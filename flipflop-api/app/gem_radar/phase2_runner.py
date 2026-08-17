@@ -23,7 +23,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.gem_radar.cpk_market import robust_active_market
 from app.gem_radar.demand_velocity import record_demand_snapshot
-from app.gem_radar.opportunity_scoring import SoldComparable, load_opportunity_policy, robust_sold_market, score_opportunity
+from app.gem_radar.opportunity_scoring import OpportunityResult, SoldComparable, identity_gates, load_opportunity_policy, robust_sold_market, score_opportunity
 from app.gem_radar.favourite_matching import find_matching_favourite
 from app.gem_radar.marketplace import fallback_listing_url
 from app.models.favourite import Favourite
@@ -53,10 +53,10 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
                 lo.listing_id, lo.title, lo.seller_name, lo.image_url,
                 lo.condition_normalised AS condition, lo.item_price, lo.postage_price,
                 lo.delivered_price, lo.source, lo.observed_at,
-                cpk.cpk, cpk.cpk_data, lo.bid_count, lo.watch_count,
+                cpk.cpk, cpk.cpk_data, lo.category AS observed_category, lo.bid_count, lo.watch_count,
                 lo.epid, lo.seller_feedback_percent, lo.seller_feedback_count
             FROM gem_radar_listing_observations lo
-            JOIN gem_radar_listing_cpk cpk ON lo.listing_id = cpk.listing_id
+            LEFT JOIN gem_radar_listing_cpk cpk ON lo.listing_id = cpk.listing_id
             ORDER BY lo.listing_id, lo.observed_at DESC, lo.id DESC
             """
         )
@@ -124,15 +124,18 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
         (
             listing_id, title, seller_name, image_url, condition,
             item_price, postage_price, delivered_price, source, observed_at,
-            cpk, cpk_data, bid_count, watch_count,
+            cpk, cpk_data, observed_category, bid_count, watch_count,
             epid, seller_feedback_percent, seller_feedback_count,
         ) = row
 
         normalised_condition = "new" if (condition or "").lower() == "new" else "used"
+        category = (cpk_data or {}).get("category") or observed_category
         sold_comps = sold_cohorts.get((cpk, normalised_condition), [])
-        market = robust_sold_market(sold_comps, subject_listing_id=listing_id, policy=policy)
+        market = robust_sold_market(sold_comps, subject_listing_id=listing_id, policy=policy) if cpk else None
         preliminary_market = False
-        if market is None:
+        if not cpk:
+            unsettled_count += 1
+        if cpk and market is None:
             market = robust_sold_market(
                 sold_comps, subject_listing_id=listing_id,
                 policy=replace(policy, minimum_sold_comps=3),
@@ -147,7 +150,6 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
                 preliminary_market = False
                 if market is None:
                     unsettled_count += 1
-        category = (cpk_data or {}).get("category")
 
         # Record demand snapshot for velocity tracking (Phase 2 enhancement).
         await record_demand_snapshot(
@@ -159,14 +161,30 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
         active_count = max(0, len(active_cohorts.get((cpk, normalised_condition), [])) - 1)
         preferred = cpk in preferred_keys
         watch_velocity, bid_velocity = velocities.get(listing_id, (None, None))
-        opportunity = score_opportunity(
-            listing_price=delivered_price, title=title, cpk_data=cpk_data,
-            market=market, sold_count_90d=sold_count, active_count=active_count,
-            watch_velocity=watch_velocity, bid_velocity=bid_velocity,
-            policy=policy, preferred=preferred,
-            extra_risk_flags=("preliminary_sold_cohort",) if preliminary_market else (),
-            listing_condition=condition,
-        )
+        if cpk:
+            opportunity = score_opportunity(
+                listing_price=delivered_price, title=title, cpk_data=cpk_data,
+                market=market, sold_count_90d=sold_count, active_count=active_count,
+                watch_velocity=watch_velocity, bid_velocity=bid_velocity,
+                policy=policy, preferred=preferred,
+                extra_risk_flags=("preliminary_sold_cohort",) if preliminary_market else (),
+                listing_condition=condition,
+            )
+        else:
+            pending_identity = {"category": category, "brand": None, "model": None}
+            flags = identity_gates(title, pending_identity)
+            hard_vetoes = [flag for flag in flags if flag != "identity_incomplete"]
+            classification = "INELIGIBLE" if hard_vetoes else ("IDENTITY_PENDING" if category else "IDENTITY_FAILED")
+            decision = "IGNORE" if hard_vetoes else "INVESTIGATE"
+            opportunity = OpportunityResult(
+                classification=classification, decision=decision, score=0.0,
+                expected_profit=None, roi_pct=None, walk_away_price=None,
+                liquidity_score=0.0, desirability_score=0.0,
+                risk_score=max(0.0, 100.0 - 30.0 * len(flags)), market=None,
+                eligible=False,
+                reasons=["Listing was processed, but no trustworthy canonical product identity is available."],
+                risk_flags=flags,
+            )
         classification = opportunity.classification
         deal_score = opportunity.score / 10.0
         adjusted_confidence = market.confidence if market else 0.0
