@@ -936,7 +936,7 @@ function findLatestRunId(listings: Listing[]): string | null {
 
 type GemFilter = "all" | "SUPER_GEM" | "GEM" | "OK_DEAL" | "AVERAGE_DEAL" | "POOR_DEAL";
 
-type SortKey = "source" | "title" | "seller" | "condition" | "price_variance" | "delivered_price" | "market_new_price" | "market_used_price" | "classification" | "decision" | "deal_score" | "watch_count" | "bid_count" | "release_year" | "listing_observed_at";
+type SortKey = "source" | "title" | "seller" | "condition" | "price_variance" | "delivered_price" | "market_new_price" | "market_used_price" | "conservative_resale_price" | "classification" | "decision" | "deal_score" | "watch_count" | "bid_count" | "release_year" | "listing_observed_at";
 type SortDir = "asc" | "desc";
 
 const CLASSIFICATION_RANK: Record<string, number> = {
@@ -1460,7 +1460,7 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                 <SortHeader label="Listing Price" sortKey="delivered_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
                 <th className="p-3 text-left text-slate-200 font-semibold">Price History</th>
                 <SortHeader label="Market New" sortKey="market_new_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
-                <SortHeader label="Market Used" sortKey="market_used_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
+                <SortHeader label="Conservative Resale" sortKey="conservative_resale_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
                 <SortHeader label="Variance" sortKey="price_variance" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
                 <SortHeader label="Classification" sortKey="classification" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} />
                 <SortHeader label="Decision" sortKey="decision" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} />
@@ -1526,16 +1526,16 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                     <td className="p-3 text-right text-slate-100">
                       {listing.market_new_price ? (
                         `£${listing.market_new_price.toFixed(2)}`
-                      ) : listing.market_median_price ? (
-                        <span title="No LLM-benchmarked 'new' price — this is the blended CPK market price (median of BIN/sold/Amazon observations across all conditions) used to classify this listing instead.">
-                          ~£{listing.market_median_price.toFixed(2)}
-                        </span>
                       ) : (
                         "—"
                       )}
                     </td>
                     <td className="p-3 text-right text-slate-100">
-                      {listing.market_used_price ? `£${listing.market_used_price.toFixed(2)}` : "—"}
+                      {listing.conservative_resale_price ? (
+                        <span title="Lower quartile of the robust, same-condition, completed-sale cohort after subject-listing exclusion and outlier controls.">
+                          £{listing.conservative_resale_price.toFixed(2)}
+                        </span>
+                      ) : "—"}
                     </td>
                     <td className="p-3 text-right">
                       <PriceVarianceCell listing={listing} />

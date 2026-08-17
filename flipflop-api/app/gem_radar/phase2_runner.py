@@ -29,7 +29,6 @@ from app.models.favourite import Favourite
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.models.gem_radar_intelligence import GemRadarDecisionEvent, PreferredComponent
 from app.services.alerts import emit_alert
-from app.services.ebay_browse import get_component_prices
 from app.services.ebay_catalog import get_product_reviews
 
 SEARCH_RUN_ID = "cpk-phase2-classify"
@@ -171,12 +170,10 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
         db.add(db_row)
         await db.flush()
 
-        try:
-            market_prices = await get_component_prices(title, min_price=15.0)
-            db_row.market_new_price = market_prices.get("new_min")
-            db_row.market_used_price = market_prices.get("used_median")
-        except Exception:
-            pass
+        # Active BIN / retail-new observations are context only and are
+        # refreshed by their dedicated ingestion jobs. A bulk rescore must
+        # never fan out one external API request per listing or let those
+        # asking prices leak into realised resale value.
 
         # market_lower/median/upper_price, pct_offset, recommendation, cpk
         # aren't declared on the ORM model (added via a raw ALTER — see
