@@ -732,6 +732,9 @@ export default function BuildDetailPage() {
                       dragOverUrl === p.url && draggedUrl !== p.url ? "border-cyan-400" : "border-white/[0.07]"
                     } ${draggedUrl === p.url ? "opacity-40" : ""}`}
                   >
+                    <div className="pointer-events-none absolute bottom-1 left-1 z-10 max-w-[calc(100%-8px)] truncate rounded-md bg-slate-950/85 px-2 py-1 text-[10px] font-semibold text-white shadow">
+                      {photoIdx + 1}. {(["Cover / hero", "Colour-shift angle", "Interior detail", "Performance proof", "Gaming FPS", "Rear connectivity", "Components", "Condition detail", "Included items", "Packaging", "Windows proof", "Extra angle"])[photoIdx] || "Extra view"}
+                    </div>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={p.url}
@@ -760,7 +763,7 @@ export default function BuildDetailPage() {
               </div>
             )}
             {regularPhotos.length > 1 && (
-              <p className="text-[11px] text-slate-500 mb-3">Drag a photo onto another to reorder them.</p>
+              <p className="text-[11px] text-slate-500 mb-3">Drag to reorder. The numbered labels show the recommended buyer journey; the first five images have the greatest selling impact.</p>
             )}
 
             <input ref={fileInputRef} type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={handlePhotoUpload} className="hidden" />
@@ -1160,6 +1163,7 @@ export default function BuildDetailPage() {
           price={price ? Number(price) : undefined}
           condition={condition}
           shippingCost={build.shipping_cost}
+          heroPhotoUrl={build.hero_photo_url}
           onClose={() => setShowEbayPreview(false)}
           isModal={true}
         />

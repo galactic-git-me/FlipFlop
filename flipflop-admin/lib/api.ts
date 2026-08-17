@@ -119,7 +119,7 @@ export type ManualBuildStatus = "in_progress" | "built" | "listed" | "sold";
 
 export interface BuildPhoto {
   url: string;
-  kind: "photo" | "spec_card" | "registration_plate";
+  kind: "photo" | "spec_card" | "registration_plate" | "performance_card";
 }
 
 export interface ManualBuild {

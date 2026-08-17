@@ -171,6 +171,18 @@ If no performance data is supplied, completely omit this section (do not include
 
 ## HTML DESIGN REQUIREMENTS
 
+## CONVERSION AND LENGTH DISCIPLINE
+
+- Front-load the strongest verified reason to buy: the processor/GPU pairing, distinctive case, and the best measured performance result.
+- Keep the complete visible description concise enough to scan on a phone. Target 900–1,400 words; never pad sections or repeat the same specification in prose.
+- Keep paragraphs to 1–3 short sentences. Prefer a benefit followed by its supporting fact.
+- PERFORMANCE_HIGHLIGHTS must contain the four strongest facts only. Every number must state whether it is measured or estimated, plus the benchmark/game, settings and source supplied in the evidence.
+- WHY_STANDS_OUT must contain exactly four compact cards, each no more than 55 words.
+- CASE_DESCRIPTION, CONNECTIVITY_DESCRIPTION and USE_CASE_SUMMARY must each be no more than two sentences.
+- FINAL_CTA must remove purchase hesitation by summarising testing, dispatch and support. Do not use urgency, scarcity or guarantees unless explicitly supplied.
+- Do not reproduce the full specification in multiple sections. The exact values belong in the key cards and specification table; surrounding prose explains buyer benefits.
+- Use a single continuous dark visual system. Never introduce white section backgrounds, fixed pixel widths wider than the container, oversized text that can crop, or horizontal scrolling.
+
 **Contrast principle:** Dark backgrounds (#171c24, #0d1015) ALWAYS use white (#fff) or very light text. Light backgrounds use dark text. Never use grey or dim text on dark backgrounds.
 
 Use this exact flipflop premium template. Copy it verbatim, then replace ONLY the {{PLACEHOLDER}} variables with build-specific content. Do NOT modify the HTML structure, CSS, or any tags.
@@ -306,6 +318,8 @@ A. Missing or contradictory information
 
 B. Three eBay titles
 [One title per line, max 80 chars each]
+
+Title priority: lead with the buyer-searched product type and exact CPU/GPU, then RAM, storage and operating system. Use plain spaces rather than decorative punctuation. Do not put the unique PC name in the title unless all high-intent specification keywords fit first.
 
 C. Condition description
 [2-3 sentences about PC condition]
