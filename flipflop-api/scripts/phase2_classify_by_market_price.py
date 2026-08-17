@@ -31,7 +31,7 @@ async def main():
     print("=" * 80)
     print("Phase 2 Complete!")
     print("=" * 80)
-    print(f"  Total CPK-tagged listings: {result.total_cpk_tagged}")
+    print(f"  Total latest listings processed: {result.total_cpk_tagged}")
     total = result.total_cpk_tagged or 1
     print(f"  Classified: {result.classified_count} ({100 * result.classified_count // total}%)")
     print(f"  Unsettled (CPK has < 2 contributing listings): {result.unsettled_count}")
