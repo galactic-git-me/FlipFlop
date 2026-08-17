@@ -107,3 +107,14 @@ def test_missing_market_is_not_mislabelled_as_average_deal():
         watch_velocity=None, bid_velocity=None, policy=OpportunityPolicy(),
     )
     assert result.classification == "INSUFFICIENT_DATA"
+
+
+def test_identity_veto_takes_precedence_over_missing_market():
+    result = score_opportunity(
+        listing_price=10, title="EMPTY BOX AMD Ryzen 9 5900X CPU",
+        cpk_data={"category": "cpu", "brand": "AMD", "model": "Ryzen 9 5900X"},
+        market=None, sold_count_90d=0, active_count=0,
+        watch_velocity=None, bid_velocity=None, policy=OpportunityPolicy(),
+    )
+    assert result.classification == "INELIGIBLE"
+    assert result.decision == "IGNORE"

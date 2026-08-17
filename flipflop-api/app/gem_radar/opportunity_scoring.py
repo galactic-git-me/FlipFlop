@@ -284,8 +284,18 @@ def score_opportunity(
     risk = max(0.0, 100.0 - len(risk_flags) * 30.0)
 
     if market is None:
-        return OpportunityResult("INSUFFICIENT_DATA", "INVESTIGATE", 0.0, None, None, None, liquidity, desirability, risk, None, False,
-                                 ["A same-condition completed-sale cohort is required before a buy classification."], risk_flags)
+        identity_vetoes = [flag for flag in risk_flags if flag != "insufficient_same_condition_sold_comparables"]
+        if identity_vetoes:
+            return OpportunityResult(
+                "INELIGIBLE", "IGNORE", 0.0, None, None, None,
+                liquidity, desirability, risk, None, False,
+                ["A hard identity veto prevents deal classification."], risk_flags,
+            )
+        return OpportunityResult(
+            "INSUFFICIENT_DATA", "INVESTIGATE", 0.0, None, None, None,
+            liquidity, desirability, risk, None, False,
+            ["A same-condition completed-sale cohort is required before a buy classification."], risk_flags,
+        )
 
     category = str((cpk_data or {}).get("category") or "").lower()
     is_component = category in COMPONENT_CATEGORIES
