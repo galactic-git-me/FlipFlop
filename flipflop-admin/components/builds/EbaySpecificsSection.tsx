@@ -97,6 +97,12 @@ function findOverLengthValues(aspectName: string, rawValue: string): string[] {
   return parseAspectInput(aspectName, rawValue).filter((v) => v.length > EBAY_ASPECT_VALUE_MAX_LENGTH);
 }
 
+function formatAspectForEditing(aspectName: string, values: string[]): string {
+  return EBAY_MULTI_VALUE_ASPECTS.has(aspectName)
+    ? values.join(", ")
+    : (values[0] || "");
+}
+
 // One icon per aspect, chosen for what the attribute actually represents
 // rather than decoratively — makes the 3-column grid scannable at a glance.
 const EBAY_ASPECT_ICONS: Record<string, LucideIcon> = {
@@ -147,6 +153,9 @@ export function EbaySpecificsSection({
 
   const aspects = build.generated_aspects || {};
   const hasAnyGenerated = Object.keys(aspects).length > 0;
+  const cardinalityViolations = Object.entries(aspects).filter(
+    ([name, values]) => !EBAY_MULTI_VALUE_ASPECTS.has(name) && values.length > 1
+  );
   const isEditing = editingAspects !== null;
   const hasAnyOverLengthValue = isEditing
     ? Object.entries(editingAspects!).some(
@@ -157,7 +166,7 @@ export function EbaySpecificsSection({
   const handleEditStart = () => {
     const drafts: Record<string, string> = {};
     for (const name of EBAY_ASPECT_FIELDS) {
-      drafts[name] = (aspects[name] || []).join(", ");
+      drafts[name] = formatAspectForEditing(name, aspects[name] || []);
     }
     setEditingAspects(drafts);
   };
@@ -182,7 +191,7 @@ export function EbaySpecificsSection({
   };
 
   const handleSpecificEditStart = (aspectName: string) => {
-    const currentValue = (aspects[aspectName] || []).join(", ");
+    const currentValue = formatAspectForEditing(aspectName, aspects[aspectName] || []);
     setEditingSpecific(aspectName);
     setEditingSpecificValue(currentValue);
   };
@@ -225,8 +234,21 @@ export function EbaySpecificsSection({
           <div className="text-xs text-amber-200">
             <p className="font-semibold mb-1">No item specifics yet</p>
             <p>
-              Click "Generate Specifics" to have the local AI fill in these attributes from
-              this build's components, or fill them in yourself below.
+              Click &quot;Generate Specifics&quot; to have the local AI fill in these attributes from
+              this build&apos;s components, or fill them in yourself below.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {cardinalityViolations.length > 0 && (
+        <div role="alert" className="flex items-start gap-3 p-3 rounded bg-red-950/40 border border-red-700/60">
+          <AlertCircle className="w-4 h-4 text-red-400 mt-0.5 shrink-0" />
+          <div className="text-xs text-red-200">
+            <p className="font-semibold mb-1">Fix single-value fields before posting</p>
+            <p>
+              eBay accepts only one value for {cardinalityViolations.map(([name]) => name).join(", ")}.
+              Select the field and save the correct value.
             </p>
           </div>
         </div>
@@ -292,6 +314,7 @@ export function EbaySpecificsSection({
           {EBAY_ASPECT_FIELDS.map((name) => {
             const values = aspects[name];
             const isEmpty = !values || values.length === 0;
+            const hasTooManyValues = !isEmpty && !EBAY_MULTI_VALUE_ASPECTS.has(name) && values.length > 1;
             const Icon = EBAY_ASPECT_ICONS[name];
             const isEditingThis = editingSpecific === name;
 
@@ -365,18 +388,21 @@ export function EbaySpecificsSection({
                 className={`flex items-start gap-2 p-2 rounded border text-left transition-colors hover:border-opacity-100 ${
                   isEmpty
                     ? "bg-slate-800/50 border-dashed border-slate-700 hover:bg-slate-800/70 hover:border-slate-600"
+                    : hasTooManyValues
+                      ? "bg-red-950/40 border-red-700/70 hover:bg-red-950/60 hover:border-red-600"
                     : "bg-emerald-950/40 border-emerald-700/50 hover:bg-emerald-950/60 hover:border-emerald-600"
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 mt-0.5 shrink-0 ${isEmpty ? "text-slate-700" : "text-emerald-400"}`} />
+                <Icon className={`w-3.5 h-3.5 mt-0.5 shrink-0 ${isEmpty ? "text-slate-700" : hasTooManyValues ? "text-red-400" : "text-emerald-400"}`} />
                 <div className="min-w-0">
                   <p className="text-xs font-semibold text-slate-300">
                     {name}
                     {EBAY_REQUIRED_ASPECTS.has(name) && <span className="text-amber-400"> *</span>}
                   </p>
-                  <p className={`text-xs truncate ${isEmpty ? "text-slate-600 italic" : "text-emerald-100"}`}>
+                  <p className={`text-xs truncate ${isEmpty ? "text-slate-600 italic" : hasTooManyValues ? "text-red-200" : "text-emerald-100"}`}>
                     {isEmpty ? "Not set" : values.join(", ")}
                   </p>
+                  {hasTooManyValues && <p className="text-[10px] text-red-400">Choose one value</p>}
                 </div>
               </button>
             );

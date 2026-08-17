@@ -186,6 +186,27 @@ def validate_aspects_for_ebay(aspects: Dict[str, List[str]]) -> List[str]:
     return problems
 
 
+def _enforce_aspect_cardinality(aspect: str, values: List[str]) -> List[str]:
+    """Return values in the shape accepted by eBay for this aspect.
+
+    Generation is allowed to be lossy here: the model occasionally returns
+    component manufacturers as several Brand values, or both SSD and HDD for
+    Storage Type. eBay requires one array entry for those fields, so retain
+    the model's best (first) choice. Manual edits remain strict and are
+    rejected by ``validate_aspects_for_ebay`` instead of being silently
+    changed.
+    """
+    if aspect not in EBAY_MULTI_VALUE_ASPECTS and len(values) > 1:
+        log.warning(
+            "ebay_specifics.extra_single_values_dropped",
+            aspect=aspect,
+            kept=values[0],
+            dropped=values[1:],
+        )
+        return values[:1]
+    return values
+
+
 async def generate_item_specifics(
     build: ManualBuild,
     selling_principles_text: str = "",
@@ -234,6 +255,14 @@ Task:
 4. Always include Brand and Type (required by eBay)
 5. If a component spec doesn't map to any allowed value, use "Other" or "Unknown"
 6. Return ONLY valid JSON with no explanation
+
+Cardinality rules:
+- Brand is the brand of the complete PC, never a list of component brands. For a
+  one-off assembled PC use "Custom Build".
+- Storage Type must be exactly one value. If the PC contains both SSD and HDD,
+  use the single allowed value "Hybrid (SSD + HDD)".
+- Only Most Suitable For, Features, Connectivity, and MPN may contain multiple
+  values. Every other aspect must contain exactly one value.
 
 Return JSON format (example):
 {{
@@ -354,7 +383,7 @@ def _parse_and_validate_specifics(json_response: str) -> Dict[str, List[str]]:
                     # Use first allowed value as fallback
                     valid_values = [allowed[0]]
 
-            validated[aspect] = valid_values
+            validated[aspect] = _enforce_aspect_cardinality(aspect, valid_values)
 
         # Ensure required fields
         for req_aspect in REQUIRED_ASPECTS:
