@@ -1,5 +1,5 @@
 from app.gem_radar.opportunity_scoring import (
-    OpportunityPolicy, SoldComparable, identity_gates, robust_sold_market, score_opportunity,
+    OpportunityPolicy, SoldComparable, category_economics, identity_gates, robust_sold_market, score_opportunity,
 )
 
 
@@ -90,3 +90,10 @@ def test_component_does_not_repeat_whole_build_fulfilment_costs():
     assert result.cost_breakdown["packaging"] == 0
     assert result.cost_breakdown["testing_refurbishment"] == 3
     assert result.expected_profit and result.expected_profit > 30
+
+
+def test_category_economics_preserve_higher_gpu_and_build_cash_hurdles():
+    policy = OpportunityPolicy()
+    assert category_economics("cpu", policy).gem_profit == 5
+    assert category_economics("gpu", policy).gem_profit == 20
+    assert category_economics("whole_pc", policy).gem_profit == policy.gem_profit

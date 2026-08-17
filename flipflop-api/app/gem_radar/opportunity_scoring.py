@@ -44,6 +44,30 @@ class OpportunityPolicy:
     sold_lookback_days: int = 90
 
 
+@dataclass(frozen=True)
+class CategoryEconomics:
+    super_profit: float
+    super_roi_pct: float
+    gem_profit: float
+    gem_roi_pct: float
+
+
+def category_economics(category: str, policy: OpportunityPolicy) -> CategoryEconomics:
+    """Cash-profit gates scaled to the capital normally tied up by a part.
+
+    Confidence, liquidity and overall-score gates remain unchanged; these
+    values only prevent a £6 CPU and a £600 GPU being judged by one cash
+    hurdle. Complete systems continue to use the configured global policy.
+    """
+    if category in {"cpu", "ram", "ssd", "cooler", "fan"}:
+        return CategoryEconomics(15.0, 50.0, 5.0, 20.0)
+    if category in {"motherboard", "psu", "case"}:
+        return CategoryEconomics(25.0, 40.0, 10.0, 20.0)
+    if category == "gpu":
+        return CategoryEconomics(40.0, 30.0, 20.0, 18.0)
+    return CategoryEconomics(policy.super_profit, policy.super_roi_pct, policy.gem_profit, policy.gem_roi_pct)
+
+
 async def load_opportunity_policy(db) -> OpportunityPolicy:
     from sqlalchemy import select
     from app.models.app_settings import AppSettings
@@ -260,6 +284,7 @@ def score_opportunity(
 
     category = str((cpk_data or {}).get("category") or "").lower()
     is_component = category in COMPONENT_CATEGORIES
+    economics = category_economics(category, policy)
     is_new = (listing_condition or "").lower() == "new"
     # Gem Radar sources parts for incorporation into a build. Its listing
     # price is already the landed acquisition price, while outbound delivery,
@@ -281,7 +306,7 @@ def score_opportunity(
     roi = profit / total_cost * 100.0 if total_cost > 0 else 0.0
     non_purchase_cost = total_cost - listing_price
     walk_away = max(0.0, market.conservative_resale / 1.25 - non_purchase_cost)
-    economic_score = max(0.0, min(100.0, (roi / policy.super_roi_pct) * 55.0 + (profit / policy.super_profit) * 45.0))
+    economic_score = max(0.0, min(100.0, (roi / economics.super_roi_pct) * 55.0 + (profit / economics.super_profit) * 45.0))
     total_score = economic_score * .45 + liquidity * .20 + desirability * .15 + market.confidence * .15 + risk * .05
     provisional_evidence = "preliminary_sold_cohort" in risk_flags
     blocking_flags = [flag for flag in risk_flags if flag != "preliminary_sold_cohort"]
@@ -292,13 +317,17 @@ def score_opportunity(
     ]
     if is_component:
         reasons.append("Component economics exclude build-level fulfilment costs, which are charged once to the completed build.")
+        reasons.append(
+            f"{category.upper()} gates: GEM £{economics.gem_profit:.0f}/{economics.gem_roi_pct:.0f}% ROI; "
+            f"SUPER_GEM £{economics.super_profit:.0f}/{economics.super_roi_pct:.0f}% ROI."
+        )
     emerging_profit_floor = min(policy.gem_profit, 10.0) if is_component else policy.gem_profit
     if provisional_evidence and not blocking_flags and profit >= emerging_profit_floor and roi >= 25 and market.confidence >= 40 and liquidity >= 20 and desirability >= 55:
         classification, decision = "EMERGING_OPPORTUNITY", "INVESTIGATE"
         reasons.append("Promising economics, but only 3–4 robust sold comparables: verify manually before buying.")
-    elif eligible and profit >= policy.super_profit and roi >= policy.super_roi_pct and market.confidence >= policy.super_confidence and liquidity >= policy.super_liquidity and total_score >= policy.super_score:
+    elif eligible and profit >= economics.super_profit and roi >= economics.super_roi_pct and market.confidence >= policy.super_confidence and liquidity >= policy.super_liquidity and total_score >= policy.super_score:
         classification, decision = "SUPER_GEM", "BUY_NOW"
-    elif eligible and profit >= policy.gem_profit and roi >= policy.gem_roi_pct and market.confidence >= policy.gem_confidence and liquidity >= policy.gem_liquidity and total_score >= policy.gem_score:
+    elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market.confidence >= policy.gem_confidence and liquidity >= policy.gem_liquidity and total_score >= policy.gem_score:
         classification, decision = "GEM", "BUY_NOW"
     elif profit > 0 and eligible:
         classification, decision = "OK_DEAL", "MAKE_OFFER"
