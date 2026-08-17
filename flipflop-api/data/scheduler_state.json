@@ -1,6 +1,6 @@
 {
   "ram_watcher": {
-    "last_success_at": "2026-08-17T14:52:38.701120+00:00"
+    "last_success_at": "2026-08-17T15:07:38.489686+00:00"
   },
   "price_refresh": {
     "last_success_at": "2026-08-17T11:57:40.270605+00:00"
@@ -9,7 +9,7 @@
     "last_success_at": "2026-07-23T14:57:29.735084+00:00"
   },
   "external_demand": {
-    "last_success_at": "2026-08-17T14:06:43.116480+00:00"
+    "last_success_at": "2026-08-17T15:06:39.718654+00:00"
   },
   "playbook_evolution": {
     "last_success_at": "2026-08-17T14:52:39.892818+00:00"
@@ -48,7 +48,7 @@
     "last_success_at": "2026-08-17T07:00:00.008238+00:00"
   },
   "ai_build_generator": {
-    "last_success_at": "2026-08-17T14:06:49.689190+00:00"
+    "last_success_at": "2026-08-17T15:06:44.865070+00:00"
   },
   "email_monitor": {
     "last_success_at": "2026-08-17T15:03:39.102709+00:00"
@@ -57,7 +57,7 @@
     "last_success_at": "2026-08-17T14:54:38.264358+00:00"
   },
   "deferred_publish": {
-    "last_success_at": "2026-08-17T14:52:38.726050+00:00"
+    "last_success_at": "2026-08-17T15:07:38.497681+00:00"
   },
   "message_poll": {
     "last_success_at": "2026-08-17T14:52:38.717592+00:00"
@@ -75,6 +75,6 @@
     "last_success_at": "2026-08-17T11:52:38.795394+00:00"
   },
   "manual_build_deferred_publish": {
-    "last_success_at": "2026-08-17T14:52:38.720256+00:00"
+    "last_success_at": "2026-08-17T15:07:38.495242+00:00"
   }
 }
