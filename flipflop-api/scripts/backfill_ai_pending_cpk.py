@@ -25,12 +25,23 @@ from app.gem_radar.opportunity_scoring import identity_gates
 
 async def run(apply: bool, limit: int | None) -> None:
     async with AsyncSessionLocal() as db:
+        await db.execute(text("""
+            CREATE TABLE IF NOT EXISTS gem_radar_identity_extraction_attempt (
+                listing_id VARCHAR(255) PRIMARY KEY,
+                outcome VARCHAR(100) NOT NULL,
+                detail JSONB NOT NULL DEFAULT '{}'::jsonb,
+                attempted_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+        """))
+        await db.commit()
         rows = (await db.execute(text("""
             SELECT s.listing_id, s.title, s.category, s.condition, s.delivered_price
             FROM gem_radar_scored_listings s
             LEFT JOIN gem_radar_listing_cpk c ON c.listing_id=s.listing_id
+            LEFT JOIN gem_radar_identity_extraction_attempt a ON a.listing_id=s.listing_id
             WHERE s.classification='IDENTITY_PENDING'
               AND s.category IS NOT NULL AND c.listing_id IS NULL
+              AND a.listing_id IS NULL
             ORDER BY s.listing_id
             LIMIT COALESCE(:limit, 2147483647)
         """), {"limit": limit})).mappings().all()
@@ -56,13 +67,21 @@ async def run(apply: bool, limit: int | None) -> None:
             for row, product in zip(batch, extracted):
                 if product is None:
                     counts["rejected_or_unresolved"] += 1
+                    outcome = "rejected_or_unresolved"
+                    detail = {}
+                    if apply:
+                        await db.execute(text("""INSERT INTO gem_radar_identity_extraction_attempt(listing_id,outcome,detail) VALUES(:id,:outcome,:detail) ON CONFLICT(listing_id) DO UPDATE SET outcome=excluded.outcome,detail=excluded.detail,attempted_at=CURRENT_TIMESTAMP"""), {"id": row["listing_id"], "outcome": outcome, "detail": json.dumps(detail)})
                     continue
                 if product.category != row["category"]:
                     counts["category_disagreement"] += 1
+                    if apply:
+                        await db.execute(text("""INSERT INTO gem_radar_identity_extraction_attempt(listing_id,outcome,detail) VALUES(:id,'category_disagreement',:detail) ON CONFLICT(listing_id) DO UPDATE SET outcome=excluded.outcome,detail=excluded.detail,attempted_at=CURRENT_TIMESTAMP"""), {"id": row["listing_id"], "detail": json.dumps({"observed": row["category"], "extracted": product.category})})
                     continue
                 flags = [flag for flag in identity_gates(row["title"], product.to_dict()) if flag != "identity_incomplete"]
                 if flags:
                     counts[f"veto:{flags[0]}"] += 1
+                    if apply:
+                        await db.execute(text("""INSERT INTO gem_radar_identity_extraction_attempt(listing_id,outcome,detail) VALUES(:id,:outcome,:detail) ON CONFLICT(listing_id) DO UPDATE SET outcome=excluded.outcome,detail=excluded.detail,attempted_at=CURRENT_TIMESTAMP"""), {"id": row["listing_id"], "outcome": f"veto:{flags[0]}", "detail": json.dumps({"flags": flags})})
                     continue
                 counts["accepted"] += 1
                 if not apply:
@@ -82,6 +101,7 @@ async def run(apply: bool, limit: int | None) -> None:
                     ON CONFLICT(listing_id) DO UPDATE
                     SET cpk=excluded.cpk,price=excluded.price,updated_at=CURRENT_TIMESTAMP
                 """), {"listing_id": row["listing_id"], "cpk": product.cpk, "price": row["delivered_price"]})
+                await db.execute(text("""INSERT INTO gem_radar_identity_extraction_attempt(listing_id,outcome,detail) VALUES(:id,'accepted',:detail) ON CONFLICT(listing_id) DO UPDATE SET outcome=excluded.outcome,detail=excluded.detail,attempted_at=CURRENT_TIMESTAMP"""), {"id": row["listing_id"], "detail": json.dumps({"cpk": product.cpk, "confidence": product.confidence})})
             if apply:
                 await db.commit()
             done = min(start + 4, len(rows))
