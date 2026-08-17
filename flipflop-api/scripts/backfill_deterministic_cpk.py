@@ -81,7 +81,8 @@ async def run(apply: bool) -> None:
         for listing_id, category in categories.items():
             await db.execute(text("""
                 UPDATE gem_radar_listing_observations SET category=:category
-                WHERE listing_id=:listing_id AND category IS NULL
+                WHERE listing_id=:listing_id
+                  AND category IS DISTINCT FROM :category
             """), {"category": category, "listing_id": listing_id})
         for row, cpk, data, confidence in exact:
             await db.execute(text("""

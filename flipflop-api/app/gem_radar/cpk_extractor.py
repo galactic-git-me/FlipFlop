@@ -189,10 +189,11 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
                         return None
                     data = json.loads(match.group())
 
-                # Skip if confidence too low (ambiguous/unrecognizable)
-                # Threshold lowered to 0.2 to accept more partial/ambiguous extractions
-                # Phase 2 will filter based on market-price settlement instead
-                if data.get("confidence", 0) < 0.2:
+                # Identity is upstream of every market cohort. A speculative
+                # match cannot be rescued by Phase 2 because it has already
+                # polluted the comparable set, so only high-confidence model
+                # extractions may receive a canonical product key.
+                if data.get("confidence", 0) < 0.7:
                     log.debug("cpk_extractor.low_confidence", title=_safe_title(title), confidence=data.get("confidence"))
                     return None
 

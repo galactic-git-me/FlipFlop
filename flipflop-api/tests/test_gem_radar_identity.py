@@ -10,6 +10,20 @@ product line's real market price.
 from app.gem_radar.identity import is_likely_accessory, resolve_identity
 
 
+def test_explicit_product_type_beats_compatibility_specs():
+    assert resolve_identity(
+        "RGEEK A07 Mini ITX PC Case supports RTX2070, M.2 SSD and Flex PSU"
+    ).category == "case"
+    assert resolve_identity(
+        "ASUS PRIME A520M-K Motherboard supports 64GB DDR4 RAM and M.2 SSD"
+    ).category == "motherboard"
+
+
+def test_storage_enclosures_and_replacement_laptop_fans_are_accessories():
+    assert is_likely_accessory("PHIXERO SSD Case NVMe M.2 to USB SSD Enclosure")
+    assert is_likely_accessory("Replacement CPU GPU Cooling Fan for Dell XPS 15 9520")
+
+
 class TestSsdIdentity:
     def test_samsung_pro_series(self):
         r = resolve_identity("Samsung 980 PRO 250GB M.2 NVMe 2280 Gen4 Solid State Drive (SSD) Grade A")

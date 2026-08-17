@@ -228,6 +228,9 @@ _PSU_TIER_PATTERN = re.compile(r"\b(bronze|silver|gold|platinum|titanium)\b", re
 _ACCESSORY_KEYWORDS = re.compile(
     r"\b(protector|protective\s*case|clamshell|dust\s*cover|anti[\s-]?static\s*bag|"
     r"carry(?:ing)?\s*case|storage\s*box|stand\s*for|holder|pouch|sleeve|skin|decal|sticker|"
+    r"(?:ssd|m\.2|nvme|hard\s*drive)\s*(?:enclosure|case|adapter)|"
+    r"decorative\s*(?:panel|cover|strip)|luminescent\s*board|"
+    r"replacement\s+(?:(?:cpu|gpu)\s+){0,2}cooling\s+fan|(?:cpu|gpu)\s+fan\s+for\s+(?:dell|hp|lenovo|asus|acer|msi)|"
     r"bracket|backplate|mounting\s*kit|mounting\s*for|screw\s*kit|"
     r"thermal\s*(?:pad|paste|compound|grease|paste\s*syringe)|"
     # Same failure mode as bracket/backplate above: a WiFi antenna, BIOS
@@ -455,6 +458,22 @@ def _detect_category(title: str) -> Optional[str]:
     clean_title = _strip_scrape_artifacts(title)
     if _FULL_SYSTEM_KEYWORDS.search(clean_title):
         return None
+
+    # Prefer phrases which say what the item *is* over secondary components
+    # mentioned in compatibility/specification text.  Without this pass an
+    # ITX chassis saying "supports RTX 2070 / SSD / Flex PSU" becomes a GPU,
+    # while a motherboard advertising "64GB DDR4" becomes RAM.  These
+    # explicit nouns are materially stronger identity evidence than the
+    # generic model/spec scans below.
+    explicit_categories = (
+        ("case", re.compile(r"\b(pc|computer|desktop|gaming)\s+case\b|\bchassis\b|\b(?:mid|full|mini)[\s-]?tower\b", re.IGNORECASE)),
+        ("motherboard", re.compile(r"\b(motherboard|mainboard|mobo)\b", re.IGNORECASE)),
+        ("cooler", re.compile(r"\b(cpu\s+(?:air\s+|liquid\s+)?cooler|aio\s+(?:liquid\s+)?cooler|liquid\s+cpu\s+cooler)\b", re.IGNORECASE)),
+        ("psu", re.compile(r"\b(psu|power\s+supply)\b", re.IGNORECASE)),
+    )
+    for category, pattern in explicit_categories:
+        if pattern.search(clean_title):
+            return category
     for category, pattern in _CATEGORY_KEYWORDS:
         if pattern.search(clean_title):
             return category

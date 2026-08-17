@@ -82,6 +82,10 @@ async def assign_cpk_and_accumulate_price(
         if extracted is None:
             return None
 
+        extracted_flags = identity_gates(title, extracted.to_dict())
+        if any(flag != "identity_incomplete" for flag in extracted_flags):
+            return None
+
         await db.execute(
             text(
                 """
