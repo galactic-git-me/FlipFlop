@@ -281,7 +281,7 @@ def score_opportunity(
     risk_flags = identity_gates(title, cpk_data, strategy) + list(extra_risk_flags)
     if market is None:
         risk_flags.append("insufficient_same_condition_sold_comparables")
-    elif market.source_diversity < policy.minimum_source_diversity:
+    elif market.source_diversity < policy.minimum_source_diversity and market.basis != "FIXED_RETAIL_CONTEXT":
         risk_flags.append("insufficient_comparable_source_diversity")
 
     liquidity = min(70.0, sold_count_90d * 7.0)
@@ -345,7 +345,7 @@ def score_opportunity(
         reasons.append(
             f"BIN estimate applies a {100 * (1 - market.realisation_factor):.0f}% realisation haircut and lower confidence until sold evidence refines it."
         )
-    elif market.basis == "FIXED_RETAIL_ESTIMATED":
+    elif market.basis in {"FIXED_RETAIL_ESTIMATED", "FIXED_RETAIL_CONTEXT"}:
         reasons.append("Fixed-price retailer evidence receives no offer/negotiation haircut; sold evidence can still refine confidence.")
     elif market.basis == "MIXED_ACTIVE_ESTIMATE":
         reasons.append("Mixed active evidence keeps fixed retailer prices intact and haircuts negotiable marketplace BIN prices.")

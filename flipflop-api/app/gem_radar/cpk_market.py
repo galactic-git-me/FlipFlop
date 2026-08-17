@@ -122,7 +122,8 @@ async def get_robust_active_market(
 
 def robust_active_market(comps, *, subject_listing_id: str, condition: str, policy):
     from dataclasses import replace
-    from app.gem_radar.opportunity_scoring import SoldComparable, robust_sold_market
+    from statistics import median
+    from app.gem_radar.opportunity_scoring import RobustMarket, SoldComparable, robust_sold_market
 
     active_policy = replace(policy, minimum_sold_comps=max(5, policy.minimum_sold_comps))
     fixed_retailers = {"amazon", "overclockers", "scan", "aliexpress", "temu", "cex"}
@@ -138,7 +139,25 @@ def robust_active_market(comps, *, subject_listing_id: str, condition: str, poli
         adjusted.append(SoldComparable(comp.price * factor, comp.postage * factor, comp.source_url, comp.observed_days_ago))
     market = robust_sold_market(adjusted, subject_listing_id=subject_listing_id, policy=active_policy)
     if market is None:
-        return None
+        # An exact fixed retailer price is a real purchasable transaction
+        # price even when only one shop stocks the SKU. It establishes a
+        # lower-confidence context tier, not GEM-quality evidence.
+        fixed = [c for c in adjusted if (c.source_url or "").split("://", 1)[0].lower() in fixed_retailers and subject_listing_id.lower() not in (c.source_url or "").lower()]
+        if not fixed:
+            return None
+        values = sorted(c.delivered_price for c in fixed if c.delivered_price > 0)
+        if not values:
+            return None
+        mid = median(values)
+        spread = ((max(values) - min(values)) / mid * 100.0) if mid else 100.0
+        return RobustMarket(
+            lower=round(min(values), 2), median=round(mid, 2), upper=round(max(values), 2),
+            conservative_resale=round(min(values), 2), sample_size=len(values), raw_sample_size=len(values),
+            source_diversity=len({_c.source_url for _c in fixed}), spread_pct=round(spread, 2),
+            confidence=min(65.0, 35.0 + len(values) * 10.0),
+            comparable_urls=tuple(c.source_url for c in fixed if c.source_url),
+            basis="FIXED_RETAIL_CONTEXT", realisation_factor=1.0,
+        )
     retail_share = retail_count / len(comps) if comps else 0.0
     factor = sum(factors) / len(factors) if factors else marketplace_factor
     basis = "FIXED_RETAIL_ESTIMATED" if retail_share == 1 else ("MIXED_ACTIVE_ESTIMATE" if retail_share > 0 else "BIN_ESTIMATED")
