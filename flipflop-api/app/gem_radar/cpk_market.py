@@ -77,6 +77,61 @@ async def get_robust_sold_market(
     return robust_sold_market(comps, subject_listing_id=subject_listing_id, policy=cohort_policy)
 
 
+async def get_robust_active_market(
+    db: AsyncSession,
+    *,
+    cpk: str,
+    condition: str,
+    subject_listing_id: str,
+    policy,
+):
+    """Estimate achievable value from fresh, leave-one-out active prices.
+
+    Active asking prices are not treated as realised sales: the robust lower
+    quartile receives a condition-specific realisation haircut and a confidence
+    penalty. This is the fallback classification anchor when sold coverage is
+    unavailable, not a replacement for sold evidence.
+    """
+    from dataclasses import replace
+    from app.gem_radar.opportunity_scoring import SoldComparable, robust_sold_market
+
+    normalised = "new" if (condition or "").lower() == "new" else "used"
+    result = await db.execute(text("""
+        WITH latest AS (
+            SELECT DISTINCT ON (listing_id) listing_id, condition_normalised
+            FROM gem_radar_listing_observations
+            ORDER BY listing_id, observed_at DESC, id DESC
+        )
+        SELECT p.price, p.listing_id
+        FROM gem_radar_cpk_listing_price p
+        JOIN latest l ON l.listing_id = p.listing_id
+        WHERE p.cpk = :cpk
+          AND p.listing_id <> :subject
+          AND p.updated_at >= CURRENT_TIMESTAMP - INTERVAL '14 days'
+          AND CASE WHEN LOWER(COALESCE(l.condition_normalised, '')) = 'new' THEN 'new' ELSE 'used' END = :condition
+          AND p.price > 0
+    """), {"cpk": cpk, "subject": subject_listing_id, "condition": normalised})
+    comps = [
+        SoldComparable(float(price), source_url=f"active://{listing_id}")
+        for price, listing_id in result.fetchall()
+    ]
+    active_policy = replace(policy, minimum_sold_comps=max(5, policy.minimum_sold_comps))
+    market = robust_sold_market(comps, subject_listing_id=subject_listing_id, policy=active_policy)
+    if market is None:
+        return None
+    factor = 0.92 if normalised == "new" else 0.88
+    return replace(
+        market,
+        lower=round(market.lower * factor, 2),
+        median=round(market.median * factor, 2),
+        upper=round(market.upper * factor, 2),
+        conservative_resale=round(market.conservative_resale * factor, 2),
+        confidence=round(max(0.0, market.confidence - 15.0), 1),
+        basis="BIN_ESTIMATED",
+        realisation_factor=factor,
+    )
+
+
 @dataclass(frozen=True)
 class CPKMarketPrice:
     cpk: str

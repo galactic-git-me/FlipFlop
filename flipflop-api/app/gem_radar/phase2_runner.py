@@ -20,7 +20,7 @@ from datetime import datetime
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.gem_radar.cpk_market import get_robust_sold_market
+from app.gem_radar.cpk_market import get_robust_active_market, get_robust_sold_market
 from app.gem_radar.demand_velocity import record_demand_snapshot, calculate_watch_velocity, calculate_bid_velocity
 from app.gem_radar.opportunity_scoring import load_opportunity_policy, score_opportunity
 from app.gem_radar.favourite_matching import find_matching_favourite
@@ -89,7 +89,13 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
             )
             preliminary_market = market is not None
             if market is None:
-                unsettled_count += 1
+                market = await get_robust_active_market(
+                    db, cpk=cpk, condition=condition,
+                    subject_listing_id=listing_id, policy=policy,
+                )
+                preliminary_market = False
+                if market is None:
+                    unsettled_count += 1
         category = (cpk_data or {}).get("category")
 
         # Record demand snapshot for velocity tracking (Phase 2 enhancement).

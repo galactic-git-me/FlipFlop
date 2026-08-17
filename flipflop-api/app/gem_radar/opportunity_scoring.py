@@ -124,6 +124,8 @@ class RobustMarket:
     spread_pct: float
     confidence: float
     comparable_urls: tuple[str, ...]
+    basis: str = "SOLD_REFINED"
+    realisation_factor: float = 1.0
 
 
 @dataclass
@@ -326,10 +328,15 @@ def score_opportunity(
     provisional_evidence = "preliminary_sold_cohort" in risk_flags
     blocking_flags = [flag for flag in risk_flags if flag != "preliminary_sold_cohort"]
     eligible = not risk_flags
+    evidence_label = "completed sales" if market.basis == "SOLD_REFINED" else "active asking prices"
     reasons = [
-        f"Conservative resale uses the lower quartile of {market.sample_size} robust same-condition sold comparables.",
+        f"Conservative resale uses the lower quartile of {market.sample_size} robust same-condition {evidence_label}.",
         f"Expected net profit £{profit:.2f}; ROI {roi:.1f}%; liquidity {liquidity:.0f}/100.",
     ]
+    if market.basis == "BIN_ESTIMATED":
+        reasons.append(
+            f"BIN estimate applies a {100 * (1 - market.realisation_factor):.0f}% realisation haircut and lower confidence until sold evidence refines it."
+        )
     if is_component:
         reasons.append("Component economics exclude build-level fulfilment costs, which are charged once to the completed build.")
         reasons.append(
