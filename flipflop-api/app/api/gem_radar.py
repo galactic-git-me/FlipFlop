@@ -2275,7 +2275,7 @@ async def get_cpk_price_history(
     from sqlalchemy import select, desc, func
 
     # Get the listing to find its CPK
-    listing_stmt = select(GemRadarListingCpk.cpk_code).where(
+    listing_stmt = select(GemRadarListingCpk.cpk).where(
         GemRadarListingCpk.listing_id == listing_id
     ).limit(1)
 
@@ -2285,22 +2285,24 @@ async def get_cpk_price_history(
     if not row or not row[0]:
         return {"prices": []}
 
-    cpk_code = row[0]
+    cpk = row[0]
 
-    # Get price history for this CPK (average prices across all listings with this CPK)
-    # This shows the market trend for this component type
+    # Bucket observations by day. Listings are normally scanned at slightly
+    # different timestamps, so grouping by the raw timestamp would produce
+    # one pseudo-market point per listing rather than a real CPK trend.
+    observed_day = func.date_trunc("day", GemRadarListingObservation.observed_at)
     obs_stmt = (
         select(
-            GemRadarListingObservation.observed_at,
+            observed_day.label("observed_day"),
             func.avg(GemRadarListingObservation.delivered_price).label("avg_price"),
         )
         .join(
             GemRadarListingCpk,
             GemRadarListingCpk.listing_id == GemRadarListingObservation.listing_id,
         )
-        .where(GemRadarListingCpk.cpk_code == cpk_code)
-        .group_by(GemRadarListingObservation.observed_at)
-        .order_by(desc(GemRadarListingObservation.observed_at))
+        .where(GemRadarListingCpk.cpk == cpk)
+        .group_by(observed_day)
+        .order_by(desc(observed_day))
         .limit(100)
     )
 
@@ -2308,6 +2310,7 @@ async def get_cpk_price_history(
     observations = result.fetchall()
 
     return {
+        "cpk": cpk,
         "prices": [
             {
                 "observed_at": obs[0].isoformat() if obs[0] else None,
