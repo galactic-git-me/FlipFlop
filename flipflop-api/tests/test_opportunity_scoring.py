@@ -67,7 +67,7 @@ def test_preliminary_cohort_can_only_be_emerging():
     )
     result = score_opportunity(
         listing_price=70, title="AMD Ryzen 7 7800X3D",
-        cpk_data={"category": "cpu", "brand": "AMD", "model": "Ryzen 7 7800X3D"},
+        cpk_data={"category": "cpu", "brand": "AMD", "model": "Ryzen 7 7800X3D", "specs": {"socket": "am5"}},
         market=market, sold_count_90d=3, active_count=2,
         watch_velocity=2, bid_velocity=1, policy=policy, delivery_cost=0,
         extra_risk_flags=("preliminary_sold_cohort",),

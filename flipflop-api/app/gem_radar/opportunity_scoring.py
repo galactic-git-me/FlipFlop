@@ -293,7 +293,7 @@ def score_opportunity(
     if is_component:
         reasons.append("Component economics exclude build-level fulfilment costs, which are charged once to the completed build.")
     emerging_profit_floor = min(policy.gem_profit, 10.0) if is_component else policy.gem_profit
-    if provisional_evidence and not blocking_flags and profit >= emerging_profit_floor and roi >= 25 and market.confidence >= 40 and liquidity >= 20:
+    if provisional_evidence and not blocking_flags and profit >= emerging_profit_floor and roi >= 25 and market.confidence >= 40 and liquidity >= 20 and desirability >= 55:
         classification, decision = "EMERGING_OPPORTUNITY", "INVESTIGATE"
         reasons.append("Promising economics, but only 3–4 robust sold comparables: verify manually before buying.")
     elif eligible and profit >= policy.super_profit and roi >= policy.super_roi_pct and market.confidence >= policy.super_confidence and liquidity >= policy.super_liquidity and total_score >= policy.super_score:
