@@ -1,6 +1,7 @@
 "use client";
 
-import { X } from "lucide-react";
+import { useEffect } from "react";
+import { TrendingDown, TrendingUp, X } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -18,6 +19,7 @@ interface PriceObservation {
 
 interface PriceHistoryModalProps {
   listingId: string;
+  listingTitle?: string;
   listingPrices: PriceObservation[];
   cpkPrices?: PriceObservation[];
   onClose: () => void;
@@ -25,10 +27,22 @@ interface PriceHistoryModalProps {
 
 export function PriceHistoryModal({
   listingId,
+  listingTitle,
   listingPrices,
   cpkPrices,
   onClose,
 }: PriceHistoryModalProps) {
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => event.key === "Escape" && onClose();
+    document.addEventListener("keydown", closeOnEscape);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", closeOnEscape);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [onClose]);
+
   // Sort by date for chart
   const sortedListing = [...listingPrices].sort(
     (a, b) => new Date(a.observed_at).getTime() - new Date(b.observed_at).getTime()
@@ -40,23 +54,28 @@ export function PriceHistoryModal({
       )
     : [];
 
-  // Format for Recharts - align both datasets by timestamp
+  // Align both series to calendar days. The market endpoint is daily and a
+  // listing can be observed multiple times per day; the latest listing value
+  // for each day is the most useful like-for-like comparison.
+  const dayKey = (value: string) => {
+    const date = new Date(value);
+    date.setHours(0, 0, 0, 0);
+    return date.getTime();
+  };
   const timestamps = new Set<number>();
-  sortedListing.forEach((p) =>
-    timestamps.add(new Date(p.observed_at).getTime())
-  );
-  sortedCpk.forEach((p) => timestamps.add(new Date(p.observed_at).getTime()));
+  sortedListing.forEach((p) => timestamps.add(dayKey(p.observed_at)));
+  sortedCpk.forEach((p) => timestamps.add(dayKey(p.observed_at)));
 
   const sortedTimestamps = Array.from(timestamps).sort((a, b) => a - b);
   const listingMap = new Map(
     sortedListing.map((p) => [
-      new Date(p.observed_at).getTime(),
+      dayKey(p.observed_at),
       p.delivered_price,
     ])
   );
   const cpkMap = new Map(
     sortedCpk.map((p) => [
-      new Date(p.observed_at).getTime(),
+      dayKey(p.observed_at),
       p.delivered_price,
     ])
   );
@@ -66,8 +85,6 @@ export function PriceHistoryModal({
     date: new Date(ts).toLocaleDateString("en-GB", {
       month: "short",
       day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
     }),
     listingPrice: listingMap.get(ts),
     cpkPrice: cpkMap.get(ts),
@@ -99,15 +116,16 @@ export function PriceHistoryModal({
       : 0;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-slate-800 rounded-lg shadow-xl max-w-2xl w-full mx-4 border border-slate-600 max-h-[80vh] flex flex-col">
+    <div className="fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/80 p-3 backdrop-blur-sm" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
+      <div role="dialog" aria-modal="true" aria-labelledby="price-history-title" className="flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-slate-600 bg-slate-900 shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-slate-600">
-          <h2 className="text-lg font-semibold text-slate-100">Price History</h2>
+          <div className="min-w-0"><h2 id="price-history-title" className="text-lg font-semibold text-slate-100">Price history</h2><p className="truncate text-xs text-slate-400">{listingTitle || `Listing ${listingId}`}</p></div>
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-200 transition"
+            className="cursor-pointer rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-700 hover:text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+            aria-label="Close price history"
           >
             <X size={24} />
           </button>
@@ -122,20 +140,16 @@ export function PriceHistoryModal({
           ) : (
             <>
               {/* Stats */}
-              <div className="grid grid-cols-2 gap-3 mb-6">
-                <div className="bg-slate-700 rounded p-3 border-l-2 border-blue-400">
+              <div className="mb-6 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-xl border border-blue-400/30 bg-blue-500/10 p-4">
                   <div className="text-xs text-slate-400">This Listing</div>
                   <div className="text-lg font-semibold text-blue-300 mb-1">
                     £{currentListingPrice.toFixed(2)}
                   </div>
-                  <div className="text-xs text-slate-400">
-                    Avg: £{avgListingPrice.toFixed(2)} | Min: £
-                    {minListingPrice.toFixed(2)} | Max: £
-                    {maxListingPrice.toFixed(2)}
-                  </div>
+                  <div className="text-xs text-slate-400">Average £{avgListingPrice.toFixed(2)} · Range £{minListingPrice.toFixed(2)}–£{maxListingPrice.toFixed(2)}</div>
                 </div>
                 {cpkPrices && cpkPrices.length > 0 && (
-                  <div className="bg-slate-700 rounded p-3 border-l-2 border-orange-400">
+                  <div className="rounded-xl border border-orange-400/30 bg-orange-500/10 p-4">
                     <div className="text-xs text-slate-400">Market CPK Average</div>
                     <div className="text-lg font-semibold text-orange-300 mb-1">
                       £{currentCpkPrice.toFixed(2)}
@@ -149,13 +163,13 @@ export function PriceHistoryModal({
 
               {/* vs Market */}
               {cpkPrices && cpkPrices.length > 0 && (
-                <div className="mb-6 p-3 bg-slate-700 rounded">
+                <div className="mb-6 rounded-xl border border-slate-700 bg-slate-800 p-4">
                   <div className="text-xs text-slate-400 mb-1">vs Market</div>
                   <div className="flex items-baseline gap-2">
                     <span className={`text-sm font-semibold ${
                       priceVsMarket < 0 ? "text-green-400" : "text-red-400"
                     }`}>
-                      {priceVsMarket < 0 ? "↓" : "↑"} £{Math.abs(priceVsMarket).toFixed(2)}
+                      {priceVsMarket < 0 ? <TrendingDown className="inline h-4 w-4" /> : <TrendingUp className="inline h-4 w-4" />} £{Math.abs(priceVsMarket).toFixed(2)}
                     </span>
                     <span className={`text-xs ${
                       priceVsMarket < 0 ? "text-green-400" : "text-red-400"
@@ -167,7 +181,7 @@ export function PriceHistoryModal({
               )}
 
               {/* Trend */}
-              <div className="mb-6 p-3 bg-slate-700 rounded">
+              <div className="mb-6 rounded-xl border border-slate-700 bg-slate-800 p-4">
                 <div className="text-xs text-slate-400">Trend (This Listing)</div>
                 <div className="flex items-baseline gap-2">
                   <span className="text-sm font-semibold text-slate-100">
@@ -193,8 +207,8 @@ export function PriceHistoryModal({
               </div>
 
               {/* Chart */}
-              <div className="bg-slate-750 rounded p-4 border border-slate-600">
-                <ResponsiveContainer width="100%" height={300}>
+              <div className="rounded-xl border border-slate-700 bg-slate-950/50 p-3 sm:p-5">
+                <ResponsiveContainer width="100%" height={360}>
                   <LineChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
                     <XAxis
@@ -229,6 +243,7 @@ export function PriceHistoryModal({
                       isAnimationActive={false}
                       name="This Listing"
                       strokeWidth={2}
+                      connectNulls
                     />
                     {sortedCpk.length > 0 && (
                       <Line
@@ -241,6 +256,7 @@ export function PriceHistoryModal({
                         name="Market CPK"
                         strokeWidth={2}
                         opacity={0.7}
+                        connectNulls
                       />
                     )}
                   </LineChart>

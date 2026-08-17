@@ -1506,7 +1506,7 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                     </td>
                     <td className="p-3 text-right text-slate-100 font-semibold">£{listing.delivered_price.toFixed(2)}</td>
                     <td className="p-3">
-                      <PriceHistorySparkline listingId={listing.listing_id} />
+                      <PriceHistorySparkline listingId={listing.listing_id} listingTitle={listing.title} />
                     </td>
                     <td className="p-3 text-right text-slate-100">
                       {listing.market_new_price ? (

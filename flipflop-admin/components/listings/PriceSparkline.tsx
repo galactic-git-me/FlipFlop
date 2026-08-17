@@ -48,7 +48,7 @@ export function PriceSparkline({
   const range = max - min || 1;
 
   // Generate SVG path points for listing prices (blue)
-  const listingPoints = sortedListing
+  const listingPoints = (sortedListing.length === 1 ? [sortedListing[0], sortedListing[0]] : sortedListing)
     .map((p, idx) => {
       const x = (idx / (sortedListing.length - 1 || 1)) * width;
       const y = height - ((p.delivered_price - min) / range) * (height - 4) - 2;
@@ -57,7 +57,7 @@ export function PriceSparkline({
     .join(' ');
 
   // Generate SVG path points for CPK prices (orange)
-  const cpkPoints = sortedCpk
+  const cpkPoints = (sortedCpk.length === 1 ? [sortedCpk[0], sortedCpk[0]] : sortedCpk)
     .map((p, idx) => {
       const x = (idx / (sortedCpk.length - 1 || 1)) * width;
       const y = height - ((p.delivered_price - min) / range) * (height - 4) - 2;
@@ -103,7 +103,7 @@ export function PriceSparkline({
               points={cpkPoints}
               fill="none"
               stroke="#f97316"
-              strokeWidth="1"
+              strokeWidth="1.75"
               strokeLinecap="round"
               strokeLinejoin="round"
               opacity="0.6"
@@ -125,7 +125,7 @@ export function PriceSparkline({
           points={listingPoints}
           fill="none"
           stroke={listingTrendColor}
-          strokeWidth="1.5"
+          strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
