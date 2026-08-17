@@ -50,6 +50,8 @@ class CategoryEconomics:
     super_roi_pct: float
     gem_profit: float
     gem_roi_pct: float
+    super_score: float
+    gem_score: float
 
 
 def category_economics(category: str, policy: OpportunityPolicy) -> CategoryEconomics:
@@ -60,12 +62,15 @@ def category_economics(category: str, policy: OpportunityPolicy) -> CategoryEcon
     hurdle. Complete systems continue to use the configured global policy.
     """
     if category in {"cpu", "ram", "ssd", "cooler", "fan"}:
-        return CategoryEconomics(15.0, 50.0, 5.0, 20.0)
+        return CategoryEconomics(15.0, 50.0, 5.0, 18.0, 80.0, 60.0)
     if category in {"motherboard", "psu", "case"}:
-        return CategoryEconomics(25.0, 40.0, 10.0, 20.0)
+        return CategoryEconomics(25.0, 40.0, 10.0, 20.0, 82.0, 65.0)
     if category == "gpu":
-        return CategoryEconomics(40.0, 30.0, 20.0, 18.0)
-    return CategoryEconomics(policy.super_profit, policy.super_roi_pct, policy.gem_profit, policy.gem_roi_pct)
+        return CategoryEconomics(40.0, 30.0, 20.0, 18.0, 83.0, 70.0)
+    return CategoryEconomics(
+        policy.super_profit, policy.super_roi_pct, policy.gem_profit,
+        policy.gem_roi_pct, policy.super_score, policy.gem_score,
+    )
 
 
 async def load_opportunity_policy(db) -> OpportunityPolicy:
@@ -325,9 +330,9 @@ def score_opportunity(
     if provisional_evidence and not blocking_flags and profit >= emerging_profit_floor and roi >= 25 and market.confidence >= 40 and liquidity >= 20 and desirability >= 55:
         classification, decision = "EMERGING_OPPORTUNITY", "INVESTIGATE"
         reasons.append("Promising economics, but only 3–4 robust sold comparables: verify manually before buying.")
-    elif eligible and profit >= economics.super_profit and roi >= economics.super_roi_pct and market.confidence >= policy.super_confidence and liquidity >= policy.super_liquidity and total_score >= policy.super_score:
+    elif eligible and profit >= economics.super_profit and roi >= economics.super_roi_pct and market.confidence >= policy.super_confidence and liquidity >= policy.super_liquidity and total_score >= economics.super_score:
         classification, decision = "SUPER_GEM", "BUY_NOW"
-    elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market.confidence >= policy.gem_confidence and liquidity >= policy.gem_liquidity and total_score >= policy.gem_score:
+    elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market.confidence >= policy.gem_confidence and liquidity >= policy.gem_liquidity and total_score >= economics.gem_score:
         classification, decision = "GEM", "BUY_NOW"
     elif profit > 0 and eligible:
         classification, decision = "OK_DEAL", "MAKE_OFFER"
