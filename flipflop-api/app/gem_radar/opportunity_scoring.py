@@ -19,6 +19,7 @@ ACCESSORY_TERMS = {
 }
 BUNDLE_TERMS = {"job lot", "bundle of", "mystery box", "assorted parts"}
 RETRO_PLATFORM_TERMS = {"am3", "am3+", "ddr3", "ddr2", "socket 775"}
+COMPONENT_CATEGORIES = {"cpu", "gpu", "motherboard", "ram", "ssd", "psu", "case", "cooler", "fan"}
 
 
 @dataclass(frozen=True)
@@ -236,6 +237,7 @@ def score_opportunity(
     policy: OpportunityPolicy, delivery_cost: float | None = None,
     preferred: bool = False, inventory_fit: bool = False,
     strategy: str = "standard", extra_risk_flags: Iterable[str] = (),
+    listing_condition: str | None = None,
 ) -> OpportunityResult:
     risk_flags = identity_gates(title, cpk_data, strategy) + list(extra_risk_flags)
     if market is None:
@@ -256,12 +258,22 @@ def score_opportunity(
         return OpportunityResult("AVERAGE_DEAL", "INVESTIGATE", 0.0, None, None, None, liquidity, desirability, risk, None, False,
                                  ["A same-condition completed-sale cohort is required before a buy classification."], risk_flags)
 
-    shipping = policy.delivery_fallback if delivery_cost is None else delivery_cost
-    ebay_fee = market.conservative_resale * policy.ebay_fee_pct / 100.0
-    warranty = market.conservative_resale * policy.returns_warranty_pct / 100.0
+    category = str((cpk_data or {}).get("category") or "").lower()
+    is_component = category in COMPONENT_CATEGORIES
+    is_new = (listing_condition or "").lower() == "new"
+    # Gem Radar sources parts for incorporation into a build. Its listing
+    # price is already the landed acquisition price, while outbound delivery,
+    # packaging, eBay fees and whole-build QA are charged once by the build
+    # economics layer. Applying them to every part double-counts those costs.
+    shipping = 0.0 if is_component else (policy.delivery_fallback if delivery_cost is None else delivery_cost)
+    ebay_fee = 0.0 if is_component else market.conservative_resale * policy.ebay_fee_pct / 100.0
+    packaging = 0.0 if is_component else policy.packaging_cost
+    testing = (0.0 if is_new else 3.0) if is_component else policy.testing_refurbishment_cost
+    warranty_pct = (0.5 if is_new else 2.0) if is_component else policy.returns_warranty_pct
+    warranty = market.conservative_resale * warranty_pct / 100.0
     costs = {
         "purchase": listing_price, "delivery": shipping, "ebay_fee": ebay_fee,
-        "packaging": policy.packaging_cost, "testing_refurbishment": policy.testing_refurbishment_cost,
+        "packaging": packaging, "testing_refurbishment": testing,
         "returns_warranty_reserve": warranty,
     }
     total_cost = sum(costs.values())
@@ -278,7 +290,10 @@ def score_opportunity(
         f"Conservative resale uses the lower quartile of {market.sample_size} robust same-condition sold comparables.",
         f"Expected net profit £{profit:.2f}; ROI {roi:.1f}%; liquidity {liquidity:.0f}/100.",
     ]
-    if provisional_evidence and not blocking_flags and profit >= policy.gem_profit and roi >= 12 and market.confidence >= 50 and liquidity >= 30:
+    if is_component:
+        reasons.append("Component economics exclude build-level fulfilment costs, which are charged once to the completed build.")
+    emerging_profit_floor = min(policy.gem_profit, 10.0) if is_component else policy.gem_profit
+    if provisional_evidence and not blocking_flags and profit >= emerging_profit_floor and roi >= 25 and market.confidence >= 40 and liquidity >= 20:
         classification, decision = "EMERGING_OPPORTUNITY", "INVESTIGATE"
         reasons.append("Promising economics, but only 3–4 robust sold comparables: verify manually before buying.")
     elif eligible and profit >= policy.super_profit and roi >= policy.super_roi_pct and market.confidence >= policy.super_confidence and liquidity >= policy.super_liquidity and total_score >= policy.super_score:

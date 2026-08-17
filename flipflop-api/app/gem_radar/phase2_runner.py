@@ -115,6 +115,7 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
             bid_velocity=await calculate_bid_velocity(db, listing_id),
             policy=policy, preferred=preferred,
             extra_risk_flags=("preliminary_sold_cohort",) if preliminary_market else (),
+            listing_condition=condition,
         )
         classification = opportunity.classification
         deal_score = opportunity.score / 10.0

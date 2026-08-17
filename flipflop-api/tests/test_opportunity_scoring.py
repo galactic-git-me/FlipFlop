@@ -75,3 +75,18 @@ def test_preliminary_cohort_can_only_be_emerging():
     assert result.classification == "EMERGING_OPPORTUNITY"
     assert result.decision == "INVESTIGATE"
     assert not result.eligible
+
+
+def test_component_does_not_repeat_whole_build_fulfilment_costs():
+    policy = OpportunityPolicy(delivery_fallback=15, packaging_cost=6, testing_refurbishment_cost=10)
+    market = robust_sold_market(comps([100, 102, 104, 106, 108]), subject_listing_id="999", policy=policy)
+    result = score_opportunity(
+        listing_price=60, title="Used AMD Ryzen 5 5600 CPU",
+        cpk_data={"category": "cpu", "brand": "AMD", "model": "Ryzen 5 5600"},
+        market=market, sold_count_90d=8, active_count=3,
+        watch_velocity=1, bid_velocity=1, policy=policy,
+    )
+    assert result.cost_breakdown["delivery"] == 0
+    assert result.cost_breakdown["packaging"] == 0
+    assert result.cost_breakdown["testing_refurbishment"] == 3
+    assert result.expected_profit and result.expected_profit > 30
