@@ -183,7 +183,7 @@ Use this exact flipflop premium template. Copy it verbatim, then replace ONLY th
 <img class="ff-image" src="{{HERO_IMAGE_URL}}" alt="{{PC_NAME}} custom gaming and creative PC">
 
 <div style="padding:38px 24px;text-align:left;border-top:3px solid #ff6700;border-bottom:3px solid #008cff">
-  <img src="{{FLIPFLOP_LOGO_URL}}" alt="flipflop" style="display:block;width:150px;max-width:45%;height:auto;margin:0 0 22px;border:0">
+  <img src="https://theflipflop.shop/media/flipflop-glow-black-with-full-glow.png" alt="flipflop" style="display:block;width:150px;max-width:45%;height:auto;margin:0 0 22px;border:0">
   <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/prometheus.png" alt="{{PC_NAME}}">
   <p style="margin:0 0 12px;color:#ff761a;font-size:22px;font-weight:bold">{{TAGLINE}}</p>
   <p style="max-width:760px;margin:0;color:#cbd5e1;font-size:17px">{{HERO_DESCRIPTION}}</p>
@@ -264,7 +264,8 @@ Use this exact flipflop premium template. Copy it verbatim, then replace ONLY th
 ```
 
 **Template Variables (MUST fill in):**
-- {{HERO_IMAGE_URL}}, {{FLIPFLOP_LOGO_URL}}, {{INTERIOR_IMAGE_URL}}, {{COMPONENT_CALLOUT_IMAGE_URL}}, {{CASE_DETAIL_IMAGE_URL}}, {{REAR_CONNECTIVITY_IMAGE_URL}}, {{OWNER_PORTAL_IMAGE_URL}} — image URLs
+- {{INTERIOR_IMAGE_URL}}, {{COMPONENT_CALLOUT_IMAGE_URL}}, {{CASE_DETAIL_IMAGE_URL}}, {{REAR_CONNECTIVITY_IMAGE_URL}}, {{OWNER_PORTAL_IMAGE_URL}} — image URLs you don't have; use your best judgement per the surrounding instructions
+- {{HERO_IMAGE_URL}} — do NOT fill this in. Leave the literal text `{{HERO_IMAGE_URL}}` exactly as-is in your output; the backend substitutes it with the build's actual uploaded hero photo URL after generation, since only it knows that value
 - {{PC_NAME}}, {{TAGLINE}}, {{HERO_DESCRIPTION}} — hero section
 - {{PROCESSOR}}, {{GRAPHICS}}, {{MEMORY}}, {{STORAGE}} — spec cards
 - {{WHY_STANDS_OUT}} — 3–4 paragraphs with `<p>` tags and emojis
