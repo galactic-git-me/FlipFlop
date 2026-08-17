@@ -63,7 +63,7 @@ async def get_robust_sold_market(
             FROM gem_radar_sold_observations
             WHERE cpk = :cpk
               AND LOWER(condition) = :condition
-              AND observed_at >= CURRENT_TIMESTAMP - (:lookback || ' days')::interval
+              AND observed_at >= CURRENT_TIMESTAMP - make_interval(days => :lookback)
               AND price > 0
             ORDER BY observed_at DESC
             """

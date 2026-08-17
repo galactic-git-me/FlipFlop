@@ -50,28 +50,35 @@ def upgrade():
     for name, (kind, default) in settings.items():
         op.add_column("app_settings", sa.Column(name, kind, nullable=False, server_default=default))
 
-    op.create_table("gem_radar_decision_events",
-        sa.Column("id", sa.Integer(), primary_key=True), sa.Column("listing_id", sa.String(255), nullable=False, index=True),
-        sa.Column("classification", sa.String(50), nullable=False, index=True), sa.Column("decision", sa.String(50), nullable=False),
-        sa.Column("score", sa.Float(), nullable=False), sa.Column("explanation", sa.JSON(), nullable=False),
-        sa.Column("created_at", sa.DateTime(), nullable=False, index=True))
-    op.create_table("component_rating_events",
-        sa.Column("id", sa.Integer(), primary_key=True),
-        sa.Column("build_id", sa.Integer(), sa.ForeignKey("manual_builds.id", ondelete="CASCADE"), nullable=False, index=True),
-        sa.Column("component_slot", sa.String(50), nullable=False), sa.Column("component_key", sa.String(255), nullable=False, index=True),
-        sa.Column("overall_rating", sa.Integer(), nullable=False), sa.Column("reliability_rating", sa.Integer()),
-        sa.Column("installation_rating", sa.Integer()), sa.Column("aesthetics_rating", sa.Integer()),
-        sa.Column("value_rating", sa.Integer()), sa.Column("customer_appeal_rating", sa.Integer()),
-        sa.Column("notes", sa.Text()), sa.Column("created_at", sa.DateTime(), nullable=False),
-        sa.Column("updated_at", sa.DateTime(), nullable=False),
-        sa.UniqueConstraint("build_id", "component_slot", "component_key", name="uq_component_rating_build_slot_key"))
-    op.create_table("preferred_components",
-        sa.Column("component_key", sa.String(255), primary_key=True), sa.Column("component_slot", sa.String(50), nullable=False, index=True),
-        sa.Column("sample_count", sa.Integer(), nullable=False, server_default="1"),
-        sa.Column("average_rating", sa.Float(), nullable=False, server_default="5"),
-        sa.Column("status", sa.String(20), nullable=False, server_default="preferred"),
-        sa.Column("last_build_id", sa.Integer()), sa.Column("last_used_at", sa.DateTime(), nullable=False),
-        sa.Column("outcome_summary", sa.JSON()))
+    # Development startup may have created newly imported ORM tables via
+    # create_all before Alembic runs. Keep the migration idempotent in that
+    # case while Alembic remains authoritative for deployed databases.
+    tables = set(sa.inspect(op.get_bind()).get_table_names())
+    if "gem_radar_decision_events" not in tables:
+        op.create_table("gem_radar_decision_events",
+            sa.Column("id", sa.Integer(), primary_key=True), sa.Column("listing_id", sa.String(255), nullable=False, index=True),
+            sa.Column("classification", sa.String(50), nullable=False, index=True), sa.Column("decision", sa.String(50), nullable=False),
+            sa.Column("score", sa.Float(), nullable=False), sa.Column("explanation", sa.JSON(), nullable=False),
+            sa.Column("created_at", sa.DateTime(), nullable=False, index=True))
+    if "component_rating_events" not in tables:
+        op.create_table("component_rating_events",
+            sa.Column("id", sa.Integer(), primary_key=True),
+            sa.Column("build_id", sa.Integer(), sa.ForeignKey("manual_builds.id", ondelete="CASCADE"), nullable=False, index=True),
+            sa.Column("component_slot", sa.String(50), nullable=False), sa.Column("component_key", sa.String(255), nullable=False, index=True),
+            sa.Column("overall_rating", sa.Integer(), nullable=False), sa.Column("reliability_rating", sa.Integer()),
+            sa.Column("installation_rating", sa.Integer()), sa.Column("aesthetics_rating", sa.Integer()),
+            sa.Column("value_rating", sa.Integer()), sa.Column("customer_appeal_rating", sa.Integer()),
+            sa.Column("notes", sa.Text()), sa.Column("created_at", sa.DateTime(), nullable=False),
+            sa.Column("updated_at", sa.DateTime(), nullable=False),
+            sa.UniqueConstraint("build_id", "component_slot", "component_key", name="uq_component_rating_build_slot_key"))
+    if "preferred_components" not in tables:
+        op.create_table("preferred_components",
+            sa.Column("component_key", sa.String(255), primary_key=True), sa.Column("component_slot", sa.String(50), nullable=False, index=True),
+            sa.Column("sample_count", sa.Integer(), nullable=False, server_default="1"),
+            sa.Column("average_rating", sa.Float(), nullable=False, server_default="5"),
+            sa.Column("status", sa.String(20), nullable=False, server_default="preferred"),
+            sa.Column("last_build_id", sa.Integer()), sa.Column("last_used_at", sa.DateTime(), nullable=False),
+            sa.Column("outcome_summary", sa.JSON()))
 
 
 def downgrade():
