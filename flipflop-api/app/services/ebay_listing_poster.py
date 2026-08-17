@@ -20,6 +20,8 @@ from typing import Optional
 from datetime import datetime
 import uuid
 import base64
+from html import unescape
+from html.parser import HTMLParser
 
 log = structlog.get_logger(__name__)
 
@@ -27,6 +29,39 @@ EBAY_API_BASE = {
     "sandbox": "https://api.sandbox.ebay.com",
     "production": "https://api.ebay.com",
 }
+
+EBAY_PRODUCT_DESCRIPTION_MAX_LENGTH = 4000
+EBAY_LISTING_DESCRIPTION_MAX_LENGTH = 500_000
+
+
+class _DescriptionTextExtractor(HTMLParser):
+    """Extract readable product text without sending template markup."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.parts: list[str] = []
+
+    def handle_data(self, data: str) -> None:
+        if data.strip():
+            self.parts.append(data.strip())
+
+
+def _inventory_product_description(description: str, title: str) -> str:
+    """Build the short Product.description required by Inventory API.
+
+    The complete HTML belongs in Offer.listingDescription. Keeping markup out
+    of this field makes its documented 4,000-character limit deterministic.
+    """
+    parser = _DescriptionTextExtractor()
+    parser.feed(description or "")
+    plain_text = unescape(" ".join(parser.parts))
+    normalized = " ".join(plain_text.split())
+    value = normalized or title.strip() or "Custom PC"
+    # eBay documents characters, but its validation can occur after UTF-8
+    # serialization. Truncate on a valid code-point boundary so both counts
+    # remain within the same 4,000-unit ceiling for £, dashes, and emoji.
+    encoded = value.encode("utf-8")[:EBAY_PRODUCT_DESCRIPTION_MAX_LENGTH]
+    return encoded.decode("utf-8", errors="ignore")
 
 
 class EbayListingPoster:
@@ -211,7 +246,7 @@ class EbayListingPoster:
                 inventory_item = {
                     "product": {
                         "title": title[:80],
-                        "description": description[:4000],
+                        "description": _inventory_product_description(description, title),
                         "imageUrls": image_urls,
                         "aspects": item_aspects,
                     },
@@ -287,6 +322,7 @@ class EbayListingPoster:
                     "marketplaceId": "EBAY_GB",  # UK marketplace
                     "format": "FIXED_PRICE",
                     "categoryId": category_id,
+                    "listingDescription": (description or title)[:EBAY_LISTING_DESCRIPTION_MAX_LENGTH],
                     "merchantLocationKey": merchant_location_key,
                     "pricingSummary": {
                         "price": {
