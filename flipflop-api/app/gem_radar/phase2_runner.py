@@ -20,20 +20,14 @@ from datetime import datetime
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.gem_radar.cpk_market import get_market_price_with_hierarchy_fallback
-from app.gem_radar.deal_classification import (
-    classify_by_offset,
-    deal_score_from_offset,
-    load_deal_thresholds,
-    market_price_for_source,
-    pct_offset,
-    recommendation_for_classification,
-)
-from app.gem_radar.demand_velocity import record_demand_snapshot, detect_hot_item
+from app.gem_radar.cpk_market import get_robust_sold_market
+from app.gem_radar.demand_velocity import record_demand_snapshot, calculate_watch_velocity, calculate_bid_velocity
+from app.gem_radar.opportunity_scoring import load_opportunity_policy, score_opportunity
 from app.gem_radar.favourite_matching import find_matching_favourite
 from app.gem_radar.marketplace import fallback_listing_url
 from app.models.favourite import Favourite
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
+from app.models.gem_radar_intelligence import GemRadarDecisionEvent, PreferredComponent
 from app.services.alerts import emit_alert
 from app.services.ebay_browse import get_component_prices
 from app.services.ebay_catalog import get_product_reviews
@@ -50,12 +44,12 @@ class Phase2Result:
 
 
 async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
-    thresholds = await load_deal_thresholds(db)
+    policy = await load_opportunity_policy(db)
 
     result = await db.execute(
         text(
             """
-            SELECT
+            SELECT DISTINCT ON (lo.listing_id)
                 lo.listing_id, lo.title, lo.seller_name, lo.image_url,
                 lo.condition_normalised AS condition, lo.item_price, lo.postage_price,
                 lo.delivered_price, lo.source, lo.observed_at,
@@ -63,7 +57,7 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
                 lo.epid, lo.seller_feedback_percent, lo.seller_feedback_count
             FROM gem_radar_listing_observations lo
             JOIN gem_radar_listing_cpk cpk ON lo.listing_id = cpk.listing_id
-            ORDER BY lo.listing_id
+            ORDER BY lo.listing_id, lo.observed_at DESC, lo.id DESC
             """
         )
     )
@@ -85,45 +79,40 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
             epid, seller_feedback_percent, seller_feedback_count,
         ) = row
 
-        market = await get_market_price_with_hierarchy_fallback(db, cpk)
+        market = await get_robust_sold_market(
+            db, cpk=cpk, condition=condition, subject_listing_id=listing_id, policy=policy
+        )
         if market is None:
             unsettled_count += 1
-            continue
-
-        market_price = market_price_for_source(market, thresholds.market_price_source)
-        offset = pct_offset(delivered_price, market_price)
-        classification = classify_by_offset(offset, thresholds)
-        deal_score = deal_score_from_offset(offset, thresholds)
-        recommendation = recommendation_for_classification(classification)
         category = (cpk_data or {}).get("category")
 
         # Record demand snapshot for velocity tracking (Phase 2 enhancement).
         await record_demand_snapshot(
             db, listing_id, SEARCH_RUN_ID,
-            watch_count or 0, bid_count or 0, delivered_price
+            watch_count, bid_count, delivered_price
         )
 
-        # Demand signal multiplier for GEM/SUPER_GEM listings.
-        # High watch count + high bid count = real demand signal (boost confidence).
-        # High watch count + low/zero bid count = price-likely-too-high signal (reduce confidence).
-        # Hot items (watch/bid velocity > threshold) get an additional boost.
-        # This is a weak signal (not a veto) — real price competitiveness matters more.
-        demand_multiplier = 1.0
-        if classification in ("GEM", "SUPER_GEM"):
-            watch_count = watch_count or 0
-            bid_count = bid_count or 0
-            if watch_count > 5 and bid_count > 1:
-                demand_multiplier = 1.15  # +15% confidence boost
-            elif watch_count > 20 and bid_count <= 1:
-                demand_multiplier = 0.85  # -15% confidence reduction
-
-            # Check for hot-item velocity signals (growing watch/bid counts).
-            is_hot = await detect_hot_item(db, listing_id)
-            if is_hot:
-                demand_multiplier *= 1.15  # Additional +15% for velocity
-
-        base_confidence = min(100.0, market.listing_count * 20.0)
-        adjusted_confidence = min(100.0, base_confidence * demand_multiplier)
+        cohort_counts = (await db.execute(text("""
+            SELECT
+              (SELECT COUNT(DISTINCT COALESCE(source_url, id::text)) FROM gem_radar_sold_observations
+               WHERE cpk = :cpk AND LOWER(condition) = :condition
+                 AND observed_at >= CURRENT_TIMESTAMP - INTERVAL '90 days') AS sold_count,
+              (SELECT COUNT(*) FROM gem_radar_cpk_listing_price
+               WHERE cpk = :cpk AND listing_id <> :listing_id
+                 AND updated_at >= CURRENT_TIMESTAMP - INTERVAL '14 days') AS active_count
+        """), {"cpk": cpk, "condition": "new" if (condition or "").lower() == "new" else "used", "listing_id": listing_id})).one()
+        preferred = (await db.execute(select(PreferredComponent).where(PreferredComponent.component_key == cpk))).scalar_one_or_none() is not None
+        opportunity = score_opportunity(
+            listing_price=delivered_price, title=title, cpk_data=cpk_data,
+            market=market, sold_count_90d=int(cohort_counts[0] or 0), active_count=int(cohort_counts[1] or 0),
+            watch_velocity=await calculate_watch_velocity(db, listing_id),
+            bid_velocity=await calculate_bid_velocity(db, listing_id),
+            policy=policy, preferred=preferred,
+        )
+        classification = opportunity.classification
+        deal_score = opportunity.score / 10.0
+        adjusted_confidence = market.confidence if market else 0.0
+        recommendation = "BUY_NOW" if opportunity.decision == "BUY_NOW" else ("OFFER_DEAL" if opportunity.decision == "MAKE_OFFER" else "DO_NOT_BUY")
 
         # Product review rating is a per-epid external API call (7-day
         # cached, see services/ebay_catalog.py) — only worth paying for on
@@ -136,13 +125,7 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
             review_average_rating = reviews.average_rating
             review_count = reviews.review_count
 
-        decision_map = {
-            "BUY_NOW_NO_QUESTION": "BUY_NOW",
-            "BUY_NOW": "BUY_NOW",
-            "OFFER_DEAL": "MAKE_OFFER",
-            "DO_NOT_BUY": "IGNORE",
-        }
-        decision = decision_map.get(recommendation, "WATCH")
+        decision = opportunity.decision
 
         db_row = GemRadarScoredListing(
             listing_id=listing_id,
@@ -169,6 +152,20 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
             confidence_score=adjusted_confidence,
             confidence_band="high" if adjusted_confidence >= 75 else ("medium" if adjusted_confidence >= 40 else "low"),
             decision=decision,
+            expected_profit=opportunity.expected_profit,
+            roi_pct=opportunity.roi_pct,
+            walk_away_price=opportunity.walk_away_price,
+            conservative_resale_price=market.conservative_resale if market else None,
+            market_confidence=market.confidence if market else 0.0,
+            market_sample_size=market.sample_size if market else 0,
+            market_source_diversity=market.source_diversity if market else 0,
+            market_spread_pct=market.spread_pct if market else None,
+            liquidity_score=opportunity.liquidity_score,
+            desirability_score=opportunity.desirability_score,
+            risk_score=opportunity.risk_score,
+            eligible=opportunity.eligible,
+            scoring_explanation=opportunity.explanation(),
+            reasoning_summary=" ".join(opportunity.reasons),
             listing_observed_at=observed_at,
         )
         db.add(db_row)
@@ -198,10 +195,10 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
                 """
             ),
             {
-                "lower": market.min_price,
-                "median": market.median_price,
-                "upper": market.max_price,
-                "offset": offset,
+                "lower": market.lower if market else None,
+                "median": market.median if market else None,
+                "upper": market.upper if market else None,
+                "offset": round((delivered_price - market.conservative_resale) / market.conservative_resale * 100, 2) if market and market.conservative_resale else None,
                 "recommendation": recommendation,
                 "cpk": cpk,
                 "id": db_row.id,
@@ -210,6 +207,11 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
 
         classified_count += 1
         classification_counts[classification] = classification_counts.get(classification, 0) + 1
+
+        db.add(GemRadarDecisionEvent(
+            listing_id=listing_id, classification=classification, decision=decision,
+            score=opportunity.score, explanation=opportunity.explanation(),
+        ))
 
         if classification in ("GEM", "SUPER_GEM") and favourites:
             matched_fav = find_matching_favourite(title, cpk, favourites)

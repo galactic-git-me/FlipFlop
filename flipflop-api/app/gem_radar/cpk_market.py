@@ -39,6 +39,41 @@ MIN_LISTINGS_FOR_SETTLED_PRICE = 2
 MARKET_PRICE_WINDOW_DAYS = 14
 
 
+async def get_robust_sold_market(
+    db: AsyncSession,
+    *,
+    cpk: str,
+    condition: str,
+    subject_listing_id: str,
+    policy,
+):
+    """Return a same-condition completed-sale cohort only.
+
+    Active BIN, Amazon and scan prices remain available elsewhere as context,
+    but are intentionally excluded from realised resale value.
+    """
+    from app.gem_radar.opportunity_scoring import SoldComparable, robust_sold_market
+
+    normalised = "new" if (condition or "").lower() == "new" else "used"
+    result = await db.execute(
+        text(
+            """
+            SELECT price, postage, source_url,
+                   EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - observed_at)) / 86400.0 AS days_ago
+            FROM gem_radar_sold_observations
+            WHERE cpk = :cpk
+              AND LOWER(condition) = :condition
+              AND observed_at >= CURRENT_TIMESTAMP - (:lookback || ' days')::interval
+              AND price > 0
+            ORDER BY observed_at DESC
+            """
+        ),
+        {"cpk": cpk, "condition": normalised, "lookback": policy.sold_lookback_days},
+    )
+    comps = [SoldComparable(float(r[0]), float(r[1] or 0), r[2], float(r[3] or 0)) for r in result.fetchall()]
+    return robust_sold_market(comps, subject_listing_id=subject_listing_id, policy=policy)
+
+
 @dataclass(frozen=True)
 class CPKMarketPrice:
     cpk: str

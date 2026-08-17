@@ -82,4 +82,24 @@ class AppSettings(Base):
     deal_ok_deal_threshold_pct: Mapped[float] = mapped_column(Float, default=-10.0)
     deal_average_deal_threshold_pct: Mapped[float] = mapped_column(Float, default=5.0)
 
+    # Explainable opportunity policy. Defaults are intentionally conservative
+    # and remain editable as realised FlipFlop outcomes accumulate.
+    opportunity_super_profit_gbp: Mapped[float] = mapped_column(Float, default=50.0)
+    opportunity_super_roi_pct: Mapped[float] = mapped_column(Float, default=25.0)
+    opportunity_super_confidence: Mapped[float] = mapped_column(Float, default=80.0)
+    opportunity_super_liquidity: Mapped[float] = mapped_column(Float, default=60.0)
+    opportunity_super_score: Mapped[float] = mapped_column(Float, default=85.0)
+    opportunity_gem_profit_gbp: Mapped[float] = mapped_column(Float, default=30.0)
+    opportunity_gem_roi_pct: Mapped[float] = mapped_column(Float, default=18.0)
+    opportunity_gem_confidence: Mapped[float] = mapped_column(Float, default=70.0)
+    opportunity_gem_liquidity: Mapped[float] = mapped_column(Float, default=45.0)
+    opportunity_gem_score: Mapped[float] = mapped_column(Float, default=75.0)
+    opportunity_delivery_fallback_gbp: Mapped[float] = mapped_column(Float, default=15.0)
+    opportunity_ebay_fee_pct: Mapped[float] = mapped_column(Float, default=0.0)
+    opportunity_packaging_gbp: Mapped[float] = mapped_column(Float, default=6.0)
+    opportunity_testing_refurbishment_gbp: Mapped[float] = mapped_column(Float, default=10.0)
+    opportunity_returns_warranty_pct: Mapped[float] = mapped_column(Float, default=5.0)
+    opportunity_minimum_sold_comps: Mapped[int] = mapped_column(Integer, default=5)
+    opportunity_minimum_source_diversity: Mapped[int] = mapped_column(Integer, default=2)
+
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

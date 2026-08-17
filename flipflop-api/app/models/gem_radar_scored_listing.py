@@ -1,6 +1,6 @@
 """Scored listings with gem classification and market prices."""
 from datetime import datetime
-from sqlalchemy import String, Float, DateTime, Integer, Text
+from sqlalchemy import String, Float, DateTime, Integer, Text, Boolean, JSON
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
@@ -90,6 +90,22 @@ class GemRadarScoredListing(Base):
 
     # Decision
     decision: Mapped[str] = mapped_column(String(50))  # BUY_NOW, MAKE_OFFER, WATCH, INVESTIGATE, IGNORE
+
+    # Explainable opportunity model.  These are current decision facts, not
+    # another event ledger; listing_id is unique after the migration.
+    expected_profit: Mapped[float | None] = mapped_column(Float, nullable=True)
+    roi_pct: Mapped[float | None] = mapped_column(Float, nullable=True)
+    walk_away_price: Mapped[float | None] = mapped_column(Float, nullable=True)
+    conservative_resale_price: Mapped[float | None] = mapped_column(Float, nullable=True)
+    market_confidence: Mapped[float | None] = mapped_column(Float, nullable=True)
+    market_sample_size: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    market_source_diversity: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    market_spread_pct: Mapped[float | None] = mapped_column(Float, nullable=True)
+    liquidity_score: Mapped[float | None] = mapped_column(Float, nullable=True)
+    desirability_score: Mapped[float | None] = mapped_column(Float, nullable=True)
+    risk_score: Mapped[float | None] = mapped_column(Float, nullable=True)
+    eligible: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
+    scoring_explanation: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
     # Reasoning
     reasoning_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
