@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeft, CheckCircle2, Circle, Hammer, Sparkles, ExternalLink,
   Loader2, ShoppingBag, ImagePlus, Star, X, IdCard, BadgeCheck, Store, Download, Zap,
-  CalendarClock,
+  CalendarClock, Truck,
 } from "lucide-react";
 import { Toaster, toast } from "sonner";
 import confetti from "canvas-confetti";
@@ -53,6 +53,46 @@ const EBAY_CONDITIONS: { value: string; label: string }[] = [
   { value: "FOR_PARTS_OR_NOT_WORKING", label: "For Parts / Not Working" },
 ];
 
+function TabButton({
+  label,
+  icon: Icon,
+  active,
+  completed,
+  disabled,
+  onClick,
+}: {
+  label: string;
+  icon: any;
+  active: boolean;
+  completed: boolean;
+  disabled?: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-xs font-semibold whitespace-nowrap transition-all shrink-0 ${
+        disabled
+          ? "border-white/[0.02] bg-white/[0.01] text-slate-600 cursor-not-allowed opacity-50 font-medium"
+          : active
+          ? "border-cyan-500/40 bg-cyan-950/20 text-cyan-400 cursor-pointer"
+          : "border-white/[0.05] bg-white/[0.01] text-slate-400 hover:text-slate-200 hover:bg-white/[0.03] cursor-pointer"
+      }`}
+    >
+      <Icon className="w-3.5 h-3.5 shrink-0" />
+      <span>{label}</span>
+      {!disabled && (
+        completed ? (
+          <CheckCircle2 className="w-3.5 h-3.5 text-[#00dc82] shrink-0 font-bold" />
+        ) : (
+          <Circle className="w-3.5 h-3.5 text-slate-600 shrink-0" />
+        )
+      )}
+    </button>
+  );
+}
+
 export default function BuildDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -85,6 +125,8 @@ export default function BuildDetailPage() {
   const [performanceCardImageUrls, setPerformanceCardImageUrls] = useState<string[]>([]);
   const [performanceCardZipUrl, setPerformanceCardZipUrl] = useState<string | null>(null);
 
+  const [activeTab, setActiveTab] = useState<"build" | "listing" | "media" | "specifics" | "shipping" | "fulfillment">("build");
+
   useEffect(() => {
     api.manualBuilds
       .get(buildId)
@@ -92,6 +134,15 @@ export default function BuildDetailPage() {
         setBuild(b);
         if (b.last_evaluation?.mid) setPrice(String(Math.round(b.last_evaluation.mid)));
         if (b.deferred_publish_at) setDeferredAt(b.deferred_publish_at.slice(0, 16));
+        
+        // Auto-focus active tab based on status
+        if (b.status === "in_progress") {
+          setActiveTab("build");
+        } else if (b.status === "sold") {
+          setActiveTab("fulfillment");
+        } else {
+          setActiveTab("listing");
+        }
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -119,6 +170,7 @@ export default function BuildDetailPage() {
     try {
       const saved = await api.manualBuilds.markBuilt(buildId);
       setBuild(saved);
+      setActiveTab("listing");
     } catch (error) {
       const msg = error instanceof Error ? error.message : "Unknown error";
       alert(`Couldn't mark this build as built: ${msg}`);
@@ -469,53 +521,189 @@ export default function BuildDetailPage() {
         <ChannelBadge label="FlipFlop.shop" icon={Store} live={!!build.storefront_live} />
       </div>
 
-      {/* Purchase checklist */}
-      <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 mb-6">
-        <div className="flex items-center justify-between mb-3">
-          <p className="text-sm font-semibold flex items-center gap-2">
-            <ShoppingBag className="w-4 h-4 text-slate-500" /> Components purchased
-          </p>
-          <p className="text-xs text-slate-500 font-mono">{purchasedCount}/{totalCount}</p>
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          {build.components.map((c) => (
-            <button
-              key={c.slot}
-              onClick={() => togglePurchased(c.slot)}
-              disabled={savingSlot === c.slot || build.status !== "in_progress"}
-              className="w-full flex items-center gap-3 p-2.5 rounded-lg hover:bg-white/[0.03] transition-colors text-left disabled:opacity-60 disabled:cursor-default"
-            >
-              {savingSlot === c.slot ? (
-                <Loader2 className="w-4 h-4 text-slate-500 animate-spin shrink-0" />
-              ) : c.purchased ? (
-                <CheckCircle2 className="w-4 h-4 text-[#00dc82] shrink-0" />
-              ) : (
-                <Circle className="w-4 h-4 text-slate-600 shrink-0" />
-              )}
-              <span className="text-xs text-slate-500 uppercase font-mono w-24 shrink-0">{c.slot}</span>
-              <span className="text-sm flex-1 truncate">{c.name}</span>
-              <span className="text-sm font-semibold text-slate-400">{formatCurrency(c.price_paid)}</span>
-            </button>
-          ))}
-        </div>
-
-        {build.status === "in_progress" && (
-          <button
-            onClick={markBuilt}
-            disabled={!canMarkBuilt || markingBuilt}
-            className="w-full mt-4 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold bg-cyan-500 hover:bg-cyan-400 disabled:bg-slate-800 disabled:text-slate-600 text-black rounded-lg transition-colors"
-          >
-            {markingBuilt ? <Loader2 className="w-4 h-4 animate-spin" /> : <Hammer className="w-4 h-4" />}
-            {allPurchased ? "Mark as Built" : `Waiting on ${totalCount - purchasedCount} component${totalCount - purchasedCount === 1 ? "" : "s"}`}
-          </button>
+      {/* Guided Steps Tabs */}
+      <div className="flex gap-1.5 overflow-x-auto pb-2 mb-6 border-b border-white/[0.06] no-scrollbar">
+        <TabButton
+          label="1. Build Checklist"
+          icon={Hammer}
+          active={activeTab === "build"}
+          completed={build.status !== "in_progress"}
+          onClick={() => setActiveTab("build")}
+        />
+        <TabButton
+          label="2. Listing & Price"
+          icon={Sparkles}
+          active={activeTab === "listing"}
+          completed={!!build.generated_title && parseFloat(price) > 0}
+          disabled={!canSell}
+          onClick={() => setActiveTab("listing")}
+        />
+        <TabButton
+          label="3. Media & Cards"
+          icon={ImagePlus}
+          active={activeTab === "media"}
+          completed={!!build.hero_photo_url && build.photos.some(p => p.kind === "spec_card") && build.photos.some(p => p.kind === "registration_plate")}
+          disabled={!canSell}
+          onClick={() => setActiveTab("media")}
+        />
+        <TabButton
+          label="4. Item Specifics"
+          icon={IdCard}
+          active={activeTab === "specifics"}
+          completed={hasRequiredAspects}
+          disabled={!canSell}
+          onClick={() => setActiveTab("specifics")}
+        />
+        <TabButton
+          label="5. Shipping & Offers"
+          icon={Truck}
+          active={activeTab === "shipping"}
+          completed={!!build.ebay_condition}
+          disabled={!canSell}
+          onClick={() => setActiveTab("shipping")}
+        />
+        {(build.status === "sold" || !!build.ebay_order_id) && (
+          <TabButton
+            label="6. Fulfillment"
+            icon={ShoppingBag}
+            active={activeTab === "fulfillment"}
+            completed={!!build.tracking_number}
+            onClick={() => setActiveTab("fulfillment")}
+          />
         )}
       </div>
 
-      {canSell && (
-        <>
+      {/* Tab 1: Build Checklist */}
+      {activeTab === "build" && (
+        <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-sm font-semibold flex items-center gap-2">
+              <ShoppingBag className="w-4 h-4 text-slate-500" /> Components purchased
+            </p>
+            <p className="text-xs text-slate-500 font-mono">{purchasedCount}/{totalCount}</p>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            {build.components.map((c) => (
+              <button
+                key={c.slot}
+                onClick={() => togglePurchased(c.slot)}
+                disabled={savingSlot === c.slot || build.status !== "in_progress"}
+                className="w-full flex items-center gap-3 p-2.5 rounded-lg hover:bg-white/[0.03] transition-colors text-left disabled:opacity-60 disabled:cursor-default"
+              >
+                {savingSlot === c.slot ? (
+                  <Loader2 className="w-4 h-4 text-slate-500 animate-spin shrink-0" />
+                ) : c.purchased ? (
+                  <CheckCircle2 className="w-4 h-4 text-[#00dc82] shrink-0" />
+                ) : (
+                  <Circle className="w-4 h-4 text-slate-600 shrink-0" />
+                )}
+                <span className="text-xs text-slate-500 uppercase font-mono w-24 shrink-0">{c.slot}</span>
+                <span className="text-sm flex-1 truncate">{c.name}</span>
+                <span className="text-sm font-semibold text-slate-400">{formatCurrency(c.price_paid)}</span>
+              </button>
+            ))}
+          </div>
+
+          {build.status === "in_progress" && (
+            <button
+              onClick={markBuilt}
+              disabled={!canMarkBuilt || markingBuilt}
+              className="w-full mt-4 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold bg-cyan-500 hover:bg-cyan-400 disabled:bg-slate-800 disabled:text-slate-600 text-black rounded-lg transition-colors"
+            >
+              {markingBuilt ? <Loader2 className="w-4 h-4 animate-spin" /> : <Hammer className="w-4 h-4" />}
+              {allPurchased ? "Mark as Built" : `Waiting on ${totalCount - purchasedCount} component${totalCount - purchasedCount === 1 ? "" : "s"}`}
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Tab 2: Listing & Price */}
+      {canSell && activeTab === "listing" && (
+        <div className="flex flex-col gap-6 mb-6">
+          {/* Sell flow */}
+          <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 flex flex-col gap-4">
+            <p className="text-sm font-semibold flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-slate-500" /> Sell this build
+            </p>
+
+            {!build.generated_title ? (
+              <p className="text-sm text-slate-400 italic">
+                Use the actions in the side menu to generate your eBay listing details.
+              </p>
+            ) : (
+              <div className="flex flex-col gap-3">
+                <div>
+                  <label className="text-xs text-slate-500 uppercase font-mono">Title</label>
+                  <p className="text-sm font-semibold mt-1">{build.generated_title}</p>
+                </div>
+                <div>
+                  <label className="text-xs text-slate-500 uppercase font-mono mb-2 block">Description Preview</label>
+                  <DescriptionPreview html={build.generated_description} />
+                </div>
+              </div>
+            )}
+
+            {build.generated_title && (
+              <div>
+                <label className="text-xs text-slate-500 uppercase font-mono">Asking price (£)</label>
+                <input
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  className="w-full mt-1 bg-black/30 border border-white/[0.1] rounded-lg px-3 py-2 text-sm text-slate-100"
+                  placeholder="e.g. 450"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Pricing Breakdown with Sold Data */}
+          {build && build.generated_title && (
+            <PricingBreakdown
+              buildId={String(buildId)}
+              onPricingUpdate={(newPrice) => setPrice(String(Math.round(newPrice)))}
+            />
+          )}
+
+          {/* FlipFlop.shop storefront */}
+          {build.generated_title && (
+            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 flex flex-col gap-3">
+              <p className="text-sm font-semibold flex items-center gap-2">
+                <Store className="w-4 h-4 text-slate-500" /> List on FlipFlop.shop
+              </p>
+              {build.storefront_product_id ? (
+                <p className="text-sm text-[#00dc82]">
+                  ✓ Published to the pre-built showcase (product #{build.storefront_product_id}) — it&apos;ll also appear
+                  in the homepage gallery now that it has a hero photo.
+                </p>
+              ) : (
+                <>
+                  {!canPublish && (
+                    <p className="text-[11px] text-amber-400">
+                      Needs a hero photo and generated title/description before it can be published.
+                    </p>
+                  )}
+                  <button
+                    onClick={listOnStorefront}
+                    disabled={!canPublish || listingOnStorefront}
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold bg-cyan-500 hover:bg-cyan-400 disabled:bg-slate-800 disabled:text-slate-600 text-black rounded-lg transition-colors"
+                  >
+                    {listingOnStorefront ? <Loader2 className="w-4 h-4 animate-spin" /> : <Store className="w-4 h-4" />}
+                    List on FlipFlop.shop
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Tab 3: Media & Cards */}
+      {canSell && activeTab === "media" && (
+        <div className="flex flex-col gap-6 mb-6">
           {/* Photos */}
-          <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 mb-6">
+          <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
             <p className="text-sm font-semibold flex items-center gap-2 mb-3">
               <ImagePlus className="w-4 h-4 text-slate-500" /> Photos
             </p>
@@ -588,89 +776,9 @@ export default function BuildDetailPage() {
             )}
           </div>
 
-          {/* Sell flow */}
-          <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 flex flex-col gap-4 mb-6">
-            <p className="text-sm font-semibold flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-slate-500" /> Sell this build
-            </p>
-
-            {!build.generated_title ? (
-              <p className="text-sm text-slate-400 italic">
-                Use the actions in the side menu to generate your eBay listing details.
-              </p>
-            ) : (
-              <div className="flex flex-col gap-3">
-                <div>
-                  <label className="text-xs text-slate-500 uppercase font-mono">Title</label>
-                  <p className="text-sm font-semibold mt-1">{build.generated_title}</p>
-                </div>
-                <div>
-                  <label className="text-xs text-slate-500 uppercase font-mono mb-2 block">Description Preview</label>
-                  <DescriptionPreview html={build.generated_description} />
-                </div>
-              </div>
-            )}
-
-            {build.generated_title && (
-              <div>
-                <label className="text-xs text-slate-500 uppercase font-mono">Asking price (£)</label>
-                <input
-                  type="number"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  className="w-full mt-1 bg-black/30 border border-white/[0.1] rounded-lg px-3 py-2 text-sm text-slate-100"
-                  placeholder="e.g. 450"
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Pricing Breakdown with Sold Data — cost/delivery figures come from
-              the backend (build.total_cost / build.shipping_cost on the
-              persisted record), not recomputed client-side; see
-              app/api/builds_pricing.py's PricingBreakdown response. */}
-          {build && build.generated_title && (
-            <PricingBreakdown
-              buildId={String(buildId)}
-              onPricingUpdate={(newPrice) => setPrice(String(Math.round(newPrice)))}
-            />
-          )}
-
-          {/* Item Specifics - NEW COMPONENT */}
-          {build.generated_title && (
-            <>
-              <EbaySpecificsSection
-                build={build}
-                onGenerateSpecifics={generateSpecifics}
-                onUpdateAspects={saveAspects}
-                generating={generatingSpecifics}
-                saving={savingAspects}
-              />
-
-              {/* Offers Configuration */}
-              <EbayOffersSection
-                build={build}
-                onUpdate={updateEbayConfig}
-                saving={savingEbayConfig}
-              />
-
-              {/* Shipping Configuration */}
-              <EbayShippingSection
-                build={build}
-                onUpdate={updateEbayConfig}
-                saving={savingEbayConfig}
-                askingPrice={parseFloat(price) || 0}
-                onAskingPriceUpdate={(newPrice) => setPrice(String(Math.round(newPrice)))}
-              />
-
-              {/* Real post-sale shipment: buyer address sync + courier booking */}
-              <EbayShipmentBookingSection build={build} onRefresh={refreshBuild} />
-            </>
-          )}
-
           {/* Branded cards */}
           {build.generated_title && (
-            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 flex flex-col gap-3 mb-6">
+            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 flex flex-col gap-3">
               <p className="text-sm font-semibold flex items-center gap-2">
                 <IdCard className="w-4 h-4 text-slate-500" /> Branded cards
               </p>
@@ -696,7 +804,7 @@ export default function BuildDetailPage() {
 
           {/* Performance Card */}
           {build.generated_title && (
-            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 flex flex-col gap-3 mb-6">
+            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 flex flex-col gap-3">
               <p className="text-sm font-semibold flex items-center gap-2">
                 <Zap className="w-4 h-4 text-slate-500" /> Performance Card
               </p>
@@ -848,10 +956,28 @@ export default function BuildDetailPage() {
               )}
             </div>
           )}
+        </div>
+      )}
 
+      {/* Tab 4: Item Specifics */}
+      {canSell && activeTab === "specifics" && (
+        <div className="flex flex-col gap-6 mb-6">
+          <EbaySpecificsSection
+            build={build}
+            onGenerateSpecifics={generateSpecifics}
+            onUpdateAspects={saveAspects}
+            generating={generatingSpecifics}
+            saving={savingAspects}
+          />
+        </div>
+      )}
+
+      {/* Tab 5: Shipping & Offers */}
+      {canSell && activeTab === "shipping" && (
+        <div className="flex flex-col gap-6 mb-6">
           {/* eBay */}
           {build.generated_title && build.status !== "sold" && (
-            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 flex flex-col gap-3 mb-6">
+            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 flex flex-col gap-3">
               <p className="text-sm font-semibold flex items-center gap-2">
                 <BadgeCheck className="w-4 h-4 text-slate-500" /> List on eBay
               </p>
@@ -893,7 +1019,7 @@ export default function BuildDetailPage() {
                       <CalendarClock className="w-3.5 h-3.5" /> Deferred-listing scheduler
                     </p>
                     <label className="text-xs text-slate-500">
-                      Publish at (optional — leave blank and use &quot;List on eBay&quot; below instead)
+                      Publish at (optional — leave blank and use &quot;List on eBay&quot; in side menu instead)
                     </label>
                     <div className="flex gap-2">
                       <input
@@ -922,11 +1048,6 @@ export default function BuildDetailPage() {
                     {build.generated_title && build.generated_description && (
                       <button
                         onClick={() => {
-                          // Re-check inside the handler: the outer JSX guard only
-                          // narrows for the render that created this closure, not
-                          // for whenever the user actually clicks (build is state
-                          // and can change between the two, e.g. after an
-                          // unrelated async setBuild call).
                           const { generated_title, generated_description } = build;
                           if (!generated_title || !generated_description) return;
 
@@ -989,7 +1110,7 @@ export default function BuildDetailPage() {
                           window.open(url, '_blank');
                         }}
                         disabled={generating}
-                        className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
                       >
                         {generating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                         Preview HTML
@@ -1001,37 +1122,29 @@ export default function BuildDetailPage() {
             </div>
           )}
 
-          {/* FlipFlop.shop storefront */}
-          {build.generated_title && (
-            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 flex flex-col gap-3">
-              <p className="text-sm font-semibold flex items-center gap-2">
-                <Store className="w-4 h-4 text-slate-500" /> List on FlipFlop.shop
-              </p>
-              {build.storefront_product_id ? (
-                <p className="text-sm text-[#00dc82]">
-                  ✓ Published to the pre-built showcase (product #{build.storefront_product_id}) — it&apos;ll also appear
-                  in the homepage gallery now that it has a hero photo.
-                </p>
-              ) : (
-                <>
-                  {!canPublish && (
-                    <p className="text-[11px] text-amber-400">
-                      Needs a hero photo and generated title/description before it can be published.
-                    </p>
-                  )}
-                  <button
-                    onClick={listOnStorefront}
-                    disabled={!canPublish || listingOnStorefront}
-                    className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold bg-cyan-500 hover:bg-cyan-400 disabled:bg-slate-800 disabled:text-slate-600 text-black rounded-lg transition-colors"
-                  >
-                    {listingOnStorefront ? <Loader2 className="w-4 h-4 animate-spin" /> : <Store className="w-4 h-4" />}
-                    List on FlipFlop.shop
-                  </button>
-                </>
-              )}
-            </div>
-          )}
-        </>
+          {/* Offers Configuration */}
+          <EbayOffersSection
+            build={build}
+            onUpdate={updateEbayConfig}
+            saving={savingEbayConfig}
+          />
+
+          {/* Shipping Configuration */}
+          <EbayShippingSection
+            build={build}
+            onUpdate={updateEbayConfig}
+            saving={savingEbayConfig}
+            askingPrice={parseFloat(price) || 0}
+            onAskingPriceUpdate={(newPrice) => setPrice(String(Math.round(newPrice)))}
+          />
+        </div>
+      )}
+
+      {/* Tab 6: Fulfillment */}
+      {(build.status === "sold" || !!build.ebay_order_id) && activeTab === "fulfillment" && (
+        <div className="flex flex-col gap-6 mb-6">
+          <EbayShipmentBookingSection build={build} onRefresh={refreshBuild} />
+        </div>
       )}
 
       </div>
