@@ -96,7 +96,69 @@ def prepare_ebay_listing_description(description: str) -> str:
         add_style(node, "background:#0d1015;color:#f5f7fa;max-width:100%;overflow:hidden")
 
     for node in soup.select(".ff-card"):
-        add_style(node, "background:#171c24;color:#f5f7fa;overflow-wrap:anywhere")
+        add_style(
+            node,
+            "display:inline-block;width:42%;min-height:220px;margin:12px 2%;"
+            "padding:34px 20px;vertical-align:top;text-align:center;background:#171c24;"
+            "color:#f5f7fa;border:1px solid #2a3442;border-top:4px solid #ff6700;"
+            "border-radius:14px;overflow-wrap:anywhere",
+        )
+
+    for node in soup.select(".ff-hero"):
+        add_style(node, "padding:52px 34px;text-align:center;background:#0d1015")
+
+    for node in soup.select(".ff-hero-logo"):
+        add_style(node, "margin:0 auto 28px")
+
+    for node in soup.select(".ff-hero-copy"):
+        add_style(node, "max-width:780px;margin-left:auto;margin-right:auto;text-align:center")
+
+    for node in soup.select(".ff-card-row, .ff-promise-grid, .ff-performance"):
+        add_style(node, "text-align:center")
+
+    for node in soup.select(".ff-card-icon"):
+        add_style(node, "font-size:44px;line-height:1;margin-bottom:16px")
+
+    for node in soup.select(".ff-benefit"):
+        add_style(
+            node,
+            "display:inline-block;width:29%;min-height:235px;margin:10px 1.5%;"
+            "padding:28px 18px;vertical-align:top;text-align:center;background:#171c24;"
+            "border:1px solid #2a3442;border-radius:12px;font-size:15px",
+        )
+
+    for node in soup.select(".ff-benefit-icon"):
+        add_style(node, "font-size:38px;line-height:1;margin-bottom:18px")
+
+    for node in soup.select(".ff-standout"):
+        add_style(node, "margin:18px 0;padding:26px;background:#171c24;border:1px solid #2a3442;border-radius:12px")
+
+    for node in soup.select(".ff-standout-icon"):
+        add_style(node, "display:inline-block;min-width:58px;margin-bottom:14px;padding:10px 12px;background:#102a43;color:#42a5ff;border:1px solid #1d78bd;border-radius:10px;font-size:17px;font-weight:bold;text-align:center")
+
+    for node in soup.select(".ff-performance"):
+        add_style(node, "max-width:820px;margin:34px auto 0;font-size:0")
+
+    for node in soup.select(".ff-performance-card"):
+        add_style(node, "display:inline-block;width:44%;min-height:130px;margin:8px 2%;padding:22px 16px;vertical-align:top;background:#171c24;border:1px solid #2a3442;border-radius:12px;font-size:14px;text-align:center")
+
+    for node in soup.select(".ff-performance-value"):
+        add_style(node, "display:block;color:#fff;font-size:28px;font-weight:bold")
+
+    for node in soup.select(".ff-performance-source"):
+        add_style(node, "display:block;margin-top:8px;color:#9fb0c3;font-size:12px")
+
+    for node in soup.select(".ff-case-layout"):
+        add_style(node, "width:100%;border-collapse:separate;border-spacing:0")
+
+    for node in soup.select(".ff-case-layout td"):
+        add_style(node, "width:50%;padding:30px;vertical-align:middle;color:#d8e2ee")
+
+    for node in soup.select(".ff-spec-icon"):
+        add_style(node, "display:inline-block;width:44px;margin-right:12px;padding:7px 3px;background:#102a43;color:#42a5ff;border:1px solid #1d78bd;border-radius:7px;font-size:11px;font-weight:bold;text-align:center")
+
+    for node in soup.select(".ff-about"):
+        add_style(node, "padding:48px 8%;text-align:center;background:#171c24;border-top:3px solid #ff6700;border-bottom:3px solid #008cff")
 
     for node in soup.select(".ff-heading"):
         add_style(node, "width:100%;max-width:100%;height:auto;object-fit:contain")

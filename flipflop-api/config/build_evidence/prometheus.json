@@ -1,0 +1,30 @@
+{
+  "reviewed_from": "Prometheus performance card generated 2026-07-29",
+  "overall": {
+    "benchmark": "NovaBench",
+    "score": 4068,
+    "percentile": 92,
+    "claim": "Faster than 92 out of every 100 systems NovaBench has benchmarked",
+    "method": "Measured against NovaBench's full global results database"
+  },
+  "measured_benchmarks": [
+    {"name": "Cinebench 2026 CPU Multi", "value": "3098 pts"},
+    {"name": "Cinebench 2026 CPU Single", "value": "514 pts"},
+    {"name": "Cinebench 2026 GPU (Redshift)", "value": "37,341 pts"},
+    {"name": "Unigine Valley Extreme HD", "value": "163.4 FPS", "settings": "1920×1080, 8×AA"}
+  ],
+  "estimated_game_performance": {
+    "method": "Hardware-matched benchmark estimates; actual FPS varies by game version and drivers",
+    "settings": "1920×1080, High settings, ray tracing off",
+    "sources": ["Tom's Hardware", "TechPowerUp", "NotebookCheck"],
+    "games": [
+      {"game": "Valorant", "fps": 587},
+      {"game": "Fortnite", "fps": 368},
+      {"game": "Call of Duty: Warzone", "fps": 198},
+      {"game": "Baldur's Gate 3", "fps": 145},
+      {"game": "Elden Ring", "fps": 132},
+      {"game": "Red Dead Redemption 2", "fps": 126},
+      {"game": "Cyberpunk 2077", "fps": 113}
+    ]
+  }
+}

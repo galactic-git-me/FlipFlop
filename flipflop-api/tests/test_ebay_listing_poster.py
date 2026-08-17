@@ -43,6 +43,28 @@ def test_listing_description_inlines_dark_theme_and_removes_broken_images():
     assert "max-width:100%" in result
 
 
+def test_listing_description_inlines_visual_sales_layout():
+    html = """
+    <div class="ff-page"><div class="ff-wrap">
+      <div class="ff-hero"><p class="ff-hero-copy">Hero</p></div>
+      <div class="ff-card">CPU</div>
+      <div class="ff-benefit">Promise</div>
+      <div class="ff-performance-card"><span class="ff-performance-value">92nd</span></div>
+      <div class="ff-standout"><span class="ff-standout-icon">GPU</span></div>
+      <div class="ff-about"><p>About</p></div>
+    </div></div>
+    """
+
+    result = prepare_ebay_listing_description(html)
+
+    assert "text-align:center" in result
+    assert "min-height:220px" in result
+    assert "min-height:235px" in result
+    assert "min-height:130px" in result
+    assert "background:#102a43" in result
+    assert "border-top:3px solid #ff6700" in result
+
+
 async def test_existing_listing_uses_revise_instead_of_create():
     with (
         patch(

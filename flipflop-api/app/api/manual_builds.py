@@ -90,6 +90,17 @@ def _load_ebay_listing_system_prompt() -> str:
     return _EBAY_LISTING_SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")
 
 
+def _load_build_performance_evidence(build_name: str) -> dict | None:
+    """Load reviewed, build-specific evidence when it is not yet in the DB."""
+    import re
+
+    slug = re.sub(r"[^a-z0-9]+", "-", build_name.lower()).strip("-")
+    path = _EBAY_LISTING_SYSTEM_PROMPT_PATH.parent / "build_evidence" / f"{slug}.json"
+    if not path.exists():
+        return None
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def _extract_section(text: str, start_marker: str, end_markers: list[str]) -> str:
     """Extract text between a section header and whichever of the given
     next-section headers appears first — tolerant of the model reformatting
@@ -404,7 +415,7 @@ async def generate_listing(build_id: int, db: AsyncSession = Depends(get_db)):
         ],
     }
     registration_plate_data = evidence.get("registration_plate") or {"pc_name": build.name}
-    performance_card_data = evidence.get("performance_card")
+    performance_card_data = evidence.get("performance_card") or _load_build_performance_evidence(build.name)
 
     shipping_labels = {
         "tracked": "Tracked courier delivery",
@@ -473,14 +484,15 @@ BEST OFFER ENABLED: {"Yes" if build.allow_offers else "No"}
             reason="build has no hero_photo_url set — upload a photo first",
         )
 
+    prepared_description = prepare_ebay_listing_description(description_html)
     build.generated_title = title[:80]
-    build.generated_description = prepare_ebay_listing_description(description_html)
+    build.generated_description = prepared_description
     build.updated_at = datetime.utcnow()
     await db.flush()
 
     return GenerateListingResult(
         titles=[title],
-        description=description_html,
+        description=prepared_description,
         aspects=build.generated_aspects or {},
     )
 

@@ -16,6 +16,8 @@ Fill ONLY these template placeholders with the data provided:
 - {{PC_NAME}} → Build name from registration plate
 - {{TAGLINE}} → Short 2–4 word strapline describing the build (e.g., "1440p power. Built to be admired.")
 - {{HERO_DESCRIPTION}} → 2–3 sentence overview of the PC's purpose and key specs
+- {{PERFORMANCE_HIGHLIGHTS}} → A centred 2×2 grid of the strongest verified performance facts. Prioritise an overall percentile plus three game FPS results. Every figure must name its source/method and distinguish measured scores from hardware-matched estimates.
+  Use exactly this structure when data is supplied: `<div class="ff-performance"><div class="ff-performance-card"><span class="ff-performance-value">92nd percentile</span><strong>NovaBench overall</strong><span class="ff-performance-source">Measured against NovaBench's global results database</span></div>...</div>`. For estimated games, the source line must include `Estimated · 1080p High · RT off · hardware-matched data` and the named sources supplied in the evidence.
 - {{PROCESSOR}}, {{GRAPHICS}}, {{MEMORY}}, {{STORAGE}} → Extract from spec card
 - {{WHY_STANDS_OUT}} → 3–4 paragraphs explaining what makes this build special (derived from specs + performance data)
 - {{CASE_NAME}}, {{CASE_DESCRIPTION}} → Case model and visual description (from spec card)
@@ -111,7 +113,8 @@ Highlight only the top 4 specs. Use small labels (color-matched to border) and l
 
 ## WHY IT STANDS OUT (Section 6)
 
-Write 3–4 paragraphs, each with:
+Write 4 visual `.ff-standout` cards, each with:
+- A large `.ff-standout-icon` containing a short text badge such as CPU, GPU, RAM, or RGB
 - Bold benefit headline
 - Explanation of how the hardware delivers that benefit
 - Connection to real-world use (gaming, streaming, AI, multitasking, etc.)
@@ -145,6 +148,7 @@ A clean two-column table with every component:
 - Operating System | [Windows version and bit count]
 
 Extract ONLY what is shown on the spec card. Do not guess or fill in blanks.
+Format every label cell as `<td class="ff-spec-label"><span class="ff-spec-icon">CPU</span>Processor</td>` using these short visual badges where applicable: CPU, MB, GPU, RAM, SSD, PSU, COOL, FAN, CASE, SUP, OS, NET. The second cell contains the exact component value. Keep the complete result inside `<table class="ff-spec-table">`.
 
 ## PERFORMANCE DATA (Section 9 - if supplied)
 
@@ -176,35 +180,38 @@ Use this exact flipflop premium template. Copy it verbatim, then replace ONLY th
 .ff-page,.ff-page *{box-sizing:border-box}.ff-page{width:100%;margin:0;padding:0;background:#0d1015;color:#f5f7fa;font-family:Arial,Helvetica,sans-serif;line-height:1.55;overflow:hidden}.ff-wrap{width:100%;max-width:1000px;margin:0 auto;background:#0d1015;color:#f5f7fa;overflow:hidden}.ff-image{display:block;width:100%;max-width:100%;height:auto;border:0}.ff-heading{display:block;width:100%;max-width:100%;height:auto;margin:0 0 22px 0;border:0;object-fit:contain}.ff-section{margin:0 22px 38px;padding:28px 26px;background:#0d1015;color:#f5f7fa;overflow:hidden}.ff-image-section{padding:0 22px 38px;background:#0d1015;overflow:hidden}.ff-card-row{padding:28px 12px;text-align:center;font-size:0;background:#0d1015;overflow:hidden}.ff-card{display:inline-block;width:22.5%;min-height:136px;margin:6px 1%;padding:18px 8px;vertical-align:top;background:#171c24;color:#f5f7fa;border-top:3px solid #ff6700;font-size:15px;overflow-wrap:anywhere}.ff-card:nth-child(even){border-top-color:#008cff}.ff-card-value{margin-top:5px;color:#fff;font-size:17px;font-weight:bold}.ff-benefit{margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid #2a3039}.ff-benefit:last-child{margin-bottom:0;padding-bottom:0;border-bottom:0}.ff-benefit strong{color:#fff;font-size:16px}.ff-benefit div{margin-top:4px;color:#cbd5e1}.ff-spec-table{width:100%;max-width:100%;border-collapse:collapse;color:#fff;font-size:15px}.ff-spec-table td{padding:13px 8px;color:#d8e2ee;border-bottom:1px solid #2a3039;vertical-align:top;overflow-wrap:anywhere}.ff-spec-table tr:last-child td{border-bottom:0}.ff-spec-label{width:36%;color:#b9c8da}.ff-use-grid{width:100%;max-width:100%;border-collapse:collapse;color:#fff;font-size:16px}.ff-use-grid td{width:50%;padding:10px;color:#d8e2ee;vertical-align:top;overflow-wrap:anywhere}
 @media only screen and (max-width:700px){.ff-section{margin-left:12px!important;margin-right:12px!important;padding-left:17px!important;padding-right:17px!important}.ff-image-section{padding-left:12px!important;padding-right:12px!important}.ff-card{width:46%;margin:6px 2%}.ff-spec-table,.ff-spec-table tbody,.ff-spec-table tr,.ff-spec-table td{display:block;width:100%!important}.ff-spec-table tr{padding:11px 0;border-bottom:1px solid #2a3039}.ff-spec-table td{padding:3px 8px!important;border:0!important}.ff-spec-table td:first-child{color:#159cff!important}.ff-use-grid,.ff-use-grid tbody,.ff-use-grid tr,.ff-use-grid td{display:block;width:100%!important}.ff-use-grid td{padding:8px 0!important}}
 @media only screen and (max-width:420px){.ff-card{display:block;width:100%;min-height:0;margin:9px 0}}
+.ff-hero{text-align:center!important;padding:52px 34px!important}.ff-hero-logo{margin:0 auto 28px!important}.ff-hero-copy{max-width:780px!important;margin-left:auto!important;margin-right:auto!important}.ff-card-row{padding:42px 7%!important}.ff-card{width:42%!important;min-height:220px!important;margin:12px 2%!important;padding:34px 20px!important;text-align:center!important;border:1px solid #2a3442!important;border-top:4px solid #ff6700!important;border-radius:14px!important}.ff-card:nth-child(even){border-top-color:#008cff!important}.ff-card-icon{font-size:44px!important;line-height:1!important;margin-bottom:16px!important}.ff-card-value{font-size:21px!important;line-height:1.35!important}.ff-promise-grid{text-align:center!important;font-size:0!important}.ff-benefit{display:inline-block!important;width:29%!important;min-height:235px!important;margin:10px 1.5%!important;padding:28px 18px!important;vertical-align:top!important;text-align:center!important;background:#171c24!important;border:1px solid #2a3442!important;border-radius:12px!important;font-size:15px!important}.ff-benefit-icon{font-size:38px!important;line-height:1!important;margin-bottom:18px!important}.ff-benefit strong{display:block!important;margin-bottom:10px!important;font-size:17px!important}.ff-standout{margin:18px 0!important;padding:26px!important;background:#171c24!important;border:1px solid #2a3442!important;border-radius:12px!important}.ff-standout-icon{display:inline-block!important;min-width:58px!important;margin-bottom:14px!important;padding:10px 12px!important;background:#102a43!important;color:#42a5ff!important;border:1px solid #1d78bd!important;border-radius:10px!important;font-size:17px!important;font-weight:bold!important;text-align:center!important}.ff-performance{text-align:center!important;font-size:0!important;margin:34px auto 0!important;max-width:820px!important}.ff-performance-card{display:inline-block!important;width:44%!important;min-height:130px!important;margin:8px 2%!important;padding:22px 16px!important;vertical-align:top!important;background:#171c24!important;border:1px solid #2a3442!important;border-radius:12px!important;font-size:14px!important}.ff-performance-value{display:block!important;color:#fff!important;font-size:28px!important;font-weight:bold!important}.ff-performance-source{display:block!important;margin-top:8px!important;color:#9fb0c3!important;font-size:12px!important}.ff-case-layout{width:100%!important;border-collapse:separate!important;border-spacing:0!important}.ff-case-layout td{width:50%!important;padding:30px!important;vertical-align:middle!important;color:#d8e2ee!important}.ff-case-layout img{width:100%!important;height:auto!important;border-radius:12px!important}.ff-spec-icon{display:inline-block!important;width:44px!important;margin-right:12px!important;padding:7px 3px!important;background:#102a43!important;color:#42a5ff!important;border:1px solid #1d78bd!important;border-radius:7px!important;font-size:11px!important;font-weight:bold!important;text-align:center!important}.ff-about{text-align:center!important;padding:48px 8%!important;background:#171c24!important;border-top:3px solid #ff6700!important;border-bottom:3px solid #008cff!important}.ff-about p{max-width:760px!important;margin:14px auto 0!important}.ff-section{margin-bottom:56px!important}.ff-image-section{padding-bottom:56px!important}@media only screen and (max-width:700px){.ff-card,.ff-performance-card,.ff-benefit{display:block!important;width:100%!important;min-height:0!important;margin:12px 0!important}.ff-case-layout,.ff-case-layout tbody,.ff-case-layout tr,.ff-case-layout td{display:block!important;width:100%!important}.ff-case-layout td{padding:20px!important}.ff-hero{padding:36px 18px!important}}
 </style>
 
 <div class="ff-page"><div class="ff-wrap">
 
 <img class="ff-image" src="{{HERO_IMAGE_URL}}" alt="{{PC_NAME}} custom gaming and creative PC">
 
-<div style="padding:38px 24px;text-align:left;border-top:3px solid #ff6700;border-bottom:3px solid #008cff">
-  <img src="https://theflipflop.shop/media/flipflop-glow-black-with-full-glow.png" alt="flipflop" style="display:block;width:150px;max-width:45%;height:auto;margin:0 0 22px;border:0">
+<div class="ff-hero" style="padding:52px 34px;text-align:center;border-top:3px solid #ff6700;border-bottom:3px solid #008cff">
+  <img class="ff-hero-logo" src="https://theflipflop.shop/media/flipflop-glow-black-with-full-glow.png" alt="flipflop" style="display:block;width:170px;max-width:45%;height:auto;margin:0 auto 28px;border:0">
   <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/prometheus.png" alt="{{PC_NAME}}">
   <p style="margin:0 0 12px;color:#ff761a;font-size:22px;font-weight:bold">{{TAGLINE}}</p>
-  <p style="max-width:760px;margin:0;color:#cbd5e1;font-size:17px">{{HERO_DESCRIPTION}}</p>
+  <p class="ff-hero-copy" style="max-width:760px;margin:0 auto;color:#cbd5e1;font-size:17px">{{HERO_DESCRIPTION}}</p>
+  {{PERFORMANCE_HIGHLIGHTS}}
 </div>
 
 <div class="ff-card-row">
-  <div class="ff-card"><div style="font-size:26px">⚙️</div><div style="color:#ff761a;font-size:13px;font-weight:bold">PROCESSOR</div><div class="ff-card-value">{{PROCESSOR}}</div></div>
-  <div class="ff-card"><div style="font-size:26px">🎮</div><div style="color:#159cff;font-size:13px;font-weight:bold">GRAPHICS</div><div class="ff-card-value">{{GRAPHICS}}</div></div>
-  <div class="ff-card"><div style="font-size:26px">🧠</div><div style="color:#ff761a;font-size:13px;font-weight:bold">MEMORY</div><div class="ff-card-value">{{MEMORY}}</div></div>
-  <div class="ff-card"><div style="font-size:26px">💾</div><div style="color:#159cff;font-size:13px;font-weight:bold">STORAGE</div><div class="ff-card-value">{{STORAGE}}</div></div>
+  <div class="ff-card"><div class="ff-card-icon">⚙</div><div style="color:#ff761a;font-size:13px;font-weight:bold">PROCESSOR</div><div class="ff-card-value">{{PROCESSOR}}</div></div>
+  <div class="ff-card"><div class="ff-card-icon">▣</div><div style="color:#159cff;font-size:13px;font-weight:bold">GRAPHICS</div><div class="ff-card-value">{{GRAPHICS}}</div></div>
+  <div class="ff-card"><div class="ff-card-icon">▤</div><div style="color:#ff761a;font-size:13px;font-weight:bold">MEMORY</div><div class="ff-card-value">{{MEMORY}}</div></div>
+  <div class="ff-card"><div class="ff-card-icon">◆</div><div style="color:#159cff;font-size:13px;font-weight:bold">STORAGE</div><div class="ff-card-value">{{STORAGE}}</div></div>
 </div>
 
 <div class="ff-section" style="background:#171c24;border-left:4px solid #ff6700">
   <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/what-to-expect.png" alt="What You Can Expect from flipflop">
-  <div class="ff-benefit"><strong>🖥️ Premium, carefully curated build</strong><div>Every component is selected for compatibility, performance, cooling and visual balance.</div></div>
-  <div class="ff-benefit"><strong>🛠️ Individually assembled and tested</strong><div>Built by hand, configured and stability-checked before dispatch.</div></div>
-  <div class="ff-benefit"><strong>🌐 Personalised online owner portal</strong><div>Your complete specification, getting-started guide, useful downloads, support and warranty information in one place.</div></div>
-  <div class="ff-benefit"><strong>🪪 Unique PC name and registration plate</strong><div>{{PC_NAME}} has its own identity and digital registration plate, connected to its personalised owner portal.</div></div>
-  <div class="ff-benefit"><strong>⬆️ Build-specific upgrade path</strong><div>Clear guidance on compatible future upgrades for the processor, graphics card, memory, storage and cooling.</div></div>
-  <div class="ff-benefit"><strong>💬 Personal support</strong><div>Direct help with setup, troubleshooting and future upgrades.</div></div>
-  <div class="ff-benefit"><strong>🏷️ Relevant future offers</strong><div>Access to relevant discounts, upgrade opportunities and selected future technology offers.</div></div>
+  <div class="ff-promise-grid">
+    <div class="ff-benefit"><div class="ff-benefit-icon">◇</div><strong>Premium, carefully curated build</strong><div>Every component is selected for compatibility, performance, cooling and visual balance.</div></div>
+    <div class="ff-benefit"><div class="ff-benefit-icon">⚒</div><strong>Individually assembled and tested</strong><div>Built by hand, configured and stability-checked before dispatch.</div></div>
+    <div class="ff-benefit"><div class="ff-benefit-icon">◎</div><strong>Personalised owner portal</strong><div>Your specification, guides, downloads, support and warranty information in one place.</div></div>
+    <div class="ff-benefit"><div class="ff-benefit-icon">ID</div><strong>Unique name and registration</strong><div>{{PC_NAME}} has its own identity, digital registration plate and personalised portal.</div></div>
+    <div class="ff-benefit"><div class="ff-benefit-icon">↑</div><strong>Build-specific upgrade path</strong><div>Clear guidance on compatible future processor, graphics, memory, storage and cooling upgrades.</div></div>
+    <div class="ff-benefit"><div class="ff-benefit-icon">?</div><strong>Personal support</strong><div>Direct help with setup, troubleshooting and future upgrades.</div></div>
+  </div>
 </div>
 
 <div class="ff-image-section"><img class="ff-image" src="{{INTERIOR_IMAGE_URL}}" alt="Illuminated interior of the {{PC_NAME}} PC"></div>
@@ -216,12 +223,11 @@ Use this exact flipflop premium template. Copy it verbatim, then replace ONLY th
 
 <div class="ff-image-section"><img class="ff-image" src="{{COMPONENT_CALLOUT_IMAGE_URL}}" alt="{{PC_NAME}} component overview"></div>
 
-<div class="ff-image-section">
-  <img class="ff-image" src="{{CASE_DETAIL_IMAGE_URL}}" alt="{{CASE_NAME}} Mid Tower case">
-  <div style="padding:24px;background:#171c24;border-bottom:3px solid #ff6700">
-    <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/apnx-creator-c1-chromaflair.png" alt="{{CASE_NAME}}">
-    <p style="margin:0;color:#cbd5e1;font-size:16px">{{CASE_DESCRIPTION}}</p>
-  </div>
+<div class="ff-image-section" style="background:#171c24;border-bottom:3px solid #ff6700">
+  <table class="ff-case-layout"><tr>
+    <td><img src="https://theflipflop.shop/media/chromaflair-case.png" alt="APNX ChromaFlair iridescent PC case"></td>
+    <td><img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/apnx-creator-c1-chromaflair.png" alt="{{CASE_NAME}}"><p style="margin:0 0 18px;color:#cbd5e1;font-size:16px">{{CASE_DESCRIPTION}}</p><div style="color:#fff;line-height:2"><strong>Colour-shifting metallic finish</strong><br>Gradient tones change with light and viewing angle<br><strong>Panoramic presentation</strong><br>Tempered glass and integrated RGB showcase the build<br><strong>Airflow with presence</strong><br>High-airflow front panel with room for modern cooling</div></td>
+  </tr></table>
 </div>
 
 <div class="ff-section" style="padding-left:18px;padding-right:18px;background:#171c24">
@@ -235,6 +241,12 @@ Use this exact flipflop premium template. Copy it verbatim, then replace ONLY th
     <img class="ff-heading" src="https://theflipflop.shop/media/images/listing-headings/ready-to-connect.png" alt="Ready to Connect">
     <p style="margin:0;color:#cbd5e1">{{CONNECTIVITY_DESCRIPTION}}</p>
   </div>
+</div>
+
+<div class="ff-about">
+  <p style="margin:0;color:#159cff;font-size:13px;font-weight:bold;letter-spacing:2px">ABOUT FLIPFLOP</p>
+  <p style="color:#fff;font-size:25px;font-weight:bold">A new London PC-building business, backed by two decades of technical experience.</p>
+  <p style="color:#cbd5e1;font-size:16px">flipflop is an independent startup based in Twickenham, London. Its founder is a software engineer with 20 years of professional experience who has built countless PCs for himself, friends and family over the years before turning that long-standing craft into a business. Every machine combines careful engineering, honest specification and a distinctive visual identity.</p>
 </div>
 
 <div class="ff-section" style="border-left:4px solid #ff6700">
@@ -268,7 +280,8 @@ Use this exact flipflop premium template. Copy it verbatim, then replace ONLY th
 - {{HERO_IMAGE_URL}} — do NOT fill this in. Leave the literal text `{{HERO_IMAGE_URL}}` exactly as-is in your output; the backend substitutes it with the build's actual uploaded hero photo URL after generation, since only it knows that value
 - {{PC_NAME}}, {{TAGLINE}}, {{HERO_DESCRIPTION}} — hero section
 - {{PROCESSOR}}, {{GRAPHICS}}, {{MEMORY}}, {{STORAGE}} — spec cards
-- {{WHY_STANDS_OUT}} — 3–4 paragraphs with `<p>` tags and emojis
+- {{PERFORMANCE_HIGHLIGHTS}} — centred `.ff-performance` 2×2 evidence grid using only supplied measured or clearly-labelled estimated results
+- {{WHY_STANDS_OUT}} — 4 `.ff-standout` cards with a large text badge, prominent title and supporting copy
 - {{SPECIFICATION_TABLE}} — full spec table with `<table class="ff-spec-table">` structure
 - {{CASE_NAME}}, {{CASE_DESCRIPTION}} — case showcase
 - {{BEST_SUITED_FOR}} — use-case grid with `<table class="ff-use-grid">` structure
