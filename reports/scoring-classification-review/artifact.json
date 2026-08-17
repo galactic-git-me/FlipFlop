@@ -1,0 +1,158 @@
+{
+  "surface": "report",
+  "manifest": {
+    "version": 1,
+    "surface": "report",
+    "title": "FlipFlop Deal Classification and Scoring Review",
+    "description": "Production-data audit and replacement design for sourcing classifications and buy decisions.",
+    "generatedAt": "2026-08-17T00:00:00Z",
+    "sources": [
+      {
+        "id": "scored-production",
+        "label": "Production Phase 2 scored listings",
+        "query": {
+          "engine": "PostgreSQL",
+          "description": "Production profile of the current CPK Phase 2 classification output.",
+          "executed_at": "2026-08-17",
+          "tables_used": ["gem_radar_scored_listings", "gem_radar_cpk_market_price"],
+          "filters": ["search_run_id = cpk-phase2-classify"],
+          "metric_definitions": ["Duplicate rows are scored rows minus distinct listing IDs.", "Basic guardrails require at least five market observations, confidence at least 75, known condition, valid single category, bounded market spread and no obvious accessory terms."],
+          "sql": "SELECT classification, COUNT(*) AS rows, COUNT(DISTINCT listing_id) AS unique_listings, AVG(deal_score) AS average_score FROM gem_radar_scored_listings WHERE search_run_id = 'cpk-phase2-classify' GROUP BY classification;"
+        }
+      },
+      {
+        "id": "pipeline-code",
+        "label": "Current classification implementation",
+        "path": "flipflop-api/app/gem_radar/phase2_runner.py"
+      },
+      {
+        "id": "market-code",
+        "label": "Current CPK market implementation",
+        "path": "flipflop-api/app/gem_radar/cpk_market.py"
+      },
+      {
+        "id": "feature-coverage",
+        "label": "Production feature coverage",
+        "query": {
+          "engine": "PostgreSQL",
+          "description": "Coverage of release-year, demand, performance and CPK features used or available for scoring.",
+          "executed_at": "2026-08-17",
+          "tables_used": ["gem_radar_scored_listings", "hardware_benchmarks", "component_performance_metrics", "gem_radar_listing_cpk"],
+          "sql": "SELECT COUNT(*) AS total, COUNT(release_year) AS release_year_rows, COUNT(watch_count) AS watch_rows, COUNT(bid_count) AS bid_rows FROM gem_radar_scored_listings WHERE search_run_id = 'cpk-phase2-classify';"
+        }
+      }
+    ],
+    "cards": [
+      {"id": "rows-card", "dataset": "headline", "sourceId": "scored-production", "description": "Rows produced by the Phase 2 pass.", "metrics": [{"label": "Scored rows", "field": "scored_rows", "format": "number"}]},
+      {"id": "unique-card", "dataset": "headline", "sourceId": "scored-production", "description": "Actual distinct marketplace listings.", "metrics": [{"label": "Unique listings", "field": "unique_listings", "format": "number"}]},
+      {"id": "duplicate-card", "dataset": "headline", "sourceId": "scored-production", "description": "Share of scored rows caused by repeat observations.", "metrics": [{"label": "Duplicate-row share", "field": "duplicate_share", "format": "percent"}]},
+      {"id": "super-card", "dataset": "headline", "sourceId": "scored-production", "description": "Distinct listings currently labelled SUPER_GEM.", "metrics": [{"label": "Unique SUPER_GEMs", "field": "unique_super_gems", "format": "number"}]},
+      {"id": "guardrail-card", "dataset": "headline", "sourceId": "scored-production", "description": "Unique SUPER_GEMs surviving basic evidence and identity checks; this is not a validated buy rate.", "metrics": [{"label": "Pass basic guardrails", "field": "guardrail_pass_rate", "format": "percent"}]}
+    ],
+    "charts": [
+      {
+        "id": "classification-chart",
+        "title": "Current Phase 2 classification rows",
+        "subtitle": "Counts include repeat observations of the same listing, so they overstate the actionable inventory.",
+        "showDescription": true,
+        "type": "bar",
+        "dataset": "classification_counts",
+        "sourceId": "scored-production",
+        "xField": "classification",
+        "series": [{"field": "rows", "label": "Rows", "color": "blue"}],
+        "valueFormat": "number",
+        "layout": "full",
+        "maxRows": 5
+      }
+    ],
+    "tables": [
+      {
+        "id": "failure-table",
+        "title": "Failure modes requiring remediation",
+        "subtitle": "Observed production evidence, decision risk and proposed control.",
+        "dataset": "failure_modes",
+        "defaultSort": {"field": "priority", "direction": "asc"},
+        "density": "spacious",
+        "layout": "full",
+        "sourceId": "scored-production",
+        "columns": [
+          {"field": "priority", "label": "Priority", "type": "number"},
+          {"field": "failure", "label": "Failure", "type": "text"},
+          {"field": "evidence", "label": "Evidence", "type": "text"},
+          {"field": "decision_risk", "label": "Decision risk", "type": "text"},
+          {"field": "control", "label": "Required control", "type": "text"}
+        ]
+      },
+      {
+        "id": "score-table",
+        "title": "Recommended decision model",
+        "subtitle": "Hard gates establish eligibility; scored dimensions rank only listings that pass.",
+        "dataset": "score_model",
+        "defaultSort": {"field": "order", "direction": "asc"},
+        "density": "spacious",
+        "layout": "full",
+        "columns": [
+          {"field": "order", "label": "Order", "type": "number"},
+          {"field": "layer", "label": "Layer", "type": "text"},
+          {"field": "measure", "label": "Measure", "type": "text"},
+          {"field": "rule", "label": "Proposed treatment", "type": "text"}
+        ]
+      }
+    ],
+    "blocks": [
+      {"id": "title", "type": "markdown", "layout": "full", "body": "# FlipFlop Deal Classification and Scoring Review"},
+      {"id": "summary", "type": "markdown", "layout": "full", "sourceId": "scored-production", "body": "## Technical summary\n\n**The current SUPER_GEM label is not safe to use as a buy signal.** The production Phase 2 path is essentially a percentage discount against a mixed-source, mixed-condition CPK median. It does not require expected net profit, ROI, liquidity, product desirability, performance, launch recency or preference fit. Its confidence value does not veto a classification.\n\n**The data confirms systemic false positives.** The 33,543 scored rows represent only 6,479 unique listings; 80.7% are repeat-observation rows. There are 1,906 SUPER_GEM rows but only 557 distinct listings. Of the SUPER_GEM rows, 56.2% have confidence below 75, 69.3% use CPK groups with fewer than five cached contributors, and at least 12.1% contain obvious accessory or invalid multi-category signals. Only 111 of 557 unique SUPER_GEMs pass even a basic set of guardrails—and manual inspection shows false positives remain.\n\n**Recommendation:** temporarily rename SUPER_GEM to `PRICE_ANOMALY` in the UI and remove automatic BUY_NOW semantics. Replace the model with hard eligibility gates followed by conservative expected-profit, liquidity, desirability and risk scores. Restore SUPER_GEM only for listings that are demonstrably actionable purchases."},
+      {"id": "metrics", "type": "metric-strip", "layout": "full", "cardIds": ["rows-card", "unique-card", "duplicate-card", "super-card", "guardrail-card"]},
+      {"id": "finding-one", "type": "markdown", "layout": "full", "sourceId": "pipeline-code", "body": "## Price offset currently determines both class and score\n\nPhase 2 calculates `(listing price - CPK market price) / CPK market price`, maps fixed thresholds to classifications, and derives the 0–10 score from the same number. This creates two labels for one signal rather than independent evidence. Demand only adjusts confidence after classification, while low confidence does not block BUY_NOW. A large but unreliable median therefore produces a high class, high score and purchase recommendation simultaneously."},
+      {"id": "classification-visual-note", "type": "markdown", "layout": "full", "sourceId": "scored-production", "body": "## The dashboard counts observations as opportunities\n\nThe visual below is the current row distribution, not the number of distinct buyable listings. Phase 2 loops through every historical observation rather than selecting the latest observation per listing, producing 27,064 excess rows and repeated copies of the same deal."},
+      {"id": "classification-visual", "type": "chart", "layout": "full", "chartId": "classification-chart"},
+      {"id": "finding-two", "type": "markdown", "layout": "full", "sourceId": "market-code", "body": "## The market estimate is too permissive for purchase decisions\n\nA CPK is treated as settled with two observations. Active asking prices and realised sold prices are unioned into one distribution, without condition separation, source weighting, unique-listing enforcement or outlier removal. The current listing can also contribute to the market against which it is judged. With two observations, the median is their midpoint: a £193 motherboard paired with one £1,461 outlier produces an £827 market median and an implausible 76% discount.\n\nThe correct resale anchor is a robust, leave-one-out, same-condition distribution of completed sales. Active BIN and retail-new prices are useful context, but they must not be treated as equivalent realised resale value."},
+      {"id": "failures", "type": "table", "layout": "full", "tableId": "failure-table"},
+      {"id": "scope", "type": "markdown", "layout": "full", "body": "## Scope and definitions\n\nThe decision unit is one currently active, uniquely identified marketplace listing that FlipFlop could purchase for resale or use in a build. `Fair resale value` means a conservative same-product, same-condition estimate derived primarily from completed sales. `Expected net profit` subtracts purchase delivery, refurbishment or missing-part allowance, selling fees, outbound shipping, packaging and a returns/risk reserve. `Liquidity` measures the probability and likely speed of sale, not simply watchers on the current listing. `Desirability` captures strategic build fit and customer appeal without altering the market-value estimate."},
+      {"id": "method", "type": "markdown", "layout": "full", "sourceId": "scored-production", "body": "## Review methodology\n\nThe review traced the live CPK accumulation, Phase 2 classification, older deterministic benchmark scorer, demand-history logic, hardware benchmark tables and build outcome models. Read-only production queries profiled row grain, distinct listings, classes, confidence, CPK sample size, category validity, market spread, condition mixing, demand coverage, sold-comparable coverage and benchmark coverage. A sensitivity screen then applied basic evidence and identity guardrails to the latest row per unique SUPER_GEM listing. That screen is diagnostic only; it is not a replacement model."},
+      {"id": "model-intro", "type": "markdown", "layout": "full", "body": "## Replace one blended score with a gated decision model\n\nA single weighted average lets excellent price offset conceal catastrophic identity or market-quality risk. The replacement should first reject ineligible listings, then estimate economics, then rank qualified opportunities. Preference and platform desirability should improve ranking but never manufacture profit or fair market value."},
+      {"id": "score-model", "type": "table", "layout": "full", "tableId": "score-table"},
+      {"id": "classification-contract", "type": "markdown", "layout": "full", "body": "## Proposed classification contract\n\n**SUPER_GEM / BUY_NOW:** all hard gates pass; conservative expected net profit at least £50; ROI at least 25%; value confidence at least 80; liquidity at least 60; no high-risk flag; and total opportunity score at least 85.\n\n**GEM / BUY or offer:** all hard gates pass; expected net profit at least £30; ROI at least 18%; confidence at least 70; liquidity at least 45; score at least 75.\n\n**OK_DEAL / MAKE_OFFER:** positive expected profit but one target is missed; calculate an explicit target and walk-away purchase price.\n\n**WATCH / INVESTIGATE:** identity, condition or market evidence is incomplete, or liquidity is weak. This is where apparently huge discounts with uncertain evidence belong.\n\n**DO_NOT_BUY:** negative conservative profit, obsolete/disallowed platform, accessory or bundle mismatch, parts-only condition without a parts-only model, counterfeit risk, or other hard veto.\n\nThresholds should be category-specific and calibrated against actual FlipFlop outcomes after enough sales exist. Until then they are explicit operating-policy starting points, not statistically learned truth."},
+      {"id": "preferences", "type": "markdown", "layout": "full", "sourceId": "feature-coverage", "body": "## Platform and personal preferences should become an explicit build-fit score\n\nThe current general component catalogue does not contain a preferred-component flag or rating; the only comparable preference data found is static preferred-brand guidance in playbooks. Production performance coverage is also incomplete: hardware benchmarks currently cover CPUs and a small storage set, while the component-performance metrics table is empty. These features therefore need coverage indicators and neutral missing-value handling.\n\nRecommended desirability rules include AM5 above AM4, veto AM3 and older for normal gaming builds; DDR5 above DDR4, veto DDR3 unless an explicitly approved retro/budget strategy applies; NVMe above SATA SSD above HDD; cases with included usable fans; AIO liquid cooling as a configurable preference rather than a universal truth; recent launch generation; performance percentile; energy efficiency; warranty transferability; physical condition; upgrade path; preferred component/model; and compatibility with inventory already held.\n\nKeep these as build-fit and marketability features. Do not inflate fair resale value merely because FlipFlop personally prefers a component."},
+      {"id": "rating", "type": "markdown", "layout": "full", "body": "## Add the post-build five-star component feedback loop\n\nWhen a build is marked built, show a `Rate this build's components` card linked from the completion state. Rate each normalized exact model from one to five stars, with optional subratings for reliability, installation experience, aesthetics, value and customer appeal plus a note. A five-star overall rating should automatically create or update a preferred-component record, as requested.\n\nStore ratings as events rather than overwriting a single value: build ID, component slot, normalized model/CPK, rating dimensions, timestamp and notes. The preferred list should maintain sample count, recency-weighted average and last-used date. One five-star result may mark a component personally preferred, but ranking influence should grow with repeated successful builds and sale outcomes. A later serious fault should be able to suspend preference without deleting history."},
+      {"id": "limitations", "type": "markdown", "layout": "full", "body": "## Limitations and robustness\n\nThe audit is descriptive, not a backtested estimate of purchase precision: the system does not yet preserve a clean candidate-to-purchase-to-sale label for enough completed flips. The 111-listing guardrail screen deliberately uses simple rules and still contains obvious false positives, demonstrating that threshold filters alone are insufficient. Watch and bid fields are absent or zero for much of the production data; release year is null for every current Phase 2 row; GPU benchmark coverage is unavailable; and marketplace-specific fraud/counterfeit signals are not consistently captured.\n\nThe notebook workflow could not be packaged because `nbformat` and `nbclient` are not installed in this environment. The SQL was executed read-only against production and is preserved in report source metadata, but a rerunnable notebook remains a follow-up artifact."},
+      {"id": "next", "type": "markdown", "layout": "full", "body": "## Recommended implementation sequence\n\n1. **Immediately protect the decision surface:** deduplicate to the latest active listing, rename current SUPER_GEM to PRICE_ANOMALY, remove BUY_NOW_NO_QUESTION and show confidence/sample/spread warnings.\n2. **Repair identity and market construction:** purge/re-extract invalid CPKs, add accessory/bundle hard vetoes, build same-condition unique sold-comparable sets, exclude the subject listing, apply MAD/IQR controls and require minimum sample/source diversity.\n3. **Build the economics layer:** conservative resale estimate, lower confidence bound, complete cost stack, expected profit, ROI, walk-away price and uncertainty.\n4. **Build liquidity and desirability:** sold velocity, active-to-sold ratio, days-to-sell, performance and generation data, platform/memory/storage/cooling/case preferences and inventory compatibility.\n5. **Add feedback and validation:** post-build star ratings, preferred-component events, candidate decision logging and realised sale outcomes. Backtest precision-at-K, false-positive rate, profit calibration and time-to-sale before restoring automatic SUPER_GEM semantics.\n6. **Expose explanations:** every ranked result should show the exact comparable cohort, robust price range, costs, expected profit, ROI, liquidity, build-fit, risk flags and the reasons it did or did not qualify."},
+      {"id": "questions", "type": "markdown", "layout": "full", "body": "## Decisions still needed\n\n- Minimum acceptable profit and ROI by category and expected holding period.\n- Whether liquid cooling is a universal preference or only applies to premium/high-TDP build profiles.\n- Which platforms and generations are hard vetoes versus permitted for explicitly labelled budget or retro strategies.\n- The cost reserves to use for testing labour, refurbishment, packaging, returns and warranty exposure.\n- Whether a five-star rating should immediately affect sourcing rank or require confirmation after the finished PC has sold without a component-related return."}
+    ]
+  },
+  "snapshot": {
+    "version": 1,
+    "generatedAt": "2026-08-17T00:00:00Z",
+    "status": "ready",
+    "datasets": {
+      "headline": [{"scored_rows": 33543, "unique_listings": 6479, "duplicate_share": 0.8068449453, "unique_super_gems": 557, "guardrail_pass_rate": 0.1992818671}],
+      "classification_counts": [
+        {"classification": "AVERAGE_DEAL", "rows": 14325},
+        {"classification": "POOR_DEAL", "rows": 12089},
+        {"classification": "OK_DEAL", "rows": 3521},
+        {"classification": "SUPER_GEM", "rows": 1906},
+        {"classification": "GEM", "rows": 1702}
+      ],
+      "failure_modes": [
+        {"priority": 1, "failure": "Wrong scoring grain", "evidence": "33,543 rows represent 6,479 distinct listings; 80.7% are repeat observations.", "decision_risk": "Repeated listings dominate counts, rankings and dashboard confidence.", "control": "Score one latest active observation per listing; retain history separately."},
+        {"priority": 2, "failure": "Market accepted with two observations", "evidence": "812 of 1,906 SUPER_GEM rows have cached CPK listing_count exactly 2; 1,320 have fewer than 5.", "decision_risk": "One outlier can nearly double a two-point median.", "control": "Require at least 5 unique same-condition observations and source diversity; require sold evidence for buy labels."},
+        {"priority": 3, "failure": "Mixed evidence types and conditions", "evidence": "Active asks and sold prices are unioned; many CPKs contain new, used and unknown listings.", "decision_risk": "The benchmark is neither a realised resale value nor a condition-matched replacement value.", "control": "Separate sold, active and retail distributions; segment by normalized condition."},
+        {"priority": 4, "failure": "Identity and accessory contamination", "evidence": "At least 230 SUPER_GEM rows match obvious accessory or invalid multi-category patterns; examples include GPU brackets and fans-only products.", "decision_risk": "A cheap accessory is compared with the component it mentions.", "control": "Deterministic accessory/bundle veto, valid single category, exact normalized model and CPK quarantine/rebuild."},
+        {"priority": 5, "failure": "Score and class duplicate one feature", "evidence": "Both classification and 0–10 deal score are derived from the same price-offset value.", "decision_risk": "The interface appears to show corroboration where none exists.", "control": "Separate value, confidence, liquidity, desirability and risk; classify with hard gates."},
+        {"priority": 6, "failure": "Confidence does not veto BUY_NOW", "evidence": "1,072 of 1,906 SUPER_GEM rows have confidence below 75.", "decision_risk": "Weak evidence can still generate the strongest purchase recommendation.", "control": "Minimum confidence is mandatory for GEM/SUPER_GEM; otherwise INVESTIGATE."},
+        {"priority": 7, "failure": "Demand is not part of opportunity score", "evidence": "All current SUPER_GEM scored rows show zero watches and bids; demand only modifies confidence.", "decision_risk": "Cheap but illiquid obsolete hardware ranks as highly actionable.", "control": "Use sold velocity, days-to-sell and active/sold ratio as a liquidity gate and score."},
+        {"priority": 8, "failure": "Performance, recency and preferences unused", "evidence": "Release year is null on all 33,543 Phase 2 rows; performance metrics are empty and benchmarks lack GPU coverage.", "decision_risk": "Old low-value parts rank beside strategically useful current platforms.", "control": "Add coverage-aware build-fit features and hard platform vetoes; never impute missing values as strong evidence."}
+      ],
+      "score_model": [
+        {"order": 1, "layer": "Hard eligibility", "measure": "Identity, item type, condition, activity, source and platform", "rule": "Reject accessories, bundles, counterfeit risk, inactive listings, invalid categories, disallowed legacy platforms and condition mismatches before scoring."},
+        {"order": 2, "layer": "Market-value confidence", "measure": "Unique comparable count, sold count, source diversity, freshness, dispersion and identity confidence", "rule": "Use a 0–100 confidence score; require minimum evidence for purchase classes and surface an uncertainty interval."},
+        {"order": 3, "layer": "Economics", "measure": "Conservative resale, total landed/refurbishment/selling cost, net profit and ROI", "rule": "Use the lower confidence-bound resale estimate. Economics should carry about 45% of ranking after eligibility passes."},
+        {"order": 4, "layer": "Liquidity and demand", "measure": "Sold count per period, active-to-sold ratio, median days-to-sell, bid/watch velocity", "rule": "Use market-level realised demand; weak liquidity blocks SUPER_GEM even if percentage discount is large. Approximately 20% of ranking."},
+        {"order": 5, "layer": "Performance and recency", "measure": "Category-normalized performance percentile, generation age, efficiency and warranty", "rule": "Reward useful modern capability, not raw benchmark magnitude across categories. Approximately 15% of ranking."},
+        {"order": 6, "layer": "Build fit and preference", "measure": "AM5/DDR5/NVMe, included fans, cooling, preferred models and inventory compatibility", "rule": "Approximately 15% of ranking; apply strategy-specific vetoes and bonuses without changing fair market value."},
+        {"order": 7, "layer": "Operational risk", "measure": "Seller, description completeness, testing, returns, damage, missing parts and marketplace risk", "rule": "Apply hard vetoes for severe risks and a bounded penalty for manageable risks. Approximately 5% plus gates."}
+      ]
+    }
+  },
+  "sources": []
+}
