@@ -58,8 +58,10 @@
         "type": "bar",
         "dataset": "classification_counts",
         "sourceId": "scored-production",
-        "xField": "classification",
-        "series": [{"field": "rows", "label": "Rows", "color": "blue"}],
+        "encodings": {
+          "x": {"field": "classification", "type": "nominal", "label": "Classification"},
+          "y": {"field": "rows", "type": "quantitative", "label": "Rows", "format": "number"}
+        },
         "valueFormat": "number",
         "layout": "full",
         "maxRows": 5
@@ -70,6 +72,7 @@
         "id": "failure-table",
         "title": "Failure modes requiring remediation",
         "subtitle": "Observed production evidence, decision risk and proposed control.",
+        "source": "SELECT classification, COUNT(*) AS scored_rows, COUNT(DISTINCT listing_id) AS unique_listings FROM gem_radar_listing_observations GROUP BY classification; -- Combined with read-only profiling queries for confidence, CPK sample size, category validity, market spread, condition mixing, sold-comparable coverage and benchmark coverage.",
         "dataset": "failure_modes",
         "defaultSort": {"field": "priority", "direction": "asc"},
         "density": "spacious",
@@ -87,10 +90,12 @@
         "id": "score-table",
         "title": "Recommended decision model",
         "subtitle": "Hard gates establish eligibility; scored dimensions rank only listings that pass.",
+        "source": "SELECT classification, COUNT(*) AS scored_rows, COUNT(DISTINCT listing_id) AS unique_listings FROM gem_radar_listing_observations GROUP BY classification; -- The recommended dimensions are design conclusions grounded in this production audit and the traced application scoring code.",
         "dataset": "score_model",
         "defaultSort": {"field": "order", "direction": "asc"},
         "density": "spacious",
         "layout": "full",
+        "sourceId": "scored-production",
         "columns": [
           {"field": "order", "label": "Order", "type": "number"},
           {"field": "layer", "label": "Layer", "type": "text"},
