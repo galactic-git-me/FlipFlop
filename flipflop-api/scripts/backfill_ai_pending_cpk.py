@@ -42,7 +42,11 @@ async def run(apply: bool, limit: int | None) -> None:
             WHERE s.classification='IDENTITY_PENDING'
               AND s.category IS NOT NULL AND c.listing_id IS NULL
               AND a.listing_id IS NULL
-            ORDER BY s.listing_id
+            ORDER BY CASE s.source
+                WHEN 'ebay' THEN 0 WHEN 'scan' THEN 1 WHEN 'overclockers' THEN 2
+                WHEN 'amazon' THEN 3 WHEN 'cex' THEN 4 WHEN 'vinted' THEN 5
+                WHEN 'temu' THEN 6 WHEN 'aliexpress' THEN 7 ELSE 8 END,
+                s.listing_id
             LIMIT COALESCE(:limit, 2147483647)
         """), {"limit": limit})).mappings().all()
         print(f"pending_queue={len(rows)} apply={str(apply).lower()}", flush=True)
