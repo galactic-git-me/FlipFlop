@@ -491,6 +491,7 @@ export default function BuildDetailPage() {
             listingStatuses={listingStatuses}
             onGenerateDescription={() => generateListing(false)}
             onGenerateTitle={() => generateListing(false)}
+            onPreviewEbay={build.generated_title && build.generated_description ? () => setShowEbayPreview(true) : undefined}
             onPublishEbay={postToEbay}
             onUpdateEbay={postToEbay}
             onDeleteEbay={() => {
@@ -1155,7 +1156,10 @@ export default function BuildDetailPage() {
           title={build.generated_title}
           description={build.generated_description}
           images={build.photos?.filter((p) => p.kind === "photo").map((p) => p.url) || []}
+          aspects={build.generated_aspects}
           price={price ? Number(price) : undefined}
+          condition={condition}
+          shippingCost={build.shipping_cost}
           onClose={() => setShowEbayPreview(false)}
           isModal={true}
         />
