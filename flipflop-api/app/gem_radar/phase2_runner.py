@@ -15,15 +15,15 @@ run_phase2_classification for manual/offline re-runs.
 from __future__ import annotations
 
 from collections import defaultdict
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import datetime
 
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.gem_radar.cpk_market import get_robust_sold_market, robust_active_market
+from app.gem_radar.cpk_market import robust_active_market
 from app.gem_radar.demand_velocity import record_demand_snapshot, calculate_watch_velocity, calculate_bid_velocity
-from app.gem_radar.opportunity_scoring import SoldComparable, load_opportunity_policy, score_opportunity
+from app.gem_radar.opportunity_scoring import SoldComparable, load_opportunity_policy, robust_sold_market, score_opportunity
 from app.gem_radar.favourite_matching import find_matching_favourite
 from app.gem_radar.marketplace import fallback_listing_url
 from app.models.favourite import Favourite
@@ -63,24 +63,38 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
     )
     listings = result.fetchall()
 
+    sold_rows = (await db.execute(text("""
+        SELECT cpk, LOWER(condition), price, postage, source_url,
+               EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - observed_at)) / 86400.0
+        FROM gem_radar_sold_observations
+        WHERE cpk IS NOT NULL
+          AND observed_at >= CURRENT_TIMESTAMP - make_interval(days => :lookback)
+          AND price > 0
+    """), {"lookback": policy.sold_lookback_days})).all()
+    sold_cohorts: dict[tuple[str, str], list[SoldComparable]] = defaultdict(list)
+    for sold_cpk, sold_condition, sold_price, sold_postage, sold_url, sold_days in sold_rows:
+        sold_cohorts[(sold_cpk, "new" if sold_condition == "new" else "used")].append(
+            SoldComparable(float(sold_price), float(sold_postage or 0), sold_url, float(sold_days or 0))
+        )
+
     # One bulk read for all fresh active cohorts. Re-querying the observation
     # join once per listing made a full rebuild O(listings × database roundtrip).
     active_rows = (await db.execute(text("""
         WITH latest AS (
-            SELECT DISTINCT ON (listing_id) listing_id, condition_normalised
+            SELECT DISTINCT ON (listing_id) listing_id, condition_normalised, source
             FROM gem_radar_listing_observations
             ORDER BY listing_id, observed_at DESC, id DESC
         )
-        SELECT p.cpk, p.listing_id, p.price,
+        SELECT p.cpk, p.listing_id, p.price, l.source,
                CASE WHEN LOWER(COALESCE(l.condition_normalised, '')) = 'new' THEN 'new' ELSE 'used' END condition
         FROM gem_radar_cpk_listing_price p
         JOIN latest l ON l.listing_id = p.listing_id
         WHERE p.updated_at >= CURRENT_TIMESTAMP - INTERVAL '14 days' AND p.price > 0
     """))).all()
     active_cohorts: dict[tuple[str, str], list[SoldComparable]] = defaultdict(list)
-    for active_cpk, active_listing_id, active_price, active_condition in active_rows:
+    for active_cpk, active_listing_id, active_price, active_source, active_condition in active_rows:
         active_cohorts[(active_cpk, active_condition)].append(
-            SoldComparable(float(active_price), source_url=f"active://{active_listing_id}")
+            SoldComparable(float(active_price), source_url=f"{active_source or 'active'}://{active_listing_id}")
         )
 
     favourites = (await db.execute(select(Favourite))).scalars().all()
@@ -99,18 +113,17 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
             epid, seller_feedback_percent, seller_feedback_count,
         ) = row
 
-        market = await get_robust_sold_market(
-            db, cpk=cpk, condition=condition, subject_listing_id=listing_id, policy=policy
-        )
+        normalised_condition = "new" if (condition or "").lower() == "new" else "used"
+        sold_comps = sold_cohorts.get((cpk, normalised_condition), [])
+        market = robust_sold_market(sold_comps, subject_listing_id=listing_id, policy=policy)
         preliminary_market = False
         if market is None:
-            market = await get_robust_sold_market(
-                db, cpk=cpk, condition=condition, subject_listing_id=listing_id,
-                policy=policy, minimum_comps=3,
+            market = robust_sold_market(
+                sold_comps, subject_listing_id=listing_id,
+                policy=replace(policy, minimum_sold_comps=3),
             )
             preliminary_market = market is not None
             if market is None:
-                normalised_condition = "new" if (condition or "").lower() == "new" else "used"
                 market = robust_active_market(
                     active_cohorts.get((cpk, normalised_condition), []),
                     condition=normalised_condition, subject_listing_id=listing_id,

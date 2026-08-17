@@ -122,22 +122,31 @@ async def get_robust_active_market(
 
 def robust_active_market(comps, *, subject_listing_id: str, condition: str, policy):
     from dataclasses import replace
-    from app.gem_radar.opportunity_scoring import robust_sold_market
+    from app.gem_radar.opportunity_scoring import SoldComparable, robust_sold_market
 
     active_policy = replace(policy, minimum_sold_comps=max(5, policy.minimum_sold_comps))
-    market = robust_sold_market(comps, subject_listing_id=subject_listing_id, policy=active_policy)
+    fixed_retailers = {"amazon", "overclockers", "scan", "aliexpress", "temu", "cex"}
+    marketplace_factor = 0.92 if condition == "new" else 0.88
+    adjusted = []
+    factors = []
+    retail_count = 0
+    for comp in comps:
+        source = (comp.source_url or "").split("://", 1)[0].lower()
+        factor = 1.0 if source in fixed_retailers else marketplace_factor
+        retail_count += int(factor == 1.0)
+        factors.append(factor)
+        adjusted.append(SoldComparable(comp.price * factor, comp.postage * factor, comp.source_url, comp.observed_days_ago))
+    market = robust_sold_market(adjusted, subject_listing_id=subject_listing_id, policy=active_policy)
     if market is None:
         return None
-    factor = 0.92 if condition == "new" else 0.88
+    retail_share = retail_count / len(comps) if comps else 0.0
+    factor = sum(factors) / len(factors) if factors else marketplace_factor
+    basis = "FIXED_RETAIL_ESTIMATED" if retail_share == 1 else ("MIXED_ACTIVE_ESTIMATE" if retail_share > 0 else "BIN_ESTIMATED")
+    confidence_penalty = 5.0 if retail_share >= 0.5 else 15.0
     return replace(
         market,
-        lower=round(market.lower * factor, 2),
-        median=round(market.median * factor, 2),
-        upper=round(market.upper * factor, 2),
-        conservative_resale=round(market.conservative_resale * factor, 2),
-        confidence=round(max(0.0, market.confidence - 15.0), 1),
-        basis="BIN_ESTIMATED",
-        realisation_factor=factor,
+        confidence=round(max(0.0, market.confidence - confidence_penalty), 1),
+        basis=basis, realisation_factor=round(factor, 3),
     )
 
 

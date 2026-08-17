@@ -328,7 +328,7 @@ def score_opportunity(
     provisional_evidence = "preliminary_sold_cohort" in risk_flags
     blocking_flags = [flag for flag in risk_flags if flag != "preliminary_sold_cohort"]
     eligible = not risk_flags
-    evidence_label = "completed sales" if market.basis == "SOLD_REFINED" else "active asking prices"
+    evidence_label = "completed sales" if market.basis == "SOLD_REFINED" else "active market prices"
     reasons = [
         f"Conservative resale uses the lower quartile of {market.sample_size} robust same-condition {evidence_label}.",
         f"Expected net profit £{profit:.2f}; ROI {roi:.1f}%; liquidity {liquidity:.0f}/100.",
@@ -337,6 +337,10 @@ def score_opportunity(
         reasons.append(
             f"BIN estimate applies a {100 * (1 - market.realisation_factor):.0f}% realisation haircut and lower confidence until sold evidence refines it."
         )
+    elif market.basis == "FIXED_RETAIL_ESTIMATED":
+        reasons.append("Fixed-price retailer evidence receives no offer/negotiation haircut; sold evidence can still refine confidence.")
+    elif market.basis == "MIXED_ACTIVE_ESTIMATE":
+        reasons.append("Mixed active evidence keeps fixed retailer prices intact and haircuts negotiable marketplace BIN prices.")
     if is_component:
         reasons.append("Component economics exclude build-level fulfilment costs, which are charged once to the completed build.")
         reasons.append(
