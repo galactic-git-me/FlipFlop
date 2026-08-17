@@ -135,6 +135,14 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
 
         decision = opportunity.decision
 
+        # The scored table is the latest-current decision surface, not an
+        # event ledger. A live ingestion pathway may have written this
+        # listing after the run-level cleanup began, so replace it here too;
+        # history remains in GemRadarDecisionEvent and observation tables.
+        await db.execute(
+            text("DELETE FROM gem_radar_scored_listings WHERE listing_id = :listing_id"),
+            {"listing_id": listing_id},
+        )
         db_row = GemRadarScoredListing(
             listing_id=listing_id,
             search_run_id=SEARCH_RUN_ID,

@@ -97,3 +97,13 @@ def test_category_economics_preserve_higher_gpu_and_build_cash_hurdles():
     assert category_economics("cpu", policy).gem_profit == 5
     assert category_economics("gpu", policy).gem_profit == 20
     assert category_economics("whole_pc", policy).gem_profit == policy.gem_profit
+
+
+def test_missing_market_is_not_mislabelled_as_average_deal():
+    result = score_opportunity(
+        listing_price=50, title="AMD Ryzen 5 5600",
+        cpk_data={"category": "cpu", "brand": "AMD", "model": "Ryzen 5 5600"},
+        market=None, sold_count_90d=0, active_count=5,
+        watch_velocity=None, bid_velocity=None, policy=OpportunityPolicy(),
+    )
+    assert result.classification == "INSUFFICIENT_DATA"

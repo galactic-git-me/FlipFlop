@@ -284,7 +284,7 @@ def score_opportunity(
     risk = max(0.0, 100.0 - len(risk_flags) * 30.0)
 
     if market is None:
-        return OpportunityResult("AVERAGE_DEAL", "INVESTIGATE", 0.0, None, None, None, liquidity, desirability, risk, None, False,
+        return OpportunityResult("INSUFFICIENT_DATA", "INVESTIGATE", 0.0, None, None, None, liquidity, desirability, risk, None, False,
                                  ["A same-condition completed-sale cohort is required before a buy classification."], risk_flags)
 
     category = str((cpk_data or {}).get("category") or "").lower()
@@ -327,9 +327,15 @@ def score_opportunity(
             f"SUPER_GEM £{economics.super_profit:.0f}/{economics.super_roi_pct:.0f}% ROI."
         )
     emerging_profit_floor = min(policy.gem_profit, 10.0) if is_component else policy.gem_profit
-    if provisional_evidence and not blocking_flags and profit >= emerging_profit_floor and roi >= 25 and market.confidence >= 40 and liquidity >= 20 and desirability >= 55:
+    if blocking_flags:
+        classification, decision = "INELIGIBLE", "IGNORE"
+        reasons.append("A hard identity or market-quality veto prevents deal classification.")
+    elif provisional_evidence and profit >= emerging_profit_floor and roi >= 25 and market.confidence >= 40 and liquidity >= 20 and desirability >= 55:
         classification, decision = "EMERGING_OPPORTUNITY", "INVESTIGATE"
         reasons.append("Promising economics, but only 3–4 robust sold comparables: verify manually before buying.")
+    elif provisional_evidence:
+        classification, decision = "INSUFFICIENT_DATA", "INVESTIGATE"
+        reasons.append("Only 3–4 sold comparables are available and the provisional opportunity gates were not all met.")
     elif eligible and profit >= economics.super_profit and roi >= economics.super_roi_pct and market.confidence >= policy.super_confidence and liquidity >= policy.super_liquidity and total_score >= economics.super_score:
         classification, decision = "SUPER_GEM", "BUY_NOW"
     elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market.confidence >= policy.gem_confidence and liquidity >= policy.gem_liquidity and total_score >= economics.gem_score:

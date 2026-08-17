@@ -934,7 +934,7 @@ function findLatestRunId(listings: Listing[]): string | null {
   return latest?.search_run_id ?? null;
 }
 
-type GemFilter = "all" | "SUPER_GEM" | "GEM" | "EMERGING_OPPORTUNITY" | "OK_DEAL" | "AVERAGE_DEAL" | "POOR_DEAL";
+type GemFilter = "all" | "SUPER_GEM" | "GEM" | "EMERGING_OPPORTUNITY" | "OK_DEAL" | "AVERAGE_DEAL" | "POOR_DEAL" | "INSUFFICIENT_DATA" | "INELIGIBLE";
 
 type SortKey = "source" | "title" | "seller" | "condition" | "price_variance" | "delivered_price" | "market_new_price" | "market_used_price" | "conservative_resale_price" | "classification" | "decision" | "deal_score" | "watch_count" | "bid_count" | "release_year" | "listing_observed_at";
 type SortDir = "asc" | "desc";
@@ -946,11 +946,13 @@ const CLASSIFICATION_RANK: Record<string, number> = {
   OK_DEAL: 2,
   AVERAGE_DEAL: 1,
   POOR_DEAL: 0,
+  INSUFFICIENT_DATA: -1,
+  INELIGIBLE: -2,
 };
 
 // Best deal to worst — shared between the filter tags and the row badge so
 // the two stay visually consistent.
-const CLASSIFICATION_BADGE_ORDER: string[] = ["SUPER_GEM", "GEM", "EMERGING_OPPORTUNITY", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL"];
+const CLASSIFICATION_BADGE_ORDER: string[] = ["SUPER_GEM", "GEM", "EMERGING_OPPORTUNITY", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "INELIGIBLE"];
 const CLASSIFICATION_BADGE_COLORS: Record<string, string> = {
   SUPER_GEM: "bg-amber-600 text-white",
   GEM: "bg-blue-600 text-white",
@@ -958,6 +960,8 @@ const CLASSIFICATION_BADGE_COLORS: Record<string, string> = {
   OK_DEAL: "bg-emerald-700 text-white",
   AVERAGE_DEAL: "bg-slate-600 text-slate-100",
   POOR_DEAL: "bg-red-800 text-white",
+  INSUFFICIENT_DATA: "bg-slate-700 text-slate-300",
+  INELIGIBLE: "bg-rose-950 text-rose-300",
 };
 const CLASSIFICATION_TAG_INACTIVE: Record<string, string> = {
   SUPER_GEM: "bg-amber-900/20 text-amber-300 border border-amber-700/30 hover:bg-amber-900/40",
@@ -966,6 +970,8 @@ const CLASSIFICATION_TAG_INACTIVE: Record<string, string> = {
   OK_DEAL: "bg-emerald-900/20 text-emerald-300 border border-emerald-700/30 hover:bg-emerald-900/40",
   AVERAGE_DEAL: "bg-slate-700/40 text-slate-300 border border-slate-600/40 hover:bg-slate-700/70",
   POOR_DEAL: "bg-red-900/20 text-red-300 border border-red-700/30 hover:bg-red-900/40",
+  INSUFFICIENT_DATA: "bg-slate-900/30 text-slate-400 border border-slate-700/40 hover:bg-slate-800/50",
+  INELIGIBLE: "bg-rose-950/30 text-rose-400 border border-rose-900/50 hover:bg-rose-950/50",
 };
 
 function ClassificationBadge({ classification }: { classification: string }) {
@@ -1019,6 +1025,8 @@ const CLASSIFICATION_TIER_MEANING: Record<string, string> = {
   OK_DEAL: "Priced somewhat below market value — a fair deal.",
   AVERAGE_DEAL: "Priced close to market value — not a notable deal either way.",
   POOR_DEAL: "Priced at or above real market value — not worth pursuing.",
+  INSUFFICIENT_DATA: "Not enough completed-sale evidence to classify this listing yet.",
+  INELIGIBLE: "Rejected by an identity, accessory, bundle, retro-platform, or market-quality veto.",
 };
 
 // Mirrors app/gem_radar/deal_classification.py's classify_by_offset +
@@ -1226,6 +1234,8 @@ const CLASSIFICATION_CHART_COLORS: Record<string, string> = {
   OK_DEAL: "#047857",
   AVERAGE_DEAL: "#475569",
   POOR_DEAL: "#991b1b",
+  INSUFFICIENT_DATA: "#334155",
+  INELIGIBLE: "#881337",
 };
 
 function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
@@ -1631,7 +1641,7 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
   );
 }
 
-const CLASSIFICATION_ORDER = ["SUPER_GEM", "GEM", "EMERGING_OPPORTUNITY", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL"] as const;
+const CLASSIFICATION_ORDER = ["SUPER_GEM", "GEM", "EMERGING_OPPORTUNITY", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "INELIGIBLE"] as const;
 const CLASSIFICATION_COLORS: Record<string, string> = {
   SUPER_GEM: "#f59e0b",
   GEM: "#3b82f6",
@@ -1639,6 +1649,8 @@ const CLASSIFICATION_COLORS: Record<string, string> = {
   OK_DEAL: "#10b981",
   AVERAGE_DEAL: "#64748b",
   POOR_DEAL: "#ef4444",
+  INSUFFICIENT_DATA: "#475569",
+  INELIGIBLE: "#9f1239",
 };
 
 interface ScatterPoint {
