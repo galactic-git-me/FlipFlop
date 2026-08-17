@@ -934,7 +934,7 @@ function findLatestRunId(listings: Listing[]): string | null {
   return latest?.search_run_id ?? null;
 }
 
-type GemFilter = "all" | "SUPER_GEM" | "GEM" | "OK_DEAL" | "AVERAGE_DEAL" | "POOR_DEAL";
+type GemFilter = "all" | "SUPER_GEM" | "GEM" | "EMERGING_OPPORTUNITY" | "OK_DEAL" | "AVERAGE_DEAL" | "POOR_DEAL";
 
 type SortKey = "source" | "title" | "seller" | "condition" | "price_variance" | "delivered_price" | "market_new_price" | "market_used_price" | "conservative_resale_price" | "classification" | "decision" | "deal_score" | "watch_count" | "bid_count" | "release_year" | "listing_observed_at";
 type SortDir = "asc" | "desc";
@@ -942,6 +942,7 @@ type SortDir = "asc" | "desc";
 const CLASSIFICATION_RANK: Record<string, number> = {
   SUPER_GEM: 4,
   GEM: 3,
+  EMERGING_OPPORTUNITY: 2.5,
   OK_DEAL: 2,
   AVERAGE_DEAL: 1,
   POOR_DEAL: 0,
@@ -949,10 +950,11 @@ const CLASSIFICATION_RANK: Record<string, number> = {
 
 // Best deal to worst — shared between the filter tags and the row badge so
 // the two stay visually consistent.
-const CLASSIFICATION_BADGE_ORDER: string[] = ["SUPER_GEM", "GEM", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL"];
+const CLASSIFICATION_BADGE_ORDER: string[] = ["SUPER_GEM", "GEM", "EMERGING_OPPORTUNITY", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL"];
 const CLASSIFICATION_BADGE_COLORS: Record<string, string> = {
   SUPER_GEM: "bg-amber-600 text-white",
   GEM: "bg-blue-600 text-white",
+  EMERGING_OPPORTUNITY: "bg-sky-600 text-white",
   OK_DEAL: "bg-emerald-700 text-white",
   AVERAGE_DEAL: "bg-slate-600 text-slate-100",
   POOR_DEAL: "bg-red-800 text-white",
@@ -960,6 +962,7 @@ const CLASSIFICATION_BADGE_COLORS: Record<string, string> = {
 const CLASSIFICATION_TAG_INACTIVE: Record<string, string> = {
   SUPER_GEM: "bg-amber-900/20 text-amber-300 border border-amber-700/30 hover:bg-amber-900/40",
   GEM: "bg-blue-900/20 text-blue-300 border border-blue-700/30 hover:bg-blue-900/40",
+  EMERGING_OPPORTUNITY: "bg-sky-900/20 text-sky-300 border border-sky-700/30 hover:bg-sky-900/40",
   OK_DEAL: "bg-emerald-900/20 text-emerald-300 border border-emerald-700/30 hover:bg-emerald-900/40",
   AVERAGE_DEAL: "bg-slate-700/40 text-slate-300 border border-slate-600/40 hover:bg-slate-700/70",
   POOR_DEAL: "bg-red-900/20 text-red-300 border border-red-700/30 hover:bg-red-900/40",
@@ -1012,6 +1015,7 @@ function explainDecision(decision: string, classification: string, confidence: s
 const CLASSIFICATION_TIER_MEANING: Record<string, string> = {
   SUPER_GEM: "Priced far below real market value — an exceptional deal.",
   GEM: "Priced clearly below real market value — a solid deal.",
+  EMERGING_OPPORTUNITY: "Promising positive economics with only 3–4 robust sold comparables — manually verify before buying.",
   OK_DEAL: "Priced somewhat below market value — a fair deal.",
   AVERAGE_DEAL: "Priced close to market value — not a notable deal either way.",
   POOR_DEAL: "Priced at or above real market value — not worth pursuing.",
@@ -1218,6 +1222,7 @@ const VENDOR_TABLE_TIERS: string[] = [...CLASSIFICATION_BADGE_ORDER].reverse();
 const CLASSIFICATION_CHART_COLORS: Record<string, string> = {
   SUPER_GEM: "#d97706",
   GEM: "#2563eb",
+  EMERGING_OPPORTUNITY: "#0284c7",
   OK_DEAL: "#047857",
   AVERAGE_DEAL: "#475569",
   POOR_DEAL: "#991b1b",
@@ -1626,10 +1631,11 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
   );
 }
 
-const CLASSIFICATION_ORDER = ["SUPER_GEM", "GEM", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL"] as const;
+const CLASSIFICATION_ORDER = ["SUPER_GEM", "GEM", "EMERGING_OPPORTUNITY", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL"] as const;
 const CLASSIFICATION_COLORS: Record<string, string> = {
   SUPER_GEM: "#f59e0b",
   GEM: "#3b82f6",
+  EMERGING_OPPORTUNITY: "#0ea5e9",
   OK_DEAL: "#10b981",
   AVERAGE_DEAL: "#64748b",
   POOR_DEAL: "#ef4444",

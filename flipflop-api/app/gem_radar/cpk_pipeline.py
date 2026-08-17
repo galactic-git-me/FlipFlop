@@ -23,6 +23,12 @@ from app.gem_radar.benchmarks import normalize_match_key
 from app.gem_radar.opportunity_scoring import identity_gates
 
 
+def _identity_match_keys(brand: str | None, model: str | None) -> set[str]:
+    """Exact sold-search keys that can safely inherit this CPK."""
+    keys = {normalize_match_key(model or ""), normalize_match_key(f"{brand or ''} {model or ''}")}
+    return {key for key in keys if len(key) >= 5}
+
+
 def _valid_existing_cpk(data: dict | None, title: str) -> bool:
     if not data or not data.get("category") or not data.get("brand") or not data.get("model"):
         return False
@@ -138,5 +144,14 @@ async def assign_cpk_and_accumulate_price(
         ),
         {"cpk": cpk, "match_key": match_key},
     )
+    identity_keys = _identity_match_keys(brand, model)
+    if identity_keys:
+        await db.execute(
+            text("""
+                UPDATE gem_radar_sold_observations SET cpk = :cpk
+                WHERE match_key = ANY(:identity_keys) AND cpk IS NULL
+            """),
+            {"cpk": cpk, "identity_keys": list(identity_keys)},
+        )
 
     return cpk
