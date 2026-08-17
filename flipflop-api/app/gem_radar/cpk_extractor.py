@@ -13,6 +13,7 @@ from __future__ import annotations
 import asyncio
 import json
 import hashlib
+import re
 from dataclasses import dataclass
 from typing import Optional
 
@@ -61,6 +62,10 @@ def _is_placeholder_echo(value: str) -> bool:
 def _safe_title(title: str, limit: int = 50) -> str:
     """Encode title to be safe for logging (handles non-ASCII characters)."""
     return title[:limit].encode('utf-8', errors='replace').decode('utf-8', errors='replace')
+
+
+def _slug(value: str) -> str:
+    return re.sub(r"-+", "-", re.sub(r"[^a-z0-9]+", "-", value.lower())).strip("-")
 
 @dataclass
 class ExtractedProductData:
@@ -233,6 +238,10 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
                 # preventing get_market_price() from ever seeing 2+ listings
                 # share a key, so market prices never settled. specs is still
                 # captured in cpk_data for display/debugging, just not hashed.
+                data["brand"] = _slug(str(data["brand"]))
+                data["model"] = _slug(str(data["model"]))
+                if not data["brand"] or not data["model"]:
+                    return None
                 cpk_input = f"{data['category']}|{data['brand']}|{data['model']}"
                 cpk = hashlib.sha256(cpk_input.encode()).hexdigest()[:16]  # 16-char hex
 
