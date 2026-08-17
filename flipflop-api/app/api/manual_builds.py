@@ -50,6 +50,19 @@ _PUBLIC_MEDIA_ROOT = Path(__file__).resolve().parent.parent.parent.parent / "Fli
 _SELLING_PRINCIPLES_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "selling_principles.md"
 _EBAY_LISTING_SYSTEM_PROMPT_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "ebay_listing_system_prompt.md"
 
+# The listing template (ebay_listing_system_prompt.md) asks the LLM to fill
+# in {{FLIPFLOP_LOGO_URL}} and {{HERO_IMAGE_URL}} itself, but never actually
+# gives it real values to fill them with — the materials text built below
+# never included build.hero_photo_url or a logo URL anywhere. The model has
+# no way to invent a correct URL, so it either hallucinates one or leaves
+# the literal placeholder text in place (confirmed live on a published
+# listing: both images broken, src="{{...}}" verbatim). Substituted
+# deterministically after generation instead of relying on the model, since
+# both values are already known ground truth — the logo is a fixed asset,
+# and hero_photo_url is set on the build the moment its first photo is
+# uploaded (see the photo-upload endpoint below).
+_FLIPFLOP_LOGO_URL = "https://theflipflop.shop/media/flipflop-glow-black-with-full-glow.png"
+
 # eBay Item Specifics for category 179 (PC Desktops & All-in-Ones), fetched
 # from the Taxonomy API's get_item_aspects_for_category. "Brand" and "Type"
 # are eBay-required; the rest are recommended and materially improve
@@ -447,6 +460,18 @@ BEST OFFER ENABLED: {"Yes" if build.allow_offers else "No"}
             502,
             "The AI response didn't include a parseable title or HTML section — "
             f"raw response (first 800 chars): {raw_response[:800]}",
+        )
+
+    description_html = description_html.replace("{{FLIPFLOP_LOGO_URL}}", _FLIPFLOP_LOGO_URL)
+    if build.hero_photo_url:
+        description_html = description_html.replace("{{HERO_IMAGE_URL}}", build.hero_photo_url)
+    elif "{{HERO_IMAGE_URL}}" in description_html:
+        import structlog
+
+        structlog.get_logger(__name__).warning(
+            "generate_listing.hero_image_placeholder_unfilled",
+            build_id=build_id,
+            reason="build has no hero_photo_url set — upload a photo first",
         )
 
     build.generated_title = title[:80]
