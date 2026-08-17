@@ -60,8 +60,8 @@ def _is_placeholder_echo(value: str) -> bool:
 
 
 def _safe_title(title: str, limit: int = 50) -> str:
-    """Encode title to be safe for logging (handles non-ASCII characters)."""
-    return title[:limit].encode('utf-8', errors='replace').decode('utf-8', errors='replace')
+    """Return an ASCII-safe representation for Windows console logging."""
+    return title[:limit].encode("ascii", errors="backslashreplace").decode("ascii")
 
 
 def _slug(value: str) -> str:
