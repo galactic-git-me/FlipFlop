@@ -22,7 +22,7 @@ from app.schemas.manual_build import (
     BookShipmentResult, UpdateEvidenceDataRequest,
 )
 from app.services import ai_service
-from app.services.ebay_listing_poster import post_flip_to_ebay
+from app.services.ebay_listing_poster import post_flip_to_ebay, prepare_ebay_listing_description
 from app.services.ebay_specifics_generator import (
     generate_item_specifics,
     repair_legacy_aspect_cardinality,
@@ -474,7 +474,7 @@ BEST OFFER ENABLED: {"Yes" if build.allow_offers else "No"}
         )
 
     build.generated_title = title[:80]
-    build.generated_description = description_html
+    build.generated_description = prepare_ebay_listing_description(description_html)
     build.updated_at = datetime.utcnow()
     await db.flush()
 

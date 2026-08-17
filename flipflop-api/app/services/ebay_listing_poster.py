@@ -22,6 +22,7 @@ import uuid
 import base64
 from html import unescape
 from html.parser import HTMLParser
+from bs4 import BeautifulSoup
 
 log = structlog.get_logger(__name__)
 
@@ -62,6 +63,56 @@ def _inventory_product_description(description: str, title: str) -> str:
     # remain within the same 4,000-unit ceiling for £, dashes, and emoji.
     encoded = value.encode("utf-8")[:EBAY_PRODUCT_DESCRIPTION_MAX_LENGTH]
     return encoded.decode("utf-8", errors="ignore")
+
+
+def prepare_ebay_listing_description(description: str) -> str:
+    """Make FlipFlop listing HTML reliable in eBay's constrained renderer."""
+    if not description or "ff-page" not in description:
+        return description
+
+    soup = BeautifulSoup(description, "html.parser")
+
+    def add_style(node, declarations: str) -> None:
+        existing = (node.get("style") or "").strip().rstrip(";")
+        node["style"] = f"{existing};{declarations}" if existing else declarations
+
+    for image in soup.find_all("img"):
+        src = (image.get("src") or "").strip()
+        if not src or "{{" in src or "}}" in src:
+            image.decompose()
+            continue
+        add_style(image, "display:block;max-width:100%;height:auto;border:0")
+
+    for node in soup.select(".ff-page, .ff-wrap"):
+        add_style(
+            node,
+            "width:100%;max-width:1000px;margin:0 auto;background:#0d1015;"
+            "color:#f5f7fa;overflow:hidden;font-family:Arial,Helvetica,sans-serif;"
+            "line-height:1.55",
+        )
+
+    for node in soup.select(".ff-section, .ff-image-section, .ff-card-row"):
+        add_style(node, "background:#0d1015;color:#f5f7fa;max-width:100%;overflow:hidden")
+
+    for node in soup.select(".ff-card"):
+        add_style(node, "background:#171c24;color:#f5f7fa;overflow-wrap:anywhere")
+
+    for node in soup.select(".ff-heading"):
+        add_style(node, "width:100%;max-width:100%;height:auto;object-fit:contain")
+
+    for node in soup.select(".ff-page p, .ff-page li, .ff-page td, .ff-page strong"):
+        style = (node.get("style") or "").lower()
+        if "color:" not in style:
+            add_style(node, "color:#d8e2ee")
+        add_style(node, "overflow-wrap:anywhere;word-break:normal")
+
+    for node in soup.select(".ff-benefit div"):
+        add_style(node, "color:#cbd5e1")
+
+    for node in soup.select(".ff-spec-table, .ff-use-grid"):
+        add_style(node, "width:100%;max-width:100%;color:#f5f7fa")
+
+    return str(soup)
 
 
 class EbayListingPoster:
@@ -322,7 +373,9 @@ class EbayListingPoster:
                     "marketplaceId": "EBAY_GB",  # UK marketplace
                     "format": "FIXED_PRICE",
                     "categoryId": category_id,
-                    "listingDescription": (description or title)[:EBAY_LISTING_DESCRIPTION_MAX_LENGTH],
+                    "listingDescription": prepare_ebay_listing_description(
+                        description or title
+                    )[:EBAY_LISTING_DESCRIPTION_MAX_LENGTH],
                     "merchantLocationKey": merchant_location_key,
                     "pricingSummary": {
                         "price": {
