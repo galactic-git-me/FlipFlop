@@ -162,7 +162,11 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
                             "model": settings.ollama_model,
                             "prompt": prompt,
                             "stream": False,
-                            "temperature": 0.1,  # Low temp for deterministic output
+                            "format": "json",
+                            "options": {
+                                "temperature": 0.1,
+                                "num_predict": 256,
+                            },
                         },
                     )
 
