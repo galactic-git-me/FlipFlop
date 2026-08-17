@@ -91,3 +91,25 @@ async def test_call_raises_on_http_error():
                 await trading.get_best_offers("item-1", "token-1")
     finally:
         patcher.stop()
+
+
+async def test_revise_fixed_price_item_sends_existing_id_and_escaped_html():
+    with patch("app.services.ebay_trading_api._call", new=AsyncMock()) as call:
+        item_id = await trading.revise_fixed_price_item(
+            item_id="188805793027",
+            title="Prometheus & PC",
+            description="<div>Dark & readable</div>",
+            price=1450.0,
+            image_urls=["https://example.com/pc.jpg"],
+            aspects={"Brand": ["Custom Build"], "Features": ["RGB", "Wi-Fi"]},
+            token="token-1",
+            environment="production",
+        )
+
+    assert item_id == "188805793027"
+    body = call.await_args.args[1]
+    assert "<ItemID>188805793027</ItemID>" in body
+    assert "Prometheus &amp; PC" in body
+    assert "&lt;div&gt;Dark &amp; readable&lt;/div&gt;" in body
+    assert body.count("<Value>") == 3
+    assert call.await_args.kwargs["environment"] == "production"

@@ -42,9 +42,12 @@ def _headers(call_name: str, token: str) -> dict:
     }
 
 
-async def _call(call_name: str, body_xml: str, token: str) -> ET.Element:
+async def _call(
+    call_name: str, body_xml: str, token: str, environment: str | None = None
+) -> ET.Element:
     settings = get_settings()
-    root_url = _TRADING_API_BASE.get(settings.ebay_environment, _TRADING_API_BASE["production"])
+    target_environment = environment or settings.ebay_environment
+    root_url = _TRADING_API_BASE.get(target_environment, _TRADING_API_BASE["production"])
     envelope = f"""<?xml version="1.0" encoding="utf-8"?>
 <{call_name}Request xmlns="{_NS}">
 {body_xml}
@@ -62,6 +65,48 @@ async def _call(call_name: str, body_xml: str, token: str) -> ET.Element:
         errors = [e.findtext(f"{{{_NS}}}LongMessage") for e in tree.findall(f"{{{_NS}}}Errors")]
         raise RuntimeError(f"eBay Trading API {call_name} failed: {'; '.join(filter(None, errors)) or ack}")
     return tree
+
+
+async def revise_fixed_price_item(
+    item_id: str,
+    title: str,
+    description: str,
+    price: float,
+    image_urls: list[str],
+    aspects: dict[str, list[str]],
+    token: str,
+    environment: str = "production",
+) -> str:
+    """Replace editable content on an existing fixed-price listing."""
+    item = ET.Element("Item")
+    ET.SubElement(item, "ItemID").text = item_id
+    ET.SubElement(item, "Title").text = title[:80]
+    ET.SubElement(item, "Description").text = description
+    start_price = ET.SubElement(item, "StartPrice", {"currencyID": "GBP"})
+    start_price.text = f"{price:.2f}"
+
+    if image_urls:
+        pictures = ET.SubElement(item, "PictureDetails")
+        for url in image_urls:
+            ET.SubElement(pictures, "PictureURL").text = url
+
+    if aspects:
+        specifics = ET.SubElement(item, "ItemSpecifics")
+        for name, values in aspects.items():
+            if not values:
+                continue
+            pair = ET.SubElement(specifics, "NameValueList")
+            ET.SubElement(pair, "Name").text = name
+            for value in values:
+                ET.SubElement(pair, "Value").text = value
+
+    await _call(
+        "ReviseFixedPriceItem",
+        ET.tostring(item, encoding="unicode"),
+        token,
+        environment=environment,
+    )
+    return item_id
 
 
 async def get_best_offers(item_id: str, token: str) -> list[dict]:

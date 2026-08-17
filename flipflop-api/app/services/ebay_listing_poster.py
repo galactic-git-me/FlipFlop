@@ -20,6 +20,7 @@ from typing import Optional
 from datetime import datetime
 import uuid
 import base64
+import re
 from html import unescape
 from html.parser import HTMLParser
 from bs4 import BeautifulSoup
@@ -525,7 +526,31 @@ async def post_flip_to_ebay(
         app_id=app_id,
         client_secret=client_secret,
     )
-    return await poster.create_listing(
+    async def revise(existing_listing_id: str) -> dict:
+        from app.services.ebay_trading_api import revise_fixed_price_item
+
+        await revise_fixed_price_item(
+            item_id=existing_listing_id,
+            title=title,
+            description=prepare_ebay_listing_description(description),
+            price=price,
+            image_urls=image_urls,
+            aspects=aspects or {},
+            token=access_token,
+            environment=environment,
+        )
+        domain = "www.ebay.co.uk" if environment == "production" else "sandbox.ebay.com"
+        return {
+            "success": True,
+            "listing_id": existing_listing_id,
+            "url": f"https://{domain}/itm/{existing_listing_id}",
+            "status": "ACTIVE",
+        }
+
+    if listing_id:
+        return await revise(listing_id)
+
+    result = await poster.create_listing(
         title=title,
         description=description,
         price=price,
@@ -537,3 +562,18 @@ async def post_flip_to_ebay(
         fulfillment_policy_id=fulfillment_policy_id,
         aspects=aspects,
     )
+
+    # Recover builds whose original successful listing ID was never saved by
+    # the old broken update path. eBay includes that active item ID in its
+    # duplicate-listing rejection; adopt and revise it instead of asking the
+    # seller to manually repair local state.
+    if not result.get("success"):
+        duplicate = re.search(
+            r"already have on eBay:.*?\((\d{9,19})\)",
+            result.get("error", ""),
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+        if duplicate:
+            return await revise(duplicate.group(1))
+
+    return result
