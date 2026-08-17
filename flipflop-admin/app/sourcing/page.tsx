@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer } from "lucide-react";
+import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer, Info, X } from "lucide-react";
 import PixelCard from "../../components/ui/PixelCard";
 import { VendorLogo } from "../../components/VendorLogo";
 import { PriceHistorySparkline } from "../../components/listings/PriceHistorySparkline";
@@ -49,6 +49,19 @@ interface Listing {
   deal_score: number;
   confidence: string;
   decision: string;
+  expected_profit?: number | null;
+  roi_pct?: number | null;
+  walk_away_price?: number | null;
+  conservative_resale_price?: number | null;
+  market_confidence?: number | null;
+  market_sample_size?: number | null;
+  market_source_diversity?: number | null;
+  market_spread_pct?: number | null;
+  liquidity_score?: number | null;
+  desirability_score?: number | null;
+  risk_score?: number | null;
+  eligible?: boolean;
+  scoring_explanation?: { reasons?: string[]; risk_flags?: string[]; cost_breakdown?: Record<string, number>; market?: { comparable_urls?: string[] } } | null;
   release_year: number | null;
   scored_at: string;
   listing_observed_at: string | null;
@@ -1302,6 +1315,7 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
   const [sortKey, setSortKey] = useState<SortKey>("deal_score");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [titleQuery, setTitleQuery] = useState("");
+  const [explanationListing, setExplanationListing] = useState<Listing | null>(null);
 
   // Jump straight to a specific listing when arriving from a favourite-match
   // toast/notification link (?listing=<listing_id>) — switch to its tab so
@@ -1451,6 +1465,7 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                 <SortHeader label="Classification" sortKey="classification" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} />
                 <SortHeader label="Decision" sortKey="decision" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} />
                 <SortHeader label="Score" sortKey="deal_score" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
+                <th className="p-3 text-left text-slate-200 font-semibold">Evidence</th>
                 <SortHeader label="Watches" sortKey="watch_count" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
                 <SortHeader label="Bids" sortKey="bid_count" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
                 <SortHeader label="Released" sortKey="release_year" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
@@ -1538,6 +1553,15 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                     <td className="p-3 text-right text-slate-100 font-semibold" title={explainClassification(listing)}>
                       {listing.deal_score.toFixed(1)}
                     </td>
+                    <td className="p-3">
+                      <button
+                        type="button"
+                        onClick={() => setExplanationListing(listing)}
+                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-cyan-400/25 bg-cyan-400/10 px-2 py-1 text-xs font-semibold text-cyan-300 transition-colors duration-200 hover:bg-cyan-400/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+                      >
+                        <Info className="h-3.5 w-3.5" /> Why?
+                      </button>
+                    </td>
                     <td className="p-3 text-right text-cyan-300">
                       {listing.watch_count ?? "—"}
                     </td>
@@ -1557,6 +1581,47 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
           </table>
         )}
       </div>
+      {explanationListing && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4" role="dialog" aria-modal="true" aria-labelledby="opportunity-explanation-title">
+          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-white/10 bg-[#0b1422] p-5 shadow-2xl">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-mono uppercase tracking-wider text-cyan-400">Decision evidence</p>
+                <h2 id="opportunity-explanation-title" className="mt-1 text-lg font-bold text-white">{explanationListing.title}</h2>
+              </div>
+              <button type="button" onClick={() => setExplanationListing(null)} className="cursor-pointer rounded-md p-2 text-slate-400 hover:bg-white/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Close explanation">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {[
+                ["Expected profit", explanationListing.expected_profit == null ? "—" : `£${explanationListing.expected_profit.toFixed(2)}`],
+                ["ROI", explanationListing.roi_pct == null ? "—" : `${explanationListing.roi_pct.toFixed(1)}%`],
+                ["Walk-away", explanationListing.walk_away_price == null ? "—" : `£${explanationListing.walk_away_price.toFixed(2)}`],
+                ["Conservative resale", explanationListing.conservative_resale_price == null ? "—" : `£${explanationListing.conservative_resale_price.toFixed(2)}`],
+                ["Sold comps", explanationListing.market_sample_size ?? 0],
+                ["Market confidence", `${(explanationListing.market_confidence ?? 0).toFixed(0)}/100`],
+                ["Liquidity", `${(explanationListing.liquidity_score ?? 0).toFixed(0)}/100`],
+                ["Build fit", `${(explanationListing.desirability_score ?? 0).toFixed(0)}/100`],
+              ].map(([label, value]) => (
+                <div key={String(label)} className="rounded-xl border border-white/[0.07] bg-white/[0.03] p-3">
+                  <p className="text-[11px] text-slate-500">{label}</p><p className="mt-1 font-semibold text-slate-100">{value}</p>
+                </div>
+              ))}
+            </div>
+            {!!explanationListing.scoring_explanation?.risk_flags?.length && (
+              <div className="mt-4 rounded-xl border border-amber-400/25 bg-amber-400/5 p-4">
+                <p className="text-sm font-semibold text-amber-300">Qualification warnings</p>
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-300">{explanationListing.scoring_explanation.risk_flags.map((flag) => <li key={flag}>{flag.replace(/_/g, " ")}</li>)}</ul>
+              </div>
+            )}
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div><p className="text-sm font-semibold text-white">Reasons</p><ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-300">{(explanationListing.scoring_explanation?.reasons ?? ["Awaiting recalculation under the new model."]).map((reason) => <li key={reason}>{reason}</li>)}</ul></div>
+              <div><p className="text-sm font-semibold text-white">Cost stack</p><dl className="mt-2 space-y-1 text-sm">{Object.entries(explanationListing.scoring_explanation?.cost_breakdown ?? {}).map(([name, amount]) => <div key={name} className="flex justify-between gap-3"><dt className="text-slate-400">{name.replace(/_/g, " ")}</dt><dd className="text-slate-200">£{amount.toFixed(2)}</dd></div>)}</dl></div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

@@ -20,6 +20,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.gem_radar.cpk_extractor import extract_cpk
 from app.gem_radar.cpk_market import upsert_listing_price, upsert_scan_price
 from app.gem_radar.benchmarks import normalize_match_key
+from app.gem_radar.opportunity_scoring import identity_gates
+
+
+def _valid_existing_cpk(data: dict | None, title: str) -> bool:
+    if not data or not data.get("category") or not data.get("brand") or not data.get("model"):
+        return False
+    return not any(
+        flag in {"identity_incomplete", "accessory_or_parts_listing", "bundle_listing"}
+        for flag in identity_gates(title, data)
+    )
 
 
 async def assign_cpk_and_accumulate_price(
@@ -47,13 +57,21 @@ async def assign_cpk_and_accumulate_price(
     )
     row = existing.fetchone()
 
-    if row is not None:
+    if row is not None and _valid_existing_cpk(row[1], title):
         cpk = row[0]
         cpk_data = row[1] or {}
         brand = cpk_data.get("brand")
         model = cpk_data.get("model")
         extracted_category = cpk_data.get("category")
     else:
+        if row is not None:
+            # Quarantine stale/invalid identity before re-extraction; prices
+            # tied to it are removed so it cannot contaminate another cohort.
+            await db.execute(text("DELETE FROM gem_radar_cpk_listing_price WHERE listing_id = :listing_id"), {"listing_id": listing_id})
+            await db.execute(text("DELETE FROM gem_radar_listing_cpk WHERE listing_id = :listing_id"), {"listing_id": listing_id})
+        preflight_flags = identity_gates(title, {"category": category, "brand": "pending", "model": "pending"})
+        if any(flag in {"accessory_or_parts_listing", "bundle_listing"} for flag in preflight_flags):
+            return None
         extracted = await extract_cpk(title, category, condition)
         if extracted is None:
             return None

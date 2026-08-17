@@ -174,7 +174,10 @@ def robust_sold_market(
     lower = _percentile(filtered_values, 0.25)
     mid = median(filtered_values)
     upper = _percentile(filtered_values, 0.75)
-    diversity = len({_source_key(c.source_url).split("/", 3)[2] if "://" in _source_key(c.source_url) else _source_key(c.source_url) for c in filtered})
+    # Sold rows currently originate mainly from eBay; until seller identity is
+    # persisted, diversity means independently identified sold listings rather
+    # than marketplace domains (which would make every eBay-only cohort fail).
+    diversity = len({_source_key(c.source_url) for c in filtered})
     spread = ((upper - lower) / mid * 100.0) if mid else 100.0
     sample_component = min(55.0, len(filtered) * 8.0)
     diversity_component = min(20.0, diversity * 10.0)
