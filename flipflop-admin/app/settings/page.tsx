@@ -26,6 +26,23 @@ interface AppSettings {
   free_shipping_enabled: boolean;
   local_pickup_enabled: boolean;
   listing_type_default: string;
+  opportunity_super_profit_gbp: number;
+  opportunity_super_roi_pct: number;
+  opportunity_super_confidence: number;
+  opportunity_super_liquidity: number;
+  opportunity_super_score: number;
+  opportunity_gem_profit_gbp: number;
+  opportunity_gem_roi_pct: number;
+  opportunity_gem_confidence: number;
+  opportunity_gem_liquidity: number;
+  opportunity_gem_score: number;
+  opportunity_delivery_fallback_gbp: number;
+  opportunity_ebay_fee_pct: number;
+  opportunity_packaging_gbp: number;
+  opportunity_testing_refurbishment_gbp: number;
+  opportunity_returns_warranty_pct: number;
+  opportunity_minimum_sold_comps: number;
+  opportunity_minimum_source_diversity: number;
 }
 
 interface DataSource {
@@ -55,6 +72,23 @@ const DEFAULTS: AppSettings = {
   free_shipping_enabled: true,
   local_pickup_enabled: true,
   listing_type_default: "FixedPrice",
+  opportunity_super_profit_gbp: 50,
+  opportunity_super_roi_pct: 25,
+  opportunity_super_confidence: 80,
+  opportunity_super_liquidity: 60,
+  opportunity_super_score: 85,
+  opportunity_gem_profit_gbp: 30,
+  opportunity_gem_roi_pct: 18,
+  opportunity_gem_confidence: 70,
+  opportunity_gem_liquidity: 45,
+  opportunity_gem_score: 75,
+  opportunity_delivery_fallback_gbp: 15,
+  opportunity_ebay_fee_pct: 0,
+  opportunity_packaging_gbp: 6,
+  opportunity_testing_refurbishment_gbp: 10,
+  opportunity_returns_warranty_pct: 5,
+  opportunity_minimum_sold_comps: 5,
+  opportunity_minimum_source_diversity: 2,
 };
 
 function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void }) {
@@ -70,7 +104,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
   );
 }
 
-type TabKey = "general" | "seller-policies" | "sources" | "terms";
+type TabKey = "general" | "opportunity" | "seller-policies" | "sources" | "terms";
 
 export default function SettingsPage() {
   const [tab, setTab] = useState<TabKey>("general");
@@ -206,7 +240,7 @@ export default function SettingsPage() {
           variant="primary"
           size="sm"
           onClick={saveSettings}
-          disabled={saving || (tab !== "general" && tab !== "seller-policies")}
+          disabled={saving || (tab !== "general" && tab !== "opportunity" && tab !== "seller-policies")}
         >
           <Save className="w-3.5 h-3.5" />
           {saving ? "Saving…" : saved ? "Saved ✓" : "Save"}
@@ -216,6 +250,7 @@ export default function SettingsPage() {
       <div className="flex gap-2">
         {[
           { key: "general", label: "General" },
+          { key: "opportunity", label: "Opportunity Scoring" },
           { key: "seller-policies", label: "Seller Policies" },
           { key: "sources", label: "Data Sources" },
           { key: "terms", label: "Search Terms" },
@@ -266,6 +301,56 @@ export default function SettingsPage() {
               <input value={settings.ollama_base_url} onChange={e => setSettings(p => ({ ...p, ollama_base_url: e.target.value }))} placeholder="Ollama URL" className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
               <input value={settings.ollama_model} onChange={e => setSettings(p => ({ ...p, ollama_model: e.target.value }))} placeholder="Ollama model" className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
               <input value={settings.ebay_app_id} onChange={e => setSettings(p => ({ ...p, ebay_app_id: e.target.value }))} placeholder="eBay App ID" className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {tab === "opportunity" && (
+        <div className="space-y-6">
+          <div className="rounded-lg border border-sky-500/20 bg-sky-500/5 p-4 text-sm text-slate-300">
+            Labels are earned only after identity and evidence gates pass. Price cannot compensate for an accessory,
+            bundle, retro-platform exclusion, or an inadequate same-condition sold cohort.
+          </div>
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            {[
+              { title: "SUPER_GEM + BUY_NOW", prefix: "opportunity_super", fields: [["profit_gbp", "Minimum profit (£)"], ["roi_pct", "Minimum ROI (%)"], ["confidence", "Market confidence"], ["liquidity", "Liquidity score"], ["score", "Overall score"]] },
+              { title: "GEM + BUY_NOW", prefix: "opportunity_gem", fields: [["profit_gbp", "Minimum profit (£)"], ["roi_pct", "Minimum ROI (%)"], ["confidence", "Market confidence"], ["liquidity", "Liquidity score"], ["score", "Overall score"]] },
+            ].map(group => (
+              <Card key={group.prefix}>
+                <CardHeader><CardTitle>{group.title}</CardTitle></CardHeader>
+                <CardContent className="grid grid-cols-2 gap-3 pt-0">
+                  {group.fields.map(([suffix, label]) => {
+                    const key = `${group.prefix}_${suffix}` as keyof AppSettings;
+                    return <label key={key} className="text-xs text-slate-500">{label}
+                      <input type="number" min={0} step="0.1" value={settings[key] as number}
+                        onChange={e => setSettings(p => ({ ...p, [key]: Number(e.target.value) }))}
+                        className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-200" />
+                    </label>;
+                  })}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          <Card>
+            <CardHeader><CardTitle>Cost stack and evidence gates</CardTitle></CardHeader>
+            <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-0">
+              {[
+                ["opportunity_delivery_fallback_gbp", "Delivery fallback (£)"],
+                ["opportunity_ebay_fee_pct", "eBay fee (%)"],
+                ["opportunity_packaging_gbp", "Packaging (£)"],
+                ["opportunity_testing_refurbishment_gbp", "Testing/refurb (£)"],
+                ["opportunity_returns_warranty_pct", "Returns/warranty reserve (%)"],
+                ["opportunity_minimum_sold_comps", "Minimum sold comps"],
+                ["opportunity_minimum_source_diversity", "Minimum source diversity"],
+              ].map(([field, label]) => {
+                const key = field as keyof AppSettings;
+                return <label key={field} className="text-xs text-slate-500">{label}
+                  <input type="number" min={0} step="0.1" value={settings[key] as number}
+                    onChange={e => setSettings(p => ({ ...p, [key]: Number(e.target.value) }))}
+                    className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-200" />
+                </label>;
+              })}
             </CardContent>
           </Card>
         </div>

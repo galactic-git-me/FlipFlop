@@ -36,6 +36,23 @@ class SettingsUpdate(BaseModel):
     deal_gem_threshold_pct: float | None = None
     deal_ok_deal_threshold_pct: float | None = None
     deal_average_deal_threshold_pct: float | None = None
+    opportunity_super_profit_gbp: float | None = None
+    opportunity_super_roi_pct: float | None = None
+    opportunity_super_confidence: float | None = None
+    opportunity_super_liquidity: float | None = None
+    opportunity_super_score: float | None = None
+    opportunity_gem_profit_gbp: float | None = None
+    opportunity_gem_roi_pct: float | None = None
+    opportunity_gem_confidence: float | None = None
+    opportunity_gem_liquidity: float | None = None
+    opportunity_gem_score: float | None = None
+    opportunity_delivery_fallback_gbp: float | None = None
+    opportunity_ebay_fee_pct: float | None = None
+    opportunity_packaging_gbp: float | None = None
+    opportunity_testing_refurbishment_gbp: float | None = None
+    opportunity_returns_warranty_pct: float | None = None
+    opportunity_minimum_sold_comps: int | None = None
+    opportunity_minimum_source_diversity: int | None = None
 
 
 @router.get("/")
@@ -106,4 +123,21 @@ def _to_dict(s: AppSettings) -> dict:
         "deal_gem_threshold_pct": s.deal_gem_threshold_pct,
         "deal_ok_deal_threshold_pct": s.deal_ok_deal_threshold_pct,
         "deal_average_deal_threshold_pct": s.deal_average_deal_threshold_pct,
+        "opportunity_super_profit_gbp": s.opportunity_super_profit_gbp,
+        "opportunity_super_roi_pct": s.opportunity_super_roi_pct,
+        "opportunity_super_confidence": s.opportunity_super_confidence,
+        "opportunity_super_liquidity": s.opportunity_super_liquidity,
+        "opportunity_super_score": s.opportunity_super_score,
+        "opportunity_gem_profit_gbp": s.opportunity_gem_profit_gbp,
+        "opportunity_gem_roi_pct": s.opportunity_gem_roi_pct,
+        "opportunity_gem_confidence": s.opportunity_gem_confidence,
+        "opportunity_gem_liquidity": s.opportunity_gem_liquidity,
+        "opportunity_gem_score": s.opportunity_gem_score,
+        "opportunity_delivery_fallback_gbp": s.opportunity_delivery_fallback_gbp,
+        "opportunity_ebay_fee_pct": s.opportunity_ebay_fee_pct,
+        "opportunity_packaging_gbp": s.opportunity_packaging_gbp,
+        "opportunity_testing_refurbishment_gbp": s.opportunity_testing_refurbishment_gbp,
+        "opportunity_returns_warranty_pct": s.opportunity_returns_warranty_pct,
+        "opportunity_minimum_sold_comps": s.opportunity_minimum_sold_comps,
+        "opportunity_minimum_source_diversity": s.opportunity_minimum_source_diversity,
     }
