@@ -16,6 +16,7 @@ ACCESSORY_TERMS = {
     "backplate", "back plate", "bracket", "mount only", "fan only",
     "heatsink only", "cooler only", "empty box", "box only", "for parts",
     "spares or repair", "cable only", "adapter only", "waterblock",
+    "riser cable", "extension cable", "gpu riser",
 }
 BUNDLE_TERMS = {"job lot", "bundle of", "mystery box", "assorted parts"}
 RETRO_PLATFORM_TERMS = {"am3", "am3+", "ddr3", "ddr2", "socket 775"}
@@ -236,6 +237,13 @@ def identity_gates(title: str, cpk_data: dict[str, Any] | None, strategy: str = 
         flags.append("accessory_or_parts_listing")
     if any(term in lowered for term in BUNDLE_TERMS):
         flags.append("bundle_listing")
+    if category in COMPONENT_CATEGORIES and any(term in lowered for term in ("mini pc", "laptop", "notebook", "desktop computer")):
+        flags.append("whole_system_misclassified_as_component")
+    import re
+    if re.search(r"\b\d+\s*/\s*\d+(?:\s*/\s*\d+)?\s*gb\b", lowered):
+        flags.append("multi_variant_listing")
+    if category == "gpu" and any(term in lowered for term in ("mining gpu", "mining card", "cmp 170")):
+        flags.append("specialised_mining_hardware")
     if strategy != "retro_budget" and any(term in lowered for term in RETRO_PLATFORM_TERMS):
         flags.append("retro_platform_excluded")
     return flags

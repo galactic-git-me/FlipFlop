@@ -118,3 +118,12 @@ def test_identity_veto_takes_precedence_over_missing_market():
     )
     assert result.classification == "INELIGIBLE"
     assert result.decision == "IGNORE"
+
+
+def test_active_market_identity_traps_are_hard_vetoes():
+    cpu = {"category": "cpu", "brand": "Intel", "model": "i9-10980HK"}
+    gpu = {"category": "gpu", "brand": "NVIDIA", "model": "RTX 3070"}
+    ram = {"category": "ram", "brand": "Kingston", "model": "Fury Beast"}
+    assert "whole_system_misclassified_as_component" in identity_gates("i9-10980HK 32GB laptop notebook", cpu)
+    assert "accessory_or_parts_listing" in identity_gates("PCIe GPU riser extension cable", gpu)
+    assert "multi_variant_listing" in identity_gates("Kingston Fury 8/16/32GB DDR5", ram)

@@ -230,6 +230,7 @@ async def _get_cpk_for_match_key(db: AsyncSession, match_key: str) -> str | None
         SELECT DISTINCT cpk
         FROM gem_radar_listing_cpk
         WHERE regexp_replace(upper(coalesce(cpk_data->>'model', '')), '[^A-Z0-9]', '', 'g') = :match_key
+           OR regexp_replace(upper(coalesce(cpk_data->>'brand', '') || coalesce(cpk_data->>'model', '')), '[^A-Z0-9]', '', 'g') = :match_key
     """), {"match_key": match_key})
     cpks = [row[0] for row in result.fetchall()]
     return cpks[0] if len(cpks) == 1 else None

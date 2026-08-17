@@ -61,7 +61,7 @@ interface Listing {
   desirability_score?: number | null;
   risk_score?: number | null;
   eligible?: boolean;
-  scoring_explanation?: { reasons?: string[]; risk_flags?: string[]; cost_breakdown?: Record<string, number>; market?: { comparable_urls?: string[] } } | null;
+  scoring_explanation?: { reasons?: string[]; risk_flags?: string[]; cost_breakdown?: Record<string, number>; market?: { comparable_urls?: string[]; basis?: string; realisation_factor?: number } } | null;
   release_year: number | null;
   scored_at: string;
   listing_observed_at: string | null;
@@ -1614,7 +1614,8 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                 ["ROI", explanationListing.roi_pct == null ? "—" : `${explanationListing.roi_pct.toFixed(1)}%`],
                 ["Walk-away", explanationListing.walk_away_price == null ? "—" : `£${explanationListing.walk_away_price.toFixed(2)}`],
                 ["Conservative resale", explanationListing.conservative_resale_price == null ? "—" : `£${explanationListing.conservative_resale_price.toFixed(2)}`],
-                ["Sold comps", explanationListing.market_sample_size ?? 0],
+                ["Comparables", explanationListing.market_sample_size ?? 0],
+                ["Market evidence", (explanationListing.scoring_explanation?.market?.basis ?? "NONE").replace(/_/g, " ")],
                 ["Market confidence", `${(explanationListing.market_confidence ?? 0).toFixed(0)}/100`],
                 ["Liquidity", `${(explanationListing.liquidity_score ?? 0).toFixed(0)}/100`],
                 ["Build fit", `${(explanationListing.desirability_score ?? 0).toFixed(0)}/100`],
