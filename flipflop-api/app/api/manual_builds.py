@@ -1265,7 +1265,7 @@ async def list_on_storefront(
             product.title = build.generated_title
             product.description = build.generated_description
             await db.flush()
-            return ListOnStorefrontResult(product_id=product.id, build_id=product.build_id, storefront_url=f"/builds/{product.id}")
+            return ListOnStorefrontResult(product_id=product.id, build_id=product.build_id, storefront_url=f"/ready-to-ship/{product.id}")
 
     orchestration_build = Build(
         build_type=BuildType.PREBUILT,
@@ -1294,4 +1294,4 @@ async def list_on_storefront(
     build.updated_at = datetime.utcnow()
     await db.flush()
 
-    return ListOnStorefrontResult(product_id=product.id, build_id=orchestration_build.id, storefront_url=f"/builds/{product.id}")
+    return ListOnStorefrontResult(product_id=product.id, build_id=orchestration_build.id, storefront_url=f"/ready-to-ship/{product.id}")

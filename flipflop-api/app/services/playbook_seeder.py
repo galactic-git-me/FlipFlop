@@ -1,5 +1,5 @@
 """
-Playbook Seeder — 11 canonical build strategies, pricing linked to live benchmarks.
+Playbook Seeder — five canonical Curated Build strategies, linked to live benchmarks.
 
 Safe to run multiple times:
   - Retires removed playbooks (Mainstream Gamer, RGB Showcase, Competitive Gaming, Premium Showcase)
@@ -950,6 +950,43 @@ _INITIAL_PLAYBOOKS: list[dict] = [
     },
 ]
 
+# Day-one Curated Builds. The source names preserve the strongest existing
+# strategy, economics, catalogue slots and variants while presenting the same
+# five outcomes internally and to customers.
+_CURATED_RENAMES = {
+    "Budget Gamer": "Great-value Gaming",
+    "High-end Gamer": "High-performance Gaming",
+    "Student Build": "Work & Study",
+    "Content Creator": "Creation & Development",
+    "AI Workstation": "AI Workstation",
+}
+_CURATED_NAMES = set(_CURATED_RENAMES.values())
+
+
+def _curated_seed_data() -> list[dict]:
+    by_name = {data["name"]: data for data in _INITIAL_PLAYBOOKS}
+    curated: list[dict] = []
+    for source_name, curated_name in _CURATED_RENAMES.items():
+        data = dict(by_name[source_name])
+        data["name"] = curated_name
+        if curated_name == "Work & Study":
+            data.update({
+                "target_customer": "Students, home workers, families and small-business users",
+                "what_they_use_it_for": "Study, office work, video calls, coding, browsing and everyday home computing",
+                "what_they_want_from_build": "Quiet, responsive, reliable performance with flexible memory and storage",
+            })
+        elif curated_name == "Creation & Development":
+            data.update({
+                "target_customer": "Creators, developers, engineers and technical professionals",
+                "what_they_use_it_for": "Editing, rendering, streaming, software development, containers and local virtual machines",
+                "what_they_want_from_build": "Strong multi-core performance, generous RAM and fast expandable NVMe storage",
+            })
+        curated.append(data)
+    return curated
+
+
+_CURATED_PLAYBOOKS = _curated_seed_data()
+
 # Playbooks that existed in previous versions and are now retired
 _RETIRE_NAMES = {
     # v2 playbooks being replaced
@@ -1012,10 +1049,10 @@ async def refresh_playbook_economics_from_benchmarks() -> int:
 async def seed_playbooks(db: AsyncSession) -> int:
     """
     Idempotent playbook migration:
-    1. Deprecate retired playbooks (don't delete — preserve foreign-key refs)
-    2. Rename renamed playbooks
-    3. Insert any missing canonical playbooks
-    4. Refresh pricing_model / profit_model on ALL active playbooks from live benchmarks
+    1. Rename the five retained strategies to their customer-facing names
+    2. Deprecate every other strategy (never delete: preserve foreign keys)
+    3. Insert any missing curated playbooks
+    4. Refresh pricing_model / profit_model on every curated playbook
 
     Returns total playbooks created.
     """
@@ -1023,6 +1060,28 @@ async def seed_playbooks(db: AsyncSession) -> int:
     from app.services.price_refresh import load_benchmarks
 
     benchmarks = load_benchmarks()
+
+    # ── Step 0: preserve the existing IDs, slots and variants of the five
+    # retained strategies by renaming their rows in place.
+    for source_name, curated_name in _CURATED_RENAMES.items():
+        if source_name == curated_name:
+            continue
+        source_result = await db.execute(select(Playbook).where(Playbook.name == source_name))
+        source = source_result.scalar_one_or_none()
+        target_result = await db.execute(select(Playbook).where(Playbook.name == curated_name))
+        target = target_result.scalar_one_or_none()
+        if source and target is None:
+            source.name = curated_name
+            source.status = PlaybookStatus.ACTIVE
+        elif source and target is not None:
+            source.status = PlaybookStatus.DEPRECATED
+
+    # Keep the internal and external catalogue identical: only the five
+    # Curated Builds remain active.
+    active_result = await db.execute(select(Playbook).where(Playbook.status == "active"))
+    for playbook in active_result.scalars().all():
+        if playbook.name not in _CURATED_NAMES:
+            playbook.status = PlaybookStatus.DEPRECATED
 
     # ── Step 1: retire removed playbooks ─────────────────────────────────────
     for retired_name in _RETIRE_NAMES:
@@ -1043,7 +1102,7 @@ async def seed_playbooks(db: AsyncSession) -> int:
 
     # ── Step 3 + 4: insert missing, update pricing on all active ones ─────────
     created = 0
-    for data in _INITIAL_PLAYBOOKS:
+    for data in _CURATED_PLAYBOOKS:
         economics = compute_live_economics(data["name"], benchmarks)
 
         r = await db.execute(select(Playbook).where(Playbook.name == data["name"]))
