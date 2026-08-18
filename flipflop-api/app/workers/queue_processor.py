@@ -175,7 +175,16 @@ async def _worker_loop(worker_id: int, poll_interval_seconds: int) -> None:
             async with _active_search_lock:
                 if len(_active_search_ids) < settings.max_concurrent_search_terms:
                     async with AsyncSessionLocal() as db:
-                        submission = await SubmissionQueueService.claim_next_pending(db)
+                        # Only one page/vendor submission for a search term may
+                        # score at once. Previously seven workers could all claim
+                        # submissions for the same two active search IDs; the set
+                        # still had length two, so the configured limit appeared
+                        # satisfied while expensive CPK/pricing work contended
+                        # seven ways and the queue stopped completing anything.
+                        submission = await SubmissionQueueService.claim_next_pending(
+                            db,
+                            excluded_search_ids=set(_active_search_ids),
+                        )
                     if submission is not None:
                         _active_search_ids.add(submission.search_id)
 

@@ -60,7 +60,10 @@ class SubmissionQueueService:
         return result.scalars().all()
 
     @staticmethod
-    async def claim_next_pending(db: AsyncSession) -> SubmissionQueue | None:
+    async def claim_next_pending(
+        db: AsyncSession,
+        excluded_search_ids: set[str] | None = None,
+    ) -> SubmissionQueue | None:
         """Atomically claim and return ONE pending submission, or None if the
         queue is empty. Uses SELECT ... FOR UPDATE SKIP LOCKED so multiple
         concurrent workers can each claim a different row safely without
@@ -80,6 +83,8 @@ class SubmissionQueueService:
             .limit(1)
             .with_for_update(skip_locked=True)
         )
+        if excluded_search_ids:
+            stmt = stmt.where(SubmissionQueue.search_id.not_in(excluded_search_ids))
         result = await db.execute(stmt)
         submission = result.scalar_one_or_none()
         if submission is None:
