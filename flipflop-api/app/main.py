@@ -421,39 +421,48 @@ async def lifespan(app: FastAPI):
     #     await _wipe_dev_data()
     # await _seed_default_data()
     await _load_db_settings_into_config()
-    start_workers()  # Uses DEFAULT_WORKERS (16) for 4x throughput
-    start_eval_workers()
-    start_part_eval_workers()
-    start_scheduler()
+    reaper = None
+    gem_radar_retention = None
+    queue_processor = None
+    verification_worker = None
+    cache = None
+
+    if not settings.web_only:
+        start_workers()  # Uses DEFAULT_WORKERS (16) for 4x throughput
+        start_eval_workers()
+        start_part_eval_workers()
+        start_scheduler()
     # Pops a visible login browser for gated sources (Temu) when
     # SHOW_SCRAPER_BROWSER/ANTI_BOT_PREFLIGHT_ON_STARTUP are enabled — no-ops
     # internally otherwise, so this is always safe to fire. Previously
     # imported but never actually invoked, so ANTI_BOT_PREFLIGHT_ON_STARTUP
     # had no effect regardless of its value.
-    asyncio.create_task(run_antibot_preflight())
+        asyncio.create_task(run_antibot_preflight())
     # asyncio.create_task(run_startup_bootstrap())  # DISABLED: was hammering eBay API on startup, triggering circuit breaker
     # asyncio.create_task(_queue_unevaluated_gems())  # DISABLED: also hitting eBay API hard at startup
-    reaper = asyncio.create_task(_reap_zombie_children())
-    gem_radar_retention = asyncio.create_task(_gem_radar_retention_loop())
-    queue_processor = asyncio.create_task(_submission_queue_processor())
-    from app.gem_radar.margin_verifier import start_verification_worker
-    verification_worker = asyncio.create_task(start_verification_worker())
-    # Initialize Redis cache for sold comps (7-day TTL)
-    from app.services.sold_comps_cache import get_sold_comps_cache
-    await get_sold_comps_cache()
-    log.info("app.ready", note="full pipeline enabled - ingest/eval/build workers + scheduler + queue processor + margin verifier + sold comps cache running")
+        reaper = asyncio.create_task(_reap_zombie_children())
+        gem_radar_retention = asyncio.create_task(_gem_radar_retention_loop())
+        queue_processor = asyncio.create_task(_submission_queue_processor())
+        from app.gem_radar.margin_verifier import start_verification_worker
+        verification_worker = asyncio.create_task(start_verification_worker())
+        # Initialize Redis cache for sold comps (7-day TTL)
+        from app.services.sold_comps_cache import get_sold_comps_cache
+        cache = await get_sold_comps_cache()
+        log.info("app.ready", note="full pipeline enabled - ingest/eval/build workers + scheduler + queue processor + margin verifier + sold comps cache running")
+    else:
+        log.info("app.ready", note="web-only production API enabled; background and AI workers disabled")
     yield
     # Cleanup Redis cache connection
-    cache = await get_sold_comps_cache()
-    await cache.disconnect()
-    reaper.cancel()
-    gem_radar_retention.cancel()
-    queue_processor.cancel()
-    verification_worker.cancel()
-    try:
-        stop_scheduler()
-    except Exception:
-        pass
+    if cache is not None:
+        await cache.disconnect()
+    for task in (reaper, gem_radar_retention, queue_processor, verification_worker):
+        if task is not None:
+            task.cancel()
+    if not settings.web_only:
+        try:
+            stop_scheduler()
+        except Exception:
+            pass
     await engine.dispose()
     log.info("app.shutdown")
 

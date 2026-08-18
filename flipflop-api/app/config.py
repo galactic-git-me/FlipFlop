@@ -184,6 +184,11 @@ class Settings(BaseSettings):
     # "dev" clears search_telemetry on every startup so figures start fresh.
     # "production" preserves history across restarts.
     app_env: str = "dev"
+    # Production storefront API mode: serve catalogue, auth, orders and
+    # payments without starting ingestion, browser, scheduler or LLM workers.
+    # Those remain on the GPU workstation and publish completed results to the
+    # production database through the worker integration path.
+    web_only: bool = False
 
     class Config:
         env_file = (".env.local", ".env")

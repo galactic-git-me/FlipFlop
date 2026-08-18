@@ -1,0 +1,58 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: flipflop-production-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: pcflipper
+      POSTGRES_USER: flipper
+      POSTGRES_PASSWORD: flipper
+    volumes:
+      - flipflop_production_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flipper -d pcflipper"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    container_name: flipflop-production-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - flipflop_production_redis:/data
+
+  api:
+    build:
+      context: ../flipflop-api
+      dockerfile: Dockerfile
+    container_name: flipflop-production-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    env_file:
+      - ../.env.local
+    environment:
+      APP_ENV: production
+      WEB_ONLY: "true"
+      DATABASE_URL: postgresql+asyncpg://flipper:flipper@postgres:5432/pcflipper
+      SYNC_DATABASE_URL: postgresql://flipper:flipper@postgres:5432/pcflipper
+      REDIS_URL: redis://redis:6379/0
+      OLLAMA_BASE_URL: ""
+      OLLAMA_MODEL: disabled-on-web-tier
+    ports:
+      - "127.0.0.1:4311:4311"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4311/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+volumes:
+  flipflop_production_postgres:
+  flipflop_production_redis:
