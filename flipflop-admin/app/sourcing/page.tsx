@@ -1275,7 +1275,7 @@ const VENDOR_TABLE_TIERS: string[] = [...CLASSIFICATION_BADGE_ORDER].reverse();
 const CLASSIFICATION_CHART_COLORS: Record<string, string> = {
   SUPER_GEM: "#d97706",
   GEM: "#2563eb",
-  EMERGING_OPPORTUNITY: "#0284c7",
+  EVIDENCE_LIMITED_DEAL: "#0284c7",
   OK_DEAL: "#047857",
   AVERAGE_DEAL: "#475569",
   POOR_DEAL: "#991b1b",
@@ -1321,6 +1321,17 @@ function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
           ))}
         </BarChart>
       </ResponsiveContainer>
+      <div className="mt-3 flex flex-wrap justify-center gap-x-3 gap-y-2 border-t border-slate-700 pt-3" aria-label="Classification legend">
+        {VENDOR_TABLE_TIERS.map((tier) => (
+          <div key={tier} className="flex items-center gap-1.5 text-[11px] text-slate-300">
+            <span
+              className="h-2.5 w-2.5 shrink-0 rounded-sm"
+              style={{ backgroundColor: CLASSIFICATION_CHART_COLORS[tier] }}
+            />
+            <span>{tier.replace(/_/g, " ")}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
