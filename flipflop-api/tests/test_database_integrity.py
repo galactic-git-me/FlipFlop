@@ -6,6 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
+from app import main as _main  # noqa: F401 - registers every FK target in Base metadata
 from app.database import Base
 from app.models.customer import Customer
 from app.models.order import Order, OrderStatus
