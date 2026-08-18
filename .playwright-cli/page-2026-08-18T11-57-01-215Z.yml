@@ -1,0 +1,2743 @@
+- generic [ref=f2e1]:
+  - complementary [ref=f2e2]:
+    - generic [ref=f2e3]:
+      - img "FlipFlop" [ref=f2e5]
+      - navigation [ref=f2e6]:
+        - link "Sourcing" [ref=f2e7] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Add Build" [ref=f2e12] [cursor=pointer]:
+          - /url: /add-build
+        - link "Your Builds" [ref=f2e15] [cursor=pointer]:
+          - /url: /builds
+        - link "Configurator" [ref=f2e21] [cursor=pointer]:
+          - /url: /configurator-config
+        - link "PC Builder" [ref=f2e26] [cursor=pointer]:
+          - /url: /pc-builder
+  - generic [ref=f2e30]:
+    - banner [ref=f2e31]:
+      - textbox "QUERY MARKET DATA..." [ref=f2e36]
+      - generic [ref=f2e37]:
+        - img "FlipFlop" [ref=f2e40]
+        - generic [ref=f2e41]:
+          - button "Favourites" [ref=f2e48]
+          - button "Notifications" [ref=f2e51]
+          - button "Sign out" [ref=f2e55]
+    - main [ref=f2e60]:
+      - generic [ref=f2e72]:
+        - generic [ref=f2e73]:
+          - heading "Sourcing Dashboard" [level=1] [ref=f2e75]
+          - generic [ref=f2e76]:
+            - generic "No scan activity observed yet" [ref=f2e77]:
+              - generic [ref=f2e81]:
+                - generic [ref=f2e82]: Next scan (est.)
+                - generic [ref=f2e83]: No scan activity yet
+            - button "Refresh data now" [ref=f2e84]
+        - generic [ref=f2e91]:
+          - button "Stats" [ref=f2e92]
+          - button "Listings" [active] [ref=f2e93]
+          - button "Analytics" [ref=f2e94]
+        - generic [ref=f2e95]:
+          - generic [ref=f2e225]:
+            - table [ref=f2e227]:
+              - rowgroup [ref=f2e228]:
+                - row [ref=f2e229]:
+                  - columnheader "Vendor" [ref=f2e230]
+                  - columnheader "Total" [ref=f2e231]
+                  - columnheader "INELIGIBLE" [ref=f2e232]
+                  - columnheader "INSUFFICIENT DATA" [ref=f2e233]
+                  - columnheader "POOR DEAL" [ref=f2e234]
+                  - columnheader "AVERAGE DEAL" [ref=f2e235]
+                  - columnheader "OK DEAL" [ref=f2e236]
+                  - columnheader "EVIDENCE LIMITED DEAL" [ref=f2e237]
+                  - columnheader "GEM" [ref=f2e238]
+                  - columnheader "SUPER GEM" [ref=f2e239]
+              - rowgroup [ref=f2e240]:
+                - row [ref=f2e241]:
+                  - cell "eBay" [ref=f2e242]
+                  - cell "11218" [ref=f2e244]
+                  - cell "987" [ref=f2e245]
+                  - cell "6903" [ref=f2e246]
+                  - cell "1483" [ref=f2e247]
+                  - cell "0" [ref=f2e248]
+                  - cell "249" [ref=f2e249]
+                  - cell "28" [ref=f2e250]
+                  - cell "11" [ref=f2e251]
+                  - cell "1" [ref=f2e252]
+                - row [ref=f2e253]:
+                  - cell "Amazon" [ref=f2e254]
+                  - cell "1883" [ref=f2e256]
+                  - cell "302" [ref=f2e257]
+                  - cell "1213" [ref=f2e258]
+                  - cell "87" [ref=f2e259]
+                  - cell "0" [ref=f2e260]
+                  - cell "69" [ref=f2e261]
+                  - cell "22" [ref=f2e262]
+                  - cell "7" [ref=f2e263]
+                  - cell "2" [ref=f2e264]
+                - row [ref=f2e265]:
+                  - cell "vinted" [ref=f2e266]
+                  - cell "1557" [ref=f2e268]
+                  - cell "17" [ref=f2e269]
+                  - cell "242" [ref=f2e270]
+                  - cell "45" [ref=f2e271]
+                  - cell "0" [ref=f2e272]
+                  - cell "6" [ref=f2e273]
+                  - cell "0" [ref=f2e274]
+                  - cell "0" [ref=f2e275]
+                  - cell "1" [ref=f2e276]
+                - row [ref=f2e277]:
+                  - cell "aliexpress" [ref=f2e278]
+                  - cell "1472" [ref=f2e280]
+                  - cell "105" [ref=f2e281]
+                  - cell "585" [ref=f2e282]
+                  - cell "64" [ref=f2e283]
+                  - cell "0" [ref=f2e284]
+                  - cell "48" [ref=f2e285]
+                  - cell "12" [ref=f2e286]
+                  - cell "3" [ref=f2e287]
+                  - cell "0" [ref=f2e288]
+                - row [ref=f2e289]:
+                  - cell "Computer Orbit" [ref=f2e290]
+                  - cell "1020" [ref=f2e292]
+                  - cell "10" [ref=f2e293]
+                  - cell "769" [ref=f2e294]
+                  - cell "100" [ref=f2e295]
+                  - cell "0" [ref=f2e296]
+                  - cell "60" [ref=f2e297]
+                  - cell "16" [ref=f2e298]
+                  - cell "2" [ref=f2e299]
+                  - cell "1" [ref=f2e300]
+                - row [ref=f2e301]:
+                  - cell "AWD-IT" [ref=f2e302]
+                  - cell "345" [ref=f2e304]
+                  - cell "0" [ref=f2e305]
+                  - cell "169" [ref=f2e306]
+                  - cell "26" [ref=f2e307]
+                  - cell "0" [ref=f2e308]
+                  - cell "22" [ref=f2e309]
+                  - cell "0" [ref=f2e310]
+                  - cell "0" [ref=f2e311]
+                  - cell "0" [ref=f2e312]
+                - row [ref=f2e313]:
+                  - cell "Overclockers" [ref=f2e314]
+                  - cell "288" [ref=f2e316]
+                  - cell "1" [ref=f2e317]
+                  - cell "211" [ref=f2e318]
+                  - cell "30" [ref=f2e319]
+                  - cell "0" [ref=f2e320]
+                  - cell "27" [ref=f2e321]
+                  - cell "2" [ref=f2e322]
+                  - cell "6" [ref=f2e323]
+                  - cell "0" [ref=f2e324]
+                - row [ref=f2e325]:
+                  - cell "Scan.co.uk" [ref=f2e326]
+                  - cell "199" [ref=f2e328]
+                  - cell "4" [ref=f2e329]
+                  - cell "105" [ref=f2e330]
+                  - cell "8" [ref=f2e331]
+                  - cell "0" [ref=f2e332]
+                  - cell "6" [ref=f2e333]
+                  - cell "0" [ref=f2e334]
+                  - cell "0" [ref=f2e335]
+                  - cell "0" [ref=f2e336]
+            - generic [ref=f2e337]:
+              - application [ref=f2e340]:
+                - generic [ref=f2e509]:
+                  - generic [ref=f2e510]:
+                    - generic [ref=f2e511]: eBay
+                    - generic [ref=f2e513]: Amazon
+                    - generic [ref=f2e515]: vinted
+                    - generic [ref=f2e517]: aliexpress
+                    - generic [ref=f2e519]: Computer Orbit
+                    - generic [ref=f2e521]: AWD-IT
+                    - generic [ref=f2e523]: Overclockers
+                    - generic [ref=f2e525]: Scan.co.uk
+                  - generic [ref=f2e527]:
+                    - generic [ref=f2e528]: "0"
+                    - generic [ref=f2e530]: "2500"
+                    - generic [ref=f2e532]: "5000"
+                    - generic [ref=f2e534]: "7500"
+                    - generic [ref=f2e536]: "10000"
+              - generic "Classification legend" [ref=f2e538]:
+                - generic [ref=f2e539]: INELIGIBLE
+                - generic [ref=f2e542]: INSUFFICIENT DATA
+                - generic [ref=f2e545]: POOR DEAL
+                - generic [ref=f2e548]: AVERAGE DEAL
+                - generic [ref=f2e551]: OK DEAL
+                - generic [ref=f2e554]: EVIDENCE LIMITED DEAL
+                - generic [ref=f2e557]: GEM
+                - generic [ref=f2e560]: SUPER GEM
+          - generic [ref=f2e563]:
+            - button "CPU (2603)" [ref=f2e564]
+            - button "Motherboard (3550)" [ref=f2e565]
+            - button "RAM (1534)" [ref=f2e566]
+            - button "PSU (675)" [ref=f2e567]
+            - button "SSD (1351)" [ref=f2e568]
+            - button "GPU (1754)" [ref=f2e569]
+            - button "Cooler (1327)" [ref=f2e570]
+            - button "Fan (88)" [ref=f2e571]
+            - button "Case (1583)" [ref=f2e572]
+            - button "Other (3517)" [ref=f2e573]
+          - generic [ref=f2e574]:
+            - button "All (2603)" [ref=f2e575]
+            - button "SUPER GEM (0)" [ref=f2e576]
+            - button "GEM (6)" [ref=f2e577]
+            - button "EVIDENCE LIMITED DEAL (23)" [ref=f2e578]
+            - button "OK DEAL (102)" [ref=f2e579]
+            - button "AVERAGE DEAL (0)" [ref=f2e580]
+            - button "POOR DEAL (676)" [ref=f2e581]
+            - button "INSUFFICIENT DATA (1682)" [ref=f2e582]
+            - button "INELIGIBLE (113)" [ref=f2e583]
+          - generic [ref=f2e584]:
+            - generic [ref=f2e585]:
+              - generic [ref=f2e586]:
+                - generic [ref=f2e587]: Listings
+                - generic [ref=f2e588]: "2603"
+              - generic [ref=f2e589]:
+                - generic [ref=f2e590]: Avg Variance
+                - generic [ref=f2e591]: "-£19"
+              - generic [ref=f2e592]:
+                - generic [ref=f2e593]: Avg Score
+                - generic [ref=f2e594]: "1.3"
+              - generic [ref=f2e595]:
+                - generic [ref=f2e596]: Gems
+                - generic [ref=f2e597]: "6"
+              - generic [ref=f2e598]:
+                - generic [ref=f2e599]: Super Gems
+                - generic [ref=f2e600]: "0"
+            - generic [ref=f2e601]:
+              - generic [ref=f2e602]:
+                - generic [ref=f2e603]: Top Gem
+                - generic "AMD Ryzen 5 5600XT 6/12 Gthread desktop processor AM4 socket 3.7GHz base clock 4.6GHz cache gaming office CPU No Cooler" [ref=f2e604]
+                - generic [ref=f2e605]: score 8.8 · £99.71
+              - generic [ref=f2e606]:
+                - generic [ref=f2e607]: Top Super Gem
+                - generic [ref=f2e608]: —
+            - generic [ref=f2e609]:
+              - generic [ref=f2e610]:
+                - text: eBay
+                - generic [ref=f2e611]: "1908"
+              - generic [ref=f2e612]:
+                - text: aliexpress
+                - generic [ref=f2e613]: "279"
+              - generic [ref=f2e614]:
+                - text: Amazon
+                - generic [ref=f2e615]: "176"
+              - generic [ref=f2e616]:
+                - text: vinted
+                - generic [ref=f2e617]: "94"
+              - generic [ref=f2e618]:
+                - text: Overclockers
+                - generic [ref=f2e619]: "79"
+              - generic [ref=f2e620]:
+                - text: Computer Orbit
+                - generic [ref=f2e621]: "46"
+              - generic [ref=f2e622]:
+                - text: Scan.co.uk
+                - generic [ref=f2e623]: "12"
+              - generic [ref=f2e624]:
+                - text: AWD-IT
+                - generic [ref=f2e625]: "9"
+            - generic [ref=f2e626]:
+              - generic [ref=f2e627]:
+                - text: BUY NOW
+                - generic [ref=f2e628]: "6"
+              - generic [ref=f2e629]:
+                - text: MAKE OFFER
+                - generic [ref=f2e630]: "102"
+              - generic [ref=f2e631]:
+                - text: WATCH
+                - generic [ref=f2e632]: "0"
+              - generic [ref=f2e633]:
+                - text: INVESTIGATE
+                - generic [ref=f2e634]: "1706"
+              - generic [ref=f2e635]:
+                - text: IGNORE
+                - generic [ref=f2e636]: "789"
+          - generic [ref=f2e637]:
+            - generic [ref=f2e638]: Showing 1–100 of 2603
+            - generic [ref=f2e639]:
+              - button "Previous" [disabled] [ref=f2e640]
+              - generic [ref=f2e641]: Page 1 of 27
+              - button "Next" [ref=f2e642]
+          - table [ref=f2e644]:
+            - rowgroup [ref=f2e645]:
+              - row [ref=f2e646]:
+                - columnheader [ref=f2e647]
+                - columnheader "Source ▼" [ref=f2e648] [cursor=pointer]:
+                  - text: Source
+                  - generic [ref=f2e649]: ▼
+                - columnheader "Title ▼" [ref=f2e650]:
+                  - generic [ref=f2e651] [cursor=pointer]:
+                    - text: Title
+                    - generic [ref=f2e652]: ▼
+                  - textbox "Fuzzy search title..." [ref=f2e653]
+                - columnheader "Condition ▼" [ref=f2e654] [cursor=pointer]:
+                  - text: Condition
+                  - generic [ref=f2e655]: ▼
+                - columnheader "Listing Price ▼" [ref=f2e656] [cursor=pointer]:
+                  - text: Listing Price
+                  - generic [ref=f2e657]: ▼
+                - columnheader "Price History" [ref=f2e658]
+                - columnheader "Market Low ▼" [ref=f2e659] [cursor=pointer]:
+                  - text: Market Low
+                  - generic [ref=f2e660]: ▼
+                - columnheader "Median Resale ▼" [ref=f2e661] [cursor=pointer]:
+                  - text: Median Resale
+                  - generic [ref=f2e662]: ▼
+                - columnheader "Market High ▼" [ref=f2e663] [cursor=pointer]:
+                  - text: Market High
+                  - generic [ref=f2e664]: ▼
+                - columnheader "Vs Median ▼" [ref=f2e665] [cursor=pointer]:
+                  - text: Vs Median
+                  - generic [ref=f2e666]: ▼
+                - columnheader "Classification ▼" [ref=f2e667] [cursor=pointer]:
+                  - text: Classification
+                  - generic [ref=f2e668]: ▼
+                - columnheader "Decision ▼" [ref=f2e669] [cursor=pointer]:
+                  - text: Decision
+                  - generic [ref=f2e670]: ▼
+                - columnheader "Score ▼" [ref=f2e671] [cursor=pointer]:
+                  - text: Score
+                  - generic [ref=f2e672]: ▼
+                - columnheader "Evidence" [ref=f2e673]
+                - columnheader "Watches ▼" [ref=f2e674] [cursor=pointer]:
+                  - text: Watches
+                  - generic [ref=f2e675]: ▼
+                - columnheader "Offers ▼" [ref=f2e676] [cursor=pointer]:
+                  - text: Offers
+                  - generic [ref=f2e677]: ▼
+                - columnheader "Last Seen ▼" [ref=f2e678] [cursor=pointer]:
+                  - text: Last Seen
+                  - generic [ref=f2e679]: ▼
+            - rowgroup [ref=f2e680]:
+              - row [ref=f2e681]:
+                - cell [ref=f2e682]:
+                  - img "AMD Ryzen 5 5600XT 6/12 Gthread desktop processor AM4 socket 3.7GHz base clock 4.6GHz cache gaming office CPU No Cooler" [ref=f2e683]
+                - cell "aliexpress" [ref=f2e684]
+                - cell [ref=f2e686]:
+                  - img "New since the last scrape" [ref=f2e687]
+                  - link "AMD Ryzen 5 5600XT 6/12 Gthread desktop processor AM4 socket 3.7GHz base clock 4.6GHz cache gaming office CPU No Cooler" [ref=f2e689] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+5+5600XT+6%2F12++Gthread+desktop+processor+AM4+socket+3.7GHz+base+clock+4.6GHz+cache+gaming+office+CPU+No+Cooler
+                - cell "new" [ref=f2e690]
+                - cell "£99.71" [ref=f2e691]
+                - cell [ref=f2e692]
+                - cell "£123.74" [ref=f2e694]
+                - cell "£127.49" [ref=f2e695]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e696]: £127.49
+                - cell "£132.49" [ref=f2e697]
+                - cell "+£28 (+28%)" [ref=f2e698]
+                - cell "GEM" [ref=f2e700]
+                - cell "BUY NOW" [ref=f2e701]
+                - cell "8.8" [ref=f2e702]
+                - cell [ref=f2e703]:
+                  - button "Why?" [ref=f2e704] [cursor=pointer]
+                - cell "—" [ref=f2e707]
+                - cell "No" [ref=f2e708]
+                - cell "3h ago" [ref=f2e709]
+              - row [ref=f2e710]:
+                - cell [ref=f2e711]:
+                  - img "AMD Ryzen 5 5600XT R5 5600XT Desktop CPU Processor 6-Core 12-Thread 3.5GHz Boost 4.6GHz 32MB L3 Cache AM4 Socket 65W Gaming Proc" [ref=f2e712]
+                - cell "aliexpress" [ref=f2e713]
+                - cell [ref=f2e715]:
+                  - img "New since the last scrape" [ref=f2e716]
+                  - link "AMD Ryzen 5 5600XT R5 5600XT Desktop CPU Processor 6-Core 12-Thread 3.5GHz Boost 4.6GHz 32MB L3 Cache AM4 Socket 65W Gaming Proc" [ref=f2e718] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+5+5600XT+R5+5600XT+Desktop+CPU+Processor+6-Core+12-Thread+3.5GHz+Boost+4.6GHz+32MB+L3+Cache+AM4+Socket+65W+Gaming+Proc
+                - cell "new" [ref=f2e719]
+                - cell "£99.35" [ref=f2e720]
+                - cell [ref=f2e721]
+                - cell "£123.74" [ref=f2e723]
+                - cell "£127.49" [ref=f2e724]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e725]: £127.49
+                - cell "£132.49" [ref=f2e726]
+                - cell "+£28 (+28%)" [ref=f2e727]
+                - cell "GEM" [ref=f2e729]
+                - cell "BUY NOW" [ref=f2e730]
+                - cell "8.8" [ref=f2e731]
+                - cell [ref=f2e732]:
+                  - button "Why?" [ref=f2e733] [cursor=pointer]
+                - cell "—" [ref=f2e736]
+                - cell "No" [ref=f2e737]
+                - cell "3h ago" [ref=f2e738]
+              - row [ref=f2e739]:
+                - cell [ref=f2e740]:
+                  - img "AMD Ryzen 5 5600X AMD R5 5600X CPU 6-Core 12-Thread 4.6GHz Unlocked Desktop Processor Socket AM4 Gaming CPU Without Package" [ref=f2e741]
+                - cell "aliexpress" [ref=f2e742]
+                - cell [ref=f2e744]:
+                  - img "New since the last scrape" [ref=f2e745]
+                  - link "AMD Ryzen 5 5600X AMD R5 5600X CPU 6-Core 12-Thread 4.6GHz Unlocked Desktop Processor Socket AM4 Gaming CPU Without Package" [ref=f2e747] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+5+5600X+AMD+R5+5600X+CPU+6-Core+12-Thread+4.6GHz+Unlocked+Desktop+Processor+Socket+AM4+Gaming+CPU+Without+Package
+                - cell "new" [ref=f2e748]
+                - cell "£99.57" [ref=f2e749]
+                - cell [ref=f2e750]
+                - cell "£118.18" [ref=f2e752]
+                - cell "£123.44" [ref=f2e753]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e754]: £123.44
+                - cell "£128.67" [ref=f2e755]
+                - cell "+£24 (+24%)" [ref=f2e756]
+                - cell "OK_DEAL" [ref=f2e758]
+                - cell "MAKE OFFER" [ref=f2e759]
+                - cell "8.8" [ref=f2e760]
+                - cell [ref=f2e761]:
+                  - button "Why?" [ref=f2e762] [cursor=pointer]
+                - cell "—" [ref=f2e765]
+                - cell "No" [ref=f2e766]
+                - cell "3h ago" [ref=f2e767]
+              - row [ref=f2e768]:
+                - cell "—" [ref=f2e769]
+                - cell "vinted" [ref=f2e771]
+                - cell [ref=f2e773]:
+                  - img "New since the last scrape" [ref=f2e774]
+                  - link "Genuine Ryzen 7 5800X3D *BOX*" [ref=f2e776] [cursor=pointer]:
+                    - /url: https://www.vinted.co.uk/items/9659953801
+                - cell "used" [ref=f2e777]
+                - cell "£11.20" [ref=f2e778]
+                - cell [ref=f2e779]
+                - cell "£262.75" [ref=f2e781]
+                - cell "£276.30" [ref=f2e782]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e783]: £276.30
+                - cell "£283.35" [ref=f2e784]
+                - cell "+£265 (+2367%)" [ref=f2e785]
+                - cell "INELIGIBLE" [ref=f2e787]
+                - cell "IGNORE" [ref=f2e788]
+                - cell "8.8" [ref=f2e789]
+                - cell [ref=f2e790]:
+                  - button "Why?" [ref=f2e791] [cursor=pointer]
+                - cell "—" [ref=f2e794]
+                - cell "No" [ref=f2e795]
+                - cell "3h ago" [ref=f2e796]
+              - row [ref=f2e797]:
+                - cell [ref=f2e798]:
+                  - img "AMD Ryzen 7 5800X3D 10th Anniversary Edition 8C/16T 4.5GHz 3D V-Cache AM4 Processor" [ref=f2e799]
+                - cell "Computer Orbit" [ref=f2e800]
+                - cell [ref=f2e802]:
+                  - img "New since the last scrape" [ref=f2e803]
+                  - link "AMD Ryzen 7 5800X3D 10th Anniversary Edition 8C/16T 4.5GHz 3D V-Cache AM4 Processor" [ref=f2e805] [cursor=pointer]:
+                    - /url: https://computerorbit.com/search?q=AMD+Ryzen+7+5800X3D+10th+Anniversary+Edition+8C%2F16T+4.5GHz+3D+V-Cache+AM4+Processor&type=product
+                - cell "new" [ref=f2e806]
+                - cell "£309.00" [ref=f2e807]
+                - cell [ref=f2e808]
+                - cell "£338.15" [ref=f2e810]
+                - cell "£393.00" [ref=f2e811]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e812]: £393.00
+                - cell "£420.14" [ref=f2e813]
+                - cell "+£84 (+27%)" [ref=f2e814]
+                - cell "GEM" [ref=f2e816]
+                - cell "BUY NOW" [ref=f2e817]
+                - cell "8.7" [ref=f2e818]
+                - cell [ref=f2e819]:
+                  - button "Why?" [ref=f2e820] [cursor=pointer]
+                - cell "—" [ref=f2e823]
+                - cell "No" [ref=f2e824]
+                - cell "4h ago" [ref=f2e825]
+              - row [ref=f2e826]:
+                - cell [ref=f2e827]:
+                  - img "Intel Core i5-12600K 10C/16T 4.9GHz LGA1700 Processor" [ref=f2e828]
+                - cell "Computer Orbit" [ref=f2e829]
+                - cell [ref=f2e831]:
+                  - img "New since the last scrape" [ref=f2e832]
+                  - link "Intel Core i5-12600K 10C/16T 4.9GHz LGA1700 Processor" [ref=f2e834] [cursor=pointer]:
+                    - /url: https://computerorbit.com/search?q=Intel+Core+i5-12600K+10C%2F16T+4.9GHz+LGA1700+Processor&type=product
+                - cell "new" [ref=f2e835]
+                - cell "£165.00" [ref=f2e836]
+                - cell [ref=f2e837]
+                - cell "£200.00" [ref=f2e839]
+                - cell "£205.00" [ref=f2e840]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e841]: £205.00
+                - cell "£209.99" [ref=f2e842]
+                - cell "+£40 (+24%)" [ref=f2e843]
+                - cell "INSUFFICIENT_DATA" [ref=f2e845]
+                - cell "INVESTIGATE" [ref=f2e846]
+                - cell "8.6" [ref=f2e847]
+                - cell [ref=f2e848]:
+                  - button "Why?" [ref=f2e849] [cursor=pointer]
+                - cell "—" [ref=f2e852]
+                - cell "No" [ref=f2e853]
+                - cell "4h ago" [ref=f2e854]
+              - row [ref=f2e855]:
+                - cell [ref=f2e856]:
+                  - img "AMD Ryzen 5 5600G 6C/12T 3.9GHz AM4 Processor" [ref=f2e857]
+                - cell "Computer Orbit" [ref=f2e858]
+                - cell [ref=f2e860]:
+                  - img "New since the last scrape" [ref=f2e861]
+                  - link "AMD Ryzen 5 5600G 6C/12T 3.9GHz AM4 Processor" [ref=f2e863] [cursor=pointer]:
+                    - /url: https://computerorbit.com/search?q=AMD+Ryzen+5+5600G+6C%2F12T+3.9GHz+AM4+Processor&type=product
+                - cell "new" [ref=f2e864]
+                - cell "£139.00" [ref=f2e865]
+                - cell [ref=f2e866]
+                - cell "£95.00" [ref=f2e868]
+                - cell "£317.50" [ref=f2e869]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e870]: £317.50
+                - cell "£539.99" [ref=f2e871]
+                - cell "+£179 (+128%)" [ref=f2e872]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e874]
+                - cell "INVESTIGATE" [ref=f2e875]
+                - cell "8.5" [ref=f2e876]
+                - cell [ref=f2e877]:
+                  - button "Why?" [ref=f2e878] [cursor=pointer]
+                - cell "—" [ref=f2e881]
+                - cell "No" [ref=f2e882]
+                - cell "4h ago" [ref=f2e883]
+              - row [ref=f2e884]:
+                - cell [ref=f2e885]:
+                  - img "AMD Ryzen 7 8700F High-Performance Gaming CPU, 8-Core 16-Thread, 4.1GHz/5.0GHz, 16MB L3 Cache, 4NM 65W AM5 Socket Processor" [ref=f2e886]
+                - cell "aliexpress" [ref=f2e887]
+                - cell [ref=f2e889]:
+                  - img "New since the last scrape" [ref=f2e890]
+                  - link "AMD Ryzen 7 8700F High-Performance Gaming CPU, 8-Core 16-Thread, 4.1GHz/5.0GHz, 16MB L3 Cache, 4NM 65W AM5 Socket Processor" [ref=f2e892] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+7+8700F+High-Performance+Gaming+CPU%2C+8-Core+16-Thread%2C+4.1GHz%2F5.0GHz%2C+16MB+L3+Cache%2C+4NM+65W+AM5+Socket+Processor
+                - cell "new" [ref=f2e893]
+                - cell "£164.31" [ref=f2e894]
+                - cell [ref=f2e895]
+                - cell "£191.66" [ref=f2e897]
+                - cell "£191.66" [ref=f2e898]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e899]: £191.66
+                - cell "£191.66" [ref=f2e900]
+                - cell "+£27 (+17%)" [ref=f2e901]
+                - cell "INSUFFICIENT_DATA" [ref=f2e903]
+                - cell "INVESTIGATE" [ref=f2e904]
+                - cell "8.5" [ref=f2e905]
+                - cell [ref=f2e906]:
+                  - button "Why?" [ref=f2e907] [cursor=pointer]
+                - cell "—" [ref=f2e910]
+                - cell "No" [ref=f2e911]
+                - cell "3h ago" [ref=f2e912]
+              - row [ref=f2e913]:
+                - cell [ref=f2e914]:
+                  - img "AMD Ryzen 7 9800X3D 8-Core Desktop CPU Socket AM5 MPN 100-100001084WOF" [ref=f2e915]
+                - cell "eBay" [ref=f2e916]
+                - cell [ref=f2e918]:
+                  - img "New since the last scrape" [ref=f2e919]
+                  - link "AMD Ryzen 7 9800X3D 8-Core Desktop CPU Socket AM5 MPN 100-100001084WOF" [ref=f2e921] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/278290654457
+                - cell "new" [ref=f2e922]
+                - cell "£290.12" [ref=f2e923]
+                - cell [ref=f2e924]
+                - cell "£318.09" [ref=f2e926]
+                - cell "£319.99" [ref=f2e927]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e928]: £319.99
+                - cell "£320.00" [ref=f2e929]
+                - cell "+£30 (+10%)" [ref=f2e930]
+                - cell "OK_DEAL" [ref=f2e932]
+                - cell "MAKE OFFER" [ref=f2e933]
+                - cell "8.4" [ref=f2e934]
+                - cell [ref=f2e935]:
+                  - button "Why?" [ref=f2e936] [cursor=pointer]
+                - cell "—" [ref=f2e939]
+                - cell "No" [ref=f2e940]
+                - cell "3h ago" [ref=f2e941]
+              - row [ref=f2e942]:
+                - cell [ref=f2e943]:
+                  - img "Intel Core i7-12700K 12C/20T 5.0GHz LGA1700 Processor" [ref=f2e944]
+                - cell "Computer Orbit" [ref=f2e945]
+                - cell [ref=f2e947]:
+                  - img "New since the last scrape" [ref=f2e948]
+                  - link "Intel Core i7-12700K 12C/20T 5.0GHz LGA1700 Processor" [ref=f2e950] [cursor=pointer]:
+                    - /url: https://computerorbit.com/search?q=Intel+Core+i7-12700K+12C%2F20T+5.0GHz+LGA1700+Processor&type=product
+                - cell "new" [ref=f2e951]
+                - cell "£329.00" [ref=f2e952]
+                - cell [ref=f2e953]
+                - cell "£416.66" [ref=f2e955]
+                - cell "£416.66" [ref=f2e956]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e957]: £416.66
+                - cell "£416.66" [ref=f2e958]
+                - cell "+£88 (+27%)" [ref=f2e959]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e961]
+                - cell "INVESTIGATE" [ref=f2e962]
+                - cell "8.4" [ref=f2e963]
+                - cell [ref=f2e964]:
+                  - button "Why?" [ref=f2e965] [cursor=pointer]
+                - cell "—" [ref=f2e968]
+                - cell "No" [ref=f2e969]
+                - cell "4h ago" [ref=f2e970]
+              - row [ref=f2e971]:
+                - cell [ref=f2e972]:
+                  - img "Intel Core i9 13900K LGA1700 CPU Processor Brand New Sealed Warranty April 2028" [ref=f2e973]
+                - cell "eBay" [ref=f2e974]
+                - cell [ref=f2e976]:
+                  - img "New since the last scrape" [ref=f2e977]
+                  - link "Intel Core i9 13900K LGA1700 CPU Processor Brand New Sealed Warranty April 2028" [ref=f2e979] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/178417569696
+                - cell "new" [ref=f2e980]
+                - cell "£345.95" [ref=f2e981]
+                - cell [ref=f2e982]
+                - cell "£458.00" [ref=f2e984]
+                - cell "£458.00" [ref=f2e985]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e986]: £458.00
+                - cell "£458.00" [ref=f2e987]
+                - cell "+£112 (+32%)" [ref=f2e988]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e990]
+                - cell "INVESTIGATE" [ref=f2e991]
+                - cell "8.4" [ref=f2e992]
+                - cell [ref=f2e993]:
+                  - button "Why?" [ref=f2e994] [cursor=pointer]
+                - cell "—" [ref=f2e997]
+                - cell "No" [ref=f2e998]
+                - cell "3h ago" [ref=f2e999]
+              - row [ref=f2e1000]:
+                - cell [ref=f2e1001]:
+                  - img "NEW Intel Core i9-14900K 24-Core 32-Thread LGA1700 CPU Processor SRN48 VAT" [ref=f2e1002]
+                - cell "eBay" [ref=f2e1003]
+                - cell [ref=f2e1005]:
+                  - img "New since the last scrape" [ref=f2e1006]
+                  - link "NEW Intel Core i9-14900K 24-Core 32-Thread LGA1700 CPU Processor SRN48 VAT" [ref=f2e1008] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/117351018664
+                - cell "new" [ref=f2e1009]
+                - cell "£364.99" [ref=f2e1010]
+                - cell [ref=f2e1011]
+                - cell "£442.09" [ref=f2e1013]
+                - cell "£459.20" [ref=f2e1014]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1015]: £459.20
+                - cell "£470.93" [ref=f2e1016]
+                - cell "+£94 (+26%)" [ref=f2e1017]
+                - cell "OK_DEAL" [ref=f2e1019]
+                - cell "MAKE OFFER" [ref=f2e1020]
+                - cell "8.3" [ref=f2e1021]
+                - cell [ref=f2e1022]:
+                  - button "Why?" [ref=f2e1023] [cursor=pointer]
+                - cell "—" [ref=f2e1026]
+                - cell "No" [ref=f2e1027]
+                - cell "4h ago" [ref=f2e1028]
+              - row [ref=f2e1029]:
+                - cell [ref=f2e1030]:
+                  - img "R5 3600 Used AMD Ryzen 5 3600 CPU processor 3.6 GHz GAMING Zen 2 7NM 65W L3=32M 100-000000031 Socket AM4" [ref=f2e1031]
+                - cell "aliexpress" [ref=f2e1032]
+                - cell [ref=f2e1034]:
+                  - img "New since the last scrape" [ref=f2e1035]
+                  - link "R5 3600 Used AMD Ryzen 5 3600 CPU processor 3.6 GHz GAMING Zen 2 7NM 65W L3=32M 100-000000031 Socket AM4" [ref=f2e1037] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=R5+3600+Used+AMD+Ryzen+5+3600+CPU+processor+3.6+GHz+GAMING+Zen+2+7NM+65W+L3%3D32M+100-000000031+Socket+AM4
+                - cell "new" [ref=f2e1038]
+                - cell "£62.22" [ref=f2e1039]
+                - cell [ref=f2e1040]
+                - cell "£143.00" [ref=f2e1042]
+                - cell "£143.00" [ref=f2e1043]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1044]: £143.00
+                - cell "£143.00" [ref=f2e1045]
+                - cell "+£81 (+130%)" [ref=f2e1046]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e1048]
+                - cell "INVESTIGATE" [ref=f2e1049]
+                - cell "8.3" [ref=f2e1050]
+                - cell [ref=f2e1051]:
+                  - button "Why?" [ref=f2e1052] [cursor=pointer]
+                - cell "—" [ref=f2e1055]
+                - cell "No" [ref=f2e1056]
+                - cell "3h ago" [ref=f2e1057]
+              - row [ref=f2e1058]:
+                - cell [ref=f2e1059]:
+                  - img "AMD Ryzen 7 3700X R7 3700X 3.6 GHz Eight-Core Sixteen-Thread CPU Processor 65W 7NM L3=32M 100-000000071 Socket AM4" [ref=f2e1060]
+                - cell "aliexpress" [ref=f2e1061]
+                - cell [ref=f2e1063]:
+                  - img "New since the last scrape" [ref=f2e1064]
+                  - link "AMD Ryzen 7 3700X R7 3700X 3.6 GHz Eight-Core Sixteen-Thread CPU Processor 65W 7NM L3=32M 100-000000071 Socket AM4" [ref=f2e1066] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+7+3700X+R7+3700X+3.6+GHz+Eight-Core+Sixteen-Thread+CPU+Processor+65W+7NM+L3%3D32M+100-000000071+Socket+AM4
+                - cell "new" [ref=f2e1067]
+                - cell "£95.66" [ref=f2e1068]
+                - cell [ref=f2e1069]
+                - cell "£195.00" [ref=f2e1071]
+                - cell "£195.00" [ref=f2e1072]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1073]: £195.00
+                - cell "£195.00" [ref=f2e1074]
+                - cell "+£99 (+104%)" [ref=f2e1075]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e1077]
+                - cell "INVESTIGATE" [ref=f2e1078]
+                - cell "8.3" [ref=f2e1079]
+                - cell [ref=f2e1080]:
+                  - button "Why?" [ref=f2e1081] [cursor=pointer]
+                - cell "—" [ref=f2e1084]
+                - cell "No" [ref=f2e1085]
+                - cell "3h ago" [ref=f2e1086]
+              - row [ref=f2e1087]:
+                - cell [ref=f2e1088]:
+                  - img "AMD Ryzen 5 3600 R5 3600 3.6 GHz Six-Core Twelve-Thread CPU Processor 7NM 65W L3=32M 100-000000031 Socket AM4" [ref=f2e1089]
+                - cell "aliexpress" [ref=f2e1090]
+                - cell [ref=f2e1092]:
+                  - img "New since the last scrape" [ref=f2e1093]
+                  - link "AMD Ryzen 5 3600 R5 3600 3.6 GHz Six-Core Twelve-Thread CPU Processor 7NM 65W L3=32M 100-000000031 Socket AM4" [ref=f2e1095] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+5+3600+R5+3600+3.6+GHz+Six-Core+Twelve-Thread+CPU+Processor+7NM+65W+L3%3D32M+100-000000031+Socket+AM4
+                - cell "new" [ref=f2e1096]
+                - cell "£71.31" [ref=f2e1097]
+                - cell [ref=f2e1098]
+                - cell "£143.00" [ref=f2e1100]
+                - cell "£143.00" [ref=f2e1101]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1102]: £143.00
+                - cell "£143.00" [ref=f2e1103]
+                - cell "+£72 (+101%)" [ref=f2e1104]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e1106]
+                - cell "INVESTIGATE" [ref=f2e1107]
+                - cell "8.3" [ref=f2e1108]
+                - cell [ref=f2e1109]:
+                  - button "Why?" [ref=f2e1110] [cursor=pointer]
+                - cell "—" [ref=f2e1113]
+                - cell "No" [ref=f2e1114]
+                - cell "3h ago" [ref=f2e1115]
+              - row [ref=f2e1116]:
+                - cell "—" [ref=f2e1117]
+                - cell "vinted" [ref=f2e1119]
+                - cell [ref=f2e1121]:
+                  - img "New since the last scrape" [ref=f2e1122]
+                  - link "Amd Ryzen 5 8400f" [ref=f2e1124] [cursor=pointer]:
+                    - /url: https://www.vinted.co.uk/items/9695915986
+                - cell "new" [ref=f2e1125]
+                - cell "£95.20" [ref=f2e1126]
+                - cell [ref=f2e1127]
+                - cell "£126.91" [ref=f2e1129]
+                - cell "£149.00" [ref=f2e1130]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1131]: £149.00
+                - cell "£157.78" [ref=f2e1132]
+                - cell "+£54 (+57%)" [ref=f2e1133]
+                - cell "OK_DEAL" [ref=f2e1135]
+                - cell "MAKE OFFER" [ref=f2e1136]
+                - cell "8.3" [ref=f2e1137]
+                - cell [ref=f2e1138]:
+                  - button "Why?" [ref=f2e1139] [cursor=pointer]
+                - cell "—" [ref=f2e1142]
+                - cell "No" [ref=f2e1143]
+                - cell "3h ago" [ref=f2e1144]
+              - row [ref=f2e1145]:
+                - cell [ref=f2e1146]:
+                  - img "i7-4790K CPU Intel Core i7 Quad-Core 4.40GHz BOOST 5GT/s 8MB Cache Processor" [ref=f2e1147]
+                - cell "eBay" [ref=f2e1148]
+                - cell [ref=f2e1150]:
+                  - img "New since the last scrape" [ref=f2e1151]
+                  - link "i7-4790K CPU Intel Core i7 Quad-Core 4.40GHz BOOST 5GT/s 8MB Cache Processor" [ref=f2e1153] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/325049816347
+                - cell "used" [ref=f2e1154]
+                - cell "£69.98" [ref=f2e1155]
+                - cell [ref=f2e1156]
+                - cell "£105.00" [ref=f2e1158]
+                - cell "£105.00" [ref=f2e1159]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1160]: £105.00
+                - cell "£105.00" [ref=f2e1161]
+                - cell "+£35 (+50%)" [ref=f2e1162]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e1164]
+                - cell "INVESTIGATE" [ref=f2e1165]
+                - cell "8.3" [ref=f2e1166]
+                - cell [ref=f2e1167]:
+                  - button "Why?" [ref=f2e1168] [cursor=pointer]
+                - cell "—" [ref=f2e1171]
+                - cell "No" [ref=f2e1172]
+                - cell "3h ago" [ref=f2e1173]
+              - row [ref=f2e1174]:
+                - cell [ref=f2e1175]:
+                  - img "Intel i5-6400 @ 2.70GHz CPU - LGA1151 Socket" [ref=f2e1176]
+                - cell "eBay" [ref=f2e1177]
+                - cell [ref=f2e1179]:
+                  - img "New since the last scrape" [ref=f2e1180]
+                  - link "Intel i5-6400 @ 2.70GHz CPU - LGA1151 Socket" [ref=f2e1182] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/800004789391
+                - cell "used" [ref=f2e1183]
+                - cell "£14.99" [ref=f2e1184]
+                - cell [ref=f2e1185]
+                - cell "£24.47" [ref=f2e1187]
+                - cell "£39.95" [ref=f2e1188]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1189]: £39.95
+                - cell "£44.95" [ref=f2e1190]
+                - cell "+£25 (+167%)" [ref=f2e1191]
+                - cell "OK_DEAL" [ref=f2e1193]
+                - cell "MAKE OFFER" [ref=f2e1194]
+                - cell "8.3" [ref=f2e1195]
+                - cell [ref=f2e1196]:
+                  - button "Why?" [ref=f2e1197] [cursor=pointer]
+                - cell "0" [ref=f2e1200]
+                - cell "No" [ref=f2e1201]
+                - cell "3h ago" [ref=f2e1202]
+              - row [ref=f2e1203]:
+                - cell [ref=f2e1204]:
+                  - img "Intel Core i5 (SR2BY / i5-6400) 2.70GHz 6M Cache LGA1151 Quad Core Processor" [ref=f2e1205]
+                - cell "eBay" [ref=f2e1206]
+                - cell [ref=f2e1208]:
+                  - img "New since the last scrape" [ref=f2e1209]
+                  - link "Intel Core i5 (SR2BY / i5-6400) 2.70GHz 6M Cache LGA1151 Quad Core Processor" [ref=f2e1211] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/357938063967
+                - cell "used" [ref=f2e1212]
+                - cell "£14.99" [ref=f2e1213]
+                - cell [ref=f2e1214]
+                - cell "£24.47" [ref=f2e1216]
+                - cell "£39.95" [ref=f2e1217]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1218]: £39.95
+                - cell "£44.95" [ref=f2e1219]
+                - cell "+£25 (+167%)" [ref=f2e1220]
+                - cell "OK_DEAL" [ref=f2e1222]
+                - cell "MAKE OFFER" [ref=f2e1223]
+                - cell "8.3" [ref=f2e1224]
+                - cell [ref=f2e1225]:
+                  - button "Why?" [ref=f2e1226] [cursor=pointer]
+                - cell "—" [ref=f2e1229]
+                - cell "No" [ref=f2e1230]
+                - cell "4h ago" [ref=f2e1231]
+              - row [ref=f2e1232]:
+                - cell [ref=f2e1233]:
+                  - img "Intel Core i5 i5-6400 CPU 2.70GHz 6M Cache LGA1151 Quad Core Processor" [ref=f2e1234]
+                - cell "eBay" [ref=f2e1235]
+                - cell [ref=f2e1237]:
+                  - img "New since the last scrape" [ref=f2e1238]
+                  - link "Intel Core i5 i5-6400 CPU 2.70GHz 6M Cache LGA1151 Quad Core Processor" [ref=f2e1240] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/327280500377
+                - cell "used" [ref=f2e1241]
+                - cell "£8.98" [ref=f2e1242]
+                - cell [ref=f2e1243]
+                - cell "£24.47" [ref=f2e1245]
+                - cell "£39.95" [ref=f2e1246]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1247]: £39.95
+                - cell "£44.95" [ref=f2e1248]
+                - cell "+£31 (+345%)" [ref=f2e1249]
+                - cell "OK_DEAL" [ref=f2e1251]
+                - cell "MAKE OFFER" [ref=f2e1252]
+                - cell "8.3" [ref=f2e1253]
+                - cell [ref=f2e1254]:
+                  - button "Why?" [ref=f2e1255] [cursor=pointer]
+                - cell "—" [ref=f2e1258]
+                - cell "No" [ref=f2e1259]
+                - cell "3h ago" [ref=f2e1260]
+              - row [ref=f2e1261]:
+                - cell [ref=f2e1262]:
+                  - img "2 X Intel i5-6400 2.7GHz Quad Core LGA1151 Skylake-S CPU Processor SR2L7" [ref=f2e1263]
+                - cell "eBay" [ref=f2e1264]
+                - cell [ref=f2e1266]:
+                  - img "New since the last scrape" [ref=f2e1267]
+                  - link "2 X Intel i5-6400 2.7GHz Quad Core LGA1151 Skylake-S CPU Processor SR2L7" [ref=f2e1269] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/307131579665
+                - cell "used" [ref=f2e1270]
+                - cell "£15.66" [ref=f2e1271]
+                - cell [ref=f2e1272]
+                - cell "£24.47" [ref=f2e1274]
+                - cell "£39.95" [ref=f2e1275]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1276]: £39.95
+                - cell "£44.95" [ref=f2e1277]
+                - cell "+£24 (+155%)" [ref=f2e1278]
+                - cell "OK_DEAL" [ref=f2e1280]
+                - cell "MAKE OFFER" [ref=f2e1281]
+                - cell "8.3" [ref=f2e1282]
+                - cell [ref=f2e1283]:
+                  - button "Why?" [ref=f2e1284] [cursor=pointer]
+                - cell "—" [ref=f2e1287]
+                - cell "No" [ref=f2e1288]
+                - cell "3h ago" [ref=f2e1289]
+              - row [ref=f2e1290]:
+                - cell [ref=f2e1291]:
+                  - img "Intel i5-6400 2.7GHz Quad Core LGA1151 Skylake-S CPU SR2BY" [ref=f2e1292]
+                - cell "eBay" [ref=f2e1293]
+                - cell [ref=f2e1295]:
+                  - img "New since the last scrape" [ref=f2e1296]
+                  - link "Intel i5-6400 2.7GHz Quad Core LGA1151 Skylake-S CPU SR2BY" [ref=f2e1298] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/168391792913
+                - cell "unknown" [ref=f2e1299]
+                - cell "£9.49" [ref=f2e1300]
+                - cell [ref=f2e1301]
+                - cell "£24.47" [ref=f2e1303]
+                - cell "£39.95" [ref=f2e1304]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1305]: £39.95
+                - cell "£44.95" [ref=f2e1306]
+                - cell "+£30 (+321%)" [ref=f2e1307]
+                - cell "OK_DEAL" [ref=f2e1309]
+                - cell "MAKE OFFER" [ref=f2e1310]
+                - cell "8.3" [ref=f2e1311]
+                - cell [ref=f2e1312]:
+                  - button "Why?" [ref=f2e1313] [cursor=pointer]
+                - cell "—" [ref=f2e1316]
+                - cell "No" [ref=f2e1317]
+                - cell "3h ago" [ref=f2e1318]
+              - row [ref=f2e1319]:
+                - cell [ref=f2e1320]:
+                  - img "Intel Core i5-6400 2.7GHz Quad-Core Processor LGA1151 (SR2L7) CPU" [ref=f2e1321]
+                - cell "eBay" [ref=f2e1322]
+                - cell [ref=f2e1324]:
+                  - img "New since the last scrape" [ref=f2e1325]
+                  - link "Intel Core i5-6400 2.7GHz Quad-Core Processor LGA1151 (SR2L7) CPU" [ref=f2e1327] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/147358239182
+                - cell "used" [ref=f2e1328]
+                - cell "£6.35" [ref=f2e1329]
+                - cell [ref=f2e1330]
+                - cell "£24.47" [ref=f2e1332]
+                - cell "£39.95" [ref=f2e1333]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1334]: £39.95
+                - cell "£44.95" [ref=f2e1335]
+                - cell "+£34 (+529%)" [ref=f2e1336]
+                - cell "OK_DEAL" [ref=f2e1338]
+                - cell "MAKE OFFER" [ref=f2e1339]
+                - cell "8.3" [ref=f2e1340]
+                - cell [ref=f2e1341]:
+                  - button "Why?" [ref=f2e1342] [cursor=pointer]
+                - cell "—" [ref=f2e1345]
+                - cell "No" [ref=f2e1346]
+                - cell "3h ago" [ref=f2e1347]
+              - row [ref=f2e1348]:
+                - cell [ref=f2e1349]:
+                  - img "Intel Core Ultra 5 235 (Arrow Lake) Socket LGA 1851 Processor - Retail" [ref=f2e1350]
+                - cell "Overclockers" [ref=f2e1351]
+                - cell [ref=f2e1353]:
+                  - img "New since the last scrape" [ref=f2e1354]
+                  - link "Intel Core Ultra 5 235 (Arrow Lake) Socket LGA 1851 Processor - Retail" [ref=f2e1356] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=Intel+Core+Ultra+5+235+%28Arrow+Lake%29+Socket+LGA+1851+Processor+-+Retail
+                - cell "new" [ref=f2e1357]
+                - cell "£218.32" [ref=f2e1358]
+                - cell [ref=f2e1359]
+                - cell "£259.00" [ref=f2e1361]
+                - cell "£259.00" [ref=f2e1362]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1363]: £259.00
+                - cell "£259.00" [ref=f2e1364]
+                - cell "+£41 (+19%)" [ref=f2e1365]
+                - cell "INSUFFICIENT_DATA" [ref=f2e1367]
+                - cell "INVESTIGATE" [ref=f2e1368]
+                - cell "8.2" [ref=f2e1369]
+                - cell [ref=f2e1370]:
+                  - button "Why?" [ref=f2e1371] [cursor=pointer]
+                - cell "—" [ref=f2e1374]
+                - cell "No" [ref=f2e1375]
+                - cell "6h ago" [ref=f2e1376]
+              - row [ref=f2e1377]:
+                - cell [ref=f2e1378]:
+                  - img "AMD Ryzen Threadripper PRO 9995WX (sTR5) 5.4GHz 96 Core/192 Thread Processor- Retail" [ref=f2e1379]
+                - cell "Overclockers" [ref=f2e1380]
+                - cell [ref=f2e1382]:
+                  - img "New since the last scrape" [ref=f2e1383]
+                  - link "AMD Ryzen Threadripper PRO 9995WX (sTR5) 5.4GHz 96 Core/192 Thread Processor- Retail" [ref=f2e1385] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+Threadripper+PRO+9995WX+%28sTR5%29+5.4GHz+96+Core%2F192+Thread+Processor-+Retail
+                - cell "new" [ref=f2e1386]
+                - cell "£8333.29" [ref=f2e1387]
+                - cell [ref=f2e1388]
+                - cell "£10809.00" [ref=f2e1390]
+                - cell "£10809.00" [ref=f2e1391]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1392]: £10809.00
+                - cell "£10809.00" [ref=f2e1393]
+                - cell "+£2476 (+30%)" [ref=f2e1394]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e1396]
+                - cell "INVESTIGATE" [ref=f2e1397]
+                - cell "8.2" [ref=f2e1398]
+                - cell [ref=f2e1399]:
+                  - button "Why?" [ref=f2e1400] [cursor=pointer]
+                - cell "—" [ref=f2e1403]
+                - cell "No" [ref=f2e1404]
+                - cell "6h ago" [ref=f2e1405]
+              - row [ref=f2e1406]:
+                - cell [ref=f2e1407]:
+                  - img "AMD Ryzen Threadripper PRO 9985WX (sTR5) 5.4GHz 64 Core/128 Thread Processor - Retail" [ref=f2e1408]
+                - cell "Overclockers" [ref=f2e1409]
+                - cell [ref=f2e1411]:
+                  - img "New since the last scrape" [ref=f2e1412]
+                  - link "AMD Ryzen Threadripper PRO 9985WX (sTR5) 5.4GHz 64 Core/128 Thread Processor - Retail" [ref=f2e1414] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+Threadripper+PRO+9985WX+%28sTR5%29+5.4GHz+64+Core%2F128+Thread+Processor+-+Retail
+                - cell "new" [ref=f2e1415]
+                - cell "£5824.99" [ref=f2e1416]
+                - cell [ref=f2e1417]
+                - cell "£7109.00" [ref=f2e1419]
+                - cell "£7109.00" [ref=f2e1420]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1421]: £7109.00
+                - cell "£7109.00" [ref=f2e1422]
+                - cell "+£1284 (+22%)" [ref=f2e1423]
+                - cell "INSUFFICIENT_DATA" [ref=f2e1425]
+                - cell "INVESTIGATE" [ref=f2e1426]
+                - cell "8.2" [ref=f2e1427]
+                - cell [ref=f2e1428]:
+                  - button "Why?" [ref=f2e1429] [cursor=pointer]
+                - cell "—" [ref=f2e1432]
+                - cell "No" [ref=f2e1433]
+                - cell "6h ago" [ref=f2e1434]
+              - row [ref=f2e1435]:
+                - cell [ref=f2e1436]:
+                  - img "Intel Core i9-12900K 16 Core 3.20GHz CPU Alder Lake Processor - LGA 1700" [ref=f2e1437]
+                - cell "AWD-IT" [ref=f2e1438]
+                - cell [ref=f2e1440]:
+                  - img "New since the last scrape" [ref=f2e1441]
+                  - link "Intel Core i9-12900K 16 Core 3.20GHz CPU Alder Lake Processor - LGA 1700" [ref=f2e1443] [cursor=pointer]:
+                    - /url: https://www.awd-it.co.uk/catalogsearch/result/?q=Intel+Core+i9-12900K+16+Core+3.20GHz+CPU+Alder+Lake+Processor+-+LGA+1700
+                - cell "new" [ref=f2e1444]
+                - cell "£364.99" [ref=f2e1445]
+                - cell [ref=f2e1446]
+                - cell "£409.00" [ref=f2e1448]
+                - cell "£409.00" [ref=f2e1449]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1450]: £409.00
+                - cell "£409.00" [ref=f2e1451]
+                - cell "+£44 (+12%)" [ref=f2e1452]
+                - cell "INSUFFICIENT_DATA" [ref=f2e1454]
+                - cell "INVESTIGATE" [ref=f2e1455]
+                - cell "8.2" [ref=f2e1456]
+                - cell [ref=f2e1457]:
+                  - button "Why?" [ref=f2e1458] [cursor=pointer]
+                - cell "—" [ref=f2e1461]
+                - cell "No" [ref=f2e1462]
+                - cell "4h ago" [ref=f2e1463]
+              - row [ref=f2e1464]:
+                - cell [ref=f2e1465]:
+                  - img "Intel Core i7-2600 SR00B 3.40GHz Quad Core 8MB LGA1155 CPU Processor Tested" [ref=f2e1466]
+                - cell "eBay" [ref=f2e1467]
+                - cell [ref=f2e1469]:
+                  - img "New since the last scrape" [ref=f2e1470]
+                  - link "Intel Core i7-2600 SR00B 3.40GHz Quad Core 8MB LGA1155 CPU Processor Tested" [ref=f2e1472] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/267754171393
+                - cell "used" [ref=f2e1473]
+                - cell "£16.99" [ref=f2e1474]
+                - cell [ref=f2e1475]
+                - cell "£64.00" [ref=f2e1477]
+                - cell "£64.00" [ref=f2e1478]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1479]: £64.00
+                - cell "£64.00" [ref=f2e1480]
+                - cell "+£47 (+277%)" [ref=f2e1481]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e1483]
+                - cell "INVESTIGATE" [ref=f2e1484]
+                - cell "8.2" [ref=f2e1485]
+                - cell [ref=f2e1486]:
+                  - button "Why?" [ref=f2e1487] [cursor=pointer]
+                - cell "—" [ref=f2e1490]
+                - cell "No" [ref=f2e1491]
+                - cell "18h ago" [ref=f2e1492]
+              - row [ref=f2e1493]:
+                - cell [ref=f2e1494]:
+                  - img "Intel Core i7-2600 3.40GHz 4-Core CPU 8 Threads Lga 1155" [ref=f2e1495]
+                - cell "eBay" [ref=f2e1496]
+                - cell [ref=f2e1498]:
+                  - img "New since the last scrape" [ref=f2e1499]
+                  - link "Intel Core i7-2600 3.40GHz 4-Core CPU 8 Threads Lga 1155" [ref=f2e1501] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/178396048583
+                - cell "used" [ref=f2e1502]
+                - cell "£15.88" [ref=f2e1503]
+                - cell [ref=f2e1504]
+                - cell "£64.00" [ref=f2e1506]
+                - cell "£64.00" [ref=f2e1507]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1508]: £64.00
+                - cell "£64.00" [ref=f2e1509]
+                - cell "+£48 (+303%)" [ref=f2e1510]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e1512]
+                - cell "INVESTIGATE" [ref=f2e1513]
+                - cell "8.2" [ref=f2e1514]
+                - cell [ref=f2e1515]:
+                  - button "Why?" [ref=f2e1516] [cursor=pointer]
+                - cell "—" [ref=f2e1519]
+                - cell "No" [ref=f2e1520]
+                - cell "18h ago" [ref=f2e1521]
+              - row [ref=f2e1522]:
+                - cell [ref=f2e1523]:
+                  - img "Intel Core i7-4790K i7 4790K 4.0 GHz Used Quad-Core Eight-Thread CPU 88W 8M LGA 1150" [ref=f2e1524]
+                - cell "aliexpress" [ref=f2e1525]
+                - cell [ref=f2e1527]:
+                  - img "New since the last scrape" [ref=f2e1528]
+                  - link "Intel Core i7-4790K i7 4790K 4.0 GHz Used Quad-Core Eight-Thread CPU 88W 8M LGA 1150" [ref=f2e1530] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=Intel+Core+i7-4790K+i7+4790K+4.0+GHz+Used+Quad-Core+Eight-Thread+CPU++88W+8M+LGA+1150
+                - cell "new" [ref=f2e1531]
+                - cell "£56.37" [ref=f2e1532]
+                - cell [ref=f2e1533]
+                - cell "£123.00" [ref=f2e1535]
+                - cell "£123.00" [ref=f2e1536]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1537]: £123.00
+                - cell "£123.00" [ref=f2e1538]
+                - cell "+£67 (+118%)" [ref=f2e1539]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e1541]
+                - cell "INVESTIGATE" [ref=f2e1542]
+                - cell "8.2" [ref=f2e1543]
+                - cell [ref=f2e1544]:
+                  - button "Why?" [ref=f2e1545] [cursor=pointer]
+                - cell "—" [ref=f2e1548]
+                - cell "No" [ref=f2e1549]
+                - cell "3h ago" [ref=f2e1550]
+              - row [ref=f2e1551]:
+                - cell [ref=f2e1552]:
+                  - img "Intel Core i7-6700 i7 6700 3.4 GHz Used Quad-core Eight-threaded 65w CPU LGA 1151" [ref=f2e1553]
+                - cell "aliexpress" [ref=f2e1554]
+                - cell [ref=f2e1556]:
+                  - img "New since the last scrape" [ref=f2e1557]
+                  - link "Intel Core i7-6700 i7 6700 3.4 GHz Used Quad-core Eight-threaded 65w CPU LGA 1151" [ref=f2e1559] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=Intel+Core+i7-6700+i7+6700+3.4+GHz+Used+Quad-core+Eight-threaded+65w+CPU++LGA+1151
+                - cell "new" [ref=f2e1560]
+                - cell "£42.00" [ref=f2e1561]
+                - cell [ref=f2e1562]
+                - cell "£90.00" [ref=f2e1564]
+                - cell "£90.00" [ref=f2e1565]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1566]: £90.00
+                - cell "£90.00" [ref=f2e1567]
+                - cell "+£48 (+114%)" [ref=f2e1568]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e1570]
+                - cell "INVESTIGATE" [ref=f2e1571]
+                - cell "8.2" [ref=f2e1572]
+                - cell [ref=f2e1573]:
+                  - button "Why?" [ref=f2e1574] [cursor=pointer]
+                - cell "—" [ref=f2e1577]
+                - cell "No" [ref=f2e1578]
+                - cell "3h ago" [ref=f2e1579]
+              - row [ref=f2e1580]:
+                - cell [ref=f2e1581]:
+                  - img "Intel Core i7-7700K i7 7700K 4.2 GHz Used Quad-Core Eight-Thread CPU 8M 91W LGA 1151" [ref=f2e1582]
+                - cell "aliexpress" [ref=f2e1583]
+                - cell [ref=f2e1585]:
+                  - img "New since the last scrape" [ref=f2e1586]
+                  - link "Intel Core i7-7700K i7 7700K 4.2 GHz Used Quad-Core Eight-Thread CPU 8M 91W LGA 1151" [ref=f2e1588] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=Intel+Core+i7-7700K+i7+7700K+4.2+GHz+Used+Quad-Core+Eight-Thread+CPU++8M+91W+LGA+1151
+                - cell "new" [ref=f2e1589]
+                - cell "£65.23" [ref=f2e1590]
+                - cell [ref=f2e1591]
+                - cell "£145.00" [ref=f2e1593]
+                - cell "£145.00" [ref=f2e1594]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1595]: £145.00
+                - cell "£145.00" [ref=f2e1596]
+                - cell "+£80 (+122%)" [ref=f2e1597]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e1599]
+                - cell "INVESTIGATE" [ref=f2e1600]
+                - cell "8.2" [ref=f2e1601]
+                - cell [ref=f2e1602]:
+                  - button "Why?" [ref=f2e1603] [cursor=pointer]
+                - cell "—" [ref=f2e1606]
+                - cell "No" [ref=f2e1607]
+                - cell "3h ago" [ref=f2e1608]
+              - row [ref=f2e1609]:
+                - cell [ref=f2e1610]:
+                  - img "Intel Core i7-6700 3.4GHz 8M TDP65W i7 6700 Computer CPU Processor Server FC-LGA14C Package LGA1151" [ref=f2e1611]
+                - cell "aliexpress" [ref=f2e1612]
+                - cell [ref=f2e1614]:
+                  - img "New since the last scrape" [ref=f2e1615]
+                  - link "Intel Core i7-6700 3.4GHz 8M TDP65W i7 6700 Computer CPU Processor Server FC-LGA14C Package LGA1151" [ref=f2e1617] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=Intel+Core+i7-6700+3.4GHz+8M+TDP65W+i7+6700+Computer+CPU+Processor+Server+FC-LGA14C+Package+LGA1151
+                - cell "new" [ref=f2e1618]
+                - cell "£46.09" [ref=f2e1619]
+                - cell [ref=f2e1620]
+                - cell "£90.00" [ref=f2e1622]
+                - cell "£90.00" [ref=f2e1623]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1624]: £90.00
+                - cell "£90.00" [ref=f2e1625]
+                - cell "+£44 (+95%)" [ref=f2e1626]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e1628]
+                - cell "INVESTIGATE" [ref=f2e1629]
+                - cell "8.2" [ref=f2e1630]
+                - cell [ref=f2e1631]:
+                  - button "Why?" [ref=f2e1632] [cursor=pointer]
+                - cell "—" [ref=f2e1635]
+                - cell "No" [ref=f2e1636]
+                - cell "3h ago" [ref=f2e1637]
+              - row [ref=f2e1638]:
+                - cell [ref=f2e1639]:
+                  - img "Intel Core i7 7700 Processor 3.6GHz Quad-Core Eight-Thread 8M 65W CPU LGA 1151" [ref=f2e1640]
+                - cell "aliexpress" [ref=f2e1641]
+                - cell [ref=f2e1643]:
+                  - img "New since the last scrape" [ref=f2e1644]
+                  - link "Intel Core i7 7700 Processor 3.6GHz Quad-Core Eight-Thread 8M 65W CPU LGA 1151" [ref=f2e1646] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=Intel+Core+i7+7700+Processor+3.6GHz+Quad-Core+Eight-Thread+8M+65W+CPU+LGA+1151
+                - cell "new" [ref=f2e1647]
+                - cell "£56.18" [ref=f2e1648]
+                - cell [ref=f2e1649]
+                - cell "£125.00" [ref=f2e1651]
+                - cell "£125.00" [ref=f2e1652]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1653]: £125.00
+                - cell "£125.00" [ref=f2e1654]
+                - cell "+£69 (+122%)" [ref=f2e1655]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e1657]
+                - cell "INVESTIGATE" [ref=f2e1658]
+                - cell "8.2" [ref=f2e1659]
+                - cell [ref=f2e1660]:
+                  - button "Why?" [ref=f2e1661] [cursor=pointer]
+                - cell "—" [ref=f2e1664]
+                - cell "No" [ref=f2e1665]
+                - cell "3h ago" [ref=f2e1666]
+              - row [ref=f2e1667]:
+                - cell [ref=f2e1668]:
+                  - img "AMD Ryzen 7 7700 Processor (AM5, 8-Cores, 3.8 GHz) - Tray CPU" [ref=f2e1669]
+                - cell "eBay" [ref=f2e1670]
+                - cell [ref=f2e1672]:
+                  - img "New since the last scrape" [ref=f2e1673]
+                  - link "AMD Ryzen 7 7700 Processor (AM5, 8-Cores, 3.8 GHz) - Tray CPU" [ref=f2e1675] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/800497205795
+                - cell "used" [ref=f2e1676]
+                - cell "£152.84" [ref=f2e1677]
+                - cell [ref=f2e1678]
+                - cell "£162.12" [ref=f2e1680]
+                - cell "£202.39" [ref=f2e1681]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1682]: £202.39
+                - cell "£220.05" [ref=f2e1683]
+                - cell "+£50 (+32%)" [ref=f2e1684]
+                - cell "OK_DEAL" [ref=f2e1686]
+                - cell "MAKE OFFER" [ref=f2e1687]
+                - cell "8.1" [ref=f2e1688]
+                - cell [ref=f2e1689]:
+                  - button "Why?" [ref=f2e1690] [cursor=pointer]
+                - cell "—" [ref=f2e1693]
+                - cell "No" [ref=f2e1694]
+                - cell "3h ago" [ref=f2e1695]
+              - row [ref=f2e1696]:
+                - cell [ref=f2e1697]:
+                  - img "AMD Athlon 3000G Used X2 3000G 3.5 GHz Dual-Core Quad-Thread CPU Processor YD3000C6M2OFH Socket AM4" [ref=f2e1698]
+                - cell "aliexpress" [ref=f2e1699]
+                - cell [ref=f2e1701]:
+                  - img "New since the last scrape" [ref=f2e1702]
+                  - link "AMD Athlon 3000G Used X2 3000G 3.5 GHz Dual-Core Quad-Thread CPU Processor YD3000C6M2OFH Socket AM4" [ref=f2e1704] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=AMD+Athlon+3000G+Used+X2+3000G+3.5+GHz+Dual-Core+Quad-Thread+CPU+Processor+YD3000C6M2OFH+Socket+AM4
+                - cell "new" [ref=f2e1705]
+                - cell "£25.36" [ref=f2e1706]
+                - cell [ref=f2e1707]
+                - cell "£36.00" [ref=f2e1709]
+                - cell "£36.00" [ref=f2e1710]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1711]: £36.00
+                - cell "£36.00" [ref=f2e1712]
+                - cell "+£11 (+42%)" [ref=f2e1713]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e1715]
+                - cell "INVESTIGATE" [ref=f2e1716]
+                - cell "8.1" [ref=f2e1717]
+                - cell [ref=f2e1718]:
+                  - button "Why?" [ref=f2e1719] [cursor=pointer]
+                - cell "—" [ref=f2e1722]
+                - cell "No" [ref=f2e1723]
+                - cell "3h ago" [ref=f2e1724]
+              - row [ref=f2e1725]:
+                - cell "—" [ref=f2e1726]
+                - cell "vinted" [ref=f2e1728]
+                - cell [ref=f2e1730]:
+                  - img "New since the last scrape" [ref=f2e1731]
+                  - link "AMD ryzen 7 7700 cPU - 5.3 gHz 8 cores AM5" [ref=f2e1733] [cursor=pointer]:
+                    - /url: https://www.vinted.co.uk/items/9679968110
+                - cell "new" [ref=f2e1734]
+                - cell "£147.70" [ref=f2e1735]
+                - cell [ref=f2e1736]
+                - cell "£144.50" [ref=f2e1738]
+                - cell "£169.13" [ref=f2e1739]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1740]: £169.13
+                - cell "£204.16" [ref=f2e1741]
+                - cell "+£21 (+15%)" [ref=f2e1742]
+                - cell "OK_DEAL" [ref=f2e1744]
+                - cell "MAKE OFFER" [ref=f2e1745]
+                - cell "8.0" [ref=f2e1746]
+                - cell [ref=f2e1747]:
+                  - button "Why?" [ref=f2e1748] [cursor=pointer]
+                - cell "—" [ref=f2e1751]
+                - cell "No" [ref=f2e1752]
+                - cell "3h ago" [ref=f2e1753]
+              - row [ref=f2e1754]:
+                - cell [ref=f2e1755]:
+                  - img "AMD Ryzen 7 5700G Processor (AM4, 8-Cores, 3.8 GHz, Vega Graphics) - Tray CPU" [ref=f2e1756]
+                - cell "eBay" [ref=f2e1757]
+                - cell [ref=f2e1759]:
+                  - img "New since the last scrape" [ref=f2e1760]
+                  - link "AMD Ryzen 7 5700G Processor (AM4, 8-Cores, 3.8 GHz, Vega Graphics) - Tray CPU" [ref=f2e1762] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/336725818154
+                - cell "new" [ref=f2e1763]
+                - cell "£135.00" [ref=f2e1764]
+                - cell [ref=f2e1765]
+                - cell "£183.00" [ref=f2e1767]
+                - cell "£286.00" [ref=f2e1768]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1769]: £286.00
+                - cell "£389.00" [ref=f2e1770]
+                - cell "+£151 (+112%)" [ref=f2e1771]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e1773]
+                - cell "INVESTIGATE" [ref=f2e1774]
+                - cell "7.9" [ref=f2e1775]
+                - cell [ref=f2e1776]:
+                  - button "Why?" [ref=f2e1777] [cursor=pointer]
+                - cell "—" [ref=f2e1780]
+                - cell "No" [ref=f2e1781]
+                - cell "3h ago" [ref=f2e1782]
+              - row [ref=f2e1783]:
+                - cell [ref=f2e1784]:
+                  - img "Intel Celeron G3930 - 2.90GHz 2 Core/2 Thread LGA1151 CPU" [ref=f2e1785]
+                - cell "eBay" [ref=f2e1786]
+                - cell [ref=f2e1788]:
+                  - img "New since the last scrape" [ref=f2e1789]
+                  - link "Intel Celeron G3930 - 2.90GHz 2 Core/2 Thread LGA1151 CPU" [ref=f2e1791] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/227473115948
+                - cell "used" [ref=f2e1792]
+                - cell "£2.39" [ref=f2e1793]
+                - cell [ref=f2e1794]
+                - cell "£9.14" [ref=f2e1796]
+                - cell "£11.11" [ref=f2e1797]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1798]: £11.11
+                - cell "£16.64" [ref=f2e1799]
+                - cell "+£9 (+365%)" [ref=f2e1800]
+                - cell "OK_DEAL" [ref=f2e1802]
+                - cell "MAKE OFFER" [ref=f2e1803]
+                - cell "7.9" [ref=f2e1804]
+                - cell [ref=f2e1805]:
+                  - button "Why?" [ref=f2e1806] [cursor=pointer]
+                - cell "—" [ref=f2e1809]
+                - cell "No" [ref=f2e1810]
+                - cell "9h ago" [ref=f2e1811]
+              - row [ref=f2e1812]:
+                - cell [ref=f2e1813]:
+                  - img "AMD Ryzen 7 5700X , AMD R7 5700X New 8C/16T 65W 7NM L3=32M 100-000000926 Socket AM4 but without cooler" [ref=f2e1814]
+                - cell "aliexpress" [ref=f2e1815]
+                - cell [ref=f2e1817]:
+                  - img "New since the last scrape" [ref=f2e1818]
+                  - link "AMD Ryzen 7 5700X , AMD R7 5700X New 8C/16T 65W 7NM L3=32M 100-000000926 Socket AM4 but without cooler" [ref=f2e1820] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+7+5700X+%2C+AMD+R7+5700X+New+8C%2F16T+65W+7NM+L3%3D32M+100-000000926+Socket+AM4+but+without+cooler
+                - cell "new" [ref=f2e1821]
+                - cell "£123.85" [ref=f2e1822]
+                - cell [ref=f2e1823]
+                - cell "£142.16" [ref=f2e1825]
+                - cell "£156.10" [ref=f2e1826]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1827]: £156.10
+                - cell "£182.00" [ref=f2e1828]
+                - cell "+£32 (+26%)" [ref=f2e1829]
+                - cell "GEM" [ref=f2e1831]
+                - cell "BUY NOW" [ref=f2e1832]
+                - cell "7.9" [ref=f2e1833]
+                - cell [ref=f2e1834]:
+                  - button "Why?" [ref=f2e1835] [cursor=pointer]
+                - cell "—" [ref=f2e1838]
+                - cell "No" [ref=f2e1839]
+                - cell "3h ago" [ref=f2e1840]
+              - row [ref=f2e1841]:
+                - cell [ref=f2e1842]:
+                  - img "Intel CPU/Core i5-12400 4.40GHZ LGA1700 Tray" [ref=f2e1843]
+                - cell "Amazon" [ref=f2e1844]
+                - cell [ref=f2e1846]:
+                  - img "New since the last scrape" [ref=f2e1847]
+                  - link "Intel CPU/Core i5-12400 4.40GHZ LGA1700 Tray" [ref=f2e1849] [cursor=pointer]:
+                    - /url: https://www.amazon.co.uk/dp/B09QFW3WPF
+                - cell "new" [ref=f2e1850]
+                - cell "£165.00" [ref=f2e1851]
+                - cell [ref=f2e1852]
+                - cell "£189.00" [ref=f2e1854]
+                - cell "£189.00" [ref=f2e1855]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1856]: £189.00
+                - cell "£189.00" [ref=f2e1857]
+                - cell "+£24 (+15%)" [ref=f2e1858]
+                - cell "INSUFFICIENT_DATA" [ref=f2e1860]
+                - cell "INVESTIGATE" [ref=f2e1861]
+                - cell "7.9" [ref=f2e1862]
+                - cell [ref=f2e1863]:
+                  - button "Why?" [ref=f2e1864] [cursor=pointer]
+                - cell "—" [ref=f2e1867]
+                - cell "No" [ref=f2e1868]
+                - cell "2h ago" [ref=f2e1869]
+              - row [ref=f2e1870]:
+                - cell [ref=f2e1871]:
+                  - img "Intel i3-6100 3.70GHz LGA1151 Skylake-S CPU SR2HG" [ref=f2e1872]
+                - cell "eBay" [ref=f2e1873]
+                - cell [ref=f2e1875]:
+                  - img "New since the last scrape" [ref=f2e1876]
+                  - link "Intel i3-6100 3.70GHz LGA1151 Skylake-S CPU SR2HG" [ref=f2e1878] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/158009026504
+                - cell "unknown" [ref=f2e1879]
+                - cell "£5.69" [ref=f2e1880]
+                - cell [ref=f2e1881]
+                - cell "£8.99" [ref=f2e1883]
+                - cell "£44.99" [ref=f2e1884]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1885]: £44.99
+                - cell "£84.00" [ref=f2e1886]
+                - cell "+£39 (+691%)" [ref=f2e1887]
+                - cell "OK_DEAL" [ref=f2e1889]
+                - cell "MAKE OFFER" [ref=f2e1890]
+                - cell "7.8" [ref=f2e1891]
+                - cell [ref=f2e1892]:
+                  - button "Why?" [ref=f2e1893] [cursor=pointer]
+                - cell "0" [ref=f2e1896]
+                - cell "No" [ref=f2e1897]
+                - cell "3h ago" [ref=f2e1898]
+              - row [ref=f2e1899]:
+                - cell [ref=f2e1900]:
+                  - img "AMD Ryzen 7 7700 R7 7700 CPU 8-Core 16-Thread 5.3GHz Unlocked Desktop Processor Socket AM5 Gaming CPU Without Package" [ref=f2e1901]
+                - cell "aliexpress" [ref=f2e1902]
+                - cell [ref=f2e1904]:
+                  - img "New since the last scrape" [ref=f2e1905]
+                  - link "AMD Ryzen 7 7700 R7 7700 CPU 8-Core 16-Thread 5.3GHz Unlocked Desktop Processor Socket AM5 Gaming CPU Without Package" [ref=f2e1907] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+7+7700+R7+7700+CPU+8-Core+16-Thread+5.3GHz+Unlocked+Desktop+Processor+Socket+AM5+Gaming+CPU+Without+Package
+                - cell "new" [ref=f2e1908]
+                - cell "£148.82" [ref=f2e1909]
+                - cell [ref=f2e1910]
+                - cell "£144.50" [ref=f2e1912]
+                - cell "£169.13" [ref=f2e1913]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1914]: £169.13
+                - cell "£204.16" [ref=f2e1915]
+                - cell "+£20 (+14%)" [ref=f2e1916]
+                - cell "OK_DEAL" [ref=f2e1918]
+                - cell "MAKE OFFER" [ref=f2e1919]
+                - cell "7.7" [ref=f2e1920]
+                - cell [ref=f2e1921]:
+                  - button "Why?" [ref=f2e1922] [cursor=pointer]
+                - cell "—" [ref=f2e1925]
+                - cell "No" [ref=f2e1926]
+                - cell "3h ago" [ref=f2e1927]
+              - row [ref=f2e1928]:
+                - cell [ref=f2e1929]:
+                  - img "AMD Ryzen 7 7700X Eight Core 5.40GHz (Socket AM5) Processor - Retail" [ref=f2e1930]
+                - cell "Overclockers" [ref=f2e1931]
+                - cell [ref=f2e1933]:
+                  - img "New since the last scrape" [ref=f2e1934]
+                  - link "AMD Ryzen 7 7700X Eight Core 5.40GHz (Socket AM5) Processor - Retail" [ref=f2e1936] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+7+7700X+Eight+Core+5.40GHz++%28Socket+AM5%29+Processor+-+Retail
+                - cell "new" [ref=f2e1937]
+                - cell "£166.66" [ref=f2e1938]
+                - cell [ref=f2e1939]
+                - cell "£181.89" [ref=f2e1941]
+                - cell "£193.07" [ref=f2e1942]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1943]: £193.07
+                - cell "£202.00" [ref=f2e1944]
+                - cell "+£26 (+16%)" [ref=f2e1945]
+                - cell "OK_DEAL" [ref=f2e1947]
+                - cell "MAKE OFFER" [ref=f2e1948]
+                - cell "7.4" [ref=f2e1949]
+                - cell [ref=f2e1950]:
+                  - button "Why?" [ref=f2e1951] [cursor=pointer]
+                - cell "—" [ref=f2e1954]
+                - cell "No" [ref=f2e1955]
+                - cell "6h ago" [ref=f2e1956]
+              - row [ref=f2e1957]:
+                - cell [ref=f2e1958]:
+                  - img "AMD Ryzensets 9 9900X Processor (radeon graphics integrated, 12 Cores/24 Threads, 120W DTP, AM5 Socket, 76MB Cache, Up to 5.6 GHz max boost frequency, No Cooler)" [ref=f2e1959]
+                - cell "Amazon" [ref=f2e1960]
+                - cell [ref=f2e1962]:
+                  - img "New since the last scrape" [ref=f2e1963]
+                  - link "AMD Ryzensets 9 9900X Processor (radeon graphics integrated, 12 Cores/24 Threads, 120W DTP, AM5 Socket, 76MB Cache, Up to 5.6 GHz max boost frequency, No Cooler)" [ref=f2e1965] [cursor=pointer]:
+                    - /url: https://www.amazon.co.uk/dp/B0D6NN87T8
+                - cell "new" [ref=f2e1966]
+                - cell "£299.00" [ref=f2e1967]
+                - cell [ref=f2e1968]
+                - cell "£297.40" [ref=f2e1970]
+                - cell "£335.65" [ref=f2e1971]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e1972]: £335.65
+                - cell "£380.37" [ref=f2e1973]
+                - cell "+£37 (+12%)" [ref=f2e1974]
+                - cell "OK_DEAL" [ref=f2e1976]
+                - cell "MAKE OFFER" [ref=f2e1977]
+                - cell "7.3" [ref=f2e1978]
+                - cell [ref=f2e1979]:
+                  - button "Why?" [ref=f2e1980] [cursor=pointer]
+                - cell "—" [ref=f2e1983]
+                - cell "No" [ref=f2e1984]
+                - cell "2h ago" [ref=f2e1985]
+              - row [ref=f2e1986]:
+                - cell [ref=f2e1987]:
+                  - img "Intel Core i5-4570 3.2 GHz 6MB CPU Processor SR14E Haswell (i5 4570)" [ref=f2e1988]
+                - cell "eBay" [ref=f2e1989]
+                - cell [ref=f2e1991]:
+                  - img "New since the last scrape" [ref=f2e1992]
+                  - link "Intel Core i5-4570 3.2 GHz 6MB CPU Processor SR14E Haswell (i5 4570)" [ref=f2e1994] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/318563625192
+                - cell "used" [ref=f2e1995]
+                - cell "£9.99" [ref=f2e1996]
+                - cell [ref=f2e1997]
+                - cell "£14.34" [ref=f2e1999]
+                - cell "£19.23" [ref=f2e2000]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2001]: £19.23
+                - cell "£28.61" [ref=f2e2002]
+                - cell "+£9 (+92%)" [ref=f2e2003]
+                - cell "OK_DEAL" [ref=f2e2005]
+                - cell "MAKE OFFER" [ref=f2e2006]
+                - cell "7.3" [ref=f2e2007]
+                - cell [ref=f2e2008]:
+                  - button "Why?" [ref=f2e2009] [cursor=pointer]
+                - cell "—" [ref=f2e2012]
+                - cell "No" [ref=f2e2013]
+                - cell "3h ago" [ref=f2e2014]
+              - row [ref=f2e2015]:
+                - cell [ref=f2e2016]
+                - cell "Scan.co.uk" [ref=f2e2017]
+                - cell [ref=f2e2019]:
+                  - img "New since the last scrape" [ref=f2e2020]
+                  - link "CompareQuick viewAMD Ryzen™ 9 9900X, AM5, Zen 5, 12 Core, 24 Thread, 4.4GHz, 5.6GHz Turbo, 64MB Cache, PCIe 5.0, 120W, CPU RetailAMD Ryzen 9 9900X 12 Core AM5 CPU/Processor" [ref=f2e2022] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/LN149411
+                - cell "new" [ref=f2e2023]
+                - cell "£299.99" [ref=f2e2024]
+                - cell [ref=f2e2025]
+                - cell "£289.41" [ref=f2e2027]
+                - cell "£335.65" [ref=f2e2028]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2029]: £335.65
+                - cell "£380.37" [ref=f2e2030]
+                - cell "+£36 (+12%)" [ref=f2e2031]
+                - cell "OK_DEAL" [ref=f2e2033]
+                - cell "MAKE OFFER" [ref=f2e2034]
+                - cell "7.3" [ref=f2e2035]
+                - cell [ref=f2e2036]:
+                  - button "Why?" [ref=f2e2037] [cursor=pointer]
+                - cell "—" [ref=f2e2040]
+                - cell "No" [ref=f2e2041]
+                - cell "22h ago" [ref=f2e2042]
+              - row [ref=f2e2043]:
+                - cell [ref=f2e2044]:
+                  - img "AMD Ryzen 3 Pro 2200G 3.5GHz 4MB L3 Cache Processor AM4 CPU" [ref=f2e2045]
+                - cell "eBay" [ref=f2e2046]
+                - cell [ref=f2e2048]:
+                  - img "New since the last scrape" [ref=f2e2049]
+                  - link "AMD Ryzen 3 Pro 2200G 3.5GHz 4MB L3 Cache Processor AM4 CPU" [ref=f2e2051] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/377367944418
+                - cell "used" [ref=f2e2052]
+                - cell "£15.95" [ref=f2e2053]
+                - cell [ref=f2e2054]
+                - cell "£16.91" [ref=f2e2056]
+                - cell "£28.59" [ref=f2e2057]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2058]: £28.59
+                - cell "£42.84" [ref=f2e2059]
+                - cell "+£13 (+79%)" [ref=f2e2060]
+                - cell "OK_DEAL" [ref=f2e2062]
+                - cell "MAKE OFFER" [ref=f2e2063]
+                - cell "7.3" [ref=f2e2064]
+                - cell [ref=f2e2065]:
+                  - button "Why?" [ref=f2e2066] [cursor=pointer]
+                - cell "0" [ref=f2e2069]
+                - cell "No" [ref=f2e2070]
+                - cell "3h ago" [ref=f2e2071]
+              - row [ref=f2e2072]:
+                - cell [ref=f2e2073]:
+                  - img "AMD Ryzen 7 7700 AM5 CPU - 8 Cores up to 5.3GHz - Excellent Condition - Original Box (No Cooler)" [ref=f2e2074]
+                - cell "eBay" [ref=f2e2075]
+                - cell [ref=f2e2077]:
+                  - img "New since the last scrape" [ref=f2e2078]
+                  - link "AMD Ryzen 7 7700 AM5 CPU - 8 Cores up to 5.3GHz - Excellent Condition - Original Box (No Cooler)" [ref=f2e2080] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/237001987995
+                - cell "unknown" [ref=f2e2081]
+                - cell "£162.01" [ref=f2e2082]
+                - cell [ref=f2e2083]
+                - cell "£257.49" [ref=f2e2085]
+                - cell "£257.49" [ref=f2e2086]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2087]: £257.49
+                - cell "£257.49" [ref=f2e2088]
+                - cell "+£95 (+59%)" [ref=f2e2089]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e2091]
+                - cell "INVESTIGATE" [ref=f2e2092]
+                - cell "7.3" [ref=f2e2093]
+                - cell [ref=f2e2094]:
+                  - button "Why?" [ref=f2e2095] [cursor=pointer]
+                - cell "—" [ref=f2e2098]
+                - cell "No" [ref=f2e2099]
+                - cell "3h ago" [ref=f2e2100]
+              - row [ref=f2e2101]:
+                - cell [ref=f2e2102]:
+                  - img "AMD Ryzen 9 9950X R9 9950X New 16 Cores 32 Threads 5.7GHz AM5 Processor" [ref=f2e2103]
+                - cell "aliexpress" [ref=f2e2104]
+                - cell [ref=f2e2106]:
+                  - img "New since the last scrape" [ref=f2e2107]
+                  - link "AMD Ryzen 9 9950X R9 9950X New 16 Cores 32 Threads 5.7GHz AM5 Processor" [ref=f2e2109] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+9+9950X+R9+9950X+New+16+Cores+32+Threads+5.7GHz+AM5+Processor
+                - cell "new" [ref=f2e2110]
+                - cell "£422.73" [ref=f2e2111]
+                - cell [ref=f2e2112]
+                - cell "£391.30" [ref=f2e2114]
+                - cell "£455.00" [ref=f2e2115]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2116]: £455.00
+                - cell "£470.77" [ref=f2e2117]
+                - cell "+£32 (+8%)" [ref=f2e2118]
+                - cell "OK_DEAL" [ref=f2e2120]
+                - cell "MAKE OFFER" [ref=f2e2121]
+                - cell "7.2" [ref=f2e2122]
+                - cell [ref=f2e2123]:
+                  - button "Why?" [ref=f2e2124] [cursor=pointer]
+                - cell "—" [ref=f2e2127]
+                - cell "No" [ref=f2e2128]
+                - cell "3h ago" [ref=f2e2129]
+              - row [ref=f2e2130]:
+                - cell [ref=f2e2131]:
+                  - img "AMD Ryzen 9 9900X3D CPU AM5 Zen 5 12 Cores 24 Threads Processor Brand New Sealed" [ref=f2e2132]
+                - cell "eBay" [ref=f2e2133]
+                - cell [ref=f2e2135]:
+                  - img "New since the last scrape" [ref=f2e2136]
+                  - link "AMD Ryzen 9 9900X3D CPU AM5 Zen 5 12 Cores 24 Threads Processor Brand New Sealed" [ref=f2e2138] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/358478042260
+                - cell "new" [ref=f2e2139]
+                - cell "£460.00" [ref=f2e2140]
+                - cell [ref=f2e2141]
+                - cell "£454.99" [ref=f2e2143]
+                - cell "£509.00" [ref=f2e2144]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2145]: £509.00
+                - cell "£550.98" [ref=f2e2146]
+                - cell "+£49 (+11%)" [ref=f2e2147]
+                - cell "OK_DEAL" [ref=f2e2149]
+                - cell "MAKE OFFER" [ref=f2e2150]
+                - cell "7.2" [ref=f2e2151]
+                - cell [ref=f2e2152]:
+                  - button "Why?" [ref=f2e2153] [cursor=pointer]
+                - cell "—" [ref=f2e2156]
+                - cell "No" [ref=f2e2157]
+                - cell "15h ago" [ref=f2e2158]
+              - row [ref=f2e2159]:
+                - cell [ref=f2e2160]:
+                  - img "Intel Quad Core i5-4670 3.4GHz CPU Processor LGA1150 SR14D (484)" [ref=f2e2161]
+                - cell "eBay" [ref=f2e2162]
+                - cell [ref=f2e2164]:
+                  - img "New since the last scrape" [ref=f2e2165]
+                  - link "Intel Quad Core i5-4670 3.4GHz CPU Processor LGA1150 SR14D (484)" [ref=f2e2167] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/278004437254
+                - cell "used" [ref=f2e2168]
+                - cell "£8.99" [ref=f2e2169]
+                - cell [ref=f2e2170]
+                - cell "£31.00" [ref=f2e2172]
+                - cell "£31.00" [ref=f2e2173]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2174]: £31.00
+                - cell "£31.00" [ref=f2e2175]
+                - cell "+£22 (+245%)" [ref=f2e2176]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e2178]
+                - cell "INVESTIGATE" [ref=f2e2179]
+                - cell "7.1" [ref=f2e2180]
+                - cell [ref=f2e2181]:
+                  - button "Why?" [ref=f2e2182] [cursor=pointer]
+                - cell "0" [ref=f2e2185]
+                - cell "No" [ref=f2e2186]
+                - cell "3h ago" [ref=f2e2187]
+              - row [ref=f2e2188]:
+                - cell [ref=f2e2189]:
+                  - img "AMD Ryzen 9 9900X Twelve Core 5.60GHz (Socket AM5) Processor - Retail" [ref=f2e2190]
+                - cell "Overclockers" [ref=f2e2191]
+                - cell [ref=f2e2193]:
+                  - img "New since the last scrape" [ref=f2e2194]
+                  - link "AMD Ryzen 9 9900X Twelve Core 5.60GHz (Socket AM5) Processor - Retail" [ref=f2e2196] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+9+9900X+Twelve+Core+5.60GHz+%28Socket+AM5%29+Processor+-+Retail
+                - cell "new" [ref=f2e2197]
+                - cell "£274.99" [ref=f2e2198]
+                - cell [ref=f2e2199]
+                - cell "£297.40" [ref=f2e2201]
+                - cell "£335.65" [ref=f2e2202]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2203]: £335.65
+                - cell "£380.37" [ref=f2e2204]
+                - cell "+£61 (+22%)" [ref=f2e2205]
+                - cell "OK_DEAL" [ref=f2e2207]
+                - cell "MAKE OFFER" [ref=f2e2208]
+                - cell "7.1" [ref=f2e2209]
+                - cell [ref=f2e2210]:
+                  - button "Why?" [ref=f2e2211] [cursor=pointer]
+                - cell "—" [ref=f2e2214]
+                - cell "No" [ref=f2e2215]
+                - cell "6h ago" [ref=f2e2216]
+              - row [ref=f2e2217]:
+                - cell [ref=f2e2218]:
+                  - img "AMD Ryzen 5 5500 6-Core 3.6GHz Socket AM4 CPU Processor MPN 100-000000457" [ref=f2e2219]
+                - cell "eBay" [ref=f2e2220]
+                - cell [ref=f2e2222]:
+                  - img "New since the last scrape" [ref=f2e2223]
+                  - link "AMD Ryzen 5 5500 6-Core 3.6GHz Socket AM4 CPU Processor MPN 100-000000457" [ref=f2e2225] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/800523819808
+                - cell "new" [ref=f2e2226]
+                - cell "£63.10" [ref=f2e2227]
+                - cell [ref=f2e2228]
+                - cell "£72.70" [ref=f2e2230]
+                - cell "£77.46" [ref=f2e2231]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2232]: £77.46
+                - cell "£81.34" [ref=f2e2233]
+                - cell "+£14 (+23%)" [ref=f2e2234]
+                - cell "OK_DEAL" [ref=f2e2236]
+                - cell "MAKE OFFER" [ref=f2e2237]
+                - cell "7.1" [ref=f2e2238]
+                - cell [ref=f2e2239]:
+                  - button "Why?" [ref=f2e2240] [cursor=pointer]
+                - cell "—" [ref=f2e2243]
+                - cell "No" [ref=f2e2244]
+                - cell "23h ago" [ref=f2e2245]
+              - row [ref=f2e2246]:
+                - cell [ref=f2e2247]:
+                  - img "NEW AMD Ryzen 9 9950X 16-Core 32-Thread Processor 4.3GHz 170W L3=64M DDR5 PCIe 5.0 Socket AM5 4NM R9 9950X but No Fan" [ref=f2e2248]
+                - cell "aliexpress" [ref=f2e2249]
+                - cell [ref=f2e2251]:
+                  - img "New since the last scrape" [ref=f2e2252]
+                  - link "NEW AMD Ryzen 9 9950X 16-Core 32-Thread Processor 4.3GHz 170W L3=64M DDR5 PCIe 5.0 Socket AM5 4NM R9 9950X but No Fan" [ref=f2e2254] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=NEW+AMD+Ryzen+9+9950X+16-Core+32-Thread++Processor+4.3GHz+170W+L3%3D64M+DDR5+PCIe+5.0+Socket+AM5+4NM+R9+9950X+but+No+Fan
+                - cell "new" [ref=f2e2255]
+                - cell "£424.94" [ref=f2e2256]
+                - cell [ref=f2e2257]
+                - cell "£390.29" [ref=f2e2259]
+                - cell "£455.00" [ref=f2e2260]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2261]: £455.00
+                - cell "£470.77" [ref=f2e2262]
+                - cell "+£30 (+7%)" [ref=f2e2263]
+                - cell "OK_DEAL" [ref=f2e2265]
+                - cell "MAKE OFFER" [ref=f2e2266]
+                - cell "7.1" [ref=f2e2267]
+                - cell [ref=f2e2268]:
+                  - button "Why?" [ref=f2e2269] [cursor=pointer]
+                - cell "—" [ref=f2e2272]
+                - cell "No" [ref=f2e2273]
+                - cell "3h ago" [ref=f2e2274]
+              - row [ref=f2e2275]:
+                - cell [ref=f2e2276]:
+                  - img "AMD Ryzen 5 9600 Processor (AM5, 6-Cores, 3.8 GHz) - Tray CPU" [ref=f2e2277]
+                - cell "eBay" [ref=f2e2278]
+                - cell [ref=f2e2280]:
+                  - img "New since the last scrape" [ref=f2e2281]
+                  - link "AMD Ryzen 5 9600 Processor (AM5, 6-Cores, 3.8 GHz) - Tray CPU" [ref=f2e2283] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/336725875723
+                - cell "new" [ref=f2e2284]
+                - cell "£125.00" [ref=f2e2285]
+                - cell [ref=f2e2286]
+                - cell "£157.49" [ref=f2e2288]
+                - cell "£171.25" [ref=f2e2289]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2290]: £171.25
+                - cell "£185.00" [ref=f2e2291]
+                - cell "+£46 (+37%)" [ref=f2e2292]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e2294]
+                - cell "INVESTIGATE" [ref=f2e2295]
+                - cell "7.1" [ref=f2e2296]
+                - cell [ref=f2e2297]:
+                  - button "Why?" [ref=f2e2298] [cursor=pointer]
+                - cell "0" [ref=f2e2301]
+                - cell "No" [ref=f2e2302]
+                - cell "3h ago" [ref=f2e2303]
+              - row [ref=f2e2304]:
+                - cell [ref=f2e2305]:
+                  - img "AMD Ryzen 9 9950X Sixteen Core 5.70GHz (Socket AM5) Processor - Retail" [ref=f2e2306]
+                - cell "Overclockers" [ref=f2e2307]
+                - cell [ref=f2e2309]:
+                  - img "New since the last scrape" [ref=f2e2310]
+                  - link "AMD Ryzen 9 9950X Sixteen Core 5.70GHz (Socket AM5) Processor - Retail" [ref=f2e2312] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+9+9950X+Sixteen+Core+5.70GHz+%28Socket+AM5%29+Processor+-+Retail
+                - cell "new" [ref=f2e2313]
+                - cell "£391.66" [ref=f2e2314]
+                - cell [ref=f2e2315]
+                - cell "£389.93" [ref=f2e2317]
+                - cell "£455.00" [ref=f2e2318]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2319]: £455.00
+                - cell "£470.77" [ref=f2e2320]
+                - cell "+£63 (+16%)" [ref=f2e2321]
+                - cell "OK_DEAL" [ref=f2e2323]
+                - cell "MAKE OFFER" [ref=f2e2324]
+                - cell "7.0" [ref=f2e2325]
+                - cell [ref=f2e2326]:
+                  - button "Why?" [ref=f2e2327] [cursor=pointer]
+                - cell "0" [ref=f2e2330]
+                - cell "No" [ref=f2e2331]
+                - cell "6h ago" [ref=f2e2332]
+              - row [ref=f2e2333]:
+                - cell [ref=f2e2334]:
+                  - img "Intel i3-12100 LGA1700 Stock CPU Cooler Fan | Original Intel | New Boxed" [ref=f2e2335]
+                - cell "eBay" [ref=f2e2336]
+                - cell [ref=f2e2338]:
+                  - img "New since the last scrape" [ref=f2e2339]
+                  - link "Intel i3-12100 LGA1700 Stock CPU Cooler Fan | Original Intel | New Boxed" [ref=f2e2341] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/188740861168
+                - cell "new" [ref=f2e2342]
+                - cell "£5.45" [ref=f2e2343]
+                - cell [ref=f2e2344]
+                - cell "£179.99" [ref=f2e2346]
+                - cell "£179.99" [ref=f2e2347]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2348]: £179.99
+                - cell "£179.99" [ref=f2e2349]
+                - cell "+£175 (+3203%)" [ref=f2e2350]
+                - cell "INELIGIBLE" [ref=f2e2352]
+                - cell "IGNORE" [ref=f2e2353]
+                - cell "7.0" [ref=f2e2354]
+                - cell [ref=f2e2355]:
+                  - button "Why?" [ref=f2e2356] [cursor=pointer]
+                - cell "—" [ref=f2e2359]
+                - cell "No" [ref=f2e2360]
+                - cell "18h ago" [ref=f2e2361]
+              - row [ref=f2e2362]:
+                - cell [ref=f2e2363]:
+                  - img "AMD Ryzen 7 5800X3D 10th Anniversary Edition Eight Core 4.5GHz (Socket AM4) Processor - Retail" [ref=f2e2364]
+                - cell "Overclockers" [ref=f2e2365]
+                - cell [ref=f2e2367]:
+                  - img "New since the last scrape" [ref=f2e2368]
+                  - link "AMD Ryzen 7 5800X3D 10th Anniversary Edition Eight Core 4.5GHz (Socket AM4) Processor - Retail" [ref=f2e2370] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+7+5800X3D+10th+Anniversary+Edition+Eight+Core+4.5GHz+%28Socket+AM4%29+Processor+-+Retail
+                - cell "new" [ref=f2e2371]
+                - cell "£257.49" [ref=f2e2372]
+                - cell [ref=f2e2373]
+                - cell "£338.15" [ref=f2e2375]
+                - cell "£393.00" [ref=f2e2376]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2377]: £393.00
+                - cell "£420.14" [ref=f2e2378]
+                - cell "+£136 (+53%)" [ref=f2e2379]
+                - cell "GEM" [ref=f2e2381]
+                - cell "BUY NOW" [ref=f2e2382]
+                - cell "7.0" [ref=f2e2383]
+                - cell [ref=f2e2384]:
+                  - button "Why?" [ref=f2e2385] [cursor=pointer]
+                - cell "—" [ref=f2e2388]
+                - cell "No" [ref=f2e2389]
+                - cell "6h ago" [ref=f2e2390]
+              - row [ref=f2e2391]:
+                - cell [ref=f2e2392]:
+                  - img "AMD Ryzen 7 5800X3D 8-Core Socket AM4 CPU Up to 4.5GHz 96MB L3 100MHz" [ref=f2e2393]
+                - cell "eBay" [ref=f2e2394]
+                - cell [ref=f2e2396]:
+                  - img "New since the last scrape" [ref=f2e2397]
+                  - link "AMD Ryzen 7 5800X3D 8-Core Socket AM4 CPU Up to 4.5GHz 96MB L3 100MHz" [ref=f2e2399] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/287407784634
+                - cell "new" [ref=f2e2400]
+                - cell "£348.40" [ref=f2e2401]
+                - cell [ref=f2e2402]
+                - cell "£329.50" [ref=f2e2404]
+                - cell "£393.00" [ref=f2e2405]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2406]: £393.00
+                - cell "£420.14" [ref=f2e2407]
+                - cell "+£45 (+13%)" [ref=f2e2408]
+                - cell "OK_DEAL" [ref=f2e2410]
+                - cell "MAKE OFFER" [ref=f2e2411]
+                - cell "7.0" [ref=f2e2412]
+                - cell [ref=f2e2413]:
+                  - button "Why?" [ref=f2e2414] [cursor=pointer]
+                - cell "—" [ref=f2e2417]
+                - cell "No" [ref=f2e2418]
+                - cell "15h ago" [ref=f2e2419]
+              - row [ref=f2e2420]:
+                - cell [ref=f2e2421]:
+                  - img "AMD Ryzen 7 5800X Eight Core 4.7GHz (Socket AM4) Processor - Retail" [ref=f2e2422]
+                - cell "Overclockers" [ref=f2e2423]
+                - cell [ref=f2e2425]:
+                  - img "New since the last scrape" [ref=f2e2426]
+                  - link "AMD Ryzen 7 5800X Eight Core 4.7GHz (Socket AM4) Processor - Retail" [ref=f2e2428] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+7+5800X+Eight+Core+4.7GHz++%28Socket+AM4%29+Processor+-+Retail
+                - cell "new" [ref=f2e2429]
+                - cell "£166.66" [ref=f2e2430]
+                - cell [ref=f2e2431]
+                - cell "£195.47" [ref=f2e2433]
+                - cell "£195.81" [ref=f2e2434]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2435]: £195.81
+                - cell "£196.25" [ref=f2e2436]
+                - cell "+£29 (+17%)" [ref=f2e2437]
+                - cell "OK_DEAL" [ref=f2e2439]
+                - cell "MAKE OFFER" [ref=f2e2440]
+                - cell "7.0" [ref=f2e2441]
+                - cell [ref=f2e2442]:
+                  - button "Why?" [ref=f2e2443] [cursor=pointer]
+                - cell "—" [ref=f2e2446]
+                - cell "No" [ref=f2e2447]
+                - cell "6h ago" [ref=f2e2448]
+              - row [ref=f2e2449]:
+                - cell [ref=f2e2450]:
+                  - img "AMD Ryzen 9 9900X3D Twelve Core 5.50GHz (Socket AM5) Processor - Retail" [ref=f2e2451]
+                - cell "Overclockers" [ref=f2e2452]
+                - cell [ref=f2e2454]:
+                  - img "New since the last scrape" [ref=f2e2455]
+                  - link "AMD Ryzen 9 9900X3D Twelve Core 5.50GHz (Socket AM5) Processor - Retail" [ref=f2e2457] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+9+9900X3D+Twelve+Core+5.50GHz+%28Socket+AM5%29+Processor+-+Retail
+                - cell "new" [ref=f2e2458]
+                - cell "£382.49" [ref=f2e2459]
+                - cell [ref=f2e2460]
+                - cell "£454.99" [ref=f2e2462]
+                - cell "£509.00" [ref=f2e2463]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2464]: £509.00
+                - cell "£550.98" [ref=f2e2465]
+                - cell "+£127 (+33%)" [ref=f2e2466]
+                - cell "GEM" [ref=f2e2468]
+                - cell "BUY NOW" [ref=f2e2469]
+                - cell "6.9" [ref=f2e2470]
+                - cell [ref=f2e2471]:
+                  - button "Why?" [ref=f2e2472] [cursor=pointer]
+                - cell "—" [ref=f2e2475]
+                - cell "No" [ref=f2e2476]
+                - cell "6h ago" [ref=f2e2477]
+              - row [ref=f2e2478]:
+                - cell [ref=f2e2479]:
+                  - img "AMD Ryzen 5 7600 Six Core 5.10GHz (Socket AM5) Processor - Retail" [ref=f2e2480]
+                - cell "Overclockers" [ref=f2e2481]
+                - cell [ref=f2e2483]:
+                  - img "New since the last scrape" [ref=f2e2484]
+                  - link "AMD Ryzen 5 7600 Six Core 5.10GHz (Socket AM5) Processor - Retail" [ref=f2e2486] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+5+7600+Six+Core+5.10GHz++%28Socket+AM5%29+Processor+-+Retail
+                - cell "new" [ref=f2e2487]
+                - cell "£141.66" [ref=f2e2488]
+                - cell [ref=f2e2489]
+                - cell "£165.00" [ref=f2e2491]
+                - cell "£165.00" [ref=f2e2492]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2493]: £165.00
+                - cell "£165.00" [ref=f2e2494]
+                - cell "+£23 (+16%)" [ref=f2e2495]
+                - cell "INSUFFICIENT_DATA" [ref=f2e2497]
+                - cell "INVESTIGATE" [ref=f2e2498]
+                - cell "6.9" [ref=f2e2499]
+                - cell [ref=f2e2500]:
+                  - button "Why?" [ref=f2e2501] [cursor=pointer]
+                - cell "—" [ref=f2e2504]
+                - cell "No" [ref=f2e2505]
+                - cell "6h ago" [ref=f2e2506]
+              - row [ref=f2e2507]:
+                - cell [ref=f2e2508]:
+                  - img "Intel Core i5-12600K CPU 10-Core (6P+4E) Up to 4.9GHz LGA1700 Unlocked" [ref=f2e2509]
+                - cell "eBay" [ref=f2e2510]
+                - cell [ref=f2e2512]:
+                  - img "New since the last scrape" [ref=f2e2513]
+                  - link "Intel Core i5-12600K CPU 10-Core (6P+4E) Up to 4.9GHz LGA1700 Unlocked" [ref=f2e2515] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/820004974433
+                - cell "new" [ref=f2e2516]
+                - cell "£150.23" [ref=f2e2517]
+                - cell [ref=f2e2518]
+                - cell "£182.50" [ref=f2e2520]
+                - cell "£200.00" [ref=f2e2521]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2522]: £200.00
+                - cell "£205.00" [ref=f2e2523]
+                - cell "+£50 (+33%)" [ref=f2e2524]
+                - cell "OK_DEAL" [ref=f2e2526]
+                - cell "MAKE OFFER" [ref=f2e2527]
+                - cell "6.9" [ref=f2e2528]
+                - cell [ref=f2e2529]:
+                  - button "Why?" [ref=f2e2530] [cursor=pointer]
+                - cell "—" [ref=f2e2533]
+                - cell "No" [ref=f2e2534]
+                - cell "3h ago" [ref=f2e2535]
+              - row [ref=f2e2536]:
+                - cell [ref=f2e2537]:
+                  - img "AMD Ryzen 7 5700X , AMD R7 5700X New 8C/16T 65W 7NM L3=32M 100-000000926 Socket AM4 New but without cooler" [ref=f2e2538]
+                - cell "aliexpress" [ref=f2e2539]
+                - cell [ref=f2e2541]:
+                  - img "New since the last scrape" [ref=f2e2542]
+                  - link "AMD Ryzen 7 5700X , AMD R7 5700X New 8C/16T 65W 7NM L3=32M 100-000000926 Socket AM4 New but without cooler" [ref=f2e2544] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+7+5700X+%2C+AMD+R7+5700X+New+8C%2F16T+65W+7NM+L3%3D32M+100-000000926+Socket+AM4+New+but+without+cooler
+                - cell "new" [ref=f2e2545]
+                - cell "£136.58" [ref=f2e2546]
+                - cell [ref=f2e2547]
+                - cell "£142.16" [ref=f2e2549]
+                - cell "£156.10" [ref=f2e2550]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2551]: £156.10
+                - cell "£182.00" [ref=f2e2552]
+                - cell "+£20 (+14%)" [ref=f2e2553]
+                - cell "OK_DEAL" [ref=f2e2555]
+                - cell "MAKE OFFER" [ref=f2e2556]
+                - cell "6.9" [ref=f2e2557]
+                - cell [ref=f2e2558]:
+                  - button "Why?" [ref=f2e2559] [cursor=pointer]
+                - cell "—" [ref=f2e2562]
+                - cell "No" [ref=f2e2563]
+                - cell "3h ago" [ref=f2e2564]
+              - row [ref=f2e2565]:
+                - cell [ref=f2e2566]:
+                  - img "Intel Core i9-14900KF 24-Core LGA1700 3.2GHz CPU 32MB L2 36MB L3" [ref=f2e2567]
+                - cell "eBay" [ref=f2e2568]
+                - cell [ref=f2e2570]:
+                  - img "New since the last scrape" [ref=f2e2571]
+                  - link "Intel Core i9-14900KF 24-Core LGA1700 3.2GHz CPU 32MB L2 36MB L3" [ref=f2e2573] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/178402975243
+                - cell "new" [ref=f2e2574]
+                - cell "£271.10" [ref=f2e2575]
+                - cell [ref=f2e2576]
+                - cell "£405.92" [ref=f2e2578]
+                - cell "£436.79" [ref=f2e2579]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2580]: £436.79
+                - cell "£465.18" [ref=f2e2581]
+                - cell "+£166 (+61%)" [ref=f2e2582]
+                - cell "OK_DEAL" [ref=f2e2584]
+                - cell "MAKE OFFER" [ref=f2e2585]
+                - cell "6.9" [ref=f2e2586]
+                - cell [ref=f2e2587]:
+                  - button "Why?" [ref=f2e2588] [cursor=pointer]
+                - cell "—" [ref=f2e2591]
+                - cell "No" [ref=f2e2592]
+                - cell "18h ago" [ref=f2e2593]
+              - row [ref=f2e2594]:
+                - cell [ref=f2e2595]:
+                  - img "AMD Ryzen 7 9850X3D Eight Core 5.60GHz (Socket AM5) Processor - Retail" [ref=f2e2596]
+                - cell "Overclockers" [ref=f2e2597]
+                - cell [ref=f2e2599]:
+                  - img "New since the last scrape" [ref=f2e2600]
+                  - link "AMD Ryzen 7 9850X3D Eight Core 5.60GHz (Socket AM5) Processor - Retail" [ref=f2e2602] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+7+9850X3D+Eight+Core+5.60GHz+%28Socket+AM5%29+Processor+-+Retail
+                - cell "new" [ref=f2e2603]
+                - cell "£316.66" [ref=f2e2604]
+                - cell [ref=f2e2605]
+                - cell "£428.94" [ref=f2e2607]
+                - cell "£438.39" [ref=f2e2608]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2609]: £438.39
+                - cell "£445.07" [ref=f2e2610]
+                - cell "+£122 (+38%)" [ref=f2e2611]
+                - cell "OK_DEAL" [ref=f2e2613]
+                - cell "MAKE OFFER" [ref=f2e2614]
+                - cell "6.8" [ref=f2e2615]
+                - cell [ref=f2e2616]:
+                  - button "Why?" [ref=f2e2617] [cursor=pointer]
+                - cell "—" [ref=f2e2620]
+                - cell "No" [ref=f2e2621]
+                - cell "6h ago" [ref=f2e2622]
+              - row [ref=f2e2623]:
+                - cell [ref=f2e2624]:
+                  - img "AMD Ryzen 9 9950X3D Sixteen Core 5.70GHz (Socket AM5) Processor - Retail" [ref=f2e2625]
+                - cell "Overclockers" [ref=f2e2626]
+                - cell [ref=f2e2628]:
+                  - img "New since the last scrape" [ref=f2e2629]
+                  - link "AMD Ryzen 9 9950X3D Sixteen Core 5.70GHz (Socket AM5) Processor - Retail" [ref=f2e2631] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+9+9950X3D+Sixteen+Core+5.70GHz+%28Socket+AM5%29+Processor+-+Retail
+                - cell "new" [ref=f2e2632]
+                - cell "£416.66" [ref=f2e2633]
+                - cell [ref=f2e2634]
+                - cell "£516.07" [ref=f2e2636]
+                - cell "£553.13" [ref=f2e2637]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2638]: £553.13
+                - cell "£566.07" [ref=f2e2639]
+                - cell "+£136 (+33%)" [ref=f2e2640]
+                - cell "OK_DEAL" [ref=f2e2642]
+                - cell "MAKE OFFER" [ref=f2e2643]
+                - cell "6.8" [ref=f2e2644]
+                - cell [ref=f2e2645]:
+                  - button "Why?" [ref=f2e2646] [cursor=pointer]
+                - cell "—" [ref=f2e2649]
+                - cell "No" [ref=f2e2650]
+                - cell "6h ago" [ref=f2e2651]
+              - row [ref=f2e2652]:
+                - cell [ref=f2e2653]:
+                  - img "AMD Ryzen 9 7900 12-Core 5.4GHz AM5 CPU with Wraith Prism Cooler" [ref=f2e2654]
+                - cell "eBay" [ref=f2e2655]
+                - cell [ref=f2e2657]:
+                  - img "New since the last scrape" [ref=f2e2658]
+                  - link "AMD Ryzen 9 7900 12-Core 5.4GHz AM5 CPU with Wraith Prism Cooler" [ref=f2e2660] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/298538914754
+                - cell "new" [ref=f2e2661]
+                - cell "£232.92" [ref=f2e2662]
+                - cell [ref=f2e2663]
+                - cell "£299.00" [ref=f2e2665]
+                - cell "£299.00" [ref=f2e2666]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2667]: £299.00
+                - cell "£299.00" [ref=f2e2668]
+                - cell "+£66 (+28%)" [ref=f2e2669]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e2671]
+                - cell "INVESTIGATE" [ref=f2e2672]
+                - cell "6.8" [ref=f2e2673]
+                - cell [ref=f2e2674]:
+                  - button "Why?" [ref=f2e2675] [cursor=pointer]
+                - cell "—" [ref=f2e2678]
+                - cell "No" [ref=f2e2679]
+                - cell "3h ago" [ref=f2e2680]
+              - row [ref=f2e2681]:
+                - cell [ref=f2e2682]
+                - cell "Scan.co.uk" [ref=f2e2683]
+                - cell [ref=f2e2685]:
+                  - img "New since the last scrape" [ref=f2e2686]
+                  - link "CompareQuick viewAMD Ryzen™ 5 7600X, AM5, Zen 4, 6 Core, 12 Thread, 4.7GHz, 5.3GHz Turbo, 32MB Cache, PCIe 5.0, 105W, CPUAMD Ryzen 5 7600X 6 Core AM5 CPU/Processor" [ref=f2e2688] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/LN128864
+                - cell "new" [ref=f2e2689]
+                - cell "£148.99" [ref=f2e2690]
+                - cell [ref=f2e2691]
+                - cell "£147.83" [ref=f2e2693]
+                - cell "£179.00" [ref=f2e2694]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2695]: £179.00
+                - cell "£221.76" [ref=f2e2696]
+                - cell "+£30 (+20%)" [ref=f2e2697]
+                - cell "OK_DEAL" [ref=f2e2699]
+                - cell "MAKE OFFER" [ref=f2e2700]
+                - cell "6.7" [ref=f2e2701]
+                - cell [ref=f2e2702]:
+                  - button "Why?" [ref=f2e2703] [cursor=pointer]
+                - cell "—" [ref=f2e2706]
+                - cell "No" [ref=f2e2707]
+                - cell "22h ago" [ref=f2e2708]
+              - row [ref=f2e2709]:
+                - cell [ref=f2e2710]:
+                  - img "AMD Ryzen 7 8700G Eight Core 4.2GHz (Socket AM5) APU with Radeon 780M Graphics" [ref=f2e2711]
+                - cell "Overclockers" [ref=f2e2712]
+                - cell [ref=f2e2714]:
+                  - img "New since the last scrape" [ref=f2e2715]
+                  - link "AMD Ryzen 7 8700G Eight Core 4.2GHz (Socket AM5) APU with Radeon 780M Graphics" [ref=f2e2717] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+7+8700G+Eight+Core+4.2GHz+%28Socket+AM5%29+APU+with+Radeon+780M+Graphics
+                - cell "new" [ref=f2e2718]
+                - cell "£216.66" [ref=f2e2719]
+                - cell [ref=f2e2720]
+                - cell "£244.00" [ref=f2e2722]
+                - cell "£252.00" [ref=f2e2723]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2724]: £252.00
+                - cell "£260.00" [ref=f2e2725]
+                - cell "+£35 (+16%)" [ref=f2e2726]
+                - cell "INSUFFICIENT_DATA" [ref=f2e2728]
+                - cell "INVESTIGATE" [ref=f2e2729]
+                - cell "6.7" [ref=f2e2730]
+                - cell [ref=f2e2731]:
+                  - button "Why?" [ref=f2e2732] [cursor=pointer]
+                - cell "—" [ref=f2e2735]
+                - cell "No" [ref=f2e2736]
+                - cell "6h ago" [ref=f2e2737]
+              - row [ref=f2e2738]:
+                - cell [ref=f2e2739]:
+                  - img "AMD Ryzen 5 8400F CPU with Wraith Stealth Cooler – 6-Core 4.7GHz AM5" [ref=f2e2740]
+                - cell "eBay" [ref=f2e2741]
+                - cell [ref=f2e2743]:
+                  - img "New since the last scrape" [ref=f2e2744]
+                  - link "AMD Ryzen 5 8400F CPU with Wraith Stealth Cooler – 6-Core 4.7GHz AM5" [ref=f2e2746] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/326909496675
+                - cell "new" [ref=f2e2747]
+                - cell "£113.94" [ref=f2e2748]
+                - cell [ref=f2e2749]
+                - cell "£118.29" [ref=f2e2751]
+                - cell "£149.00" [ref=f2e2752]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2753]: £149.00
+                - cell "£157.78" [ref=f2e2754]
+                - cell "+£35 (+31%)" [ref=f2e2755]
+                - cell "OK_DEAL" [ref=f2e2757]
+                - cell "MAKE OFFER" [ref=f2e2758]
+                - cell "6.7" [ref=f2e2759]
+                - cell [ref=f2e2760]:
+                  - button "Why?" [ref=f2e2761] [cursor=pointer]
+                - cell "0" [ref=f2e2764]
+                - cell "No" [ref=f2e2765]
+                - cell "3h ago" [ref=f2e2766]
+              - row [ref=f2e2767]:
+                - cell [ref=f2e2768]:
+                  - img "Intel i9-14900KF 14th Gen 6.0GHz 24-Core 36MB CPU Processor LGA1700" [ref=f2e2769]
+                - cell "eBay" [ref=f2e2770]
+                - cell [ref=f2e2772]:
+                  - img "New since the last scrape" [ref=f2e2773]
+                  - link "Intel i9-14900KF 14th Gen 6.0GHz 24-Core 36MB CPU Processor LGA1700" [ref=f2e2775] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/318625819881
+                - cell "new" [ref=f2e2776]
+                - cell "£312.70" [ref=f2e2777]
+                - cell [ref=f2e2778]
+                - cell "£412.00" [ref=f2e2780]
+                - cell "£412.00" [ref=f2e2781]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2782]: £412.00
+                - cell "£412.00" [ref=f2e2783]
+                - cell "+£99 (+32%)" [ref=f2e2784]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e2786]
+                - cell "INVESTIGATE" [ref=f2e2787]
+                - cell "6.7" [ref=f2e2788]
+                - cell [ref=f2e2789]:
+                  - button "Why?" [ref=f2e2790] [cursor=pointer]
+                - cell "—" [ref=f2e2793]
+                - cell "No" [ref=f2e2794]
+                - cell "7h ago" [ref=f2e2795]
+              - row [ref=f2e2796]:
+                - cell [ref=f2e2797]:
+                  - img "AMD Ryzen 5 9600 Six Core 5.20GHz (Socket AM5) Processor - Retail" [ref=f2e2798]
+                - cell "Overclockers" [ref=f2e2799]
+                - cell [ref=f2e2801]:
+                  - img "New since the last scrape" [ref=f2e2802]
+                  - link "AMD Ryzen 5 9600 Six Core 5.20GHz (Socket AM5) Processor - Retail" [ref=f2e2804] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+5+9600+Six+Core+5.20GHz+%28Socket+AM5%29+Processor+-+Retail
+                - cell "new" [ref=f2e2805]
+                - cell "£157.49" [ref=f2e2806]
+                - cell [ref=f2e2807]
+                - cell "£185.00" [ref=f2e2809]
+                - cell "£185.00" [ref=f2e2810]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2811]: £185.00
+                - cell "£185.00" [ref=f2e2812]
+                - cell "+£28 (+17%)" [ref=f2e2813]
+                - cell "INSUFFICIENT_DATA" [ref=f2e2815]
+                - cell "INVESTIGATE" [ref=f2e2816]
+                - cell "6.7" [ref=f2e2817]
+                - cell [ref=f2e2818]:
+                  - button "Why?" [ref=f2e2819] [cursor=pointer]
+                - cell "—" [ref=f2e2822]
+                - cell "No" [ref=f2e2823]
+                - cell "6h ago" [ref=f2e2824]
+              - row [ref=f2e2825]:
+                - cell [ref=f2e2826]:
+                  - img "AMD Ryzen 7 3700X CPU 3.6GHz 8-Core Socket AM4 Processor & Prism Cooler" [ref=f2e2827]
+                - cell "eBay" [ref=f2e2828]
+                - cell [ref=f2e2830]:
+                  - img "New since the last scrape" [ref=f2e2831]
+                  - link "AMD Ryzen 7 3700X CPU 3.6GHz 8-Core Socket AM4 Processor & Prism Cooler" [ref=f2e2833] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/336635746768
+                - cell "new" [ref=f2e2834]
+                - cell "£139.97" [ref=f2e2835]
+                - cell [ref=f2e2836]
+                - cell "£195.00" [ref=f2e2838]
+                - cell "£195.00" [ref=f2e2839]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2840]: £195.00
+                - cell "£195.00" [ref=f2e2841]
+                - cell "+£55 (+39%)" [ref=f2e2842]
+                - cell "EVIDENCE_LIMITED_DEAL" [ref=f2e2844]
+                - cell "INVESTIGATE" [ref=f2e2845]
+                - cell "6.7" [ref=f2e2846]
+                - cell [ref=f2e2847]:
+                  - button "Why?" [ref=f2e2848] [cursor=pointer]
+                - cell "—" [ref=f2e2851]
+                - cell "No" [ref=f2e2852]
+                - cell "3h ago" [ref=f2e2853]
+              - row [ref=f2e2854]:
+                - cell [ref=f2e2855]:
+                  - img "AMD Ryzen 7 9800X3D Eight Core 5.20GHz (Socket AM5) Processor - Retail" [ref=f2e2856]
+                - cell "Overclockers" [ref=f2e2857]
+                - cell [ref=f2e2859]:
+                  - img "New since the last scrape" [ref=f2e2860]
+                  - link "AMD Ryzen 7 9800X3D Eight Core 5.20GHz (Socket AM5) Processor - Retail" [ref=f2e2862] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+7+9800X3D+Eight+Core+5.20GHz+%28Socket+AM5%29+Processor+-+Retail
+                - cell "new" [ref=f2e2863]
+                - cell "£299.99" [ref=f2e2864]
+                - cell [ref=f2e2865]
+                - cell "£318.09" [ref=f2e2867]
+                - cell "£319.99" [ref=f2e2868]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2869]: £319.99
+                - cell "£320.00" [ref=f2e2870]
+                - cell "+£20 (+7%)" [ref=f2e2871]
+                - cell "OK_DEAL" [ref=f2e2873]
+                - cell "MAKE OFFER" [ref=f2e2874]
+                - cell "6.6" [ref=f2e2875]
+                - cell [ref=f2e2876]:
+                  - button "Why?" [ref=f2e2877] [cursor=pointer]
+                - cell "—" [ref=f2e2880]
+                - cell "No" [ref=f2e2881]
+                - cell "6h ago" [ref=f2e2882]
+              - row [ref=f2e2883]:
+                - cell [ref=f2e2884]:
+                  - img "AMD Ryzen 5 5600XT (5600X Turbo) CPU Processor (4.7 GHz, 6 Cores, Socket AM4)" [ref=f2e2885]
+                - cell "eBay" [ref=f2e2886]
+                - cell [ref=f2e2888]:
+                  - img "New since the last scrape" [ref=f2e2889]
+                  - link "AMD Ryzen 5 5600XT (5600X Turbo) CPU Processor (4.7 GHz, 6 Cores, Socket AM4)" [ref=f2e2891] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/278291365229
+                - cell "new" [ref=f2e2892]
+                - cell "£114.93" [ref=f2e2893]
+                - cell [ref=f2e2894]
+                - cell "£123.74" [ref=f2e2896]
+                - cell "£127.49" [ref=f2e2897]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2898]: £127.49
+                - cell "£132.49" [ref=f2e2899]
+                - cell "+£13 (+11%)" [ref=f2e2900]
+                - cell "OK_DEAL" [ref=f2e2902]
+                - cell "MAKE OFFER" [ref=f2e2903]
+                - cell "6.6" [ref=f2e2904]
+                - cell [ref=f2e2905]:
+                  - button "Why?" [ref=f2e2906] [cursor=pointer]
+                - cell "—" [ref=f2e2909]
+                - cell "No" [ref=f2e2910]
+                - cell "3h ago" [ref=f2e2911]
+              - row [ref=f2e2912]:
+                - cell [ref=f2e2913]:
+                  - img "AMD Ryzen 5 7600X Six Core 5.30GHz (Socket AM5) Processor - Retail" [ref=f2e2914]
+                - cell "Overclockers" [ref=f2e2915]
+                - cell [ref=f2e2917]:
+                  - img "New since the last scrape" [ref=f2e2918]
+                  - link "AMD Ryzen 5 7600X Six Core 5.30GHz (Socket AM5) Processor - Retail" [ref=f2e2920] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+5+7600X+Six+Core+5.30GHz+%28Socket+AM5%29+Processor+-+Retail
+                - cell "new" [ref=f2e2921]
+                - cell "£116.66" [ref=f2e2922]
+                - cell [ref=f2e2923]
+                - cell "£164.00" [ref=f2e2925]
+                - cell "£179.00" [ref=f2e2926]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2927]: £179.00
+                - cell "£221.76" [ref=f2e2928]
+                - cell "+£62 (+53%)" [ref=f2e2929]
+                - cell "OK_DEAL" [ref=f2e2931]
+                - cell "MAKE OFFER" [ref=f2e2932]
+                - cell "6.6" [ref=f2e2933]
+                - cell [ref=f2e2934]:
+                  - button "Why?" [ref=f2e2935] [cursor=pointer]
+                - cell "—" [ref=f2e2938]
+                - cell "No" [ref=f2e2939]
+                - cell "6h ago" [ref=f2e2940]
+              - row [ref=f2e2941]:
+                - cell [ref=f2e2942]:
+                  - img "AMD New Ryzen 7 9700X Processor 5.5GHz 8-Core 16-Thread 40MB Game Cache 4NM TDP 65W Socket AM5 Gaming CPU Zen 5" [ref=f2e2943]
+                - cell "aliexpress" [ref=f2e2944]
+                - cell [ref=f2e2946]:
+                  - img "New since the last scrape" [ref=f2e2947]
+                  - link "AMD New Ryzen 7 9700X Processor 5.5GHz 8-Core 16-Thread 40MB Game Cache 4NM TDP 65W Socket AM5 Gaming CPU Zen 5" [ref=f2e2949] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=AMD+New+Ryzen+7+9700X+Processor+5.5GHz+8-Core+16-Thread+40MB+Game+Cache+4NM+TDP+65W+Socket+AM5+Gaming+CPU+Zen+5
+                - cell "new" [ref=f2e2950]
+                - cell "£180.86" [ref=f2e2951]
+                - cell [ref=f2e2952]
+                - cell "£188.95" [ref=f2e2954]
+                - cell "£194.99" [ref=f2e2955]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2956]: £194.99
+                - cell "£199.99" [ref=f2e2957]
+                - cell "+£14 (+8%)" [ref=f2e2958]
+                - cell "OK_DEAL" [ref=f2e2960]
+                - cell "MAKE OFFER" [ref=f2e2961]
+                - cell "6.6" [ref=f2e2962]
+                - cell [ref=f2e2963]:
+                  - button "Why?" [ref=f2e2964] [cursor=pointer]
+                - cell "—" [ref=f2e2967]
+                - cell "No" [ref=f2e2968]
+                - cell "3h ago" [ref=f2e2969]
+              - row [ref=f2e2970]:
+                - cell [ref=f2e2971]:
+                  - img "R5 7500F AMD Used Ryzen 5 7500F 6C/12T 65W 5NM L3=32M 100-000000926 Socket AM5" [ref=f2e2972]
+                - cell "aliexpress" [ref=f2e2973]
+                - cell [ref=f2e2975]:
+                  - img "New since the last scrape" [ref=f2e2976]
+                  - link "R5 7500F AMD Used Ryzen 5 7500F 6C/12T 65W 5NM L3=32M 100-000000926 Socket AM5" [ref=f2e2978] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=R5+7500F+AMD+Used+Ryzen+5+7500F++6C%2F12T+65W+5NM+L3%3D32M+100-000000926+Socket+AM5
+                - cell "new" [ref=f2e2979]
+                - cell "£88.64" [ref=f2e2980]
+                - cell [ref=f2e2981]
+                - cell "£100.97" [ref=f2e2983]
+                - cell "£106.22" [ref=f2e2984]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e2985]: £106.22
+                - cell "£112.77" [ref=f2e2986]
+                - cell "+£18 (+20%)" [ref=f2e2987]
+                - cell "OK_DEAL" [ref=f2e2989]
+                - cell "MAKE OFFER" [ref=f2e2990]
+                - cell "6.6" [ref=f2e2991]
+                - cell [ref=f2e2992]:
+                  - button "Why?" [ref=f2e2993] [cursor=pointer]
+                - cell "—" [ref=f2e2996]
+                - cell "No" [ref=f2e2997]
+                - cell "3h ago" [ref=f2e2998]
+              - row [ref=f2e2999]:
+                - cell [ref=f2e3000]:
+                  - img "AMD Ryzen 9 9950X3D2 Dual Edition Sixteen Core 5.60GHz (Socket AM5) Processor - Retail" [ref=f2e3001]
+                - cell "Overclockers" [ref=f2e3002]
+                - cell [ref=f2e3004]:
+                  - img "New since the last scrape" [ref=f2e3005]
+                  - link "AMD Ryzen 9 9950X3D2 Dual Edition Sixteen Core 5.60GHz (Socket AM5) Processor - Retail" [ref=f2e3007] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+9+9950X3D2+Dual+Edition+Sixteen+Core+5.60GHz+%28Socket+AM5%29+Processor+-+Retail
+                - cell "new" [ref=f2e3008]
+                - cell "£647.50" [ref=f2e3009]
+                - cell [ref=f2e3010]
+                - cell "£789.98" [ref=f2e3012]
+                - cell "£789.98" [ref=f2e3013]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3014]: £789.98
+                - cell "£789.98" [ref=f2e3015]
+                - cell "+£142 (+22%)" [ref=f2e3016]
+                - cell "INSUFFICIENT_DATA" [ref=f2e3018]
+                - cell "INVESTIGATE" [ref=f2e3019]
+                - cell "6.6" [ref=f2e3020]
+                - cell [ref=f2e3021]:
+                  - button "Why?" [ref=f2e3022] [cursor=pointer]
+                - cell "—" [ref=f2e3025]
+                - cell "No" [ref=f2e3026]
+                - cell "6h ago" [ref=f2e3027]
+              - row [ref=f2e3028]:
+                - cell [ref=f2e3029]:
+                  - img "AMD Ryzen 5 7500X3D Six Core 4.5GHz (Socket AM5) Processor - Retail" [ref=f2e3030]
+                - cell "Overclockers" [ref=f2e3031]
+                - cell [ref=f2e3033]:
+                  - img "New since the last scrape" [ref=f2e3034]
+                  - link "AMD Ryzen 5 7500X3D Six Core 4.5GHz (Socket AM5) Processor - Retail" [ref=f2e3036] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+5+7500X3D+Six+Core+4.5GHz+%28Socket+AM5%29+Processor+-+Retail
+                - cell "new" [ref=f2e3037]
+                - cell "£166.66" [ref=f2e3038]
+                - cell [ref=f2e3039]
+                - cell "£199.99" [ref=f2e3041]
+                - cell "£199.99" [ref=f2e3042]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3043]: £199.99
+                - cell "£199.99" [ref=f2e3044]
+                - cell "+£33 (+20%)" [ref=f2e3045]
+                - cell "INSUFFICIENT_DATA" [ref=f2e3047]
+                - cell "INVESTIGATE" [ref=f2e3048]
+                - cell "6.6" [ref=f2e3049]
+                - cell [ref=f2e3050]:
+                  - button "Why?" [ref=f2e3051] [cursor=pointer]
+                - cell "—" [ref=f2e3054]
+                - cell "No" [ref=f2e3055]
+                - cell "6h ago" [ref=f2e3056]
+              - row [ref=f2e3057]:
+                - cell [ref=f2e3058]:
+                  - img "AMD Ryzen Threadripper PRO 9965WX (sTR5) 5.4GHz 24 Core/48 Thread Processor - Retail" [ref=f2e3059]
+                - cell "Overclockers" [ref=f2e3060]
+                - cell [ref=f2e3062]:
+                  - img "New since the last scrape" [ref=f2e3063]
+                  - link "AMD Ryzen Threadripper PRO 9965WX (sTR5) 5.4GHz 24 Core/48 Thread Processor - Retail" [ref=f2e3065] [cursor=pointer]:
+                    - /url: https://www.overclockers.co.uk/search?q=AMD+Ryzen+Threadripper+PRO+9965WX+%28sTR5%29+5.4GHz+24+Core%2F48+Thread+Processor+-+Retail
+                - cell "new" [ref=f2e3066]
+                - cell "£2124.99" [ref=f2e3067]
+                - cell [ref=f2e3068]
+                - cell "£2659.00" [ref=f2e3070]
+                - cell "£2659.00" [ref=f2e3071]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3072]: £2659.00
+                - cell "£2659.00" [ref=f2e3073]
+                - cell "+£534 (+25%)" [ref=f2e3074]
+                - cell "INSUFFICIENT_DATA" [ref=f2e3076]
+                - cell "INVESTIGATE" [ref=f2e3077]
+                - cell "6.6" [ref=f2e3078]
+                - cell [ref=f2e3079]:
+                  - button "Why?" [ref=f2e3080] [cursor=pointer]
+                - cell "—" [ref=f2e3083]
+                - cell "No" [ref=f2e3084]
+                - cell "6h ago" [ref=f2e3085]
+              - row [ref=f2e3086]:
+                - cell [ref=f2e3087]:
+                  - img "Intel Core i9-14900KS 14th gen Desktop Processor LGA 1700 3.2-6.2 GHz B+" [ref=f2e3088]
+                - cell "Amazon" [ref=f2e3089]
+                - cell [ref=f2e3091]:
+                  - img "New since the last scrape" [ref=f2e3092]
+                  - link "Intel Core i9-14900KS 14th gen Desktop Processor LGA 1700 3.2-6.2 GHz B+" [ref=f2e3094] [cursor=pointer]:
+                    - /url: https://www.amazon.co.uk/dp/B0CWVKMV7N
+                - cell "new" [ref=f2e3095]
+                - cell "£590.00" [ref=f2e3096]
+                - cell [ref=f2e3097]
+                - cell "£630.00" [ref=f2e3099]
+                - cell "£630.00" [ref=f2e3100]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3101]: £630.00
+                - cell "£630.00" [ref=f2e3102]
+                - cell "+£40 (+7%)" [ref=f2e3103]
+                - cell "INSUFFICIENT_DATA" [ref=f2e3105]
+                - cell "INVESTIGATE" [ref=f2e3106]
+                - cell "6.6" [ref=f2e3107]
+                - cell [ref=f2e3108]:
+                  - button "Why?" [ref=f2e3109] [cursor=pointer]
+                - cell "0" [ref=f2e3112]
+                - cell "No" [ref=f2e3113]
+                - cell "2h ago" [ref=f2e3114]
+              - row [ref=f2e3115]:
+                - cell [ref=f2e3116]:
+                  - img "intel CORE I7-14700K 3.40GHZ SKTLGA1700 33.00MB CACHE BOXED" [ref=f2e3117]
+                - cell "Amazon" [ref=f2e3118]
+                - cell [ref=f2e3120]:
+                  - img "New since the last scrape" [ref=f2e3121]
+                  - link "intel CORE I7-14700K 3.40GHZ SKTLGA1700 33.00MB CACHE BOXED" [ref=f2e3123] [cursor=pointer]:
+                    - /url: https://www.amazon.co.uk/dp/B0CGJ41C9W
+                - cell "new" [ref=f2e3124]
+                - cell "£337.00" [ref=f2e3125]
+                - cell [ref=f2e3126]
+                - cell "£369.00" [ref=f2e3128]
+                - cell "£369.00" [ref=f2e3129]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3130]: £369.00
+                - cell "£369.00" [ref=f2e3131]
+                - cell "+£32 (+9%)" [ref=f2e3132]
+                - cell "INSUFFICIENT_DATA" [ref=f2e3134]
+                - cell "INVESTIGATE" [ref=f2e3135]
+                - cell "6.6" [ref=f2e3136]
+                - cell [ref=f2e3137]:
+                  - button "Why?" [ref=f2e3138] [cursor=pointer]
+                - cell "—" [ref=f2e3141]
+                - cell "No" [ref=f2e3142]
+                - cell "2h ago" [ref=f2e3143]
+              - row [ref=f2e3144]:
+                - cell [ref=f2e3145]:
+                  - img "AMD Ryzen 7 3800x 3.9GHz 8 Core Processor | Gaming PC CPU" [ref=f2e3146]
+                - cell "eBay" [ref=f2e3147]
+                - cell [ref=f2e3149]:
+                  - img "New since the last scrape" [ref=f2e3150]
+                  - link "AMD Ryzen 7 3800x 3.9GHz 8 Core Processor | Gaming PC CPU" [ref=f2e3152] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/188676261053
+                - cell "new" [ref=f2e3153]
+                - cell "£156.70" [ref=f2e3154]
+                - cell [ref=f2e3155]
+                - cell "£190.00" [ref=f2e3157]
+                - cell "£190.00" [ref=f2e3158]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3159]: £190.00
+                - cell "£190.00" [ref=f2e3160]
+                - cell "+£33 (+21%)" [ref=f2e3161]
+                - cell "INSUFFICIENT_DATA" [ref=f2e3163]
+                - cell "INVESTIGATE" [ref=f2e3164]
+                - cell "6.6" [ref=f2e3165]
+                - cell [ref=f2e3166]:
+                  - button "Why?" [ref=f2e3167] [cursor=pointer]
+                - cell "0" [ref=f2e3170]
+                - cell "No" [ref=f2e3171]
+                - cell "3h ago" [ref=f2e3172]
+              - row [ref=f2e3173]:
+                - cell [ref=f2e3174]:
+                  - img "AMD Ryzen 7 9800X3D 8-Core 16-Thread Processor 4.7GHz 120W L3=96M DDR5 NEW Socket AM5 4NM R7 9800X3D but No Fan" [ref=f2e3175]
+                - cell "aliexpress" [ref=f2e3176]
+                - cell [ref=f2e3178]:
+                  - img "New since the last scrape" [ref=f2e3179]
+                  - link "AMD Ryzen 7 9800X3D 8-Core 16-Thread Processor 4.7GHz 120W L3=96M DDR5 NEW Socket AM5 4NM R7 9800X3D but No Fan" [ref=f2e3181] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+7+9800X3D+8-Core+16-Thread+Processor+4.7GHz+120W+L3%3D96M+DDR5+NEW+Socket+AM5+4NM+R7+9800X3D+but+No+Fan
+                - cell "new" [ref=f2e3182]
+                - cell "£302.72" [ref=f2e3183]
+                - cell [ref=f2e3184]
+                - cell "£318.09" [ref=f2e3186]
+                - cell "£319.99" [ref=f2e3187]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3188]: £319.99
+                - cell "£320.00" [ref=f2e3189]
+                - cell "+£17 (+6%)" [ref=f2e3190]
+                - cell "OK_DEAL" [ref=f2e3192]
+                - cell "MAKE OFFER" [ref=f2e3193]
+                - cell "6.5" [ref=f2e3194]
+                - cell [ref=f2e3195]:
+                  - button "Why?" [ref=f2e3196] [cursor=pointer]
+                - cell "—" [ref=f2e3199]
+                - cell "No" [ref=f2e3200]
+                - cell "3h ago" [ref=f2e3201]
+              - row [ref=f2e3202]:
+                - cell [ref=f2e3203]:
+                  - img "Intel Core i5 14400F 2.5GHz 10-Core 16-Thread LGA 1700 processor without cooler" [ref=f2e3204]
+                - cell "aliexpress" [ref=f2e3205]
+                - cell [ref=f2e3207]:
+                  - img "New since the last scrape" [ref=f2e3208]
+                  - link "Intel Core i5 14400F 2.5GHz 10-Core 16-Thread LGA 1700 processor without cooler" [ref=f2e3210] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=Intel+Core+i5+14400F+2.5GHz+10-Core+16-Thread+LGA+1700+processor+without+cooler
+                - cell "new" [ref=f2e3211]
+                - cell "£146.00" [ref=f2e3212]
+                - cell [ref=f2e3213]
+                - cell "£164.00" [ref=f2e3215]
+                - cell "£164.00" [ref=f2e3216]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3217]: £164.00
+                - cell "£164.00" [ref=f2e3218]
+                - cell "+£18 (+12%)" [ref=f2e3219]
+                - cell "INSUFFICIENT_DATA" [ref=f2e3221]
+                - cell "INVESTIGATE" [ref=f2e3222]
+                - cell "6.5" [ref=f2e3223]
+                - cell [ref=f2e3224]:
+                  - button "Why?" [ref=f2e3225] [cursor=pointer]
+                - cell "—" [ref=f2e3228]
+                - cell "No" [ref=f2e3229]
+                - cell "3h ago" [ref=f2e3230]
+              - row [ref=f2e3231]:
+                - cell [ref=f2e3232]:
+                  - img "AMD EPYC 7282 CPU 16-core 2.8GHz 32 thread 7nm 64MB 100-000000078 READ DESCRIP" [ref=f2e3233]
+                - cell "eBay" [ref=f2e3234]
+                - cell [ref=f2e3236]:
+                  - img "New since the last scrape" [ref=f2e3237]
+                  - link "AMD EPYC 7282 CPU 16-core 2.8GHz 32 thread 7nm 64MB 100-000000078 READ DESCRIP" [ref=f2e3239] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/188251564683
+                - cell "used" [ref=f2e3240]
+                - cell "£48.59" [ref=f2e3241]
+                - cell [ref=f2e3242]
+                - cell "£61.60" [ref=f2e3244]
+                - cell "£79.20" [ref=f2e3245]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3246]: £79.20
+                - cell "£84.48" [ref=f2e3247]
+                - cell "+£31 (+63%)" [ref=f2e3248]
+                - cell "OK_DEAL" [ref=f2e3250]
+                - cell "MAKE OFFER" [ref=f2e3251]
+                - cell "6.5" [ref=f2e3252]
+                - cell [ref=f2e3253]:
+                  - button "Why?" [ref=f2e3254] [cursor=pointer]
+                - cell "—" [ref=f2e3257]
+                - cell "No" [ref=f2e3258]
+                - cell "15h ago" [ref=f2e3259]
+              - row [ref=f2e3260]:
+                - cell [ref=f2e3261]:
+                  - img "AMD EPYC 7282 64MB 2.80HGz 16 Core/32 Threads Server CPU Processor Socket SP3" [ref=f2e3262]
+                - cell "eBay" [ref=f2e3263]
+                - cell [ref=f2e3265]:
+                  - img "New since the last scrape" [ref=f2e3266]
+                  - link "AMD EPYC 7282 64MB 2.80HGz 16 Core/32 Threads Server CPU Processor Socket SP3" [ref=f2e3268] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/307040012082
+                - cell "used" [ref=f2e3269]
+                - cell "£49.99" [ref=f2e3270]
+                - cell [ref=f2e3271]
+                - cell "£60.98" [ref=f2e3273]
+                - cell "£79.20" [ref=f2e3274]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3275]: £79.20
+                - cell "£84.48" [ref=f2e3276]
+                - cell "+£29 (+58%)" [ref=f2e3277]
+                - cell "OK_DEAL" [ref=f2e3279]
+                - cell "MAKE OFFER" [ref=f2e3280]
+                - cell "6.5" [ref=f2e3281]
+                - cell [ref=f2e3282]:
+                  - button "Why?" [ref=f2e3283] [cursor=pointer]
+                - cell "—" [ref=f2e3286]
+                - cell "No" [ref=f2e3287]
+                - cell "15h ago" [ref=f2e3288]
+              - row [ref=f2e3289]:
+                - cell [ref=f2e3290]:
+                  - img "Intel Core i9-14900K CPU, LGA1700, 24 Core, 32 Thread, Used Warranty Replacement" [ref=f2e3291]
+                - cell "eBay" [ref=f2e3292]
+                - cell [ref=f2e3294]:
+                  - img "New since the last scrape" [ref=f2e3295]
+                  - link "Intel Core i9-14900K CPU, LGA1700, 24 Core, 32 Thread, Used Warranty Replacement" [ref=f2e3297] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/267754967698
+                - cell "used" [ref=f2e3298]
+                - cell "£337.53" [ref=f2e3299]
+                - cell [ref=f2e3300]
+                - cell "£344.77" [ref=f2e3302]
+                - cell "£434.24" [ref=f2e3303]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3304]: £434.24
+                - cell "£489.27" [ref=f2e3305]
+                - cell "+£97 (+29%)" [ref=f2e3306]
+                - cell "OK_DEAL" [ref=f2e3308]
+                - cell "MAKE OFFER" [ref=f2e3309]
+                - cell "6.5" [ref=f2e3310]
+                - cell [ref=f2e3311]:
+                  - button "Why?" [ref=f2e3312] [cursor=pointer]
+                - cell "—" [ref=f2e3315]
+                - cell "No" [ref=f2e3316]
+                - cell "4h ago" [ref=f2e3317]
+              - row [ref=f2e3318]:
+                - cell [ref=f2e3319]
+                - cell "Scan.co.uk" [ref=f2e3320]
+                - cell [ref=f2e3322]:
+                  - img "New since the last scrape" [ref=f2e3323]
+                  - link "CompareQuick viewAMD Ryzen™ 5 4500, AM4, Zen 2, 6 Core, 12 Thread, 3.6GHz, 4.1GHz Turbo, 11MB Cache, PCIe 3.0, 65W, CPUAMD Ryzen 5 4500 6 Core AM4 CPU/Processor" [ref=f2e3325] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/LN125005
+                - cell "new" [ref=f2e3326]
+                - cell "£59.99" [ref=f2e3327]
+                - cell [ref=f2e3328]
+                - cell "£67.09" [ref=f2e3330]
+                - cell "£76.54" [ref=f2e3331]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3332]: £76.54
+                - cell "£91.71" [ref=f2e3333]
+                - cell "+£17 (+28%)" [ref=f2e3334]
+                - cell "OK_DEAL" [ref=f2e3336]
+                - cell "MAKE OFFER" [ref=f2e3337]
+                - cell "6.4" [ref=f2e3338]
+                - cell [ref=f2e3339]:
+                  - button "Why?" [ref=f2e3340] [cursor=pointer]
+                - cell "—" [ref=f2e3343]
+                - cell "No" [ref=f2e3344]
+                - cell "22h ago" [ref=f2e3345]
+              - row [ref=f2e3346]:
+                - cell [ref=f2e3347]:
+                  - img "New AMD Ryzen 7 7700X Socket AM5 but without cooler" [ref=f2e3348]
+                - cell "aliexpress" [ref=f2e3349]
+                - cell [ref=f2e3351]:
+                  - img "New since the last scrape" [ref=f2e3352]
+                  - link "New AMD Ryzen 7 7700X Socket AM5 but without cooler" [ref=f2e3354] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=New+AMD+Ryzen+7+7700X+Socket+AM5+but+without+cooler
+                - cell "new" [ref=f2e3355]
+                - cell "£172.72" [ref=f2e3356]
+                - cell [ref=f2e3357]
+                - cell "£181.89" [ref=f2e3359]
+                - cell "£193.07" [ref=f2e3360]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3361]: £193.07
+                - cell "£202.00" [ref=f2e3362]
+                - cell "+£20 (+12%)" [ref=f2e3363]
+                - cell "OK_DEAL" [ref=f2e3365]
+                - cell "MAKE OFFER" [ref=f2e3366]
+                - cell "6.3" [ref=f2e3367]
+                - cell [ref=f2e3368]:
+                  - button "Why?" [ref=f2e3369] [cursor=pointer]
+                - cell "—" [ref=f2e3372]
+                - cell "No" [ref=f2e3373]
+                - cell "3h ago" [ref=f2e3374]
+              - row [ref=f2e3375]:
+                - cell [ref=f2e3376]:
+                  - img "AMD Ryzen 5 5600X 6-Core Socket AM4 CPU Processor 3.7GHz 32MB L3" [ref=f2e3377]
+                - cell "eBay" [ref=f2e3378]
+                - cell [ref=f2e3380]:
+                  - img "New since the last scrape" [ref=f2e3381]
+                  - link "AMD Ryzen 5 5600X 6-Core Socket AM4 CPU Processor 3.7GHz 32MB L3" [ref=f2e3383] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/820014783742
+                - cell "used" [ref=f2e3384]
+                - cell "£93.26" [ref=f2e3385]
+                - cell [ref=f2e3386]
+                - cell "£86.50" [ref=f2e3388]
+                - cell "£107.34" [ref=f2e3389]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3390]: £107.34
+                - cell "£118.22" [ref=f2e3391]
+                - cell "+£14 (+15%)" [ref=f2e3392]
+                - cell "OK_DEAL" [ref=f2e3394]
+                - cell "MAKE OFFER" [ref=f2e3395]
+                - cell "6.3" [ref=f2e3396]
+                - cell [ref=f2e3397]:
+                  - button "Why?" [ref=f2e3398] [cursor=pointer]
+                - cell "—" [ref=f2e3401]
+                - cell "No" [ref=f2e3402]
+                - cell "15h ago" [ref=f2e3403]
+              - row [ref=f2e3404]:
+                - cell [ref=f2e3405]:
+                  - img "AMD Ryzen 7 7800X3D 4.2GHz L3=96M Processor 120W 8-Core 16-Thread R7 7800X3D Socket AM5 5NM DDR5 but No Fan" [ref=f2e3406]
+                - cell "aliexpress" [ref=f2e3407]
+                - cell [ref=f2e3409]:
+                  - img "New since the last scrape" [ref=f2e3410]
+                  - link "AMD Ryzen 7 7800X3D 4.2GHz L3=96M Processor 120W 8-Core 16-Thread R7 7800X3D Socket AM5 5NM DDR5 but No Fan" [ref=f2e3412] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+7+7800X3D+4.2GHz+L3%3D96M+Processor+120W+8-Core+16-Thread+R7+7800X3D+Socket+AM5+5NM+DDR5+but+No+Fan
+                - cell "new" [ref=f2e3413]
+                - cell "£200.53" [ref=f2e3414]
+                - cell [ref=f2e3415]
+                - cell "£208.70" [ref=f2e3417]
+                - cell "£209.49" [ref=f2e3418]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3419]: £209.49
+                - cell "£210.25" [ref=f2e3420]
+                - cell "+£9 (+4%)" [ref=f2e3421]
+                - cell "OK_DEAL" [ref=f2e3423]
+                - cell "MAKE OFFER" [ref=f2e3424]
+                - cell "6.3" [ref=f2e3425]
+                - cell [ref=f2e3426]:
+                  - button "Why?" [ref=f2e3427] [cursor=pointer]
+                - cell "—" [ref=f2e3430]
+                - cell "No" [ref=f2e3431]
+                - cell "3h ago" [ref=f2e3432]
+              - row [ref=f2e3433]:
+                - cell [ref=f2e3434]:
+                  - img "AMD Ryzen 5 5500X3D Processor (AM4, 6-Cores, 3.0 GHz, 96 MB L3 Cache) - Tray CPU" [ref=f2e3435]
+                - cell "eBay" [ref=f2e3436]
+                - cell [ref=f2e3438]:
+                  - img "New since the last scrape" [ref=f2e3439]
+                  - link "AMD Ryzen 5 5500X3D Processor (AM4, 6-Cores, 3.0 GHz, 96 MB L3 Cache) - Tray CPU" [ref=f2e3441] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/336725498135
+                - cell "new" [ref=f2e3442]
+                - cell "£165.00" [ref=f2e3443]
+                - cell [ref=f2e3444]
+                - cell "£156.78" [ref=f2e3446]
+                - cell "£181.24" [ref=f2e3447]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3448]: £181.24
+                - cell "£198.72" [ref=f2e3449]
+                - cell "+£16 (+10%)" [ref=f2e3450]
+                - cell "OK_DEAL" [ref=f2e3452]
+                - cell "MAKE OFFER" [ref=f2e3453]
+                - cell "6.2" [ref=f2e3454]
+                - cell [ref=f2e3455]:
+                  - button "Why?" [ref=f2e3456] [cursor=pointer]
+                - cell "—" [ref=f2e3459]
+                - cell "No" [ref=f2e3460]
+                - cell "3h ago" [ref=f2e3461]
+              - row [ref=f2e3462]:
+                - cell [ref=f2e3463]:
+                  - img "AMD Ryzen 5 Zen 3 5500 X3d 6 Core Socket AM4 CPU Tray" [ref=f2e3464]
+                - cell "eBay" [ref=f2e3465]
+                - cell [ref=f2e3467]:
+                  - img "New since the last scrape" [ref=f2e3468]
+                  - link "AMD Ryzen 5 Zen 3 5500 X3d 6 Core Socket AM4 CPU Tray" [ref=f2e3470] [cursor=pointer]:
+                    - /url: https://www.ebay.co.uk/itm/227478441606
+                - cell "new" [ref=f2e3471]
+                - cell "£159.00" [ref=f2e3472]
+                - cell [ref=f2e3473]
+                - cell "£170.00" [ref=f2e3475]
+                - cell "£175.00" [ref=f2e3476]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3477]: £175.00
+                - cell "£177.50" [ref=f2e3478]
+                - cell "+£16 (+10%)" [ref=f2e3479]
+                - cell "OK_DEAL" [ref=f2e3481]
+                - cell "MAKE OFFER" [ref=f2e3482]
+                - cell "6.2" [ref=f2e3483]
+                - cell [ref=f2e3484]:
+                  - button "Why?" [ref=f2e3485] [cursor=pointer]
+                - cell "—" [ref=f2e3488]
+                - cell "No" [ref=f2e3489]
+                - cell "4h ago" [ref=f2e3490]
+              - row [ref=f2e3491]:
+                - cell [ref=f2e3492]:
+                  - img "Ryzen 9 9900X AMD R9 9900X New Processor 5.6GHz 12-Core 24-Thread 76MB Game Cache 4NM TDP 120W Socket AM5 Gaming CPU Zen 5" [ref=f2e3493]
+                - cell "aliexpress" [ref=f2e3494]
+                - cell [ref=f2e3496]:
+                  - img "New since the last scrape" [ref=f2e3497]
+                  - link "Ryzen 9 9900X AMD R9 9900X New Processor 5.6GHz 12-Core 24-Thread 76MB Game Cache 4NM TDP 120W Socket AM5 Gaming CPU Zen 5" [ref=f2e3499] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=Ryzen+9+9900X+AMD+R9+9900X+New+Processor+5.6GHz+12-Core+24-Thread+76MB+Game+Cache+4NM+TDP+120W+Socket+AM5+Gaming+CPU+Zen+5
+                - cell "new" [ref=f2e3500]
+                - cell "£320.45" [ref=f2e3501]
+                - cell [ref=f2e3502]
+                - cell "£292.00" [ref=f2e3504]
+                - cell "£335.65" [ref=f2e3505]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3506]: £335.65
+                - cell "£380.37" [ref=f2e3507]
+                - cell "+£15 (+5%)" [ref=f2e3508]
+                - cell "OK_DEAL" [ref=f2e3510]
+                - cell "MAKE OFFER" [ref=f2e3511]
+                - cell "6.2" [ref=f2e3512]
+                - cell [ref=f2e3513]:
+                  - button "Why?" [ref=f2e3514] [cursor=pointer]
+                - cell "—" [ref=f2e3517]
+                - cell "No" [ref=f2e3518]
+                - cell "3h ago" [ref=f2e3519]
+              - row [ref=f2e3520]:
+                - cell [ref=f2e3521]:
+                  - img "AMD Ryzensets 9 7900X Processor (integrated Radeon Graphics, 12 cores/24 threads, 170W TDP, AM5 Socket, 76MB cache, up to 5.6 GHz max boost, no cooler)" [ref=f2e3522]
+                - cell "Amazon" [ref=f2e3523]
+                - cell [ref=f2e3525]:
+                  - img "New since the last scrape" [ref=f2e3526]
+                  - link "AMD Ryzensets 9 7900X Processor (integrated Radeon Graphics, 12 cores/24 threads, 170W TDP, AM5 Socket, 76MB cache, up to 5.6 GHz max boost, no cooler)" [ref=f2e3528] [cursor=pointer]:
+                    - /url: https://www.amazon.co.uk/dp/B0BBJ59WJ4
+                - cell "new" [ref=f2e3529]
+                - cell "£254.00" [ref=f2e3530]
+                - cell [ref=f2e3531]
+                - cell "£268.92" [ref=f2e3533]
+                - cell "£277.00" [ref=f2e3534]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3535]: £277.00
+                - cell "£284.52" [ref=f2e3536]
+                - cell "+£23 (+9%)" [ref=f2e3537]
+                - cell "OK_DEAL" [ref=f2e3539]
+                - cell "MAKE OFFER" [ref=f2e3540]
+                - cell "6.2" [ref=f2e3541]
+                - cell [ref=f2e3542]:
+                  - button "Why?" [ref=f2e3543] [cursor=pointer]
+                - cell "—" [ref=f2e3546]
+                - cell "No" [ref=f2e3547]
+                - cell "2h ago" [ref=f2e3548]
+              - row [ref=f2e3549]:
+                - cell [ref=f2e3550]:
+                  - img "AMD Ryzen 5 5600X 3.7GHz 6-Core 12-Thread 7NM R5 5600X Socket AM4 L3=32M Processor 65W DDR4 No cooler" [ref=f2e3551]
+                - cell "aliexpress" [ref=f2e3552]
+                - cell [ref=f2e3554]:
+                  - img "New since the last scrape" [ref=f2e3555]
+                  - link "AMD Ryzen 5 5600X 3.7GHz 6-Core 12-Thread 7NM R5 5600X Socket AM4 L3=32M Processor 65W DDR4 No cooler" [ref=f2e3557] [cursor=pointer]:
+                    - /url: https://www.aliexpress.com/wholesale?SearchText=AMD+Ryzen+5+5600X+3.7GHz+6-Core+12-Thread+7NM+R5+5600X+Socket+AM4+L3%3D32M+Processor+65W+DDR4+No+cooler
+                - cell "new" [ref=f2e3558]
+                - cell "£113.51" [ref=f2e3559]
+                - cell [ref=f2e3560]
+                - cell "£118.18" [ref=f2e3562]
+                - cell "£123.44" [ref=f2e3563]:
+                  - generic "Median of the robust, same-condition comparable cohort used by classification." [ref=f2e3564]: £123.44
+                - cell "£128.67" [ref=f2e3565]
+                - cell "+£10 (+9%)" [ref=f2e3566]
+                - cell "OK_DEAL" [ref=f2e3568]
+                - cell "MAKE OFFER" [ref=f2e3569]
+                - cell "6.2" [ref=f2e3570]
+                - cell [ref=f2e3571]:
+                  - button "Why?" [ref=f2e3572] [cursor=pointer]
+                - cell "—" [ref=f2e3575]
+                - cell "No" [ref=f2e3576]
+                - cell "3h ago" [ref=f2e3577]
+          - group "Stock condition lane" [ref=f2e3578]:
+            - button "All stock 17982 Every retained sourcing opportunity" [pressed] [ref=f2e3579] [cursor=pointer]:
+              - generic [ref=f2e3580]:
+                - generic [ref=f2e3581]: All stock
+                - generic [ref=f2e3582]: "17982"
+              - generic [ref=f2e3583]: Every retained sourcing opportunity
+            - button "New build stock 9343 Factory-new components suitable for an all-new build" [ref=f2e3584] [cursor=pointer]:
+              - generic [ref=f2e3585]:
+                - generic [ref=f2e3586]: New build stock
+                - generic [ref=f2e3587]: "9343"
+              - generic [ref=f2e3588]: Factory-new components suitable for an all-new build
+            - button "Open-box / B-grade 0 Refurbished, open-box and new-other stock requiring disclosure" [ref=f2e3589] [cursor=pointer]:
+              - generic [ref=f2e3590]:
+                - generic [ref=f2e3591]: Open-box / B-grade
+                - generic [ref=f2e3592]: "0"
+              - generic [ref=f2e3593]: Refurbished, open-box and new-other stock requiring disclosure
+            - button "Used flip opportunities 6617 Pre-owned components for value-led or refurbished builds" [ref=f2e3594] [cursor=pointer]:
+              - generic [ref=f2e3595]:
+                - generic [ref=f2e3596]: Used flip opportunities
+                - generic [ref=f2e3597]: "6617"
+              - generic [ref=f2e3598]: Pre-owned components for value-led or refurbished builds
+      - button [ref=f2e61]:
+        - img "Hermes" [ref=f2e62]
+  - generic [ref=f2e67] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=f2e68]
+    - generic [ref=f2e169]:
+      - button "Open issues overlay" [ref=f2e170]:
+        - generic [ref=f2e171]:
+          - generic [ref=f2e172]: "1"
+          - generic [ref=f2e173]: "2"
+        - generic [ref=f2e174]:
+          - text: Issue
+          - generic [ref=f2e175]: s
+      - button "Collapse issues badge" [ref=f2e176]
+  - alert [ref=f2e179]
+  - generic [ref=f2e3599]: "0"

@@ -905,12 +905,11 @@ function ConditionBadge({ condition }: { condition?: string | null }) {
   );
 }
 
-// Only ever compares like-for-like: a "new" listing's price variance is
-// measured against market_new_price, everything else (used, refurbished,
-// for parts, unknown) against market_used_price — never new vs. used.
+// Phase 2 classifies against the robust same-condition median. Keep the table
+// variance anchored to that same value so the displayed economics agree with
+// the classification rather than legacy new/used asking-price fields.
 function priceVariance(listing: Listing): { amount: number; percent: number } | null {
-  const isNew = (listing.condition ?? "").toLowerCase().includes("new");
-  const marketPrice = isNew ? listing.market_new_price : listing.market_used_price;
+  const marketPrice = listing.market_median_price ?? listing.conservative_resale_price;
   if (marketPrice == null || listing.delivered_price <= 0) return null;
   const amount = marketPrice - listing.delivered_price;
   return { amount, percent: (amount / listing.delivered_price) * 100 };
@@ -1228,7 +1227,7 @@ function compareSortValue(a: Listing, b: Listing, key: SortKey): number {
   if (typeof av === "string" || typeof bv === "string") {
     return String(av).localeCompare(String(bv));
   }
-  return (av as number) - (bv as number);
+  return Number(av) - Number(bv);
 }
 
 function SortHeader({
@@ -1559,16 +1558,16 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                 <SortHeader label="Condition" sortKey="condition" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} />
                 <SortHeader label="Listing Price" sortKey="delivered_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
                 <th className="p-3 text-left text-slate-200 font-semibold">Price History</th>
-                <SortHeader label="Market New" sortKey="market_new_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
-                <SortHeader label="Conservative Resale" sortKey="conservative_resale_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
-                <SortHeader label="Variance" sortKey="price_variance" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
+                <SortHeader label="Market Low" sortKey="market_lower_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
+                <SortHeader label="Median Resale" sortKey="market_median_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
+                <SortHeader label="Market High" sortKey="market_upper_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
+                <SortHeader label="Vs Median" sortKey="price_variance" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
                 <SortHeader label="Classification" sortKey="classification" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} />
                 <SortHeader label="Decision" sortKey="decision" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} />
                 <SortHeader label="Score" sortKey="deal_score" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
                 <th className="p-3 text-left text-slate-200 font-semibold">Evidence</th>
                 <SortHeader label="Watches" sortKey="watch_count" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
-                <SortHeader label="Bids" sortKey="bid_count" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
-                <SortHeader label="Released" sortKey="release_year" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
+                <SortHeader label="Offers" sortKey="best_offer_enabled" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
                 <SortHeader label="Last Seen" sortKey="listing_observed_at" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
               </tr>
             </thead>
@@ -1624,18 +1623,17 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                       <PriceHistorySparkline listingId={listing.listing_id} listingTitle={listing.title} />
                     </td>
                     <td className="p-3 text-right text-slate-100">
-                      {listing.market_new_price ? (
-                        `£${listing.market_new_price.toFixed(2)}`
-                      ) : (
-                        "—"
-                      )}
+                      {listing.market_lower_price == null ? "—" : `£${listing.market_lower_price.toFixed(2)}`}
                     </td>
                     <td className="p-3 text-right text-slate-100">
-                      {listing.conservative_resale_price ? (
-                        <span title="Lower quartile of the robust, same-condition, completed-sale cohort after subject-listing exclusion and outlier controls.">
-                          £{listing.conservative_resale_price.toFixed(2)}
+                      {(listing.market_median_price ?? listing.conservative_resale_price) != null ? (
+                        <span title="Median of the robust, same-condition comparable cohort used by classification.">
+                          £{(listing.market_median_price ?? listing.conservative_resale_price)!.toFixed(2)}
                         </span>
                       ) : "—"}
+                    </td>
+                    <td className="p-3 text-right text-slate-100">
+                      {listing.market_upper_price == null ? "—" : `£${listing.market_upper_price.toFixed(2)}`}
                     </td>
                     <td className="p-3 text-right">
                       <PriceVarianceCell listing={listing} />
@@ -1665,11 +1663,8 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                     <td className="p-3 text-right text-cyan-300">
                       {listing.watch_count ?? "—"}
                     </td>
-                    <td className="p-3 text-right text-yellow-300">
-                      {listing.bid_count ?? "—"}
-                    </td>
-                    <td className="p-3 text-right text-slate-400">
-                      {listing.release_year ?? "—"}
+                    <td className={`p-3 text-right ${listing.best_offer_enabled ? "text-emerald-300" : "text-slate-500"}`}>
+                      {listing.best_offer_enabled ? "Yes" : "No"}
                     </td>
                     <td className="p-3 text-right text-slate-400 whitespace-nowrap">
                       {formatLastSeen(listing.listing_observed_at)}

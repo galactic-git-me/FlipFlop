@@ -664,7 +664,7 @@ async def get_scored_listings_current(
     most recent scored row.
     """
     from datetime import datetime, timedelta, timezone
-    from sqlalchemy import select, func
+    from sqlalchemy import select, func, text
 
     cutoff = datetime.now(timezone.utc) - timedelta(seconds=120)
 
@@ -780,7 +780,7 @@ async def get_scored_listings_latest_run(
     Historical and auction rows remain in the database for evidence and
     Auction Intel, but are never actionable sourcing cards.
     """
-    from sqlalchemy import select, func
+    from sqlalchemy import select, func, text
 
     actionable_ids = await get_active_buy_it_now_listing_ids(db)
     if not actionable_ids:
