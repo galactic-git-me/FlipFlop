@@ -26,6 +26,7 @@ from app.gem_radar import identity as identity_mod
 from app.gem_radar.inventory_match import fetch_inventory_awareness
 from app.gem_radar.marketplace import fallback_listing_url, infer_marketplace
 from app.gem_radar.observations import (
+    get_active_buy_it_now_listing_ids,
     get_active_listing_ids,
     get_current_scan_interval_minutes,
     get_observation_history,
@@ -427,10 +428,14 @@ async def _fetch_best_gem(db: AsyncSession, since, require_modern: bool = False)
     in title text rather than a column postgres can filter on directly."""
     from sqlalchemy import select
 
+    actionable_ids = await get_active_buy_it_now_listing_ids(db)
+    if not actionable_ids:
+        return None
     query = (
         select(GemRadarScoredListing)
         .where(
-            GemRadarScoredListing.scored_at >= since,
+            GemRadarScoredListing.listing_id.in_(actionable_ids),
+            GemRadarScoredListing.listing_observed_at >= since,
             GemRadarScoredListing.category.in_(_CORE_CATEGORIES),
             GemRadarScoredListing.classification.in_(("GEM", "SUPER_GEM")),
         )
@@ -551,7 +556,7 @@ async def get_scored_listings(
     """
     from sqlalchemy import select, func, text
 
-    active_ids = await get_active_listing_ids(db)
+    active_ids = await get_active_buy_it_now_listing_ids(db)
     if not active_ids:
         return []
 
@@ -772,13 +777,16 @@ async def get_scored_listings_latest_run(
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
 ) -> list[dict]:
-    """Get all scored listings from the latest/current run, regardless of active status.
+    """Get the latest scored row for every active fixed-price listing.
 
-    Returns all listings in the most recent search run (identified by the most recent
-    scored_at timestamp across any search_run_id), enabling dashboard stats to reflect
-    the full current run's progress.
+    Historical and auction rows remain in the database for evidence and
+    Auction Intel, but are never actionable sourcing cards.
     """
     from sqlalchemy import select, func
+
+    actionable_ids = await get_active_buy_it_now_listing_ids(db)
+    if not actionable_ids:
+        return []
 
     # Get the most recent search_run_id
     latest_run_query = (
@@ -799,7 +807,10 @@ async def get_scored_listings_latest_run(
             GemRadarScoredListing.listing_id,
             func.max(GemRadarScoredListing.scored_at).label("scored_at"),
         )
-        .where(GemRadarScoredListing.search_run_id == latest_run_id)
+        .where(
+            GemRadarScoredListing.search_run_id == latest_run_id,
+            GemRadarScoredListing.listing_id.in_(actionable_ids),
+        )
         .group_by(GemRadarScoredListing.listing_id)
         .subquery()
     )
@@ -1442,10 +1453,14 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
     """Best gem for a specific component category, sorted by deal_score."""
     from sqlalchemy import select
 
+    actionable_ids = await get_active_buy_it_now_listing_ids(db)
+    if not actionable_ids:
+        return None
     query = (
         select(GemRadarScoredListing)
         .where(
-            GemRadarScoredListing.scored_at >= since,
+            GemRadarScoredListing.listing_id.in_(actionable_ids),
+            GemRadarScoredListing.listing_observed_at >= since,
             GemRadarScoredListing.category == category,
             GemRadarScoredListing.classification.in_(("GEM", "SUPER_GEM")),
         )

@@ -77,6 +77,25 @@ async def get_active_listing_ids(db: AsyncSession) -> set[str]:
     )
     return {row[0] for row in result.all()}
 
+
+async def get_active_buy_it_now_listing_ids(db: AsyncSession) -> set[str]:
+    """Currently observed fixed-price listings suitable for sourcing cards.
+
+    Auction lots belong in Auction Intel, never Gem-of-Day/component cards.
+    This reads the sighting ledger because the scored table does not retain
+    listing_type and a bulk rescore can make an old row's scored_at look new.
+    """
+    cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
+    result = await db.execute(
+        select(GemRadarListingObservation.listing_id)
+        .where(
+            GemRadarListingObservation.observed_at >= cutoff.replace(tzinfo=None),
+            GemRadarListingObservation.listing_type == "buy_it_now",
+        )
+        .distinct()
+    )
+    return {row[0] for row in result.all()}
+
 # How similar two titles from the same seller must be (token-overlap ratio)
 # before a new listing_id is treated as a likely relisting of an old one.
 _RELISTING_TITLE_SIMILARITY_THRESHOLD = 0.6
