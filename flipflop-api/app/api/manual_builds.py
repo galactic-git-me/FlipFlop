@@ -42,6 +42,7 @@ from app.services.parcel2go_booking import (
     Parcel2GoBookingError,
 )
 from app.services.ebay_shipping_fulfillment import mark_order_shipped, EbayShippingFulfillmentError
+from app.services.ebay_listing_withdraw import withdraw_listing_by_sku, EbayListingWithdrawError
 from app.services.cross_channel_guard import withdraw_storefront_for_sold_build
 from app.services.media_sync import sync_to_public_media
 from app.config import get_settings
@@ -947,6 +948,66 @@ async def update_ebay_config(
     build.updated_at = datetime.utcnow()
     await db.flush()
     await db.refresh(build)
+    return build
+
+
+@router.delete("/{build_id}/ebay-listing", response_model=ManualBuildOut)
+async def end_ebay_listing(build_id: int, db: AsyncSession = Depends(get_db)):
+    """End the live eBay offer while preserving the build for editing/relisting."""
+    import structlog
+
+    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
+    build = result.scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if not build.ebay_listing_id:
+        raise HTTPException(409, "This build does not have a live eBay listing to end")
+    if not build.ebay_sku:
+        raise HTTPException(
+            409,
+            "This listing has no saved eBay SKU, so it cannot be ended safely from FlipFlop",
+        )
+
+    listing_id = build.ebay_listing_id
+    sku = build.ebay_sku
+    settings = get_settings()
+    log = structlog.get_logger(__name__)
+
+    try:
+        await withdraw_listing_by_sku(sku, environment=settings.ebay_listing_environment)
+    except EbayListingWithdrawError as exc:
+        log.error(
+            "manual_build.ebay_listing_end_failed",
+            build_id=build_id,
+            listing_id=listing_id,
+            sku=sku,
+            ebay_status=exc.status_code,
+        )
+        raise HTTPException(
+            502,
+            "eBay could not end the listing. Nothing was changed in FlipFlop; please try again.",
+        ) from exc
+
+    # Only clear the local live-listing link after eBay confirms withdrawal.
+    # Generated content, photos, item specifics and selling configuration stay
+    # on the build so it can be corrected and published as a fresh listing.
+    build.ebay_listing_id = None
+    build.ebay_listing_url = None
+    build.ebay_sku = None
+    build.deferred_publish_at = None
+    if build.status == "listed":
+        build.status = "built"
+    build.updated_at = datetime.utcnow()
+    await db.flush()
+    await db.refresh(build)
+    build.ebay_live = False
+
+    log.info(
+        "manual_build.ebay_listing_ended",
+        build_id=build_id,
+        listing_id=listing_id,
+        sku=sku,
+    )
     return build
 
 

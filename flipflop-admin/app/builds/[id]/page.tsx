@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeft, CheckCircle2, Circle, Hammer, Sparkles, ExternalLink,
   Loader2, ShoppingBag, ImagePlus, Star, X, IdCard, BadgeCheck, Store, Download, Zap,
-  CalendarClock, Truck,
+  CalendarClock, Truck, AlertTriangle,
 } from "lucide-react";
 import { Toaster, toast } from "sonner";
 import confetti from "canvas-confetti";
@@ -116,6 +116,8 @@ export default function BuildDetailPage() {
   const [draggedUrl, setDraggedUrl] = useState<string | null>(null);
   const [dragOverUrl, setDragOverUrl] = useState<string | null>(null);
   const [showEbayPreview, setShowEbayPreview] = useState(false);
+  const [showEndEbayConfirm, setShowEndEbayConfirm] = useState(false);
+  const [endingEbayListing, setEndingEbayListing] = useState(false);
   const [componentRatings, setComponentRatings] = useState<Record<string, number>>({});
   const [savingRatings, setSavingRatings] = useState(false);
 
@@ -425,6 +427,22 @@ export default function BuildDetailPage() {
     }
   };
 
+  const endEbayListing = async () => {
+    if (!build?.ebay_live) return;
+    setEndingEbayListing(true);
+    try {
+      const saved = await api.manualBuilds.endEbayListing(buildId);
+      setBuild(saved);
+      setDeferredAt("");
+      setShowEndEbayConfirm(false);
+      toast.success("The eBay listing has ended. This build is ready to edit and relist.");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not end the eBay listing");
+    } finally {
+      setEndingEbayListing(false);
+    }
+  };
+
   const saveDeferredSchedule = async () => {
     // The scheduled job runs unattended, so it needs a price already saved
     // on the build (there's no one there to type it in when the time
@@ -523,11 +541,9 @@ export default function BuildDetailPage() {
             onPreviewEbay={build.generated_title && build.generated_description ? () => setShowEbayPreview(true) : undefined}
             onPublishEbay={postToEbay}
             onUpdateEbay={postToEbay}
-            onDeleteEbay={() => {
-              // TODO: implement delete listing
-              alert("Delete listing not yet implemented");
-            }}
+            onDeleteEbay={() => setShowEndEbayConfirm(true)}
             isLoading={generating || posting || markingBuilt}
+            isDeletingEbay={endingEbayListing}
           />
         )}
 
@@ -1242,6 +1258,54 @@ export default function BuildDetailPage() {
           onClose={() => setShowEbayPreview(false)}
           isModal={true}
         />
+      )}
+
+      {showEndEbayConfirm && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 px-4 backdrop-blur-sm"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget && !endingEbayListing) setShowEndEbayConfirm(false);
+          }}
+        >
+          <div
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="end-ebay-title"
+            aria-describedby="end-ebay-description"
+            className="w-full max-w-md rounded-2xl border border-red-500/25 bg-[#0b1422] p-6 shadow-2xl shadow-black/50"
+          >
+            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-red-500/10 text-red-400">
+              <AlertTriangle className="h-5 w-5" />
+            </div>
+            <h2 id="end-ebay-title" className="text-lg font-bold text-white">End this eBay listing?</h2>
+            <p id="end-ebay-description" className="mt-2 text-sm leading-6 text-slate-400">
+              Item {build.ebay_listing_id} will stop being available on eBay immediately. Its views and watchers will not carry over to a new listing.
+            </p>
+            <p className="mt-3 rounded-lg border border-cyan-500/15 bg-cyan-500/[0.06] px-3 py-2.5 text-xs leading-5 text-cyan-100/80">
+              The build, photos, listing copy, item specifics and price settings will stay here so you can correct them before relisting.
+            </p>
+            <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={() => setShowEndEbayConfirm(false)}
+                disabled={endingEbayListing}
+                className="cursor-pointer rounded-lg border border-white/10 px-4 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Keep listing live
+              </button>
+              <button
+                type="button"
+                onClick={endEbayListing}
+                disabled={endingEbayListing}
+                autoFocus
+                className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {endingEbayListing && <Loader2 className="h-4 w-4 animate-spin" />}
+                {endingEbayListing ? "Ending listing…" : "End listing on eBay"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

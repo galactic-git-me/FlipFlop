@@ -21,6 +21,7 @@ interface CommandPanelProps {
   onDeleteEbay?: () => void;
   onCreateNew?: (platform: string) => void;
   isLoading?: boolean;
+  isDeletingEbay?: boolean;
 }
 
 type ActionAccent = "blue" | "amber" | "red" | "green";
@@ -87,6 +88,7 @@ export function CommandPanel({
   onUpdateEbay,
   onDeleteEbay,
   isLoading = false,
+  isDeletingEbay = false,
 }: CommandPanelProps) {
   const ebayStatus = listingStatuses.find((s) => s.platform === "ebay");
 
@@ -114,7 +116,7 @@ export function CommandPanel({
       {ebayStatus?.isListed ? (
         <>
           <RailButton label="Update eBay listing" icon={Send} onClick={onUpdateEbay} disabled={isLoading} isLoading={isLoading} accent="amber" />
-          <RailButton label="Delete eBay listing" icon={Trash2} onClick={onDeleteEbay} disabled={isLoading} isLoading={isLoading} accent="red" />
+          <RailButton label="End eBay listing" icon={Trash2} onClick={onDeleteEbay} disabled={isLoading || isDeletingEbay} isLoading={isDeletingEbay} accent="red" />
         </>
       ) : (
         <RailButton label="Create eBay listing" icon={Plus} onClick={onPublishEbay} disabled={isLoading} isLoading={isLoading} accent="green" />

@@ -650,6 +650,8 @@ export const api = {
         `/manual-builds/${id}/post-to-ebay`,
         { method: "POST", body: JSON.stringify(data) },
       ),
+    endEbayListing: (id: number) =>
+      request<ManualBuild>(`/manual-builds/${id}/ebay-listing`, { method: "DELETE" }),
     uploadPhotos: async (id: number, files: File[], kind: "photo" | "performance_card" = "photo"): Promise<ManualBuild> => {
       const formData = new FormData();
       for (const f of files) formData.append("files", f);
