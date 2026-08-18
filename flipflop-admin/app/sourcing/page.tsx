@@ -401,10 +401,12 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
         ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
           {sortScansByDefinitionOrder(displayedScans).map((scan) => {
-            // Read configured vendors from search settings (stored in database).
-            // Fall back to all vendors if the search has no specific configuration.
-            // This allows per-search-term flexibility: each search defines its own vendor set.
-            const searchConfiguredVendors = scan.configuredVendors || VENDOR_ORDER;
+            // Only render zeroes for vendors the API says were explicitly
+            // configured for this search.  When that metadata is absent, showing
+            // every vendor in VENDOR_ORDER invents a row of zeroes for sources
+            // that may never have been queried; in that case, show only vendors
+            // that are actually present in byVendor.
+            const searchConfiguredVendors = scan.configuredVendors;
             // Render every vendor byVendor actually reports, not just the ones
             // in the hardcoded VENDOR_ORDER list -- a source key that isn't in
             // that list (e.g. "unknown", or a newly-scraped marketplace not
@@ -412,8 +414,10 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             // while still counting toward the gauges' denominator above,
             // making the displayed vendor sum quietly undercount the total.
             const knownVendorEntries = VENDOR_ORDER
-              .filter((v) => searchConfiguredVendors.includes(v))
-              .map((v): [string, number] => [v, scan.byVendor?.[v] ?? 0]);
+              .filter((v) => searchConfiguredVendors
+                ? searchConfiguredVendors.includes(v)
+                : Object.prototype.hasOwnProperty.call(scan.byVendor || {}, v))
+              .map((v): [string, number] => [v, scan.byVendor[v] ?? 0]);
             const extraVendorEntries = Object.entries(scan.byVendor || {})
               .filter(([v, count]) => count > 0 && !(VENDOR_ORDER as readonly string[]).includes(v))
               .sort((a, b) => b[1] - a[1]);
