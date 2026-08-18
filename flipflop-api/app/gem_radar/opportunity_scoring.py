@@ -41,7 +41,7 @@ class OpportunityPolicy:
     packaging_cost: float = 6.0
     testing_refurbishment_cost: float = 10.0
     returns_warranty_pct: float = 5.0
-    minimum_sold_comps: int = 5
+    minimum_sold_comps: int = 3
     minimum_source_diversity: int = 2
     sold_lookback_days: int = 90
     super_discount_pct: float = -30.0
@@ -66,11 +66,11 @@ def category_economics(category: str, policy: OpportunityPolicy) -> CategoryEcon
     hurdle. Complete systems continue to use the configured global policy.
     """
     if category in {"cpu", "ram", "ssd", "cooler", "fan"}:
-        return CategoryEconomics(15.0, 50.0, 5.0, 18.0, 80.0, 60.0)
+        return CategoryEconomics(15.0, 35.0, 5.0, 18.0, 80.0, 60.0)
     if category in {"motherboard", "psu", "case"}:
-        return CategoryEconomics(25.0, 40.0, 10.0, 20.0, 82.0, 65.0)
+        return CategoryEconomics(25.0, 30.0, 10.0, 20.0, 82.0, 65.0)
     if category == "gpu":
-        return CategoryEconomics(40.0, 30.0, 20.0, 18.0, 83.0, 70.0)
+        return CategoryEconomics(40.0, 25.0, 20.0, 18.0, 83.0, 70.0)
     return CategoryEconomics(
         policy.super_profit, policy.super_roi_pct, policy.gem_profit,
         policy.gem_roi_pct, policy.super_score, policy.gem_score,
@@ -359,21 +359,25 @@ def score_opportunity(
     # packaging, eBay fees and whole-build QA are charged once by the build
     # economics layer. Applying them to every part double-counts those costs.
     shipping = 0.0 if is_component else (policy.delivery_fallback if delivery_cost is None else delivery_cost)
-    ebay_fee = 0.0 if is_component else market.conservative_resale * policy.ebay_fee_pct / 100.0
+    # Median is the operational resale basis. The lower and upper quartiles
+    # remain available on RobustMarket for downside/upside display, but deal
+    # tier, profit, ROI and walk-away price must all use one coherent basis.
+    resale_value = market.median
+    ebay_fee = 0.0 if is_component else resale_value * policy.ebay_fee_pct / 100.0
     packaging = 0.0 if is_component else policy.packaging_cost
     testing = (0.0 if is_new else 3.0) if is_component else policy.testing_refurbishment_cost
     warranty_pct = (0.5 if is_new else 2.0) if is_component else policy.returns_warranty_pct
-    warranty = market.conservative_resale * warranty_pct / 100.0
+    warranty = resale_value * warranty_pct / 100.0
     costs = {
         "purchase": listing_price, "delivery": shipping, "ebay_fee": ebay_fee,
         "packaging": packaging, "testing_refurbishment": testing,
         "returns_warranty_reserve": warranty,
     }
     total_cost = sum(costs.values())
-    profit = market.conservative_resale - total_cost
+    profit = resale_value - total_cost
     roi = profit / total_cost * 100.0 if total_cost > 0 else 0.0
     non_purchase_cost = total_cost - listing_price
-    walk_away = max(0.0, market.conservative_resale / 1.25 - non_purchase_cost)
+    walk_away = max(0.0, resale_value / 1.25 - non_purchase_cost)
     economic_score = max(0.0, min(100.0, (roi / economics.super_roi_pct) * 55.0 + (profit / economics.super_profit) * 45.0))
     total_score = economic_score * .45 + liquidity * .20 + desirability * .15 + market.confidence * .15 + risk * .05
     provisional_evidence = "preliminary_sold_cohort" in risk_flags
@@ -382,7 +386,7 @@ def score_opportunity(
     eligible = not risk_flags
     evidence_label = "completed sales" if market.basis == "SOLD_REFINED" else "active market prices"
     reasons = [
-        f"Conservative resale uses the lower quartile of {market.sample_size} robust same-condition {evidence_label}.",
+        f"Resale basis uses the median of {market.sample_size} robust same-condition {evidence_label}; lower quartile remains the downside case.",
         f"Expected net profit £{profit:.2f}; ROI {roi:.1f}%; liquidity {liquidity:.0f}/100.",
     ]
     if market.basis == "BIN_ESTIMATED":
@@ -400,7 +404,7 @@ def score_opportunity(
             f"SUPER_GEM £{economics.super_profit:.0f}/{economics.super_roi_pct:.0f}% ROI."
         )
     emerging_profit_floor = min(policy.gem_profit, 10.0) if is_component else policy.gem_profit
-    discount_pct = (listing_price - market.conservative_resale) / market.conservative_resale * 100.0
+    discount_pct = (listing_price - resale_value) / resale_value * 100.0
     # Deal tier answers "how exceptional is the buy?"  Evidence and identity
     # remain hard gates, but liquidity/desirability rank urgency rather than
     # vetoing a genuine bargain.  The former all-gates-at-once rule made a

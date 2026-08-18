@@ -125,7 +125,7 @@ def robust_active_market(comps, *, subject_listing_id: str, condition: str, poli
     from statistics import median
     from app.gem_radar.opportunity_scoring import RobustMarket, SoldComparable, robust_sold_market
 
-    active_policy = replace(policy, minimum_sold_comps=max(5, policy.minimum_sold_comps))
+    active_policy = replace(policy, minimum_sold_comps=max(3, policy.minimum_sold_comps))
     fixed_retailers = {"amazon", "overclockers", "scan", "awd_it", "computer_orbit", "bargain_hardware", "cex"}
     marketplace_factor = 0.92 if condition == "new" else 0.88
     adjusted = []

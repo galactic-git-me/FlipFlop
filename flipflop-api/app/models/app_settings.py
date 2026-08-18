@@ -99,7 +99,7 @@ class AppSettings(Base):
     opportunity_packaging_gbp: Mapped[float] = mapped_column(Float, default=6.0)
     opportunity_testing_refurbishment_gbp: Mapped[float] = mapped_column(Float, default=10.0)
     opportunity_returns_warranty_pct: Mapped[float] = mapped_column(Float, default=5.0)
-    opportunity_minimum_sold_comps: Mapped[int] = mapped_column(Integer, default=5)
+    opportunity_minimum_sold_comps: Mapped[int] = mapped_column(Integer, default=3)
     opportunity_minimum_source_diversity: Mapped[int] = mapped_column(Integer, default=2)
 
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

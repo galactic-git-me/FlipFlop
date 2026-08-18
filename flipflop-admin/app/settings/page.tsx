@@ -87,7 +87,7 @@ const DEFAULTS: AppSettings = {
   opportunity_packaging_gbp: 6,
   opportunity_testing_refurbishment_gbp: 10,
   opportunity_returns_warranty_pct: 5,
-  opportunity_minimum_sold_comps: 5,
+  opportunity_minimum_sold_comps: 3,
   opportunity_minimum_source_diversity: 2,
 };
 

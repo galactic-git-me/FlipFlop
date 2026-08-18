@@ -242,7 +242,9 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
             expected_profit=opportunity.expected_profit,
             roi_pct=opportunity.roi_pct,
             walk_away_price=opportunity.walk_away_price,
-            conservative_resale_price=market.conservative_resale if market else None,
+            # Legacy column name; now stores the selected operational resale
+            # basis (median). market_lower_price retains the downside value.
+            conservative_resale_price=market.median if market else None,
             market_confidence=market.confidence if market else 0.0,
             market_sample_size=market.sample_size if market else 0,
             market_source_diversity=market.source_diversity if market else 0,
@@ -283,7 +285,7 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
                 "lower": market.lower if market else None,
                 "median": market.median if market else None,
                 "upper": market.upper if market else None,
-                "offset": round((delivered_price - market.conservative_resale) / market.conservative_resale * 100, 2) if market and market.conservative_resale else None,
+                "offset": round((delivered_price - market.median) / market.median * 100, 2) if market and market.median else None,
                 "recommendation": recommendation,
                 "cpk": cpk,
                 "id": db_row.id,
