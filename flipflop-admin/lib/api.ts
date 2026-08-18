@@ -153,6 +153,7 @@ export interface ManualBuild {
   evidence_data?: Record<string, unknown>;
   hero_photo_url: string | null;
   model_3d_url?: string | null;
+  selected_faq_ids?: string[] | null;
   storefront_product_id: number | null;
   // eBay Listing Configuration (optional until migration runs)
   ebay_condition?: string | null;
@@ -206,6 +207,20 @@ export interface CourierQuote {
   protection_scope: "loss_only" | "loss_and_damage" | "unknown";
   full_value_damage_cover: boolean;
   protection_warning: string;
+}
+
+export interface ProductFaq {
+  id: string;
+  category: string;
+  question: string;
+  answer: string;
+}
+
+export interface BuildFaqSelection {
+  bank: ProductFaq[];
+  selected_ids: string[];
+  uses_defaults: boolean;
+  maximum: number;
 }
 
 // The buyer's real delivery address, synced from the actual eBay order
@@ -561,6 +576,13 @@ export const api = {
   manualBuilds: {
     list: () => request<ManualBuildSummary[]>("/manual-builds/"),
     get: (id: number) => request<ManualBuild>(`/manual-builds/${id}`),
+    getFaqs: (id: number) => request<BuildFaqSelection>(`/manual-builds/${id}/faqs`),
+    updateFaqs: (id: number, selectedIds: string[]) =>
+      request<{ selected_ids: string[]; selected_faqs: ProductFaq[] }>(`/manual-builds/${id}/faqs`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ selected_ids: selectedIds }),
+      }),
     create: (name: string) =>
       request<ManualBuild>("/manual-builds/", {
         method: "POST",

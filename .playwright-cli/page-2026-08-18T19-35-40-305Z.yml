@@ -1,0 +1,196 @@
+- generic [ref=f1e1]:
+  - complementary [ref=f1e2]:
+    - generic [ref=f1e3]:
+      - img "FlipFlop" [ref=f1e5]
+      - navigation [ref=f1e6]:
+        - link "Sourcing" [ref=f1e7] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Add Build" [ref=f1e11] [cursor=pointer]:
+          - /url: /add-build
+        - link "Your Builds" [ref=f1e13] [cursor=pointer]:
+          - /url: /builds
+        - link "Configurator" [ref=f1e18] [cursor=pointer]:
+          - /url: /configurator-config
+        - link "PC Builder" [ref=f1e22] [cursor=pointer]:
+          - /url: /pc-builder
+  - generic [ref=f1e25]:
+    - banner [ref=f1e26]:
+      - textbox "QUERY MARKET DATA..." [ref=f1e31]
+      - generic [ref=f1e32]:
+        - img "FlipFlop" [ref=f1e35]
+        - generic [ref=f1e36]:
+          - button "Favourites" [ref=f1e43]
+          - button "Notifications" [ref=f1e46]:
+            - generic [ref=f1e59]: "2"
+    - main [ref=f1e50]:
+      - region "Notifications alt+T"
+      - generic [ref=f1e60]:
+        - generic [ref=f1e61]:
+          - generic "PROMETHEUS" [ref=f1e62]:
+            - generic "Not listed" [ref=f1e64]
+          - generic [ref=f1e65]:
+            - button "Generate title" [ref=f1e66] [cursor=pointer]
+            - tooltip "Generate title"
+          - generic [ref=f1e70]:
+            - button "Generate description" [ref=f1e71] [cursor=pointer]
+            - tooltip "Generate description"
+          - generic [ref=f1e75]:
+            - button "Preview eBay listing" [ref=f1e76] [cursor=pointer]
+            - tooltip "Preview eBay listing"
+          - generic [ref=f1e80]:
+            - button "Create eBay listing" [ref=f1e81] [cursor=pointer]
+            - tooltip "Create eBay listing"
+          - generic [ref=f1e83]:
+            - button "Publish to FlipFlop.shop" [ref=f1e84] [cursor=pointer]
+            - tooltip "Publish to FlipFlop.shop"
+        - button "Your Builds" [ref=f1e89]
+        - generic [ref=f1e92]:
+          - heading "PROMETHEUS" [level=1] [ref=f1e93]
+          - generic [ref=f1e94]: Built
+        - generic [ref=f1e95]:
+          - generic "Not currently published to eBay" [ref=f1e96]: eBay
+          - generic "Not currently published to FlipFlop.shop" [ref=f1e103]: FlipFlop.shop
+        - generic [ref=f1e111]:
+          - button "1. Build Checklist" [ref=f1e112] [cursor=pointer]
+          - button "2. Pricing" [ref=f1e121] [cursor=pointer]
+          - button "3. Listing" [ref=f1e128] [cursor=pointer]
+          - button "4. Media & Cards" [ref=f1e136] [cursor=pointer]
+          - button "5. Item Specifics" [ref=f1e145] [cursor=pointer]
+          - button "6. Shipping & Offers" [active] [ref=f1e154] [cursor=pointer]
+        - generic [ref=f1e631]:
+          - generic [ref=f1e632]:
+            - paragraph [ref=f1e633]: Delivery promises
+            - paragraph [ref=f1e639]: Handling/build time and courier transit are shown separately so customers know exactly what each window means.
+            - table [ref=f1e641]:
+              - rowgroup [ref=f1e642]:
+                - row [ref=f1e643]:
+                  - columnheader "Build type" [ref=f1e644]
+                  - columnheader "Handling / build time" [ref=f1e645]
+                  - columnheader "Delivery after dispatch" [ref=f1e646]
+                  - columnheader "Customer wording" [ref=f1e647]
+              - rowgroup [ref=f1e648]:
+                - row [ref=f1e649]:
+                  - cell "Ready-to-ship pre-built" [ref=f1e650]
+                  - cell "1 working day" [ref=f1e651]
+                  - cell "1–2 working days" [ref=f1e652]
+                  - cell "Usually arrives 2–3 working days after ordering" [ref=f1e653]
+                - row [ref=f1e654]:
+                  - cell "Curated build" [ref=f1e655]
+                  - cell "Set per build" [ref=f1e656]
+                  - cell "1–2 working days" [ref=f1e657]
+                  - cell "Build lead time plus tracked delivery" [ref=f1e658]
+                - row [ref=f1e659]:
+                  - cell "Custom build" [ref=f1e660]
+                  - cell "Set per build" [ref=f1e661]
+                  - cell "1–2 working days" [ref=f1e662]
+                  - cell "Quoted build lead time plus tracked delivery" [ref=f1e663]
+          - generic [ref=f1e664]:
+            - paragraph [ref=f1e665]: Customer promise shown with this build
+            - generic [ref=f1e666]:
+              - generic [ref=f1e667]:
+                - paragraph [ref=f1e668]: Returns
+                - paragraph [ref=f1e669]: 30-day returns. Change-of-mind return postage is paid by the customer; FlipFlop pays reasonable return costs for faulty or misdescribed goods.
+              - generic [ref=f1e670]:
+                - paragraph [ref=f1e671]: Consumer rights
+                - paragraph [ref=f1e672]: UK statutory remedies apply. These rights are not reduced by any separate warranty or remaining manufacturer cover.
+              - generic [ref=f1e673]:
+                - paragraph [ref=f1e674]: Delivery
+                - paragraph [ref=f1e675]: One working day handling, followed by an estimated 1–2 working day tracked-delivery window.
+              - generic [ref=f1e676]:
+                - paragraph [ref=f1e677]: Support
+                - paragraph [ref=f1e678]: Direct setup, troubleshooting and upgrade help through the personalised owner portal.
+          - generic [ref=f1e679]:
+            - paragraph [ref=f1e680]: List on eBay
+            - generic [ref=f1e684]:
+              - paragraph [ref=f1e685]: Configure condition and scheduling below. Use the actions in the side menu to publish or update the listing on eBay.
+              - generic [ref=f1e686]:
+                - text: Condition
+                - combobox [ref=f1e687]:
+                  - option "New"
+                  - option "New (other) — opened packaging / tested only"
+                  - option "Seller Refurbished"
+                  - option "Used" [selected]
+                  - option "For Parts / Not Working"
+              - generic [ref=f1e688]:
+                - paragraph [ref=f1e689]: Deferred-listing scheduler
+                - generic [ref=f1e694]: Publish at (optional — leave blank and use "List on eBay" in side menu instead)
+                - generic [ref=f1e695]:
+                  - textbox [ref=f1e696]
+                  - button "Save" [ref=f1e697]
+              - button "Preview HTML" [ref=f1e699]
+          - generic [ref=f1e703]:
+            - heading "Offers & Returns" [level=3] [ref=f1e707]
+            - generic [ref=f1e708]:
+              - text: Accept Offers
+              - generic [ref=f1e709]:
+                - button [ref=f1e710]
+                - generic [ref=f1e712]: Enabled
+            - generic [ref=f1e713]:
+              - text: Auto-Reject Offers Below (optional)
+              - generic [ref=f1e714]:
+                - generic [ref=f1e715]: £
+                - spinbutton "Leave empty for no minimum" [ref=f1e716]: "1250"
+              - paragraph [ref=f1e717]: Offers below this amount will be automatically rejected
+            - generic [ref=f1e718]:
+              - text: Return Period
+              - combobox [ref=f1e719]:
+                - option "No Returns"
+                - option "14 Days"
+                - option "30 Days" [selected]
+                - option "60 Days"
+          - generic [ref=f1e720]:
+            - heading "Shipping & Delivery" [level=3] [ref=f1e727]
+            - generic [ref=f1e728]:
+              - text: Shipping Method
+              - combobox [ref=f1e729]:
+                - option "Tracked Delivery (Royal Mail/Courier)" [selected]
+                - option "Untracked Delivery"
+                - option "Local Pickup Only"
+            - generic [ref=f1e730]:
+              - text: Shipping Cost (£)
+              - spinbutton [ref=f1e731]: "0"
+              - paragraph [ref=f1e732]: Flat rate shipping cost for buyers. Use 0 for free shipping.
+            - generic [ref=f1e733]:
+              - text: Handling Time (Days)
+              - combobox [ref=f1e734]:
+                - option "Same Day"
+                - option "1 Day" [selected]
+                - option "2 Days"
+                - option "3 Days"
+              - paragraph [ref=f1e735]: How long after purchase before item ships
+            - generic [ref=f1e736]:
+              - generic [ref=f1e737]:
+                - text: Package Dimensions
+                - generic [ref=f1e742]: ✓ saved
+              - paragraph [ref=f1e743]: Dimensions auto-save as you enter them — used for real courier quotes.
+              - generic [ref=f1e744]:
+                - generic [ref=f1e745]:
+                  - text: Weight (kg)
+                  - spinbutton [ref=f1e746]: "20"
+                - generic [ref=f1e747]:
+                  - text: Length (cm)
+                  - spinbutton [ref=f1e748]: "57"
+                - generic [ref=f1e749]:
+                  - text: Width (cm)
+                  - spinbutton [ref=f1e750]: "30"
+                - generic [ref=f1e751]:
+                  - text: Height (cm)
+                  - spinbutton [ref=f1e752]: "55"
+              - generic [ref=f1e753]:
+                - button "Save Dimensions" [ref=f1e754]
+                - button "Get Courier Quote" [ref=f1e755]
+            - generic [ref=f1e759] [cursor=pointer]:
+              - checkbox "Separate full-value transit-damage cover arranged Only tick this after confirming the entire PC is covered for accidental transit damage up to its sale/replacement value. Parcel2Go protection for computers is loss-only." [ref=f1e760]
+              - generic [ref=f1e761]:
+                - generic [ref=f1e762]: Separate full-value transit-damage cover arranged
+                - generic [ref=f1e763]: Only tick this after confirming the entire PC is covered for accidental transit damage up to its sale/replacement value. Parcel2Go protection for computers is loss-only.
+            - generic [ref=f1e764]:
+              - text: Shipping Destination
+              - combobox [ref=f1e765]:
+                - option "Account default"
+                - option "flipflop-postage — Domestic (UK)" [selected]
+              - paragraph [ref=f1e766]: "Ships to: Domestic (UK)"
+      - button [ref=f1e52]:
+        - img "Hermes" [ref=f1e53]
+  - button "Open Next.js Dev Tools" [ref=f1e426] [cursor=pointer]
+  - alert [ref=f1e430]

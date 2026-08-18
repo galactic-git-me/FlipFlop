@@ -44,6 +44,7 @@ class Product(Base):
     capture_3d_asset_id = Column(Integer, ForeignKey("capture_3d_assets.id"), nullable=True)
     hero_photo_url = Column(String, nullable=True)
     model_3d_url = Column(String, nullable=True)
+    selected_faqs = Column(JSON, nullable=False, default=list)
     fulfilment_type = Column(String(30), nullable=False, default="prebuilt")
     handling_min_days = Column(Integer, nullable=False, default=1)
     handling_max_days = Column(Integer, nullable=False, default=1)

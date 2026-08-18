@@ -45,6 +45,7 @@ from app.services.ebay_shipping_fulfillment import mark_order_shipped, EbayShipp
 from app.services.ebay_listing_withdraw import withdraw_listing_by_sku, EbayListingWithdrawError
 from app.services.cross_channel_guard import withdraw_storefront_for_sold_build
 from app.services.media_sync import sync_to_public_media
+from app.services.product_faqs import FAQ_BANK, FAQ_BY_ID, selected_faqs, render_ebay_faq_html
 from app.config import get_settings
 from app.routes.admin_auth import get_current_admin
 
@@ -65,6 +66,22 @@ class ComponentRatingInput(BaseModel):
 
 class ComponentRatingsInput(BaseModel):
     ratings: list[ComponentRatingInput]
+
+
+class FaqSelectionInput(BaseModel):
+    selected_ids: list[str] = Field(max_length=10)
+
+
+def _description_with_selected_faqs(description: str, build: ManualBuild) -> str:
+    """Replace any previously-rendered FAQ block with the current selection."""
+    without_old = re.sub(
+        r'<section data-flipflop-faq="true".*?</section>',
+        "",
+        description,
+        flags=re.DOTALL,
+    )
+    items = selected_faqs(build.id, build.selected_faq_ids)
+    return without_old + (render_ebay_faq_html(items) if items else "")
 
 _IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 _MAX_IMAGE_BYTES = 15 * 1024 * 1024  # 15 MB
@@ -239,6 +256,52 @@ async def get_ebay_fulfillment_policies():
         )
         for p in policies
     ]
+
+
+@router.get("/{build_id}/faqs")
+async def get_build_faqs(build_id: int, db: AsyncSession = Depends(get_db)):
+    build = (
+        await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
+    ).scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+    effective = selected_faqs(build.id, build.selected_faq_ids)
+    return {
+        "bank": FAQ_BANK,
+        "selected_ids": [item["id"] for item in effective],
+        "uses_defaults": build.selected_faq_ids is None,
+        "maximum": 10,
+    }
+
+
+@router.put("/{build_id}/faqs")
+async def update_build_faqs(
+    build_id: int, body: FaqSelectionInput, db: AsyncSession = Depends(get_db)
+):
+    build = (
+        await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
+    ).scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if len(body.selected_ids) != len(set(body.selected_ids)):
+        raise HTTPException(400, "FAQ selections must be unique")
+    unknown = [item_id for item_id in body.selected_ids if item_id not in FAQ_BY_ID]
+    if unknown:
+        raise HTTPException(400, f"Unknown FAQ IDs: {', '.join(unknown)}")
+    build.selected_faq_ids = body.selected_ids
+    if build.generated_description:
+        build.generated_description = prepare_ebay_listing_description(
+            _description_with_selected_faqs(build.generated_description, build)
+        )
+    if build.storefront_product_id:
+        product = (
+            await db.execute(select(Product).where(Product.id == build.storefront_product_id))
+        ).scalar_one_or_none()
+        if product:
+            product.selected_faqs = selected_faqs(build.id, body.selected_ids)
+    build.updated_at = datetime.utcnow()
+    await db.flush()
+    return {"selected_ids": body.selected_ids, "selected_faqs": selected_faqs(build.id, body.selected_ids)}
 
 
 @router.get("/{build_id}", response_model=ManualBuildOut)
@@ -576,7 +639,9 @@ BEST OFFER ENABLED: {"Yes" if build.allow_offers else "No"}
             reason="build has no hero_photo_url set — upload a photo first",
         )
 
-    prepared_description = prepare_ebay_listing_description(description_html)
+    prepared_description = prepare_ebay_listing_description(
+        _description_with_selected_faqs(description_html, build)
+    )
     build.generated_title = title[:80]
     build.generated_description = prepared_description
     build.updated_at = datetime.utcnow()
@@ -1035,6 +1100,12 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
     if not build.generated_title or not build.generated_description:
         raise HTTPException(400, "Generate the listing content before posting to eBay")
 
+    # FAQ choices can be changed after the description was generated. Always
+    # refresh the deterministic FAQ block immediately before publication.
+    build.generated_description = prepare_ebay_listing_description(
+        _description_with_selected_faqs(build.generated_description, build)
+    )
+
     # Do not allow an older generated description to bypass the customer-facing
     # delivery/returns/support wording added to the current listing workflow.
     if "data-flipflop-customer-policy" not in build.generated_description:
@@ -1397,6 +1468,7 @@ async def list_on_storefront(
             product.title = build.generated_title
             product.description = build.generated_description
             product.model_3d_url = build.model_3d_url
+            product.selected_faqs = selected_faqs(build.id, build.selected_faq_ids)
             product.fulfilment_type = "prebuilt"
             product.handling_min_days = 1
             product.handling_max_days = 1
@@ -1424,6 +1496,7 @@ async def list_on_storefront(
         status=ProductStatus.LISTED,
         hero_photo_url=build.hero_photo_url,
         model_3d_url=build.model_3d_url,
+        selected_faqs=selected_faqs(build.id, build.selected_faq_ids),
         fulfilment_type="prebuilt",
         handling_min_days=1,
         handling_max_days=1,

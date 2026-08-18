@@ -59,6 +59,7 @@ class ManualBuildOut(BaseModel):
     evidence_data: dict = {}
     hero_photo_url: Optional[str]
     model_3d_url: Optional[str] = None
+    selected_faq_ids: Optional[list[str]] = None
     storefront_product_id: Optional[int]
     # eBay Listing Configuration
     ebay_condition: Optional[str] = None

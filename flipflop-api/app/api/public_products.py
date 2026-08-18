@@ -117,4 +117,5 @@ async def public_product_detail(product_id: int, db: AsyncSession = Depends(get_
             "delivery": "Ready-to-ship PCs are dispatched after 1 working day handling, with an estimated 1–2 working day tracked delivery window.",
             "support": "Direct setup, troubleshooting and upgrade support is available through the personalised owner portal.",
         },
+        "faqs": product.selected_faqs or [],
     }

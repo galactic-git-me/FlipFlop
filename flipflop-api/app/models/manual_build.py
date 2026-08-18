@@ -36,6 +36,9 @@ class ManualBuild(Base):
     hero_photo_url: Mapped[str | None] = mapped_column(String(500))
     # Customer-facing GLB for the completed machine's storefront 3D viewer.
     model_3d_url: Mapped[str | None] = mapped_column(String(500))
+    # None means use the stable set of ten defaults; [] is an intentional
+    # user choice to publish no FAQs.
+    selected_faq_ids: Mapped[list | None] = mapped_column(JSON)
     storefront_product_id: Mapped[int | None] = mapped_column(Integer)
     # eBay Listing Configuration
     ebay_condition: Mapped[str | None] = mapped_column(String(30))  # NEW, USED_EXCELLENT, FOR_PARTS_OR_NOT_WORKING, etc.

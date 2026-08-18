@@ -1,0 +1,183 @@
+- generic [ref=f1e1]:
+  - complementary [ref=f1e2]:
+    - generic [ref=f1e3]:
+      - img "FlipFlop" [ref=f1e5]
+      - navigation [ref=f1e6]:
+        - link "Sourcing" [ref=f1e7] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Add Build" [ref=f1e11] [cursor=pointer]:
+          - /url: /add-build
+        - link "Your Builds" [ref=f1e13] [cursor=pointer]:
+          - /url: /builds
+        - link "Configurator" [ref=f1e18] [cursor=pointer]:
+          - /url: /configurator-config
+        - link "PC Builder" [ref=f1e22] [cursor=pointer]:
+          - /url: /pc-builder
+  - generic [ref=f1e25]:
+    - banner [ref=f1e26]:
+      - textbox "QUERY MARKET DATA..." [ref=f1e31]
+      - generic [ref=f1e32]:
+        - img "FlipFlop" [ref=f1e35]
+        - generic [ref=f1e36]:
+          - button "Favourites" [ref=f1e43]
+          - button "Notifications" [ref=f1e46]:
+            - generic [ref=f1e59]: "2"
+    - main [ref=f1e50]:
+      - region "Notifications alt+T"
+      - generic [ref=f1e60]:
+        - generic [ref=f1e61]:
+          - generic "PROMETHEUS" [ref=f1e62]:
+            - generic "Not listed" [ref=f1e64]
+          - generic [ref=f1e65]:
+            - button "Generate title" [ref=f1e66] [cursor=pointer]
+            - tooltip "Generate title"
+          - generic [ref=f1e70]:
+            - button "Generate description" [ref=f1e71] [cursor=pointer]
+            - tooltip "Generate description"
+          - generic [ref=f1e75]:
+            - button "Preview eBay listing" [ref=f1e76] [cursor=pointer]
+            - tooltip "Preview eBay listing"
+          - generic [ref=f1e80]:
+            - button "Create eBay listing" [ref=f1e81] [cursor=pointer]
+            - tooltip "Create eBay listing"
+          - generic [ref=f1e83]:
+            - button "Publish to FlipFlop.shop" [ref=f1e84] [cursor=pointer]
+            - tooltip "Publish to FlipFlop.shop"
+        - button "Your Builds" [ref=f1e89]
+        - generic [ref=f1e92]:
+          - heading "PROMETHEUS" [level=1] [ref=f1e93]
+          - generic [ref=f1e94]: Built
+        - generic [ref=f1e95]:
+          - generic "Not currently published to eBay" [ref=f1e96]: eBay
+          - generic "Not currently published to FlipFlop.shop" [ref=f1e103]: FlipFlop.shop
+        - generic [ref=f1e111]:
+          - button "1. Build Checklist" [ref=f1e112] [cursor=pointer]
+          - button "2. Pricing" [ref=f1e121] [cursor=pointer]
+          - button "3. Listing" [ref=f1e128] [cursor=pointer]
+          - button "4. Media & Cards" [active] [ref=f1e136] [cursor=pointer]
+          - button "5. Item Specifics" [ref=f1e145] [cursor=pointer]
+          - button "6. Shipping & Offers" [ref=f1e154] [cursor=pointer]
+        - generic [ref=f1e431]:
+          - generic [ref=f1e432]:
+            - paragraph [ref=f1e433]: Photos
+            - generic [ref=f1e438]:
+              - generic [ref=f1e439]:
+                - generic: 1. Cover / hero
+                - img "PROMETHEUS photo 1"
+                - button "Hero photo" [ref=f1e440]
+                - button "Remove photo" [ref=f1e443]
+              - generic [ref=f1e447]:
+                - generic: 2. Colour-shift angle
+                - img "PROMETHEUS photo 2"
+                - button "Set as hero photo" [ref=f1e448]
+                - button "Remove photo" [ref=f1e451]
+              - generic [ref=f1e455]:
+                - generic: 3. Interior detail
+                - img "PROMETHEUS photo 3"
+                - button "Set as hero photo" [ref=f1e456]
+                - button "Remove photo" [ref=f1e459]
+              - generic [ref=f1e463]:
+                - generic: 4. Performance proof
+                - img "PROMETHEUS photo 4"
+                - button "Set as hero photo" [ref=f1e464]
+                - button "Remove photo" [ref=f1e467]
+              - generic [ref=f1e471]:
+                - generic: 5. Gaming FPS
+                - img "PROMETHEUS photo 5"
+                - button "Set as hero photo" [ref=f1e472]
+                - button "Remove photo" [ref=f1e475]
+              - generic [ref=f1e479]:
+                - generic: 6. Rear connectivity
+                - img "PROMETHEUS photo 6"
+                - button "Set as hero photo" [ref=f1e480]
+                - button "Remove photo" [ref=f1e483]
+              - generic [ref=f1e487]:
+                - generic: 7. Components
+                - img "PROMETHEUS photo 7"
+                - button "Set as hero photo" [ref=f1e488]
+                - button "Remove photo" [ref=f1e491]
+              - generic [ref=f1e495]:
+                - generic: 8. Condition detail
+                - img "PROMETHEUS photo 8"
+                - button "Set as hero photo" [ref=f1e496]
+                - button "Remove photo" [ref=f1e499]
+              - generic [ref=f1e503]:
+                - generic: 9. Included items
+                - img "PROMETHEUS photo 9"
+                - button "Set as hero photo" [ref=f1e504]
+                - button "Remove photo" [ref=f1e507]
+              - generic [ref=f1e511]:
+                - generic: 10. Packaging
+                - img "PROMETHEUS photo 10"
+                - button "Set as hero photo" [ref=f1e512]
+                - button "Remove photo" [ref=f1e515]
+              - generic [ref=f1e519]:
+                - generic: 11. Windows proof
+                - img "PROMETHEUS photo 11"
+                - button "Set as hero photo" [ref=f1e520]
+                - button "Remove photo" [ref=f1e523]
+              - generic [ref=f1e527]:
+                - generic: 12. Extra angle
+                - img "PROMETHEUS photo 12"
+                - button "Set as hero photo" [ref=f1e528]
+                - button "Remove photo" [ref=f1e531]
+              - generic [ref=f1e535]:
+                - generic: 13. Extra view
+                - img "PROMETHEUS photo 13"
+                - button "Set as hero photo" [ref=f1e536]
+                - button "Remove photo" [ref=f1e539]
+              - generic [ref=f1e543]:
+                - generic: 14. Extra view
+                - img "PROMETHEUS photo 14"
+                - button "Set as hero photo" [ref=f1e544]
+                - button "Remove photo" [ref=f1e547]
+              - generic [ref=f1e551]:
+                - generic: 15. Extra view
+                - img "PROMETHEUS photo 15"
+                - button "Set as hero photo" [ref=f1e552]
+                - button "Remove photo" [ref=f1e555]
+              - generic [ref=f1e559]:
+                - generic: 16. Extra view
+                - img "PROMETHEUS photo 16"
+                - button "Set as hero photo" [ref=f1e560]
+                - button "Remove photo" [ref=f1e563]
+              - generic [ref=f1e567]:
+                - generic: 17. Extra view
+                - img "PROMETHEUS photo 17"
+                - button "Set as hero photo" [ref=f1e568]
+                - button "Remove photo" [ref=f1e571]
+            - paragraph [ref=f1e575]: Drag to reorder. The numbered labels show the recommended buyer journey; the first five images have the greatest selling impact.
+            - button "Upload photos" [ref=f1e576]
+          - generic [ref=f1e581]:
+            - paragraph [ref=f1e582]: Branded cards
+            - paragraph [ref=f1e587]: Generated from this build's actual components — accompany the eBay listing and storefront page with these.
+            - generic [ref=f1e588]:
+              - generic [ref=f1e589]:
+                - link [ref=f1e591] [cursor=pointer]:
+                  - /url: https://theflipflop.shop/media/spec_card-0be6f08c79d9446db5f6a53c8e8ddb1b.png
+                  - img "Spec Card" [ref=f1e592]
+                - generic [ref=f1e593]:
+                  - button "Regenerate Spec Card" [ref=f1e594]
+                  - link "Download Spec Card" [ref=f1e595] [cursor=pointer]:
+                    - /url: https://theflipflop.shop/media/spec_card-0be6f08c79d9446db5f6a53c8e8ddb1b.png
+              - generic [ref=f1e599]:
+                - link [ref=f1e601] [cursor=pointer]:
+                  - /url: https://theflipflop.shop/media/registration_plate-af8def9c865d468c904087ae5050a528.png
+                  - img "Registration Plate" [ref=f1e602]
+                - generic [ref=f1e603]:
+                  - button "Regenerate Registration Plate" [ref=f1e604]
+                  - link "Download Registration Plate" [ref=f1e605] [cursor=pointer]:
+                    - /url: https://theflipflop.shop/media/registration_plate-af8def9c865d468c904087ae5050a528.png
+          - generic [ref=f1e610]:
+            - generic [ref=f1e611]:
+              - paragraph [ref=f1e612]: Storefront 3D model
+              - paragraph [ref=f1e616]: Upload one self-contained GLB, maximum 100 MB. It will be used by this PC's viewer on FlipFlop.shop.
+            - button "Upload GLB" [ref=f1e617] [cursor=pointer]
+          - generic [ref=f1e621]:
+            - paragraph [ref=f1e622]: Performance Card
+            - paragraph [ref=f1e625]: Create a branded benchmark report card with real performance stats from this build.
+            - button "Upload performance-data.json" [ref=f1e627]
+      - button [ref=f1e52]:
+        - img "Hermes" [ref=f1e53]
+  - button "Open Next.js Dev Tools" [ref=f1e426] [cursor=pointer]
+  - alert [ref=f1e430]
