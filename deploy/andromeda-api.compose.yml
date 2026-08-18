@@ -27,6 +27,7 @@ services:
     build:
       context: ../flipflop-api
       dockerfile: Dockerfile
+      target: backend
     container_name: flipflop-production-api
     restart: unless-stopped
     depends_on:
