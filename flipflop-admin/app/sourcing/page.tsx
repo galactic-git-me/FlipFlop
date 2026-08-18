@@ -2185,13 +2185,14 @@ function SourcingPageInner() {
   // timer, not a backend-scheduled job (the old "flip_opportunities"
   // APScheduler job this used to query was disabled when that queue/
   // extension architecture replaced it) — so next_scan_at here is a
-  // best-effort estimate derived from real activity (last observation +
+  // best-effort estimate derived from real activity (scan-wave start +
   // the configured interval), not a guarantee. See
   // /gem-radar/scan-schedule-status's docstring.
   const fetchScanSchedule = async () => {
     try {
       const status = await api.gemRadar.scanScheduleStatus();
-      setLastScanAt(status.last_scan_at ? new Date(status.last_scan_at) : null);
+      const scanStart = status.scan_started_at ?? status.last_scan_at;
+      setLastScanAt(scanStart ? new Date(scanStart) : null);
       setNextScanAt(status.next_scan_at ? new Date(status.next_scan_at) : null);
       setScanIntervalMinutes(status.scan_interval_minutes);
     } catch (error) {
@@ -2309,7 +2310,7 @@ function SourcingPageInner() {
             className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-xl px-4 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
             title={
               nextScanAt
-                ? `Estimated from last scan activity (${lastScanAt?.toLocaleTimeString() ?? "unknown"}) + the configured ${scanIntervalMinutes ?? "?"}-minute interval. Scanning runs client-side in the browser extension, so this isn't a guarantee — only accurate while the extension's browser is open.`
+                ? `Expected from scan start (${lastScanAt?.toLocaleTimeString() ?? "unknown"}) + the configured ${scanIntervalMinutes ?? "?"}-minute interval. Scanning runs client-side in the browser extension, so this remains an estimate while the extension's browser is open.`
                 : "No scan activity observed yet"
             }
           >

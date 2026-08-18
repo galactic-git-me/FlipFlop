@@ -260,6 +260,7 @@ export interface MarketSnapshot {
 // /gem-radar/scan-schedule-status's docstring for why this is a best-effort
 // estimate rather than a guaranteed backend-scheduled job.
 export interface ScanScheduleStatus {
+  scan_started_at: string | null;
   last_scan_at: string | null;
   scan_interval_minutes: number;
   next_scan_at: string | null;

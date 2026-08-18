@@ -1670,7 +1670,14 @@ async def get_market_snapshot(db: AsyncSession = Depends(get_db), _: None = Depe
 
 @router.get("/scan-schedule-status")
 async def get_scan_schedule_status(db: AsyncSession = Depends(get_db), _: None = Depends(require_operator)) -> dict:
-    """Real scan cadence, derived from actual activity — not a backend
+    """Real scan cadence, derived from the start of the latest scan wave.
+
+    One extension scan submits many search_run_ids over several minutes. The
+    old implementation used MAX(observed_at), so every arriving batch moved
+    the countdown forwards. Nearby run starts are now grouped into a scan
+    wave and the countdown is anchored to that wave's earliest start.
+
+    This is not a backend
     APScheduler job. Scanning happens client-side in FlipFlopXtension on its
     own timer (gem_radar_scan_interval_minutes, an AppSettings row the
     extension reads), and the backend only learns about it after the fact
@@ -1678,21 +1685,48 @@ async def get_scan_schedule_status(db: AsyncSession = Depends(get_db), _: None =
     "flip_opportunities" scheduler job to query (that registration was
     disabled — see app/workers/scheduler.py — when this queue/extension
     architecture replaced it), so `next_scan_at` here is a best-effort
-    estimate (last observed activity + the configured interval), not a
+    estimate (latest scan-wave start + the configured interval), not a
     guarantee — the extension only actually fires if its browser is open."""
-    from sqlalchemy import select, func
-    from datetime import timedelta
-    from app.models.gem_radar_observation import GemRadarListingObservation
-
+    from sqlalchemy import text
+    from datetime import datetime, timedelta
     interval_minutes = await get_current_scan_interval_minutes(db)
-    last_scan_at = (
-        await db.execute(select(func.max(GemRadarListingObservation.observed_at)))
-    ).scalar_one_or_none()
+    # Fetch the start of each extension search batch. A complete market scan
+    # is a burst of these batches; walking backwards until a substantial gap
+    # finds the first batch in the latest burst without letting later batches
+    # continually reset the timer.
+    lookback = datetime.utcnow() - timedelta(minutes=max(interval_minutes * 3, 360))
+    run_rows = (
+        await db.execute(
+            text(
+                """
+                SELECT search_run_id, MIN(observed_at) AS started_at
+                FROM gem_radar_listing_observations
+                WHERE search_run_id IS NOT NULL AND observed_at >= :lookback
+                GROUP BY search_run_id
+                ORDER BY started_at DESC
+                """
+            ),
+            {"lookback": lookback},
+        )
+    ).fetchall()
 
-    next_scan_at = (last_scan_at + timedelta(minutes=interval_minutes)) if last_scan_at else None
+    scan_started_at = None
+    if run_rows:
+        scan_started_at = run_rows[0].started_at
+        cluster_gap = timedelta(minutes=min(30, max(10, interval_minutes // 6)))
+        newer_start = run_rows[0].started_at
+        for row in run_rows[1:]:
+            if newer_start - row.started_at > cluster_gap:
+                break
+            scan_started_at = row.started_at
+            newer_start = row.started_at
+
+    next_scan_at = (scan_started_at + timedelta(minutes=interval_minutes)) if scan_started_at else None
 
     return {
-        "last_scan_at": last_scan_at.isoformat() if last_scan_at else None,
+        "scan_started_at": scan_started_at.isoformat() if scan_started_at else None,
+        # Kept for older clients; semantics are now scan start, not last item.
+        "last_scan_at": scan_started_at.isoformat() if scan_started_at else None,
         "scan_interval_minutes": interval_minutes,
         "next_scan_at": next_scan_at.isoformat() if next_scan_at else None,
         "estimate_only": True,
