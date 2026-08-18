@@ -47,7 +47,7 @@ const STATUS_COLOR: Record<string, string> = {
 // USED_GOOD/USED_VERY_GOOD/etc values other categories allow.
 const EBAY_CONDITIONS: { value: string; label: string }[] = [
   { value: "NEW", label: "New" },
-  { value: "NEW_OTHER", label: "Opened — never used" },
+  { value: "NEW_OTHER", label: "New (other) — opened packaging / tested only" },
   { value: "SELLER_REFURBISHED", label: "Seller Refurbished" },
   { value: "USED_EXCELLENT", label: "Used" },
   { value: "FOR_PARTS_OR_NOT_WORKING", label: "For Parts / Not Working" },
