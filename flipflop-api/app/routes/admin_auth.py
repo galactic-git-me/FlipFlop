@@ -1,5 +1,6 @@
 import structlog
-from fastapi import APIRouter, HTTPException, Depends, Header
+from fastapi import APIRouter, HTTPException, Depends, Header, Request
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -13,11 +14,27 @@ router = APIRouter(prefix="/admin/auth", tags=["admin-auth"])
 
 
 async def get_current_admin(
+    request: Request,
     authorization: str = Header(None),
     db: AsyncSession = Depends(get_db),
 ) -> AdminUser:
-    """Dependency: validates an admin-audience JWT. Import this into every
-    router that backs flipflop-admin — a customer token will not pass this check."""
+    """Resolve the admin identity.
+
+    The admin UI is a personal tool running on this PC, so loopback requests
+    do not require a login. Requests arriving from any other machine still
+    require a valid admin JWT; binding the dev server to 0.0.0.0 must not turn
+    into an unauthenticated LAN-facing administration API.
+    """
+    client_host = request.client.host if request.client else None
+    if client_host in {"127.0.0.1", "::1", "localhost"}:
+        result = await db.execute(
+            select(AdminUser).where(AdminUser.is_active.is_(True)).order_by(AdminUser.id)
+        )
+        admin = result.scalars().first()
+        if not admin:
+            raise HTTPException(status_code=503, detail="No active admin account is configured")
+        return admin
+
     if not authorization:
         raise HTTPException(status_code=401, detail="Missing authorization header")
 

@@ -407,13 +407,6 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     ...init,
   });
   if (!res.ok) {
-    // Redirect to login on 401 Unauthorized
-    if (res.status === 401) {
-      if (typeof window !== "undefined") {
-        window.location.href = "/login";
-      }
-      throw new Error("Unauthorized - redirecting to login");
-    }
     const detail = await res
       .clone()
       .json()

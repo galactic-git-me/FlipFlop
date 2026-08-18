@@ -1,15 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ADMIN_SESSION_COOKIE, verifyAdminToken } from "@/lib/admin-session";
 
 // Auth disabled for development — all routes are public
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-
-  // /api/* is proxied to flipflop-api. No auth required in dev.
-  if (pathname.startsWith("/api/")) {
-    return NextResponse.next();
-  }
-
   return NextResponse.next();
 }
 

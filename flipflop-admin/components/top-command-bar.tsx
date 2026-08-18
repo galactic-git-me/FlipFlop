@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { Bell, Heart, Radio, Search, UserCircle2 } from "lucide-react";
+import { Bell, Heart, Radio, Search } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import type { PlaybookProposal } from "@/lib/types";
@@ -227,19 +227,6 @@ export function TopCommandBar() {
               </span>
             )}
           </button>
-          <button
-            type="button"
-            onClick={async () => {
-              await fetch("/api/session/logout", { method: "POST" });
-              router.push("/login");
-              router.refresh();
-            }}
-            aria-label="Sign out"
-            title="Sign out"
-          >
-            <UserCircle2 className="h-5 w-5 hover:text-red-400 transition-colors" />
-          </button>
-
           {notifOpen && (
             <div className="absolute right-0 top-7 w-[400px] rounded-xl border border-white/10 bg-[#0b111d]/98 backdrop-blur-md shadow-2xl z-50 flex flex-col" style={{ maxHeight: "480px" }}>
 
