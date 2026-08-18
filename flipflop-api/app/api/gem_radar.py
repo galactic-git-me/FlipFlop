@@ -824,6 +824,25 @@ async def get_scored_listings_latest_run(
     scored = result.scalars().all()
 
     cpk_price_fields = await _fetch_cpk_price_fields(db, [s.id for s in scored])
+    observation_result = await db.execute(
+        text(
+            """
+            SELECT DISTINCT ON (listing_id)
+                   listing_id, watch_count, best_offer_enabled
+            FROM gem_radar_listing_observations
+            WHERE listing_id = ANY(:listing_ids)
+            ORDER BY listing_id, observed_at DESC
+            """
+        ),
+        {"listing_ids": [s.listing_id for s in scored]},
+    )
+    observation_fields = {
+        row.listing_id: {
+            "watch_count": row.watch_count,
+            "best_offer_enabled": bool(row.best_offer_enabled),
+        }
+        for row in observation_result
+    }
 
     return [
         {
@@ -841,12 +860,25 @@ async def get_scored_listings_latest_run(
             "market_new_price": s.market_new_price,
             "market_used_price": s.market_used_price,
             **cpk_price_fields.get(s.id, {}),
-            "watch_count": s.watch_count,
-            "bid_count": s.bid_count,
+            "watch_count": observation_fields.get(s.listing_id, {}).get("watch_count", s.watch_count),
+            "best_offer_enabled": observation_fields.get(s.listing_id, {}).get("best_offer_enabled", False),
             "classification": s.classification,
             "deal_score": s.deal_score,
             "confidence": s.confidence_band,
             "decision": s.decision,
+            "expected_profit": s.expected_profit,
+            "roi_pct": s.roi_pct,
+            "walk_away_price": s.walk_away_price,
+            "conservative_resale_price": s.conservative_resale_price,
+            "market_confidence": s.market_confidence,
+            "market_sample_size": s.market_sample_size,
+            "market_source_diversity": s.market_source_diversity,
+            "market_spread_pct": s.market_spread_pct,
+            "liquidity_score": s.liquidity_score,
+            "desirability_score": s.desirability_score,
+            "risk_score": s.risk_score,
+            "eligible": s.eligible,
+            "scoring_explanation": s.scoring_explanation,
             "release_year": s.release_year,
             "scored_at": s.scored_at.isoformat() if s.scored_at else None,
             "listing_observed_at": s.listing_observed_at.isoformat() if s.listing_observed_at else None,

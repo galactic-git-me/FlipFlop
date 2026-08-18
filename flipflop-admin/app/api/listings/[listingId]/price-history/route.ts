@@ -19,18 +19,18 @@ export async function GET(
   }
 
   try {
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+    const backendUrl = process.env.GEMRADAR_URL || "http://localhost:18000";
 
     // Fetch both listing and CPK price histories in parallel
     const [listingRes, cpkRes] = await Promise.all([
       fetch(
-        `${backendUrl}/api/gem_radar/listings/${encodeURIComponent(listingId)}/price-history`,
+        `${backendUrl}/api/gem-radar/listings/${encodeURIComponent(listingId)}/price-history`,
         {
           headers: { "Content-Type": "application/json" },
         }
       ),
       fetch(
-        `${backendUrl}/api/gem_radar/listings/${encodeURIComponent(listingId)}/cpk-price-history`,
+        `${backendUrl}/api/gem-radar/listings/${encodeURIComponent(listingId)}/cpk-price-history`,
         {
           headers: { "Content-Type": "application/json" },
         }

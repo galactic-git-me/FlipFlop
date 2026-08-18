@@ -44,7 +44,7 @@ interface Listing {
   market_upper_price?: number | null;
   pct_offset?: number | null;
   watch_count?: number | null;
-  bid_count?: number | null;
+  best_offer_enabled?: boolean;
   classification: string;
   deal_score: number;
   confidence: string;
@@ -977,7 +977,7 @@ function stockLaneFor(listing: Listing): Exclude<StockLane, "all"> | "unknown" {
   return "unknown";
 }
 
-type SortKey = "source" | "title" | "seller" | "condition" | "price_variance" | "delivered_price" | "market_new_price" | "market_used_price" | "conservative_resale_price" | "classification" | "decision" | "deal_score" | "watch_count" | "bid_count" | "release_year" | "listing_observed_at";
+type SortKey = "source" | "title" | "seller" | "condition" | "price_variance" | "delivered_price" | "market_lower_price" | "market_median_price" | "market_upper_price" | "classification" | "decision" | "deal_score" | "watch_count" | "best_offer_enabled" | "listing_observed_at";
 type SortDir = "asc" | "desc";
 
 const CLASSIFICATION_RANK: Record<string, number> = {
