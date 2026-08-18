@@ -17,7 +17,7 @@ ACCESSORY_TERMS = {
     "backplate", "back plate", "bracket", "mount only", "fan only",
     "heatsink only", "cooler only", "empty box", "box only", "for parts",
     "spares or repair", "cable only", "adapter only", "waterblock",
-    "riser cable", "extension cable", "gpu riser",
+    "riser cable", "extension cable", "gpu riser", "*box*",
 }
 BUNDLE_TERMS = {"job lot", "bundle of", "mystery box", "assorted parts"}
 RETRO_PLATFORM_TERMS = {"am3", "am3+", "ddr3", "ddr2", "socket 775"}

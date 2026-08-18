@@ -31,6 +31,8 @@ def test_accessory_and_retro_platform_are_hard_gates():
     assert "accessory_or_parts_listing" in identity_gates("RTX 3070 RGB backplate", identity)
     assert "retro_platform_excluded" in identity_gates("AM3 DDR3 motherboard", identity)
     assert "retro_platform_excluded" not in identity_gates("AM3 DDR3 motherboard", identity, "retro_budget")
+    cpu = {"category": "cpu", "brand": "AMD", "model": "Ryzen 7 5800X3D"}
+    assert "accessory_or_parts_listing" in identity_gates("Genuine Ryzen 7 5800X3D *BOX*", cpu)
 
 
 def test_full_system_and_value_variant_identity_gates():
