@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: flipper
       POSTGRES_PASSWORD: flipper
     volumes:
-      - flipflop_production_postgres:/var/lib/postgresql/data
+      - flipflop_production_postgres:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U flipper -d pcflipper"]
       interval: 5s
