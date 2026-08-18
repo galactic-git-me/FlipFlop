@@ -41,6 +41,9 @@ _DOMAIN_TO_MARKETPLACE: dict[str, str] = {
     # but missing here entirely -- every Scan.co.uk observation fell through
     # to source=None and got misbucketed as "unknown" on the dashboard.
     "scan.co.uk": "scan",
+    "awd-it.co.uk": "awd_it",
+    "computerorbit.com": "computer_orbit",
+    "bargainhardware.co.uk": "bargain_hardware",
 }
 
 # Marketplaces excluded from contributing to price benchmarks. Temu: "new"
@@ -97,6 +100,9 @@ _FALLBACK_SEARCH_TEMPLATES: dict[str, str] = {
     "cex": "https://uk.webuy.com/search?stext={query}",
     "temu": "https://www.temu.com/search_result.html?search_key={query}",
     "aliexpress": "https://www.aliexpress.com/wholesale?SearchText={query}",
+    "awd_it": "https://www.awd-it.co.uk/catalogsearch/result/?q={query}",
+    "computer_orbit": "https://computerorbit.com/search?q={query}&type=product",
+    "bargain_hardware": "https://www.bargainhardware.co.uk/catalogsearch/result/?q={query}",
 }
 
 

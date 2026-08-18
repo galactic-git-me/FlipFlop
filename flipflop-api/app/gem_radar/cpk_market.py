@@ -97,11 +97,11 @@ async def get_robust_active_market(
     normalised = "new" if (condition or "").lower() == "new" else "used"
     result = await db.execute(text("""
         WITH latest AS (
-            SELECT DISTINCT ON (listing_id) listing_id, condition_normalised
+            SELECT DISTINCT ON (listing_id) listing_id, condition_normalised, source
             FROM gem_radar_listing_observations
             ORDER BY listing_id, observed_at DESC, id DESC
         )
-        SELECT p.price, p.listing_id
+        SELECT p.price, p.listing_id, l.source
         FROM gem_radar_cpk_listing_price p
         JOIN latest l ON l.listing_id = p.listing_id
         WHERE p.cpk = :cpk
@@ -111,8 +111,8 @@ async def get_robust_active_market(
           AND p.price > 0
     """), {"cpk": cpk, "subject": subject_listing_id, "condition": normalised})
     comps = [
-        SoldComparable(float(price), source_url=f"active://{listing_id}")
-        for price, listing_id in result.fetchall()
+        SoldComparable(float(price), source_url=f"{source or 'active'}://{listing_id}")
+        for price, listing_id, source in result.fetchall()
     ]
     return robust_active_market(
         comps, subject_listing_id=subject_listing_id,
@@ -126,7 +126,7 @@ def robust_active_market(comps, *, subject_listing_id: str, condition: str, poli
     from app.gem_radar.opportunity_scoring import RobustMarket, SoldComparable, robust_sold_market
 
     active_policy = replace(policy, minimum_sold_comps=max(5, policy.minimum_sold_comps))
-    fixed_retailers = {"amazon", "overclockers", "scan", "aliexpress", "temu", "cex"}
+    fixed_retailers = {"amazon", "overclockers", "scan", "awd_it", "computer_orbit", "bargain_hardware", "cex"}
     marketplace_factor = 0.92 if condition == "new" else 0.88
     adjusted = []
     factors = []
