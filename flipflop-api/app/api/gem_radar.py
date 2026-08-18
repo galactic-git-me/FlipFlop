@@ -499,19 +499,17 @@ async def startup_compute_category_stats():
         _category_stats = {}
 
 
-@router.get("/gem-of-day")
-async def get_gem_of_day(
+@router.get("/current-gem")
+@router.get("/gem-of-day", deprecated=True)
+async def get_current_gem(
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
 ) -> dict | None:
-    """Best CPU/Motherboard/RAM/GPU deal scored today, ranked by deal_score
-    (gap to real market price) — not raw price, not keyword matching.
-    Restricted to modern/current-gen parts, same as Gem of the Week — see
-    _is_desktop_appropriate/_is_current_gen/_is_current_gen_ram."""
-    from datetime import datetime, timezone
+    """Best actionable item in the current active fixed-price snapshot."""
+    from datetime import datetime, timedelta, timezone
 
-    today_start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
-    return await _fetch_best_gem(db, today_start.replace(tzinfo=None), require_modern=True)
+    active_cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
+    return await _fetch_best_gem(db, active_cutoff.replace(tzinfo=None), require_modern=True)
 
 
 def _wrap_market_price(value: float | None, observed_at) -> BenchmarkStat:
@@ -1017,15 +1015,11 @@ async def get_gem_of_week(
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
 ) -> dict | None:
-    """Best CPU/Motherboard/RAM/GPU deal scored this week, ranked by
-    deal_score (gap to real market price) — not raw price, not keyword
-    matching. Restricted to modern/current-gen parts (see
-    _GEM_OF_WEEK_MIN_RELEASE_YEAR) — a deal on legacy tech doesn't qualify
-    no matter how big the price gap."""
+    """Deprecated compatibility alias for the current-snapshot gem."""
     from datetime import datetime, timedelta, timezone
 
-    week_start = datetime.now(timezone.utc) - timedelta(days=7)
-    return await _fetch_best_gem(db, week_start.replace(tzinfo=None), require_modern=True)
+    active_cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
+    return await _fetch_best_gem(db, active_cutoff.replace(tzinfo=None), require_modern=True)
 
 
 def _is_reasonable_price(category: str, price: float) -> bool:
@@ -1556,16 +1550,15 @@ async def get_gem_by_component(
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
 ) -> dict:
-    """Best gem for each major component category (CPU, GPU, Motherboard, SSD, PSU).
-    Each is the highest deal_score item in its category from today."""
-    from datetime import datetime, timezone
+    """Best active fixed-price gem in each major component category."""
+    from datetime import datetime, timedelta, timezone
 
-    today_start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+    active_cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
     categories = ["cpu", "gpu", "motherboard", "ssd", "psu"]
 
     gems = {}
     for category in categories:
-        gem = await _fetch_best_gem_for_category(db, category, today_start.replace(tzinfo=None), require_modern=True)
+        gem = await _fetch_best_gem_for_category(db, category, active_cutoff.replace(tzinfo=None), require_modern=True)
         if gem:
             gems[category] = gem
 

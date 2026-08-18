@@ -2192,7 +2192,7 @@ function SourcingPageInner() {
     try {
       const [listingsRes, dayRes, componentRes, queueRes] = await Promise.all([
         fetch(`/api/gem-radar/scored-listings-latest-run`),
-        fetch(`/api/gem-radar/gem-of-day`),
+        fetch(`/api/gem-radar/current-gem`, { cache: "no-store" }),
         fetch(`/api/gem-radar/gem-by-component`),
         fetch(`/api/gem-radar/queue-status`),
       ]);

@@ -441,8 +441,7 @@ export const api = {
   gemRadar: {
     scoredListings: () => request<unknown[]>("/gem-radar/scored-listings"),
     listings: () => request<unknown[]>("/gem-radar/listings"),
-    gemOfDay: () => request<unknown>("/gem-radar/gem-of-day"),
-    gemOfWeek: () => request<unknown>("/gem-radar/gem-of-week"),
+    currentGem: () => request<unknown>("/gem-radar/current-gem"),
     // Whole-DB market snapshot (all currently-active listings, not just the
     // latest scan run) — same shape as the Current Scan Run panel's stats.
     marketSnapshot: () => request<MarketSnapshot>("/gem-radar/market-snapshot"),

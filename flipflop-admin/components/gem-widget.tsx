@@ -33,25 +33,15 @@ function GemThumbnail({ src, alt }: { src?: string | null; alt: string }) {
 }
 
 export function GemWidget() {
-  const [gemOfDay, setGemOfDay] = useState<GemData | null>(null);
-  const [gemOfWeek, setGemOfWeek] = useState<GemData | null>(null);
+  const [currentGem, setCurrentGem] = useState<GemData | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchGems = async () => {
     try {
-      const [dayRes, weekRes] = await Promise.all([
-        fetch("/api/gem-radar/gem-of-day"),
-        fetch("/api/gem-radar/gem-of-week"),
-      ]);
-
-      if (dayRes.ok) {
-        const data = await dayRes.json();
-        if (data) setGemOfDay(data);
-      }
-
-      if (weekRes.ok) {
-        const data = await weekRes.json();
-        if (data) setGemOfWeek(data);
+      const response = await fetch("/api/gem-radar/current-gem", { cache: "no-store" });
+      if (response.ok) {
+        const data = await response.json();
+        setCurrentGem(data ?? null);
       }
 
       setLoading(false);
@@ -69,56 +59,31 @@ export function GemWidget() {
 
   return (
     <div className="px-4 py-4 border-t border-slate-700 space-y-3">
-      {/* Gem of the Day */}
-      {gemOfDay && (
+      {currentGem && (
         <a
-          href={gemOfDay.url}
+          href={currentGem.url}
           target="_blank"
           rel="noopener noreferrer"
           className="block p-3 rounded bg-gradient-to-br from-amber-600/20 to-orange-600/20 border border-amber-500/30 hover:border-amber-500/60 transition group"
         >
           <div className="flex items-start gap-2">
             <Gem className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
-            <GemThumbnail src={gemOfDay.image_url} alt={gemOfDay.title} />
+            <GemThumbnail src={currentGem.image_url} alt={currentGem.title} />
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-amber-300 uppercase tracking-wide">Gem of Day</p>
+              <p className="text-xs font-semibold text-amber-300 uppercase tracking-wide">Best Available Gem</p>
               <p className="text-sm text-white truncate group-hover:underline">
-                {gemOfDay.title.substring(0, 40)}...
+                {currentGem.title.substring(0, 40)}...
               </p>
-              <p className="text-lg font-bold text-amber-200 mt-1">£{gemOfDay.price.toFixed(2)}</p>
-              <p className="text-xs text-slate-300 mt-1">{gemOfDay.condition}</p>
+              <p className="text-lg font-bold text-amber-200 mt-1">£{currentGem.price.toFixed(2)}</p>
+              <p className="text-xs text-slate-300 mt-1">{currentGem.condition}</p>
             </div>
             <ExternalLink className="w-3 h-3 text-slate-400 flex-shrink-0 opacity-0 group-hover:opacity-100 transition" />
           </div>
         </a>
       )}
 
-      {/* Gem of the Week */}
-      {gemOfWeek && gemOfWeek.url !== gemOfDay?.url && (
-        <a
-          href={gemOfWeek.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block p-3 rounded bg-gradient-to-br from-blue-600/20 to-purple-600/20 border border-blue-500/30 hover:border-blue-500/60 transition group"
-        >
-          <div className="flex items-start gap-2">
-            <Gem className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
-            <GemThumbnail src={gemOfWeek.image_url} alt={gemOfWeek.title} />
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-blue-300 uppercase tracking-wide">Gem of Week</p>
-              <p className="text-sm text-white truncate group-hover:underline">
-                {gemOfWeek.title.substring(0, 40)}...
-              </p>
-              <p className="text-lg font-bold text-blue-200 mt-1">£{gemOfWeek.price.toFixed(2)}</p>
-              <p className="text-xs text-slate-300 mt-1">{gemOfWeek.condition}</p>
-            </div>
-            <ExternalLink className="w-3 h-3 text-slate-400 flex-shrink-0 opacity-0 group-hover:opacity-100 transition" />
-          </div>
-        </a>
-      )}
-
-      {!loading && !gemOfDay && !gemOfWeek && (
-        <p className="text-xs text-slate-400 text-center py-2">No gems found yet</p>
+      {!loading && !currentGem && (
+        <p className="text-xs text-slate-400 text-center py-2">No available gems in the current snapshot</p>
       )}
     </div>
   );
