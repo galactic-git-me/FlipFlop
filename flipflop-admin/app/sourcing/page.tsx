@@ -809,17 +809,21 @@ function StatsTab({ listings, gemOfDay, componentGems }: { listings: Listing[]; 
 
 const SOURCE_LABELS: Record<string, string> = {
   ebay: "eBay",
-  vinted: "Vinted",
   overclockers: "Overclockers",
-  temu: "Temu",
   amazon: "Amazon",
+  scan: "Scan.co.uk",
+  awd_it: "AWD-IT",
+  computer_orbit: "Computer Orbit",
+  bargain_hardware: "Bargain Hardware",
 };
 const SOURCE_COLORS: Record<string, string> = {
   ebay: "bg-sky-600 text-white",
-  vinted: "bg-teal-600 text-white",
   overclockers: "bg-orange-600 text-white",
-  temu: "bg-red-600 text-white",
   amazon: "bg-amber-700 text-white",
+  scan: "bg-blue-700 text-white",
+  awd_it: "bg-rose-700 text-white",
+  computer_orbit: "bg-violet-700 text-white",
+  bargain_hardware: "bg-teal-700 text-white",
 };
 // No eBay/Vinted logo files are bundled in this repo, so this pulls each
 // site's own favicon at render time rather than embedding a logo asset
@@ -827,10 +831,12 @@ const SOURCE_COLORS: Record<string, string> = {
 // bundled SVG under /public if a proper wordmark is ever wanted instead.
 const SOURCE_DOMAINS: Record<string, string> = {
   ebay: "ebay.co.uk",
-  vinted: "vinted.co.uk",
   overclockers: "overclockers.co.uk",
-  temu: "temu.com",
   amazon: "amazon.co.uk",
+  scan: "scan.co.uk",
+  awd_it: "awd-it.co.uk",
+  computer_orbit: "computerorbit.com",
+  bargain_hardware: "bargainhardware.co.uk",
 };
 
 function SourceBadge({ source }: { source: string }) {
@@ -935,6 +941,22 @@ function findLatestRunId(listings: Listing[]): string | null {
 }
 
 type GemFilter = "all" | "SUPER_GEM" | "GEM" | "EMERGING_OPPORTUNITY" | "OK_DEAL" | "AVERAGE_DEAL" | "POOR_DEAL" | "INSUFFICIENT_DATA" | "INELIGIBLE";
+type StockLane = "all" | "new" | "open_box" | "used";
+
+const STOCK_LANES: { value: StockLane; label: string; description: string }[] = [
+  { value: "all", label: "All stock", description: "Every retained sourcing opportunity" },
+  { value: "new", label: "New build stock", description: "Factory-new components suitable for an all-new build" },
+  { value: "open_box", label: "Open-box / B-grade", description: "Refurbished, open-box and new-other stock requiring disclosure" },
+  { value: "used", label: "Used flip opportunities", description: "Pre-owned components for value-led or refurbished builds" },
+];
+
+function stockLaneFor(listing: Listing): Exclude<StockLane, "all"> | "unknown" {
+  const condition = (listing.condition ?? "").trim().toLowerCase().replace(/[ -]+/g, "_");
+  if (condition === "new") return "new";
+  if (condition.includes("refurb") || condition.includes("open_box") || condition.includes("new_other") || condition.includes("b_grade")) return "open_box";
+  if (condition.includes("used") || condition.includes("pre_owned")) return "used";
+  return "unknown";
+}
 
 type SortKey = "source" | "title" | "seller" | "condition" | "price_variance" | "delivered_price" | "market_new_price" | "market_used_price" | "conservative_resale_price" | "classification" | "decision" | "deal_score" | "watch_count" | "bid_count" | "release_year" | "listing_observed_at";
 type SortDir = "asc" | "desc";
@@ -1326,6 +1348,7 @@ function VendorSummaryTable({ listings }: { listings: Listing[] }) {
 
 function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; highlightListingId?: string | null }) {
   const [componentTab, setComponentTab] = useState<ComponentType>("CPU");
+  const [stockLane, setStockLane] = useState<StockLane>("all");
   const [gemFilter, setGemFilter] = useState<GemFilter>("all");
   const [sortKey, setSortKey] = useState<SortKey>("deal_score");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
@@ -1368,18 +1391,19 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
     }
   };
 
-  const byComponent = listings.filter((l) => listingTab(l) === componentTab);
-  // Show all listings - gemFilter is just for display counts, not filtering
+  const byLane = stockLane === "all" ? listings : listings.filter((listing) => stockLaneFor(listing) === stockLane);
+  const byComponent = byLane.filter((l) => listingTab(l) === componentTab);
   const byTitle = titleQuery.trim()
     ? byComponent.filter((l) => fuzzyMatches(titleQuery, l.title))
     : byComponent;
-  const filtered = [...byTitle].sort((a, b) => {
+  const byClassification = gemFilter === "all" ? byTitle : byTitle.filter((listing) => listing.classification === gemFilter);
+  const filtered = [...byClassification].sort((a, b) => {
     const cmp = compareSortValue(a, b, sortKey);
     return sortDir === "asc" ? cmp : -cmp;
   });
   const tabCounts = COMPONENT_TABS.map((tab) => ({
     tab,
-    count: listings.filter((l) => listingTab(l) === tab).length,
+    count: byLane.filter((l) => listingTab(l) === tab).length,
   }));
   const classificationCounts = CLASSIFICATION_BADGE_ORDER.map((classification) => ({
     classification,
@@ -1595,6 +1619,28 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
             </tbody>
           </table>
         )}
+      </div>
+
+      <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3" role="group" aria-label="Stock condition lane">
+        {STOCK_LANES.map((lane) => {
+          const count = lane.value === "all" ? listings.length : listings.filter((listing) => stockLaneFor(listing) === lane.value).length;
+          const active = stockLane === lane.value;
+          return (
+            <button
+              key={lane.value}
+              type="button"
+              onClick={() => setStockLane(lane.value)}
+              aria-pressed={active}
+              className={`cursor-pointer rounded-lg border p-4 text-left transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 ${active ? "border-blue-500 bg-blue-950/60" : "border-slate-700 bg-slate-800 hover:border-slate-500 hover:bg-slate-750"}`}
+            >
+              <span className="flex items-center justify-between gap-3">
+                <span className="font-semibold text-slate-100">{lane.label}</span>
+                <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${active ? "bg-blue-500 text-white" : "bg-slate-700 text-slate-200"}`}>{count}</span>
+              </span>
+              <span className="mt-1 block text-xs leading-5 text-slate-400">{lane.description}</span>
+            </button>
+          );
+        })}
       </div>
       {explanationListing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4" role="dialog" aria-modal="true" aria-labelledby="opportunity-explanation-title">

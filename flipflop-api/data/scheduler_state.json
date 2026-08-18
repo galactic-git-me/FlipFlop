@@ -1,6 +1,6 @@
 {
   "ram_watcher": {
-    "last_success_at": "2026-08-18T06:15:05.451512+00:00"
+    "last_success_at": "2026-08-18T06:30:05.444634+00:00"
   },
   "price_refresh": {
     "last_success_at": "2026-08-18T06:05:06.270163+00:00"
@@ -57,13 +57,13 @@
     "last_success_at": "2026-08-18T06:02:05.287748+00:00"
   },
   "deferred_publish": {
-    "last_success_at": "2026-08-18T06:15:05.457969+00:00"
+    "last_success_at": "2026-08-18T06:30:05.452931+00:00"
   },
   "message_poll": {
-    "last_success_at": "2026-08-18T06:00:05.604367+00:00"
+    "last_success_at": "2026-08-18T06:30:05.447208+00:00"
   },
   "offer_poll": {
-    "last_success_at": "2026-08-18T06:00:05.614683+00:00"
+    "last_success_at": "2026-08-18T06:30:05.447849+00:00"
   },
   "recreate_cycle": {
     "last_success_at": "2026-08-18T06:00:05.622891+00:00"
@@ -75,6 +75,6 @@
     "last_success_at": "2026-08-18T06:00:05.615560+00:00"
   },
   "manual_build_deferred_publish": {
-    "last_success_at": "2026-08-18T06:15:05.456322+00:00"
+    "last_success_at": "2026-08-18T06:30:05.450088+00:00"
   }
 }
