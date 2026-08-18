@@ -54,6 +54,7 @@ from app.gem_radar.schemas import (
     ExtractedListing,
     SoldCompSubmitRequest,
     SoldCompSubmitResponse,
+    SoldCompTarget,
 )
 from app.services.submission_queue_service import SubmissionQueueService
 
@@ -1659,6 +1660,79 @@ async def get_scan_schedule_status(db: AsyncSession = Depends(get_db), _: None =
     }
 
 
+@router.get("/sold-comp-targets", response_model=list[SoldCompTarget])
+async def sold_comp_targets(
+    query: str = Query(..., min_length=1),
+    limit: int = Query(3, ge=1, le=5),
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+) -> list[SoldCompTarget]:
+    """Nominate exact products worth a bounded sold-comps enrichment.
+
+    Targets must already have a canonical identity, at least two active price
+    observations, a listing at least 10% below the active median, and fewer
+    than five same-condition completed-sale comps. This avoids turning every
+    scan into a per-listing eBay scrape while prioritising candidates that
+    could plausibly become actionable once realised-sale evidence arrives.
+    """
+    from sqlalchemy import text
+
+    rows = (await db.execute(text("""
+        WITH latest AS (
+            SELECT DISTINCT ON (o.listing_id)
+                o.listing_id, o.search_query, o.condition_normalised,
+                o.delivered_price
+            FROM gem_radar_listing_observations o
+            ORDER BY o.listing_id, o.observed_at DESC, o.id DESC
+        ), candidates AS (
+            SELECT
+                c.cpk,
+                c.cpk_data->>'brand' AS brand,
+                c.cpk_data->>'model' AS model,
+                CASE WHEN LOWER(COALESCE(l.condition_normalised, '')) = 'new'
+                     THEN 'new' ELSE 'used' END AS condition,
+                COUNT(DISTINCT l.listing_id) AS candidate_count,
+                MIN(l.delivered_price) AS candidate_price,
+                mp.median_price,
+                COUNT(DISTINCT so.id) AS sold_count
+            FROM latest l
+            JOIN gem_radar_listing_cpk c ON c.listing_id = l.listing_id
+            JOIN gem_radar_cpk_market_price mp ON mp.cpk = c.cpk
+            JOIN gem_radar_scored_listings s ON s.listing_id = l.listing_id
+            LEFT JOIN gem_radar_sold_observations so
+              ON so.cpk = c.cpk
+             AND so.condition = CASE
+                  WHEN LOWER(COALESCE(l.condition_normalised, '')) = 'new'
+                  THEN 'new' ELSE 'used' END
+             AND so.observed_at >= CURRENT_TIMESTAMP - INTERVAL '90 days'
+            WHERE l.search_query = :query
+              AND s.classification = 'INSUFFICIENT_DATA'
+              AND c.cpk_data->>'brand' IS NOT NULL
+              AND c.cpk_data->>'model' IS NOT NULL
+              AND mp.listing_count >= 2
+              AND mp.median_price > 0
+            GROUP BY c.cpk, brand, model, condition, mp.median_price
+        )
+        SELECT cpk, brand, model, condition, candidate_count,
+               ROUND((1.0 - candidate_price / median_price) * 100.0) AS discount_pct
+        FROM candidates
+        WHERE sold_count < 5
+          AND candidate_price <= median_price * 0.90
+        ORDER BY discount_pct DESC, candidate_count DESC
+        LIMIT :limit
+    """), {"query": query, "limit": limit})).all()
+    return [
+        SoldCompTarget(
+            cpk=cpk,
+            query=" ".join(part for part in (brand, model) if part),
+            condition=condition,
+            candidate_count=int(candidate_count),
+            discount_pct=float(discount_pct),
+        )
+        for cpk, brand, model, condition, candidate_count, discount_pct in rows
+    ]
+
+
 @router.post("/sold-comps", response_model=SoldCompSubmitResponse)
 async def submit_sold_comps(
     payload: SoldCompSubmitRequest,
@@ -1674,6 +1748,19 @@ async def submit_sold_comps(
     than stored as noise."""
     from app.gem_radar.benchmarks import normalize_match_key, _get_cpk_for_match_key
     from app.models.gem_radar_sold_observation import GemRadarSoldObservation
+
+    target_identity_keys: set[str] | None = None
+    if payload.target_cpk:
+        target = (await db.execute(
+            select(GemRadarListingCpk.cpk_data).where(GemRadarListingCpk.cpk == payload.target_cpk).limit(1)
+        )).scalar_one_or_none()
+        if not target:
+            return SoldCompSubmitResponse(inserted=0, skipped=len(payload.comps))
+        target_identity_keys = {
+            normalize_match_key(target.get("model") or ""),
+            normalize_match_key(f"{target.get('brand') or ''} {target.get('model') or ''}"),
+        }
+        target_identity_keys.discard("")
 
     inserted = 0
     skipped = 0
@@ -1694,7 +1781,10 @@ async def submit_sold_comps(
             skipped += 1
             continue
         match_key = normalize_match_key(identity.model)
-        cpk = await _get_cpk_for_match_key(db, match_key)
+        if target_identity_keys is not None and match_key not in target_identity_keys:
+            skipped += 1
+            continue
+        cpk = payload.target_cpk or await _get_cpk_for_match_key(db, match_key)
         db.add(
             GemRadarSoldObservation(
                 match_key=match_key,

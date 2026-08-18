@@ -102,12 +102,24 @@ class SoldCompSubmitRequest(CamelModel):
     identical fields for a sold-search page as for a live-search page."""
     search_id: str
     query: str
+    # Set for a backend-nominated exact-model enrichment. The ingestion
+    # endpoint validates every returned comp against this CPK's canonical
+    # identity before linking it; broad per-search collection leaves it null.
+    target_cpk: Optional[str] = None
     comps: list[ExtractedListing]
 
 
 class SoldCompSubmitResponse(CamelModel):
     inserted: int
     skipped: int
+
+
+class SoldCompTarget(CamelModel):
+    cpk: str
+    query: str
+    condition: Literal["new", "used"]
+    candidate_count: int
+    discount_pct: float
 
 
 class ExclusionReason(CamelModel):
