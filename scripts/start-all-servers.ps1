@@ -9,6 +9,7 @@ param(
     [switch]$NoGemRadar = $false,
     [switch]$NoAdmin = $false,
     [switch]$NoFrontend = $false,
+    [switch]$NoProductionSync = $false,
     [switch]$NoExtensionBuild = $false
 )
 
@@ -359,6 +360,13 @@ $servers = @(
         port     = 4313
         color    = "Magenta"
         skip     = $NoFrontend
+    },
+    @{
+        name     = "production-sync"
+        cmdArgs  = @("/c", "cd flipflop-api && .venv\Scripts\python.exe scripts\publish_to_andromeda.py --watch --interval 900")
+        port     = "SSH"
+        color    = "DarkCyan"
+        skip     = $NoProductionSync
     },
     @{
         name     = "performance-card"
