@@ -649,7 +649,13 @@ export const api = {
       const formData = new FormData();
       for (const f of files) formData.append("files", f);
       formData.append("kind", kind);
-      const res = await fetch(`${API_BASE_URL}/manual-builds/${id}/photos`, { method: "POST", body: formData });
+      const token = getAdminToken();
+      const res = await fetch(`${API_BASE_URL}/manual-builds/${id}/photos`, {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      });
       if (!res.ok) throw new Error(`API upload photos → ${res.status}`);
       return res.json();
     },
@@ -658,7 +664,13 @@ export const api = {
     uploadBrandedAsset: async (id: number, kind: "spec_card" | "registration_plate", blob: Blob): Promise<ManualBuild> => {
       const formData = new FormData();
       formData.append("file", blob, `${kind}.png`);
-      const res = await fetch(`${API_BASE_URL}/manual-builds/${id}/photos/branded?kind=${kind}`, { method: "POST", body: formData });
+      const token = getAdminToken();
+      const res = await fetch(`${API_BASE_URL}/manual-builds/${id}/photos/branded?kind=${kind}`, {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      });
       if (!res.ok) throw new Error(`API upload branded asset → ${res.status}`);
       return res.json();
     },

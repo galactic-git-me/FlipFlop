@@ -1,0 +1,27 @@
+- generic [active] [ref=e1]:
+  - complementary [ref=e2]:
+    - generic [ref=e3]:
+      - img "FlipFlop" [ref=e5]
+      - navigation [ref=e6]:
+        - link "Sourcing" [ref=e7] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Add Build" [ref=e11] [cursor=pointer]:
+          - /url: /add-build
+        - link "Your Builds" [ref=e13] [cursor=pointer]:
+          - /url: /builds
+        - link "Configurator" [ref=e18] [cursor=pointer]:
+          - /url: /configurator-config
+        - link "PC Builder" [ref=e22] [cursor=pointer]:
+          - /url: /pc-builder
+  - generic [ref=e25]:
+    - banner [ref=e26]:
+      - textbox "QUERY MARKET DATA..." [ref=e31]
+      - generic [ref=e32]:
+        - img "FlipFlop" [ref=e35]
+        - generic [ref=e36]:
+          - button "Favourites" [ref=e43]
+          - button "Notifications" [ref=e46]
+    - main [ref=e50]:
+      - generic [ref=e51]: Loading…
+      - button [ref=e52]:
+        - img "Hermes" [ref=e53]
