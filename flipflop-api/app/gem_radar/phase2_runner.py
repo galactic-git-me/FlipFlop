@@ -81,12 +81,13 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
     # join once per listing made a full rebuild O(listings × database roundtrip).
     active_rows = (await db.execute(text("""
         WITH latest AS (
-            SELECT DISTINCT ON (listing_id) listing_id, condition_normalised, source
+            SELECT DISTINCT ON (listing_id) listing_id, title, condition_normalised, source
             FROM gem_radar_listing_observations
             ORDER BY listing_id, observed_at DESC, id DESC
         )
         SELECT p.cpk, p.listing_id, p.price, l.source,
-               CASE WHEN LOWER(COALESCE(l.condition_normalised, '')) = 'new' THEN 'new' ELSE 'used' END condition
+               CASE WHEN LOWER(l.title) ~ '\\m(b[ -]?grade|open[ -]?box|refurbished|renewed)\\M' THEN 'used'
+                    WHEN LOWER(COALESCE(l.condition_normalised, '')) = 'new' THEN 'new' ELSE 'used' END condition
         FROM gem_radar_cpk_listing_price p
         JOIN latest l ON l.listing_id = p.listing_id
         WHERE p.updated_at >= CURRENT_TIMESTAMP - INTERVAL '14 days' AND p.price > 0
@@ -128,7 +129,9 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
             epid, seller_feedback_percent, seller_feedback_count,
         ) = row
 
-        normalised_condition = "new" if (condition or "").lower() == "new" else "used"
+        title_condition = (title or "").lower()
+        title_marks_non_new = any(term in title_condition for term in ("b grade", "b-grade", "open box", "open-box", "refurbished", "renewed"))
+        normalised_condition = "new" if (condition or "").lower() == "new" and not title_marks_non_new else "used"
         category = (cpk_data or {}).get("category") or observed_category
         sold_comps = sold_cohorts.get((cpk, normalised_condition), [])
         market = robust_sold_market(sold_comps, subject_listing_id=listing_id, policy=policy) if cpk else None
