@@ -142,8 +142,8 @@ class OpportunityResult:
     expected_profit: float | None
     roi_pct: float | None
     walk_away_price: float | None
-    liquidity_score: float
-    desirability_score: float
+    liquidity_score: float | None
+    desirability_score: float | None
     risk_score: float
     market: RobustMarket | None
     eligible: bool
@@ -293,22 +293,67 @@ def identity_gates(title: str, cpk_data: dict[str, Any] | None, strategy: str = 
 
 
 def desirability_score(title: str, cpk_data: dict[str, Any] | None, preferred: bool = False, inventory_fit: bool = False) -> float:
+    """Rank build-market appeal independently from listing economics."""
     lowered = title.lower()
-    specs = (cpk_data or {}).get("specs") or {}
-    score = 50.0
+    data = cpk_data or {}
+    if not data.get("category") or not data.get("brand") or not data.get("model"):
+        return 0.0
+    specs = data.get("specs") or {}
+    category = str(data.get("category") or "").lower()
+    brand = str(data.get("brand") or "").lower()
+    score = {"gpu": 57.0, "cpu": 55.0, "motherboard": 50.0, "ram": 48.0,
+             "ssd": 50.0, "psu": 45.0, "case": 44.0, "cooler": 43.0,
+             "fan": 38.0}.get(category, 42.0)
+    if brand in {"amd", "intel", "nvidia", "asus", "msi", "gigabyte", "corsair", "samsung", "crucial", "kingston", "noctua"}:
+        score += 4
     socket = str(specs.get("socket", "")).lower()
     memory = str(specs.get("memory_type") or specs.get("type") or "").lower()
     interface = str(specs.get("interface", "")).lower()
-    if socket == "am5": score += 15
-    elif socket == "am4": score += 7
-    if "ddr5" in memory or "ddr5" in lowered: score += 10
-    elif "ddr4" in memory or "ddr4" in lowered: score += 4
-    if "nvme" in interface or "nvme" in lowered: score += 10
-    elif "sata" in interface or "sata ssd" in lowered: score += 4
-    if "case" == (cpk_data or {}).get("category") and any(term in lowered for term in ("fans included", "with fans", "argb fans")): score += 8
-    if (cpk_data or {}).get("category") == "cooler" and any(term in lowered for term in ("aio", "liquid cpu", "240mm", "280mm", "360mm")): score += 8
+    if socket == "am5": score += 14
+    elif socket == "am4": score += 6
+    elif socket in {"lga1700", "lga1851"}: score += 10
+    if "ddr5" in memory or "ddr5" in lowered: score += 9
+    elif "ddr4" in memory or "ddr4" in lowered: score += 3
+    if "nvme" in interface or "nvme" in lowered or "pcie 4" in lowered: score += 9
+    elif "sata" in interface or "sata ssd" in lowered: score += 2
+    if category == "gpu" and re.search(r"\b(?:rtx\s*[345]\d{3}|rx\s*(?:6[7-9]|7)\d{2})\b", lowered): score += 8
+    if category in {"ram", "ssd"} and re.search(r"\b(?:32|64)\s*gb\b|\b[12]\s*tb\b", lowered): score += 5
+    if category == "psu" and re.search(r"\b(?:80\s*\+?\s*)?(?:gold|platinum|titanium)\b", lowered): score += 7
+    if category == "case" and any(term in lowered for term in ("fans included", "with fans", "argb fans")): score += 8
+    if category == "cooler" and any(term in lowered for term in ("aio", "liquid cpu", "240mm", "280mm", "360mm")): score += 8
+    if any(term in lowered for term in RETRO_PLATFORM_TERMS): score -= 18
+    if any(term in lowered for term in ("untested", "unknown condition", "damaged", "spares or repair")): score -= 12
     if preferred: score += 10
     if inventory_fit: score += 8
+    return max(0.0, min(100.0, score))
+
+
+RISK_PENALTIES = {
+    "identity_incomplete": 35.0, "accessory_or_parts_listing": 55.0,
+    "category_identity_conflict": 55.0, "whole_system_misclassified_as_component": 55.0,
+    "bundle_listing": 35.0, "multi_variant_listing": 30.0,
+    "specialised_mining_hardware": 35.0, "retro_platform_excluded": 25.0,
+    "insufficient_same_condition_sold_comparables": 18.0,
+    "insufficient_comparable_source_diversity": 15.0, "preliminary_sold_cohort": 10.0,
+}
+
+
+def risk_safety_score(flags: Iterable[str]) -> float:
+    """Return 0-100 safety using flag severity rather than raw flag count."""
+    penalty = sum(RISK_PENALTIES.get(flag, 20.0) for flag in set(flags))
+    return max(0.0, min(100.0, 100.0 - penalty))
+
+
+def liquidity_score(sold_count_90d: int, active_count: int,
+                    watch_velocity: float | None, bid_velocity: float | None) -> float | None:
+    """Return demand strength, or None when no demand evidence exists."""
+    if sold_count_90d <= 0 and watch_velocity is None and bid_velocity is None:
+        return None
+    score = min(70.0, sold_count_90d * 7.0)
+    if active_count > 0 and sold_count_90d > 0:
+        score += max(-20.0, min(15.0, (sold_count_90d / active_count - 0.5) * 20.0))
+    if watch_velocity is not None: score += min(8.0, max(0.0, watch_velocity) * 4.0)
+    if bid_velocity is not None: score += min(12.0, max(0.0, bid_velocity) * 12.0)
     return max(0.0, min(100.0, score))
 
 
@@ -327,14 +372,9 @@ def score_opportunity(
     elif market.source_diversity < policy.minimum_source_diversity and market.basis != "FIXED_RETAIL_CONTEXT":
         risk_flags.append("insufficient_comparable_source_diversity")
 
-    liquidity = min(70.0, sold_count_90d * 7.0)
-    if active_count > 0:
-        liquidity += max(-20.0, min(15.0, (sold_count_90d / active_count - 0.5) * 20.0))
-    if watch_velocity is not None: liquidity += min(8.0, watch_velocity * 4.0)
-    if bid_velocity is not None: liquidity += min(12.0, bid_velocity * 12.0)
-    liquidity = max(0.0, min(100.0, liquidity))
+    liquidity = liquidity_score(sold_count_90d, active_count, watch_velocity, bid_velocity)
     desirability = desirability_score(title, cpk_data, preferred, inventory_fit)
-    risk = max(0.0, 100.0 - len(risk_flags) * 30.0)
+    risk = risk_safety_score(risk_flags)
 
     if market is None:
         identity_vetoes = [flag for flag in risk_flags if flag != "insufficient_same_condition_sold_comparables"]
@@ -379,7 +419,10 @@ def score_opportunity(
     non_purchase_cost = total_cost - listing_price
     walk_away = max(0.0, resale_value / 1.25 - non_purchase_cost)
     economic_score = max(0.0, min(100.0, (roi / economics.super_roi_pct) * 55.0 + (profit / economics.super_profit) * 45.0))
-    total_score = economic_score * .45 + liquidity * .20 + desirability * .15 + market.confidence * .15 + risk * .05
+    score_parts = [(economic_score, .45), (desirability, .15), (market.confidence, .15), (risk, .05)]
+    if liquidity is not None:
+        score_parts.append((liquidity, .20))
+    total_score = sum(value * weight for value, weight in score_parts) / sum(weight for _, weight in score_parts)
     provisional_evidence = "preliminary_sold_cohort" in risk_flags
     evidence_limited = provisional_evidence or market.sample_size < policy.minimum_sold_comps
     blocking_flags = [flag for flag in risk_flags if flag != "preliminary_sold_cohort"]
@@ -387,7 +430,8 @@ def score_opportunity(
     evidence_label = "completed sales" if market.basis == "SOLD_REFINED" else "active market prices"
     reasons = [
         f"Resale basis uses the median of {market.sample_size} robust same-condition {evidence_label}; lower quartile remains the downside case.",
-        f"Expected net profit £{profit:.2f}; ROI {roi:.1f}%; liquidity {liquidity:.0f}/100.",
+        f"Expected net profit £{profit:.2f}; ROI {roi:.1f}%; "
+        + (f"liquidity {liquidity:.0f}/100." if liquidity is not None else "liquidity unknown (no demand evidence)."),
     ]
     if market.basis == "BIN_ESTIMATED":
         reasons.append(
@@ -434,4 +478,4 @@ def score_opportunity(
         classification, decision = "AVERAGE_DEAL", "INVESTIGATE"
     else:
         classification, decision = "POOR_DEAL", "IGNORE"
-    return OpportunityResult(classification, decision, round(total_score, 1), round(profit, 2), round(roi, 2), round(walk_away, 2), round(liquidity, 1), round(desirability, 1), round(risk, 1), market, eligible, reasons, risk_flags, {k: round(v, 2) for k, v in costs.items()})
+    return OpportunityResult(classification, decision, round(total_score, 1), round(profit, 2), round(roi, 2), round(walk_away, 2), None if liquidity is None else round(liquidity, 1), round(desirability, 1), round(risk, 1), market, eligible, reasons, risk_flags, {k: round(v, 2) for k, v in costs.items()})

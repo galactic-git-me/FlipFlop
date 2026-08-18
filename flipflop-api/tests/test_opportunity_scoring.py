@@ -1,5 +1,6 @@
 from app.gem_radar.opportunity_scoring import (
-    OpportunityPolicy, SoldComparable, category_economics, identity_gates, robust_sold_market, score_opportunity,
+    OpportunityPolicy, SoldComparable, category_economics, desirability_score,
+    identity_gates, risk_safety_score, robust_sold_market, score_opportunity,
 )
 
 
@@ -191,5 +192,41 @@ def test_liquidity_ranks_urgency_but_does_not_veto_a_verified_super_gem():
         market=market, sold_count_90d=0, active_count=10,
         watch_velocity=None, bid_velocity=None, policy=policy,
     )
-    assert result.liquidity_score == 0
+    assert result.liquidity_score is None
     assert result.classification == "SUPER_GEM"
+
+
+def test_missing_demand_is_unknown_but_observed_demand_is_scored():
+    market = robust_sold_market(comps([85, 88, 90]), subject_listing_id="999", policy=OpportunityPolicy())
+    unknown = score_opportunity(
+        listing_price=40, title="Noctua NH-D15 CPU Cooler",
+        cpk_data={"category": "cooler", "brand": "Noctua", "model": "NH-D15"},
+        market=market, sold_count_90d=0, active_count=10,
+        watch_velocity=None, bid_velocity=None, policy=OpportunityPolicy(),
+    )
+    observed = score_opportunity(
+        listing_price=40, title="Noctua NH-D15 CPU Cooler",
+        cpk_data={"category": "cooler", "brand": "Noctua", "model": "NH-D15"},
+        market=market, sold_count_90d=0, active_count=10,
+        watch_velocity=1.0, bid_velocity=0.0, policy=OpportunityPolicy(),
+    )
+    assert unknown.liquidity_score is None
+    assert observed.liquidity_score == 4.0
+
+
+def test_risk_flags_have_distinct_severity_and_are_deduplicated():
+    assert risk_safety_score(["preliminary_sold_cohort"]) == 90
+    assert risk_safety_score(["accessory_or_parts_listing"]) == 45
+    assert risk_safety_score(["bundle_listing", "bundle_listing"]) == 65
+
+
+def test_desirability_separates_modern_build_friendly_parts():
+    modern = desirability_score(
+        "Samsung 2TB NVMe PCIe 4 SSD",
+        {"category": "ssd", "brand": "Samsung", "model": "990 Pro", "specs": {"interface": "nvme"}},
+    )
+    basic = desirability_score(
+        "Generic SATA SSD",
+        {"category": "ssd", "brand": "Generic", "model": "SATA SSD", "specs": {"interface": "sata"}},
+    )
+    assert modern > basic

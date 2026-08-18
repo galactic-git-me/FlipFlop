@@ -23,7 +23,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.gem_radar.cpk_market import robust_active_market
 from app.gem_radar.demand_velocity import record_demand_snapshot
-from app.gem_radar.opportunity_scoring import OpportunityResult, SoldComparable, identity_gates, load_opportunity_policy, robust_sold_market, score_opportunity
+from app.gem_radar.opportunity_scoring import OpportunityResult, SoldComparable, identity_gates, load_opportunity_policy, risk_safety_score, robust_sold_market, score_opportunity
 from app.gem_radar.favourite_matching import find_matching_favourite
 from app.gem_radar.marketplace import fallback_listing_url
 from app.models.favourite import Favourite
@@ -182,8 +182,8 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
             opportunity = OpportunityResult(
                 classification=classification, decision=decision, score=0.0,
                 expected_profit=None, roi_pct=None, walk_away_price=None,
-                liquidity_score=0.0, desirability_score=0.0,
-                risk_score=max(0.0, 100.0 - 30.0 * len(flags)), market=None,
+                liquidity_score=None, desirability_score=None,
+                risk_score=risk_safety_score(flags), market=None,
                 eligible=False,
                 reasons=["Listing was processed, but no trustworthy canonical product identity is available."],
                 risk_flags=flags,

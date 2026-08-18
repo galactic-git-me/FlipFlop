@@ -1678,8 +1678,8 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                 ["Comparables", explanationListing.market_sample_size ?? 0],
                 ["Market evidence", (explanationListing.scoring_explanation?.market?.basis ?? "NONE").replace(/_/g, " ")],
                 ["Market confidence", `${(explanationListing.market_confidence ?? 0).toFixed(0)}/100`],
-                ["Liquidity", `${(explanationListing.liquidity_score ?? 0).toFixed(0)}/100`],
-                ["Build fit", `${(explanationListing.desirability_score ?? 0).toFixed(0)}/100`],
+                ["Liquidity", explanationListing.liquidity_score == null ? "Unknown" : `${explanationListing.liquidity_score.toFixed(0)}/100`],
+                ["Build fit", explanationListing.desirability_score == null ? "Unknown" : `${explanationListing.desirability_score.toFixed(0)}/100`],
               ].map(([label, value]) => (
                 <div key={String(label)} className="rounded-xl border border-white/[0.07] bg-white/[0.03] p-3">
                   <p className="text-[11px] text-slate-500">{label}</p><p className="mt-1 font-semibold text-slate-100">{value}</p>
