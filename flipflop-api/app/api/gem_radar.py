@@ -1663,6 +1663,7 @@ async def get_scan_schedule_status(db: AsyncSession = Depends(get_db), _: None =
 @router.get("/sold-comp-targets", response_model=list[SoldCompTarget])
 async def sold_comp_targets(
     query: str = Query(..., min_length=1),
+    category: str | None = Query(None),
     limit: int = Query(3, ge=1, le=5),
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
@@ -1684,6 +1685,12 @@ async def sold_comp_targets(
                 o.delivered_price
             FROM gem_radar_listing_observations o
             ORDER BY o.listing_id, o.observed_at DESC, o.id DESC
+        ), sold_counts AS (
+            SELECT cpk, condition, COUNT(*) AS sold_count
+            FROM gem_radar_sold_observations
+            WHERE cpk IS NOT NULL
+              AND observed_at >= CURRENT_TIMESTAMP - INTERVAL '90 days'
+            GROUP BY cpk, condition
         ), candidates AS (
             SELECT
                 c.cpk,
@@ -1694,24 +1701,27 @@ async def sold_comp_targets(
                 COUNT(DISTINCT l.listing_id) AS candidate_count,
                 MIN(l.delivered_price) AS candidate_price,
                 mp.median_price,
-                COUNT(DISTINCT so.id) AS sold_count
+                COALESCE(sc.sold_count, 0) AS sold_count
             FROM latest l
             JOIN gem_radar_listing_cpk c ON c.listing_id = l.listing_id
             JOIN gem_radar_cpk_market_price mp ON mp.cpk = c.cpk
             JOIN gem_radar_scored_listings s ON s.listing_id = l.listing_id
-            LEFT JOIN gem_radar_sold_observations so
-              ON so.cpk = c.cpk
-             AND so.condition = CASE
+            LEFT JOIN sold_counts sc
+              ON sc.cpk = c.cpk
+             AND sc.condition = CASE
                   WHEN LOWER(COALESCE(l.condition_normalised, '')) = 'new'
                   THEN 'new' ELSE 'used' END
-             AND so.observed_at >= CURRENT_TIMESTAMP - INTERVAL '90 days'
             WHERE l.search_query = :query
               AND s.classification = 'INSUFFICIENT_DATA'
               AND c.cpk_data->>'brand' IS NOT NULL
               AND c.cpk_data->>'model' IS NOT NULL
+              AND (CAST(:category AS TEXT) IS NULL OR c.cpk_data->>'category' = :category)
               AND mp.listing_count >= 2
               AND mp.median_price > 0
-            GROUP BY c.cpk, brand, model, condition, mp.median_price
+            GROUP BY c.cpk, c.cpk_data->>'brand', c.cpk_data->>'model',
+                     CASE WHEN LOWER(COALESCE(l.condition_normalised, '')) = 'new'
+                          THEN 'new' ELSE 'used' END,
+                     mp.median_price, sc.sold_count
         )
         SELECT cpk, brand, model, condition, candidate_count,
                ROUND((1.0 - candidate_price / median_price) * 100.0) AS discount_pct
@@ -1720,7 +1730,7 @@ async def sold_comp_targets(
           AND candidate_price <= median_price * 0.90
         ORDER BY discount_pct DESC, candidate_count DESC
         LIMIT :limit
-    """), {"query": query, "limit": limit})).all()
+    """), {"query": query, "category": category, "limit": limit})).all()
     return [
         SoldCompTarget(
             cpk=cpk,
