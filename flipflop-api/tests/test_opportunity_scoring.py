@@ -33,6 +33,17 @@ def test_accessory_and_retro_platform_are_hard_gates():
     assert "retro_platform_excluded" not in identity_gates("AM3 DDR3 motherboard", identity, "retro_budget")
 
 
+def test_full_system_and_value_variant_identity_gates():
+    gpu = {"category": "gpu", "brand": "nvidia", "model": "rtx-3060"}
+    assert "whole_system_misclassified_as_component" in identity_gates(
+        "Custom White Gaming Desktop RTX 3060 12GB 32GB RAM", gpu
+    )
+    ssd = {"category": "ssd", "brand": "samsung", "model": "980-pro"}
+    assert "multi_variant_listing" in identity_gates(
+        "Samsung 980 Pro SSD 250GB 500GB 1TB 2TB", ssd
+    )
+
+
 def test_super_gem_requires_profit_roi_confidence_liquidity_and_no_veto():
     policy = OpportunityPolicy()
     market = robust_sold_market(comps([590, 600, 610, 620, 630, 640]), subject_listing_id="999", policy=policy)

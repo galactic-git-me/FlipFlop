@@ -67,6 +67,28 @@ def _safe_title(title: str, limit: int = 50) -> str:
 def _slug(value: str) -> str:
     return re.sub(r"-+", "-", re.sub(r"[^a-z0-9]+", "-", value.lower())).strip("-")
 
+
+def canonical_variant_model(category: str, model: str, title: str) -> str:
+    """Add value-defining variants which a product-line name omits."""
+    result = _slug(model)
+    lowered = title.lower()
+    if category in {"ssd", "ram"}:
+        capacities = re.findall(r"\b(\d+(?:\.\d+)?)\s*(tb|gb)\b", lowered)
+        if len(set(capacities)) == 1:
+            value, unit = capacities[0]
+            token = f"{value}{unit}"
+            if token not in result:
+                result = f"{result}-{token}"
+    elif category == "gpu":
+        vram = re.search(r"\b(\d{1,2})\s*gb\s*(?:gddr\d\w*|vram|graphics)?\b", lowered)
+        if vram and f"{vram.group(1)}gb" not in result:
+            result = f"{result}-{vram.group(1)}gb"
+    elif category == "cooler":
+        radiator = re.search(r"\b(120|140|240|280|360|420)\s*mm\b", lowered)
+        if radiator and f"{radiator.group(1)}mm" not in result:
+            result = f"{result}-{radiator.group(1)}mm"
+    return result
+
 @dataclass
 class ExtractedProductData:
     """Structured product info extracted from title."""
@@ -243,7 +265,7 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
                 # share a key, so market prices never settled. specs is still
                 # captured in cpk_data for display/debugging, just not hashed.
                 data["brand"] = _slug(str(data["brand"]))
-                data["model"] = _slug(str(data["model"]))
+                data["model"] = canonical_variant_model(data["category"], str(data["model"]), title)
                 if not data["brand"] or not data["model"]:
                     return None
                 cpk_input = f"{data['category']}|{data['brand']}|{data['model']}"

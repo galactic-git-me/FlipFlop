@@ -240,7 +240,24 @@ def identity_gates(title: str, cpk_data: dict[str, Any] | None, strategy: str = 
     if category in COMPONENT_CATEGORIES and any(term in lowered for term in ("mini pc", "laptop", "notebook", "desktop computer")):
         flags.append("whole_system_misclassified_as_component")
     import re
+    if category in COMPONENT_CATEGORIES and re.search(
+        r"\b(gaming desktop|optiplex|thinkcentre|elitedesk|prodesk)\b|"
+        r"\blegion\b.*\b(?:ram|ssd)\b|"
+        r"\b(?:rtx|gtx)\s*\d{3,4}\b.*\b\d+gb\s+ram\b|"
+        r"\b\d+gb\s+ram\b.*\b(?:rtx|gtx)\s*\d{3,4}\b",
+        lowered,
+    ):
+        flags.append("whole_system_misclassified_as_component")
+    if category in COMPONENT_CATEGORIES and re.search(
+        r"\b(?:ram|memory)\b.*\b(?:and|\+)\b.*\b(?:cpu|processor|ryzen|core\s+i[3579])\b|"
+        r"\b(?:cpu|processor|ryzen|core\s+i[3579])\b.*\b(?:and|\+)\b.*\b(?:ram|memory)\b",
+        lowered,
+    ):
+        flags.append("bundle_listing")
     if re.search(r"\b\d+\s*/\s*\d+(?:\s*/\s*\d+)?\s*gb\b", lowered):
+        flags.append("multi_variant_listing")
+    capacities = set(re.findall(r"\b\d+(?:\.\d+)?\s*(?:tb|gb)\b", lowered))
+    if category in {"ssd", "ram"} and len(capacities) > 1:
         flags.append("multi_variant_listing")
     if category == "gpu" and any(term in lowered for term in ("mining gpu", "mining card", "cmp 170")):
         flags.append("specialised_mining_hardware")
