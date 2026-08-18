@@ -144,6 +144,8 @@ export default function BuildDetailPage() {
           setActiveTab("build");
         } else if (b.status === "sold") {
           setActiveTab("fulfillment");
+        } else if (b.status === "built") {
+          setActiveTab("pricing");
         } else {
           setActiveTab("listing");
         }
@@ -659,6 +661,14 @@ export default function BuildDetailPage() {
             ))}
           </div>
 
+          <div className="mt-3 flex items-center justify-between rounded-lg border border-cyan-400/15 bg-cyan-400/[0.04] px-3 py-3">
+            <div>
+              <p className="text-xs font-semibold text-slate-200">Total build cost</p>
+              <p className="mt-0.5 text-[11px] text-slate-500">Sum of every recorded component purchase</p>
+            </div>
+            <p className="text-lg font-black text-cyan-300">{formatCurrency(build.total_cost ?? 0)}</p>
+          </div>
+
           {build.status === "in_progress" && (
             <button
               onClick={markBuilt}
@@ -718,7 +728,18 @@ export default function BuildDetailPage() {
         </div>
       )}
 
-      {/* Tab 2: Listing & Price */}
+      {/* Tab 2: Pricing intelligence */}
+      {canSell && activeTab === "pricing" && (
+        <div className="mb-6">
+          <PricingIntelligence buildId={buildId} onUsePrice={(recommended) => {
+            setPrice(String(Math.round(recommended)));
+            setActiveTab("listing");
+            toast.success(`Asking price set to ${formatCurrency(recommended)} — review before publishing`);
+          }} />
+        </div>
+      )}
+
+      {/* Tab 3: Listing */}
       {canSell && activeTab === "listing" && (
         <div className="flex flex-col gap-6 mb-6">
           {/* Sell flow */}
@@ -757,14 +778,6 @@ export default function BuildDetailPage() {
               </div>
             )}
           </div>
-
-          {/* Pricing Breakdown with Sold Data */}
-          {build && build.generated_title && (
-            <PricingBreakdown
-              buildId={String(buildId)}
-              onPricingUpdate={(newPrice) => setPrice(String(Math.round(newPrice)))}
-            />
-          )}
 
           {/* FlipFlop.shop storefront */}
           {build.generated_title && (
