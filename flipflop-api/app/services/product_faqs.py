@@ -43,9 +43,9 @@ def selected_faqs(build_id: int, selected_ids: list[str] | None) -> list[dict]:
 
 def render_ebay_faq_html(items: list[dict]) -> str:
     rows = "".join(
-        f'<details style="margin:0 0 10px;padding:12px;border:1px solid #d7dce2;border-radius:8px;">'
-        f'<summary style="cursor:pointer;font-weight:700;">{item["question"]}</summary>'
-        f'<p style="margin:9px 0 0;line-height:1.55;">{item["answer"]}</p></details>'
+        f'<div style="margin:0 0 10px;padding:12px;border:1px solid #d7dce2;border-radius:8px;">'
+        f'<h3 style="margin:0;font-size:16px;">{item["question"]}</h3>'
+        f'<p style="margin:9px 0 0;line-height:1.55;">{item["answer"]}</p></div>'
         for item in items
     )
     return (

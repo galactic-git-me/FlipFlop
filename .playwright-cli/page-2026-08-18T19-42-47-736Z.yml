@@ -1,0 +1,196 @@
+- generic [ref=f3e1]:
+  - complementary [ref=f3e2]:
+    - generic [ref=f3e3]:
+      - img "FlipFlop" [ref=f3e5]
+      - navigation [ref=f3e6]:
+        - link "Sourcing" [ref=f3e7] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Add Build" [ref=f3e11] [cursor=pointer]:
+          - /url: /add-build
+        - link "Your Builds" [ref=f3e13] [cursor=pointer]:
+          - /url: /builds
+        - link "Configurator" [ref=f3e18] [cursor=pointer]:
+          - /url: /configurator-config
+        - link "PC Builder" [ref=f3e22] [cursor=pointer]:
+          - /url: /pc-builder
+  - generic [ref=f3e25]:
+    - banner [ref=f3e26]:
+      - textbox "QUERY MARKET DATA..." [ref=f3e31]
+      - generic [ref=f3e32]:
+        - img "FlipFlop" [ref=f3e35]
+        - generic [ref=f3e36]:
+          - button "Favourites" [ref=f3e43]
+          - button "Notifications" [ref=f3e46]:
+            - generic [ref=f3e59]: "2"
+    - main [ref=f3e50]:
+      - region "Notifications alt+T"
+      - generic [ref=f3e60]:
+        - generic [ref=f3e61]:
+          - generic "PROMETHEUS" [ref=f3e62]:
+            - generic "Not listed" [ref=f3e64]
+          - generic [ref=f3e65]:
+            - button "Generate title" [ref=f3e66] [cursor=pointer]
+            - tooltip "Generate title"
+          - generic [ref=f3e70]:
+            - button "Generate description" [ref=f3e71] [cursor=pointer]
+            - tooltip "Generate description"
+          - generic [ref=f3e75]:
+            - button "Preview eBay listing" [ref=f3e76] [cursor=pointer]
+            - tooltip "Preview eBay listing"
+          - generic [ref=f3e80]:
+            - button "Create eBay listing" [ref=f3e81] [cursor=pointer]
+            - tooltip "Create eBay listing"
+          - generic [ref=f3e83]:
+            - button "Publish to FlipFlop.shop" [ref=f3e84] [cursor=pointer]
+            - tooltip "Publish to FlipFlop.shop"
+        - button "Your Builds" [ref=f3e89]
+        - generic [ref=f3e92]:
+          - heading "PROMETHEUS" [level=1] [ref=f3e93]
+          - generic [ref=f3e94]: Built
+        - generic [ref=f3e95]:
+          - generic "Not currently published to eBay" [ref=f3e96]: eBay
+          - generic "Not currently published to FlipFlop.shop" [ref=f3e103]: FlipFlop.shop
+        - generic [ref=f3e111]:
+          - button "1. Build Checklist" [ref=f3e112] [cursor=pointer]
+          - button "2. Pricing" [ref=f3e121] [cursor=pointer]
+          - button "3. Listing" [ref=f3e128] [cursor=pointer]
+          - button "4. Media & Cards" [ref=f3e136] [cursor=pointer]
+          - button "5. Item Specifics" [ref=f3e145] [cursor=pointer]
+          - button "6. FAQs" [active] [ref=f3e154] [cursor=pointer]
+          - button "7. Shipping & Offers" [ref=f3e162] [cursor=pointer]
+        - generic [ref=f3e439]:
+          - generic [ref=f3e440]:
+            - generic [ref=f3e441]:
+              - generic [ref=f3e442]:
+                - heading "Customer FAQ bank" [level=2] [ref=f3e446]
+                - generic [ref=f3e447]: 10/10 selected
+              - paragraph [ref=f3e448]: These answers are included in the eBay description when it is published and appear as an FAQ section on FlipFlop.shop. Ten defaults are chosen for each build; untick any and choose replacements below.
+              - paragraph [ref=f3e449]: Using this build's automatically chosen defaults.
+            - generic [ref=f3e450]:
+              - button "Choose another 10" [ref=f3e451] [cursor=pointer]
+              - button "Save selection" [ref=f3e458] [cursor=pointer]
+          - generic [ref=f3e462]:
+            - generic [ref=f3e463] [cursor=pointer]:
+              - 'checkbox "Include FAQ: Is the PC ready to use when it arrives?" [checked] [ref=f3e464]'
+              - generic [ref=f3e465]:
+                - generic [ref=f3e466]: Setup
+                - generic [ref=f3e467]: Is the PC ready to use when it arrives?
+                - generic [ref=f3e468]: Yes. Windows, drivers and available updates are installed, and the completed PC is tested before dispatch. You only need to connect your display, keyboard, mouse and internet.
+            - generic [ref=f3e469] [cursor=pointer]:
+              - 'checkbox "Include FAQ: How has the PC been tested?" [checked] [ref=f3e470]'
+              - generic [ref=f3e471]:
+                - generic [ref=f3e472]: Quality
+                - generic [ref=f3e473]: How has the PC been tested?
+                - generic [ref=f3e474]: The completed system is checked for startup, stability, temperatures, storage, memory and graphics operation. Any published benchmark card contains results measured on this specific build.
+            - generic [ref=f3e475] [cursor=pointer]:
+              - 'checkbox "Include FAQ: Is Windows installed and activated?" [checked] [ref=f3e476]'
+              - generic [ref=f3e477]:
+                - generic [ref=f3e478]: Software
+                - generic [ref=f3e479]: Is Windows installed and activated?
+                - generic [ref=f3e480]: The listing specifications state the installed Windows edition. Activation status is checked before dispatch and no unlisted paid software subscription is included.
+            - generic [ref=f3e481] [cursor=pointer]:
+              - 'checkbox "Include FAQ: Does it include Wi-Fi and Bluetooth?" [checked] [ref=f3e482]'
+              - generic [ref=f3e483]:
+                - generic [ref=f3e484]: Connectivity
+                - generic [ref=f3e485]: Does it include Wi-Fi and Bluetooth?
+                - generic [ref=f3e486]: Check the item specifications for this build. Wi-Fi or Bluetooth is only described as included when the installed hardware supports it.
+            - generic [ref=f3e487] [cursor=pointer]:
+              - 'checkbox "Include FAQ: Can I upgrade it later?" [ref=f3e488]'
+              - generic [ref=f3e489]:
+                - generic [ref=f3e490]: Ownership
+                - generic [ref=f3e491]: Can I upgrade it later?
+                - generic [ref=f3e492]: Yes. It uses standard desktop components wherever the specification allows. Compatibility, available slots, power requirements and case clearance should be checked before any upgrade.
+            - generic [ref=f3e493] [cursor=pointer]:
+              - 'checkbox "Include FAQ: Are the photographs of the actual PC?" [checked] [ref=f3e494]'
+              - generic [ref=f3e495]:
+                - generic [ref=f3e496]: Condition
+                - generic [ref=f3e497]: Are the photographs of the actual PC?
+                - generic [ref=f3e498]: Yes. The build photographs show the actual completed machine unless an image is clearly labelled as an illustration or 3D view.
+            - generic [ref=f3e499] [cursor=pointer]:
+              - 'checkbox "Include FAQ: Are all of the components new?" [checked] [ref=f3e500]'
+              - generic [ref=f3e501]:
+                - generic [ref=f3e502]: Condition
+                - generic [ref=f3e503]: Are all of the components new?
+                - generic [ref=f3e504]: The exact condition is disclosed in the listing. Any component that was opened, tested or previously owned is identified rather than being represented as factory-sealed.
+            - generic [ref=f3e505] [cursor=pointer]:
+              - 'checkbox "Include FAQ: How is the PC packaged for delivery?" [ref=f3e506]'
+              - generic [ref=f3e507]:
+                - generic [ref=f3e508]: Delivery
+                - generic [ref=f3e509]: How is the PC packaged for delivery?
+                - generic [ref=f3e510]: The PC is secured with protective packaging designed to limit movement and protect the case. The buyer should remove any clearly marked internal transit protection before switching it on.
+            - generic [ref=f3e511] [cursor=pointer]:
+              - 'checkbox "Include FAQ: How long will delivery take?" [ref=f3e512]'
+              - generic [ref=f3e513]:
+                - generic [ref=f3e514]: Delivery
+                - generic [ref=f3e515]: How long will delivery take?
+                - generic [ref=f3e516]: Ready-to-ship PCs normally have one working day handling followed by an estimated one to two working day tracked delivery window. Any different build lead time is shown before purchase.
+            - generic [ref=f3e517] [cursor=pointer]:
+              - 'checkbox "Include FAQ: Will I receive tracking information?" [ref=f3e518]'
+              - generic [ref=f3e519]:
+                - generic [ref=f3e520]: Delivery
+                - generic [ref=f3e521]: Will I receive tracking information?
+                - generic [ref=f3e522]: Yes. Tracking is provided after dispatch when the courier booking has been completed.
+            - generic [ref=f3e523] [cursor=pointer]:
+              - 'checkbox "Include FAQ: What should I do if it arrives damaged?" [ref=f3e524]'
+              - generic [ref=f3e525]:
+                - generic [ref=f3e526]: Delivery
+                - generic [ref=f3e527]: What should I do if it arrives damaged?
+                - generic [ref=f3e528]: Keep all packaging, photograph the parcel and PC before further handling, and contact FlipFlop promptly. Do not attempt a repair before receiving guidance.
+            - generic [ref=f3e529] [cursor=pointer]:
+              - 'checkbox "Include FAQ: Can I return the PC?" [checked] [ref=f3e530]'
+              - generic [ref=f3e531]:
+                - generic [ref=f3e532]: Returns
+                - generic [ref=f3e533]: Can I return the PC?
+                - generic [ref=f3e534]: The applicable returns period is shown with the product. For a change of mind the customer pays return postage; FlipFlop pays reasonable return costs when goods are faulty, damaged or misdescribed. Statutory rights are unaffected.
+            - generic [ref=f3e535] [cursor=pointer]:
+              - 'checkbox "Include FAQ: What warranty or consumer protection do I receive?" [checked] [ref=f3e536]'
+              - generic [ref=f3e537]:
+                - generic [ref=f3e538]: Support
+                - generic [ref=f3e539]: What warranty or consumer protection do I receive?
+                - generic [ref=f3e540]: UK statutory consumer rights apply. Any remaining transferable manufacturer warranty is identified with the build; no unsupported manufacturer cover is implied.
+            - generic [ref=f3e541] [cursor=pointer]:
+              - 'checkbox "Include FAQ: Can you help me set it up?" [ref=f3e542]'
+              - generic [ref=f3e543]:
+                - generic [ref=f3e544]: Support
+                - generic [ref=f3e545]: Can you help me set it up?
+                - generic [ref=f3e546]: Yes. Direct setup and troubleshooting support is available after purchase, including help with first connection and common configuration questions.
+            - generic [ref=f3e547] [cursor=pointer]:
+              - 'checkbox "Include FAQ: How noisy is the PC?" [checked] [ref=f3e548]'
+              - generic [ref=f3e549]:
+                - generic [ref=f3e550]: Performance
+                - generic [ref=f3e551]: How noisy is the PC?
+                - generic [ref=f3e552]: Noise varies with workload, room temperature and fan settings. The system is configured for stable everyday operation, but no fixed decibel claim is made unless it has been measured and published.
+            - generic [ref=f3e553] [cursor=pointer]:
+              - 'checkbox "Include FAQ: What gaming performance should I expect?" [checked] [ref=f3e554]'
+              - generic [ref=f3e555]:
+                - generic [ref=f3e556]: Performance
+                - generic [ref=f3e557]: What gaming performance should I expect?
+                - generic [ref=f3e558]: Use the measured results shown for this build where available. Frame rates also depend on the game, resolution, settings, updates and background software.
+            - generic [ref=f3e559] [cursor=pointer]:
+              - 'checkbox "Include FAQ: Is a monitor, keyboard or mouse included?" [ref=f3e560]'
+              - generic [ref=f3e561]:
+                - generic [ref=f3e562]: Included
+                - generic [ref=f3e563]: Is a monitor, keyboard or mouse included?
+                - generic [ref=f3e564]: Only the items explicitly listed in the included-items section and photographs are supplied. A monitor and peripherals are not assumed to be included.
+            - generic [ref=f3e565] [cursor=pointer]:
+              - 'checkbox "Include FAQ: Are the original component boxes included?" [ref=f3e566]'
+              - generic [ref=f3e567]:
+                - generic [ref=f3e568]: Included
+                - generic [ref=f3e569]: Are the original component boxes included?
+                - generic [ref=f3e570]: Only packaging shown or explicitly listed is included. Large original boxes may be omitted where they cannot be shipped safely with the completed PC.
+            - generic [ref=f3e571] [cursor=pointer]:
+              - 'checkbox "Include FAQ: Can I change the specification before buying?" [ref=f3e572]'
+              - generic [ref=f3e573]:
+                - generic [ref=f3e574]: Buying
+                - generic [ref=f3e575]: Can I change the specification before buying?
+                - generic [ref=f3e576]: Ready-to-ship machines are sold in their completed specification. For different parts, choose a Curated Build or request a Custom Build rather than altering this finished unit.
+            - generic [ref=f3e577] [cursor=pointer]:
+              - 'checkbox "Include FAQ: Can I collect the PC?" [ref=f3e578]'
+              - generic [ref=f3e579]:
+                - generic [ref=f3e580]: Delivery
+                - generic [ref=f3e581]: Can I collect the PC?
+                - generic [ref=f3e582]: Collection is not available unless the individual listing explicitly says otherwise. The standard service is tracked delivery.
+      - button [ref=f3e52]:
+        - img "Hermes" [ref=f3e53]
+  - button "Open Next.js Dev Tools" [ref=f3e434] [cursor=pointer]
+  - alert [ref=f3e438]
