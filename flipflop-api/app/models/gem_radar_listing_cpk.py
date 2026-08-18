@@ -11,7 +11,9 @@ from app.database import Base
 class GemRadarListingCpk(Base):
     __tablename__ = "gem_radar_listing_cpk"
 
-    listing_id: Mapped[str] = mapped_column(String(50), primary_key=True)
+    # Vendor-qualified IDs can include a source prefix plus a product slug.
+    # Keep this aligned with gem_radar_listing_observations.listing_id.
+    listing_id: Mapped[str] = mapped_column(String(255), primary_key=True)
     cpk: Mapped[str] = mapped_column(String(64), index=True)
     cpk_data: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
     cpk_confidence: Mapped[float | None] = mapped_column(Float, nullable=True)

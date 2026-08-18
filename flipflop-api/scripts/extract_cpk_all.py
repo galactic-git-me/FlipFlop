@@ -24,7 +24,7 @@ async def extract_all_cpk():
         # Create persistent CPK table if it doesn't exist
         await conn.execute('''
             CREATE TABLE IF NOT EXISTS gem_radar_listing_cpk (
-                listing_id VARCHAR(50) PRIMARY KEY,
+                listing_id VARCHAR(255) PRIMARY KEY,
                 cpk VARCHAR(64) NOT NULL,
                 cpk_data JSONB,
                 cpk_confidence FLOAT,

@@ -23,7 +23,7 @@ async def migrate_cpk_values():
         # Create table
         create_table_query = """
         CREATE TABLE IF NOT EXISTS gem_radar_listing_cpk (
-            listing_id VARCHAR(50) PRIMARY KEY,
+            listing_id VARCHAR(255) PRIMARY KEY,
             cpk VARCHAR(64) NOT NULL,
             cpk_data JSONB,
             cpk_confidence FLOAT,

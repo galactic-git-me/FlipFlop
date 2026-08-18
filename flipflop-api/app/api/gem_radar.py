@@ -1827,6 +1827,12 @@ async def _submit_scan_body(
                 cpk_assigned_count += 1
                 pipeline_status.increment(payload.search_id, cpk_assigned_count=1)
                 pipeline_status.track_listing(payload.search_id, listing.listing_id)
+            else:
+                # A previous attempt may have recorded the observation but
+                # failed before persisting its CPK (for example, an earlier
+                # schema rejected a long vendor-qualified listing ID). Retry
+                # identity assignment so these rows self-heal when re-seen.
+                listings_to_assign_cpk.append(listing)
 
             # Check if it has a score
             score_result = await db.execute(
@@ -1837,7 +1843,7 @@ async def _submit_scan_body(
             if score_result.scalar_one_or_none() is not None:
                 pipeline_status.increment(payload.search_id, classified_count=1)
 
-            # Skip CPK assignment for cross-run duplicates (already has CPK)
+            # Existing CPKs skip extraction; missing CPKs were queued above.
             continue
 
         # New listing (not seen before): full pipeline

@@ -13,7 +13,8 @@ from app.database import Base
 class GemRadarCpkListingPrice(Base):
     __tablename__ = "gem_radar_cpk_listing_price"
 
-    listing_id: Mapped[str] = mapped_column(String(50), primary_key=True)
+    # Vendor-qualified IDs can include a source prefix plus a product slug.
+    listing_id: Mapped[str] = mapped_column(String(255), primary_key=True)
     cpk: Mapped[str] = mapped_column(String(64), index=True)
     price: Mapped[float] = mapped_column(Float)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
