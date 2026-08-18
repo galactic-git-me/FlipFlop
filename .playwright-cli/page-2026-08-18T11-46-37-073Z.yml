@@ -1,0 +1,112 @@
+- generic [active] [ref=f1e1]:
+  - complementary [ref=f1e2]:
+    - generic [ref=f1e3]:
+      - img "FlipFlop" [ref=f1e5]
+      - navigation [ref=f1e6]:
+        - link "Sourcing" [ref=f1e7] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Add Build" [ref=f1e12] [cursor=pointer]:
+          - /url: /add-build
+        - link "Your Builds" [ref=f1e15] [cursor=pointer]:
+          - /url: /builds
+        - link "Configurator" [ref=f1e21] [cursor=pointer]:
+          - /url: /configurator-config
+        - link "PC Builder" [ref=f1e26] [cursor=pointer]:
+          - /url: /pc-builder
+  - generic [ref=f1e30]:
+    - banner [ref=f1e31]:
+      - textbox "QUERY MARKET DATA..." [ref=f1e36]
+      - generic [ref=f1e37]:
+        - img "FlipFlop" [ref=f1e40]
+        - generic [ref=f1e41]:
+          - button "Favourites" [ref=f1e48]
+          - button "Notifications" [ref=f1e51]
+          - button "Sign out" [ref=f1e55]
+    - main [ref=f1e60]:
+      - generic [ref=f1e61]:
+        - generic [ref=f1e62]:
+          - heading "Sourcing Dashboard" [level=1] [ref=f1e64]
+          - generic [ref=f1e65]:
+            - generic "No scan activity observed yet" [ref=f1e66]:
+              - generic [ref=f1e70]:
+                - generic [ref=f1e71]: Next scan (est.)
+                - generic [ref=f1e72]: No scan activity yet
+            - button "Refresh data now" [disabled] [ref=f1e73]
+        - generic [ref=f1e80]:
+          - button "Stats" [ref=f1e81]
+          - button "Listings" [ref=f1e82]
+          - button "Analytics" [ref=f1e83]
+        - generic [ref=f1e84]:
+          - generic [ref=f1e86]:
+            - generic [ref=f1e87]:
+              - heading "Market Snapshot" [level=3] [ref=f1e88]
+              - paragraph [ref=f1e89]: Every currently-active listing in the DB, not just this run
+            - generic [ref=f1e90]:
+              - generic [ref=f1e91]:
+                - generic [ref=f1e92]: "0"
+                - generic [ref=f1e93]: Listings
+              - generic [ref=f1e94]:
+                - generic [ref=f1e95]: "0"
+                - generic [ref=f1e96]: SUPER GEMs
+              - generic [ref=f1e97]:
+                - generic [ref=f1e98]: "0"
+                - generic [ref=f1e99]: GEMs
+              - generic [ref=f1e100]:
+                - generic [ref=f1e101]: "0.0"
+                - generic [ref=f1e102]: Avg Gem
+              - generic [ref=f1e103]:
+                - generic [ref=f1e104]: "0.0"
+                - generic [ref=f1e105]: Avg Super Gem
+              - generic [ref=f1e106]:
+                - generic [ref=f1e107]: "0"
+                - generic [ref=f1e108]: BIN Prices
+              - generic [ref=f1e109]:
+                - generic [ref=f1e110]: "0"
+                - generic [ref=f1e111]: Sold Prices
+          - generic [ref=f1e113]:
+            - generic [ref=f1e114]:
+              - generic [ref=f1e115]:
+                - heading "Current Scan Run" [level=3] [ref=f1e117]
+                - paragraph [ref=f1e118]: 0 searches in this run
+              - generic [ref=f1e119]:
+                - generic [ref=f1e120]:
+                  - generic [ref=f1e121]: "0"
+                  - generic [ref=f1e122]: Listings
+                - generic [ref=f1e123]:
+                  - generic [ref=f1e124]: "0"
+                  - generic [ref=f1e125]: SUPER GEMs
+                - generic [ref=f1e126]:
+                  - generic [ref=f1e127]: "0"
+                  - generic [ref=f1e128]: GEMs
+                - generic [ref=f1e129]:
+                  - generic [ref=f1e130]: "0.0"
+                  - generic [ref=f1e131]: Avg Gem
+                - generic [ref=f1e132]:
+                  - generic [ref=f1e133]: "0.0"
+                  - generic [ref=f1e134]: Avg Super Gem
+                - generic [ref=f1e135]:
+                  - generic [ref=f1e136]: "0"
+                  - generic [ref=f1e137]: BIN Prices
+                - generic [ref=f1e138]:
+                  - generic [ref=f1e139]: "0"
+                  - generic [ref=f1e140]: Sold Prices
+            - paragraph [ref=f1e141]: No scans to display.
+          - generic [ref=f1e142]:
+            - generic [ref=f1e143]:
+              - generic [ref=f1e144]: Gem CPU
+              - paragraph [ref=f1e145]: No qualifying gem in the current snapshot
+            - generic [ref=f1e146]:
+              - generic [ref=f1e147]: Gem GPU
+              - paragraph [ref=f1e148]: No qualifying gem in the current snapshot
+            - generic [ref=f1e149]:
+              - generic [ref=f1e150]: Gem Motherboard
+              - paragraph [ref=f1e151]: No qualifying gem in the current snapshot
+            - generic [ref=f1e152]:
+              - generic [ref=f1e153]: Gem SSD
+              - paragraph [ref=f1e154]: No qualifying gem in the current snapshot
+            - generic [ref=f1e155]:
+              - generic [ref=f1e156]: Gem PSU
+              - paragraph [ref=f1e157]: No qualifying gem in the current snapshot
+      - button [ref=f1e158]:
+        - img "Hermes" [ref=f1e159]
+  - button "Open Next.js Dev Tools" [ref=f1e165] [cursor=pointer]

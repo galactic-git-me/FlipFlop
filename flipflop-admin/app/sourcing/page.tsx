@@ -1370,6 +1370,7 @@ function VendorSummaryTable({ listings }: { listings: Listing[] }) {
 }
 
 function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; highlightListingId?: string | null }) {
+  const PAGE_SIZE = 100;
   const [componentTab, setComponentTab] = useState<ComponentType>("CPU");
   const [stockLane, setStockLane] = useState<StockLane>("all");
   const [gemFilter, setGemFilter] = useState<GemFilter>("all");
@@ -1377,6 +1378,7 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [titleQuery, setTitleQuery] = useState("");
   const [explanationListing, setExplanationListing] = useState<Listing | null>(null);
+  const [page, setPage] = useState(1);
 
   // Jump straight to a specific listing when arriving from a favourite-match
   // toast/notification link (?listing=<listing_id>) — switch to its tab so
@@ -1424,6 +1426,20 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
     const cmp = compareSortValue(a, b, sortKey);
     return sortDir === "asc" ? cmp : -cmp;
   });
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pageStart = (currentPage - 1) * PAGE_SIZE;
+  const visibleListings = filtered.slice(pageStart, pageStart + PAGE_SIZE);
+
+  useEffect(() => {
+    setPage(1);
+  }, [componentTab, stockLane, gemFilter, sortKey, sortDir, titleQuery]);
+
+  useEffect(() => {
+    if (!highlightListingId) return;
+    const index = filtered.findIndex((listing) => listing.listing_id === highlightListingId);
+    if (index >= 0) setPage(Math.floor(index / PAGE_SIZE) + 1);
+  }, [highlightListingId, componentTab]);
   const tabCounts = COMPONENT_TABS.map((tab) => ({
     tab,
     count: byLane.filter((l) => listingTab(l) === tab).length,
@@ -1484,6 +1500,17 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
 
       <StatsBar listings={filtered} />
 
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-3 text-sm">
+        <span className="text-slate-400">
+          Showing {filtered.length === 0 ? 0 : pageStart + 1}–{Math.min(pageStart + PAGE_SIZE, filtered.length)} of {filtered.length}
+        </span>
+        <div className="flex items-center gap-2">
+          <button type="button" disabled={currentPage <= 1} onClick={() => setPage((value) => Math.max(1, value - 1))} className="rounded border border-slate-600 bg-slate-700 px-3 py-1.5 text-slate-200 disabled:cursor-not-allowed disabled:opacity-40">Previous</button>
+          <span className="min-w-24 text-center text-slate-300">Page {currentPage} of {totalPages}</span>
+          <button type="button" disabled={currentPage >= totalPages} onClick={() => setPage((value) => Math.min(totalPages, value + 1))} className="rounded border border-slate-600 bg-slate-700 px-3 py-1.5 text-slate-200 disabled:cursor-not-allowed disabled:opacity-40">Next</button>
+        </div>
+      </div>
+
       <div className="flex-1 overflow-x-auto overflow-y-auto bg-slate-800 rounded-lg border border-slate-700">
         {filtered.length === 0 ? (
           <div className="flex items-center justify-center h-full text-slate-400">
@@ -1535,7 +1562,7 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
               </tr>
             </thead>
             <tbody>
-              {filtered.map((listing, idx) => {
+              {visibleListings.map((listing, idx) => {
                 const isGem = listing.classification === "SUPER_GEM";
                 const isDeal = listing.classification === "GEM";
                 const isHighlighted = highlightActive && listing.listing_id === highlightListingId;
