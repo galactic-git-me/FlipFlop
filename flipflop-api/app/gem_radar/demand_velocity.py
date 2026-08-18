@@ -15,14 +15,36 @@ async def record_demand_snapshot(
     bid_count: int | None,
     delivered_price: float,
 ) -> None:
-    """Record a point-in-time demand snapshot for velocity tracking."""
+    """Record a bounded point-in-time snapshot for velocity tracking.
+
+    Phase 2 can be retried repeatedly after a failed sweep. Never append an
+    identical observation more than once per hour; doing so previously grew
+    this table by millions of redundant rows in a few days.
+    """
+    latest = (
+        await db.execute(
+            select(GemRadarListingDemandHistory)
+            .where(GemRadarListingDemandHistory.listing_id == listing_id)
+            .order_by(GemRadarListingDemandHistory.observed_at.desc())
+            .limit(1)
+        )
+    ).scalar_one_or_none()
+    now = datetime.utcnow()
+    if latest is not None and now - latest.observed_at < timedelta(hours=1):
+        if (
+            latest.watch_count == watch_count
+            and latest.bid_count == bid_count
+            and latest.delivered_price == delivered_price
+        ):
+            return
+
     snapshot = GemRadarListingDemandHistory(
         listing_id=listing_id,
         search_run_id=search_run_id,
         watch_count=watch_count,
         bid_count=bid_count,
         delivered_price=delivered_price,
-        observed_at=datetime.utcnow(),
+        observed_at=now,
     )
     db.add(snapshot)
 

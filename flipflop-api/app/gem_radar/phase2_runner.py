@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from dataclasses import dataclass, field, replace
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -295,10 +295,25 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
         classified_count += 1
         classification_counts[classification] = classification_counts.get(classification, 0) + 1
 
-        db.add(GemRadarDecisionEvent(
-            listing_id=listing_id, classification=classification, decision=decision,
-            score=opportunity.score, explanation=opportunity.explanation(),
-        ))
+        latest_decision = (
+            await db.execute(
+                select(GemRadarDecisionEvent)
+                .where(GemRadarDecisionEvent.listing_id == listing_id)
+                .order_by(GemRadarDecisionEvent.created_at.desc())
+                .limit(1)
+            )
+        ).scalar_one_or_none()
+        if (
+            latest_decision is None
+            or latest_decision.classification != classification
+            or latest_decision.decision != decision
+            or abs(latest_decision.score - opportunity.score) >= 0.01
+            or datetime.utcnow() - latest_decision.created_at >= timedelta(hours=24)
+        ):
+            db.add(GemRadarDecisionEvent(
+                listing_id=listing_id, classification=classification, decision=decision,
+                score=opportunity.score, explanation=opportunity.explanation(),
+            ))
 
         if classification in ("GEM", "SUPER_GEM") and favourites:
             matched_fav = find_matching_favourite(title, cpk, favourites)

@@ -425,6 +425,7 @@ async def lifespan(app: FastAPI):
     gem_radar_retention = None
     queue_processor = None
     verification_worker = None
+    database_cleaner = None
     cache = None
 
     if not settings.web_only:
@@ -445,6 +446,8 @@ async def lifespan(app: FastAPI):
         queue_processor = asyncio.create_task(_submission_queue_processor())
         from app.gem_radar.margin_verifier import start_verification_worker
         verification_worker = asyncio.create_task(start_verification_worker())
+        from app.workers.database_cleaner import run_database_cleaner
+        database_cleaner = asyncio.create_task(run_database_cleaner())
         # Initialize Redis cache for sold comps (7-day TTL)
         from app.services.sold_comps_cache import get_sold_comps_cache
         cache = await get_sold_comps_cache()
@@ -455,7 +458,7 @@ async def lifespan(app: FastAPI):
     # Cleanup Redis cache connection
     if cache is not None:
         await cache.disconnect()
-    for task in (reaper, gem_radar_retention, queue_processor, verification_worker):
+    for task in (reaper, gem_radar_retention, queue_processor, verification_worker, database_cleaner):
         if task is not None:
             task.cancel()
     if not settings.web_only:
