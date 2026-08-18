@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
 from math import floor
+import re
 from statistics import median
 from typing import Any, Iterable
 
@@ -235,11 +236,31 @@ def identity_gates(title: str, cpk_data: dict[str, Any] | None, strategy: str = 
         flags.append("identity_incomplete")
     if any(term in lowered for term in ACCESSORY_TERMS):
         flags.append("accessory_or_parts_listing")
+    # Compatibility/model text frequently names the component an accessory
+    # fits (for example an i3-12100 stock cooler or an RTX-ready PSU).  Those
+    # names can fool CPK extraction, so veto strong product-type conflicts
+    # independently of the extracted model.
+    if category == "cpu" and re.search(
+        r"\b(?:cpu|processor)\s+(?:cooler|fan|heatsink)\b|"
+        r"\b(?:stock|replacement)\s+(?:cpu\s+)?(?:cooler|fan|heatsink)\b",
+        lowered,
+    ):
+        flags.append("accessory_or_parts_listing")
+    if category == "gpu" and re.search(
+        r"\b(?:power supply|psu|atx\s*3(?:\.\d)?|80\s*\+?\s*(?:gold|platinum|bronze)|"
+        r"\d{3,4}\s*w(?:att)?s?\b)",
+        lowered,
+    ):
+        flags.append("category_identity_conflict")
+    if category == "case" and re.search(
+        r"\b(?:retaining clips?|panel clips?|replacement panel|dust filters?|case feet|thumbscrews?)\b",
+        lowered,
+    ):
+        flags.append("accessory_or_parts_listing")
     if any(term in lowered for term in BUNDLE_TERMS):
         flags.append("bundle_listing")
     if category in COMPONENT_CATEGORIES and any(term in lowered for term in ("mini pc", "laptop", "notebook", "desktop computer")):
         flags.append("whole_system_misclassified_as_component")
-    import re
     if category in COMPONENT_CATEGORIES and re.search(
         r"\b(gaming desktop|optiplex|thinkcentre|elitedesk|prodesk)\b|"
         r"\blegion\b.*\b(?:ram|ssd)\b|"
@@ -351,6 +372,7 @@ def score_opportunity(
     economic_score = max(0.0, min(100.0, (roi / economics.super_roi_pct) * 55.0 + (profit / economics.super_profit) * 45.0))
     total_score = economic_score * .45 + liquidity * .20 + desirability * .15 + market.confidence * .15 + risk * .05
     provisional_evidence = "preliminary_sold_cohort" in risk_flags
+    evidence_limited = provisional_evidence or market.sample_size < policy.minimum_sold_comps
     blocking_flags = [flag for flag in risk_flags if flag != "preliminary_sold_cohort"]
     eligible = not risk_flags
     evidence_label = "completed sales" if market.basis == "SOLD_REFINED" else "active market prices"
@@ -376,12 +398,15 @@ def score_opportunity(
     if blocking_flags:
         classification, decision = "INELIGIBLE", "IGNORE"
         reasons.append("A hard identity or market-quality veto prevents deal classification.")
-    elif provisional_evidence and profit >= emerging_profit_floor and roi >= 25 and market.confidence >= 40 and liquidity >= 20 and desirability >= 55:
-        classification, decision = "EMERGING_OPPORTUNITY", "INVESTIGATE"
-        reasons.append("Promising economics, but only 3–4 robust sold comparables: verify manually before buying.")
-    elif provisional_evidence:
+    elif evidence_limited and profit >= emerging_profit_floor and roi >= 25 and market.confidence >= 40:
+        classification, decision = "EVIDENCE_LIMITED_DEAL", "INVESTIGATE"
+        reasons.append(
+            f"Promising economics, but only {market.sample_size} robust comparable"
+            f"{'s' if market.sample_size != 1 else ''}: verify identity and price manually before buying."
+        )
+    elif evidence_limited:
         classification, decision = "INSUFFICIENT_DATA", "INVESTIGATE"
-        reasons.append("Only 3–4 sold comparables are available and the provisional opportunity gates were not all met.")
+        reasons.append("The comparable cohort is below the minimum evidence requirement and the provisional opportunity gates were not all met.")
     elif eligible and profit >= economics.super_profit and roi >= economics.super_roi_pct and market.confidence >= policy.super_confidence and liquidity >= policy.super_liquidity and total_score >= economics.super_score:
         classification, decision = "SUPER_GEM", "BUY_NOW"
     elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market.confidence >= policy.gem_confidence and liquidity >= policy.gem_liquidity and total_score >= economics.gem_score:

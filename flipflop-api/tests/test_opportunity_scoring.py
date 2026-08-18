@@ -70,7 +70,7 @@ def test_good_price_cannot_hide_identity_failure():
     assert "accessory_or_parts_listing" in result.risk_flags
 
 
-def test_preliminary_cohort_can_only_be_emerging():
+def test_preliminary_cohort_is_evidence_limited():
     policy = OpportunityPolicy(minimum_sold_comps=3)
     market = robust_sold_market(
         [SoldComparable(180, source_url=f"https://ebay.test/{i}") for i in range(3)],
@@ -83,7 +83,7 @@ def test_preliminary_cohort_can_only_be_emerging():
         watch_velocity=2, bid_velocity=1, policy=policy, delivery_cost=0,
         extra_risk_flags=("preliminary_sold_cohort",),
     )
-    assert result.classification == "EMERGING_OPPORTUNITY"
+    assert result.classification == "EVIDENCE_LIMITED_DEAL"
     assert result.decision == "INVESTIGATE"
     assert not result.eligible
 
@@ -138,3 +138,36 @@ def test_active_market_identity_traps_are_hard_vetoes():
     assert "whole_system_misclassified_as_component" in identity_gates("i9-10980HK 32GB laptop notebook", cpu)
     assert "accessory_or_parts_listing" in identity_gates("PCIe GPU riser extension cable", gpu)
     assert "multi_variant_listing" in identity_gates("Kingston Fury 8/16/32GB DDR5", ram)
+
+
+def test_compatibility_text_cannot_turn_accessories_or_psus_into_components():
+    cpu = {"category": "cpu", "brand": "Intel", "model": "i3-12100"}
+    gpu = {"category": "gpu", "brand": "NVIDIA", "model": "RTX 5080"}
+    case = {"category": "case", "brand": "Lian Li", "model": "A3-mATX"}
+    assert "accessory_or_parts_listing" in identity_gates(
+        "Intel i3-12100 LGA1700 Stock CPU Cooler Fan", cpu
+    )
+    assert "category_identity_conflict" in identity_gates(
+        "Seasonic 850W 80+ Gold ATX 3.0 PSU RTX 5080 Ready", gpu
+    )
+    assert "accessory_or_parts_listing" in identity_gates(
+        "4x Retaining Clips for Lian Li A3-mATX Case", case
+    )
+
+
+def test_single_active_comparable_is_evidence_limited_not_ok_deal():
+    policy = OpportunityPolicy(minimum_sold_comps=5, minimum_source_diversity=1)
+    market = robust_sold_market(
+        [SoldComparable(180, source_url="https://retailer.test/item")],
+        subject_listing_id="subject",
+        policy=OpportunityPolicy(minimum_sold_comps=1),
+    )
+    assert market is not None
+    result = score_opportunity(
+        listing_price=70, title="AMD Ryzen 7 7800X3D",
+        cpk_data={"category": "cpu", "brand": "AMD", "model": "Ryzen 7 7800X3D"},
+        market=market, sold_count_90d=0, active_count=3,
+        watch_velocity=None, bid_velocity=None, policy=policy,
+    )
+    assert result.classification == "EVIDENCE_LIMITED_DEAL"
+    assert result.decision == "INVESTIGATE"
