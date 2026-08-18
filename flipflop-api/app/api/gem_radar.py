@@ -1559,8 +1559,7 @@ async def get_gem_by_component(
     gems = {}
     for category in categories:
         gem = await _fetch_best_gem_for_category(db, category, active_cutoff.replace(tzinfo=None), require_modern=True)
-        if gem:
-            gems[category] = gem
+        gems[category] = gem
 
     return gems
 

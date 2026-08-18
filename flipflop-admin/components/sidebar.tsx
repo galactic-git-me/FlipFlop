@@ -13,7 +13,6 @@ import {
   LineChart,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { GemWidget } from "./gem-widget";
 
 const PRIMARY_NAV = [
   { href: "/sourcing", icon: Search, label: "Sourcing" },
@@ -117,11 +116,6 @@ export function Sidebar() {
             );
           })}
         </nav>
-
-        {/* Gems widget - stays at bottom */}
-        <div className="mt-auto">
-          <GemWidget />
-        </div>
 
       </div>
 

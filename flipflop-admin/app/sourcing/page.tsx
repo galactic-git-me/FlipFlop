@@ -793,7 +793,7 @@ function GemSpotlightCard({
   );
 }
 
-function StatsTab({ listings, gemOfDay, componentGems }: { listings: Listing[]; gemOfDay?: GemData; componentGems?: Record<string, GemData> }) {
+function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | null> }) {
   const componentLabels: Record<string, { label: string; emoji: string }> = {
     cpu: { label: "Gem CPU", emoji: "⚡" },
     gpu: { label: "Gem GPU", emoji: "🎮" },
@@ -805,14 +805,22 @@ function StatsTab({ listings, gemOfDay, componentGems }: { listings: Listing[]; 
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6 mt-6">
-        {componentGems && Object.entries(componentGems).map(([category, gem]) => (
-          <GemSpotlightCard
-            key={category}
-            gem={gem}
-            label={componentLabels[category]?.label || category}
-            accent={category === "cpu" ? "cyan" : category === "gpu" ? "purple" : category === "motherboard" ? "emerald" : category === "ssd" ? "blue" : "orange"}
-          />
-        ))}
+        {Object.keys(componentLabels).map((category) => {
+          const gem = componentGems?.[category];
+          return gem ? (
+            <GemSpotlightCard
+              key={category}
+              gem={gem}
+              label={componentLabels[category].label}
+              accent={category === "cpu" ? "cyan" : category === "gpu" ? "purple" : category === "motherboard" ? "emerald" : category === "ssd" ? "blue" : "orange"}
+            />
+          ) : (
+            <div key={category} className="min-h-48 rounded-2xl border border-white/10 bg-white/[0.03] p-5 flex flex-col justify-between">
+              <span className="text-[10px] uppercase tracking-wide font-semibold text-slate-400">{componentLabels[category].label}</span>
+              <p className="text-sm text-slate-500">No qualifying gem in the current snapshot</p>
+            </div>
+          );
+        })}
       </div>
     </>
   );
@@ -2146,8 +2154,7 @@ function SourcingPageInner() {
   const highlightListingId = searchParams.get("listing");
   const [mainTab, setMainTab] = useState<MainTab>("stats");
   const [listings, setListings] = useState<Listing[]>([]);
-  const [gemOfDay, setGemOfDay] = useState<GemData | null>(null);
-  const [componentGems, setComponentGems] = useState<Record<string, GemData> | null>(null);
+  const [componentGems, setComponentGems] = useState<Record<string, GemData | null> | null>(null);
   const [queueStatus, setQueueStatus] = useState<QueueStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
@@ -2190,10 +2197,9 @@ function SourcingPageInner() {
 
   const fetchData = async () => {
     try {
-      const [listingsRes, dayRes, componentRes, queueRes] = await Promise.all([
+      const [listingsRes, componentRes, queueRes] = await Promise.all([
         fetch(`/api/gem-radar/scored-listings-latest-run`),
-        fetch(`/api/gem-radar/current-gem`, { cache: "no-store" }),
-        fetch(`/api/gem-radar/gem-by-component`),
+        fetch(`/api/gem-radar/gem-by-component`, { cache: "no-store" }),
         fetch(`/api/gem-radar/queue-status`),
       ]);
 
@@ -2209,10 +2215,6 @@ function SourcingPageInner() {
         }
       } else {
         console.warn(`scored-listings returned ${listingsRes.status}`);
-      }
-      if (dayRes.ok) {
-        const data = await dayRes.json();
-        setGemOfDay(data);
       }
       if (componentRes.ok) {
         const data = await componentRes.json();
@@ -2348,7 +2350,7 @@ function SourcingPageInner() {
           <>
             <MarketSnapshotPanel snapshot={marketSnapshot} />
             <PipelineDashboard queueStatus={queueStatus} />
-            <StatsTab listings={listings} gemOfDay={gemOfDay || undefined} componentGems={componentGems || undefined} />
+            <StatsTab componentGems={componentGems || undefined} />
           </>
         )}
         {mainTab === "listings" && <ListingsTab listings={listings} highlightListingId={highlightListingId} />}
