@@ -927,22 +927,6 @@ function PriceVarianceCell({ listing }: { listing: Listing }) {
   );
 }
 
-// "Last seen" = listing_observed_at (when the scraper actually saw this
-// listing), not scored_at (when our pipeline got around to scoring it) —
-// those can lag behind by a meaningful amount under batch processing.
-function formatLastSeen(iso: string | null): string {
-  if (!iso) return "—";
-  const then = new Date(iso).getTime();
-  if (Number.isNaN(then)) return "—";
-  const minutes = Math.round((Date.now() - then) / 60000);
-  if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes}m ago`;
-  const hours = Math.round(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.round(hours / 24);
-  return `${days}d ago`;
-}
-
 // The most recent scraping run represented in the currently loaded listings
 // — grouping by search_run_id rather than a timestamp-proximity threshold,
 // since listings within one run can be observed a little apart from each
@@ -976,7 +960,7 @@ function stockLaneFor(listing: Listing): Exclude<StockLane, "all"> | "unknown" {
   return "unknown";
 }
 
-type SortKey = "source" | "title" | "seller" | "condition" | "price_variance" | "delivered_price" | "market_lower_price" | "market_median_price" | "market_upper_price" | "classification" | "decision" | "deal_score" | "watch_count" | "best_offer_enabled" | "listing_observed_at";
+type SortKey = "source" | "title" | "seller" | "condition" | "price_variance" | "delivered_price" | "market_lower_price" | "market_median_price" | "market_upper_price" | "classification" | "decision" | "deal_score" | "watch_count" | "best_offer_enabled";
 type SortDir = "asc" | "desc";
 
 const CLASSIFICATION_RANK: Record<string, number> = {
@@ -1250,7 +1234,7 @@ function SortHeader({
   const isActive = activeSort === sortKey;
   return (
     <th
-      className={`p-3 text-slate-200 font-semibold cursor-pointer select-none hover:text-white transition ${
+      className={`px-1.5 py-2 text-xs text-slate-200 font-semibold cursor-pointer select-none hover:text-white transition ${
         align === "right" ? "text-right" : "text-left"
       } ${widthClassName}`}
       onClick={() => onSort(sortKey)}
@@ -1267,6 +1251,9 @@ function SortHeader({
 // a column per classification tier, worst to best left-to-right so the
 // "good stuff" columns land next to each other on the right.
 const VENDOR_TABLE_TIERS: string[] = [...CLASSIFICATION_BADGE_ORDER].reverse();
+const VENDOR_SUMMARY_TABLE_TIERS = VENDOR_TABLE_TIERS.filter(
+  (tier) => tier !== "AVERAGE_DEAL" && tier !== "EVIDENCE_LIMITED_DEAL",
+);
 
 // Hex equivalents of CLASSIFICATION_BADGE_COLORS' Tailwind classes — recharts
 // fills need real colour values, not class names, but these are picked to
@@ -1349,7 +1336,7 @@ function VendorSummaryTable({ listings }: { listings: Listing[] }) {
           <tr>
             <th className="text-left p-2.5 text-slate-200 font-semibold">Vendor</th>
             <th className="text-right p-2.5 text-slate-200 font-semibold">Total</th>
-            {VENDOR_TABLE_TIERS.map((tier) => (
+            {VENDOR_SUMMARY_TABLE_TIERS.map((tier) => (
               <th key={tier} className="text-right p-2.5 text-slate-200 font-semibold whitespace-nowrap">
                 {tier.replace(/_/g, " ")}
               </th>
@@ -1365,7 +1352,7 @@ function VendorSummaryTable({ listings }: { listings: Listing[] }) {
                   <SourceBadge source={source} />
                 </td>
                 <td className="p-2.5 text-right text-slate-100 font-semibold">{vendorListings.length}</td>
-                {VENDOR_TABLE_TIERS.map((tier) => (
+                {VENDOR_SUMMARY_TABLE_TIERS.map((tier) => (
                   <td key={tier} className="p-2.5 text-right text-slate-300">
                     {vendorListings.filter((l) => l.classification === tier).length}
                   </td>
@@ -1521,23 +1508,19 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
         </div>
       </div>
 
-      <div className="flex-1 overflow-x-auto overflow-y-auto bg-slate-800 rounded-lg border border-slate-700">
+      <div className="flex-1 overflow-y-auto bg-slate-800 rounded-lg border border-slate-700">
         {filtered.length === 0 ? (
           <div className="flex items-center justify-center h-full text-slate-400">
             No {gemFilter === "all" ? "listings" : gemFilter.replace(/_/g, " ").toLowerCase()} yet for {componentTab}
             {titleQuery.trim() && <> matching &quot;{titleQuery}&quot;</>}
           </div>
         ) : (
-          // min-w-full (not w-full) lets the table grow to its natural
-          // content width with this many columns — the wrapping div's
-          // overflow-x-auto then scrolls just this table horizontally
-          // instead of the whole page overflowing.
-          <table className="min-w-full text-sm">
+          <table className="w-full table-fixed text-xs [&_th]:px-1.5 [&_th]:py-2 [&_td]:overflow-hidden [&_td]:px-1.5 [&_td]:py-2">
             <thead className="sticky top-0 bg-slate-700 border-b border-slate-600">
               <tr>
-                <th className="text-left p-3 text-slate-200 font-semibold w-16"></th>
-                <SortHeader label="Source" sortKey="source" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} />
-                <th className="p-3 text-left text-slate-200 font-semibold min-w-[220px]">
+                <th className="text-left text-slate-200 font-semibold w-10"></th>
+                <SortHeader label="Source" sortKey="source" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} widthClassName="w-16" />
+                <th className="text-left text-slate-200 font-semibold w-auto">
                   <div
                     className="cursor-pointer select-none hover:text-white transition inline-flex items-center"
                     onClick={() => handleSort("title")}
@@ -1555,20 +1538,19 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                     className="mt-1 w-full rounded border border-slate-600 bg-slate-800 px-2 py-1 text-xs font-normal text-slate-100 placeholder:text-slate-500 outline-none focus:border-blue-500"
                   />
                 </th>
-                <SortHeader label="Condition" sortKey="condition" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} />
-                <SortHeader label="Listing Price" sortKey="delivered_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
-                <th className="p-3 text-left text-slate-200 font-semibold">Price History</th>
-                <SortHeader label="Market Low" sortKey="market_lower_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
-                <SortHeader label="Median Resale" sortKey="market_median_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
-                <SortHeader label="Market High" sortKey="market_upper_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
-                <SortHeader label="Vs Median" sortKey="price_variance" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
-                <SortHeader label="Classification" sortKey="classification" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} />
-                <SortHeader label="Decision" sortKey="decision" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} />
-                <SortHeader label="Score" sortKey="deal_score" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
-                <th className="p-3 text-left text-slate-200 font-semibold">Evidence</th>
-                <SortHeader label="Watches" sortKey="watch_count" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
-                <SortHeader label="Offers" sortKey="best_offer_enabled" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
-                <SortHeader label="Last Seen" sortKey="listing_observed_at" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" />
+                <SortHeader label="Condition" sortKey="condition" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} widthClassName="w-20" />
+                <SortHeader label="Price" sortKey="delivered_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
+                <th className="text-left text-slate-200 font-semibold w-28">History</th>
+                <SortHeader label="Low" sortKey="market_lower_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
+                <SortHeader label="Median" sortKey="market_median_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
+                <SortHeader label="High" sortKey="market_upper_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
+                <SortHeader label="Vs Median" sortKey="price_variance" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-24" />
+                <SortHeader label="Class" sortKey="classification" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} widthClassName="w-24" />
+                <SortHeader label="Decision" sortKey="decision" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} widthClassName="w-20" />
+                <SortHeader label="Score" sortKey="deal_score" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-14" />
+                <th className="text-left text-slate-200 font-semibold w-16">Evidence</th>
+                <SortHeader label="Watches" sortKey="watch_count" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-16" />
+                <SortHeader label="Offers" sortKey="best_offer_enabled" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-14" />
               </tr>
             </thead>
             <tbody>
@@ -1665,9 +1647,6 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                     </td>
                     <td className={`p-3 text-right ${listing.best_offer_enabled ? "text-emerald-300" : "text-slate-500"}`}>
                       {listing.best_offer_enabled ? "Yes" : "No"}
-                    </td>
-                    <td className="p-3 text-right text-slate-400 whitespace-nowrap">
-                      {formatLastSeen(listing.listing_observed_at)}
                     </td>
                   </tr>
                 );

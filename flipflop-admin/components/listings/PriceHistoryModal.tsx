@@ -10,6 +10,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  ReferenceLine,
 } from "recharts";
 
 interface PriceObservation {
@@ -238,13 +239,27 @@ export function PriceHistoryModal({
                       type="monotone"
                       dataKey="listingPrice"
                       stroke="#3b82f6"
-                      dot={false}
+                      dot={listingMap.size === 1 ? { r: 5, fill: "#3b82f6", stroke: "#bfdbfe", strokeWidth: 2 } : false}
                       activeDot={{ r: 6 }}
                       isAnimationActive={false}
                       name="This Listing"
                       strokeWidth={2}
                       connectNulls
                     />
+                    {listingMap.size === 1 && (
+                      <ReferenceLine
+                        y={currentListingPrice}
+                        stroke="#3b82f6"
+                        strokeDasharray="5 4"
+                        strokeWidth={2}
+                        label={{
+                          value: `This listing £${currentListingPrice.toFixed(2)} · 1 observation`,
+                          fill: "#93c5fd",
+                          fontSize: 12,
+                          position: "insideTopRight",
+                        }}
+                      />
+                    )}
                     {sortedCpk.length > 0 && (
                       <Line
                         type="monotone"
