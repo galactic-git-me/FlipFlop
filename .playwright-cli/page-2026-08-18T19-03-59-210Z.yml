@@ -1,0 +1,173 @@
+- generic [ref=e1]:
+  - complementary [ref=e2]:
+    - generic [ref=e3]:
+      - img "FlipFlop" [ref=e5]
+      - navigation [ref=e6]:
+        - link "Sourcing" [ref=e7] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Add Build" [ref=e11] [cursor=pointer]:
+          - /url: /add-build
+        - link "Your Builds" [ref=e13] [cursor=pointer]:
+          - /url: /builds
+        - link "Configurator" [ref=e18] [cursor=pointer]:
+          - /url: /configurator-config
+        - link "PC Builder" [ref=e22] [cursor=pointer]:
+          - /url: /pc-builder
+  - generic [ref=e25]:
+    - banner [ref=e26]:
+      - textbox "QUERY MARKET DATA..." [ref=e31]
+      - generic [ref=e32]:
+        - img "FlipFlop" [ref=e35]
+        - generic [ref=e36]:
+          - button "Favourites" [ref=e43]
+          - button "Notifications" [ref=e46]
+    - main [ref=e50]:
+      - region "Notifications alt+T"
+      - generic [ref=e59]:
+        - generic [ref=e60]:
+          - generic "PROMETHEUS" [ref=e61]:
+            - generic "Not listed" [ref=e63]
+          - generic [ref=e64]:
+            - button "Generate title" [ref=e65] [cursor=pointer]
+            - tooltip "Generate title"
+          - generic [ref=e69]:
+            - button "Generate description" [ref=e70] [cursor=pointer]
+            - tooltip "Generate description"
+          - generic [ref=e74]:
+            - button "Preview eBay listing" [ref=e75] [cursor=pointer]
+            - tooltip "Preview eBay listing"
+          - generic [ref=e79]:
+            - button "Create eBay listing" [ref=e80] [cursor=pointer]
+            - tooltip "Create eBay listing"
+        - button "Your Builds" [ref=e82]
+        - generic [ref=e85]:
+          - heading "PROMETHEUS" [level=1] [ref=e86]
+          - generic [ref=e87]: Built
+        - generic [ref=e88]:
+          - generic "Not currently published to eBay" [ref=e89]: eBay
+          - generic "Not currently published to FlipFlop.shop" [ref=e96]: FlipFlop.shop
+        - generic [ref=e104]:
+          - button "1. Build Checklist" [ref=e105] [cursor=pointer]
+          - button "2. Listing & Price" [ref=e114] [cursor=pointer]
+          - button "3. Media & Cards" [active] [ref=e122] [cursor=pointer]
+          - button "4. Item Specifics" [ref=e131] [cursor=pointer]
+          - button "5. Shipping & Offers" [ref=e140] [cursor=pointer]
+        - generic [ref=e385]:
+          - generic [ref=e386]:
+            - paragraph [ref=e387]: Photos
+            - generic [ref=e392]:
+              - generic [ref=e393]:
+                - generic: 1. Cover / hero
+                - img "PROMETHEUS photo 1"
+                - button "Hero photo" [ref=e394]
+                - button "Remove photo" [ref=e397]
+              - generic [ref=e401]:
+                - generic: 2. Colour-shift angle
+                - img "PROMETHEUS photo 2"
+                - button "Set as hero photo" [ref=e402]
+                - button "Remove photo" [ref=e405]
+              - generic [ref=e409]:
+                - generic: 3. Interior detail
+                - img "PROMETHEUS photo 3"
+                - button "Set as hero photo" [ref=e410]
+                - button "Remove photo" [ref=e413]
+              - generic [ref=e417]:
+                - generic: 4. Performance proof
+                - img "PROMETHEUS photo 4"
+                - button "Set as hero photo" [ref=e418]
+                - button "Remove photo" [ref=e421]
+              - generic [ref=e425]:
+                - generic: 5. Gaming FPS
+                - img "PROMETHEUS photo 5"
+                - button "Set as hero photo" [ref=e426]
+                - button "Remove photo" [ref=e429]
+              - generic [ref=e433]:
+                - generic: 6. Rear connectivity
+                - img "PROMETHEUS photo 6"
+                - button "Set as hero photo" [ref=e434]
+                - button "Remove photo" [ref=e437]
+              - generic [ref=e441]:
+                - generic: 7. Components
+                - img "PROMETHEUS photo 7"
+                - button "Set as hero photo" [ref=e442]
+                - button "Remove photo" [ref=e445]
+              - generic [ref=e449]:
+                - generic: 8. Condition detail
+                - img "PROMETHEUS photo 8"
+                - button "Set as hero photo" [ref=e450]
+                - button "Remove photo" [ref=e453]
+              - generic [ref=e457]:
+                - generic: 9. Included items
+                - img "PROMETHEUS photo 9"
+                - button "Set as hero photo" [ref=e458]
+                - button "Remove photo" [ref=e461]
+              - generic [ref=e465]:
+                - generic: 10. Packaging
+                - img "PROMETHEUS photo 10"
+                - button "Set as hero photo" [ref=e466]
+                - button "Remove photo" [ref=e469]
+              - generic [ref=e473]:
+                - generic: 11. Windows proof
+                - img "PROMETHEUS photo 11"
+                - button "Set as hero photo" [ref=e474]
+                - button "Remove photo" [ref=e477]
+              - generic [ref=e481]:
+                - generic: 12. Extra angle
+                - img "PROMETHEUS photo 12"
+                - button "Set as hero photo" [ref=e482]
+                - button "Remove photo" [ref=e485]
+              - generic [ref=e489]:
+                - generic: 13. Extra view
+                - img "PROMETHEUS photo 13"
+                - button "Set as hero photo" [ref=e490]
+                - button "Remove photo" [ref=e493]
+              - generic [ref=e497]:
+                - generic: 14. Extra view
+                - img "PROMETHEUS photo 14"
+                - button "Set as hero photo" [ref=e498]
+                - button "Remove photo" [ref=e501]
+              - generic [ref=e505]:
+                - generic: 15. Extra view
+                - img "PROMETHEUS photo 15"
+                - button "Set as hero photo" [ref=e506]
+                - button "Remove photo" [ref=e509]
+              - generic [ref=e513]:
+                - generic: 16. Extra view
+                - img "PROMETHEUS photo 16"
+                - button "Set as hero photo" [ref=e514]
+                - button "Remove photo" [ref=e517]
+              - generic [ref=e521]:
+                - generic: 17. Extra view
+                - img "PROMETHEUS photo 17"
+                - button "Set as hero photo" [ref=e522]
+                - button "Remove photo" [ref=e525]
+            - paragraph [ref=e529]: Drag to reorder. The numbered labels show the recommended buyer journey; the first five images have the greatest selling impact.
+            - button "Upload photos" [ref=e530]
+          - generic [ref=e535]:
+            - paragraph [ref=e536]: Branded cards
+            - paragraph [ref=e541]: Generated from this build's actual components — accompany the eBay listing and storefront page with these.
+            - generic [ref=e542]:
+              - generic [ref=e543]:
+                - link [ref=e545] [cursor=pointer]:
+                  - /url: https://theflipflop.shop/media/spec_card-5f3b44ecf5c04f969e87a9e36cc3cdf0.png
+                  - img "Spec Card" [ref=e546]
+                - generic [ref=e547]:
+                  - button "Regenerate Spec Card" [ref=e548]
+                  - link "Download Spec Card" [ref=e549] [cursor=pointer]:
+                    - /url: https://theflipflop.shop/media/spec_card-5f3b44ecf5c04f969e87a9e36cc3cdf0.png
+              - generic [ref=e553]:
+                - link [ref=e555] [cursor=pointer]:
+                  - /url: https://theflipflop.shop/media/registration_plate-af8def9c865d468c904087ae5050a528.png
+                  - img "Registration Plate" [ref=e556]
+                - generic [ref=e557]:
+                  - button "Regenerate Registration Plate" [ref=e558]
+                  - link "Download Registration Plate" [ref=e559] [cursor=pointer]:
+                    - /url: https://theflipflop.shop/media/registration_plate-af8def9c865d468c904087ae5050a528.png
+          - generic [ref=e563]:
+            - paragraph [ref=e564]: Performance Card
+            - paragraph [ref=e567]: Create a branded benchmark report card with real performance stats from this build.
+            - button "Upload performance-data.json" [ref=e569]
+      - button [ref=e52]:
+        - img "Hermes" [ref=e53]
+  - button "Open Next.js Dev Tools" [ref=e380] [cursor=pointer]
+  - alert [ref=e384]
