@@ -292,6 +292,7 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
             "model_number": model_number,
             "seller_feedback_percent": seller_feedback_percent,
             "seller_feedback_count": seller_feedback_count,
+            "best_offer_enabled": "BEST_OFFER" in (item.get("buyingOptions") or []),
         })
 
     return results

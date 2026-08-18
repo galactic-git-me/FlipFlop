@@ -2526,7 +2526,7 @@ async def ebay_search(
                     "currentDeliveredPrice": listing["price"],
                     "currency": "GBP",
                     "listingType": "buy_it_now",
-                    "bestOfferEnabled": False,
+                    "bestOfferEnabled": bool(listing.get("best_offer_enabled")),
                     "bidCount": None,
                     "auctionEndAt": None,
                     "imageUrl": listing["image_url"],

@@ -1,0 +1,28 @@
+- generic [active] [ref=f5e1]:
+  - complementary [ref=f5e2]:
+    - generic [ref=f5e3]:
+      - img "FlipFlop" [ref=f5e5]
+      - navigation [ref=f5e6]:
+        - link "Sourcing" [ref=f5e7] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Add Build" [ref=f5e12] [cursor=pointer]:
+          - /url: /add-build
+        - link "Your Builds" [ref=f5e15] [cursor=pointer]:
+          - /url: /builds
+        - link "Configurator" [ref=f5e21] [cursor=pointer]:
+          - /url: /configurator-config
+        - link "PC Builder" [ref=f5e26] [cursor=pointer]:
+          - /url: /pc-builder
+  - generic [ref=f5e30]:
+    - banner [ref=f5e31]:
+      - textbox "QUERY MARKET DATA..." [ref=f5e36]
+      - generic [ref=f5e37]:
+        - img "FlipFlop" [ref=f5e40]
+        - generic [ref=f5e41]:
+          - button "Favourites" [ref=f5e48]
+          - button "Notifications" [ref=f5e51]
+          - button "Sign out" [ref=f5e55]
+    - main [ref=f5e60]:
+      - button [ref=f5e61]:
+        - img "Hermes" [ref=f5e62]
+  - button "Open Next.js Dev Tools" [ref=f5e68] [cursor=pointer]

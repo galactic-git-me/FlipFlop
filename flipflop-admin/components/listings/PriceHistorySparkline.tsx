@@ -44,15 +44,18 @@ export function PriceHistorySparkline({ listingId, listingTitle }: PriceHistoryS
     const controller = new AbortController();
     const fetchPriceHistory = async () => {
       try {
-        const url = `/api/listings/${encodeURIComponent(listingId)}/price-history`;
-        const response = await fetch(url, { signal: controller.signal });
-        if (response.ok) {
-          const data = await response.json();
-          setListingPrices(data.listingPrices || []);
-          setCpkPrices(data.cpkPrices || []);
-        } else {
+        const encodedId = encodeURIComponent(listingId);
+        const [listingResponse, cpkResponse] = await Promise.all([
+          fetch(`/api/gem-radar/listings/${encodedId}/price-history`, { signal: controller.signal }),
+          fetch(`/api/gem-radar/listings/${encodedId}/cpk-price-history`, { signal: controller.signal }),
+        ]);
+        if (!listingResponse.ok || !cpkResponse.ok) {
           setHasError(true);
+          return;
         }
+        const [listingData, cpkData] = await Promise.all([listingResponse.json(), cpkResponse.json()]);
+        setListingPrices(listingData.prices || []);
+        setCpkPrices(cpkData.prices || []);
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") return;
         console.error(`Error fetching price history for ${listingId}:`, error);
