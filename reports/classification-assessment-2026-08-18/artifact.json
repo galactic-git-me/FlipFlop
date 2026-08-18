@@ -1,0 +1,104 @@
+{
+  "surface": "report",
+  "manifest": {
+    "version": 1,
+    "surface": "report",
+    "title": "Why GEM classifications remain scarce",
+    "description": "A live-data assessment of FlipFlop's GEM Radar classification funnel and the next improvements to prioritize.",
+    "generatedAt": "2026-08-18T12:30:00+01:00",
+    "sources": [
+      {
+        "id": "classification_source",
+        "label": "Live GEM Radar scored listings",
+        "query": {
+          "engine": "PostgreSQL",
+          "language": "sql",
+          "executed_at": "2026-08-18T12:30:00+01:00",
+          "tables_used": ["public.gem_radar_scored_listings"],
+          "description": "Current classification distribution and stage coverage after the latest CPK rescore.",
+          "filters": ["Current rows in gem_radar_scored_listings", "One row per distinct listing_id in the current rescore"],
+          "metric_definitions": ["CPK coverage is rows with non-null cpk divided by all scored rows.", "Usable market is rows with non-null conservative_resale_price.", "GEM output is classification GEM or SUPER_GEM."],
+          "sql": "SELECT classification, COUNT(*) AS listings, COUNT(*) FILTER (WHERE cpk IS NOT NULL) AS with_cpk, COUNT(*) FILTER (WHERE conservative_resale_price IS NOT NULL) AS with_market FROM public.gem_radar_scored_listings GROUP BY classification;"
+        }
+      },
+      {
+        "id": "risk_source",
+        "label": "Classification risk flags",
+        "query": {
+          "engine": "PostgreSQL",
+          "language": "sql",
+          "executed_at": "2026-08-18T12:30:00+01:00",
+          "tables_used": ["public.gem_radar_scored_listings"],
+          "description": "Counts of classification-blocking flags stored in scoring explanations.",
+          "sql": "SELECT flag, COUNT(*) AS listings FROM public.gem_radar_scored_listings CROSS JOIN LATERAL jsonb_array_elements_text(scoring_explanation::jsonb->'risk_flags') AS flag GROUP BY flag ORDER BY listings DESC;"
+        }
+      }
+    ],
+    "charts": [
+      {
+        "id": "coverage_chart",
+        "title": "Classification funnel coverage",
+        "subtitle": "Current scored-listing population; stages show where evidence becomes scarce",
+        "type": "bar",
+        "dataset": "coverage",
+        "sourceId": "classification_source",
+        "encodings": {
+          "x": {"field": "stage", "type": "nominal", "label": "Stage"},
+          "y": {"field": "listings", "type": "quantitative", "label": "Listings", "format": "compact"},
+          "tooltip": [{"field": "rate_pct", "type": "quantitative", "label": "Share of scored listings", "unit": "%"}]
+        },
+        "layout": "full"
+      },
+      {
+        "id": "risk_chart",
+        "title": "Most common blocking conditions",
+        "subtitle": "Flags are not mutually exclusive",
+        "type": "bar",
+        "dataset": "risks",
+        "sourceId": "risk_source",
+        "encodings": {
+          "x": {"field": "flag", "type": "nominal", "label": "Blocking condition"},
+          "y": {"field": "listings", "type": "quantitative", "label": "Listings", "format": "compact"}
+        },
+        "layout": "full"
+      }
+    ],
+    "blocks": [
+      {"id": "title", "type": "markdown", "body": "# Why GEM classifications remain scarce"},
+      {"id": "summary", "type": "markdown", "sourceId": "classification_source", "body": "## Executive Summary\n\n- **CPK assignment is no longer the main bottleneck.** 20,605 of 27,654 listings (74.5%) now have a CPK, but only 3,925 (14.2%) have a usable resale market.\n- **The system is correctly conservative, but the evidence layer is too weak and sometimes mismatched.** Only 1,920 listings (6.9%) have at least five comparables; the current output is 8 GEMs and 0 SUPER GEMs.\n- **Do not loosen thresholds globally yet.** Sample review found extreme false bargains caused by identity/comparable mismatches, including a CPU cooler valued as an i3-12100 and a PSU classified as a GPU. More permissive thresholds would promote bad listings.\n- **Next priority:** make comparable cohorts identity-safe and improve sold-comparable coverage, then tune liquidity/score gates using verified outcomes."},
+      {"id": "finding_coverage", "type": "markdown", "sourceId": "classification_source", "body": "## Market evidence—not CPKs—is the dominant funnel loss\n\nThe CPK repair moved product identity coverage to 74.5%. The larger loss now occurs between identity and valuation: 16,680 rows carry `insufficient_same_condition_sold_comparables`, and usable market values exist for only 14.2% of scored listings. This means further CPK work alone will not materially increase trustworthy GEM volume."},
+      {"id": "coverage", "type": "chart", "chartId": "coverage_chart"},
+      {"id": "finding_quality", "type": "markdown", "sourceId": "risk_source", "body": "## False bargains show the remaining matching risk\n\nThe strongest apparent discounts are often not real opportunities. Spot checks found accessories, empty boxes, and cross-category products compared with full components. Some identity vetoes catch these, but other mismatches remain eligible and are merely capped at OK_DEAL by the score/liquidity gates. Those gates are currently preventing false positives, so relaxing them before fixing cohort identity would reduce trust."},
+      {"id": "risks", "type": "chart", "chartId": "risk_chart"},
+      {"id": "recommendations", "type": "markdown", "body": "## Recommended next steps\n\n1. **Enforce exact comparable identity before valuation.** Require category, brand/model family, core capacity/spec fields, and accessory/full-product status to agree between a listing and every comparable. Quarantine cross-category cohorts.\n2. **Prioritize sold-comparable acquisition for CPKs that already have live listings.** Target the 20,605 assigned CPK rows, beginning with GPUs, CPUs, and motherboards; cache cohorts by CPK and condition.\n3. **Create an explicit `EVIDENCE_LIMITED_DEAL` tier.** Preserve promising economics with 1–4 comparables without presenting them as actionable GEMs. This is more useful than collapsing everything to OK_DEAL or INSUFFICIENT_DATA.\n4. **Tune gates only after a labelled validation set exists.** Manually review roughly 100 candidates across categories, measure precision at each tier, then consider reducing the GEM score/liquidity gates by category. The current generic 45 liquidity gate is especially harsh for slower-moving PC parts, but it is not yet safe to lower blindly.\n5. **Track a classification funnel per scan.** Monitor CPK coverage, valid market coverage, five-comparable coverage, eligible-positive deals, GEM precision, and stale/incorrect comparable rate."},
+      {"id": "questions", "type": "markdown", "body": "## Further questions\n\n- What minimum precision do you want for GEM and SUPER GEM alerts—90%, 95%, or another target?\n- Should retailer prices be treated only as context, with sold prices required for all BUY_NOW classifications?\n- Which categories should be optimized first for deal volume versus cash profit?"},
+      {"id": "caveats", "type": "markdown", "body": "## Caveats and assumptions\n\nThis assessment uses the live scored-listing snapshot on August 18, 2026 (Europe/London) after the latest CPK rescore. The 27,654 rows share the synthetic rescore run ID `cpk-phase2-classify`, so this is a current-state funnel assessment rather than a clean scan-over-scan trend. Risk flags can overlap. No realised purchase/resale outcome labels are yet available, so threshold recommendations remain provisional."}
+    ]
+  },
+  "snapshot": {
+    "version": 1,
+    "generatedAt": "2026-08-18T12:30:00+01:00",
+    "status": "ready",
+    "datasets": {
+      "coverage": [
+        {"stage": "Scored", "listings": 27654, "rate_pct": 100.0},
+        {"stage": "CPK assigned", "listings": 20605, "rate_pct": 74.5},
+        {"stage": "Usable market", "listings": 3925, "rate_pct": 14.2},
+        {"stage": "5+ comparables", "listings": 1920, "rate_pct": 6.9},
+        {"stage": "Eligible positive", "listings": 740, "rate_pct": 2.7},
+        {"stage": "GEM", "listings": 8, "rate_pct": 0.03},
+        {"stage": "SUPER GEM", "listings": 0, "rate_pct": 0.0}
+      ],
+      "risks": [
+        {"flag": "No comps", "listings": 16680},
+        {"flag": "Identity gap", "listings": 7049},
+        {"flag": "Retro", "listings": 812},
+        {"flag": "System mismatch", "listings": 724},
+        {"flag": "Multi-variant", "listings": 476},
+        {"flag": "3–4 sold comps", "listings": 396},
+        {"flag": "Accessory", "listings": 250}
+      ]
+    }
+  },
+  "sources": []
+}
