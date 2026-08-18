@@ -44,6 +44,8 @@ class OpportunityPolicy:
     minimum_sold_comps: int = 5
     minimum_source_diversity: int = 2
     sold_lookback_days: int = 90
+    super_discount_pct: float = -30.0
+    gem_discount_pct: float = -20.0
 
 
 @dataclass(frozen=True)
@@ -99,6 +101,8 @@ async def load_opportunity_policy(db) -> OpportunityPolicy:
         returns_warranty_pct=settings.opportunity_returns_warranty_pct,
         minimum_sold_comps=settings.opportunity_minimum_sold_comps,
         minimum_source_diversity=settings.opportunity_minimum_source_diversity,
+        super_discount_pct=settings.deal_super_gem_threshold_pct,
+        gem_discount_pct=settings.deal_gem_threshold_pct,
     )
 
 
@@ -253,7 +257,8 @@ def identity_gates(title: str, cpk_data: dict[str, Any] | None, strategy: str = 
     ):
         flags.append("category_identity_conflict")
     if category == "case" and re.search(
-        r"\b(?:retaining clips?|panel clips?|replacement panel|dust filters?|case feet|thumbscrews?)\b",
+        r"\b(?:retaining clips?|panel clips?|replacement panel|dust filters?|case feet|thumbscrews?|"
+        r"fan\s*(?:&|and)?\s*rgb controller|fan controller)\b",
         lowered,
     ):
         flags.append("accessory_or_parts_listing")
@@ -395,6 +400,14 @@ def score_opportunity(
             f"SUPER_GEM £{economics.super_profit:.0f}/{economics.super_roi_pct:.0f}% ROI."
         )
     emerging_profit_floor = min(policy.gem_profit, 10.0) if is_component else policy.gem_profit
+    discount_pct = (listing_price - market.conservative_resale) / market.conservative_resale * 100.0
+    # Deal tier answers "how exceptional is the buy?"  Evidence and identity
+    # remain hard gates, but liquidity/desirability rank urgency rather than
+    # vetoing a genuine bargain.  The former all-gates-at-once rule made a
+    # slow-moving item mathematically incapable of being a SUPER_GEM even at
+    # a 60% discount with a strong comparable cohort.
+    super_confidence_floor = max(70.0, policy.super_confidence - 10.0)
+    gem_confidence_floor = max(65.0, policy.gem_confidence - 5.0)
     if blocking_flags:
         classification, decision = "INELIGIBLE", "IGNORE"
         reasons.append("A hard identity or market-quality veto prevents deal classification.")
@@ -407,9 +420,9 @@ def score_opportunity(
     elif evidence_limited:
         classification, decision = "INSUFFICIENT_DATA", "INVESTIGATE"
         reasons.append("The comparable cohort is below the minimum evidence requirement and the provisional opportunity gates were not all met.")
-    elif eligible and profit >= economics.super_profit and roi >= economics.super_roi_pct and market.confidence >= policy.super_confidence and liquidity >= policy.super_liquidity and total_score >= economics.super_score:
+    elif eligible and discount_pct <= policy.super_discount_pct and profit >= economics.super_profit and roi >= economics.super_roi_pct and market.confidence >= super_confidence_floor:
         classification, decision = "SUPER_GEM", "BUY_NOW"
-    elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market.confidence >= policy.gem_confidence and liquidity >= policy.gem_liquidity and total_score >= economics.gem_score:
+    elif eligible and discount_pct <= policy.gem_discount_pct and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market.confidence >= gem_confidence_floor:
         classification, decision = "GEM", "BUY_NOW"
     elif profit > 0 and eligible:
         classification, decision = "OK_DEAL", "MAKE_OFFER"

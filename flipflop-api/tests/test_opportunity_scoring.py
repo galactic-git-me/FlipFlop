@@ -155,6 +155,9 @@ def test_compatibility_text_cannot_turn_accessories_or_psus_into_components():
     assert "accessory_or_parts_listing" in identity_gates(
         "4x Retaining Clips for Lian Li A3-mATX Case", case
     )
+    assert "accessory_or_parts_listing" in identity_gates(
+        "Lian Li UNI FAN TL Fan & RGB Controller Black", case
+    )
 
 
 def test_single_active_comparable_is_evidence_limited_not_ok_deal():
@@ -173,3 +176,17 @@ def test_single_active_comparable_is_evidence_limited_not_ok_deal():
     )
     assert result.classification == "EVIDENCE_LIMITED_DEAL"
     assert result.decision == "INVESTIGATE"
+
+
+def test_liquidity_ranks_urgency_but_does_not_veto_a_verified_super_gem():
+    policy = OpportunityPolicy()
+    market = robust_sold_market(comps([85, 88, 90, 92, 95, 97]), subject_listing_id="999", policy=policy)
+    assert market is not None
+    result = score_opportunity(
+        listing_price=40, title="Noctua NH-D15 CPU Cooler",
+        cpk_data={"category": "cooler", "brand": "Noctua", "model": "NH-D15"},
+        market=market, sold_count_90d=0, active_count=10,
+        watch_velocity=None, bid_velocity=None, policy=policy,
+    )
+    assert result.liquidity_score == 0
+    assert result.classification == "SUPER_GEM"
