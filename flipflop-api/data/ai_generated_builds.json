@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T18:40:09.337022+00:00",
+  "generated_at": "2026-08-18T19:15:43.259819+00:00",
   "builds": [
     {
       "components": [
@@ -132,12 +132,12 @@
           "count": 49,
           "min_price": 167.22,
           "max_price": 2517.0,
-          "average_price": 1013.18
+          "average_price": 1050.99
         }
       },
-      "resale_estimate": 1013.18,
+      "resale_estimate": 1050.99,
       "resale_source": "bin_average",
-      "estimated_profit": 489.2,
+      "estimated_profit": 527.01,
       "rank": 1
     },
     {
@@ -271,152 +271,13 @@
           "count": 49,
           "min_price": 167.22,
           "max_price": 2517.0,
-          "average_price": 1013.18
+          "average_price": 1050.99
         }
       },
-      "resale_estimate": 1013.18,
+      "resale_estimate": 1050.99,
       "resale_source": "bin_average",
-      "estimated_profit": 470.22,
+      "estimated_profit": 508.03,
       "rank": 2
-    },
-    {
-      "components": [
-        {
-          "id": 14534153,
-          "listing_id": "407142500949",
-          "category": "cpu",
-          "title": "AMD Ryzen 5 2600X 6-Core CPU AM4 Zen+ with 12 Threads Fully Tested and Working",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/2GUAAeSwSUhqfjLZ/s-l500.webp",
-          "delivered_price": 27.22,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "GEM",
-          "estimated_profit": -27.22,
-          "url": "https://www.ebay.co.uk/itm/407142500949"
-        },
-        {
-          "id": 14537967,
-          "listing_id": "820011077804",
-          "category": "motherboard",
-          "title": "MSI B550 GAMING WIFI Motherboard, ATX",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/h7QAAeSwJgVqgh6O/s-l500.webp",
-          "delivered_price": 68.3,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -68.3,
-          "url": "https://www.ebay.co.uk/itm/820011077804"
-        },
-        {
-          "id": 14545221,
-          "listing_id": "GRA-GNW-04906",
-          "category": "gpu",
-          "title": "Gainward GeForce RTX 5060 Ti Ghost 8GB GDDR7 PCI-Express Graphics Card",
-          "seller": null,
-          "image_url": "https://img.overclockers.co.uk/images/GRA-GNW-04906/95c25611bf82d935c510f2da0ef86475.jpg",
-          "delivered_price": 299.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -299.99,
-          "url": "https://www.overclockers.co.uk/search?q=Gainward+GeForce+RTX+5060+Ti+Ghost+8GB+GDDR7+PCI-Express+Graphics+Card"
-        },
-        {
-          "id": 14542015,
-          "listing_id": "B0CSKH56WN",
-          "category": "ram",
-          "title": "Gigabyte B650 GAMING X AX V2 Motherboard - Supports AMD Ryzen 8000 CPUs, 8+2+2 Phases Digital VRM, up to 8000MHz DDR5 (OC), 1xPCIe 5.0 + 2xPCIe 4.0 M.2, Wi-Fi 6E 802.11ax, 2.5GbE LAN, USB 3.2 Gen 2",
-          "seller": "Amazon",
-          "image_url": "https://m.media-amazon.com/images/I/61Y8Vdyx0sL._AC_UY218_.jpg",
-          "delivered_price": 124.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -124.0,
-          "url": "https://www.amazon.co.uk/dp/B0CSKH56WN"
-        },
-        {
-          "id": 14534415,
-          "listing_id": "601099520392240",
-          "category": "psu",
-          "title": "Top pickComputer Fan Mesh Cover, Metal Iron Mesh Protective Cover, Case Fan Power Supply Mesh, Radiator Protective Mesh CoverOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 3.06,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "IDENTITY_PENDING",
-          "estimated_profit": -3.06,
-          "url": "https://www.temu.com/search_result.html?search_key=Top+pickComputer+Fan+Mesh+Cover%2C+Metal+Iron+Mesh+Protective+Cover%2C+Case+Fan+Power+Supply+Mesh%2C+Radiator+Protective+Mesh+CoverOpen+in+new+tab."
-        },
-        {
-          "id": 14535633,
-          "listing_id": "605593003735804",
-          "category": "ssd",
-          "title": "Top pick1pc Solid State Drive Storage Protection Case, Suitable for Gridfinity M.2 SSD 22 X 80 Storage. Allows for Free Stacking And Compact Storage of The DrivesOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.87,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "IDENTITY_PENDING",
-          "estimated_profit": -0.87,
-          "url": "https://www.temu.com/search_result.html?search_key=Top+pick1pc+Solid+State+Drive+Storage+Protection+Case%2C+Suitable+for+Gridfinity+M.2+SSD+22+X+80+Storage.+Allows+for+Free+Stacking+And+Compact+Storage+of+The+DrivesOpen+in+new+tab."
-        },
-        {
-          "id": 14536239,
-          "listing_id": "607122532211230",
-          "category": "cooler",
-          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.79,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -0.79,
-          "url": "https://www.temu.com/search_result.html?search_key=Top+pick8pcs+Set+of+Mini+Heatsinks%2C+9x9x5mm+in+Size%2C+Radiators+with+Thermal+Conductive+Double-Sided+Tape%2C+Suitable+for+VRM%2C+GPU+Step-Down+Drivers%2C+MOSFETs%2C+VRAM+RegulatorsOpen+in+new+tab."
-        },
-        {
-          "id": 14536082,
-          "listing_id": "606364621483887",
-          "category": "case",
-          "title": "Top pick3 Sets/5 Sets Full-Height PCI Slot Heat Dissipation Dust Shutter, Universal Desktop Computer Case Panel with Hex ScrewsOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 1.02,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INELIGIBLE",
-          "estimated_profit": -1.02,
-          "url": "https://www.temu.com/search_result.html?search_key=Top+pick3+Sets%2F5+Sets+Full-Height+PCI+Slot+Heat+Dissipation+Dust+Shutter%2C+Universal+Desktop+Computer+Case+Panel+with+Hex+ScrewsOpen+in+new+tab."
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 3,
-      "build_cost": 525.25,
-      "market": {
-        "query": "gaming pc AMD Ryzen 5 2600X RTX 5060 Ti",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "No comparable sold listings found"
-        },
-        "bin": {
-          "available": true,
-          "count": 50,
-          "min_price": 288.42,
-          "max_price": 2459.0,
-          "average_price": 930.08
-        }
-      },
-      "resale_estimate": 930.08,
-      "resale_source": "bin_average",
-      "estimated_profit": 404.83,
-      "rank": 3
     },
     {
       "components": [
@@ -549,12 +410,151 @@
           "count": 50,
           "min_price": 288.42,
           "max_price": 2459.0,
-          "average_price": 930.08
+          "average_price": 936.9
         }
       },
-      "resale_estimate": 930.08,
+      "resale_estimate": 936.9,
       "resale_source": "bin_average",
-      "estimated_profit": 402.41,
+      "estimated_profit": 409.23,
+      "rank": 3
+    },
+    {
+      "components": [
+        {
+          "id": 14534153,
+          "listing_id": "407142500949",
+          "category": "cpu",
+          "title": "AMD Ryzen 5 2600X 6-Core CPU AM4 Zen+ with 12 Threads Fully Tested and Working",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/2GUAAeSwSUhqfjLZ/s-l500.webp",
+          "delivered_price": 27.22,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "GEM",
+          "estimated_profit": -27.22,
+          "url": "https://www.ebay.co.uk/itm/407142500949"
+        },
+        {
+          "id": 14537967,
+          "listing_id": "820011077804",
+          "category": "motherboard",
+          "title": "MSI B550 GAMING WIFI Motherboard, ATX",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/h7QAAeSwJgVqgh6O/s-l500.webp",
+          "delivered_price": 68.3,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -68.3,
+          "url": "https://www.ebay.co.uk/itm/820011077804"
+        },
+        {
+          "id": 14545221,
+          "listing_id": "GRA-GNW-04906",
+          "category": "gpu",
+          "title": "Gainward GeForce RTX 5060 Ti Ghost 8GB GDDR7 PCI-Express Graphics Card",
+          "seller": null,
+          "image_url": "https://img.overclockers.co.uk/images/GRA-GNW-04906/95c25611bf82d935c510f2da0ef86475.jpg",
+          "delivered_price": 299.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -299.99,
+          "url": "https://www.overclockers.co.uk/search?q=Gainward+GeForce+RTX+5060+Ti+Ghost+8GB+GDDR7+PCI-Express+Graphics+Card"
+        },
+        {
+          "id": 14542015,
+          "listing_id": "B0CSKH56WN",
+          "category": "ram",
+          "title": "Gigabyte B650 GAMING X AX V2 Motherboard - Supports AMD Ryzen 8000 CPUs, 8+2+2 Phases Digital VRM, up to 8000MHz DDR5 (OC), 1xPCIe 5.0 + 2xPCIe 4.0 M.2, Wi-Fi 6E 802.11ax, 2.5GbE LAN, USB 3.2 Gen 2",
+          "seller": "Amazon",
+          "image_url": "https://m.media-amazon.com/images/I/61Y8Vdyx0sL._AC_UY218_.jpg",
+          "delivered_price": 124.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -124.0,
+          "url": "https://www.amazon.co.uk/dp/B0CSKH56WN"
+        },
+        {
+          "id": 14534415,
+          "listing_id": "601099520392240",
+          "category": "psu",
+          "title": "Top pickComputer Fan Mesh Cover, Metal Iron Mesh Protective Cover, Case Fan Power Supply Mesh, Radiator Protective Mesh CoverOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 3.06,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "IDENTITY_PENDING",
+          "estimated_profit": -3.06,
+          "url": "https://www.temu.com/search_result.html?search_key=Top+pickComputer+Fan+Mesh+Cover%2C+Metal+Iron+Mesh+Protective+Cover%2C+Case+Fan+Power+Supply+Mesh%2C+Radiator+Protective+Mesh+CoverOpen+in+new+tab."
+        },
+        {
+          "id": 14535633,
+          "listing_id": "605593003735804",
+          "category": "ssd",
+          "title": "Top pick1pc Solid State Drive Storage Protection Case, Suitable for Gridfinity M.2 SSD 22 X 80 Storage. Allows for Free Stacking And Compact Storage of The DrivesOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 0.87,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "IDENTITY_PENDING",
+          "estimated_profit": -0.87,
+          "url": "https://www.temu.com/search_result.html?search_key=Top+pick1pc+Solid+State+Drive+Storage+Protection+Case%2C+Suitable+for+Gridfinity+M.2+SSD+22+X+80+Storage.+Allows+for+Free+Stacking+And+Compact+Storage+of+The+DrivesOpen+in+new+tab."
+        },
+        {
+          "id": 14536239,
+          "listing_id": "607122532211230",
+          "category": "cooler",
+          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 0.79,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -0.79,
+          "url": "https://www.temu.com/search_result.html?search_key=Top+pick8pcs+Set+of+Mini+Heatsinks%2C+9x9x5mm+in+Size%2C+Radiators+with+Thermal+Conductive+Double-Sided+Tape%2C+Suitable+for+VRM%2C+GPU+Step-Down+Drivers%2C+MOSFETs%2C+VRAM+RegulatorsOpen+in+new+tab."
+        },
+        {
+          "id": 14536082,
+          "listing_id": "606364621483887",
+          "category": "case",
+          "title": "Top pick3 Sets/5 Sets Full-Height PCI Slot Heat Dissipation Dust Shutter, Universal Desktop Computer Case Panel with Hex ScrewsOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 1.02,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INELIGIBLE",
+          "estimated_profit": -1.02,
+          "url": "https://www.temu.com/search_result.html?search_key=Top+pick3+Sets%2F5+Sets+Full-Height+PCI+Slot+Heat+Dissipation+Dust+Shutter%2C+Universal+Desktop+Computer+Case+Panel+with+Hex+ScrewsOpen+in+new+tab."
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 3,
+      "build_cost": 525.25,
+      "market": {
+        "query": "gaming pc AMD Ryzen 5 2600X RTX 5060 Ti",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "No comparable sold listings found"
+        },
+        "bin": {
+          "available": true,
+          "count": 50,
+          "min_price": 288.42,
+          "max_price": 2459.0,
+          "average_price": 926.88
+        }
+      },
+      "resale_estimate": 926.88,
+      "resale_source": "bin_average",
+      "estimated_profit": 401.63,
       "rank": 4
     },
     {
@@ -688,12 +688,12 @@
           "count": 49,
           "min_price": 214.58,
           "max_price": 1975.0,
-          "average_price": 835.66
+          "average_price": 849.23
         }
       },
-      "resale_estimate": 835.66,
+      "resale_estimate": 849.23,
       "resale_source": "bin_average",
-      "estimated_profit": 319.64,
+      "estimated_profit": 333.21,
       "rank": 5
     },
     {
@@ -824,15 +824,15 @@
         },
         "bin": {
           "available": true,
-          "count": 49,
+          "count": 50,
           "min_price": 214.58,
           "max_price": 1975.0,
-          "average_price": 835.66
+          "average_price": 841.35
         }
       },
-      "resale_estimate": 835.66,
+      "resale_estimate": 841.35,
       "resale_source": "bin_average",
-      "estimated_profit": 318.54,
+      "estimated_profit": 324.23,
       "rank": 6
     }
   ],

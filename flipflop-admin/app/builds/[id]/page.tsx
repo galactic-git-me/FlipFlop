@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeft, CheckCircle2, Circle, Hammer, Sparkles, ExternalLink,
   Loader2, ShoppingBag, ImagePlus, Star, X, IdCard, BadgeCheck, Store, Download, Zap,
-  CalendarClock, Truck, AlertTriangle,
+  CalendarClock, Truck, AlertTriangle, PoundSterling,
 } from "lucide-react";
 import { Toaster, toast } from "sonner";
 import confetti from "canvas-confetti";
@@ -19,7 +19,7 @@ import { EbayShipmentBookingSection } from "@/components/builds/EbayShipmentBook
 import { EbaySpecificsSection } from "@/components/builds/EbaySpecificsSection";
 import { DescriptionPreview } from "@/components/builds/DescriptionPreview";
 import { EbayListingHTMLPreview } from "@/components/builds/EbayListingHTMLPreview";
-import { PricingBreakdown } from "@/components/builds/PricingBreakdown";
+import { PricingIntelligence } from "@/components/builds/PricingIntelligence";
 import { CommandPanel } from "@/components/builds/CommandPanel";
 
 // eBay-required Item Specifics for "PC Desktops & All-in-Ones" — mirrors
@@ -129,7 +129,7 @@ export default function BuildDetailPage() {
   const [performanceCardImageUrls, setPerformanceCardImageUrls] = useState<string[]>([]);
   const [performanceCardZipUrl, setPerformanceCardZipUrl] = useState<string | null>(null);
 
-  const [activeTab, setActiveTab] = useState<"build" | "listing" | "media" | "specifics" | "shipping" | "fulfillment">("build");
+  const [activeTab, setActiveTab] = useState<"build" | "pricing" | "listing" | "media" | "specifics" | "shipping" | "fulfillment">("build");
 
   useEffect(() => {
     api.manualBuilds
@@ -577,7 +577,15 @@ export default function BuildDetailPage() {
           onClick={() => setActiveTab("build")}
         />
         <TabButton
-          label="2. Listing & Price"
+          label="2. Pricing"
+          icon={PoundSterling}
+          active={activeTab === "pricing"}
+          completed={!!build.total_cost && !!build.last_evaluation}
+          disabled={!canSell}
+          onClick={() => setActiveTab("pricing")}
+        />
+        <TabButton
+          label="3. Listing"
           icon={Sparkles}
           active={activeTab === "listing"}
           completed={!!build.generated_title && parseFloat(price) > 0}
@@ -585,7 +593,7 @@ export default function BuildDetailPage() {
           onClick={() => setActiveTab("listing")}
         />
         <TabButton
-          label="3. Media & Cards"
+          label="4. Media & Cards"
           icon={ImagePlus}
           active={activeTab === "media"}
           completed={!!build.hero_photo_url && build.photos.some(p => p.kind === "spec_card") && build.photos.some(p => p.kind === "registration_plate")}
@@ -593,7 +601,7 @@ export default function BuildDetailPage() {
           onClick={() => setActiveTab("media")}
         />
         <TabButton
-          label="4. Item Specifics"
+          label="5. Item Specifics"
           icon={IdCard}
           active={activeTab === "specifics"}
           completed={hasRequiredAspects}
@@ -601,7 +609,7 @@ export default function BuildDetailPage() {
           onClick={() => setActiveTab("specifics")}
         />
         <TabButton
-          label="5. Shipping & Offers"
+          label="6. Shipping & Offers"
           icon={Truck}
           active={activeTab === "shipping"}
           completed={!!build.ebay_condition}
@@ -610,7 +618,7 @@ export default function BuildDetailPage() {
         />
         {(build.status === "sold" || !!build.ebay_order_id) && (
           <TabButton
-            label="6. Fulfillment"
+            label="7. Fulfillment"
             icon={ShoppingBag}
             active={activeTab === "fulfillment"}
             completed={!!build.tracking_number}

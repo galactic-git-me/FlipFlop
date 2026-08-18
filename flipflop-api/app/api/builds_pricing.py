@@ -18,11 +18,13 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
-from sqlalchemy import select
+from sqlalchemy import select, or_, and_
 import structlog
 
 from app.database import AsyncSessionLocal
 from app.models.manual_build import ManualBuild
+from app.models.listing import Listing, ListingStatus
+from app.config import get_settings
 from app.gem_radar.identity import resolve_identity
 from app.gem_radar.adapters.sold_comps import SoldComp, SoldCompsResult
 from app.services.ai_build_generator import _validate_against_ebay
@@ -100,6 +102,48 @@ class SoldCompDetail(BaseModel):
     ram_gb: int | None = None
 
 
+class ComponentValuation(BaseModel):
+    slot: str
+    name: str
+    price_paid: float
+    estimated_resale: float
+    estimate_basis: str
+    confidence: str
+    evidence_count: int = 0
+
+
+class MarketComparable(BaseModel):
+    source: str
+    title: str
+    price: float
+    status: str
+    observed_or_sold_at: str | None = None
+    url: str | None = None
+    match_basis: str
+
+
+class PriceAutomationStep(BaseModel):
+    day: int
+    action: str
+    price: float
+    rationale: str
+
+
+class PriceRecommendation(BaseModel):
+    market_low: float
+    market_mid: float
+    market_high: float
+    recommended_price: float
+    floor_price: float
+    auto_accept_at: float
+    counter_offer_from: float
+    auto_reject_below: float
+    fee_rate_pct: float
+    confidence: str
+    rationale: str
+    automation: list[PriceAutomationStep]
+
+
 class PricingBreakdown(BaseModel):
     estimated_price: float
     primary_reasoning: PricingDetail
@@ -112,6 +156,94 @@ class PricingBreakdown(BaseModel):
     estimated_profit: float
     is_loss: bool
     fetched_at: str
+    component_valuations: list[ComponentValuation] = []
+    component_resale_total: float = 0.0
+    market_comparables: list[MarketComparable] = []
+    recommendation: PriceRecommendation
+
+
+_COMPONENT_RETENTION = {
+    "gpu": 0.95, "cpu": 0.90, "ram": 0.85, "motherboard": 0.82,
+    "ssd": 0.70, "psu": 0.72, "case": 0.65, "cpu_cooler": 0.65,
+    "case_fans": 0.50, "gpu_support": 0.50, "operating_system": 0.0,
+}
+
+
+def _percentile(values: list[float], fraction: float) -> float:
+    if not values:
+        return 0.0
+    ordered = sorted(values)
+    index = (len(ordered) - 1) * fraction
+    lower = int(index)
+    upper = min(lower + 1, len(ordered) - 1)
+    weight = index - lower
+    return ordered[lower] * (1 - weight) + ordered[upper] * weight
+
+
+def _round_price(value: float, step: int = 10) -> float:
+    return float(round(value / step) * step)
+
+
+async def _component_valuations(components: list[dict]) -> list[ComponentValuation]:
+    valuations: list[ComponentValuation] = []
+    async with AsyncSessionLocal() as db:
+        for component in components:
+            name = str(component.get("name") or "")
+            slot = str(component.get("slot") or "other").lower()
+            paid = float(component.get("price_paid") or 0)
+            identity = resolve_identity(name)
+            model = identity.model or ""
+            observed: list[float] = []
+            if len(model) >= 4:
+                rows = (await db.execute(
+                    select(Listing.price).where(
+                        Listing.status == ListingStatus.active,
+                        Listing.title.ilike(f"%{model}%"),
+                        Listing.price > 0,
+                    ).order_by(Listing.last_seen_at.desc()).limit(12)
+                )).scalars().all()
+                observed = [float(price) for price in rows if paid <= 0 or paid * 0.2 <= float(price) <= paid * 3.0]
+
+            if observed:
+                estimate = statistics.median(observed)
+                basis = f"Median of {len(observed)} current standalone listings"
+                confidence = "medium" if len(observed) >= 3 else "low"
+            else:
+                estimate = paid * _COMPONENT_RETENTION.get(slot, 0.65)
+                basis = "Conservative category retention model; no exact live match"
+                confidence = "low"
+            valuations.append(ComponentValuation(
+                slot=slot, name=name, price_paid=round(paid, 2),
+                estimated_resale=round(estimate, 2), estimate_basis=basis,
+                confidence=confidence, evidence_count=len(observed),
+            ))
+    return valuations
+
+
+async def _active_build_comparables(cpu_model: str | None, gpu_model: str | None) -> list[MarketComparable]:
+    matchers = []
+    if cpu_model:
+        matchers.append(Listing.cpu.ilike(f"%{cpu_model}%"))
+        matchers.append(Listing.title.ilike(f"%{cpu_model}%"))
+    if gpu_model:
+        matchers.append(Listing.gpu.ilike(f"%{gpu_model}%"))
+        matchers.append(Listing.title.ilike(f"%{gpu_model}%"))
+    if not matchers:
+        return []
+    async with AsyncSessionLocal() as db:
+        rows = (await db.execute(
+            select(Listing).where(
+                Listing.status == ListingStatus.active,
+                Listing.price >= 400,
+                or_(*matchers),
+                or_(Listing.title.ilike("%pc%"), Listing.title.ilike("%desktop%"), Listing.title.ilike("%gaming%")),
+            ).order_by(Listing.last_seen_at.desc()).limit(12)
+        )).scalars().all()
+    return [MarketComparable(
+        source=row.source_name, title=row.title, price=round(row.price, 2), status="active",
+        observed_or_sold_at=row.last_seen_at.isoformat() if row.last_seen_at else None,
+        url=row.url, match_basis="Same CPU or GPU; verify full specification",
+    ) for row in rows]
 
 
 @router.get("/{build_id}/pricing")
@@ -224,6 +356,73 @@ async def get_build_pricing(
     if not bin_prices and market_data.get("bin", {}).get("average_price"):
         bin_prices = [market_data["bin"]["average_price"]]
 
+    component_valuations = await _component_valuations(components)
+    component_resale_total = round(sum(item.estimated_resale for item in component_valuations), 2)
+    cpu_model = resolve_identity(cpu_title).model if cpu_title else None
+    gpu_model = resolve_identity(gpu_title).model if gpu_title else None
+    active_comparables = await _active_build_comparables(cpu_model, gpu_model)
+    sold_market_comparables = [MarketComparable(
+        source="eBay sold", title=comp.title or "Comparable gaming PC", price=comp.price,
+        status="sold", observed_or_sold_at=comp.sold_at, url=comp.url,
+        match_basis="Completed sale matched by CPU, GPU and RAM tolerance",
+    ) for comp in sold_comps_list]
+    market_comparables = sold_market_comparables + active_comparables
+
+    sold_prices = [comp.price for comp in sold_comps_list]
+    active_prices = [comp.price for comp in active_comparables]
+    evidence_prices = sold_prices or active_prices
+    if evidence_prices:
+        market_low = _percentile(evidence_prices, 0.25)
+        market_mid = statistics.median(evidence_prices)
+        market_high = _percentile(evidence_prices, 0.75)
+        confidence = "high" if len(sold_prices) >= 5 else "medium" if len(evidence_prices) >= 3 else "low"
+        rationale = (
+            f"Anchored to {len(sold_prices)} completed sales" if sold_prices
+            else f"Provisional range from {len(active_prices)} active asking prices; no completed-sale cohort is cached"
+        )
+    else:
+        # A sum-of-parts value is context, not proof of what a complete PC will
+        # sell for. Apply a modest assembly/warranty premium and label it low confidence.
+        market_mid = max(component_resale_total * 1.10, total_cost * 1.10)
+        market_low, market_high = market_mid * 0.92, market_mid * 1.10
+        confidence = "low"
+        rationale = "No comparable-build evidence is available; provisional range uses component values plus a modest complete-build premium"
+
+    fee_rate = float(get_settings().ebay_final_value_fee_pct)
+    # Floor is the sale price required to net a 10% return after configured
+    # marketplace fees and delivery, not merely the cash component total.
+    floor_price = (total_cost * 1.10) / max(0.01, 1 - fee_rate)
+    # Leave deliberate negotiating room above the protected floor when offers
+    # are enabled; otherwise every non-full-price offer would be rejected.
+    recommended_price = max(market_mid, floor_price * (1.08 if build.allow_offers else 1.0))
+    if build.allow_offers:
+        recommended_price = max(recommended_price, market_high)
+    recommended_price = _round_price(recommended_price)
+    floor_price = _round_price(floor_price)
+    auto_accept_at = _round_price(max(floor_price, recommended_price * 0.96))
+    counter_offer_from = _round_price(max(floor_price, recommended_price * 0.88))
+    auto_reject_below = _round_price(max(total_cost / max(0.01, 1 - fee_rate), counter_offer_from * 0.90))
+    automation: list[PriceAutomationStep] = []
+    for day, reduction, action in (
+        (0, 0.00, "Launch at the recommended price"),
+        (3, 0.00, "Review views and watchers; send a 3% watcher offer if eligible"),
+        (7, 0.03, "Reduce by 3% if there is no serious buyer engagement"),
+        (14, 0.06, "Re-anchor to fresh sold evidence; target roughly 6% below launch"),
+        (21, 0.09, "Final automated step; stop at the protected floor and require review"),
+    ):
+        automation.append(PriceAutomationStep(
+            day=day, action=action,
+            price=_round_price(max(floor_price, recommended_price * (1 - reduction))),
+            rationale="Never crosses the fee-aware 10% margin floor",
+        ))
+    recommendation = PriceRecommendation(
+        market_low=round(market_low, 2), market_mid=round(market_mid, 2), market_high=round(market_high, 2),
+        recommended_price=recommended_price, floor_price=floor_price,
+        auto_accept_at=auto_accept_at, counter_offer_from=counter_offer_from,
+        auto_reject_below=auto_reject_below, fee_rate_pct=round(fee_rate * 100, 2),
+        confidence=confidence, rationale=rationale, automation=automation,
+    )
+
     return PricingBreakdown(
         estimated_price=estimated_price,
         primary_reasoning=primary_reasoning,
@@ -236,6 +435,10 @@ async def get_build_pricing(
         estimated_profit=estimated_profit,
         is_loss=estimated_profit < 0,
         fetched_at=datetime.now(timezone.utc).isoformat(),
+        component_valuations=component_valuations,
+        component_resale_total=component_resale_total,
+        market_comparables=market_comparables,
+        recommendation=recommendation,
     )
 
 
