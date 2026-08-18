@@ -413,8 +413,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             // making the displayed vendor sum quietly undercount the total.
             const knownVendorEntries = VENDOR_ORDER
               .filter((v) => searchConfiguredVendors.includes(v))
-              .map((v): [string, number] => [v, scan.byVendor?.[v] ?? 0])
-              .filter(([, count]) => count > 0);
+              .map((v): [string, number] => [v, scan.byVendor?.[v] ?? 0]);
             const extraVendorEntries = Object.entries(scan.byVendor || {})
               .filter(([v, count]) => count > 0 && !(VENDOR_ORDER as readonly string[]).includes(v))
               .sort((a, b) => b[1] - a[1]);
