@@ -152,6 +152,7 @@ export interface ManualBuild {
   // listing generation (as JSON text), not the images themselves.
   evidence_data?: Record<string, unknown>;
   hero_photo_url: string | null;
+  model_3d_url?: string | null;
   storefront_product_id: number | null;
   // eBay Listing Configuration (optional until migration runs)
   ebay_condition?: string | null;
@@ -163,6 +164,9 @@ export interface ManualBuild {
   shipping_method?: string;
   shipping_cost?: number;
   handling_time_days?: number;
+  delivery_min_days?: number;
+  delivery_max_days?: number;
+  shipping_damage_cover_confirmed?: boolean;
   ships_to_countries?: string[];
   domestic_only?: boolean;
   fulfillment_policy_id?: string | null;
@@ -199,6 +203,9 @@ export interface CourierQuote {
   tracked: boolean;
   estimated_days: number | null;
   service_slug: string | null;
+  protection_scope: "loss_only" | "loss_and_damage" | "unknown";
+  full_value_damage_cover: boolean;
+  protection_warning: string;
 }
 
 // The buyer's real delivery address, synced from the actual eBay order
@@ -609,6 +616,7 @@ export const api = {
       | "ebay_condition" | "ebay_price" | "allow_offers" | "auto_reject_below_price"
       | "auction_start_price" | "return_days" | "shipping_method" | "shipping_cost"
       | "handling_time_days" | "ships_to_countries" | "domestic_only"
+      | "shipping_damage_cover_confirmed"
       | "fulfillment_policy_id" | "package_weight_kg" | "package_length_cm"
       | "package_width_cm" | "package_height_cm" | "deferred_publish_at"
     >>) =>
@@ -672,6 +680,22 @@ export const api = {
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
       if (!res.ok) throw new Error(`API upload branded asset → ${res.status}`);
+      return res.json();
+    },
+    upload3dModel: async (id: number, file: File): Promise<ManualBuild> => {
+      const formData = new FormData();
+      formData.append("file", file);
+      const token = getAdminToken();
+      const res = await fetch(`${API_BASE_URL}/manual-builds/${id}/model-3d`, {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      });
+      if (!res.ok) {
+        const detail = await res.json().then((body) => body?.detail).catch(() => undefined);
+        throw new Error(detail ? String(detail) : `3D model upload failed (${res.status})`);
+      }
       return res.json();
     },
     removePhoto: (id: number, url: string) =>

@@ -34,6 +34,8 @@ class ManualBuild(Base):
     # plain text/JSON), not the images — the images are a rendering of it.
     evidence_data: Mapped[dict] = mapped_column(JSON, default=dict)
     hero_photo_url: Mapped[str | None] = mapped_column(String(500))
+    # Customer-facing GLB for the completed machine's storefront 3D viewer.
+    model_3d_url: Mapped[str | None] = mapped_column(String(500))
     storefront_product_id: Mapped[int | None] = mapped_column(Integer)
     # eBay Listing Configuration
     ebay_condition: Mapped[str | None] = mapped_column(String(30))  # NEW, USED_EXCELLENT, FOR_PARTS_OR_NOT_WORKING, etc.
@@ -46,6 +48,9 @@ class ManualBuild(Base):
     shipping_method: Mapped[str] = mapped_column(String(30), default="tracked")  # tracked, untracked, local_pickup
     shipping_cost: Mapped[float] = mapped_column(Float, default=0.0)
     handling_time_days: Mapped[int] = mapped_column(Integer, default=1)  # 1-3 typical
+    delivery_min_days: Mapped[int] = mapped_column(Integer, default=1)
+    delivery_max_days: Mapped[int] = mapped_column(Integer, default=2)
+    shipping_damage_cover_confirmed: Mapped[bool] = mapped_column(default=False)
     ships_to_countries: Mapped[list] = mapped_column(JSON, default=lambda: ["GB"])  # ["GB", "EU", "WORLD"]
     domestic_only: Mapped[bool] = mapped_column(default=True)
     # Per-build override of which real eBay fulfillment policy (shipping

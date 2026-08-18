@@ -43,6 +43,12 @@ class Product(Base):
     benchmark_report_document_id = Column(Integer, ForeignKey("cx_documents.id"), nullable=True)
     capture_3d_asset_id = Column(Integer, ForeignKey("capture_3d_assets.id"), nullable=True)
     hero_photo_url = Column(String, nullable=True)
+    model_3d_url = Column(String, nullable=True)
+    fulfilment_type = Column(String(30), nullable=False, default="prebuilt")
+    handling_min_days = Column(Integer, nullable=False, default=1)
+    handling_max_days = Column(Integer, nullable=False, default=1)
+    delivery_min_days = Column(Integer, nullable=False, default=1)
+    delivery_max_days = Column(Integer, nullable=False, default=2)
     profit_calculation_id = Column(Integer, ForeignKey("profit_calculations.id"), nullable=True)
 
     reserved_until = Column(DateTime, nullable=True)  # soft basket-add reservation window, Ch.9.6

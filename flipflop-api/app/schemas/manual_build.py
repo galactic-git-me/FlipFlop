@@ -58,6 +58,7 @@ class ManualBuildOut(BaseModel):
     photos: list[BuildPhoto]
     evidence_data: dict = {}
     hero_photo_url: Optional[str]
+    model_3d_url: Optional[str] = None
     storefront_product_id: Optional[int]
     # eBay Listing Configuration
     ebay_condition: Optional[str] = None
@@ -69,6 +70,9 @@ class ManualBuildOut(BaseModel):
     shipping_method: str = "tracked"
     shipping_cost: float = 0.0
     handling_time_days: int = 1
+    delivery_min_days: int = 1
+    delivery_max_days: int = 2
+    shipping_damage_cover_confirmed: bool = False
     ships_to_countries: list[str] = ["GB"]
     domestic_only: bool = True
     fulfillment_policy_id: Optional[str] = None
@@ -186,6 +190,7 @@ class UpdateEbayListingConfigRequest(BaseModel):
     package_width_cm: Optional[float] = None
     package_height_cm: Optional[float] = None
     deferred_publish_at: Optional[datetime] = None
+    shipping_damage_cover_confirmed: Optional[bool] = None
 
 
 class CourierQuoteOut(BaseModel):
@@ -195,6 +200,9 @@ class CourierQuoteOut(BaseModel):
     tracked: bool
     service_slug: Optional[str] = None
     estimated_days: Optional[int] = None
+    protection_scope: str
+    full_value_damage_cover: bool
+    protection_warning: str
 
 
 class BuyerAddressOut(BaseModel):

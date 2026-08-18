@@ -530,7 +530,11 @@ REGISTRATION PLATE DATA (JSON):
 MEASURED BENCHMARKS / TEMPERATURES / STABILITY RESULTS (JSON):
 {json.dumps(performance_card_data, indent=2) if performance_card_data else "None supplied — omit the PERFORMANCE YOU CAN COUNT ON section or place it under INFORMATION REQUIRED"}
 
-RETURNS POLICY: {f"{build.return_days} day returns" if build.return_days else "No returns"}
+RETURNS POLICY: {f"{build.return_days} day returns" if build.return_days else "No voluntary returns period set"}
+CHANGE-OF-MIND RETURN POSTAGE: Customer pays the return postage. The PC must be returned securely packed and in the condition received.
+FAULTY / DAMAGED / MISDESCRIBED RETURN POSTAGE: flipflop pays the reasonable return postage.
+CONSUMER RIGHTS: The buyer's UK statutory rights are not affected. A faulty or misdescribed item remains covered by those rights regardless of the voluntary returns period.
+SUPPORT: Direct setup and after-sales support is available from flipflop. Manufacturer warranties are passed on where transferable.
 
 DELIVERY METHOD: {delivery_method}
 DISPATCH TIME: {build.handling_time_days} business day(s)
@@ -687,6 +691,9 @@ async def get_courier_quote(
         tracked=quote.tracked,
         estimated_days=quote.estimated_days,
         service_slug=quote.service_slug,
+        protection_scope=quote.protection_scope,
+        full_value_damage_cover=quote.full_value_damage_cover,
+        protection_warning=quote.protection_warning,
     )
 
 
@@ -760,6 +767,12 @@ async def book_shipment(build_id: int, body: BookShipmentRequest, db: AsyncSessi
 
     if not build.buyer_address_json or not build.ebay_order_id:
         raise HTTPException(400, "Sync the real eBay order first (sync-ebay-order) before booking a shipment.")
+    if not build.shipping_damage_cover_confirmed:
+        raise HTTPException(
+            409,
+            "Shipment booking is blocked until separate full-value transit-damage cover is confirmed. "
+            "Parcel2Go classifies computers/electricals as protected for loss only.",
+        )
 
     missing = [
         field
@@ -925,6 +938,8 @@ async def update_ebay_config(
         build.shipping_cost = body.shipping_cost
     if body.handling_time_days is not None:
         build.handling_time_days = body.handling_time_days
+    if body.shipping_damage_cover_confirmed is not None:
+        build.shipping_damage_cover_confirmed = body.shipping_damage_cover_confirmed
     if body.ships_to_countries is not None:
         build.ships_to_countries = body.ships_to_countries
     if body.domestic_only is not None:
@@ -1019,6 +1034,27 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
         raise HTTPException(404, "Build not found")
     if not build.generated_title or not build.generated_description:
         raise HTTPException(400, "Generate the listing content before posting to eBay")
+
+    # Do not allow an older generated description to bypass the customer-facing
+    # delivery/returns/support wording added to the current listing workflow.
+    if "data-flipflop-customer-policy" not in build.generated_description:
+        return_period = (
+            f"{build.return_days}-day returns" if build.return_days else "No voluntary returns period set"
+        )
+        policy_html = f"""
+<section data-flipflop-customer-policy="true" style="margin-top:24px;padding:20px;border:1px solid #d7dce2;border-radius:12px;background:#f7f9fb;color:#17202a;">
+  <h2 style="margin:0 0 12px;font-size:20px;">Delivery, returns &amp; support</h2>
+  <p><strong>Dispatch:</strong> Within {build.handling_time_days or 1} working day(s), followed by tracked delivery.</p>
+  <p><strong>Returns:</strong> {return_period}. The buyer pays return postage for a change of mind; flipflop pays reasonable return postage if the PC is faulty, damaged or misdescribed.</p>
+  <p><strong>Your rights:</strong> UK statutory consumer rights are not affected. Manufacturer warranties are passed on where transferable.</p>
+  <p><strong>Support:</strong> Direct setup and after-sales support is available from flipflop.</p>
+</section>
+"""
+        build.generated_description = prepare_ebay_listing_description(
+            build.generated_description + policy_html
+        )
+        build.updated_at = datetime.utcnow()
+        await db.flush()
 
     # Builds generated before cardinality validation can still contain arrays
     # such as Brand=[AMD, NVIDIA, Corsair] and Storage Type=[SSD, HDD]. Repair
@@ -1240,6 +1276,41 @@ async def upload_branded_asset(
     return build
 
 
+@router.post("/{build_id}/model-3d", response_model=ManualBuildOut)
+async def upload_build_3d_model(
+    build_id: int,
+    file: UploadFile = File(...),
+    db: AsyncSession = Depends(get_db),
+):
+    """Store one self-contained GLB for the completed-build web viewer."""
+    if not (file.filename or "").lower().endswith(".glb"):
+        raise HTTPException(400, "Upload a self-contained .glb model")
+    model_bytes = await file.read()
+    if not model_bytes:
+        raise HTTPException(400, "The GLB file is empty")
+    if len(model_bytes) > 100 * 1024 * 1024:
+        raise HTTPException(413, "The GLB must be 100 MB or smaller")
+    # Binary glTF begins with the ASCII magic bytes 'glTF'. This rejects a
+    # renamed ZIP/OBJ before it can reach the public storefront.
+    if model_bytes[:4] != b"glTF":
+        raise HTTPException(400, "The uploaded file is not a valid binary GLB")
+
+    build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+
+    _PUBLIC_MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
+    filename = f"build-{build_id}-3d-{uuid.uuid4().hex}.glb"
+    public_path = _PUBLIC_MEDIA_ROOT / filename
+    public_path.write_bytes(model_bytes)
+    await sync_to_public_media(public_path)
+    build.model_3d_url = f"https://theflipflop.shop/media/{filename}"
+    build.updated_at = datetime.utcnow()
+    await db.flush()
+    await db.refresh(build)
+    return build
+
+
 @router.delete("/{build_id}/photos", response_model=ManualBuildOut)
 async def remove_photo(build_id: int, body: RemovePhotoRequest, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
@@ -1325,6 +1396,12 @@ async def list_on_storefront(
             product.hero_photo_url = build.hero_photo_url
             product.title = build.generated_title
             product.description = build.generated_description
+            product.model_3d_url = build.model_3d_url
+            product.fulfilment_type = "prebuilt"
+            product.handling_min_days = 1
+            product.handling_max_days = 1
+            product.delivery_min_days = 1
+            product.delivery_max_days = 2
             await db.flush()
             return ListOnStorefrontResult(product_id=product.id, build_id=product.build_id, storefront_url=f"/ready-to-ship/{product.id}")
 
@@ -1346,6 +1423,12 @@ async def list_on_storefront(
         price=body.price,
         status=ProductStatus.LISTED,
         hero_photo_url=build.hero_photo_url,
+        model_3d_url=build.model_3d_url,
+        fulfilment_type="prebuilt",
+        handling_min_days=1,
+        handling_max_days=1,
+        delivery_min_days=1,
+        delivery_max_days=2,
     )
     db.add(product)
     await db.flush()

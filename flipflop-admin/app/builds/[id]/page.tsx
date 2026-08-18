@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeft, CheckCircle2, Circle, Hammer, Sparkles, ExternalLink,
   Loader2, ShoppingBag, ImagePlus, Star, X, IdCard, BadgeCheck, Store, Download, Zap,
-  CalendarClock, Truck, AlertTriangle, PoundSterling,
+  CalendarClock, Truck, AlertTriangle, PoundSterling, Box, UploadCloud,
 } from "lucide-react";
 import { Toaster, toast } from "sonner";
 import confetti from "canvas-confetti";
@@ -99,6 +99,7 @@ export default function BuildDetailPage() {
   const buildId = Number(params.id);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const performanceCardInputRef = useRef<HTMLInputElement>(null);
+  const model3dInputRef = useRef<HTMLInputElement>(null);
   const hiddenCanvasRef = useRef<HTMLCanvasElement>(null);
 
   const [build, setBuild] = useState<ManualBuild | null>(null);
@@ -108,6 +109,7 @@ export default function BuildDetailPage() {
   const [generating, setGenerating] = useState(false);
   const [posting, setPosting] = useState(false);
   const [uploadingPhotos, setUploadingPhotos] = useState(false);
+  const [uploading3dModel, setUploading3dModel] = useState(false);
   const [savingAspects, setSavingAspects] = useState(false);
   const [generatingSpecifics, setGeneratingSpecifics] = useState(false);
   const [savingEbayConfig, setSavingEbayConfig] = useState(false);
@@ -429,6 +431,27 @@ export default function BuildDetailPage() {
     }
   };
 
+  const handle3dModelUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith(".glb")) {
+      toast.error("Please upload a self-contained .glb model");
+      e.target.value = "";
+      return;
+    }
+    setUploading3dModel(true);
+    try {
+      const saved = await api.manualBuilds.upload3dModel(buildId, file);
+      setBuild(saved);
+      toast.success("3D model uploaded and ready for the storefront viewer");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not upload the 3D model");
+    } finally {
+      setUploading3dModel(false);
+      if (model3dInputRef.current) model3dInputRef.current.value = "";
+    }
+  };
+
   const endEbayListing = async () => {
     if (!build?.ebay_live) return;
     setEndingEbayListing(true);
@@ -522,6 +545,12 @@ export default function BuildDetailPage() {
           listingId: build.ebay_listing_id || undefined,
           lastUpdated: build.updated_at,
         },
+        {
+          platform: "storefront",
+          isListed: !!build.storefront_live,
+          listingId: build.storefront_product_id ? String(build.storefront_product_id) : undefined,
+          lastUpdated: build.updated_at,
+        },
       ]
     : [];
 
@@ -544,8 +573,10 @@ export default function BuildDetailPage() {
             onPublishEbay={postToEbay}
             onUpdateEbay={postToEbay}
             onDeleteEbay={() => setShowEndEbayConfirm(true)}
+            onPublishStorefront={canPublish ? listOnStorefront : undefined}
             isLoading={generating || posting || markingBuilt}
             isDeletingEbay={endingEbayListing}
+            isPublishingStorefront={listingOnStorefront}
           />
         )}
 
@@ -779,36 +810,6 @@ export default function BuildDetailPage() {
             )}
           </div>
 
-          {/* FlipFlop.shop storefront */}
-          {build.generated_title && (
-            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 flex flex-col gap-3">
-              <p className="text-sm font-semibold flex items-center gap-2">
-                <Store className="w-4 h-4 text-slate-500" /> List on FlipFlop.shop
-              </p>
-              {build.storefront_product_id ? (
-                <p className="text-sm text-[#00dc82]">
-                  ✓ Published to the pre-built showcase (product #{build.storefront_product_id}) — it&apos;ll also appear
-                  in the homepage gallery now that it has a hero photo.
-                </p>
-              ) : (
-                <>
-                  {!canPublish && (
-                    <p className="text-[11px] text-amber-400">
-                      Needs a hero photo and generated title/description before it can be published.
-                    </p>
-                  )}
-                  <button
-                    onClick={listOnStorefront}
-                    disabled={!canPublish || listingOnStorefront}
-                    className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold bg-cyan-500 hover:bg-cyan-400 disabled:bg-slate-800 disabled:text-slate-600 text-black rounded-lg transition-colors"
-                  >
-                    {listingOnStorefront ? <Loader2 className="w-4 h-4 animate-spin" /> : <Store className="w-4 h-4" />}
-                    List on FlipFlop.shop
-                  </button>
-                </>
-              )}
-            </div>
-          )}
         </div>
       )}
 
@@ -917,6 +918,22 @@ export default function BuildDetailPage() {
               </div>
             </div>
           )}
+
+          {/* Storefront 3D model */}
+          <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="flex items-center gap-2 text-sm font-semibold"><Box className="h-4 w-4 text-cyan-400" /> Storefront 3D model</p>
+                <p className="mt-1 text-[11px] leading-5 text-slate-500">Upload one self-contained GLB, maximum 100 MB. It will be used by this PC&apos;s viewer on FlipFlop.shop.</p>
+                {build.model_3d_url && <a href={build.model_3d_url} target="_blank" rel="noreferrer" className="mt-2 inline-flex cursor-pointer items-center gap-1 text-xs text-emerald-300 hover:text-emerald-200">3D model ready <ExternalLink className="h-3 w-3" /></a>}
+              </div>
+              <input ref={model3dInputRef} type="file" accept=".glb,model/gltf-binary" onChange={handle3dModelUpload} className="hidden" />
+              <button type="button" onClick={() => model3dInputRef.current?.click()} disabled={uploading3dModel} className="flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg border border-cyan-400/25 bg-cyan-400/[0.06] px-4 py-2 text-sm font-semibold text-cyan-300 transition-colors hover:bg-cyan-400/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 disabled:cursor-not-allowed disabled:opacity-50">
+                {uploading3dModel ? <Loader2 className="h-4 w-4 animate-spin" /> : <UploadCloud className="h-4 w-4" />}
+                {build.model_3d_url ? "Replace GLB" : "Upload GLB"}
+              </button>
+            </div>
+          </div>
 
           {/* Performance Card */}
           {build.generated_title && (
@@ -1088,9 +1105,31 @@ export default function BuildDetailPage() {
         </div>
       )}
 
-      {/* Tab 5: Shipping & Offers */}
+      {/* Tab 6: Shipping & Offers */}
       {canSell && activeTab === "shipping" && (
         <div className="flex flex-col gap-6 mb-6">
+          <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
+            <p className="flex items-center gap-2 text-sm font-semibold"><Truck className="h-4 w-4 text-cyan-400" /> Delivery promises</p>
+            <p className="mt-1 text-xs text-slate-500">Handling/build time and courier transit are shown separately so customers know exactly what each window means.</p>
+            <div className="mt-4 overflow-x-auto"><table className="w-full min-w-[620px] text-left text-sm"><thead className="border-b border-white/[0.08] text-[10px] uppercase tracking-wider text-slate-500"><tr><th className="px-2 py-2">Build type</th><th className="px-2 py-2">Handling / build time</th><th className="px-2 py-2">Delivery after dispatch</th><th className="px-2 py-2">Customer wording</th></tr></thead><tbody>
+              <tr className="border-b border-white/[0.05] bg-cyan-400/[0.025]"><td className="px-2 py-3 font-semibold text-cyan-300">Ready-to-ship pre-built</td><td className="px-2 py-3">1 working day</td><td className="px-2 py-3">1–2 working days</td><td className="px-2 py-3 text-slate-400">Usually arrives 2–3 working days after ordering</td></tr>
+              <tr className="border-b border-white/[0.05]"><td className="px-2 py-3 font-semibold">Curated build</td><td className="px-2 py-3 text-amber-300">Set per build</td><td className="px-2 py-3">1–2 working days</td><td className="px-2 py-3 text-slate-400">Build lead time plus tracked delivery</td></tr>
+              <tr><td className="px-2 py-3 font-semibold">Custom build</td><td className="px-2 py-3 text-amber-300">Set per build</td><td className="px-2 py-3">1–2 working days</td><td className="px-2 py-3 text-slate-400">Quoted build lead time plus tracked delivery</td></tr>
+            </tbody></table></div>
+          </div>
+
+          <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
+            <p className="text-sm font-semibold">Customer promise shown with this build</p>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              {[
+                ["Returns", "30-day returns. Change-of-mind return postage is paid by the customer; FlipFlop pays reasonable return costs for faulty or misdescribed goods."],
+                ["Consumer rights", "UK statutory remedies apply. These rights are not reduced by any separate warranty or remaining manufacturer cover."],
+                ["Delivery", "One working day handling, followed by an estimated 1–2 working day tracked-delivery window."],
+                ["Support", "Direct setup, troubleshooting and upgrade help through the personalised owner portal."],
+              ].map(([title, copy]) => <div key={title} className="rounded-lg border border-white/[0.06] bg-black/20 p-3"><p className="text-xs font-semibold text-slate-200">{title}</p><p className="mt-1 text-xs leading-5 text-slate-500">{copy}</p></div>)}
+            </div>
+          </div>
+
           {/* eBay */}
           {build.generated_title && build.status !== "sold" && (
             <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4 flex flex-col gap-3">

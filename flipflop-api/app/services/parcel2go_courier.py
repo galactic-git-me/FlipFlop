@@ -72,6 +72,9 @@ class CourierQuote:
     # by Parcel2Go's order-creation endpoint (Items[].Service) to book this
     # specific quoted service. See app/services/parcel2go_booking.py.
     service_slug: str
+    protection_scope: str
+    full_value_damage_cover: bool
+    protection_warning: str
 
 
 async def _get_access_token(environment: str) -> str:
@@ -194,6 +197,17 @@ async def get_cheapest_tracked_quote(
                 tracked=True,
                 estimated_days=estimated_days,
                 service_slug=service.get("Slug", ""),
+                # Parcel2Go's restricted-items terms classify computers and
+                # related electricals as protected for loss only, not transit
+                # damage. A quote price must never be presented as full-value
+                # damage insurance without a separate eligible policy.
+                protection_scope="loss_only",
+                full_value_damage_cover=False,
+                protection_warning=(
+                    "Parcel2Go treats computers/electricals as loss-only items. "
+                    "This quote does not demonstrate cover for transit damage; "
+                    "arrange separate goods-in-transit cover before dispatch."
+                ),
             )
         )
 

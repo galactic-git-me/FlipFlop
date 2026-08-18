@@ -22,6 +22,7 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
   const [shippingMethod, setShippingMethod] = useState(build.shipping_method ?? "tracked");
   const [shippingCost, setShippingCost] = useState((build.shipping_cost ?? 0).toString());
   const [handlingDays, setHandlingDays] = useState((build.handling_time_days ?? 1).toString());
+  const [damageCoverConfirmed, setDamageCoverConfirmed] = useState(build.shipping_damage_cover_confirmed ?? false);
   const [fulfillmentPolicyId, setFulfillmentPolicyId] = useState(build.fulfillment_policy_id ?? "");
   const [weightKg, setWeightKg] = useState((build.package_weight_kg ?? "").toString());
   const [lengthCm, setLengthCm] = useState((build.package_length_cm ?? "").toString());
@@ -190,6 +191,7 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
       shipping_cost: parseFloat(shippingCost) || 0,
       handling_time_days: parseInt(handlingDays, 10),
       fulfillment_policy_id: fulfillmentPolicyId || null,
+      shipping_damage_cover_confirmed: damageCoverConfirmed,
     };
     if (hasPackageDimensions) {
       update.package_weight_kg = parseFloat(weightKg);
@@ -205,6 +207,7 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
     shippingMethod !== (build.shipping_method ?? "tracked") ||
     parseFloat(shippingCost) !== (build.shipping_cost ?? 0) ||
     parseInt(handlingDays, 10) !== (build.handling_time_days ?? 1) ||
+    damageCoverConfirmed !== (build.shipping_damage_cover_confirmed ?? false) ||
     fulfillmentPolicyId !== (build.fulfillment_policy_id ?? "");
 
   const selectedPolicy = policies?.find((p) => p.policy_id === fulfillmentPolicyId);
@@ -374,7 +377,7 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
           )}
 
           {quote && (
-            <div className="space-y-2 p-2 rounded bg-emerald-950/40 border border-emerald-700/50">
+            <div className="space-y-2 p-2 rounded bg-amber-950/30 border border-amber-600/40">
               <div className="text-xs">
                 <p className="font-semibold text-emerald-100">
                   {quote.courier_name} — {quote.service_name}
@@ -382,6 +385,10 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
                 <p className="text-emerald-300">
                   £{quote.price_gbp.toFixed(2)} tracked
                   {quote.estimated_days != null && ` · ${quote.estimated_days} day est.`}
+                </p>
+                <p className="mt-2 flex items-start gap-1.5 text-amber-200">
+                  <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                  {quote.protection_warning}
                 </p>
               </div>
               <div className="flex gap-2">
@@ -403,6 +410,14 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
           )}
         </div>
       )}
+
+      {/* Shipping Destination — real eBay fulfillment policies */}
+      <div className="rounded-lg border border-amber-500/25 bg-amber-500/[0.05] p-3">
+        <label className="flex cursor-pointer items-start gap-3">
+          <input type="checkbox" checked={damageCoverConfirmed} onChange={(event) => setDamageCoverConfirmed(event.target.checked)} className="mt-1 h-4 w-4 accent-cyan-400" />
+          <span><span className="block text-xs font-semibold text-amber-200">Separate full-value transit-damage cover arranged</span><span className="mt-1 block text-xs leading-5 text-slate-500">Only tick this after confirming the entire PC is covered for accidental transit damage up to its sale/replacement value. Parcel2Go protection for computers is loss-only.</span></span>
+        </label>
+      </div>
 
       {/* Shipping Destination — real eBay fulfillment policies */}
       <div className="space-y-2">

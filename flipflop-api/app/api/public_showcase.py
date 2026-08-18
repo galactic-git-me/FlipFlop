@@ -85,7 +85,7 @@ async def public_list_showcase_builds(db: AsyncSession = Depends(get_db)):
             "spec_highlights": (p.build.spec_json if p.build else None),
             "twin_3d": _twin_ref(twins_by_id.get(p.capture_3d_asset_id))
             if p.capture_3d_asset_id
-            else None,
+            else ({"optimized_asset_ref": p.model_3d_url, "preview_image_ref": None, "ar_ready": False} if p.model_3d_url else None),
             "price": p.price,
             "sold": p.status == ProductStatus.SOLD,
             # RESERVED means someone else is mid-checkout right now — distinct
@@ -142,6 +142,14 @@ async def public_showcase_build_detail(product_id: int, db: AsyncSession = Depen
         "title": product.title,
         "description": product.description,
         "hero_photo_url": product.hero_photo_url,
+        "model_3d_url": product.model_3d_url,
+        "fulfilment": {
+            "type": product.fulfilment_type,
+            "handling_min_days": product.handling_min_days,
+            "handling_max_days": product.handling_max_days,
+            "delivery_min_days": product.delivery_min_days,
+            "delivery_max_days": product.delivery_max_days,
+        },
         "spec": product.build.spec_json if product.build else None,
         "benchmark_report": benchmark,
         "twin_3d": twin,

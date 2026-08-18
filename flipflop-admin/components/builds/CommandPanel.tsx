@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, Send, Trash2, Plus, RotateCcw, Loader2, type LucideIcon } from "lucide-react";
+import { Eye, Send, Trash2, Plus, RotateCcw, Loader2, Store, type LucideIcon } from "lucide-react";
 
 interface ListingStatus {
   platform: string;
@@ -19,9 +19,11 @@ interface CommandPanelProps {
   onPublishEbay?: () => void;
   onUpdateEbay?: () => void;
   onDeleteEbay?: () => void;
+  onPublishStorefront?: () => void;
   onCreateNew?: (platform: string) => void;
   isLoading?: boolean;
   isDeletingEbay?: boolean;
+  isPublishingStorefront?: boolean;
 }
 
 type ActionAccent = "blue" | "amber" | "red" | "green";
@@ -87,10 +89,13 @@ export function CommandPanel({
   onPublishEbay,
   onUpdateEbay,
   onDeleteEbay,
+  onPublishStorefront,
   isLoading = false,
   isDeletingEbay = false,
+  isPublishingStorefront = false,
 }: CommandPanelProps) {
   const ebayStatus = listingStatuses.find((s) => s.platform === "ebay");
+  const storefrontStatus = listingStatuses.find((s) => s.platform === "storefront");
 
   return (
     <div className="fixed right-4 top-1/3 z-50 flex flex-col items-center gap-2">
@@ -121,6 +126,14 @@ export function CommandPanel({
       ) : (
         <RailButton label="Create eBay listing" icon={Plus} onClick={onPublishEbay} disabled={isLoading} isLoading={isLoading} accent="green" />
       )}
+      <RailButton
+        label={storefrontStatus?.isListed ? "Update FlipFlop.shop listing" : "Publish to FlipFlop.shop"}
+        icon={Store}
+        onClick={onPublishStorefront}
+        disabled={isLoading || isPublishingStorefront || !onPublishStorefront}
+        isLoading={isPublishingStorefront}
+        accent={storefrontStatus?.isListed ? "amber" : "green"}
+      />
     </div>
   );
 }

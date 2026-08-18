@@ -28,7 +28,15 @@ def _summary_payload(p: Product) -> dict:
         "status": p.status.value,
         "hero_photo_url": p.hero_photo_url,
         "has_benchmark_report": p.benchmark_report_document_id is not None,
-        "has_3d_twin": p.capture_3d_asset_id is not None,
+        "has_3d_twin": p.capture_3d_asset_id is not None or bool(p.model_3d_url),
+        "model_3d_url": p.model_3d_url,
+        "fulfilment": {
+            "type": p.fulfilment_type,
+            "handling_min_days": p.handling_min_days,
+            "handling_max_days": p.handling_max_days,
+            "delivery_min_days": p.delivery_min_days,
+            "delivery_max_days": p.delivery_max_days,
+        },
     }
 
 
@@ -102,5 +110,11 @@ async def public_product_detail(product_id: int, db: AsyncSession = Depends(get_
         "spec": build_spec,
         # Measured results only — never presented alongside estimates.
         "benchmark_report": benchmark,
-        "twin_3d": twin,
+        "twin_3d": twin or ({"optimized_asset_ref": product.model_3d_url, "preview_image_ref": None, "ar_ready": False} if product.model_3d_url else None),
+        "customer_policies": {
+            "returns": "30-day returns. For a change of mind, the customer pays return postage; faulty or misdescribed goods are returned at FlipFlop's cost. Statutory rights are unaffected.",
+            "warranty": "UK statutory consumer rights apply. Any remaining transferable manufacturer warranty is identified with the build; no unsupported manufacturer cover is implied.",
+            "delivery": "Ready-to-ship PCs are dispatched after 1 working day handling, with an estimated 1–2 working day tracked delivery window.",
+            "support": "Direct setup, troubleshooting and upgrade support is available through the personalised owner portal.",
+        },
     }
