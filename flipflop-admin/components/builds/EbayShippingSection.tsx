@@ -36,6 +36,7 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
   const [insuranceError, setInsuranceError] = useState<string | null>(null);
   const [loadingInsurance, setLoadingInsurance] = useState(false);
   const quote = quotes[selectedQuoteIndex] ?? null;
+  const quotePrice = quote && Number.isFinite(Number(quote.price_gbp)) ? Number(quote.price_gbp) : null;
   const listingValue = askingPrice ?? build.ebay_price ?? 0;
 
   const handleGetInsuranceQuote = async () => {
@@ -94,7 +95,7 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
   };
 
   const applyQuoteAsChargedShipping = () => {
-    if (quote) setShippingCost(quote.price_gbp.toFixed(2));
+    if (quotePrice != null) setShippingCost(quotePrice.toFixed(2));
   };
 
   // Folds the real courier cost into the asking price and zeroes the
@@ -104,13 +105,13 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
   // cost). Persists ebay_price directly since that field lives in a
   // sibling component, not local state here.
   const applyQuoteToAskingPrice = async () => {
-    if (!quote) return;
+    if (!quote || quotePrice == null) return;
     setShippingCost("0");
     // Fold onto the asking price actually shown on screen (askingPrice prop),
     // not build.ebay_price — that field is only ever written from here and
     // is never the source of truth the seller is looking at.
     const currentAskingPrice = askingPrice ?? build.ebay_price ?? 0;
-    const newAskingPrice = currentAskingPrice + quote.price_gbp;
+    const newAskingPrice = currentAskingPrice + quotePrice;
     await onUpdate({
       ebay_price: newAskingPrice,
       shipping_cost: 0,
@@ -403,7 +404,7 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
                 <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                 <p><strong>Estimate only.</strong> This does not book or reserve delivery. After the item sells, get a fresh quote using the buyer&apos;s real address and choose the service before paying.</p>
               </div>
-              {quotes.length > 1 && (
+              {quotes.length > 0 && (
                 <label className="block text-xs text-slate-300">
                   <span className="mb-1 block font-semibold">Estimated courier service</span>
                   <select
@@ -413,7 +414,7 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
                   >
                     {quotes.map((option, index) => (
                       <option key={`${option.service_slug}-${index}`} value={index}>
-                        {index === 0 ? "Cheapest · " : ""}{option.courier_name} — {option.service_name} — £{option.price_gbp.toFixed(2)}{option.estimated_days != null ? ` · ${option.estimated_days} day est.` : ""}
+                        {index === 0 ? "Cheapest · " : ""}{option.courier_name} — {option.service_name} — £{Number(option.price_gbp).toFixed(2)}{option.estimated_days != null ? ` · ${option.estimated_days} day est.` : ""}
                       </option>
                     ))}
                   </select>
@@ -424,7 +425,7 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
                   {quote.courier_name} — {quote.service_name}
                 </p>
                 <p className="text-emerald-300">
-                  £{quote.price_gbp.toFixed(2)} tracked
+                  £{quotePrice?.toFixed(2) ?? "—"} tracked
                   {quote.estimated_days != null && ` · ${quote.estimated_days} day est.`}
                 </p>
                 <p className="mt-2 flex items-start gap-1.5 text-amber-200">
