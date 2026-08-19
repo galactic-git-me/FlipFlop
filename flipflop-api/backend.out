@@ -410,3 +410,56 @@ INFO:     127.0.0.1:65068 - "GET /api/alerts/?limit=100&include_acked=false HTTP
 INFO:     127.0.0.1:65068 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 INFO:     127.0.0.1:59004 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
 2026-08-19 13:18:05 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X49 X 49 Inch QD-OLED Curved Gaming
+2026-08-19 13:18:09 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X32X5 31.5 Inch QD-OLED 240Hz Gaming
+2026-08-19 13:18:11 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator XB273U F5 27 Inch IPS 360Hz Gaming M
+2026-08-19 13:18:12 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X27 X1 26.5 Inch 4K QD-OLED 240Hz Ga
+2026-08-19 13:18:16 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Nitro XZ322QU V3 32 Inch WQHD Curved Gaming M
+INFO:     127.0.0.1:56133 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56133 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56133 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56133 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54450 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54450 - "GET /api/settings/ HTTP/1.1" 200 OK
+2026-08-19 13:18:22 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=36 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=43 elapsed_s=49.7 excluded_auctions=0 new_listings=1
+2026-08-19 13:18:22 [info     ] queue_processor.submission_completed cpk_assigned=36 ingested=1 submission_id=55591
+2026-08-19 13:18:22 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=m2-nvme-ssd
+2026-08-19 13:18:22 [info     ] queue_processor.processing_submission active_searches=2 n_listings=74 query=M.2 NVMe SSD -"m.2 case" -adapter -"heatsink only" -enclosure -"ssd case" -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=55592
+2026-08-19 13:18:23 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=19 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=21 elapsed_s=28.7 excluded_auctions=0 new_listings=0
+2026-08-19 13:18:23 [info     ] queue_processor.submission_completed cpk_assigned=19 ingested=0 submission_id=55603
+2026-08-19 13:18:24 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=psu-gold-750w-modular
+2026-08-19 13:18:24 [info     ] queue_processor.processing_submission active_searches=2 n_listings=48 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=55604
+2026-08-19 13:18:24 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=48 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=48 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-08-19 13:18:24 [info     ] queue_processor.submission_completed cpk_assigned=48 ingested=0 submission_id=55604
+2026-08-19 13:18:24 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=psu-gold-750w-modular
+2026-08-19 13:18:24 [info     ] queue_processor.processing_submission active_searches=2 n_listings=21 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=55605
+INFO:     127.0.0.1:58766 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58766 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58766 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58766 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50225 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50225 - "GET /api/settings/ HTTP/1.1" 200 OK
+2026-08-19 13:18:42 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=20 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=21 elapsed_s=18.3 excluded_auctions=0 new_listings=0
+2026-08-19 13:18:42 [info     ] queue_processor.submission_completed cpk_assigned=20 ingested=0 submission_id=55605
+2026-08-19 13:18:42 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=psu-gold-750w-modular
+2026-08-19 13:18:42 [info     ] queue_processor.processing_submission active_searches=2 n_listings=91 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=55607
+INFO:     127.0.0.1:54824 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54824 - "OPTIONS /api/alerts/?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63353 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:51011 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56283 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56283 - "OPTIONS /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51011 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63353 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 13:18:47 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=66 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=73 elapsed_s=24.7 excluded_auctions=0 new_listings=1
+2026-08-19 13:18:47 [info     ] queue_processor.submission_completed cpk_assigned=66 ingested=1 submission_id=55592
+2026-08-19 13:18:47 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=m2-nvme-ssd
+2026-08-19 13:18:47 [info     ] queue_processor.processing_submission active_searches=2 n_listings=43 query=M.2 NVMe SSD -"m.2 case" -adapter -"heatsink only" -enclosure -"ssd case" -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=55594
+INFO:     127.0.0.1:56283 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56283 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52678 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60713 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52678 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60713 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 13:18:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=cpu cooler lga 1150/1151/1155/1156
+INFO:     127.0.0.1:65007 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:65007 - "GET /api/settings/ HTTP/1.1" 200 OK

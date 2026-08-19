@@ -5,3 +5,5 @@ INFO:     Waiting for application startup.
 Recovered 4 stuck 'processing' submissions: [55562, 55565, 55563, 55566]
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
+C:\Users\mclar\CODING\FlipFlop\flipflop-api\.venv\Lib\site-packages\fastapi\openapi\utils.py:252: UserWarning: Duplicate Operation ID list_orders_api_admin_orders_get for function list_orders at C:\Users\mclar\CODING\FlipFlop\flipflop-api\app\routes\admin.py
+  warnings.warn(message, stacklevel=1)

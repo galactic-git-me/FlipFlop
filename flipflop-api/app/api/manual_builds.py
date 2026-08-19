@@ -35,7 +35,7 @@ from app.services.ebay_fulfillment_policies import (
     EbayFulfillmentPoliciesError,
 )
 from app.services.parcel2go_courier import get_tracked_quotes, Parcel2GoError
-from app.services.secursus_insurance import get_insurance_quote, SecursusError
+from app.services.figural_insurance import get_insurance_quote, FiguralError
 from app.services.ebay_order_sync import find_order_for_listing, EbayOrderSyncError, BuyerAddress
 from app.services.parcel2go_booking import (
     create_order as create_parcel2go_order,
@@ -777,7 +777,7 @@ async def get_build_insurance_quote(
     listing_value_gbp: float = Query(gt=0),
     db: AsyncSession = Depends(get_db),
 ):
-    """Get a live Secursus premium for the full current listing value.
+    """Get a live Figural premium for the full current listing value.
 
     Price lookup only: this endpoint cannot create, reserve, or charge for an
     insurance policy. Cover is purchased later, after the item sells.
@@ -787,10 +787,10 @@ async def get_build_insurance_quote(
         raise HTTPException(404, "Build not found")
     try:
         quote = await get_insurance_quote(listing_value_gbp)
-    except SecursusError as error:
+    except FiguralError as error:
         raise HTTPException(error.status_code or 502, str(error))
     return InsuranceQuoteOut(
-        provider="Secursus",
+        provider="Figural",
         insured_value_gbp=quote.insured_value_gbp,
         price_gbp=quote.price_gbp,
         currency=quote.currency,

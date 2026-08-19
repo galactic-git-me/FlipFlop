@@ -99,9 +99,9 @@ class Settings(BaseSettings):
     # "sandbox" (default, no real charges) | "production"
     parcel2go_environment: str = "sandbox"
 
-    # Secursus price-only shipping-insurance quotes. The pre-sale flow calls
-    # /api/parcels/price only; creating an insured parcel is deliberately kept
-    # for the post-sale booking flow.
+    # Figural price-only shipping-insurance quotes. These legacy environment
+    # variable names already hold the Figural API key and secret in this app.
+    # The pre-sale flow only calls /v2/parcel/get_price.
     secursus_api_identifier: str = ""
     secursus_api_secret_key: str = ""
     # Seller's own collection address — used as every booking's

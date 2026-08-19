@@ -456,7 +456,7 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="text-xs font-semibold text-cyan-100">Full-value shipping insurance</p>
-            <p className="mt-1 text-xs text-slate-400">Live Secursus quote for the full £{listingValue.toFixed(2)} listing value.</p>
+            <p className="mt-1 text-xs text-slate-400">Live Figural quote for the full £{listingValue.toFixed(2)} listing value.</p>
           </div>
           <button
             type="button"

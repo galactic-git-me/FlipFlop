@@ -144,7 +144,14 @@ export default function BuildDetailPage() {
       .get(buildId)
       .then((b) => {
         setBuild(b);
-        if (b.last_evaluation?.mid) setPrice(String(Math.round(b.last_evaluation.mid)));
+        // The declared insurance value and publish price must be the actual
+        // saved listing price. The market-evaluation midpoint is only a
+        // fallback for a build that has never had a listing price set.
+        if (b.ebay_price && b.ebay_price > 0) {
+          setPrice(String(b.ebay_price));
+        } else if (b.last_evaluation?.mid) {
+          setPrice(String(Math.round(b.last_evaluation.mid)));
+        }
         if (b.deferred_publish_at) setDeferredAt(b.deferred_publish_at.slice(0, 16));
         
         // Auto-focus active tab based on status
