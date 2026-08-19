@@ -1,0 +1,62 @@
+{
+  "build_id": 2,
+  "build_name": "PROMETHEUS",
+  "created_for": "Meshy multi-image-to-3D reference inputs",
+  "max_images_per_generation": 4,
+  "assets": {
+    "complete_build": {
+      "identity": "PROMETHEUS finished PC",
+      "confidence": "exact",
+      "source_page": "original build uploads",
+      "files": ["01-original.png", "02-original.png", "03-original.png", "04-original.png"]
+    },
+    "chassis": {
+      "identity": "APNX C1 ChromaFlair",
+      "confidence": "exact",
+      "source_page": "https://www.apnx.com/product/c1/",
+      "files": ["01-angle.jpg", "02-front.jpg", "03-side.jpg", "04-rear.jpg"]
+    },
+    "motherboard": {
+      "identity": "ASUS PRIME X870-P",
+      "confidence": "exact",
+      "source_page": "https://www.asus.com/uk/motherboards-components/motherboards/prime/prime-x870-p/",
+      "files": ["01-top.png", "02-angle.png", "03-io-angle.png", "04-rear.png"]
+    },
+    "cpu": {
+      "identity": "AMD Ryzen 7 7800X3D",
+      "confidence": "exact",
+      "source_page": "https://shop-us-en.amd.com/amd-ryzen-7-7800x3d-processor/",
+      "files": ["01-front-and-back.png", "02-package-angle.png"]
+    },
+    "gpu": {
+      "identity": "Palit GeForce RTX 3070 GameRock",
+      "confidence": "exact model, mixed manufacturer and retailer sources",
+      "source_page": "https://www.palit.com/palit/vgapro.php?id=3811&lang=en&tab=ga",
+      "files": ["01-front.jpg", "02-angle.jpg", "03-card-and-box.jpg", "04-angle.webp", "05-front.jpg"]
+    },
+    "ram": {
+      "identity": "Lexar THOR OC DDR5 product family",
+      "confidence": "needs exact SKU confirmation",
+      "source_page": "https://americas.lexar.com/product/lexar-thor-oc-ddr5-desktop-memory/",
+      "files": ["01-kit-front.png", "02-kit-angle.png", "03-module.png"]
+    },
+    "psu": {
+      "identity": "Corsair RM750i 750W",
+      "confidence": "exact",
+      "source_page": "https://www.corsair.com/us/en/p/psu/cp-9020082-na/rmi-series-rm750i-750-watt-80-plus-gold-certified-fully-modular-psu-cp-9020082-na",
+      "files": ["01-angle.webp", "02-side.webp", "03-modular-panel.webp", "04-fan-side.webp"]
+    },
+    "liquid_cooler": {
+      "identity": "Thermalright Aqua Elite 240 White V3",
+      "confidence": "exact",
+      "source_page": "https://www.thermalright.com/tw/product/aqua-elite-240-white-v3/",
+      "files": ["01-product.jpg", "02-angle.jpg", "03-pump.jpg", "04-radiator.jpg"]
+    },
+    "rgb_fan": {
+      "identity": "Thermalright TL-C12CW-S",
+      "confidence": "reference model; installed case-fan SKU is not recorded",
+      "source_page": "https://www.thermalright.com/product/tl-c12cw-s/",
+      "files": ["01-front.jpg", "02-angle.jpg", "03-rear.jpg"]
+    }
+  }
+}
