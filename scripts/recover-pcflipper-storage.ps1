@@ -9,7 +9,6 @@ $backupRoot = (Resolve-Path -LiteralPath 'C:\Users\mclar\db-backups\pcflipper').
 $pgRoot = 'C:\Program Files\PostgreSQL\18'
 $pgData = Join-Path $pgRoot 'data'
 $pgRestore = Join-Path $pgRoot 'bin\pg_restore.exe'
-$postgres = Join-Path $pgRoot 'bin\postgres.exe'
 $psql = Join-Path $pgRoot 'bin\psql.exe'
 $serviceName = 'postgresql-x64-18'
 $taskName = 'PCFlipperDBBackup'
@@ -79,9 +78,13 @@ if ($remaining.Count -ne $keep.Count) {
     throw "Unexpected remaining backup count: expected $($keep.Count), found $($remaining.Count)"
 }
 
-$configuredMode = (& $postgres -D $pgData -C archive_mode).Trim()
-if ($LASTEXITCODE -ne 0 -or $configuredMode -ne 'off') {
-    throw "PostgreSQL archive_mode is not safely staged as off: $configuredMode"
+$postgresConfig = Join-Path $pgData 'postgresql.conf'
+$activeArchiveSettings = @(
+    Get-Content -LiteralPath $postgresConfig -ErrorAction Stop |
+        Where-Object { $_ -match '^\s*archive_mode\s*=' -and $_ -notmatch '^\s*#' }
+)
+if ($activeArchiveSettings.Count -ne 1 -or $activeArchiveSettings[0] -notmatch '^\s*archive_mode\s*=\s*off(?:\s|#|$)') {
+    throw "PostgreSQL archive_mode is not safely staged as off in $postgresConfig"
 }
 
 Write-Host 'Restarting PostgreSQL so retained WAL can be recycled...'
@@ -97,16 +100,29 @@ $activeMode = (& $psql -h 127.0.0.1 -p 5432 -U flipper -d pcflipper -X -Atqc 'SH
 if ($LASTEXITCODE -ne 0 -or $activeMode -ne 'off') {
     throw "PostgreSQL restarted but archive_mode is not off: $activeMode"
 }
-& $psql -h 127.0.0.1 -p 5432 -U flipper -d pcflipper -X -v ON_ERROR_STOP=1 -c 'CHECKPOINT;'
+& $psql -h 127.0.0.1 -p 5432 -U flipper -d pcflipper -X -c 'CHECKPOINT;'
 if ($LASTEXITCODE -ne 0) {
-    throw 'PostgreSQL checkpoint failed.'
+    Write-Warning 'The flipper role cannot request CHECKPOINT; waiting for PostgreSQL automatic checkpoint.'
 }
 
-Start-Sleep -Seconds 5
-$walBytes = (
-    Get-ChildItem -LiteralPath (Join-Path $pgData 'pg_wal') -File -Force -ErrorAction Stop |
-        Measure-Object Length -Sum
-).Sum
+$walPath = Join-Path $pgData 'pg_wal'
+$walBytes = [long]::MaxValue
+$deadline = (Get-Date).AddMinutes(7)
+do {
+    $walBytes = (
+        Get-ChildItem -LiteralPath $walPath -File -Force -ErrorAction Stop |
+            Measure-Object Length -Sum
+    ).Sum
+    Write-Host ("Waiting for WAL recycling: {0:N2} GB currently..." -f ($walBytes / 1GB))
+    if ($walBytes -le 2GB) {
+        break
+    }
+    Start-Sleep -Seconds 15
+} while ((Get-Date) -lt $deadline)
+
+if ($walBytes -gt 2GB) {
+    throw ("WAL did not recycle within seven minutes; current size is {0:N2} GB. Backups remain disabled." -f ($walBytes / 1GB))
+}
 
 Enable-ScheduledTask -TaskName $taskName -ErrorAction Stop | Out-Null
 $disk = Get-CimInstance Win32_LogicalDisk -Filter "DeviceID='C:'"
