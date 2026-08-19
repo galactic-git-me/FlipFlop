@@ -291,6 +291,7 @@ async def confirm_payment(
                 order_reference=order.order_id,
                 build_summary="Custom PC build order received. Build will begin soon.",
                 assigned_week="TBD",
+                order_id=order.id,
             )
         except Exception as e:
             log.warning(

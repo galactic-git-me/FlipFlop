@@ -188,6 +188,7 @@ async def _handle_payment_intent_succeeded(
                 order_reference=order.order_id,
                 build_summary=f"Custom PC build - Total: £{amount:.2f}",
                 assigned_week="TBD",
+                order_id=order.id,
             )
             log.info(
                 "webhook.email.sent",
@@ -308,6 +309,7 @@ async def _handle_product_payment_succeeded(intent: dict, db: AsyncSession) -> N
             order_reference=order.order_id,
             build_summary=f"{product.title or 'Pre-built PC'} — £{amount:.2f}",
             assigned_week="Ready to ship",
+            order_id=order.id,
         )
     except Exception as e:
         log.warning("webhook.product_payment.email_failed", error=str(e), order_id=order.id)

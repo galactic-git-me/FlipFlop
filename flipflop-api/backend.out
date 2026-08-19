@@ -1,0 +1,362 @@
+2026-08-19 12:09:35 [info     ] browser_pool.sigchld_reaper_skipped (Windows or no SIGCHLD support)
+2026-08-19 12:09:35 [info     ] app.startup                    app_env=dev event_loop_type=ProactorEventLoop
+2026-08-19 12:09:35 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-08-19 12:09:35 [info     ] listing_ingest_queue.started   max_queue=25000 workers=16
+2026-08-19 12:09:35 [info     ] claude_eval_queue.started      workers=6
+2026-08-19 12:09:35 [info     ] part_gem_eval_queue.started    workers=2
+2026-08-19 12:09:35 [info     ] scheduler.started              jobs=23
+2026-08-19 12:09:35 [debug    ] listing_ingest_queue.worker_ready worker=0
+2026-08-19 12:09:35 [debug    ] listing_ingest_queue.worker_ready worker=1
+2026-08-19 12:09:35 [debug    ] listing_ingest_queue.worker_ready worker=2
+2026-08-19 12:09:35 [debug    ] listing_ingest_queue.worker_ready worker=3
+2026-08-19 12:09:35 [debug    ] listing_ingest_queue.worker_ready worker=4
+2026-08-19 12:09:35 [debug    ] listing_ingest_queue.worker_ready worker=5
+2026-08-19 12:09:35 [debug    ] listing_ingest_queue.worker_ready worker=6
+2026-08-19 12:09:35 [debug    ] listing_ingest_queue.worker_ready worker=7
+2026-08-19 12:09:35 [debug    ] listing_ingest_queue.worker_ready worker=8
+2026-08-19 12:09:35 [debug    ] listing_ingest_queue.worker_ready worker=9
+2026-08-19 12:09:35 [debug    ] listing_ingest_queue.worker_ready worker=10
+2026-08-19 12:09:35 [debug    ] listing_ingest_queue.worker_ready worker=11
+2026-08-19 12:09:35 [debug    ] listing_ingest_queue.worker_ready worker=12
+2026-08-19 12:09:35 [debug    ] listing_ingest_queue.worker_ready worker=13
+2026-08-19 12:09:35 [debug    ] listing_ingest_queue.worker_ready worker=14
+2026-08-19 12:09:35 [debug    ] listing_ingest_queue.worker_ready worker=15
+2026-08-19 12:09:35 [debug    ] claude_eval_queue.worker_ready worker=0
+2026-08-19 12:09:35 [debug    ] part_gem_eval_queue.worker_ready worker=0
+2026-08-19 12:09:35 [info     ] runtime.preflight.antibot.disabled
+2026-08-19 12:09:35 [info     ] queue_processor.started        workers=15
+2026-08-19 12:09:35 [info     ] margin_verifier.worker_started
+2026-08-19 12:09:35 [warning  ] ram_watcher.fetch_failed       reason=no_oauth_or_error subreddit=buildapcsales
+2026-08-19 12:09:35 [warning  ] ram_watcher.fetch_failed       reason=no_oauth_or_error subreddit=buildapcuk
+2026-08-19 12:09:35 [info     ] ram_watcher.done               checked=0 deals=0
+2026-08-19 12:09:35 [warning  ] queue_processor.recovered_stuck_submissions count=4
+2026-08-19 12:09:35 [info     ] queue_processor.processing_submission active_searches=1 n_listings=43 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=55449
+2026-08-19 12:09:35 [info     ] queue_processor.processing_submission active_searches=2 n_listings=93 query=AMD GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=amd-gpu submission_id=55457
+2026-08-19 12:09:39 [info     ] database_cleaner.completed     deleted={'gem_radar_decision_events': 0, 'gem_radar_listing_demand_history': 8497, 'submission_queue': 0, 'gem_radar_listing_observations': 0, 'gem_radar_scored_listings': 0}
+2026-08-19 12:09:39 [warning  ] sold_comps_cache.connection_failed error=Error 22 connecting to localhost:6379. The remote computer refused the network connection.
+2026-08-19 12:09:39 [info     ] app.ready                      note=full pipeline enabled - ingest/eval/build workers + scheduler + queue processor + margin verifier + sold comps cache running
+2026-08-19 12:09:39 [info     ] opp4.startup                   stats_count=9
+2026-08-19 12:09:40 [debug    ] claude_eval_queue.worker_ready worker=1
+2026-08-19 12:09:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT Hecate AMD Ryzen 5, NVIDIA RTX 5050, 16GB R
+2026-08-19 12:09:45 [debug    ] claude_eval_queue.worker_ready worker=2
+2026-08-19 12:09:45 [debug    ] part_gem_eval_queue.worker_ready worker=1
+2026-08-19 12:09:45 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X49 X 49 Inch QD-OLED Curved Gaming
+2026-08-19 12:09:47 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Astraeus AMD Ryzen 5, Radeon RX 9070 GRE, 1
+2026-08-19 12:09:49 [debug    ] cpk_extractor.low_confidence   confidence=0.6 title=AWD-IT Atlas AMD Ryzen 5, Radeon RX 9070 XT 16GB ,
+2026-08-19 12:09:50 [debug    ] claude_eval_queue.worker_ready worker=3
+2026-08-19 12:09:53 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X32X5 31.5 Inch QD-OLED 240Hz Gaming
+INFO:     127.0.0.1:60829 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54245 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52574 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54245 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52574 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60829 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:09:55 [debug    ] claude_eval_queue.worker_ready worker=4
+2026-08-19 12:09:56 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X27 X1 26.5 Inch 4K QD-OLED 240Hz Ga
+2026-08-19 12:09:57 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator XB273U F5 27 Inch IPS 360Hz Gaming M
+2026-08-19 12:10:00 [debug    ] claude_eval_queue.worker_ready worker=5
+2026-08-19 12:10:00 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Nitro XZ322QU V3 32 Inch WQHD Curved Gaming M
+2026-08-19 12:10:02 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Forge Ryzen 5 5500 6 Core NVIDIA RTX 5060 8
+2026-08-19 12:10:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT Tower 600 Ryzen 5 9600X Nvidia RTX 5060 Lim
+2026-08-19 12:10:06 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT X= Charger Ryzen 5 5500 6 Core NVIDIA RTX 5
+2026-08-19 12:10:09 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT 3500X RGB Ryzen 5 9600X 6 Core Nvidia RTX 5
+2026-08-19 12:10:12 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT DAN A3 AMD Ryzen 5 7600X Nvidia RTX 5070 12
+2026-08-19 12:10:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT Dark Xpanse Ryzen 7 7700 NVIDIA RTX 5070 12
+2026-08-19 12:10:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT NV5 Glacier Intel i5 13400F Nvidia GeForce
+INFO:     127.0.0.1:50155 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50155 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50155 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50155 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:10:18 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Lancool 207 Intel i5 13400F 10 Core Nvidia
+2026-08-19 12:10:20 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT 3D Glass Ryzen 5 5500 NVIDIA GeForce RTX 50
+2026-08-19 12:10:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT FRAME 4000D RGB AMD Ryzen 9600X Nvidia RTX
+2026-08-19 12:10:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT Corsair 4000D FRAME RGB Ryzen 7 5800X3D Nvi
+INFO:     127.0.0.1:62960 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62960 - "GET /api/settings/ HTTP/1.1" 200 OK
+2026-08-19 12:10:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT A31 BTF AMD Ryzen 9600X Nvidia Geforce RTX
+2026-08-19 12:10:28 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT FROST Ryzen 5 5500 6 Core NVIDIA RTX 5060 8
+2026-08-19 12:10:29 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Aurora Compact Black Ryzen 7 5700X 8 Core N
+2026-08-19 12:10:29 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT 120A Mesh Ryzen 7 5700X 8 Core NVIDIA RTX 5
+2026-08-19 12:10:36 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT 3D ARGB Ryzen 5600X 6 Core NVIDIA RTX 5070
+2026-08-19 12:10:36 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Fractal North Ryzen 5 9600X NVIDIA RTX 5070
+2026-08-19 12:10:37 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Pure Black Ryzen 5 8400F 6 Core Nvidia GeFo
+2026-08-19 12:10:39 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Fractal North Black Ryzen 8400F DDR5 NVIDIA
+INFO:     127.0.0.1:63670 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52890 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:63670 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52890 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:10:45 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT MESH Intel i3 14100F Quad Core NVIDIA RTX 3
+2026-08-19 12:10:46 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT A31 PLUS White AMD Ryzen 5 9600X Nvidia Gef
+2026-08-19 12:10:47 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Mesh Ryzen 5 5500 6 Core NVIDIA RTX 5060 8G
+2026-08-19 12:10:49 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT M120R Mesh AMD Ryzen 5600 6 Core NVIDIA RTX
+INFO:     127.0.0.1:57405 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:57405 - "GET /api/settings/ HTTP/1.1" 200 OK
+2026-08-19 12:10:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT FRAME 4000D Ryzen 7 5700X Eight Core NVIDIA
+2026-08-19 12:10:57 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT X= ARC White Ryzen 5 8400F 6 Core NVIDIA RT
+2026-08-19 12:10:59 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT LEVEL 3 Ryzen 5 3600 6 Core Nvidia RTX 3050
+2026-08-19 12:10:59 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=9 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=43 elapsed_s=83.4 excluded_auctions=0 new_listings=0
+2026-08-19 12:10:59 [info     ] queue_processor.submission_completed cpk_assigned=9 ingested=0 submission_id=55449
+2026-08-19 12:10:59 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=NVIDIA/AMD  Graphics card GPU repair service
+2026-08-19 12:10:59 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=nvidia-gpu
+2026-08-19 12:11:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Graphic Card GPU /DP/PCI-E/HDMI Dust Cover for NVI
+2026-08-19 12:11:05 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram title=Gaming PC/Desktop. CPU: AMD 7500F | GPU: AMD Radeo
+2026-08-19 12:11:07 [debug    ] cpk_extractor.invalid_category category=gpu|cpu|ram|ssd title=RX 9070 16 GB GPU, Ryzen 5 7500X3D, 16GB DDR5, 1TB
+INFO:     127.0.0.1:59117 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59117 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59117 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59117 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:11:08 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Zoostorm Desktop AMD A6-3500 4GB 500GB \u2013 Linux MX
+2026-08-19 12:11:11 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=GAMING PC / AMD Ryzen 7 5700X3D / RTX 5070 Ti 16GB
+2026-08-19 12:11:11 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=87 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=93 elapsed_s=95.8 excluded_auctions=0 new_listings=0
+2026-08-19 12:11:11 [info     ] queue_processor.submission_completed cpk_assigned=87 ingested=0 submission_id=55457
+2026-08-19 12:11:11 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=amd-gpu
+2026-08-19 12:11:11 [info     ] queue_processor.processing_submission active_searches=1 n_listings=85 query=AMD GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=amd-gpu submission_id=55462
+2026-08-19 12:11:18 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=GAMING PC / AMD Ryzen 9850X3D / RTX 5080 / 6TB M.2
+2026-08-19 12:11:20 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Gaming Desktop -i9 10th 10 CORE 32GB DDR4 512GB NV
+INFO:     127.0.0.1:56333 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56333 - "GET /api/settings/ HTTP/1.1" 200 OK
+2026-08-19 12:11:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lenovo Windows 11 Desktop PC CORE 8TH 9TH GEN i5 i
+2026-08-19 12:11:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Custom GPU Support Brace - Anti Sag Graphics Card
+2026-08-19 12:11:31 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=GAMING PC / AMD Ryzen 9850X3D / RTX 5080 / 6TB M.2
+INFO:     127.0.0.1:59778 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:57405 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:57405 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59778 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:11:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Custom Desktop PC Intel i7 16GB RAM 480GB SSD AMD
+2026-08-19 12:11:35 [info     ] ebay_sales_tracker.poll_complete found=0 matched=0 updated=0
+2026-08-19 12:11:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP EliteBook 735 G5 13\u2033 AMD Ryzen 5 PRO 2500U 16GB
+2026-08-19 12:11:44 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Cheap Gaming PC -AMD Ryzen 5 2600, 8GB RAM, GTX 76
+2026-08-19 12:11:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Home-Office Desktop PC! AMD A10-6800K CPU 8GB RAM
+2026-08-19 12:11:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HYTE Y60 GAMING PC / AMD Ryzen 9800X3D / RTX 5080
+2026-08-19 12:11:48 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=Gaming PC Computer AMD Ryzen 3600 CPU RX 6600 GPU
+INFO:     127.0.0.1:62603 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62603 - "GET /api/settings/ HTTP/1.1" 200 OK
+2026-08-19 12:11:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=GAMING PC AMD Ryzen 9800X3D RTX 5080 6TB M.2 SSD 1
+2026-08-19 12:11:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Sony PlayStation 4 PS4 AMD Jaguar 8 core CPU + AMD
+INFO:     127.0.0.1:62289 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62289 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62289 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62289 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:12:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Gaming PC Computer AMD Ryzen 3600 CPU RX 6650 XT G
+2026-08-19 12:12:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CoolLaboratory Liquid MetalPad 30mm x 30mm For AMD
+2026-08-19 12:12:07 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=68 cross_run_dupes_price_updated=5 cross_run_dupes_unchanged_price=80 elapsed_s=56.2 excluded_auctions=0 new_listings=0
+2026-08-19 12:12:07 [info     ] queue_processor.submission_completed cpk_assigned=68 ingested=0 submission_id=55462
+2026-08-19 12:12:07 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=amd-gpu
+2026-08-19 12:12:07 [info     ] queue_processor.processing_submission active_searches=1 n_listings=82 query=AMD GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=amd-gpu submission_id=55463
+2026-08-19 12:12:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AMD Radeon GPU Plush Pillow + 3 Detachable Fan Plu
+2026-08-19 12:12:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=custom gaming pc used AMD CPU And GPU
+2026-08-19 12:12:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Optiplex 7010 Intel i5 3.2GHz, AMD GPU, 16GB
+INFO:     127.0.0.1:61709 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53408 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60199 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61709 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60199 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53408 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:12:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=GAMING PC AMD RYZEN INTEL i5 i7 NVIDIA RTX RX 6600
+2026-08-19 12:12:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Graphics Card Side Panel RGB RTX AMD Geforce GPU M
+2026-08-19 12:12:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lenovo IdeaPad 1 \u2014  2.4GHz AMD Athlon Silver \u2014 AMD
+2026-08-19 12:12:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Graphics Card Side Panel RGB RTX AMD Geforce GPU M
+2026-08-19 12:12:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Powerfull GAMING PC AMD Ryzen 7 9800X3D RTX 5080 2
+2026-08-19 12:12:40 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AMD A8-5500 socket FM2 quad core CPU AD5500OKA44HJ
+2026-08-19 12:12:44 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=216-0809000 AMD BGA GPU MacBook 6490M chipset REAL
+2026-08-19 12:12:44 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=custom gaming PC, AMD Ryzen 5 5500 Six Core CPU RT
+INFO:     127.0.0.1:62967 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56939 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62967 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56380 - "OPTIONS /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62967 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:12:48 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=custom gaming PC AMD Ryzen 5 5500 Six Core CPU RTX
+2026-08-19 12:12:48 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=69 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=81 elapsed_s=40.8 excluded_auctions=0 new_listings=0
+2026-08-19 12:12:48 [info     ] queue_processor.submission_completed cpk_assigned=69 ingested=0 submission_id=55463
+2026-08-19 12:12:48 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=amd-gpu
+2026-08-19 12:12:48 [info     ] queue_processor.processing_submission active_searches=1 n_listings=70 query=AMD GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=amd-gpu submission_id=55466
+INFO:     127.0.0.1:56380 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56380 - "GET /api/settings/ HTTP/1.1" 200 OK
+2026-08-19 12:12:55 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AMD 216-0842036 BGA GPU Graphics Chip   'UK COMPAN
+2026-08-19 12:12:55 [debug    ] cpk_extractor.low_confidence   confidence=0.6 title=ASUS ESC8000A-E11 4U 8 GPU Server +2x AMD 7542 32
+2026-08-19 12:12:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Gaming PC Windows 10 - WiFi - 1Tb NVMe SSD - 16Gb
+2026-08-19 12:13:02 [debug    ] cpk_extractor.invalid_category category=gpu|cpu title=ASUS ESC8000A-E11 8 GPU Server + 2x AMD 7542 32 Co
+2026-08-19 12:13:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=ASUS ESC8000A-E12 4U GPU Server For NVIDIA A100 H1
+2026-08-19 12:13:04 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram|ssd title=Apple iMac 27-inch 5K , Intel i5, 32GB RAM , 2TB D
+2026-08-19 12:13:08 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Supermicro AS-4124GS-TNR 4U 8GPU server, 2x AMD 76
+2026-08-19 12:13:09 [debug    ] cpk_extractor.invalid_category category=motherboard|cpu|ram|case title=Asus Z97-Pro Gamer+i5 4670k+8GB DDR3 1866+DeepCool
+2026-08-19 12:13:09 [debug    ] cpk_extractor.invalid_category category=server title=ASUS ESC4000A-E12 Server 2U 4 GPU 8 PCIe 5.0 x16 s
+2026-08-19 12:13:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=3.5g Thermal Compound for AMD & Intel CPU/GPU Heat
+2026-08-19 12:13:10 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=58 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=70 elapsed_s=21.9 excluded_auctions=0 new_listings=0
+2026-08-19 12:13:10 [info     ] queue_processor.submission_completed cpk_assigned=58 ingested=0 submission_id=55466
+2026-08-19 12:13:10 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=amd-gpu
+2026-08-19 12:13:11 [info     ] phase2_trigger.queue_drained_running_phase2
+INFO:     127.0.0.1:49926 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53215 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54213 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49926 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54213 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53215 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-08-19 12:13:14 [warning  ] phase2_trigger.error           error=(sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DeadlockDetectedError'>: deadlock detected
+DETAIL:  Process 65424 waits for ShareLock on transaction 4622125; blocked by process 63416.
+Process 63416 waits for ShareLock on transaction 4622124; blocked by process 65424.
+HINT:  See server log for query details.
+[SQL: DELETE FROM gem_radar_scored_listings WHERE search_run_id = $1]
+[parameters: ('cpk-phase2-classify',)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+2026-08-19 12:13:19 [info     ] phase2_trigger.queue_drained_running_phase2
+INFO:     127.0.0.1:51835 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:51835 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64821 - "OPTIONS /api/alerts/?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64568 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64568 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64568 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64568 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56727 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56727 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62220 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61168 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61168 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62220 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60664 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60664 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49388 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49388 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49388 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49388 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:14:35 [info     ] price_refresh.start
+2026-08-19 12:14:35 [debug    ] margin_verifier.worker_idle
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_case_rgb_mesh query=mesh gaming pc case argb mid tower
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=resale_mobo_am4_b550 query=am4 b550 motherboard used
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_ram_64gb_ddr5 query=64gb ddr5 desktop ram kit 5600
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=resale_mobo_am5_b650 query=am5 b650 motherboard used
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_psu_650w query=650w 80 plus bronze psu modular
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rtx3070 query=rtx 3070 8gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_ram_64gb_ddr4 query=64gb ddr4 desktop ram kit 3200
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rtx3080 query=rtx 3080 10gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rtx3090 query=rtx 3090 24gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rtx4080 query=rtx 4080 16gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rtx4060 query=rtx 4060 8gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=resale_mobo_am5_x670 query=am5 x670 motherboard used
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_i5_9 query=gaming pc i5 9600 desktop tower
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_case_mini_itx query=mini itx gaming case rgb
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=resale_headset_gaming query=gaming headset used
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rx7800xt query=rx 7800 xt graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=resale_ram_64gb_ddr5 query=64gb ddr5 desktop ram kit used
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rtx2070 query=rtx 2070 8gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=resale_case_mesh_argb query=mesh argb gaming case used
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rtx3060 query=rtx 3060 12gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_gtx1660super query=gtx 1660 super graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_i7_8 query=gaming pc i7 8700 desktop tower
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_mobo_am4_x570 query=am4 x570 motherboard
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_i7_9 query=gaming pc i7 9700 desktop tower
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_ram_32gb_ddr4 query=32gb ddr4 desktop ram kit 3200
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_gpu_rtx4060 query=rtx 4060 8gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_r9_3900 query=gaming pc ryzen 9 3900x desktop
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rx6900xt query=rx 6900 xt graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_r5_7600 query=gaming pc ryzen 5 7600 desktop
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=resale_case_atx_rgb query=rgb gaming pc case atx used
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_monitor_1440p query=27 inch 1440p gaming monitor 144hz
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_gtx1080 query=gtx 1080 8gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_i7_13 query=gaming pc i7 13700 desktop tower
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_psu_750w query=750w 80 plus gold psu modular
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_r7_9700 query=gaming pc ryzen 7 9700x desktop
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rtx4060ti query=rtx 4060 ti graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_wifi_card_pcie query=pcie wifi 6 card desktop
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_gtx1060_6gb query=gtx 1060 6gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rx7700xt query=rx 7700 xt graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rx6700xt query=rx 6700 xt graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_i5_8 query=gaming pc i5 8400 desktop tower
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_r9_5900 query=gaming pc ryzen 9 5900x desktop
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rx7900xtx query=rx 7900 xtx graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_r5_3600 query=gaming pc ryzen 5 3600 desktop
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_gtx1070 query=gtx 1070 8gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_cpu_cooler_air query=cpu air cooler tower 120mm
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_i5_14 query=gaming pc i5 14600 desktop tower
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_keyboard_rgb query=rgb gaming keyboard mechanical
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=resale_mouse_gaming query=gaming mouse used
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_i5_12 query=gaming pc i5 12400 desktop tower
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=resale_mobo_am4_x570 query=am4 x570 motherboard used
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_r7_3700 query=gaming pc ryzen 7 3700x desktop
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_i5_10 query=gaming pc i5 10400 desktop tower
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rtx4070 query=rtx 4070 12gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rx6800xt query=rx 6800 xt graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=resale_ram_32gb_ddr5 query=32gb ddr5 desktop ram kit used
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_r5_5600 query=gaming pc ryzen 5 5600 desktop
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rx7600 query=rx 7600 8gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_monitor_1080p query=24 inch 1080p gaming monitor 144hz
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rx6750xt query=rx 6750 xt graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rtx2060 query=rtx 2060 6gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=resale_ram_32gb_ddr4 query=32gb ddr4 desktop ram kit used
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rx580 query=rx 580 8gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rx7900xt query=rx 7900 xt graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=resale_monitor_1080p query=24 inch 1080p 144hz gaming monitor used
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_i7_12 query=gaming pc i7 12700 desktop tower
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_case_rgb_atx query=rgb gaming pc case atx mid tower
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_gpu_rtx3060 query=rtx 3060 12gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_ssd_2tb_nvme query=2tb nvme m.2 ssd 2280
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rtx4070super query=rtx 4070 super graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_gtx1080ti query=gtx 1080 ti graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_mobo_am4_b550 query=am4 b550 motherboard
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rx6800 query=rx 6800 16gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_mobo_am5_b650 query=am5 b650 motherboard
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=resale_aio_120mm query=120mm aio liquid cpu cooler used
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_i9_9 query=gaming pc i9 9900 desktop tower
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_mouse_gaming query=gaming mouse rgb
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_cpu_cooler_120mm query=120mm aio liquid cooler
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rx6600 query=rx 6600 8gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rtx3060ti query=rtx 3060 ti graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_i7_10 query=gaming pc i7 10700 desktop tower
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rx6600xt query=rx 6600 xt graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=resale_case_mini_itx query=mini itx gaming case used
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_rtx2080 query=rtx 2080 8gb graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_ssd_1tb_nvme query=1tb nvme m.2 ssd 2280
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=cost_ram_32gb_ddr5 query=32gb ddr5 desktop ram kit 5600
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=resale_keyboard_rgb query=rgb gaming keyboard mechanical used
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=gpu_gtx1660ti query=gtx 1660 ti graphics card
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_r9_7950 query=gaming pc ryzen 9 7950x desktop
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=resale_monitor_1440p query=27 inch 1440p 144hz gaming monitor used
+2026-08-19 12:14:36 [warning  ] price_refresh.no_comps         key=sys_i7_14 query=gaming pc i7 14700 desktop tower
+2026-08-19 12:14:37 [warning  ] price_refresh.no_comps         key=cost_headset_gaming query=gaming headset usb rgb
+2026-08-19 12:14:37 [warning  ] price_refresh.no_comps         key=cost_mobo_am5_x670 query=am5 x670 motherboard
+2026-08-19 12:14:37 [warning  ] price_refresh.no_comps         key=sys_r5_9600 query=gaming pc ryzen 5 9600x desktop
+2026-08-19 12:14:37 [warning  ] price_refresh.no_comps         key=sys_r7_7700 query=gaming pc ryzen 7 7700x desktop
+2026-08-19 12:14:37 [warning  ] price_refresh.no_comps         key=sys_r7_5800 query=gaming pc ryzen 7 5800x desktop
+2026-08-19 12:14:37 [warning  ] price_refresh.no_comps         key=resale_ram_64gb_ddr4 query=64gb ddr4 desktop ram kit used
+2026-08-19 12:14:37 [warning  ] price_refresh.no_comps         key=sys_i5_13 query=gaming pc i5 13600 desktop tower
+2026-08-19 12:14:37 [warning  ] price_refresh.no_comps         key=sys_r9_7900 query=gaming pc ryzen 9 7900x desktop
+2026-08-19 12:14:37 [warning  ] price_refresh.no_comps         key=gpu_rx5700xt query=rx 5700 xt graphics card
+2026-08-19 12:14:37 [warning  ] price_refresh.no_comps         key=cost_gpu_rx6700xt query=rx 6700 xt graphics card
+2026-08-19 12:14:37 [warning  ] price_refresh.no_comps         key=resale_aio_240mm query=240mm aio liquid cpu cooler used
+INFO:     127.0.0.1:64767 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56342 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64767 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56342 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50932 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50932 - "GET /api/settings/ HTTP/1.1" 200 OK
+2026-08-19 12:15:14 [warning  ] ebay_catalog_cache.connection_failed error=Error 22 connecting to localhost:6379. The remote computer refused the network connection.
+2026-08-19 12:15:17 [warning  ] ebay_catalog.get_product_failed epid=20083999353 status=403
+INFO:     127.0.0.1:57548 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:57548 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:57548 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57548 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:15:22 [warning  ] ebay_catalog.get_product_failed epid=23063751086 status=403
+INFO:     127.0.0.1:50404 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50404 - "GET /api/settings/ HTTP/1.1" 200 OK
+2026-08-19 12:15:25 [warning  ] ebay_catalog.get_product_failed epid=21063417861 status=403
+2026-08-19 12:15:30 [warning  ] ebay_catalog.get_product_failed epid=18080744981 status=403
+2026-08-19 12:15:31 [warning  ] ebay_catalog.get_product_failed epid=245207444 status=403
+2026-08-19 12:15:42 [warning  ] ebay_catalog.get_product_failed epid=17067645721 status=403
+INFO:     127.0.0.1:52410 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58977 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52410 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58977 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:15:47 [warning  ] ebay_catalog.get_product_failed epid=26018014646 status=403
+2026-08-19 12:15:51 [warning  ] ebay_catalog.get_product_failed epid=5063752260 status=403
+2026-08-19 12:15:53 [warning  ] ebay_catalog.get_product_failed epid=20093457019 status=403
+INFO:     127.0.0.1:57405 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:57405 - "GET /api/settings/ HTTP/1.1" 200 OK
+2026-08-19 12:15:57 [warning  ] ebay_catalog.get_product_failed epid=5063752260 status=403
+2026-08-19 12:16:01 [warning  ] ebay_catalog.get_product_failed epid=20039124574 status=403
+2026-08-19 12:16:04 [warning  ] ebay_catalog.get_product_failed epid=12039141953 status=403
+2026-08-19 12:16:07 [warning  ] ebay_catalog.get_product_failed epid=17091132811 status=403
+2026-08-19 12:16:07 [warning  ] ebay_catalog.get_product_failed epid=8035053517 status=403
+INFO:     127.0.0.1:64554 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64554 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64554 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64554 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK

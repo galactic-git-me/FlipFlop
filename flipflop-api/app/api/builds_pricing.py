@@ -327,9 +327,13 @@ async def _playwright_close_sold_comps(
     """Use component pricing's short-query Playwright strategy for builds."""
     searches: list[tuple[str, str]] = []
     if gpu_model:
-        searches.append((f"{gpu_model} gaming PC", gpu_model))
+        gpu_short = re.search(r"\b(?:RTX|GTX|RX)\s*\d{3,4}(?:\s*(?:Ti|Super|XT|XTX))?\b", gpu_model, re.IGNORECASE)
+        gpu_anchor = gpu_short.group(0) if gpu_short else gpu_model
+        searches.append((f"{gpu_anchor} PC", gpu_anchor))
     if cpu_model:
-        searches.append((f"{cpu_model} gaming PC", cpu_model))
+        cpu_short = re.search(r"\b\d{4,5}(?:X3D|X|G|F|K|KF)?\b", cpu_model, re.IGNORECASE)
+        cpu_anchor = cpu_short.group(0) if cpu_short else cpu_model
+        searches.append((f"{cpu_anchor} PC", cpu_anchor))
     if not searches:
         return SoldCompsResult(available=False, unavailable_reason="Build has no searchable CPU or GPU")
 

@@ -14,7 +14,7 @@ from app.models.order_checklist import OrderChecklist
 from app.models.order_photo import OrderPhoto
 from app.models.customer import Customer
 from app.routes.admin_auth import get_current_admin
-from app.services.email_service import send_shipment_update_email
+from app.services.email_service import send_shipment_update_email, send_order_status_email
 
 router = APIRouter(prefix="/api/admin", tags=["admin"], dependencies=[Depends(get_current_admin)])
 
@@ -262,6 +262,7 @@ async def get_order_detail(order_id: int, db: Session = Depends(get_db)):
 async def update_order_status(
     order_id: int,
     update: OrderStatusUpdateRequest,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db)
 ):
     """Update order status and set relevant timing fields."""
@@ -307,6 +308,9 @@ async def update_order_status(
 
     db.commit()
     db.refresh(order)
+
+    if old_status != new_status and new_status in {OrderStatus.BUILDING, OrderStatus.QA, OrderStatus.COMPLETED} and order.customer:
+        background_tasks.add_task(send_order_status_email, order.customer.email, order.customer.name, order.order_id, new_status.value, order.id)
 
     return {
         "status": "updated",
@@ -387,7 +391,7 @@ async def update_shipping(
         carrier_urls = {"royal_mail": "https://www.royalmail.com/track-your-item#/tracking-results/{}", "parcelforce": "https://www.parcelforce.com/track-trace?trackNumber={}", "dpd": "https://track.dpd.co.uk/parcels/{}", "ups": "https://www.ups.com/track?loc=en_GB&tracknum={}", "dhl": "https://www.dhl.com/gb-en/home/tracking/tracking-express.html?submit=1&tracking-id={}"}
         template = carrier_urls.get((order.carrier or "").lower().replace(" ", "_"))
         tracking_url = template.format(order.tracking_number) if template and order.tracking_number else None
-        background_tasks.add_task(send_shipment_update_email, order.customer.email, order.customer.name, order.order_id, order.carrier, order.tracking_number, tracking_url, order.estimated_delivery)
+        background_tasks.add_task(send_shipment_update_email, order.customer.email, order.customer.name, order.order_id, order.carrier, order.tracking_number, tracking_url, order.estimated_delivery, order.id)
 
     return {
         "status": "updated",

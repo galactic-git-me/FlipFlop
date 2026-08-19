@@ -18,7 +18,7 @@ def _send(msg: MIMEMultipart, reference: str) -> bool:
         log.error("Email send failed", error=str(exc), reference=reference)
         return False
 
-async def send_order_confirmation_email(customer_email: str, customer_name: str, order_reference: str, build_summary: str, assigned_week: str) -> bool:
+async def send_order_confirmation_email(customer_email: str, customer_name: str, order_reference: str, build_summary: str, assigned_week: str, order_id: int | None = None) -> bool:
     if not settings.smtp_host or not settings.smtp_user:
         log.warning("Email not configured, skipping confirmation email")
         return False
@@ -26,10 +26,11 @@ async def send_order_confirmation_email(customer_email: str, customer_name: str,
     msg["Subject"] = f"FlipFlop Order Confirmation: {order_reference}"
     msg["From"] = settings.smtp_from or "noreply@flipflop.co.uk"
     msg["To"] = customer_email
-    msg.attach(MIMEText(f"<html><body><h2>Your FlipFlop Order is Confirmed</h2><p>Hello {customer_name},</p><p>Your custom PC build is confirmed for week {assigned_week}.</p><p><strong>Reference:</strong> {order_reference}</p><pre>{build_summary}</pre><p><a href=\"https://theflipflop.shop/my-builds\">Open your customer portal</a></p></body></html>", "html"))
+    portal = f"https://theflipflop.shop/my-builds/{order_id}" if order_id else "https://theflipflop.shop/my-builds"
+    msg.attach(MIMEText(f"<html><body><h2>Your FlipFlop Order is Confirmed</h2><p>Hello {customer_name},</p><p>Your custom PC build is confirmed for week {assigned_week}.</p><p><strong>Reference:</strong> {order_reference}</p><pre>{build_summary}</pre><p><a href=\"{portal}\">Open your customer portal</a></p></body></html>", "html"))
     return _send(msg, order_reference)
 
-async def send_shipment_update_email(customer_email: str, customer_name: str, order_reference: str, carrier: str | None, tracking_number: str | None, tracking_url: str | None, estimated_delivery: object | None) -> bool:
+async def send_shipment_update_email(customer_email: str, customer_name: str, order_reference: str, carrier: str | None, tracking_number: str | None, tracking_url: str | None, estimated_delivery: object | None, order_id: int | None = None) -> bool:
     if not settings.smtp_host or not settings.smtp_user:
         log.warning("Email not configured, skipping shipment email")
         return False
@@ -39,5 +40,24 @@ async def send_shipment_update_email(customer_email: str, customer_name: str, or
     msg["Subject"] = f"Your FlipFlop PC has shipped: {order_reference}"
     msg["From"] = settings.smtp_from or "noreply@flipflop.co.uk"
     msg["To"] = customer_email
-    msg.attach(MIMEText(f"<html><body><h2>Your FlipFlop PC is on its way</h2><p>Hello {customer_name},</p><p>Order <strong>{order_reference}</strong> has been dispatched.</p><p>Courier: {carrier or 'Not specified'}<br>Tracking: {tracking}<br>Estimated delivery: {estimate}</p><p><a href=\"https://theflipflop.shop/my-builds\">Open your customer portal</a></p></body></html>", "html"))
+    portal = f"https://theflipflop.shop/my-builds/{order_id}" if order_id else "https://theflipflop.shop/my-builds"
+    msg.attach(MIMEText(f"<html><body><h2>Your FlipFlop PC is on its way</h2><p>Hello {customer_name},</p><p>Order <strong>{order_reference}</strong> has been dispatched.</p><p>Courier: {carrier or 'Not specified'}<br>Tracking: {tracking}<br>Estimated delivery: {estimate}</p><p><a href=\"{portal}\">Open your customer portal</a></p></body></html>", "html"))
+    return _send(msg, order_reference)
+
+async def send_order_status_email(customer_email: str, customer_name: str, order_reference: str, status: str, order_id: int | None = None) -> bool:
+    if not settings.smtp_host or not settings.smtp_user:
+        log.warning("Email not configured, skipping status email")
+        return False
+    messages = {
+        "building": ("Your FlipFlop build has started", "Your components are now in the build queue."),
+        "qa": ("Your FlipFlop build is being tested", "Your machine has reached quality assurance testing."),
+        "completed": ("Your FlipFlop build has been delivered", "Your order is marked delivered. Your owner portal contains the latest available documents and support tools."),
+    }
+    subject, body = messages.get(status, ("Your FlipFlop order has been updated", f"Your order status is now {status.replace('_', ' ')}."))
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = f"{subject}: {order_reference}"
+    msg["From"] = settings.smtp_from or "noreply@flipflop.co.uk"
+    msg["To"] = customer_email
+    portal = f"https://theflipflop.shop/my-builds/{order_id}" if order_id else "https://theflipflop.shop/my-builds"
+    msg.attach(MIMEText(f"<html><body><h2>{subject}</h2><p>Hello {customer_name},</p><p>{body}</p><p><a href=\"{portal}\">Open your customer portal</a></p></body></html>", "html"))
     return _send(msg, order_reference)
