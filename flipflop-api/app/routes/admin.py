@@ -1,7 +1,7 @@
 """
 Admin dashboard API routes for managing PC builds through their lifecycle.
 """
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, BackgroundTasks
 from sqlalchemy.orm import Session
 from sqlalchemy import select, func, and_, or_
 from datetime import datetime, timedelta
@@ -14,6 +14,7 @@ from app.models.order_checklist import OrderChecklist
 from app.models.order_photo import OrderPhoto
 from app.models.customer import Customer
 from app.routes.admin_auth import get_current_admin
+from app.services.email_service import send_shipment_update_email
 
 router = APIRouter(prefix="/api/admin", tags=["admin"], dependencies=[Depends(get_current_admin)])
 
@@ -365,6 +366,7 @@ async def update_checklist_item(
 async def update_shipping(
     order_id: int,
     update: ShippingUpdateRequest,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db)
 ):
     """Update shipping information."""
@@ -372,6 +374,7 @@ async def update_shipping(
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
 
+    first_shipment_update = order.shipped_at is None
     order.tracking_number = update.tracking_number
     order.carrier = update.carrier
     order.estimated_delivery = update.estimated_delivery
@@ -379,6 +382,12 @@ async def update_shipping(
 
     db.commit()
     db.refresh(order)
+
+    if first_shipment_update and order.customer:
+        carrier_urls = {"royal_mail": "https://www.royalmail.com/track-your-item#/tracking-results/{}", "parcelforce": "https://www.parcelforce.com/track-trace?trackNumber={}", "dpd": "https://track.dpd.co.uk/parcels/{}", "ups": "https://www.ups.com/track?loc=en_GB&tracknum={}", "dhl": "https://www.dhl.com/gb-en/home/tracking/tracking-express.html?submit=1&tracking-id={}"}
+        template = carrier_urls.get((order.carrier or "").lower().replace(" ", "_"))
+        tracking_url = template.format(order.tracking_number) if template and order.tracking_number else None
+        background_tasks.add_task(send_shipment_update_email, order.customer.email, order.customer.name, order.order_id, order.carrier, order.tracking_number, tracking_url, order.estimated_delivery)
 
     return {
         "status": "updated",

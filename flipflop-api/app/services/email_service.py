@@ -7,52 +7,37 @@ import structlog
 log = structlog.get_logger(__name__)
 settings = get_settings()
 
-
-async def send_order_confirmation_email(
-    customer_email: str,
-    customer_name: str,
-    order_reference: str,
-    build_summary: str,
-    assigned_week: str,
-) -> bool:
-    """Send order confirmation email"""
-    if not settings.smtp_host or not settings.smtp_user:
-        log.warning("Email not configured, skipping confirmation email")
-        return False
-
-    subject = f"FlipFlop Order Confirmation: {order_reference}"
-    html_body = f"""
-    <html>
-        <body style="font-family: Arial, sans-serif;">
-            <h2>Your FlipFlop Order is Confirmed!</h2>
-            <p>Hello {customer_name},</p>
-            <p>Thank you for ordering from FlipFlop. Your custom PC build is confirmed and will be built during week {assigned_week}.</p>
-            <h3>Order Details</h3>
-            <p><strong>Reference:</strong> {order_reference}</p>
-            <p><strong>Build Summary:</strong></p>
-            <pre>{build_summary}</pre>
-            <p>You can track your order status at: https://flipflop.co.uk/order/{order_reference}</p>
-            <p>For any questions, contact us at hello@flipflop.co.uk</p>
-            <p>Best regards,<br>The FlipFlop Team</p>
-        </body>
-    </html>
-    """
-
+def _send(msg: MIMEMultipart, reference: str) -> bool:
     try:
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = subject
-        msg["From"] = settings.smtp_from or "noreply@flipflop.co.uk"
-        msg["To"] = customer_email
-
-        msg.attach(MIMEText(html_body, "html"))
-
         with smtplib.SMTP_SSL(settings.smtp_host, 465) as server:
             server.login(settings.smtp_user, settings.smtp_pass)
             server.send_message(msg)
-
-        log.info("Email sent", reference=order_reference, to=customer_email)
+        log.info("Email sent", reference=reference, to=msg["To"])
         return True
-
-    except Exception as e:
-        log.error("Email send failed", error=str(e), reference=order_reference)
+    except Exception as exc:
+        log.error("Email send failed", error=str(exc), reference=reference)
         return False
+
+async def send_order_confirmation_email(customer_email: str, customer_name: str, order_reference: str, build_summary: str, assigned_week: str) -> bool:
+    if not settings.smtp_host or not settings.smtp_user:
+        log.warning("Email not configured, skipping confirmation email")
+        return False
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = f"FlipFlop Order Confirmation: {order_reference}"
+    msg["From"] = settings.smtp_from or "noreply@flipflop.co.uk"
+    msg["To"] = customer_email
+    msg.attach(MIMEText(f"<html><body><h2>Your FlipFlop Order is Confirmed</h2><p>Hello {customer_name},</p><p>Your custom PC build is confirmed for week {assigned_week}.</p><p><strong>Reference:</strong> {order_reference}</p><pre>{build_summary}</pre><p><a href=\"https://theflipflop.shop/my-builds\">Open your customer portal</a></p></body></html>", "html"))
+    return _send(msg, order_reference)
+
+async def send_shipment_update_email(customer_email: str, customer_name: str, order_reference: str, carrier: str | None, tracking_number: str | None, tracking_url: str | None, estimated_delivery: object | None) -> bool:
+    if not settings.smtp_host or not settings.smtp_user:
+        log.warning("Email not configured, skipping shipment email")
+        return False
+    tracking = f'<a href="{tracking_url}">{tracking_number}</a>' if tracking_url and tracking_number else (tracking_number or "Not available yet")
+    estimate = str(estimated_delivery) if estimated_delivery else "The courier will provide an estimate when available."
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = f"Your FlipFlop PC has shipped: {order_reference}"
+    msg["From"] = settings.smtp_from or "noreply@flipflop.co.uk"
+    msg["To"] = customer_email
+    msg.attach(MIMEText(f"<html><body><h2>Your FlipFlop PC is on its way</h2><p>Hello {customer_name},</p><p>Order <strong>{order_reference}</strong> has been dispatched.</p><p>Courier: {carrier or 'Not specified'}<br>Tracking: {tracking}<br>Estimated delivery: {estimate}</p><p><a href=\"https://theflipflop.shop/my-builds\">Open your customer portal</a></p></body></html>", "html"))
+    return _send(msg, order_reference)
