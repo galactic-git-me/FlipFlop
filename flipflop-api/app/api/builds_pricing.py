@@ -162,13 +162,6 @@ class PricingBreakdown(BaseModel):
     recommendation: PriceRecommendation
 
 
-_COMPONENT_RETENTION = {
-    "gpu": 0.95, "cpu": 0.90, "ram": 0.85, "motherboard": 0.82,
-    "ssd": 0.70, "psu": 0.72, "case": 0.65, "cpu_cooler": 0.65,
-    "case_fans": 0.50, "gpu_support": 0.50, "operating_system": 0.0,
-}
-
-
 def _percentile(values: list[float], fraction: float) -> float:
     if not values:
         return 0.0
@@ -191,6 +184,11 @@ async def _component_valuations(components: list[dict]) -> list[ComponentValuati
             name = str(component.get("name") or "")
             slot = str(component.get("slot") or "other").lower()
             paid = float(component.get("price_paid") or 0)
+            recorded_market = float(
+                component.get("market_price")
+                or component.get("market_price_avg")
+                or 0
+            )
             identity = resolve_identity(name)
             model = identity.model or ""
             observed: list[float] = []
@@ -204,13 +202,20 @@ async def _component_valuations(components: list[dict]) -> list[ComponentValuati
                 )).scalars().all()
                 observed = [float(price) for price in rows if paid <= 0 or paid * 0.2 <= float(price) <= paid * 3.0]
 
-            if observed:
+            if recorded_market > 0:
+                estimate = recorded_market
+                basis = "Recorded current market value"
+                confidence = "medium"
+            elif observed:
                 estimate = statistics.median(observed)
                 basis = f"Median of {len(observed)} current standalone listings"
                 confidence = "medium" if len(observed) >= 3 else "low"
             else:
-                estimate = paid * _COMPONENT_RETENTION.get(slot, 0.65)
-                basis = "Conservative category retention model; no exact live match"
+                # Do not manufacture a lower value by depreciating the purchase
+                # price. If no market value is recorded and there is no exact
+                # live evidence, retain the paid value as a transparent fallback.
+                estimate = paid
+                basis = "Purchase price fallback; no current market value available"
                 confidence = "low"
             valuations.append(ComponentValuation(
                 slot=slot, name=name, price_paid=round(paid, 2),
