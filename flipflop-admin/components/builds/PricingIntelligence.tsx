@@ -34,6 +34,7 @@ export function PricingIntelligence({ buildId, onUsePrice }: { buildId: number; 
   const [data, setData] = useState<PricingData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [detailModal, setDetailModal] = useState<"cost" | "resale" | "market" | null>(null);
 
   const load = useCallback(async (fresh: boolean) => {
     setLoading(true); setError(null);
@@ -62,18 +63,18 @@ export function PricingIntelligence({ buildId, onUsePrice }: { buildId: number; 
         ["Parts resale context", data.component_resale_total, "Standalone estimates; not the PC price"],
         ["Recommended list price", r.recommended_price, `${r.confidence} confidence`],
         ["Protected offer floor", r.floor_price, `After ${r.fee_rate_pct}% configured fees`],
-      ].map(([label, value, detail]) => <div key={String(label)} className="rounded-xl border border-white/[0.07] bg-white/[0.025] p-4">
+      ].map(([label, value, detail]) => <button type="button" onClick={() => setDetailModal(label === "Actual build cost" ? "cost" : label === "Parts resale context" ? "resale" : label === "Recommended list price" ? "market" : null)} key={String(label)} className="rounded-xl border border-white/[0.07] bg-white/[0.025] p-4 text-left transition-colors hover:border-cyan-400/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
         <p className="text-[11px] font-mono uppercase tracking-wider text-slate-500">{label}</p>
         <p className="mt-2 text-2xl font-black text-slate-100">{formatCurrency(Number(value))}</p>
         <p className="mt-1 text-xs text-slate-500">{detail}</p>
-      </div>)}
+      </button>)}
     </section>
 
     <section className="rounded-xl border border-cyan-400/15 bg-cyan-400/[0.035] p-4">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <div className="flex items-center gap-2"><TrendingUp className="h-4 w-4 text-cyan-400" /><h2 className="font-semibold">Market recommendation</h2><Confidence value={r.confidence} /></div>
-          <p className="mt-2 text-sm text-slate-300">Range {formatCurrency(r.market_low)}–{formatCurrency(r.market_high)} · midpoint {formatCurrency(r.market_mid)}</p>
+          <button type="button" onClick={() => setDetailModal("market")} className="mt-2 cursor-pointer text-left text-sm text-slate-300 hover:text-cyan-300">Range {formatCurrency(r.market_low)}–{formatCurrency(r.market_high)} · midpoint {formatCurrency(r.market_mid)} · view evidence</button>
           <p className="mt-1 max-w-3xl text-xs leading-5 text-slate-500">{r.rationale}. The recommended price includes negotiating room; the floor protects a 10% margin after configured marketplace fees.</p>
         </div>
         <div className="flex shrink-0 gap-2">
@@ -108,5 +109,11 @@ export function PricingIntelligence({ buildId, onUsePrice }: { buildId: number; 
       <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4"><div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-emerald-300" /><h2 className="font-semibold">Offer guardrails</h2></div><div className="mt-4 space-y-3 text-sm">{[["Auto-accept at or above", r.auto_accept_at, "text-emerald-300"],["Always counter from", r.counter_offer_from, "text-cyan-300"],["Auto-reject below", r.auto_reject_below, "text-red-300"],["Never reduce below", r.floor_price, "text-amber-300"]].map(([label,value,tone]) => <div key={String(label)} className="flex items-center justify-between border-b border-white/[0.05] pb-3 last:border-0"><span className="text-slate-400">{label}</span><strong className={String(tone)}>{formatCurrency(Number(value))}</strong></div>)}</div></div>
       <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4"><h2 className="font-semibold">Suggested price automation</h2><div className="mt-4 space-y-0">{r.automation.map((step, index) => <div key={step.day} className="grid grid-cols-[52px_18px_1fr_auto] gap-2"><span className="pt-0.5 text-xs font-mono text-slate-500">Day {step.day}</span><div className="flex flex-col items-center"><span className="mt-1 h-2 w-2 rounded-full bg-cyan-400" />{index < r.automation.length - 1 && <span className="min-h-12 w-px flex-1 bg-white/[0.08]" />}</div><div className="pb-4"><p className="text-sm text-slate-200">{step.action}</p><p className="mt-1 text-xs text-slate-600">{step.rationale}</p></div><strong className="text-sm text-slate-300">{formatCurrency(step.price)}</strong></div>)}</div></div>
     </section>
+    {detailModal && <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4" onClick={() => setDetailModal(null)}>
+      <div className="max-h-[85vh] w-full max-w-3xl overflow-auto rounded-2xl border border-cyan-400/20 bg-slate-950 p-5 shadow-2xl" onClick={(event) => event.stopPropagation()}>
+        <div className="flex items-center justify-between"><div><h2 className="text-lg font-semibold text-slate-100">{detailModal === "cost" ? "Actual build cost" : detailModal === "resale" ? "Parts resale context" : "Market recommendation evidence"}</h2><p className="mt-1 text-xs text-slate-500">Every value shown comes from the current build record or recorded market evidence.</p></div><button type="button" onClick={() => setDetailModal(null)} className="rounded px-2 py-1 text-slate-400 hover:bg-white/10">Close</button></div>
+        {detailModal !== "market" ? <table className="mt-5 w-full text-sm"><thead className="border-b border-white/10 text-left text-xs uppercase text-slate-500"><tr><th className="py-2">Component</th><th className="py-2 text-right">Paid</th>{detailModal === "resale" && <th className="py-2 text-right">Estimated resale</th>}</tr></thead><tbody>{data.component_valuations.map((item) => <tr key={item.slot} className="border-b border-white/[0.06]"><td className="py-3 text-slate-200">{item.name}<span className="ml-2 text-[10px] uppercase text-slate-600">{item.slot.replaceAll("_", " ")}</span></td><td className="py-3 text-right text-slate-300">{formatCurrency(item.price_paid)}</td>{detailModal === "resale" && <td className="py-3 text-right text-cyan-300">{formatCurrency(item.estimated_resale)}</td>}</tr>)}</tbody><tfoot className="font-semibold"><tr><td className="py-3">Total</td><td className="py-3 text-right">{formatCurrency(data.cost_price)}</td>{detailModal === "resale" && <td className="py-3 text-right text-cyan-300">{formatCurrency(data.component_resale_total)}</td>}</tr></tfoot></table> : <><div className="mt-5 grid grid-cols-3 gap-3 text-center"><div><p className="text-xs text-slate-500">Low</p><p className="text-xl font-bold">{formatCurrency(r.market_low)}</p></div><div><p className="text-xs text-slate-500">Average / midpoint</p><p className="text-xl font-bold text-cyan-300">{formatCurrency(r.market_mid)}</p></div><div><p className="text-xs text-slate-500">High</p><p className="text-xl font-bold">{formatCurrency(r.market_high)}</p></div></div><table className="mt-5 w-full text-sm"><thead className="border-b border-white/10 text-left text-xs uppercase text-slate-500"><tr><th className="py-2">Source / listing</th><th className="py-2">Date</th><th className="py-2 text-right">Price</th></tr></thead><tbody>{data.market_comparables.map((item, index) => <tr key={`${item.url}-${index}`} className="border-b border-white/[0.06]"><td className="py-3 text-slate-200">{item.title}<span className="block text-xs text-slate-500">{item.source} · {item.status} · {item.match_basis}</span></td><td className="py-3 text-slate-400">{item.observed_or_sold_at ? new Date(item.observed_or_sold_at).toLocaleDateString("en-GB") : "—"}</td><td className="py-3 text-right font-semibold">{formatCurrency(item.price)}</td></tr>)}</tbody></table></>}
+      </div>
+    </div>}
   </div>;
 }
