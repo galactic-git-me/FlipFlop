@@ -1,8 +1,11 @@
 {
   "ram_watcher": {
-    "last_success_at": "2026-08-19T20:46:14.200187+00:00"
+    "last_success_at": "2026-08-19T21:01:14.216532+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-08-19T20:57:14.468256+00:00"
+    "last_success_at": "2026-08-19T21:12:14.483617+00:00"
+  },
+  "ebay_sales_tracker": {
+    "last_success_at": "2026-08-19T21:03:16.056118+00:00"
   }
 }
