@@ -152,6 +152,7 @@ export default function BuildDetailPage() {
         } else if (b.last_evaluation?.mid) {
           setPrice(String(Math.round(b.last_evaluation.mid)));
         }
+        if (b.ebay_condition) setCondition(b.ebay_condition);
         if (b.deferred_publish_at) setDeferredAt(b.deferred_publish_at.slice(0, 16));
         
         // Auto-focus active tab based on status
@@ -1304,7 +1305,11 @@ export default function BuildDetailPage() {
                     <label className="text-xs text-slate-500 uppercase font-mono">Condition</label>
                     <select
                       value={condition}
-                      onChange={(e) => setCondition(e.target.value)}
+                      onChange={(e) => {
+                        const nextCondition = e.target.value;
+                        setCondition(nextCondition);
+                        void updateEbayConfig({ ebay_condition: nextCondition });
+                      }}
                       className="mt-1 w-full bg-black/30 border border-white/[0.1] rounded-lg px-3 py-2 text-sm text-slate-200"
                     >
                       {EBAY_CONDITIONS.map((c) => (
