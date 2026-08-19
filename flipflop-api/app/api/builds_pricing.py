@@ -26,8 +26,7 @@ from app.models.manual_build import ManualBuild
 from app.models.listing import Listing, ListingStatus
 from app.config import get_settings
 from app.gem_radar.identity import resolve_identity
-from app.gem_radar.adapters.sold_comps import SoldComp, SoldCompsResult
-from app.services.ai_build_generator import _validate_against_ebay
+from app.gem_radar.adapters.sold_comps import PlaywrightSoldCompsAdapter, SoldComp, SoldCompsResult
 from app.services.ebay_browse import search_active_listings
 from app.services.sold_comps_cache import get_sold_comps_cache
 
@@ -322,6 +321,39 @@ async def _live_close_build_comparables(
     return [item for _, item in sorted(found.values(), key=lambda pair: pair[0], reverse=True)[:12]]
 
 
+async def _playwright_close_sold_comps(
+    cpu_model: str | None, gpu_model: str | None,
+) -> SoldCompsResult:
+    """Use component pricing's short-query Playwright strategy for builds."""
+    searches: list[tuple[str, str]] = []
+    if gpu_model:
+        searches.append((f"{gpu_model} gaming PC", gpu_model))
+    if cpu_model:
+        searches.append((f"{cpu_model} gaming PC", cpu_model))
+    if not searches:
+        return SoldCompsResult(available=False, unavailable_reason="Build has no searchable CPU or GPU")
+
+    found: dict[str, SoldComp] = {}
+    reasons: list[str] = []
+    adapter = PlaywrightSoldCompsAdapter()
+    for short_query, anchor in searches:
+        result = await adapter.fetch(short_query, condition="used")
+        if result.unavailable_reason:
+            reasons.append(result.unavailable_reason)
+        anchor_key = re.sub(r"[^a-z0-9]", "", anchor.lower())
+        for comp in result.comps:
+            title_key = re.sub(r"[^a-z0-9]", "", (comp.title or "").lower())
+            if anchor_key not in title_key:
+                continue
+            key = comp.url or f"{comp.title}|{comp.price}"
+            found[key] = comp
+    comps = list(found.values())
+    return SoldCompsResult(
+        available=bool(comps), comps=comps,
+        unavailable_reason=None if comps else "; ".join(dict.fromkeys(reasons)) or "No close sold builds found",
+    )
+
+
 @router.get("/{build_id}/pricing")
 async def get_build_pricing(
     build_id: int,
@@ -361,14 +393,25 @@ async def get_build_pricing(
     if fetch_sold:
         log.info("builds_pricing.fetch_sold", build_id=build_id, query=query, cache_key=cache_key)
         try:
-            market_data = await _validate_against_ebay(query)
-            if market_data.get("sold", {}).get("available"):
-                # _validate_against_ebay only surfaces the average, not the
-                # raw comps — pull them again for the detailed breakdown.
-                from app.gem_radar.adapters.sold_comps import LiveSoldCompsAdapter
-                sold_result = await LiveSoldCompsAdapter().fetch(query, condition="used")
-                if sold_result.available:
-                    await cache.set(cache_key, sold_result)
+            # Use the same logged-in Playwright sold-comps path as component
+            # pricing. The previous LiveSoldCompsAdapter path depended on
+            # ScrapingBee and failed with 401s.
+            cpu_model_for_search = resolve_identity(cpu_title).model if cpu_title else None
+            gpu_model_for_search = resolve_identity(gpu_title).model if gpu_title else None
+            sold_result = await _playwright_close_sold_comps(
+                cpu_model_for_search, gpu_model_for_search,
+            )
+            sold_prices = [comp.price for comp in sold_result.comps] if sold_result.available else []
+            market_data = {
+                "sold": {
+                    "available": bool(sold_prices),
+                    "count": len(sold_prices),
+                    "average_price": round(statistics.mean(sold_prices), 2) if sold_prices else None,
+                    "unavailable_reason": sold_result.unavailable_reason,
+                },
+                "bin": {"available": False, "count": 0, "average_price": None},
+            }
+            await cache.set(cache_key, sold_result)
         except Exception as exc:
             log.warning("builds_pricing.fetch_failed", build_id=build_id, query=query, error=str(exc))
 
