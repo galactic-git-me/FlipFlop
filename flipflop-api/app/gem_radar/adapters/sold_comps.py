@@ -158,6 +158,19 @@ class LiveSoldCompsAdapter(SoldCompsAdapter):
                             params=scrapingbee_params,
                         )
 
+                    if resp.status_code in (401, 403):
+                        # Authentication/authorisation failures are
+                        # configuration errors, not transient network errors.
+                        # Retrying them only stalls pricing while guaranteeing
+                        # the same response on every attempt/category pass.
+                        log.error(
+                            "sold_comps.scrapingbee_auth_failed",
+                            query=query,
+                            condition=condition,
+                            status=resp.status_code,
+                        )
+                        return []
+
                     if resp.status_code != 200:
                         log.debug(
                             "sold_comps.scrapingbee_error",

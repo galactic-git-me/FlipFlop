@@ -390,12 +390,16 @@ async def snapshot(db) -> dict:
         #    (Ollama error, low-confidence extraction) -- without adding those
         #    in, a single failed extraction made cpk_assigned_count
         #    permanently unreachable and the card spun forever.
-        # 4. All CPK-assigned listings from THIS run have been classified/priced
+        # Classification and market-price enrichment are Phase 2 outcomes,
+        # not prerequisites for declaring Phase 1 finished. Some legitimate
+        # terminal outcomes (insufficient comparable evidence, identity
+        # pending, or an intentionally ineligible listing) never acquire a
+        # settled price. Requiring every listing to appear in one of those
+        # two tables left otherwise-finished cards spinning at 99.x%.
         is_complete = (
             s.active_submissions == 0
             and s.ingested_count > 0
             and (s.cpk_assigned_count + s.cpk_failed_count) >= s.ingested_count
-            and processed_count >= len(s.listing_ids)
         )
 
         active_scans.append(
