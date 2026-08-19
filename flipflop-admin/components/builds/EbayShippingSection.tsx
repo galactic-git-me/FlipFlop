@@ -415,7 +415,17 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
       <div className="rounded-lg border border-amber-500/25 bg-amber-500/[0.05] p-3">
         <label className="flex cursor-pointer items-start gap-3">
           <input type="checkbox" checked={damageCoverConfirmed} onChange={(event) => setDamageCoverConfirmed(event.target.checked)} className="mt-1 h-4 w-4 accent-cyan-400" />
-          <span><span className="block text-xs font-semibold text-amber-200">Separate full-value transit-damage cover arranged</span><span className="mt-1 block text-xs leading-5 text-slate-500">Only tick this after confirming the entire PC is covered for accidental transit damage up to its sale/replacement value. Parcel2Go protection for computers is loss-only.</span></span>
+          <span>
+            <span className="block text-xs font-semibold text-amber-200">Full-value transit protection requirements confirmed</span>
+            <span className="mt-1 block text-xs leading-5 text-slate-500">
+              Only tick after the insurer has confirmed this assembled PC and its packaging are eligible for loss and accidental-damage cover up to the exact invoice value. For a glass-sided case, obtain written packaging approval before dispatch. Use tracked, signature-required delivery and retain photos of the components, serial numbers, packaging and sealed carton. Parcel2Go carrier protection for computers is loss-only.
+            </span>
+            <span className="mt-2 block text-xs leading-5 text-slate-400">
+              Check the current{' '}
+              <a href="https://www.secursus.com/en-gb/terms-and-conditions/" target="_blank" rel="noreferrer" className="text-cyan-300 underline hover:text-cyan-200">Secursus terms</a>
+              {' '}and get written confirmation rather than relying on this checkbox as proof of cover.
+            </span>
+          </span>
         </label>
       </div>
 
