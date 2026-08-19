@@ -1132,6 +1132,14 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
     build = result.scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
+
+    # Persist the seller's asking price as build configuration before making
+    # the external eBay request. This keeps the value after reloads and also
+    # preserves it when eBay rejects a listing update.
+    build.ebay_price = body.price
+    build.updated_at = datetime.utcnow()
+    await db.flush()
+
     if not build.generated_title or not build.generated_description:
         raise HTTPException(400, "Generate the listing content before posting to eBay")
 

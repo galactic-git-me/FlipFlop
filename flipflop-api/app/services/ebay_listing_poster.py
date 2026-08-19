@@ -550,6 +550,7 @@ class EbayListingPoster:
 
     async def update_listing(
         self,
+        listing_id: str,
         sku: str,
         title: str,
         description: str,
@@ -643,9 +644,11 @@ class EbayListingPoster:
                 )
                 if offer_resp.status_code not in (200, 201, 204):
                     return {"success": False, "error": f"Failed to update eBay offer: {offer_resp.status_code}: {offer_resp.text}"}
-                listing_id = str(offer.get("listingId") or "")
+                # eBay's updateOffer response intentionally does not include
+                # listingId. The listing ID supplied by the caller remains
+                # authoritative for an existing active listing.
                 if not listing_id:
-                    return {"success": False, "error": "eBay updated the offer but did not return its listing ID."}
+                    return {"success": False, "error": "Existing eBay listing ID is missing; relist this build."}
                 domain = "www.ebay.co.uk" if self.environment == "production" else "sandbox.ebay.com"
                 return {"success": True, "listing_id": listing_id, "sku": sku, "offer_id": offer_id, "url": f"https://{domain}/itm/{listing_id}", "status": "ACTIVE"}
         except Exception as exc:
@@ -702,6 +705,7 @@ async def post_flip_to_ebay(
     )
     async def revise(existing_listing_id: str) -> dict:
         return await poster.update_listing(
+            listing_id=existing_listing_id,
             sku=sku or "",
             title=title,
             description=description,
