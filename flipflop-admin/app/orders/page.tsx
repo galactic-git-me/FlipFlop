@@ -48,6 +48,13 @@ export default function OrdersPage() {
     }
   };
 
+  const previewPortal = async (orderId: number) => {
+    const response = await fetch(`/api/admin/orders/${orderId}/portal-preview`, { method: 'POST' });
+    if (!response.ok) { window.alert('Could not create a portal preview.'); return; }
+    const payload = await response.json() as { token: string };
+    window.open(`https://theflipflop.shop/my-builds/${orderId}?preview=${encodeURIComponent(payload.token)}`, '_blank', 'noopener,noreferrer');
+  };
+
   const statusColors: Record<string, string> = {
     awaiting_sourcing: '#fbbf24',
     parts_ordered: '#3b82f6',
@@ -153,6 +160,9 @@ export default function OrdersPage() {
                       >
                         View Details
                       </Link>
+                      <button type="button" onClick={() => void previewPortal(order.id)} className={styles.actionBtn} style={{ marginLeft: 8 }}>
+                        View Portal
+                      </button>
                     </td>
                   </tr>
                 ))}
