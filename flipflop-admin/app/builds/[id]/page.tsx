@@ -729,7 +729,7 @@ export default function BuildDetailPage() {
       <div className="flex items-center gap-2 mb-6">
         <ChannelBadge label="eBay" icon={ShoppingBag} live={!!build.ebay_live} />
         <ChannelBadge label="FlipFlop.shop" icon={Store} live={!!build.storefront_live} />
-        {build.status === "sold" && (
+        {build.status !== "in_progress" && (
           <button
             type="button"
             onClick={() => void openCustomerPortal()}
