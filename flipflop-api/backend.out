@@ -360,3 +360,398 @@ INFO:     127.0.0.1:64554 - "GET /api/playbooks/proposals/?status=pending HTTP/1
 INFO:     127.0.0.1:64554 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
 INFO:     127.0.0.1:64554 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 INFO:     127.0.0.1:64554 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:16:10 [warning  ] ebay_catalog.get_product_failed epid=4064073857 status=403
+2026-08-19 12:16:11 [warning  ] ebay_catalog.get_product_failed epid=21073865366 status=403
+2026-08-19 12:16:21 [warning  ] ebay_catalog.get_product_failed epid=18042422571 status=403
+2026-08-19 12:16:22 [warning  ] ebay_catalog.get_product_failed epid=3072105977 status=403
+INFO:     127.0.0.1:53387 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53387 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65330 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60273 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60273 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65330 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:16:44 [info     ] phase2_trigger.phase2_complete classified=32124 total_cpk_tagged=32124 unsettled=26696
+INFO:     127.0.0.1:58794 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58794 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58766 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58766 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58766 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58766 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58777 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54477 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58769 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58777 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58769 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54477 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53071 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53071 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53071 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53071 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60336 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60336 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51784 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:65189 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:51784 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65189 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58766 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58766 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63783 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:63783 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:63783 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63783 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54033 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54033 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62160 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61440 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62160 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61440 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49718 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49718 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55237 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55237 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55237 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55237 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:19:35 [info     ] ai_build_generator.start
+2026-08-19 12:19:35 [debug    ] browser_pool.acquired          cap=1
+2026-08-19 12:19:35 [debug    ] margin_verifier.worker_idle
+2026-08-19 12:19:39 [debug    ] sold_comps.playwright.fetch_pass condition=used found=0 query=gaming pc AMD Ryzen 7 5800X3D RTX 5060 Ti sacat=179
+2026-08-19 12:19:44 [debug    ] sold_comps.playwright.fetch_pass condition=used found=0 query=gaming pc AMD Ryzen 7 5800X3D RTX 5060 Ti sacat=0
+2026-08-19 12:19:45 [debug    ] browser_pool.released
+2026-08-19 12:19:46 [debug    ] browser_pool.acquired          cap=1
+2026-08-19 12:19:50 [debug    ] sold_comps.playwright.fetch_pass condition=used found=0 query=gaming pc AMD Ryzen 7 5800X3D RTX 5060 Ti sacat=179
+INFO:     127.0.0.1:62600 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50917 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62600 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50917 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63112 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:63112 - "GET /api/settings/ HTTP/1.1" 200 OK
+2026-08-19 12:19:54 [debug    ] sold_comps.playwright.fetch_pass condition=used found=0 query=gaming pc AMD Ryzen 7 5800X3D RTX 5060 Ti sacat=0
+2026-08-19 12:19:55 [debug    ] browser_pool.released
+2026-08-19 12:19:56 [debug    ] browser_pool.acquired          cap=1
+2026-08-19 12:20:01 [debug    ] sold_comps.playwright.fetch_pass condition=used found=0 query=gaming pc AMD Ryzen 7 5800X3D RTX 5060 Ti sacat=179
+2026-08-19 12:20:05 [debug    ] sold_comps.playwright.fetch_pass condition=used found=0 query=gaming pc AMD Ryzen 7 5800X3D RTX 5060 Ti sacat=0
+2026-08-19 12:20:06 [debug    ] browser_pool.released
+2026-08-19 12:20:07 [debug    ] browser_pool.acquired          cap=1
+2026-08-19 12:20:11 [debug    ] sold_comps.playwright.fetch_pass condition=used found=0 query=gaming pc AMD Ryzen 7 5800X3D RTX 5060 Ti sacat=179
+2026-08-19 12:20:15 [debug    ] sold_comps.playwright.fetch_pass condition=used found=0 query=gaming pc AMD Ryzen 7 5800X3D RTX 5060 Ti sacat=0
+2026-08-19 12:20:16 [debug    ] browser_pool.released
+2026-08-19 12:20:17 [debug    ] browser_pool.acquired          cap=1
+INFO:     127.0.0.1:49472 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49472 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49472 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49472 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:20:21 [debug    ] sold_comps.playwright.fetch_pass condition=used found=0 query=gaming pc AMD Ryzen 7 5800X3D RTX 5060 Ti sacat=179
+INFO:     127.0.0.1:63348 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:63348 - "GET /api/settings/ HTTP/1.1" 200 OK
+2026-08-19 12:20:25 [debug    ] sold_comps.playwright.fetch_pass condition=used found=0 query=gaming pc AMD Ryzen 7 5800X3D RTX 5060 Ti sacat=0
+2026-08-19 12:20:27 [debug    ] browser_pool.released
+2026-08-19 12:20:28 [debug    ] browser_pool.acquired          cap=1
+2026-08-19 12:20:31 [debug    ] sold_comps.playwright.fetch_pass condition=used found=0 query=gaming pc AMD Ryzen 7 5800X3D RTX 5060 Ti sacat=179
+2026-08-19 12:20:36 [debug    ] sold_comps.playwright.fetch_pass condition=used found=0 query=gaming pc AMD Ryzen 7 5800X3D RTX 5060 Ti sacat=0
+2026-08-19 12:20:37 [debug    ] browser_pool.released
+2026-08-19 12:20:38 [debug    ] browser_pool.acquired          cap=1
+2026-08-19 12:20:43 [debug    ] sold_comps.playwright.fetch_pass condition=used found=0 query=gaming pc AMD Ryzen 7 5800X3D RTX 5060 Ti sacat=179
+INFO:     127.0.0.1:56744 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60619 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60619 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56744 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:20:44 [debug    ] sold_comps.playwright.page_error error=Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc+AMD+Ryzen+7+5800X3D+RTX+5060+Ti&LH_Sold=1&LH_Complete=1&LH_BIN=1&_sacat=0&_sop=12&LH_PrefLoc=1&_ipg=60&LH_ItemCondition=3000
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc+AMD+Ryzen+7+5800X3D+RTX+5060+Ti&LH_Sold=1&LH_Complete=1&LH_BIN=1&_sacat=0&_sop=12&LH_PrefLoc=1&_ipg=60&LH_ItemCondition=3000", waiting until "domcontentloaded"
+ query=gaming pc AMD Ryzen 7 5800X3D RTX 5060 Ti sacat=0
+2026-08-19 12:20:45 [debug    ] browser_pool.released
+2026-08-19 12:20:46 [debug    ] browser_pool.acquired          cap=1
+2026-08-19 12:20:48 [debug    ] sold_comps.playwright.page_error error=Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc+AMD+Ryzen+7+5800X3D+RTX+5060+Ti&LH_Sold=1&LH_Complete=1&LH_BIN=1&_sacat=179&_sop=12&LH_PrefLoc=1&_ipg=60&LH_ItemCondition=3000
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc+AMD+Ryzen+7+5800X3D+RTX+5060+Ti&LH_Sold=1&LH_Complete=1&LH_BIN=1&_sacat=179&_sop=12&LH_PrefLoc=1&_ipg=60&LH_ItemCondition=3000", waiting until "domcontentloaded"
+ query=gaming pc AMD Ryzen 7 5800X3D RTX 5060 Ti sacat=179
+2026-08-19 12:20:48 [debug    ] sold_comps.playwright.page_error error=Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc+AMD+Ryzen+7+5800X3D+RTX+5060+Ti&LH_Sold=1&LH_Complete=1&LH_BIN=1&_sacat=0&_sop=12&LH_PrefLoc=1&_ipg=60&LH_ItemCondition=3000
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc+AMD+Ryzen+7+5800X3D+RTX+5060+Ti&LH_Sold=1&LH_Complete=1&LH_BIN=1&_sacat=0&_sop=12&LH_PrefLoc=1&_ipg=60&LH_ItemCondition=3000", waiting until "domcontentloaded"
+ query=gaming pc AMD Ryzen 7 5800X3D RTX 5060 Ti sacat=0
+2026-08-19 12:20:49 [debug    ] browser_pool.released
+2026-08-19 12:20:50 [debug    ] browser_pool.acquired          cap=1
+2026-08-19 12:20:51 [debug    ] sold_comps.playwright.page_error error=Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc+AMD+Ryzen+7+5800X3D+QUADRO+P1000&LH_Sold=1&LH_Complete=1&LH_BIN=1&_sacat=179&_sop=12&LH_PrefLoc=1&_ipg=60&LH_ItemCondition=3000
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc+AMD+Ryzen+7+5800X3D+QUADRO+P1000&LH_Sold=1&LH_Complete=1&LH_BIN=1&_sacat=179&_sop=12&LH_PrefLoc=1&_ipg=60&LH_ItemCondition=3000", waiting until "domcontentloaded"
+ query=gaming pc AMD Ryzen 7 5800X3D QUADRO P1000 sacat=179
+2026-08-19 12:20:52 [debug    ] sold_comps.playwright.page_error error=Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc+AMD+Ryzen+7+5800X3D+QUADRO+P1000&LH_Sold=1&LH_Complete=1&LH_BIN=1&_sacat=0&_sop=12&LH_PrefLoc=1&_ipg=60&LH_ItemCondition=3000
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc+AMD+Ryzen+7+5800X3D+QUADRO+P1000&LH_Sold=1&LH_Complete=1&LH_BIN=1&_sacat=0&_sop=12&LH_PrefLoc=1&_ipg=60&LH_ItemCondition=3000", waiting until "domcontentloaded"
+ query=gaming pc AMD Ryzen 7 5800X3D QUADRO P1000 sacat=0
+2026-08-19 12:20:52 [debug    ] browser_pool.released
+2026-08-19 12:20:53 [debug    ] browser_pool.acquired          cap=1
+INFO:     127.0.0.1:54017 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54017 - "GET /api/settings/ HTTP/1.1" 200 OK
+2026-08-19 12:20:55 [debug    ] sold_comps.playwright.page_error error=Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc+AMD+Ryzen+7+5800X3D+QUADRO+P1000&LH_Sold=1&LH_Complete=1&LH_BIN=1&_sacat=179&_sop=12&LH_PrefLoc=1&_ipg=60&LH_ItemCondition=3000
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc+AMD+Ryzen+7+5800X3D+QUADRO+P1000&LH_Sold=1&LH_Complete=1&LH_BIN=1&_sacat=179&_sop=12&LH_PrefLoc=1&_ipg=60&LH_ItemCondition=3000", waiting until "domcontentloaded"
+ query=gaming pc AMD Ryzen 7 5800X3D QUADRO P1000 sacat=179
+2026-08-19 12:20:56 [debug    ] sold_comps.playwright.page_error error=Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc+AMD+Ryzen+7+5800X3D+QUADRO+P1000&LH_Sold=1&LH_Complete=1&LH_BIN=1&_sacat=0&_sop=12&LH_PrefLoc=1&_ipg=60&LH_ItemCondition=3000
+Call log:
+  - navigating to "https://www.ebay.co.uk/sch/i.html?_nkw=gaming+pc+AMD+Ryzen+7+5800X3D+QUADRO+P1000&LH_Sold=1&LH_Complete=1&LH_BIN=1&_sacat=0&_sop=12&LH_PrefLoc=1&_ipg=60&LH_ItemCondition=3000", waiting until "domcontentloaded"
+ query=gaming pc AMD Ryzen 7 5800X3D QUADRO P1000 sacat=0
+2026-08-19 12:20:56 [debug    ] browser_pool.released
+2026-08-19 12:20:57 [info     ] ai_build_generator.done        builds=6 candidates=10
+INFO:     127.0.0.1:55808 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55808 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55808 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55808 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49303 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49303 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59483 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58765 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59483 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58765 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56031 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56031 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57426 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:57426 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:57426 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57426 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53114 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55556 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58765 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53114 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58765 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55556 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61891 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61891 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61891 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61891 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64681 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64681 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58899 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64477 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58899 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63423 - "OPTIONS /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58899 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49734 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49734 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63464 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61122 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61122 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:63464 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61122 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61122 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56361 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56361 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58773 - "OPTIONS /api/alerts/?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54534 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58770 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58770 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54534 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55872 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55872 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58954 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58954 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58954 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58954 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:24:35 [warning  ] ram_watcher.fetch_failed       reason=no_oauth_or_error subreddit=buildapcsales
+2026-08-19 12:24:35 [warning  ] ram_watcher.fetch_failed       reason=no_oauth_or_error subreddit=buildapcuk
+2026-08-19 12:24:35 [info     ] ram_watcher.done               checked=0 deals=0
+2026-08-19 12:24:35 [debug    ] margin_verifier.worker_idle
+INFO:     127.0.0.1:62016 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53392 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53254 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53254 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53392 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62016 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51848 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:51848 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:51848 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51848 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50753 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50753 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49463 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53133 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49463 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53133 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60212 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60212 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59551 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59551 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59551 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59551 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61584 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61584 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54892 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62213 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62213 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54892 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64355 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64355 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62702 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55506 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62702 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55506 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56871 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56871 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56871 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56871 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65268 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:65268 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62702 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64772 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64772 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62702 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57405 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:57405 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51041 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:65153 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:51041 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65153 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59638 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59638 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53390 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53390 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53390 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53390 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56715 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56715 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51681 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55971 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55971 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51681 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64422 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64422 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55263 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55002 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55263 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55002 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:29:35 [debug    ] margin_verifier.worker_idle
+INFO:     127.0.0.1:54770 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53067 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54770 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54770 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53067 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54770 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49375 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52441 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49375 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52441 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57413 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:57413 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64092 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64092 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64092 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64092 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57458 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:57458 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57405 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56210 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56210 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57405 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57405 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:57405 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58767 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:51328 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:51328 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58767 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63722 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:63722 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64655 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64655 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64655 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64655 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59438 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58767 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58767 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59438 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65285 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:65285 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63732 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50716 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50716 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63732 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63816 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:63816 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50926 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50926 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50926 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63164 - "OPTIONS /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50926 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59959 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59959 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53060 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56056 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56056 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51550 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56056 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49334 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49334 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51846 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61260 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61260 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61260 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61260 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58766 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58766 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58766 - "OPTIONS /api/alerts/?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50060 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64145 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64145 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50060 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 12:34:35 [debug    ] margin_verifier.worker_idle
+INFO:     127.0.0.1:61961 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60786 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60786 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61961 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62895 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62895 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54642 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54642 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59768 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56448 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:56448 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63799 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:63799 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:63799 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63799 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53093 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53093 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58766 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58767 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58767 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58766 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58799 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58799 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62370 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54131 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62370 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54131 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55274 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55274 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62893 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62893 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62893 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62893 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49587 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:65289 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49484 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:65289 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49484 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49587 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62171 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54604 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62171 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54604 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59665 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59665 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55168 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55168 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55168 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55168 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61594 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61594 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60169 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59244 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60169 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59244 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64045 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64045 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58992 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58992 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58992 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58992 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK

@@ -2,6 +2,9 @@
 Admin dashboard API routes for managing PC builds through their lifecycle.
 """
 from fastapi import APIRouter, Depends, HTTPException, Query, BackgroundTasks
+from jose import jwt
+from datetime import timezone
+from app.config import get_settings
 from sqlalchemy.orm import Session
 from sqlalchemy import select, func, and_, or_
 from datetime import datetime, timedelta
@@ -17,6 +20,22 @@ from app.routes.admin_auth import get_current_admin
 from app.services.email_service import send_shipment_update_email, send_order_status_email
 
 router = APIRouter(prefix="/api/admin", tags=["admin"], dependencies=[Depends(get_current_admin)])
+
+@router.post("/orders/{order_id}/portal-preview")
+def create_portal_preview(order_id: int, db: Session = Depends(get_db)):
+    """Create a short-lived, read-only preview reference for one order.
+
+    The token is intentionally scoped to this order and cannot authenticate as
+    the customer. The storefront preview consumer must enforce the `preview`
+    and `order_id` claims and disable all mutations.
+    """
+    order = db.query(Order).filter(Order.id == order_id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    now = datetime.now(timezone.utc)
+    settings = get_settings()
+    token = jwt.encode({"typ": "portal_preview", "order_id": order.id, "scope": "read", "iat": now, "exp": now + timedelta(minutes=15)}, settings.secret_key, algorithm=settings.jwt_algorithm)
+    return {"order_id": order.id, "token": token, "expires_at": (now + timedelta(minutes=15)).isoformat()}
 
 
 # ─── Schemas ────────────────────────────────────────────────────────────────
