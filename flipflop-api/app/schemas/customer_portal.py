@@ -1,5 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, Field
+from typing import Any
 
 
 class CustomerProblemCreate(BaseModel):
@@ -30,3 +31,4 @@ class CustomerDocumentOut(BaseModel):
     version: int
     pdf_url: str | None = None
     generated_at: datetime | None = None
+    content_json: dict[str, Any] | None = None

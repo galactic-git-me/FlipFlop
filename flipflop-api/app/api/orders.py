@@ -230,6 +230,7 @@ async def list_my_order_documents(
         version=document.version or 1,
         pdf_url=document.pdf_url,
         generated_at=document.generated_at,
+        content_json=document.content_json if (document.status.value if hasattr(document.status, "value") else str(document.status)) == "ready" else None,
     ) for document in result.scalars().all()]
 
 
