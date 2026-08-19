@@ -115,7 +115,7 @@ async def _get_access_token(environment: str) -> str:
     return token
 
 
-async def get_cheapest_tracked_quote(
+async def get_tracked_quotes(
     weight_kg: float,
     length_cm: float,
     width_cm: float,
@@ -123,8 +123,8 @@ async def get_cheapest_tracked_quote(
     value_gbp: float,
     delivery_country: str = "GBR",
     environment: str | None = None,
-) -> CourierQuote | None:
-    """Returns the cheapest TRACKED service quote, or None if no tracked
+) -> list[CourierQuote]:
+    """Returns all TRACKED service quotes, cheapest first. An empty list if no tracked
     service is available for these dimensions/destination. Untracked
     services are deliberately excluded — see the free-delivery pricing
     discussion this was built for: for anything of real value (a built PC
@@ -211,6 +211,13 @@ async def get_cheapest_tracked_quote(
             )
         )
 
-    if not parsed_quotes:
-        return None
-    return min(parsed_quotes, key=lambda q: q.price_gbp)
+    return sorted(
+        parsed_quotes,
+        key=lambda q: (q.price_gbp, q.estimated_days if q.estimated_days is not None else 999),
+    )
+
+
+async def get_cheapest_tracked_quote(**kwargs) -> CourierQuote | None:
+    """Backward-compatible helper for callers that only need the cheapest."""
+    quotes = await get_tracked_quotes(**kwargs)
+    return quotes[0] if quotes else None

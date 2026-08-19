@@ -34,7 +34,7 @@ from app.services.ebay_fulfillment_policies import (
     list_fulfillment_policies,
     EbayFulfillmentPoliciesError,
 )
-from app.services.parcel2go_courier import get_cheapest_tracked_quote, Parcel2GoError
+from app.services.parcel2go_courier import get_tracked_quotes, Parcel2GoError
 from app.services.ebay_order_sync import find_order_for_listing, EbayOrderSyncError, BuyerAddress
 from app.services.parcel2go_booking import (
     create_order as create_parcel2go_order,
@@ -690,7 +690,7 @@ async def generate_specifics(build_id: int, db: AsyncSession = Depends(get_db)):
     )
 
 
-@router.post("/{build_id}/courier-quote", response_model=CourierQuoteOut)
+@router.post("/{build_id}/courier-quote", response_model=list[CourierQuoteOut])
 async def get_courier_quote(
     build_id: int, delivery_country: str | None = None, db: AsyncSession = Depends(get_db)
 ):
@@ -746,7 +746,7 @@ async def get_courier_quote(
     resolved_country = resolved_country or "GBR"
 
     try:
-        quote = await get_cheapest_tracked_quote(
+        quotes = await get_tracked_quotes(
             weight_kg=build.package_weight_kg,
             length_cm=build.package_length_cm,
             width_cm=build.package_width_cm,
@@ -757,20 +757,17 @@ async def get_courier_quote(
     except Parcel2GoError as e:
         raise HTTPException(e.status_code or 502, str(e))
 
-    if quote is None:
+    if not quotes:
         raise HTTPException(404, "No tracked courier service found for this destination/parcel size")
 
-    return CourierQuoteOut(
-        courier_name=quote.courier_name,
-        service_name=quote.service_name,
-        price_gbp=quote.price_gbp,
-        tracked=quote.tracked,
-        estimated_days=quote.estimated_days,
-        service_slug=quote.service_slug,
+    return [CourierQuoteOut(
+        courier_name=quote.courier_name, service_name=quote.service_name,
+        price_gbp=quote.price_gbp, tracked=quote.tracked,
+        estimated_days=quote.estimated_days, service_slug=quote.service_slug,
         protection_scope=quote.protection_scope,
         full_value_damage_cover=quote.full_value_damage_cover,
         protection_warning=quote.protection_warning,
-    )
+    ) for quote in quotes]
 
 
 @router.post("/{build_id}/sync-ebay-order", response_model=SyncEbayOrderResult)

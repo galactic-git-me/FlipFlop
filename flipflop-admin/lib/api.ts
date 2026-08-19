@@ -196,7 +196,7 @@ export interface ManualBuild {
   updated_at: string;
 }
 
-// Cheapest real tracked-delivery quote for a build's saved package
+// Real tracked-delivery quotes, cheapest first, for a build's saved package
 // dimensions, via Parcel2Go (see /manual-builds/{id}/courier-quote).
 export interface CourierQuote {
   courier_name: string;
@@ -654,7 +654,7 @@ export const api = {
     // Omitting deliveryCountry lets the backend default to the real synced
     // buyer address's country (see sync-ebay-order) instead of forcing GBR.
     getCourierQuote: (id: number, deliveryCountry?: string) =>
-      request<CourierQuote>(
+      request<CourierQuote[]>(
         `/manual-builds/${id}/courier-quote${deliveryCountry ? `?delivery_country=${deliveryCountry}` : ""}`,
         { method: "POST" },
       ),

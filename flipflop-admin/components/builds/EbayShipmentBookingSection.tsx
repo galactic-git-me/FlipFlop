@@ -13,9 +13,11 @@ export function EbayShipmentBookingSection({ build, onRefresh }: Props) {
   const [syncing, setSyncing] = useState(false);
   const [syncError, setSyncError] = useState<string | null>(null);
 
-  const [quote, setQuote] = useState<CourierQuote | null>(null);
+  const [quotes, setQuotes] = useState<CourierQuote[]>([]);
+  const [selectedQuoteIndex, setSelectedQuoteIndex] = useState(0);
   const [quoteError, setQuoteError] = useState<string | null>(null);
   const [loadingQuote, setLoadingQuote] = useState(false);
+  const quote = quotes[selectedQuoteIndex] ?? null;
 
   const [booking, setBooking] = useState(false);
   const [bookError, setBookError] = useState<string | null>(null);
@@ -37,10 +39,11 @@ export function EbayShipmentBookingSection({ build, onRefresh }: Props) {
   const handleGetQuote = async () => {
     setLoadingQuote(true);
     setQuoteError(null);
-    setQuote(null);
+    setQuotes([]);
+    setSelectedQuoteIndex(0);
     try {
       const result = await api.manualBuilds.getCourierQuote(build.id);
-      setQuote(result);
+      setQuotes(result);
     } catch (error) {
       setQuoteError(error instanceof Error ? error.message : "Failed to get courier quote");
     } finally {
@@ -158,6 +161,22 @@ export function EbayShipmentBookingSection({ build, onRefresh }: Props) {
 
           {quote && (
             <div className="space-y-2 p-3 rounded bg-amber-950/30 border border-amber-700/40">
+              {quotes.length > 1 && (
+                <label className="block text-xs text-slate-300">
+                  <span className="mb-1 block font-semibold">Courier service</span>
+                  <select
+                    value={selectedQuoteIndex}
+                    onChange={(event) => setSelectedQuoteIndex(Number(event.target.value))}
+                    className="w-full rounded border border-white/10 bg-slate-900 px-3 py-2 text-xs text-slate-100 outline-none focus:border-cyan-400"
+                  >
+                    {quotes.map((option, index) => (
+                      <option key={`${option.service_slug}-${index}`} value={index}>
+                        {index === 0 ? "Cheapest · " : ""}{option.courier_name} — {option.service_name} — £{option.price_gbp.toFixed(2)}{option.estimated_days != null ? ` · ${option.estimated_days} day est.` : ""}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
               <p className="text-xs text-amber-100 font-semibold">
                 {quote.courier_name} — {quote.service_name}: £{quote.price_gbp.toFixed(2)}
               </p>

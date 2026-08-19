@@ -29,9 +29,11 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
   const [widthCm, setWidthCm] = useState((build.package_width_cm ?? "").toString());
   const [heightCm, setHeightCm] = useState((build.package_height_cm ?? "").toString());
 
-  const [quote, setQuote] = useState<CourierQuote | null>(null);
+  const [quotes, setQuotes] = useState<CourierQuote[]>([]);
+  const [selectedQuoteIndex, setSelectedQuoteIndex] = useState(0);
   const [quoteError, setQuoteError] = useState<string | null>(null);
   const [loadingQuote, setLoadingQuote] = useState(false);
+  const quote = quotes[selectedQuoteIndex] ?? null;
   const [autoSavingDimensions, setAutoSavingDimensions] = useState(false);
   const dimensionsSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastSavedDimensionsRef = useRef<{ w: string; l: string; wd: string; h: string }>({
@@ -52,7 +54,8 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
   const handleGetQuote = async () => {
     setLoadingQuote(true);
     setQuoteError(null);
-    setQuote(null);
+    setQuotes([]);
+    setSelectedQuoteIndex(0);
     try {
       // Wait briefly to ensure auto-save has completed if dimensions were just entered
       if (autoSavingDimensions) {
@@ -60,7 +63,7 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
       }
 
       const result = await api.manualBuilds.getCourierQuote(build.id);
-      setQuote(result);
+      setQuotes(result);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : "Failed to get courier quote";
       console.error("[handleGetQuote] Error:", errorMsg);
@@ -378,6 +381,22 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
 
           {quote && (
             <div className="space-y-2 p-2 rounded bg-amber-950/30 border border-amber-600/40">
+              {quotes.length > 1 && (
+                <label className="block text-xs text-slate-300">
+                  <span className="mb-1 block font-semibold">Courier service</span>
+                  <select
+                    value={selectedQuoteIndex}
+                    onChange={(event) => setSelectedQuoteIndex(Number(event.target.value))}
+                    className="w-full rounded border border-white/10 bg-slate-900 px-3 py-2 text-xs text-slate-100 outline-none focus:border-cyan-400"
+                  >
+                    {quotes.map((option, index) => (
+                      <option key={`${option.service_slug}-${index}`} value={index}>
+                        {index === 0 ? "Cheapest · " : ""}{option.courier_name} — {option.service_name} — £{option.price_gbp.toFixed(2)}{option.estimated_days != null ? ` · ${option.estimated_days} day est.` : ""}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
               <div className="text-xs">
                 <p className="font-semibold text-emerald-100">
                   {quote.courier_name} — {quote.service_name}
