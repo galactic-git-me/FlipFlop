@@ -181,6 +181,7 @@ def build_prompt(category: str, family_key: str) -> str:
         "fan_120_rgb": "a 120mm desktop PC case fan with an RGB lighting ring, no branding",
         "fan_140_plain": "a 140mm desktop PC case fan, plain frame, no RGB, no branding",
         "fan_140_rgb": "a 140mm desktop PC case fan with an RGB lighting ring, no branding",
+        "psu_atx_standard": "a standard ATX desktop PC modular power supply, fan grille and rear power socket visible, no cables or branding",
     }
     if family_key in descriptions:
         return descriptions[family_key]
@@ -194,6 +195,7 @@ def build_prompt(category: str, family_key: str) -> str:
         parts = family_key.split("_")
         colour = parts[-1] if parts[-1] in ("black", "white", "rgb") else "black"
         colour_label = "black" if colour == "black" else ("white" if colour == "white" else "black with an RGB light bar")
-        return f"a single desktop PC DDR RAM memory module, tall rectangular heatspreader, {colour_label}, no branding"
+        brand = parts[1].replace("gskill", "G.Skill").replace("teamgroup", "TeamGroup").title()
+        return f"a matched kit of two desktop PC DDR RAM memory modules standing side by side, {brand}-inspired but with no logos or copied markings, tall rectangular heatspreaders, {colour_label}"
 
     return f"a generic desktop PC {category} component, {family_key.replace('_', ' ')}, no branding"

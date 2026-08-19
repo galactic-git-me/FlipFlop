@@ -14,7 +14,7 @@ existing plain category-generic placeholder. Every classify_* function
 returns None rather than a low-confidence guess — same principle as
 _infer_cpu_socket etc. in compatibility_engine.py.
 
-Where a category doesn't need bucketing at all (PSU, storage, OS — mostly
+Where a category doesn't need bucketing at all (storage and OS — mostly
 concealed / low visual variance), there's no classify_* function; callers
 just get None and use the plain per-category generic.
 """
@@ -38,7 +38,7 @@ def _classify_cpu(title: str) -> str | None:
 
 
 # ---- RAM: brand + colourway — heatspreader shape barely varies otherwise --
-_RAM_BRANDS = ("corsair", "kingston", "crucial", "g.skill", "gskill", "teamgroup", "adata", "hyperx")
+_RAM_BRANDS = ("corsair", "kingston", "crucial", "g.skill", "gskill", "teamgroup", "adata", "hyperx", "patriot")
 
 
 def _classify_ram(title: str) -> str | None:
@@ -138,6 +138,14 @@ def _classify_fan(title: str) -> str | None:
     return f"fan_{size}_{style}"
 
 
+def _classify_psu(title: str) -> str | None:
+    """PSUs share one standard ATX library model unless an exact asset overrides it."""
+    t = _norm(title)
+    if re.search(r"\bpsu\b|power supply|\d{3,4}\s?w\b|80\+|80 plus", t):
+        return "psu_atx_standard"
+    return None
+
+
 _CLASSIFIERS = {
     "cpu": _classify_cpu,
     "ram": _classify_ram,
@@ -145,6 +153,7 @@ _CLASSIFIERS = {
     "gpu": _classify_gpu,
     "cooling": _classify_cooling,
     "fan": _classify_fan,
+    "psu": _classify_psu,
 }
 
 
@@ -169,11 +178,15 @@ KNOWN_FAMILY_BUCKETS: list[tuple[str, str]] = [
     ("motherboard", "mobo_gigabyte_atx"), ("motherboard", "mobo_gigabyte_matx"),
     ("motherboard", "mobo_asrock_atx"), ("motherboard", "mobo_asrock_matx"),
     ("ram", "ram_corsair_black"), ("ram", "ram_corsair_rgb"), ("ram", "ram_corsair_white"),
-    ("ram", "ram_kingston_black"), ("ram", "ram_gskill_black"),
+    ("ram", "ram_kingston_black"), ("ram", "ram_crucial_black"),
+    ("ram", "ram_gskill_black"), ("ram", "ram_teamgroup_rgb"),
+    ("ram", "ram_adata_rgb"), ("ram", "ram_hyperx_black"),
+    ("ram", "ram_patriot_rgb"),
     ("gpu", "gpu_blower"), ("gpu", "gpu_compact_dual_fan"),
     ("gpu", "gpu_mid_dual_fan"), ("gpu", "gpu_large_triple_fan"),
     ("cooling", "cooling_air_tower"),
     ("cooling", "cooling_aio_240"), ("cooling", "cooling_aio_280"), ("cooling", "cooling_aio_360"),
     ("cooling", "cooling_aio_360_lcd"),
     ("fan", "fan_120_plain"), ("fan", "fan_120_rgb"), ("fan", "fan_140_plain"), ("fan", "fan_140_rgb"),
+    ("psu", "psu_atx_standard"),
 ]

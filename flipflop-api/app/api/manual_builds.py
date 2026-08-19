@@ -77,7 +77,10 @@ class FaqSelectionInput(BaseModel):
     answer_overrides: dict[str, str] = Field(default_factory=dict)
 
 
-_BUILD_3D_ASSET_TYPES = ("complete_build", "chassis", "motherboard", "cpu", "gpu", "ram")
+_BUILD_3D_ASSET_TYPES = (
+    "complete_build", "chassis", "motherboard", "cpu", "gpu", "ram",
+    "psu", "liquid_cooler", "rgb_fan",
+)
 
 
 class QueueBuild3DAssetsInput(BaseModel):

@@ -61,6 +61,9 @@ const BUILD_3D_TARGETS = [
   { key: "cpu", label: "CPU", hint: "Use close, sharp views of the processor only." },
   { key: "gpu", label: "GPU", hint: "Use front, rear and connector-side views." },
   { key: "ram", label: "RAM", hint: "Use front, rear and end-on views of the exact memory module." },
+  { key: "psu", label: "Power supply", hint: "Use fan-side, modular-connector and label-side views." },
+  { key: "liquid_cooler", label: "CPU liquid cooler", hint: "Show the pump, radiator and complete tube routing." },
+  { key: "rgb_fan", label: "RGB fan", hint: "Use front, rear and edge views of one unmounted fan." },
 ] as const;
 
 function TabButton({
