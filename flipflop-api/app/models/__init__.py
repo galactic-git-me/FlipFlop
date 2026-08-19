@@ -146,6 +146,7 @@ from .photo_requirement import PhotoRequirement, PhotoType
 from .quality_gate import QualityGateCheck, QualityGateResult, EvidenceRequirement
 from .cx_cost_record import CXCostRecord
 from .social_proof_event import SocialProofEvent
+from .customer_problem import CustomerProblem
 
 __all__ = [
     "Customer",
@@ -184,4 +185,5 @@ __all__ = [
     "QualityGateCheck", "QualityGateResult", "EvidenceRequirement",
     "CXCostRecord",
     "SocialProofEvent",
+    "CustomerProblem",
 ]

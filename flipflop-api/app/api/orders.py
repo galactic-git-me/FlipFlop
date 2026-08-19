@@ -3,7 +3,7 @@ from sqlalchemy import func, select, and_, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta, date
 from app.database import get_db
-from app.models import Order, BuildCapacity, BuildCapacityOverride
+from app.models import Order, BuildCapacity, BuildCapacityOverride, CustomerProblem, CXDocument
 from app.models.customer import Customer
 from app.routes.auth import get_current_user
 from app.routes.admin_auth import get_current_admin
@@ -16,6 +16,7 @@ from app.schemas.order import (
     MyOrderOut,
     MyOrderSlotOut,
 )
+from app.schemas.customer_portal import CustomerDocumentOut, CustomerProblemCreate, CustomerProblemOut, CustomerProblemStatusUpdate
 
 router = APIRouter(prefix="/api/orders", tags=["orders"])
 
@@ -178,7 +179,88 @@ async def get_my_order(
     return _order_to_my_order_out(order)
 
 
+async def _owned_order(order_id: int, customer: Customer, db: AsyncSession) -> Order:
+    result = await db.execute(select(Order).where(Order.id == order_id, Order.customer_id == customer.id))
+    order = result.scalar_one_or_none()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    return order
+
+
+@router.get("/{order_id}/documents", response_model=list[CustomerDocumentOut])
+async def list_my_order_documents(
+    order_id: int,
+    customer: Customer = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Return only generated documents belonging to the signed-in customer's order."""
+    await _owned_order(order_id, customer, db)
+    result = await db.execute(select(CXDocument).where(CXDocument.order_id == order_id).order_by(CXDocument.created_at.desc()))
+    return [CustomerDocumentOut(
+        id=document.id,
+        document_type=document.document_type.value if hasattr(document.document_type, "value") else str(document.document_type),
+        status=document.status.value if hasattr(document.status, "value") else str(document.status),
+        version=document.version or 1,
+        pdf_url=document.pdf_url,
+        generated_at=document.generated_at,
+    ) for document in result.scalars().all()]
+
+
+@router.get("/{order_id}/problems", response_model=list[CustomerProblemOut])
+async def list_my_order_problems(
+    order_id: int,
+    customer: Customer = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    await _owned_order(order_id, customer, db)
+    result = await db.execute(select(CustomerProblem).where(CustomerProblem.order_id == order_id).order_by(CustomerProblem.created_at.desc()))
+    return list(result.scalars().all())
+
+
+@router.post("/{order_id}/problems", response_model=CustomerProblemOut, status_code=201)
+async def create_my_order_problem(
+    order_id: int,
+    body: CustomerProblemCreate,
+    customer: Customer = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    await _owned_order(order_id, customer, db)
+    problem = CustomerProblem(order_id=order_id, customer_id=customer.id, category=body.category, description=body.description)
+    db.add(problem)
+    await db.flush()
+    await db.refresh(problem)
+    return problem
+
+
 admin_router = APIRouter(prefix="/api/admin", tags=["admin"], dependencies=[Depends(get_current_admin)])
+
+
+@admin_router.get("/customer-problems", response_model=list[CustomerProblemOut])
+async def list_customer_problems(
+    status: str | None = None,
+    db: AsyncSession = Depends(get_db),
+):
+    query = select(CustomerProblem).order_by(CustomerProblem.created_at.desc())
+    if status:
+        query = query.where(CustomerProblem.status == status)
+    result = await db.execute(query)
+    return list(result.scalars().all())
+
+
+@admin_router.patch("/customer-problems/{problem_id}", response_model=CustomerProblemOut)
+async def update_customer_problem(
+    problem_id: int,
+    body: CustomerProblemStatusUpdate,
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(select(CustomerProblem).where(CustomerProblem.id == problem_id))
+    problem = result.scalar_one_or_none()
+    if not problem:
+        raise HTTPException(status_code=404, detail="Problem report not found")
+    problem.status = body.status
+    await db.flush()
+    await db.refresh(problem)
+    return problem
 
 
 @admin_router.get("/orders", response_model=list[AdminOrderOut])
