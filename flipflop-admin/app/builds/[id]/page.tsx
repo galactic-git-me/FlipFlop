@@ -60,6 +60,7 @@ const BUILD_3D_TARGETS = [
   { key: "motherboard", label: "Motherboard", hint: "Use top-down and angled board views." },
   { key: "cpu", label: "CPU", hint: "Use close, sharp views of the processor only." },
   { key: "gpu", label: "GPU", hint: "Use front, rear and connector-side views." },
+  { key: "ram", label: "RAM", hint: "Use front, rear and end-on views of the exact memory module." },
 ] as const;
 
 function TabButton({
@@ -1015,7 +1016,7 @@ export default function BuildDetailPage() {
                   <Sparkles className="h-4 w-4 text-cyan-300" /> Generate 3D assets from photos
                 </p>
                 <p className="mt-1 max-w-2xl text-[11px] leading-5 text-slate-400">
-                  Choose one to four views of the same object for each asset. Every row is sent as a separate Meshy job, so spec cards and performance cards are never included.
+                  Choose one to four views of the same object for each asset. Every row goes directly to the Meshy image-to-3D API; spec cards and performance cards are never included.
                 </p>
               </div>
               <button

@@ -212,7 +212,7 @@ export interface CourierQuote {
 }
 
 export interface Build3DAsset {
-  provider: "meshy" | "modly";
+  provider: "meshy";
   status: "queued" | "processing" | "succeeded" | "failed";
   source_image_urls: string[];
   task_id?: string;
