@@ -28,6 +28,7 @@ from app.config import get_settings
 from app.gem_radar.identity import resolve_identity
 from app.gem_radar.adapters.sold_comps import SoldComp, SoldCompsResult
 from app.services.ai_build_generator import _validate_against_ebay
+from app.services.ebay_browse import search_active_listings
 from app.services.sold_comps_cache import get_sold_comps_cache
 
 log = structlog.get_logger(__name__)
@@ -267,6 +268,60 @@ async def _active_build_comparables(cpu_model: str | None, gpu_model: str | None
     ) for row in rows]
 
 
+async def _live_close_build_comparables(
+    cpu_model: str | None, gpu_model: str | None, target_ram_gb: int | None,
+) -> list[MarketComparable]:
+    """Find source-backed close matches even when no exact CPU+GPU result exists.
+
+    eBay Browse treats multi-term queries loosely, so query each major anchor
+    separately and then verify that anchor is actually present in the title.
+    """
+    queries: list[tuple[str, str]] = []
+    if cpu_model:
+        queries.append((f'gaming PC "{cpu_model}"', "same CPU"))
+    if gpu_model:
+        ram_term = f" {target_ram_gb}GB" if target_ram_gb else ""
+        queries.append((f'gaming PC "{gpu_model}"{ram_term}', "same GPU"))
+
+    found: dict[str, tuple[int, MarketComparable]] = {}
+    for query, anchor_label in queries:
+        items = await search_active_listings(
+            query,
+            condition_filter="USED|EXCELLENT|VERY_GOOD|GOOD|ACCEPTABLE",
+            limit=50,
+        )
+        anchor = cpu_model if anchor_label == "same CPU" else gpu_model
+        anchor_key = re.sub(r"[^a-z0-9]", "", (anchor or "").lower())
+        for item in items:
+            title = str(item.get("title") or "")
+            title_key = re.sub(r"[^a-z0-9]", "", title.lower())
+            if not anchor_key or anchor_key not in title_key:
+                continue
+            if not any(term in title.lower() for term in ("pc", "desktop", "gaming")):
+                continue
+            price = float(item.get("price") or 0)
+            if price < 400:
+                continue
+            has_cpu = bool(cpu_model and re.sub(r"[^a-z0-9]", "", cpu_model.lower()) in title_key)
+            has_gpu = bool(gpu_model and re.sub(r"[^a-z0-9]", "", gpu_model.lower()) in title_key)
+            ram_gb = _extract_ram_gb(title)
+            ram_close = bool(target_ram_gb and ram_gb and abs(ram_gb - target_ram_gb) <= _RAM_TOLERANCE_GB)
+            score = (4 if has_cpu else 0) + (4 if has_gpu else 0) + (1 if ram_close else 0)
+            matched = "same CPU and GPU" if has_cpu and has_gpu else anchor_label
+            if ram_close:
+                matched += f", RAM within {_RAM_TOLERANCE_GB}GB"
+            url = str(item.get("url") or "")
+            key = url or f"{title}|{price}"
+            candidate = MarketComparable(
+                source="eBay active", title=title, price=round(price, 2), status="active",
+                observed_or_sold_at=datetime.now(timezone.utc).isoformat(),
+                url=url or None, match_basis=f"Close match: {matched}",
+            )
+            if key not in found or score > found[key][0]:
+                found[key] = (score, candidate)
+    return [item for _, item in sorted(found.values(), key=lambda pair: pair[0], reverse=True)[:12]]
+
+
 @router.get("/{build_id}/pricing")
 async def get_build_pricing(
     build_id: int,
@@ -301,6 +356,7 @@ async def get_build_pricing(
     cache = await get_sold_comps_cache()
     cache_info = CacheInfo(is_cached=False)
     market_data: dict = {}
+    live_close_comparables: list[MarketComparable] = []
 
     if fetch_sold:
         log.info("builds_pricing.fetch_sold", build_id=build_id, query=query, cache_key=cache_key)
@@ -316,7 +372,35 @@ async def get_build_pricing(
         except Exception as exc:
             log.warning("builds_pricing.fetch_failed", build_id=build_id, query=query, error=str(exc))
 
+        try:
+            cpu_model_for_search = resolve_identity(cpu_title).model if cpu_title else None
+            gpu_model_for_search = resolve_identity(gpu_title).model if gpu_title else None
+            live_close_comparables = await _live_close_build_comparables(
+                cpu_model_for_search, gpu_model_for_search, target_ram_gb,
+            )
+            # Cache the source details as well as sold comps so a page reload
+            # does not erase the evidence just fetched by the operator.
+            sold_for_cache = await cache.get(cache_key)
+            if sold_for_cache is None:
+                sold_for_cache = SoldCompsResult(
+                    available=False, comps=[], unavailable_reason="No completed-sale evidence",
+                )
+            await cache.set(
+                cache_key,
+                sold_for_cache,
+                listings_data={"active_close_matches": [item.model_dump() for item in live_close_comparables]},
+            )
+        except Exception as exc:
+            log.warning("builds_pricing.close_match_fetch_failed", build_id=build_id, error=str(exc))
+
     cached_result = await cache.get(cache_key)
+    if not live_close_comparables:
+        cached_listings = await cache.get_listings(cache_key)
+        if cached_listings:
+            live_close_comparables = [
+                MarketComparable.model_validate(item)
+                for item in cached_listings.get("active_close_matches", [])
+            ]
     sold_comps_list: list[SoldCompDetail] = []
     if cached_result and cached_result.available:
         cache_age_info = await cache.get_cache_age_and_expiry(cache_key)
@@ -387,10 +471,10 @@ async def get_build_pricing(
         status="sold", observed_or_sold_at=comp.sold_at, url=comp.url,
         match_basis="Completed sale matched by CPU, GPU and RAM tolerance",
     ) for comp in sold_comps_list]
-    market_comparables = sold_market_comparables + active_comparables
+    market_comparables = sold_market_comparables + live_close_comparables + active_comparables
 
     sold_prices = [comp.price for comp in sold_comps_list]
-    active_prices = [comp.price for comp in active_comparables]
+    active_prices = [comp.price for comp in live_close_comparables + active_comparables]
     evidence_prices = sold_prices or active_prices
     if evidence_prices:
         market_low = _percentile(evidence_prices, 0.25)
