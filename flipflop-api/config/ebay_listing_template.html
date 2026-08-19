@@ -55,7 +55,10 @@ html, body { margin: 0; padding: 0; }
 /* Mobile */
 @media (max-width: 700px) {
   .ff-hero, .ff-section { padding: 24px 16px; }
-  .ff-specs { grid-template-columns: 1fr; gap: 12px; padding: 24px 16px; }
+  /* eBay renders the description in an approximately 450px column. Keep
+     the opening spec cards as a balanced 2x2 layout at that width; collapse
+     only on genuinely narrow phone widths below. */
+  .ff-specs { gap: 12px; padding: 24px 16px; }
   .ff-benefits { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .ff-benefits-row-2 { grid-template-columns: repeat(2, 1fr); }
 }
@@ -94,7 +97,7 @@ html, body { margin: 0; padding: 0; }
     <div class="ff-benefit-item"><div class="ff-benefit-emoji">🌐</div><div class="ff-benefit-title">Personalised online owner portal</div><div class="ff-benefit-text">Your specification, getting-started guide, downloads, support and warranty in one place.</div></div>
     <div class="ff-benefit-item"><div class="ff-benefit-emoji">🪪</div><div class="ff-benefit-title">Unique PC name and registration plate</div><div class="ff-benefit-text">{{PC_NAME}} has its own identity and digital registration plate.</div></div>
   </div>
-  <div style="margin-top: 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+  <div class="ff-benefits ff-benefits-row-2" style="margin-top: 16px;">
     <div class="ff-benefit-item"><div class="ff-benefit-emoji">⬆️</div><div class="ff-benefit-title">Build-specific upgrade path</div><div class="ff-benefit-text">Clear guidance on compatible future upgrades.</div></div>
     <div class="ff-benefit-item"><div class="ff-benefit-emoji">💬</div><div class="ff-benefit-title">Personal support</div><div class="ff-benefit-text">Direct help with setup, troubleshooting and upgrades.</div></div>
     <div class="ff-benefit-item"><div class="ff-benefit-emoji">🏷️</div><div class="ff-benefit-title">Relevant future offers</div><div class="ff-benefit-text">Access to discounts, upgrade opportunities and tech offers.</div></div>
