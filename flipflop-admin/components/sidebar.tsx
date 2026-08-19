@@ -11,6 +11,7 @@ import {
   Plus,
   Package,
   LineChart,
+  AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +21,7 @@ const PRIMARY_NAV = [
   { href: "/builds", icon: Package, label: "Your Builds" },
   { href: "/configurator-config", icon: Settings2, label: "Configurator" },
   { href: "/pc-builder", icon: Zap, label: "PC Builder" },
+  { href: "/problems", icon: AlertTriangle, label: "Problems" },
 ];
 
 // ─── Twinkling stars canvas ───────────────────────────────────────────────────
