@@ -98,6 +98,12 @@ class Settings(BaseSettings):
     parcel2go_client_secret: str = ""
     # "sandbox" (default, no real charges) | "production"
     parcel2go_environment: str = "sandbox"
+
+    # Secursus price-only shipping-insurance quotes. The pre-sale flow calls
+    # /api/parcels/price only; creating an insured parcel is deliberately kept
+    # for the post-sale booking flow.
+    secursus_api_identifier: str = ""
+    secursus_api_secret_key: str = ""
     # Seller's own collection address — used as every booking's
     # CollectionAddress (where the courier picks up from) and as the
     # Parcel2Go order's CustomerDetails. Constant across all shipments,

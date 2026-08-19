@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 from datetime import datetime
 import shutil
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Query
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -20,7 +20,7 @@ from app.schemas.manual_build import (
     PostToEbayRequest, PostToEbayResult, SetHeroPhotoRequest, RemovePhotoRequest,
     ListOnStorefrontRequest, ListOnStorefrontResult, ReorderPhotosRequest,
     UpdateAspectsRequest, UpdateEbayListingConfigRequest, FulfillmentPolicyOut,
-    CourierQuoteOut, SyncEbayOrderResult, BuyerAddressOut, BookShipmentRequest,
+    CourierQuoteOut, InsuranceQuoteOut, SyncEbayOrderResult, BuyerAddressOut, BookShipmentRequest,
     BookShipmentResult, UpdateEvidenceDataRequest,
 )
 from app.services import ai_service
@@ -35,6 +35,7 @@ from app.services.ebay_fulfillment_policies import (
     EbayFulfillmentPoliciesError,
 )
 from app.services.parcel2go_courier import get_tracked_quotes, Parcel2GoError
+from app.services.secursus_insurance import get_insurance_quote, SecursusError
 from app.services.ebay_order_sync import find_order_for_listing, EbayOrderSyncError, BuyerAddress
 from app.services.parcel2go_booking import (
     create_order as create_parcel2go_order,
@@ -768,6 +769,32 @@ async def get_courier_quote(
         full_value_damage_cover=quote.full_value_damage_cover,
         protection_warning=quote.protection_warning,
     ) for quote in quotes]
+
+
+@router.post("/{build_id}/insurance-quote", response_model=InsuranceQuoteOut)
+async def get_build_insurance_quote(
+    build_id: int,
+    listing_value_gbp: float = Query(gt=0),
+    db: AsyncSession = Depends(get_db),
+):
+    """Get a live Secursus premium for the full current listing value.
+
+    Price lookup only: this endpoint cannot create, reserve, or charge for an
+    insurance policy. Cover is purchased later, after the item sells.
+    """
+    result = await db.execute(select(ManualBuild.id).where(ManualBuild.id == build_id))
+    if result.scalar_one_or_none() is None:
+        raise HTTPException(404, "Build not found")
+    try:
+        quote = await get_insurance_quote(listing_value_gbp)
+    except SecursusError as error:
+        raise HTTPException(error.status_code or 502, str(error))
+    return InsuranceQuoteOut(
+        provider="Secursus",
+        insured_value_gbp=quote.insured_value_gbp,
+        price_gbp=quote.price_gbp,
+        currency=quote.currency,
+    )
 
 
 @router.post("/{build_id}/sync-ebay-order", response_model=SyncEbayOrderResult)

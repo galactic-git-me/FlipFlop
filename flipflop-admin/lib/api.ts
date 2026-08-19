@@ -210,6 +210,14 @@ export interface CourierQuote {
   protection_warning: string;
 }
 
+export interface InsuranceQuote {
+  provider: string;
+  insured_value_gbp: number;
+  price_gbp: number;
+  currency: string;
+  quote_only: boolean;
+}
+
 export interface ProductFaq {
   id: string;
   category: string;
@@ -674,6 +682,11 @@ export const api = {
       request<{ success: boolean; listing_id?: string; url?: string; error?: string }>(
         `/manual-builds/${id}/post-to-ebay`,
         { method: "POST", body: JSON.stringify(data) },
+      ),
+    getInsuranceQuote: (id: number, listingValueGbp: number) =>
+      request<InsuranceQuote>(
+        `/manual-builds/${id}/insurance-quote?listing_value_gbp=${encodeURIComponent(listingValueGbp)}`,
+        { method: "POST" },
       ),
     endEbayListing: (id: number) =>
       request<ManualBuild>(`/manual-builds/${id}/ebay-listing`, { method: "DELETE" }),

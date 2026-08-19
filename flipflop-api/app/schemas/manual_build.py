@@ -207,6 +207,14 @@ class CourierQuoteOut(BaseModel):
     protection_warning: str
 
 
+class InsuranceQuoteOut(BaseModel):
+    provider: str
+    insured_value_gbp: float
+    price_gbp: float
+    currency: str
+    quote_only: bool = True
+
+
 class BuyerAddressOut(BaseModel):
     contact_name: str
     address_line1: Optional[str] = None

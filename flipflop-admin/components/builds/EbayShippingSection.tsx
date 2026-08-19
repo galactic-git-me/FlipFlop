@@ -1,6 +1,6 @@
 "use client";
 
-import { ManualBuild, FulfillmentPolicy, CourierQuote, api } from "@/lib/api";
+import { ManualBuild, FulfillmentPolicy, CourierQuote, InsuranceQuote, api } from "@/lib/api";
 import { Truck, AlertCircle, Globe2, Package, Zap } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 
@@ -22,7 +22,6 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
   const [shippingMethod, setShippingMethod] = useState(build.shipping_method ?? "tracked");
   const [shippingCost, setShippingCost] = useState((build.shipping_cost ?? 0).toString());
   const [handlingDays, setHandlingDays] = useState((build.handling_time_days ?? 1).toString());
-  const [damageCoverConfirmed, setDamageCoverConfirmed] = useState(build.shipping_damage_cover_confirmed ?? false);
   const [fulfillmentPolicyId, setFulfillmentPolicyId] = useState(build.fulfillment_policy_id ?? "");
   const [weightKg, setWeightKg] = useState((build.package_weight_kg ?? "").toString());
   const [lengthCm, setLengthCm] = useState((build.package_length_cm ?? "").toString());
@@ -33,7 +32,28 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
   const [selectedQuoteIndex, setSelectedQuoteIndex] = useState(0);
   const [quoteError, setQuoteError] = useState<string | null>(null);
   const [loadingQuote, setLoadingQuote] = useState(false);
+  const [insuranceQuote, setInsuranceQuote] = useState<InsuranceQuote | null>(null);
+  const [insuranceError, setInsuranceError] = useState<string | null>(null);
+  const [loadingInsurance, setLoadingInsurance] = useState(false);
   const quote = quotes[selectedQuoteIndex] ?? null;
+  const listingValue = askingPrice ?? build.ebay_price ?? 0;
+
+  const handleGetInsuranceQuote = async () => {
+    if (listingValue <= 0) {
+      setInsuranceError("Set a listing price above £0 to get an insurance quote.");
+      return;
+    }
+    setLoadingInsurance(true);
+    setInsuranceError(null);
+    try {
+      setInsuranceQuote(await api.manualBuilds.getInsuranceQuote(build.id, listingValue));
+    } catch (error) {
+      setInsuranceQuote(null);
+      setInsuranceError(error instanceof Error ? error.message : "Failed to get insurance quote");
+    } finally {
+      setLoadingInsurance(false);
+    }
+  };
   const [autoSavingDimensions, setAutoSavingDimensions] = useState(false);
   const dimensionsSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastSavedDimensionsRef = useRef<{ w: string; l: string; wd: string; h: string }>({
@@ -194,7 +214,6 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
       shipping_cost: parseFloat(shippingCost) || 0,
       handling_time_days: parseInt(handlingDays, 10),
       fulfillment_policy_id: fulfillmentPolicyId || null,
-      shipping_damage_cover_confirmed: damageCoverConfirmed,
     };
     if (hasPackageDimensions) {
       update.package_weight_kg = parseFloat(weightKg);
@@ -210,7 +229,6 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
     shippingMethod !== (build.shipping_method ?? "tracked") ||
     parseFloat(shippingCost) !== (build.shipping_cost ?? 0) ||
     parseInt(handlingDays, 10) !== (build.handling_time_days ?? 1) ||
-    damageCoverConfirmed !== (build.shipping_damage_cover_confirmed ?? false) ||
     fulfillmentPolicyId !== (build.fulfillment_policy_id ?? "");
 
   const selectedPolicy = policies?.find((p) => p.policy_id === fulfillmentPolicyId);
@@ -434,22 +452,33 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
         </div>
       )}
 
-      {/* Shipping Destination — real eBay fulfillment policies */}
-      <div className="rounded-lg border border-amber-500/25 bg-amber-500/[0.05] p-3">
-        <label className="flex cursor-pointer items-start gap-3">
-          <input type="checkbox" checked={damageCoverConfirmed} onChange={(event) => setDamageCoverConfirmed(event.target.checked)} className="mt-1 h-4 w-4 accent-cyan-400" />
-          <span>
-            <span className="block text-xs font-semibold text-amber-200">Full-value transit protection requirements confirmed</span>
-            <span className="mt-1 block text-xs leading-5 text-slate-500">
-              Only tick after the insurer has confirmed this assembled PC and its packaging are eligible for loss and accidental-damage cover up to the exact invoice value. For a glass-sided case, obtain written packaging approval before dispatch. Use tracked, signature-required delivery and retain photos of the components, serial numbers, packaging and sealed carton. Parcel2Go carrier protection for computers is loss-only.
-            </span>
-            <span className="mt-2 block text-xs leading-5 text-slate-400">
-              Check the current{' '}
-              <a href="https://www.secursus.com/en-gb/terms-and-conditions/" target="_blank" rel="noreferrer" className="text-cyan-300 underline hover:text-cyan-200">Secursus terms</a>
-              {' '}and get written confirmation rather than relying on this checkbox as proof of cover.
-            </span>
-          </span>
-        </label>
+      <div className="space-y-2 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.05] p-3">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold text-cyan-100">Full-value shipping insurance</p>
+            <p className="mt-1 text-xs text-slate-400">Live Secursus quote for the full £{listingValue.toFixed(2)} listing value.</p>
+          </div>
+          <button
+            type="button"
+            onClick={handleGetInsuranceQuote}
+            disabled={loadingInsurance || listingValue <= 0}
+            className="shrink-0 rounded bg-cyan-700 px-3 py-2 text-xs font-semibold text-white transition hover:bg-cyan-600 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-500"
+          >
+            {loadingInsurance ? "Getting quote…" : insuranceQuote ? "Refresh quote" : "Get insurance quote"}
+          </button>
+        </div>
+        {insuranceQuote && (
+          <div className="rounded border border-emerald-500/30 bg-emerald-500/10 p-2">
+            <p className="text-lg font-bold text-emerald-300">£{insuranceQuote.price_gbp.toFixed(2)}</p>
+            <p className="text-xs text-slate-300">Covers a declared parcel value of £{insuranceQuote.insured_value_gbp.toFixed(2)}.</p>
+          </div>
+        )}
+        {insuranceError && <p className="text-xs text-red-300">{insuranceError}</p>}
+        <p className="text-xs leading-5 text-slate-500">
+          Quote only — no cover is booked or charged here. Insurance will be purchased with delivery after the item sells. Review the current{' '}
+          <a href="https://www.secursus.com/en-gb/terms-and-conditions/" target="_blank" rel="noreferrer" className="text-cyan-300 underline hover:text-cyan-200">Secursus terms</a>
+          {' '}before booking.
+        </p>
       </div>
 
       {/* Shipping Destination — real eBay fulfillment policies */}
