@@ -1,261 +1,60 @@
-2026-08-19 12:49:35 [info     ] browser_pool.sigchld_reaper_skipped (Windows or no SIGCHLD support)
-2026-08-19 12:49:35 [info     ] app.startup                    app_env=dev event_loop_type=ProactorEventLoop
-2026-08-19 12:49:35 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
-2026-08-19 12:49:35 [info     ] listing_ingest_queue.started   max_queue=25000 workers=16
-2026-08-19 12:49:35 [info     ] claude_eval_queue.started      workers=6
-2026-08-19 12:49:35 [info     ] part_gem_eval_queue.started    workers=2
-2026-08-19 12:49:35 [info     ] scheduler.started              jobs=23
-2026-08-19 12:49:35 [debug    ] listing_ingest_queue.worker_ready worker=0
-2026-08-19 12:49:35 [debug    ] listing_ingest_queue.worker_ready worker=1
-2026-08-19 12:49:35 [debug    ] listing_ingest_queue.worker_ready worker=2
-2026-08-19 12:49:35 [debug    ] listing_ingest_queue.worker_ready worker=3
-2026-08-19 12:49:35 [debug    ] listing_ingest_queue.worker_ready worker=4
-2026-08-19 12:49:35 [debug    ] listing_ingest_queue.worker_ready worker=5
-2026-08-19 12:49:35 [debug    ] listing_ingest_queue.worker_ready worker=6
-2026-08-19 12:49:35 [debug    ] listing_ingest_queue.worker_ready worker=7
-2026-08-19 12:49:35 [debug    ] listing_ingest_queue.worker_ready worker=8
-2026-08-19 12:49:35 [debug    ] listing_ingest_queue.worker_ready worker=9
-2026-08-19 12:49:35 [debug    ] listing_ingest_queue.worker_ready worker=10
-2026-08-19 12:49:35 [debug    ] listing_ingest_queue.worker_ready worker=11
-2026-08-19 12:49:35 [debug    ] listing_ingest_queue.worker_ready worker=12
-2026-08-19 12:49:35 [debug    ] listing_ingest_queue.worker_ready worker=13
-2026-08-19 12:49:35 [debug    ] listing_ingest_queue.worker_ready worker=14
-2026-08-19 12:49:35 [debug    ] listing_ingest_queue.worker_ready worker=15
-2026-08-19 12:49:35 [debug    ] claude_eval_queue.worker_ready worker=0
-2026-08-19 12:49:35 [debug    ] part_gem_eval_queue.worker_ready worker=0
-2026-08-19 12:49:35 [info     ] runtime.preflight.antibot.disabled
-2026-08-19 12:49:35 [info     ] queue_processor.started        workers=15
-2026-08-19 12:49:35 [info     ] margin_verifier.worker_started
-2026-08-19 12:49:36 [warning  ] ram_watcher.fetch_failed       reason=no_oauth_or_error subreddit=buildapcsales
-2026-08-19 12:49:36 [warning  ] ram_watcher.fetch_failed       reason=no_oauth_or_error subreddit=buildapcuk
-2026-08-19 12:49:36 [info     ] ram_watcher.done               checked=0 deals=0
-2026-08-19 12:49:39 [info     ] database_cleaner.completed     deleted={'gem_radar_decision_events': 0, 'gem_radar_listing_demand_history': 56846, 'submission_queue': 410, 'gem_radar_listing_observations': 0, 'gem_radar_scored_listings': 0}
-2026-08-19 12:49:40 [warning  ] sold_comps_cache.connection_failed error=Error 22 connecting to localhost:6379. The remote computer refused the network connection.
-2026-08-19 12:49:40 [info     ] app.ready                      note=full pipeline enabled - ingest/eval/build workers + scheduler + queue processor + margin verifier + sold comps cache running
-2026-08-19 12:49:40 [info     ] opp4.startup                   stats_count=9
-2026-08-19 12:49:40 [debug    ] claude_eval_queue.worker_ready worker=1
-2026-08-19 12:49:45 [debug    ] claude_eval_queue.worker_ready worker=2
-2026-08-19 12:49:45 [debug    ] part_gem_eval_queue.worker_ready worker=1
-INFO:     127.0.0.1:61818 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61819 - "GET /api/builds/sold-comp-targets?limit=2 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61820 - "GET /api/builds/2/pricing HTTP/1.1" 200 OK
-2026-08-19 12:49:50 [debug    ] claude_eval_queue.worker_ready worker=3
-2026-08-19 12:49:55 [debug    ] claude_eval_queue.worker_ready worker=4
-INFO:     127.0.0.1:61994 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:63272 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:54926 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:61994 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54926 - "GET /api/settings/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63272 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-2026-08-19 12:50:00 [debug    ] claude_eval_queue.worker_ready worker=5
-INFO:     127.0.0.1:56042 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:56042 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:56042 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56042 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51195 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:51195 - "GET /api/settings/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53421 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:62004 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:62004 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62004 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51117 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:51117 - "GET /api/settings/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57519 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:49820 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:57519 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49820 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60488 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:60488 - "GET /api/settings/ HTTP/1.1" 200 OK
-2026-08-19 12:51:35 [info     ] ebay_sales_tracker.poll_complete found=0 matched=0 updated=0
-INFO:     127.0.0.1:60953 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:60953 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:60953 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60953 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51356 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:51356 - "GET /api/settings/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60028 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:53275 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:53275 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60028 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53226 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:53226 - "GET /api/settings/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60860 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:56157 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:60860 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56157 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60235 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:60235 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:60235 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60235 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61251 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:61251 - "GET /api/settings/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56413 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:60987 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:54995 - "OPTIONS /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60987 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56413 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56038 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:56038 - "GET /api/settings/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54725 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:54725 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:60438 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54725 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54725 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50411 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:50411 - "GET /api/settings/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52666 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55367 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:53847 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:53847 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55367 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53767 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:53767 - "GET /api/settings/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53767 - "OPTIONS /api/alerts/?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56264 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:49573 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:56264 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49573 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-2026-08-19 12:54:35 [info     ] price_refresh.start
-2026-08-19 12:54:36 [debug    ] margin_verifier.worker_idle
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_ram_32gb_ddr4 query=32gb ddr4 desktop ram kit 3200
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_mobo_am5_x670 query=am5 x670 motherboard
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_gtx1660super query=gtx 1660 super graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_i9_9 query=gaming pc i9 9900 desktop tower
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rtx4070super query=rtx 4070 super graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_gpu_rtx3060 query=rtx 3060 12gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_case_rgb_mesh query=mesh gaming pc case argb mid tower
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rx6700xt query=rx 6700 xt graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_mobo_am4_x570 query=am4 x570 motherboard
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_headset_gaming query=gaming headset usb rgb
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_i5_8 query=gaming pc i5 8400 desktop tower
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rtx3060ti query=rtx 3060 ti graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rtx4070 query=rtx 4070 12gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_ram_64gb_ddr4 query=64gb ddr4 desktop ram kit 3200
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_gpu_rx6700xt query=rx 6700 xt graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_monitor_1440p query=27 inch 1440p gaming monitor 144hz
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_cpu_cooler_air query=cpu air cooler tower 120mm
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rx6600 query=rx 6600 8gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rx7600 query=rx 7600 8gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_i7_8 query=gaming pc i7 8700 desktop tower
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rtx4060 query=rtx 4060 8gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_ram_32gb_ddr5 query=32gb ddr5 desktop ram kit 5600
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_case_mini_itx query=mini itx gaming case rgb
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_r9_3900 query=gaming pc ryzen 9 3900x desktop
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_i7_14 query=gaming pc i7 14700 desktop tower
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rx5700xt query=rx 5700 xt graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_i7_12 query=gaming pc i7 12700 desktop tower
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_gtx1080 query=gtx 1080 8gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rx6800xt query=rx 6800 xt graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rtx3090 query=rtx 3090 24gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_ram_64gb_ddr5 query=64gb ddr5 desktop ram kit 5600
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rtx3080 query=rtx 3080 10gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rx6750xt query=rx 6750 xt graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_gtx1660ti query=gtx 1660 ti graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rx7900xt query=rx 7900 xt graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rtx2060 query=rtx 2060 6gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rx7900xtx query=rx 7900 xtx graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rtx2070 query=rtx 2070 8gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_r7_7700 query=gaming pc ryzen 7 7700x desktop
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_ram_32gb_ddr4 query=32gb ddr4 desktop ram kit used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rtx3060 query=rtx 3060 12gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_keyboard_rgb query=rgb gaming keyboard mechanical
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_ram_64gb_ddr4 query=64gb ddr4 desktop ram kit used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rtx2080 query=rtx 2080 8gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_r5_5600 query=gaming pc ryzen 5 5600 desktop
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_monitor_1080p query=24 inch 1080p gaming monitor 144hz
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_case_atx_rgb query=rgb gaming pc case atx used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_i5_13 query=gaming pc i5 13600 desktop tower
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_gtx1080ti query=gtx 1080 ti graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_i7_13 query=gaming pc i7 13700 desktop tower
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_cpu_cooler_120mm query=120mm aio liquid cooler
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rx7700xt query=rx 7700 xt graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_ssd_2tb_nvme query=2tb nvme m.2 ssd 2280
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_case_mesh_argb query=mesh argb gaming case used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_mobo_am4_b550 query=am4 b550 motherboard used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_monitor_1080p query=24 inch 1080p 144hz gaming monitor used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_r7_3700 query=gaming pc ryzen 7 3700x desktop
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_ram_32gb_ddr5 query=32gb ddr5 desktop ram kit used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_case_rgb_atx query=rgb gaming pc case atx mid tower
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_i5_10 query=gaming pc i5 10400 desktop tower
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_keyboard_rgb query=rgb gaming keyboard mechanical used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_i5_14 query=gaming pc i5 14600 desktop tower
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_mobo_am5_b650 query=am5 b650 motherboard
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_r9_7900 query=gaming pc ryzen 9 7900x desktop
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_psu_650w query=650w 80 plus bronze psu modular
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_i7_9 query=gaming pc i7 9700 desktop tower
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_r5_3600 query=gaming pc ryzen 5 3600 desktop
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_i5_9 query=gaming pc i5 9600 desktop tower
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_monitor_1440p query=27 inch 1440p 144hz gaming monitor used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_headset_gaming query=gaming headset used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_r5_7600 query=gaming pc ryzen 5 7600 desktop
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_mobo_am5_x670 query=am5 x670 motherboard used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_r9_7950 query=gaming pc ryzen 9 7950x desktop
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_ssd_1tb_nvme query=1tb nvme m.2 ssd 2280
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rtx3070 query=rtx 3070 8gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_case_mini_itx query=mini itx gaming case used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_gpu_rtx4060 query=rtx 4060 8gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_psu_750w query=750w 80 plus gold psu modular
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_mobo_am5_b650 query=am5 b650 motherboard used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_mobo_am4_b550 query=am4 b550 motherboard
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_i5_12 query=gaming pc i5 12400 desktop tower
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rtx4060ti query=rtx 4060 ti graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_r5_9600 query=gaming pc ryzen 5 9600x desktop
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rx6900xt query=rx 6900 xt graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rtx4080 query=rtx 4080 16gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rx580 query=rx 580 8gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_mobo_am4_x570 query=am4 x570 motherboard used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_gtx1070 query=gtx 1070 8gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_r9_5900 query=gaming pc ryzen 9 5900x desktop
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_ram_64gb_ddr5 query=64gb ddr5 desktop ram kit used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=cost_wifi_card_pcie query=pcie wifi 6 card desktop
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_aio_240mm query=240mm aio liquid cpu cooler used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_rx6600xt query=rx 6600 xt graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_mouse_gaming query=gaming mouse used
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_r7_5800 query=gaming pc ryzen 7 5800x desktop
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_r7_9700 query=gaming pc ryzen 7 9700x desktop
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=gpu_gtx1060_6gb query=gtx 1060 6gb graphics card
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=sys_i7_10 query=gaming pc i7 10700 desktop tower
-2026-08-19 12:54:36 [warning  ] price_refresh.no_comps         key=resale_aio_120mm query=120mm aio liquid cpu cooler used
-2026-08-19 12:54:37 [warning  ] price_refresh.no_comps         key=gpu_rx7800xt query=rx 7800 xt graphics card
-2026-08-19 12:54:37 [warning  ] price_refresh.no_comps         key=gpu_rx6800 query=rx 6800 16gb graphics card
-2026-08-19 12:54:37 [warning  ] price_refresh.no_comps         key=cost_mouse_gaming query=gaming mouse rgb
-INFO:     127.0.0.1:60603 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:53177 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:60603 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:60603 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53177 - "GET /api/settings/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60603 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64403 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:64244 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:64244 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64403 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49482 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:49482 - "GET /api/settings/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54480 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:54480 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:54480 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:54480 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60781 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:60781 - "GET /api/settings/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59000 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:61396 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:61396 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59000 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60044 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:60044 - "GET /api/settings/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63358 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:63358 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:63358 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63358 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64371 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:64371 - "GET /api/settings/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51556 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:63259 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:63259 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63259 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63964 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:64603 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:50791 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
-INFO:     127.0.0.1:63964 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50791 - "GET /api/settings/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64603 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 13:07:47 [info     ] browser_pool.sigchld_reaper_skipped (Windows or no SIGCHLD support)
+2026-08-19 13:07:47 [info     ] app.startup                    app_env=dev event_loop_type=ProactorEventLoop
+2026-08-19 13:07:47 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-08-19 13:07:47 [info     ] listing_ingest_queue.started   max_queue=25000 workers=16
+2026-08-19 13:07:47 [info     ] claude_eval_queue.started      workers=6
+2026-08-19 13:07:47 [info     ] part_gem_eval_queue.started    workers=2
+2026-08-19 13:07:47 [info     ] scheduler.started              jobs=23
+2026-08-19 13:07:47 [debug    ] listing_ingest_queue.worker_ready worker=0
+2026-08-19 13:07:47 [debug    ] listing_ingest_queue.worker_ready worker=1
+2026-08-19 13:07:47 [debug    ] listing_ingest_queue.worker_ready worker=2
+2026-08-19 13:07:47 [debug    ] listing_ingest_queue.worker_ready worker=3
+2026-08-19 13:07:47 [debug    ] listing_ingest_queue.worker_ready worker=4
+2026-08-19 13:07:47 [debug    ] listing_ingest_queue.worker_ready worker=5
+2026-08-19 13:07:47 [debug    ] listing_ingest_queue.worker_ready worker=6
+2026-08-19 13:07:47 [debug    ] listing_ingest_queue.worker_ready worker=7
+2026-08-19 13:07:47 [debug    ] listing_ingest_queue.worker_ready worker=8
+2026-08-19 13:07:47 [debug    ] listing_ingest_queue.worker_ready worker=9
+2026-08-19 13:07:47 [debug    ] listing_ingest_queue.worker_ready worker=10
+2026-08-19 13:07:47 [debug    ] listing_ingest_queue.worker_ready worker=11
+2026-08-19 13:07:47 [debug    ] listing_ingest_queue.worker_ready worker=12
+2026-08-19 13:07:47 [debug    ] listing_ingest_queue.worker_ready worker=13
+2026-08-19 13:07:47 [debug    ] listing_ingest_queue.worker_ready worker=14
+2026-08-19 13:07:47 [debug    ] listing_ingest_queue.worker_ready worker=15
+2026-08-19 13:07:47 [debug    ] claude_eval_queue.worker_ready worker=0
+2026-08-19 13:07:47 [debug    ] part_gem_eval_queue.worker_ready worker=0
+2026-08-19 13:07:47 [info     ] runtime.preflight.antibot.disabled
+2026-08-19 13:07:47 [info     ] queue_processor.started        workers=15
+2026-08-19 13:07:47 [info     ] margin_verifier.worker_started
+2026-08-19 13:07:48 [warning  ] ram_watcher.fetch_failed       reason=no_oauth_or_error subreddit=buildapcsales
+2026-08-19 13:07:48 [warning  ] ram_watcher.fetch_failed       reason=no_oauth_or_error subreddit=buildapcuk
+2026-08-19 13:07:48 [info     ] ram_watcher.done               checked=0 deals=0
+2026-08-19 13:07:48 [warning  ] queue_processor.recovered_stuck_submissions count=4
+2026-08-19 13:07:48 [info     ] queue_processor.processing_submission active_searches=1 n_listings=44 query=Intel GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=intel-gpu submission_id=55522
+2026-08-19 13:07:48 [info     ] queue_processor.processing_submission active_searches=2 n_listings=84 query=ASUS motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=asus-motherboard submission_id=55533
+2026-08-19 13:07:48 [info     ] database_cleaner.completed     deleted={'gem_radar_decision_events': 0, 'gem_radar_listing_demand_history': 0, 'submission_queue': 142, 'gem_radar_listing_observations': 0, 'gem_radar_scored_listings': 0}
+2026-08-19 13:07:52 [warning  ] sold_comps_cache.connection_failed error=Error 22 connecting to localhost:6379. The remote computer refused the network connection.
+2026-08-19 13:07:52 [info     ] app.ready                      note=full pipeline enabled - ingest/eval/build workers + scheduler + queue processor + margin verifier + sold comps cache running
+2026-08-19 13:07:52 [info     ] opp4.startup                   stats_count=9
+2026-08-19 13:07:52 [debug    ] claude_eval_queue.worker_ready worker=1
+INFO:     127.0.0.1:55407 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:51094 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55407 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51094 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 13:07:54 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Hecate AMD Ryzen 5, NVIDIA RTX 5050, 16GB R
+2026-08-19 13:07:55 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT Astraeus AMD Ryzen 5, Radeon RX 9070 GRE, 1
+2026-08-19 13:07:57 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X49 X 49 Inch QD-OLED Curved Gaming
+INFO:     127.0.0.1:54221 - "GET /health HTTP/1.1" 200 OK
+2026-08-19 13:07:57 [debug    ] claude_eval_queue.worker_ready worker=2
+2026-08-19 13:07:57 [debug    ] part_gem_eval_queue.worker_ready worker=1
+2026-08-19 13:07:58 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram|ssd title=AWD-IT Atlas AMD Ryzen 5, Radeon RX 9070 XT 16GB ,
+INFO:     127.0.0.1:54233 - "GET /api/manual-builds/2/faqs HTTP/1.1" 200 OK
+2026-08-19 13:08:02 [debug    ] claude_eval_queue.worker_ready worker=3
+INFO:     127.0.0.1:55407 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:63752 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64850 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55407 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64850 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63752 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 13:08:04 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X32X5 31.5 Inch QD-OLED 240Hz Gaming
+2026-08-19 13:08:05 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator XB273U F5 27 Inch IPS 360Hz Gaming M

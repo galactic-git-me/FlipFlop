@@ -154,6 +154,7 @@ export interface ManualBuild {
   hero_photo_url: string | null;
   model_3d_url?: string | null;
   selected_faq_ids?: string[] | null;
+  selected_faq_answer_overrides?: Record<string, string>;
   storefront_product_id: number | null;
   // eBay Listing Configuration (optional until migration runs)
   ebay_condition?: string | null;
@@ -221,6 +222,7 @@ export interface BuildFaqSelection {
   selected_ids: string[];
   uses_defaults: boolean;
   maximum: number;
+  answer_overrides: Record<string, string>;
 }
 
 // The buyer's real delivery address, synced from the actual eBay order
@@ -577,11 +579,11 @@ export const api = {
     list: () => request<ManualBuildSummary[]>("/manual-builds/"),
     get: (id: number) => request<ManualBuild>(`/manual-builds/${id}`),
     getFaqs: (id: number) => request<BuildFaqSelection>(`/manual-builds/${id}/faqs`),
-    updateFaqs: (id: number, selectedIds: string[]) =>
+    updateFaqs: (id: number, selectedIds: string[], answerOverrides: Record<string, string>) =>
       request<{ selected_ids: string[]; selected_faqs: ProductFaq[] }>(`/manual-builds/${id}/faqs`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ selected_ids: selectedIds }),
+        body: JSON.stringify({ selected_ids: selectedIds, answer_overrides: answerOverrides }),
       }),
     create: (name: string) =>
       request<ManualBuild>("/manual-builds/", {

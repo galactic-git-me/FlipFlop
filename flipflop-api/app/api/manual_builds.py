@@ -70,6 +70,7 @@ class ComponentRatingsInput(BaseModel):
 
 class FaqSelectionInput(BaseModel):
     selected_ids: list[str] = Field(max_length=10)
+    answer_overrides: dict[str, str] = Field(default_factory=dict)
 
 
 def _description_with_selected_faqs(description: str, build: ManualBuild) -> str:
@@ -80,7 +81,7 @@ def _description_with_selected_faqs(description: str, build: ManualBuild) -> str
         description,
         flags=re.DOTALL,
     )
-    items = selected_faqs(build.id, build.selected_faq_ids)
+    items = selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides)
     return without_old + (render_ebay_faq_html(items) if items else "")
 
 _IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
@@ -265,11 +266,12 @@ async def get_build_faqs(build_id: int, db: AsyncSession = Depends(get_db)):
     ).scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
-    effective = selected_faqs(build.id, build.selected_faq_ids)
+    effective = selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides)
     return {
         "bank": FAQ_BANK,
         "selected_ids": [item["id"] for item in effective],
         "uses_defaults": build.selected_faq_ids is None,
+        "answer_overrides": build.selected_faq_answer_overrides or {},
         "maximum": 10,
     }
 
@@ -288,7 +290,16 @@ async def update_build_faqs(
     unknown = [item_id for item_id in body.selected_ids if item_id not in FAQ_BY_ID]
     if unknown:
         raise HTTPException(400, f"Unknown FAQ IDs: {', '.join(unknown)}")
+    unknown_overrides = [item_id for item_id in body.answer_overrides if item_id not in FAQ_BY_ID]
+    if unknown_overrides:
+        raise HTTPException(400, f"Unknown FAQ override IDs: {', '.join(unknown_overrides)}")
+    cleaned_overrides = {
+        item_id: answer.strip()
+        for item_id, answer in body.answer_overrides.items()
+        if answer.strip() and answer.strip() != FAQ_BY_ID[item_id]["answer"]
+    }
     build.selected_faq_ids = body.selected_ids
+    build.selected_faq_answer_overrides = cleaned_overrides
     if build.generated_description:
         build.generated_description = prepare_ebay_listing_description(
             _description_with_selected_faqs(build.generated_description, build)
@@ -298,10 +309,10 @@ async def update_build_faqs(
             await db.execute(select(Product).where(Product.id == build.storefront_product_id))
         ).scalar_one_or_none()
         if product:
-            product.selected_faqs = selected_faqs(build.id, body.selected_ids)
+            product.selected_faqs = selected_faqs(build.id, body.selected_ids, cleaned_overrides)
     build.updated_at = datetime.utcnow()
     await db.flush()
-    return {"selected_ids": body.selected_ids, "selected_faqs": selected_faqs(build.id, body.selected_ids)}
+    return {"selected_ids": body.selected_ids, "answer_overrides": cleaned_overrides, "selected_faqs": selected_faqs(build.id, body.selected_ids, cleaned_overrides)}
 
 
 @router.get("/{build_id}", response_model=ManualBuildOut)
@@ -1468,7 +1479,7 @@ async def list_on_storefront(
             product.title = build.generated_title
             product.description = build.generated_description
             product.model_3d_url = build.model_3d_url
-            product.selected_faqs = selected_faqs(build.id, build.selected_faq_ids)
+            product.selected_faqs = selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides)
             product.fulfilment_type = "prebuilt"
             product.handling_min_days = 1
             product.handling_max_days = 1
@@ -1496,7 +1507,7 @@ async def list_on_storefront(
         status=ProductStatus.LISTED,
         hero_photo_url=build.hero_photo_url,
         model_3d_url=build.model_3d_url,
-        selected_faqs=selected_faqs(build.id, build.selected_faq_ids),
+        selected_faqs=selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides),
         fulfilment_type="prebuilt",
         handling_min_days=1,
         handling_max_days=1,

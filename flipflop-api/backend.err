@@ -1,6 +1,7 @@
 C:\Users\mclar\CODING\FlipFlop\flipflop-api\app\routes\gems.py:85: FastAPIDeprecationWarning: `regex` has been deprecated, please use `pattern` instead
   risk_level: Optional[str] = Query(None, regex="^(low|medium|high)$"),
-INFO:     Started server process [47536]
+INFO:     Started server process [43284]
 INFO:     Waiting for application startup.
+Recovered 4 stuck 'processing' submissions: [55523, 55535, 55533, 55522]
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)

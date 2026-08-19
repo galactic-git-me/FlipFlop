@@ -126,6 +126,7 @@ export default function BuildDetailPage() {
   const [faqBank, setFaqBank] = useState<ProductFaq[]>([]);
   const [selectedFaqIds, setSelectedFaqIds] = useState<string[]>([]);
   const [faqUsesDefaults, setFaqUsesDefaults] = useState(false);
+  const [faqAnswerOverrides, setFaqAnswerOverrides] = useState<Record<string, string>>({});
   const [savingFaqs, setSavingFaqs] = useState(false);
 
   const [price, setPrice] = useState("");
@@ -166,6 +167,7 @@ export default function BuildDetailPage() {
       setFaqBank(result.bank);
       setSelectedFaqIds(result.selected_ids);
       setFaqUsesDefaults(result.uses_defaults);
+      setFaqAnswerOverrides(result.answer_overrides || {});
     }).catch(() => undefined);
   }, [buildId]);
 
@@ -190,9 +192,9 @@ export default function BuildDetailPage() {
   const saveFaqs = async () => {
     setSavingFaqs(true);
     try {
-      await api.manualBuilds.updateFaqs(buildId, selectedFaqIds);
+      await api.manualBuilds.updateFaqs(buildId, selectedFaqIds, faqAnswerOverrides);
       setBuild((current) => current ? { ...current, selected_faq_ids: selectedFaqIds } : current);
-      toast.success(`Saved ${selectedFaqIds.length} FAQs for eBay and FlipFlop.shop`);
+      toast.success(`Saved ${selectedFaqIds.length} FAQs and edited answers for eBay and FlipFlop.shop`);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not save FAQ selection");
     } finally {
@@ -1189,7 +1191,7 @@ export default function BuildDetailPage() {
                 className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-cyan-500 px-3 py-2 text-xs font-bold text-slate-950 transition-colors hover:bg-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {savingFaqs ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
-                Save selection
+                Save FAQs
               </button>
             </div>
           </div>
@@ -1198,9 +1200,9 @@ export default function BuildDetailPage() {
             {faqBank.map((faq) => {
               const selected = selectedFaqIds.includes(faq.id);
               return (
-                <label
+                <div
                   key={faq.id}
-                  className={`flex cursor-pointer items-start gap-3 rounded-xl border p-3.5 transition-colors ${selected ? "border-cyan-400/35 bg-cyan-400/[0.07]" : "border-white/[0.07] bg-black/10 hover:border-white/20"}`}
+                  className={`flex items-start gap-3 rounded-xl border p-3.5 transition-colors ${selected ? "border-cyan-400/35 bg-cyan-400/[0.07]" : "border-white/[0.07] bg-black/10 hover:border-white/20"}`}
                 >
                   <input
                     type="checkbox"
@@ -1209,12 +1211,34 @@ export default function BuildDetailPage() {
                     className="mt-1 h-4 w-4 shrink-0 accent-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
                     aria-label={`Include FAQ: ${faq.question}`}
                   />
-                  <span className="min-w-0">
+                  <span className="min-w-0 flex-1">
                     <span className="block text-[10px] font-bold uppercase tracking-wider text-cyan-400/80">{faq.category}</span>
                     <span className="mt-0.5 block text-sm font-semibold text-slate-100">{faq.question}</span>
-                    <span className="mt-1.5 block text-xs leading-relaxed text-slate-400">{faq.answer}</span>
+                    <textarea
+                      value={faqAnswerOverrides[faq.id] ?? faq.answer}
+                      onChange={(event) => {
+                        setFaqUsesDefaults(false);
+                        setFaqAnswerOverrides((current) => ({ ...current, [faq.id]: event.target.value }));
+                      }}
+                      rows={4}
+                      aria-label={`Answer for ${faq.question}`}
+                      className="mt-2 w-full resize-y rounded-lg border border-white/10 bg-slate-950/60 px-3 py-2 text-xs leading-relaxed text-slate-300 outline-none transition-colors focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20"
+                    />
+                    {faqAnswerOverrides[faq.id] !== undefined && (
+                      <button
+                        type="button"
+                        onClick={() => setFaqAnswerOverrides((current) => {
+                          const next = { ...current };
+                          delete next[faq.id];
+                          return next;
+                        })}
+                        className="mt-1 text-[11px] font-semibold text-slate-500 hover:text-cyan-300"
+                      >
+                        Restore default answer
+                      </button>
+                    )}
                   </span>
-                </label>
+                </div>
               );
             })}
           </div>

@@ -36,9 +36,17 @@ def default_faq_ids(build_id: int, count: int = 10) -> list[str]:
     return ids[:count]
 
 
-def selected_faqs(build_id: int, selected_ids: list[str] | None) -> list[dict]:
+def selected_faqs(
+    build_id: int,
+    selected_ids: list[str] | None,
+    answer_overrides: dict[str, str] | None = None,
+) -> list[dict]:
     ids = default_faq_ids(build_id) if selected_ids is None else selected_ids
-    return [FAQ_BY_ID[item_id] for item_id in ids if item_id in FAQ_BY_ID]
+    overrides = answer_overrides or {}
+    return [
+        {**FAQ_BY_ID[item_id], "answer": overrides.get(item_id, FAQ_BY_ID[item_id]["answer"])}
+        for item_id in ids if item_id in FAQ_BY_ID
+    ]
 
 
 def render_ebay_faq_html(items: list[dict]) -> str:

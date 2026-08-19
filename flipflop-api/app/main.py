@@ -791,6 +791,7 @@ async def _migrate_add_columns():
         ("manual_builds", "hero_photo_url",           "VARCHAR(500)"),
         ("manual_builds", "model_3d_url",              "VARCHAR(500)"),
         ("manual_builds", "selected_faq_ids",          "JSON"),
+        ("manual_builds", "selected_faq_answer_overrides", "JSON DEFAULT '{}'"),
         ("manual_builds", "storefront_product_id",    "INTEGER"),
         ("manual_builds", "delivery_min_days",         "INTEGER DEFAULT 1"),
         ("manual_builds", "delivery_max_days",         "INTEGER DEFAULT 2"),

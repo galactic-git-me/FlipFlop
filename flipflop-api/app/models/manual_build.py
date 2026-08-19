@@ -39,6 +39,9 @@ class ManualBuild(Base):
     # None means use the stable set of ten defaults; [] is an intentional
     # user choice to publish no FAQs.
     selected_faq_ids: Mapped[list | None] = mapped_column(JSON)
+    # Per-build answer text keyed by FAQ id. Questions/categories remain in
+    # the shared bank so copy can be tailored without duplicating the bank.
+    selected_faq_answer_overrides: Mapped[dict] = mapped_column(JSON, default=dict)
     storefront_product_id: Mapped[int | None] = mapped_column(Integer)
     # eBay Listing Configuration
     ebay_condition: Mapped[str | None] = mapped_column(String(30))  # NEW, USED_EXCELLENT, FOR_PARTS_OR_NOT_WORKING, etc.

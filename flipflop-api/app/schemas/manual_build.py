@@ -1,6 +1,6 @@
 # pc-flipper-backend/app/schemas/manual_build.py
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 
@@ -60,6 +60,7 @@ class ManualBuildOut(BaseModel):
     hero_photo_url: Optional[str]
     model_3d_url: Optional[str] = None
     selected_faq_ids: Optional[list[str]] = None
+    selected_faq_answer_overrides: dict[str, str] = Field(default_factory=dict)
     storefront_product_id: Optional[int]
     # eBay Listing Configuration
     ebay_condition: Optional[str] = None
