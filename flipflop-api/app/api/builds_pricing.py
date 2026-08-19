@@ -123,6 +123,9 @@ class MarketComparable(BaseModel):
     observed_or_sold_at: str | None = None
     url: str | None = None
     match_basis: str
+    # "sold" is reserved for a genuine marketplace completion date. Existing
+    # build sold-comp ingestion currently supplies only its retrieval time.
+    date_kind: str = "observed"
 
 
 class PriceAutomationStep(BaseModel):
@@ -283,6 +286,7 @@ async def _active_build_comparables(cpu_model: str | None, gpu_model: str | None
         source=row.source_name, title=row.title, price=round(row.price, 2), status="active",
         observed_or_sold_at=row.last_seen_at.isoformat() if row.last_seen_at else None,
         url=row.url, match_basis="Same CPU or GPU; verify full specification",
+        date_kind="observed",
     ) for row in rows]
 
 
@@ -334,6 +338,7 @@ async def _live_close_build_comparables(
                 source="eBay active", title=title, price=round(price, 2), status="active",
                 observed_or_sold_at=datetime.now(timezone.utc).isoformat(),
                 url=url or None, match_basis=f"Close match: {matched}",
+                date_kind="observed",
             )
             if key not in found or score > found[key][0]:
                 found[key] = (score, candidate)
@@ -573,6 +578,9 @@ async def get_build_pricing(
         source="eBay sold", title=comp.title or "Comparable gaming PC", price=comp.price,
         status="sold", observed_or_sold_at=comp.sold_at, url=comp.url,
         match_basis="Completed sale matched by CPU, GPU and RAM tolerance",
+        # The extension and current cache record when the comp was retrieved,
+        # not the eBay completion date. Do not present that as a sold date.
+        date_kind="observed",
     ) for comp in sold_comps_list]
     market_comparables = sold_market_comparables + live_close_comparables + active_comparables
 
