@@ -98,6 +98,14 @@ class MyOrderOut(BaseModel):
     case_price: float = 0.0
     chosen_week: Optional[str] = None
     promised_delivery_date: Optional[datetime] = None
+    actual_delivery_date: Optional[datetime] = None
+    estimated_delivery: Optional[datetime] = None
+    shipped_at: Optional[datetime] = None
+    delivered_at: Optional[datetime] = None
+    tracking_number: Optional[str] = None
+    carrier: Optional[str] = None
+    tracking_url: Optional[str] = None
+    live_tracking_available: bool = False
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=False)

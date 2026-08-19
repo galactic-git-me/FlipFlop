@@ -22,6 +22,19 @@ router = APIRouter(prefix="/api/orders", tags=["orders"])
 
 def _order_to_my_order_out(order: Order) -> MyOrderOut:
     specs = order.specs or {}
+    carrier = (order.carrier or "").strip()
+    tracking_url = None
+    carrier_urls = {
+        "royal_mail": "https://www.royalmail.com/track-your-item#/tracking-results/{}",
+        "parcelforce": "https://www.parcelforce.com/track-trace?trackNumber={}",
+        "dpd": "https://track.dpd.co.uk/parcels/{}",
+        "ups": "https://www.ups.com/track?loc=en_GB&tracknum={}",
+        "dhl": "https://www.dhl.com/gb-en/home/tracking/tracking-express.html?submit=1&tracking-id={}",
+        "fedex": "https://www.fedex.com/fedextrack/?trknbr={}",
+    }
+    if order.tracking_number:
+        template = carrier_urls.get(carrier.lower().replace(" ", "_"))
+        tracking_url = template.format(order.tracking_number) if template else None
     return MyOrderOut(
         id=order.id,
         order_id=order.order_id,
@@ -33,6 +46,14 @@ def _order_to_my_order_out(order: Order) -> MyOrderOut:
         case_price=specs.get("case_price", 0.0),
         chosen_week=specs.get("chosen_week"),
         promised_delivery_date=order.promised_delivery_date,
+        actual_delivery_date=order.actual_delivery_date,
+        estimated_delivery=order.estimated_delivery,
+        shipped_at=order.shipped_at,
+        delivered_at=order.delivered_at,
+        tracking_number=order.tracking_number,
+        carrier=carrier or None,
+        tracking_url=tracking_url,
+        live_tracking_available=False,
         created_at=order.created_at,
     )
 
