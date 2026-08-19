@@ -27,6 +27,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.gem_radar import router as gem_radar_router
 from app.database import Base, engine
 from app.workers.queue_processor import process_submission_queue
+from app.workers.database_cleaner import run_database_cleaner
 
 
 @asynccontextmanager
@@ -38,8 +39,10 @@ async def lifespan(app: FastAPI):
     # app/workers/queue_processor.py. Without this the queue table just
     # accumulates rows forever since nothing ever reads from it.
     worker_task = asyncio.create_task(process_submission_queue())
+    cleaner_task = asyncio.create_task(run_database_cleaner())
     yield
     worker_task.cancel()
+    cleaner_task.cancel()
     await engine.dispose()
 
 

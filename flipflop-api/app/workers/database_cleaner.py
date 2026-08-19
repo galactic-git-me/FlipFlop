@@ -13,7 +13,7 @@ log = structlog.get_logger()
 RETENTION = (
     ("gem_radar_decision_events", "created_at", "72 hours"),
     ("gem_radar_listing_demand_history", "observed_at", "48 hours"),
-    ("submission_queue", "created_at", "7 days"),
+    ("submission_queue", "created_at", "24 hours"),
     ("gem_radar_listing_observations", "observed_at", "30 days"),
     ("gem_radar_scored_listings", "scored_at", "30 days"),
 )

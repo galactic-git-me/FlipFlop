@@ -116,6 +116,10 @@ class SubmissionQueueService:
         submission.status = "completed"
         submission.completed_at = datetime.utcnow()
         submission.last_error = None
+        # The extracted listings are only needed while the job is pending or
+        # processing. Keeping every completed payload duplicated hundreds of
+        # megabytes of JSON into the live DB and every subsequent backup.
+        submission.listings_json = []
         await db.commit()
         await db.refresh(submission)
         logger.info(f"Completed submission {submission_id}")
