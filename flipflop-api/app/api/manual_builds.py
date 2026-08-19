@@ -4,10 +4,11 @@ import re
 import uuid
 import os
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 import shutil
 import httpx
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, UploadFile, File, Form, Query
+from jose import jwt
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -85,6 +86,46 @@ _BUILD_3D_ASSET_TYPES = (
 
 class QueueBuild3DAssetsInput(BaseModel):
     assets: dict[str, list[str]]
+
+
+@router.post("/{build_id}/portal-preview")
+async def create_build_portal_preview(
+    build_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    """Create a read-only customer portal preview for this build's sale order."""
+    build = (await db.execute(
+        select(ManualBuild).where(ManualBuild.id == build_id)
+    )).scalar_one_or_none()
+    if not build:
+        raise HTTPException(status_code=404, detail="Build not found")
+    if not build.storefront_product_id:
+        raise HTTPException(status_code=404, detail="This build does not have a customer order yet")
+
+    product = (await db.execute(
+        select(Product).where(Product.id == build.storefront_product_id)
+    )).scalar_one_or_none()
+    if not product or not product.sold_order_id:
+        raise HTTPException(status_code=404, detail="This build does not have a customer order yet")
+
+    now = datetime.now(timezone.utc)
+    settings = get_settings()
+    token = jwt.encode(
+        {
+            "typ": "portal_preview",
+            "order_id": product.sold_order_id,
+            "scope": "read",
+            "iat": now,
+            "exp": now + timedelta(minutes=15),
+        },
+        settings.secret_key,
+        algorithm=settings.jwt_algorithm,
+    )
+    return {
+        "order_id": product.sold_order_id,
+        "token": token,
+        "expires_at": (now + timedelta(minutes=15)).isoformat(),
+    }
 
 
 async def _run_build_3d_generation(build_id: int, requested: dict[str, list[str]]) -> None:

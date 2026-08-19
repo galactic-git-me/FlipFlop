@@ -697,14 +697,14 @@ export function HermesCompanion() {
       <button
         onClick={() => setOpen(!isOpen)}
         className={cn(
-          "fixed bottom-6 right-6 z-50 w-48 h-48 rounded-full overflow-hidden",
+          "fixed bottom-6 right-6 z-50 w-24 h-24 rounded-full overflow-hidden",
           "border-4 shadow-xl shadow-[#7c85ff]/30 transition-all duration-200",
           "hover:scale-110 hover:shadow-[#7c85ff]/50",
           isOpen ? "opacity-0 pointer-events-none" : "border-[#7c85ff]/60 scale-100",
         )}
         title="Chat with Hermes"
       >
-        <Image src="/pics/hermes.gif" alt="Hermes" fill sizes="192px" className="object-cover" unoptimized />
+        <Image src="/pics/hermes.gif" alt="Hermes" fill sizes="96px" className="object-cover" unoptimized />
       </button>
     </>
   );

@@ -130,6 +130,7 @@ export default function BuildDetailPage() {
   const [savingEbayConfig, setSavingEbayConfig] = useState(false);
   const [generatingCard, setGeneratingCard] = useState<"spec_card" | "registration_plate" | null>(null);
   const [listingOnStorefront, setListingOnStorefront] = useState(false);
+  const [openingPortal, setOpeningPortal] = useState(false);
   const [draggedUrl, setDraggedUrl] = useState<string | null>(null);
   const [dragOverUrl, setDragOverUrl] = useState<string | null>(null);
   const [showEbayPreview, setShowEbayPreview] = useState(false);
@@ -152,6 +153,26 @@ export default function BuildDetailPage() {
   const [performanceCardZipUrl, setPerformanceCardZipUrl] = useState<string | null>(null);
 
   const [activeTab, setActiveTab] = useState<"build" | "pricing" | "listing" | "media" | "specifics" | "faqs" | "shipping" | "fulfillment">("build");
+
+  const openCustomerPortal = async () => {
+    setOpeningPortal(true);
+    try {
+      const response = await fetch(`/api/manual-builds/${buildId}/portal-preview`, { method: "POST" });
+      const payload = await response.json() as { order_id?: number; token?: string; detail?: string };
+      if (!response.ok || !payload.order_id || !payload.token) {
+        throw new Error(payload.detail || "Could not create a customer portal preview");
+      }
+      window.open(
+        `https://theflipflop.shop/my-builds/${payload.order_id}?preview=${encodeURIComponent(payload.token)}`,
+        "_blank",
+        "noopener,noreferrer",
+      );
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not open the customer portal");
+    } finally {
+      setOpeningPortal(false);
+    }
+  };
 
   useEffect(() => {
     api.manualBuilds
@@ -708,6 +729,17 @@ export default function BuildDetailPage() {
       <div className="flex items-center gap-2 mb-6">
         <ChannelBadge label="eBay" icon={ShoppingBag} live={!!build.ebay_live} />
         <ChannelBadge label="FlipFlop.shop" icon={Store} live={!!build.storefront_live} />
+        {build.status === "sold" && (
+          <button
+            type="button"
+            onClick={() => void openCustomerPortal()}
+            disabled={openingPortal}
+            className="ml-auto inline-flex items-center gap-2 rounded-lg border border-cyan-400/30 bg-cyan-400/10 px-3 py-1.5 text-xs font-bold text-cyan-300 transition-colors hover:bg-cyan-400/20 disabled:cursor-wait disabled:opacity-60"
+          >
+            {openingPortal ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ExternalLink className="h-3.5 w-3.5" />}
+            View Customer Portal
+          </button>
+        )}
       </div>
 
       {/* Guided Steps Tabs */}
