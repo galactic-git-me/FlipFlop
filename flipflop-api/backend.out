@@ -1,0 +1,89 @@
+2026-08-19 11:51:13 [info     ] browser_pool.sigchld_reaper_skipped (Windows or no SIGCHLD support)
+2026-08-19 11:51:13 [info     ] app.startup                    app_env=dev event_loop_type=ProactorEventLoop
+2026-08-19 11:51:13 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-08-19 11:51:13 [info     ] listing_ingest_queue.started   max_queue=25000 workers=16
+2026-08-19 11:51:13 [info     ] claude_eval_queue.started      workers=6
+2026-08-19 11:51:13 [info     ] part_gem_eval_queue.started    workers=2
+2026-08-19 11:51:13 [info     ] scheduler.started              jobs=23
+2026-08-19 11:51:13 [debug    ] listing_ingest_queue.worker_ready worker=0
+2026-08-19 11:51:13 [debug    ] listing_ingest_queue.worker_ready worker=1
+2026-08-19 11:51:13 [debug    ] listing_ingest_queue.worker_ready worker=2
+2026-08-19 11:51:13 [debug    ] listing_ingest_queue.worker_ready worker=3
+2026-08-19 11:51:13 [debug    ] listing_ingest_queue.worker_ready worker=4
+2026-08-19 11:51:13 [debug    ] listing_ingest_queue.worker_ready worker=5
+2026-08-19 11:51:13 [debug    ] listing_ingest_queue.worker_ready worker=6
+2026-08-19 11:51:13 [debug    ] listing_ingest_queue.worker_ready worker=7
+2026-08-19 11:51:13 [debug    ] listing_ingest_queue.worker_ready worker=8
+2026-08-19 11:51:13 [debug    ] listing_ingest_queue.worker_ready worker=9
+2026-08-19 11:51:13 [debug    ] listing_ingest_queue.worker_ready worker=10
+2026-08-19 11:51:13 [debug    ] listing_ingest_queue.worker_ready worker=11
+2026-08-19 11:51:13 [debug    ] listing_ingest_queue.worker_ready worker=12
+2026-08-19 11:51:13 [debug    ] listing_ingest_queue.worker_ready worker=13
+2026-08-19 11:51:13 [debug    ] listing_ingest_queue.worker_ready worker=14
+2026-08-19 11:51:13 [debug    ] listing_ingest_queue.worker_ready worker=15
+2026-08-19 11:51:13 [debug    ] claude_eval_queue.worker_ready worker=0
+2026-08-19 11:51:13 [debug    ] part_gem_eval_queue.worker_ready worker=0
+2026-08-19 11:51:13 [info     ] runtime.preflight.antibot.disabled
+2026-08-19 11:51:13 [info     ] queue_processor.started        workers=15
+2026-08-19 11:51:13 [info     ] margin_verifier.worker_started
+2026-08-19 11:51:13 [warning  ] ram_watcher.fetch_failed       reason=no_oauth_or_error subreddit=buildapcsales
+2026-08-19 11:51:13 [warning  ] ram_watcher.fetch_failed       reason=no_oauth_or_error subreddit=buildapcuk
+2026-08-19 11:51:13 [info     ] ram_watcher.done               checked=0 deals=0
+2026-08-19 11:51:17 [warning  ] sold_comps_cache.connection_failed error=Error 22 connecting to localhost:6379. The remote computer refused the network connection.
+2026-08-19 11:51:17 [info     ] app.ready                      note=full pipeline enabled - ingest/eval/build workers + scheduler + queue processor + margin verifier + sold comps cache running
+2026-08-19 11:51:17 [info     ] opp4.startup                   stats_count=9
+2026-08-19 11:51:18 [debug    ] claude_eval_queue.worker_ready worker=1
+2026-08-19 11:51:19 [info     ] database_cleaner.completed     deleted={'gem_radar_decision_events': 0, 'gem_radar_listing_demand_history': 53308, 'submission_queue': 281, 'gem_radar_listing_observations': 0, 'gem_radar_scored_listings': 0}
+2026-08-19 11:51:23 [debug    ] claude_eval_queue.worker_ready worker=2
+2026-08-19 11:51:23 [debug    ] part_gem_eval_queue.worker_ready worker=1
+INFO:     127.0.0.1:56881 - "GET /api/builds/2/pricing HTTP/1.1" 200 OK
+2026-08-19 11:51:28 [debug    ] claude_eval_queue.worker_ready worker=3
+2026-08-19 11:51:33 [debug    ] claude_eval_queue.worker_ready worker=4
+INFO:     127.0.0.1:55111 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59066 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62230 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55111 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62230 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59066 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 11:51:38 [debug    ] claude_eval_queue.worker_ready worker=5
+INFO:     127.0.0.1:60447 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60447 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57405 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:57405 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:57405 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57405 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60571 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49873 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49873 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49873 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64356 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64356 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52551 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52551 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53678 - "OPTIONS /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52551 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52551 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53678 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53678 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50306 - "OPTIONS /api/playbooks/proposals/?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54841 - "OPTIONS /api/alerts/?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59627 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54582 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54841 - "OPTIONS /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59627 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54582 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 11:53:13 [info     ] ebay_sales_tracker.poll_complete found=0 matched=0 updated=0
+INFO:     127.0.0.1:52979 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52979 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50454 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60030 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50454 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60030 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50706 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50706 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59266 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59266 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59266 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55216 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:55216 - "GET /api/settings/ HTTP/1.1" 200 OK
