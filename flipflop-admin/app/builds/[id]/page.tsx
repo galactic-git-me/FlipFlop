@@ -565,16 +565,16 @@ export default function BuildDetailPage() {
   };
 
   const queue3dModels = async () => {
-    const assets = Object.fromEntries(Object.entries(selected3dPhotos).filter(([, urls]) => urls.length > 0));
-    if (!Object.keys(assets).length) {
-      toast.error("Select at least one photo for a 3D asset");
+    const completeBuildPhotos = selected3dPhotos.complete_build ?? [];
+    if (!completeBuildPhotos.length) {
+      toast.error("Select at least one photo of the real completed PC");
       return;
     }
     setQueueing3dModels(true);
     try {
-      const result = await api.manualBuilds.generate3dAssets(buildId, assets);
+      const result = await api.manualBuilds.generate3dAssets(buildId, { complete_build: completeBuildPhotos });
       setBuild((current) => current ? { ...current, model_3d_assets: result.assets } : current);
-      toast.success(`${result.queued.length} separate 3D generation job${result.queued.length === 1 ? "" : "s"} queued`);
+      toast.success(`${result.queued.length} 3D models queued using your PC photos and curated manufacturer references`);
       setSelected3dPhotos({});
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not queue 3D generation");
@@ -1051,17 +1051,17 @@ export default function BuildDetailPage() {
                   <Sparkles className="h-4 w-4 text-cyan-300" /> Generate 3D assets from photos
                 </p>
                 <p className="mt-1 max-w-2xl text-[11px] leading-5 text-slate-400">
-                  Choose one to four views of the same object for each asset. Every row goes directly to the Meshy image-to-3D API; spec cards and performance cards are never included.
+                  Choose only the real finished-PC photos. Component models are generated automatically from the curated manufacturer and professional reference library.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={queue3dModels}
-                disabled={queueing3dModels || regularPhotos.length === 0 || !Object.values(selected3dPhotos).some((urls) => urls.length)}
+                disabled={queueing3dModels || regularPhotos.length === 0 || !(selected3dPhotos.complete_build?.length)}
                 className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg bg-cyan-400 px-4 py-2 text-sm font-black text-slate-950 transition-colors hover:bg-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-200 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {queueing3dModels ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-                Queue selected models
+                Generate all 3D models
               </button>
             </div>
 
@@ -1081,7 +1081,9 @@ export default function BuildDetailPage() {
                           <p className="mt-0.5 text-[10px] text-slate-500">{target.hint}</p>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-mono text-slate-500">{selected.length}/4 selected</span>
+                          <span className="text-[10px] font-mono text-slate-500">
+                            {target.key === "complete_build" ? `${selected.length}/4 selected` : "Automatic references"}
+                          </span>
                           {existing && (
                             <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase ${
                               existing.status === "succeeded" ? "border-emerald-400/25 bg-emerald-400/10 text-emerald-300" :
@@ -1092,8 +1094,9 @@ export default function BuildDetailPage() {
                           {existing?.glb_url && <a href={existing.glb_url} target="_blank" rel="noreferrer" className="text-[10px] font-bold text-cyan-300 hover:text-cyan-200">Open GLB</a>}
                         </div>
                       </div>
-                      <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
-                        {regularPhotos.map((photo, index) => {
+                      {target.key === "complete_build" ? (
+                        <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+                          {regularPhotos.map((photo, index) => {
                           const isSelected = selected.includes(photo.url);
                           return (
                             <button
@@ -1110,9 +1113,14 @@ export default function BuildDetailPage() {
                                 {isSelected ? selected.indexOf(photo.url) + 1 : index + 1}
                               </span>
                             </button>
-                          );
-                        })}
-                      </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <p className="mt-3 rounded-lg border border-emerald-400/15 bg-emerald-400/[0.04] px-3 py-2 text-[10px] leading-4 text-emerald-200/80">
+                          No selection needed. The backend supplies the approved professional reference views for this component.
+                        </p>
+                      )}
                       {existing?.error && <p className="mt-2 text-[10px] text-red-300">{existing.error}</p>}
                     </section>
                   );

@@ -32,7 +32,7 @@
       "identity": "Palit GeForce RTX 3070 GameRock",
       "confidence": "exact model, mixed manufacturer and retailer sources",
       "source_page": "https://www.palit.com/palit/vgapro.php?id=3811&lang=en&tab=ga",
-      "files": ["01-front.jpg", "02-angle.jpg", "03-card-and-box.jpg", "04-angle.webp", "05-front.jpg"]
+      "files": ["01-front.jpg", "02-angle.jpg", "04-angle.webp", "05-front.jpg"]
     },
     "ram": {
       "identity": "Lexar THOR OC DDR5 product family",

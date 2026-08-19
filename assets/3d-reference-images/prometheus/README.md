@@ -1,6 +1,6 @@
 # PROMETHEUS 3D reference images
 
-Source images are grouped by the asset keys accepted by the build 3D-generation endpoint. Each generation should use no more than four images showing the same physical object.
+Source images are grouped by the asset keys accepted by the build 3D-generation endpoint. The operator selects only the original `complete_build` photographs. The backend automatically publishes and submits up to four curated professional references for every component asset.
 
 ## Readiness
 

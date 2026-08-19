@@ -184,21 +184,51 @@ async def queue_build_3d_generation(
     build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
     if not build:
         raise HTTPException(status_code=404, detail="Build not found")
-    if not body.assets:
-        raise HTTPException(status_code=422, detail="Select photos for at least one 3D asset")
-    unknown = set(body.assets) - set(_BUILD_3D_ASSET_TYPES)
+    unknown = set(body.assets) - {"complete_build"}
     if unknown:
-        raise HTTPException(status_code=422, detail=f"Unknown 3D asset types: {', '.join(sorted(unknown))}")
+        raise HTTPException(status_code=422, detail="Only complete-build photos can be selected manually")
+    complete_build_urls = body.assets.get("complete_build", [])
+    if not complete_build_urls:
+        raise HTTPException(status_code=422, detail="Select photos of the real completed PC")
     valid_urls = {p.get("url") for p in (build.photos or []) if p.get("kind") == "photo"}
-    for asset_type, urls in body.assets.items():
-        if not 1 <= len(urls) <= 4:
-            raise HTTPException(status_code=422, detail=f"{asset_type} needs 1 to 4 photos")
-        if len(set(urls)) != len(urls) or any(url not in valid_urls for url in urls):
-            raise HTTPException(status_code=422, detail=f"{asset_type} contains an invalid or duplicate photo")
+    if not 1 <= len(complete_build_urls) <= 4:
+        raise HTTPException(status_code=422, detail="The complete build needs 1 to 4 photos")
+    if len(set(complete_build_urls)) != len(complete_build_urls) or any(url not in valid_urls for url in complete_build_urls):
+        raise HTTPException(status_code=422, detail="The complete build contains an invalid or duplicate photo")
+
+    curated_root = _CURATED_3D_REFERENCE_ROOT / re.sub(r"[^a-z0-9]+", "-", build.name.lower()).strip("-")
+    manifest_path = curated_root / "manifest.json"
+    if not manifest_path.exists():
+        raise HTTPException(status_code=422, detail=f"No curated manufacturer-photo library exists for {build.name}")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    requested = {"complete_build": complete_build_urls}
+    sync_jobs = []
+    for asset_type in _BUILD_3D_ASSET_TYPES:
+        if asset_type == "complete_build":
+            continue
+        entry = (manifest.get("assets") or {}).get(asset_type) or {}
+        filenames = list(entry.get("files") or [])[:4]
+        if not filenames:
+            raise HTTPException(status_code=422, detail=f"Curated references are missing for {asset_type}")
+        public_urls = []
+        for index, filename in enumerate(filenames, start=1):
+            source = curated_root / asset_type / filename
+            if not source.is_file():
+                raise HTTPException(status_code=422, detail=f"Missing curated reference: {asset_type}/{filename}")
+            public_name = f"build_{build.id}_{asset_type}_reference_{index}{source.suffix.lower()}"
+            public_path = _PUBLIC_MEDIA_ROOT / public_name
+            public_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, public_path)
+            sync_jobs.append(sync_to_public_media(public_path))
+            public_urls.append(f"https://theflipflop.shop/media/{public_name}")
+        requested[asset_type] = public_urls
+
+    if not all(await asyncio.gather(*sync_jobs)):
+        raise HTTPException(status_code=503, detail="Could not publish every manufacturer reference image for Meshy")
 
     assets = dict(build.model_3d_assets or {})
     queued_at = datetime.utcnow().isoformat()
-    for asset_type, urls in body.assets.items():
+    for asset_type, urls in requested.items():
         assets[asset_type] = {
             "provider": "meshy",
             "status": "queued",
@@ -207,8 +237,8 @@ async def queue_build_3d_generation(
         }
     build.model_3d_assets = assets
     await db.commit()
-    background_tasks.add_task(_run_build_3d_generation, build_id, body.assets)
-    return {"queued": list(body.assets), "assets": assets}
+    background_tasks.add_task(_run_build_3d_generation, build_id, requested)
+    return {"queued": list(requested), "assets": assets}
 
 
 def _description_with_selected_faqs(description: str, build: ManualBuild) -> str:
@@ -226,6 +256,7 @@ _IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 _MAX_IMAGE_BYTES = 15 * 1024 * 1024  # 15 MB
 _UPLOADS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "manual_builds"
 _PUBLIC_MEDIA_ROOT = Path(__file__).resolve().parent.parent.parent.parent / "FlipFlop.shop" / "public" / "media"
+_CURATED_3D_REFERENCE_ROOT = Path(__file__).resolve().parents[3] / "assets" / "3d-reference-images"
 _SELLING_PRINCIPLES_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "selling_principles.md"
 _EBAY_LISTING_SYSTEM_PROMPT_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "ebay_listing_system_prompt.md"
 
