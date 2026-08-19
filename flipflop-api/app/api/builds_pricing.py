@@ -34,6 +34,7 @@ log = structlog.get_logger(__name__)
 router = APIRouter(prefix="/api/builds", tags=["builds"])
 
 _RAM_GB_PATTERN = re.compile(r"(\d+)\s*(?:gb|gig|gigabyte)\b", re.IGNORECASE)
+_STORAGE_CAPACITY_PATTERN = re.compile(r"(\d+)\s*(tb|gb)\b", re.IGNORECASE)
 _RAM_TOLERANCE_GB = 8  # comps within +/- this many GB of the build's actual RAM are treated as comparable
 
 
@@ -192,11 +193,26 @@ async def _component_valuations(components: list[dict]) -> list[ComponentValuati
             identity = resolve_identity(name)
             model = identity.model or ""
             observed: list[float] = []
+            listing_match = None
             if len(model) >= 4:
+                listing_match = Listing.title.ilike(f"%{model}%")
+            elif identity.category == "ssd" and identity.brand:
+                # Generic but still useful descriptions such as "Samsung 1TB
+                # M.2 NVMe SSD" do not resolve to a model. Match the recorded
+                # brand, capacity and drive type instead of treating them as £0.
+                capacity_match = _STORAGE_CAPACITY_PATTERN.search(name)
+                if capacity_match:
+                    capacity = "".join(capacity_match.groups()).upper()
+                    listing_match = and_(
+                        Listing.title.ilike(f"%{identity.brand}%"),
+                        Listing.title.ilike(f"%{capacity}%"),
+                        or_(Listing.title.ilike("%NVMe%"), Listing.title.ilike("%M.2%")),
+                    )
+            if listing_match is not None:
                 rows = (await db.execute(
                     select(Listing.price).where(
                         Listing.status == ListingStatus.active,
-                        Listing.title.ilike(f"%{model}%"),
+                        listing_match,
                         Listing.price > 0,
                     ).order_by(Listing.last_seen_at.desc()).limit(12)
                 )).scalars().all()
