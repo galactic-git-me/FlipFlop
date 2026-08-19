@@ -79,13 +79,17 @@ function Confidence({ value }: { value: string }) {
 function cohortStats(items: Comparable[]) {
   const prices = items.map((item) => item.price).sort((a, b) => a - b);
   if (!prices.length) return null;
+  const percentile = (fraction: number) => {
+    const index = (prices.length - 1) * fraction;
+    const lower = Math.floor(index);
+    const upper = Math.min(lower + 1, prices.length - 1);
+    const weight = index - lower;
+    return prices[lower] * (1 - weight) + prices[upper] * weight;
+  };
   return {
-    low: prices[0],
-    mid:
-      prices.length % 2
-        ? prices[(prices.length - 1) / 2]
-        : (prices[prices.length / 2 - 1] + prices[prices.length / 2]) / 2,
-    high: prices[prices.length - 1],
+    low: percentile(0.25),
+    mid: percentile(0.5),
+    high: percentile(0.75),
   };
 }
 
