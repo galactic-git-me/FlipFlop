@@ -106,6 +106,7 @@ class MyOrderOut(BaseModel):
     carrier: Optional[str] = None
     tracking_url: Optional[str] = None
     live_tracking_available: bool = False
+    capture_3d: Optional[Dict[str, Any]] = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=False)

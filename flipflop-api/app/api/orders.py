@@ -3,7 +3,7 @@ from sqlalchemy import func, select, and_, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta, date
 from app.database import get_db
-from app.models import Order, BuildCapacity, BuildCapacityOverride, CustomerProblem, CXDocument
+from app.models import Order, BuildCapacity, BuildCapacityOverride, CustomerProblem, CXDocument, Capture3DAsset, Capture3DStatus
 from app.models.customer import Customer
 from app.routes.auth import get_current_user
 from app.routes.admin_auth import get_current_admin
@@ -21,7 +21,7 @@ from app.schemas.customer_portal import CustomerDocumentOut, CustomerProblemCrea
 router = APIRouter(prefix="/api/orders", tags=["orders"])
 
 
-def _order_to_my_order_out(order: Order) -> MyOrderOut:
+def _order_to_my_order_out(order: Order, capture_3d: Capture3DAsset | None = None) -> MyOrderOut:
     specs = order.specs or {}
     carrier = (order.carrier or "").strip()
     tracking_url = None
@@ -55,6 +55,13 @@ def _order_to_my_order_out(order: Order) -> MyOrderOut:
         carrier=carrier or None,
         tracking_url=tracking_url,
         live_tracking_available=False,
+        capture_3d=(
+            {"status": capture_3d.status.value if hasattr(capture_3d.status, "value") else str(capture_3d.status),
+             "optimized_asset_ref": capture_3d.optimized_asset_ref,
+             "preview_image_ref": capture_3d.preview_image_ref,
+             "ar_ready": bool(capture_3d.ar_ready)}
+            if capture_3d and capture_3d.status == Capture3DStatus.PUBLISHED and capture_3d.optimized_asset_ref else None
+        ),
         created_at=order.created_at,
     )
 
@@ -160,7 +167,10 @@ async def list_my_orders(
         .where(Order.customer_id == customer.id)
         .order_by(Order.created_at.desc())
     )
-    return [_order_to_my_order_out(o) for o in result.scalars().all()]
+    orders = result.scalars().all()
+    assets = (await db.execute(select(Capture3DAsset).where(Capture3DAsset.order_id.in_([o.id for o in orders])))).scalars().all() if orders else []
+    assets_by_order = {asset.order_id: asset for asset in assets}
+    return [_order_to_my_order_out(o, assets_by_order.get(o.id)) for o in orders]
 
 
 @router.get("/{order_id}", response_model=MyOrderOut)
@@ -176,7 +186,8 @@ async def get_my_order(
     order = result.scalar_one_or_none()
     if not order or order.customer_id != customer.id:
         raise HTTPException(status_code=404, detail="Order not found")
-    return _order_to_my_order_out(order)
+    asset = (await db.execute(select(Capture3DAsset).where(Capture3DAsset.order_id == order.id))).scalar_one_or_none()
+    return _order_to_my_order_out(order, asset)
 
 
 async def _owned_order(order_id: int, customer: Customer, db: AsyncSession) -> Order:
