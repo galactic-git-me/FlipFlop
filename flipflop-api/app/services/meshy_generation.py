@@ -23,6 +23,7 @@ from app.config import get_settings
 log = structlog.get_logger(__name__)
 
 _MESHY_BASE = "https://api.meshy.ai/openapi/v2/text-to-3d"
+_MESHY_MULTI_IMAGE_BASE = "https://api.meshy.ai/openapi/v1/multi-image-to-3d"
 _POLL_INTERVAL_SECONDS = 5
 _MAX_POLL_ATTEMPTS = 120  # ~10 minutes ceiling — Meshy generations typically finish well inside this
 
@@ -103,6 +104,59 @@ async def generate_family_asset(prompt: str) -> MeshyGenerationResult | None:
 
     log.warning("meshy_generation.timed_out", task_id=task_id)
     return MeshyGenerationResult(task_id=task_id, status="TIMED_OUT", glb_url=None, thumbnail_url=None, poly_count=None)
+
+
+async def generate_multi_image_asset(image_urls: list[str]) -> MeshyGenerationResult | None:
+    """Generate one textured GLB from one to four views of the same object."""
+    settings = get_settings()
+    if not settings.meshy_api_key:
+        log.warning("meshy_generation.no_api_key")
+        return None
+    if not 1 <= len(image_urls) <= 4:
+        raise ValueError("Meshy multi-image generation requires 1 to 4 images")
+
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            response = await client.post(
+                _MESHY_MULTI_IMAGE_BASE,
+                headers=_headers(),
+                json={
+                    "image_urls": image_urls,
+                    "should_texture": True,
+                    "enable_pbr": True,
+                    "target_formats": ["glb"],
+                },
+            )
+            response.raise_for_status()
+            task_id = response.json().get("result")
+            if not task_id:
+                return None
+    except httpx.HTTPError as exc:
+        log.warning("meshy_generation.multi_image_submit_failed", error=str(exc))
+        return None
+
+    for attempt in range(_MAX_POLL_ATTEMPTS):
+        await asyncio.sleep(_POLL_INTERVAL_SECONDS)
+        try:
+            async with httpx.AsyncClient(timeout=30) as client:
+                response = await client.get(f"{_MESHY_MULTI_IMAGE_BASE}/{task_id}", headers=_headers())
+                response.raise_for_status()
+                data = response.json()
+        except httpx.HTTPError as exc:
+            log.warning("meshy_generation.multi_image_poll_failed", attempt=attempt, error=str(exc))
+            continue
+        status = data.get("status", "")
+        if status == "SUCCEEDED":
+            return MeshyGenerationResult(
+                task_id=task_id,
+                status=status,
+                glb_url=(data.get("model_urls") or {}).get("glb"),
+                thumbnail_url=data.get("thumbnail_url"),
+                poly_count=None,
+            )
+        if status in ("FAILED", "CANCELED"):
+            return MeshyGenerationResult(task_id, status, None, None, None)
+    return MeshyGenerationResult(task_id, "TIMED_OUT", None, None, None)
 
 
 def build_prompt(category: str, family_key: str) -> str:

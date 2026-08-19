@@ -54,6 +54,14 @@ const EBAY_CONDITIONS: { value: string; label: string }[] = [
   { value: "FOR_PARTS_OR_NOT_WORKING", label: "For Parts / Not Working" },
 ];
 
+const BUILD_3D_TARGETS = [
+  { key: "complete_build", label: "Complete build", hint: "Use clean exterior angles of the finished PC." },
+  { key: "chassis", label: "PC chassis", hint: "Use empty-case or unobstructed chassis views." },
+  { key: "motherboard", label: "Motherboard", hint: "Use top-down and angled board views." },
+  { key: "cpu", label: "CPU", hint: "Use close, sharp views of the processor only." },
+  { key: "gpu", label: "GPU", hint: "Use front, rear and connector-side views." },
+] as const;
+
 function TabButton({
   label,
   icon: Icon,
@@ -111,6 +119,8 @@ export default function BuildDetailPage() {
   const [posting, setPosting] = useState(false);
   const [uploadingPhotos, setUploadingPhotos] = useState(false);
   const [uploading3dModel, setUploading3dModel] = useState(false);
+  const [queueing3dModels, setQueueing3dModels] = useState(false);
+  const [selected3dPhotos, setSelected3dPhotos] = useState<Record<string, string[]>>({});
   const [savingAspects, setSavingAspects] = useState(false);
   const [generatingSpecifics, setGeneratingSpecifics] = useState(false);
   const [savingEbayConfig, setSavingEbayConfig] = useState(false);
@@ -178,6 +188,17 @@ export default function BuildDetailPage() {
       setFaqAnswerOverrides(result.answer_overrides || {});
     }).catch(() => undefined);
   }, [buildId]);
+
+  useEffect(() => {
+    const pending = Object.values(build?.model_3d_assets ?? {}).some((asset) =>
+      asset.status === "queued" || asset.status === "processing"
+    );
+    if (!pending) return;
+    const timer = window.setInterval(() => {
+      api.manualBuilds.get(buildId).then(setBuild).catch(() => undefined);
+    }, 5000);
+    return () => window.clearInterval(timer);
+  }, [buildId, build?.model_3d_assets]);
 
   const toggleFaq = (faqId: string) => {
     setFaqUsesDefaults(false);
@@ -503,6 +524,37 @@ export default function BuildDetailPage() {
     } finally {
       setUploading3dModel(false);
       if (model3dInputRef.current) model3dInputRef.current.value = "";
+    }
+  };
+
+  const toggle3dPhoto = (assetType: string, url: string) => {
+    setSelected3dPhotos((current) => {
+      const selected = current[assetType] ?? [];
+      if (selected.includes(url)) return { ...current, [assetType]: selected.filter((item) => item !== url) };
+      if (selected.length >= 4) {
+        toast.error("Meshy accepts up to four views for each model");
+        return current;
+      }
+      return { ...current, [assetType]: [...selected, url] };
+    });
+  };
+
+  const queue3dModels = async () => {
+    const assets = Object.fromEntries(Object.entries(selected3dPhotos).filter(([, urls]) => urls.length > 0));
+    if (!Object.keys(assets).length) {
+      toast.error("Select at least one photo for a 3D asset");
+      return;
+    }
+    setQueueing3dModels(true);
+    try {
+      const result = await api.manualBuilds.generate3dAssets(buildId, assets);
+      setBuild((current) => current ? { ...current, model_3d_assets: result.assets } : current);
+      toast.success(`${result.queued.length} separate 3D generation job${result.queued.length === 1 ? "" : "s"} queued`);
+      setSelected3dPhotos({});
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not queue 3D generation");
+    } finally {
+      setQueueing3dModels(false);
     }
   };
 
@@ -952,6 +1004,84 @@ export default function BuildDetailPage() {
             </button>
             {regularPhotos.length > 0 && !build.hero_photo_url && (
               <p className="text-[11px] text-amber-400 mt-2">Click the star on a photo to set it as the hero image.</p>
+            )}
+          </div>
+
+          {/* Image-to-3D generation */}
+          <div className="rounded-xl border border-cyan-400/20 bg-cyan-400/[0.035] p-4 sm:p-5">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p className="flex items-center gap-2 text-sm font-bold text-slate-100">
+                  <Sparkles className="h-4 w-4 text-cyan-300" /> Generate 3D assets from photos
+                </p>
+                <p className="mt-1 max-w-2xl text-[11px] leading-5 text-slate-400">
+                  Choose one to four views of the same object for each asset. Every row is sent as a separate Meshy job, so spec cards and performance cards are never included.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={queue3dModels}
+                disabled={queueing3dModels || regularPhotos.length === 0 || !Object.values(selected3dPhotos).some((urls) => urls.length)}
+                className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg bg-cyan-400 px-4 py-2 text-sm font-black text-slate-950 transition-colors hover:bg-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-200 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                {queueing3dModels ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                Queue selected models
+              </button>
+            </div>
+
+            {regularPhotos.length === 0 ? (
+              <p className="mt-4 rounded-lg border border-amber-400/20 bg-amber-400/[0.05] p-3 text-xs text-amber-200">Upload ordinary build photos first.</p>
+            ) : (
+              <div className="mt-5 space-y-3">
+                {BUILD_3D_TARGETS.map((target) => {
+                  const selected = selected3dPhotos[target.key] ?? [];
+                  const existing = build.model_3d_assets?.[target.key];
+                  const pending = existing?.status === "queued" || existing?.status === "processing";
+                  return (
+                    <section key={target.key} className="rounded-xl border border-white/[0.08] bg-slate-950/45 p-3" aria-labelledby={`asset-${target.key}`}>
+                      <div className="flex flex-wrap items-start justify-between gap-2">
+                        <div>
+                          <h3 id={`asset-${target.key}`} className="text-xs font-bold text-slate-200">{target.label}</h3>
+                          <p className="mt-0.5 text-[10px] text-slate-500">{target.hint}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-mono text-slate-500">{selected.length}/4 selected</span>
+                          {existing && (
+                            <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase ${
+                              existing.status === "succeeded" ? "border-emerald-400/25 bg-emerald-400/10 text-emerald-300" :
+                              existing.status === "failed" ? "border-red-400/25 bg-red-400/10 text-red-300" :
+                              "border-amber-400/25 bg-amber-400/10 text-amber-300"
+                            }`}>{pending && <Loader2 className="mr-1 inline h-2.5 w-2.5 animate-spin" />}{existing.status}</span>
+                          )}
+                          {existing?.glb_url && <a href={existing.glb_url} target="_blank" rel="noreferrer" className="text-[10px] font-bold text-cyan-300 hover:text-cyan-200">Open GLB</a>}
+                        </div>
+                      </div>
+                      <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+                        {regularPhotos.map((photo, index) => {
+                          const isSelected = selected.includes(photo.url);
+                          return (
+                            <button
+                              key={photo.url}
+                              type="button"
+                              onClick={() => toggle3dPhoto(target.key, photo.url)}
+                              aria-pressed={isSelected}
+                              aria-label={`${isSelected ? "Remove" : "Use"} photo ${index + 1} for ${target.label}`}
+                              className={`relative h-20 w-20 shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 ${isSelected ? "border-cyan-300" : "border-white/10 hover:border-white/30"}`}
+                            >
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img src={photo.url} alt="" className="h-full w-full object-cover" />
+                              <span className={`absolute right-1 top-1 grid h-5 w-5 place-items-center rounded-full text-[10px] font-black ${isSelected ? "bg-cyan-300 text-slate-950" : "bg-slate-950/80 text-slate-300"}`}>
+                                {isSelected ? selected.indexOf(photo.url) + 1 : index + 1}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {existing?.error && <p className="mt-2 text-[10px] text-red-300">{existing.error}</p>}
+                    </section>
+                  );
+                })}
+              </div>
             )}
           </div>
 

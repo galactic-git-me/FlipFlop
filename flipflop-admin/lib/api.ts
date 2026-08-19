@@ -153,6 +153,7 @@ export interface ManualBuild {
   evidence_data?: Record<string, unknown>;
   hero_photo_url: string | null;
   model_3d_url?: string | null;
+  model_3d_assets?: Record<string, Build3DAsset>;
   selected_faq_ids?: string[] | null;
   selected_faq_answer_overrides?: Record<string, string>;
   storefront_product_id: number | null;
@@ -208,6 +209,18 @@ export interface CourierQuote {
   protection_scope: "loss_only" | "loss_and_damage" | "unknown";
   full_value_damage_cover: boolean;
   protection_warning: string;
+}
+
+export interface Build3DAsset {
+  provider: "meshy" | "modly";
+  status: "queued" | "processing" | "succeeded" | "failed";
+  source_image_urls: string[];
+  task_id?: string;
+  glb_url?: string;
+  preview_url?: string | null;
+  error?: string;
+  queued_at?: string;
+  completed_at?: string;
 }
 
 export interface InsuranceQuote {
@@ -735,6 +748,11 @@ export const api = {
       }
       return res.json();
     },
+    generate3dAssets: (id: number, assets: Record<string, string[]>) =>
+      request<{ queued: string[]; assets: Record<string, Build3DAsset> }>(`/manual-builds/${id}/model-3d/generate`, {
+        method: "POST",
+        body: JSON.stringify({ assets }),
+      }),
     removePhoto: (id: number, url: string) =>
       request<ManualBuild>(`/manual-builds/${id}/photos`, { method: "DELETE", body: JSON.stringify({ url }) }),
     reorderPhotos: (id: number, urls: string[]) =>

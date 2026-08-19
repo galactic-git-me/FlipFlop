@@ -1,15 +1,17 @@
 import json
+import asyncio
 import re
 import uuid
 import os
 from pathlib import Path
 from datetime import datetime
 import shutil
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Query
+import httpx
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, UploadFile, File, Form, Query
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from app.database import get_db
+from app.database import AsyncSessionLocal, get_db
 from app.models.manual_build import ManualBuild
 from app.models.gem_radar_intelligence import ComponentRatingEvent, PreferredComponent
 from app.models.build import Build, BuildType, BuildStatus
@@ -46,6 +48,7 @@ from app.services.ebay_shipping_fulfillment import mark_order_shipped, EbayShipp
 from app.services.ebay_listing_withdraw import withdraw_listing_by_sku, EbayListingWithdrawError
 from app.services.cross_channel_guard import withdraw_storefront_for_sold_build
 from app.services.media_sync import sync_to_public_media
+from app.services.meshy_generation import generate_multi_image_asset
 from app.services.product_faqs import FAQ_BANK, FAQ_BY_ID, selected_faqs, render_ebay_faq_html
 from app.config import get_settings
 from app.routes.admin_auth import get_current_admin
@@ -72,6 +75,96 @@ class ComponentRatingsInput(BaseModel):
 class FaqSelectionInput(BaseModel):
     selected_ids: list[str] = Field(max_length=10)
     answer_overrides: dict[str, str] = Field(default_factory=dict)
+
+
+_BUILD_3D_ASSET_TYPES = ("complete_build", "chassis", "motherboard", "cpu", "gpu")
+
+
+class QueueBuild3DAssetsInput(BaseModel):
+    assets: dict[str, list[str]]
+
+
+async def _run_build_3d_generation(build_id: int, requested: dict[str, list[str]]) -> None:
+    """Run Meshy jobs off-request, mirror expiring results, then persist once."""
+    results = await asyncio.gather(
+        *(generate_multi_image_asset(urls) for urls in requested.values()),
+        return_exceptions=True,
+    )
+    completed: dict[str, dict] = {}
+    for (asset_type, source_urls), result in zip(requested.items(), results):
+        entry = {"provider": "meshy", "source_image_urls": source_urls}
+        if isinstance(result, Exception) or result is None:
+            entry.update(status="failed", error=str(result) if result else "Meshy did not accept the task")
+        elif result.status != "SUCCEEDED" or not result.glb_url:
+            entry.update(status="failed", task_id=result.task_id, error=f"Meshy task ended as {result.status}")
+        else:
+            try:
+                filename = f"build_{build_id}_{asset_type}_{uuid.uuid4().hex}.glb"
+                local_path = _PUBLIC_MEDIA_ROOT / filename
+                async with httpx.AsyncClient(timeout=120, follow_redirects=True) as client:
+                    response = await client.get(result.glb_url)
+                    response.raise_for_status()
+                local_path.parent.mkdir(parents=True, exist_ok=True)
+                local_path.write_bytes(response.content)
+                await sync_to_public_media(local_path)
+                entry.update(
+                    status="succeeded",
+                    task_id=result.task_id,
+                    glb_url=f"https://theflipflop.shop/media/{filename}",
+                    preview_url=result.thumbnail_url,
+                    completed_at=datetime.utcnow().isoformat(),
+                )
+            except Exception as exc:
+                entry.update(status="failed", task_id=result.task_id, error=f"Could not store GLB: {exc}")
+        completed[asset_type] = entry
+
+    async with AsyncSessionLocal() as session:
+        build = (await session.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
+        if not build:
+            return
+        assets = dict(build.model_3d_assets or {})
+        assets.update(completed)
+        build.model_3d_assets = assets
+        if completed.get("complete_build", {}).get("status") == "succeeded":
+            build.model_3d_url = completed["complete_build"]["glb_url"]
+        await session.commit()
+
+
+@router.post("/{build_id}/model-3d/generate", status_code=202)
+async def queue_build_3d_generation(
+    build_id: int,
+    body: QueueBuild3DAssetsInput,
+    background_tasks: BackgroundTasks,
+    db: AsyncSession = Depends(get_db),
+):
+    build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
+    if not build:
+        raise HTTPException(status_code=404, detail="Build not found")
+    if not body.assets:
+        raise HTTPException(status_code=422, detail="Select photos for at least one 3D asset")
+    unknown = set(body.assets) - set(_BUILD_3D_ASSET_TYPES)
+    if unknown:
+        raise HTTPException(status_code=422, detail=f"Unknown 3D asset types: {', '.join(sorted(unknown))}")
+    valid_urls = {p.get("url") for p in (build.photos or []) if p.get("kind") == "photo"}
+    for asset_type, urls in body.assets.items():
+        if not 1 <= len(urls) <= 4:
+            raise HTTPException(status_code=422, detail=f"{asset_type} needs 1 to 4 photos")
+        if len(set(urls)) != len(urls) or any(url not in valid_urls for url in urls):
+            raise HTTPException(status_code=422, detail=f"{asset_type} contains an invalid or duplicate photo")
+
+    assets = dict(build.model_3d_assets or {})
+    queued_at = datetime.utcnow().isoformat()
+    for asset_type, urls in body.assets.items():
+        assets[asset_type] = {
+            "provider": "meshy",
+            "status": "queued",
+            "source_image_urls": urls,
+            "queued_at": queued_at,
+        }
+    build.model_3d_assets = assets
+    await db.commit()
+    background_tasks.add_task(_run_build_3d_generation, build_id, body.assets)
+    return {"queued": list(body.assets), "assets": assets}
 
 
 def _description_with_selected_faqs(description: str, build: ManualBuild) -> str:

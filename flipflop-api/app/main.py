@@ -790,6 +790,7 @@ async def _migrate_add_columns():
         ("manual_builds", "photos",                  "JSON DEFAULT '[]'"),
         ("manual_builds", "hero_photo_url",           "VARCHAR(500)"),
         ("manual_builds", "model_3d_url",              "VARCHAR(500)"),
+        ("manual_builds", "model_3d_assets",           "JSON DEFAULT '{}'"),
         ("manual_builds", "selected_faq_ids",          "JSON"),
         ("manual_builds", "selected_faq_answer_overrides", "JSON DEFAULT '{}'"),
         ("manual_builds", "storefront_product_id",    "INTEGER"),

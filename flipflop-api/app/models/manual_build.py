@@ -36,6 +36,10 @@ class ManualBuild(Base):
     hero_photo_url: Mapped[str | None] = mapped_column(String(500))
     # Customer-facing GLB for the completed machine's storefront 3D viewer.
     model_3d_url: Mapped[str | None] = mapped_column(String(500))
+    # Per-build image-to-3D generation jobs and resulting assets. Keys are
+    # complete_build/chassis/motherboard/cpu/gpu; values retain the selected
+    # source photos, Meshy task id, status and locally mirrored GLB URL.
+    model_3d_assets: Mapped[dict] = mapped_column(JSON, default=dict)
     # None means use the stable set of ten defaults; [] is an intentional
     # user choice to publish no FAQs.
     selected_faq_ids: Mapped[list | None] = mapped_column(JSON)

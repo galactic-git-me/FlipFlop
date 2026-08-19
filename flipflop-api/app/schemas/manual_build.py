@@ -59,6 +59,7 @@ class ManualBuildOut(BaseModel):
     evidence_data: dict = {}
     hero_photo_url: Optional[str]
     model_3d_url: Optional[str] = None
+    model_3d_assets: dict = Field(default_factory=dict)
     selected_faq_ids: Optional[list[str]] = None
     selected_faq_answer_overrides: dict[str, str] = Field(default_factory=dict)
     storefront_product_id: Optional[int]
