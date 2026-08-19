@@ -38,6 +38,7 @@ from app.models.gem_radar_scan_observation import GemRadarScanObservation
 from app.models.gem_radar_listing_cpk import GemRadarListingCpk
 from app.models.gem_radar_cpk_listing_price import GemRadarCpkListingPrice
 from app.models.gem_radar_cpk_market_price import GemRadarCpkMarketPrice
+from app.models.build_sold_observation import BuildSoldObservation
 from app.models.gem_radar_sweep_signal import GemRadarSweepSignal
 from app.models.gem_radar_listing_demand_history import GemRadarListingDemandHistory
 from app.models.gem_radar_intelligence import GemRadarDecisionEvent, ComponentRatingEvent, PreferredComponent

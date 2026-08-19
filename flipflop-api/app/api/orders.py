@@ -17,8 +17,24 @@ from app.schemas.order import (
     MyOrderSlotOut,
 )
 from app.schemas.customer_portal import CustomerDocumentOut, CustomerProblemCreate, CustomerProblemOut, CustomerProblemStatusUpdate
+from jose import jwt, JWTError
+from app.config import get_settings
 
 router = APIRouter(prefix="/api/orders", tags=["orders"])
+
+@router.get("/portal-preview/{preview_token}")
+async def get_portal_preview(preview_token: str, db: AsyncSession = Depends(get_db)):
+    try:
+        claims = jwt.decode(preview_token, get_settings().secret_key, algorithms=[get_settings().jwt_algorithm])
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Preview expired or invalid")
+    if claims.get("typ") != "portal_preview" or claims.get("scope") != "read":
+        raise HTTPException(status_code=403, detail="Invalid preview scope")
+    order = (await db.execute(select(Order).where(Order.id == int(claims.get("order_id", 0))))).scalar_one_or_none()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    asset = (await db.execute(select(Capture3DAsset).where(Capture3DAsset.order_id == order.id))).scalar_one_or_none()
+    return _order_to_my_order_out(order, asset)
 
 
 def _order_to_my_order_out(order: Order, capture_3d: Capture3DAsset | None = None) -> MyOrderOut:

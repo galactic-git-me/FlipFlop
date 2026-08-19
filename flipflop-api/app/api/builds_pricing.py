@@ -14,19 +14,21 @@ from __future__ import annotations
 
 import re
 import statistics
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
-from sqlalchemy import select, or_, and_
+from sqlalchemy import select, or_, and_, func
 import structlog
 
 from app.database import AsyncSessionLocal
 from app.models.manual_build import ManualBuild
+from app.models.build_sold_observation import BuildSoldObservation
 from app.models.listing import Listing, ListingStatus
+from app.gem_radar.schemas import CamelModel, ExtractedListing
 from app.config import get_settings
 from app.gem_radar.identity import resolve_identity
-from app.gem_radar.adapters.sold_comps import PlaywrightSoldCompsAdapter, SoldComp, SoldCompsResult
+from app.gem_radar.adapters.sold_comps import SoldCompsResult
 from app.services.ebay_browse import search_active_listings
 from app.services.sold_comps_cache import get_sold_comps_cache
 
@@ -161,6 +163,23 @@ class PricingBreakdown(BaseModel):
     component_resale_total: float = 0.0
     market_comparables: list[MarketComparable] = []
     recommendation: PriceRecommendation
+
+
+class BuildSoldCompTarget(CamelModel):
+    build_id: int
+    name: str
+    queries: list[str]
+
+
+class BuildSoldCompSubmit(CamelModel):
+    build_id: int
+    query: str
+    comps: list[ExtractedListing]
+
+
+class BuildSoldCompSubmitResponse(CamelModel):
+    inserted: int
+    skipped: int
 
 
 def _percentile(values: list[float], fraction: float) -> float:
@@ -321,41 +340,86 @@ async def _live_close_build_comparables(
     return [item for _, item in sorted(found.values(), key=lambda pair: pair[0], reverse=True)[:12]]
 
 
-async def _playwright_close_sold_comps(
-    cpu_model: str | None, gpu_model: str | None,
-) -> SoldCompsResult:
-    """Use component pricing's short-query Playwright strategy for builds."""
-    searches: list[tuple[str, str]] = []
+def _build_sold_queries(components: list[dict]) -> list[str]:
+    cpu = _find_component(components, ("cpu", "processor"))
+    gpu = _find_component(components, ("gpu", "graphics"))
+    cpu_model = resolve_identity(cpu.get("name")).model if cpu else None
+    gpu_model = resolve_identity(gpu.get("name")).model if gpu else None
+    queries: list[str] = []
     if gpu_model:
-        gpu_short = re.search(r"\b(?:RTX|GTX|RX)\s*\d{3,4}(?:\s*(?:Ti|Super|XT|XTX))?\b", gpu_model, re.IGNORECASE)
-        gpu_anchor = gpu_short.group(0) if gpu_short else gpu_model
-        searches.append((f"{gpu_anchor} PC", gpu_anchor))
+        match = re.search(r"\b(?:RTX|GTX|RX)\s*\d{3,4}(?:\s*(?:Ti|Super|XT|XTX))?\b", gpu_model, re.IGNORECASE)
+        queries.append(f"{match.group(0) if match else gpu_model} PC")
     if cpu_model:
-        cpu_short = re.search(r"\b\d{4,5}(?:X3D|X|G|F|K|KF)?\b", cpu_model, re.IGNORECASE)
-        cpu_anchor = cpu_short.group(0) if cpu_short else cpu_model
-        searches.append((f"{cpu_anchor} PC", cpu_anchor))
-    if not searches:
-        return SoldCompsResult(available=False, unavailable_reason="Build has no searchable CPU or GPU")
+        match = re.search(r"\b\d{4,5}(?:X3D|X|G|F|K|KF)?\b", cpu_model, re.IGNORECASE)
+        queries.append(f"{match.group(0) if match else cpu_model} PC")
+    return list(dict.fromkeys(queries))
 
-    found: dict[str, SoldComp] = {}
-    reasons: list[str] = []
-    adapter = PlaywrightSoldCompsAdapter()
-    for short_query, anchor in searches:
-        result = await adapter.fetch(short_query, condition="used")
-        if result.unavailable_reason:
-            reasons.append(result.unavailable_reason)
-        anchor_key = re.sub(r"[^a-z0-9]", "", anchor.lower())
-        for comp in result.comps:
-            title_key = re.sub(r"[^a-z0-9]", "", (comp.title or "").lower())
-            if anchor_key not in title_key:
+
+@router.get("/sold-comp-targets", response_model=list[BuildSoldCompTarget])
+async def build_sold_comp_targets(limit: int = Query(2, ge=1, le=5)) -> list[BuildSoldCompTarget]:
+    """Builds for FlipFlopXtension to enrich through the signed-in eBay tab."""
+    cutoff = datetime.utcnow() - timedelta(days=90)
+    async with AsyncSessionLocal() as db:
+        counts = (
+            select(BuildSoldObservation.build_id, func.count().label("sold_count"))
+            .where(BuildSoldObservation.observed_at >= cutoff)
+            .group_by(BuildSoldObservation.build_id)
+            .subquery()
+        )
+        rows = (await db.execute(
+            select(ManualBuild, counts.c.sold_count)
+            .outerjoin(counts, counts.c.build_id == ManualBuild.id)
+            .where(ManualBuild.status.in_(("built", "listed")))
+            .where(func.coalesce(counts.c.sold_count, 0) < 5)
+            .order_by(ManualBuild.updated_at.desc())
+            .limit(limit)
+        )).all()
+    return [
+        BuildSoldCompTarget(build_id=build.id, name=build.name, queries=_build_sold_queries(build.components or []))
+        for build, _ in rows if _build_sold_queries(build.components or [])
+    ]
+
+
+@router.post("/sold-comps", response_model=BuildSoldCompSubmitResponse)
+async def submit_build_sold_comps(payload: BuildSoldCompSubmit) -> BuildSoldCompSubmitResponse:
+    """Persist extension-extracted complete-PC sold results for one build."""
+    async with AsyncSessionLocal() as db:
+        build = (await db.execute(select(ManualBuild).where(ManualBuild.id == payload.build_id))).scalar_one_or_none()
+        if not build:
+            raise HTTPException(status_code=404, detail="Build not found")
+        cpu = _find_component(build.components or [], ("cpu", "processor"))
+        gpu = _find_component(build.components or [], ("gpu", "graphics"))
+        cpu_model = resolve_identity(cpu.get("name")).model if cpu else None
+        gpu_model = resolve_identity(gpu.get("name")).model if gpu else None
+        cpu_short = re.search(r"\b\d{4,5}(?:X3D|X|G|F|K|KF)?\b", cpu_model or "", re.IGNORECASE)
+        cpu_key = re.sub(r"[^a-z0-9]", "", (cpu_short.group(0) if cpu_short else cpu_model or "").lower())
+        gpu_short = re.search(r"\b(?:RTX|GTX|RX)\s*\d{3,4}(?:\s*(?:Ti|Super|XT|XTX))?\b", gpu_model or "", re.IGNORECASE)
+        gpu_key = re.sub(r"[^a-z0-9]", "", (gpu_short.group(0) if gpu_short else gpu_model or "").lower())
+        existing_urls = set((await db.execute(
+            select(BuildSoldObservation.source_url).where(BuildSoldObservation.build_id == build.id)
+        )).scalars().all())
+        inserted = skipped = 0
+        for comp in payload.comps:
+            title_key = re.sub(r"[^a-z0-9]", "", comp.title.lower())
+            has_cpu = bool(cpu_key and cpu_key in title_key)
+            has_gpu = bool(gpu_key and gpu_key in title_key)
+            is_pc = any(term in comp.title.lower() for term in (" pc", "desktop", "gaming computer"))
+            if comp.listing_type == "auction" or not is_pc or not (has_cpu or has_gpu) or comp.current_delivered_price < 400:
+                skipped += 1
                 continue
-            key = comp.url or f"{comp.title}|{comp.price}"
-            found[key] = comp
-    comps = list(found.values())
-    return SoldCompsResult(
-        available=bool(comps), comps=comps,
-        unavailable_reason=None if comps else "; ".join(dict.fromkeys(reasons)) or "No close sold builds found",
-    )
+            if comp.url in existing_urls:
+                skipped += 1
+                continue
+            basis = "same CPU and GPU" if has_cpu and has_gpu else "same CPU" if has_cpu else "same GPU"
+            db.add(BuildSoldObservation(
+                build_id=build.id, title=comp.title, price=comp.item_price,
+                postage=comp.postage_price, condition="used", sold_at=comp.extracted_at.isoformat(),
+                source_url=comp.url, match_basis=f"Extension sold search: {basis}",
+            ))
+            existing_urls.add(comp.url)
+            inserted += 1
+        await db.commit()
+    return BuildSoldCompSubmitResponse(inserted=inserted, skipped=skipped)
 
 
 @router.get("/{build_id}/pricing")
@@ -397,29 +461,6 @@ async def get_build_pricing(
     if fetch_sold:
         log.info("builds_pricing.fetch_sold", build_id=build_id, query=query, cache_key=cache_key)
         try:
-            # Use the same logged-in Playwright sold-comps path as component
-            # pricing. The previous LiveSoldCompsAdapter path depended on
-            # ScrapingBee and failed with 401s.
-            cpu_model_for_search = resolve_identity(cpu_title).model if cpu_title else None
-            gpu_model_for_search = resolve_identity(gpu_title).model if gpu_title else None
-            sold_result = await _playwright_close_sold_comps(
-                cpu_model_for_search, gpu_model_for_search,
-            )
-            sold_prices = [comp.price for comp in sold_result.comps] if sold_result.available else []
-            market_data = {
-                "sold": {
-                    "available": bool(sold_prices),
-                    "count": len(sold_prices),
-                    "average_price": round(statistics.mean(sold_prices), 2) if sold_prices else None,
-                    "unavailable_reason": sold_result.unavailable_reason,
-                },
-                "bin": {"available": False, "count": 0, "average_price": None},
-            }
-            await cache.set(cache_key, sold_result)
-        except Exception as exc:
-            log.warning("builds_pricing.fetch_failed", build_id=build_id, query=query, error=str(exc))
-
-        try:
             cpu_model_for_search = resolve_identity(cpu_title).model if cpu_title else None
             gpu_model_for_search = resolve_identity(gpu_title).model if gpu_title else None
             live_close_comparables = await _live_close_build_comparables(
@@ -449,12 +490,27 @@ async def get_build_pricing(
                 for item in cached_listings.get("active_close_matches", [])
             ]
     sold_comps_list: list[SoldCompDetail] = []
+    async with AsyncSessionLocal() as db:
+        stored_build_comps = (await db.execute(
+            select(BuildSoldObservation)
+            .where(BuildSoldObservation.build_id == build_id)
+            .where(BuildSoldObservation.observed_at >= datetime.utcnow() - timedelta(days=90))
+            .order_by(BuildSoldObservation.observed_at.desc())
+            .limit(50)
+        )).scalars().all()
+    sold_comps_list.extend(SoldCompDetail(
+        title=comp.title, price=round(comp.price + comp.postage, 2),
+        condition=comp.condition, sold_at=comp.sold_at or comp.observed_at.isoformat(),
+        url=comp.source_url, ram_gb=_extract_ram_gb(comp.title),
+    ) for comp in stored_build_comps)
     if cached_result and cached_result.available:
         cache_age_info = await cache.get_cache_age_and_expiry(cache_key)
         if cache_age_info:
             seconds_ago, seconds_until_expiry = cache_age_info
             cache_info = CacheInfo(seconds_ago=seconds_ago, seconds_until_expiry=seconds_until_expiry, is_cached=True)
         for comp in cached_result.comps:
+            if comp.url and any(existing.url == comp.url for existing in sold_comps_list):
+                continue
             sold_comps_list.append(
                 SoldCompDetail(
                     title=comp.title,
