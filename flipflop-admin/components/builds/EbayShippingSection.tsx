@@ -368,7 +368,7 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
               className="flex-1 flex items-center justify-center gap-1.5 rounded bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed px-3 py-2 text-xs font-semibold text-slate-200 transition"
             >
               <Zap className="w-3.5 h-3.5" />
-              {loadingQuote ? "Getting quote…" : "Get Courier Quote"}
+              {loadingQuote ? "Getting estimate…" : "Get Shipping Estimate"}
             </button>
           </div>
 
@@ -381,9 +381,13 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
 
           {quote && (
             <div className="space-y-2 p-2 rounded bg-amber-950/30 border border-amber-600/40">
+              <div className="flex items-start gap-2 rounded border border-cyan-400/20 bg-cyan-400/5 p-2 text-xs text-cyan-100">
+                <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                <p><strong>Estimate only.</strong> This does not book or reserve delivery. After the item sells, get a fresh quote using the buyer&apos;s real address and choose the service before paying.</p>
+              </div>
               {quotes.length > 1 && (
                 <label className="block text-xs text-slate-300">
-                  <span className="mb-1 block font-semibold">Courier service</span>
+                  <span className="mb-1 block font-semibold">Estimated courier service</span>
                   <select
                     value={selectedQuoteIndex}
                     onChange={(event) => setSelectedQuoteIndex(Number(event.target.value))}

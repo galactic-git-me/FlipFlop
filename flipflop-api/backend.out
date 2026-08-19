@@ -54,3 +54,78 @@ INFO:     127.0.0.1:62804 - "GET /api/alerts/?limit=100&include_acked=false HTTP
 INFO:     127.0.0.1:60568 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
 INFO:     127.0.0.1:62804 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
 2026-08-19 13:12:16 [debug    ] claude_eval_queue.worker_ready worker=4
+INFO:     127.0.0.1:58766 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58766 - "GET /api/settings/ HTTP/1.1" 200 OK
+2026-08-19 13:12:21 [debug    ] claude_eval_queue.worker_ready worker=5
+INFO:     127.0.0.1:63070 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:63070 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:63070 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63070 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64840 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64840 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61342 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61342 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61342 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61342 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60757 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60757 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49556 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53320 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49556 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53320 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 13:12:58 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=72 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=87 elapsed_s=62.1 excluded_auctions=0 new_listings=0
+2026-08-19 13:12:58 [info     ] queue_processor.submission_completed cpk_assigned=72 ingested=0 submission_id=55562
+2026-08-19 13:12:59 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=gigabyte-motherboard
+2026-08-19 13:12:59 [info     ] queue_processor.processing_submission active_searches=2 n_listings=12 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=55575
+INFO:     127.0.0.1:54316 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:51717 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:51717 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54316 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60512 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60512 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65147 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:65147 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:65147 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65147 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61765 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61765 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60224 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60224 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60224 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60224 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60547 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60547 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64231 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59081 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:64231 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59081 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 13:13:45 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=88 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=100 elapsed_s=108.1 excluded_auctions=0 new_listings=0
+2026-08-19 13:13:45 [info     ] queue_processor.submission_completed cpk_assigned=88 ingested=0 submission_id=55565
+2026-08-19 13:13:45 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=ddr4-udimm-ram
+2026-08-19 13:13:45 [info     ] queue_processor.processing_submission active_searches=2 n_listings=45 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=55569
+INFO:     127.0.0.1:53935 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53935 - "GET /api/settings/ HTTP/1.1" 200 OK
+2026-08-19 13:13:48 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT Astraeus AMD Ryzen 5, Radeon RX 9070 GRE, 1
+2026-08-19 13:13:50 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram|ssd title=AWD-IT Atlas AMD Ryzen 5, Radeon RX 9070 XT 16GB ,
+INFO:     127.0.0.1:59364 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49367 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49367 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+2026-08-19 13:13:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT Hecate AMD Ryzen 5, NVIDIA RTX 5050, 16GB R
+INFO:     127.0.0.1:61185 - "OPTIONS /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49367 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 13:13:56 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X49 X 49 Inch QD-OLED Curved Gaming
+2026-08-19 13:13:56 [info     ] ebay_sales_tracker.poll_complete found=0 matched=0 updated=0
+2026-08-19 13:13:59 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X32X5 31.5 Inch QD-OLED 240Hz Gaming
+2026-08-19 13:14:02 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X27 X1 26.5 Inch 4K QD-OLED 240Hz Ga
+INFO:     127.0.0.1:59495 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59495 - "GET /api/settings/ HTTP/1.1" 200 OK
+2026-08-19 13:14:04 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator XB273U F5 27 Inch IPS 360Hz Gaming M
+INFO:     127.0.0.1:60166 - "GET /api/playbooks/proposals/?status=pending HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60166 - "GET /api/alerts/?limit=100&include_acked=false HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60166 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60166 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+2026-08-19 13:14:08 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Nitro XZ322QU V3 32 Inch WQHD Curved Gaming M
+2026-08-19 13:14:08 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=4 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=12 elapsed_s=69.1 excluded_auctions=0 new_listings=0
+2026-08-19 13:14:08 [info     ] queue_processor.submission_completed cpk_assigned=4 ingested=0 submission_id=55575
+2026-08-19 13:14:08 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=ddr5-udimm-ram
+2026-08-19 13:14:08 [info     ] queue_processor.processing_submission active_searches=2 n_listings=16 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=55580
