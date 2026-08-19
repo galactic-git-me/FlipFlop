@@ -1,0 +1,85 @@
+Act as a UK price-research analyst. Search the web for current, live UK listings that match the attached build specification as closely as possible.
+
+BUILD SPECIFICATION:
+[PASTE OR ATTACH BUILD SPEC HERE]
+
+Research requirements:
+
+Search multiple reputable UK retailers, marketplaces, system builders, and specialist suppliers.
+Prioritise complete builds that exactly match the specification.
+If there are not enough exact matches, include the closest comparable builds, but clearly explain every difference, such as component model, capacity, performance tier, condition, warranty, or included accessories.
+Only include listings that are currently in stock and available to buy in the UK. Do not use old search snippets, cached prices, expired deals, auction bids, or unavailable products.
+Use new products unless the specification explicitly requests used or refurbished items.
+Record prices in GBP and include VAT. Include mandatory delivery charges in the total where known. Show delivery separately.
+Avoid duplicate listings. Treat different sellers offering the same product as separate observations only when each listing is genuine and independently purchasable.
+Open and verify each product page rather than relying solely on search-result text.
+Record the date and time when the prices were checked.
+
+For every listing, provide:
+
+Seller
+Product/build name
+Direct product-page link
+Exact-match or comparable-match classification
+Listed price
+Delivery charge
+Total price used in the calculation
+Stock status
+New, used, or refurbished condition
+Warranty, if stated
+Differences from the requested specification
+Brief notes about any uncertainty
+
+Price analysis:
+
+Create one calculation for exact matches if at least three valid exact matches are available.
+Create a separate calculation for close comparable matches if they are needed.
+Identify suspicious price anomalies using a defensible statistical method, preferably the 1.5×IQR rule. If the sample is too small for that method, assess anomalies cautiously using the median and the listings’ specification differences.
+Do not remove a price merely because it is the highest or lowest.
+Exclude a listing only when there is a clear reason, such as an obvious pricing error, materially different specification, missing VAT, incomplete build, scam-like listing, auction price, used condition, or an extreme statistical outlier.
+Show every excluded listing separately, including its price and the exact reason for exclusion.
+Never silently discard a result.
+
+Return the results in this structure:
+
+A. Specification interpreted
+Summarise the requested build and identify any ambiguous requirements or assumptions.
+
+B. Exact matches
+Provide a table containing the complete breakdown of verified exact-match listings.
+
+C. Closest comparable matches
+Provide a separate table, ordered from most similar to least similar. Clearly state each specification difference.
+
+D. Excluded listings and anomalies
+List each excluded result, its price, link, and reason for exclusion.
+
+E. Price calculation
+Show:
+
+Number of valid prices
+Complete list of prices used
+Sum of those prices
+Arithmetic mean
+Median
+Lowest valid price
+Highest valid price
+Price range
+The outlier-detection method and calculation
+Average for exact matches
+Separate average for comparable matches, if applicable
+
+Show the arithmetic explicitly, for example:
+
+(£1,299 + £1,349 + £1,399) ÷ 3 = £1,349.00
+
+F. Conclusion
+State the best-supported current UK market price, the likely reasonable buying range, and which listing represents the best like-for-like value. Mention any limitations caused by a small sample, uncertain specifications, delivery costs, or rapidly changing prices.
+
+Accuracy rules:
+
+Do not invent prices, listings, specifications, stock information, or links.
+Cite every included and excluded listing with a direct product-page link.
+Clearly distinguish verified facts from assumptions.
+If live web access is unavailable, stop and say so rather than estimating.
+If fewer than three genuinely comparable listings can be verified, do not present the mean as reliable; report the available evidence and explain the limitation.
