@@ -349,6 +349,12 @@ class EbayListingPoster:
                     "USED_ACCEPTABLE",
                     "FOR_PARTS_OR_NOT_WORKING",
                 }
+
+                if not all((payment_policy_id, return_policy_id, fulfillment_policy_id)):
+                    return {
+                        "success": False,
+                        "error": "eBay business policy IDs are required (payment, returns and fulfilment). Configure the seller's policy IDs before posting.",
+                    }
                 condition_normalized = condition.upper()
                 if condition_normalized not in _VALID_CONDITIONS:
                     condition_normalized = "USED_EXCELLENT"
@@ -447,9 +453,9 @@ class EbayListingPoster:
                         }
                     },
                     "listingPolicies": {
-                        "paymentPolicyId": payment_policy_id or "default",
-                        "returnPolicyId": return_policy_id or "default",
-                        "fulfillmentPolicyId": fulfillment_policy_id or "default",
+                        "paymentPolicyId": payment_policy_id,
+                        "returnPolicyId": return_policy_id,
+                        "fulfillmentPolicyId": fulfillment_policy_id,
                     },
                 }
 
@@ -532,6 +538,7 @@ class EbayListingPoster:
                     "sku": sku,
                     "url": listing_url,
                     "status": "ACTIVE",
+                    "offer_id": offer_id,
                 }
 
         except Exception as exc:
@@ -540,6 +547,110 @@ class EbayListingPoster:
                 "success": False,
                 "error": f"Failed to post listing: {str(exc)}",
             }
+
+    async def update_listing(
+        self,
+        sku: str,
+        title: str,
+        description: str,
+        price: float,
+        image_urls: list[str],
+        condition: str,
+        payment_policy_id: Optional[str],
+        return_policy_id: Optional[str],
+        fulfillment_policy_id: Optional[str],
+        aspects: Optional[dict[str, list[str]]] = None,
+    ) -> dict:
+        """Update an Inventory-API listing using its SKU and offer.
+
+        Inventory-created listings cannot be revised with Trading API
+        ReviseFixedPriceItem. The offer is looked up by SKU, then both the
+        inventory item and offer are updated with business-policy IDs.
+        """
+        if not sku:
+            return {"success": False, "error": "Existing eBay listing has no inventory SKU; it must be relisted."}
+        if not all((payment_policy_id, return_policy_id, fulfillment_policy_id)):
+            return {"success": False, "error": "eBay business policy IDs are required (payment, returns and fulfilment)."}
+        if not image_urls:
+            return {"success": False, "error": "At least one image URL is required for an eBay listing."}
+
+        valid_conditions = {
+            "NEW", "LIKE_NEW", "NEW_OTHER", "NEW_WITH_DEFECTS",
+            "MANUFACTURER_REFURBISHED", "CERTIFIED_REFURBISHED",
+            "EXCELLENT_REFURBISHED", "VERY_GOOD_REFURBISHED",
+            "GOOD_REFURBISHED", "SELLER_REFURBISHED", "USED_EXCELLENT",
+            "USED_VERY_GOOD", "USED_GOOD", "USED_ACCEPTABLE",
+            "FOR_PARTS_OR_NOT_WORKING",
+        }
+        normalized_condition = (condition or "USED_EXCELLENT").upper()
+        if normalized_condition not in valid_conditions:
+            normalized_condition = "USED_EXCELLENT"
+        item_aspects = dict(aspects) if aspects else {}
+        item_aspects.setdefault("Brand", ["FlipFlop"])
+        item_aspects.setdefault("Type", ["Desktop"])
+        headers = {**self.headers, "Content-Language": "en-GB"}
+        inventory_item = {
+            "product": {
+                "title": title[:80],
+                "description": _inventory_product_description(description, title),
+                "imageUrls": image_urls,
+                "aspects": item_aspects,
+            },
+            "condition": normalized_condition,
+            "availability": {"shipToLocationAvailability": {"quantity": 1}},
+        }
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                item_resp = await client.put(
+                    f"{self.base_url}/sell/inventory/v1/inventory_item/{sku}",
+                    json=inventory_item,
+                    headers=headers,
+                )
+                if item_resp.status_code not in (200, 201, 204):
+                    return {"success": False, "error": f"Failed to update eBay inventory item: {item_resp.status_code}: {item_resp.text}"}
+
+                offers_resp = await client.get(
+                    f"{self.base_url}/sell/inventory/v1/offer",
+                    params={"sku": sku, "marketplace_id": "EBAY_GB"},
+                    headers=headers,
+                )
+                if offers_resp.status_code != 200:
+                    return {"success": False, "error": f"Could not find the eBay offer for SKU {sku}: {offers_resp.status_code}: {offers_resp.text}"}
+                offers = offers_resp.json().get("offers") or []
+                offer = next((o for o in offers if o.get("marketplaceId") == "EBAY_GB"), None)
+                if not offer or not offer.get("offerId"):
+                    return {"success": False, "error": f"No active eBay Inventory API offer was found for SKU {sku}; relist this build to repair the listing."}
+                offer_id = offer["offerId"]
+                offer_payload = {
+                    "sku": sku,
+                    "marketplaceId": "EBAY_GB",
+                    "format": "FIXED_PRICE",
+                    "availableQuantity": offer.get("availableQuantity") or 1,
+                    "categoryId": offer.get("categoryId") or "179",
+                    "listingDescription": prepare_ebay_listing_description(description or title)[:EBAY_LISTING_DESCRIPTION_MAX_LENGTH],
+                    "merchantLocationKey": offer.get("merchantLocationKey") or "UK_WAREHOUSE",
+                    "pricingSummary": {"price": {"currency": "GBP", "value": str(price)}},
+                    "listingPolicies": {
+                        "paymentPolicyId": payment_policy_id,
+                        "returnPolicyId": return_policy_id,
+                        "fulfillmentPolicyId": fulfillment_policy_id,
+                    },
+                }
+                offer_resp = await client.put(
+                    f"{self.base_url}/sell/inventory/v1/offer/{offer_id}",
+                    json=offer_payload,
+                    headers=headers,
+                )
+                if offer_resp.status_code not in (200, 201, 204):
+                    return {"success": False, "error": f"Failed to update eBay offer: {offer_resp.status_code}: {offer_resp.text}"}
+                listing_id = str(offer.get("listingId") or "")
+                if not listing_id:
+                    return {"success": False, "error": "eBay updated the offer but did not return its listing ID."}
+                domain = "www.ebay.co.uk" if self.environment == "production" else "sandbox.ebay.com"
+                return {"success": True, "listing_id": listing_id, "sku": sku, "offer_id": offer_id, "url": f"https://{domain}/itm/{listing_id}", "status": "ACTIVE"}
+        except Exception as exc:
+            log.error("ebay.inventory_update_exception", error=str(exc), sku=sku)
+            return {"success": False, "error": f"Failed to update eBay listing: {exc}"}
 
 
 async def post_flip_to_ebay(
@@ -557,6 +668,7 @@ async def post_flip_to_ebay(
     fulfillment_policy_id: Optional[str] = None,
     aspects: Optional[dict[str, list[str]]] = None,
     listing_id: Optional[str] = None,  # If provided, update existing listing; else create new
+    sku: Optional[str] = None,
 ) -> dict:
     """
     Convenience function to post or update a flip's listing on eBay.
@@ -589,25 +701,18 @@ async def post_flip_to_ebay(
         client_secret=client_secret,
     )
     async def revise(existing_listing_id: str) -> dict:
-        from app.services.ebay_trading_api import revise_fixed_price_item
-
-        await revise_fixed_price_item(
-            item_id=existing_listing_id,
+        return await poster.update_listing(
+            sku=sku or "",
             title=title,
-            description=prepare_ebay_listing_description(description),
+            description=description,
             price=price,
             image_urls=image_urls,
-            aspects=aspects or {},
-            token=access_token,
-            environment=environment,
+            condition=condition,
+            payment_policy_id=payment_policy_id,
+            return_policy_id=return_policy_id,
+            fulfillment_policy_id=fulfillment_policy_id,
+            aspects=aspects,
         )
-        domain = "www.ebay.co.uk" if environment == "production" else "sandbox.ebay.com"
-        return {
-            "success": True,
-            "listing_id": existing_listing_id,
-            "url": f"https://{domain}/itm/{existing_listing_id}",
-            "status": "ACTIVE",
-        }
 
     if listing_id:
         return await revise(listing_id)

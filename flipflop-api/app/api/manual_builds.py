@@ -1252,6 +1252,7 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
                 fulfillment_policy_id=fulfillment_policy_id,
                 aspects=build.generated_aspects or {},
                 listing_id=build.ebay_listing_id,  # Pass existing ID to update
+                sku=build.ebay_sku,
             )
         else:
             # Create new eBay listing
