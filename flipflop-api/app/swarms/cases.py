@@ -76,6 +76,9 @@ class RawCase:
     specs: str = "ATX Mid Tower · New"
     form_factors: list[str] = None  # ["ATX", "MATX", "EATX", "ITX", "MINI_ITX"]
     keywords: list[str] = None  # ["gaming", "RGB", "tempered-glass", etc.]
+    rating: float = None  # 0-5 stars (from Amazon/reviews)
+    review_count: int = None  # number of customer reviews
+    sales_velocity: str = None  # "50+ bought in past month" - real demand signal
 
     def __post_init__(self):
         # Auto-extract form factors and keywords from name if not provided
@@ -1657,6 +1660,12 @@ async def _upsert_case(db, case: RawCase):
             part.image_url = case.image_url
             part.form_factors = case.form_factors
             part.keywords = case.keywords
+            if case.rating:
+                part.rating = case.rating
+            if case.review_count:
+                part.review_count = case.review_count
+            if case.sales_velocity:
+                part.sales_velocity = case.sales_velocity
             part.last_price_update = now
     else:
         # Check for cross-source duplicates (same case name, different source)
@@ -1681,6 +1690,12 @@ async def _upsert_case(db, case: RawCase):
                 existing.image_url = case.image_url
                 existing.form_factors = case.form_factors
                 existing.keywords = case.keywords
+                if case.rating:
+                    existing.rating = case.rating
+                if case.review_count:
+                    existing.review_count = case.review_count
+                if case.sales_velocity:
+                    existing.sales_velocity = case.sales_velocity
                 existing.last_price_update = now
                 part = existing
             else:
@@ -1701,6 +1716,9 @@ async def _upsert_case(db, case: RawCase):
                 specs=case.specs,
                 form_factors=case.form_factors,
                 keywords=case.keywords,
+                rating=case.rating,
+                review_count=case.review_count,
+                sales_velocity=case.sales_velocity,
                 resale_value_add=0.0,
                 last_price_update=now,
             )

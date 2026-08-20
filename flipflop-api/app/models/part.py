@@ -58,6 +58,11 @@ class Part(Base):
     # For cases: customer selection count (how many builds used this case)
     selection_count: Mapped[int] = mapped_column(Integer, default=0)
 
+    # For cases: customer ratings & demand (from Amazon/reviews)
+    rating: Mapped[float | None] = mapped_column(Float)  # 0-5 stars
+    review_count: Mapped[int | None] = mapped_column(Integer)  # number of reviews
+    sales_velocity: Mapped[str | None] = mapped_column(String(100))  # "50+ bought in past month"
+
     # Value it adds to resale
     resale_value_add: Mapped[float] = mapped_column(Float, default=0.0)
 
