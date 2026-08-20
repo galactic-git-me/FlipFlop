@@ -52,6 +52,9 @@ class Part(Base):
     # For cases: supported motherboard form factors (JSON array of: ATX, MATX, EATX, ITX, MINI_ITX)
     form_factors: Mapped[list[str] | None] = mapped_column(JSON)
 
+    # For cases: extracted keywords (JSON array: gaming, dual-chamber, tempered-glass, RGB, wood, curved, fishtank, etc.)
+    keywords: Mapped[list[str] | None] = mapped_column(JSON)
+
     # Value it adds to resale
     resale_value_add: Mapped[float] = mapped_column(Float, default=0.0)
 

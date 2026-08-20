@@ -75,11 +75,14 @@ class RawCase:
     theme: str
     specs: str = "ATX Mid Tower · New"
     form_factors: list[str] = None  # ["ATX", "MATX", "EATX", "ITX", "MINI_ITX"]
+    keywords: list[str] = None  # ["gaming", "RGB", "tempered-glass", etc.]
 
     def __post_init__(self):
-        # Auto-extract form factors from name if not provided
+        # Auto-extract form factors and keywords from name if not provided
         if self.form_factors is None:
             self.form_factors = _extract_form_factors(self.name)
+        if self.keywords is None:
+            self.keywords = _extract_keywords(self.name)
 
 
 def _extract_form_factors(text: str) -> list[str]:
@@ -88,20 +91,18 @@ def _extract_form_factors(text: str) -> list[str]:
     factors = []
 
     # Check for form factors (order matters — check longer forms first)
-    if "MINI ITX" in text_upper or "MINI-ITX" in text_upper:
+    if "MINI ITX" in text_upper or "MINI-ITX" in text_upper or "MINI_ITX" in text_upper:
         factors.append("MINI_ITX")
     elif "ITX" in text_upper:
         factors.append("ITX")
 
-    if "EATX" in text_upper:
-        factors.append("EATX")
-    elif "E-ATX" in text_upper:
+    if "EATX" in text_upper or "E-ATX" in text_upper:
         factors.append("EATX")
 
-    if "MATX" in text_upper or "M-ATX" in text_upper or "MICRO ATX" in text_upper:
+    if "MATX" in text_upper or "M-ATX" in text_upper or "MICRO ATX" in text_upper or "MICROATX" in text_upper:
         factors.append("MATX")
 
-    if "ATX" in text_upper and "MATX" not in text_upper and "EATX" not in text_upper:
+    if "ATX" in text_upper and "MATX" not in text_upper and "EATX" not in text_upper and "MINI" not in text_upper:
         factors.append("ATX")
 
     # Default to ATX if nothing found (most common form factor)
@@ -109,6 +110,45 @@ def _extract_form_factors(text: str) -> list[str]:
         factors.append("ATX")
 
     return list(dict.fromkeys(factors))  # Deduplicate while preserving order
+
+
+def _extract_keywords(text: str) -> list[str]:
+    """Extract relevant case keywords from name/specs."""
+    text_lower = text.lower()
+    keywords = []
+
+    # Visual/material keywords
+    keyword_map = {
+        "gaming": ["gaming", "gamer", "esports"],
+        "RGB": ["rgb", "argb", "aura", "addressable"],
+        "tempered-glass": ["tempered glass", "tg", "glass panel", "glass window"],
+        "white": ["white", "pearl", "snow"],
+        "black": ["black", "dark"],
+        "wood": ["bamboo", "wood", "walnut"],
+        "curved": ["curved", "edge", "curve"],
+        "dual-chamber": ["dual chamber", "divided", "split"],
+        "airflow": ["airflow", "air flow", "ventilation"],
+        "showcase": ["showcase", "display", "panoramic"],
+        "fishtank": ["fish tank", "aquarium", "panoramic"],
+        "compact": ["compact", "small", "mini", "micro"],
+        "tower": ["tower", "mid tower", "full tower"],
+        "mesh": ["mesh", "front mesh"],
+        "window": ["window", "side window"],
+        "silent": ["silent", "quiet", "noise"],
+        "modular": ["modular"],
+        "budget": ["budget", "budget-friendly", "affordable"],
+        "premium": ["premium", "high-end", "luxury"],
+        "retro": ["retro", "vintage", "classic"],
+        "modern": ["modern", "contemporary", "sleek"],
+    }
+
+    for keyword, patterns in keyword_map.items():
+        for pattern in patterns:
+            if pattern in text_lower:
+                keywords.append(keyword)
+                break  # Only add keyword once
+
+    return list(dict.fromkeys(keywords))  # Deduplicate while preserving order
 
 
 async def _playbook_extra_themes() -> list[dict]:
@@ -1612,6 +1652,7 @@ async def _upsert_case(db, case: RawCase):
             part.source_site = case.source_site  # Switch to cheaper source
             part.image_url = case.image_url
             part.form_factors = case.form_factors
+            part.keywords = case.keywords
             part.last_price_update = now
     else:
         # Check for cross-source duplicates (same case name, different source)
@@ -1635,6 +1676,7 @@ async def _upsert_case(db, case: RawCase):
                 existing.source_site = case.source_site
                 existing.image_url = case.image_url
                 existing.form_factors = case.form_factors
+                existing.keywords = case.keywords
                 existing.last_price_update = now
                 part = existing
             else:
@@ -1654,6 +1696,7 @@ async def _upsert_case(db, case: RawCase):
                 theme=case.theme,
                 specs=case.specs,
                 form_factors=case.form_factors,
+                keywords=case.keywords,
                 resale_value_add=0.0,
                 last_price_update=now,
             )
