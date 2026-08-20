@@ -1,8 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, JSON, Boolean, DateTime
-from sqlalchemy.ext.declarative import declarative_base
+from app.database import Base
 from datetime import datetime
-
-Base = declarative_base()
 
 
 class Case(Base):
