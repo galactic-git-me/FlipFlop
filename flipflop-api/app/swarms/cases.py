@@ -1661,9 +1661,11 @@ async def _upsert_case(db, case: RawCase):
             part.image_url = case.image_url
             part.form_factors = case.form_factors
             part.keywords = case.keywords
-            if case.rrp:
-                part.rrp = case.rrp
             part.last_price_update = now
+
+        # Capture RRP from whichever source has it
+        if case.rrp:
+            part.rrp = case.rrp
 
         # Always prefer Amazon ratings (more reliable) regardless of price source
         if case.source_site == "Amazon":
@@ -1702,13 +1704,15 @@ async def _upsert_case(db, case: RawCase):
                 existing.image_url = case.image_url
                 existing.form_factors = case.form_factors
                 existing.keywords = case.keywords
-                if case.rrp:
-                    existing.rrp = case.rrp
                 existing.last_price_update = now
                 part = existing
             else:
                 # Existing source is cheaper or equal, don't create duplicate
                 part = existing
+
+            # Capture RRP from whichever source has it
+            if case.rrp:
+                existing.rrp = case.rrp
 
             # Always prefer Amazon ratings regardless of which source has the best price
             if case.source_site == "Amazon":
