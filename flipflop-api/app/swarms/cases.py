@@ -1556,6 +1556,8 @@ async def _scrape_generic_case_market(search: str, theme: str, source_site: str,
 
 async def _upsert_case(db, case: RawCase):
     from sqlalchemy import select
+
+    # First: check for exact match (same name + source)
     result = await db.execute(
         select(Part).where(
             Part.name == case.name,
@@ -1565,29 +1567,60 @@ async def _upsert_case(db, case: RawCase):
     )
     part = result.scalar_one_or_none()
     now = datetime.utcnow()
+
     if part:
-        part.price = case.price
-        part.price_new = case.price
-        part.source_url = case.source_url
-        part.image_url = case.image_url
-        part.last_price_update = now
+        # Update price if cheaper or if source is Amazon Prime
+        if case.price < part.price or case.source_site in ("Amazon", "Overclockers"):
+            part.price = case.price
+            part.price_new = case.price
+            part.source_url = case.source_url
+            part.source_site = case.source_site  # Switch to cheaper source
+            part.image_url = case.image_url
+            part.last_price_update = now
     else:
-        part = Part(
-            name=case.name,
-            category=PartCategory.case,
-            condition=PartCondition.new,
-            source_site=case.source_site,
-            source_url=case.source_url,
-            price=case.price,
-            price_new=case.price,
-            image_url=case.image_url,
-            theme=case.theme,
-            specs=case.specs,
-            resale_value_add=0.0,
-            last_price_update=now,
+        # Check for cross-source duplicates (same case name, different source)
+        # If found, only keep if this source is cheaper
+        result = await db.execute(
+            select(Part).where(
+                Part.name == case.name,
+                Part.category == PartCategory.case,
+                Part.source_site.in_(["Amazon", "Overclockers"]),
+            )
         )
-        db.add(part)
-        await db.flush()
+        existing = result.scalar_one_or_none()
+
+        if existing:
+            # Case exists from another fast source
+            if case.price < existing.price:
+                # This source is cheaper, update it
+                existing.price = case.price
+                existing.price_new = case.price
+                existing.source_url = case.source_url
+                existing.source_site = case.source_site
+                existing.image_url = case.image_url
+                existing.last_price_update = now
+                part = existing
+            else:
+                # Existing source is cheaper or equal, don't create duplicate
+                part = existing
+        else:
+            # No existing entry, create new
+            part = Part(
+                name=case.name,
+                category=PartCategory.case,
+                condition=PartCondition.new,
+                source_site=case.source_site,
+                source_url=case.source_url,
+                price=case.price,
+                price_new=case.price,
+                image_url=case.image_url,
+                theme=case.theme,
+                specs=case.specs,
+                resale_value_add=0.0,
+                last_price_update=now,
+            )
+            db.add(part)
+            await db.flush()
 
     db.add(PriceHistory(
         entity_type=PriceHistoryType.part,
