@@ -352,7 +352,7 @@ export default function Components3DReviewPage() {
           </div>
 
           {/* Detail viewer */}
-          <div className="col-span-5 flex flex-col min-h-0">
+          <div className="col-span-2 flex flex-col min-h-0">
           {selectedAsset ? (
             <div className="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto">
               {/* 3D Viewer */}
