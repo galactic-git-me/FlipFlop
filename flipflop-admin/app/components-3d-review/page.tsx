@@ -32,7 +32,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
     setTimeout(() => {
       const setupViewer = async () => {
         try {
-          const THREE = (await import("three")).default;
+          const THREE = await import("three");
           const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
 
           if (!containerRef.current) return;
@@ -47,11 +47,11 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           scene.background = new THREE.Color(0x0a1119);
 
           // Camera
-          const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+          const camera = new THREE.default.PerspectiveCamera(75, width / height, 0.1, 1000);
           camera.position.set(0, 1, 2);
 
           // Renderer
-          const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+          const renderer = new THREE.default.WebGLRenderer({ antialias: true, alpha: true });
           renderer.setSize(width, height);
           renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
@@ -62,10 +62,10 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           containerRef.current.appendChild(renderer.domElement);
 
           // Lights
-          const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+          const ambientLight = new THREE.default.AmbientLight(0xffffff, 0.8);
           scene.add(ambientLight);
 
-          const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+          const directionalLight = new THREE.default.DirectionalLight(0xffffff, 0.6);
           directionalLight.position.set(5, 8, 5);
           scene.add(directionalLight);
 
@@ -75,8 +75,8 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
             const model = gltf.scene;
 
             // Scale and center
-            const bbox = new THREE.Box3().setFromObject(model);
-            const center = bbox.getCenter(new THREE.Vector3());
+            const bbox = new THREE.default.Box3().setFromObject(model);
+            const center = bbox.getCenter(new THREE.default.Vector3());
             const size = bbox.getSize(new THREE.Vector3());
             const maxDim = Math.max(size.x, size.y, size.z);
             const scale = 1.5 / maxDim;
