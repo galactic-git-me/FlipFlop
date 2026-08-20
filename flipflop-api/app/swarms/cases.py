@@ -852,31 +852,16 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
                     // Find all ck-product-box custom elements
                     document.querySelectorAll('ck-product-box').forEach(box => {
                         try {
-                            // Get product data from data attributes
-                            const name = box.getAttribute('data-qa-component-ck-product-box') || '';
-                            const dataStr = box.textContent.trim();
+                            // Get analytics data from data-analytics attribute (already valid JSON)
+                            const analyticsStr = box.getAttribute('data-analytics') || '{}';
+                            let analytics = JSON.parse(analyticsStr);
 
-                            // Parse the JSON-like data from the element
-                            const script = box.querySelector('script');
-                            let productData = null;
-                            if (script) {
-                                try {
-                                    productData = JSON.parse(script.textContent);
-                                } catch (e) {
-                                    // If no script, try extracting from text content
-                                }
-                            }
+                            // Extract products array (direct property)
+                            const productsArray = analytics.products || [];
+                            if (productsArray.length === 0) return;
 
-                            if (!productData) {
-                                // Fallback: extract from element text
-                                const text = box.textContent;
-                                const match = text.match(/"name"\\s*:\\s*"([^"]+)"/);
-                                if (match) {
-                                    productData = { name: match[1] };
-                                }
-                            }
-
-                            if (!productData || !productData.name) return;
+                            const product = productsArray[0];
+                            if (!product.name || !product.price) return;
 
                             // Extract link
                             const link = box.querySelector('a');
@@ -888,11 +873,8 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
                             if (seen.has(key)) return;
                             seen.add(key);
 
-                            // Extract price
-                            const priceMatch = box.textContent.match(/£\\s*([\\d,]+\\.?\\d*)/);
-                            if (!priceMatch) return;
-
-                            const price = parseFloat(priceMatch[1].replace(',', ''));
+                            // Parse price
+                            const price = parseFloat(product.price);
                             if (price < 10 || price > 500) return;
 
                             // Extract image
@@ -900,7 +882,7 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
                             const imgSrc = img ? (img.src || img.dataset.src || '') : '';
 
                             items.push({
-                                title: productData.name.slice(0, 250),
+                                title: product.name.slice(0, 250),
                                 price,
                                 href,
                                 img: imgSrc
