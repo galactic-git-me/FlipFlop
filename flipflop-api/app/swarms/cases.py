@@ -79,6 +79,7 @@ class RawCase:
     rating: float = None  # 0-5 stars (from Amazon/reviews)
     review_count: int = None  # number of customer reviews
     sales_velocity: str = None  # "50+ bought in past month" - real demand signal
+    rrp: float = None  # Recommended Retail Price (shows discount %)
 
     def __post_init__(self):
         # Auto-extract form factors and keywords from name if not provided
@@ -1666,6 +1667,8 @@ async def _upsert_case(db, case: RawCase):
                 part.review_count = case.review_count
             if case.sales_velocity:
                 part.sales_velocity = case.sales_velocity
+            if case.rrp:
+                part.rrp = case.rrp
             part.last_price_update = now
     else:
         # Check for cross-source duplicates (same case name, different source)
@@ -1696,6 +1699,8 @@ async def _upsert_case(db, case: RawCase):
                     existing.review_count = case.review_count
                 if case.sales_velocity:
                     existing.sales_velocity = case.sales_velocity
+                if case.rrp:
+                    existing.rrp = case.rrp
                 existing.last_price_update = now
                 part = existing
             else:
@@ -1719,6 +1724,7 @@ async def _upsert_case(db, case: RawCase):
                 rating=case.rating,
                 review_count=case.review_count,
                 sales_velocity=case.sales_velocity,
+                rrp=case.rrp,
                 resale_value_add=0.0,
                 last_price_update=now,
             )

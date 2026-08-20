@@ -43,6 +43,7 @@ class Part(Base):
     price_new: Mapped[float | None] = mapped_column(Float)
     price_used: Mapped[float | None] = mapped_column(Float)
     price_refurb: Mapped[float | None] = mapped_column(Float)
+    rrp: Mapped[float | None] = mapped_column(Float)               # Recommended Retail Price (shows discount %)
 
     image_url: Mapped[str | None] = mapped_column(String(2000))
 
