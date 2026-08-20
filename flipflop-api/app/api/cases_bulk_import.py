@@ -28,7 +28,6 @@ from sqlalchemy import select, and_
 from app.database import get_db
 from app.models.part import Part, PartCategory, PartCondition
 from app.models.price_history import PriceHistory, PriceHistoryType
-from app.schemas.component import PartOut
 
 log = structlog.get_logger(__name__)
 router = APIRouter(prefix="/cases", tags=["cases"])
