@@ -882,7 +882,7 @@ async def _scrape_amazon(search: str, theme: str) -> list[RawCase]:
                         const reviewDigits = (reviewEl?.textContent || '').replace(/[^0-9]/g, '');
                         const bought = Array.from(item.querySelectorAll('span'))
                             .map((el) => (el.textContent || '').trim())
-                            .find((t) => /bought in (the )?past month/i.test(t));
+                            .find((t) => t.length < 60 && /bought in (the )?past month/i.test(t));
                         const strikeEl = item.querySelector('.a-price[data-a-strike="true"] .a-offscreen, span.a-price.a-text-price .a-offscreen');
 
                         out.push({
@@ -1909,8 +1909,8 @@ async def _upsert_case_new(db, case: RawCase):
                 source_site=case.source_site,
                 source_url=case.source_url,
                 image_url=case.image_url,
-                price=case.price,
-                price_new=case.price,
+                price=case.price or None,
+                price_new=case.price or None,
                 rrp=case.rrp,
                 form_factors=case.form_factors,
                 keywords=case.keywords,

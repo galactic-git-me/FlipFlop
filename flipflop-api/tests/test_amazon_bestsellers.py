@@ -1,10 +1,21 @@
-from app.services.amazon_bestsellers import extract_asin, match_row_by_bestseller, name_similarity
+from app.services.amazon_bestsellers import (
+    clean_sales_velocity,
+    extract_asin,
+    match_row_by_bestseller,
+    name_similarity,
+)
 
 
 class _Row:
     def __init__(self, name: str, source_url: str):
         self.name = name
         self.source_url = source_url
+
+
+def test_clean_sales_velocity_rejects_card_blob():
+    assert clean_sales_velocity("400+ bought in past month") == "400+ bought in past month"
+    assert clean_sales_velocity("Best Sellerin Computer CasesCORSAIR FRAME 4500X") is None
+    assert clean_sales_velocity(None) is None
 
 
 def test_extract_asin_from_dp_url():

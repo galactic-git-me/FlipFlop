@@ -70,7 +70,7 @@ _EXTRACT_JS = """() => {
         const reviewDigits = reviewText.replace(/[^0-9]/g, '');
         const bought = Array.from(item.querySelectorAll('span'))
             .map((el) => (el.textContent || '').trim())
-            .find((t) => /bought in (the )?past month/i.test(t));
+            .find((t) => t.length < 60 && /bought in (the )?past month/i.test(t));
         const strike = item.querySelector('.a-price[data-a-strike="true"] .a-offscreen, .a-text-price .a-offscreen');
         const priceWhole = item.querySelector('.a-price:not([data-a-strike="true"]) .a-offscreen');
 
@@ -103,6 +103,15 @@ def extract_asin(url: str | None) -> str | None:
         return None
     match = ASIN_RE.search(url)
     return match.group(1).upper() if match else None
+
+
+def clean_sales_velocity(text: str | None) -> str | None:
+    if not text:
+        return None
+    cleaned = str(text).strip()
+    if len(cleaned) < 60 and "bought" in cleaned.lower():
+        return cleaned
+    return None
 
 
 def name_similarity(a: str, b: str) -> float:
@@ -199,6 +208,12 @@ async def scrape_amazon_bestsellers() -> dict:
                 ).scalars().all()
 
                 await db.execute(update(Case).values(bestseller_rank=None))
+                await db.execute(
+                    update(Case)
+                    .where(Case.sales_velocity.is_not(None))
+                    .where(~Case.sales_velocity.ilike("%bought%"))
+                    .values(sales_velocity=None)
+                )
                 if part_rows:
                     await db.execute(
                         update(Part)
@@ -216,8 +231,9 @@ async def scrape_amazon_bestsellers() -> dict:
                             matching_case.rating = item["rating"]
                         if item.get("review_count"):
                             matching_case.review_count = item["review_count"]
-                        if item.get("sales_velocity"):
-                            matching_case.sales_velocity = item["sales_velocity"]
+                        demand = clean_sales_velocity(item.get("sales_velocity"))
+                        if demand:
+                            matching_case.sales_velocity = demand
                         if item.get("rrp"):
                             matching_case.rrp = item["rrp"]
                         if item.get("price"):
@@ -235,7 +251,7 @@ async def scrape_amazon_bestsellers() -> dict:
                             theme="Bestseller",
                             rating=item.get("rating"),
                             review_count=item.get("review_count"),
-                            sales_velocity=item.get("sales_velocity"),
+                            sales_velocity=clean_sales_velocity(item.get("sales_velocity")),
                             rrp=item.get("rrp"),
                         ))
                         if created:
