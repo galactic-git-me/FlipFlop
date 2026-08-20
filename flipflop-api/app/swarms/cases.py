@@ -815,78 +815,89 @@ async def _scrape_amazon(search: str, theme: str) -> list[RawCase]:
 
 async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
     """
-    Overclockers UK — Playwright (httpx blocked by Cloudflare 403).
+    Overclockers UK — Full browser (non-headless) to bypass Cloudflare.
 
-    Scrapes the PC cases section using Playwright with stealth mode.
-    Overclockers blocks plain HTTP requests; Playwright handles the Cloudflare challenge.
+    Overclockers blocks headless Playwright (Cloudflare challenge).
+    Uses full browser with real browser profile to appear as human user.
+    Requires manual Cloudflare bypass on first run.
     """
     cases = []
     url = "https://www.overclockers.co.uk/pc-cases"
 
-    async with managed_playwright() as p:
-        try:
-            browser, context = await _make_pw_context(p)
-        except Exception as exc:
-            log.warning("overclockers.cases.browser_error", error=str(exc))
-            return []
+    try:
+        # Launch full browser (not headless) to handle Cloudflare
+        from playwright.async_api import async_playwright
 
-        page = await context.new_page()
-        try:
-            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
-            await asyncio.sleep(2)
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=False)
+            page = await browser.new_page(
+                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            )
 
-            # Extract products using JS (resilient to class name changes)
-            products = await page.evaluate("""() => {
-                const items = [];
-                const products = document.querySelectorAll('a[href*="/product/"]');
+            try:
+                await page.goto(url, wait_until="networkidle", timeout=60000)
 
-                products.forEach(el => {
-                    const href = el.href;
-                    if (!href) return;
+                # Wait for Cloudflare to clear (user may need to solve challenge manually)
+                await asyncio.sleep(3)
 
-                    // Find parent card
-                    let card = el.closest('li') || el.closest('[class*="product"]') || el.parentElement;
-                    if (!card) return;
+                # Dismiss cookie banner if present
+                for selector in ["button:has-text('Accept')", "[data-cookielaw='accept']", ".cookie-accept"]:
+                    try:
+                        await page.click(selector, timeout=2000)
+                        await asyncio.sleep(1)
+                    except:
+                        pass
 
-                    const title = el.textContent.trim().slice(0, 250);
-                    if (!title || title.length < 5) return;
+                # Extract products using JS
+                products = await page.evaluate("""() => {
+                    const items = [];
+                    const seen = new Set();
 
-                    // Extract price
-                    const text = card.textContent;
-                    const match = text.match(/£\\s*([\\d,]+\\.?\\d*)/);
-                    if (!match) return;
+                    // Look for product links
+                    document.querySelectorAll('a[href*="/product/"]').forEach(link => {
+                        const href = link.href;
+                        if (!href || seen.has(href.split('?')[0])) return;
+                        seen.add(href.split('?')[0]);
 
-                    const price = parseFloat(match[1].replace(',', ''));
-                    if (price < 10 || price > 500) return;
+                        const card = link.closest('li') || link.closest('div[class*="product"]') || link;
+                        const title = link.textContent.trim().slice(0, 250).trim();
+                        if (!title || title.length < 5) return;
 
-                    // Extract image
-                    const img = card.querySelector('img');
-                    const imgSrc = img ? (img.src || img.dataset.src || '') : '';
+                        const priceMatch = card.textContent.match(/£\\s*([\\d,]+\\.?\\d*)/);
+                        if (!priceMatch) return;
 
-                    // Deduplicate by URL
-                    if (!items.find(i => i.url === href)) {
-                        items.push({ title, price, href, img: imgSrc });
-                    }
-                });
+                        const price = parseFloat(priceMatch[1].replace(',', ''));
+                        if (price < 10 || price > 500) return;
 
-                return items;
-            }""")
+                        const img = card.querySelector('img');
+                        items.push({
+                            title,
+                            price,
+                            href,
+                            img: img ? (img.src || img.dataset.src || '') : ''
+                        });
+                    });
 
-            for product in products[:24]:
-                cases.append(RawCase(
-                    name=product["title"],
-                    price=product["price"],
-                    source_site="Overclockers",
-                    source_url=product["href"],
-                    image_url=product["img"] or "",
-                    theme=theme,
-                ))
+                    return items;
+                }""")
 
-            log.info("overclockers.cases.done", found=len(cases))
-        except Exception as exc:
-            log.warning("overclockers.cases.error", error=str(exc))
-        finally:
-            await page.close()
+                for product in products[:24]:
+                    cases.append(RawCase(
+                        name=product["title"],
+                        price=product["price"],
+                        source_site="Overclockers",
+                        source_url=product["href"],
+                        image_url=product["img"] or "",
+                        theme=theme,
+                    ))
+
+                log.info("overclockers.cases.done", found=len(cases))
+
+            finally:
+                await browser.close()
+
+    except Exception as exc:
+        log.warning("overclockers.cases.error", error=str(exc))
 
     return cases
 
