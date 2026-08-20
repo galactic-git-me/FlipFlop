@@ -12,12 +12,9 @@ from functools import partial
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from app.config import get_settings
-# Disabled: flip_opportunities, upgrade_parts, accessories replaced by FlipFlopXtension
-# Cases swarm re-enabled to use direct httpx method (Overclockers, Amazon, BargainHardware)
-# from app.swarms.flip_opportunities import run_flip_opportunities_swarm
-# from app.swarms.upgrade_parts import run_upgrade_parts_swarm
+# Cases swarm: feeds PC case data for 3D model sourcing workflow
+# Other swarms (flip_opportunities, upgrade_parts, accessories) are handled by FlipFlopXtension
 from app.swarms.cases import run_cases_swarm
-# from app.swarms.accessories import run_accessories_swarm
 from app.services.external_demand import ingest_external_demand_signals
 from app.services.playbook_evolution import run_playbook_evolution
 from app.services.autonomous_loop import run_autonomous_cycle
@@ -45,11 +42,7 @@ settings = get_settings()
 
 _scheduler: AsyncIOScheduler | None = None
 _job_history: dict[str, deque[dict]] = {
-    # Backend scrapers disabled — replaced by FlipFlopXtension
-    # "flip_opportunities": deque(maxlen=50),
-    # "upgrade_parts": deque(maxlen=50),
     "cases": deque(maxlen=50),
-    # "accessories": deque(maxlen=50),
     "external_demand": deque(maxlen=50),
     "playbook_evolution": deque(maxlen=50),
     "autonomous": deque(maxlen=50),
