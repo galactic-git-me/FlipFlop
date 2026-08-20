@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Box, Check, AlertCircle, RefreshCw, ChevronRight, Zap, HardDrive, Maximize2 } from "lucide-react";
+import { Box, Check, AlertCircle, ChevronRight, Zap, HardDrive, Maximize2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -22,116 +22,94 @@ interface Component3DAsset {
 
 function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const rendererRef = useRef<any>(null);
+  const sceneRef = useRef<any>(null);
 
   useEffect(() => {
     if (!containerRef.current || !glbUrl) return;
 
     let animationId: number;
 
-    const loadScene = async () => {
-      try {
-        // Dynamic imports
-        const THREE = (await import("three")).default;
-        const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+    setTimeout(() => {
+      const setupViewer = async () => {
+        try {
+          const THREE = (await import("three")).default;
+          const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
 
-        if (!containerRef.current) return;
+          if (!containerRef.current) return;
 
-        const width = containerRef.current.clientWidth;
-        const height = containerRef.current.clientHeight;
+          const width = containerRef.current.clientWidth;
+          const height = containerRef.current.clientHeight;
 
-        // Scene setup
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0a1119);
-        scene.add(new THREE.GridHelper(10, 10, 0x444444, 0x222222));
+          if (width === 0 || height === 0) return;
 
-        const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-        camera.position.set(0, 1.5, 2.5);
-        camera.lookAt(0, 0.5, 0);
+          // Scene
+          const scene = new THREE.Scene();
+          scene.background = new THREE.Color(0x0a1119);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(width, height);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.shadowMap.enabled = true;
+          // Camera
+          const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+          camera.position.set(0, 1, 2);
 
-        // Clear previous content
-        while (containerRef.current.firstChild) {
-          containerRef.current.removeChild(containerRef.current.firstChild);
-        }
-        containerRef.current.appendChild(renderer.domElement);
-        rendererRef.current = renderer;
+          // Renderer
+          const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+          renderer.setSize(width, height);
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
-        // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-        scene.add(ambientLight);
+          // Clear container
+          while (containerRef.current.firstChild) {
+            containerRef.current.removeChild(containerRef.current.firstChild);
+          }
+          containerRef.current.appendChild(renderer.domElement);
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
-        directionalLight.position.set(5, 10, 5);
-        directionalLight.castShadow = true;
-        scene.add(directionalLight);
+          // Lights
+          const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+          scene.add(ambientLight);
 
-        // Load GLB
-        const loader = new GLTFLoader();
-        loader.load(
-          glbUrl,
-          (gltf) => {
+          const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+          directionalLight.position.set(5, 8, 5);
+          scene.add(directionalLight);
+
+          // Load model
+          const loader = new GLTFLoader();
+          loader.load(glbUrl, (gltf) => {
             const model = gltf.scene;
 
-            // Center and scale model
+            // Scale and center
             const bbox = new THREE.Box3().setFromObject(model);
             const center = bbox.getCenter(new THREE.Vector3());
             const size = bbox.getSize(new THREE.Vector3());
             const maxDim = Math.max(size.x, size.y, size.z);
-            const scale = 2 / maxDim;
+            const scale = 1.5 / maxDim;
 
             model.position.copy(center).multiplyScalar(-1);
             model.scale.multiplyScalar(scale);
             scene.add(model);
 
-            // Auto-rotate animation
+            // Animate
             let rotation = 0;
             const animate = () => {
               animationId = requestAnimationFrame(animate);
-              rotation += 0.005;
+              rotation += 0.003;
               model.rotation.y = rotation;
               renderer.render(scene, camera);
             };
             animate();
-          },
-          undefined,
-          (error) => {
-            console.error("Error loading GLB:", error);
-          }
-        );
 
-        // Handle window resize
-        const handleResize = () => {
-          if (!containerRef.current) return;
-          const w = containerRef.current.clientWidth;
-          const h = containerRef.current.clientHeight;
-          camera.aspect = w / h;
-          camera.updateProjectionMatrix();
-          renderer.setSize(w, h);
-        };
+            sceneRef.current = { scene, renderer, camera, model };
+          });
+        } catch (error) {
+          console.error("3D viewer error:", error);
+        }
+      };
 
-        window.addEventListener("resize", handleResize);
+      setupViewer();
+    }, 100);
 
-        return () => {
-          window.removeEventListener("resize", handleResize);
-          if (animationId) cancelAnimationFrame(animationId);
-          renderer.dispose();
-          if (containerRef.current && renderer.domElement.parentNode === containerRef.current) {
-            containerRef.current.removeChild(renderer.domElement);
-          }
-        };
-      } catch (error) {
-        console.error("Error setting up 3D viewer:", error);
-      }
-    };
-
-    const cleanup = loadScene();
     return () => {
-      cleanup?.then((f) => f?.());
+      if (animationId) cancelAnimationFrame(animationId);
+      if (sceneRef.current?.renderer) {
+        sceneRef.current.renderer.dispose();
+      }
     };
   }, [glbUrl]);
 
@@ -139,7 +117,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
     <div
       ref={containerRef}
       className="w-full h-full rounded-lg overflow-hidden bg-[#0a1119] border border-[#1e2d45]"
-      style={{ minHeight: "500px" }}
+      style={{ minHeight: "380px" }}
     />
   );
 }
@@ -248,91 +226,60 @@ export default function Components3DReviewPage() {
       <div className="relative z-10">
         {/* Header */}
         <div>
-        <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
-          <Box className="w-6 h-6 text-purple-400" /> Component 3D Asset Review
-        </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Review Meshy-generated models. Approve for production or reject for rework.
-          </p>
+        <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
         </div>
 
-        {/* Progress summary */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-slate-500 uppercase">Draft (Review)</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-orange-400">{draftCount}</div>
-            <p className="text-xs text-slate-500 mt-1">awaiting review</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-slate-500 uppercase">Validated</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-purple-400">{validatedCount}</div>
-            <p className="text-xs text-slate-500 mt-1">scale/orientation checked</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-slate-500 uppercase">Final</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-[#00dc82]">{finalCount}</div>
-            <p className="text-xs text-slate-500 mt-1">ready for production</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-slate-500 uppercase">Total</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-slate-300">{assets.length}</div>
-            <p className="text-xs text-slate-500 mt-1">all assets</p>
-          </CardContent>
-        </Card>
+        {/* Progress summary - Compact */}
+        <div className="grid grid-cols-4 gap-1.5 pb-2 text-center text-xs">
+        <div className="bg-orange-400/10 border border-orange-400/30 rounded p-1">
+          <div className="text-xl font-bold text-orange-400">{draftCount}</div>
+          <div className="text-[10px] text-slate-500">Draft</div>
+        </div>
+        <div className="bg-purple-400/10 border border-purple-400/30 rounded p-1">
+          <div className="text-xl font-bold text-purple-400">{validatedCount}</div>
+          <div className="text-[10px] text-slate-500">Valid</div>
+        </div>
+        <div className="bg-[#00dc82]/10 border border-[#00dc82]/30 rounded p-1">
+          <div className="text-xl font-bold text-[#00dc82]">{finalCount}</div>
+          <div className="text-[10px] text-slate-500">Final</div>
+        </div>
+        <div className="bg-slate-600/10 border border-slate-600/30 rounded p-1">
+          <div className="text-xl font-bold text-slate-300">{assets.length}</div>
+          <div className="text-[10px] text-slate-500">Total</div>
+        </div>
       </div>
 
-        {/* Filter tabs */}
-        <div className="flex gap-2">
-        <button
-          onClick={() => setFilter("meshy_draft")}
-          className={`px-4 py-2 rounded text-xs font-semibold transition-colors ${
-            filter === "meshy_draft"
-              ? "bg-orange-600/30 text-orange-300 border border-orange-500/50"
-              : "bg-slate-700/30 text-slate-400 border border-slate-600/50 hover:border-slate-500"
-          }`}
-        >
-          Review Queue ({draftCount})
-        </button>
-        <button
-          onClick={() => setFilter("all")}
-          className={`px-4 py-2 rounded text-xs font-semibold transition-colors ${
-            filter === "all"
-              ? "bg-purple-600/30 text-purple-300 border border-purple-500/50"
-              : "bg-slate-700/30 text-slate-400 border border-slate-600/50 hover:border-slate-500"
-          }`}
-        >
-          All Assets ({assets.length})
-        </button>
-      </div>
+        {/* Filters */}
+        <div className="flex gap-1">
+          <button
+            onClick={() => setFilter("meshy_draft")}
+            className={`px-2 py-1 rounded text-xs font-semibold transition-colors ${
+              filter === "meshy_draft"
+                ? "bg-orange-600/30 text-orange-300 border border-orange-500/50"
+                : "bg-slate-700/30 text-slate-400 border border-slate-600/50"
+            }`}
+          >
+            Review ({draftCount})
+          </button>
+          <button
+            onClick={() => setFilter("all")}
+            className={`px-2 py-1 rounded text-xs font-semibold transition-colors ${
+              filter === "all"
+                ? "bg-purple-600/30 text-purple-300 border border-purple-500/50"
+                : "bg-slate-700/30 text-slate-400 border border-slate-600/50"
+            }`}
+          >
+            All ({assets.length})
+          </button>
+        </div>
 
-        {/* Main layout: list + viewer */}
-        <div className="grid grid-cols-1 lg:grid-cols-6 gap-6">
-        {/* Asset list - Grid of squares */}
-        <div className="lg:col-span-1">
-          <div className="flex flex-col gap-2">
-            <h3 className="text-sm font-semibold text-slate-100 px-1">Assets ({filteredAssets.length})</h3>
-            <div className="grid grid-cols-2 gap-2 max-h-[calc(100vh-300px)] overflow-y-auto pr-2">
+        {/* Main layout: grid + viewer - Full height */}
+        <div className="grid grid-cols-6 gap-3 flex-1 min-h-0">
+          {/* Asset list - Grid of squares */}
+          <div className="col-span-1 flex flex-col min-h-0">
+            <div className="grid grid-cols-2 gap-2 overflow-y-auto flex-1">
               {loading ? (
-                <div className="text-center py-8 text-slate-500">
-                  <RefreshCw className="w-4 h-4 animate-spin mx-auto mb-2" />
+                <div className="text-center py-8 text-slate-500 text-xs col-span-2">
                   Loading...
                 </div>
               ) : filteredAssets.length === 0 ? (
@@ -404,35 +351,29 @@ export default function Components3DReviewPage() {
               )}
             </div>
           </div>
-        </div>
 
-        {/* Detail viewer */}
-        <div className="lg:col-span-5">
+          {/* Detail viewer */}
+          <div className="col-span-5 flex flex-col min-h-0">
           {selectedAsset ? (
-            <div className="space-y-4">
+            <div className="flex flex-col gap-2 flex-1 min-h-0 overflow-y-auto">
               {/* 3D Viewer */}
-              <Card className="border-[#1e2d45]">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-sm">3D Model Viewer</CardTitle>
-                    {selectedAsset.glb_ref && (
-                      <span className="text-[10px] text-slate-500">Auto-rotating • Scroll to zoom • Drag to rotate</span>
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent className="p-0">
+              <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 min-h-0 flex flex-col">
+                <div className="px-3 py-2 border-b border-[#1e2d45] bg-slate-900/30 flex-shrink-0">
+                  <div className="text-xs font-semibold text-slate-300">3D Viewer</div>
+                </div>
+                <div className="flex-1 min-h-0 bg-[#0a1119]">
                   {selectedAsset.glb_ref ? (
                     <Viewer3D glbUrl={selectedAsset.glb_ref} />
                   ) : (
-                    <div className="w-full h-96 rounded-lg overflow-hidden bg-[#0a1119] flex items-center justify-center text-slate-500">
+                    <div className="w-full h-full flex items-center justify-center text-slate-500">
                       <div className="text-center">
-                        <Box className="w-12 h-12 mx-auto mb-2 opacity-30" />
-                        <p className="text-xs">No 3D model available</p>
+                        <Box className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                        <p className="text-xs">No 3D model</p>
                       </div>
                     </div>
                   )}
-                </CardContent>
-              </Card>
+                </div>
+              </div>
 
               {/* Asset details */}
               <Card className="border-[#1e2d45]">
@@ -597,7 +538,7 @@ export default function Components3DReviewPage() {
               <p>Select an asset to review</p>
             </div>
           )}
-        </div>
+          </div>
         </div>
       </div>
     </div>
