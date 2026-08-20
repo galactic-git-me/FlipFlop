@@ -48,15 +48,8 @@ async def scrape_amazon_bestsellers() -> dict:
         page = await context.new_page()
         try:
             log.info("bestsellers.scraping", url=url)
-            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
-
-            # Wait for bestseller items to load
-            try:
-                await page.wait_for_selector('[data-component-type="s-search-result"]', timeout=10000)
-            except Exception as exc:
-                log.debug("bestsellers.wait_timeout", error=str(exc))
-
-            await asyncio.sleep(2)
+            await page.goto(url, wait_until="networkidle", timeout=45000)
+            await asyncio.sleep(3)  # Let JS render fully
 
             # Extract bestseller items using JS (try multiple selectors)
             raw = await page.evaluate("""() => {
