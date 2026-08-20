@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Box, Check, AlertCircle, RefreshCw, ChevronRight, Zap, HardDrive, Maximize2, RotateCw } from "lucide-react";
+import { Box, Check, AlertCircle, RefreshCw, ChevronRight, Zap, HardDrive, Maximize2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -22,19 +22,23 @@ interface Component3DAsset {
 
 function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const sceneRef = useRef<any>(null);
+  const rendererRef = useRef<any>(null);
 
   useEffect(() => {
     if (!containerRef.current || !glbUrl) return;
 
+    let animationId: number;
+
     const loadScene = async () => {
       try {
-        // Dynamically import Three.js and GLTFLoader
+        // Dynamic imports
         const THREE = (await import("three")).default;
-        const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader");
+        const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
 
-        const width = containerRef.current?.clientWidth || 800;
-        const height = containerRef.current?.clientHeight || 600;
+        if (!containerRef.current) return;
+
+        const width = containerRef.current.clientWidth;
+        const height = containerRef.current.clientHeight;
 
         // Scene setup
         const scene = new THREE.Scene();
@@ -42,52 +46,65 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
         scene.add(new THREE.GridHelper(10, 10, 0x444444, 0x222222));
 
         const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-        camera.position.set(0, 1, 2);
-        camera.lookAt(0, 0, 0);
+        camera.position.set(0, 1.5, 2.5);
+        camera.lookAt(0, 0.5, 0);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(width, height);
         renderer.setPixelRatio(window.devicePixelRatio);
-        containerRef.current?.appendChild(renderer.domElement);
+        renderer.shadowMap.enabled = true;
+
+        // Clear previous content
+        while (containerRef.current.firstChild) {
+          containerRef.current.removeChild(containerRef.current.firstChild);
+        }
+        containerRef.current.appendChild(renderer.domElement);
+        rendererRef.current = renderer;
 
         // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
         scene.add(ambientLight);
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
         directionalLight.position.set(5, 10, 5);
+        directionalLight.castShadow = true;
         scene.add(directionalLight);
 
         // Load GLB
         const loader = new GLTFLoader();
-        loader.load(glbUrl, (gltf) => {
-          const model = gltf.scene;
+        loader.load(
+          glbUrl,
+          (gltf) => {
+            const model = gltf.scene;
 
-          // Center and scale model
-          const bbox = new THREE.Box3().setFromObject(model);
-          const center = bbox.getCenter(new THREE.Vector3());
-          const size = bbox.getSize(new THREE.Vector3());
-          const maxDim = Math.max(size.x, size.y, size.z);
-          const scale = 2 / maxDim;
+            // Center and scale model
+            const bbox = new THREE.Box3().setFromObject(model);
+            const center = bbox.getCenter(new THREE.Vector3());
+            const size = bbox.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z);
+            const scale = 2 / maxDim;
 
-          model.position.sub(center);
-          model.scale.multiplyScalar(scale);
-          scene.add(model);
+            model.position.copy(center).multiplyScalar(-1);
+            model.scale.multiplyScalar(scale);
+            scene.add(model);
 
-          // Auto-rotate
-          let rotation = 0;
-          const animate = () => {
-            requestAnimationFrame(animate);
-            rotation += 0.005;
-            model.rotation.y = rotation;
-            renderer.render(scene, camera);
-          };
-          animate();
-        });
+            // Auto-rotate animation
+            let rotation = 0;
+            const animate = () => {
+              animationId = requestAnimationFrame(animate);
+              rotation += 0.005;
+              model.rotation.y = rotation;
+              renderer.render(scene, camera);
+            };
+            animate();
+          },
+          undefined,
+          (error) => {
+            console.error("Error loading GLB:", error);
+          }
+        );
 
-        sceneRef.current = { scene, renderer, camera };
-
-        // Handle resize
+        // Handle window resize
         const handleResize = () => {
           if (!containerRef.current) return;
           const w = containerRef.current.clientWidth;
@@ -98,17 +115,24 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
         };
 
         window.addEventListener("resize", handleResize);
+
         return () => {
           window.removeEventListener("resize", handleResize);
+          if (animationId) cancelAnimationFrame(animationId);
           renderer.dispose();
-          containerRef.current?.removeChild(renderer.domElement);
+          if (containerRef.current && renderer.domElement.parentNode === containerRef.current) {
+            containerRef.current.removeChild(renderer.domElement);
+          }
         };
       } catch (error) {
-        console.error("Error loading 3D viewer:", error);
+        console.error("Error setting up 3D viewer:", error);
       }
     };
 
-    loadScene();
+    const cleanup = loadScene();
+    return () => {
+      cleanup?.then((f) => f?.());
+    };
   }, [glbUrl]);
 
   return (
@@ -186,19 +210,54 @@ export default function Components3DReviewPage() {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
-      <div>
+    <div className="p-6 space-y-6 relative overflow-hidden min-h-screen">
+      {/* Animated gradient background */}
+      <style>{`
+        @keyframes gradientShift {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+
+        .animate-gradient-bg {
+          background: linear-gradient(
+            -45deg,
+            #0a1119,
+            #1a3a52,
+            #ff6b35,
+            #0a1119
+          );
+          background-size: 400% 400%;
+          animation: gradientShift 15s ease infinite;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: -1;
+        }
+      `}</style>
+      <div className="animate-gradient-bg" />
+
+      <div className="relative z-10">
+        {/* Header */}
+        <div>
         <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
           <Box className="w-6 h-6 text-purple-400" /> Component 3D Asset Review
         </h1>
-        <p className="text-sm text-slate-500 mt-1">
-          Review Meshy-generated models. Approve for production or reject for rework.
-        </p>
-      </div>
+          <p className="text-sm text-slate-500 mt-1">
+            Review Meshy-generated models. Approve for production or reject for rework.
+          </p>
+        </div>
 
-      {/* Progress summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {/* Progress summary */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-xs text-slate-500 uppercase">Draft (Review)</CardTitle>
@@ -265,14 +324,12 @@ export default function Components3DReviewPage() {
       </div>
 
       {/* Main layout: list + viewer */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Asset list */}
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-6">
+        {/* Asset list - Grid of squares */}
         <div className="lg:col-span-1">
-          <Card className="max-h-[calc(100vh-400px)] overflow-y-auto">
-            <CardHeader className="sticky top-0 bg-slate-900 z-10 border-b border-slate-700">
-              <CardTitle className="text-sm">Assets ({filteredAssets.length})</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2 p-3">
+          <div className="flex flex-col gap-2">
+            <h3 className="text-sm font-semibold text-slate-100 px-1">Assets ({filteredAssets.length})</h3>
+            <div className="grid grid-cols-2 gap-2 max-h-[calc(100vh-300px)] overflow-y-auto pr-2">
               {loading ? (
                 <div className="text-center py-8 text-slate-500">
                   <RefreshCw className="w-4 h-4 animate-spin mx-auto mb-2" />
@@ -303,42 +360,54 @@ export default function Components3DReviewPage() {
                     rejected: "✗",
                   };
 
+                  const bgImage = asset.preview_image_ref
+                    ? `url('${asset.preview_image_ref}')`
+                    : "none";
+
                   return (
                     <button
                       key={asset.id}
                       onClick={() => setSelectedAsset(asset)}
-                      className={`w-full text-left p-2 rounded-lg border transition-all ${
+                      className={`aspect-square w-full rounded-lg border transition-all flex flex-col items-center justify-center p-2 text-center relative overflow-hidden group ${
                         selectedAsset?.id === asset.id
-                          ? "border-purple-400/50 bg-purple-400/10"
-                          : statusColors[asset.status]
+                          ? "border-purple-400/70 ring-2 ring-purple-400/50 shadow-lg shadow-purple-400/50"
+                          : "border-slate-600 shadow-lg shadow-black/50 hover:shadow-xl hover:shadow-black/70"
                       }`}
+                      style={{
+                        backgroundImage: bgImage,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      }}
                     >
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-semibold text-slate-100 truncate">
-                            {statusIcons[asset.status]} {asset.family_key}
-                          </div>
-                          <div className="text-[10px] text-slate-500 mt-0.5">{asset.category}</div>
-                          {asset.file_size_kb && (
-                            <div className="text-[10px] text-slate-600 mt-1">
-                              {Math.round(asset.file_size_kb / 1024)}MB
-                            </div>
-                          )}
+                      {/* Overlay gradient for readability */}
+                      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/70" />
+
+                      {/* Content */}
+                      <div className="relative z-10 flex flex-col items-center justify-center h-full w-full">
+                        <div className="text-2xl mb-1">{statusIcons[asset.status]}</div>
+                        <div className="text-[10px] font-bold text-white truncate w-full">
+                          {asset.family_key?.split("_")[1] || asset.family_key}
                         </div>
-                        {selectedAsset?.id === asset.id && (
-                          <ChevronRight className="w-3 h-3 text-purple-400 flex-shrink-0 mt-0.5" />
+                        <div className="text-[8px] text-slate-300 mt-0.5">{asset.category}</div>
+                        {asset.file_size_kb && (
+                          <div className="text-[8px] text-slate-400 mt-1">
+                            {Math.round(asset.file_size_kb / 1024)}MB
+                          </div>
+                        )}
+                        {asset.status === "meshy_draft" && (
+                          <div className="text-[8px] text-orange-300 mt-1 font-semibold">REVIEW</div>
                         )}
                       </div>
                     </button>
                   );
                 })
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
 
         {/* Detail viewer */}
-        <div className="lg:col-span-3">
+        <div className="lg:col-span-5">
           {selectedAsset ? (
             <div className="space-y-4">
               {/* 3D Viewer */}
@@ -525,4 +594,11 @@ export default function Components3DReviewPage() {
           ) : (
             <div className="text-center py-12 text-slate-500">
               <Box className="w-12 h-12 mx-auto mb-3 opacity-30" />
-              <p>Select an asse
+              <p>Select an asset to review</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
