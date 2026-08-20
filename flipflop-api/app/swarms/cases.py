@@ -1667,14 +1667,15 @@ async def _upsert_case(db, case: RawCase):
         if case.rrp:
             part.rrp = case.rrp
 
-        # Always prefer Amazon ratings (more reliable) regardless of price source
+        # Always prefer Amazon ratings & demand (more reliable) regardless of price source
         if case.source_site == "Amazon":
+            # Always take Amazon ratings, reviews, and sales velocity (demand signal)
             if case.rating:
                 part.rating = case.rating
             if case.review_count:
                 part.review_count = case.review_count
             if case.sales_velocity:
-                part.sales_velocity = case.sales_velocity
+                part.sales_velocity = case.sales_velocity  # "50+ sold this month"
         elif not part.rating and case.rating:
             # Only use Overclockers ratings if we have no Amazon ratings yet
             part.rating = case.rating
