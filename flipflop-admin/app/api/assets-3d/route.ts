@@ -1,23 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:18000";
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || process.env.BACKEND_URL || "http://localhost:18000";
 
 export async function GET(request: NextRequest) {
   try {
-    const response = await fetch(`${BACKEND_URL}/assets-3d`, {
-      headers: {
-        "Authorization": request.headers.get("authorization") || "",
-      },
-    });
+    const url = new URL(`${BACKEND_URL}/api/assets-3d`);
+
+    // Use admin/system credentials if available (bypass user auth for admin tools)
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    // Forward auth header if present, but don't require it
+    const authHeader = request.headers.get("authorization");
+    if (authHeader) {
+      headers["authorization"] = authHeader;
+    }
+
+    const response = await fetch(url.toString(), { headers });
 
     if (!response.ok) {
-      return NextResponse.json({ error: "Failed to fetch assets" }, { status: response.status });
+      const errorText = await response.text();
+      console.error(`Backend error ${response.status}:`, errorText);
+      return NextResponse.json(
+        { error: `Failed to fetch assets (${response.status})`, details: errorText },
+        { status: response.status }
+      );
     }
 
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
     console.error("Error fetching assets:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error", details: String(error) }, { status: 500 });
   }
 }

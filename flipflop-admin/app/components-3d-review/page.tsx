@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Box, Check, AlertCircle, RefreshCw, ChevronRight, Zap, FileSize, Maximize2 } from "lucide-react";
+import { Box, Check, AlertCircle, RefreshCw, ChevronRight, Zap, HardDrive, Maximize2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -31,11 +31,14 @@ export default function Components3DReviewPage() {
       setLoading(true);
       try {
         const response = await fetch("/api/assets-3d");
-        const data = (await response.json()) as Component3DAsset[];
-        setAssets(data);
+        const data = await response.json();
+
+        // Handle both array and object responses
+        const assets = Array.isArray(data) ? data : (data.data || data.assets || []);
+        setAssets(assets as Component3DAsset[]);
 
         // Auto-select first MESHY_DRAFT
-        const firstDraft = data.find(a => a.status === "meshy_draft");
+        const firstDraft = assets.find((a: Component3DAsset) => a.status === "meshy_draft");
         if (firstDraft) {
           setSelectedAsset(firstDraft);
         }
@@ -291,7 +294,7 @@ export default function Components3DReviewPage() {
                     </div>
                     <div>
                       <p className="text-slate-500 flex items-center gap-1">
-                        <FileSize className="w-3 h-3" /> File Size
+                        <HardDrive className="w-3 h-3" /> File Size
                       </p>
                       <p className="text-slate-100 font-semibold">
                         {selectedAsset.file_size_kb ? `${Math.round(selectedAsset.file_size_kb / 1024)}MB` : "—"}
