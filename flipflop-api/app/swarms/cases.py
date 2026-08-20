@@ -47,11 +47,10 @@ CORE_CASE_TERMS = [
 ]
 
 SOURCES = [
-    {"name": "Amazon",            "fn": "amazon"},          # Playwright — new cases with Prime shipping
-    {"name": "Overclockers",      "fn": "overclockers"},    # Playwright — UK retailer (httpx blocked by CF, fallback to PW)
-    {"name": "BargainHardware",   "fn": "bargainhardware"}, # Playwright — refurb specialist
+    {"name": "Amazon",       "fn": "amazon"},       # Playwright — new cases with Prime shipping
+    {"name": "Overclockers", "fn": "overclockers"}, # Playwright — UK retailer, fast delivery
 ]
-_PLAYWRIGHT_CASE_SOURCES = {"amazon", "overclockers", "bargainhardware"}
+_PLAYWRIGHT_CASE_SOURCES = {"amazon", "overclockers"}
 
 _SOURCE_ALIASES: dict[str, str] = {
     "ebay uk": "eBay",
