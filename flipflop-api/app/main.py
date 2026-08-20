@@ -36,6 +36,7 @@ from app.workers.scheduler import start_scheduler, stop_scheduler, run_startup_b
 from app.api import listings, flips, parts, sources, chat, config, swarms, inventory, inventory_allocations
 from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms
 from app.api import alerts, reselling, ebay_listings, favourites
+from app.api import cases_bulk_import
 from app.api.orders import router as orders_router, admin_router as orders_admin_router
 from app.api.drafts import router as drafts_router
 from app.api.build_comparison import router as build_comparison_router
@@ -617,6 +618,7 @@ app.include_router(drafts_router, prefix="")
 app.include_router(build_comparison_router, prefix="")
 app.include_router(demand.router, prefix="/api")
 app.include_router(manual_submit.router, prefix="/api")
+app.include_router(cases_bulk_import.router, prefix="/api")
 app.include_router(schedule.router, prefix="/api")
 app.include_router(search_telemetry.router, prefix="/api")
 app.include_router(source_search_terms.router, prefix="/api")
