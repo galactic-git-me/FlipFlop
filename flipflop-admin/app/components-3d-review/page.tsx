@@ -188,7 +188,7 @@ export default function Components3DReviewPage() {
   };
 
   return (
-    <div className="p-6 space-y-6 relative overflow-hidden min-h-screen">
+    <div className="p-6 space-y-6 relative">
       {/* Animated gradient background */}
       <style>{`
         @keyframes gradientShift {
@@ -219,6 +219,7 @@ export default function Components3DReviewPage() {
           right: 0;
           bottom: 0;
           z-index: -1;
+          pointer-events: none;
         }
       `}</style>
       <div className="animate-gradient-bg" />
