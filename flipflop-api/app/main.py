@@ -97,6 +97,7 @@ _CASE_DEFAULT_SOURCES = [
     "eBay (Worldwide)",
     "Gumtree",
     "Amazon",
+    "Overclockers",
     "Temu",
     "AliExpress",
     "BargainHardware",

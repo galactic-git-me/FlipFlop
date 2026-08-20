@@ -63,9 +63,27 @@ def _case_form_factor(title: str) -> str:
     return "atx"
 
 
+def _is_case_search(search_id: str) -> bool:
+    """Accept extension search IDs that clearly represent case searches."""
+    normalized = re.sub(r"[^a-z0-9]+", "-", str(search_id or "").lower()).strip("-")
+    return "case" in normalized or "chassis" in normalized
+
+
+def _looks_like_pc_case(title: str) -> bool:
+    """Reject peripherals and complete PCs returned by broad case searches."""
+    normalized = str(title or "").lower()
+    if not re.search(r"\bpc\s*case\b|\bcomputer\s*case\b|\bchassis\b|\b(?:mid|full|mini)[- ]tower\b", normalized):
+        return False
+    excluded = (
+        "complete pc", "gaming pc", "pre-built", "prebuilt", "desktop computer",
+        "case fan", "fan only", "case badge", "case accessory", "carry case",
+    )
+    return not any(term in normalized for term in excluded)
+
+
 async def _sync_supplier_case_catalogue(db: AsyncSession, payload: ScanSubmitRequest) -> int:
     """Promote verified extension case offers into the customer catalogue."""
-    if payload.search_id not in {"pc-case-chassis", "lian-li-pc-case"}:
+    if not _is_case_search(payload.search_id):
         return 0
     from app.models.catalogue import CaseCatalogue
 
@@ -76,7 +94,7 @@ async def _sync_supplier_case_catalogue(db: AsyncSession, payload: ScanSubmitReq
     now = datetime.utcnow().isoformat()
     upserted = 0
     for offer in payload.listings:
-        if offer.sponsored or offer.condition_normalised != "new":
+        if offer.sponsored or offer.condition_normalised != "new" or not _looks_like_pc_case(offer.title):
             continue
         if vendor == "Amazon" and not (
             offer.prime_eligible
