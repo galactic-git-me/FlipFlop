@@ -969,8 +969,8 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
                     all_products.extend(products)
                     log.debug("overclockers.cases.page", page=page_num, found=len(products), total=len(all_products))
 
-                    # Look for next page button on current tab
-                    next_button = None
+                    # Look for next page button or link
+                    next_url = None
                     next_selectors = [
                         'a[rel="next"]',
                         'a:has-text("Next")',
@@ -980,20 +980,24 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
 
                     for selector in next_selectors:
                         try:
-                            next_button = await page.query_selector(selector)
-                            if next_button and await next_button.is_enabled():
-                                break
+                            elem = await page.query_selector(selector)
+                            if elem and await elem.is_enabled():
+                                next_url = await elem.get_attribute("href")
+                                if next_url:
+                                    break
                         except:
                             pass
 
-                    if not next_button:
+                    if not next_url:
                         log.debug("overclockers.cases.no_more_pages", page=page_num)
                         break
 
                     try:
-                        # Click next on same tab
-                        await next_button.click()
-                        await page.wait_for_load_state("networkidle", timeout=30000)
+                        # Navigate to next page URL (avoids opening new windows)
+                        if not next_url.startswith("http"):
+                            next_url = "https://www.overclockers.co.uk" + next_url
+
+                        await page.goto(next_url, wait_until="networkidle", timeout=30000)
                         await asyncio.sleep(1)
                         page_num += 1
                     except Exception as e:
