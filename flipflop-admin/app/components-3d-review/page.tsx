@@ -299,8 +299,8 @@ export default function Components3DReviewPage() {
         </Card>
       </div>
 
-      {/* Filter tabs */}
-      <div className="flex gap-2">
+        {/* Filter tabs */}
+        <div className="flex gap-2">
         <button
           onClick={() => setFilter("meshy_draft")}
           className={`px-4 py-2 rounded text-xs font-semibold transition-colors ${
@@ -323,8 +323,8 @@ export default function Components3DReviewPage() {
         </button>
       </div>
 
-      {/* Main layout: list + viewer */}
-      <div className="grid grid-cols-1 lg:grid-cols-6 gap-6">
+        {/* Main layout: list + viewer */}
+        <div className="grid grid-cols-1 lg:grid-cols-6 gap-6">
         {/* Asset list - Grid of squares */}
         <div className="lg:col-span-1">
           <div className="flex flex-col gap-2">
@@ -597,6 +597,7 @@ export default function Components3DReviewPage() {
               <p>Select an asset to review</p>
             </div>
           )}
+        </div>
         </div>
       </div>
     </div>
