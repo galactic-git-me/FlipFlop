@@ -1652,7 +1652,7 @@ async def _upsert_case(db, case: RawCase):
     now = datetime.utcnow()
 
     if part:
-        # Update price if cheaper, but prefer Amazon ratings
+        # Update price if cheaper
         if case.price < part.price:
             part.price = case.price
             part.price_new = case.price
@@ -1661,17 +1661,24 @@ async def _upsert_case(db, case: RawCase):
             part.image_url = case.image_url
             part.form_factors = case.form_factors
             part.keywords = case.keywords
-            # Only update ratings if this is Amazon (more reliable) or if current has no ratings
-            if case.source_site == "Amazon" or not part.rating:
-                if case.rating:
-                    part.rating = case.rating
-                if case.review_count:
-                    part.review_count = case.review_count
-            if case.sales_velocity:
-                part.sales_velocity = case.sales_velocity
             if case.rrp:
                 part.rrp = case.rrp
             part.last_price_update = now
+
+        # Always prefer Amazon ratings (more reliable) regardless of price source
+        if case.source_site == "Amazon":
+            if case.rating:
+                part.rating = case.rating
+            if case.review_count:
+                part.review_count = case.review_count
+            if case.sales_velocity:
+                part.sales_velocity = case.sales_velocity
+        elif not part.rating and case.rating:
+            # Only use Overclockers ratings if we have no Amazon ratings yet
+            part.rating = case.rating
+            part.review_count = case.review_count
+            if case.sales_velocity:
+                part.sales_velocity = case.sales_velocity
     else:
         # Check for cross-source duplicates (same case name, different source)
         # If found, only keep if this source is cheaper
@@ -1687,7 +1694,7 @@ async def _upsert_case(db, case: RawCase):
         if existing:
             # Case exists from another fast source
             if case.price < existing.price:
-                # This source is cheaper, update it (but keep Amazon ratings if available)
+                # This source is cheaper, update it
                 existing.price = case.price
                 existing.price_new = case.price
                 existing.source_url = case.source_url
@@ -1695,25 +1702,28 @@ async def _upsert_case(db, case: RawCase):
                 existing.image_url = case.image_url
                 existing.form_factors = case.form_factors
                 existing.keywords = case.keywords
-                # Only update ratings if this is Amazon or existing has no ratings
-                if case.source_site == "Amazon" or not existing.rating:
-                    if case.rating:
-                        existing.rating = case.rating
-                    if case.review_count:
-                        existing.review_count = case.review_count
-                if case.sales_velocity:
-                    existing.sales_velocity = case.sales_velocity
                 if case.rrp:
                     existing.rrp = case.rrp
                 existing.last_price_update = now
                 part = existing
             else:
                 # Existing source is cheaper or equal, don't create duplicate
-                # But update Amazon ratings if this case is from Amazon
-                if case.source_site == "Amazon" and case.rating and not existing.rating:
-                    existing.rating = case.rating
-                    existing.review_count = case.review_count
                 part = existing
+
+            # Always prefer Amazon ratings regardless of which source has the best price
+            if case.source_site == "Amazon":
+                if case.rating:
+                    existing.rating = case.rating
+                if case.review_count:
+                    existing.review_count = case.review_count
+                if case.sales_velocity:
+                    existing.sales_velocity = case.sales_velocity
+            elif not existing.rating and case.rating:
+                # Only use Overclockers ratings if we have no Amazon ratings yet
+                existing.rating = case.rating
+                existing.review_count = case.review_count
+                if case.sales_velocity:
+                    existing.sales_velocity = case.sales_velocity
         else:
             # No existing entry, create new
             part = Part(
