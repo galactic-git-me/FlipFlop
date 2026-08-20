@@ -2520,13 +2520,13 @@ async def _scrape_alibaba_http(
 
 async def scrape_overclockers_cases(min_price: float = 10.0, max_price: float = 500.0) -> list[RawListing]:
     """
-    Overclockers UK — PC Cases category.
+    Overclockers UK — PC Cases by Brand category.
     Scrapes the entire cases section using httpx (like eBay).
     Falls back gracefully if blocked.
     """
     results: list[RawListing] = []
     seen: set[str] = set()
-    url = "https://www.overclockers.co.uk/cases"
+    url = "https://www.overclockers.co.uk/cases-and-modding/pc-cases/pc-cases-by-brand"
 
     client_kwargs = apply_httpx_proxy({"timeout": 30, "follow_redirects": True})
 

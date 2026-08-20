@@ -817,15 +817,13 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
     """
     Overclockers UK — Full browser (non-headless) to bypass Cloudflare.
 
-    Overclockers blocks headless Playwright (Cloudflare challenge).
-    Uses full browser with real browser profile to appear as human user.
-    Requires manual Cloudflare bypass on first run.
+    Scrapes PC Cases by Brand using custom-element ck-product-box.
+    Uses full browser to handle Cloudflare challenge.
     """
     cases = []
-    url = "https://www.overclockers.co.uk/cases"
+    url = "https://www.overclockers.co.uk/cases-and-modding/pc-cases/pc-cases-by-brand"
 
     try:
-        # Launch full browser (not headless) to handle Cloudflare
         from playwright.async_api import async_playwright
 
         async with async_playwright() as p:
@@ -836,9 +834,7 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
 
             try:
                 await page.goto(url, wait_until="networkidle", timeout=60000)
-
-                # Wait for Cloudflare to clear (user may need to solve challenge manually)
-                await asyncio.sleep(3)
+                await asyncio.sleep(2)
 
                 # Dismiss cookie banner if present
                 for selector in ["button:has-text('Accept')", "[data-cookielaw='accept']", ".cookie-accept"]:
@@ -848,34 +844,70 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
                     except:
                         pass
 
-                # Extract products using JS
+                # Extract products from ck-product-box elements
                 products = await page.evaluate("""() => {
                     const items = [];
                     const seen = new Set();
 
-                    // Look for product links
-                    document.querySelectorAll('a[href*="/product/"]').forEach(link => {
-                        const href = link.href;
-                        if (!href || seen.has(href.split('?')[0])) return;
-                        seen.add(href.split('?')[0]);
+                    // Find all ck-product-box custom elements
+                    document.querySelectorAll('ck-product-box').forEach(box => {
+                        try {
+                            // Get product data from data attributes
+                            const name = box.getAttribute('data-qa-component-ck-product-box') || '';
+                            const dataStr = box.textContent.trim();
 
-                        const card = link.closest('li') || link.closest('div[class*="product"]') || link;
-                        const title = link.textContent.trim().slice(0, 250).trim();
-                        if (!title || title.length < 5) return;
+                            // Parse the JSON-like data from the element
+                            const script = box.querySelector('script');
+                            let productData = null;
+                            if (script) {
+                                try {
+                                    productData = JSON.parse(script.textContent);
+                                } catch (e) {
+                                    // If no script, try extracting from text content
+                                }
+                            }
 
-                        const priceMatch = card.textContent.match(/£\\s*([\\d,]+\\.?\\d*)/);
-                        if (!priceMatch) return;
+                            if (!productData) {
+                                // Fallback: extract from element text
+                                const text = box.textContent;
+                                const match = text.match(/"name"\\s*:\\s*"([^"]+)"/);
+                                if (match) {
+                                    productData = { name: match[1] };
+                                }
+                            }
 
-                        const price = parseFloat(priceMatch[1].replace(',', ''));
-                        if (price < 10 || price > 500) return;
+                            if (!productData || !productData.name) return;
 
-                        const img = card.querySelector('img');
-                        items.push({
-                            title,
-                            price,
-                            href,
-                            img: img ? (img.src || img.dataset.src || '') : ''
-                        });
+                            // Extract link
+                            const link = box.querySelector('a');
+                            const href = link ? link.href : '';
+                            if (!href) return;
+
+                            // Deduplicate
+                            const key = href.split('?')[0];
+                            if (seen.has(key)) return;
+                            seen.add(key);
+
+                            // Extract price
+                            const priceMatch = box.textContent.match(/£\\s*([\\d,]+\\.?\\d*)/);
+                            if (!priceMatch) return;
+
+                            const price = parseFloat(priceMatch[1].replace(',', ''));
+                            if (price < 10 || price > 500) return;
+
+                            // Extract image
+                            const img = box.querySelector('img');
+                            const imgSrc = img ? (img.src || img.dataset.src || '') : '';
+
+                            items.push({
+                                title: productData.name.slice(0, 250),
+                                price,
+                                href,
+                                img: imgSrc
+                            });
+                        } catch (e) {
+                            // Skip items that fail parsing
+                        }
                     });
 
                     return items;
