@@ -282,36 +282,19 @@ export default function Components3DReviewPage() {
                   <button
                     key={asset.id}
                     onClick={() => setSelectedAsset(asset)}
-                    className={`overflow-hidden rounded border text-xs flex flex-col gap-1 cursor-pointer transition hover:scale-105 ${
+                    className={`aspect-square rounded border p-3 text-xs flex flex-col items-center justify-center text-center cursor-pointer transition hover:scale-105 ${
                       selectedAsset?.id === asset.id
-                        ? "ring-2 ring-orange-400"
+                        ? "ring-2 ring-orange-400 scale-105"
                         : ""
                     } ${statusColors[asset.status]}`}
                   >
-                    {/* Preview image */}
-                    {asset.preview_image_ref ? (
-                      <div className="w-full h-20 bg-[#0a1119] relative overflow-hidden flex-shrink-0">
-                        <img
-                          src={asset.preview_image_ref}
-                          alt={asset.family_key}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    ) : (
-                      <div className="w-full h-20 bg-[#0a1119] flex items-center justify-center">
-                        <Box className="w-8 h-8 opacity-30" />
+                    <div className="font-bold">{asset.family_key}</div>
+                    <div className="text-[9px] opacity-70">{asset.category}</div>
+                    {asset.file_size_kb && (
+                      <div className="text-[8px] opacity-60 mt-1">
+                        {Math.round(asset.file_size_kb / 1024)}MB
                       </div>
                     )}
-                    {/* Info */}
-                    <div className="p-2">
-                      <div className="font-semibold truncate">{asset.family_key}</div>
-                      <div className="text-[9px] text-slate-400">{asset.category}</div>
-                      {asset.file_size_kb && (
-                        <div className="text-[9px] text-slate-500 mt-1">
-                          {Math.round(asset.file_size_kb / 1024)}MB
-                        </div>
-                      )}
-                    </div>
                   </button>
                 );
               })
