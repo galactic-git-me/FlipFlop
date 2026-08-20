@@ -844,68 +844,112 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
                     except:
                         pass
 
-                # Extract products from ck-product-box elements
-                products = await page.evaluate("""() => {
-                    const items = [];
-                    const seen = new Set();
+                all_products = []
+                page_num = 1
+                max_pages = 5  # Limit to 5 pages (~120 cases max)
 
-                    // Find all ck-product-box custom elements
-                    document.querySelectorAll('ck-product-box').forEach(box => {
-                        try {
-                            // Get analytics data from data-analytics attribute (already valid JSON)
-                            const analyticsStr = box.getAttribute('data-analytics') || '{}';
-                            let analytics = JSON.parse(analyticsStr);
+                # Paginate through all results
+                while page_num <= max_pages and len(all_products) < 200:
+                    # Extract products from ck-product-box elements
+                    products = await page.evaluate("""() => {
+                        const items = [];
+                        const seen = new Set();
 
-                            // Extract products array (direct property)
-                            const productsArray = analytics.products || [];
-                            if (productsArray.length === 0) return;
+                        // Find all ck-product-box custom elements
+                        document.querySelectorAll('ck-product-box').forEach(box => {
+                            try {
+                                // Get analytics data from data-analytics attribute (already valid JSON)
+                                const analyticsStr = box.getAttribute('data-analytics') || '{}';
+                                let analytics = JSON.parse(analyticsStr);
 
-                            const product = productsArray[0];
-                            if (!product.name || !product.price) return;
+                                // Extract products array (direct property)
+                                const productsArray = analytics.products || [];
+                                if (productsArray.length === 0) return;
 
-                            // Extract link
-                            const link = box.querySelector('a');
-                            const href = link ? link.href : '';
-                            if (!href) return;
+                                const product = productsArray[0];
+                                if (!product.name || !product.price) return;
 
-                            // Deduplicate
-                            const key = href.split('?')[0];
-                            if (seen.has(key)) return;
-                            seen.add(key);
+                                // Extract link
+                                const link = box.querySelector('a');
+                                const href = link ? link.href : '';
+                                if (!href) return;
 
-                            // Parse price
-                            const price = parseFloat(product.price);
-                            if (price < 10 || price > 500) return;
+                                // Deduplicate
+                                const key = href.split('?')[0];
+                                if (seen.has(key)) return;
+                                seen.add(key);
 
-                            // Extract image
-                            const img = box.querySelector('img');
-                            const imgSrc = img ? (img.src || img.dataset.src || '') : '';
+                                // Parse price
+                                const price = parseFloat(product.price);
+                                if (price < 10 || price > 500) return;
 
-                            items.push({
-                                title: product.name.slice(0, 250),
-                                price,
-                                href,
-                                img: imgSrc
-                            });
-                        } catch (e) {
-                            // Skip items that fail parsing
-                        }
-                    });
+                                // Extract image
+                                const img = box.querySelector('img');
+                                const imgSrc = img ? (img.src || img.dataset.src || '') : '';
 
-                    return items;
-                }""")
+                                items.push({
+                                    title: product.name.slice(0, 250),
+                                    price,
+                                    href,
+                                    img: imgSrc
+                                });
+                            } catch (e) {
+                                // Skip items that fail parsing
+                            }
+                        });
 
-                for product in products[:24]:
-                    cases.append(RawCase(
-                        name=product["title"],
-                        price=product["price"],
-                        source_site="Overclockers",
-                        source_url=product["href"],
-                        image_url=product["img"] or "",
-                        theme=theme,
-                    ))
+                        return items;
+                    }""")
 
-                log.info("overclockers.cases.done", found=len(cases))
+                    all_products.extend(products)
+                    log.debug("overclockers.cases.page", page=page_num, found=len(products), total=len(all_products))
+
+                    # Try to click next page button
+                    next_button = None
+                    next_selectors = [
+                        'a[rel="next"]',
+                        'a:has-text("Next")',
+                        '[class*="next"] a',
+                        'a[aria-label*="next"]',
+                    ]
+
+                    for selector in next_selectors:
+                        try:
+                            next_button = await page.query_selector(selector)
+                            if next_button:
+                                break
+                        except:
+                            pass
+
+                    if not next_button:
+                        log.debug("overclockers.cases.no_more_pages", page=page_num)
+                        break
+
+                    try:
+                        await next_button.click()
+                        await page.wait_for_load_state("networkidle", timeout=30000)
+                        await asyncio.sleep(1)
+                        page_num += 1
+                    except Exception as e:
+                        log.debug("overclockers.cases.pagination_error", error=str(e))
+                        break
+
+                # Deduplicate by URL and add to cases list
+                seen_urls = set()
+                for product in all_products[:200]:
+                    key = product["href"].split("?")[0]
+                    if key not in seen_urls:
+                        seen_urls.add(key)
+                        cases.append(RawCase(
+                            name=product["title"],
+                            price=product["price"],
+                            source_site="Overclockers",
+                            source_url=product["href"],
+                            image_url=product["img"] or "",
+                            theme=theme,
+                        ))
+
+                log.info("overclockers.cases.done", found=len(cases), total_collected=len(all_products))
 
             finally:
                 await browser.close()
