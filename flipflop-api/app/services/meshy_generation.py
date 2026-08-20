@@ -168,9 +168,8 @@ def build_prompt(category: str, family_key: str) -> str:
     descriptions = {
         "cpu_amd": "a modern desktop computer CPU processor chip, square ceramic package with metal contact pins, no branding",
         "cpu_intel": "a modern desktop computer CPU processor chip, square ceramic package with gold contact pads, no branding",
-        "motherboard_asus": "a modern ASUS-style desktop PC motherboard with CPU socket, RAM slots, PCIe slots and silver heatsinks",
-        "motherboard_msi": "a modern MSI-style desktop PC motherboard with CPU socket, RAM slots, PCIe slots and dark heatsinks",
-        "motherboard_gigabyte": "a modern Gigabyte-style desktop PC motherboard with CPU socket, RAM slots, PCIe slots and heatsinks",
+        "motherboard_atx": "a full-size ATX desktop PC motherboard with CPU socket, four RAM slots, PCIe slots, M.2 heatsink and rear I/O, no branding",
+        "motherboard_matx": "a compact micro-ATX desktop PC motherboard with CPU socket, two or four RAM slots, PCIe slots, M.2 heatsink and rear I/O, no branding",
         "gpu_nvidia": "a modern NVIDIA GeForce desktop PC graphics card with a PCIe connector and cooling shroud",
         "gpu_amd": "a modern AMD Radeon desktop PC graphics card with a PCIe connector and cooling shroud",
         "gpu_intel": "a modern Intel Arc desktop PC graphics card with a PCIe connector and cooling shroud",

@@ -17,6 +17,9 @@ from app.services.component_family_classifier import KNOWN_FAMILY_BUCKETS
 
 
 async def generate_one(semaphore: asyncio.Semaphore, category: str, family_key: str) -> None:
+    if category == "gpu":
+        print(f"SKIP {category}/{family_key}: using the user-supplied GPU asset", flush=True)
+        return
     async with semaphore, AsyncSessionLocal() as db:
         existing = (
             await db.execute(
