@@ -296,7 +296,7 @@ def start_scheduler():
         kwargs={"job_id": "cases", "fn": partial(run_cases_swarm, "main")},
         replace_existing=True,
         max_instances=1,
-        next_run_time=now,
+        next_run_time=now + timedelta(hours=24),  # Run 24 hours from now, not immediately
     )
     #
     # scheduler.add_job(
