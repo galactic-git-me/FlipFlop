@@ -3,6 +3,8 @@ Public catalogue endpoints — no auth required.
 Consumed by the customer website (Subsystem 3).
 """
 from collections import defaultdict
+from datetime import datetime, timedelta
+import json
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
@@ -145,15 +147,31 @@ async def public_playbook_slots(playbook_id: int, db: AsyncSession = Depends(get
 
 @router.get("/cases")
 async def public_list_cases(db: AsyncSession = Depends(get_db)):
-    """Active cases only — images, form_factor, transparent panel flag."""
+    """Active manual and live supplier cases from one unified catalogue."""
     result = await db.execute(
         select(CaseCatalogue)
         .where(CaseCatalogue.status == "active")
         .order_by(CaseCatalogue.brand, CaseCatalogue.name)
     )
     cases = result.scalars().all()
-    return [
-        {
+    output = []
+    for c in cases:
+        supplier_offer = None
+        if c.notes:
+            try:
+                supplier_offer = json.loads(c.notes).get("supplier_offer")
+            except (ValueError, TypeError, AttributeError):
+                pass
+        # Supplier availability is deliberately short-lived; never sell from
+        # an old delivery promise just because its catalogue row still exists.
+        if supplier_offer:
+            try:
+                observed = datetime.fromisoformat(supplier_offer["observed_at"])
+                if datetime.utcnow() - observed > timedelta(hours=8):
+                    continue
+            except (KeyError, TypeError, ValueError):
+                continue
+        output.append({
             "id": c.id,
             "name": c.name,
             "brand": c.brand,
@@ -161,6 +179,6 @@ async def public_list_cases(db: AsyncSession = Depends(get_db)):
             "images": c.images,
             "rrp_gbp": c.rrp_gbp,
             "is_transparent_panel": c.is_transparent_panel,
-        }
-        for c in cases
-    ]
+            "supplier_offer": supplier_offer,
+        })
+    return output

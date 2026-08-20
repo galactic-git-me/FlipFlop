@@ -82,6 +82,9 @@ class ExtractedListing(CamelModel):
     review_average_rating: Optional[float] = None
     review_count: Optional[int] = None
     review_url: Optional[str] = None
+    prime_eligible: Optional[bool] = None
+    delivery_text: Optional[str] = None
+    delivery_postcode: Optional[str] = None
 
 
 class ScanSubmitRequest(CamelModel):

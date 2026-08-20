@@ -1,7 +1,11 @@
 """Background worker to process gem-radar submission queue."""
 import asyncio
+import json
+import re
 import structlog
 from datetime import datetime
+from urllib.parse import urlparse
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import AsyncSessionLocal
@@ -42,6 +46,77 @@ _EMPTY_QUEUE_POLL_SECONDS = 5
 # Track actively-processing search_ids to enforce concurrent search term limit
 _active_search_ids: set[str] = set()
 _active_search_lock = asyncio.Lock()
+
+
+def _case_brand(title: str) -> str:
+    known = ("Lian Li", "Fractal Design", "NZXT", "Corsair", "Phanteks", "Montech", "be quiet!", "HYTE", "Cooler Master", "Thermaltake", "Antec", "DeepCool", "ASUS", "MSI", "Kolink")
+    lowered = title.lower()
+    return next((brand for brand in known if brand.lower() in lowered), "Other")
+
+
+def _case_form_factor(title: str) -> str:
+    lowered = title.lower()
+    if "mini-itx" in lowered or "mini itx" in lowered or " itx" in lowered:
+        return "itx"
+    if "micro-atx" in lowered or "micro atx" in lowered or "matx" in lowered or "m-atx" in lowered:
+        return "matx"
+    return "atx"
+
+
+async def _sync_supplier_case_catalogue(db: AsyncSession, payload: ScanSubmitRequest) -> int:
+    """Promote verified extension case offers into the customer catalogue."""
+    if payload.search_id not in {"pc-case-chassis", "lian-li-pc-case"}:
+        return 0
+    from app.models.catalogue import CaseCatalogue
+
+    hostname = urlparse(payload.source_url).hostname or ""
+    vendor = "Amazon" if "amazon.co.uk" in hostname else "Overclockers" if "overclockers.co.uk" in hostname else None
+    if not vendor:
+        return 0
+    now = datetime.utcnow().isoformat()
+    upserted = 0
+    for offer in payload.listings:
+        if offer.sponsored or offer.condition_normalised != "new":
+            continue
+        if vendor == "Amazon" and not (
+            offer.prime_eligible
+            and re.sub(r"\s+", "", offer.delivery_postcode or "").upper() == "TW121JQ"
+            and re.search(r"tomorrow|overnight|one[- ]day", offer.delivery_text or "", re.I)
+        ):
+            continue
+        name = offer.title.strip()[:200]
+        existing = (await db.execute(select(CaseCatalogue).where(CaseCatalogue.name == name))).scalar_one_or_none()
+        supplier = {
+            "vendor": vendor,
+            "external_id": offer.listing_id,
+            "url": offer.url,
+            "price_gbp": offer.current_delivered_price,
+            "delivery_postcode": "TW12 1JQ",
+            "delivery_promise": offer.delivery_text or "Next working day available",
+            "prime_eligible": bool(offer.prime_eligible),
+            "observed_at": now,
+        }
+        if existing:
+            existing.rrp_gbp = offer.current_delivered_price
+            existing.images = [offer.image_url] if offer.image_url else existing.images
+            existing.notes = json.dumps({"supplier_offer": supplier})
+            existing.status = "active"
+            existing.updated_at = now
+        else:
+            db.add(CaseCatalogue(
+                name=name,
+                brand=_case_brand(name),
+                form_factor=_case_form_factor(name),
+                images=[offer.image_url] if offer.image_url else [],
+                rrp_gbp=offer.current_delivered_price,
+                is_transparent_panel=bool(re.search(r"glass|tempered|window", name, re.I)),
+                status="active",
+                notes=json.dumps({"supplier_offer": supplier}),
+                updated_at=now,
+            ))
+        upserted += 1
+    await db.flush()
+    return upserted
 
 
 async def process_submission_queue(process_interval_seconds: int = _EMPTY_QUEUE_POLL_SECONDS):
@@ -245,11 +320,13 @@ async def _process_single_submission(submission):
                 result = await asyncio.wait_for(
                     _submit_scan_body(payload, db, _t0), timeout=_SUBMISSION_TIMEOUT_S
                 )
+                catalogue_upserted = await _sync_supplier_case_catalogue(db, payload)
                 logger.info(
                     "queue_processor.submission_completed",
                     submission_id=submission.id,
                     ingested=result.ingested_count,
                     cpk_assigned=result.cpk_assigned_count,
+                    catalogue_cases_upserted=catalogue_upserted,
                 )
                 await SubmissionQueueService.mark_completed(db, submission.id)
             except asyncio.TimeoutError:

@@ -56,14 +56,6 @@ const EBAY_CONDITIONS: { value: string; label: string }[] = [
 
 const BUILD_3D_TARGETS = [
   { key: "complete_build", label: "Complete build", hint: "Use clean exterior angles of the finished PC." },
-  { key: "chassis", label: "PC chassis", hint: "Use empty-case or unobstructed chassis views." },
-  { key: "motherboard", label: "Motherboard", hint: "Use top-down and angled board views." },
-  { key: "cpu", label: "CPU", hint: "Use close, sharp views of the processor only." },
-  { key: "gpu", label: "GPU", hint: "Use front, rear and connector-side views." },
-  { key: "ram", label: "RAM", hint: "Use front, rear and end-on views of the exact memory module." },
-  { key: "psu", label: "Power supply", hint: "Use fan-side, modular-connector and label-side views." },
-  { key: "liquid_cooler", label: "CPU liquid cooler", hint: "Show the pump, radiator and complete tube routing." },
-  { key: "rgb_fan", label: "RGB fan", hint: "Use front, rear and edge views of one unmounted fan." },
 ] as const;
 
 function TabButton({
@@ -574,7 +566,7 @@ export default function BuildDetailPage() {
     try {
       const result = await api.manualBuilds.generate3dAssets(buildId, { complete_build: completeBuildPhotos });
       setBuild((current) => current ? { ...current, model_3d_assets: result.assets } : current);
-      toast.success(`${result.queued.length} 3D models queued using your PC photos and curated manufacturer references`);
+      toast.success("Complete-build 3D model queued");
       setSelected3dPhotos({});
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not queue 3D generation");
@@ -1054,7 +1046,7 @@ export default function BuildDetailPage() {
                   <Sparkles className="h-4 w-4 text-cyan-300" /> Generate 3D assets from photos
                 </p>
                 <p className="mt-1 max-w-2xl text-[11px] leading-5 text-slate-400">
-                  Choose only the real finished-PC photos. Component models are generated automatically from the curated manufacturer and professional reference library.
+                  Select up to four clear photos of the finished PC.
                 </p>
               </div>
               <button
@@ -1064,7 +1056,7 @@ export default function BuildDetailPage() {
                 className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg bg-cyan-400 px-4 py-2 text-sm font-black text-slate-950 transition-colors hover:bg-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-200 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {queueing3dModels ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-                Generate all 3D models
+                Generate 3D model
               </button>
             </div>
 
@@ -1085,7 +1077,7 @@ export default function BuildDetailPage() {
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-[10px] font-mono text-slate-500">
-                            {target.key === "complete_build" ? `${selected.length}/4 selected` : "Automatic references"}
+                            {selected.length}/4 selected
                           </span>
                           {existing && (
                             <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase ${
@@ -1097,8 +1089,7 @@ export default function BuildDetailPage() {
                           {existing?.glb_url && <a href={existing.glb_url} target="_blank" rel="noreferrer" className="text-[10px] font-bold text-cyan-300 hover:text-cyan-200">Open GLB</a>}
                         </div>
                       </div>
-                      {target.key === "complete_build" ? (
-                        <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+                      <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
                           {regularPhotos.map((photo, index) => {
                           const isSelected = selected.includes(photo.url);
                           return (
@@ -1118,12 +1109,7 @@ export default function BuildDetailPage() {
                             </button>
                             );
                           })}
-                        </div>
-                      ) : (
-                        <p className="mt-3 rounded-lg border border-emerald-400/15 bg-emerald-400/[0.04] px-3 py-2 text-[10px] leading-4 text-emerald-200/80">
-                          No selection needed. The backend supplies the approved professional reference views for this component.
-                        </p>
-                      )}
+                      </div>
                       {existing?.error && <p className="mt-2 text-[10px] text-red-300">{existing.error}</p>}
                     </section>
                   );

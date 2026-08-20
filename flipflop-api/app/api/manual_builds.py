@@ -5,7 +5,6 @@ import uuid
 import os
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
-import shutil
 import httpx
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, UploadFile, File, Form, Query
 from jose import jwt
@@ -76,12 +75,6 @@ class ComponentRatingsInput(BaseModel):
 class FaqSelectionInput(BaseModel):
     selected_ids: list[str] = Field(max_length=10)
     answer_overrides: dict[str, str] = Field(default_factory=dict)
-
-
-_BUILD_3D_ASSET_TYPES = (
-    "complete_build", "chassis", "motherboard", "cpu", "gpu", "ram",
-    "psu", "liquid_cooler", "rgb_fan",
-)
 
 
 class QueueBuild3DAssetsInput(BaseModel):
@@ -203,35 +196,7 @@ async def queue_build_3d_generation(
     if len(set(complete_build_urls)) != len(complete_build_urls) or any(url not in valid_urls for url in complete_build_urls):
         raise HTTPException(status_code=422, detail="The complete build contains an invalid or duplicate photo")
 
-    curated_root = _CURATED_3D_REFERENCE_ROOT / re.sub(r"[^a-z0-9]+", "-", build.name.lower()).strip("-")
-    manifest_path = curated_root / "manifest.json"
-    if not manifest_path.exists():
-        raise HTTPException(status_code=422, detail=f"No curated manufacturer-photo library exists for {build.name}")
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     requested = {"complete_build": complete_build_urls}
-    sync_jobs = []
-    for asset_type in _BUILD_3D_ASSET_TYPES:
-        if asset_type == "complete_build":
-            continue
-        entry = (manifest.get("assets") or {}).get(asset_type) or {}
-        filenames = list(entry.get("files") or [])[:4]
-        if not filenames:
-            raise HTTPException(status_code=422, detail=f"Curated references are missing for {asset_type}")
-        public_urls = []
-        for index, filename in enumerate(filenames, start=1):
-            source = curated_root / asset_type / filename
-            if not source.is_file():
-                raise HTTPException(status_code=422, detail=f"Missing curated reference: {asset_type}/{filename}")
-            public_name = f"build_{build.id}_{asset_type}_reference_{index}{source.suffix.lower()}"
-            public_path = _PUBLIC_MEDIA_ROOT / public_name
-            public_path.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(source, public_path)
-            sync_jobs.append(sync_to_public_media(public_path))
-            public_urls.append(f"https://theflipflop.shop/media/{public_name}")
-        requested[asset_type] = public_urls
-
-    if not all(await asyncio.gather(*sync_jobs)):
-        raise HTTPException(status_code=503, detail="Could not publish every manufacturer reference image for Meshy")
 
     assets = dict(build.model_3d_assets or {})
     queued_at = datetime.utcnow().isoformat()
@@ -263,7 +228,6 @@ _IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 _MAX_IMAGE_BYTES = 15 * 1024 * 1024  # 15 MB
 _UPLOADS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "manual_builds"
 _PUBLIC_MEDIA_ROOT = Path(__file__).resolve().parent.parent.parent.parent / "FlipFlop.shop" / "public" / "media"
-_CURATED_3D_REFERENCE_ROOT = Path(__file__).resolve().parents[3] / "assets" / "3d-reference-images"
 _SELLING_PRINCIPLES_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "selling_principles.md"
 _EBAY_LISTING_SYSTEM_PROMPT_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "ebay_listing_system_prompt.md"
 
