@@ -48,9 +48,10 @@ def _classify_ram(title: str) -> str | None:
 
 def _classify_motherboard(title: str) -> str | None:
     t = _norm(title)
-    for brand in ("asus", "msi", "gigabyte"):
-        if brand in t:
-            return f"motherboard_{brand}"
+    if re.search(r"\bm(?:icro[- ]?)?atx\b|micro[- ]?atx", t):
+        return "motherboard_matx"
+    if re.search(r"\batx\b", t):
+        return "motherboard_atx"
     return None
 
 
@@ -157,8 +158,6 @@ def classify_family(category: str, title: str) -> str | None:
 KNOWN_FAMILY_BUCKETS: list[tuple[str, str]] = [
     ("cpu", "cpu_amd"), ("cpu", "cpu_intel"),
     ("motherboard", "motherboard_atx"), ("motherboard", "motherboard_matx"),
-    ("motherboard", "motherboard_asus"), ("motherboard", "motherboard_msi"),
-    ("motherboard", "motherboard_gigabyte"),
     ("ram", "ram_ddr4"), ("ram", "ram_ddr5"),
     ("gpu", "gpu_nvidia"), ("gpu", "gpu_amd"), ("gpu", "gpu_intel"),
     ("cooling", "cooling_air_tower"),
