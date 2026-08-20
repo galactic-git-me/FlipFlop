@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "scope": "catalogue_component_library",
+  "generated_on": "2026-08-20",
+  "chassis_included": false,
+  "rights_status": "internal_reference_only_pending_review",
+  "families": [
+    {
+      "key": "cpu_amd_am4_am5",
+      "category": "cpu",
+      "representative": "AMD Ryzen desktop processor",
+      "covers": ["Ryzen 5 3600", "Ryzen 5 5600", "Ryzen 5 5600X", "Ryzen 5 7600", "Ryzen 7 5700X", "Ryzen 7 7700X", "Ryzen 7 7800X3D", "Ryzen 9 5900X", "Ryzen 9 5950X", "Ryzen 9 7900X", "Ryzen 9 7950X"],
+      "directory": "cpu/cpu_amd_am4_am5",
+      "source_page": "https://www.amd.com/en/products/processors/desktops/ryzen/7000-series/amd-ryzen-7-7700.html",
+      "note": "AM4 and AM5 are grouped for the initial catalogue asset; split them before dimension-critical AR use."
+    },
+    {
+      "key": "cpu_intel_lga1700",
+      "category": "cpu",
+      "representative": "Intel Core i9-13900K LGA1700",
+      "covers": ["Core i3-12100", "Core i5-12400", "Core i5-12400F", "Core i5-12600K", "Core i5-13600K", "Core i7-12700K", "Core i7-13700K", "Core i9-12900K", "Core i9-13900K"],
+      "directory": "cpu/cpu_intel_lga1700",
+      "source_page": "https://www.intel.com/content/www/us/en/products/sku/230496/intel-core-i913900k-processor-36m-cache-up-to-5-80-ghz/specifications.html",
+      "note": "Core i5-10400/F is LGA1200 and should be split if socket-side dimensional accuracy is exposed."
+    },
+    {
+      "key": "gpu_compact_dual_fan",
+      "category": "gpu",
+      "representative": "GeForce RTX 4060 compact dual-fan board",
+      "covers": ["RTX 3060", "RTX 3060 Ti", "RX 6600", "RX 6600 XT", "RTX 2070 Super", "RTX 4060"],
+      "directory": "gpu/gpu_compact_dual_fan",
+      "source_page": "https://nvidianews.nvidia.com/news/geforce-rtx-4060-family-is-here-nvidias-revolutionary-ada-lovelace-architecture-comes-to-core-gamers-everywhere-starting-at-299"
+    },
+    {
+      "key": "gpu_mid_dual_fan",
+      "category": "gpu",
+      "representative": "NVIDIA GeForce RTX 4070 Founders Edition",
+      "covers": ["RTX 3070", "RTX 3070 Ti", "RX 6700 XT", "RX 6800", "RTX 4060 Ti", "RX 7600", "RTX 4070", "RTX 4070 Super", "RX 7800 XT"],
+      "directory": "gpu/gpu_mid_dual_fan",
+      "source_page": "https://www.nvidia.com/en-gb/geforce/graphics-cards/40-series/rtx-4070-4070ti/"
+    },
+    {
+      "key": "gpu_large_triple_fan",
+      "category": "gpu",
+      "representative": "ASUS TUF GeForce RTX 4090",
+      "covers": ["RTX 3080", "RTX 3080 Ti", "RX 6800 XT", "RTX 4070 Ti", "RTX 3090", "RTX 4080", "RTX 4090", "RX 7900 XTX"],
+      "directory": "gpu/gpu_large_triple_fan",
+      "source_page": "https://www.asus.com/motherboards-components/graphics-cards/tuf-gaming/tuf-rtx4090-24g-gaming/"
+    },
+    {
+      "key": "motherboard_atx",
+      "category": "motherboard",
+      "representative": "ASUS PRIME B650-PLUS ATX",
+      "covers": ["B660 ATX LGA1700", "B760 ATX LGA1700", "Z690 ATX LGA1700", "Z790 ATX LGA1700", "B550 ATX AM4", "X570 ATX AM4", "B650 ATX AM5", "X670E ATX AM5"],
+      "directory": "motherboard/motherboard_atx",
+      "source_page": "https://www.asus.com/us/motherboards-components/motherboards/prime/prime-b650-plus/"
+    },
+    {
+      "key": "motherboard_matx",
+      "category": "motherboard",
+      "representative": "ASUS PRIME H610M-A micro-ATX",
+      "covers": ["H610 mATX LGA1700"],
+      "directory": "motherboard/motherboard_matx",
+      "source_page": "https://www.asus.com/mx/motherboards-components/motherboards/prime/prime-h610m-a/"
+    },
+    {
+      "key": "ram_ddr4",
+      "category": "ram",
+      "representative": "Corsair Vengeance LPX DDR4",
+      "covers": ["all generic DDR4 capacities and speeds in active playbooks"],
+      "directory": "ram/ram_ddr4",
+      "source_page": "https://www.corsair.com/newsroom/press-release/corsair-launches-new-32gb-modules-of-high-performance-vengeance-lpx-ddr4-memory"
+    },
+    {
+      "key": "ram_ddr5",
+      "category": "ram",
+      "representative": "Corsair Vengeance DDR5",
+      "covers": ["all generic DDR5 capacities and speeds in active playbooks"],
+      "directory": "ram/ram_ddr5",
+      "source_page": "https://www.corsair.com/us/en/p/memory/cmk32gx5m2b5600c36/vengeance-32gb-2x16gb-ddr5-dram-5600mhz-c36-memory-kit-black-cmk32gx5m2b5600c36"
+    },
+    {
+      "key": "storage_nvme_m2",
+      "category": "storage",
+      "representative": "Samsung 990 PRO M.2 2280",
+      "covers": ["all generic NVMe M.2 and NVMe Gen4 capacities in active playbooks"],
+      "directory": "storage/storage_nvme_m2",
+      "source_page": "https://www.samsung.com/us/memory-storage/nvme-ssd/990-pro-2tb-nvme-pcie-gen-4-mz-v9p2t0b-am/"
+    },
+    {
+      "key": "storage_sata_2_5",
+      "category": "storage",
+      "representative": "Samsung 870 EVO 2.5-inch SATA",
+      "covers": ["all generic SATA SSD capacities in active playbooks"],
+      "directory": "storage/storage_sata_2_5",
+      "source_page": "https://www.samsung.com/us/memory-storage/sata-ssd/870-evo-sata-2-5-ssd-1tb-sku-mz-77e1t0b-am/"
+    },
+    {
+      "key": "psu_atx_standard",
+      "category": "psu",
+      "representative": "Corsair RM-series modular ATX PSU",
+      "covers": ["all generic ATX PSU wattages and 80 Plus ratings in active playbooks"],
+      "directory": "psu/psu_atx_standard",
+      "source_page": "https://www.corsair.com/uk/en/c/psu"
+    },
+    {
+      "key": "cooling_air_tower",
+      "category": "cooling",
+      "representative": "Noctua NH-D15 chromax.black dual tower",
+      "covers": ["Cooler Master Hyper 212", "Deepcool AK400", "Thermalright Peerless Assassin 120", "Deepcool AK620", "be quiet! Dark Rock 4", "Noctua NH-U12S", "Noctua NH-D15", "be quiet! Dark Rock Pro 4"],
+      "directory": "cooling/cooling_air_tower",
+      "source_page": "https://www.noctua.at/en/products/nh-d15-chromax-black",
+      "note": "This family is suitable for browse-card representation; single- and dual-tower coolers should be split before dimension-critical AR use."
+    },
+    {
+      "key": "cooling_aio_240",
+      "category": "cooling",
+      "representative": "Corsair iCUE H100i RGB ELITE 240 mm",
+      "covers": ["ARCTIC Liquid Freezer II 240", "Corsair H100i RGB 240", "NZXT Kraken X53 240"],
+      "directory": "cooling/cooling_aio_240",
+      "source_page": "https://www.corsair.com/us/en/p/cpu-coolers/cw-9060058-ww/icue-h100i-rgb-elite-liquid-cpu-cooler-cw-9060058-ww"
+    }
+  ],
+  "excluded_chassis_for_discussion": [
+    "Lian Li O11 Vision Compact",
+    "Fractal Design North",
+    "NZXT H6 Flow",
+    "Corsair 3500X",
+    "Phanteks XT View",
+    "Montech KING 95 PRO",
+    "be quiet! Light Base 600 LX",
+    "HYTE Y60",
+    "Fractal Design Pop 2 Air",
+    "Cooler Master MasterBox TD500 Mesh V2"
+  ]
+}
