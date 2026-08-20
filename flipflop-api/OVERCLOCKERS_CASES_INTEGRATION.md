@@ -38,26 +38,19 @@ The existing cases swarm runs daily and now:
 5. Upserts into `Part` table (category = "case")
 6. Records price history automatically
 
-### Configuration
+### How It Works — No Search Terms Needed
 
-Cases are already configured to search Overclockers through the existing `SourceSearchTerm` table:
+Unlike Amazon/BargainHardware (which search for specific case types), **Overclockers scrapes the entire PC cases section directly**:
 
-```sql
-SELECT * FROM source_search_term 
-WHERE scope = 'cases' AND enabled = 1 AND source_names LIKE '%Overclockers%';
-```
+1. The scraper calls `scrape_overclockers_cases()` (httpx-based)
+2. Makes HTTP GET to `https://www.overclockers.co.uk/pc-cases`
+3. Parses all products in the PC cases section
+4. Filters by price (£10–500)
+5. Returns all matching cases
 
-Add terms via the admin API:
-```bash
-POST /api/source-search-terms
-{
-  "scope": "cases",
-  "term": "gaming pc case rgb",
-  "group_name": "RGB Cases",
-  "source_names": ["Overclockers", "Amazon", "eBay"],
-  "enabled": true
-}
-```
+**No search terms required** — the `search` parameter in `_scrape_overclockers(search, theme)` is ignored. The scraper collects all available cases regardless of search terms in the database.
+
+This is why search terms are **not configured for Overclockers** (and don't need to be). It's a full-section scrape, not a search-based scrape.
 
 ### Testing
 
