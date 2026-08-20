@@ -3,7 +3,7 @@ API endpoint to get prioritized cases for 3D model creation.
 Returns cases ranked by Amazon bestseller ranking (most popular first).
 """
 from fastapi import APIRouter, Depends
-from sqlalchemy import select, and_
+from sqlalchemy import select, and_, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.part import Part, PartCategory
@@ -29,7 +29,7 @@ async def get_cases_priority_for_3d(
             and_(
                 Part.category == PartCategory.case,
                 Part.has_3d_model == False,
-                Part.name.ilike("%case%"),  # Filter to only actual cases by name
+                Part.name.ilike("%pc case%"),  # Stricter filter: "PC Case" in name
             )
         )
         .order_by(
