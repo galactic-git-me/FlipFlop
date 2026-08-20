@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Box, Download, Image, FileText, RefreshCw, CheckCircle2, AlertCircle, ExternalLink } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import { Box, Download, Image, FileText, RefreshCw, CheckCircle2, AlertCircle, ExternalLink, Upload, Trash2, Check, X } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
@@ -21,36 +21,30 @@ interface CaseSourceItem {
   form_factors?: string[];
 }
 
+interface ApprovedAssets {
+  model3d?: {
+    url: string;
+    source: "found" | "uploaded";
+    fromMeshy: boolean;
+  };
+  photos?: string[];
+  youtubeUrl?: string;
+  description?: string;
+}
+
 interface SourcingTask {
   case: CaseSourceItem;
   priority: number;
-  status: "pending" | "in_progress" | "completed";
+  status: "pending" | "sourcing" | "ready_for_approval" | "approved" | "modeling" | "completed";
   sources: {
-    manufacturerCAD: {
-      checked: boolean;
-      url?: string;
-      found: boolean;
-    };
-    thirdPartyCAD: {
-      checked: boolean;
-      urls?: string[];
-      found: boolean;
-    };
-    manufacturerPhotos: {
-      checked: boolean;
-      urls?: string[];
-      found: boolean;
-    };
-    internetPhotos: {
-      checked: boolean;
-      urls?: string[];
-      found: boolean;
-    };
-    description: {
-      checked: boolean;
-      text?: string;
-    };
+    manufacturerCAD: { checked: boolean; url?: string; found: boolean };
+    thirdPartyCAD: { checked: boolean; urls?: string[]; found: boolean };
+    manufacturerPhotos: { checked: boolean; urls?: string[]; found: boolean };
+    youtubeVideo: { checked: boolean; url?: string; found: boolean };
+    description: { checked: boolean; text?: string };
   };
+  approvedAssets?: ApprovedAssets;
+  approvalNotes?: string;
 }
 
 export default function Cases3DSourcingPage() {
@@ -73,9 +67,10 @@ export default function Cases3DSourcingPage() {
             manufacturerCAD: { checked: false, found: false },
             thirdPartyCAD: { checked: false, found: false },
             manufacturerPhotos: { checked: false, found: false },
-            internetPhotos: { checked: false, found: false },
+            youtubeVideo: { checked: false, found: false },
             description: { checked: false },
           },
+          approvedAssets: {},
         }));
 
         setTasks(newTasks);
@@ -99,7 +94,8 @@ export default function Cases3DSourcingPage() {
   };
 
   const completedCount = tasks.filter((t) => t.status === "completed").length;
-  const inProgressCount = tasks.filter((t) => t.status === "in_progress").length;
+  const approvedCount = tasks.filter((t) => t.status === "approved").length;
+  const readyCount = tasks.filter((t) => t.status === "ready_for_approval").length;
   const activeTask = tasks.find((t) => t.case.id === activeTaskId);
 
   return (
@@ -107,42 +103,52 @@ export default function Cases3DSourcingPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
-          <Box className="w-6 h-6 text-purple-400" /> 3D Model Sourcing Guide
+          <Box className="w-6 h-6 text-purple-400" /> 3D Model Sourcing & Approval
         </h1>
         <p className="text-sm text-slate-500 mt-1">
-          Systematic sourcing for top 30 cases. Priority: CAD → Photos → Description
+          Source assets → Approve → Generate 3D models (if needed) → Complete
         </p>
       </div>
 
       {/* Progress summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-xs text-slate-500 uppercase">Completed</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-[#00dc82]">{completedCount}</div>
-            <p className="text-xs text-slate-500 mt-1">/ {tasks.length}</p>
+            <p className="text-xs text-slate-500 mt-1">fully done</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-slate-500 uppercase">In Progress</CardTitle>
+            <CardTitle className="text-xs text-slate-500 uppercase">Approved</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-cyan-400">{inProgressCount}</div>
-            <p className="text-xs text-slate-500 mt-1">currently working on</p>
+            <div className="text-3xl font-bold text-cyan-400">{approvedCount}</div>
+            <p className="text-xs text-slate-500 mt-1">ready to model</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-slate-500 uppercase">Pending</CardTitle>
+            <CardTitle className="text-xs text-slate-500 uppercase">Ready Review</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-orange-400">{tasks.length - completedCount - inProgressCount}</div>
-            <p className="text-xs text-slate-500 mt-1">waiting to start</p>
+            <div className="text-3xl font-bold text-purple-400">{readyCount}</div>
+            <p className="text-xs text-slate-500 mt-1">awaiting approval</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs text-slate-500 uppercase">Total</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-orange-400">{tasks.length}</div>
+            <p className="text-xs text-slate-500 mt-1">in queue</p>
           </CardContent>
         </Card>
 
@@ -174,39 +180,45 @@ export default function Cases3DSourcingPage() {
                   Loading...
                 </div>
               ) : (
-                tasks.map((task) => (
-                  <button
-                    key={task.case.id}
-                    onClick={() => setActiveTaskId(task.case.id)}
-                    className={`w-full text-left p-2 rounded-lg border transition-all ${
-                      activeTaskId === task.case.id
-                        ? "border-purple-400/50 bg-purple-400/10"
-                        : "border-[#1e2d45] hover:border-[#2a3f5a]"
-                    }`}
-                  >
-                    <div className="flex items-start gap-2">
-                      <div className="flex-shrink-0 mt-1">
-                        {task.status === "completed" ? (
-                          <CheckCircle2 className="w-4 h-4 text-[#00dc82]" />
-                        ) : task.status === "in_progress" ? (
-                          <div className="w-4 h-4 rounded-full border-2 border-cyan-400 border-t-transparent animate-spin" />
-                        ) : (
-                          <div className="w-4 h-4 rounded-full border-2 border-slate-600" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-xs font-semibold text-slate-100 line-clamp-1">
-                          #{task.priority} {task.case.name.split(" ").slice(0, 3).join(" ")}
-                        </div>
-                        {task.case.bestseller_rank && (
-                          <div className="text-[10px] text-slate-500">
-                            Rank #{task.case.bestseller_rank}
+                tasks.map((task) => {
+                  const statusColors = {
+                    pending: "border-slate-600 bg-slate-900/20",
+                    sourcing: "border-orange-400/30 bg-orange-400/5",
+                    ready_for_approval: "border-purple-400/30 bg-purple-400/5",
+                    approved: "border-cyan-400/30 bg-cyan-400/5",
+                    modeling: "border-blue-400/30 bg-blue-400/5",
+                    completed: "border-[#00dc82]/30 bg-[#00dc82]/5",
+                  };
+
+                  const statusIcons = {
+                    pending: <div className="w-4 h-4 rounded-full border-2 border-slate-600" />,
+                    sourcing: <div className="w-4 h-4 rounded-full border-2 border-orange-400 border-t-transparent animate-spin" />,
+                    ready_for_approval: <AlertCircle className="w-4 h-4 text-purple-400" />,
+                    approved: <Check className="w-4 h-4 text-cyan-400" />,
+                    modeling: <div className="w-4 h-4 rounded-full border-2 border-blue-400 border-t-transparent animate-spin" />,
+                    completed: <CheckCircle2 className="w-4 h-4 text-[#00dc82]" />,
+                  };
+
+                  return (
+                    <button
+                      key={task.case.id}
+                      onClick={() => setActiveTaskId(task.case.id)}
+                      className={`w-full text-left p-2 rounded-lg border transition-all ${
+                        activeTaskId === task.case.id ? "border-purple-400/50 bg-purple-400/10" : statusColors[task.status]
+                      }`}
+                    >
+                      <div className="flex items-start gap-2">
+                        <div className="flex-shrink-0 mt-1">{statusIcons[task.status]}</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs font-semibold text-slate-100 line-clamp-1">
+                            #{task.priority} {task.case.name.split(" ").slice(0, 3).join(" ")}
                           </div>
-                        )}
+                          <div className="text-[10px] text-slate-500 capitalize">{task.status.replace(/_/g, " ")}</div>
+                        </div>
                       </div>
-                    </div>
-                  </button>
-                ))
+                    </button>
+                  );
+                })
               )}
             </CardContent>
           </Card>
@@ -222,17 +234,11 @@ export default function Cases3DSourcingPage() {
                   <div className="flex gap-4">
                     {activeTask.case.image_url && (
                       <div className="w-32 h-32 rounded-lg overflow-hidden flex-shrink-0 bg-[#0a1119]">
-                        <img
-                          src={activeTask.case.image_url}
-                          alt=""
-                          className="w-full h-full object-cover"
-                        />
+                        <img src={activeTask.case.image_url} alt="" className="w-full h-full object-cover" />
                       </div>
                     )}
                     <div className="flex-1">
-                      <h2 className="text-lg font-bold text-slate-100 mb-2">
-                        {activeTask.case.name}
-                      </h2>
+                      <h2 className="text-lg font-bold text-slate-100 mb-2">{activeTask.case.name}</h2>
                       <div className="space-y-1 text-sm text-slate-400">
                         <p>
                           <span className="text-slate-600">Price:</span> {formatCurrency(activeTask.case.price)}
@@ -242,193 +248,24 @@ export default function Cases3DSourcingPage() {
                             <span className="text-slate-600">Amazon Rank:</span> #{activeTask.case.bestseller_rank}
                           </p>
                         )}
-                        {activeTask.case.rating && (
-                          <p>
-                            <span className="text-slate-600">Rating:</span> {activeTask.case.rating.toFixed(1)}★ ({activeTask.case.review_count} reviews)
-                          </p>
-                        )}
-                        {activeTask.case.keywords && activeTask.case.keywords.length > 0 && (
-                          <p>
-                            <span className="text-slate-600">Tags:</span> {activeTask.case.keywords.join(", ")}
-                          </p>
-                        )}
                       </div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Sourcing checklist */}
-              <Card className="border-[#1e2d45]">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-sm">Sourcing Checklist</CardTitle>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() =>
-                          updateTask(activeTask.case.id, { status: "in_progress" })
-                        }
-                        disabled={activeTask.status === "in_progress"}
-                        className={`px-3 py-1 text-xs rounded-lg transition-colors ${
-                          activeTask.status === "in_progress"
-                            ? "bg-cyan-400/20 text-cyan-400 border border-cyan-400/30"
-                            : "bg-slate-700/30 text-slate-400 hover:bg-cyan-400/20 hover:text-cyan-400 border border-slate-600"
-                        }`}
-                      >
-                        Start
-                      </button>
-                      <button
-                        onClick={() =>
-                          updateTask(activeTask.case.id, { status: "completed" })
-                        }
-                        disabled={activeTask.status === "completed"}
-                        className={`px-3 py-1 text-xs rounded-lg transition-colors ${
-                          activeTask.status === "completed"
-                            ? "bg-[#00dc82]/20 text-[#00dc82] border border-[#00dc82]/30"
-                            : "bg-slate-700/30 text-slate-400 hover:bg-[#00dc82]/20 hover:text-[#00dc82] border border-slate-600"
-                        }`}
-                      >
-                        Complete
-                      </button>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {/* 1. Manufacturer CAD */}
-                  <SourceChecklistItem
-                    icon={<Download className="w-5 h-5" />}
-                    title="1. Manufacturer CAD/3D Model"
-                    description="Search official product pages or support sites"
-                    suggestions={[
-                      `Search: "${activeTask.case.name} CAD" or "${activeTask.case.name} 3D model"`,
-                      "Check manufacturer website: Downloads/CAD/Technical specs",
-                      "Try: brand official support/resources section",
-                      "Look for: .step, .igs, .fbx, .obj, .blend files",
-                    ]}
-                    status={activeTask.sources.manufacturerCAD.found ? "found" : activeTask.sources.manufacturerCAD.checked ? "checked" : "pending"}
-                    url={activeTask.sources.manufacturerCAD.url}
-                    onUpdate={(url) =>
-                      updateTask(activeTask.case.id, {
-                        sources: {
-                          ...activeTask.sources,
-                          manufacturerCAD: { checked: true, found: !!url, url },
-                        },
-                      })
-                    }
-                  />
-
-                  {/* 2. Third-party CAD */}
-                  <SourceChecklistItem
-                    icon={<Download className="w-5 h-5" />}
-                    title="2. Third-Party CAD (Sketchfab, Grabcad, etc.)"
-                    description="Community-uploaded models from free sites"
-                    suggestions={[
-                      "Search Sketchfab: https://sketchfab.com/search?q=" + encodeURIComponent(activeTask.case.name),
-                      "Search Grabcad: https://grabcad.com/library?query=" + encodeURIComponent(activeTask.case.name),
-                      "Search Thingiverse: https://www.thingiverse.com/search",
-                      "Look for Creative Commons licensed models",
-                    ]}
-                    status={activeTask.sources.thirdPartyCAD.found ? "found" : activeTask.sources.thirdPartyCAD.checked ? "checked" : "pending"}
-                    urls={activeTask.sources.thirdPartyCAD.urls}
-                    onUpdate={(urls) =>
-                      updateTask(activeTask.case.id, {
-                        sources: {
-                          ...activeTask.sources,
-                          thirdPartyCAD: { checked: true, found: urls && urls.length > 0, urls },
-                        },
-                      })
-                    }
-                  />
-
-                  {/* 3. Manufacturer Photos */}
-                  <SourceChecklistItem
-                    icon={<Image className="w-5 h-5" />}
-                    title="3. Official Manufacturer Photos"
-                    description="High-quality product photos from official sources"
-                    suggestions={[
-                      `Search: "${activeTask.case.brand} ${activeTask.case.name} specifications"`,
-                      "Check product page: Gallery/Media section",
-                      "Look for: Front, back, side, top-down, interior views",
-                      "Get: Close-ups of rear ports, cable management, features",
-                      "Format: PNG/JPG, high resolution (2K+)",
-                    ]}
-                    status={activeTask.sources.manufacturerPhotos.found ? "found" : activeTask.sources.manufacturerPhotos.checked ? "checked" : "pending"}
-                    urls={activeTask.sources.manufacturerPhotos.urls}
-                    onUpdate={(urls) =>
-                      updateTask(activeTask.case.id, {
-                        sources: {
-                          ...activeTask.sources,
-                          manufacturerPhotos: { checked: true, found: urls && urls.length > 0, urls },
-                        },
-                      })
-                    }
-                  />
-
-                  {/* 4. Official YouTube Video */}
-                  <SourceChecklistItem
-                    icon={<Image className="w-5 h-5" />}
-                    title="4. Official YouTube Product Video"
-                    description="Official showcase/walkthrough from manufacturer (best) or quality review"
-                    suggestions={[
-                      `YouTube: Search "${activeTask.case.brand} ${activeTask.case.name} official"`,
-                      `YouTube: Search "${activeTask.case.name} showcase" or "product walkthrough"`,
-                      "Prefer: Manufacturer channel or official distributor",
-                      "Fallback: High-quality review (JayzTwoCents, Linus Tech Tips, GamersNexus)",
-                      "What to capture: All angles, interior views, features highlighted",
-                      "⚠️ RGB: Screenshot + edit to FlipFlop orange-blue gradient",
-                    ]}
-                    status={activeTask.sources.internetPhotos.found ? "found" : activeTask.sources.internetPhotos.checked ? "checked" : "pending"}
-                    url={activeTask.sources.internetPhotos.urls?.[0]}
-                    onUpdate={(url) =>
-                      updateTask(activeTask.case.id, {
-                        sources: {
-                          ...activeTask.sources,
-                          internetPhotos: { checked: true, found: !!url, urls: url ? [url] : [] },
-                        },
-                      })
-                    }
-                  />
-
-                  {/* 5. Description & KSP */}
-                  <SourceChecklistItem
-                    icon={<FileText className="w-5 h-5" />}
-                    title="5. Features & Key Selling Points (KSP)"
-                    description="Highlights for customer decision-making + product listings"
-                    suggestions={[
-                      "Form factors: What motherboard sizes fit (ATX, MATX, ITX)?",
-                      "Cooling: Radiator support, fan slots, airflow design",
-                      "Key features: Tempered glass, cable management, dust filters",
-                      "Material & aesthetics: Build quality, color, design style",
-                      "What makes it special: Performance, value, aesthetics, silence, etc",
-                      "Example: 'Premium airflow case with dual-chamber design and 360mm radiator support'",
-                    ]}
-                    status={activeTask.sources.description.checked ? "filled" : "pending"}
-                    onUpdateText={(text) =>
-                      updateTask(activeTask.case.id, {
-                        sources: {
-                          ...activeTask.sources,
-                          description: { checked: true, text },
-                        },
-                      })
-                    }
-                  />
-                </CardContent>
-              </Card>
-
-              {/* Notes */}
-              <Card className="bg-slate-700/20 border-slate-600">
-                <CardHeader>
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4" /> Notes
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-xs text-slate-400 space-y-1">
-                  <p>✨ <strong>Geometry Green case:</strong> Use your existing model as first item</p>
-                  <p>🎨 <strong>RGB recoloring:</strong> When photos show RGB, edit to FlipFlop orange-blue gradient</p>
-                  <p>📸 <strong>Photo quality matters:</strong> Multi-angle + interior shots help customers visualize</p>
-                  <p>💾 <strong>Store sources:</strong> Save all URLs/files for reference during 3D modeling</p>
-                </CardContent>
-              </Card>
+              {/* Status-based workflow */}
+              {activeTask.status === "pending" || activeTask.status === "sourcing" ? (
+                <SourcingPhase task={activeTask} onUpdate={(updates) => updateTask(activeTask.case.id, updates)} />
+              ) : activeTask.status === "ready_for_approval" ? (
+                <ApprovalPhase task={activeTask} onUpdate={(updates) => updateTask(activeTask.case.id, updates)} />
+              ) : activeTask.status === "approved" ? (
+                <ModelingPhase task={activeTask} onUpdate={(updates) => updateTask(activeTask.case.id, updates)} />
+              ) : activeTask.status === "modeling" ? (
+                <ModelingInProgressPhase task={activeTask} />
+              ) : (
+                <CompletedPhase task={activeTask} />
+              )}
             </>
           ) : (
             <div className="text-center py-12 text-slate-500">
@@ -442,124 +279,416 @@ export default function Cases3DSourcingPage() {
   );
 }
 
-interface SourceChecklistItemProps {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  suggestions: string[];
-  status: "pending" | "checked" | "found" | "filled";
-  url?: string;
-  urls?: string[];
-  onUpdate?: (url: string) => void;
-  onUpdateText?: (text: string) => void;
+interface PhaseProps {
+  task: SourcingTask;
+  onUpdate: (updates: Partial<SourcingTask>) => void;
 }
 
-function SourceChecklistItem({
-  icon,
-  title,
-  description,
-  suggestions,
-  status,
-  url,
-  urls,
-  onUpdate,
-  onUpdateText,
-}: SourceChecklistItemProps) {
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [inputValue, setInputValue] = useState(url || urls?.join("\n") || "");
+function SourcingPhase({ task, onUpdate }: PhaseProps) {
+  const allSourcesFound = task.sources.manufacturerCAD.checked || task.sources.thirdPartyCAD.checked;
+  const allPhotosFound = task.sources.manufacturerPhotos.found;
+  const allVideoFound = task.sources.youtubeVideo.found;
+  const descriptionExists = task.sources.description.checked;
 
-  const statusColors = {
-    pending: "border-slate-600 bg-slate-900/20",
-    checked: "border-orange-400/30 bg-orange-400/5",
-    found: "border-[#00dc82]/30 bg-[#00dc82]/5",
-    filled: "border-purple-400/30 bg-purple-400/5",
-  };
+  const isReadyForApproval = allSourcesFound && allPhotosFound && allVideoFound && descriptionExists;
 
-  const statusIcons = {
-    pending: <div className="w-4 h-4 rounded-full border-2 border-slate-600" />,
-    checked: <AlertCircle className="w-4 h-4 text-orange-400" />,
-    found: <CheckCircle2 className="w-4 h-4 text-[#00dc82]" />,
-    filled: <CheckCircle2 className="w-4 h-4 text-purple-400" />,
+  return (
+    <Card className="border-[#1e2d45]">
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-sm">Step 1: Source Assets</CardTitle>
+          <div className="text-xs text-slate-500">
+            {[allSourcesFound, allPhotosFound, allVideoFound, descriptionExists].filter(Boolean).length}/4 complete
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-3">
+          {/* 3D Model */}
+          <div className={`p-3 rounded-lg border ${allSourcesFound ? "border-[#00dc82]/30 bg-[#00dc82]/5" : "border-slate-600 bg-slate-900/20"}`}>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="font-semibold text-slate-100 text-sm">1. 3D Model</h4>
+              {allSourcesFound && <CheckCircle2 className="w-4 h-4 text-[#00dc82]" />}
+            </div>
+            <p className="text-xs text-slate-400 mb-2">Manufacturer CAD or Sketchfab</p>
+            {!allSourcesFound && (
+              <div className="space-y-2">
+                <div>
+                  <label className="text-xs text-slate-500 block mb-1">Manufacturer CAD URL (if found)</label>
+                  <input
+                    type="text"
+                    placeholder="https://example.com/case.step"
+                    onBlur={(e) => {
+                      if (e.target.value.trim()) {
+                        onUpdate({ sources: { ...task.sources, manufacturerCAD: { checked: true, url: e.target.value, found: true } } });
+                        e.target.value = "";
+                      }
+                    }}
+                    className="w-full px-2 py-1.5 bg-[#0a1119] border border-[#1e2d45] rounded text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-400/50"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-slate-500 block mb-1">Third-party CAD URL (Sketchfab, GrabCAD)</label>
+                  <input
+                    type="text"
+                    placeholder="https://sketchfab.com/models/..."
+                    onBlur={(e) => {
+                      if (e.target.value.trim()) {
+                        onUpdate({ sources: { ...task.sources, thirdPartyCAD: { checked: true, urls: [e.target.value], found: true } } });
+                        e.target.value = "";
+                      }
+                    }}
+                    className="w-full px-2 py-1.5 bg-[#0a1119] border border-[#1e2d45] rounded text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-400/50"
+                  />
+                </div>
+              </div>
+            )}
+            {task.sources.manufacturerCAD.url && <p className="text-xs text-purple-400 mt-2">✓ Manufacturer CAD: {task.sources.manufacturerCAD.url}</p>}
+            {task.sources.thirdPartyCAD.urls?.[0] && <p className="text-xs text-purple-400 mt-2">✓ Third-party CAD: {task.sources.thirdPartyCAD.urls[0]}</p>}
+          </div>
+
+          {/* Photos */}
+          <div className={`p-3 rounded-lg border ${allPhotosFound ? "border-[#00dc82]/30 bg-[#00dc82]/5" : "border-slate-600 bg-slate-900/20"}`}>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="font-semibold text-slate-100 text-sm">2. Product Photos</h4>
+              {allPhotosFound && <CheckCircle2 className="w-4 h-4 text-[#00dc82]" />}
+            </div>
+            <p className="text-xs text-slate-400 mb-2">Multi-angle manufacturer photos</p>
+            {!allPhotosFound && (
+              <div>
+                <label className="text-xs text-slate-500 block mb-1">Photo URLs (paste each, press Enter)</label>
+                <input
+                  type="text"
+                  placeholder="https://example.com/photo1.jpg"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && e.currentTarget.value.trim()) {
+                      const newUrls = [...(task.sources.manufacturerPhotos.urls || []), e.currentTarget.value];
+                      onUpdate({
+                        sources: {
+                          ...task.sources,
+                          manufacturerPhotos: { checked: true, urls: newUrls, found: newUrls.length > 0 },
+                        },
+                      });
+                      e.currentTarget.value = "";
+                    }
+                  }}
+                  className="w-full px-2 py-1.5 bg-[#0a1119] border border-[#1e2d45] rounded text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-400/50"
+                />
+              </div>
+            )}
+            {task.sources.manufacturerPhotos.urls && (
+              <div className="mt-2 space-y-1">
+                {task.sources.manufacturerPhotos.urls.map((url, i) => (
+                  <div key={i} className="text-xs text-purple-400 flex items-center justify-between">
+                    <span>Photo {i + 1}: {url.slice(0, 40)}...</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* YouTube Video */}
+          <div className={`p-3 rounded-lg border ${allVideoFound ? "border-[#00dc82]/30 bg-[#00dc82]/5" : "border-slate-600 bg-slate-900/20"}`}>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="font-semibold text-slate-100 text-sm">3. YouTube Product Video</h4>
+              {allVideoFound && <CheckCircle2 className="w-4 h-4 text-[#00dc82]" />}
+            </div>
+            <p className="text-xs text-slate-400 mb-2">Official showcase or quality review</p>
+            {!allVideoFound && (
+              <input
+                type="text"
+                placeholder="https://youtube.com/watch?v=..."
+                onBlur={(e) => {
+                  if (e.target.value.trim()) {
+                    onUpdate({ sources: { ...task.sources, youtubeVideo: { checked: true, url: e.target.value, found: true } } });
+                    e.target.value = "";
+                  }
+                }}
+                className="w-full px-2 py-1.5 bg-[#0a1119] border border-[#1e2d45] rounded text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-400/50"
+              />
+            )}
+            {task.sources.youtubeVideo.url && <p className="text-xs text-purple-400 mt-2">✓ Video: {task.sources.youtubeVideo.url.slice(0, 50)}...</p>}
+          </div>
+
+          {/* Description */}
+          <div className={`p-3 rounded-lg border ${descriptionExists ? "border-[#00dc82]/30 bg-[#00dc82]/5" : "border-slate-600 bg-slate-900/20"}`}>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="font-semibold text-slate-100 text-sm">4. Description & KSP</h4>
+              {descriptionExists && <CheckCircle2 className="w-4 h-4 text-[#00dc82]" />}
+            </div>
+            <p className="text-xs text-slate-400 mb-2">Key features & selling points</p>
+            {!descriptionExists && (
+              <textarea
+                placeholder="E.g., 'Premium airflow case supporting up to 360mm radiators. Features dual-chamber design with tempered glass panel and excellent cable management.'"
+                rows={3}
+                onBlur={(e) => {
+                  if (e.target.value.trim()) {
+                    onUpdate({ sources: { ...task.sources, description: { checked: true, text: e.target.value } } });
+                    e.target.value = "";
+                  }
+                }}
+                className="w-full px-2 py-1.5 bg-[#0a1119] border border-[#1e2d45] rounded text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-400/50"
+              />
+            )}
+            {task.sources.description.text && <p className="text-xs text-purple-400 mt-2">✓ Description saved</p>}
+          </div>
+        </div>
+
+        {/* Action buttons */}
+        <div className="flex gap-2 pt-2">
+          <Button
+            onClick={() => onUpdate({ status: "sourcing" })}
+            disabled={task.status === "sourcing"}
+            variant="secondary"
+            size="sm"
+            className="flex-1"
+          >
+            Start Sourcing
+          </Button>
+          <Button
+            onClick={() => {
+              if (isReadyForApproval) {
+                onUpdate({ status: "ready_for_approval" });
+              }
+            }}
+            disabled={!isReadyForApproval}
+            size="sm"
+            className="flex-1 bg-purple-600 hover:bg-purple-700"
+          >
+            Ready for Approval
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function ApprovalPhase({ task, onUpdate }: PhaseProps) {
+  const [modelFile, setModelFile] = useState<File | null>(null);
+  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
+  const modelInputRef = useRef<HTMLInputElement>(null);
+  const photoInputRef = useRef<HTMLInputElement>(null);
+
+  const handleApprove = () => {
+    const approved: ApprovedAssets = {
+      photos: task.sources.manufacturerPhotos.urls || [],
+      youtubeUrl: task.sources.youtubeVideo.url,
+      description: task.sources.description.text,
+      model3d: task.sources.manufacturerCAD.found
+        ? { url: task.sources.manufacturerCAD.url!, source: "found", fromMeshy: false }
+        : task.sources.thirdPartyCAD.found
+        ? { url: task.sources.thirdPartyCAD.urls![0], source: "found", fromMeshy: false }
+        : undefined,
+    };
+
+    if (modelFile) {
+      // In real implementation, upload to storage and get URL
+      approved.model3d = { url: URL.createObjectURL(modelFile), source: "uploaded", fromMeshy: false };
+    }
+
+    if (photoFiles.length > 0) {
+      // Add uploaded photos to approved list
+      approved.photos = [
+        ...(approved.photos || []),
+        ...photoFiles.map((f) => URL.createObjectURL(f)),
+      ];
+    }
+
+    onUpdate({
+      status: "approved",
+      approvedAssets: approved,
+      approvalNotes: "User approved all assets",
+    });
   };
 
   return (
-    <div className={`p-3 rounded-lg border ${statusColors[status]}`}>
-      <div className="flex items-start gap-3">
-        <div className="flex-shrink-0 text-slate-400 mt-1">{icon}</div>
-        <div className="flex-1 min-w-0">
-          <h4 className="font-semibold text-slate-100 text-sm mb-1">{title}</h4>
-          <p className="text-xs text-slate-400 mb-2">{description}</p>
-
-          {/* Suggestions */}
-          <button
-            onClick={() => setShowSuggestions(!showSuggestions)}
-            className="text-xs text-slate-500 hover:text-slate-300 transition-colors mb-2 flex items-center gap-1"
-          >
-            💡 {showSuggestions ? "Hide" : "Show"} search tips
-          </button>
-
-          {showSuggestions && (
-            <ul className="text-xs text-slate-500 mb-2 space-y-1 pl-4 list-disc">
-              {suggestions.map((s, i) => (
-                <li key={i} className="text-slate-400">
-                  {s}
-                </li>
-              ))}
-            </ul>
-          )}
-
-          {/* Input */}
-          {onUpdate && (
-            <input
-              type="text"
-              placeholder="Paste URL here..."
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onBlur={() => {
-                if (inputValue.trim()) {
-                  onUpdate(inputValue.trim());
-                  setInputValue("");
-                }
-              }}
-              className="w-full px-2 py-1 bg-[#0a1119] border border-[#1e2d45] rounded text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-400/50 mb-2"
-            />
-          )}
-
-          {onUpdateText && (
-            <textarea
-              placeholder="Describe key features..."
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onBlur={() => {
-                if (inputValue.trim()) {
-                  onUpdateText(inputValue.trim());
-                  setInputValue("");
-                }
-              }}
-              rows={3}
-              className="w-full px-2 py-1 bg-[#0a1119] border border-[#1e2d45] rounded text-xs text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-400/50"
-            />
-          )}
-
-          {/* Display saved URLs */}
-          {urls && urls.length > 0 && (
-            <div className="text-xs space-y-1 mt-2">
-              {urls.map((u, i) => (
-                <a
-                  key={i}
-                  href={u}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-purple-400 hover:text-purple-300 flex items-center gap-1 break-all"
-                >
-                  <ExternalLink className="w-3 h-3 flex-shrink-0" /> {u.slice(0, 50)}...
-                </a>
-              ))}
-            </div>
-          )}
+    <Card className="border-purple-400/30 bg-purple-400/5">
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-sm">Step 2: Review & Approve Assets</CardTitle>
+          <AlertCircle className="w-5 h-5 text-purple-400" />
         </div>
-        <div className="flex-shrink-0 mt-1">{statusIcons[status]}</div>
-      </div>
-    </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="bg-purple-900/20 border border-purple-400/20 rounded-lg p-3">
+          <p className="text-xs text-slate-300 mb-3">
+            ✓ All 4 assets sourced. Review them below. Approve to proceed to 3D modeling (only if no 3D model found), or upload your own assets to replace.
+          </p>
+
+          <div className="space-y-4">
+            {/* 3D Model */}
+            <div>
+              <h4 className="text-sm font-semibold text-slate-100 mb-2">3D Model</h4>
+              {task.sources.manufacturerCAD.found || task.sources.thirdPartyCAD.found ? (
+                <div className="p-2 bg-[#0a1119] border border-[#1e2d45] rounded text-xs text-slate-400 mb-2">
+                  Found: {task.sources.manufacturerCAD.url || task.sources.thirdPartyCAD.urls?.[0]}
+                </div>
+              ) : (
+                <div className="p-2 bg-orange-900/20 border border-orange-400/20 rounded text-xs text-orange-300 mb-2">
+                  No 3D model found - will call Meshy.ai API to generate after approval
+                </div>
+              )}
+              <button
+                onClick={() => modelInputRef.current?.click()}
+                className="w-full px-3 py-2 text-xs bg-[#0d1320] border border-[#1e2d45] rounded text-slate-300 hover:border-purple-400/50 transition-colors flex items-center justify-center gap-2"
+              >
+                <Upload className="w-3.5 h-3.5" /> Replace with your own 3D model
+              </button>
+              <input
+                ref={modelInputRef}
+                type="file"
+                accept=".glb,.gltf,.obj,.fbx,.step,.iges"
+                onChange={(e) => setModelFile(e.target.files?.[0] || null)}
+                className="hidden"
+              />
+              {modelFile && <p className="text-xs text-purple-400 mt-1">✓ {modelFile.name} selected</p>}
+            </div>
+
+            {/* Photos */}
+            <div>
+              <h4 className="text-sm font-semibold text-slate-100 mb-2">Product Photos ({task.sources.manufacturerPhotos.urls?.length || 0})</h4>
+              <div className="space-y-1 mb-2">
+                {task.sources.manufacturerPhotos.urls?.map((url, i) => (
+                  <div key={i} className="p-2 bg-[#0a1119] border border-[#1e2d45] rounded text-xs text-slate-400 truncate">
+                    Photo {i + 1}: {url}
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={() => photoInputRef.current?.click()}
+                className="w-full px-3 py-2 text-xs bg-[#0d1320] border border-[#1e2d45] rounded text-slate-300 hover:border-purple-400/50 transition-colors flex items-center justify-center gap-2"
+              >
+                <Upload className="w-3.5 h-3.5" /> Add/Replace photos
+              </button>
+              <input
+                ref={photoInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(e) => setPhotoFiles(Array.from(e.target.files || []))}
+                className="hidden"
+              />
+              {photoFiles.length > 0 && <p className="text-xs text-purple-400 mt-1">✓ {photoFiles.length} photos selected</p>}
+            </div>
+
+            {/* YouTube */}
+            <div>
+              <h4 className="text-sm font-semibold text-slate-100 mb-2">YouTube Video</h4>
+              <div className="p-2 bg-[#0a1119] border border-[#1e2d45] rounded text-xs text-slate-400 mb-2 truncate">
+                {task.sources.youtubeVideo.url}
+              </div>
+              <p className="text-xs text-slate-500">💡 Edit in the sourcing checklist if you want to change</p>
+            </div>
+
+            {/* Description */}
+            <div>
+              <h4 className="text-sm font-semibold text-slate-100 mb-2">Description</h4>
+              <div className="p-2 bg-[#0a1119] border border-[#1e2d45] rounded text-xs text-slate-400">
+                {task.sources.description.text}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Approval buttons */}
+        <div className="flex gap-2 pt-2">
+          <Button
+            onClick={() => onUpdate({ status: "ready_for_approval", approvalNotes: "Needs more work" })}
+            variant="secondary"
+            size="sm"
+            className="flex-1"
+          >
+            <X className="w-3.5 h-3.5 mr-1" /> Reject
+          </Button>
+          <Button onClick={handleApprove} size="sm" className="flex-1 bg-[#00dc82] hover:bg-[#00dc82]/90 text-black">
+            <Check className="w-3.5 h-3.5 mr-1" /> Approve & Proceed
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function ModelingPhase({ task, onUpdate }: PhaseProps) {
+  const hasExistingModel = task.approvedAssets?.model3d?.source === "found";
+
+  return (
+    <Card className="border-cyan-400/30 bg-cyan-400/5">
+      <CardHeader>
+        <CardTitle className="text-sm">Step 3: 3D Modeling</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        {hasExistingModel ? (
+          <div className="bg-[#00dc82]/10 border border-[#00dc82]/30 rounded-lg p-3">
+            <p className="text-xs text-[#00dc82] flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4" /> 3D model already sourced - skipping Meshy.ai generation
+            </p>
+          </div>
+        ) : (
+          <div className="bg-cyan-900/20 border border-cyan-400/20 rounded-lg p-3 space-y-2">
+            <p className="text-xs text-slate-300">
+              No CAD model found. Will call Meshy.ai API to generate 3D model from product photos.
+            </p>
+            <p className="text-xs text-slate-400">
+              Meshy prompt: Generate a photorealistic 3D model of a PC case: {task.case.name}. Use the reference photos provided to match colors, materials, and design accurately.
+            </p>
+            <button
+              onClick={() => onUpdate({ status: "modeling" })}
+              className="w-full px-3 py-2 text-xs bg-cyan-600 hover:bg-cyan-700 text-white rounded transition-colors"
+            >
+              Start Meshy.ai Generation
+            </button>
+          </div>
+        )}
+
+        {hasExistingModel && (
+          <button
+            onClick={() => onUpdate({ status: "completed" })}
+            className="w-full px-3 py-2 text-xs bg-[#00dc82] hover:bg-[#00dc82]/90 text-black rounded font-semibold transition-colors"
+          >
+            Mark as Completed
+          </button>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function ModelingInProgressPhase({ task }: PhaseProps) {
+  return (
+    <Card className="border-blue-400/30 bg-blue-400/5">
+      <CardHeader>
+        <CardTitle className="text-sm flex items-center gap-2">
+          <div className="w-4 h-4 rounded-full border-2 border-blue-400 border-t-transparent animate-spin" />
+          Generating 3D Model with Meshy.ai
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-xs text-slate-400">
+          Your 3D model is being generated. You can check back in a few minutes to see the result.
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
+function CompletedPhase({ task }: { task: SourcingTask }) {
+  return (
+    <Card className="border-[#00dc82]/30 bg-[#00dc82]/5">
+      <CardHeader>
+        <CardTitle className="text-sm flex items-center gap-2">
+          <CheckCircle2 className="w-5 h-5 text-[#00dc82]" /> Complete ✓
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-2">
+        <div className="text-xs text-[#00dc82]">
+          <p>✓ 3D model ready</p>
+          <p>✓ Product photos approved</p>
+          <p>✓ YouTube video linked</p>
+          <p>✓ Description approved</p>
+        </div>
+        <p className="text-xs text-slate-400 mt-3">This case is ready to be added to the customer builder.</p>
+      </CardContent>
+    </Card>
   );
 }
