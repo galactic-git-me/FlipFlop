@@ -1,4 +1,4 @@
-# FlipFlop Platform - Start All Servers
+   # FlipFlop Platform - Start All Servers
 # Spawns server processes directly (no PM2)
 # Press Ctrl+C to stop all servers
 
@@ -9,7 +9,6 @@ param(
     [switch]$NoGemRadar = $false,
     [switch]$NoAdmin = $false,
     [switch]$NoFrontend = $false,
-    [switch]$NoProductionSync = $false,
     [switch]$NoExtensionBuild = $false
 )
 
@@ -353,20 +352,10 @@ $servers = @(
     },
     @{
         name     = "frontend"
-        # Browser API calls stay same-origin and are proxied by Next.js to the
-        # backend. Never expose localhost:4311 in the client bundle: for a
-        # visitor, localhost means their own computer.
-        cmdArgs  = @("/c", "cd ..\FlipFlop.shop && set ""BACKEND_URL=http://localhost:4311"" && set ""NEXT_PUBLIC_API_URL="" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4313 -H 0.0.0.0")
+        cmdArgs  = @("/c", "cd ..\FlipFlop.shop && set ""BACKEND_URL=http://localhost:4311"" && set ""NEXT_PUBLIC_API_URL=http://localhost:4311"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4313 -H 0.0.0.0")
         port     = 4313
         color    = "Magenta"
         skip     = $NoFrontend
-    },
-    @{
-        name     = "production-sync"
-        cmdArgs  = @("/c", "cd flipflop-api && .venv\Scripts\python.exe scripts\publish_to_andromeda.py --watch --interval 900")
-        port     = "SSH"
-        color    = "DarkCyan"
-        skip     = $NoProductionSync
     },
     @{
         name     = "performance-card"
