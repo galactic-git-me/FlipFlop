@@ -48,7 +48,7 @@ CORE_CASE_TERMS = [
 
 SOURCES = [
     {"name": "Amazon",            "fn": "amazon"},          # Playwright — new cases with Prime shipping
-    {"name": "Overclockers",      "fn": "overclockers"},    # Playwright — UK retailer new cases
+    {"name": "Overclockers",      "fn": "overclockers"},    # Playwright — UK retailer (httpx blocked by CF, fallback to PW)
     {"name": "BargainHardware",   "fn": "bargainhardware"}, # Playwright — refurb specialist
 ]
 _PLAYWRIGHT_CASE_SOURCES = {"amazon", "overclockers", "bargainhardware"}
@@ -816,31 +816,78 @@ async def _scrape_amazon(search: str, theme: str) -> list[RawCase]:
 
 async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
     """
-    Overclockers UK — Uses httpx (same as eBay).
+    Overclockers UK — Playwright (httpx blocked by Cloudflare 403).
 
-    Scrapes the entire PC cases section using httpx + BeautifulSoup.
-    Uses the scrape_overclockers_cases function from the scraper service,
-    which mimics the eBay pattern: simple HTTP request, HTML parsing, no Playwright.
+    Scrapes the PC cases section using Playwright with stealth mode.
+    Overclockers blocks plain HTTP requests; Playwright handles the Cloudflare challenge.
     """
     cases = []
+    url = "https://www.overclockers.co.uk/pc-cases"
 
-    try:
-        # Call the httpx-based scraper (same pattern as eBay)
-        listings = await scrape_overclockers_cases(min_price=10.0, max_price=500.0)
+    async with managed_playwright() as p:
+        try:
+            browser, context = await _make_pw_context(p)
+        except Exception as exc:
+            log.warning("overclockers.cases.browser_error", error=str(exc))
+            return []
 
-        for listing in listings:
-            cases.append(RawCase(
-                name=listing.title,
-                price=listing.price,
-                source_site="Overclockers",
-                source_url=listing.url,
-                image_url=listing.image_urls[0] if listing.image_urls else "",
-                theme=theme,
-            ))
+        page = await context.new_page()
+        try:
+            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+            await asyncio.sleep(2)
 
-        log.info("overclockers.cases.done", found=len(cases))
-    except Exception as exc:
-        log.warning("overclockers.cases.error", error=str(exc))
+            # Extract products using JS (resilient to class name changes)
+            products = await page.evaluate("""() => {
+                const items = [];
+                const products = document.querySelectorAll('a[href*="/product/"]');
+
+                products.forEach(el => {
+                    const href = el.href;
+                    if (!href) return;
+
+                    // Find parent card
+                    let card = el.closest('li') || el.closest('[class*="product"]') || el.parentElement;
+                    if (!card) return;
+
+                    const title = el.textContent.trim().slice(0, 250);
+                    if (!title || title.length < 5) return;
+
+                    // Extract price
+                    const text = card.textContent;
+                    const match = text.match(/£\\s*([\\d,]+\\.?\\d*)/);
+                    if (!match) return;
+
+                    const price = parseFloat(match[1].replace(',', ''));
+                    if (price < 10 || price > 500) return;
+
+                    // Extract image
+                    const img = card.querySelector('img');
+                    const imgSrc = img ? (img.src || img.dataset.src || '') : '';
+
+                    // Deduplicate by URL
+                    if (!items.find(i => i.url === href)) {
+                        items.push({ title, price, href, img: imgSrc });
+                    }
+                });
+
+                return items;
+            }""")
+
+            for product in products[:24]:
+                cases.append(RawCase(
+                    name=product["title"],
+                    price=product["price"],
+                    source_site="Overclockers",
+                    source_url=product["href"],
+                    image_url=product["img"] or "",
+                    theme=theme,
+                ))
+
+            log.info("overclockers.cases.done", found=len(cases))
+        except Exception as exc:
+            log.warning("overclockers.cases.error", error=str(exc))
+        finally:
+            await page.close()
 
     return cases
 
