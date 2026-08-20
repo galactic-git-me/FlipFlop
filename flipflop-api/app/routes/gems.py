@@ -82,7 +82,7 @@ async def generate_recommendations(
 
 @router.get("")
 async def list_recommendations(
-    risk_level: Optional[str] = Query(None, regex="^(low|medium|high)$"),
+    risk_level: Optional[str] = Query(None, pattern="^(low|medium|high)$"),
     use_case: Optional[str] = Query(None),
     limit: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
