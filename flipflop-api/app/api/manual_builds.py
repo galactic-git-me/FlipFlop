@@ -93,27 +93,30 @@ async def create_build_portal_preview(
     build_id: int,
     db: AsyncSession = Depends(get_db),
 ):
-    """Create a read-only customer portal preview for this build's sale order."""
+    """Create a read-only owner-portal preview for a completed physical build."""
     build = (await db.execute(
         select(ManualBuild).where(ManualBuild.id == build_id)
     )).scalar_one_or_none()
     if not build:
         raise HTTPException(status_code=404, detail="Build not found")
-    if not build.storefront_product_id:
-        raise HTTPException(status_code=404, detail="This build does not have a customer order yet")
+    if build.status not in {"built", "listed", "sold"}:
+        raise HTTPException(status_code=409, detail="The customer portal is created when the build reaches Built")
+    if not build.model_3d_url:
+        raise HTTPException(status_code=409, detail="Complete the build's 3D model to create its customer portal")
 
-    product = (await db.execute(
-        select(Product).where(Product.id == build.storefront_product_id)
-    )).scalar_one_or_none()
-    if not product or not product.sold_order_id:
-        raise HTTPException(status_code=404, detail="This build does not have a customer order yet")
+    product = None
+    if build.storefront_product_id:
+        product = (await db.execute(
+            select(Product).where(Product.id == build.storefront_product_id)
+        )).scalar_one_or_none()
 
     now = datetime.now(timezone.utc)
     settings = get_settings()
     token = jwt.encode(
         {
             "typ": "portal_preview",
-            "order_id": product.sold_order_id,
+            "build_id": build.id,
+            "order_id": product.sold_order_id if product else None,
             "scope": "read",
             "iat": now,
             "exp": now + timedelta(minutes=15),
@@ -122,7 +125,11 @@ async def create_build_portal_preview(
         algorithm=settings.jwt_algorithm,
     )
     return {
-        "order_id": product.sold_order_id,
+        # The storefront route historically calls this value order_id. Before
+        # sale, the build id provides a stable route segment; the signed token
+        # remains the authority for selecting portal data.
+        "order_id": product.sold_order_id if product and product.sold_order_id else build.id,
+        "build_id": build.id,
         "token": token,
         "expires_at": (now + timedelta(minutes=15)).isoformat(),
     }

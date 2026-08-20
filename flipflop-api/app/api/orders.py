@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta, date
 from app.database import get_db
 from app.models import Order, BuildCapacity, BuildCapacityOverride, CustomerProblem, CXDocument, Capture3DAsset, Capture3DStatus
+from app.models.manual_build import ManualBuild
 from app.models.customer import Customer
 from app.routes.auth import get_current_user
 from app.routes.admin_auth import get_current_admin
@@ -30,11 +31,56 @@ async def get_portal_preview(preview_token: str, db: AsyncSession = Depends(get_
         raise HTTPException(status_code=401, detail="Preview expired or invalid")
     if claims.get("typ") != "portal_preview" or claims.get("scope") != "read":
         raise HTTPException(status_code=403, detail="Invalid preview scope")
-    order = (await db.execute(select(Order).where(Order.id == int(claims.get("order_id", 0))))).scalar_one_or_none()
-    if not order:
-        raise HTTPException(status_code=404, detail="Order not found")
-    asset = (await db.execute(select(Capture3DAsset).where(Capture3DAsset.order_id == order.id))).scalar_one_or_none()
-    return _order_to_my_order_out(order, asset)
+    order_id = int(claims.get("order_id") or 0)
+    if order_id:
+        order = (await db.execute(select(Order).where(Order.id == order_id))).scalar_one_or_none()
+        if order:
+            asset = (await db.execute(select(Capture3DAsset).where(Capture3DAsset.order_id == order.id))).scalar_one_or_none()
+            return _order_to_my_order_out(order, asset)
+
+    build_id = int(claims.get("build_id") or 0)
+    build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
+    if not build or build.status not in {"built", "listed", "sold"} or not build.model_3d_url:
+        raise HTTPException(status_code=404, detail="Build portal not found")
+    return _manual_build_to_portal_out(build)
+
+
+def _manual_build_to_portal_out(build: ManualBuild) -> MyOrderOut:
+    """Represent a ready-to-ship build in the existing owner-portal contract."""
+    components = list(build.components or [])
+    case = next(
+        (item for item in components if str(item.get("slot", "")).lower() in {"case", "chassis"}),
+        None,
+    )
+    slots = [
+        MyOrderSlotOut(
+            slot_id=index,
+            slot_type=str(item.get("slot") or "component"),
+            variant_id=int(item.get("part_id") or 0),
+            title=str(item.get("name") or "Component"),
+            price=float(item.get("price_paid") or 0),
+        )
+        for index, item in enumerate(components, start=1)
+        if item is not case
+    ]
+    asking_price = float(build.ebay_price or (build.last_evaluation or {}).get("mid") or 0)
+    return MyOrderOut(
+        id=build.id,
+        order_id=f"BUILD-{build.id}",
+        status=build.status,
+        customer_price=asking_price,
+        component_costs=float(build.total_cost or 0),
+        slots=slots,
+        case_name=str(case.get("name")) if case else None,
+        case_price=float(case.get("price_paid") or 0) if case else 0.0,
+        capture_3d={
+            "status": "published",
+            "optimized_asset_ref": build.model_3d_url,
+            "preview_image_ref": build.hero_photo_url,
+            "ar_ready": True,
+        },
+        created_at=build.created_at,
+    )
 
 
 def _order_to_my_order_out(order: Order, capture_3d: Capture3DAsset | None = None) -> MyOrderOut:

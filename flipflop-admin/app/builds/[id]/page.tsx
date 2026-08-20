@@ -729,7 +729,7 @@ export default function BuildDetailPage() {
       <div className="flex items-center gap-2 mb-6">
         <ChannelBadge label="eBay" icon={ShoppingBag} live={!!build.ebay_live} />
         <ChannelBadge label="FlipFlop.shop" icon={Store} live={!!build.storefront_live} />
-        {build.status !== "in_progress" && (
+        {build.status !== "in_progress" && build.model_3d_url && (
           <button
             type="button"
             onClick={() => void openCustomerPortal()}
@@ -739,6 +739,9 @@ export default function BuildDetailPage() {
             {openingPortal ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ExternalLink className="h-3.5 w-3.5" />}
             View Customer Portal
           </button>
+        )}
+        {build.status !== "in_progress" && !build.model_3d_url && (
+          <span className="ml-auto text-xs text-slate-500">Customer portal unlocks when the completed 3D model is ready</span>
         )}
       </div>
 
