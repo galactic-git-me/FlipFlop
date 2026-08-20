@@ -2,33 +2,39 @@
 
 ## What Changed
 
-You were right — instead of building a separate bulk-import workflow, I just **added Overclockers to the existing cases swarm**.
+I **added Overclockers to the existing cases swarm** using the **direct httpx method** (same pattern as eBay).
+
+Overclockers has no API, so the scraper uses **httpx + BeautifulSoup** — the same proven approach eBay uses. This is the primary/only method, not a fallback.
 
 The cases swarm was already scraping 9 sources (eBay, Amazon, Temu, AliExpress, Etsy, Gumtree, Vinted, BargainHardware, CherryTree, Alibaba). Now it includes **Overclockers as source #10**.
 
 ### Key Additions
 
-**File**: `flipflop-api/app/swarms/cases.py`
+**Files**: 
+- `flipflop-api/app/services/scraper.py` — new `scrape_overclockers_cases()` function
+- `flipflop-api/app/swarms/cases.py` — `_scrape_overclockers()` calls the scraper
 
-1. **Added to SOURCES list**:
-   - `{"name": "Overclockers", "fn": "overclockers"}`
-   - Added to `_PLAYWRIGHT_CASE_SOURCES` set
+1. **New scraper function**: `scrape_overclockers_cases()`
+   - Uses **httpx** with headers (no API, no Playwright)
+   - Mimics eBay pattern exactly
+   - Scrapes entire PC cases section (not search terms)
+   - Parses HTML with BeautifulSoup
+   - Price range: £10–500
+   - Returns list of `RawListing` objects
 
-2. **New scraper function**: `_scrape_overclockers(search, theme)`
-   - Uses Playwright + stealth patches (same as Amazon, Temu, AliExpress)
-   - Cloudflare-resistant (httpx blocks, Playwright works)
-   - Extracts product links, prices, images via JS evaluation
-   - Price range: £0–350 (filters out enterprise/industrial cases)
-   - Returns list of `RawCase` objects (auto-upserted by swarm)
+2. **Updated cases swarm**: `_scrape_overclockers()`
+   - Calls `scrape_overclockers_cases()` from scraper service
+   - Converts results to `RawCase` objects
+   - Auto-upserts into `Part` table
 
 ### How It Works
 
 The existing cases swarm runs daily and now:
 
-1. Searches Overclockers for configured case terms (gaming cases, airflow RGB, etc.)
-2. Launches Playwright browser (stealth mode, fake User-Agent)
-3. Navigates to search results
-4. Extracts products using JS evaluation (resistant to class name changes)
+1. Calls `scrape_overclockers_cases()` (httpx-based)
+2. Makes HTTP request to Overclockers PC cases page
+3. Parses HTML with BeautifulSoup (same as eBay)
+4. Extracts product links, prices, images
 5. Upserts into `Part` table (category = "case")
 6. Records price history automatically
 
