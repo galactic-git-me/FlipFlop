@@ -848,42 +848,34 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
                 page_num = 1
                 max_pages = 5  # Limit to 5 pages (~120 cases max)
 
-                # Paginate through all results
+                # Paginate through all results on same tab
                 while page_num <= max_pages and len(all_products) < 200:
                     # Extract products from ck-product-box elements
                     products = await page.evaluate("""() => {
                         const items = [];
                         const seen = new Set();
 
-                        // Find all ck-product-box custom elements
                         document.querySelectorAll('ck-product-box').forEach(box => {
                             try {
-                                // Get analytics data from data-analytics attribute (already valid JSON)
                                 const analyticsStr = box.getAttribute('data-analytics') || '{}';
                                 let analytics = JSON.parse(analyticsStr);
-
-                                // Extract products array (direct property)
                                 const productsArray = analytics.products || [];
                                 if (productsArray.length === 0) return;
 
                                 const product = productsArray[0];
                                 if (!product.name || !product.price) return;
 
-                                // Extract link
                                 const link = box.querySelector('a');
                                 const href = link ? link.href : '';
                                 if (!href) return;
 
-                                // Deduplicate
                                 const key = href.split('?')[0];
                                 if (seen.has(key)) return;
                                 seen.add(key);
 
-                                // Parse price
                                 const price = parseFloat(product.price);
                                 if (price < 10 || price > 500) return;
 
-                                // Extract image
                                 const img = box.querySelector('img');
                                 const imgSrc = img ? (img.src || img.dataset.src || '') : '';
 
@@ -893,9 +885,7 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
                                     href,
                                     img: imgSrc
                                 });
-                            } catch (e) {
-                                // Skip items that fail parsing
-                            }
+                            } catch (e) {}
                         });
 
                         return items;
@@ -904,7 +894,7 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
                     all_products.extend(products)
                     log.debug("overclockers.cases.page", page=page_num, found=len(products), total=len(all_products))
 
-                    # Try to click next page button
+                    # Look for next page button on current tab
                     next_button = None
                     next_selectors = [
                         'a[rel="next"]',
@@ -916,7 +906,7 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
                     for selector in next_selectors:
                         try:
                             next_button = await page.query_selector(selector)
-                            if next_button:
+                            if next_button and await next_button.is_enabled():
                                 break
                         except:
                             pass
@@ -926,6 +916,7 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
                         break
 
                     try:
+                        # Click next on same tab
                         await next_button.click()
                         await page.wait_for_load_state("networkidle", timeout=30000)
                         await asyncio.sleep(1)
