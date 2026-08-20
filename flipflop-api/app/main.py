@@ -75,7 +75,6 @@ from app.routes.admin import router as admin_router
 from app.routes.gems import router as gems_router
 from app.routes.admin_auth import router as admin_auth_router
 from app.api.motherboard_specs import router as motherboard_specs_router
-from app.routes.cases_priority import router as cases_priority_router
 from app.api.logs import install_log_capture
 from app.services.playwright_scraper import chromium_available
 from app.services.antibot_preflight import run_antibot_preflight
@@ -620,7 +619,6 @@ app.include_router(build_comparison_router, prefix="")
 app.include_router(demand.router, prefix="/api")
 app.include_router(manual_submit.router, prefix="/api")
 app.include_router(cases_bulk_import.router, prefix="/api")
-app.include_router(cases_priority_router, prefix="/api")
 app.include_router(schedule.router, prefix="/api")
 app.include_router(search_telemetry.router, prefix="/api")
 app.include_router(source_search_terms.router, prefix="/api")
