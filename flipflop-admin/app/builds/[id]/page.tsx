@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeft, CheckCircle2, Circle, Hammer, Sparkles, ExternalLink,
   Loader2, ShoppingBag, ImagePlus, Star, X, IdCard, BadgeCheck, Store, Download, Zap,
-  CalendarClock, Truck, AlertTriangle, PoundSterling, Box, UploadCloud,
+  CalendarClock, Truck, AlertTriangle, PoundSterling, UploadCloud,
   HelpCircle, Shuffle,
 } from "lucide-react";
 import { Toaster, toast } from "sonner";
@@ -1049,15 +1049,28 @@ export default function BuildDetailPage() {
                   Select up to four clear photos of the finished PC.
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={queue3dModels}
-                disabled={queueing3dModels || regularPhotos.length === 0 || !(selected3dPhotos.complete_build?.length)}
-                className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg bg-cyan-400 px-4 py-2 text-sm font-black text-slate-950 transition-colors hover:bg-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-200 disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                {queueing3dModels ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-                Generate 3D model
-              </button>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={queue3dModels}
+                  disabled={queueing3dModels || regularPhotos.length === 0 || !(selected3dPhotos.complete_build?.length)}
+                  className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg bg-cyan-400 px-4 py-2 text-sm font-black text-slate-950 transition-colors hover:bg-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-200 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  {queueing3dModels ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                  Generate from photos
+                </button>
+                <input ref={model3dInputRef} type="file" accept=".glb,model/gltf-binary" onChange={handle3dModelUpload} className="hidden" />
+                <button
+                  type="button"
+                  onClick={() => model3dInputRef.current?.click()}
+                  disabled={uploading3dModel}
+                  className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg border border-cyan-400/25 bg-cyan-400/[0.06] px-4 py-2 text-sm font-semibold text-cyan-300 transition-colors hover:bg-cyan-400/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {uploading3dModel ? <Loader2 className="h-4 w-4 animate-spin" /> : <UploadCloud className="h-4 w-4" />}
+                  {build.model_3d_url ? "Replace GLB" : "Upload GLB"}
+                </button>
+                {build.model_3d_url && <a href={build.model_3d_url} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-1 px-2 text-xs font-bold text-emerald-300 hover:text-emerald-200">3D model ready <ExternalLink className="h-3 w-3" /></a>}
+              </div>
             </div>
 
             {regularPhotos.length === 0 ? (
@@ -1143,22 +1156,6 @@ export default function BuildDetailPage() {
               </div>
             </div>
           )}
-
-          {/* Storefront 3D model */}
-          <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="flex items-center gap-2 text-sm font-semibold"><Box className="h-4 w-4 text-cyan-400" /> Storefront 3D model</p>
-                <p className="mt-1 text-[11px] leading-5 text-slate-500">Upload one self-contained GLB, maximum 100 MB. It will be used by this PC&apos;s viewer on FlipFlop.shop.</p>
-                {build.model_3d_url && <a href={build.model_3d_url} target="_blank" rel="noreferrer" className="mt-2 inline-flex cursor-pointer items-center gap-1 text-xs text-emerald-300 hover:text-emerald-200">3D model ready <ExternalLink className="h-3 w-3" /></a>}
-              </div>
-              <input ref={model3dInputRef} type="file" accept=".glb,model/gltf-binary" onChange={handle3dModelUpload} className="hidden" />
-              <button type="button" onClick={() => model3dInputRef.current?.click()} disabled={uploading3dModel} className="flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg border border-cyan-400/25 bg-cyan-400/[0.06] px-4 py-2 text-sm font-semibold text-cyan-300 transition-colors hover:bg-cyan-400/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 disabled:cursor-not-allowed disabled:opacity-50">
-                {uploading3dModel ? <Loader2 className="h-4 w-4 animate-spin" /> : <UploadCloud className="h-4 w-4" />}
-                {build.model_3d_url ? "Replace GLB" : "Upload GLB"}
-              </button>
-            </div>
-          </div>
 
           {/* Performance Card */}
           {build.generated_title && (

@@ -37,44 +37,33 @@ def _classify_cpu(title: str) -> str | None:
     return None
 
 
-# ---- RAM: brand + colourway — heatspreader shape barely varies otherwise --
-_RAM_BRANDS = ("corsair", "kingston", "crucial", "g.skill", "gskill", "teamgroup", "adata", "hyperx", "patriot")
-
-
 def _classify_ram(title: str) -> str | None:
     t = _norm(title)
-    if not re.search(r"\bddr[345]\b|\bram\b|\bdimm\b|\bso-?dimm\b", t):
-        return None
-    brand = next((b for b in _RAM_BRANDS if b.replace(".", "") in t.replace(".", "")), None)
-    if not brand:
-        return None
-    colour = "black"
-    if "white" in t:
-        colour = "white"
-    elif "rgb" in t or "argb" in t:
-        colour = "rgb"
-    return f"ram_{brand.replace('.', '')}_{colour}"
-
-
-# ---- Motherboard: brand + form factor — mostly hidden, form factor matters
-# more visually than exact model line at typical camera angles -------------
-_MOBO_BRANDS = ("asus", "msi", "gigabyte", "asrock")
+    if re.search(r"\bddr5\b", t):
+        return "ram_ddr5"
+    if re.search(r"\bddr4\b", t):
+        return "ram_ddr4"
+    return None
 
 
 def _classify_motherboard(title: str) -> str | None:
     t = _norm(title)
-    brand = next((b for b in _MOBO_BRANDS if b in t), None)
-    if not brand:
-        return None
     if re.search(r"\bitx\b|\bmini-itx\b", t):
-        form = "itx"
+        return None  # no approved ITX photo set yet
     elif re.search(r"\bm-?atx\b|\bmicro-?atx\b|\bmatx\b", t):
-        form = "matx"
+        return "motherboard_matx"
     elif re.search(r"\batx\b", t):
-        form = "atx"
-    else:
-        return None  # form factor is the load-bearing part of this bucket — no guess
-    return f"mobo_{brand}_{form}"
+        return "motherboard_atx"
+    return None
+
+
+def _classify_storage(title: str) -> str | None:
+    t = _norm(title)
+    if re.search(r"\bnvme\b|\bm\.2\b|\b2280\b", t):
+        return "storage_nvme_m2"
+    if re.search(r"\bsata\b|2\.5(?:-inch|\s?inch|\")", t):
+        return "storage_sata_2_5"
+    return None
 
 
 # ---- GPU: shape-tier, NOT brand — cooler-shroud size is what customers
@@ -154,6 +143,7 @@ _CLASSIFIERS = {
     "cooling": _classify_cooling,
     "fan": _classify_fan,
     "psu": _classify_psu,
+    "storage": _classify_storage,
 }
 
 
@@ -173,20 +163,12 @@ def classify_family(category: str, title: str) -> str | None:
 # grow), but enough to know what to generate first.
 KNOWN_FAMILY_BUCKETS: list[tuple[str, str]] = [
     ("cpu", "cpu_amd"), ("cpu", "cpu_intel"),
-    ("motherboard", "mobo_asus_atx"), ("motherboard", "mobo_asus_matx"), ("motherboard", "mobo_asus_itx"),
-    ("motherboard", "mobo_msi_atx"), ("motherboard", "mobo_msi_matx"),
-    ("motherboard", "mobo_gigabyte_atx"), ("motherboard", "mobo_gigabyte_matx"),
-    ("motherboard", "mobo_asrock_atx"), ("motherboard", "mobo_asrock_matx"),
-    ("ram", "ram_corsair_black"), ("ram", "ram_corsair_rgb"), ("ram", "ram_corsair_white"),
-    ("ram", "ram_kingston_black"), ("ram", "ram_crucial_black"),
-    ("ram", "ram_gskill_black"), ("ram", "ram_teamgroup_rgb"),
-    ("ram", "ram_adata_rgb"), ("ram", "ram_hyperx_black"),
-    ("ram", "ram_patriot_rgb"),
-    ("gpu", "gpu_blower"), ("gpu", "gpu_compact_dual_fan"),
+    ("motherboard", "motherboard_atx"), ("motherboard", "motherboard_matx"),
+    ("ram", "ram_ddr4"), ("ram", "ram_ddr5"),
+    ("gpu", "gpu_compact_dual_fan"),
     ("gpu", "gpu_mid_dual_fan"), ("gpu", "gpu_large_triple_fan"),
     ("cooling", "cooling_air_tower"),
-    ("cooling", "cooling_aio_240"), ("cooling", "cooling_aio_280"), ("cooling", "cooling_aio_360"),
-    ("cooling", "cooling_aio_360_lcd"),
-    ("fan", "fan_120_plain"), ("fan", "fan_120_rgb"), ("fan", "fan_140_plain"), ("fan", "fan_140_rgb"),
+    ("cooling", "cooling_aio_240"),
+    ("storage", "storage_nvme_m2"), ("storage", "storage_sata_2_5"),
     ("psu", "psu_atx_standard"),
 ]

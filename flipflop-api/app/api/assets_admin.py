@@ -6,8 +6,12 @@ Only VALIDATED/FINAL rows with is_active=True are ever served publicly
 (see public_configurator.py).
 """
 from datetime import datetime
+import json
+from pathlib import Path
+import shutil
 
 from fastapi import APIRouter, Depends, HTTPException
+import httpx
 from pydantic import BaseModel, Field
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,9 +26,67 @@ from app.routes.admin_auth import get_current_admin
 from pydantic import ValidationError as PydanticValidationError
 from app.schemas.case_mount import validate_case_mount_manifest
 from app.services.component_family_classifier import KNOWN_FAMILY_BUCKETS
-from app.services.meshy_generation import build_prompt, generate_family_asset
+from app.services.media_sync import sync_to_public_media
+from app.services.meshy_generation import build_prompt, generate_multi_image_asset
 
 router = APIRouter(prefix="/assets-3d", tags=["assets-3d"], dependencies=[Depends(get_current_admin)])
+
+_WORKSPACE_ROOT = Path(__file__).resolve().parents[3]
+_REFERENCE_ROOT = _WORKSPACE_ROOT / "assets" / "3d-reference-images" / "catalogue"
+_PUBLIC_MEDIA_ROOT = _WORKSPACE_ROOT.parent / "FlipFlop.shop" / "public" / "media"
+_PUBLIC_MEDIA_URL = "https://theflipflop.shop/media"
+_REFERENCE_ALIASES = {
+    "cpu_amd": "cpu_amd_am4_am5",
+    "cpu_intel": "cpu_intel_lga1700",
+}
+
+
+def _reference_family(category: str, family_key: str) -> dict | None:
+    manifest_path = _REFERENCE_ROOT / "manifest.json"
+    if not manifest_path.exists():
+        return None
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    reference_key = _REFERENCE_ALIASES.get(family_key, family_key)
+    return next(
+        (family for family in manifest["families"] if family["category"] == category and family["key"] == reference_key),
+        None,
+    )
+
+
+async def _publish_reference_images(category: str, family_key: str) -> tuple[list[str], dict]:
+    family = _reference_family(category, family_key)
+    if not family:
+        raise HTTPException(status_code=409, detail=f"No approved photo set for {category}/{family_key}")
+    source_dir = _REFERENCE_ROOT / family["directory"]
+    images = sorted(path for path in source_dir.iterdir() if path.is_file())[:4]
+    if not images:
+        raise HTTPException(status_code=409, detail=f"Photo set is empty for {category}/{family_key}")
+
+    _PUBLIC_MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
+    urls: list[str] = []
+    for index, source in enumerate(images, start=1):
+        filename = f"catalogue-3d-ref-{family_key}-{index}{source.suffix.lower()}"
+        public_path = _PUBLIC_MEDIA_ROOT / filename
+        shutil.copy2(source, public_path)
+        if not await sync_to_public_media(public_path):
+            raise HTTPException(status_code=502, detail=f"Could not publish reference image {source.name}")
+        urls.append(f"{_PUBLIC_MEDIA_URL}/{filename}")
+    return urls, family
+
+
+async def _store_generated_glb(family_key: str, version: int, source_url: str) -> tuple[str, int]:
+    filename = f"catalogue-3d-{family_key}-v{version}.glb"
+    public_path = _PUBLIC_MEDIA_ROOT / filename
+    try:
+        async with httpx.AsyncClient(timeout=120, follow_redirects=True) as client:
+            response = await client.get(source_url)
+            response.raise_for_status()
+    except httpx.HTTPError as exc:
+        raise HTTPException(status_code=502, detail=f"Could not download generated GLB: {exc}") from exc
+    public_path.write_bytes(response.content)
+    if not await sync_to_public_media(public_path):
+        raise HTTPException(status_code=502, detail="Generated GLB could not be published")
+    return f"{_PUBLIC_MEDIA_URL}/{filename}", max(1, len(response.content) // 1024)
 
 
 def _serialize(a: Component3DAsset) -> dict:
@@ -325,7 +387,8 @@ async def generate_family_bucket_asset(
         raise HTTPException(status_code=404, detail=f"Unknown bucket {category}/{family_key}")
 
     prompt = build_prompt(category, family_key)
-    result = await generate_family_asset(prompt)
+    image_urls, reference_family = await _publish_reference_images(category, family_key)
+    result = await generate_multi_image_asset(image_urls)
     if result is None:
         raise HTTPException(
             status_code=502,
@@ -346,6 +409,8 @@ async def generate_family_bucket_asset(
             .limit(1)
         )
     ).scalar_one_or_none()
+    version = (prior_version or 0) + 1
+    stable_glb_url, file_size_kb = await _store_generated_glb(family_key, version, result.glb_url)
 
     asset = Component3DAsset(
         subject_type=AssetSubjectType.CATEGORY_GENERIC,
@@ -353,18 +418,20 @@ async def generate_family_bucket_asset(
         category=category,
         family_key=family_key,
         status=Component3DAssetStatus.MESHY_DRAFT,
-        version=(prior_version or 0) + 1,
-        glb_ref=result.glb_url,
+        version=version,
+        glb_ref=stable_glb_url,
         preview_image_ref=result.thumbnail_url,
-        source_image_refs=[],
-        notes=f"Meshy task {result.task_id}, prompt: {prompt}",
+        source_image_refs=image_urls,
+        file_size_kb=file_size_kb,
+        notes=f"Meshy multi-image task {result.task_id}; reference family: {reference_family['key']}",
         created_by=getattr(admin, "email", None),
         # Original AI-generated recreation from a generic text prompt — never
         # a copy of a specific product. Still starts unapproved: a human
         # reviews the actual output before it can be promoted (patch_asset's
         # provenance gate below still requires explicit approval either way).
         provenance_status="original-recreation",
-        source_name=f"Meshy AI text-to-3D generation (task {result.task_id})",
+        source_name=f"Meshy AI multi-image recreation (task {result.task_id})",
+        source_url=reference_family.get("source_page"),
         commercial_use_approved=False,
         redistribution_approved=False,
     )
