@@ -1763,6 +1763,115 @@ async def _upsert_case(db, case: RawCase):
     ))
 
 
+async def _upsert_case_new(db, case: RawCase):
+    """Upsert into new Case table (clean, isolated from Parts inventory)."""
+    from sqlalchemy import select
+    from app.models.case import Case
+
+    # Check for exact match (same name + source)
+    result = await db.execute(
+        select(Case).where(
+            Case.name == case.name,
+            Case.source_site == case.source_site,
+        )
+    )
+    case_row = result.scalar_one_or_none()
+    now = datetime.utcnow()
+
+    if case_row:
+        # Update price if cheaper
+        if case.price < (case_row.price or 999999):
+            case_row.price = case.price
+            case_row.price_new = case.price
+            case_row.source_url = case.source_url
+            case_row.source_site = case.source_site
+            case_row.image_url = case.image_url
+            case_row.form_factors = case.form_factors
+            case_row.keywords = case.keywords
+
+        # Capture RRP from whichever source has it
+        if case.rrp:
+            case_row.rrp = case.rrp
+
+        # Always prefer Amazon ratings & demand (more reliable)
+        if case.source_site == "Amazon":
+            if case.rating:
+                case_row.rating = case.rating
+            if case.review_count:
+                case_row.review_count = case.review_count
+            if case.sales_velocity:
+                case_row.sales_velocity = case.sales_velocity
+        elif not case_row.rating and case.rating:
+            # Only use Overclockers ratings if we have no Amazon ratings yet
+            case_row.rating = case.rating
+            case_row.review_count = case.review_count
+            if case.sales_velocity:
+                case_row.sales_velocity = case.sales_velocity
+    else:
+        # Check for cross-source duplicates
+        result = await db.execute(
+            select(Case).where(
+                Case.name == case.name,
+                Case.source_site.in_(["Amazon", "Overclockers"]),
+            )
+        )
+        existing = result.scalar_one_or_none()
+
+        if existing:
+            # Case exists from another source
+            if case.price < (existing.price or 999999):
+                # This source is cheaper, update it
+                existing.price = case.price
+                existing.price_new = case.price
+                existing.source_url = case.source_url
+                existing.source_site = case.source_site
+                existing.image_url = case.image_url
+                existing.form_factors = case.form_factors
+                existing.keywords = case.keywords
+                case_row = existing
+            else:
+                case_row = existing
+
+            # Capture RRP from whichever source has it
+            if case.rrp:
+                existing.rrp = case.rrp
+
+            # Always prefer Amazon ratings
+            if case.source_site == "Amazon":
+                if case.rating:
+                    existing.rating = case.rating
+                if case.review_count:
+                    existing.review_count = case.review_count
+                if case.sales_velocity:
+                    existing.sales_velocity = case.sales_velocity
+            elif not existing.rating and case.rating:
+                existing.rating = case.rating
+                existing.review_count = case.review_count
+                if case.sales_velocity:
+                    existing.sales_velocity = case.sales_velocity
+        else:
+            # No existing entry, create new
+            case_row = Case(
+                name=case.name,
+                brand=case.brand,
+                model=case.model,
+                source_site=case.source_site,
+                source_url=case.source_url,
+                image_url=case.image_url,
+                price=case.price,
+                price_new=case.price,
+                rrp=case.rrp,
+                form_factors=case.form_factors,
+                keywords=case.keywords,
+                rating=case.rating,
+                review_count=case.review_count,
+                sales_velocity=case.sales_velocity,
+                status="pending",
+            )
+            db.add(case_row)
+            await db.flush()
+
+
 def _parse_price(text: str) -> float:
     m = re.search(r"[\d,]+\.?\d*", str(text).replace(",", ""))
     return float(m.group(0)) if m else 0.0

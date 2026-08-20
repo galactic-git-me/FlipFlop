@@ -25,8 +25,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.gem_radar import router as gem_radar_router
-from app.routes.cases_priority import router as cases_priority_router
+from app.routes.cases import router as cases_router
 from app.database import Base, engine
+from app.models import case as case_models
 from app.workers.queue_processor import process_submission_queue
 from app.workers.database_cleaner import run_database_cleaner
 
@@ -59,4 +60,4 @@ app.add_middleware(
 )
 
 app.include_router(gem_radar_router, prefix="/api")
-app.include_router(cases_priority_router, prefix="/api")
+app.include_router(cases_router, prefix="/api")
