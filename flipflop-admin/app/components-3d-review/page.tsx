@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Box, Check, AlertCircle, ChevronRight, Zap, HardDrive, Maximize2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,12 +20,13 @@ interface Component3DAsset {
   created_at: string | null;
 }
 
-function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
+function Viewer3D({ glbUrl, previewUrl }: { glbUrl: string | null; previewUrl?: string | null }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<any>(null);
+  const [loadFailed, setLoadFailed] = React.useState(false);
 
   useEffect(() => {
-    if (!containerRef.current || !glbUrl) return;
+    if (!containerRef.current || !glbUrl || loadFailed) return;
 
     let animationId: number;
 
@@ -71,34 +72,43 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
 
           // Load model
           const loader = new GLTFLoader();
-          loader.load(glbUrl, (gltf) => {
-            const model = gltf.scene;
+          loader.load(
+            glbUrl,
+            (gltf) => {
+              const model = gltf.scene;
 
-            // Scale and center
-            const bbox = new THREE.Box3().setFromObject(model);
-            const center = bbox.getCenter(new THREE.Vector3());
-            const size = bbox.getSize(new THREE.Vector3());
-            const maxDim = Math.max(size.x, size.y, size.z);
-            const scale = 1.5 / maxDim;
+              // Scale and center
+              const bbox = new THREE.Box3().setFromObject(model);
+              const center = bbox.getCenter(new THREE.Vector3());
+              const size = bbox.getSize(new THREE.Vector3());
+              const maxDim = Math.max(size.x, size.y, size.z);
+              const scale = 1.5 / maxDim;
 
-            model.position.copy(center).multiplyScalar(-1);
-            model.scale.multiplyScalar(scale);
-            scene.add(model);
+              model.position.copy(center).multiplyScalar(-1);
+              model.scale.multiplyScalar(scale);
+              scene.add(model);
 
-            // Animate
-            let rotation = 0;
-            const animate = () => {
-              animationId = requestAnimationFrame(animate);
-              rotation += 0.003;
-              model.rotation.y = rotation;
-              renderer.render(scene, camera);
-            };
-            animate();
+              // Animate
+              let rotation = 0;
+              const animate = () => {
+                animationId = requestAnimationFrame(animate);
+                rotation += 0.003;
+                model.rotation.y = rotation;
+                renderer.render(scene, camera);
+              };
+              animate();
 
-            sceneRef.current = { scene, renderer, camera, model };
-          });
+              sceneRef.current = { scene, renderer, camera, model };
+            },
+            undefined,
+            (error) => {
+              console.error("Failed to load 3D model:", error);
+              setLoadFailed(true);
+            }
+          );
         } catch (error) {
           console.error("3D viewer error:", error);
+          setLoadFailed(true);
         }
       };
 
@@ -111,14 +121,22 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
         sceneRef.current.renderer.dispose();
       }
     };
-  }, [glbUrl]);
+  }, [glbUrl, loadFailed]);
 
   return (
     <div
       ref={containerRef}
-      className="w-full h-full rounded-lg overflow-hidden bg-[#0a1119] border border-[#1e2d45]"
+      className="w-full h-full rounded-lg overflow-hidden bg-[#0a1119] border border-[#1e2d45] flex items-center justify-center"
       style={{ minHeight: "380px" }}
-    />
+    >
+      {loadFailed && previewUrl && (
+        <img
+          src={previewUrl}
+          alt="3D Model Preview"
+          className="w-full h-full object-cover"
+        />
+      )}
+    </div>
   );
 }
 
@@ -264,19 +282,36 @@ export default function Components3DReviewPage() {
                   <button
                     key={asset.id}
                     onClick={() => setSelectedAsset(asset)}
-                    className={`p-2 rounded border text-xs flex flex-col gap-1 cursor-pointer transition ${
+                    className={`overflow-hidden rounded border text-xs flex flex-col gap-1 cursor-pointer transition hover:scale-105 ${
                       selectedAsset?.id === asset.id
                         ? "ring-2 ring-orange-400"
                         : ""
                     } ${statusColors[asset.status]}`}
                   >
-                    <div className="font-semibold truncate">{asset.family_key}</div>
-                    <div className="text-[9px] text-slate-400">{asset.category}</div>
-                    {asset.file_size_kb && (
-                      <div className="text-[9px] text-slate-500">
-                        {Math.round(asset.file_size_kb / 1024)}MB
+                    {/* Preview image */}
+                    {asset.preview_image_ref ? (
+                      <div className="w-full h-20 bg-[#0a1119] relative overflow-hidden flex-shrink-0">
+                        <img
+                          src={asset.preview_image_ref}
+                          alt={asset.family_key}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-full h-20 bg-[#0a1119] flex items-center justify-center">
+                        <Box className="w-8 h-8 opacity-30" />
                       </div>
                     )}
+                    {/* Info */}
+                    <div className="p-2">
+                      <div className="font-semibold truncate">{asset.family_key}</div>
+                      <div className="text-[9px] text-slate-400">{asset.category}</div>
+                      {asset.file_size_kb && (
+                        <div className="text-[9px] text-slate-500 mt-1">
+                          {Math.round(asset.file_size_kb / 1024)}MB
+                        </div>
+                      )}
+                    </div>
                   </button>
                 );
               })
@@ -295,7 +330,7 @@ export default function Components3DReviewPage() {
                 </div>
                 <div className="flex-1 min-h-0 bg-[#0a1119]">
                   {selectedAsset.glb_ref ? (
-                    <Viewer3D glbUrl={selectedAsset.glb_ref} />
+                    <Viewer3D glbUrl={selectedAsset.glb_ref} previewUrl={selectedAsset.preview_image_ref} />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-slate-500">
                       <div className="text-center">
