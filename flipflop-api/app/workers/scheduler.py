@@ -12,10 +12,11 @@ from functools import partial
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from app.config import get_settings
-# Disabled: Backend swarms replaced by FlipFlopXtension
+# Disabled: flip_opportunities, upgrade_parts, accessories replaced by FlipFlopXtension
+# Cases swarm re-enabled to use direct httpx method (Overclockers, Amazon, BargainHardware)
 # from app.swarms.flip_opportunities import run_flip_opportunities_swarm
 # from app.swarms.upgrade_parts import run_upgrade_parts_swarm
-# from app.swarms.cases import run_cases_swarm
+from app.swarms.cases import run_cases_swarm
 # from app.swarms.accessories import run_accessories_swarm
 from app.services.external_demand import ingest_external_demand_signals
 from app.services.playbook_evolution import run_playbook_evolution
@@ -47,7 +48,7 @@ _job_history: dict[str, deque[dict]] = {
     # Backend scrapers disabled — replaced by FlipFlopXtension
     # "flip_opportunities": deque(maxlen=50),
     # "upgrade_parts": deque(maxlen=50),
-    # "cases": deque(maxlen=50),
+    "cases": deque(maxlen=50),
     # "accessories": deque(maxlen=50),
     "external_demand": deque(maxlen=50),
     "playbook_evolution": deque(maxlen=50),
@@ -287,16 +288,16 @@ def start_scheduler():
     #     next_run_time=upgrade_start,
     # )
     #
-    # scheduler.add_job(
-    #     _run_job_with_history,
-    #     trigger=IntervalTrigger(minutes=settings.flip_scan_interval_minutes),
-    #     id="cases",
-    #     name="Cases Catalogue Swarm",
-    #     kwargs={"job_id": "cases", "fn": partial(run_cases_swarm, "main")},
-    #     replace_existing=True,
-    #     max_instances=1,
-    #     next_run_time=cases_start,
-    # )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=24),
+        id="cases",
+        name="Cases Catalogue Swarm",
+        kwargs={"job_id": "cases", "fn": partial(run_cases_swarm, "main")},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now,
+    )
     #
     # scheduler.add_job(
     #     _run_job_with_history,
@@ -633,9 +634,12 @@ def stop_scheduler():
 
 async def trigger_swarm(swarm_id: str) -> dict:
     """Manually trigger a swarm by ID."""
-    # Backend scrapers disabled — replaced by FlipFlopXtension
-    if swarm_id in ("flip_opportunities", "upgrade_parts", "cases", "accessories"):
+    # Cases swarm re-enabled (uses direct httpx method)
+    # flip_opportunities, upgrade_parts, accessories still disabled
+    if swarm_id in ("flip_opportunities", "upgrade_parts", "accessories"):
         return {"ok": False, "reason": "Backend scrapers disabled — data sourcing handled by FlipFlopXtension"}
+    if swarm_id == "cases":
+        return await _run_job_with_history("cases", partial(run_cases_swarm, "main"))
     if swarm_id == "external_demand":
         return await _run_job_with_history("external_demand", ingest_external_demand_signals)
     if swarm_id == "playbook_evolution":
