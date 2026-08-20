@@ -74,6 +74,41 @@ class RawCase:
     image_url: str
     theme: str
     specs: str = "ATX Mid Tower · New"
+    form_factors: list[str] = None  # ["ATX", "MATX", "EATX", "ITX", "MINI_ITX"]
+
+    def __post_init__(self):
+        # Auto-extract form factors from name if not provided
+        if self.form_factors is None:
+            self.form_factors = _extract_form_factors(self.name)
+
+
+def _extract_form_factors(text: str) -> list[str]:
+    """Extract motherboard form factors from case name/specs."""
+    text_upper = text.upper()
+    factors = []
+
+    # Check for form factors (order matters — check longer forms first)
+    if "MINI ITX" in text_upper or "MINI-ITX" in text_upper:
+        factors.append("MINI_ITX")
+    elif "ITX" in text_upper:
+        factors.append("ITX")
+
+    if "EATX" in text_upper:
+        factors.append("EATX")
+    elif "E-ATX" in text_upper:
+        factors.append("EATX")
+
+    if "MATX" in text_upper or "M-ATX" in text_upper or "MICRO ATX" in text_upper:
+        factors.append("MATX")
+
+    if "ATX" in text_upper and "MATX" not in text_upper and "EATX" not in text_upper:
+        factors.append("ATX")
+
+    # Default to ATX if nothing found (most common form factor)
+    if not factors:
+        factors.append("ATX")
+
+    return list(dict.fromkeys(factors))  # Deduplicate while preserving order
 
 
 async def _playbook_extra_themes() -> list[dict]:
@@ -1576,6 +1611,7 @@ async def _upsert_case(db, case: RawCase):
             part.source_url = case.source_url
             part.source_site = case.source_site  # Switch to cheaper source
             part.image_url = case.image_url
+            part.form_factors = case.form_factors
             part.last_price_update = now
     else:
         # Check for cross-source duplicates (same case name, different source)
@@ -1598,6 +1634,7 @@ async def _upsert_case(db, case: RawCase):
                 existing.source_url = case.source_url
                 existing.source_site = case.source_site
                 existing.image_url = case.image_url
+                existing.form_factors = case.form_factors
                 existing.last_price_update = now
                 part = existing
             else:
@@ -1616,6 +1653,7 @@ async def _upsert_case(db, case: RawCase):
                 image_url=case.image_url,
                 theme=case.theme,
                 specs=case.specs,
+                form_factors=case.form_factors,
                 resale_value_add=0.0,
                 last_price_update=now,
             )
