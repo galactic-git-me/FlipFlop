@@ -5,6 +5,32 @@ You have **226 unique PC cases** in the database. To launch the customer builder
 
 **Target:** Top 30 bestsellers + Geometry Green case
 
+## Target Deliverables (4 items)
+
+You won't find all 6 sources for every case. **Aim for these 4 core deliverables:**
+
+1. **Beautiful 3D Model** (lifelike, fully textured)
+   - Preferred: Manufacturer CAD (if available)
+   - Fallback: High-quality community model (Sketchfab/GrabCAD)
+   - Acceptable: Hand-modeled from detailed photos if no CAD exists
+
+2. **Product Photo Set** (multi-angle, professional quality)
+   - Preferred: Official manufacturer specs/gallery photos
+   - Fallback: Official Amazon listing photos
+   - Angles: Front, back, interior, rear I/O ports, special features
+
+3. **YouTube Product Video** (official showcase)
+   - Preferred: Official manufacturer channel
+   - Fallback: High-quality review (Linus Tech Tips, GamersNexus, JayzTwoCents)
+   - Purpose: Show the case from all angles, highlight features, demonstrate interior space
+
+4. **Description + Key Selling Points** (marketing copy)
+   - 2-3 sentences highlighting what makes this case special
+   - Form factors, cooling capability, design philosophy
+   - Use in customer builder & pre-built listings
+
+---
+
 ## Sourcing Priority (in order)
 
 ### 1. **Manufacturer CAD/3D Model** ⭐ BEST
@@ -29,7 +55,7 @@ You have **226 unique PC cases** in the database. To launch the customer builder
 
 ---
 
-### 2. **Third-Party CAD/3D Models** ⭐⭐ GOOD
+### 1B. **Third-Party CAD/3D Models** (if manufacturer CAD unavailable)
 - Community-uploaded, free, often very detailed
 - Prefer **Creative Commons Licensed** (reusable for your project)
 
@@ -39,46 +65,32 @@ You have **226 unique PC cases** in the database. To launch the customer builder
   - Download formats: `.obj`, `.fbx`, `.blend`, `.gltf`
   
 - **GrabCAD** https://grabcad.com/library
-  - Industrial CAD library
-  - Often has `.step` or `.iges` files
+  - Industrial CAD library, often has `.step` or `.iges` files
   
 - **Thingiverse** https://www.thingiverse.com
-  - 3D print community (many PC case holders exist)
-  - Search: `"{Case Name}" case`
-  
-- **CGTrader** https://www.cgtrader.com (free models)
-  - Higher quality but verify license
-  
-- **TurboSquid Free** https://www.turbosquid.com/Search/3D-Models/free
-  - Professional models, check license
+  - 3D print community, search: `"{Case Name}" case`
 
 **License check:** Look for Creative Commons (CC-BY, CC0, etc.) - allows commercial reuse
 
 ---
 
-### 3. **Official Manufacturer Photos** ⭐⭐⭐ IMPORTANT
-- High-resolution, multi-angle, well-lit
-- Use if CAD model not available
+### 2. **Official Manufacturer Photos** ⭐⭐⭐ (Deliverable #2)
+- High-resolution, multi-angle, professional quality
+- Essential for product visualization
 
-**What to capture:**
+**What to collect:**
 - ✅ Front view (full case, straight-on)
-- ✅ Back view (I/O ports, cable routing)
-- ✅ Left side view
-- ✅ Right side view
-- ✅ Top-down view
-- ✅ Interior (no components) - open it up
+- ✅ Back view (I/O ports clearly visible)
+- ✅ Left & right side views
+- ✅ Interior view (empty case, no components)
 - ✅ Close-up: Rear I/O ports & connectors
-- ✅ Close-up: Front panel buttons/displays
-- ✅ Close-up: Cable management features
-- ✅ Close-up: Radiator mounting areas
-- ✅ Close-up: Any RGB or special features
+- ✅ Optional: Top-down, special features, RGB areas
 
 **Where to find:**
-- Product page: `/specifications` or `/gallery`
-- Brand website: High-res press photos
-- Amazon: Detailed product images (often 10+ angles)
-- Newegg: Product photos section
-- TechPowerUp: Detailed reviews with photos
+- Brand website product page: `/specifications` or `/gallery` section
+- Amazon: Detailed product images (often 10+ angles available)
+- Manufacturer press/media page: High-res assets
+- Newegg, TechPowerUp: Product detail pages
 
 ---
 
@@ -156,12 +168,29 @@ and excellent airflow for budget gaming builds."
 - Geometry Green case at top
 - Systematic checklist for each case
 
-### Step 2: For each case, source in order:
-1. ✅ Check if manufacturer has CAD → save URL
-2. ✅ Check Sketchfab/GrabCAD if no CAD → save URL
-3. ✅ Collect manufacturer photos (multi-angle)
-4. ✅ Collect internet photos if needed
-5. ✅ Write 2-3 sentence feature description
+### Step 2: For each case, collect 4 deliverables:
+
+**Deliverable 1: 3D Model** (pick best option)
+- Check if manufacturer has CAD/3D files
+- If not, search Sketchfab/GrabCAD for community models
+- If not found, plan to hand-model from photos
+
+**Deliverable 2: Photos** (multi-angle official)
+- Collect manufacturer product photos from their website
+- Amazon product images work as backup
+- Need: Front, back, interior, rear ports/I/O
+
+**Deliverable 3: YouTube Video** (official preferred)
+- Search for official manufacturer product showcase
+- If available, save link + screenshot key angles
+- Edit any RGB areas to FlipFlop orange-blue gradient
+- Fallback: High-quality review if no official video
+
+**Deliverable 4: Description + KSP** (marketing copy)
+- Form factors supported (ATX, M-ATX, Mini-ITX)
+- Cooling capability (radiator support, fan slots)
+- Key features (tempered glass, cable management, design style)
+- Why it's special: value, performance, aesthetics, silence, etc
 
 ### Step 3: Mark complete
 - Click "Complete" when all sources found

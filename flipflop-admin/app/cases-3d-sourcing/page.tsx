@@ -364,41 +364,43 @@ export default function Cases3DSourcingPage() {
                     }
                   />
 
-                  {/* 4. Internet Photos */}
+                  {/* 4. Official YouTube Video */}
                   <SourceChecklistItem
                     icon={<Image className="w-5 h-5" />}
-                    title="4. High-Quality Internet Photos"
-                    description="Reviews, YouTube, tech sites with great photography"
+                    title="4. Official YouTube Product Video"
+                    description="Official showcase/walkthrough from manufacturer (best) or quality review"
                     suggestions={[
-                      `YouTube: Search "${activeTask.case.name} review" or "unboxing"`,
-                      `Reddit: r/pcmasterrace, r/buildapc with case photos`,
-                      `Tech reviews: GamersNexus, JayzTwoCents, Linus Tech Tips`,
-                      "Angles needed: Front, back, sides, interior, ports close-up, RGB areas",
-                      "⚠️ RGB: Replace with FlipFlop orange-blue gradient",
+                      `YouTube: Search "${activeTask.case.brand} ${activeTask.case.name} official"`,
+                      `YouTube: Search "${activeTask.case.name} showcase" or "product walkthrough"`,
+                      "Prefer: Manufacturer channel or official distributor",
+                      "Fallback: High-quality review (JayzTwoCents, Linus Tech Tips, GamersNexus)",
+                      "What to capture: All angles, interior views, features highlighted",
+                      "⚠️ RGB: Screenshot + edit to FlipFlop orange-blue gradient",
                     ]}
                     status={activeTask.sources.internetPhotos.found ? "found" : activeTask.sources.internetPhotos.checked ? "checked" : "pending"}
-                    urls={activeTask.sources.internetPhotos.urls}
-                    onUpdate={(urls) =>
+                    url={activeTask.sources.internetPhotos.urls?.[0]}
+                    onUpdate={(url) =>
                       updateTask(activeTask.case.id, {
                         sources: {
                           ...activeTask.sources,
-                          internetPhotos: { checked: true, found: urls && urls.length > 0, urls },
+                          internetPhotos: { checked: true, found: !!url, urls: url ? [url] : [] },
                         },
                       })
                     }
                   />
 
-                  {/* 5. Description */}
+                  {/* 5. Description & KSP */}
                   <SourceChecklistItem
                     icon={<FileText className="w-5 h-5" />}
-                    title="5. Feature Description"
-                    description="Key features for customer decision-making"
+                    title="5. Features & Key Selling Points (KSP)"
+                    description="Highlights for customer decision-making + product listings"
                     suggestions={[
                       "Form factors: What motherboard sizes fit (ATX, MATX, ITX)?",
                       "Cooling: Radiator support, fan slots, airflow design",
-                      "Features: Tempered glass, cable management, dust filters, RGB",
-                      "Aesthetics: Material, color, design style, durability",
-                      "Usability: Port accessibility, hard drive bays, drive support",
+                      "Key features: Tempered glass, cable management, dust filters",
+                      "Material & aesthetics: Build quality, color, design style",
+                      "What makes it special: Performance, value, aesthetics, silence, etc",
+                      "Example: 'Premium airflow case with dual-chamber design and 360mm radiator support'",
                     ]}
                     status={activeTask.sources.description.checked ? "filled" : "pending"}
                     onUpdateText={(text) =>
