@@ -1,11 +1,11 @@
-"""Run Amazon case listing scrape then stamp bestseller ranks."""
+"""Run the cases swarm: Amazon listings, Overclockers catalogue, then Amazon bestseller ranks."""
 import asyncio
 import os
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-os.environ.setdefault("CASES_AMAZON_ONLY", "1")
+os.environ.pop("CASES_AMAZON_ONLY", None)
 os.environ.setdefault("CASES_MAX_TERMS", "8")
 os.environ.setdefault("CASES_TERM_CONCURRENCY", "1")
 

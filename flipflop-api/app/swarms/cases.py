@@ -57,6 +57,8 @@ _SOURCE_ALIASES: dict[str, str] = {
     "ebay uk auctions": "eBay",
     "amazon uk": "Amazon",
     "bargain hardware": "BargainHardware",
+    "overclockers uk": "Overclockers",
+    "overclockers": "Overclockers",
 }
 
 
@@ -267,9 +269,11 @@ async def run_cases_swarm(mode: str = "main") -> dict:
             if source["fn"] != "cherrytree":
                 terms_by_vendor[source["name"]] = fallback_terms
 
-    # Dedup per source, apply cap, always give CherryTree its catalogue term
+    # Dedup per source, apply cap. Catalogue vendors are scraped once, not per term.
     terms_by_vendor = {k: list(dict.fromkeys(v))[:max_terms] for k, v in terms_by_vendor.items()}
     terms_by_vendor["CherryTree Inc"] = ["catalogue"]
+    if os.getenv("CASES_AMAZON_ONLY", "0").lower() not in {"1", "true", "yes"}:
+        terms_by_vendor["Overclockers"] = ["catalogue"]
 
     batch_terms = terms_by_vendor
     log.info(
@@ -307,8 +311,8 @@ async def run_cases_swarm(mode: str = "main") -> dict:
 
     async def _scrape_source_seq(source: dict) -> list[dict]:
         rows: list[dict] = []
-        # CherryTree should ingest from its cases catalogue once, not per search term.
-        if source["fn"] == "cherrytree":
+        # CherryTree / Overclockers ingest a catalogue once, not per search term.
+        if source["fn"] in {"cherrytree", "overclockers"}:
             rows.append(await _scrape_one(source, "Catalogue", "catalogue"))
             return rows
         async def _one(term: str):
@@ -371,7 +375,8 @@ async def run_cases_swarm(mode: str = "main") -> dict:
                 continue
             try:
                 stats["found"] += len(cases)
-                for case in cases[:16]:
+                save_limit = len(cases) if source_name == "Overclockers" else 16
+                for case in cases[:save_limit]:
                     await _upsert_case(db, case)
                     await _upsert_case_new(db, case)
                     stats["upserted"] += 1
@@ -939,142 +944,136 @@ async def _scrape_amazon(search: str, theme: str) -> list[RawCase]:
 
 async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
     """
-    Overclockers UK — Full browser (non-headless) to bypass Cloudflare.
-
-    Scrapes PC Cases by Brand using custom-element ck-product-box.
-    Uses full browser to handle Cloudflare challenge.
+    Overclockers UK PC Cases by Brand catalogue.
+    One catalogue pass per swarm, not per search term.
     """
-    cases = []
+    cases = await _scrape_overclockers_once(headless=True)
+    if not cases:
+        log.info("overclockers.retry_headed")
+        cases = await _scrape_overclockers_once(headless=False)
+    log.info("overclockers.cases.done", search=search, found=len(cases))
+    return cases
+
+
+async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
+    cases: list[RawCase] = []
     url = "https://www.overclockers.co.uk/cases-and-modding/pc-cases/pc-cases-by-brand"
 
-    try:
-        from playwright.async_api import async_playwright
-
-        async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=False)
-            page = await browser.new_page(
-                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    async with managed_playwright() as p:
+        try:
+            browser = await p.chromium.launch(
+                headless=headless,
+                args=_STEALTH_ARGS,
+                proxy=playwright_proxy_config(),
             )
+            context = await browser.new_context(
+                user_agent=_STEALTH_UA,
+                viewport={"width": 1366, "height": 768},
+                locale="en-GB",
+                timezone_id="Europe/London",
+                java_script_enabled=True,
+            )
+            await context.add_init_script(_STEALTH_JS)
+        except Exception as exc:
+            log.warning("overclockers.cases.browser_error", error=str(exc), headless=headless)
+            return []
+
+        page = await context.new_page()
+        try:
+            await page.goto(url, wait_until="domcontentloaded", timeout=60000)
+            await asyncio.sleep(2)
+            for selector in ["button:has-text('Accept')", "[data-cookielaw='accept']", ".cookie-accept"]:
+                try:
+                    await page.click(selector, timeout=2000)
+                    await asyncio.sleep(0.5)
+                except Exception:
+                    pass
 
             try:
-                await page.goto(url, wait_until="networkidle", timeout=60000)
-                await asyncio.sleep(2)
+                await page.wait_for_selector("ck-product-box, a[href*='/cas-']", timeout=15000)
+            except Exception as exc:
+                log.debug("overclockers.wait_selector_timeout", error=str(exc))
 
-                # Dismiss cookie banner if present
-                for selector in ["button:has-text('Accept')", "[data-cookielaw='accept']", ".cookie-accept"]:
+            all_products = []
+            page_num = 1
+            max_pages = 8
+            while page_num <= max_pages and len(all_products) < 240:
+                products = await page.evaluate("""() => {
+                    const items = [];
+                    const seen = new Set();
+                    document.querySelectorAll('ck-product-box').forEach(box => {
+                        try {
+                            const analytics = JSON.parse(box.getAttribute('data-analytics') || '{}');
+                            const product = (analytics.products || [])[0];
+                            if (!product || !product.name || !product.price) return;
+                            const link = box.querySelector('a');
+                            const href = link ? link.href : '';
+                            if (!href) return;
+                            const key = href.split('?')[0];
+                            if (seen.has(key)) return;
+                            seen.add(key);
+                            const price = parseFloat(product.price);
+                            if (price < 10 || price > 500) return;
+                            const img = box.querySelector('img');
+                            const rrp = parseFloat(product.wasPrice || product.rrp || product.listPrice || 0);
+                            items.push({
+                                title: String(product.name).slice(0, 250),
+                                price,
+                                href,
+                                img: img ? (img.src || img.dataset.src || '') : '',
+                                rrp: Number.isFinite(rrp) && rrp > price ? rrp : null,
+                                rating: product.rating || product.averageRating || null,
+                                reviewCount: product.reviewCount || product.reviews || null,
+                            });
+                        } catch (e) {}
+                    });
+                    return items;
+                }""")
+                all_products.extend(products)
+                log.info("overclockers.cases.page", page=page_num, found=len(products), total=len(all_products), headless=headless)
+
+                next_url = None
+                for selector in ['a[rel="next"]', 'a:has-text("Next")', '[class*="next"] a', 'a[aria-label*="next"]']:
                     try:
-                        await page.click(selector, timeout=2000)
-                        await asyncio.sleep(1)
-                    except:
+                        elem = await page.query_selector(selector)
+                        if elem and await elem.is_enabled():
+                            next_url = await elem.get_attribute("href")
+                            if next_url:
+                                break
+                    except Exception:
                         pass
+                if not next_url:
+                    break
+                if not next_url.startswith("http"):
+                    next_url = "https://www.overclockers.co.uk" + next_url
+                await page.goto(next_url, wait_until="domcontentloaded", timeout=30000)
+                await asyncio.sleep(1)
+                page_num += 1
 
-                all_products = []
-                page_num = 1
-                max_pages = 5  # Limit to 5 pages (~120 cases max)
-
-                # Paginate through all results on same tab
-                while page_num <= max_pages and len(all_products) < 200:
-                    # Extract products from ck-product-box elements
-                    products = await page.evaluate("""() => {
-                        const items = [];
-                        const seen = new Set();
-
-                        document.querySelectorAll('ck-product-box').forEach(box => {
-                            try {
-                                const analyticsStr = box.getAttribute('data-analytics') || '{}';
-                                let analytics = JSON.parse(analyticsStr);
-                                const productsArray = analytics.products || [];
-                                if (productsArray.length === 0) return;
-
-                                const product = productsArray[0];
-                                if (!product.name || !product.price) return;
-
-                                const link = box.querySelector('a');
-                                const href = link ? link.href : '';
-                                if (!href) return;
-
-                                const key = href.split('?')[0];
-                                if (seen.has(key)) return;
-                                seen.add(key);
-
-                                const price = parseFloat(product.price);
-                                if (price < 10 || price > 500) return;
-
-                                const img = box.querySelector('img');
-                                const imgSrc = img ? (img.src || img.dataset.src || '') : '';
-
-                                items.push({
-                                    title: product.name.slice(0, 250),
-                                    price,
-                                    href,
-                                    img: imgSrc
-                                });
-                            } catch (e) {}
-                        });
-
-                        return items;
-                    }""")
-
-                    all_products.extend(products)
-                    log.debug("overclockers.cases.page", page=page_num, found=len(products), total=len(all_products))
-
-                    # Look for next page button or link
-                    next_url = None
-                    next_selectors = [
-                        'a[rel="next"]',
-                        'a:has-text("Next")',
-                        '[class*="next"] a',
-                        'a[aria-label*="next"]',
-                    ]
-
-                    for selector in next_selectors:
-                        try:
-                            elem = await page.query_selector(selector)
-                            if elem and await elem.is_enabled():
-                                next_url = await elem.get_attribute("href")
-                                if next_url:
-                                    break
-                        except:
-                            pass
-
-                    if not next_url:
-                        log.debug("overclockers.cases.no_more_pages", page=page_num)
-                        break
-
-                    try:
-                        # Navigate to next page URL (avoids opening new windows)
-                        if not next_url.startswith("http"):
-                            next_url = "https://www.overclockers.co.uk" + next_url
-
-                        await page.goto(next_url, wait_until="networkidle", timeout=30000)
-                        await asyncio.sleep(1)
-                        page_num += 1
-                    except Exception as e:
-                        log.debug("overclockers.cases.pagination_error", error=str(e))
-                        break
-
-                # Deduplicate by URL and add to cases list
-                seen_urls = set()
-                for product in all_products[:200]:
-                    key = product["href"].split("?")[0]
-                    if key not in seen_urls:
-                        seen_urls.add(key)
-                        cases.append(RawCase(
-                            name=product["title"],
-                            price=product["price"],
-                            source_site="Overclockers",
-                            source_url=product["href"],
-                            image_url=product["img"] or "",
-                            theme=theme,
-                        ))
-
-                log.info("overclockers.cases.done", found=len(cases), total_collected=len(all_products))
-
-            finally:
-                await browser.close()
-
-    except Exception as exc:
-        log.warning("overclockers.cases.error", error=str(exc))
+            seen_urls = set()
+            for product in all_products[:240]:
+                key = product["href"].split("?")[0]
+                if key in seen_urls:
+                    continue
+                seen_urls.add(key)
+                rating = product.get("rating")
+                review_count = product.get("reviewCount")
+                rrp = product.get("rrp")
+                cases.append(RawCase(
+                    name=product["title"],
+                    price=product["price"],
+                    source_site="Overclockers",
+                    source_url=product["href"],
+                    image_url=product.get("img") or "",
+                    theme="Catalogue",
+                    rating=float(rating) if rating else None,
+                    review_count=int(review_count) if review_count else None,
+                    rrp=float(rrp) if rrp else None,
+                ))
+        except Exception as exc:
+            log.warning("overclockers.cases.error", error=str(exc), headless=headless)
+        finally:
+            await browser.close()
 
     return cases
 
