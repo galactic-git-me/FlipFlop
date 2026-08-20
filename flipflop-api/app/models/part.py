@@ -55,6 +55,9 @@ class Part(Base):
     # For cases: extracted keywords (JSON array: gaming, dual-chamber, tempered-glass, RGB, wood, curved, fishtank, etc.)
     keywords: Mapped[list[str] | None] = mapped_column(JSON)
 
+    # For cases: customer selection count (how many builds used this case)
+    selection_count: Mapped[int] = mapped_column(Integer, default=0)
+
     # Value it adds to resale
     resale_value_add: Mapped[float] = mapped_column(Float, default=0.0)
 
