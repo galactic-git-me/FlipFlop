@@ -2526,7 +2526,7 @@ async def scrape_overclockers_cases(min_price: float = 10.0, max_price: float = 
     """
     results: list[RawListing] = []
     seen: set[str] = set()
-    url = "https://www.overclockers.co.uk/pc-cases"
+    url = "https://www.overclockers.co.uk/cases"
 
     client_kwargs = apply_httpx_proxy({"timeout": 30, "follow_redirects": True})
 

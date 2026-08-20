@@ -822,7 +822,7 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
     Requires manual Cloudflare bypass on first run.
     """
     cases = []
-    url = "https://www.overclockers.co.uk/pc-cases"
+    url = "https://www.overclockers.co.uk/cases"
 
     try:
         # Launch full browser (not headless) to handle Cloudflare
