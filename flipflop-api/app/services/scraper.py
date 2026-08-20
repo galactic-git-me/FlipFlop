@@ -2509,3 +2509,114 @@ async def _scrape_alibaba_http(
             except Exception as exc:
                 record_term_result(term=term, found=0, new=0, error=str(exc), source_name="Alibaba")
     return results
+
+
+# ---------------------------------------------------------------------------
+# Overclockers UK — PC Cases (logged-in session via httpx)
+# ---------------------------------------------------------------------------
+# Overclockers blocks unauthorized requests heavily. This scraper mimics eBay:
+# it uses httpx with headers, relies on your browser session cookies if
+# authentication is needed, and parses HTML with BeautifulSoup.
+
+async def scrape_overclockers_cases(min_price: float = 10.0, max_price: float = 500.0) -> list[RawListing]:
+    """
+    Overclockers UK — PC Cases category.
+    Scrapes the entire cases section using httpx (like eBay).
+    Falls back gracefully if blocked.
+    """
+    results: list[RawListing] = []
+    seen: set[str] = set()
+    url = "https://www.overclockers.co.uk/pc-cases"
+
+    client_kwargs = apply_httpx_proxy({"timeout": 30, "follow_redirects": True})
+
+    async with httpx.AsyncClient(**client_kwargs) as client:
+        try:
+            await _delay()
+            resp = await client.get(url, headers=_headers())
+
+            if resp.status_code != 200:
+                record_term_result(term="catalogue", found=0, new=0, error=f"http_{resp.status_code}", source_name="Overclockers")
+                return []
+
+            if len(resp.text) < 1000:
+                record_term_result(term="catalogue", found=0, new=0, error="response_too_short", source_name="Overclockers")
+                return []
+
+            soup = BeautifulSoup(resp.text, "lxml")
+
+            # Find all product links (Overclockers uses a-tags with /product/ URLs)
+            product_links = soup.select('a[href*="/product/"]')
+
+            for link in product_links:
+                try:
+                    # Extract URL
+                    href = link.get("href", "").strip()
+                    if not href.startswith("http"):
+                        if href.startswith("/"):
+                            href = "https://www.overclockers.co.uk" + href
+                        else:
+                            continue
+
+                    # Deduplicate
+                    key = href.split("?")[0]
+                    if key in seen:
+                        continue
+                    seen.add(key)
+
+                    # Find the product card container
+                    card = link.find_parent("li") or link.find_parent("div", class_=re.compile("product", re.I)) or link
+
+                    # Extract title
+                    title = link.get_text(strip=True) or ""
+                    if not title:
+                        title_el = card.find("h2") or card.find("h3") or card.find("a", string=True)
+                        title = title_el.get_text(strip=True) if title_el else ""
+
+                    title = title.strip()[:250]
+                    if not title or len(title) < 5:
+                        continue
+
+                    # Extract price (look for £ symbol)
+                    price_text = card.get_text()
+                    price_match = re.search(r"£\s*([\d,]+\.?\d*)", price_text)
+                    if not price_match:
+                        continue
+
+                    try:
+                        price = float(price_match.group(1).replace(",", ""))
+                    except ValueError:
+                        continue
+
+                    if price < min_price or price > max_price:
+                        continue
+
+                    # Extract image if available
+                    image_url = ""
+                    img = card.find("img")
+                    if img:
+                        image_url = img.get("src") or img.get("data-src") or ""
+
+                    # Create listing
+                    external_id = f"overclockers_{abs(hash(key))}"
+                    results.append(RawListing(
+                        external_id=external_id,
+                        title=title,
+                        price=price,
+                        url=href,
+                        location="UK",
+                        condition="new",
+                        description="",
+                        image_urls=[image_url] if image_url else [],
+                        source_name="Overclockers",
+                        listing_type="classified",
+                    ))
+                except Exception:
+                    continue
+
+            record_term_result(term="catalogue", found=len(results), new=len(results), source_name="Overclockers")
+
+        except Exception as exc:
+            record_term_result(term="catalogue", found=0, new=0, error=str(exc), source_name="Overclockers")
+
+    return results

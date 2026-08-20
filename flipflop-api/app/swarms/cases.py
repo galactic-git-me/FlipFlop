@@ -20,7 +20,7 @@ from app.models.part import Part, PartCategory, PartCondition
 from app.models.price_history import PriceHistory, PriceHistoryType
 from app.models.source_search_term import SourceSearchTerm
 from app.services.search_telemetry import record_term_result
-from app.services.scraper import scrape_ebay
+from app.services.scraper import scrape_ebay, scrape_overclockers_cases
 from app.services.proxy import playwright_proxy_config
 from app.services.playwright_scraper import chromium_available
 from app.services.delivery_filters import allow_temu_aliexpress_listing
@@ -816,146 +816,32 @@ async def _scrape_amazon(search: str, theme: str) -> list[RawCase]:
 
 async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
     """
-    Overclockers UK — Playwright stealth browser.
-    Overclockers blocks httpx but works with Playwright + stealth patches.
-    Searches their PC cases section and extracts products via JS evaluation.
+    Overclockers UK — Uses httpx (same as eBay).
+
+    Scrapes the entire PC cases section using httpx + BeautifulSoup.
+    Uses the scrape_overclockers_cases function from the scraper service,
+    which mimics the eBay pattern: simple HTTP request, HTML parsing, no Playwright.
     """
     cases = []
-    url = f"https://www.overclockers.co.uk/search?sSearch={search.replace(' ', '+')}"
 
-    async with managed_playwright() as p:
-        try:
-            browser, context = await _make_pw_context(p)
-        except Exception as exc:
-            log.warning("overclockers.cases.browser_error", error=str(exc))
-            return []
+    try:
+        # Call the httpx-based scraper (same pattern as eBay)
+        listings = await scrape_overclockers_cases(min_price=10.0, max_price=500.0)
 
-        page = await context.new_page()
-        try:
-            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+        for listing in listings:
+            cases.append(RawCase(
+                name=listing.title,
+                price=listing.price,
+                source_site="Overclockers",
+                source_url=listing.url,
+                image_url=listing.image_urls[0] if listing.image_urls else "",
+                theme=theme,
+            ))
 
-            # Dismiss any cookie/modal dialogs
-            for selector in ["button:has-text('Accept')", "button:has-text('OK')", "[class*='close']"]:
-                try:
-                    await page.click(selector, timeout=2000)
-                    await asyncio.sleep(0.3)
-                except Exception as exc:
-                    log.debug("overclockers.modal.dismiss_failed", selector=selector, error=str(exc))
+        log.info("overclockers.cases.done", found=len(cases))
+    except Exception as exc:
+        log.warning("overclockers.cases.error", error=str(exc))
 
-            # Wait for product listings to load
-            try:
-                await page.wait_for_selector(
-                    "[class*='product'], a[href*='/product/'], [data-product-id]",
-                    timeout=12000,
-                )
-            except Exception as exc:
-                log.debug("overclockers.wait_selector_timeout", error=str(exc))
-
-            await asyncio.sleep(random.uniform(1.5, 2.5))
-            await page.evaluate("window.scrollBy(0, 500)")
-            await asyncio.sleep(1.0)
-
-            # Extract products via JS evaluation — Overclockers uses dynamic class names
-            raw = await page.evaluate("""() => {
-                const out = [];
-                const priceRe = /£\\s*([\\d,]+\\.?\\d*)/;
-                const seen = new Set();
-
-                // Strategy 1: Find product containers
-                const containers = document.querySelectorAll(
-                    "a[href*='/product/'], [class*='product-card'], [class*='listing-item']"
-                );
-
-                containers.forEach(el => {
-                    try {
-                        let href = el.href || el.querySelector('a')?.href || '';
-                        if (!href.startsWith('http')) return;
-                        const key = href.split('?')[0];
-                        if (seen.has(key)) return;
-                        seen.add(key);
-
-                        // Extract title
-                        const titleEl = el.querySelector('h2, h3, h4, .product-name') ||
-                                       el.querySelector('a');
-                        let title = titleEl?.textContent?.trim() || el.textContent?.trim() || '';
-                        title = title.replace(/\\s+/g, ' ').slice(0, 200);
-                        if (!title || title.length < 5) return;
-
-                        // Extract price
-                        const priceEl = el.querySelector('[class*="price"]');
-                        const priceText = priceEl?.textContent || el.textContent || '';
-                        const pm = priceRe.exec(priceText);
-                        const price = pm ? parseFloat(pm[1].replace(',', '')) : 0;
-                        if (price <= 0 || price > 350) return;
-
-                        // Extract image
-                        const img = el.querySelector('img');
-                        const imgSrc = img?.src || img?.getAttribute('data-src') || '';
-
-                        out.push({title, price, href, img: imgSrc});
-                    } catch (e) {}
-                });
-
-                // If no results, try alternative selectors
-                if (out.length === 0) {
-                    document.querySelectorAll('a[href*="/product/"]').forEach(link => {
-                        try {
-                            let href = link.href;
-                            if (!href.startsWith('http')) return;
-                            const key = href.split('?')[0];
-                            if (seen.has(key)) return;
-                            seen.add(key);
-
-                            const node = link.closest('div, li, article') || link;
-                            let title = link.textContent?.trim() || '';
-                            title = title.replace(/\\s+/g, ' ').slice(0, 200);
-                            if (!title || title.length < 5) return;
-
-                            const pm = priceRe.exec(node.textContent || '');
-                            const price = pm ? parseFloat(pm[1].replace(',', '')) : 0;
-                            if (price <= 0 || price > 350) return;
-
-                            out.push({
-                                title,
-                                price,
-                                href,
-                                img: node.querySelector('img')?.src || ''
-                            });
-                        } catch (e) {}
-                    });
-                }
-
-                return out.slice(0, 20);
-            }""")
-
-            for item in raw:
-                try:
-                    title = str(item.get("title", "")).strip()[:200]
-                    if not title or len(title) < 5:
-                        continue
-                    price = float(item.get("price", 0) or 0)
-                    if price <= 0 or price > 350:
-                        continue
-                    href = str(item.get("href", ""))
-                    if not href.startswith("http"):
-                        continue
-                    cases.append(RawCase(
-                        name=title,
-                        price=price,
-                        source_site="Overclockers",
-                        source_url=href,
-                        image_url=str(item.get("img", "")),
-                        theme=theme,
-                    ))
-                except Exception:
-                    continue
-
-        except Exception as exc:
-            log.warning("overclockers.cases.scrape_error", error=str(exc))
-        finally:
-            await browser.close()
-
-    log.info("overclockers.cases.done", search=search, found=len(cases))
     return cases
 
 
