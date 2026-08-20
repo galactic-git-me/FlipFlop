@@ -30,6 +30,7 @@ from app.services.media_sync import sync_to_public_media
 from app.services.meshy_generation import build_prompt, generate_multi_image_asset
 
 router = APIRouter(prefix="/assets-3d", tags=["assets-3d"], dependencies=[Depends(get_current_admin)])
+public_router = APIRouter(prefix="/assets-3d", tags=["assets-3d"])
 
 _WORKSPACE_ROOT = Path(__file__).resolve().parents[3]
 _REFERENCE_ROOT = _WORKSPACE_ROOT / "assets" / "3d-reference-images" / "catalogue"
@@ -227,6 +228,33 @@ async def create_asset(body: AssetCreate, db: AsyncSession = Depends(get_db)):
     await db.commit()
     await db.refresh(asset)
     return _serialize(asset)
+
+
+# Public read-only endpoint (no auth required)
+@public_router.get("/public")
+async def list_assets_public(
+    subject_type: str | None = None,
+    status: str | None = None,
+    db: AsyncSession = Depends(get_db),
+):
+    """List all 3D assets (public read-only, no auth required)."""
+    q = select(Component3DAsset).order_by(
+        Component3DAsset.subject_type,
+        Component3DAsset.subject_id,
+        Component3DAsset.version.desc(),
+    )
+    if subject_type:
+        try:
+            q = q.where(Component3DAsset.subject_type == AssetSubjectType(subject_type))
+        except ValueError:
+            raise HTTPException(status_code=422, detail=f"Unknown subject_type '{subject_type}'")
+    if status:
+        try:
+            q = q.where(Component3DAsset.status == Component3DAssetStatus(status))
+        except ValueError:
+            raise HTTPException(status_code=422, detail=f"Unknown status '{status}'")
+    rows = (await db.execute(q)).scalars().all()
+    return [_serialize(a) for a in rows]
 
 
 class AssetPatch(BaseModel):

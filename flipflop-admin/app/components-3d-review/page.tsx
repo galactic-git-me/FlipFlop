@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Box, Check, AlertCircle, RefreshCw, ChevronRight, Zap, HardDrive, Maximize2 } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import { Box, Check, AlertCircle, RefreshCw, ChevronRight, Zap, HardDrive, Maximize2, RotateCw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -18,6 +18,106 @@ interface Component3DAsset {
   notes: string | null;
   created_by: string | null;
   created_at: string | null;
+}
+
+function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const sceneRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (!containerRef.current || !glbUrl) return;
+
+    const loadScene = async () => {
+      try {
+        // Dynamically import Three.js and GLTFLoader
+        const THREE = (await import("three")).default;
+        const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader");
+
+        const width = containerRef.current?.clientWidth || 800;
+        const height = containerRef.current?.clientHeight || 600;
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a1119);
+        scene.add(new THREE.GridHelper(10, 10, 0x444444, 0x222222));
+
+        const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+        camera.position.set(0, 1, 2);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(width, height);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        containerRef.current?.appendChild(renderer.domElement);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(5, 10, 5);
+        scene.add(directionalLight);
+
+        // Load GLB
+        const loader = new GLTFLoader();
+        loader.load(glbUrl, (gltf) => {
+          const model = gltf.scene;
+
+          // Center and scale model
+          const bbox = new THREE.Box3().setFromObject(model);
+          const center = bbox.getCenter(new THREE.Vector3());
+          const size = bbox.getSize(new THREE.Vector3());
+          const maxDim = Math.max(size.x, size.y, size.z);
+          const scale = 2 / maxDim;
+
+          model.position.sub(center);
+          model.scale.multiplyScalar(scale);
+          scene.add(model);
+
+          // Auto-rotate
+          let rotation = 0;
+          const animate = () => {
+            requestAnimationFrame(animate);
+            rotation += 0.005;
+            model.rotation.y = rotation;
+            renderer.render(scene, camera);
+          };
+          animate();
+        });
+
+        sceneRef.current = { scene, renderer, camera };
+
+        // Handle resize
+        const handleResize = () => {
+          if (!containerRef.current) return;
+          const w = containerRef.current.clientWidth;
+          const h = containerRef.current.clientHeight;
+          camera.aspect = w / h;
+          camera.updateProjectionMatrix();
+          renderer.setSize(w, h);
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => {
+          window.removeEventListener("resize", handleResize);
+          renderer.dispose();
+          containerRef.current?.removeChild(renderer.domElement);
+        };
+      } catch (error) {
+        console.error("Error loading 3D viewer:", error);
+      }
+    };
+
+    loadScene();
+  }, [glbUrl]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="w-full h-full rounded-lg overflow-hidden bg-[#0a1119] border border-[#1e2d45]"
+      style={{ minHeight: "500px" }}
+    />
+  );
 }
 
 export default function Components3DReviewPage() {
@@ -44,6 +144,7 @@ export default function Components3DReviewPage() {
         }
       } catch (error) {
         console.error("Error loading assets:", error);
+        // Note: If backend API returns 404, make sure FastAPI server has reloaded after code changes
       } finally {
         setLoading(false);
       }
@@ -240,22 +341,24 @@ export default function Components3DReviewPage() {
         <div className="lg:col-span-3">
           {selectedAsset ? (
             <div className="space-y-4">
-              {/* Preview image */}
+              {/* 3D Viewer */}
               <Card className="border-[#1e2d45]">
-                <CardContent className="pt-6">
-                  {selectedAsset.preview_image_ref ? (
-                    <div className="aspect-video rounded-lg overflow-hidden bg-[#0a1119] flex items-center justify-center">
-                      <img
-                        src={selectedAsset.preview_image_ref}
-                        alt={selectedAsset.family_key}
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-sm">3D Model Viewer</CardTitle>
+                    {selectedAsset.glb_ref && (
+                      <span className="text-[10px] text-slate-500">Auto-rotating • Scroll to zoom • Drag to rotate</span>
+                    )}
+                  </div>
+                </CardHeader>
+                <CardContent className="p-0">
+                  {selectedAsset.glb_ref ? (
+                    <Viewer3D glbUrl={selectedAsset.glb_ref} />
                   ) : (
-                    <div className="aspect-video rounded-lg overflow-hidden bg-[#0a1119] flex items-center justify-center text-slate-500">
+                    <div className="w-full h-96 rounded-lg overflow-hidden bg-[#0a1119] flex items-center justify-center text-slate-500">
                       <div className="text-center">
                         <Box className="w-12 h-12 mx-auto mb-2 opacity-30" />
-                        <p className="text-xs">No preview available</p>
+                        <p className="text-xs">No 3D model available</p>
                       </div>
                     </div>
                   )}
@@ -422,11 +525,4 @@ export default function Components3DReviewPage() {
           ) : (
             <div className="text-center py-12 text-slate-500">
               <Box className="w-12 h-12 mx-auto mb-3 opacity-30" />
-              <p>Select an asset to review</p>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
+              <p>Select an asse

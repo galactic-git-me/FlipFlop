@@ -4,20 +4,9 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || process.env.BACKEND_URL |
 
 export async function GET(request: NextRequest) {
   try {
-    const url = new URL(`${BACKEND_URL}/api/assets-3d`);
+    const url = new URL(`${BACKEND_URL}/api/assets-3d/public`);
 
-    // Use admin/system credentials if available (bypass user auth for admin tools)
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-    };
-
-    // Forward auth header if present, but don't require it
-    const authHeader = request.headers.get("authorization");
-    if (authHeader) {
-      headers["authorization"] = authHeader;
-    }
-
-    const response = await fetch(url.toString(), { headers });
+    const response = await fetch(url.toString());
 
     if (!response.ok) {
       const errorText = await response.text();
