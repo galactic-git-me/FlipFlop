@@ -47,19 +47,11 @@ CORE_CASE_TERMS = [
 ]
 
 SOURCES = [
-    {"name": "eBay",              "fn": "ebay"},            # httpx — reliable, UK + worldwide
-    {"name": "eBay (Worldwide)",  "fn": "ebay_worldwide"},  # same scraper, worldwide sellers
-    {"name": "Gumtree",           "fn": "gumtree"},
-    {"name": "Vinted",            "fn": "vinted"},          # httpx — secondhand UK
-    {"name": "Amazon",            "fn": "amazon"},          # Playwright — JS evaluation
-    {"name": "Overclockers",      "fn": "overclockers"},    # Playwright — UK retailer
-    {"name": "Temu",              "fn": "temu"},            # Playwright — stealth browser (may be rate-limited)
-    {"name": "AliExpress",        "fn": "aliexpress"},      # Playwright — stealth browser (may be rate-limited)
-    {"name": "BargainHardware",   "fn": "bargainhardware"},
-    {"name": "CherryTree Inc",    "fn": "cherrytree"},
-    {"name": "Alibaba",           "fn": "alibaba"},
+    {"name": "Amazon",            "fn": "amazon"},          # Playwright — new cases with Prime shipping
+    {"name": "Overclockers",      "fn": "overclockers"},    # Playwright — UK retailer new cases
+    {"name": "BargainHardware",   "fn": "bargainhardware"}, # Playwright — refurb specialist
 ]
-_PLAYWRIGHT_CASE_SOURCES = {"gumtree", "amazon", "overclockers", "temu", "aliexpress", "bargainhardware", "cherrytree", "alibaba"}
+_PLAYWRIGHT_CASE_SOURCES = {"amazon", "overclockers", "bargainhardware"}
 
 _SOURCE_ALIASES: dict[str, str] = {
     "ebay uk": "eBay",
