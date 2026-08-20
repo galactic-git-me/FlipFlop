@@ -48,12 +48,9 @@ def _classify_ram(title: str) -> str | None:
 
 def _classify_motherboard(title: str) -> str | None:
     t = _norm(title)
-    if re.search(r"\bitx\b|\bmini-itx\b", t):
-        return None  # no approved ITX photo set yet
-    elif re.search(r"\bm-?atx\b|\bmicro-?atx\b|\bmatx\b", t):
-        return "motherboard_matx"
-    elif re.search(r"\batx\b", t):
-        return "motherboard_atx"
+    for brand in ("asus", "msi", "gigabyte"):
+        if brand in t:
+            return f"motherboard_{brand}"
     return None
 
 
@@ -79,17 +76,13 @@ _GPU_COMPACT_HINTS = ("1650", "1660", "3050", "4060", "6400", "6500", "6600", "l
 
 def _classify_gpu(title: str) -> str | None:
     t = _norm(title)
-    if not re.search(r"\brtx\b|\bgtx\b|\bradeon\b|\brx \d|\barc\b", t):
-        return None
-    if any(h in t for h in _GPU_BLOWER_HINTS):
-        return "gpu_blower"
-    if any(h in t for h in _GPU_LARGE_HINTS):
-        return "gpu_large_triple_fan"
-    if any(h in t for h in _GPU_COMPACT_HINTS):
-        return "gpu_compact_dual_fan"
-    # A named, recognised GPU that doesn't match a known size hint — mid-size
-    # dual/triple-fan is the safest generic middle ground, not "no bucket".
-    return "gpu_mid_dual_fan"
+    if re.search(r"\brtx\b|\bgtx\b|\bgeforce\b|\bnvidia\b", t):
+        return "gpu_nvidia"
+    if re.search(r"\bradeon\b|\brx\s?\d|\bamd\b", t):
+        return "gpu_amd"
+    if re.search(r"\bintel\s+arc\b|\barc\s+[ab]\d", t):
+        return "gpu_intel"
+    return None
 
 
 # ---- Cooling: type + size — an AIO's radiator size and an LCD pump are the
@@ -163,10 +156,10 @@ def classify_family(category: str, title: str) -> str | None:
 # grow), but enough to know what to generate first.
 KNOWN_FAMILY_BUCKETS: list[tuple[str, str]] = [
     ("cpu", "cpu_amd"), ("cpu", "cpu_intel"),
-    ("motherboard", "motherboard_atx"), ("motherboard", "motherboard_matx"),
+    ("motherboard", "motherboard_asus"), ("motherboard", "motherboard_msi"),
+    ("motherboard", "motherboard_gigabyte"),
     ("ram", "ram_ddr4"), ("ram", "ram_ddr5"),
-    ("gpu", "gpu_compact_dual_fan"),
-    ("gpu", "gpu_mid_dual_fan"), ("gpu", "gpu_large_triple_fan"),
+    ("gpu", "gpu_nvidia"), ("gpu", "gpu_amd"), ("gpu", "gpu_intel"),
     ("cooling", "cooling_air_tower"),
     ("cooling", "cooling_aio_240"),
     ("storage", "storage_nvme_m2"), ("storage", "storage_sata_2_5"),
