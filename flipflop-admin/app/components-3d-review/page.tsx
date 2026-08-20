@@ -253,61 +253,14 @@ export default function Components3DReviewPage() {
         </button>
       </div>
 
-      {/* Main layout: 2-column split */}
+      {/* Main layout: preview left, details right */}
       <div className="flex gap-3 flex-1 min-h-0">
-        {/* Asset list */}
-        <div className="w-48 flex flex-col min-h-0">
-          <div className="grid grid-cols-2 gap-2 overflow-y-auto">
-            {loading ? (
-              <div className="text-center py-8 text-slate-500 text-xs col-span-2">
-                Loading...
-              </div>
-            ) : filteredAssets.length === 0 ? (
-              <div className="text-center py-8 text-slate-500 text-xs">
-                <Check className="w-4 h-4 mx-auto mb-2 text-[#00dc82]" />
-                No {filter === "meshy_draft" ? "draft" : ""} assets
-              </div>
-            ) : (
-              filteredAssets.map((asset) => {
-                const statusColors = {
-                  missing: "border-slate-600 bg-slate-900/20",
-                  meshy_draft: "border-orange-400/30 bg-orange-400/5",
-                  cleaned: "border-blue-400/30 bg-blue-400/5",
-                  validated: "border-purple-400/30 bg-purple-400/5",
-                  final: "border-[#00dc82]/30 bg-[#00dc82]/5",
-                  rejected: "border-red-400/30 bg-red-400/5",
-                };
-
-                return (
-                  <button
-                    key={asset.id}
-                    onClick={() => setSelectedAsset(asset)}
-                    className={`aspect-square rounded border p-3 text-xs flex flex-col items-center justify-center text-center cursor-pointer transition hover:scale-105 ${
-                      selectedAsset?.id === asset.id
-                        ? "ring-2 ring-orange-400 scale-105"
-                        : ""
-                    } ${statusColors[asset.status]}`}
-                  >
-                    <div className="font-bold">{asset.family_key}</div>
-                    <div className="text-[9px] opacity-70">{asset.category}</div>
-                    {asset.file_size_kb && (
-                      <div className="text-[8px] opacity-60 mt-1">
-                        {Math.round(asset.file_size_kb / 1024)}MB
-                      </div>
-                    )}
-                  </button>
-                );
-              })
-            )}
-          </div>
-        </div>
-
-        {/* Viewer and details */}
+        {/* Preview viewer - LEFT */}
         <div className="flex-1 flex flex-col min-h-0 gap-3">
           {selectedAsset ? (
             <>
               {/* 3D Viewer */}
-              <div className="border border-[#1e2d45] rounded-lg overflow-hidden h-80 flex flex-col bg-[#0a1119]">
+              <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 flex flex-col bg-[#0a1119]">
                 <div className="px-3 py-2 border-b border-[#1e2d45] bg-slate-900/30 text-xs font-semibold text-slate-300">
                   Preview
                 </div>
@@ -327,8 +280,53 @@ export default function Components3DReviewPage() {
                 </div>
               </div>
 
-              {/* Asset details */}
-              <Card className="border-[#1e2d45] max-h-96 overflow-y-auto">
+              {/* Asset list below preview */}
+              <div className="flex-1 border border-[#1e2d45] rounded-lg overflow-y-auto p-2 bg-[#0a1119]">
+                <div className="grid grid-cols-6 gap-2">
+                  {filteredAssets.map((asset) => {
+                    const statusColors: Record<string, string> = {
+                      missing: "border-slate-600 bg-slate-900/20",
+                      meshy_draft: "border-orange-400/30 bg-orange-400/5",
+                      cleaned: "border-blue-400/30 bg-blue-400/5",
+                      validated: "border-purple-400/30 bg-purple-400/5",
+                      final: "border-[#00dc82]/30 bg-[#00dc82]/5",
+                      rejected: "border-red-400/30 bg-red-400/5",
+                    };
+
+                    const bgImage = asset.preview_image_ref ? `url('${asset.preview_image_ref}')` : 'none';
+
+                    return (
+                      <button
+                        key={asset.id}
+                        onClick={() => setSelectedAsset(asset)}
+                        className={`aspect-square rounded border overflow-hidden cursor-pointer transition hover:scale-105 relative ${
+                          selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""
+                        } ${statusColors[asset.status] || ""}`}
+                        style={{ backgroundImage: bgImage, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                      >
+                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                          <div className="font-bold text-[8px] text-white text-center">{asset.family_key}</div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="flex items-center justify-center flex-1 text-slate-500">
+              <div className="text-center">
+                <Box className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                <p>Select an asset to review</p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Details panel - RIGHT */}
+        {selectedAsset && (
+          <div className="w-96 flex flex-col min-h-0 overflow-y-auto">
+            <Card className="border-[#1e2d45]">
                 <CardHeader>
                   <div className="flex items-start justify-between gap-2">
                     <div>
@@ -436,13 +434,6 @@ export default function Components3DReviewPage() {
                   )}
                 </CardContent>
               </Card>
-            </>
-          ) : (
-            <div className="flex items-center justify-center flex-1 text-slate-500">
-              <div className="text-center">
-                <Box className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                <p>Select an asset to review</p>
-              </div>
             </div>
           )}
         </div>
