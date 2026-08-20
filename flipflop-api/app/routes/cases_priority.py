@@ -29,6 +29,7 @@ async def get_cases_priority_for_3d(
             and_(
                 Part.category == PartCategory.case,
                 Part.has_3d_model == False,
+                Part.name.ilike("%case%"),  # Filter to only actual cases by name
             )
         )
         .order_by(
