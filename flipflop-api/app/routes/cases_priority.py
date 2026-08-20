@@ -18,19 +18,24 @@ async def get_cases_priority_for_3d(
 ):
     """
     Get cases prioritized for 3D model creation.
-    Sorted by Amazon bestseller rank (lower = more popular).
+    Sorted by Amazon bestseller rank (if available), then by source + price.
     Returns only cases without 3D models yet.
     """
+    from sqlalchemy import case as sql_case
+
     result = await db.execute(
         select(Part)
         .where(
             and_(
                 Part.category == PartCategory.case,
                 Part.has_3d_model == False,
-                Part.bestseller_rank != None,
             )
         )
-        .order_by(Part.bestseller_rank.asc())
+        .order_by(
+            Part.bestseller_rank.asc().nullslast(),  # Bestseller rank first (null last)
+            sql_case((Part.source_site == "Amazon", 0), else_=1),  # Amazon prioritized
+            Part.price.asc(),  # Cheaper cases first
+        )
         .limit(limit)
     )
     cases = result.scalars().all()
