@@ -63,6 +63,7 @@ class Part(Base):
     rating: Mapped[float | None] = mapped_column(Float)  # 0-5 stars
     review_count: Mapped[int | None] = mapped_column(Integer)  # number of reviews
     sales_velocity: Mapped[str | None] = mapped_column(String(100))  # "50+ bought in past month"
+    bestseller_rank: Mapped[int | None] = mapped_column(Integer)  # Amazon bestseller rank (1 = #1 bestseller)
 
     # Value it adds to resale
     resale_value_add: Mapped[float] = mapped_column(Float, default=0.0)
