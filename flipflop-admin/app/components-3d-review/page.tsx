@@ -307,19 +307,21 @@ export default function Components3DReviewPage() {
           {selectedAsset ? (
             <>
               {/* 3D Viewer */}
-              <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 min-h-0 flex flex-col">
+              <div className="border border-[#1e2d45] rounded-lg overflow-hidden h-80 flex flex-col bg-[#0a1119]">
                 <div className="px-3 py-2 border-b border-[#1e2d45] bg-slate-900/30 text-xs font-semibold text-slate-300">
-                  3D Viewer
+                  Preview
                 </div>
-                <div className="flex-1 min-h-0 bg-[#0a1119]">
-                  {selectedAsset.glb_ref ? (
-                    <Viewer3D glbUrl={selectedAsset.glb_ref} previewUrl={selectedAsset.preview_image_ref} />
+                <div className="flex-1 min-h-0 flex items-center justify-center">
+                  {selectedAsset.preview_image_ref ? (
+                    <img
+                      src={selectedAsset.preview_image_ref}
+                      alt={selectedAsset.family_key}
+                      className="w-full h-full object-contain"
+                    />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-slate-500">
-                      <div className="text-center">
-                        <Box className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                        <p className="text-xs">No 3D model</p>
-                      </div>
+                    <div className="text-center text-slate-500">
+                      <Box className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                      <p className="text-xs">No preview available</p>
                     </div>
                   )}
                 </div>
