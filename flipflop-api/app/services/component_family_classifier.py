@@ -156,6 +156,7 @@ def classify_family(category: str, title: str) -> str | None:
 # grow), but enough to know what to generate first.
 KNOWN_FAMILY_BUCKETS: list[tuple[str, str]] = [
     ("cpu", "cpu_amd"), ("cpu", "cpu_intel"),
+    ("motherboard", "motherboard_atx"), ("motherboard", "motherboard_matx"),
     ("motherboard", "motherboard_asus"), ("motherboard", "motherboard_msi"),
     ("motherboard", "motherboard_gigabyte"),
     ("ram", "ram_ddr4"), ("ram", "ram_ddr5"),
