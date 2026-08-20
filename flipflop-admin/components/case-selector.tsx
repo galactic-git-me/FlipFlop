@@ -12,6 +12,7 @@ interface CaseSelectorProps {
   onSelect: (caseItem: Part) => void;
   onClose: () => void;
   selectedCaseId?: number;
+  requiresModel?: boolean; // if true, only show cases with 3D models
 }
 
 export function CaseSelector({ onSelect, onClose, selectedCaseId }: CaseSelectorProps) {
