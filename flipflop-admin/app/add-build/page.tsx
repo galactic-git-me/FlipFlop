@@ -240,7 +240,7 @@ export default function AddBuildPage() {
         setEvaluating(false);
       }
 
-      // Auto-navigate to Your Builds after short delay to see eval
+      // Return to the Pre-Built workspace after the evaluation preview.
       setTimeout(() => {
         router.push(`/builds?new=${build.id}`);
       }, 2000);
@@ -256,7 +256,7 @@ export default function AddBuildPage() {
     <div className="p-6 space-y-6">
       <div>
         <h1 className="text-3xl font-bold font-mono tracking-wider uppercase flex items-center gap-2 bg-gradient-to-r from-cyan-400 via-[#00dc82] to-orange-400 bg-clip-text text-transparent">
-          <Package className="w-5 h-5 text-[var(--nf-primary)]" /> Add Your Build
+          <Package className="w-5 h-5 text-[var(--nf-primary)]" /> Create Pre-Built
         </h1>
         <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">
           Enter all components to calculate profit and resale potential

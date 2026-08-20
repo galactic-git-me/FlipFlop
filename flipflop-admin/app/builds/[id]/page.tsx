@@ -707,7 +707,7 @@ export default function BuildDetailPage() {
         onClick={() => router.push("/builds")}
         className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-300 mb-4 transition-colors"
       >
-        <ArrowLeft className="w-3.5 h-3.5" /> Your Builds
+        <ArrowLeft className="w-3.5 h-3.5" /> Pre-Built
       </button>
 
       <div className="flex items-center justify-between mb-3">

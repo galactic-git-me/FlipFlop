@@ -214,8 +214,8 @@ export default function ConfiguratorConfigPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Configurator Setup</h1>
-        <p className="text-muted">Curate which components appear in your customer configurator</p>
+        <h1 className="text-3xl font-bold mb-2">Custom Builds</h1>
+        <p className="text-muted">Shape the component choices customers can use to create a custom PC</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

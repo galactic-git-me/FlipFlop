@@ -620,7 +620,7 @@ export default function PCBuilderPage() {
           estimated_profit: profit,
         }),
       });
-      alert("Custom build saved!");
+      alert("Curated build saved!");
       setCustomBuildName("");
       setCustomComponents([]);
     } catch (error) {
@@ -631,8 +631,8 @@ export default function PCBuilderPage() {
   return (
     <div className="flex flex-col h-full gap-4 p-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="mb-4">
-        <h1 className="text-3xl font-bold text-white">PC Builder</h1>
-        <p className="text-slate-400 text-sm mt-1">Build, customize, and save your PC configurations</p>
+        <h1 className="text-3xl font-bold text-white">Curated Builds</h1>
+        <p className="text-slate-400 text-sm mt-1">Shape proven playbooks into ready-to-sell PC configurations</p>
       </div>
 
       {/* Main Tabs */}
@@ -662,7 +662,7 @@ export default function PCBuilderPage() {
             { id: "playbook" as DesignSubTab, label: "By Playbook" },
             { id: "draft" as DesignSubTab, label: `Draft Builds (${draftBuilds.length})` },
             { id: "previous" as DesignSubTab, label: `Previous Builds (${completedBuilds.length})` },
-            { id: "custom" as DesignSubTab, label: "Custom Build" },
+            { id: "custom" as DesignSubTab, label: "Manual Configuration" },
             { id: "ai" as DesignSubTab, label: "AI-Generated" },
           ].map(({ id, label }) => (
             <button
@@ -784,7 +784,7 @@ export default function PCBuilderPage() {
             {designSubTab === "draft" && (
               <div>
                 {draftBuilds.length === 0 ? (
-                  <p className="text-slate-400">No draft builds yet. Create one using the "By Playbook" or "Custom Build" tabs.</p>
+                  <p className="text-slate-400">No draft builds yet. Create one using the "By Playbook" or "Manual Configuration" tabs.</p>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {draftBuilds.map((build) => (
@@ -887,7 +887,7 @@ export default function PCBuilderPage() {
                   <div className="bg-slate-800 rounded-lg p-4 border border-slate-700 space-y-3">
                     <input
                       type="text"
-                      placeholder="Custom build name..."
+                        placeholder="Curated build name..."
                       value={customBuildName}
                       onChange={(e) => setCustomBuildName(e.target.value)}
                       className="w-full px-3 py-2 bg-slate-700 border border-slate-600 text-white rounded text-sm"

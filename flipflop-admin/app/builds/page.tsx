@@ -70,14 +70,14 @@ function BuildsPageInner() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <Package className="w-5 h-5 text-[#00dc82]" />
-          <h1 className="text-xl font-black">Your Builds</h1>
+          <h1 className="text-xl font-black">Pre-Built</h1>
         </div>
         <button
           onClick={() => router.push("/add-build")}
           className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold bg-cyan-500 hover:bg-cyan-400 text-black rounded-lg transition-colors"
         >
           <Plus className="w-3.5 h-3.5" />
-          Add Build
+          Create Pre-Built
         </button>
       </div>
 
@@ -108,7 +108,7 @@ function BuildsPageInner() {
             onClick={() => router.push("/add-build")}
             className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold bg-cyan-500 hover:bg-cyan-400 text-black rounded-lg transition-colors"
           >
-            <Plus className="w-3.5 h-3.5" /> Add Your First Build
+            <Plus className="w-3.5 h-3.5" /> Create Your First Pre-Built
           </button>
         </div>
       ) : (

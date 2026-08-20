@@ -8,19 +8,16 @@ import {
   Search,
   Zap,
   Settings2,
-  Plus,
   Package,
-  LineChart,
   AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const PRIMARY_NAV = [
   { href: "/sourcing", icon: Search, label: "Sourcing" },
-  { href: "/add-build", icon: Plus, label: "Add Build" },
-  { href: "/builds", icon: Package, label: "Your Builds" },
-  { href: "/configurator-config", icon: Settings2, label: "Configurator" },
-  { href: "/pc-builder", icon: Zap, label: "PC Builder" },
+  { href: "/builds", icon: Package, label: "Pre-Built" },
+  { href: "/configurator-config", icon: Settings2, label: "Custom Builds" },
+  { href: "/pc-builder", icon: Zap, label: "Curated Builds" },
   { href: "/problems", icon: AlertTriangle, label: "Problems" },
 ];
 

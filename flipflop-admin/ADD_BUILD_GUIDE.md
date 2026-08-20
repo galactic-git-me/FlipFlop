@@ -1,4 +1,4 @@
-# Add Build - Manual PC Entry Guide
+# Create Pre-Built - Manual PC Entry Guide
 
 ## 🎯 What You Just Got
 
@@ -19,7 +19,7 @@ Navigate to your admin dashboard:
 http://localhost:4312/add-build
 ```
 
-Or click **"Add Build"** in the left navigation menu.
+Open **Pre-Built** in the left navigation, then choose **Create Pre-Built**.
 
 ---
 
