@@ -3,7 +3,7 @@
     "last_success_at": "2026-08-20T06:52:04.036255+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-08-20T06:53:03.976929+00:00"
+    "last_success_at": "2026-08-20T06:58:04.114081+00:00"
   },
   "ebay_sales_tracker": {
     "last_success_at": "2026-08-20T06:54:03.567397+00:00"
@@ -55,5 +55,8 @@
   },
   "benchmark_refresh_weekly": {
     "last_success_at": "2026-08-20T06:52:13.208067+00:00"
+  },
+  "catalogue_digest": {
+    "last_success_at": "2026-08-20T07:00:00.181458+00:00"
   }
 }
