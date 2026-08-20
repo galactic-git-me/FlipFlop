@@ -38,6 +38,12 @@ _PUBLIC_MEDIA_URL = "https://theflipflop.shop/media"
 _REFERENCE_ALIASES = {
     "cpu_amd": "cpu_amd_am4_am5",
     "cpu_intel": "cpu_intel_lga1700",
+    # GPU generation is intentionally split by brand. The current photo
+    # library is shape-based, so use the closest available geometry set until
+    # dedicated AMD and Intel reference photography is curated.
+    "gpu_nvidia": "gpu_mid_dual_fan",
+    "gpu_amd": "gpu_large_triple_fan",
+    "gpu_intel": "gpu_compact_dual_fan",
 }
 
 
