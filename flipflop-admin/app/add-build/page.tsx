@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { api, BuildComponent, ManualBuild } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
 import { BuildListingTemplate } from "@/components/build-listing-template";
+import { CaseSelector } from "@/components/case-selector";
+import { Part } from "@/lib/types";
 
 interface ComponentEntry {
   slot: string;
@@ -61,6 +63,8 @@ export default function AddBuildPage() {
   const [pricingLookups, setPricingLookups] = useState<Record<number, ComponentPricing | null>>({});
   const [showJsonModal, setShowJsonModal] = useState(false);
   const [jsonCopied, setJsonCopied] = useState(false);
+  const [showCaseSelector, setShowCaseSelector] = useState(false);
+  const [selectedCase, setSelectedCase] = useState<Part | null>(null);
 
   const JSON_EXAMPLE = {
     buildName: "Gaming PC #1",
@@ -119,6 +123,18 @@ export default function AddBuildPage() {
     navigator.clipboard.writeText(JSON.stringify(JSON_EXAMPLE, null, 2));
     setJsonCopied(true);
     setTimeout(() => setJsonCopied(false), 2000);
+  };
+
+  const handleCaseSelect = (caseItem: Part) => {
+    const caseIdx = components.findIndex((c) => c.slot === "case");
+    if (caseIdx >= 0) {
+      updateComponent(caseIdx, "name", caseItem.name);
+      updateComponent(caseIdx, "price_paid", caseItem.price_new ?? caseItem.price ?? 0);
+      updateComponent(caseIdx, "source", caseItem.source_site ?? "Catalogue");
+      updateComponent(caseIdx, "part_id", caseItem.id);
+    }
+    setSelectedCase(caseItem);
+    setShowCaseSelector(false);
   };
 
   const totalCost = components.reduce((sum, c) => sum + (c.price_paid || 0), 0);
@@ -352,13 +368,22 @@ export default function AddBuildPage() {
                         placeholder={`e.g., Intel Core i7-10700K, RTX 3070, 16GB DDR4`}
                         className="flex-1 px-3 py-1.5 bg-[#141d2d] border border-[#1e2d45] rounded text-xs text-slate-300 outline-none focus:border-[#00dc82]/50"
                       />
-                      <button
-                        onClick={() => comp.name.trim() && checkMarketPrice(idx, comp.name)}
-                        disabled={!comp.name.trim() || comp.market_status === "checking"}
-                        className="px-2 py-1.5 text-[10px] font-semibold bg-[#00dc82]/10 text-[#00dc82] border border-[#00dc82]/20 rounded hover:border-[#00dc82]/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {comp.market_status === "checking" ? "🔍" : "Check Price"}
-                      </button>
+                      {comp.slot === "case" ? (
+                        <button
+                          onClick={() => setShowCaseSelector(true)}
+                          className="px-2 py-1.5 text-[10px] font-semibold bg-purple-400/10 text-purple-400 border border-purple-400/20 rounded hover:border-purple-400/50 transition-colors"
+                        >
+                          📦 Browse
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => comp.name.trim() && checkMarketPrice(idx, comp.name)}
+                          disabled={!comp.name.trim() || comp.market_status === "checking"}
+                          className="px-2 py-1.5 text-[10px] font-semibold bg-[#00dc82]/10 text-[#00dc82] border border-[#00dc82]/20 rounded hover:border-[#00dc82]/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {comp.market_status === "checking" ? "🔍" : "Check Price"}
+                        </button>
+                      )}
                     </div>
                     {pricingLookups[idx] && (
                       <div className="col-span-2 p-2 bg-[#00dc82]/5 rounded border border-[#00dc82]/20 text-[10px]">
