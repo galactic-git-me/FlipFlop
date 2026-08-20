@@ -784,7 +784,7 @@ export default function PCBuilderPage() {
             {designSubTab === "draft" && (
               <div>
                 {draftBuilds.length === 0 ? (
-                  <p className="text-slate-400">No draft builds yet. Create one using the "By Playbook" or "Manual Configuration" tabs.</p>
+                  <p className="text-slate-400">No draft builds yet. Create one using the &quot;By Playbook&quot; or &quot;Manual Configuration&quot; tabs.</p>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {draftBuilds.map((build) => (
