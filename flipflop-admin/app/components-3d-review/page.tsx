@@ -47,11 +47,11 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           scene.background = new THREE.Color(0x0a1119);
 
           // Camera
-          const camera = new THREE.default.PerspectiveCamera(75, width / height, 0.1, 1000);
+          const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
           camera.position.set(0, 1, 2);
 
           // Renderer
-          const renderer = new THREE.default.WebGLRenderer({ antialias: true, alpha: true });
+          const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
           renderer.setSize(width, height);
           renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
@@ -62,10 +62,10 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           containerRef.current.appendChild(renderer.domElement);
 
           // Lights
-          const ambientLight = new THREE.default.AmbientLight(0xffffff, 0.8);
+          const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
           scene.add(ambientLight);
 
-          const directionalLight = new THREE.default.DirectionalLight(0xffffff, 0.6);
+          const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
           directionalLight.position.set(5, 8, 5);
           scene.add(directionalLight);
 
@@ -75,8 +75,8 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
             const model = gltf.scene;
 
             // Scale and center
-            const bbox = new THREE.default.Box3().setFromObject(model);
-            const center = bbox.getCenter(new THREE.default.Vector3());
+            const bbox = new THREE.Box3().setFromObject(model);
+            const center = bbox.getCenter(new THREE.Vector3());
             const size = bbox.getSize(new THREE.Vector3());
             const maxDim = Math.max(size.x, size.y, size.z);
             const scale = 1.5 / maxDim;
@@ -188,7 +188,7 @@ export default function Components3DReviewPage() {
   };
 
   return (
-    <div className="p-6 space-y-6 relative">
+    <div className="p-4 space-y-3 relative">
       {/* Animated gradient background */}
       <style>{`
         @keyframes gradientShift {
@@ -224,29 +224,27 @@ export default function Components3DReviewPage() {
       `}</style>
       <div className="animate-gradient-bg" />
 
-      <div className="relative z-10">
+      <div className="relative z-10 space-y-3">
         {/* Header */}
-        <div>
         <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
-        </div>
 
         {/* Progress summary - Compact */}
-        <div className="grid grid-cols-4 gap-1.5 pb-2 text-center text-xs">
+        <div className="grid grid-cols-4 gap-1 text-center text-xs">
         <div className="bg-orange-400/10 border border-orange-400/30 rounded p-1">
-          <div className="text-xl font-bold text-orange-400">{draftCount}</div>
-          <div className="text-[10px] text-slate-500">Draft</div>
+          <div className="text-lg font-bold text-orange-400">{draftCount}</div>
+          <div className="text-[9px] text-slate-500">Draft</div>
         </div>
         <div className="bg-purple-400/10 border border-purple-400/30 rounded p-1">
-          <div className="text-xl font-bold text-purple-400">{validatedCount}</div>
-          <div className="text-[10px] text-slate-500">Valid</div>
+          <div className="text-lg font-bold text-purple-400">{validatedCount}</div>
+          <div className="text-[9px] text-slate-500">Valid</div>
         </div>
         <div className="bg-[#00dc82]/10 border border-[#00dc82]/30 rounded p-1">
-          <div className="text-xl font-bold text-[#00dc82]">{finalCount}</div>
-          <div className="text-[10px] text-slate-500">Final</div>
+          <div className="text-lg font-bold text-[#00dc82]">{finalCount}</div>
+          <div className="text-[9px] text-slate-500">Final</div>
         </div>
         <div className="bg-slate-600/10 border border-slate-600/30 rounded p-1">
-          <div className="text-xl font-bold text-slate-300">{assets.length}</div>
-          <div className="text-[10px] text-slate-500">Total</div>
+          <div className="text-lg font-bold text-slate-300">{assets.length}</div>
+          <div className="text-[9px] text-slate-500">Total</div>
         </div>
       </div>
 
@@ -254,7 +252,7 @@ export default function Components3DReviewPage() {
         <div className="flex gap-1">
           <button
             onClick={() => setFilter("meshy_draft")}
-            className={`px-2 py-1 rounded text-xs font-semibold transition-colors ${
+            className={`px-2 py-0.5 rounded text-xs font-semibold transition-colors ${
               filter === "meshy_draft"
                 ? "bg-orange-600/30 text-orange-300 border border-orange-500/50"
                 : "bg-slate-700/30 text-slate-400 border border-slate-600/50"
@@ -264,7 +262,7 @@ export default function Components3DReviewPage() {
           </button>
           <button
             onClick={() => setFilter("all")}
-            className={`px-2 py-1 rounded text-xs font-semibold transition-colors ${
+            className={`px-2 py-0.5 rounded text-xs font-semibold transition-colors ${
               filter === "all"
                 ? "bg-purple-600/30 text-purple-300 border border-purple-500/50"
                 : "bg-slate-700/30 text-slate-400 border border-slate-600/50"
@@ -274,8 +272,8 @@ export default function Components3DReviewPage() {
           </button>
         </div>
 
-        {/* Main layout: grid + viewer - Full height */}
-        <div className="grid grid-cols-6 gap-3 flex-1 min-h-0">
+        {/* Main layout: grid + viewer - horizontal split */}
+        <div className="grid grid-cols-3 gap-3 h-[calc(100vh-280px)]">
           {/* Asset list - Grid of squares */}
           <div className="col-span-1 flex flex-col min-h-0">
             <div className="grid grid-cols-2 gap-2 overflow-y-auto flex-1">
