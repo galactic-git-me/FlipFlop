@@ -120,6 +120,11 @@ class Settings(BaseSettings):
     seller_address_postcode: str = ""
     seller_address_country_iso: str = "GBR"
 
+    # Destination used to verify time-sensitive case-supplier promises. Amazon
+    # and Overclockers availability is postcode-specific; a Prime badge alone
+    # is not sufficient evidence of next-day delivery.
+    case_catalogue_delivery_postcode: str = "TW12 1JQ"
+
     scrape_delay_min: float = 2.0
     scrape_delay_max: float = 5.0
     max_concurrent_scrapers: int = 8
