@@ -188,7 +188,7 @@ export default function Components3DReviewPage() {
   };
 
   return (
-    <div className="p-4 space-y-3 relative">
+    <div className="p-4 space-y-3 relative h-full flex flex-col">
       {/* Animated gradient background */}
       <style>{`
         @keyframes gradientShift {
@@ -273,7 +273,7 @@ export default function Components3DReviewPage() {
         </div>
 
         {/* Main layout: grid + viewer - horizontal split */}
-        <div className="grid grid-cols-3 gap-3 h-[calc(100vh-280px)]">
+        <div className="grid grid-cols-3 gap-3 flex-1 min-h-0">
           {/* Asset list - Grid of squares */}
           <div className="col-span-1 flex flex-col min-h-0">
             <div className="grid grid-cols-2 gap-2 overflow-y-auto flex-1">
