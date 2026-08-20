@@ -1,25 +1,34 @@
 """
 Amazon Best Sellers scraper for PC cases.
 Captures bestseller ranking to show which cases are trending.
-Runs daily/weekly to track ranking changes over time.
+Uses Playwright to handle JS-rendered content.
+Matches by ASIN + fuzzy product name matching.
 """
 import asyncio
 from datetime import datetime
 from sqlalchemy import select, update
 from app.database import AsyncSessionLocal
 from app.models.part import Part, PartCategory
+from app.services.browser_pool import managed_playwright
+from app.swarms.cases import _make_pw_context
 import structlog
-import httpx
-from bs4 import BeautifulSoup
+from difflib import SequenceMatcher
 
 log = structlog.get_logger(__name__)
+
+
+def name_similarity(a: str, b: str) -> float:
+    """Calculate similarity between two product names (0-1)"""
+    a_lower = a.lower().replace("pc case", "").replace("case", "").strip()
+    b_lower = b.lower().replace("pc case", "").replace("case", "").strip()
+    return SequenceMatcher(None, a_lower, b_lower).ratio()
 
 
 async def scrape_amazon_bestsellers() -> dict:
     """
     Scrape Amazon UK bestseller rankings for PC cases.
+    URL: https://www.amazon.co.uk/Best-Sellers-Computers-Accessories-Computer-Cases/zgbs/computers/430498031/
     Updates bestseller_rank field for matching cases.
-    Handles pagination (25 items per page).
     """
     url = "https://www.amazon.co.uk/Best-Sellers-Computers-Accessories-Computer-Cases/zgbs/computers/430498031/"
 
@@ -29,93 +38,137 @@ async def scrape_amazon_bestsellers() -> dict:
         "errors": 0,
     }
 
-    try:
-        async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
-            rank = 0
-            page = 1
-            max_pages = 3  # Top 75 bestsellers (3 pages × 25 items)
+    async with managed_playwright() as p:
+        try:
+            browser, context = await _make_pw_context(p)
+        except Exception as exc:
+            log.warning("bestsellers.browser_error", error=str(exc))
+            return results
 
-            while page <= max_pages:
-                try:
-                    # Fetch page with delay to avoid blocking
-                    params = {"pg": page} if page > 1 else {}
-                    resp = await client.get(url, params=params, headers={
-                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                    })
+        page = await context.new_page()
+        try:
+            log.info("bestsellers.scraping", url=url)
+            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
 
-                    if resp.status_code != 200:
-                        log.warning("amazon_bestsellers.page_error", page=page, status=resp.status_code)
-                        break
+            # Wait for bestseller items to load
+            try:
+                await page.wait_for_selector('[data-component-type="s-search-result"]', timeout=10000)
+            except Exception as exc:
+                log.debug("bestsellers.wait_timeout", error=str(exc))
 
-                    soup = BeautifulSoup(resp.text, "lxml")
+            await asyncio.sleep(2)
 
-                    # Find bestseller items
-                    items = soup.select('div[data-component-type="s-search-result"]')
+            # Extract bestseller items using JS (try multiple selectors)
+            raw = await page.evaluate("""() => {
+                const out = [];
 
-                    if not items:
-                        log.debug("amazon_bestsellers.no_items_found", page=page)
-                        break
+                // Try multiple selector strategies
+                let items = document.querySelectorAll('[data-component-type="s-search-result"]');
+                if (items.length === 0) items = document.querySelectorAll('div[data-asin]');
+                if (items.length === 0) items = document.querySelectorAll('.sg-col-inner');
 
-                    for item in items:
-                        rank += 1
-                        results["scraped"] += 1
+                items.forEach((item, rank) => {
+                    let titleEl = item.querySelector('h2 span') || item.querySelector('h2') || item.querySelector('[data-component-type="s-product-image"] + div a span');
+                    let linkEl = item.querySelector('h2 a') || item.querySelector('a[href*="/dp/"]') || item.querySelector('[data-asin] a[href*="/dp/"]');
+                    let asin = item.getAttribute('data-asin');
 
-                        # Extract title and link
-                        title_elem = item.select_one('h2 a span')
-                        link_elem = item.select_one('h2 a')
+                    if (!titleEl && !linkEl) return;
 
-                        if not title_elem or not link_elem:
-                            continue
+                    const title = titleEl?.textContent?.trim() || '';
+                    let href = linkEl?.href || linkEl?.getAttribute('href') || '';
 
-                        title = title_elem.text.strip()
-                        url_href = link_elem.get("href", "")
+                    if (!href && asin) {
+                        href = 'https://www.amazon.co.uk/dp/' + asin;
+                    }
 
-                        if not url_href.startswith("http"):
-                            url_href = "https://www.amazon.co.uk" + url_href
+                    if (!title || !href) return;
+                    if (href.startsWith('/')) href = 'https://www.amazon.co.uk' + href;
 
-                        log.debug("amazon_bestsellers.item", rank=rank, title=title[:50])
+                    // Extract ASIN from URL or element
+                    let finalAsin = asin;
+                    if (!finalAsin) {
+                        const match = href.match(/\\/dp\\/([A-Z0-9]{10})/);
+                        finalAsin = match ? match[1] : null;
+                    }
 
-                        # Try to match with case in database
-                        async with AsyncSessionLocal() as db:
-                            result = await db.execute(
-                                select(Part).where(
-                                    Part.category == PartCategory.case,
-                                    Part.source_site == "Amazon",
-                                    Part.name.ilike(f"%{extract_brand_model(title)}%")
-                                )
-                            )
-                            case = result.scalar_one_or_none()
+                    if (title && finalAsin) {
+                        out.push({
+                            rank: rank + 1,
+                            title: title.slice(0, 200),
+                            asin: finalAsin,
+                            url: href
+                        });
+                    }
+                });
+                return out.slice(0, 75);  // Top 75 bestsellers
+            }""")
 
-                            if case:
-                                # Update bestseller rank
-                                await db.execute(
-                                    update(Part)
-                                    .where(Part.id == case.id)
-                                    .values(bestseller_rank=rank)
-                                )
-                                await db.commit()
-                                results["matched"] += 1
-                                log.info("amazon_bestsellers.matched", rank=rank, case=case.name[:50])
+            log.info("bestsellers.extracted", count=len(raw))
 
-                    await asyncio.sleep(1)  # Rate limiting
-                    page += 1
+            # Match with database cases
+            async with AsyncSessionLocal() as db:
+                # Get all Amazon cases
+                result = await db.execute(
+                    select(Part).where(
+                        Part.category == PartCategory.case,
+                        Part.source_site == "Amazon",
+                    )
+                )
+                amazon_cases = result.scalars().all()
 
-                except Exception as e:
-                    log.error("amazon_bestsellers.page_error", page=page, error=str(e))
-                    results["errors"] += 1
-                    break
+                for item in raw:
+                    results["scraped"] += 1
 
-        log.info("amazon_bestsellers.complete", scraped=results["scraped"], matched=results["matched"])
+                    # Try to match by ASIN first (most reliable)
+                    matching_case = None
 
-    except Exception as exc:
-        log.error("amazon_bestsellers.error", error=str(exc))
-        results["errors"] += 1
+                    # Check if ASIN is in the URL
+                    if item["asin"]:
+                        for case in amazon_cases:
+                            if case.source_url and item["asin"] in case.source_url:
+                                matching_case = case
+                                break
+
+                    # Fallback: fuzzy match by name
+                    if not matching_case:
+                        best_similarity = 0.7  # Threshold
+                        for case in amazon_cases:
+                            sim = name_similarity(item["title"], case.name)
+                            if sim > best_similarity:
+                                best_similarity = sim
+                                matching_case = case
+
+                    if matching_case:
+                        # Update bestseller rank
+                        await db.execute(
+                            update(Part)
+                            .where(Part.id == matching_case.id)
+                            .values(bestseller_rank=item["rank"])
+                        )
+                        results["matched"] += 1
+                        log.debug(
+                            "bestsellers.matched",
+                            rank=item["rank"],
+                            title=item["title"][:50],
+                            case_id=matching_case.id,
+                        )
+                    else:
+                        log.debug("bestsellers.no_match", rank=item["rank"], title=item["title"][:50])
+
+                await db.commit()
+
+            log.info(
+                "bestsellers.complete",
+                scraped=results["scraped"],
+                matched=results["matched"],
+            )
+
+        except Exception as exc:
+            log.error("bestsellers.error", error=str(exc))
+            results["errors"] += 1
+        finally:
+            await page.close()
+            await context.close()
+            await browser.close()
 
     return results
-
-
-def extract_brand_model(title: str) -> str:
-    """Extract brand/model keywords from Amazon title for matching."""
-    # Get first 3-4 words (usually brand + model)
-    words = title.split()[:4]
-    return " ".join(words)
