@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-20T06:03:51.608320+00:00",
+  "generated_at": "2026-08-20T07:03:54.882096+00:00",
   "builds": [
     {
       "components": [
         {
-          "id": 16519586,
+          "id": 16618026,
           "listing_id": "PRO-AMD-08286",
           "category": "cpu",
           "title": "AMD Ryzen 7 5800X3D 10th Anniversary Edition Eight Core 4.5GHz (Socket AM4) Processor - Retail",
@@ -18,7 +18,7 @@
           "url": "https://www.overclockers.co.uk/search?q=AMD+Ryzen+7+5800X3D+10th+Anniversary+Edition+Eight+Core+4.5GHz+%28Socket+AM4%29+Processor+-+Retail"
         },
         {
-          "id": 16510785,
+          "id": 16609222,
           "listing_id": "820011077804",
           "category": "motherboard",
           "title": "MSI B550 GAMING WIFI Motherboard, ATX",
@@ -32,7 +32,7 @@
           "url": "https://www.ebay.co.uk/itm/820011077804"
         },
         {
-          "id": 16518405,
+          "id": 16616842,
           "listing_id": "GRA-GNW-04906",
           "category": "gpu",
           "title": "Gainward GeForce RTX 5060 Ti Ghost 8GB GDDR7 PCI-Express Graphics Card",
@@ -46,7 +46,7 @@
           "url": "https://www.overclockers.co.uk/search?q=Gainward+GeForce+RTX+5060+Ti+Ghost+8GB+GDDR7+PCI-Express+Graphics+Card"
         },
         {
-          "id": 16514945,
+          "id": 16613382,
           "listing_id": "B0CSKH56WN",
           "category": "ram",
           "title": "Gigabyte B650 GAMING X AX V2 Motherboard - Supports AMD Ryzen 8000 CPUs, 8+2+2 Phases Digital VRM, up to 8000MHz DDR5 (OC), 1xPCIe 5.0 + 2xPCIe 4.0 M.2, Wi-Fi 6E 802.11ax, 2.5GbE LAN, USB 3.2 Gen 2",
@@ -60,7 +60,7 @@
           "url": "https://www.amazon.co.uk/dp/B0CSKH56WN"
         },
         {
-          "id": 16507166,
+          "id": 16605603,
           "listing_id": "601099520392240",
           "category": "psu",
           "title": "Top pickComputer Fan Mesh Cover, Metal Iron Mesh Protective Cover, Case Fan Power Supply Mesh, Radiator Protective Mesh CoverOpen in new tab.",
@@ -74,7 +74,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pickComputer+Fan+Mesh+Cover%2C+Metal+Iron+Mesh+Protective+Cover%2C+Case+Fan+Power+Supply+Mesh%2C+Radiator+Protective+Mesh+CoverOpen+in+new+tab."
         },
         {
-          "id": 16508384,
+          "id": 16606821,
           "listing_id": "605593003735804",
           "category": "ssd",
           "title": "Top pick1pc Solid State Drive Storage Protection Case, Suitable for Gridfinity M.2 SSD 22 X 80 Storage. Allows for Free Stacking And Compact Storage of The DrivesOpen in new tab.",
@@ -88,7 +88,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pick1pc+Solid+State+Drive+Storage+Protection+Case%2C+Suitable+for+Gridfinity+M.2+SSD+22+X+80+Storage.+Allows+for+Free+Stacking+And+Compact+Storage+of+The+DrivesOpen+in+new+tab."
         },
         {
-          "id": 16508990,
+          "id": 16607427,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -102,7 +102,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pick8pcs+Set+of+Mini+Heatsinks%2C+9x9x5mm+in+Size%2C+Radiators+with+Thermal+Conductive+Double-Sided+Tape%2C+Suitable+for+VRM%2C+GPU+Step-Down+Drivers%2C+MOSFETs%2C+VRAM+RegulatorsOpen+in+new+tab."
         },
         {
-          "id": 16508833,
+          "id": 16607270,
           "listing_id": "606364621483887",
           "category": "case",
           "title": "Top pick3 Sets/5 Sets Full-Height PCI Slot Heat Dissipation Dust Shutter, Universal Desktop Computer Case Panel with Hex ScrewsOpen in new tab.",
@@ -132,18 +132,18 @@
           "count": 49,
           "min_price": 269.11,
           "max_price": 2979.0,
-          "average_price": 1159.43
+          "average_price": 1149.75
         }
       },
-      "resale_estimate": 1159.43,
+      "resale_estimate": 1149.75,
       "resale_source": "bin_average",
-      "estimated_profit": 403.91,
+      "estimated_profit": 394.23,
       "rank": 1
     },
     {
       "components": [
         {
-          "id": 16519586,
+          "id": 16618026,
           "listing_id": "PRO-AMD-08286",
           "category": "cpu",
           "title": "AMD Ryzen 7 5800X3D 10th Anniversary Edition Eight Core 4.5GHz (Socket AM4) Processor - Retail",
@@ -157,7 +157,7 @@
           "url": "https://www.overclockers.co.uk/search?q=AMD+Ryzen+7+5800X3D+10th+Anniversary+Edition+Eight+Core+4.5GHz+%28Socket+AM4%29+Processor+-+Retail"
         },
         {
-          "id": 16490295,
+          "id": 16588727,
           "listing_id": "128015432727",
           "category": "motherboard",
           "title": "MSI B850 GAMING PLUS WIFI6E Motherboard",
@@ -171,7 +171,7 @@
           "url": "https://www.ebay.co.uk/itm/128015432727"
         },
         {
-          "id": 16518405,
+          "id": 16616842,
           "listing_id": "GRA-GNW-04906",
           "category": "gpu",
           "title": "Gainward GeForce RTX 5060 Ti Ghost 8GB GDDR7 PCI-Express Graphics Card",
@@ -185,7 +185,7 @@
           "url": "https://www.overclockers.co.uk/search?q=Gainward+GeForce+RTX+5060+Ti+Ghost+8GB+GDDR7+PCI-Express+Graphics+Card"
         },
         {
-          "id": 16514945,
+          "id": 16613382,
           "listing_id": "B0CSKH56WN",
           "category": "ram",
           "title": "Gigabyte B650 GAMING X AX V2 Motherboard - Supports AMD Ryzen 8000 CPUs, 8+2+2 Phases Digital VRM, up to 8000MHz DDR5 (OC), 1xPCIe 5.0 + 2xPCIe 4.0 M.2, Wi-Fi 6E 802.11ax, 2.5GbE LAN, USB 3.2 Gen 2",
@@ -199,7 +199,7 @@
           "url": "https://www.amazon.co.uk/dp/B0CSKH56WN"
         },
         {
-          "id": 16507166,
+          "id": 16605603,
           "listing_id": "601099520392240",
           "category": "psu",
           "title": "Top pickComputer Fan Mesh Cover, Metal Iron Mesh Protective Cover, Case Fan Power Supply Mesh, Radiator Protective Mesh CoverOpen in new tab.",
@@ -213,7 +213,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pickComputer+Fan+Mesh+Cover%2C+Metal+Iron+Mesh+Protective+Cover%2C+Case+Fan+Power+Supply+Mesh%2C+Radiator+Protective+Mesh+CoverOpen+in+new+tab."
         },
         {
-          "id": 16508384,
+          "id": 16606821,
           "listing_id": "605593003735804",
           "category": "ssd",
           "title": "Top pick1pc Solid State Drive Storage Protection Case, Suitable for Gridfinity M.2 SSD 22 X 80 Storage. Allows for Free Stacking And Compact Storage of The DrivesOpen in new tab.",
@@ -227,7 +227,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pick1pc+Solid+State+Drive+Storage+Protection+Case%2C+Suitable+for+Gridfinity+M.2+SSD+22+X+80+Storage.+Allows+for+Free+Stacking+And+Compact+Storage+of+The+DrivesOpen+in+new+tab."
         },
         {
-          "id": 16508990,
+          "id": 16607427,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -241,7 +241,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pick8pcs+Set+of+Mini+Heatsinks%2C+9x9x5mm+in+Size%2C+Radiators+with+Thermal+Conductive+Double-Sided+Tape%2C+Suitable+for+VRM%2C+GPU+Step-Down+Drivers%2C+MOSFETs%2C+VRAM+RegulatorsOpen+in+new+tab."
         },
         {
-          "id": 16508833,
+          "id": 16607270,
           "listing_id": "606364621483887",
           "category": "case",
           "title": "Top pick3 Sets/5 Sets Full-Height PCI Slot Heat Dissipation Dust Shutter, Universal Desktop Computer Case Panel with Hex ScrewsOpen in new tab.",
@@ -271,18 +271,18 @@
           "count": 49,
           "min_price": 269.11,
           "max_price": 2979.0,
-          "average_price": 1159.43
+          "average_price": 1154.4
         }
       },
-      "resale_estimate": 1159.43,
+      "resale_estimate": 1154.4,
       "resale_source": "bin_average",
-      "estimated_profit": 384.93,
+      "estimated_profit": 379.9,
       "rank": 2
     },
     {
       "components": [
         {
-          "id": 16519586,
+          "id": 16618026,
           "listing_id": "PRO-AMD-08286",
           "category": "cpu",
           "title": "AMD Ryzen 7 5800X3D 10th Anniversary Edition Eight Core 4.5GHz (Socket AM4) Processor - Retail",
@@ -296,7 +296,7 @@
           "url": "https://www.overclockers.co.uk/search?q=AMD+Ryzen+7+5800X3D+10th+Anniversary+Edition+Eight+Core+4.5GHz+%28Socket+AM4%29+Processor+-+Retail"
         },
         {
-          "id": 16510785,
+          "id": 16609222,
           "listing_id": "820011077804",
           "category": "motherboard",
           "title": "MSI B550 GAMING WIFI Motherboard, ATX",
@@ -310,7 +310,7 @@
           "url": "https://www.ebay.co.uk/itm/820011077804"
         },
         {
-          "id": 16518405,
+          "id": 16616842,
           "listing_id": "GRA-GNW-04906",
           "category": "gpu",
           "title": "Gainward GeForce RTX 5060 Ti Ghost 8GB GDDR7 PCI-Express Graphics Card",
@@ -324,7 +324,7 @@
           "url": "https://www.overclockers.co.uk/search?q=Gainward+GeForce+RTX+5060+Ti+Ghost+8GB+GDDR7+PCI-Express+Graphics+Card"
         },
         {
-          "id": 16514480,
+          "id": 16612917,
           "listing_id": "B0BJDYYGC3",
           "category": "ram",
           "title": "GIGABYTE B650M AORUS ELITE Motherboard - AMD Ryzen 9000 CPUs, 12+2+2 Phases VRM, up to 8000MHz DDR5, 1xPCIe 5.0 + 1xPCIe 4.0 M.2, 2.5GbE LAN, USB 3.2 Gen 2x2",
@@ -338,7 +338,7 @@
           "url": "https://www.amazon.co.uk/dp/B0BJDYYGC3"
         },
         {
-          "id": 16507166,
+          "id": 16605603,
           "listing_id": "601099520392240",
           "category": "psu",
           "title": "Top pickComputer Fan Mesh Cover, Metal Iron Mesh Protective Cover, Case Fan Power Supply Mesh, Radiator Protective Mesh CoverOpen in new tab.",
@@ -352,7 +352,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pickComputer+Fan+Mesh+Cover%2C+Metal+Iron+Mesh+Protective+Cover%2C+Case+Fan+Power+Supply+Mesh%2C+Radiator+Protective+Mesh+CoverOpen+in+new+tab."
         },
         {
-          "id": 16508384,
+          "id": 16606821,
           "listing_id": "605593003735804",
           "category": "ssd",
           "title": "Top pick1pc Solid State Drive Storage Protection Case, Suitable for Gridfinity M.2 SSD 22 X 80 Storage. Allows for Free Stacking And Compact Storage of The DrivesOpen in new tab.",
@@ -366,7 +366,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pick1pc+Solid+State+Drive+Storage+Protection+Case%2C+Suitable+for+Gridfinity+M.2+SSD+22+X+80+Storage.+Allows+for+Free+Stacking+And+Compact+Storage+of+The+DrivesOpen+in+new+tab."
         },
         {
-          "id": 16508990,
+          "id": 16607427,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -380,7 +380,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pick8pcs+Set+of+Mini+Heatsinks%2C+9x9x5mm+in+Size%2C+Radiators+with+Thermal+Conductive+Double-Sided+Tape%2C+Suitable+for+VRM%2C+GPU+Step-Down+Drivers%2C+MOSFETs%2C+VRAM+RegulatorsOpen+in+new+tab."
         },
         {
-          "id": 16508833,
+          "id": 16607270,
           "listing_id": "606364621483887",
           "category": "case",
           "title": "Top pick3 Sets/5 Sets Full-Height PCI Slot Heat Dissipation Dust Shutter, Universal Desktop Computer Case Panel with Hex ScrewsOpen in new tab.",
@@ -410,18 +410,18 @@
           "count": 49,
           "min_price": 269.11,
           "max_price": 2979.0,
-          "average_price": 1161.45
+          "average_price": 1145.06
         }
       },
-      "resale_estimate": 1161.45,
+      "resale_estimate": 1145.06,
       "resale_source": "bin_average",
-      "estimated_profit": 379.93,
+      "estimated_profit": 363.54,
       "rank": 3
     },
     {
       "components": [
         {
-          "id": 16519586,
+          "id": 16618026,
           "listing_id": "PRO-AMD-08286",
           "category": "cpu",
           "title": "AMD Ryzen 7 5800X3D 10th Anniversary Edition Eight Core 4.5GHz (Socket AM4) Processor - Retail",
@@ -435,7 +435,7 @@
           "url": "https://www.overclockers.co.uk/search?q=AMD+Ryzen+7+5800X3D+10th+Anniversary+Edition+Eight+Core+4.5GHz+%28Socket+AM4%29+Processor+-+Retail"
         },
         {
-          "id": 16510785,
+          "id": 16609222,
           "listing_id": "820011077804",
           "category": "motherboard",
           "title": "MSI B550 GAMING WIFI Motherboard, ATX",
@@ -449,7 +449,7 @@
           "url": "https://www.ebay.co.uk/itm/820011077804"
         },
         {
-          "id": 16517626,
+          "id": 16616063,
           "listing_id": "computer_orbit:inno3d-geforce-rtx-5060-ti-twin-x2-8gb-graphics-card",
           "category": "gpu",
           "title": "Inno3D GeForce RTX 5060 Ti Twin X2 8GB Graphics Card",
@@ -463,7 +463,7 @@
           "url": "https://computerorbit.com/search?q=Inno3D+GeForce+RTX+5060+Ti+Twin+X2+8GB+Graphics+Card&type=product"
         },
         {
-          "id": 16514945,
+          "id": 16613382,
           "listing_id": "B0CSKH56WN",
           "category": "ram",
           "title": "Gigabyte B650 GAMING X AX V2 Motherboard - Supports AMD Ryzen 8000 CPUs, 8+2+2 Phases Digital VRM, up to 8000MHz DDR5 (OC), 1xPCIe 5.0 + 2xPCIe 4.0 M.2, Wi-Fi 6E 802.11ax, 2.5GbE LAN, USB 3.2 Gen 2",
@@ -477,7 +477,7 @@
           "url": "https://www.amazon.co.uk/dp/B0CSKH56WN"
         },
         {
-          "id": 16507166,
+          "id": 16605603,
           "listing_id": "601099520392240",
           "category": "psu",
           "title": "Top pickComputer Fan Mesh Cover, Metal Iron Mesh Protective Cover, Case Fan Power Supply Mesh, Radiator Protective Mesh CoverOpen in new tab.",
@@ -491,7 +491,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pickComputer+Fan+Mesh+Cover%2C+Metal+Iron+Mesh+Protective+Cover%2C+Case+Fan+Power+Supply+Mesh%2C+Radiator+Protective+Mesh+CoverOpen+in+new+tab."
         },
         {
-          "id": 16508384,
+          "id": 16606821,
           "listing_id": "605593003735804",
           "category": "ssd",
           "title": "Top pick1pc Solid State Drive Storage Protection Case, Suitable for Gridfinity M.2 SSD 22 X 80 Storage. Allows for Free Stacking And Compact Storage of The DrivesOpen in new tab.",
@@ -505,7 +505,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pick1pc+Solid+State+Drive+Storage+Protection+Case%2C+Suitable+for+Gridfinity+M.2+SSD+22+X+80+Storage.+Allows+for+Free+Stacking+And+Compact+Storage+of+The+DrivesOpen+in+new+tab."
         },
         {
-          "id": 16508990,
+          "id": 16607427,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -519,7 +519,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pick8pcs+Set+of+Mini+Heatsinks%2C+9x9x5mm+in+Size%2C+Radiators+with+Thermal+Conductive+Double-Sided+Tape%2C+Suitable+for+VRM%2C+GPU+Step-Down+Drivers%2C+MOSFETs%2C+VRAM+RegulatorsOpen+in+new+tab."
         },
         {
-          "id": 16508833,
+          "id": 16607270,
           "listing_id": "606364621483887",
           "category": "case",
           "title": "Top pick3 Sets/5 Sets Full-Height PCI Slot Heat Dissipation Dust Shutter, Universal Desktop Computer Case Panel with Hex ScrewsOpen in new tab.",
@@ -549,18 +549,18 @@
           "count": 49,
           "min_price": 269.11,
           "max_price": 2979.0,
-          "average_price": 1161.45
+          "average_price": 1149.71
         }
       },
-      "resale_estimate": 1161.45,
+      "resale_estimate": 1149.71,
       "resale_source": "bin_average",
-      "estimated_profit": 366.92,
+      "estimated_profit": 355.18,
       "rank": 4
     },
     {
       "components": [
         {
-          "id": 16519586,
+          "id": 16618026,
           "listing_id": "PRO-AMD-08286",
           "category": "cpu",
           "title": "AMD Ryzen 7 5800X3D 10th Anniversary Edition Eight Core 4.5GHz (Socket AM4) Processor - Retail",
@@ -574,7 +574,7 @@
           "url": "https://www.overclockers.co.uk/search?q=AMD+Ryzen+7+5800X3D+10th+Anniversary+Edition+Eight+Core+4.5GHz+%28Socket+AM4%29+Processor+-+Retail"
         },
         {
-          "id": 16490295,
+          "id": 16588727,
           "listing_id": "128015432727",
           "category": "motherboard",
           "title": "MSI B850 GAMING PLUS WIFI6E Motherboard",
@@ -588,7 +588,7 @@
           "url": "https://www.ebay.co.uk/itm/128015432727"
         },
         {
-          "id": 16518405,
+          "id": 16616842,
           "listing_id": "GRA-GNW-04906",
           "category": "gpu",
           "title": "Gainward GeForce RTX 5060 Ti Ghost 8GB GDDR7 PCI-Express Graphics Card",
@@ -602,7 +602,7 @@
           "url": "https://www.overclockers.co.uk/search?q=Gainward+GeForce+RTX+5060+Ti+Ghost+8GB+GDDR7+PCI-Express+Graphics+Card"
         },
         {
-          "id": 16514480,
+          "id": 16612917,
           "listing_id": "B0BJDYYGC3",
           "category": "ram",
           "title": "GIGABYTE B650M AORUS ELITE Motherboard - AMD Ryzen 9000 CPUs, 12+2+2 Phases VRM, up to 8000MHz DDR5, 1xPCIe 5.0 + 1xPCIe 4.0 M.2, 2.5GbE LAN, USB 3.2 Gen 2x2",
@@ -616,7 +616,7 @@
           "url": "https://www.amazon.co.uk/dp/B0BJDYYGC3"
         },
         {
-          "id": 16507166,
+          "id": 16605603,
           "listing_id": "601099520392240",
           "category": "psu",
           "title": "Top pickComputer Fan Mesh Cover, Metal Iron Mesh Protective Cover, Case Fan Power Supply Mesh, Radiator Protective Mesh CoverOpen in new tab.",
@@ -630,7 +630,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pickComputer+Fan+Mesh+Cover%2C+Metal+Iron+Mesh+Protective+Cover%2C+Case+Fan+Power+Supply+Mesh%2C+Radiator+Protective+Mesh+CoverOpen+in+new+tab."
         },
         {
-          "id": 16508384,
+          "id": 16606821,
           "listing_id": "605593003735804",
           "category": "ssd",
           "title": "Top pick1pc Solid State Drive Storage Protection Case, Suitable for Gridfinity M.2 SSD 22 X 80 Storage. Allows for Free Stacking And Compact Storage of The DrivesOpen in new tab.",
@@ -644,7 +644,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pick1pc+Solid+State+Drive+Storage+Protection+Case%2C+Suitable+for+Gridfinity+M.2+SSD+22+X+80+Storage.+Allows+for+Free+Stacking+And+Compact+Storage+of+The+DrivesOpen+in+new+tab."
         },
         {
-          "id": 16508990,
+          "id": 16607427,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -658,7 +658,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pick8pcs+Set+of+Mini+Heatsinks%2C+9x9x5mm+in+Size%2C+Radiators+with+Thermal+Conductive+Double-Sided+Tape%2C+Suitable+for+VRM%2C+GPU+Step-Down+Drivers%2C+MOSFETs%2C+VRAM+RegulatorsOpen+in+new+tab."
         },
         {
-          "id": 16508833,
+          "id": 16607270,
           "listing_id": "606364621483887",
           "category": "case",
           "title": "Top pick3 Sets/5 Sets Full-Height PCI Slot Heat Dissipation Dust Shutter, Universal Desktop Computer Case Panel with Hex ScrewsOpen in new tab.",
@@ -688,18 +688,18 @@
           "count": 49,
           "min_price": 269.11,
           "max_price": 2979.0,
-          "average_price": 1161.45
+          "average_price": 1149.71
         }
       },
-      "resale_estimate": 1161.45,
+      "resale_estimate": 1149.71,
       "resale_source": "bin_average",
-      "estimated_profit": 360.95,
+      "estimated_profit": 349.21,
       "rank": 5
     },
     {
       "components": [
         {
-          "id": 16519586,
+          "id": 16618026,
           "listing_id": "PRO-AMD-08286",
           "category": "cpu",
           "title": "AMD Ryzen 7 5800X3D 10th Anniversary Edition Eight Core 4.5GHz (Socket AM4) Processor - Retail",
@@ -713,7 +713,7 @@
           "url": "https://www.overclockers.co.uk/search?q=AMD+Ryzen+7+5800X3D+10th+Anniversary+Edition+Eight+Core+4.5GHz+%28Socket+AM4%29+Processor+-+Retail"
         },
         {
-          "id": 16490295,
+          "id": 16588727,
           "listing_id": "128015432727",
           "category": "motherboard",
           "title": "MSI B850 GAMING PLUS WIFI6E Motherboard",
@@ -727,7 +727,7 @@
           "url": "https://www.ebay.co.uk/itm/128015432727"
         },
         {
-          "id": 16517626,
+          "id": 16616063,
           "listing_id": "computer_orbit:inno3d-geforce-rtx-5060-ti-twin-x2-8gb-graphics-card",
           "category": "gpu",
           "title": "Inno3D GeForce RTX 5060 Ti Twin X2 8GB Graphics Card",
@@ -741,7 +741,7 @@
           "url": "https://computerorbit.com/search?q=Inno3D+GeForce+RTX+5060+Ti+Twin+X2+8GB+Graphics+Card&type=product"
         },
         {
-          "id": 16514945,
+          "id": 16613382,
           "listing_id": "B0CSKH56WN",
           "category": "ram",
           "title": "Gigabyte B650 GAMING X AX V2 Motherboard - Supports AMD Ryzen 8000 CPUs, 8+2+2 Phases Digital VRM, up to 8000MHz DDR5 (OC), 1xPCIe 5.0 + 2xPCIe 4.0 M.2, Wi-Fi 6E 802.11ax, 2.5GbE LAN, USB 3.2 Gen 2",
@@ -755,7 +755,7 @@
           "url": "https://www.amazon.co.uk/dp/B0CSKH56WN"
         },
         {
-          "id": 16507166,
+          "id": 16605603,
           "listing_id": "601099520392240",
           "category": "psu",
           "title": "Top pickComputer Fan Mesh Cover, Metal Iron Mesh Protective Cover, Case Fan Power Supply Mesh, Radiator Protective Mesh CoverOpen in new tab.",
@@ -769,7 +769,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pickComputer+Fan+Mesh+Cover%2C+Metal+Iron+Mesh+Protective+Cover%2C+Case+Fan+Power+Supply+Mesh%2C+Radiator+Protective+Mesh+CoverOpen+in+new+tab."
         },
         {
-          "id": 16508384,
+          "id": 16606821,
           "listing_id": "605593003735804",
           "category": "ssd",
           "title": "Top pick1pc Solid State Drive Storage Protection Case, Suitable for Gridfinity M.2 SSD 22 X 80 Storage. Allows for Free Stacking And Compact Storage of The DrivesOpen in new tab.",
@@ -783,7 +783,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pick1pc+Solid+State+Drive+Storage+Protection+Case%2C+Suitable+for+Gridfinity+M.2+SSD+22+X+80+Storage.+Allows+for+Free+Stacking+And+Compact+Storage+of+The+DrivesOpen+in+new+tab."
         },
         {
-          "id": 16508990,
+          "id": 16607427,
           "listing_id": "607122532211230",
           "category": "cooler",
           "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
@@ -797,7 +797,7 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pick8pcs+Set+of+Mini+Heatsinks%2C+9x9x5mm+in+Size%2C+Radiators+with+Thermal+Conductive+Double-Sided+Tape%2C+Suitable+for+VRM%2C+GPU+Step-Down+Drivers%2C+MOSFETs%2C+VRAM+RegulatorsOpen+in+new+tab."
         },
         {
-          "id": 16508833,
+          "id": 16607270,
           "listing_id": "606364621483887",
           "category": "case",
           "title": "Top pick3 Sets/5 Sets Full-Height PCI Slot Heat Dissipation Dust Shutter, Universal Desktop Computer Case Panel with Hex ScrewsOpen in new tab.",
@@ -827,12 +827,12 @@
           "count": 49,
           "min_price": 269.11,
           "max_price": 2979.0,
-          "average_price": 1161.45
+          "average_price": 1147.77
         }
       },
-      "resale_estimate": 1161.45,
+      "resale_estimate": 1147.77,
       "resale_source": "bin_average",
-      "estimated_profit": 347.94,
+      "estimated_profit": 334.26,
       "rank": 6
     }
   ],
