@@ -1497,7 +1497,7 @@ async def _seed_default_data():
         updated_rows = 0
         flip_allowed = {"eBay UK", "eBay UK Auctions", "BidSpotter", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware", "Vinted"}
         common_allowed = {"eBay", "Gumtree", "Amazon", "Temu", "AliExpress", "Alibaba", "BargainHardware"}
-        cases_allowed = set(common_allowed) | {"eBay (Worldwide)", "CherryTree Inc"}
+        cases_allowed = set(common_allowed) | {"eBay (Worldwide)", "CherryTree Inc", "Overclockers"}
         upgrade_allowed = set(common_allowed)
         accessories_allowed = set(common_allowed)
         for row in rows:

@@ -66,19 +66,31 @@ def _case_form_factor(title: str) -> str:
 def _is_case_search(search_id: str) -> bool:
     """Accept extension search IDs that clearly represent case searches."""
     normalized = re.sub(r"[^a-z0-9]+", "-", str(search_id or "").lower()).strip("-")
+    if any(token in normalized for token in ("case-fan", "case-fans", "case-accessory", "case-accessories")):
+        return False
     return "case" in normalized or "chassis" in normalized
 
 
 def _looks_like_pc_case(title: str) -> bool:
     """Reject peripherals and complete PCs returned by broad case searches."""
     normalized = str(title or "").lower()
-    if not re.search(r"\bpc\s*case\b|\bcomputer\s*case\b|\bchassis\b|\b(?:mid|full|mini)[- ]tower\b", normalized):
+    if not re.search(r"\bcase\b|\bchassis\b|\b(?:mid|full|mini)[- ]tower\b", normalized):
         return False
     excluded = (
         "complete pc", "gaming pc", "pre-built", "prebuilt", "desktop computer",
         "case fan", "fan only", "case badge", "case accessory", "carry case",
     )
     return not any(term in normalized for term in excluded)
+
+
+def _supplier_from_hostname(hostname: str) -> str | None:
+    """Map only genuine supplier hosts, never lookalike domains."""
+    normalized = str(hostname or "").lower().rstrip(".")
+    if normalized == "amazon.co.uk" or normalized.endswith(".amazon.co.uk"):
+        return "Amazon"
+    if normalized == "overclockers.co.uk" or normalized.endswith(".overclockers.co.uk"):
+        return "Overclockers"
+    return None
 
 
 async def _sync_supplier_case_catalogue(db: AsyncSession, payload: ScanSubmitRequest) -> int:
@@ -88,7 +100,7 @@ async def _sync_supplier_case_catalogue(db: AsyncSession, payload: ScanSubmitReq
     from app.models.catalogue import CaseCatalogue
 
     hostname = urlparse(payload.source_url).hostname or ""
-    vendor = "Amazon" if "amazon.co.uk" in hostname else "Overclockers" if "overclockers.co.uk" in hostname else None
+    vendor = _supplier_from_hostname(hostname)
     if not vendor:
         return 0
     now = datetime.utcnow().isoformat()

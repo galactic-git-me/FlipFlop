@@ -2,7 +2,13 @@ import pytest
 from sqlalchemy import inspect
 from app.models.catalogue import PlaybookSlot, CatalogueVariant, CaseCatalogue
 from app.database import Base
-from app.workers.queue_processor import _case_form_factor, _case_brand, _is_case_search, _looks_like_pc_case
+from app.workers.queue_processor import (
+    _case_form_factor,
+    _case_brand,
+    _is_case_search,
+    _looks_like_pc_case,
+    _supplier_from_hostname,
+)
 
 def test_playbook_slot_tablename():
     assert PlaybookSlot.__tablename__ == "playbook_slots"
@@ -34,15 +40,27 @@ def test_case_search_ids_are_recognised(search_id):
     assert _is_case_search(search_id)
 
 
+@pytest.mark.parametrize("search_id", ["case-fan", "case-accessory", "pc-case-fans"])
+def test_non_catalogue_case_search_ids_are_ignored(search_id):
+    assert not _is_case_search(search_id)
+
+
 def test_non_case_search_id_is_ignored():
     assert not _is_case_search("overclockers-gpu")
 
 
 def test_case_title_filter_rejects_complete_pcs():
     assert _looks_like_pc_case("Havn BF 360 premium mid tower case")
+    assert _looks_like_pc_case("NZXT H210 Mini-ITX Case")
+    assert _looks_like_pc_case("Corsair 4000D Airflow ATX Case")
     assert not _looks_like_pc_case("Overclockers complete gaming PC with case")
 
 
 def test_case_metadata_helpers():
     assert _case_brand("Lian Li O11 Vision Compact PC Case") == "Lian Li"
     assert _case_form_factor("Cooler Master micro ATX case") == "matx"
+
+
+def test_supplier_hostname_rejects_lookalikes():
+    assert _supplier_from_hostname("www.overclockers.co.uk") == "Overclockers"
+    assert _supplier_from_hostname("overclockers.co.uk.evil.example") is None
