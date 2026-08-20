@@ -80,6 +80,8 @@ class RawCase:
     review_count: int = None  # number of customer reviews
     sales_velocity: str = None  # "50+ bought in past month" - real demand signal
     rrp: float = None  # Recommended Retail Price (shows discount %)
+    brand: str = None
+    model: str = None
 
     def __post_init__(self):
         # Auto-extract form factors and keywords from name if not provided
@@ -290,8 +292,11 @@ async def run_cases_swarm(mode: str = "main") -> dict:
             return {"source_name": source["name"], "term": term, "cases": [], "error": str(exc)}
 
     has_chromium = chromium_available()
+    amazon_only = os.getenv("CASES_AMAZON_ONLY", "0").lower() in {"1", "true", "yes"}
     enabled_sources = []
     for s in SOURCES:
+        if amazon_only and s["fn"] != "amazon":
+            continue
         if s["name"] not in batch_terms:
             continue
         if s["fn"] in _PLAYWRIGHT_CASE_SOURCES and not has_chromium:
@@ -366,8 +371,9 @@ async def run_cases_swarm(mode: str = "main") -> dict:
                 continue
             try:
                 stats["found"] += len(cases)
-                for case in cases[:8]:
+                for case in cases[:16]:
                     await _upsert_case(db, case)
+                    await _upsert_case_new(db, case)
                     stats["upserted"] += 1
             except Exception as exc:
                 stats["errors"] += 1
@@ -379,6 +385,16 @@ async def run_cases_swarm(mode: str = "main") -> dict:
                 log.error("cases.upsert.error", source=source_name, term=term, error=str(exc))
 
         await db.commit()
+
+    try:
+        from app.services.amazon_bestsellers import scrape_amazon_bestsellers
+
+        bestseller_stats = await scrape_amazon_bestsellers()
+        stats["bestsellers"] = bestseller_stats
+        log.info("cases_swarm.bestsellers", **bestseller_stats)
+    except Exception as exc:
+        stats["errors"] += 1
+        log.error("cases_swarm.bestsellers_error", error=str(exc))
 
     log.info("cases_swarm.done", **stats)
     return stats
@@ -826,6 +842,12 @@ async def _scrape_amazon(search: str, theme: str) -> list[RawCase]:
             raw = await page.evaluate("""() => {
                 const out = [];
                 const seen = new Set();
+                const parseMoney = (text) => {
+                    if (!text) return 0;
+                    const n = String(text).replace(/[^0-9.]/g, '');
+                    const v = parseFloat(n);
+                    return Number.isFinite(v) ? v : 0;
+                };
                 document.querySelectorAll('[data-component-type="s-search-result"]').forEach(item => {
                     try {
                         const titleEl = item.querySelector('h2 span') || item.querySelector('h2');
@@ -854,10 +876,28 @@ async def _scrape_amazon(search: str, theme: str) -> list[RawCase]:
                         }
                         if (price <= 0 || price > 350) return;
 
-                        out.push({title, price, href, img: imgEl ? imgEl.src : ''});
+                        const ratingAlt = item.querySelector('.a-icon-alt')?.textContent || '';
+                        const ratingMatch = ratingAlt.match(/([0-9.]+)\\s+out of/);
+                        const reviewEl = item.querySelector('a[href*="#customerReviews"] span, span.s-underline-text');
+                        const reviewDigits = (reviewEl?.textContent || '').replace(/[^0-9]/g, '');
+                        const bought = Array.from(item.querySelectorAll('span'))
+                            .map((el) => (el.textContent || '').trim())
+                            .find((t) => /bought in (the )?past month/i.test(t));
+                        const strikeEl = item.querySelector('.a-price[data-a-strike="true"] .a-offscreen, span.a-price.a-text-price .a-offscreen');
+
+                        out.push({
+                            title,
+                            price,
+                            href,
+                            img: imgEl ? imgEl.src : '',
+                            rating: ratingMatch ? parseFloat(ratingMatch[1]) : null,
+                            reviewCount: reviewDigits ? parseInt(reviewDigits, 10) : null,
+                            salesVelocity: bought ? bought.slice(0, 80) : null,
+                            rrp: parseMoney(strikeEl?.textContent) || null,
+                        });
                     } catch (e) {}
                 });
-                return out.slice(0, 10);
+                return out.slice(0, 16);
             }""")
 
             for item in raw:
@@ -871,6 +911,7 @@ async def _scrape_amazon(search: str, theme: str) -> list[RawCase]:
                     href = str(item.get("href", ""))
                     if not href.startswith("http"):
                         continue
+                    rrp_raw = item.get("rrp")
                     cases.append(RawCase(
                         name=title,
                         price=price,
@@ -878,6 +919,10 @@ async def _scrape_amazon(search: str, theme: str) -> list[RawCase]:
                         source_url=href,
                         image_url=str(item.get("img", "")),
                         theme=theme,
+                        rating=float(item["rating"]) if item.get("rating") else None,
+                        review_count=int(item["reviewCount"]) if item.get("reviewCount") else None,
+                        sales_velocity=str(item["salesVelocity"]) if item.get("salesVelocity") else None,
+                        rrp=float(rrp_raw) if rrp_raw else None,
                     ))
                 except Exception:
                     continue
@@ -1779,8 +1824,14 @@ async def _upsert_case_new(db, case: RawCase):
     now = datetime.utcnow()
 
     if case_row:
-        # Update price if cheaper
-        if case.price < (case_row.price or 999999):
+        # Keep the latest Amazon price, not only a cheaper one — the extra
+        # rating/demand fields live on the same card and must refresh too.
+        if case.source_site == "Amazon" and case.price:
+            case_row.price = case.price
+            case_row.price_new = case.price
+            case_row.source_url = case.source_url
+            case_row.image_url = case.image_url or case_row.image_url
+        elif case.price < (case_row.price or 999999):
             case_row.price = case.price
             case_row.price_new = case.price
             case_row.source_url = case.source_url
@@ -1870,6 +1921,8 @@ async def _upsert_case_new(db, case: RawCase):
             )
             db.add(case_row)
             await db.flush()
+
+    return case_row
 
 
 def _parse_price(text: str) -> float:
