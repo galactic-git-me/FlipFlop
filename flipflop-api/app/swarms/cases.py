@@ -998,21 +998,20 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
             all_products = []
             seen_urls = set()
 
-            # Use query string pagination instead of "Load more" button (bot protection)
+            # Use query string pagination - pages work fine when navigated to directly
             for page_num in range(1, 12):  # Overclockers has maxpage=11
                 page_url = f"{base_url}?page={page_num}"
                 log.info("overclockers.cases.loading_page", page=page_num, url=page_url)
 
-                await page.goto(page_url, wait_until="networkidle", timeout=60000)
+                await page.goto(page_url, wait_until="domcontentloaded", timeout=60000)
 
-                # Wait for products to render
+                # CRITICAL: Wait for products to fully render before extraction
                 try:
-                    await page.wait_for_selector("ck-product-box", timeout=15000)
-                except:
-                    log.debug("overclockers.wait_product_timeout", page=page_num)
-                    pass
-
-                await asyncio.sleep(2)
+                    await page.wait_for_selector("ck-product-box", timeout=20000)
+                    await asyncio.sleep(3)  # Extra wait for all products to render
+                except Exception as e:
+                    log.warning("overclockers.wait_product_timeout", page=page_num, error=str(e))
+                    break  # No products on this page - stop pagination
 
                 # Extract products from this page
                 products = await page.evaluate(f"""() => {{
