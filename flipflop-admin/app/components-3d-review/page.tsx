@@ -271,7 +271,7 @@ export default function Components3DReviewPage() {
   };
 
   return (
-    <div className="w-full h-screen flex flex-col gap-3 p-4 overflow-hidden">
+    <div style={{ height: "100vh" }} className="w-full flex flex-col gap-3 p-4 overflow-hidden bg-slate-950">
       <div>
         <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
       </div>
@@ -310,10 +310,10 @@ export default function Components3DReviewPage() {
         </button>
       </div>
 
-      <div className="flex gap-3 flex-1 min-h-0">
+      <div style={{ flex: 1, minHeight: 0 }} className="flex gap-3">
         {/* LEFT: Asset grid */}
-        <div className="w-96 h-96 border border-[#1e2d45] rounded-lg overflow-y-auto p-2 bg-[#0a1119]">
-          <div className="grid grid-cols-6 gap-2">
+        <div style={{ width: "384px", minHeight: "400px" }} className="border border-[#1e2d45] rounded-lg overflow-y-auto p-2 bg-[#0a1119]">
+          <div className="grid grid-cols-6 gap-2 auto-rows-max">
             {filteredAssets.map((asset) => (
               <button
                 key={asset.id}
