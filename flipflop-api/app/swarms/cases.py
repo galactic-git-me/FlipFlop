@@ -827,7 +827,24 @@ async def _scrape_amazon(search: str, theme: str) -> list[RawCase]:
     them client-side. JS evaluation against the live DOM works reliably.
     """
     cases = []
-    url = f"https://www.amazon.co.uk/s?k={search.replace(' ', '+')}&i=computers"
+    # Amazon's own "Case Type" refinement (rh=n:340831031,p_n_g-101016656350111:...),
+    # restricted to desktop tower case types only (Raspberry Pi and "Integrated"
+    # SFF cases excluded on purpose — out of scope for this sourcing pipeline).
+    # Confirmed live: this cuts "pc case" from 30,000+ results to ~3,000 and
+    # removes the glasses-case/display-box/licence noise that a plain keyword
+    # search pulls in, which previously had to be filtered out after the fact.
+    case_type_values = "|".join([
+        "207021688031",  # Desktop
+        "207021693031",  # Full Tower
+        "207021696031",  # Mid Tower
+        "207021691031",  # Midi Tower
+        "207021689031",  # Mini-Tower
+        "207021690031",  # Slim-Desktop
+    ])
+    url = (
+        f"https://www.amazon.co.uk/s?k={search.replace(' ', '+')}&i=computers"
+        f"&rh=n%3A340831031%2Cp_n_g-101016656350111%3A{case_type_values}"
+    )
 
     async with managed_playwright() as p:
         try:
