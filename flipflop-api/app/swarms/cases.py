@@ -1047,8 +1047,17 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
                     try:
                         elem = await page.query_selector(selector)
                         if elem and await elem.is_visible():
-                            await elem.click()
-                            await asyncio.sleep(3)  # Wait for AJAX content to load
+                            # Click and wait for button to become disabled (loading state)
+                            await elem.click(timeout=5000)
+                            await asyncio.sleep(1)
+
+                            # Wait for new products to load (button becomes re-enabled after AJAX completes)
+                            try:
+                                await page.wait_for_selector('.js-load-more:not([disabled])', timeout=10000)
+                            except:
+                                pass  # Button might be hidden if no more products
+
+                            await asyncio.sleep(1)
                             load_more_found = True
                             break
                     except Exception as e:
