@@ -15,7 +15,7 @@ interface Star {
 export function TwinklingStars() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Star[]>([]);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | null>(null);
   const timeRef = useRef(0);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export function TwinklingStars() {
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
-    if (!ctx) return null;
+    if (!ctx) return;
 
     const updateCanvasSize = () => {
       canvas.width = window.innerWidth;

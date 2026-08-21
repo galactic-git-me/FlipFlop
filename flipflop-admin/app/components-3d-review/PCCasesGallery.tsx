@@ -488,7 +488,8 @@ export function PCCasesGallery({ cases, loading }: PCCasesGalleryProps) {
                 All
               </button>
               {statuses.map((status) => {
-                const config = statusConfig[status];
+                const config = STATUS_CONFIG[status];
+                const IconComponent = config.icon;
                 return (
                   <button
                     key={status}
@@ -499,7 +500,7 @@ export function PCCasesGallery({ cases, loading }: PCCasesGalleryProps) {
                         : "bg-slate-800/30 border-slate-700/30 text-slate-400 hover:border-slate-600/50"
                     }`}
                   >
-                    <config.icon className="w-3.5 h-3.5" />
+                    <IconComponent className="w-3.5 h-3.5" />
                     {config.label}
                   </button>
                 );
@@ -527,7 +528,8 @@ export function PCCasesGallery({ cases, loading }: PCCasesGalleryProps) {
       ) : viewMode === "grid" ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filtered.map((caseItem) => {
-            const statusConfig = statusConfig[caseItem.status];
+            const caseStatusConfig = STATUS_CONFIG[caseItem.status];
+            const IconComponent = caseStatusConfig.icon;
             return (
               <button
                 key={caseItem.id}
@@ -549,9 +551,9 @@ export function PCCasesGallery({ cases, loading }: PCCasesGalleryProps) {
                   )}
                   {/* Status Badge */}
                   <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 bg-black/70 rounded-full">
-                    <statusConfig.icon className={`w-3.5 h-3.5 ${statusConfig.color}`} />
-                    <span className={`text-xs font-semibold ${statusConfig.color}`}>
-                      {statusConfig.label}
+                    <IconComponent className={`w-3.5 h-3.5 ${caseStatusConfig.color}`} />
+                    <span className={`text-xs font-semibold ${caseStatusConfig.color}`}>
+                      {caseStatusConfig.label}
                     </span>
                   </div>
                 </div>
@@ -589,7 +591,8 @@ export function PCCasesGallery({ cases, loading }: PCCasesGalleryProps) {
       ) : (
         <div className="space-y-2">
           {filtered.map((caseItem) => {
-            const statusConfig = statusConfig[caseItem.status];
+            const caseStatusConfig = STATUS_CONFIG[caseItem.status];
+            const IconComponent = caseStatusConfig.icon;
             return (
               <button
                 key={caseItem.id}
@@ -621,9 +624,9 @@ export function PCCasesGallery({ cases, loading }: PCCasesGalleryProps) {
                       <p className="text-xs text-slate-500">{caseItem.brand} • {caseItem.model}</p>
                     </div>
                     <div className="flex items-center gap-1 px-2 py-1 bg-black/40 rounded-full">
-                      <statusConfig.icon className={`w-3.5 h-3.5 ${statusConfig.color}`} />
-                      <span className={`text-xs font-semibold ${statusConfig.color}`}>
-                        {statusConfig.label}
+                      <IconComponent className={`w-3.5 h-3.5 ${caseStatusConfig.color}`} />
+                      <span className={`text-xs font-semibold ${caseStatusConfig.color}`}>
+                        {caseStatusConfig.label}
                       </span>
                     </div>
                   </div>
