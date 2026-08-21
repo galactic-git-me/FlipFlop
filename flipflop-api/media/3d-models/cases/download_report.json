@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-08-21T17:59:01.719354",
+  "media_directory": "C:\\Users\\mclar\\CODING\\FlipFlop\\flipflop-api\\media\\3d-models\\cases",
+  "models": {
+    "corsair_4000d": {
+      "status": "failed",
+      "error": "Download error: [Errno 11001] getaddrinfo failed",
+      "filename": "corsair_4000d.glb",
+      "sketchfab_id": "bc15e007d6634579bc0e8ffdf238e665"
+    },
+    "be_quiet_pure_base_600": {
+      "status": "failed",
+      "error": "Download error: [Errno 11001] getaddrinfo failed",
+      "filename": "be_quiet_pure_base_600.glb",
+      "sketchfab_id": "6acb1b906fff44b69c9b8e04361f6b89"
+    },
+    "corsair_5000d": {
+      "status": "failed",
+      "error": "Download error: [Errno 11001] getaddrinfo failed",
+      "filename": "corsair_5000d.glb",
+      "sketchfab_id": "565f7553ffda415799a6f18fe3174614"
+    }
+  },
+  "summary": {
+    "total": 3,
+    "downloaded": 0,
+    "failed": 3,
+    "skipped": 0
+  }
+}
