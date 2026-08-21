@@ -996,8 +996,8 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
 
             all_products = []
             page_num = 1
-            max_pages = 8
-            while page_num <= max_pages and len(all_products) < 240:
+            max_pages = 10
+            while page_num <= max_pages and len(all_products) < 500:
                 products = await page.evaluate("""() => {
                     const items = [];
                     const seen = new Set();
@@ -1032,23 +1032,31 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
                 all_products.extend(products)
                 log.info("overclockers.cases.page", page=page_num, found=len(products), total=len(all_products), headless=headless)
 
-                next_url = None
-                for selector in ['a[rel="next"]', 'a:has-text("Next")', '[class*="next"] a', 'a[aria-label*="next"]']:
-                    try:
-                        elem = await page.query_selector(selector)
-                        if elem and await elem.is_enabled():
-                            next_url = await elem.get_attribute("href")
-                            if next_url:
-                                break
-                    except Exception:
-                        pass
-                if not next_url:
+                # Try query string pagination first (?page=2, ?page=3, etc.)
+                next_url = f"https://www.overclockers.co.uk/cases-and-modding/pc-cases/pc-cases-by-brand?page={page_num + 1}"
+
+                # Fallback: look for visible "next" button
+                if page_num > 1:  # Only try to find button on subsequent pages
+                    for selector in ['a[rel="next"]', 'a:has-text("Next")', '[class*="next"] a', 'a[aria-label*="next"]']:
+                        try:
+                            elem = await page.query_selector(selector)
+                            if elem and await elem.is_enabled():
+                                button_url = await elem.get_attribute("href")
+                                if button_url:
+                                    if not button_url.startswith("http"):
+                                        button_url = "https://www.overclockers.co.uk" + button_url
+                                    next_url = button_url
+                                    break
+                        except Exception:
+                            pass
+
+                try:
+                    await page.goto(next_url, wait_until="domcontentloaded", timeout=30000)
+                    await asyncio.sleep(1)
+                    page_num += 1
+                except Exception as exc:
+                    log.debug(f"overclockers.page_load_error", page={page_num + 1}, error=str(exc))
                     break
-                if not next_url.startswith("http"):
-                    next_url = "https://www.overclockers.co.uk" + next_url
-                await page.goto(next_url, wait_until="domcontentloaded", timeout=30000)
-                await asyncio.sleep(1)
-                page_num += 1
 
             seen_urls = set()
             for product in all_products[:240]:
