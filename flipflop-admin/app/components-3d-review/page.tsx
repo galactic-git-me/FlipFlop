@@ -271,7 +271,7 @@ export default function Components3DReviewPage() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col gap-3 p-4">
+    <div className="w-full h-screen flex flex-col gap-3 p-4 overflow-hidden">
       <div>
         <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
       </div>
@@ -312,7 +312,7 @@ export default function Components3DReviewPage() {
 
       <div className="flex gap-3 flex-1 min-h-0">
         {/* LEFT: Asset grid */}
-        <div className="w-96 border border-[#1e2d45] rounded-lg overflow-y-auto p-2 bg-[#0a1119]">
+        <div className="w-96 h-96 border border-[#1e2d45] rounded-lg overflow-y-auto p-2 bg-[#0a1119]">
           <div className="grid grid-cols-6 gap-2">
             {filteredAssets.map((asset) => (
               <button
