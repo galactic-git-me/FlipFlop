@@ -962,7 +962,7 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
     async with managed_playwright() as p:
         try:
             browser = await p.chromium.launch(
-                headless=headless,
+                headless=False,  # MUST be False for Overclockers - headless blocks product rendering
                 args=_STEALTH_ARGS,
                 proxy=playwright_proxy_config(),
             )
@@ -1003,8 +1003,16 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
                 page_url = f"{base_url}?page={page_num}"
                 log.info("overclockers.cases.loading_page", page=page_num, url=page_url)
 
-                await page.goto(page_url, wait_until="domcontentloaded", timeout=30000)
-                await asyncio.sleep(1)
+                await page.goto(page_url, wait_until="networkidle", timeout=60000)
+
+                # Wait for products to render
+                try:
+                    await page.wait_for_selector("ck-product-box", timeout=15000)
+                except:
+                    log.debug("overclockers.wait_product_timeout", page=page_num)
+                    pass
+
+                await asyncio.sleep(2)
 
                 # Extract products from this page
                 products = await page.evaluate(f"""() => {{
