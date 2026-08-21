@@ -8,6 +8,7 @@ Cases are a key part of the flip — they transform a bare PC into a themed prod
 """
 import re
 import asyncio
+import json
 import os
 import httpx
 from bs4 import BeautifulSoup
@@ -963,35 +964,34 @@ async def _scrape_overclockers_once() -> list[RawCase]:
     # Overclockers sits behind Cloudflare bot-management that fingerprints vanilla
     # Playwright's CDP session and blocks/challenges page 2+ (confirmed: page 1 loads
     # fine, page 2 either 403s the pagination XHR or serves a Turnstile challenge).
-    # patchright is a drop-in Playwright fork with the CDP leaks patched out — it
-    # clears every page with no challenge at all.
+    # patchright is a drop-in Playwright fork with the CDP leaks patched out.
+    #
+    # IMPORTANT: do NOT layer the manual _STEALTH_UA/_STEALTH_JS/_STEALTH_ARGS
+    # overrides used by the other scrapers on top of patchright here. patchright's
+    # own patches already make the real bundled Chrome look native; forcing a
+    # user_agent string (e.g. "Chrome/124") that doesn't match that Chrome's
+    # actual Client Hints version, plus a redundant navigator.webdriver override,
+    # creates exactly the kind of UA/fingerprint mismatch Cloudflare bot-management
+    # looks for. Confirmed: with the overrides, the FIRST page loads fine but every
+    # subsequent navigation in the same session gets challenged/blocked; with a
+    # bare patchright context (no custom UA, no init script, no extra args), all
+    # 11 pages load cleanly back to back.
     async with managed_playwright(engine="patchright") as p:
         try:
             browser = await p.chromium.launch(
                 headless=False,  # MUST be False for Overclockers - headless blocks product rendering
-                args=_STEALTH_ARGS + [
-                    "--disable-extensions",
-                    "--disable-plugins",
-                    "--disable-images",
-                ],
                 proxy=playwright_proxy_config(),
             )
             context = await browser.new_context(
-                user_agent=_STEALTH_UA,
                 viewport={"width": 1366, "height": 768},
                 locale="en-GB",
                 timezone_id="Europe/London",
-                java_script_enabled=True,
             )
-            await context.add_init_script(_STEALTH_JS)
         except Exception as exc:
             log.warning("overclockers.cases.browser_error", error=str(exc))
             return []
 
         page = await context.new_page()
-
-        # Set viewport to make window visible
-        await page.set_viewport_size({"width": 1366, "height": 768})
 
         try:
             # Load first page
@@ -1039,7 +1039,7 @@ async def _scrape_overclockers_once() -> list[RawCase]:
                 # Extract products from this page
                 products = await page.evaluate(f"""() => {{
                     const items = [];
-                    const seenUrls = {str(seen_urls).replace("'", '"')};
+                    const seenUrls = new Set({json.dumps(list(seen_urls))});
                     document.querySelectorAll('ck-product-box').forEach(box => {{
                         try {{
                             const analytics = JSON.parse(box.getAttribute('data-analytics') || '{{}}');
