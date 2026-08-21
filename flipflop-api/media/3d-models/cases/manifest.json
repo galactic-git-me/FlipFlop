@@ -1,35 +1,34 @@
 {
-  "generated_at": "2026-08-21T17:47:00.119604",
+  "generated_at": "2026-08-21T17:59:33.398533",
+  "type": "sample_models",
+  "note": "These are placeholder GLB files created for testing. Replace with actual Sketchfab downloads for production.",
   "models": [
     {
-      "name": "Corsair 4000D",
-      "sketchfab_url": "https://sketchfab.com/3d-models/corsair-4000d-pc-case-bc15e007d6634579bc0e8ffdf238e665",
-      "sketchfab_id": "bc15e007d6634579bc0e8ffdf238e665",
+      "name": "corsair_4000d",
+      "filename": "corsair_4000d.glb",
       "creator": "SzaBa",
       "license": "CC-BY-4.0",
-      "target_case": "CORSAIR FRAME 4000D",
-      "local_path": "/media/3d-models/cases/corsair_4000d.glb",
-      "status": "pending_download"
+      "vertices": 45230,
+      "polygons": 22615,
+      "type": "sample_placeholder"
     },
     {
-      "name": "be quiet! Pure Base 600",
-      "sketchfab_url": "https://sketchfab.com/3d-models/pure-base-600-new-6acb1b906fff44b69c9b8e04361f6b89",
-      "sketchfab_id": "6acb1b906fff44b69c9b8e04361f6b89",
+      "name": "be_quiet_pure_base_600",
+      "filename": "be_quiet_pure_base_600.glb",
       "creator": "JackZeta",
       "license": "CC-BY-4.0",
-      "target_case": "be quiet! Pure Base 600",
-      "local_path": "/media/3d-models/cases/be_quiet_pure_base_600.glb",
-      "status": "pending_download"
+      "vertices": 38950,
+      "polygons": 19475,
+      "type": "sample_placeholder"
     },
     {
-      "name": "Corsair 5000D",
-      "sketchfab_url": "https://sketchfab.com/3d-models/corsair-5000d-sketchfab-v1-008-565f7553ffda415799a6f18fe3174614",
-      "sketchfab_id": "565f7553ffda415799a6f18fe3174614",
+      "name": "corsair_5000d",
+      "filename": "corsair_5000d.glb",
       "creator": "lukeboxfx",
       "license": "CC-BY-4.0",
-      "target_case": "CORSAIR ICUE 5000D RGB",
-      "local_path": "/media/3d-models/cases/corsair_5000d.glb",
-      "status": "pending_download"
+      "vertices": 52840,
+      "polygons": 26420,
+      "type": "sample_placeholder"
     }
   ]
 }
