@@ -22,6 +22,8 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef({ x: 0, y: 0, isDown: false });
   const modelRef = useRef<any>(null);
+  const cameraRef = useRef<any>(null);
+  const zoomRef = useRef(1);
 
   useEffect(() => {
     if (!containerRef.current || !glbUrl) return;
@@ -44,6 +46,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
 
           const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
           camera.position.set(0, 0, 1);
+          cameraRef.current = camera;
 
           const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
           renderer.setSize(width, height);
@@ -137,6 +140,14 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
                 mouseRef.current.isDown = false;
                 isAutoRotating = true;
               });
+              container.addEventListener("wheel", (e) => {
+                e.preventDefault();
+                zoomRef.current += e.deltaY > 0 ? 0.05 : -0.05;
+                zoomRef.current = Math.max(0.2, Math.min(5, zoomRef.current));
+                if (cameraRef.current) {
+                  cameraRef.current.position.z = 1 / zoomRef.current;
+                }
+              }, { passive: false });
             },
             undefined,
             (error) => {
