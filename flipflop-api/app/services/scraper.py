@@ -2520,99 +2520,114 @@ async def _scrape_alibaba_http(
 
 async def scrape_overclockers_cases(min_price: float = 10.0, max_price: float = 500.0) -> list[RawListing]:
     """
-    Overclockers UK — PC Cases by Brand category.
-    Scrapes the entire cases section using httpx (like eBay).
+    Overclockers UK — PC Cases by Brand category (all 10 pages).
+    Scrapes all pagination pages using httpx.
     Falls back gracefully if blocked.
     """
     results: list[RawListing] = []
     seen: set[str] = set()
-    url = "https://www.overclockers.co.uk/cases-and-modding/pc-cases/pc-cases-by-brand"
+    base_url = "https://www.overclockers.co.uk/cases-and-modding/pc-cases/pc-cases-by-brand"
 
     client_kwargs = apply_httpx_proxy({"timeout": 30, "follow_redirects": True})
 
     async with httpx.AsyncClient(**client_kwargs) as client:
         try:
-            await _delay()
-            resp = await client.get(url, headers=_headers())
+            # Scrape pages 1-10 (pagination)
+            for page in range(1, 11):
+                if page == 1:
+                    url = base_url
+                else:
+                    url = f"{base_url}?page={page}"
 
-            if resp.status_code != 200:
-                record_term_result(term="catalogue", found=0, new=0, error=f"http_{resp.status_code}", source_name="Overclockers")
-                return []
+                await _delay()
+                resp = await client.get(url, headers=_headers())
 
-            if len(resp.text) < 1000:
-                record_term_result(term="catalogue", found=0, new=0, error="response_too_short", source_name="Overclockers")
-                return []
+                if resp.status_code != 200:
+                    log.warning(f"Overclockers page {page} returned {resp.status_code}, stopping pagination")
+                    break
 
-            soup = BeautifulSoup(resp.text, "lxml")
+                if len(resp.text) < 1000:
+                    log.debug(f"Overclockers page {page} too short, stopping pagination")
+                    break
 
-            # Find all product links (Overclockers uses a-tags with /product/ URLs)
-            product_links = soup.select('a[href*="/product/"]')
+                soup = BeautifulSoup(resp.text, "lxml")
 
-            for link in product_links:
-                try:
-                    # Extract URL
-                    href = link.get("href", "").strip()
-                    if not href.startswith("http"):
-                        if href.startswith("/"):
-                            href = "https://www.overclockers.co.uk" + href
-                        else:
+                # Find all product links (Overclockers uses a-tags with /product/ URLs)
+                product_links = soup.select('a[href*="/product/"]')
+
+                if not product_links:
+                    log.debug(f"Overclockers page {page} has no products, stopping pagination")
+                    break
+
+                page_count = 0
+                for link in product_links:
+                    try:
+                        # Extract URL
+                        href = link.get("href", "").strip()
+                        if not href.startswith("http"):
+                            if href.startswith("/"):
+                                href = "https://www.overclockers.co.uk" + href
+                            else:
+                                continue
+
+                        # Deduplicate
+                        key = href.split("?")[0]
+                        if key in seen:
+                            continue
+                        seen.add(key)
+
+                        # Find the product card container
+                        card = link.find_parent("li") or link.find_parent("div", class_=re.compile("product", re.I)) or link
+
+                        # Extract title
+                        title = link.get_text(strip=True) or ""
+                        if not title:
+                            title_el = card.find("h2") or card.find("h3") or card.find("a", string=True)
+                            title = title_el.get_text(strip=True) if title_el else ""
+
+                        title = title.strip()[:250]
+                        if not title or len(title) < 5:
                             continue
 
-                    # Deduplicate
-                    key = href.split("?")[0]
-                    if key in seen:
+                        # Extract price (look for £ symbol)
+                        price_text = card.get_text()
+                        price_match = re.search(r"£\s*([\d,]+\.?\d*)", price_text)
+                        if not price_match:
+                            continue
+
+                        try:
+                            price = float(price_match.group(1).replace(",", ""))
+                        except ValueError:
+                            continue
+
+                        if price < min_price or price > max_price:
+                            continue
+
+                        # Extract image if available
+                        image_url = ""
+                        img = card.find("img")
+                        if img:
+                            image_url = img.get("src") or img.get("data-src") or ""
+
+                        # Create listing
+                        external_id = f"overclockers_{abs(hash(key))}"
+                        results.append(RawListing(
+                            external_id=external_id,
+                            title=title,
+                            price=price,
+                            url=href,
+                            location="UK",
+                            condition="new",
+                            description="",
+                            image_urls=[image_url] if image_url else [],
+                            source_name="Overclockers",
+                            listing_type="classified",
+                        ))
+                        page_count += 1
+                    except Exception:
                         continue
-                    seen.add(key)
 
-                    # Find the product card container
-                    card = link.find_parent("li") or link.find_parent("div", class_=re.compile("product", re.I)) or link
-
-                    # Extract title
-                    title = link.get_text(strip=True) or ""
-                    if not title:
-                        title_el = card.find("h2") or card.find("h3") or card.find("a", string=True)
-                        title = title_el.get_text(strip=True) if title_el else ""
-
-                    title = title.strip()[:250]
-                    if not title or len(title) < 5:
-                        continue
-
-                    # Extract price (look for £ symbol)
-                    price_text = card.get_text()
-                    price_match = re.search(r"£\s*([\d,]+\.?\d*)", price_text)
-                    if not price_match:
-                        continue
-
-                    try:
-                        price = float(price_match.group(1).replace(",", ""))
-                    except ValueError:
-                        continue
-
-                    if price < min_price or price > max_price:
-                        continue
-
-                    # Extract image if available
-                    image_url = ""
-                    img = card.find("img")
-                    if img:
-                        image_url = img.get("src") or img.get("data-src") or ""
-
-                    # Create listing
-                    external_id = f"overclockers_{abs(hash(key))}"
-                    results.append(RawListing(
-                        external_id=external_id,
-                        title=title,
-                        price=price,
-                        url=href,
-                        location="UK",
-                        condition="new",
-                        description="",
-                        image_urls=[image_url] if image_url else [],
-                        source_name="Overclockers",
-                        listing_type="classified",
-                    ))
-                except Exception:
-                    continue
+                log.info(f"Overclockers page {page}: found {page_count} cases")
 
             record_term_result(term="catalogue", found=len(results), new=len(results), source_name="Overclockers")
 
