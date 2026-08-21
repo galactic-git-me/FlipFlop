@@ -196,13 +196,22 @@ export default function Components3DReviewPage() {
       try {
         const response = await fetch("/api/assets-3d/public");
         const data = await response.json();
+        console.log("API Response:", data);
+
+        if (data.detail) {
+          console.error("API Error:", data.detail);
+          setAssets([]);
+          return;
+        }
+
         const assets = Array.isArray(data) ? data : (data.data || data.assets || []);
-        console.log("Assets loaded:", { count: assets.length, first: assets[0], glbRef: assets[0]?.glb_ref });
+        console.log("Assets loaded:", { count: assets.length, first: assets[0]});
         setAssets(assets as Component3DAsset[]);
         const firstDraft = assets.find((a: Component3DAsset) => a.status === "meshy_draft");
         if (firstDraft) setSelectedAsset(firstDraft);
       } catch (error) {
         console.error("Error loading assets:", error);
+        setAssets([]);
       } finally {
         setLoading(false);
       }
