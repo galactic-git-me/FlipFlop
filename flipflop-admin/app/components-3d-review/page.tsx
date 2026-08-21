@@ -43,39 +43,46 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
 
           const scene = new THREE.Scene();
 
-          // Create procedural clouds background
+          // Holographic grid background (8)
           const canvas = document.createElement('canvas');
-          canvas.width = 2048;
-          canvas.height = 2048;
+          canvas.width = 1024;
+          canvas.height = 1024;
           const ctx = canvas.getContext('2d')!;
 
-          // Sky gradient - much bluer
-          const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-          gradient.addColorStop(0, '#1e90ff');
-          gradient.addColorStop(0.4, '#4169e1');
-          gradient.addColorStop(0.7, '#6495ed');
-          gradient.addColorStop(1, '#87ceeb');
-          ctx.fillStyle = gradient;
+          // Dark background
+          ctx.fillStyle = '#050810';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-          // Perlin-like noise for clouds
-          const drawCloud = (x: number, y: number, size: number, opacity: number) => {
-            ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
-            for (let i = 0; i < 8; i++) {
+          // Radial gradient for depth
+          const radialGrad = ctx.createRadialGradient(512, 512, 0, 512, 512, 700);
+          radialGrad.addColorStop(0, 'rgba(13, 27, 42, 0.3)');
+          radialGrad.addColorStop(1, 'rgba(5, 8, 16, 0.9)');
+          ctx.fillStyle = radialGrad;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          // Holographic grid lines with glow
+          ctx.strokeStyle = '#00dc8266';
+          ctx.lineWidth = 1.5;
+          for (let i = 0; i < canvas.width; i += 64) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, canvas.height);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(0, i);
+            ctx.lineTo(canvas.width, i);
+            ctx.stroke();
+          }
+
+          // Add some grid intersections with brighter dots
+          ctx.fillStyle = '#00dc82cc';
+          for (let i = 64; i < canvas.width; i += 128) {
+            for (let j = 64; j < canvas.height; j += 128) {
               ctx.beginPath();
-              ctx.arc(x + Math.cos(i) * size, y + Math.sin(i) * size * 0.6, size * (0.5 + Math.random() * 0.3), 0, Math.PI * 2);
+              ctx.arc(i, j, 3, 0, Math.PI * 2);
               ctx.fill();
             }
-          };
-
-          // Draw multiple cloud layers
-          drawCloud(300, 400, 150, 0.9);
-          drawCloud(800, 300, 180, 0.85);
-          drawCloud(1400, 500, 160, 0.8);
-          drawCloud(1800, 250, 140, 0.75);
-          drawCloud(600, 800, 200, 0.7);
-          drawCloud(1200, 900, 170, 0.65);
-          drawCloud(400, 1200, 150, 0.6);
+          }
 
           const texture = new THREE.CanvasTexture(canvas);
           scene.background = texture;
