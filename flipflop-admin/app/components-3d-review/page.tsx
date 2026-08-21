@@ -42,50 +42,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           if (width === 0 || height === 0) return;
 
           const scene = new THREE.Scene();
-
-          // Holographic grid background (8)
-          const canvas = document.createElement('canvas');
-          canvas.width = 1024;
-          canvas.height = 1024;
-          const ctx = canvas.getContext('2d')!;
-
-          // Dark background
-          ctx.fillStyle = '#050810';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-          // Radial gradient for depth
-          const radialGrad = ctx.createRadialGradient(512, 512, 0, 512, 512, 700);
-          radialGrad.addColorStop(0, 'rgba(13, 27, 42, 0.3)');
-          radialGrad.addColorStop(1, 'rgba(5, 8, 16, 0.9)');
-          ctx.fillStyle = radialGrad;
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-          // Holographic grid lines with glow
-          ctx.strokeStyle = '#00dc8266';
-          ctx.lineWidth = 1.5;
-          for (let i = 0; i < canvas.width; i += 64) {
-            ctx.beginPath();
-            ctx.moveTo(i, 0);
-            ctx.lineTo(i, canvas.height);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(0, i);
-            ctx.lineTo(canvas.width, i);
-            ctx.stroke();
-          }
-
-          // Add some grid intersections with brighter dots
-          ctx.fillStyle = '#00dc82cc';
-          for (let i = 64; i < canvas.width; i += 128) {
-            for (let j = 64; j < canvas.height; j += 128) {
-              ctx.beginPath();
-              ctx.arc(i, j, 3, 0, Math.PI * 2);
-              ctx.fill();
-            }
-          }
-
-          const texture = new THREE.CanvasTexture(canvas);
-          scene.background = texture;
+          scene.background = new THREE.Color(0x1a1a1a);
 
           const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
           camera.position.set(0, 0, 1);
