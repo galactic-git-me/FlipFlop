@@ -207,11 +207,6 @@ export default function Components3DReviewPage() {
     void load();
   }, []);
 
-  const filteredAssets = filter === "meshy_draft" ? assets.filter(a => a.status === "meshy_draft") : assets;
-  const draftCount = assets.filter(a => a.status === "meshy_draft").length;
-  const validatedCount = assets.filter(a => a.status === "validated").length;
-  const finalCount = assets.filter(a => a.status === "final").length;
-
   const handleStatusChange = async (assetId: number, newStatus: string) => {
     try {
       const response = await fetch(`/api/assets-3d/${assetId}`, {
