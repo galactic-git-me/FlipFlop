@@ -194,7 +194,7 @@ export default function Components3DReviewPage() {
     const load = async () => {
       setLoading(true);
       try {
-        const response = await fetch("/api/assets-3d");
+        const response = await fetch("/api/assets-3d/public");
         const data = await response.json();
         const assets = Array.isArray(data) ? data : (data.data || data.assets || []);
         console.log("Assets loaded:", { count: assets.length, first: assets[0], glbRef: assets[0]?.glb_ref });
