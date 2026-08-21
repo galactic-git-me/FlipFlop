@@ -79,8 +79,8 @@ export function TwinklingStars() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute top-0 left-0 w-full pointer-events-none bg-black"
-      style={{ zIndex: 0, height: '100%' }}
+      className="w-full h-full block"
+      style={{ display: 'block' }}
     />
   );
 }
