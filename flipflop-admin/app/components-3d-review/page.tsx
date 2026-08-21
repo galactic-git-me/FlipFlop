@@ -59,7 +59,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           scene.add(wireframe2);
 
           const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-          camera.position.set(0, 0, 3);
+          camera.position.set(0, 0, 1.5);
           cameraRef.current = camera;
 
           const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -86,14 +86,13 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           fillLight.position.set(-5, 2, 5);
           scene.add(fillLight);
 
-          // Blender-style grid on ground plane - exact match to Blender viewport
-          const gridHelper = new THREE.GridHelper(50, 50, 0x555555, 0x333333);
+          // Blender-style subtle grid
+          const gridHelper = new THREE.GridHelper(100, 100, 0x404040, 0x2a2a2a);
           gridHelper.position.y = -1;
-          gridHelper.scale.set(1.5, 1, 1.5);
           scene.add(gridHelper);
 
           // RGB axes like Blender (X=red, Y=green, Z=blue)
-          const axesHelper = new THREE.AxesHelper(6);
+          const axesHelper = new THREE.AxesHelper(8);
           scene.add(axesHelper);
 
           const loader = new GLTFLoader();
@@ -318,11 +317,18 @@ export default function Components3DReviewPage() {
               <button
                 key={asset.id}
                 onClick={() => setSelectedAsset(asset)}
-                className={`rounded border overflow-hidden cursor-pointer transition hover:scale-105 relative ${selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""} ${statusColors[asset.status] || ""}`}
-                style={{ width: "60px", height: "60px", backgroundImage: asset.preview_image_ref ? `url('${asset.preview_image_ref}')` : undefined, backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "#1a3a52" }}
+                className={`rounded border overflow-hidden cursor-pointer transition hover:scale-105 relative flex flex-col ${selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""} ${statusColors[asset.status] || ""}`}
+                style={{ width: "120px", height: "120px", backgroundImage: asset.source_image_refs && asset.source_image_refs.length > 0 ? `url('${asset.source_image_refs[0]}')` : undefined, backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "#1a3a52" }}
               >
-                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                  <div className="font-bold text-[8px] text-white text-center px-1">{asset.family_key}</div>
+                <div className="flex-1"></div>
+                <div className="w-full bg-black/70 text-center py-2 px-1 flex flex-col gap-1">
+                  <div className="text-xs font-bold text-white">{asset.family_key}</div>
+                  {asset.glb_ref && (
+                    <div className="text-[10px] text-blue-300 flex items-center justify-center gap-1">
+                      <span>3D</span>
+                      <span>{asset.status === "final" ? "✓" : asset.status === "rejected" ? "✗" : "?"}</span>
+                    </div>
+                  )}
                 </div>
               </button>
             ))}
@@ -348,7 +354,7 @@ export default function Components3DReviewPage() {
         </div>
 
         {selectedAsset && (
-          <div className="w-96 flex flex-col min-h-0 overflow-y-auto gap-2">
+          <div className="w-80 flex flex-col min-h-0 overflow-y-auto gap-2">
             <div className="border border-[#1e2d45] rounded-lg p-4 bg-[#0a1119]">
               <div className="flex items-start justify-between gap-2 mb-3">
                 <div>
