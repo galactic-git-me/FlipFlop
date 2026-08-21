@@ -60,22 +60,29 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           scene.add(directionalLight);
 
           const loader = new GLTFLoader();
-          loader.load(glbUrl, (gltf) => {
-            const model = gltf.scene;
-            model.scale.set(1, 1, 1);
-            scene.add(model);
+          loader.load(
+            glbUrl,
+            (gltf) => {
+              const model = gltf.scene;
+              model.scale.set(1, 1, 1);
+              scene.add(model);
 
-            const box = new THREE.Box3().setFromObject(model);
-            const center = box.getCenter(new THREE.Vector3());
-            model.position.sub(center);
+              const box = new THREE.Box3().setFromObject(model);
+              const center = box.getCenter(new THREE.Vector3());
+              model.position.sub(center);
 
-            const animate = () => {
-              requestAnimationFrame(animate);
-              model.rotation.y += 0.005;
-              renderer.render(scene, camera);
-            };
-            animate();
-          });
+              const animate = () => {
+                requestAnimationFrame(animate);
+                model.rotation.y += 0.005;
+                renderer.render(scene, camera);
+              };
+              animate();
+            },
+            undefined,
+            (error) => {
+              console.error("Failed to load GLB:", error, "URL:", glbUrl);
+            }
+          );
 
           renderer.render(scene, camera);
         } catch (error) {
@@ -85,6 +92,17 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
       setupViewer();
     }, 100);
   }, [glbUrl]);
+
+  if (!glbUrl) {
+    return (
+      <div className="w-full h-full bg-slate-900/50 rounded border border-slate-700/50 flex items-center justify-center text-slate-400">
+        <div className="text-center">
+          <p className="text-sm">No GLB model available</p>
+          <p className="text-xs text-slate-500 mt-1">glb_ref is null</p>
+        </div>
+      </div>
+    );
+  }
 
   return <div ref={containerRef} className="w-full h-full bg-slate-900/50 rounded border border-slate-700/50" />;
 }
