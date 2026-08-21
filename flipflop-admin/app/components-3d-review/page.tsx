@@ -120,6 +120,7 @@ export default function Components3DReviewPage() {
         const response = await fetch("/api/assets-3d");
         const data = await response.json();
         const assets = Array.isArray(data) ? data : (data.data || data.assets || []);
+        console.log("Assets loaded:", { count: assets.length, first: assets[0], glbRef: assets[0]?.glb_ref });
         setAssets(assets as Component3DAsset[]);
         const firstDraft = assets.find((a: Component3DAsset) => a.status === "meshy_draft");
         if (firstDraft) setSelectedAsset(firstDraft);
