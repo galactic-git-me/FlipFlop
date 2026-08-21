@@ -136,10 +136,11 @@ export default function Components3DReviewPage() {
     void load();
   }, []);
 
-  const filteredAssets = filter === "meshy_draft" ? assets.filter(a => a.status === "meshy_draft") : assets;
-  const draftCount = assets.filter(a => a.status === "meshy_draft").length;
-  const validatedCount = assets.filter(a => a.status === "validated").length;
-  const finalCount = assets.filter(a => a.status === "final").length;
+  const assetsWithModels = assets.filter(a => a.glb_ref);
+  const filteredAssets = filter === "meshy_draft" ? assetsWithModels.filter(a => a.status === "meshy_draft") : assetsWithModels;
+  const draftCount = assetsWithModels.filter(a => a.status === "meshy_draft").length;
+  const validatedCount = assetsWithModels.filter(a => a.status === "validated").length;
+  const finalCount = assetsWithModels.filter(a => a.status === "final").length;
 
   const handleStatusChange = async (assetId: number, newStatus: string) => {
     try {
@@ -230,10 +231,13 @@ export default function Components3DReviewPage() {
             <div className="grid grid-cols-2 gap-2">
               {loading ? (
                 <div className="col-span-2 text-center py-4 text-slate-500 text-xs">Loading...</div>
-              ) : filteredAssets.length === 0 ? (
-                <div className="col-span-2 text-center py-4 text-slate-500 text-xs">No assets</div>
+              ) : filteredAssets.filter(a => a.glb_ref).length === 0 ? (
+                <div className="col-span-2 text-center py-4 text-slate-500 text-xs space-y-2">
+                  <p>No models ready</p>
+                  <p className="text-[10px] text-slate-600">Run generate_catalogue_3d_assets.py to import more</p>
+                </div>
               ) : (
-                filteredAssets.map((asset) => (
+                filteredAssets.filter(a => a.glb_ref).map((asset) => (
                   <button
                     key={asset.id}
                     onClick={() => setSelectedAsset(asset)}
