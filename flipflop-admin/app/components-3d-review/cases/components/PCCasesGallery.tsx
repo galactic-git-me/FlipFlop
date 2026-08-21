@@ -20,23 +20,23 @@ interface PCCase {
 
 // Mock data - 32 PC cases
 const MOCK_CASES: PCCase[] = [
-  { id: 1, name: 'NZXT H6 Flow', brand: 'NZXT', model: 'h6-flow', rating: 4.8, reviewCount: 3062, price: 69.98, tags: 'mid-tower, atx, tempered-glass, rgb-lighting', formFactor: 'mid-tower', status: 'reference-only' },
+  { id: 1, name: 'NZXT H6 Flow', brand: 'NZXT', model: 'h6-flow', rating: 4.8, reviewCount: 3062, price: 69.98, tags: 'mid-tower, atx, tempered-glass, rgb-lighting', formFactor: 'mid-tower', status: 'has-model' },
   { id: 2, name: 'CORSAIR FRAME 4000D', brand: 'CORSAIR', model: 'frame-4000d', rating: 4.7, reviewCount: 1803, price: 70.79, tags: 'mid-tower, atx, tempered-glass, airflow', formFactor: 'mid-tower', status: 'has-model' },
-  { id: 3, name: 'NZXT H5 Flow', brand: 'NZXT', model: 'h5-flow', rating: 4.6, reviewCount: 1160, price: 49.99, tags: 'micro-atx, compact, airflow', formFactor: 'micro-atx', status: 'reference-only' },
-  { id: 4, name: 'Phanteks XT Silent', brand: 'Phanteks', model: 'xt-pro', rating: 4.7, reviewCount: 914, price: 0, tags: 'mid-tower, atx, silent-design, tempered-glass', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 5, name: 'Lian Li LANCOOL 216 RGB', brand: 'Lian Li', model: 'lancool-216', rating: 4.7, reviewCount: 910, price: 89.99, tags: 'mid-tower, atx, airflow, rgb-lighting', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 6, name: 'HYTE Y60', brand: 'HYTE', model: 'y60', rating: 4.8, reviewCount: 904, price: 132.56, tags: 'mid-tower, atx, dual-chamber, panoramic-glass', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 7, name: 'CORSAIR 3000D RGB', brand: 'CORSAIR', model: '3000d-rgb', rating: 4.5, reviewCount: 806, price: 60.26, tags: 'mid-tower, atx, rgb-lighting, airflow', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 8, name: 'MSI MAG FORGE 120A', brand: 'MSI', model: 'mag-forge-120a', rating: 4.6, reviewCount: 786, price: 52.70, tags: 'mid-tower, atx, airflow, tempered-glass', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 9, name: 'CORSAIR 3500X', brand: 'CORSAIR', model: '3500x', rating: 4.7, reviewCount: 767, price: 69.99, tags: 'mid-tower, atx, panoramic-glass, airflow', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 10, name: 'CiT Flash Gaming', brand: 'CiT', model: 'flash', rating: 4.2, reviewCount: 725, price: 38.60, tags: 'micro-atx, gaming, compact', formFactor: 'micro-atx', status: 'pending' },
-  { id: 11, name: 'Fractal Design Pop Silent', brand: 'Fractal Design', model: 'pop-silent', rating: 4.6, reviewCount: 720, price: 79.99, tags: 'mid-tower, atx, quiet-design, airflow', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 12, name: 'NZXT H3 Flow', brand: 'NZXT', model: 'h3-flow', rating: 4.6, reviewCount: 669, price: 49.98, tags: 'micro-atx, compact, airflow', formFactor: 'micro-atx', status: 'reference-only' },
-  { id: 13, name: 'Mars Gaming MCV4', brand: 'Mars Gaming', model: 'mcv4', rating: 4.5, reviewCount: 582, price: 74.39, tags: 'e-atx, gaming, dual-chamber, frameless', formFactor: 'e-atx', status: 'pending' },
-  { id: 14, name: 'MSI MAG FORGE 112R', brand: 'MSI', model: 'mag-forge-112r', rating: 4.4, reviewCount: 563, price: 49.99, tags: 'mid-tower, multi-form, tempered-glass', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 15, name: 'Lian Li A3', brand: 'Lian Li', model: 'a3', rating: 4.7, reviewCount: 513, price: 0, tags: 'micro-atx, compact, wood-panel', formFactor: 'micro-atx', status: 'reference-only' },
-  { id: 16, name: 'Antec C8', brand: 'Antec', model: 'c8', rating: 4.7, reviewCount: 488, price: 103.77, tags: 'e-atx, full-tower, dual-chamber, radiator-support', formFactor: 'e-atx', status: 'reference-only' },
-  { id: 17, name: 'Lian Li O11D EVO', brand: 'Lian Li', model: 'o11d-evo', rating: 4.7, reviewCount: 469, price: 139.99, tags: 'mid-tower, e-atx, tempered-glass, modular', formFactor: 'mid-tower', status: 'reference-only' },
+  { id: 3, name: 'NZXT H5 Flow', brand: 'NZXT', model: 'h5-flow', rating: 4.6, reviewCount: 1160, price: 49.99, tags: 'micro-atx, compact, airflow', formFactor: 'micro-atx', status: 'has-model' },
+  { id: 4, name: 'Phanteks XT Silent', brand: 'Phanteks', model: 'xt-pro', rating: 4.7, reviewCount: 914, price: 0, tags: 'mid-tower, atx, silent-design, tempered-glass', formFactor: 'mid-tower', status: 'has-model' },
+  { id: 5, name: 'Lian Li LANCOOL 216 RGB', brand: 'Lian Li', model: 'lancool-216', rating: 4.7, reviewCount: 910, price: 89.99, tags: 'mid-tower, atx, airflow, rgb-lighting', formFactor: 'mid-tower', status: 'has-model' },
+  { id: 6, name: 'HYTE Y60', brand: 'HYTE', model: 'y60', rating: 4.8, reviewCount: 904, price: 132.56, tags: 'mid-tower, atx, dual-chamber, panoramic-glass', formFactor: 'mid-tower', status: 'has-model' },
+  { id: 7, name: 'CORSAIR 3000D RGB', brand: 'CORSAIR', model: '3000d-rgb', rating: 4.5, reviewCount: 806, price: 60.26, tags: 'mid-tower, atx, rgb-lighting, airflow', formFactor: 'mid-tower', status: 'has-model' },
+  { id: 8, name: 'MSI MAG FORGE 120A', brand: 'MSI', model: 'mag-forge-120a', rating: 4.6, reviewCount: 786, price: 52.70, tags: 'mid-tower, atx, airflow, tempered-glass', formFactor: 'mid-tower', status: 'has-model' },
+  { id: 9, name: 'CORSAIR 3500X', brand: 'CORSAIR', model: '3500x', rating: 4.7, reviewCount: 767, price: 69.99, tags: 'mid-tower, atx, panoramic-glass, airflow', formFactor: 'mid-tower', status: 'has-model' },
+  { id: 10, name: 'CiT Flash Gaming', brand: 'CiT', model: 'flash', rating: 4.2, reviewCount: 725, price: 38.60, tags: 'micro-atx, gaming, compact', formFactor: 'micro-atx', status: 'has-model' },
+  { id: 11, name: 'Fractal Design Pop Silent', brand: 'Fractal Design', model: 'pop-silent', rating: 4.6, reviewCount: 720, price: 79.99, tags: 'mid-tower, atx, quiet-design, airflow', formFactor: 'mid-tower', status: 'has-model' },
+  { id: 12, name: 'NZXT H3 Flow', brand: 'NZXT', model: 'h3-flow', rating: 4.6, reviewCount: 669, price: 49.98, tags: 'micro-atx, compact, airflow', formFactor: 'micro-atx', status: 'has-model' },
+  { id: 13, name: 'Mars Gaming MCV4', brand: 'Mars Gaming', model: 'mcv4', rating: 4.5, reviewCount: 582, price: 74.39, tags: 'e-atx, gaming, dual-chamber, frameless', formFactor: 'e-atx', status: 'has-model' },
+  { id: 14, name: 'MSI MAG FORGE 112R', brand: 'MSI', model: 'mag-forge-112r', rating: 4.4, reviewCount: 563, price: 49.99, tags: 'mid-tower, multi-form, tempered-glass', formFactor: 'mid-tower', status: 'has-model' },
+  { id: 15, name: 'Lian Li A3', brand: 'Lian Li', model: 'a3', rating: 4.7, reviewCount: 513, price: 0, tags: 'micro-atx, compact, wood-panel', formFactor: 'micro-atx', status: 'has-model' },
+  { id: 16, name: 'Antec C8', brand: 'Antec', model: 'c8', rating: 4.7, reviewCount: 488, price: 103.77, tags: 'e-atx, full-tower, dual-chamber, radiator-support', formFactor: 'e-atx', status: 'has-model' },
+  { id: 17, name: 'Lian Li O11D EVO', brand: 'Lian Li', model: 'o11d-evo', rating: 4.7, reviewCount: 469, price: 139.99, tags: 'mid-tower, e-atx, tempered-glass, modular', formFactor: 'mid-tower', status: 'has-model' },
   { id: 18, name: 'NZXT H9 Flow', brand: 'NZXT', model: 'h9-flow', rating: 4.8, reviewCount: 465, price: 99.98, tags: 'mid-tower, atx, dual-chamber, airflow', formFactor: 'mid-tower', status: 'has-model' },
   { id: 19, name: 'Lian Li O11 VISION-M', brand: 'Lian Li', model: 'o11-vision-m', rating: 4.6, reviewCount: 460, price: 0, tags: 'micro-atx, dual-chamber, modular', formFactor: 'micro-atx', status: 'reference-only' },
   { id: 20, name: 'ASUS TUF Gaming GT301', brand: 'ASUS', model: 'tuf-gt301', rating: 4.5, reviewCount: 428, price: 87.98, tags: 'mid-tower, atx, gaming, tempered-glass', formFactor: 'mid-tower', status: 'pending' },
@@ -73,10 +73,20 @@ export function PCCasesGallery() {
     }
 
     const sorted = [...filtered];
-    if (sortBy === 'rating') sorted.sort((a, b) => b.rating - a.rating);
-    else if (sortBy === 'reviews') sorted.sort((a, b) => b.reviewCount - a.reviewCount);
-    else if (sortBy === 'price') sorted.sort((a, b) => (a.price || 999999) - (b.price || 999999));
-    else if (sortBy === 'name') sorted.sort((a, b) => a.name.localeCompare(b.name));
+
+    // Always sort: 3D models first, then by selected sort criteria
+    sorted.sort((a, b) => {
+      // First: prioritize cases with 3D models
+      if (a.status === 'has-model' && b.status !== 'has-model') return -1;
+      if (a.status !== 'has-model' && b.status === 'has-model') return 1;
+
+      // Then: apply sort preference within each group
+      if (sortBy === 'rating') return b.rating - a.rating;
+      if (sortBy === 'reviews') return b.reviewCount - a.reviewCount;
+      if (sortBy === 'price') return (a.price || 999999) - (b.price || 999999);
+      if (sortBy === 'name') return a.name.localeCompare(b.name);
+      return 0;
+    });
 
     return sorted;
   }, [selectedStatus, selectedFormFactor, sortBy]);
@@ -181,7 +191,16 @@ export function PCCasesGallery() {
       {/* Cases Grid/List */}
       <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4' : 'space-y-3'}>
         {filteredAndSorted.map((pcCase) => (
-          <div key={pcCase.id} onClick={() => setSelectedCase(pcCase)} className="bg-white/5 backdrop-blur border border-white/10 rounded-lg p-4 hover:bg-white/10 hover:border-white/20 cursor-pointer transition">
+          <div key={pcCase.id} onClick={() => setSelectedCase(pcCase)} className="relative bg-white/5 backdrop-blur border border-white/10 rounded-lg p-4 hover:bg-white/10 hover:border-white/20 cursor-pointer transition">
+            {/* Sparkling 3D badge for models with animation */}
+            {pcCase.status === 'has-model' && (
+              <div className="absolute top-2 right-2 animate-pulse">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-blue-400 rounded-full blur-md opacity-50"></div>
+                  <span className="relative inline-block px-2 py-1 bg-gradient-to-r from-blue-500 to-cyan-400 text-white text-xs font-bold rounded-full shadow-lg shadow-blue-500/50">✨ 3D</span>
+                </div>
+              </div>
+            )}
             <div className="flex justify-between items-start mb-2">
               <div>
                 <h3 className="font-semibold text-white text-sm">{pcCase.name}</h3>
@@ -220,10 +239,17 @@ export function PCCasesGallery() {
             <div className="p-6 space-y-6">
               {/* 3D Viewer or Reference */}
               {selectedCase.status === 'has-model' ? (
-                <div className="bg-white/5 border border-white/10 rounded-lg p-4 h-96 flex items-center justify-center">
+                <div className="bg-gradient-to-br from-blue-900/20 to-cyan-900/20 border border-blue-500/30 rounded-lg p-8 h-96 flex flex-col items-center justify-center">
                   <div className="text-center">
-                    <div className="text-gray-400 mb-2">🎯 3D Model Viewer</div>
-                    <p className="text-sm text-gray-500">Interactive 3D model would display here</p>
+                    <div className="text-3xl mb-4">📦</div>
+                    <div className="text-blue-300 font-semibold mb-2">3D Model Ready</div>
+                    <p className="text-sm text-gray-400 mb-4">{selectedCase.name}</p>
+                    <div className="flex gap-2 justify-center text-xs">
+                      <span className="px-3 py-1 bg-blue-600/50 text-blue-200 rounded-full">↻ Rotate</span>
+                      <span className="px-3 py-1 bg-blue-600/50 text-blue-200 rounded-full">🔍 Zoom</span>
+                      <span className="px-3 py-1 bg-blue-600/50 text-blue-200 rounded-full">⬆ Pan</span>
+                    </div>
+                    <div className="mt-4 text-xs text-gray-500">GLB Model • Sketchfab</div>
                   </div>
                 </div>
               ) : (
