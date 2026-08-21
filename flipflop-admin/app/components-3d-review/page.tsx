@@ -248,6 +248,12 @@ export default function Components3DReviewPage() {
     }
   };
 
+  const assetsWithModels = assets.filter(a => a.glb_ref);
+  const filteredAssets = filter === "meshy_draft" ? assetsWithModels.filter(a => a.status === "meshy_draft") : assetsWithModels;
+  const draftCount = assetsWithModels.filter(a => a.status === "meshy_draft").length;
+  const validatedCount = assetsWithModels.filter(a => a.status === "validated").length;
+  const finalCount = assetsWithModels.filter(a => a.status === "final").length;
+
   const startApprovalQueue = () => {
     const drafts = assetsWithModels.filter(a => a.status === "meshy_draft");
     if (drafts.length > 0) {
