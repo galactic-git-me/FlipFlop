@@ -65,55 +65,18 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           directionalLight.position.set(3, 5, 2);
           scene.add(directionalLight);
 
+          // Blender-style grid on ground plane
+          const gridHelper = new THREE.GridHelper(20, 20, 0x444444, 0x222222);
+          gridHelper.position.y = -1;
+          scene.add(gridHelper);
+
+          // RGB axes like Blender (X=red, Y=green, Z=blue)
+          const axesHelper = new THREE.AxesHelper(6);
+          scene.add(axesHelper);
+
           const loader = new GLTFLoader();
           const filename = glbUrl.split("/").pop();
           const proxyUrl = `/api/glb-proxy/${filename}`;
-
-          const createGridPlane = (size: number, divisions: number, color1: number, color2: number, rotX: number, rotY: number, rotZ: number) => {
-            const canvas = document.createElement('canvas');
-            canvas.width = 512;
-            canvas.height = 512;
-            const ctx = canvas.getContext('2d')!;
-            const cellSize = 512 / divisions;
-            ctx.fillStyle = `#${color1.toString(16).padStart(6, '0')}`;
-            ctx.fillRect(0, 0, 512, 512);
-            ctx.strokeStyle = `#${color2.toString(16).padStart(6, '0')}`;
-            ctx.lineWidth = 1;
-            for (let i = 0; i <= divisions; i++) {
-              const pos = i * cellSize;
-              ctx.beginPath();
-              ctx.moveTo(pos, 0);
-              ctx.lineTo(pos, 512);
-              ctx.stroke();
-              ctx.beginPath();
-              ctx.moveTo(0, pos);
-              ctx.lineTo(512, pos);
-              ctx.stroke();
-            }
-            const texture = new THREE.CanvasTexture(canvas);
-            const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true, opacity: 0.3 });
-            const geometry = new THREE.PlaneGeometry(size, size);
-            const mesh = new THREE.Mesh(geometry, material);
-            mesh.rotation.order = 'YXZ';
-            mesh.rotation.x = rotX;
-            mesh.rotation.y = rotY;
-            mesh.rotation.z = rotZ;
-            return mesh;
-          };
-
-          const gridSize = 8;
-          const divisions = 10;
-          const xyGrid = createGridPlane(gridSize, divisions, 0x1a1a1a, 0x444444, 0, 0, 0);
-          scene.add(xyGrid);
-
-          const xzGrid = createGridPlane(gridSize, divisions, 0x1a1a1a, 0x444444, Math.PI / 2, 0, 0);
-          scene.add(xzGrid);
-
-          const yzGrid = createGridPlane(gridSize, divisions, 0x1a1a1a, 0x444444, 0, 0, Math.PI / 2);
-          scene.add(yzGrid);
-
-          const axesHelper = new THREE.AxesHelper(5);
-          scene.add(axesHelper);
 
           loader.load(
             proxyUrl,
