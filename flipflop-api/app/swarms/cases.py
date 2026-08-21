@@ -957,12 +957,12 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
 
 async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
     cases: list[RawCase] = []
-    url = "https://www.overclockers.co.uk/cases-and-modding/pc-cases/pc-cases-by-brand"
+    base_url = "https://www.overclockers.co.uk/cases-and-modding/pc-cases/pc-cases-by-brand"
 
     async with managed_playwright() as p:
         try:
             browser = await p.chromium.launch(
-                headless=False,  # Force headless=False to allow full JavaScript rendering and AJAX
+                headless=headless,
                 args=_STEALTH_ARGS,
                 proxy=playwright_proxy_config(),
             )
@@ -980,7 +980,8 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
 
         page = await context.new_page()
         try:
-            await page.goto(url, wait_until="domcontentloaded", timeout=60000)
+            # Load first page
+            await page.goto(base_url, wait_until="domcontentloaded", timeout=60000)
             await asyncio.sleep(2)
             for selector in ["button:has-text('Accept')", "[data-cookielaw='accept']", ".cookie-accept"]:
                 try:
@@ -990,17 +991,22 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
                     pass
 
             try:
-                await page.wait_for_selector("ck-product-box, a[href*='/cas-']", timeout=15000)
+                await page.wait_for_selector("ck-product-box", timeout=15000)
             except Exception as exc:
                 log.debug("overclockers.wait_selector_timeout", error=str(exc))
 
             all_products = []
             seen_urls = set()
-            page_num = 1
-            max_pages = 12  # Overclockers has maxpage=11, so try up to 12
 
-            while page_num <= max_pages and len(all_products) < 500:
-                # Extract products currently visible on page (using global dedup)
+            # Use query string pagination instead of "Load more" button (bot protection)
+            for page_num in range(1, 12):  # Overclockers has maxpage=11
+                page_url = f"{base_url}?page={page_num}"
+                log.info("overclockers.cases.loading_page", page=page_num, url=page_url)
+
+                await page.goto(page_url, wait_until="domcontentloaded", timeout=30000)
+                await asyncio.sleep(1)
+
+                # Extract products from this page
                 products = await page.evaluate(f"""() => {{
                     const items = [];
                     const seenUrls = {str(seen_urls).replace("'", '"')};
@@ -1039,26 +1045,13 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
                         seen_urls.add(url_key)
                         all_products.append(product)
 
-                log.info("overclockers.cases.page", page=page_num, found=len(products), total=len(all_products), headless=headless)
+                log.info("overclockers.cases.page_results", page=page_num, found=len(products), total=len(all_products), headless=headless)
 
-                if page_num >= max_pages:
-                    log.info("overclockers.cases.max_pages_reached", total_products=len(all_products))
+                if not products:
+                    log.info("overclockers.cases.no_products_on_page", page=page_num)
                     break
 
-                # Try to click "Load more" button
-                try:
-                    btn = await page.query_selector('.js-load-more')
-                    if btn and await btn.is_visible():
-                        # Force click
-                        await btn.click(force=True, timeout=3000)
-                        # Wait for new products
-                        await asyncio.sleep(3)
-                        page_num += 1
-                    else:
-                        log.info("overclockers.cases.button_not_visible", page=page_num, total=len(all_products))
-                        break
-                except Exception as e:
-                    log.debug(f"overclockers.load_more_click_failed", page=page_num, error=str(e))
+                if len(all_products) >= 400:
                     break
 
             seen_urls = set()
