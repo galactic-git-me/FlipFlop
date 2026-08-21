@@ -22,80 +22,51 @@ export function PCCasesGallery() {
   const [cases, setCases] = useState<PCCase[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  { id: 2, name: 'CORSAIR FRAME 4000D', brand: 'CORSAIR', model: 'frame-4000d', rating: 4.7, reviewCount: 1803, price: 70.79, tags: 'mid-tower, atx, tempered-glass, airflow', formFactor: 'mid-tower', status: 'has-model' },
-  { id: 3, name: 'NZXT H5 Flow', brand: 'NZXT', model: 'h5-flow', rating: 4.6, reviewCount: 1160, price: 49.99, tags: 'micro-atx, compact, airflow', formFactor: 'micro-atx', status: 'has-model' },
-  { id: 4, name: 'Phanteks XT Silent', brand: 'Phanteks', model: 'xt-pro', rating: 4.7, reviewCount: 914, price: 119.99, tags: 'mid-tower, atx, silent-design, tempered-glass', formFactor: 'mid-tower', status: 'has-model' },
-  { id: 5, name: 'Lian Li LANCOOL 216 RGB', brand: 'Lian Li', model: 'lancool-216', rating: 4.7, reviewCount: 910, price: 89.99, tags: 'mid-tower, atx, airflow, rgb-lighting', formFactor: 'mid-tower', status: 'has-model' },
-  { id: 6, name: 'HYTE Y60', brand: 'HYTE', model: 'y60', rating: 4.8, reviewCount: 904, price: 132.56, tags: 'mid-tower, atx, dual-chamber, panoramic-glass', formFactor: 'mid-tower', status: 'has-model' },
-  { id: 7, name: 'CORSAIR 3000D RGB', brand: 'CORSAIR', model: '3000d-rgb', rating: 4.5, reviewCount: 806, price: 60.26, tags: 'mid-tower, atx, rgb-lighting, airflow', formFactor: 'mid-tower', status: 'has-model' },
-  { id: 8, name: 'MSI MAG FORGE 120A', brand: 'MSI', model: 'mag-forge-120a', rating: 4.6, reviewCount: 786, price: 52.70, tags: 'mid-tower, atx, airflow, tempered-glass', formFactor: 'mid-tower', status: 'has-model' },
-  { id: 9, name: 'CORSAIR 3500X', brand: 'CORSAIR', model: '3500x', rating: 4.7, reviewCount: 767, price: 69.99, tags: 'mid-tower, atx, panoramic-glass, airflow', formFactor: 'mid-tower', status: 'has-model' },
-  { id: 10, name: 'CiT Flash Gaming', brand: 'CiT', model: 'flash', rating: 4.2, reviewCount: 725, price: 38.60, tags: 'micro-atx, gaming, compact', formFactor: 'micro-atx', status: 'has-model' },
-  { id: 11, name: 'Fractal Design Pop Silent', brand: 'Fractal Design', model: 'pop-silent', rating: 4.6, reviewCount: 720, price: 79.99, tags: 'mid-tower, atx, quiet-design, airflow', formFactor: 'mid-tower', status: 'has-model' },
-  { id: 12, name: 'NZXT H3 Flow', brand: 'NZXT', model: 'h3-flow', rating: 4.6, reviewCount: 669, price: 49.98, tags: 'micro-atx, compact, airflow', formFactor: 'micro-atx', status: 'has-model' },
-  { id: 13, name: 'Mars Gaming MCV4', brand: 'Mars Gaming', model: 'mcv4', rating: 4.5, reviewCount: 582, price: 74.39, tags: 'e-atx, gaming, dual-chamber, frameless', formFactor: 'e-atx', status: 'has-model' },
-  { id: 14, name: 'MSI MAG FORGE 112R', brand: 'MSI', model: 'mag-forge-112r', rating: 4.4, reviewCount: 563, price: 49.99, tags: 'mid-tower, multi-form, tempered-glass', formFactor: 'mid-tower', status: 'has-model' },
-  { id: 15, name: 'Lian Li A3', brand: 'Lian Li', model: 'a3', rating: 4.7, reviewCount: 513, price: 65.99, tags: 'micro-atx, compact, wood-panel', formFactor: 'micro-atx', status: 'has-model' },
-  { id: 16, name: 'Antec C8', brand: 'Antec', model: 'c8', rating: 4.7, reviewCount: 488, price: 103.77, tags: 'e-atx, full-tower, dual-chamber, radiator-support', formFactor: 'e-atx', status: 'has-model' },
-  { id: 17, name: 'Lian Li O11D EVO', brand: 'Lian Li', model: 'o11d-evo', rating: 4.7, reviewCount: 469, price: 139.99, tags: 'mid-tower, e-atx, tempered-glass, modular', formFactor: 'mid-tower', status: 'has-model' },
-  { id: 18, name: 'NZXT H9 Flow', brand: 'NZXT', model: 'h9-flow', rating: 4.8, reviewCount: 465, price: 99.98, tags: 'mid-tower, atx, dual-chamber, airflow', formFactor: 'mid-tower', status: 'has-model' },
-  { id: 19, name: 'Lian Li O11 VISION-M', brand: 'Lian Li', model: 'o11-vision-m', rating: 4.6, reviewCount: 460, price: 99.99, tags: 'micro-atx, dual-chamber, modular', formFactor: 'micro-atx', status: 'reference-only' },
-  { id: 20, name: 'ASUS TUF Gaming GT301', brand: 'ASUS', model: 'tuf-gt301', rating: 4.5, reviewCount: 428, price: 87.98, tags: 'mid-tower, atx, gaming, tempered-glass', formFactor: 'mid-tower', status: 'pending' },
-  { id: 21, name: 'GAMDIAS ZEUS', brand: 'GAMDIAS', model: 'zeus', rating: 4.3, reviewCount: 412, price: 49.95, tags: 'mid-tower, atx, gaming, tempered-glass', formFactor: 'mid-tower', status: 'pending' },
-  { id: 22, name: 'MSI MAG PANO 100R', brand: 'MSI', model: 'mag-pano-100r', rating: 4.8, reviewCount: 390, price: 89.99, tags: 'mid-tower, atx, panoramic-glass, vertical-gpu', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 23, name: 'NZXT H7 Flow RGB', brand: 'NZXT', model: 'h7-flow', rating: 4.7, reviewCount: 380, price: 89.99, tags: 'mid-tower, atx, rgb-lighting, airflow', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 24, name: 'Fractal Design Define 7', brand: 'Fractal Design', model: 'define-7', rating: 4.6, reviewCount: 350, price: 149.99, tags: 'mid-tower, e-atx, quiet-design, modular', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 25, name: 'GAMDIAS TALOS E3', brand: 'GAMDIAS', model: 'talos-e3', rating: 4.4, reviewCount: 340, price: 69.99, tags: 'mid-tower, atx, gaming, mesh-front', formFactor: 'mid-tower', status: 'pending' },
-  { id: 26, name: 'Antec C8 White', brand: 'Antec', model: 'c8-white', rating: 4.7, reviewCount: 320, price: 109.99, tags: 'e-atx, full-tower, dual-chamber, no-fans', formFactor: 'e-atx', status: 'reference-only' },
-  { id: 27, name: 'Lian Li V100', brand: 'Lian Li', model: 'v100', rating: 4.6, reviewCount: 310, price: 79.99, tags: 'mid-tower, atx, tempered-glass, airflow', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 28, name: 'CiT Jet Stream', brand: 'CiT', model: 'jet-stream', rating: 4.5, reviewCount: 290, price: 45.99, tags: 'mid-tower, atx, office, compact', formFactor: 'mid-tower', status: 'pending' },
-  { id: 29, name: 'CORSAIR AIR 5400 RS-R', brand: 'CORSAIR', model: 'air-5400', rating: 4.6, reviewCount: 280, price: 189.99, tags: 'mid-tower, atx, triple-chamber, panoramic-glass', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 30, name: 'be quiet! Pure Base 600', brand: 'be quiet!', model: 'pure-base-600', rating: 4.7, reviewCount: 270, price: 59.99, tags: 'mid-tower, atx, quiet-design, mesh-front', formFactor: 'mid-tower', status: 'has-model' },
-  { id: 31, name: 'Lian Li LANCOOL 217', brand: 'Lian Li', model: 'lancool-217', rating: 4.7, reviewCount: 260, price: 85.99, tags: 'mid-tower, atx, tempered-glass, airflow', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 32, name: 'Corsair iCUE 5000D RGB', brand: 'CORSAIR', model: '5000d-rgb', rating: 4.8, reviewCount: 250, price: 129.99, tags: 'mid-tower, atx, rgb-lighting, panoramic-glass', formFactor: 'mid-tower', status: 'has-model' },
-];
-
-export function PCCasesGallery() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedStatus, setSelectedStatus] = useState<'all' | 'has-model' | 'reference-only' | 'pending'>('all');
   const [selectedFormFactor, setSelectedFormFactor] = useState<'all' | string>('all');
   const [sortBy, setSortBy] = useState<'rating' | 'reviews' | 'price' | 'name'>('reviews');
   const [selectedCase, setSelectedCase] = useState<PCCase | null>(null);
 
+  // Fetch cases from API on mount
+  useEffect(() => {
+    const fetchCases = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`http://localhost:18000/api/cases/gallery?limit=50&sort_by=${sortBy}`);
+        if (!response.ok) throw new Error(`API error: ${response.status}`);
+        const data = await response.json();
+        setCases(data);
+        setError(null);
+      } catch (err) {
+        console.error('Failed to fetch cases:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load cases');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCases();
+  }, [sortBy]);
+
   const filteredAndSorted = useMemo(() => {
-    let filtered = MOCK_CASES;
+    let filtered = cases;
 
     if (selectedStatus !== 'all') {
       filtered = filtered.filter((c) => c.status === selectedStatus);
     }
 
     if (selectedFormFactor !== 'all') {
-      filtered = filtered.filter((c) => c.formFactor === selectedFormFactor);
+      filtered = filtered.filter((c) => c.form_factors?.includes(selectedFormFactor));
     }
 
-    const sorted = [...filtered];
-
-    // Always sort: 3D models first, then by selected sort criteria
-    sorted.sort((a, b) => {
-      // First: prioritize cases with 3D models
-      if (a.status === 'has-model' && b.status !== 'has-model') return -1;
-      if (a.status !== 'has-model' && b.status === 'has-model') return 1;
-
-      // Then: apply sort preference within each group
-      if (sortBy === 'rating') return b.rating - a.rating;
-      if (sortBy === 'reviews') return b.reviewCount - a.reviewCount;
-      if (sortBy === 'price') return (a.price || 999999) - (b.price || 999999);
-      if (sortBy === 'name') return a.name.localeCompare(b.name);
-      return 0;
-    });
-
-    return sorted;
-  }, [selectedStatus, selectedFormFactor, sortBy]);
+    return filtered;
+  }, [cases, selectedStatus, selectedFormFactor]);
 
   const statusCounts = {
-    'has-model': MOCK_CASES.filter((c) => c.status === 'has-model').length,
-    'reference-only': MOCK_CASES.filter((c) => c.status === 'reference-only').length,
-    'pending': MOCK_CASES.filter((c) => c.status === 'pending').length,
+    'has-model': cases.filter((c) => c.status === 'has-model').length,
+    'reference-only': cases.filter((c) => c.status === 'reference-only').length,
+    'pending': cases.filter((c) => c.status === 'pending').length,
   };
 
   const getStatusBadge = (status: string) => {
@@ -110,6 +81,28 @@ export function PCCasesGallery() {
         return null;
     }
   };
+
+  if (loading) {
+    return (
+      <div className="p-8 max-w-7xl mx-auto">
+        <div className="text-center py-20">
+          <div className="text-gray-400 mb-4">Loading cases...</div>
+          <div className="inline-block animate-spin">⏳</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-8 max-w-7xl mx-auto">
+        <div className="text-center py-20">
+          <div className="text-red-400 mb-4">Error loading cases</div>
+          <div className="text-sm text-gray-400">{error}</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-8 max-w-7xl mx-auto">
@@ -127,7 +120,7 @@ export function PCCasesGallery() {
       {/* Stats Cards */}
       <div className="grid grid-cols-4 gap-4 mb-8">
         <div className="bg-white/5 backdrop-blur border border-white/10 rounded-lg p-4">
-          <div className="text-3xl font-bold text-white">{MOCK_CASES.length}</div>
+          <div className="text-3xl font-bold text-white">{cases.length}</div>
           <div className="text-sm text-gray-400">Total Cases</div>
         </div>
         <div className="bg-green-900/20 backdrop-blur border border-green-500/30 rounded-lg p-4">
@@ -161,16 +154,6 @@ export function PCCasesGallery() {
               <option value="has-model">3D Models</option>
               <option value="reference-only">Reference</option>
               <option value="pending">Pending</option>
-            </select>
-          </div>
-          <div>
-            <label className="text-xs text-gray-400 block mb-2">Form Factor</label>
-            <select value={selectedFormFactor} onChange={(e) => setSelectedFormFactor(e.target.value)} className="w-full bg-black/50 border border-white/20 text-white px-3 py-2 rounded text-sm">
-              <option value="all">All</option>
-              <option value="micro-atx">Micro ATX</option>
-              <option value="mid-tower">Mid Tower</option>
-              <option value="e-atx">E-ATX</option>
-              <option value="full-tower">Full Tower</option>
             </select>
           </div>
           <div>
@@ -210,12 +193,12 @@ export function PCCasesGallery() {
               {getStatusBadge(pcCase.status)}
             </div>
             <div className="flex items-center justify-between text-xs text-gray-300 mb-2">
-              <div>★ {pcCase.rating}</div>
-              <div>{pcCase.reviewCount.toLocaleString()} reviews</div>
+              <div>★ {pcCase.rating?.toFixed(1) || 'N/A'}</div>
+              <div>{(pcCase.review_count || 0).toLocaleString()} reviews</div>
             </div>
             {pcCase.price > 0 && <div className="text-sm font-semibold text-white">£{pcCase.price.toFixed(2)}</div>}
             <div className="flex flex-wrap gap-1 mt-2">
-              {pcCase.tags.split(', ').slice(0, 2).map((tag) => (
+              {(pcCase.keywords || []).slice(0, 2).map((tag) => (
                 <span key={tag} className="text-xs bg-white/10 text-gray-300 px-2 py-1 rounded">
                   {tag}
                 </span>
@@ -263,39 +246,33 @@ export function PCCasesGallery() {
               {/* Specs */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white/5 border border-white/10 rounded p-3">
-                  <div className="text-xs text-gray-400 mb-1">Form Factor</div>
-                  <div className="font-semibold text-white capitalize">{selectedCase.formFactor}</div>
-                </div>
-                <div className="bg-white/5 border border-white/10 rounded p-3">
                   <div className="text-xs text-gray-400 mb-1">Rating</div>
-                  <div className="font-semibold text-white">★ {selectedCase.rating}</div>
+                  <div className="font-semibold text-white">★ {selectedCase.rating?.toFixed(1) || 'N/A'}</div>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded p-3">
                   <div className="text-xs text-gray-400 mb-1">Reviews</div>
-                  <div className="font-semibold text-white">{selectedCase.reviewCount.toLocaleString()}</div>
+                  <div className="font-semibold text-white">{(selectedCase.review_count || 0).toLocaleString()}</div>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded p-3">
                   <div className="text-xs text-gray-400 mb-1">Price</div>
-                  <div className="font-semibold text-white">{selectedCase.price > 0 ? `£${selectedCase.price.toFixed(2)}` : 'N/A'}</div>
+                  <div className="font-semibold text-white">£{selectedCase.price?.toFixed(2) || 'N/A'}</div>
+                </div>
+                <div className="bg-white/5 border border-white/10 rounded p-3">
+                  <div className="text-xs text-gray-400 mb-1">Source</div>
+                  <div className="font-semibold text-white capitalize">{selectedCase.brand}</div>
                 </div>
               </div>
 
-              {/* Tags */}
-              <div>
-                <div className="text-xs text-gray-400 mb-2">Tags</div>
-                <div className="flex flex-wrap gap-2">
-                  {selectedCase.tags.split(', ').map((tag) => (
-                    <span key={tag} className="bg-white/10 text-gray-300 px-3 py-1 rounded-full text-xs">
-                      {tag}
-                    </span>
-                  ))}
+              {/* Admin Controls */}
+              <div className="border-t border-white/10 pt-4 mt-4">
+                <div className="flex gap-2">
+                  <button className="flex-1 bg-blue-600/20 border border-blue-500/50 text-blue-300 px-4 py-2 rounded text-sm hover:bg-blue-600/30 transition">
+                    📤 Upload Model
+                  </button>
+                  <button className="flex-1 bg-purple-600/20 border border-purple-500/50 text-purple-300 px-4 py-2 rounded text-sm hover:bg-purple-600/30 transition">
+                    📎 Manage References
+                  </button>
                 </div>
-              </div>
-
-              {/* Admin Actions */}
-              <div className="border-t border-white/10 pt-4 space-y-2">
-                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm">Upload 3D Model</button>
-                <button className="w-full bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm">Manage References</button>
               </div>
             </div>
           </div>
