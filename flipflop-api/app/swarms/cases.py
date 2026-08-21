@@ -963,7 +963,11 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
         try:
             browser = await p.chromium.launch(
                 headless=False,  # MUST be False for Overclockers - headless blocks product rendering
-                args=_STEALTH_ARGS,
+                args=_STEALTH_ARGS + [
+                    "--disable-extensions",
+                    "--disable-plugins",
+                    "--disable-images",
+                ],
                 proxy=playwright_proxy_config(),
             )
             context = await browser.new_context(
