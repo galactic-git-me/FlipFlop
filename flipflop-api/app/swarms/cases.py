@@ -947,15 +947,16 @@ async def _scrape_overclockers(search: str, theme: str) -> list[RawCase]:
     Overclockers UK PC Cases by Brand catalogue.
     One catalogue pass per swarm, not per search term.
     """
-    cases = await _scrape_overclockers_once(headless=True)
-    if not cases:
-        log.info("overclockers.retry_headed")
-        cases = await _scrape_overclockers_once(headless=False)
+    # The browser launch below hardcodes headless=False regardless of any
+    # flag (headless product rendering doesn't work on this site), so a
+    # second "retry headed" attempt was doing the exact same thing twice —
+    # just re-hammering Cloudflare with another 11 page loads on failure.
+    cases = await _scrape_overclockers_once()
     log.info("overclockers.cases.done", search=search, found=len(cases))
     return cases
 
 
-async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
+async def _scrape_overclockers_once() -> list[RawCase]:
     cases: list[RawCase] = []
     base_url = "https://www.overclockers.co.uk/cases-and-modding/pc-cases/pc-cases-by-brand"
 
@@ -984,7 +985,7 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
             )
             await context.add_init_script(_STEALTH_JS)
         except Exception as exc:
-            log.warning("overclockers.cases.browser_error", error=str(exc), headless=headless)
+            log.warning("overclockers.cases.browser_error", error=str(exc))
             return []
 
         page = await context.new_page()
@@ -1074,7 +1075,7 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
                         seen_urls.add(url_key)
                         all_products.append(product)
 
-                log.info("overclockers.cases.page_results", page=page_num, found=len(products), total=len(all_products), headless=headless)
+                log.info("overclockers.cases.page_results", page=page_num, found=len(products), total=len(all_products))
 
                 if not products:
                     log.info("overclockers.cases.no_products_on_page", page=page_num)
@@ -1104,7 +1105,7 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
                     rrp=float(rrp) if rrp else None,
                 ))
         except Exception as exc:
-            log.warning("overclockers.cases.error", error=str(exc), headless=headless)
+            log.warning("overclockers.cases.error", error=str(exc))
         finally:
             await browser.close()
 
