@@ -195,7 +195,7 @@ export default function Components3DReviewPage() {
     const load = async () => {
       setLoading(true);
       try {
-        const response = await fetch("/api/assets-3d/public");
+        const response = await fetch("/api/assets-3d");
         const data = await response.json();
 
         if (data.detail) {
