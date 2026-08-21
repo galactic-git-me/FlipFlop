@@ -15,6 +15,7 @@ import {
   Check,
   Clock,
   AlertCircle,
+  Package,
 } from "lucide-react";
 
 interface PCCase {
@@ -313,6 +314,17 @@ interface PCCasesGalleryProps {
   loading: boolean;
 }
 
+type StatusConfigType = Record<
+  PCCase["status"],
+  { icon: React.ComponentType<{ className?: string }>; label: string; color: string }
+>;
+
+const STATUS_CONFIG: StatusConfigType = {
+  "has-model": { icon: Check, label: "3D Model", color: "text-green-400" },
+  "reference-only": { icon: AlertCircle, label: "Reference Only", color: "text-blue-400" },
+  pending: { icon: Clock, label: "Pending", color: "text-yellow-400" },
+};
+
 export function PCCasesGallery({ cases, loading }: PCCasesGalleryProps) {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [selectedCase, setSelectedCase] = useState<PCCase | null>(null);
@@ -339,15 +351,10 @@ export function PCCasesGallery({ cases, loading }: PCCasesGalleryProps) {
         return a.price - b.price;
       case "name":
         return a.name.localeCompare(b.name);
+      default:
+        return 0;
     }
   });
-
-  const statusConfig: Record<PCCase["status"], { icon: any; label: string; color: string }> =
-  {
-    "has-model": { icon: Check, label: "3D Model", color: "text-green-400" },
-    "reference-only": { icon: AlertCircle, label: "Reference Only", color: "text-blue-400" },
-    pending: { icon: Clock, label: "Pending", color: "text-yellow-400" },
-  };
 
   const stats = {
     total: cases.length,
@@ -355,6 +362,8 @@ export function PCCasesGallery({ cases, loading }: PCCasesGalleryProps) {
     referenceOnly: cases.filter((c) => c.status === "reference-only").length,
     pending: cases.filter((c) => c.status === "pending").length,
   };
+
+  const statusConfig = STATUS_CONFIG;
 
   return (
     <div className="relative z-10 space-y-6">
@@ -535,7 +544,7 @@ export function PCCasesGallery({ cases, loading }: PCCasesGalleryProps) {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-slate-600">
-                      <Box className="w-12 h-12 opacity-30" />
+                      <Package className="w-12 h-12 opacity-30" />
                     </div>
                   )}
                   {/* Status Badge */}
@@ -597,7 +606,7 @@ export function PCCasesGallery({ cases, loading }: PCCasesGalleryProps) {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-slate-600">
-                      <Box className="w-8 h-8 opacity-30" />
+                      <Package className="w-8 h-8 opacity-30" />
                     </div>
                   )}
                 </div>
