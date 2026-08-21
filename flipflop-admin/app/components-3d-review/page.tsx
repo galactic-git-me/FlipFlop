@@ -86,9 +86,10 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           fillLight.position.set(-5, 2, 5);
           scene.add(fillLight);
 
-          // Blender-style grid on ground plane
-          const gridHelper = new THREE.GridHelper(20, 20, 0x444444, 0x222222);
+          // Blender-style grid on ground plane - exact match to Blender viewport
+          const gridHelper = new THREE.GridHelper(50, 50, 0x555555, 0x333333);
           gridHelper.position.y = -1;
+          gridHelper.scale.set(1.5, 1, 1.5);
           scene.add(gridHelper);
 
           // RGB axes like Blender (X=red, Y=green, Z=blue)
