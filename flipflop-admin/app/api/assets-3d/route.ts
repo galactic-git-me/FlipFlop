@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:18000";
+const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:4311";
 
 export async function GET() {
   try {
-    // Use admin endpoint (requires auth in real setup)
-    const response = await fetch(`${BACKEND_URL}/assets-3d`, {
+    // Fetch from backend assets API
+    const response = await fetch(`${BACKEND_URL}/api/assets-3d/public`, {
       headers: {
         "Content-Type": "application/json",
       },
