@@ -26,20 +26,34 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
   const zoomRef = useRef(1);
 
   useEffect(() => {
-    if (!containerRef.current || !glbUrl) return;
+    if (!containerRef.current || !glbUrl) {
+      console.log("Viewer3D: skipping - no container or URL", { containerRef: !!containerRef.current, glbUrl });
+      return;
+    }
+
+    console.log("Viewer3D: initializing with glbUrl:", glbUrl);
 
     setTimeout(() => {
       const setupViewer = async () => {
         try {
+          console.log("Viewer3D: setupViewer starting");
           const THREE = await import("three");
           const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
 
-          if (!containerRef.current) return;
+          if (!containerRef.current) {
+            console.log("Viewer3D: container ref disappeared");
+            return;
+          }
 
           const width = containerRef.current.clientWidth;
           const height = containerRef.current.clientHeight;
 
-          if (width === 0 || height === 0) return;
+          console.log("Viewer3D: container size", { width, height });
+
+          if (width === 0 || height === 0) {
+            console.log("Viewer3D: container has zero dimensions, retrying");
+            return;
+          }
 
           const scene = new THREE.Scene();
           scene.background = new THREE.Color(0x2a2a2a);
@@ -98,10 +112,12 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           const loader = new GLTFLoader();
           const filename = glbUrl.split("/").pop();
           const proxyUrl = `/api/glb-proxy/${filename}`;
+          console.log("Viewer3D: loading GLB", { filename, proxyUrl });
 
           loader.load(
             proxyUrl,
             (gltf) => {
+              console.log("Viewer3D: GLB loaded successfully");
               const model = gltf.scene;
               scene.add(model);
 
@@ -301,18 +317,18 @@ export default function Components3DReviewPage() {
         </button>
       </div>
 
-      <div className="flex gap-3 flex-1 min-h-0">
+      <div className="flex gap-3 flex-1 min-h-0 overflow-hidden">
         <div className="flex-1 flex flex-col min-h-0 gap-3">
           {selectedAsset ? (
             <>
-              <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 flex flex-col bg-[#0a1119]">
-                <div className="px-3 py-2 border-b border-[#1e2d45] bg-slate-900/30 text-xs font-semibold text-slate-300">3D Viewer</div>
-                <div className="flex-1 min-h-0">
+              <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-[2] flex flex-col bg-[#0a1119]" style={{ minHeight: 0 }}>
+                <div className="px-3 py-2 border-b border-[#1e2d45] bg-slate-900/30 text-xs font-semibold text-slate-300">3D Viewer — {selectedAsset.family_key}</div>
+                <div className="flex-1 min-h-0" style={{ minHeight: 0 }}>
                   <Viewer3D glbUrl={selectedAsset.glb_ref} />
                 </div>
               </div>
 
-              <div className="flex-1 border border-[#1e2d45] rounded-lg overflow-y-auto p-2 bg-[#0a1119]">
+              <div className="flex-1 border border-[#1e2d45] rounded-lg overflow-y-auto p-2 bg-[#0a1119]" style={{ minHeight: 0 }}>
                 <div className="grid grid-cols-6 gap-2">
                   {filteredAssets.map((asset) => (
                     <button
