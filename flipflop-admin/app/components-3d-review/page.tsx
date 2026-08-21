@@ -43,7 +43,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           scene.background = new THREE.Color(0x0a1119);
 
           const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-          camera.position.set(0, 0, 3);
+          camera.position.set(0, 0, 1);
 
           const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
           renderer.setSize(width, height);
@@ -54,16 +54,20 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           }
           containerRef.current.appendChild(renderer.domElement);
 
-          const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+          const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
           scene.add(ambientLight);
 
-          const pointLight = new THREE.PointLight(0xffffff, 0.8);
+          const pointLight = new THREE.PointLight(0xffffff, 1.2);
           pointLight.position.set(5, 5, -5);
           scene.add(pointLight);
 
-          const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+          const directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
           directionalLight.position.set(3, 5, 2);
           scene.add(directionalLight);
+
+          const fillLight = new THREE.PointLight(0x88ccff, 0.5);
+          fillLight.position.set(-5, 2, 5);
+          scene.add(fillLight);
 
           // Blender-style grid on ground plane
           const gridHelper = new THREE.GridHelper(20, 20, 0x444444, 0x222222);
@@ -87,7 +91,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
               const box = new THREE.Box3().setFromObject(model);
               const size = box.getSize(new THREE.Vector3());
               const maxDim = Math.max(size.x, size.y, size.z);
-              const scale = 1.6 / maxDim;
+              const scale = 1.7 / maxDim;
               model.scale.multiplyScalar(scale);
 
               const center = box.getCenter(new THREE.Vector3());
@@ -189,11 +193,10 @@ export default function Components3DReviewPage() {
     void load();
   }, []);
 
-  const assetsWithModels = assets.filter(a => a.glb_ref);
-  const filteredAssets = filter === "meshy_draft" ? assetsWithModels.filter(a => a.status === "meshy_draft") : assetsWithModels;
-  const draftCount = assetsWithModels.filter(a => a.status === "meshy_draft").length;
-  const validatedCount = assetsWithModels.filter(a => a.status === "validated").length;
-  const finalCount = assetsWithModels.filter(a => a.status === "final").length;
+  const filteredAssets = filter === "meshy_draft" ? assets.filter(a => a.status === "meshy_draft") : assets;
+  const draftCount = assets.filter(a => a.status === "meshy_draft").length;
+  const validatedCount = assets.filter(a => a.status === "validated").length;
+  const finalCount = assets.filter(a => a.status === "final").length;
 
   const handleStatusChange = async (assetId: number, newStatus: string) => {
     try {
