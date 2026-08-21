@@ -71,7 +71,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           }
           containerRef.current.appendChild(renderer.domElement);
 
-          const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+          const ambientLight = new THREE.AmbientLight(0xffffff, 1.1);
           scene.add(ambientLight);
 
           const pointLight = new THREE.PointLight(0xffffff, 1.2);
@@ -86,8 +86,12 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           fillLight.position.set(-5, 2, 5);
           scene.add(fillLight);
 
-          // Blender-style subtle grid
-          const gridHelper = new THREE.GridHelper(100, 100, 0x404040, 0x2a2a2a);
+          const backLight = new THREE.PointLight(0xffffff, 1.8);
+          backLight.position.set(0, 3, -8);
+          scene.add(backLight);
+
+          // Blender-style grid - matching exact appearance
+          const gridHelper = new THREE.GridHelper(100, 20, 0x888888, 0x555555);
           gridHelper.position.y = -1;
           scene.add(gridHelper);
 
@@ -321,14 +325,8 @@ export default function Components3DReviewPage() {
                 style={{ width: "120px", height: "120px", backgroundImage: asset.source_image_refs && asset.source_image_refs.length > 0 ? `url('${asset.source_image_refs[0]}')` : undefined, backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "#1a3a52" }}
               >
                 <div className="flex-1"></div>
-                <div className="w-full bg-black/70 text-center py-2 px-1 flex flex-col gap-1">
+                <div className="w-full bg-black/70 text-center py-2 px-1">
                   <div className="text-xs font-bold text-white">{asset.family_key}</div>
-                  {asset.glb_ref && (
-                    <div className="text-[10px] text-blue-300 flex items-center justify-center gap-1">
-                      <span>3D</span>
-                      <span>{asset.status === "final" ? "✓" : asset.status === "rejected" ? "✗" : "?"}</span>
-                    </div>
-                  )}
                 </div>
               </button>
             ))}
