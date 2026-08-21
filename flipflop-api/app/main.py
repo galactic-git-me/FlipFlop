@@ -62,6 +62,7 @@ from app.api.public_showcase import router as public_showcase_router
 from app.api.public_reviews import router as public_reviews_router
 from app.api.public_social_proof import router as public_social_proof_router
 from app.api.assets_admin import router as assets_admin_router, public_router as assets_public_router
+from app.api.glb_proxy import router as glb_proxy_router
 from app.api.gem_radar import router as gem_radar_router
 from app.api.margin_verification import router as margin_verification_router
 from app.api.builds_pricing import router as builds_pricing_router
@@ -647,6 +648,7 @@ app.include_router(public_reviews_router, prefix="/api")
 app.include_router(public_social_proof_router, prefix="/api")
 app.include_router(assets_admin_router, prefix="/api")
 app.include_router(assets_public_router, prefix="/api")
+app.include_router(glb_proxy_router, prefix="/api")
 app.include_router(gem_radar_router, prefix="/api")
 app.include_router(margin_verification_router, prefix="")
 # pc_builder_router's own APIRouter already declares prefix="/api/pc-builder"

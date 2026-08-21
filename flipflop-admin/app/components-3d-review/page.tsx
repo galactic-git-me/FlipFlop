@@ -60,8 +60,11 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           scene.add(directionalLight);
 
           const loader = new GLTFLoader();
+          const filename = glbUrl.split("/").pop();
+          const proxyUrl = `/api/glb-proxy/${filename}`;
+
           loader.load(
-            glbUrl,
+            proxyUrl,
             (gltf) => {
               const model = gltf.scene;
               model.scale.set(1, 1, 1);
