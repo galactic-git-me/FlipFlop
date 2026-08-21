@@ -49,21 +49,28 @@ def _get_sem() -> asyncio.Semaphore:
 
 
 @asynccontextmanager
-async def managed_playwright():
+async def managed_playwright(engine: str = "playwright"):
     """
     Context manager that acquires a browser slot, runs async_playwright(),
     then releases the slot on exit — even if an exception is raised.
+
+    engine="patchright" swaps in the patchright fork (same API, patched to
+    remove CDP automation signals) for sites with Cloudflare bot-management
+    that fingerprints and blocks vanilla Playwright — e.g. Overclockers.
 
     Example:
         async with managed_playwright() as p:
             browser, context = await _launch_browser(p)
             ...
     """
-    from playwright.async_api import async_playwright
+    if engine == "patchright":
+        from patchright.async_api import async_playwright
+    else:
+        from playwright.async_api import async_playwright
 
     sem = _get_sem()
     async with sem:
-        log.debug("browser_pool.acquired", cap=MAX_CONCURRENT_BROWSERS)
+        log.debug("browser_pool.acquired", cap=MAX_CONCURRENT_BROWSERS, engine=engine)
         try:
             async with async_playwright() as p:
                 yield p

@@ -959,7 +959,12 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
     cases: list[RawCase] = []
     base_url = "https://www.overclockers.co.uk/cases-and-modding/pc-cases/pc-cases-by-brand"
 
-    async with managed_playwright() as p:
+    # Overclockers sits behind Cloudflare bot-management that fingerprints vanilla
+    # Playwright's CDP session and blocks/challenges page 2+ (confirmed: page 1 loads
+    # fine, page 2 either 403s the pagination XHR or serves a Turnstile challenge).
+    # patchright is a drop-in Playwright fork with the CDP leaks patched out — it
+    # clears every page with no challenge at all.
+    async with managed_playwright(engine="patchright") as p:
         try:
             browser = await p.chromium.launch(
                 headless=False,  # MUST be False for Overclockers - headless blocks product rendering
@@ -1012,7 +1017,10 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
                 page_url = f"{base_url}?page={page_num}"
                 log.info("overclockers.cases.loading_page", page=page_num, url=page_url, total_so_far=len(all_products))
 
-                await page.goto(page_url, wait_until="networkidle", timeout=60000)
+                # domcontentloaded, not networkidle: this page fires continuous
+                # GA/FB/Bing/Criteo/LinkedIn/DynamicYield beacons that never go
+                # idle, so networkidle was timing out every page load.
+                await page.goto(page_url, wait_until="domcontentloaded", timeout=60000)
                 await asyncio.sleep(2)  # Wait for page to stabilize
 
                 # CRITICAL: Wait for products to fully render before extraction
