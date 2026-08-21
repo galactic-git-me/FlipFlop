@@ -7,7 +7,7 @@ interface Component3DAsset {
   id: number;
   category: string;
   family_key: string;
-  status: "missing" | "meshy_draft" | "cleaned" | "validated" | "final" | "rejected";
+  status: "missing" | "meshy_draft" | "cleaned" | "reworking" | "reworked" | "validated" | "final" | "rejected";
   version: number;
   glb_ref: string | null;
   preview_image_ref: string | null;
@@ -260,6 +260,8 @@ export default function Components3DReviewPage() {
     missing: "border-slate-600 bg-slate-900/20",
     meshy_draft: "border-orange-400/30 bg-orange-400/5",
     cleaned: "border-blue-400/30 bg-blue-400/5",
+    reworking: "border-amber-400/30 bg-amber-400/5",
+    reworked: "border-yellow-400/30 bg-yellow-400/5",
     validated: "border-purple-400/30 bg-purple-400/5",
     final: "border-[#00dc82]/30 bg-[#00dc82]/5",
     rejected: "border-red-400/30 bg-red-400/5",
@@ -476,10 +478,10 @@ export default function Components3DReviewPage() {
                 Exit
               </button>
               <button
-                onClick={() => selectedAsset && handleStatusChange(selectedAsset.id, "rejected")}
+                onClick={() => selectedAsset && handleStatusChange(selectedAsset.id, "reworking")}
                 className="flex-1 px-3 py-2 text-xs font-semibold bg-red-600/30 text-red-300 border border-red-500/50 rounded hover:bg-red-600/40 transition"
               >
-                Redo
+                Rework
               </button>
               <button
                 onClick={() => selectedAsset && handleStatusChange(selectedAsset.id, "cleaned")}
