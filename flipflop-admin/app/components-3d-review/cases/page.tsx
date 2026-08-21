@@ -6,12 +6,12 @@ import { PCCasesGallery } from './components/PCCasesGallery';
 
 export default function PCCasesReviewPage() {
   return (
-    <div className="relative min-h-screen bg-black">
-      {/* Twinkling stars background - fixed positioned so sidebar shows on top */}
+    <div className="relative w-full h-full">
+      {/* Twinkling stars background */}
       <TwinklingStars />
 
-      {/* Main content - positioned above stars with sidebar visible */}
-      <div className="relative z-20">
+      {/* Main content with higher z-index */}
+      <div className="relative z-20 w-full h-full">
         <PCCasesGallery />
       </div>
     </div>

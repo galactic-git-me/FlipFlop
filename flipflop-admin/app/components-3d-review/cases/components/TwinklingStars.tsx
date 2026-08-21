@@ -12,11 +12,14 @@ export function TwinklingStars() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set canvas size
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const updateSize = () => {
+      if (!canvas.parentElement) return;
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+    };
 
-    // Create stars array
+    updateSize();
+
     const stars: Array<{ x: number; y: number; radius: number; opacity: number; twinkleSpeed: number }> = [];
     const starCount = Math.min(400, Math.floor((canvas.width * canvas.height) / 10000));
 
@@ -30,12 +33,10 @@ export function TwinklingStars() {
       });
     }
 
-    // Animation loop
     let animationFrameId: number;
     let time = 0;
 
-    function animate() {
-      // Dark gradient background
+    const animate = () => {
       const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
       gradient.addColorStop(0, '#0a0e27');
       gradient.addColorStop(0.5, '#0f1535');
@@ -43,9 +44,7 @@ export function TwinklingStars() {
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Draw and twinkle stars
       stars.forEach((star) => {
-        // Twinkle effect using sine wave
         const twinkle = Math.sin(time * star.twinkleSpeed) * 0.5 + 0.5;
         const finalOpacity = star.opacity * twinkle;
 
@@ -54,7 +53,6 @@ export function TwinklingStars() {
         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
         ctx.fill();
 
-        // Subtle glow
         ctx.strokeStyle = `rgba(100, 150, 255, ${finalOpacity * 0.3})`;
         ctx.lineWidth = 0.5;
         ctx.stroke();
@@ -62,14 +60,12 @@ export function TwinklingStars() {
 
       time += 1;
       animationFrameId = requestAnimationFrame(animate);
-    }
+    };
 
     animate();
 
-    // Handle window resize
     const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      updateSize();
     };
 
     window.addEventListener('resize', handleResize);
@@ -83,8 +79,8 @@ export function TwinklingStars() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full pointer-events-none"
-      style={{ zIndex: 0 }}
+      className="absolute top-0 left-0 w-full pointer-events-none bg-black"
+      style={{ zIndex: 0, height: '100%' }}
     />
   );
 }
