@@ -979,6 +979,10 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
             return []
 
         page = await context.new_page()
+
+        # Set viewport to make window visible
+        await page.set_viewport_size({"width": 1366, "height": 768})
+
         try:
             # Load first page
             await page.goto(base_url, wait_until="domcontentloaded", timeout=60000)
