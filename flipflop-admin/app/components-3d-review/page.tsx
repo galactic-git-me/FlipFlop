@@ -195,8 +195,11 @@ export default function Components3DReviewPage() {
     const load = async () => {
       setLoading(true);
       try {
+        console.log("Fetching /api/assets-3d");
         const response = await fetch("/api/assets-3d");
+        console.log("Response status:", response.status);
         const data = await response.json();
+        console.log("Response data type:", typeof data, "Is array:", Array.isArray(data), "Length:", Array.isArray(data) ? data.length : "n/a");
 
         if (data.detail) {
           console.error("API Error:", data.detail);
@@ -204,7 +207,14 @@ export default function Components3DReviewPage() {
           return;
         }
 
+        if (data.error) {
+          console.error("API returned error:", data.error);
+          setAssets([]);
+          return;
+        }
+
         const assets = Array.isArray(data) ? data : (data.data || data.assets || []);
+        console.log("Processed assets count:", assets.length);
         setAssets(assets as Component3DAsset[]);
         const firstDraft = assets.find((a: Component3DAsset) => a.status === "meshy_draft");
         if (firstDraft) setSelectedAsset(firstDraft);

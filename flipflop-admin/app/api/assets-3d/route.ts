@@ -4,22 +4,27 @@ const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:4311";
 
 export async function GET() {
   try {
-    // Fetch from backend assets API
+    console.log("Fetching from:", `${BACKEND_URL}/api/assets-3d/public`);
     const response = await fetch(`${BACKEND_URL}/api/assets-3d/public`, {
       headers: {
         "Content-Type": "application/json",
       },
     });
 
+    console.log("Backend response status:", response.status);
+
     if (!response.ok) {
-      console.error("Backend error:", response.status, response.statusText);
-      return NextResponse.json({ error: "Failed to fetch assets" }, { status: response.status });
+      const errorText = await response.text();
+      console.error("Backend error:", response.status, response.statusText, errorText.substring(0, 100));
+      return NextResponse.json({ error: "Failed to fetch assets", status: response.status }, { status: response.status });
     }
 
     const data = await response.json();
+    console.log("Successfully parsed JSON, items:", Array.isArray(data) ? data.length : "not array");
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Error fetching assets:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    console.error("Error fetching assets:", errorMsg);
+    return NextResponse.json({ error: "Internal server error", detail: errorMsg }, { status: 500 });
   }
 }
