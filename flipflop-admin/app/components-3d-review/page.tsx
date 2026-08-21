@@ -42,21 +42,12 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           if (width === 0 || height === 0) return;
 
           const scene = new THREE.Scene();
-          scene.background = new THREE.Color(0x2a2a2a);
+          scene.background = new THREE.Color(0x1a1a1a);
 
-          // Create Blender-style grid floor plane
-          const gridGeometry = new THREE.PlaneGeometry(100, 100, 100, 100);
-          const gridMaterial = new THREE.LineBasicMaterial({ color: 0x444444 });
-          const wireframe = new THREE.LineSegments(gridGeometry, gridMaterial);
-          wireframe.position.y = -1;
-          scene.add(wireframe);
-
-          // Add darker grid lines (alternating)
-          const gridGeometry2 = new THREE.PlaneGeometry(100, 100, 10, 10);
-          const gridMaterial2 = new THREE.LineBasicMaterial({ color: 0x333333, linewidth: 2 });
-          const wireframe2 = new THREE.LineSegments(gridGeometry2, gridMaterial2);
-          wireframe2.position.y = -1.01;
-          scene.add(wireframe2);
+          // Blender-style grid with proper perspective
+          const gridHelper = new THREE.GridHelper(30, 30, 0x555555, 0x222222);
+          gridHelper.position.y = -1;
+          scene.add(gridHelper);
 
           const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
           camera.position.set(0, 0, 1);
@@ -86,14 +77,6 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           fillLight.position.set(-5, 2, 5);
           scene.add(fillLight);
 
-          // Blender-style grid on ground plane
-          const gridHelper = new THREE.GridHelper(20, 20, 0x444444, 0x222222);
-          gridHelper.position.y = -1;
-          scene.add(gridHelper);
-
-          // RGB axes like Blender (X=red, Y=green, Z=blue)
-          const axesHelper = new THREE.AxesHelper(6);
-          scene.add(axesHelper);
 
           const loader = new GLTFLoader();
           const filename = glbUrl.split("/").pop();
