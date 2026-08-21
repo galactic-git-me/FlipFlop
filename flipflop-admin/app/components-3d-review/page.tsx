@@ -312,14 +312,14 @@ export default function Components3DReviewPage() {
 
       <div style={{ flex: 1, minHeight: 0 }} className="flex gap-3">
         {/* LEFT: Asset grid */}
-        <div style={{ width: "384px", minHeight: "400px" }} className="border border-[#1e2d45] rounded-lg overflow-y-auto p-2 bg-[#0a1119]">
-          <div className="grid grid-cols-6 gap-2 auto-rows-max">
+        <div style={{ width: "280px", minHeight: "400px" }} className="border border-[#1e2d45] rounded-lg overflow-y-auto p-3 bg-[#0a1119]">
+          <div className="grid grid-cols-2 gap-3 auto-rows-max">
             {filteredAssets.map((asset) => (
               <button
                 key={asset.id}
                 onClick={() => setSelectedAsset(asset)}
-                className={`aspect-square rounded border overflow-hidden cursor-pointer transition hover:scale-105 ${selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""} ${statusColors[asset.status] || ""}`}
-                style={{ backgroundImage: asset.preview_image_ref ? `url('${asset.preview_image_ref}')` : undefined, backgroundSize: "cover", backgroundPosition: "center" }}
+                className={`rounded border overflow-hidden cursor-pointer transition hover:scale-105 relative ${selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""} ${statusColors[asset.status] || ""}`}
+                style={{ width: "60px", height: "60px", backgroundImage: asset.preview_image_ref ? `url('${asset.preview_image_ref}')` : undefined, backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "#1a3a52" }}
               >
                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                   <div className="font-bold text-[8px] text-white text-center px-1">{asset.family_key}</div>
