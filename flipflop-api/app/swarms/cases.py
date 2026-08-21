@@ -962,7 +962,7 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
     async with managed_playwright() as p:
         try:
             browser = await p.chromium.launch(
-                headless=headless,
+                headless=False,  # Force headless=False to allow full JavaScript rendering and AJAX
                 args=_STEALTH_ARGS,
                 proxy=playwright_proxy_config(),
             )
@@ -997,7 +997,7 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
             all_products = []
             seen_urls = set()
             page_num = 1
-            max_pages = 50  # Keep clicking "Load more" up to 50 times
+            max_pages = 12  # Overclockers has maxpage=11, so try up to 12
 
             while page_num <= max_pages and len(all_products) < 500:
                 # Extract products currently visible on page (using global dedup)
@@ -1041,33 +1041,25 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
 
                 log.info("overclockers.cases.page", page=page_num, found=len(products), total=len(all_products), headless=headless)
 
-                # Look for "Load more" button (infinite scroll pattern)
-                load_more_found = False
-                for selector in ['.js-load-more', 'button:has-text("Load more")', '[class*="load-more"] button', 'button[data-qa*="load-more"]']:
-                    try:
-                        elem = await page.query_selector(selector)
-                        if elem and await elem.is_visible():
-                            # Click and wait for button to become disabled (loading state)
-                            await elem.click(timeout=5000)
-                            await asyncio.sleep(1)
-
-                            # Wait for new products to load (button becomes re-enabled after AJAX completes)
-                            try:
-                                await page.wait_for_selector('.js-load-more:not([disabled])', timeout=10000)
-                            except:
-                                pass  # Button might be hidden if no more products
-
-                            await asyncio.sleep(1)
-                            load_more_found = True
-                            break
-                    except Exception as e:
-                        log.debug(f"overclockers.load_more_selector_failed", selector=selector, error=str(e))
-
-                if not load_more_found:
-                    log.info("overclockers.cases.no_more_button", page=page_num, total_products=len(all_products))
+                if page_num >= max_pages:
+                    log.info("overclockers.cases.max_pages_reached", total_products=len(all_products))
                     break
 
-                page_num += 1
+                # Try to click "Load more" button
+                try:
+                    btn = await page.query_selector('.js-load-more')
+                    if btn and await btn.is_visible():
+                        # Force click
+                        await btn.click(force=True, timeout=3000)
+                        # Wait for new products
+                        await asyncio.sleep(3)
+                        page_num += 1
+                    else:
+                        log.info("overclockers.cases.button_not_visible", page=page_num, total=len(all_products))
+                        break
+                except Exception as e:
+                    log.debug(f"overclockers.load_more_click_failed", page=page_num, error=str(e))
+                    break
 
             seen_urls = set()
             for product in all_products[:240]:
