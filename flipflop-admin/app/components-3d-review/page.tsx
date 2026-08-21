@@ -44,13 +44,13 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           const scene = new THREE.Scene();
           scene.background = new THREE.Color(0x1a1a1a);
 
-          // Blender-style grid with proper perspective
-          const gridHelper = new THREE.GridHelper(30, 30, 0x555555, 0x222222);
+          // Blender-style grid with proper perspective (no center line)
+          const gridHelper = new THREE.GridHelper(30, 30, 0x000000, 0x333333);
           gridHelper.position.y = -1;
           scene.add(gridHelper);
 
           const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-          camera.position.set(0, 0, 1);
+          camera.position.set(0, 0, 1.5);
           cameraRef.current = camera;
 
           const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -326,41 +326,52 @@ export default function Components3DReviewPage() {
 
       {/* Main layout: left grid + right viewer */}
       <div className="flex gap-3 flex-1 min-h-0">
-        {/* Left: Asset grid */}
+        {/* Left: Asset grid grouped by category */}
         <div className="w-40 flex flex-col gap-2 min-h-0">
           <div className="overflow-y-auto flex-1">
-            <div className="grid grid-cols-2 gap-2">
-              {loading ? (
-                <div className="col-span-2 text-center py-4 text-slate-500 text-xs">Loading...</div>
-              ) : filteredAssets.filter(a => a.glb_ref).length === 0 ? (
-                <div className="col-span-2 text-center py-4 text-slate-500 text-xs space-y-2">
-                  <p>No models ready</p>
-                  <p className="text-[10px] text-slate-600">Run generate_catalogue_3d_assets.py to import more</p>
+            {loading ? (
+              <div className="text-center py-4 text-slate-500 text-xs">Loading...</div>
+            ) : filteredAssets.filter(a => a.glb_ref).length === 0 ? (
+              <div className="text-center py-4 text-slate-500 text-xs space-y-2">
+                <p>No models ready</p>
+                <p className="text-[10px] text-slate-600">Run generate_catalogue_3d_assets.py to import more</p>
+              </div>
+            ) : (
+              Object.entries(
+                filteredAssets.filter(a => a.glb_ref).reduce((acc, asset) => {
+                  if (!acc[asset.category]) acc[asset.category] = [];
+                  acc[asset.category].push(asset);
+                  return acc;
+                }, {} as Record<string, Component3DAsset[]>)
+              ).map(([category, assets]) => (
+                <div key={category} className="mb-3">
+                  <div className="text-xs font-semibold text-slate-400 mb-1 px-1">{category}</div>
+                  <div className="grid grid-cols-2 gap-1">
+                    {assets.map((asset) => (
+                      <button
+                        key={asset.id}
+                        onClick={() => setSelectedAsset(asset)}
+                        className={`aspect-square rounded border transition ${
+                          selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""
+                        } ${statusColors[asset.status]}`}
+                        style={{
+                          backgroundImage: asset.preview_image_ref ? `url('${asset.preview_image_ref}')` : undefined,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
+                        title={asset.family_key}
+                      >
+                        <div className="w-full h-full bg-black/40 flex items-center justify-center text-xs font-bold text-white/70">
+                          {asset.status === "meshy_draft" && "DRAFT"}
+                          {asset.status === "validated" && "✓"}
+                          {asset.status === "final" && "✓✓"}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              ) : (
-                filteredAssets.filter(a => a.glb_ref).map((asset) => (
-                  <button
-                    key={asset.id}
-                    onClick={() => setSelectedAsset(asset)}
-                    className={`aspect-square rounded border transition ${
-                      selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""
-                    } ${statusColors[asset.status]}`}
-                    style={{
-                      backgroundImage: asset.preview_image_ref ? `url('${asset.preview_image_ref}')` : undefined,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                    title={asset.family_key}
-                  >
-                    <div className="w-full h-full bg-black/40 flex items-center justify-center text-xs font-bold text-white/70">
-                      {asset.status === "meshy_draft" && "DRAFT"}
-                      {asset.status === "validated" && "✓"}
-                      {asset.status === "final" && "✓✓"}
-                    </div>
-                  </button>
-                ))
-              )}
-            </div>
+              ))
+            )}
           </div>
         </div>
 
