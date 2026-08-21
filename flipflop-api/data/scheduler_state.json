@@ -3,7 +3,7 @@
     "last_success_at": "2026-08-21T12:27:03.084073+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-08-21T12:28:03.175836+00:00"
+    "last_success_at": "2026-08-21T12:33:03.478977+00:00"
   },
   "ebay_sales_tracker": {
     "last_success_at": "2026-08-21T12:29:02.733756+00:00"
@@ -27,7 +27,7 @@
     "last_success_at": "2026-08-21T12:27:03.483978+00:00"
   },
   "price_refresh": {
-    "last_success_at": "2026-08-21T11:59:10.988155+00:00"
+    "last_success_at": "2026-08-21T12:32:04.555242+00:00"
   },
   "ai_build_generator": {
     "last_success_at": "2026-08-21T12:05:37.354587+00:00"
