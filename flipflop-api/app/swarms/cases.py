@@ -1007,19 +1007,25 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
             seen_urls = set()
 
             # Use query string pagination - pages work fine when navigated to directly
+            # CRITICAL: Keep browser session open throughout pagination to maintain auth/CAPTCHA session
             for page_num in range(1, 12):  # Overclockers has maxpage=11
                 page_url = f"{base_url}?page={page_num}"
-                log.info("overclockers.cases.loading_page", page=page_num, url=page_url)
+                log.info("overclockers.cases.loading_page", page=page_num, url=page_url, total_so_far=len(all_products))
 
-                await page.goto(page_url, wait_until="domcontentloaded", timeout=60000)
+                await page.goto(page_url, wait_until="networkidle", timeout=60000)
+                await asyncio.sleep(2)  # Wait for page to stabilize
 
                 # CRITICAL: Wait for products to fully render before extraction
                 try:
                     await page.wait_for_selector("ck-product-box", timeout=20000)
-                    await asyncio.sleep(3)  # Extra wait for all products to render
+                    await asyncio.sleep(2)  # Extra wait for all products to render
                 except Exception as e:
                     log.warning("overclockers.wait_product_timeout", page=page_num, error=str(e))
-                    break  # No products on this page - stop pagination
+                    # Don't break - CAPTCHA page might need manual intervention on first page
+                    # but session persists, so keep trying
+                    if page_num == 1:
+                        log.warning("overclockers.first_page_no_products", likely_captcha=True)
+                    continue
 
                 # Extract products from this page
                 products = await page.evaluate(f"""() => {{
