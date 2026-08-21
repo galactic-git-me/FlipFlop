@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 
 interface PCCase {
   id: number;
@@ -8,22 +8,23 @@ interface PCCase {
   brand: string;
   model: string;
   rating: number;
-  reviewCount: number;
+  review_count: number;
   price: number;
-  tags: string;
-  formFactor: string;
+  form_factors?: string[];
+  keywords?: string[];
   status: 'has-model' | 'reference-only' | 'pending';
-  thumbnailUrl?: string;
-  model3dUrl?: string;
-  youtubeUrl?: string;
+  image_url?: string;
+  model_3d_url?: string;
+  has_3d_model: boolean;
 }
 
-// Mock data - 32 PC cases
-const MOCK_CASES: PCCase[] = [
-  { id: 1, name: 'NZXT H6 Flow', brand: 'NZXT', model: 'h6-flow', rating: 4.8, reviewCount: 3062, price: 69.98, tags: 'mid-tower, atx, tempered-glass, rgb-lighting', formFactor: 'mid-tower', status: 'has-model' },
+export function PCCasesGallery() {
+  const [cases, setCases] = useState<PCCase[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   { id: 2, name: 'CORSAIR FRAME 4000D', brand: 'CORSAIR', model: 'frame-4000d', rating: 4.7, reviewCount: 1803, price: 70.79, tags: 'mid-tower, atx, tempered-glass, airflow', formFactor: 'mid-tower', status: 'has-model' },
   { id: 3, name: 'NZXT H5 Flow', brand: 'NZXT', model: 'h5-flow', rating: 4.6, reviewCount: 1160, price: 49.99, tags: 'micro-atx, compact, airflow', formFactor: 'micro-atx', status: 'has-model' },
-  { id: 4, name: 'Phanteks XT Silent', brand: 'Phanteks', model: 'xt-pro', rating: 4.7, reviewCount: 914, price: 0, tags: 'mid-tower, atx, silent-design, tempered-glass', formFactor: 'mid-tower', status: 'has-model' },
+  { id: 4, name: 'Phanteks XT Silent', brand: 'Phanteks', model: 'xt-pro', rating: 4.7, reviewCount: 914, price: 119.99, tags: 'mid-tower, atx, silent-design, tempered-glass', formFactor: 'mid-tower', status: 'has-model' },
   { id: 5, name: 'Lian Li LANCOOL 216 RGB', brand: 'Lian Li', model: 'lancool-216', rating: 4.7, reviewCount: 910, price: 89.99, tags: 'mid-tower, atx, airflow, rgb-lighting', formFactor: 'mid-tower', status: 'has-model' },
   { id: 6, name: 'HYTE Y60', brand: 'HYTE', model: 'y60', rating: 4.8, reviewCount: 904, price: 132.56, tags: 'mid-tower, atx, dual-chamber, panoramic-glass', formFactor: 'mid-tower', status: 'has-model' },
   { id: 7, name: 'CORSAIR 3000D RGB', brand: 'CORSAIR', model: '3000d-rgb', rating: 4.5, reviewCount: 806, price: 60.26, tags: 'mid-tower, atx, rgb-lighting, airflow', formFactor: 'mid-tower', status: 'has-model' },
@@ -34,24 +35,24 @@ const MOCK_CASES: PCCase[] = [
   { id: 12, name: 'NZXT H3 Flow', brand: 'NZXT', model: 'h3-flow', rating: 4.6, reviewCount: 669, price: 49.98, tags: 'micro-atx, compact, airflow', formFactor: 'micro-atx', status: 'has-model' },
   { id: 13, name: 'Mars Gaming MCV4', brand: 'Mars Gaming', model: 'mcv4', rating: 4.5, reviewCount: 582, price: 74.39, tags: 'e-atx, gaming, dual-chamber, frameless', formFactor: 'e-atx', status: 'has-model' },
   { id: 14, name: 'MSI MAG FORGE 112R', brand: 'MSI', model: 'mag-forge-112r', rating: 4.4, reviewCount: 563, price: 49.99, tags: 'mid-tower, multi-form, tempered-glass', formFactor: 'mid-tower', status: 'has-model' },
-  { id: 15, name: 'Lian Li A3', brand: 'Lian Li', model: 'a3', rating: 4.7, reviewCount: 513, price: 0, tags: 'micro-atx, compact, wood-panel', formFactor: 'micro-atx', status: 'has-model' },
+  { id: 15, name: 'Lian Li A3', brand: 'Lian Li', model: 'a3', rating: 4.7, reviewCount: 513, price: 65.99, tags: 'micro-atx, compact, wood-panel', formFactor: 'micro-atx', status: 'has-model' },
   { id: 16, name: 'Antec C8', brand: 'Antec', model: 'c8', rating: 4.7, reviewCount: 488, price: 103.77, tags: 'e-atx, full-tower, dual-chamber, radiator-support', formFactor: 'e-atx', status: 'has-model' },
   { id: 17, name: 'Lian Li O11D EVO', brand: 'Lian Li', model: 'o11d-evo', rating: 4.7, reviewCount: 469, price: 139.99, tags: 'mid-tower, e-atx, tempered-glass, modular', formFactor: 'mid-tower', status: 'has-model' },
   { id: 18, name: 'NZXT H9 Flow', brand: 'NZXT', model: 'h9-flow', rating: 4.8, reviewCount: 465, price: 99.98, tags: 'mid-tower, atx, dual-chamber, airflow', formFactor: 'mid-tower', status: 'has-model' },
-  { id: 19, name: 'Lian Li O11 VISION-M', brand: 'Lian Li', model: 'o11-vision-m', rating: 4.6, reviewCount: 460, price: 0, tags: 'micro-atx, dual-chamber, modular', formFactor: 'micro-atx', status: 'reference-only' },
+  { id: 19, name: 'Lian Li O11 VISION-M', brand: 'Lian Li', model: 'o11-vision-m', rating: 4.6, reviewCount: 460, price: 99.99, tags: 'micro-atx, dual-chamber, modular', formFactor: 'micro-atx', status: 'reference-only' },
   { id: 20, name: 'ASUS TUF Gaming GT301', brand: 'ASUS', model: 'tuf-gt301', rating: 4.5, reviewCount: 428, price: 87.98, tags: 'mid-tower, atx, gaming, tempered-glass', formFactor: 'mid-tower', status: 'pending' },
   { id: 21, name: 'GAMDIAS ZEUS', brand: 'GAMDIAS', model: 'zeus', rating: 4.3, reviewCount: 412, price: 49.95, tags: 'mid-tower, atx, gaming, tempered-glass', formFactor: 'mid-tower', status: 'pending' },
   { id: 22, name: 'MSI MAG PANO 100R', brand: 'MSI', model: 'mag-pano-100r', rating: 4.8, reviewCount: 390, price: 89.99, tags: 'mid-tower, atx, panoramic-glass, vertical-gpu', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 23, name: 'NZXT H7 Flow RGB', brand: 'NZXT', model: 'h7-flow', rating: 4.7, reviewCount: 380, price: 0, tags: 'mid-tower, atx, rgb-lighting, airflow', formFactor: 'mid-tower', status: 'reference-only' },
+  { id: 23, name: 'NZXT H7 Flow RGB', brand: 'NZXT', model: 'h7-flow', rating: 4.7, reviewCount: 380, price: 89.99, tags: 'mid-tower, atx, rgb-lighting, airflow', formFactor: 'mid-tower', status: 'reference-only' },
   { id: 24, name: 'Fractal Design Define 7', brand: 'Fractal Design', model: 'define-7', rating: 4.6, reviewCount: 350, price: 149.99, tags: 'mid-tower, e-atx, quiet-design, modular', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 25, name: 'GAMDIAS TALOS E3', brand: 'GAMDIAS', model: 'talos-e3', rating: 4.4, reviewCount: 340, price: 0, tags: 'mid-tower, atx, gaming, mesh-front', formFactor: 'mid-tower', status: 'pending' },
-  { id: 26, name: 'Antec C8 White', brand: 'Antec', model: 'c8-white', rating: 4.7, reviewCount: 320, price: 0, tags: 'e-atx, full-tower, dual-chamber, no-fans', formFactor: 'e-atx', status: 'reference-only' },
-  { id: 27, name: 'Lian Li V100', brand: 'Lian Li', model: 'v100', rating: 4.6, reviewCount: 310, price: 0, tags: 'mid-tower, atx, tempered-glass, airflow', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 28, name: 'CiT Jet Stream', brand: 'CiT', model: 'jet-stream', rating: 4.5, reviewCount: 290, price: 0, tags: 'mid-tower, atx, office, compact', formFactor: 'mid-tower', status: 'pending' },
+  { id: 25, name: 'GAMDIAS TALOS E3', brand: 'GAMDIAS', model: 'talos-e3', rating: 4.4, reviewCount: 340, price: 69.99, tags: 'mid-tower, atx, gaming, mesh-front', formFactor: 'mid-tower', status: 'pending' },
+  { id: 26, name: 'Antec C8 White', brand: 'Antec', model: 'c8-white', rating: 4.7, reviewCount: 320, price: 109.99, tags: 'e-atx, full-tower, dual-chamber, no-fans', formFactor: 'e-atx', status: 'reference-only' },
+  { id: 27, name: 'Lian Li V100', brand: 'Lian Li', model: 'v100', rating: 4.6, reviewCount: 310, price: 79.99, tags: 'mid-tower, atx, tempered-glass, airflow', formFactor: 'mid-tower', status: 'reference-only' },
+  { id: 28, name: 'CiT Jet Stream', brand: 'CiT', model: 'jet-stream', rating: 4.5, reviewCount: 290, price: 45.99, tags: 'mid-tower, atx, office, compact', formFactor: 'mid-tower', status: 'pending' },
   { id: 29, name: 'CORSAIR AIR 5400 RS-R', brand: 'CORSAIR', model: 'air-5400', rating: 4.6, reviewCount: 280, price: 189.99, tags: 'mid-tower, atx, triple-chamber, panoramic-glass', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 30, name: 'be quiet! Pure Base 600', brand: 'be quiet!', model: 'pure-base-600', rating: 4.7, reviewCount: 270, price: 0, tags: 'mid-tower, atx, quiet-design, mesh-front', formFactor: 'mid-tower', status: 'has-model' },
-  { id: 31, name: 'Lian Li LANCOOL 217', brand: 'Lian Li', model: 'lancool-217', rating: 4.7, reviewCount: 260, price: 0, tags: 'mid-tower, atx, tempered-glass, airflow', formFactor: 'mid-tower', status: 'reference-only' },
-  { id: 32, name: 'Corsair iCUE 5000D RGB', brand: 'CORSAIR', model: '5000d-rgb', rating: 4.8, reviewCount: 250, price: 0, tags: 'mid-tower, atx, rgb-lighting, panoramic-glass', formFactor: 'mid-tower', status: 'has-model' },
+  { id: 30, name: 'be quiet! Pure Base 600', brand: 'be quiet!', model: 'pure-base-600', rating: 4.7, reviewCount: 270, price: 59.99, tags: 'mid-tower, atx, quiet-design, mesh-front', formFactor: 'mid-tower', status: 'has-model' },
+  { id: 31, name: 'Lian Li LANCOOL 217', brand: 'Lian Li', model: 'lancool-217', rating: 4.7, reviewCount: 260, price: 85.99, tags: 'mid-tower, atx, tempered-glass, airflow', formFactor: 'mid-tower', status: 'reference-only' },
+  { id: 32, name: 'Corsair iCUE 5000D RGB', brand: 'CORSAIR', model: '5000d-rgb', rating: 4.8, reviewCount: 250, price: 129.99, tags: 'mid-tower, atx, rgb-lighting, panoramic-glass', formFactor: 'mid-tower', status: 'has-model' },
 ];
 
 export function PCCasesGallery() {

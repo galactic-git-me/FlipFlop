@@ -100,9 +100,67 @@ async def get_cases_with_3d_models(
     ]
 
 
+@router.get("/gallery")
+async def get_gallery_cases(
+    limit: int = 32,
+    sort_by: str = "reviews",
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Get cases for the 3D review gallery.
+    Sorted by: has_3d_model first, then by sort_by (reviews, rating, price, name).
+    """
+    from sqlalchemy import case as sql_case, desc
+
+    # Build order clause: 3D models first, then by selected sort
+    order_clauses = [
+        sql_case((Case.has_3d_model == True, 0), else_=1),  # 3D models first
+    ]
+
+    if sort_by == "reviews":
+        order_clauses.append(desc(Case.review_count))
+    elif sort_by == "rating":
+        order_clauses.append(desc(Case.rating))
+    elif sort_by == "price":
+        order_clauses.append(Case.price.asc())
+    elif sort_by == "name":
+        order_clauses.append(Case.name.asc())
+    else:
+        order_clauses.append(desc(Case.review_count))
+
+    result = await db.execute(
+        select(Case)
+        .order_by(*order_clauses)
+        .limit(limit)
+    )
+    cases = result.scalars().all()
+
+    return [
+        {
+            "id": c.id,
+            "name": c.name,
+            "brand": c.brand,
+            "model": c.model,
+            "price": c.price_new or c.price or 0,
+            "source_site": c.source_site,
+            "image_url": c.image_url,
+            "rating": c.rating or 0,
+            "review_count": c.review_count or 0,
+            "form_factors": c.form_factors or [],
+            "keywords": c.keywords or [],
+            "has_3d_model": c.has_3d_model,
+            "model_3d_url": c.model_3d_url,
+            "status": "has-model" if c.has_3d_model else "reference-only",
+        }
+        for c in cases
+    ]
+
+
 @router.get("/stats")
 async def get_cases_stats(db: AsyncSession = Depends(get_db)):
     """Get sourcing statistics."""
+    from sqlalchemy import Integer
+
     result = await db.execute(
         select(
             func.count().label("total"),
