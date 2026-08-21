@@ -20,6 +20,8 @@ interface Component3DAsset {
 
 function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const mouseRef = useRef({ x: 0, y: 0, isDown: false });
+  const modelRef = useRef<any>(null);
 
   useEffect(() => {
     if (!containerRef.current || !glbUrl) return;
@@ -41,7 +43,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           scene.background = new THREE.Color(0x0a1119);
 
           const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-          camera.position.set(0, 1, 2);
+          camera.position.set(0, 0, 3);
 
           const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
           renderer.setSize(width, height);
@@ -52,34 +54,80 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           }
           containerRef.current.appendChild(renderer.domElement);
 
-          const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+          const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
           scene.add(ambientLight);
 
-          const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
-          directionalLight.position.set(5, 8, 5);
+          const pointLight = new THREE.PointLight(0xffffff, 0.8);
+          pointLight.position.set(5, 5, -5);
+          scene.add(pointLight);
+
+          const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+          directionalLight.position.set(3, 5, 2);
           scene.add(directionalLight);
 
           const loader = new GLTFLoader();
           const filename = glbUrl.split("/").pop();
           const proxyUrl = `/api/glb-proxy/${filename}`;
 
+          const gridHelper = new THREE.GridHelper(10, 20, 0x444444, 0x222222);
+          gridHelper.position.y = -1;
+          scene.add(gridHelper);
+
           loader.load(
             proxyUrl,
             (gltf) => {
               const model = gltf.scene;
-              model.scale.set(1, 1, 1);
               scene.add(model);
 
               const box = new THREE.Box3().setFromObject(model);
+              const size = box.getSize(new THREE.Vector3());
+              const maxDim = Math.max(size.x, size.y, size.z);
+              const scale = 1.6 / maxDim;
+              model.scale.multiplyScalar(scale);
+
               const center = box.getCenter(new THREE.Vector3());
-              model.position.sub(center);
+              model.position.sub(center.multiplyScalar(scale));
+
+              modelRef.current = model;
+
+              let isAutoRotating = true;
+              let animationId: number;
 
               const animate = () => {
-                requestAnimationFrame(animate);
-                model.rotation.y += 0.005;
+                animationId = requestAnimationFrame(animate);
+
+                if (isAutoRotating) {
+                  model.rotation.y += 0.005;
+                } else if (mouseRef.current.isDown) {
+                  model.rotation.y += mouseRef.current.x * 0.01;
+                  model.rotation.x += mouseRef.current.y * 0.01;
+                  mouseRef.current.x *= 0.95;
+                  mouseRef.current.y *= 0.95;
+                }
+
                 renderer.render(scene, camera);
               };
               animate();
+
+              const container = containerRef.current!;
+              container.addEventListener("mousedown", () => {
+                isAutoRotating = false;
+                mouseRef.current.isDown = true;
+              });
+              container.addEventListener("mousemove", (e) => {
+                if (mouseRef.current.isDown) {
+                  mouseRef.current.x = e.movementX;
+                  mouseRef.current.y = e.movementY;
+                }
+              });
+              container.addEventListener("mouseup", () => {
+                mouseRef.current.isDown = false;
+                isAutoRotating = true;
+              });
+              container.addEventListener("mouseleave", () => {
+                mouseRef.current.isDown = false;
+                isAutoRotating = true;
+              });
             },
             undefined,
             (error) => {
