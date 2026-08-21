@@ -36,7 +36,13 @@ class Case(Base):
     # 3D model status
     has_3d_model = Column(Boolean, default=False, index=True)
     model_3d_url = Column(String, nullable=True)  # URL to .glb/.gltf file
-    model_3d_source = Column(String, nullable=True)  # "manufacturer_cad", "community_cad", "meshy_ai"
+    model_3d_source = Column(String, nullable=True)  # "manufacturer_cad", "community_cad", "meshy_ai", "sketchfab"
+    model_3d_creator = Column(String, nullable=True)  # Creator/artist name
+    model_3d_license = Column(String, nullable=True)  # License type (e.g., "CC-BY-4.0")
+    model_3d_quality = Column(String, nullable=True)  # "low", "medium", "high" based on polygon count
+    model_3d_vertices = Column(Integer, nullable=True)  # Vertex count
+    model_3d_polygons = Column(Integer, nullable=True)  # Triangle/polygon count
+    model_3d_file_size = Column(Integer, nullable=True)  # File size in bytes
 
     # Sourcing workflow status
     status = Column(
