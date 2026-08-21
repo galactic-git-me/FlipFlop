@@ -1,9 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Box } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState, useRef } from "react";
+import { Check } from "lucide-react";
 
 interface Component3DAsset {
   id: number;
@@ -18,6 +16,77 @@ interface Component3DAsset {
   notes: string | null;
   created_by: string | null;
   created_at: string | null;
+}
+
+function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current || !glbUrl) return;
+
+    setTimeout(() => {
+      const setupViewer = async () => {
+        try {
+          const THREE = await import("three");
+          const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+
+          if (!containerRef.current) return;
+
+          const width = containerRef.current.clientWidth;
+          const height = containerRef.current.clientHeight;
+
+          if (width === 0 || height === 0) return;
+
+          const scene = new THREE.Scene();
+          scene.background = new THREE.Color(0x0a1119);
+
+          const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+          camera.position.set(0, 1, 2);
+
+          const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+          renderer.setSize(width, height);
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+
+          while (containerRef.current.firstChild) {
+            containerRef.current.removeChild(containerRef.current.firstChild);
+          }
+          containerRef.current.appendChild(renderer.domElement);
+
+          const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+          scene.add(ambientLight);
+
+          const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+          directionalLight.position.set(5, 8, 5);
+          scene.add(directionalLight);
+
+          const loader = new GLTFLoader();
+          loader.load(glbUrl, (gltf) => {
+            const model = gltf.scene;
+            model.scale.set(1, 1, 1);
+            scene.add(model);
+
+            const box = new THREE.Box3().setFromObject(model);
+            const center = box.getCenter(new THREE.Vector3());
+            model.position.sub(center);
+
+            const animate = () => {
+              requestAnimationFrame(animate);
+              model.rotation.y += 0.005;
+              renderer.render(scene, camera);
+            };
+            animate();
+          });
+
+          renderer.render(scene, camera);
+        } catch (error) {
+          console.error("Error setting up 3D viewer:", error);
+        }
+      };
+      setupViewer();
+    }, 100);
+  }, [glbUrl]);
+
+  return <div ref={containerRef} className="w-full h-full bg-slate-900/50 rounded border border-slate-700/50" />;
 }
 
 export default function Components3DReviewPage() {
@@ -80,167 +149,152 @@ export default function Components3DReviewPage() {
     rejected: "border-red-400/30 bg-red-400/5",
   };
 
-  const getStatusStyle = (status: string) => {
-    if (status === "meshy_draft") return "bg-orange-400/20 text-orange-300 border border-orange-400/50";
-    if (status === "validated") return "bg-purple-400/20 text-purple-300 border border-purple-400/50";
-    if (status === "final") return "bg-[#00dc82]/20 text-[#00dc82] border border-[#00dc82]/50";
-    return "bg-slate-600/20 text-slate-300 border border-slate-600/50";
-  };
-
   return (
-    <div className="w-full h-full flex flex-col gap-3 p-4">
+    <div className="w-full h-full flex flex-col gap-3 p-4 bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950">
+      {/* Header */}
       <div>
-        <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
+        <h1 className="text-xl font-bold text-slate-100">3D Asset Review</h1>
       </div>
 
-      <div className="grid grid-cols-4 gap-3">
-        <div className="bg-gradient-to-br from-orange-500/20 to-orange-900/20 border border-orange-400/40 rounded-lg p-4">
-          <div className="text-3xl font-bold text-orange-400 mb-1">{draftCount}</div>
-          <div className="text-xs text-orange-300/70">Draft</div>
+      {/* Stats */}
+      <div className="grid grid-cols-4 gap-2">
+        <div className="bg-orange-400/10 border border-orange-400/30 rounded p-2">
+          <div className="text-2xl font-bold text-orange-400">{draftCount}</div>
+          <div className="text-xs text-slate-500">Draft</div>
         </div>
-        <div className="bg-gradient-to-br from-purple-500/20 to-purple-900/20 border border-purple-400/40 rounded-lg p-4">
-          <div className="text-3xl font-bold text-purple-400 mb-1">{validatedCount}</div>
-          <div className="text-xs text-purple-300/70">Valid</div>
+        <div className="bg-purple-400/10 border border-purple-400/30 rounded p-2">
+          <div className="text-2xl font-bold text-purple-400">{validatedCount}</div>
+          <div className="text-xs text-slate-500">Valid</div>
         </div>
-        <div className="bg-gradient-to-br from-[#00dc82]/20 to-green-900/20 border border-[#00dc82]/40 rounded-lg p-4">
-          <div className="text-3xl font-bold text-[#00dc82] mb-1">{finalCount}</div>
-          <div className="text-xs text-[#00dc82]/70">Final</div>
+        <div className="bg-[#00dc82]/10 border border-[#00dc82]/30 rounded p-2">
+          <div className="text-2xl font-bold text-[#00dc82]">{finalCount}</div>
+          <div className="text-xs text-slate-500">Final</div>
         </div>
-        <div className="bg-gradient-to-br from-slate-500/20 to-slate-900/20 border border-slate-400/40 rounded-lg p-4">
-          <div className="text-3xl font-bold text-slate-300 mb-1">{assets.length}</div>
-          <div className="text-xs text-slate-400/70">Total</div>
+        <div className="bg-slate-600/10 border border-slate-600/30 rounded p-2">
+          <div className="text-2xl font-bold text-slate-300">{assets.length}</div>
+          <div className="text-xs text-slate-500">Total</div>
         </div>
       </div>
 
+      {/* Filters */}
       <div className="flex gap-2">
         <button
           onClick={() => setFilter("meshy_draft")}
-          className={filter === "meshy_draft" ? "px-2 py-1 rounded text-xs font-semibold bg-orange-600/30 text-orange-300 border border-orange-500/50" : "px-2 py-1 rounded text-xs font-semibold bg-slate-700/30 text-slate-400 border border-slate-600/50"}
+          className={`px-2 py-1 rounded text-xs font-semibold transition-colors ${
+            filter === "meshy_draft"
+              ? "bg-orange-600/30 text-orange-300 border border-orange-500/50"
+              : "bg-slate-700/30 text-slate-400 border border-slate-600/50"
+          }`}
         >
           Review ({draftCount})
         </button>
         <button
           onClick={() => setFilter("all")}
-          className={filter === "all" ? "px-2 py-1 rounded text-xs font-semibold bg-purple-600/30 text-purple-300 border border-purple-500/50" : "px-2 py-1 rounded text-xs font-semibold bg-slate-700/30 text-slate-400 border border-slate-600/50"}
+          className={`px-2 py-1 rounded text-xs font-semibold transition-colors ${
+            filter === "all"
+              ? "bg-purple-600/30 text-purple-300 border border-purple-500/50"
+              : "bg-slate-700/30 text-slate-400 border border-slate-600/50"
+          }`}
         >
           All ({assets.length})
         </button>
       </div>
 
+      {/* Main layout: left grid + right viewer */}
       <div className="flex gap-3 flex-1 min-h-0">
-        <div className="flex-1 flex flex-col min-h-0 gap-3">
-          {selectedAsset ? (
-            <>
-              <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 flex flex-col bg-[#0a1119]">
-                <div className="px-3 py-2 border-b border-[#1e2d45] bg-slate-900/30 text-xs font-semibold text-slate-300">Preview</div>
-                <div className="flex-1 min-h-0 flex items-center justify-center">
-                  {selectedAsset.preview_image_ref ? (
-                    <img src={selectedAsset.preview_image_ref} alt={selectedAsset.family_key} className="w-full h-full object-contain" />
-                  ) : (
-                    <div className="text-center text-slate-500">
-                      <Box className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                      <p className="text-xs">No preview available</p>
+        {/* Left: Asset grid */}
+        <div className="w-40 flex flex-col gap-2 min-h-0">
+          <div className="overflow-y-auto flex-1">
+            <div className="grid grid-cols-2 gap-2">
+              {loading ? (
+                <div className="col-span-2 text-center py-4 text-slate-500 text-xs">Loading...</div>
+              ) : filteredAssets.length === 0 ? (
+                <div className="col-span-2 text-center py-4 text-slate-500 text-xs">No assets</div>
+              ) : (
+                filteredAssets.map((asset) => (
+                  <button
+                    key={asset.id}
+                    onClick={() => setSelectedAsset(asset)}
+                    className={`aspect-square rounded border transition ${
+                      selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""
+                    } ${statusColors[asset.status]}`}
+                    style={{
+                      backgroundImage: asset.preview_image_ref ? `url('${asset.preview_image_ref}')` : undefined,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                    title={asset.family_key}
+                  >
+                    <div className="w-full h-full bg-black/40 flex items-center justify-center text-xs font-bold text-white/70">
+                      {asset.status === "meshy_draft" && "DRAFT"}
+                      {asset.status === "validated" && "✓"}
+                      {asset.status === "final" && "✓✓"}
                     </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex-1 border border-[#1e2d45] rounded-lg overflow-y-auto p-2 bg-[#0a1119]">
-                <div className="grid grid-cols-6 gap-2">
-                  {filteredAssets.map((asset) => (
-                    <button
-                      key={asset.id}
-                      onClick={() => setSelectedAsset(asset)}
-                      className={`aspect-square rounded border overflow-hidden cursor-pointer transition hover:scale-105 ${selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""} ${statusColors[asset.status] || ""}`}
-                      style={{ backgroundImage: asset.preview_image_ref ? `url('${asset.preview_image_ref}')` : undefined, backgroundSize: "cover", backgroundPosition: "center" }}
-                    >
-                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                        <div className="font-bold text-[8px] text-white text-center">{asset.family_key}</div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </>
-          ) : (
-            <div className="flex items-center justify-center flex-1 text-slate-500">
-              <div className="text-center">
-                <Box className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                <p>Select an asset to review</p>
-              </div>
+                  </button>
+                ))
+              )}
             </div>
-          )}
+          </div>
         </div>
 
-        {selectedAsset && (
-          <div className="w-96 flex flex-col min-h-0 overflow-y-auto">
-            <Card className="border-[#1e2d45]">
-              <CardHeader>
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <CardTitle className="text-sm">{selectedAsset.family_key}</CardTitle>
-                    <p className="text-xs text-slate-500 mt-1">ID: {selectedAsset.id} v{selectedAsset.version}</p>
-                  </div>
-                  <div className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-semibold whitespace-nowrap ${getStatusStyle(selectedAsset.status)}`}>
-                    {selectedAsset.status.toUpperCase()}
-                  </div>
+        {/* Right: Viewer + info */}
+        {selectedAsset ? (
+          <div className="flex-1 flex flex-col gap-2 min-h-0">
+            {/* Viewer */}
+            <div className="flex-1 rounded border border-slate-700/50 overflow-hidden min-h-0">
+              <Viewer3D glbUrl={selectedAsset.glb_ref} />
+            </div>
+
+            {/* Asset info + controls */}
+            <div className="bg-slate-900/40 border border-slate-700/50 rounded p-2 space-y-2">
+              <div>
+                <p className="text-xs font-semibold text-slate-300">{selectedAsset.family_key}</p>
+                <p className="text-xs text-slate-500">{selectedAsset.category}</p>
+              </div>
+
+              {selectedAsset.status === "meshy_draft" && (
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => handleStatusChange(selectedAsset.id, "cleaned")}
+                    className="flex-1 px-2 py-1 text-xs font-semibold bg-blue-600/30 text-blue-300 border border-blue-500/50 rounded hover:bg-blue-600/40 transition"
+                  >
+                    Clean
+                  </button>
+                  <button
+                    onClick={() => handleStatusChange(selectedAsset.id, "rejected")}
+                    className="flex-1 px-2 py-1 text-xs font-semibold bg-red-600/30 text-red-300 border border-red-500/50 rounded hover:bg-red-600/40 transition"
+                  >
+                    Reject
+                  </button>
                 </div>
-              </CardHeader>
-              <CardContent className="space-y-3 text-xs">
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <p className="text-slate-500">Category</p>
-                    <p className="text-slate-100 font-semibold">{selectedAsset.category}</p>
-                  </div>
-                  <div>
-                    <p className="text-slate-500">Version</p>
-                    <p className="text-slate-100 font-semibold">v{selectedAsset.version}</p>
-                  </div>
-                  {selectedAsset.file_size_kb && (
-                    <div>
-                      <p className="text-slate-500">File Size</p>
-                      <p className="text-slate-100 font-semibold">{Math.round(selectedAsset.file_size_kb / 1024)}MB</p>
-                    </div>
-                  )}
-                  {selectedAsset.poly_count && (
-                    <div>
-                      <p className="text-slate-500">Polygons</p>
-                      <p className="text-slate-100 font-semibold">{(selectedAsset.poly_count / 1000).toFixed(1)}k</p>
-                    </div>
-                  )}
+              )}
+
+              {selectedAsset.status === "cleaned" && (
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => handleStatusChange(selectedAsset.id, "validated")}
+                    className="flex-1 px-2 py-1 text-xs font-semibold bg-purple-600/30 text-purple-300 border border-purple-500/50 rounded hover:bg-purple-600/40 transition"
+                  >
+                    Validate
+                  </button>
                 </div>
-                {selectedAsset.notes && (
-                  <div className="p-2 bg-slate-700/30 rounded border border-slate-600 text-xs text-slate-300">
-                    <p className="text-slate-500 text-[10px] mb-1 uppercase">Notes</p>
-                    {selectedAsset.notes}
-                  </div>
-                )}
-                {selectedAsset.glb_ref && (
-                  <div className="p-2 bg-blue-900/20 rounded border border-blue-400/20">
-                    <p className="text-slate-500 text-xs mb-1">GLB File</p>
-                    <a href={selectedAsset.glb_ref} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 hover:text-blue-300 break-all">
-                      Download / View
-                    </a>
-                  </div>
-                )}
-                {selectedAsset.created_by && (
-                  <div className="text-[10px] text-slate-600">
-                    Created by {selectedAsset.created_by}
-                    {selectedAsset.created_at && ` on ${new Date(selectedAsset.created_at).toLocaleDateString()}`}
-                  </div>
-                )}
-                {selectedAsset.status === "meshy_draft" && (
-                  <div className="flex gap-2 pt-2">
-                    <Button onClick={() => handleStatusChange(selectedAsset.id, "rejected")} variant="secondary" size="sm" className="flex-1">Reject</Button>
-                    <Button onClick={() => handleStatusChange(selectedAsset.id, "cleaned")} size="sm" className="flex-1 bg-blue-600 hover:bg-blue-700">Cleaned</Button>
-                    <Button onClick={() => handleStatusChange(selectedAsset.id, "validated")} size="sm" className="flex-1 bg-purple-600 hover:bg-purple-700">Validate</Button>
-                  </div>
-                )}
-                {selectedAsset.status === "validated" && (
-                  <Button onClick={() => handleStatusChange(selectedAsset.id, "final")} size="sm" className="w-full bg-[#00dc82] hover:bg-[#00dc82]/90 text-black">Mark as Final</Button>
-                )}
-              </CardContent>
-            </Card>
+              )}
+
+              {selectedAsset.status === "validated" && (
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => handleStatusChange(selectedAsset.id, "final")}
+                    className="flex-1 px-2 py-1 text-xs font-semibold bg-[#00dc82]/30 text-[#00dc82] border border-[#00dc82]/50 rounded hover:bg-[#00dc82]/40 transition"
+                  >
+                    Finalize
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="flex-1 flex items-center justify-center text-slate-500">
+            <Check className="w-8 h-8 opacity-20" />
           </div>
         )}
       </div>
