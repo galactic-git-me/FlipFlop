@@ -49,11 +49,12 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           canvas.height = 2048;
           const ctx = canvas.getContext('2d')!;
 
-          // Sky gradient
+          // Sky gradient - much bluer
           const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-          gradient.addColorStop(0, '#87ceeb');
-          gradient.addColorStop(0.5, '#e0f6ff');
-          gradient.addColorStop(1, '#ffffff');
+          gradient.addColorStop(0, '#1e90ff');
+          gradient.addColorStop(0.4, '#4169e1');
+          gradient.addColorStop(0.7, '#6495ed');
+          gradient.addColorStop(1, '#87ceeb');
           ctx.fillStyle = gradient;
           ctx.fillRect(0, 0, canvas.width, canvas.height);
 
