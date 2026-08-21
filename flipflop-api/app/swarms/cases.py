@@ -995,28 +995,30 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
                 log.debug("overclockers.wait_selector_timeout", error=str(exc))
 
             all_products = []
+            seen_urls = set()
             page_num = 1
             max_pages = 50  # Keep clicking "Load more" up to 50 times
+
             while page_num <= max_pages and len(all_products) < 500:
-                products = await page.evaluate("""() => {
+                # Extract products currently visible on page (using global dedup)
+                products = await page.evaluate(f"""() => {{
                     const items = [];
-                    const seen = new Set();
-                    document.querySelectorAll('ck-product-box').forEach(box => {
-                        try {
-                            const analytics = JSON.parse(box.getAttribute('data-analytics') || '{}');
+                    const seenUrls = {str(seen_urls).replace("'", '"')};
+                    document.querySelectorAll('ck-product-box').forEach(box => {{
+                        try {{
+                            const analytics = JSON.parse(box.getAttribute('data-analytics') || '{{}}');
                             const product = (analytics.products || [])[0];
                             if (!product || !product.name || !product.price) return;
                             const link = box.querySelector('a');
                             const href = link ? link.href : '';
                             if (!href) return;
                             const key = href.split('?')[0];
-                            if (seen.has(key)) return;
-                            seen.add(key);
+                            if (seenUrls.has(key)) return;
                             const price = parseFloat(product.price);
                             if (price < 10 || price > 500) return;
                             const img = box.querySelector('img');
                             const rrp = parseFloat(product.wasPrice || product.rrp || product.listPrice || 0);
-                            items.push({
+                            items.push({{
                                 title: String(product.name).slice(0, 250),
                                 price,
                                 href,
@@ -1024,12 +1026,19 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
                                 rrp: Number.isFinite(rrp) && rrp > price ? rrp : null,
                                 rating: product.rating || product.averageRating || null,
                                 reviewCount: product.reviewCount || product.reviews || null,
-                            });
-                        } catch (e) {}
-                    });
+                            }});
+                        }} catch (e) {{}}
+                    }});
                     return items;
-                }""")
-                all_products.extend(products)
+                }}""")
+
+                # Track newly found products
+                for product in products:
+                    url_key = product["href"].split("?")[0]
+                    if url_key not in seen_urls:
+                        seen_urls.add(url_key)
+                        all_products.append(product)
+
                 log.info("overclockers.cases.page", page=page_num, found=len(products), total=len(all_products), headless=headless)
 
                 # Look for "Load more" button (infinite scroll pattern)
@@ -1039,7 +1048,7 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
                         elem = await page.query_selector(selector)
                         if elem and await elem.is_visible():
                             await elem.click()
-                            await asyncio.sleep(2)  # Wait for AJAX content to load
+                            await asyncio.sleep(3)  # Wait for AJAX content to load
                             load_more_found = True
                             break
                     except Exception as e:
