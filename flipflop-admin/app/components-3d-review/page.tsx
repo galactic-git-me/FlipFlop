@@ -42,7 +42,42 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           if (width === 0 || height === 0) return;
 
           const scene = new THREE.Scene();
-          scene.background = new THREE.Color(0x0a1119);
+
+          // Create procedural clouds background
+          const canvas = document.createElement('canvas');
+          canvas.width = 2048;
+          canvas.height = 2048;
+          const ctx = canvas.getContext('2d')!;
+
+          // Sky gradient
+          const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+          gradient.addColorStop(0, '#87ceeb');
+          gradient.addColorStop(0.5, '#e0f6ff');
+          gradient.addColorStop(1, '#ffffff');
+          ctx.fillStyle = gradient;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          // Perlin-like noise for clouds
+          const drawCloud = (x: number, y: number, size: number, opacity: number) => {
+            ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+            for (let i = 0; i < 8; i++) {
+              ctx.beginPath();
+              ctx.arc(x + Math.cos(i) * size, y + Math.sin(i) * size * 0.6, size * (0.5 + Math.random() * 0.3), 0, Math.PI * 2);
+              ctx.fill();
+            }
+          };
+
+          // Draw multiple cloud layers
+          drawCloud(300, 400, 150, 0.9);
+          drawCloud(800, 300, 180, 0.85);
+          drawCloud(1400, 500, 160, 0.8);
+          drawCloud(1800, 250, 140, 0.75);
+          drawCloud(600, 800, 200, 0.7);
+          drawCloud(1200, 900, 170, 0.65);
+          drawCloud(400, 1200, 150, 0.6);
+
+          const texture = new THREE.CanvasTexture(canvas);
+          scene.background = texture;
 
           const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
           camera.position.set(0, 0, 1);
@@ -57,7 +92,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           }
           containerRef.current.appendChild(renderer.domElement);
 
-          const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+          const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
           scene.add(ambientLight);
 
           const pointLight = new THREE.PointLight(0xffffff, 1.2);
