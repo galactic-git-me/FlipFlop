@@ -183,6 +183,8 @@ export default function Components3DReviewPage() {
   const [loading, setLoading] = useState(true);
   const [selectedAsset, setSelectedAsset] = useState<Component3DAsset | null>(null);
   const [filter, setFilter] = useState<"meshy_draft" | "all">("meshy_draft");
+  const [approvalModal, setApprovalModal] = useState<{ isOpen: boolean; assetId: number | null }>({ isOpen: false, assetId: null });
+  const [approvalNotes, setApprovalNotes] = useState("");
 
   useEffect(() => {
     const load = async () => {
@@ -218,16 +220,24 @@ export default function Components3DReviewPage() {
           status: newStatus,
           commercial_use_approved: newStatus === "validated" || newStatus === "final",
           redistribution_approved: newStatus === "validated" || newStatus === "final",
+          notes: approvalNotes || undefined,
         }),
       });
       if (response.ok) {
         const updated = (await response.json()) as Component3DAsset;
         setAssets(prev => prev.map(a => a.id === assetId ? updated : a));
         if (selectedAsset?.id === assetId) setSelectedAsset(updated);
+        setApprovalModal({ isOpen: false, assetId: null });
+        setApprovalNotes("");
       }
     } catch (error) {
       console.error("Error updating asset:", error);
     }
+  };
+
+  const openApprovalModal = (assetId: number) => {
+    setApprovalNotes("");
+    setApprovalModal({ isOpen: true, assetId });
   };
 
   const statusColors: Record<string, string> = {
@@ -346,20 +356,12 @@ export default function Components3DReviewPage() {
               </div>
 
               {selectedAsset.status === "meshy_draft" && (
-                <div className="flex gap-1">
-                  <button
-                    onClick={() => handleStatusChange(selectedAsset.id, "cleaned")}
-                    className="flex-1 px-2 py-1 text-xs font-semibold bg-blue-600/30 text-blue-300 border border-blue-500/50 rounded hover:bg-blue-600/40 transition"
-                  >
-                    Clean
-                  </button>
-                  <button
-                    onClick={() => handleStatusChange(selectedAsset.id, "rejected")}
-                    className="flex-1 px-2 py-1 text-xs font-semibold bg-red-600/30 text-red-300 border border-red-500/50 rounded hover:bg-red-600/40 transition"
-                  >
-                    Reject
-                  </button>
-                </div>
+                <button
+                  onClick={() => openApprovalModal(selectedAsset.id)}
+                  className="w-full px-3 py-2 text-xs font-semibold bg-orange-600/30 text-orange-300 border border-orange-500/50 rounded hover:bg-orange-600/40 transition"
+                >
+                  Review & Approve
+                </button>
               )}
 
               {selectedAsset.status === "cleaned" && (
@@ -391,6 +393,53 @@ export default function Components3DReviewPage() {
           </div>
         )}
       </div>
+
+      {/* Approval Modal */}
+      {approvalModal.isOpen && approvalModal.assetId && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-slate-900 border border-slate-700/50 rounded-lg p-6 max-w-md w-full mx-4 space-y-4">
+            <div>
+              <h2 className="text-lg font-bold text-slate-100">Approve 3D Model</h2>
+              <p className="text-xs text-slate-500 mt-1">{selectedAsset?.family_key}</p>
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-slate-300 block mb-2">Comments (optional)</label>
+              <textarea
+                value={approvalNotes}
+                onChange={(e) => setApprovalNotes(e.target.value)}
+                placeholder="Add notes about this model..."
+                className="w-full bg-slate-800/50 border border-slate-700/50 rounded p-2 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-orange-500/50"
+                rows={4}
+              />
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setApprovalModal({ isOpen: false, assetId: null });
+                  setApprovalNotes("");
+                }}
+                className="flex-1 px-3 py-2 text-xs font-semibold bg-slate-700/30 text-slate-300 border border-slate-600/50 rounded hover:bg-slate-700/40 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleStatusChange(approvalModal.assetId, "rejected")}
+                className="flex-1 px-3 py-2 text-xs font-semibold bg-red-600/30 text-red-300 border border-red-500/50 rounded hover:bg-red-600/40 transition"
+              >
+                Redo Model
+              </button>
+              <button
+                onClick={() => handleStatusChange(approvalModal.assetId, "cleaned")}
+                className="flex-1 px-3 py-2 text-xs font-semibold bg-green-600/30 text-green-300 border border-green-500/50 rounded hover:bg-green-600/40 transition"
+              >
+                Accept
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
