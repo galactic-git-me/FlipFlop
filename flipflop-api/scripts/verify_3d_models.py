@@ -141,7 +141,7 @@ def main() -> None:
 
     for filename, info in EXPECTED_MODELS.items():
         filepath = MEDIA_DIR / filename
-        status = "✓" if filepath.exists() else "✗"
+        status = "[OK]" if filepath.exists() else "[MISSING]"
 
         if filepath.exists():
             valid, message = verify_glb_format(filepath)
@@ -201,14 +201,14 @@ def main() -> None:
     print(f"Files invalid: {files_invalid}/3")
 
     if files_ok == 3 and files_invalid == 0:
-        print("\n✓ ALL MODELS VERIFIED SUCCESSFULLY")
+        print("\n[SUCCESS] ALL MODELS VERIFIED SUCCESSFULLY")
         print("\nNext steps:")
         print("1. Run: python scripts/integrate_3d_models.py")
         print("2. Verify database updates: SELECT * FROM cases WHERE has_3d_model = true;")
         return 0
 
     elif files_ok > 0:
-        print("\n⚠ PARTIAL VERIFICATION")
+        print("\n[WARNING] PARTIAL VERIFICATION")
         if files_missing > 0:
             print(f"\nMissing files ({files_missing}):")
             for filename in EXPECTED_MODELS:
@@ -220,7 +220,7 @@ def main() -> None:
         return 1
 
     else:
-        print("\n✗ NO MODELS FOUND")
+        print("\n[ERROR] NO MODELS FOUND")
         print(f"\nDownload models from Sketchfab and save to:")
         print(f"  {MEDIA_DIR}")
         return 1
