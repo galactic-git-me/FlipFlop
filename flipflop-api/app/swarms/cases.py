@@ -1034,19 +1034,19 @@ async def _scrape_overclockers_once(headless: bool) -> list[RawCase]:
 
                 # Look for "Load more" button (infinite scroll pattern)
                 load_more_found = False
-                for selector in ['button:has-text("Load more")', '[class*="load-more"] button', 'button[data-qa*="load-more"]', '.js-load-more', 'button:contains("Load")']:
+                for selector in ['.js-load-more', 'button:has-text("Load more")', '[class*="load-more"] button', 'button[data-qa*="load-more"]']:
                     try:
                         elem = await page.query_selector(selector)
                         if elem and await elem.is_visible():
                             await elem.click()
-                            await asyncio.sleep(2)  # Wait for content to load
+                            await asyncio.sleep(2)  # Wait for AJAX content to load
                             load_more_found = True
                             break
-                    except Exception:
-                        pass
+                    except Exception as e:
+                        log.debug(f"overclockers.load_more_selector_failed", selector=selector, error=str(e))
 
                 if not load_more_found:
-                    log.info("overclockers.cases.no_more_button", page=page_num)
+                    log.info("overclockers.cases.no_more_button", page=page_num, total_products=len(all_products))
                     break
 
                 page_num += 1
