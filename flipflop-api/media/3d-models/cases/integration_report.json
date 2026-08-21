@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-08-21T18:03:22.230132",
+  "media_directory": "C:\\Users\\mclar\\CODING\\FlipFlop\\flipflop-api\\media\\3d-models\\cases",
+  "models": {
+    "corsair_4000d": {
+      "status": "completed",
+      "filepath": "C:\\Users\\mclar\\CODING\\FlipFlop\\flipflop-api\\media\\3d-models\\cases\\corsair_4000d.glb",
+      "creator": "SzaBa",
+      "license": "CC-BY-4.0",
+      "metadata": {
+        "vertices": 45230,
+        "polygons": 22615,
+        "file_size": 814776,
+        "quality": "medium"
+      },
+      "case_id": 559
+    },
+    "be_quiet_pure_base_600": {
+      "status": "completed",
+      "filepath": "C:\\Users\\mclar\\CODING\\FlipFlop\\flipflop-api\\media\\3d-models\\cases\\be_quiet_pure_base_600.glb",
+      "creator": "JackZeta",
+      "license": "CC-BY-4.0",
+      "metadata": {
+        "vertices": 38950,
+        "polygons": 19475,
+        "file_size": 701736,
+        "quality": "medium"
+      },
+      "case_id": 619
+    },
+    "corsair_5000d": {
+      "status": "completed",
+      "filepath": "C:\\Users\\mclar\\CODING\\FlipFlop\\flipflop-api\\media\\3d-models\\cases\\corsair_5000d.glb",
+      "creator": "lukeboxfx",
+      "license": "CC-BY-4.0",
+      "metadata": {
+        "vertices": 52840,
+        "polygons": 26420,
+        "file_size": 951756,
+        "quality": "medium"
+      },
+      "case_id": 659
+    }
+  },
+  "summary": {
+    "total_models": 3,
+    "downloaded": 3,
+    "failed": 0,
+    "skipped": 0
+  }
+}

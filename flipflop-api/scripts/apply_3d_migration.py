@@ -9,6 +9,7 @@ This script adds the necessary columns to the cases table to support
 import sys
 import asyncio
 from pathlib import Path
+from sqlalchemy import text
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -43,7 +44,7 @@ async def apply_migration():
             for i, sql in enumerate(migrations, 1):
                 print(f"[{i}/{len(migrations)}] {sql[:60]}...")
                 try:
-                    await conn.execute(sql)
+                    await conn.execute(text(sql))
                     print(f"       ✓ Success\n")
                 except Exception as e:
                     # Some statements might fail if columns already exist, that's OK
