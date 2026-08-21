@@ -1,522 +1,415 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { TwinklingStars } from "./TwinklingStars";
-import { PCCasesGallery } from "./PCCasesGallery";
+import { useEffect, useState, useRef } from "react";
+import { Check } from "lucide-react";
 
-interface PCCase {
-  id: string;
-  name: string;
-  brand: string;
-  model: string;
-  formFactor: string;
-  materials: string[];
-  features: string[];
-  status: "has-model" | "reference-only" | "pending";
-  rating: number;
-  reviews: number;
-  price: number;
-  originalPrice?: number;
-  image?: string;
-  threeDModelUrl?: string;
-  referenceImages?: string[];
-  youtubeLinks?: { url: string; timestamp?: string; title: string }[];
-  specifications?: Record<string, string>;
+interface Component3DAsset {
+  id: number;
+  category: string;
+  family_key: string;
+  status: "missing" | "meshy_draft" | "cleaned" | "validated" | "final" | "rejected";
+  version: number;
+  glb_ref: string | null;
+  preview_image_ref: string | null;
+  file_size_kb: number | null;
+  poly_count: number | null;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string | null;
 }
 
-const MOCK_CASES: PCCase[] = [
-  {
-    id: "1",
-    name: "Corsair Obsidian 1000D Airflow",
-    brand: "Corsair",
-    model: "CC-9011211-WW",
-    formFactor: "Full Tower",
-    materials: ["Aluminum", "Tempered Glass"],
-    features: ["RGB Lighting", "Motherboard Support: E-ATX", "Cooling: 8x 120mm fans"],
-    status: "has-model",
-    rating: 4.8,
-    reviews: 324,
-    price: 249.99,
-    image: "https://via.placeholder.com/400x400?text=Corsair+Obsidian",
-    threeDModelUrl: "https://sketchfab.com/models/embed",
-    referenceImages: [
-      "https://via.placeholder.com/800x600?text=Front",
-      "https://via.placeholder.com/800x600?text=Side",
-    ],
-    youtubeLinks: [
-      { url: "https://youtube.com", title: "Corsair Obsidian 1000D Review", timestamp: "0:45" },
-      { url: "https://youtube.com", title: "Build Guide - Obsidian 1000D", timestamp: "2:30" },
-    ],
-    specifications: {
-      "Dimensions": "598 x 566 x 244mm",
-      "Weight": "17.5kg",
-      "Volume": "83.2L",
-      "Max GPU Length": "430mm",
-      "Max CPU Cooler Height": "180mm",
-    },
-  },
-  {
-    id: "2",
-    name: "NZXT H7 Flow RGB",
-    brand: "NZXT",
-    model: "CA-H7FW-RGB",
-    formFactor: "Mid Tower",
-    materials: ["Steel", "Tempered Glass"],
-    features: ["RGB Lighting", "Airflow Focus", "Cable Management"],
-    status: "has-model",
-    rating: 4.6,
-    reviews: 187,
-    price: 149.99,
-    image: "https://via.placeholder.com/400x400?text=NZXT+H7",
-  },
-  {
-    id: "3",
-    name: "Lian Li Lancool 216",
-    brand: "Lian Li",
-    model: "LANCOOL 216",
-    formFactor: "Mid Tower",
-    materials: ["Steel", "Tempered Glass"],
-    features: ["Tempered Glass", "Tool-free Design", "SSD Support"],
-    status: "reference-only",
-    rating: 4.5,
-    reviews: 142,
-    price: 89.99,
-    image: "https://via.placeholder.com/400x400?text=Lian+Li",
-  },
-  {
-    id: "4",
-    name: "Fractal Design Torrent RGB",
-    brand: "Fractal Design",
-    model: "FD-C-TOR1-RGB",
-    formFactor: "Full Tower",
-    materials: ["Aluminum", "Tempered Glass"],
-    features: ["Silent Operation", "RGB Fans", "Modular Design"],
-    status: "has-model",
-    rating: 4.9,
-    reviews: 215,
-    price: 289.99,
-    originalPrice: 329.99,
-    image: "https://via.placeholder.com/400x400?text=Fractal+Torrent",
-  },
-  {
-    id: "5",
-    name: "Be Quiet! Pure Base 500DX",
-    brand: "Be Quiet!",
-    model: "BQT-PB-500DX",
-    formFactor: "Mid Tower",
-    materials: ["Steel", "Tempered Glass"],
-    features: ["Silent Design", "Tool-free", "Cable Management"],
-    status: "pending",
-    rating: 4.4,
-    reviews: 98,
-    price: 119.99,
-    image: "https://via.placeholder.com/400x400?text=Be+Quiet+Pure",
-  },
-  {
-    id: "6",
-    name: "Phanteks Eclipse P500A D-RGB",
-    brand: "Phanteks",
-    model: "PH-EC500ATG_DBK21",
-    formFactor: "Mid Tower",
-    materials: ["Steel", "Tempered Glass"],
-    features: ["Airflow Design", "D-RGB Fans", "SSD Support"],
-    status: "has-model",
-    rating: 4.7,
-    reviews: 312,
-    price: 159.99,
-    image: "https://via.placeholder.com/400x400?text=Phanteks+Eclipse",
-  },
-  {
-    id: "7",
-    name: "Thermaltake Core P3",
-    brand: "Thermaltake",
-    model: "CA-1G4-00M1WN-00",
-    formFactor: "Mini Tower",
-    materials: ["Steel", "Tempered Glass"],
-    features: ["Open Frame", "Modular", "RGB Ready"],
-    status: "reference-only",
-    rating: 4.3,
-    reviews: 76,
-    price: 99.99,
-    image: "https://via.placeholder.com/400x400?text=Thermaltake+Core",
-  },
-  {
-    id: "8",
-    name: "Deepcool Matrexx 55 V3.0",
-    brand: "Deepcool",
-    model: "R-MATREXX55V3",
-    formFactor: "Mid Tower",
-    materials: ["Steel", "Tempered Glass"],
-    features: ["Budget Friendly", "RGB Fans", "Airflow"],
-    status: "has-model",
-    rating: 4.2,
-    reviews: 156,
-    price: 69.99,
-    image: "https://via.placeholder.com/400x400?text=Deepcool+Matrexx",
-  },
-  {
-    id: "9",
-    name: "Corsair 5000T RGB",
-    brand: "Corsair",
-    model: "CC-9011211-WW",
-    formFactor: "Full Tower",
-    materials: ["Aluminum", "Tempered Glass"],
-    features: ["iCUE Compatible", "RGB Hub", "Power Button"],
-    status: "has-model",
-    rating: 4.8,
-    reviews: 289,
-    price: 399.99,
-    originalPrice: 449.99,
-    image: "https://via.placeholder.com/400x400?text=Corsair+5000T",
-  },
-  {
-    id: "10",
-    name: "MSI MPG GUNGNIR 110M",
-    brand: "MSI",
-    model: "MPG GUNGNIR 110M",
-    formFactor: "Mini Tower",
-    materials: ["Steel", "Tempered Glass"],
-    features: ["Compact", "Tool-free", "Integrated Fan"],
-    status: "pending",
-    rating: 4.5,
-    reviews: 67,
-    price: 129.99,
-    image: "https://via.placeholder.com/400x400?text=MSI+GUNGNIR",
-  },
-  {
-    id: "11",
-    name: "Antec DF700 Flux",
-    brand: "Antec",
-    model: "DF700 FLUX",
-    formFactor: "Mid Tower",
-    materials: ["Steel", "Tempered Glass"],
-    features: ["Airflow", "RGB", "ATX Support"],
-    status: "reference-only",
-    rating: 4.4,
-    reviews: 112,
-    price: 109.99,
-    image: "https://via.placeholder.com/400x400?text=Antec+DF700",
-  },
-  {
-    id: "12",
-    name: "Coolermaster HAF 500",
-    brand: "Coolermaster",
-    model: "RC-HA500-RGB",
-    formFactor: "Full Tower",
-    materials: ["Steel", "Mesh Front"],
-    features: ["Airflow", "RGB Compatible", "Tool-free"],
-    status: "has-model",
-    rating: 4.6,
-    reviews: 201,
-    price: 149.99,
-    image: "https://via.placeholder.com/400x400?text=Coolermaster+HAF",
-  },
-  {
-    id: "13",
-    name: "Louqe Ghost S1",
-    brand: "Louqe",
-    model: "Ghost S1 Mk3",
-    formFactor: "SFF",
-    materials: ["Aluminum", "Tempered Glass"],
-    features: ["Ultra Compact", "Minimalist", "Tool-free"],
-    status: "pending",
-    rating: 4.7,
-    reviews: 234,
-    price: 199.99,
-    image: "https://via.placeholder.com/400x400?text=Louqe+Ghost",
-  },
-  {
-    id: "14",
-    name: "Dan A4-SFX",
-    brand: "Dan Cases",
-    model: "A4-SFX v4.1",
-    formFactor: "SFF",
-    materials: ["Aluminum", "Tempered Glass"],
-    features: ["Ultra Compact", "SFX PSU", "Modular"],
-    status: "reference-only",
-    rating: 4.8,
-    reviews: 189,
-    price: 229.99,
-    image: "https://via.placeholder.com/400x400?text=Dan+A4",
-  },
-  {
-    id: "15",
-    name: "Streacom DA2",
-    brand: "Streacom",
-    model: "DA2",
-    formFactor: "SFF",
-    materials: ["Aluminum", "Mesh"],
-    features: ["Fanless Design", "Passive Cooling", "Minimal"],
-    status: "has-model",
-    rating: 4.9,
-    reviews: 145,
-    price: 299.99,
-    image: "https://via.placeholder.com/400x400?text=Streacom+DA2",
-  },
-  {
-    id: "16",
-    name: "Corsair Carbide Series 275Q",
-    brand: "Corsair",
-    model: "CC-9011131-WW",
-    formFactor: "Mid Tower",
-    materials: ["Steel", "Tempered Glass"],
-    features: ["Compact", "Cable Management", "Airflow"],
-    status: "has-model",
-    rating: 4.5,
-    reviews: 176,
-    price: 119.99,
-    image: "https://via.placeholder.com/400x400?text=Corsair+275Q",
-  },
-  {
-    id: "17",
-    name: "ASUS Prime AP201",
-    brand: "ASUS",
-    model: "Prime AP201",
-    formFactor: "Mini Tower",
-    materials: ["Steel", "Mesh"],
-    features: ["Budget Friendly", "Compact", "Cable Management"],
-    status: "reference-only",
-    rating: 4.1,
-    reviews: 89,
-    price: 59.99,
-    image: "https://via.placeholder.com/400x400?text=ASUS+Prime",
-  },
-  {
-    id: "18",
-    name: "Hzxt Noctua Edition",
-    brand: "HZXT",
-    model: "NOCTUA-ED",
-    formFactor: "Mid Tower",
-    materials: ["Steel", "Tempered Glass"],
-    features: ["Noctua Integration", "Silent", "Premium Fans"],
-    status: "pending",
-    rating: 4.7,
-    reviews: 123,
-    price: 189.99,
-    image: "https://via.placeholder.com/400x400?text=HZXT+Noctua",
-  },
-  {
-    id: "19",
-    name: "Sentey Gs7000x",
-    brand: "Sentey",
-    model: "GS-7000X",
-    formFactor: "Full Tower",
-    materials: ["Steel", "Mesh"],
-    features: ["Gaming Design", "RGB Lighting", "ATX Support"],
-    status: "has-model",
-    rating: 4.3,
-    reviews: 94,
-    price: 139.99,
-    image: "https://via.placeholder.com/400x400?text=Sentey+GS7000",
-  },
-  {
-    id: "20",
-    name: "Silverstone La Isla",
-    brand: "Silverstone",
-    model: "SST-LA01B",
-    formFactor: "Mini ITX",
-    materials: ["Aluminum", "Acrylic"],
-    features: ["Unique Design", "Modular", "SFX PSU"],
-    status: "reference-only",
-    rating: 4.6,
-    reviews: 107,
-    price: 249.99,
-    image: "https://via.placeholder.com/400x400?text=Silverstone+La",
-  },
-  {
-    id: "21",
-    name: "Jonsbo D40",
-    brand: "Jonsbo",
-    model: "D40",
-    formFactor: "Mini Tower",
-    materials: ["Aluminum", "Tempered Glass"],
-    features: ["Compact", "Tool-free", "Aluminum Build"],
-    status: "has-model",
-    rating: 4.4,
-    reviews: 78,
-    price: 99.99,
-    image: "https://via.placeholder.com/400x400?text=Jonsbo+D40",
-  },
-  {
-    id: "22",
-    name: "Caselabs Merlin S",
-    brand: "Caselabs",
-    model: "Merlin S",
-    formFactor: "Mid Tower",
-    materials: ["Steel", "Tempered Glass"],
-    features: ["Extreme Customization", "Watercooling Ready", "Premium"],
-    status: "pending",
-    rating: 4.9,
-    reviews: 156,
-    price: 379.99,
-    image: "https://via.placeholder.com/400x400?text=Caselabs+Merlin",
-  },
-  {
-    id: "23",
-    name: "Thermaltake Suppressor F51",
-    brand: "Thermaltake",
-    model: "CA-1I7-00M1WN-00",
-    formFactor: "Mid Tower",
-    materials: ["Steel", "Tempered Glass"],
-    features: ["Silent Design", "Airflow", "Noise Reduction"],
-    status: "has-model",
-    rating: 4.5,
-    reviews: 134,
-    price: 149.99,
-    image: "https://via.placeholder.com/400x400?text=Thermaltake+F51",
-  },
-  {
-    id: "24",
-    name: "Raijintek Styx",
-    brand: "Raijintek",
-    model: "STYX",
-    formFactor: "Mini ITX",
-    materials: ["Aluminum", "Tempered Glass"],
-    features: ["Ultra Compact", "Tool-free", "SFX PSU"],
-    status: "reference-only",
-    rating: 4.7,
-    reviews: 98,
-    price: 179.99,
-    image: "https://via.placeholder.com/400x400?text=Raijintek+Styx",
-  },
-  {
-    id: "25",
-    name: "Evolv X",
-    brand: "Phanteks",
-    model: "PH-ES518XTC_DBK01",
-    formFactor: "Full Tower",
-    materials: ["Aluminum", "Tempered Glass"],
-    features: ["Premium Build", "Modular", "RGB Integration"],
-    status: "has-model",
-    rating: 4.8,
-    reviews: 267,
-    price: 279.99,
-    image: "https://via.placeholder.com/400x400?text=Phanteks+Evolv",
-  },
-  {
-    id: "26",
-    name: "Fractal Meshify C",
-    brand: "Fractal Design",
-    model: "FD-CA-MESH-C",
-    formFactor: "Mid Tower",
-    materials: ["Steel", "Mesh Front"],
-    features: ["Airflow Optimized", "Clean Design", "Cable Management"],
-    status: "pending",
-    rating: 4.6,
-    reviews: 241,
-    price: 99.99,
-    image: "https://via.placeholder.com/400x400?text=Fractal+Meshify",
-  },
-  {
-    id: "27",
-    name: "Lian Li Lancool 215",
-    brand: "Lian Li",
-    model: "Lancool 215",
-    formFactor: "Mid Tower",
-    materials: ["Steel", "Tempered Glass"],
-    features: ["Affordable", "Airflow", "RGB Compatible"],
-    status: "has-model",
-    rating: 4.3,
-    reviews: 189,
-    price: 79.99,
-    image: "https://via.placeholder.com/400x400?text=Lian+Li+215",
-  },
-  {
-    id: "28",
-    name: "Beautystar BS-01",
-    brand: "Beautystar",
-    model: "BS-01",
-    formFactor: "Mini Tower",
-    materials: ["Aluminum", "Acrylic"],
-    features: ["Unique Design", "Tool-free", "Compact"],
-    status: "reference-only",
-    rating: 4.2,
-    reviews: 45,
-    price: 89.99,
-    image: "https://via.placeholder.com/400x400?text=Beautystar+BS",
-  },
-  {
-    id: "29",
-    name: "Kyoto Kagura",
-    brand: "Kyoto",
-    model: "Kagura",
-    formFactor: "Mini Tower",
-    materials: ["Aluminum", "Tempered Glass"],
-    features: ["Minimalist", "Japanese Design", "Premium Build"],
-    status: "has-model",
-    rating: 4.9,
-    reviews: 112,
-    price: 199.99,
-    image: "https://via.placeholder.com/400x400?text=Kyoto+Kagura",
-  },
-  {
-    id: "30",
-    name: "In-Win A1 Plus",
-    brand: "In-Win",
-    model: "A1 Plus",
-    formFactor: "Mini Tower",
-    materials: ["Aluminum", "Tempered Glass"],
-    features: ["Modular PSU", "Compact", "Tool-free Design"],
-    status: "pending",
-    rating: 4.5,
-    reviews: 87,
-    price: 159.99,
-    image: "https://via.placeholder.com/400x400?text=In-Win+A1",
-  },
-  {
-    id: "31",
-    name: "Newegg ABS Stratos",
-    brand: "Newegg",
-    model: "ABS-STRATOS",
-    formFactor: "Mid Tower",
-    materials: ["Steel", "Tempered Glass"],
-    features: ["Pre-built Ready", "RGB System", "Budget Gaming"],
-    status: "has-model",
-    rating: 4.1,
-    reviews: 76,
-    price: 89.99,
-    image: "https://via.placeholder.com/400x400?text=Newegg+Stratos",
-  },
-  {
-    id: "32",
-    name: "Vetroo V5",
-    brand: "Vetroo",
-    model: "V5",
-    formFactor: "Mini Tower",
-    materials: ["Steel", "Tempered Glass"],
-    features: ["Budget Friendly", "RGB Fans", "Dual-Chamber"],
-    status: "reference-only",
-    rating: 4.4,
-    reviews: 203,
-    price: 69.99,
-    image: "https://via.placeholder.com/400x400?text=Vetroo+V5",
-  },
-];
-
-export default function Components3DReviewPage() {
-  const [cases, setCases] = useState<PCCase[]>([]);
-  const [loading, setLoading] = useState(true);
+function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mouseRef = useRef({ x: 0, y: 0, isDown: false });
+  const modelRef = useRef<any>(null);
+  const cameraRef = useRef<any>(null);
+  const zoomRef = useRef(1);
 
   useEffect(() => {
-    // Simulate loading from API
-    const timer = setTimeout(() => {
-      setCases(MOCK_CASES);
-      setLoading(false);
-    }, 500);
+    if (!containerRef.current || !glbUrl) return;
 
-    return () => clearTimeout(timer);
+    setTimeout(() => {
+      const setupViewer = async () => {
+        try {
+          const THREE = await import("three");
+          const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+
+          if (!containerRef.current) return;
+
+          const width = containerRef.current.clientWidth;
+          const height = containerRef.current.clientHeight;
+
+          if (width === 0 || height === 0) return;
+
+          const scene = new THREE.Scene();
+          scene.background = new THREE.Color(0x2a2a2a);
+
+          // Create Blender-style grid floor plane
+          const gridGeometry = new THREE.PlaneGeometry(100, 100, 100, 100);
+          const gridMaterial = new THREE.LineBasicMaterial({ color: 0x444444 });
+          const wireframe = new THREE.LineSegments(gridGeometry, gridMaterial);
+          wireframe.position.y = -1;
+          scene.add(wireframe);
+
+          // Add darker grid lines (alternating)
+          const gridGeometry2 = new THREE.PlaneGeometry(100, 100, 10, 10);
+          const gridMaterial2 = new THREE.LineBasicMaterial({ color: 0x333333, linewidth: 2 });
+          const wireframe2 = new THREE.LineSegments(gridGeometry2, gridMaterial2);
+          wireframe2.position.y = -1.01;
+          scene.add(wireframe2);
+
+          const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+          camera.position.set(0, 0, 3);
+          cameraRef.current = camera;
+
+          const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+          renderer.setSize(width, height);
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+
+          while (containerRef.current.firstChild) {
+            containerRef.current.removeChild(containerRef.current.firstChild);
+          }
+          containerRef.current.appendChild(renderer.domElement);
+
+          const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+          scene.add(ambientLight);
+
+          const pointLight = new THREE.PointLight(0xffffff, 1.2);
+          pointLight.position.set(5, 5, -5);
+          scene.add(pointLight);
+
+          const directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+          directionalLight.position.set(3, 5, 2);
+          scene.add(directionalLight);
+
+          const fillLight = new THREE.PointLight(0x88ccff, 0.5);
+          fillLight.position.set(-5, 2, 5);
+          scene.add(fillLight);
+
+          // Blender-style grid on ground plane
+          const gridHelper = new THREE.GridHelper(20, 20, 0x444444, 0x222222);
+          gridHelper.position.y = -1;
+          scene.add(gridHelper);
+
+          // RGB axes like Blender (X=red, Y=green, Z=blue)
+          const axesHelper = new THREE.AxesHelper(6);
+          scene.add(axesHelper);
+
+          const loader = new GLTFLoader();
+          const filename = glbUrl.split("/").pop();
+          const proxyUrl = `/api/glb-proxy/${filename}`;
+
+          loader.load(
+            proxyUrl,
+            (gltf) => {
+              const model = gltf.scene;
+              scene.add(model);
+
+              const box = new THREE.Box3().setFromObject(model);
+              const size = box.getSize(new THREE.Vector3());
+              const maxDim = Math.max(size.x, size.y, size.z);
+              const scale = 1.6 / maxDim;
+              model.scale.multiplyScalar(scale);
+
+              const center = box.getCenter(new THREE.Vector3());
+              model.position.sub(center.multiplyScalar(scale));
+
+              modelRef.current = model;
+
+              let isAutoRotating = true;
+              let animationId: number;
+
+              const animate = () => {
+                animationId = requestAnimationFrame(animate);
+
+                if (isAutoRotating) {
+                  model.rotation.y += 0.005;
+                } else if (mouseRef.current.isDown) {
+                  model.rotation.y += mouseRef.current.x * 0.01;
+                  model.rotation.x += mouseRef.current.y * 0.01;
+                  mouseRef.current.x *= 0.95;
+                  mouseRef.current.y *= 0.95;
+                }
+
+                renderer.render(scene, camera);
+              };
+              animate();
+
+              const container = containerRef.current!;
+              container.addEventListener("mousedown", () => {
+                isAutoRotating = false;
+                mouseRef.current.isDown = true;
+              });
+              container.addEventListener("mousemove", (e) => {
+                if (mouseRef.current.isDown) {
+                  mouseRef.current.x = e.movementX;
+                  mouseRef.current.y = e.movementY;
+                }
+              });
+              container.addEventListener("mouseup", () => {
+                mouseRef.current.isDown = false;
+                isAutoRotating = true;
+              });
+              container.addEventListener("mouseleave", () => {
+                mouseRef.current.isDown = false;
+                isAutoRotating = true;
+              });
+            },
+            undefined,
+            (error) => {
+              console.error("Failed to load GLB:", error, "URL:", glbUrl);
+            }
+          );
+
+          renderer.render(scene, camera);
+        } catch (error) {
+          console.error("Error setting up 3D viewer:", error);
+        }
+      };
+      setupViewer();
+    }, 100);
+  }, [glbUrl]);
+
+  if (!glbUrl) {
+    return (
+      <div className="w-full h-full bg-slate-900/50 rounded border border-slate-700/50 flex items-center justify-center text-slate-400">
+        <div className="text-center">
+          <p className="text-sm">No GLB model available</p>
+          <p className="text-xs text-slate-500 mt-1">glb_ref is null</p>
+        </div>
+      </div>
+    );
+  }
+
+  return <div ref={containerRef} className="w-full h-full bg-slate-900/50 rounded border border-slate-700/50" />;
+}
+
+export default function Components3DReviewPage() {
+  const [assets, setAssets] = useState<Component3DAsset[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedAsset, setSelectedAsset] = useState<Component3DAsset | null>(null);
+  const [filter, setFilter] = useState<"meshy_draft" | "all">("meshy_draft");
+
+  useEffect(() => {
+    const load = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch("/api/assets-3d");
+        const data = await response.json();
+        const assets = Array.isArray(data) ? data : (data.data || data.assets || []);
+        console.log("Assets loaded:", { count: assets.length, first: assets[0], glbRef: assets[0]?.glb_ref });
+        setAssets(assets as Component3DAsset[]);
+        const firstDraft = assets.find((a: Component3DAsset) => a.status === "meshy_draft");
+        if (firstDraft) setSelectedAsset(firstDraft);
+      } catch (error) {
+        console.error("Error loading assets:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    void load();
   }, []);
 
-  return (
-    <div className="relative min-h-screen bg-slate-950">
-      {/* Starfield Background */}
-      <TwinklingStars />
+  const filteredAssets = filter === "meshy_draft" ? assets.filter(a => a.status === "meshy_draft") : assets;
+  const draftCount = assets.filter(a => a.status === "meshy_draft").length;
+  const validatedCount = assets.filter(a => a.status === "validated").length;
+  const finalCount = assets.filter(a => a.status === "final").length;
 
-      {/* Content */}
-      <div className="relative z-10">
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <PCCasesGallery cases={cases} loading={loading} />
+  const handleStatusChange = async (assetId: number, newStatus: string) => {
+    try {
+      const response = await fetch(`/api/assets-3d/${assetId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: newStatus,
+          commercial_use_approved: newStatus === "validated" || newStatus === "final",
+          redistribution_approved: newStatus === "validated" || newStatus === "final",
+        }),
+      });
+      if (response.ok) {
+        const updated = (await response.json()) as Component3DAsset;
+        setAssets(prev => prev.map(a => a.id === assetId ? updated : a));
+        if (selectedAsset?.id === assetId) setSelectedAsset(updated);
+      }
+    } catch (error) {
+      console.error("Error updating asset:", error);
+    }
+  };
+
+  const statusColors: Record<string, string> = {
+    missing: "border-slate-600 bg-slate-900/20",
+    meshy_draft: "border-orange-400/30 bg-orange-400/5",
+    cleaned: "border-blue-400/30 bg-blue-400/5",
+    validated: "border-purple-400/30 bg-purple-400/5",
+    final: "border-[#00dc82]/30 bg-[#00dc82]/5",
+    rejected: "border-red-400/30 bg-red-400/5",
+  };
+
+  const getStatusStyle = (status: string) => {
+    if (status === "meshy_draft") return "bg-orange-400/20 text-orange-300 border border-orange-400/50";
+    if (status === "validated") return "bg-purple-400/20 text-purple-300 border border-purple-400/50";
+    if (status === "final") return "bg-[#00dc82]/20 text-[#00dc82] border border-[#00dc82]/50";
+    return "bg-slate-600/20 text-slate-300 border border-slate-600/50";
+  };
+
+  return (
+    <div className="w-full h-full flex flex-col gap-3 p-4">
+      <div>
+        <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
+      </div>
+
+      <div className="grid grid-cols-4 gap-3">
+        <div className="bg-gradient-to-br from-orange-500/20 to-orange-900/20 border border-orange-400/40 rounded-lg p-4">
+          <div className="text-3xl font-bold text-orange-400 mb-1">{draftCount}</div>
+          <div className="text-xs text-orange-300/70">Draft</div>
         </div>
+        <div className="bg-gradient-to-br from-purple-500/20 to-purple-900/20 border border-purple-400/40 rounded-lg p-4">
+          <div className="text-3xl font-bold text-purple-400 mb-1">{validatedCount}</div>
+          <div className="text-xs text-purple-300/70">Valid</div>
+        </div>
+        <div className="bg-gradient-to-br from-[#00dc82]/20 to-green-900/20 border border-[#00dc82]/40 rounded-lg p-4">
+          <div className="text-3xl font-bold text-[#00dc82] mb-1">{finalCount}</div>
+          <div className="text-xs text-[#00dc82]/70">Final</div>
+        </div>
+        <div className="bg-gradient-to-br from-slate-500/20 to-slate-900/20 border border-slate-400/40 rounded-lg p-4">
+          <div className="text-3xl font-bold text-slate-300 mb-1">{assets.length}</div>
+          <div className="text-xs text-slate-400/70">Total</div>
+        </div>
+      </div>
+
+      <div className="flex gap-2">
+        <button
+          onClick={() => setFilter("meshy_draft")}
+          className={filter === "meshy_draft" ? "px-2 py-1 rounded text-xs font-semibold bg-orange-600/30 text-orange-300 border border-orange-500/50" : "px-2 py-1 rounded text-xs font-semibold bg-slate-700/30 text-slate-400 border border-slate-600/50"}
+        >
+          Review ({draftCount})
+        </button>
+        <button
+          onClick={() => setFilter("all")}
+          className={filter === "all" ? "px-2 py-1 rounded text-xs font-semibold bg-purple-600/30 text-purple-300 border border-purple-500/50" : "px-2 py-1 rounded text-xs font-semibold bg-slate-700/30 text-slate-400 border border-slate-600/50"}
+        >
+          All ({assets.length})
+        </button>
+      </div>
+
+      <div className="flex gap-3 flex-1 min-h-0">
+        <div className="flex-1 flex flex-col min-h-0 gap-3">
+          {selectedAsset ? (
+            <>
+              <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 flex flex-col bg-[#0a1119]">
+                <div className="px-3 py-2 border-b border-[#1e2d45] bg-slate-900/30 text-xs font-semibold text-slate-300">3D Viewer</div>
+                <div className="flex-1 min-h-0">
+                  <Viewer3D glbUrl={selectedAsset.glb_ref} />
+                </div>
+              </div>
+
+              <div className="flex-1 border border-[#1e2d45] rounded-lg overflow-y-auto p-2 bg-[#0a1119]">
+                <div className="grid grid-cols-6 gap-2">
+                  {filteredAssets.map((asset) => (
+                    <button
+                      key={asset.id}
+                      onClick={() => setSelectedAsset(asset)}
+                      className={`aspect-square rounded border overflow-hidden cursor-pointer transition hover:scale-105 ${selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""} ${statusColors[asset.status] || ""}`}
+                      style={{ backgroundImage: asset.preview_image_ref ? `url('${asset.preview_image_ref}')` : undefined, backgroundSize: "cover", backgroundPosition: "center" }}
+                    >
+                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                        <div className="font-bold text-[8px] text-white text-center px-1">{asset.family_key}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="flex items-center justify-center flex-1 text-slate-500">
+              <div className="text-center">
+                <p>Select an asset to review</p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {selectedAsset && (
+          <div className="w-96 flex flex-col min-h-0 overflow-y-auto gap-2">
+            <div className="border border-[#1e2d45] rounded-lg p-4 bg-[#0a1119]">
+              <div className="flex items-start justify-between gap-2 mb-3">
+                <div>
+                  <h2 className="text-sm font-bold text-slate-100">{selectedAsset.family_key}</h2>
+                  <p className="text-xs text-slate-500 mt-1">ID: {selectedAsset.id} v{selectedAsset.version}</p>
+                </div>
+                <div className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-semibold whitespace-nowrap ${getStatusStyle(selectedAsset.status)}`}>
+                  {selectedAsset.status.toUpperCase()}
+                </div>
+              </div>
+
+              <div className="space-y-2 text-xs">
+                <div>
+                  <p className="text-slate-500">Category</p>
+                  <p className="text-slate-100 font-semibold">{selectedAsset.category}</p>
+                </div>
+                <div>
+                  <p className="text-slate-500">Version</p>
+                  <p className="text-slate-100 font-semibold">v{selectedAsset.version}</p>
+                </div>
+                {selectedAsset.file_size_kb && (
+                  <div>
+                    <p className="text-slate-500">File Size</p>
+                    <p className="text-slate-100 font-semibold">{Math.round(selectedAsset.file_size_kb / 1024)}MB</p>
+                  </div>
+                )}
+                {selectedAsset.poly_count && (
+                  <div>
+                    <p className="text-slate-500">Polygons</p>
+                    <p className="text-slate-100 font-semibold">{(selectedAsset.poly_count / 1000).toFixed(1)}k</p>
+                  </div>
+                )}
+              </div>
+
+              {selectedAsset.notes && (
+                <div className="p-2 bg-slate-700/30 rounded border border-slate-600 text-xs text-slate-300 mt-3">
+                  <p className="text-slate-500 text-[10px] mb-1 uppercase">Notes</p>
+                  {selectedAsset.notes}
+                </div>
+              )}
+
+              {selectedAsset.glb_ref && (
+                <div className="p-2 bg-blue-900/20 rounded border border-blue-400/20 mt-3">
+                  <p className="text-slate-500 text-xs mb-1">GLB File</p>
+                  <a href={selectedAsset.glb_ref} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 hover:text-blue-300 break-all">
+                    Download / View
+                  </a>
+                </div>
+              )}
+
+              {selectedAsset.created_by && (
+                <div className="text-[10px] text-slate-600 mt-3">
+                  Created by {selectedAsset.created_by}
+                  {selectedAsset.created_at && ` on ${new Date(selectedAsset.created_at).toLocaleDateString()}`}
+                </div>
+              )}
+
+              {selectedAsset.status === "meshy_draft" && (
+                <div className="flex gap-2 pt-3">
+                  <button onClick={() => handleStatusChange(selectedAsset.id, "rejected")} className="flex-1 px-2 py-1 rounded text-xs font-semibold bg-red-600/30 text-red-300 border border-red-500/50 hover:bg-red-600/50">
+                    Reject
+                  </button>
+                  <button onClick={() => handleStatusChange(selectedAsset.id, "cleaned")} className="flex-1 px-2 py-1 rounded text-xs font-semibold bg-blue-600/30 text-blue-300 border border-blue-500/50 hover:bg-blue-600/50">
+                    Cleaned
+                  </button>
+                  <button onClick={() => handleStatusChange(selectedAsset.id, "validated")} className="flex-1 px-2 py-1 rounded text-xs font-semibold bg-purple-600/30 text-purple-300 border border-purple-500/50 hover:bg-purple-600/50">
+                    Validate
+                  </button>
+                </div>
+              )}
+
+              {selectedAsset.status === "validated" && (
+                <button onClick={() => handleStatusChange(selectedAsset.id, "final")} className="w-full mt-3 px-2 py-1 rounded text-xs font-semibold bg-[#00dc82]/30 text-[#00dc82] border border-[#00dc82]/50 hover:bg-[#00dc82]/50">
+                  Mark as Final
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

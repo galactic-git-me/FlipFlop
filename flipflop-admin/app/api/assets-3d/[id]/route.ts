@@ -4,12 +4,13 @@ const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:18000";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const body = await request.json();
 
-    const response = await fetch(`${BACKEND_URL}/assets-3d/${params.id}`, {
+    const response = await fetch(`${BACKEND_URL}/assets-3d/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
