@@ -42,7 +42,21 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           if (width === 0 || height === 0) return;
 
           const scene = new THREE.Scene();
-          scene.background = new THREE.Color(0x1a1a1a);
+          scene.background = new THREE.Color(0x2a2a2a);
+
+          // Create Blender-style grid floor plane
+          const gridGeometry = new THREE.PlaneGeometry(100, 100, 100, 100);
+          const gridMaterial = new THREE.LineBasicMaterial({ color: 0x444444 });
+          const wireframe = new THREE.LineSegments(gridGeometry, gridMaterial);
+          wireframe.position.y = -1;
+          scene.add(wireframe);
+
+          // Add darker grid lines (alternating)
+          const gridGeometry2 = new THREE.PlaneGeometry(100, 100, 10, 10);
+          const gridMaterial2 = new THREE.LineBasicMaterial({ color: 0x333333, linewidth: 2 });
+          const wireframe2 = new THREE.LineSegments(gridGeometry2, gridMaterial2);
+          wireframe2.position.y = -1.01;
+          scene.add(wireframe2);
 
           const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
           camera.position.set(0, 0, 1);
