@@ -103,9 +103,14 @@ export function PCCasesGallery() {
   return (
     <div className="p-8 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-white mb-2">PC Cases 3D Review Gallery</h1>
-        <p className="text-gray-400">Explore 3D models and reference materials for gaming PC cases</p>
+      <div className="mb-8 flex justify-between items-start">
+        <div>
+          <h1 className="text-4xl font-bold text-white mb-2">PC Cases 3D Review Gallery</h1>
+          <p className="text-gray-400">Explore 3D models and reference materials for gaming PC cases</p>
+        </div>
+        <a href="/cases" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition">
+          → View Cases
+        </a>
       </div>
 
       {/* Stats Cards */}
