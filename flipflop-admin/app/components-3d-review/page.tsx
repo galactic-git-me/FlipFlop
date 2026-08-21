@@ -26,34 +26,20 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
   const zoomRef = useRef(1);
 
   useEffect(() => {
-    if (!containerRef.current || !glbUrl) {
-      console.log("Viewer3D: skipping - no container or URL", { containerRef: !!containerRef.current, glbUrl });
-      return;
-    }
-
-    console.log("Viewer3D: initializing with glbUrl:", glbUrl);
+    if (!containerRef.current || !glbUrl) return;
 
     setTimeout(() => {
       const setupViewer = async () => {
         try {
-          console.log("Viewer3D: setupViewer starting");
           const THREE = await import("three");
           const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
 
-          if (!containerRef.current) {
-            console.log("Viewer3D: container ref disappeared");
-            return;
-          }
+          if (!containerRef.current) return;
 
           const width = containerRef.current.clientWidth;
           const height = containerRef.current.clientHeight;
 
-          console.log("Viewer3D: container size", { width, height });
-
-          if (width === 0 || height === 0) {
-            console.log("Viewer3D: container has zero dimensions, retrying");
-            return;
-          }
+          if (width === 0 || height === 0) return;
 
           const scene = new THREE.Scene();
           scene.background = new THREE.Color(0x2a2a2a);
@@ -112,12 +98,10 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           const loader = new GLTFLoader();
           const filename = glbUrl.split("/").pop();
           const proxyUrl = `/api/glb-proxy/${filename}`;
-          console.log("Viewer3D: loading GLB", { filename, proxyUrl });
 
           loader.load(
             proxyUrl,
             (gltf) => {
-              console.log("Viewer3D: GLB loaded successfully");
               const model = gltf.scene;
               scene.add(model);
 
@@ -212,7 +196,6 @@ export default function Components3DReviewPage() {
       try {
         const response = await fetch("/api/assets-3d/public");
         const data = await response.json();
-        console.log("API Response:", data);
 
         if (data.detail) {
           console.error("API Error:", data.detail);
@@ -221,7 +204,6 @@ export default function Components3DReviewPage() {
         }
 
         const assets = Array.isArray(data) ? data : (data.data || data.assets || []);
-        console.log("Assets loaded:", { count: assets.length, first: assets[0]});
         setAssets(assets as Component3DAsset[]);
         const firstDraft = assets.find((a: Component3DAsset) => a.status === "meshy_draft");
         if (firstDraft) setSelectedAsset(firstDraft);
@@ -317,34 +299,34 @@ export default function Components3DReviewPage() {
         </button>
       </div>
 
-      <div className="flex gap-3 flex-1 min-h-0 overflow-hidden">
-        <div className="flex-1 flex flex-col min-h-0 gap-3">
-          {selectedAsset ? (
-            <>
-              <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-[2] flex flex-col bg-[#0a1119]" style={{ minHeight: 0 }}>
-                <div className="px-3 py-2 border-b border-[#1e2d45] bg-slate-900/30 text-xs font-semibold text-slate-300">3D Viewer — {selectedAsset.family_key}</div>
-                <div className="flex-1 min-h-0" style={{ minHeight: 0 }}>
-                  <Viewer3D glbUrl={selectedAsset.glb_ref} />
+      <div className="flex gap-3 flex-1 min-h-0">
+        {/* LEFT: Asset grid */}
+        <div className="w-96 border border-[#1e2d45] rounded-lg overflow-y-auto p-2 bg-[#0a1119]">
+          <div className="grid grid-cols-6 gap-2">
+            {filteredAssets.map((asset) => (
+              <button
+                key={asset.id}
+                onClick={() => setSelectedAsset(asset)}
+                className={`aspect-square rounded border overflow-hidden cursor-pointer transition hover:scale-105 ${selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""} ${statusColors[asset.status] || ""}`}
+                style={{ backgroundImage: asset.preview_image_ref ? `url('${asset.preview_image_ref}')` : undefined, backgroundSize: "cover", backgroundPosition: "center" }}
+              >
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                  <div className="font-bold text-[8px] text-white text-center px-1">{asset.family_key}</div>
                 </div>
-              </div>
+              </button>
+            ))}
+          </div>
+        </div>
 
-              <div className="flex-1 border border-[#1e2d45] rounded-lg overflow-y-auto p-2 bg-[#0a1119]" style={{ minHeight: 0 }}>
-                <div className="grid grid-cols-6 gap-2">
-                  {filteredAssets.map((asset) => (
-                    <button
-                      key={asset.id}
-                      onClick={() => setSelectedAsset(asset)}
-                      className={`aspect-square rounded border overflow-hidden cursor-pointer transition hover:scale-105 ${selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""} ${statusColors[asset.status] || ""}`}
-                      style={{ backgroundImage: asset.preview_image_ref ? `url('${asset.preview_image_ref}')` : undefined, backgroundSize: "cover", backgroundPosition: "center" }}
-                    >
-                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                        <div className="font-bold text-[8px] text-white text-center px-1">{asset.family_key}</div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
+        {/* CENTER: 3D Viewer */}
+        <div className="flex-1 flex flex-col min-h-0">
+          {selectedAsset ? (
+            <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 flex flex-col bg-[#0a1119]">
+              <div className="px-3 py-2 border-b border-[#1e2d45] bg-slate-900/30 text-xs font-semibold text-slate-300">3D Viewer</div>
+              <div className="flex-1 min-h-0">
+                <Viewer3D glbUrl={selectedAsset.glb_ref} />
               </div>
-            </>
+            </div>
           ) : (
             <div className="flex items-center justify-center flex-1 text-slate-500">
               <div className="text-center">
