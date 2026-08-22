@@ -330,7 +330,7 @@ export default function Components3DReviewPage() {
   const [assets, setAssets] = useState<Component3DAsset[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedAsset, setSelectedAsset] = useState<Component3DAsset | null>(null);
-  const [filter, setFilter] = useState<"meshy_draft" | "all">("meshy_draft");
+  const [filter, setFilter] = useState<"meshy_draft" | "all">("all");
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -543,7 +543,7 @@ export default function Components3DReviewPage() {
                 </div>
 
                 {/* Details overlay - bottom left */}
-                <div className="absolute bottom-24 left-3 w-64 bg-[#0a1119]/70 backdrop-blur-md border border-[#1e2d45]/50 rounded-lg p-2 pointer-events-auto overflow-y-auto max-h-72 shadow-2xl">
+                <div className="absolute bottom-24 left-3 w-64 bg-[#0a1119]/70 backdrop-blur-md border border-[#1e2d45]/50 rounded-lg p-2 pointer-events-auto overflow-y-auto max-h-72 shadow-2xl z-50">
                   <div className="space-y-1 text-sm">
                     <div className="pb-1 border-b border-[#1e2d45]/30">
                       <p className="text-slate-500 text-xs">ID {selectedAsset.id} v{selectedAsset.version}</p>
@@ -567,28 +567,28 @@ export default function Components3DReviewPage() {
                       </div>
                     )}
 
-                    {/* Approval buttons */}
-                    <div className="pt-1 border-t border-[#1e2d45]/30 mt-1">
+                    {/* Approval buttons - high z-index modal */}
+                    <div className="pt-1 border-t border-[#1e2d45]/30 mt-1 relative z-50">
                       <div className={`inline-block px-2 py-1 rounded text-xs font-semibold mb-2 ${getStatusStyle(selectedAsset.status)}`}>
                         {selectedAsset.status.toUpperCase()}
                       </div>
 
-                      <div className="space-y-2">
-                        <div className="flex gap-1">
-                          <button onClick={() => handleStatusChange(selectedAsset.id, "rejected")} className="flex-1 px-2 py-1 rounded text-xs font-semibold bg-red-600/40 text-red-300 border border-red-500/50 hover:bg-red-600/60">
+                      <div className="space-y-2 relative z-50">
+                        <div className="flex gap-1 relative z-50">
+                          <button onClick={() => handleStatusChange(selectedAsset.id, "rejected")} className="flex-1 px-2 py-1 rounded text-xs font-semibold bg-red-600/40 text-red-300 border border-red-500/50 hover:bg-red-600/60 relative z-50">
                             Reject
                           </button>
-                          <button onClick={() => handleStatusChange(selectedAsset.id, "validated")} className="flex-1 px-2 py-1 rounded text-xs font-semibold bg-[#00dc82]/40 text-[#00dc82] border border-[#00dc82]/50 hover:bg-[#00dc82]/60">
+                          <button onClick={() => handleStatusChange(selectedAsset.id, "validated")} className="flex-1 px-2 py-1 rounded text-xs font-semibold bg-[#00dc82]/40 text-[#00dc82] border border-[#00dc82]/50 hover:bg-[#00dc82]/60 relative z-50">
                             Approve
                           </button>
                         </div>
 
                         <textarea
                           placeholder="Add guidance comments for regeneration..."
-                          className="w-full px-2 py-1 rounded text-xs bg-slate-800/50 text-slate-300 border border-slate-600/50 placeholder-slate-500 resize-none h-16 focus:outline-none focus:border-slate-500/80"
+                          className="w-full px-2 py-1 rounded text-xs bg-slate-800/50 text-slate-300 border border-slate-600/50 placeholder-slate-500 resize-none h-16 focus:outline-none focus:border-slate-500/80 relative z-50"
                         />
 
-                        <button onClick={() => handleStatusChange(selectedAsset.id, "meshy_draft")} className="w-full px-2 py-1 rounded text-xs font-semibold bg-blue-600/40 text-blue-300 border border-blue-500/50 hover:bg-blue-600/60">
+                        <button onClick={() => handleStatusChange(selectedAsset.id, "meshy_draft")} className="w-full px-2 py-1 rounded text-xs font-semibold bg-blue-600/40 text-blue-300 border border-blue-500/50 hover:bg-blue-600/60 relative z-50">
                           Regenerate
                         </button>
                       </div>
