@@ -66,6 +66,9 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
           renderer.setSize(width, height);
           renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+          renderer.domElement.style.position = "absolute";
+          renderer.domElement.style.top = "0";
+          renderer.domElement.style.left = "0";
 
           while (containerRef.current.firstChild) {
             containerRef.current.removeChild(containerRef.current.firstChild);
@@ -178,13 +181,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
     );
   }
 
-  return (
-    <div ref={containerRef} className="w-full h-full rounded border border-slate-700/50" style={{
-      background: "linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)",
-      backgroundSize: "400% 400%",
-      animation: "gradientShift 8s ease infinite"
-    }} />
-  );
+  return <div ref={containerRef} className="w-full h-full rounded border border-slate-700/50 bg-white" />;
 }
 
 export default function Components3DReviewPage() {
