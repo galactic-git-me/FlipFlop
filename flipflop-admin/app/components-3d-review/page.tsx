@@ -217,11 +217,10 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
 
 
           const loader = new GLTFLoader();
-          const filename = glbUrl.split("/").pop();
-          const proxyUrl = `/api/glb-proxy/${filename}`;
+          loader.crossOrigin = "anonymous";
 
           loader.load(
-            proxyUrl,
+            glbUrl,
             (gltf) => {
               const model = gltf.scene;
 
