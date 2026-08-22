@@ -17,6 +17,7 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.models.case import Case
 from app.models.component_3d_asset import (
     AssetSubjectType,
     Component3DAsset,
@@ -237,7 +238,14 @@ async def list_assets_public(
     status: str | None = None,
     db: AsyncSession = Depends(get_db),
 ):
-    """List all 3D assets (public read-only, no auth required)."""
+    """List all 3D assets (public read-only, no auth required).
+
+    Returns both component assets and PC case 3D models in a unified format.
+    PC cases are transformed to match the Component3DAsset schema for compatibility.
+    """
+    results = []
+
+    # Fetch component assets
     q = select(Component3DAsset).order_by(
         Component3DAsset.subject_type,
         Component3DAsset.subject_id,
@@ -254,7 +262,49 @@ async def list_assets_public(
         except ValueError:
             raise HTTPException(status_code=422, detail=f"Unknown status '{status}'")
     rows = (await db.execute(q)).scalars().all()
-    return [_serialize(a) for a in rows]
+    results.extend([_serialize(a) for a in rows])
+
+    # Fetch PC cases with 3D models
+    case_query = select(Case).where(Case.has_3d_model == True).order_by(Case.id)
+    cases = (await db.execute(case_query)).scalars().all()
+
+    # Transform cases to match Component3DAsset format
+    for case in cases:
+        results.append({
+            "id": f"case_{case.id}",  # Prefix to avoid ID collisions
+            "subject_type": "case",
+            "subject_id": case.id,
+            "category": "case",
+            "family_key": None,
+            "status": "validated",  # Cases with models are considered validated
+            "version": 1,
+            "is_active": True,
+            "glb_ref": case.model_3d_url,
+            "preview_image_ref": case.image_url,
+            "source_image_refs": [case.image_url] if case.image_url else [],
+            "poly_count": case.model_3d_polygons,
+            "file_size_kb": case.model_3d_file_size // 1024 if case.model_3d_file_size else None,
+            "dimensions_mm": None,
+            "scale_validated": False,
+            "anchor_manifest_json": None,
+            "notes": f"PC Case: {case.name}",
+            "created_by": "system",
+            "provenance_status": case.model_3d_source or "unknown",
+            "source_name": case.brand or case.name,
+            "source_url": case.source_url,
+            "licence": case.model_3d_license,
+            "licence_url": None,
+            "commercial_use_approved": True,
+            "redistribution_approved": True,
+            "attribution": case.model_3d_creator,
+            "provenance_reviewed_at": None,
+            "provenance_reviewed_by": None,
+            "created_at": case.created_at.isoformat() if case.created_at else None,
+            "updated_at": case.updated_at.isoformat() if case.updated_at else None,
+            "rank": None,
+        })
+
+    return results
 
 
 class AssetPatch(BaseModel):
