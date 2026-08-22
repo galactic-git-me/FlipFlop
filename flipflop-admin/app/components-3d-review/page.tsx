@@ -132,6 +132,8 @@ interface Component3DAsset {
   notes: string | null;
   created_by: string | null;
   created_at: string | null;
+  rank?: number | null;
+  source_image_refs?: string[];
 }
 
 function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
@@ -222,6 +224,27 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
             proxyUrl,
             (gltf) => {
               const model = gltf.scene;
+
+              // Apply bright material to all meshes if they don't have one
+              model.traverse((child: any) => {
+                if (child.isMesh) {
+                  if (!child.material) {
+                    child.material = new THREE.MeshStandardMaterial({
+                      color: 0xcccccc,
+                      roughness: 0.5,
+                      metalness: 0.2,
+                      emissive: 0x333333,
+                    });
+                  } else if (child.material.color === undefined) {
+                    // If material exists but has no color, add one
+                    child.material.color = new THREE.Color(0xcccccc);
+                    child.material.roughness = 0.5;
+                    child.material.metalness = 0.2;
+                    child.material.emissive = new THREE.Color(0x333333);
+                  }
+                }
+              });
+
               scene.add(model);
 
               const box = new THREE.Box3().setFromObject(model);
@@ -525,6 +548,9 @@ export default function Components3DReviewPage() {
                     <div className="pb-1 border-b border-[#1e2d45]/30">
                       <p className="text-slate-500 text-xs">ID {selectedAsset.id} v{selectedAsset.version}</p>
                       <p className="text-slate-100 font-semibold text-base">{selectedAsset.category}</p>
+                      {selectedAsset.rank && (
+                        <p className="text-slate-400 text-xs mt-1"><span className="text-slate-500">Rank:</span> #{selectedAsset.rank}</p>
+                      )}
                     </div>
 
                     {selectedAsset.file_size_kb && (
