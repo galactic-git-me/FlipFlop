@@ -93,6 +93,35 @@ class ManualBuild(Base):
     buyer_name: Mapped[str | None] = mapped_column(String(200))
     buyer_address_json: Mapped[dict | None] = mapped_column(JSON)
     sale_price_actual: Mapped[float | None] = mapped_column(Float)
+    # ── Pricing engine (playbook rows 10, 19, 20, 21, 22, 23, 33, 49) —
+    # ported from the retired Flip system, adapted to ManualBuild's fields
+    # (ebay_price is this system's listing-price anchor, auto_reject_below_price
+    # is its min-offer floor — reused rather than duplicated).
+    sold_comp_target: Mapped[float | None] = mapped_column(Float)
+    active_range_ceiling: Mapped[float | None] = mapped_column(Float)
+    price_floor: Mapped[float | None] = mapped_column(Float)
+    price_last_recalculated_at: Mapped[datetime | None] = mapped_column(DateTime)
+    price_floor_hit_review_needed: Mapped[bool] = mapped_column(default=False)
+    demand_sold_count_90d: Mapped[int | None] = mapped_column(Integer)
+    demand_active_count: Mapped[int | None] = mapped_column(Integer)
+    demand_checked_at: Mapped[datetime | None] = mapped_column(DateTime)
+    # ── Offer engine (rows 8, 21, 45) ──
+    last_counter_offer_price: Mapped[float | None] = mapped_column(Float)
+    counter_offer_round: Mapped[int] = mapped_column(Integer, default=0)
+    last_watcher_offer_sent_at: Mapped[datetime | None] = mapped_column(DateTime)
+    # ── Recreate/relist cycle (rows 1, 2, 5, 6, 7, 9, 36) — ongoing
+    # end-and-republish, distinct from deferred_publish_at's one-time
+    # initial listing above. ──
+    recreate_cycle_count: Mapped[int] = mapped_column(Integer, default=0)
+    next_recreate_at: Mapped[datetime | None] = mapped_column(DateTime)
+    last_recreate_at: Mapped[datetime | None] = mapped_column(DateTime)
+    recreate_price_step_pct: Mapped[float] = mapped_column(Float, default=0.03)
+    traffic_band: Mapped[str | None] = mapped_column(String(50))
+    listed_at: Mapped[datetime | None] = mapped_column(DateTime)
+    # ── Paid visibility / markdown (rows 40, 46) ──
+    promoted_ad_rate_pct: Mapped[float | None] = mapped_column(Float)
+    promoted_enabled: Mapped[bool] = mapped_column(default=False)
+    markdown_event_opt_in: Mapped[bool] = mapped_column(default=False)
     # Populated once the seller confirms and pays for a real courier
     # booking (see app/services/parcel2go_booking.py) — booking is a real
     # financial transaction, so this only happens on explicit user

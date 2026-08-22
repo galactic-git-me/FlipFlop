@@ -825,6 +825,28 @@ async def _migrate_add_columns():
         ("gem_radar_scored_listings", "cpk", "VARCHAR(64)"),
         # Manual builds' own deferred-listing scheduler (mirrors flips.deferred_publish_at).
         ("manual_builds", "deferred_publish_at", "TIMESTAMP"),
+        # Pricing/offer/recreate-cycle/promoted-visibility engine, ported from
+        # the retired Flip system onto ManualBuild (see app/models/manual_build.py).
+        ("manual_builds", "sold_comp_target", "FLOAT"),
+        ("manual_builds", "active_range_ceiling", "FLOAT"),
+        ("manual_builds", "price_floor", "FLOAT"),
+        ("manual_builds", "price_last_recalculated_at", "TIMESTAMP"),
+        ("manual_builds", "price_floor_hit_review_needed", "BOOLEAN DEFAULT FALSE"),
+        ("manual_builds", "demand_sold_count_90d", "INTEGER"),
+        ("manual_builds", "demand_active_count", "INTEGER"),
+        ("manual_builds", "demand_checked_at", "TIMESTAMP"),
+        ("manual_builds", "last_counter_offer_price", "FLOAT"),
+        ("manual_builds", "counter_offer_round", "INTEGER DEFAULT 0"),
+        ("manual_builds", "last_watcher_offer_sent_at", "TIMESTAMP"),
+        ("manual_builds", "recreate_cycle_count", "INTEGER DEFAULT 0"),
+        ("manual_builds", "next_recreate_at", "TIMESTAMP"),
+        ("manual_builds", "last_recreate_at", "TIMESTAMP"),
+        ("manual_builds", "recreate_price_step_pct", "FLOAT DEFAULT 0.03"),
+        ("manual_builds", "traffic_band", "VARCHAR(50)"),
+        ("manual_builds", "listed_at", "TIMESTAMP"),
+        ("manual_builds", "promoted_ad_rate_pct", "FLOAT"),
+        ("manual_builds", "promoted_enabled", "BOOLEAN DEFAULT FALSE"),
+        ("manual_builds", "markdown_event_opt_in", "BOOLEAN DEFAULT FALSE"),
     ]
     async with engine.begin() as conn:
         log.info("migration.start", total_columns=len(new_cols))

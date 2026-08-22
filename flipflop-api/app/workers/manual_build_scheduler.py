@@ -67,6 +67,30 @@ async def run_deferred_manual_build_publish_job() -> dict:
 async def _publish_due_build(build) -> str:
     """Returns 'published', 'not_ready', or 'no_token'. Mutates `build`
     in place on success — caller commits."""
+    from app.services.traffic_bands import jittered_recreate_slot, DEFAULT_BAND
+
+    outcome = await post_build_to_ebay(build)
+    if outcome == "published":
+        build.status = "listed"
+        build.deferred_publish_at = None
+        if build.listed_at is None:
+            # Rows 1/2/5/6/9: start the recreate/relist cycle clock the
+            # first time this build actually goes live.
+            build.listed_at = datetime.utcnow()
+            build.next_recreate_at = jittered_recreate_slot(build.traffic_band or DEFAULT_BAND, datetime.utcnow())
+    return outcome
+
+
+async def post_build_to_ebay(build) -> str:
+    """
+    Shared eBay-publish logic for a ManualBuild — used by the deferred
+    first-publish job above and by the recreate-cycle end-and-republish job
+    (app/workers/manual_build_lifecycle.py). Returns 'published', 'not_ready',
+    or 'no_token'. Mutates `build` in place on success — caller commits.
+    Does NOT touch build.status/deferred_publish_at, since the recreate
+    cycle re-publishes an already-listed build — callers that care about
+    those fields (the deferred job) set them themselves.
+    """
     if not build.generated_title or not build.generated_description:
         log.info("manual_build_scheduler.skip_not_ready", build_id=build.id, reason="no_listing_content")
         return "not_ready"
@@ -134,9 +158,28 @@ async def _publish_due_build(build) -> str:
         build.ebay_listing_id = result["listing_id"]
         build.ebay_listing_url = result["url"]
         build.ebay_sku = result.get("sku")
-        build.status = "listed"
-        build.deferred_publish_at = None
         build.updated_at = datetime.utcnow()
+
+        # Row 40: promote automatically if opted in — a failure here doesn't
+        # undo the listing itself, just logs, since the listing going live
+        # is the outcome that actually matters.
+        if build.promoted_enabled:
+            try:
+                from app.services.ebay_marketing import set_promoted_ad
+
+                rate = build.promoted_ad_rate_pct
+                if rate is None:
+                    from app.services.pricing_engine import suggest_promoted_ad_rate
+                    suggestion = suggest_promoted_ad_rate(
+                        estimated_profit=(build.ebay_price or 0) - (build.total_cost or 0),
+                        total_cost=build.total_cost or 0,
+                    )
+                    rate = suggestion["suggested_ad_rate_pct"] * 100 if not suggestion["too_thin_to_promote"] else None
+                if rate is not None:
+                    await set_promoted_ad(build.ebay_listing_id, rate, oauth_token, listing_environment)
+            except Exception as exc:
+                log.warning("manual_build_scheduler.promote_failed", build_id=build.id, error=str(exc))
+
         return "published"
 
     log.warning("manual_build_scheduler.ebay_rejected", build_id=build.id, error=result.get("error"))

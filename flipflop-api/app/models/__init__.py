@@ -22,6 +22,7 @@ from app.models.market_ingestion import SourceRun, ListingRaw, ListingNormalized
 from app.models.source_search_term import SourceSearchTerm
 from app.models.listing_archive import ListingArchive
 from app.models.manual_build import ManualBuild
+from app.models.pc_builder import PCBuild, PCBuildPurchasePlan
 from app.models.benchmark import HardwareBenchmark, ComponentPerformanceMetric, BenchmarkRefreshRun
 from app.models.catalogue import PlaybookSlot, CatalogueVariant, CaseCatalogue
 from app.models.build_capacity import BuildCapacity

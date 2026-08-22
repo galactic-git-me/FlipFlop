@@ -182,6 +182,71 @@ def suggest_promoted_ad_rate(estimated_profit: float, total_cost: float) -> dict
     }
 
 
+def _component_spec(build, slot: str) -> Optional[str]:
+    """ManualBuild has no single Listing to read cpu/gpu off — pull the
+    name of the component in the given slot from its own `components` JSON
+    instead (each item is {"slot": ..., "name": ...} or a BuildComponent)."""
+    for c in build.components or []:
+        c_slot = c["slot"] if isinstance(c, dict) else c.slot
+        if c_slot and c_slot.lower() == slot.lower():
+            return c["name"] if isinstance(c, dict) else c.name
+    return None
+
+
+async def recalculate_manual_build_pricing(build, db) -> dict:
+    """
+    ManualBuild equivalent of recalculate_pricing() below — same sold-comp
+    re-anchoring math (never carries a stale target forward), adapted to
+    read cpu/gpu from `components` instead of a Listing, and to write onto
+    ManualBuild's fields (ebay_price is this system's listing-price anchor,
+    auto_reject_below_price its min-offer floor).
+    """
+    from app.services.demand_check import build_query
+    from app.services.ebay_browse import get_component_prices
+    from app.services.cpu_tier import extract_cpu_tier
+    from app.models.pricing_bias import PricingBias
+
+    cpu = _component_spec(build, "CPU")
+    gpu = _component_spec(build, "GPU")
+    query = build_query(cpu, gpu)
+    prices = await get_component_prices(query, force_refresh=True, min_price=50.0)
+
+    active_prices = sorted(prices["used_prices"] + prices["new_prices"])
+    ceiling = compute_active_range_ceiling(active_prices)
+    sold_target = prices["used_median"]
+
+    floor = compute_price_floor(build.total_cost or 0.0)
+    anchor = compute_bin_anchor(sold_target, ceiling, build.allow_offers)
+
+    cpu_tier = extract_cpu_tier(cpu)
+    if anchor is not None and cpu_tier:
+        bias_row = await db.get(PricingBias, cpu_tier)
+        if bias_row and bias_row.anchor_bias_pct:
+            anchor = round(anchor * (1 + bias_row.anchor_bias_pct), 2)
+
+    build.active_range_ceiling = ceiling
+    build.sold_comp_target = sold_target
+    build.price_floor = floor
+    if anchor is not None:
+        build.ebay_price = anchor
+    build.price_last_recalculated_at = datetime.utcnow()
+
+    log.info(
+        "pricing_engine.manual_build_recalculated",
+        build_id=getattr(build, "id", None),
+        anchor=anchor,
+        sold_target=sold_target,
+        ceiling=ceiling,
+        floor=floor,
+    )
+    return {
+        "listing_price": anchor,
+        "sold_comp_target": sold_target,
+        "active_range_ceiling": ceiling,
+        "price_floor": floor,
+    }
+
+
 async def recalculate_pricing(flip, db) -> dict:
     """
     Orchestrates a fresh pricing recalculation for a Flip: pulls current active

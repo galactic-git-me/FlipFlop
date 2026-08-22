@@ -28,8 +28,13 @@ from app.services.price_refresh import run_price_refresh
 from app.services.catalogue_service import run_catalogue_pipeline_job, run_catalogue_digest_job
 from app.workers.recreate_cycle import run_deferred_publish_job, run_recreate_cycle_job
 from app.workers.manual_build_scheduler import run_deferred_manual_build_publish_job
-from app.workers.markdown_event import run_markdown_event_scan_job
+from app.workers.markdown_event import run_markdown_event_scan_job, run_manual_build_markdown_event_scan_job
 from app.workers.offer_poll import run_offer_poll_job, run_send_to_watchers_job
+from app.workers.manual_build_lifecycle import (
+    run_manual_build_offer_poll_job,
+    run_manual_build_send_to_watchers_job,
+    run_manual_build_recreate_cycle_job,
+)
 from app.workers.message_poll import run_message_poll_job
 from app.services.ai_build_generator import generate_ai_builds
 from app.services.email_monitor import EmailMonitor
@@ -57,10 +62,15 @@ _job_history: dict[str, deque[dict]] = {
     "catalogue_pipeline": deque(maxlen=50),
     "catalogue_digest": deque(maxlen=50),
     "deferred_publish": deque(maxlen=50),
+    "manual_build_deferred_publish": deque(maxlen=50),
     "recreate_cycle": deque(maxlen=50),
+    "manual_build_recreate_cycle": deque(maxlen=50),
     "markdown_event_scan": deque(maxlen=50),
+    "manual_build_markdown_event_scan": deque(maxlen=50),
     "offer_poll": deque(maxlen=50),
+    "manual_build_offer_poll": deque(maxlen=50),
     "send_to_watchers": deque(maxlen=50),
+    "manual_build_send_to_watchers": deque(maxlen=50),
     "message_poll": deque(maxlen=50),
     "ai_build_generator": deque(maxlen=50),
     "email_monitor": deque(maxlen=50),
@@ -491,9 +501,29 @@ def start_scheduler():
         max_instances=1,
         next_run_time=now + timedelta(hours=4),
     )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=1),
+        id="manual_build_recreate_cycle",
+        name="Manual Build Relist/Recreate Cycle",
+        kwargs={"job_id": "manual_build_recreate_cycle", "fn": run_manual_build_recreate_cycle_job},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now,
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=24),
+        id="manual_build_markdown_event_scan",
+        name="Manual Build Markdown Event Candidate Scan",
+        kwargs={"job_id": "manual_build_markdown_event_scan", "fn": run_manual_build_markdown_event_scan_job},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(hours=4),
+    )
 
     # Playbook rows 8, 21, 45, 47 — offer/message polling. Every job here
-    # no-ops (logged, cheap) until "Connect eBay" is completed in Settings.
+    # no-ops (logged, cheap) until an eBay refresh token is configured.
     scheduler.add_job(
         _run_job_with_history,
         trigger=IntervalTrigger(minutes=30),
@@ -510,6 +540,26 @@ def start_scheduler():
         id="send_to_watchers",
         name="Send Offers to Watchers",
         kwargs={"job_id": "send_to_watchers", "fn": run_send_to_watchers_job},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now,
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=30),
+        id="manual_build_offer_poll",
+        name="Manual Build Best-Offer Poll",
+        kwargs={"job_id": "manual_build_offer_poll", "fn": run_manual_build_offer_poll_job},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now,
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=12),
+        id="manual_build_send_to_watchers",
+        name="Manual Build Send Offers to Watchers",
+        kwargs={"job_id": "manual_build_send_to_watchers", "fn": run_manual_build_send_to_watchers_job},
         replace_existing=True,
         max_instances=1,
         next_run_time=now,

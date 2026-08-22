@@ -50,6 +50,10 @@ from app.services.cross_channel_guard import withdraw_storefront_for_sold_build
 from app.services.media_sync import sync_to_public_media
 from app.services.meshy_generation import generate_multi_image_asset
 from app.services.product_faqs import FAQ_BANK, FAQ_BY_ID, selected_faqs, render_ebay_faq_html
+from app.services import pricing_engine
+import structlog
+
+log = structlog.get_logger(__name__)
 from app.config import get_settings
 from app.routes.admin_auth import get_current_admin
 
@@ -608,6 +612,28 @@ async def mark_built(build_id: int, db: AsyncSession = Depends(get_db)):
 
     build.status = "built"
     build.updated_at = datetime.utcnow()
+
+    # Rows 10/33/19/20: demand check + initial pricing anchor/floor fire
+    # automatically once cost is finalized (all components purchased), no
+    # click needed — mirrors the retired Flip system's create_flip hook.
+    try:
+        from app.services import demand_check as demand_check_service
+        from app.services.pricing_engine import _component_spec
+
+        signal = await demand_check_service.check_demand(
+            _component_spec(build, "CPU"), _component_spec(build, "GPU")
+        )
+        build.demand_sold_count_90d = signal.sold_count_90d
+        build.demand_active_count = signal.active_count
+        build.demand_checked_at = signal.checked_at
+    except Exception as exc:
+        log.warning("manual_builds.demand_check.failed", build_id=build.id, error=str(exc))
+
+    try:
+        await pricing_engine.recalculate_manual_build_pricing(build, db)
+    except Exception as exc:
+        log.warning("manual_builds.pricing_recalc.failed", build_id=build.id, error=str(exc))
+
     await db.flush()
     await db.refresh(build)
     return build
@@ -1198,6 +1224,16 @@ async def update_ebay_config(
     # the field was sent at all rather than whether it's non-null.
     if "deferred_publish_at" in body.model_fields_set:
         build.deferred_publish_at = body.deferred_publish_at
+    if body.traffic_band is not None:
+        build.traffic_band = body.traffic_band
+    if body.recreate_price_step_pct is not None:
+        build.recreate_price_step_pct = body.recreate_price_step_pct
+    if body.markdown_event_opt_in is not None:
+        build.markdown_event_opt_in = body.markdown_event_opt_in
+    if body.promoted_enabled is not None:
+        build.promoted_enabled = body.promoted_enabled
+    if body.promoted_ad_rate_pct is not None:
+        build.promoted_ad_rate_pct = body.promoted_ad_rate_pct
 
     build.updated_at = datetime.utcnow()
     await db.flush()
@@ -1418,12 +1454,44 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
             )
 
         if result["success"]:
+            from app.services.traffic_bands import jittered_recreate_slot, DEFAULT_BAND
+
             build.ebay_listing_id = result["listing_id"]
             build.ebay_listing_url = result["url"]
             build.ebay_sku = result.get("sku")
             build.status = "listed"
             build.deferred_publish_at = None
             build.updated_at = datetime.utcnow()
+            if not build.ebay_price:
+                build.ebay_price = body.price
+            if build.listed_at is None:
+                # Rows 1/2/5/6/9: start the recreate/relist cycle clock the
+                # first time this build actually goes live, whichever path
+                # got it there (manual "List on eBay" here, or the deferred
+                # scheduler in manual_build_scheduler.py).
+                build.listed_at = datetime.utcnow()
+                build.next_recreate_at = jittered_recreate_slot(
+                    build.traffic_band or DEFAULT_BAND, datetime.utcnow(),
+                )
+
+            # Row 40: promote automatically if opted in — a failure here
+            # doesn't undo the listing itself, just logs.
+            if build.promoted_enabled:
+                try:
+                    from app.services.ebay_marketing import set_promoted_ad
+
+                    rate = build.promoted_ad_rate_pct
+                    if rate is None:
+                        suggestion = pricing_engine.suggest_promoted_ad_rate(
+                            estimated_profit=body.price - (build.total_cost or 0),
+                            total_cost=build.total_cost or 0,
+                        )
+                        rate = suggestion["suggested_ad_rate_pct"] * 100 if not suggestion["too_thin_to_promote"] else None
+                    if rate is not None:
+                        await set_promoted_ad(build.ebay_listing_id, rate, oauth_token, listing_environment)
+                except Exception as exc:
+                    log.warning("manual_builds.promote_failed", build_id=build.id, error=str(exc))
+
             await db.flush()
             action = "updated" if is_relisting else "posted"
             return PostToEbayResult(success=True, listing_id=result["listing_id"], url=result["url"], action=action)

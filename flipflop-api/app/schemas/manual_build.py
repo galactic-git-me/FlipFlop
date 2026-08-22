@@ -100,6 +100,28 @@ class ManualBuildOut(BaseModel):
     ebay_live: Optional[bool] = None
     storefront_live: Optional[bool] = None
     deferred_publish_at: Optional[datetime] = None
+    # Pricing/offer/recreate-cycle/promoted-visibility engine, ported from
+    # the retired Flip system — see app/models/manual_build.py.
+    sold_comp_target: Optional[float] = None
+    active_range_ceiling: Optional[float] = None
+    price_floor: Optional[float] = None
+    price_last_recalculated_at: Optional[datetime] = None
+    price_floor_hit_review_needed: bool = False
+    demand_sold_count_90d: Optional[int] = None
+    demand_active_count: Optional[int] = None
+    demand_checked_at: Optional[datetime] = None
+    last_counter_offer_price: Optional[float] = None
+    counter_offer_round: int = 0
+    last_watcher_offer_sent_at: Optional[datetime] = None
+    recreate_cycle_count: int = 0
+    next_recreate_at: Optional[datetime] = None
+    last_recreate_at: Optional[datetime] = None
+    recreate_price_step_pct: float = 0.03
+    traffic_band: Optional[str] = None
+    listed_at: Optional[datetime] = None
+    promoted_ad_rate_pct: Optional[float] = None
+    promoted_enabled: bool = False
+    markdown_event_opt_in: bool = False
     created_at: datetime
     updated_at: datetime
 
@@ -194,6 +216,14 @@ class UpdateEbayListingConfigRequest(BaseModel):
     package_height_cm: Optional[float] = None
     deferred_publish_at: Optional[datetime] = None
     shipping_damage_cover_confirmed: Optional[bool] = None
+    # Recreate-cycle/markdown/promoted-visibility engine settings (see
+    # app/models/manual_build.py) — configured once per build, then run
+    # unattended by the scheduled jobs in app/workers/manual_build_lifecycle.py.
+    traffic_band: Optional[str] = None
+    recreate_price_step_pct: Optional[float] = None
+    markdown_event_opt_in: Optional[bool] = None
+    promoted_enabled: Optional[bool] = None
+    promoted_ad_rate_pct: Optional[float] = None
 
 
 class CourierQuoteOut(BaseModel):
