@@ -9,6 +9,11 @@ const gradientStyle = `
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
   }
+  @keyframes bgShift {
+    0% { background: linear-gradient(135deg, #C97A3A 0%, #A0624D 30%, #4A5F7F 70%, #1a3a52 100%); }
+    50% { background: linear-gradient(135deg, #D4843F 0%, #B07052 30%, #5A6F8F 70%, #2a4a62 100%); }
+    100% { background: linear-gradient(135deg, #C97A3A 0%, #A0624D 30%, #4A5F7F 70%, #1a3a52 100%); }
+  }
 `;
 
 interface Component3DAsset {
@@ -63,14 +68,15 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           camera.lookAt(0, 0, 0);
           cameraRef.current = camera;
 
-          const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: false });
+          const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: true });
           renderer.setSize(width, height);
           renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-          renderer.setClearColor(0x000000, 0);
+          renderer.setClearColor(0xffffff, 0);
           renderer.domElement.style.position = "absolute";
           renderer.domElement.style.top = "0";
           renderer.domElement.style.left = "0";
           renderer.domElement.style.background = "transparent";
+          renderer.domElement.style.backgroundColor = "transparent";
 
           while (containerRef.current.firstChild) {
             containerRef.current.removeChild(containerRef.current.firstChild);
@@ -274,7 +280,7 @@ export default function Components3DReviewPage() {
   return (
     <>
       <style>{gradientStyle}</style>
-      <div style={{ height: "100vh", background: "linear-gradient(135deg, #C97A3A 0%, #A0624D 30%, #4A5F7F 70%, #1a3a52 100%)" }} className="w-full flex flex-col gap-3 p-4 overflow-hidden">
+      <div style={{ height: "100vh", animation: "bgShift 8s ease-in-out infinite" }} className="w-full flex flex-col gap-3 p-4 overflow-hidden">
       <div>
         <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
       </div>
@@ -351,7 +357,7 @@ export default function Components3DReviewPage() {
         {/* CENTER+RIGHT: 3D Viewer with overlays */}
         <div className="flex-1 flex flex-col min-h-0">
           {selectedAsset ? (
-            <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 flex flex-col relative">
+            <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 flex flex-col relative" style={{ background: "transparent" }}>
               <div className="flex-1 min-h-0 relative">
                 <Viewer3D glbUrl={selectedAsset.glb_ref} />
 
