@@ -135,6 +135,13 @@ interface Component3DAsset {
 }
 
 function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
+  // 3D Viewer Configuration:
+  // - Camera position: (5, 6, 9) — controls zoom/perspective from the model
+  // - Model scale: 10.5 — scales loaded GLB to viewport size
+  // - Grid: 200x200 with 40 divisions, white lines (0xffffff, 0xdddddd)
+  // - Lights: ambient (2.0), point (2.5), directional (1.5), fill (1.5), back (2.5)
+  // - Starfield: twinkling background at z-index 0, model canvas at z-index 2
+  // - Grid horizon: y = -1.49 (centered in viewport for perspective)
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef({ x: 0, y: 0, isDown: false });
   const modelRef = useRef<any>(null);
@@ -388,7 +395,7 @@ export default function Components3DReviewPage() {
       <div style={{ height: "100vh", animation: "bgShift 8s ease-in-out infinite" }} className="w-full flex flex-col gap-3 p-4 pb-0 overflow-hidden">
       <div className="flex items-center justify-between">
         <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
-        <div className="bg-white/75 rounded-lg px-6 py-2 text-lg font-semibold flex items-center gap-4">
+        <div className="bg-white/50 rounded-lg px-6 py-2 text-lg font-semibold flex items-center gap-4">
           <span className="text-orange-500">{draftCount} Draft</span>
           <span className="text-purple-500">{validatedCount} Valid</span>
           <span className="text-[#00dc82]">{finalCount} Final</span>
