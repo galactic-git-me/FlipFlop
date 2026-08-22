@@ -282,17 +282,12 @@ export default function Components3DReviewPage() {
       <style>{gradientStyle}</style>
       <div style={{ height: "100vh", animation: "bgShift 8s ease-in-out infinite" }} className="w-full flex flex-col gap-3 p-4 overflow-hidden">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
-          <div className="text-xs text-slate-400 mt-1">
-            <span className="text-orange-400">{draftCount} Draft</span>
-            <span className="mx-2">•</span>
-            <span className="text-purple-400">{validatedCount} Valid</span>
-            <span className="mx-2">•</span>
-            <span className="text-[#00dc82]">{finalCount} Final</span>
-            <span className="mx-2">•</span>
-            <span className="text-slate-300">{assets.length} Total</span>
-          </div>
+        <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
+        <div className="bg-white rounded-lg px-6 py-2 text-lg font-semibold flex items-center gap-4">
+          <span className="text-orange-500">{draftCount} Draft</span>
+          <span className="text-purple-500">{validatedCount} Valid</span>
+          <span className="text-[#00dc82]">{finalCount} Final</span>
+          <span className="text-slate-800">{assets.length} Total</span>
         </div>
       </div>
 
