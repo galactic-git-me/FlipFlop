@@ -63,12 +63,14 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           camera.lookAt(0, 0, 0);
           cameraRef.current = camera;
 
-          const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+          const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: false });
           renderer.setSize(width, height);
           renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+          renderer.setClearColor(0x000000, 0);
           renderer.domElement.style.position = "absolute";
           renderer.domElement.style.top = "0";
           renderer.domElement.style.left = "0";
+          renderer.domElement.style.background = "transparent";
 
           while (containerRef.current.firstChild) {
             containerRef.current.removeChild(containerRef.current.firstChild);
@@ -272,7 +274,7 @@ export default function Components3DReviewPage() {
   return (
     <>
       <style>{gradientStyle}</style>
-      <div style={{ height: "100vh" }} className="w-full flex flex-col gap-3 p-4 overflow-hidden bg-slate-950">
+      <div style={{ height: "100vh", background: "linear-gradient(135deg, #C97A3A 0%, #A0624D 30%, #4A5F7F 70%, #1a3a52 100%)" }} className="w-full flex flex-col gap-3 p-4 overflow-hidden">
       <div>
         <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
       </div>
