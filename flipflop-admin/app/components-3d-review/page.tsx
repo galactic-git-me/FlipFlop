@@ -280,7 +280,7 @@ export default function Components3DReviewPage() {
   return (
     <>
       <style>{gradientStyle}</style>
-      <div style={{ height: "100vh", animation: "bgShift 8s ease-in-out infinite" }} className="w-full flex flex-col gap-3 p-4 overflow-hidden">
+      <div style={{ height: "100vh", animation: "bgShift 8s ease-in-out infinite" }} className="w-full flex flex-col gap-3 p-4 pb-0 overflow-hidden">
       <div className="flex items-center justify-between">
         <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
         <div className="bg-white/75 rounded-lg px-6 py-2 text-lg font-semibold flex items-center gap-4">
@@ -372,7 +372,7 @@ export default function Components3DReviewPage() {
                 </div>
 
                 {/* Details overlay - bottom right */}
-                <div className="absolute bottom-3 right-3 w-64 bg-[#0a1119]/70 backdrop-blur-md border border-[#1e2d45]/50 rounded-lg p-2 pointer-events-auto overflow-y-auto max-h-72 shadow-2xl">
+                <div className="absolute bottom-24 right-3 w-64 bg-[#0a1119]/70 backdrop-blur-md border border-[#1e2d45]/50 rounded-lg p-2 pointer-events-auto overflow-y-auto max-h-72 shadow-2xl">
                   <div className="space-y-1 text-xs">
                     <div className="pb-1 border-b border-[#1e2d45]/30">
                       <p className="text-slate-500 text-[10px]">ID {selectedAsset.id} v{selectedAsset.version}</p>
