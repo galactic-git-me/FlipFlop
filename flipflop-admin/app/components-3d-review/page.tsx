@@ -49,16 +49,16 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x3a3a3a, roughness: 0.8, metalness: 0.1 });
           const ground = new THREE.Mesh(groundGeometry, groundMaterial);
           ground.rotation.x = -Math.PI / 2;
-          ground.position.y = -1;
+          ground.position.y = -3;
           scene.add(ground);
 
           // Matrix green perspective grid lines
           const gridHelper = new THREE.GridHelper(200, 20, 0x00ff00, 0x00aa00);
-          gridHelper.position.y = -0.99;
+          gridHelper.position.y = -2.99;
           scene.add(gridHelper);
 
           const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 2000);
-          camera.position.set(2, 2.5, 3.5);
+          camera.position.set(4, 5, 7);
           camera.lookAt(0, 0, 0);
           cameraRef.current = camera;
 
@@ -104,7 +104,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
               const box = new THREE.Box3().setFromObject(model);
               const size = box.getSize(new THREE.Vector3());
               const maxDim = Math.max(size.x, size.y, size.z);
-              const scale = 1.6 / maxDim;
+              const scale = 3.5 / maxDim;
               model.scale.multiplyScalar(scale);
 
               const center = box.getCenter(new THREE.Vector3());
