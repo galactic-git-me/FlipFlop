@@ -3,6 +3,109 @@
 import { useEffect, useState, useRef } from "react";
 import { Check } from "lucide-react";
 
+interface Star {
+  x: number;
+  y: number;
+  radius: number;
+  opacity: number;
+  twinkleDuration: number;
+  twinkling: boolean;
+  animationDelay: number;
+}
+
+function StarfieldBackground({ containerRef }: { containerRef: React.RefObject<HTMLDivElement> }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const starsRef = useRef<Star[]>([]);
+  const animationRef = useRef<number | null>(null);
+  const timeRef = useRef(0);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const updateCanvasSize = () => {
+      canvas.width = container.clientWidth;
+      canvas.height = container.clientHeight;
+    };
+
+    updateCanvasSize();
+
+    // Generate stars
+    const starCount = Math.floor((canvas.width * canvas.height) / 15000);
+    starsRef.current = Array.from({ length: starCount }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 0.8,
+      opacity: Math.random() * 0.5 + 0.2,
+      twinkleDuration: Math.random() * 2000 + 1500,
+      twinkling: Math.random() > 0.6,
+      animationDelay: Math.random() * 5000,
+    }));
+
+    let lastFrameTime = Date.now();
+    const animate = () => {
+      const now = Date.now();
+      const deltaTime = now - lastFrameTime;
+      lastFrameTime = now;
+
+      timeRef.current += deltaTime;
+
+      ctx.fillStyle = "rgba(0, 0, 0, 0.02)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      starsRef.current.forEach((star) => {
+        const timeSinceDelay = Math.max(0, timeRef.current - star.animationDelay);
+
+        if (star.twinkling) {
+          const cyclePosition = (timeSinceDelay % star.twinkleDuration) / star.twinkleDuration;
+          const twinkle = Math.sin(cyclePosition * Math.PI * 2);
+          star.opacity = 0.15 + (twinkle * 0.25 + 0.25) * 0.4;
+        } else {
+          const slowPulse = (Math.sin(timeSinceDelay / 3000) + 1) / 2;
+          star.opacity = 0.2 + slowPulse * 0.3;
+        }
+
+        ctx.fillStyle = `rgba(200, 220, 255, ${star.opacity})`;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    const handleResize = () => {
+      updateCanvasSize();
+    };
+
+    const resizeObserver = new ResizeObserver(handleResize);
+    resizeObserver.observe(container);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      resizeObserver.disconnect();
+    };
+  }, [containerRef]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 pointer-events-none"
+      style={{
+        zIndex: 0,
+      }}
+    />
+  );
+}
+
 const gradientStyle = `
   @keyframes gradientShift {
     0% { background-position: 0% 50%; }
@@ -58,8 +161,8 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           scene.background = null;
 
 
-          // Matrix green perspective grid lines - smaller squares
-          const gridHelper = new THREE.GridHelper(200, 40, 0x00ff00, 0x00aa00);
+          // Bright white grid lines
+          const gridHelper = new THREE.GridHelper(200, 40, 0xffffff, 0xdddddd);
           gridHelper.position.y = -1.49;
           scene.add(gridHelper);
 
@@ -77,6 +180,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           renderer.domElement.style.left = "0";
           renderer.domElement.style.background = "transparent";
           renderer.domElement.style.backgroundColor = "transparent";
+          renderer.domElement.style.zIndex = "2";
 
           while (containerRef.current.firstChild) {
             containerRef.current.removeChild(containerRef.current.firstChild);
@@ -197,6 +301,7 @@ export default function Components3DReviewPage() {
   const [loading, setLoading] = useState(true);
   const [selectedAsset, setSelectedAsset] = useState<Component3DAsset | null>(null);
   const [filter, setFilter] = useState<"meshy_draft" | "all">("meshy_draft");
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const load = async () => {
@@ -361,7 +466,8 @@ export default function Components3DReviewPage() {
         <div className="flex-1 flex flex-col min-h-0">
           {selectedAsset ? (
             <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 flex flex-col relative" style={{ background: "transparent" }}>
-              <div className="flex-1 min-h-0 relative">
+              <div className="flex-1 min-h-0 relative" ref={containerRef}>
+                <StarfieldBackground containerRef={containerRef} />
                 <Viewer3D glbUrl={selectedAsset.glb_ref} />
 
                 {/* Title overlay - top center */}
@@ -373,22 +479,22 @@ export default function Components3DReviewPage() {
 
                 {/* Details overlay - bottom right */}
                 <div className="absolute bottom-24 right-3 w-64 bg-[#0a1119]/70 backdrop-blur-md border border-[#1e2d45]/50 rounded-lg p-2 pointer-events-auto overflow-y-auto max-h-72 shadow-2xl">
-                  <div className="space-y-1 text-xs">
+                  <div className="space-y-1 text-sm">
                     <div className="pb-1 border-b border-[#1e2d45]/30">
-                      <p className="text-slate-500 text-[10px]">ID {selectedAsset.id} v{selectedAsset.version}</p>
-                      <p className="text-slate-100 font-semibold text-sm">{selectedAsset.category}</p>
+                      <p className="text-slate-500 text-xs">ID {selectedAsset.id} v{selectedAsset.version}</p>
+                      <p className="text-slate-100 font-semibold text-base">{selectedAsset.category}</p>
                     </div>
 
                     {selectedAsset.file_size_kb && (
-                      <p className="text-slate-400"><span className="text-slate-500">Size:</span> {Math.round(selectedAsset.file_size_kb / 1024)}MB</p>
+                      <p className="text-slate-400 text-sm"><span className="text-slate-500">Size:</span> {Math.round(selectedAsset.file_size_kb / 1024)}MB</p>
                     )}
 
                     {selectedAsset.poly_count && (
-                      <p className="text-slate-400"><span className="text-slate-500">Polys:</span> {(selectedAsset.poly_count / 1000).toFixed(1)}k</p>
+                      <p className="text-slate-400 text-sm"><span className="text-slate-500">Polys:</span> {(selectedAsset.poly_count / 1000).toFixed(1)}k</p>
                     )}
 
                     {selectedAsset.notes && (
-                      <div className="p-1 bg-slate-700/20 rounded border border-slate-600/30 text-slate-300 mt-1 text-[10px]">
+                      <div className="p-1 bg-slate-700/20 rounded border border-slate-600/30 text-slate-300 mt-1 text-xs">
                         {selectedAsset.notes}
                       </div>
                     )}
