@@ -168,8 +168,8 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           scene.background = null;
 
 
-          // Bright white grid lines
-          const gridHelper = new THREE.GridHelper(200, 40, 0xffffff, 0xdddddd);
+          // Matrix green grid lines
+          const gridHelper = new THREE.GridHelper(200, 40, 0x00ff00, 0x00aa00);
           gridHelper.position.y = -1.49;
           scene.add(gridHelper);
 
@@ -484,8 +484,8 @@ export default function Components3DReviewPage() {
                   </h1>
                 </div>
 
-                {/* Details overlay - bottom right */}
-                <div className="absolute bottom-24 right-3 w-64 bg-[#0a1119]/70 backdrop-blur-md border border-[#1e2d45]/50 rounded-lg p-2 pointer-events-auto overflow-y-auto max-h-72 shadow-2xl">
+                {/* Details overlay - bottom left */}
+                <div className="absolute bottom-24 left-3 w-64 bg-[#0a1119]/70 backdrop-blur-md border border-[#1e2d45]/50 rounded-lg p-2 pointer-events-auto overflow-y-auto max-h-72 shadow-2xl">
                   <div className="space-y-1 text-sm">
                     <div className="pb-1 border-b border-[#1e2d45]/30">
                       <p className="text-slate-500 text-xs">ID {selectedAsset.id} v{selectedAsset.version}</p>
