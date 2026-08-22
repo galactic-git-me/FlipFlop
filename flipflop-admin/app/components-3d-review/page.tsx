@@ -528,9 +528,9 @@ export default function Components3DReviewPage() {
         </div>
 
         {/* CENTER+RIGHT: 3D Viewer with overlays */}
-        <div className="flex-1 flex flex-col min-h-0">
+        <div className="flex-1 flex flex-col min-h-0 z-30 relative">
           {selectedAsset ? (
-            <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 flex flex-col relative" style={{ background: "transparent" }}>
+            <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 flex flex-col relative z-30" style={{ background: "transparent" }}>
               <div className="flex-1 min-h-0 relative" ref={containerRef}>
                 <StarfieldBackground containerRef={containerRef} />
                 <Viewer3D glbUrl={selectedAsset.glb_ref} />
@@ -569,29 +569,29 @@ export default function Components3DReviewPage() {
 
                     {/* Approval buttons */}
                     <div className="pt-1 border-t border-[#1e2d45]/30 mt-1">
-                      <div className={`inline-block px-2 py-1 rounded text-xs font-semibold mb-1 ${getStatusStyle(selectedAsset.status)}`}>
+                      <div className={`inline-block px-2 py-1 rounded text-xs font-semibold mb-2 ${getStatusStyle(selectedAsset.status)}`}>
                         {selectedAsset.status.toUpperCase()}
                       </div>
 
-                      {selectedAsset.status === "meshy_draft" && (
-                        <div className="flex gap-0.5 flex-wrap">
-                          <button onClick={() => handleStatusChange(selectedAsset.id, "rejected")} className="flex-1 min-w-10 px-1 py-0.5 rounded text-xs font-semibold bg-red-600/40 text-red-300 border border-red-500/50 hover:bg-red-600/60">
+                      <div className="space-y-2">
+                        <div className="flex gap-1">
+                          <button onClick={() => handleStatusChange(selectedAsset.id, "rejected")} className="flex-1 px-2 py-1 rounded text-xs font-semibold bg-red-600/40 text-red-300 border border-red-500/50 hover:bg-red-600/60">
                             Reject
                           </button>
-                          <button onClick={() => handleStatusChange(selectedAsset.id, "cleaned")} className="flex-1 min-w-10 px-1 py-0.5 rounded text-xs font-semibold bg-blue-600/40 text-blue-300 border border-blue-500/50 hover:bg-blue-600/60">
-                            Clean
-                          </button>
-                          <button onClick={() => handleStatusChange(selectedAsset.id, "validated")} className="flex-1 min-w-10 px-1 py-0.5 rounded text-xs font-semibold bg-purple-600/40 text-purple-300 border border-purple-500/50 hover:bg-purple-600/60">
-                            Valid
+                          <button onClick={() => handleStatusChange(selectedAsset.id, "validated")} className="flex-1 px-2 py-1 rounded text-xs font-semibold bg-[#00dc82]/40 text-[#00dc82] border border-[#00dc82]/50 hover:bg-[#00dc82]/60">
+                            Approve
                           </button>
                         </div>
-                      )}
 
-                      {selectedAsset.status === "validated" && (
-                        <button onClick={() => handleStatusChange(selectedAsset.id, "final")} className="w-full px-1 py-0.5 rounded text-xs font-semibold bg-[#00dc82]/40 text-[#00dc82] border border-[#00dc82]/50 hover:bg-[#00dc82]/60">
-                          Mark Final
+                        <textarea
+                          placeholder="Add guidance comments for regeneration..."
+                          className="w-full px-2 py-1 rounded text-xs bg-slate-800/50 text-slate-300 border border-slate-600/50 placeholder-slate-500 resize-none h-16 focus:outline-none focus:border-slate-500/80"
+                        />
+
+                        <button onClick={() => handleStatusChange(selectedAsset.id, "meshy_draft")} className="w-full px-2 py-1 rounded text-xs font-semibold bg-blue-600/40 text-blue-300 border border-blue-500/50 hover:bg-blue-600/60">
+                          Regenerate
                         </button>
-                      )}
+                      </div>
                     </div>
                   </div>
                 </div>
