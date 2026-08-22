@@ -64,7 +64,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           scene.add(gridHelper);
 
           const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 2000);
-          camera.position.set(10, 12, 18);
+          camera.position.set(5, 6, 9);
           camera.lookAt(0, 0, 0);
           cameraRef.current = camera;
 
@@ -83,22 +83,22 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           }
           containerRef.current.appendChild(renderer.domElement);
 
-          const ambientLight = new THREE.AmbientLight(0xffffff, 1.1);
+          const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
           scene.add(ambientLight);
 
-          const pointLight = new THREE.PointLight(0xffffff, 1.2);
+          const pointLight = new THREE.PointLight(0xffffff, 2.5);
           pointLight.position.set(5, 5, -5);
           scene.add(pointLight);
 
-          const directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+          const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
           directionalLight.position.set(3, 5, 2);
           scene.add(directionalLight);
 
-          const fillLight = new THREE.PointLight(0x88ccff, 0.5);
+          const fillLight = new THREE.PointLight(0xccddff, 1.5);
           fillLight.position.set(-5, 2, 5);
           scene.add(fillLight);
 
-          const backLight = new THREE.PointLight(0xffffff, 1.8);
+          const backLight = new THREE.PointLight(0xffffff, 2.5);
           backLight.position.set(0, 3, -8);
           scene.add(backLight);
 
@@ -281,26 +281,18 @@ export default function Components3DReviewPage() {
     <>
       <style>{gradientStyle}</style>
       <div style={{ height: "100vh", animation: "bgShift 8s ease-in-out infinite" }} className="w-full flex flex-col gap-3 p-4 overflow-hidden">
-      <div>
-        <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
-      </div>
-
-      <div className="grid grid-cols-4 gap-3">
-        <div className="bg-gradient-to-br from-orange-500/20 to-orange-900/20 border border-orange-400/40 rounded-lg p-4">
-          <div className="text-3xl font-bold text-orange-400 mb-1">{draftCount}</div>
-          <div className="text-xs text-orange-300/70">Draft</div>
-        </div>
-        <div className="bg-gradient-to-br from-purple-500/20 to-purple-900/20 border border-purple-400/40 rounded-lg p-4">
-          <div className="text-3xl font-bold text-purple-400 mb-1">{validatedCount}</div>
-          <div className="text-xs text-purple-300/70">Valid</div>
-        </div>
-        <div className="bg-gradient-to-br from-[#00dc82]/20 to-green-900/20 border border-[#00dc82]/40 rounded-lg p-4">
-          <div className="text-3xl font-bold text-[#00dc82] mb-1">{finalCount}</div>
-          <div className="text-xs text-[#00dc82]/70">Final</div>
-        </div>
-        <div className="bg-gradient-to-br from-slate-500/20 to-slate-900/20 border border-slate-400/40 rounded-lg p-4">
-          <div className="text-3xl font-bold text-slate-300 mb-1">{assets.length}</div>
-          <div className="text-xs text-slate-400/70">Total</div>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
+          <div className="text-xs text-slate-400 mt-1">
+            <span className="text-orange-400">{draftCount} Draft</span>
+            <span className="mx-2">•</span>
+            <span className="text-purple-400">{validatedCount} Valid</span>
+            <span className="mx-2">•</span>
+            <span className="text-[#00dc82]">{finalCount} Final</span>
+            <span className="mx-2">•</span>
+            <span className="text-slate-300">{assets.length} Total</span>
+          </div>
         </div>
       </div>
 
