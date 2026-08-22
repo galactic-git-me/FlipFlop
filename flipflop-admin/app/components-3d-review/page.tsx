@@ -44,22 +44,22 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           const scene = new THREE.Scene();
           scene.background = new THREE.Color(0x2a2a2a);
 
-          // Create Blender-style grid floor plane
-          const gridGeometry = new THREE.PlaneGeometry(100, 100, 100, 100);
-          const gridMaterial = new THREE.LineBasicMaterial({ color: 0x444444 });
-          const wireframe = new THREE.LineSegments(gridGeometry, gridMaterial);
-          wireframe.position.y = -1;
-          scene.add(wireframe);
+          // Minimal ground plane reference
+          const groundGeometry = new THREE.PlaneGeometry(200, 200);
+          const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x3a3a3a, roughness: 0.8, metalness: 0.1 });
+          const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+          ground.rotation.x = -Math.PI / 2;
+          ground.position.y = -1;
+          scene.add(ground);
 
-          // Add darker grid lines (alternating)
-          const gridGeometry2 = new THREE.PlaneGeometry(100, 100, 10, 10);
-          const gridMaterial2 = new THREE.LineBasicMaterial({ color: 0x333333, linewidth: 2 });
-          const wireframe2 = new THREE.LineSegments(gridGeometry2, gridMaterial2);
-          wireframe2.position.y = -1.01;
-          scene.add(wireframe2);
+          // Matrix green perspective grid lines
+          const gridHelper = new THREE.GridHelper(200, 20, 0x00ff00, 0x00aa00);
+          gridHelper.position.y = -0.99;
+          scene.add(gridHelper);
 
-          const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-          camera.position.set(0, 0, 1.5);
+          const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 2000);
+          camera.position.set(2, 2.5, 3.5);
+          camera.lookAt(0, 0, 0);
           cameraRef.current = camera;
 
           const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -90,14 +90,6 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           backLight.position.set(0, 3, -8);
           scene.add(backLight);
 
-          // Blender-style grid - matching exact appearance
-          const gridHelper = new THREE.GridHelper(100, 20, 0x888888, 0x555555);
-          gridHelper.position.y = -1;
-          scene.add(gridHelper);
-
-          // RGB axes like Blender (X=red, Y=green, Z=blue)
-          const axesHelper = new THREE.AxesHelper(8);
-          scene.add(axesHelper);
 
           const loader = new GLTFLoader();
           const filename = glbUrl.split("/").pop();
@@ -317,29 +309,113 @@ export default function Components3DReviewPage() {
         {/* LEFT: Asset grid */}
         <div style={{ width: "280px", minHeight: "400px" }} className="border border-[#1e2d45] rounded-lg overflow-y-auto p-3 bg-[#0a1119]">
           <div className="grid grid-cols-2 gap-3 auto-rows-max">
-            {filteredAssets.map((asset) => (
-              <button
-                key={asset.id}
-                onClick={() => setSelectedAsset(asset)}
-                className={`rounded border overflow-hidden cursor-pointer transition hover:scale-105 relative flex flex-col ${selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""} ${statusColors[asset.status] || ""}`}
-                style={{ width: "120px", height: "120px", backgroundImage: asset.source_image_refs && asset.source_image_refs.length > 0 ? `url('${asset.source_image_refs[0]}')` : undefined, backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "#1a3a52" }}
-              >
-                <div className="flex-1"></div>
-                <div className="w-full bg-black/70 text-center py-2 px-1">
-                  <div className="text-xs font-bold text-white">{asset.family_key}</div>
-                </div>
-              </button>
-            ))}
+            {filteredAssets.map((asset) => {
+              const getStatusIcon = () => {
+                if (asset.status === "final") return { icon: "✓", color: "bg-[#00dc82]" };
+                if (asset.status === "rejected") return { icon: "✗", color: "bg-red-500" };
+                if (asset.status === "meshy_draft") return { icon: "?", color: "bg-amber-500" };
+                return { icon: "?", color: "bg-slate-600" };
+              };
+              const statusIcon = getStatusIcon();
+              return (
+                <button
+                  key={asset.id}
+                  onClick={() => setSelectedAsset(asset)}
+                  className={`rounded border overflow-hidden cursor-pointer transition hover:scale-105 relative flex flex-col ${selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""} ${statusColors[asset.status] || ""}`}
+                  style={{ width: "120px", height: "120px", backgroundImage: asset.source_image_refs && asset.source_image_refs.length > 0 ? `url('${asset.source_image_refs[0]}')` : undefined, backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "#1a3a52" }}
+                >
+                  {/* Status badge overlay */}
+                  {asset.glb_ref && (
+                    <div className={`absolute top-1 right-1 w-5 h-5 rounded-full ${statusIcon.color} flex items-center justify-center text-white text-[10px] font-bold shadow-lg`}>
+                      {statusIcon.icon}
+                    </div>
+                  )}
+                  <div className="flex-1"></div>
+                  <div className="w-full bg-black/70 text-center py-2 px-1">
+                    <div className="text-xs font-bold text-white">{asset.family_key}</div>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* CENTER: 3D Viewer */}
+        {/* CENTER+RIGHT: 3D Viewer with overlays */}
         <div className="flex-1 flex flex-col min-h-0">
           {selectedAsset ? (
-            <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 flex flex-col bg-[#0a1119]">
-              <div className="px-3 py-2 border-b border-[#1e2d45] bg-slate-900/30 text-xs font-semibold text-slate-300">3D Viewer</div>
-              <div className="flex-1 min-h-0">
+            <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 flex flex-col bg-[#0a1119] relative">
+              <div className="flex-1 min-h-0 relative">
                 <Viewer3D glbUrl={selectedAsset.glb_ref} />
+
+                {/* Title overlay - top center */}
+                <div className="absolute top-0 left-0 right-0 flex justify-center pt-8 pointer-events-none">
+                  <h1 className="text-5xl font-black text-white text-center drop-shadow-lg" style={{ textShadow: "0 2px 20px rgba(0,0,0,0.8)" }}>
+                    {selectedAsset.family_key}
+                  </h1>
+                </div>
+
+                {/* Details overlay - bottom right */}
+                <div className="absolute bottom-3 right-3 w-72 bg-[#0a1119]/95 backdrop-blur border border-[#1e2d45] rounded-lg p-3 pointer-events-auto overflow-y-auto max-h-80 shadow-2xl">
+                  <div className="space-y-2 text-xs">
+                    <div className="pb-2 border-b border-[#1e2d45]">
+                      <p className="text-slate-500">ID</p>
+                      <p className="text-slate-100 font-semibold">{selectedAsset.id} v{selectedAsset.version}</p>
+                    </div>
+
+                    <div>
+                      <p className="text-slate-500">Category</p>
+                      <p className="text-slate-100 font-semibold">{selectedAsset.category}</p>
+                    </div>
+
+                    {selectedAsset.file_size_kb && (
+                      <div>
+                        <p className="text-slate-500">File Size</p>
+                        <p className="text-slate-100 font-semibold">{Math.round(selectedAsset.file_size_kb / 1024)}MB</p>
+                      </div>
+                    )}
+
+                    {selectedAsset.poly_count && (
+                      <div>
+                        <p className="text-slate-500">Polygons</p>
+                        <p className="text-slate-100 font-semibold">{(selectedAsset.poly_count / 1000).toFixed(1)}k</p>
+                      </div>
+                    )}
+
+                    {selectedAsset.notes && (
+                      <div className="p-2 bg-slate-700/30 rounded border border-slate-600 text-xs text-slate-300 mt-2">
+                        <p className="text-slate-500 text-[10px] mb-1 uppercase">Notes</p>
+                        {selectedAsset.notes}
+                      </div>
+                    )}
+
+                    {/* Approval buttons */}
+                    <div className="pt-2 border-t border-[#1e2d45] mt-2">
+                      <div className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-semibold whitespace-nowrap mb-2 ${getStatusStyle(selectedAsset.status)}`}>
+                        {selectedAsset.status.toUpperCase()}
+                      </div>
+
+                      {selectedAsset.status === "meshy_draft" && (
+                        <div className="flex gap-1 flex-wrap">
+                          <button onClick={() => handleStatusChange(selectedAsset.id, "rejected")} className="flex-1 min-w-12 px-2 py-1 rounded text-xs font-semibold bg-red-600/30 text-red-300 border border-red-500/50 hover:bg-red-600/50">
+                            Reject
+                          </button>
+                          <button onClick={() => handleStatusChange(selectedAsset.id, "cleaned")} className="flex-1 min-w-12 px-2 py-1 rounded text-xs font-semibold bg-blue-600/30 text-blue-300 border border-blue-500/50 hover:bg-blue-600/50">
+                            Clean
+                          </button>
+                          <button onClick={() => handleStatusChange(selectedAsset.id, "validated")} className="flex-1 min-w-12 px-2 py-1 rounded text-xs font-semibold bg-purple-600/30 text-purple-300 border border-purple-500/50 hover:bg-purple-600/50">
+                            Valid
+                          </button>
+                        </div>
+                      )}
+
+                      {selectedAsset.status === "validated" && (
+                        <button onClick={() => handleStatusChange(selectedAsset.id, "final")} className="w-full px-2 py-1 rounded text-xs font-semibold bg-[#00dc82]/30 text-[#00dc82] border border-[#00dc82]/50 hover:bg-[#00dc82]/50">
+                          Mark Final
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           ) : (
@@ -350,88 +426,6 @@ export default function Components3DReviewPage() {
             </div>
           )}
         </div>
-
-        {selectedAsset && (
-          <div className="w-80 flex flex-col min-h-0 overflow-y-auto gap-2">
-            <div className="border border-[#1e2d45] rounded-lg p-4 bg-[#0a1119]">
-              <div className="flex items-start justify-between gap-2 mb-3">
-                <div>
-                  <h2 className="text-sm font-bold text-slate-100">{selectedAsset.family_key}</h2>
-                  <p className="text-xs text-slate-500 mt-1">ID: {selectedAsset.id} v{selectedAsset.version}</p>
-                </div>
-                <div className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-semibold whitespace-nowrap ${getStatusStyle(selectedAsset.status)}`}>
-                  {selectedAsset.status.toUpperCase()}
-                </div>
-              </div>
-
-              <div className="space-y-2 text-xs">
-                <div>
-                  <p className="text-slate-500">Category</p>
-                  <p className="text-slate-100 font-semibold">{selectedAsset.category}</p>
-                </div>
-                <div>
-                  <p className="text-slate-500">Version</p>
-                  <p className="text-slate-100 font-semibold">v{selectedAsset.version}</p>
-                </div>
-                {selectedAsset.file_size_kb && (
-                  <div>
-                    <p className="text-slate-500">File Size</p>
-                    <p className="text-slate-100 font-semibold">{Math.round(selectedAsset.file_size_kb / 1024)}MB</p>
-                  </div>
-                )}
-                {selectedAsset.poly_count && (
-                  <div>
-                    <p className="text-slate-500">Polygons</p>
-                    <p className="text-slate-100 font-semibold">{(selectedAsset.poly_count / 1000).toFixed(1)}k</p>
-                  </div>
-                )}
-              </div>
-
-              {selectedAsset.notes && (
-                <div className="p-2 bg-slate-700/30 rounded border border-slate-600 text-xs text-slate-300 mt-3">
-                  <p className="text-slate-500 text-[10px] mb-1 uppercase">Notes</p>
-                  {selectedAsset.notes}
-                </div>
-              )}
-
-              {selectedAsset.glb_ref && (
-                <div className="p-2 bg-blue-900/20 rounded border border-blue-400/20 mt-3">
-                  <p className="text-slate-500 text-xs mb-1">GLB File</p>
-                  <a href={selectedAsset.glb_ref} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 hover:text-blue-300 break-all">
-                    Download / View
-                  </a>
-                </div>
-              )}
-
-              {selectedAsset.created_by && (
-                <div className="text-[10px] text-slate-600 mt-3">
-                  Created by {selectedAsset.created_by}
-                  {selectedAsset.created_at && ` on ${new Date(selectedAsset.created_at).toLocaleDateString()}`}
-                </div>
-              )}
-
-              {selectedAsset.status === "meshy_draft" && (
-                <div className="flex gap-2 pt-3">
-                  <button onClick={() => handleStatusChange(selectedAsset.id, "rejected")} className="flex-1 px-2 py-1 rounded text-xs font-semibold bg-red-600/30 text-red-300 border border-red-500/50 hover:bg-red-600/50">
-                    Reject
-                  </button>
-                  <button onClick={() => handleStatusChange(selectedAsset.id, "cleaned")} className="flex-1 px-2 py-1 rounded text-xs font-semibold bg-blue-600/30 text-blue-300 border border-blue-500/50 hover:bg-blue-600/50">
-                    Cleaned
-                  </button>
-                  <button onClick={() => handleStatusChange(selectedAsset.id, "validated")} className="flex-1 px-2 py-1 rounded text-xs font-semibold bg-purple-600/30 text-purple-300 border border-purple-500/50 hover:bg-purple-600/50">
-                    Validate
-                  </button>
-                </div>
-              )}
-
-              {selectedAsset.status === "validated" && (
-                <button onClick={() => handleStatusChange(selectedAsset.id, "final")} className="w-full mt-3 px-2 py-1 rounded text-xs font-semibold bg-[#00dc82]/30 text-[#00dc82] border border-[#00dc82]/50 hover:bg-[#00dc82]/50">
-                  Mark as Final
-                </button>
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
