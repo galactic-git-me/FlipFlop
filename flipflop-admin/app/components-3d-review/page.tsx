@@ -138,8 +138,8 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
   // 3D Viewer Configuration:
   // - Camera position: (5, 6, 9) — controls zoom/perspective from the model
   // - Model scale: 10.5 — scales loaded GLB to viewport size
-  // - Grid: 200x200 with 40 divisions, white lines (0xffffff, 0xdddddd)
-  // - Lights: ambient (2.0), point (2.5), directional (1.5), fill (1.5), back (2.5)
+  // - Grid: 200x200 with 40 divisions, matrix green lines (0x00ff00, 0x00aa00)
+  // - Lights: ambient (3.5), point (4.0), directional (3.0), fill (2.5), back (3.5)
   // - Starfield: twinkling background at z-index 0, model canvas at z-index 2
   // - Grid horizon: y = -1.49 (centered in viewport for perspective)
   const containerRef = useRef<HTMLDivElement>(null);
@@ -194,22 +194,22 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           }
           containerRef.current.appendChild(renderer.domElement);
 
-          const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
+          const ambientLight = new THREE.AmbientLight(0xffffff, 3.5);
           scene.add(ambientLight);
 
-          const pointLight = new THREE.PointLight(0xffffff, 2.5);
+          const pointLight = new THREE.PointLight(0xffffff, 4.0);
           pointLight.position.set(5, 5, -5);
           scene.add(pointLight);
 
-          const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+          const directionalLight = new THREE.DirectionalLight(0xffffff, 3.0);
           directionalLight.position.set(3, 5, 2);
           scene.add(directionalLight);
 
-          const fillLight = new THREE.PointLight(0xccddff, 1.5);
+          const fillLight = new THREE.PointLight(0xccddff, 2.5);
           fillLight.position.set(-5, 2, 5);
           scene.add(fillLight);
 
-          const backLight = new THREE.PointLight(0xffffff, 2.5);
+          const backLight = new THREE.PointLight(0xffffff, 3.5);
           backLight.position.set(0, 3, -8);
           scene.add(backLight);
 
@@ -352,6 +352,20 @@ export default function Components3DReviewPage() {
   const validatedCount = assets.filter(a => a.status === "validated").length;
   const finalCount = assets.filter(a => a.status === "final").length;
 
+  const handlePreviousAsset = () => {
+    const currentIndex = filteredAssets.findIndex(a => a.id === selectedAsset?.id);
+    if (currentIndex > 0) {
+      setSelectedAsset(filteredAssets[currentIndex - 1]);
+    }
+  };
+
+  const handleNextAsset = () => {
+    const currentIndex = filteredAssets.findIndex(a => a.id === selectedAsset?.id);
+    if (currentIndex < filteredAssets.length - 1) {
+      setSelectedAsset(filteredAssets[currentIndex + 1]);
+    }
+  };
+
   const handleStatusChange = async (assetId: number, newStatus: string) => {
     try {
       const response = await fetch(`/api/assets-3d/${assetId}`, {
@@ -403,7 +417,28 @@ export default function Components3DReviewPage() {
         </div>
       </div>
 
-      <div style={{ flex: 1, minHeight: 0 }} className="flex gap-3">
+      <div style={{ flex: 1, minHeight: 0 }} className="flex gap-3 relative">
+        {/* LEFT/RIGHT Navigation Arrows */}
+        {selectedAsset && (
+          <>
+            <button
+              onClick={handlePreviousAsset}
+              disabled={filteredAssets.findIndex(a => a.id === selectedAsset.id) === 0}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-700/60 hover:bg-slate-600/80 text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              style={{ textShadow: "0 0 8px rgba(0,0,0,0.8)" }}
+            >
+              ◀
+            </button>
+            <button
+              onClick={handleNextAsset}
+              disabled={filteredAssets.findIndex(a => a.id === selectedAsset.id) === filteredAssets.length - 1}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-700/60 hover:bg-slate-600/80 text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              style={{ textShadow: "0 0 8px rgba(0,0,0,0.8)" }}
+            >
+              ▶
+            </button>
+          </>
+        )}
         {/* LEFT: Asset grid grouped by component */}
         <div style={{ width: "280px", minHeight: "400px" }} className="border border-[#1e2d45] rounded-lg overflow-y-auto p-3 bg-[#0a1119] flex flex-col">
           <div className="flex gap-2 mb-3 justify-end">
@@ -478,7 +513,7 @@ export default function Components3DReviewPage() {
                 <Viewer3D glbUrl={selectedAsset.glb_ref} />
 
                 {/* Title overlay - top center */}
-                <div className="absolute top-0 left-0 right-0 flex justify-center pt-8 pointer-events-none">
+                <div className="absolute top-0 left-0 right-0 flex justify-center pt-8 pointer-events-none z-10">
                   <h1 className="text-5xl font-black text-white text-center drop-shadow-lg" style={{ textShadow: "0 2px 20px rgba(0,0,0,0.8)" }}>
                     {selectedAsset.family_key}
                   </h1>
