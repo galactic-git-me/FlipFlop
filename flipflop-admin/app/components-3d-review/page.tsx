@@ -219,8 +219,13 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           const loader = new GLTFLoader();
           loader.crossOrigin = "anonymous";
 
+          // Handle CORS by proxying through local backend
+          const loadUrl = glbUrl.startsWith("http") && !glbUrl.includes("localhost")
+            ? `/api/glb-proxy?url=${encodeURIComponent(glbUrl)}`
+            : glbUrl;
+
           loader.load(
-            glbUrl,
+            loadUrl,
             (gltf) => {
               const model = gltf.scene;
 
