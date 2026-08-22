@@ -69,7 +69,7 @@ async def generate_case(case_data: dict) -> dict | None:
 
     try:
         async with httpx.AsyncClient(timeout=30) as client:
-            print(f"\n📦 GENERATING: {case_data['name']}")
+            print(f"\nGENERATING: {case_data['name']}")
             submit = await client.post(
                 _MESHY_BASE,
                 headers=_headers(),
@@ -85,12 +85,12 @@ async def generate_case(case_data: dict) -> dict | None:
             submit.raise_for_status()
             task_id = submit.json().get("result")
             if not task_id:
-                print(f"❌ FAILED: No task ID returned")
+                print(f"FAILED: No task ID returned")
                 return None
 
             print(f"   Task ID: {task_id}")
     except httpx.HTTPError as exc:
-        print(f"❌ SUBMIT FAILED: {exc}")
+        print(f"SUBMIT FAILED: {exc}")
         return None
 
     for attempt in range(_MAX_POLL_ATTEMPTS):
@@ -108,7 +108,7 @@ async def generate_case(case_data: dict) -> dict | None:
         if status == "SUCCEEDED":
             model_urls = data.get("model_urls") or {}
             glb_url = model_urls.get("glb")
-            print(f"✅ GENERATED: {case_data['name']}")
+            print(f"GENERATED: {case_data['name']}")
             return {
                 "case_data": case_data,
                 "task_id": task_id,
@@ -116,13 +116,13 @@ async def generate_case(case_data: dict) -> dict | None:
                 "thumbnail_url": data.get("thumbnail_url"),
             }
         elif status in ("FAILED", "CANCELED"):
-            print(f"❌ MESHY FAILED: {status}")
+            print(f"MESHY FAILED: {status}")
             return None
         else:
             if attempt % 12 == 0:  # Log every 60 seconds
                 print(f"   Polling... status={status} (attempt {attempt + 1}/120)")
 
-    print(f"❌ TIMED OUT after {_MAX_POLL_ATTEMPTS * _POLL_INTERVAL_SECONDS}s")
+    print(f"TIMED OUT after {_MAX_POLL_ATTEMPTS * _POLL_INTERVAL_SECONDS}s")
     return None
 
 
@@ -146,7 +146,7 @@ async def download_and_store(result: dict, db_session) -> Case | None:
         await sync_to_public_media(media_path)
 
         glb_url = f"https://theflipflop.shop/media/{filename}"
-        print(f"   📥 Downloaded & synced: {filename}")
+        print(f"   Downloaded & synced: {filename}")
 
         # Create database record
         case = Case(
@@ -163,18 +163,18 @@ async def download_and_store(result: dict, db_session) -> Case | None:
         )
         db_session.add(case)
         await db_session.flush()
-        print(f"   💾 Saved to database: Case #{case.id}")
+        print(f"   Saved to database: Case #{case.id}")
         return case
 
     except Exception as exc:
-        print(f"   ❌ DOWNLOAD/STORE FAILED: {exc}")
+        print(f"   DOWNLOAD/STORE FAILED: {exc}")
         return None
 
 
 async def main():
     """Generate 5 PC case models."""
     print("\n" + "="*60)
-    print("🚀 GENERATING 5 PC CASE 3D MODELS WITH MESHY")
+    print("GENERATING 5 PC CASE 3D MODELS WITH MESHY")
     print("="*60)
 
     async with AsyncSessionLocal() as db:
@@ -197,11 +197,11 @@ async def main():
     await engine.dispose()
 
     print("\n" + "="*60)
-    print(f"✨ COMPLETE: Generated {len(results)}/5 cases")
+    print(f"COMPLETE: Generated {len(results)}/5 cases")
     print("="*60 + "\n")
 
     for case in results:
-        print(f"  ✓ {case.name} (ID: {case.id})")
+        print(f"  OK {case.name} (ID: {case.id})")
 
 
 if __name__ == "__main__":
