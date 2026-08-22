@@ -71,7 +71,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: true });
           renderer.setSize(width, height);
           renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-          renderer.setClearColor(0xffffff, 0);
+          renderer.setClearColor(0x000000, 0);
           renderer.domElement.style.position = "absolute";
           renderer.domElement.style.top = "0";
           renderer.domElement.style.left = "0";
@@ -283,7 +283,7 @@ export default function Components3DReviewPage() {
       <div style={{ height: "100vh", animation: "bgShift 8s ease-in-out infinite" }} className="w-full flex flex-col gap-3 p-4 overflow-hidden">
       <div className="flex items-center justify-between">
         <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
-        <div className="bg-white rounded-lg px-6 py-2 text-lg font-semibold flex items-center gap-4">
+        <div className="bg-white/75 rounded-lg px-6 py-2 text-lg font-semibold flex items-center gap-4">
           <span className="text-orange-500">{draftCount} Draft</span>
           <span className="text-purple-500">{validatedCount} Valid</span>
           <span className="text-[#00dc82]">{finalCount} Final</span>
@@ -291,53 +291,69 @@ export default function Components3DReviewPage() {
         </div>
       </div>
 
-      <div className="flex gap-2">
-        <button
-          onClick={() => setFilter("meshy_draft")}
-          className={filter === "meshy_draft" ? "px-2 py-1 rounded text-xs font-semibold bg-orange-600/30 text-orange-300 border border-orange-500/50" : "px-2 py-1 rounded text-xs font-semibold bg-slate-700/30 text-slate-400 border border-slate-600/50"}
-        >
-          Review ({draftCount})
-        </button>
-        <button
-          onClick={() => setFilter("all")}
-          className={filter === "all" ? "px-2 py-1 rounded text-xs font-semibold bg-purple-600/30 text-purple-300 border border-purple-500/50" : "px-2 py-1 rounded text-xs font-semibold bg-slate-700/30 text-slate-400 border border-slate-600/50"}
-        >
-          All ({assets.length})
-        </button>
-      </div>
-
       <div style={{ flex: 1, minHeight: 0 }} className="flex gap-3">
-        {/* LEFT: Asset grid */}
-        <div style={{ width: "280px", minHeight: "400px" }} className="border border-[#1e2d45] rounded-lg overflow-y-auto p-3 bg-[#0a1119]">
-          <div className="grid grid-cols-2 gap-3 auto-rows-max">
-            {filteredAssets.map((asset) => {
-              const getStatusIcon = () => {
-                if (asset.status === "final") return { icon: "✓", color: "bg-[#00dc82]" };
-                if (asset.status === "rejected") return { icon: "✗", color: "bg-red-500" };
-                if (asset.status === "meshy_draft") return { icon: "?", color: "bg-amber-500" };
-                return { icon: "?", color: "bg-slate-600" };
-              };
-              const statusIcon = getStatusIcon();
-              return (
-                <button
-                  key={asset.id}
-                  onClick={() => setSelectedAsset(asset)}
-                  className={`rounded border overflow-hidden cursor-pointer transition hover:scale-105 relative flex flex-col ${selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""} ${statusColors[asset.status] || ""}`}
-                  style={{ width: "120px", height: "120px", backgroundImage: asset.source_image_refs && asset.source_image_refs.length > 0 ? `url('${asset.source_image_refs[0]}')` : undefined, backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "#1a3a52" }}
-                >
-                  {/* Status badge overlay */}
-                  {asset.glb_ref && (
-                    <div className={`absolute top-1 right-1 w-5 h-5 rounded-full ${statusIcon.color} flex items-center justify-center text-white text-[10px] font-bold shadow-lg`}>
-                      {statusIcon.icon}
-                    </div>
-                  )}
-                  <div className="flex-1"></div>
-                  <div className="w-full bg-black/70 text-center py-2 px-1">
-                    <div className="text-xs font-bold text-white">{asset.family_key}</div>
-                  </div>
-                </button>
-              );
-            })}
+        {/* LEFT: Asset grid grouped by component */}
+        <div style={{ width: "280px", minHeight: "400px" }} className="border border-[#1e2d45] rounded-lg overflow-y-auto p-3 bg-[#0a1119] flex flex-col">
+          <div className="flex gap-2 mb-3 justify-end">
+            <button
+              onClick={() => setFilter("meshy_draft")}
+              className={filter === "meshy_draft" ? "px-2 py-1 rounded text-xs font-semibold bg-orange-600/30 text-orange-300 border border-orange-500/50" : "px-2 py-1 rounded text-xs font-semibold bg-slate-700/30 text-slate-400 border border-slate-600/50"}
+            >
+              Review ({draftCount})
+            </button>
+            <button
+              onClick={() => setFilter("all")}
+              className={filter === "all" ? "px-2 py-1 rounded text-xs font-semibold bg-purple-600/30 text-purple-300 border border-purple-500/50" : "px-2 py-1 rounded text-xs font-semibold bg-slate-700/30 text-slate-400 border border-slate-600/50"}
+            >
+              All ({assets.length})
+            </button>
+          </div>
+          <div className="overflow-y-auto flex-1">
+          {(() => {
+            const grouped = filteredAssets.reduce((acc, asset) => {
+              if (!acc[asset.category]) acc[asset.category] = [];
+              acc[asset.category].push(asset);
+              return acc;
+            }, {} as Record<string, typeof filteredAssets>);
+
+            return Object.entries(grouped).map(([category, assets]) => (
+              <div key={category} className="mb-4">
+                <div className="text-sm font-bold text-slate-100 uppercase px-1 py-3 border-b border-[#1e2d45] mb-3">
+                  {category}
+                </div>
+                <div className="grid grid-cols-2 gap-3 auto-rows-max">
+                  {assets.map((asset) => {
+                    const getStatusIcon = () => {
+                      if (asset.status === "final") return { icon: "✓", color: "bg-[#00dc82]" };
+                      if (asset.status === "rejected") return { icon: "✗", color: "bg-red-500" };
+                      if (asset.status === "meshy_draft") return { icon: "?", color: "bg-amber-500" };
+                      return { icon: "?", color: "bg-slate-600" };
+                    };
+                    const statusIcon = getStatusIcon();
+                    return (
+                      <button
+                        key={asset.id}
+                        onClick={() => setSelectedAsset(asset)}
+                        className={`rounded border overflow-hidden cursor-pointer transition hover:scale-105 relative flex flex-col ${selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""} ${statusColors[asset.status] || ""}`}
+                        style={{ width: "120px", height: "120px", backgroundImage: asset.source_image_refs && asset.source_image_refs.length > 0 ? `url('${asset.source_image_refs[0]}')` : undefined, backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "#1a3a52" }}
+                      >
+                        {/* Status badge overlay */}
+                        {asset.glb_ref && (
+                          <div className={`absolute top-1 right-1 w-5 h-5 rounded-full ${statusIcon.color} flex items-center justify-center text-white text-[10px] font-bold shadow-lg`}>
+                            {statusIcon.icon}
+                          </div>
+                        )}
+                        <div className="flex-1"></div>
+                        <div className="w-full bg-black/70 text-center py-2 px-1">
+                          <div className="text-xs font-bold text-white">{asset.family_key}</div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ));
+          })()}
           </div>
         </div>
 
