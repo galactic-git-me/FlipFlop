@@ -65,6 +65,8 @@ async def generate_family_asset(prompt: str) -> MeshyGenerationResult | None:
                     "prompt": prompt,
                     "art_style": "realistic",
                     "should_remesh": True,
+                    "should_texture": True,
+                    "enable_pbr": True,
                 },
             )
             submit.raise_for_status()
