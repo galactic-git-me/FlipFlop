@@ -3,6 +3,14 @@
 import { useEffect, useState, useRef } from "react";
 import { Check } from "lucide-react";
 
+const gradientStyle = `
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+`;
+
 interface Component3DAsset {
   id: number;
   category: string;
@@ -42,23 +50,16 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           if (width === 0 || height === 0) return;
 
           const scene = new THREE.Scene();
-          scene.background = new THREE.Color(0x2a2a2a);
+          scene.background = null;
 
-          // Minimal ground plane reference
-          const groundGeometry = new THREE.PlaneGeometry(200, 200);
-          const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x3a3a3a, roughness: 0.8, metalness: 0.1 });
-          const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-          ground.rotation.x = -Math.PI / 2;
-          ground.position.y = -3;
-          scene.add(ground);
 
-          // Matrix green perspective grid lines
-          const gridHelper = new THREE.GridHelper(200, 20, 0x00ff00, 0x00aa00);
-          gridHelper.position.y = -2.99;
+          // Matrix green perspective grid lines - smaller squares
+          const gridHelper = new THREE.GridHelper(200, 40, 0x00ff00, 0x00aa00);
+          gridHelper.position.y = -1.49;
           scene.add(gridHelper);
 
           const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 2000);
-          camera.position.set(4, 5, 7);
+          camera.position.set(10, 12, 18);
           camera.lookAt(0, 0, 0);
           cameraRef.current = camera;
 
@@ -104,7 +105,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
               const box = new THREE.Box3().setFromObject(model);
               const size = box.getSize(new THREE.Vector3());
               const maxDim = Math.max(size.x, size.y, size.z);
-              const scale = 3.5 / maxDim;
+              const scale = 10.5 / maxDim;
               model.scale.multiplyScalar(scale);
 
               const center = box.getCenter(new THREE.Vector3());
@@ -177,7 +178,13 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
     );
   }
 
-  return <div ref={containerRef} className="w-full h-full bg-slate-900/50 rounded border border-slate-700/50" />;
+  return (
+    <div ref={containerRef} className="w-full h-full rounded border border-slate-700/50" style={{
+      background: "linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)",
+      backgroundSize: "400% 400%",
+      animation: "gradientShift 8s ease infinite"
+    }} />
+  );
 }
 
 export default function Components3DReviewPage() {
@@ -266,7 +273,9 @@ export default function Components3DReviewPage() {
   };
 
   return (
-    <div style={{ height: "100vh" }} className="w-full flex flex-col gap-3 p-4 overflow-hidden bg-slate-950">
+    <>
+      <style>{gradientStyle}</style>
+      <div style={{ height: "100vh" }} className="w-full flex flex-col gap-3 p-4 overflow-hidden bg-slate-950">
       <div>
         <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
       </div>
@@ -355,61 +364,49 @@ export default function Components3DReviewPage() {
                 </div>
 
                 {/* Details overlay - bottom right */}
-                <div className="absolute bottom-3 right-3 w-72 bg-[#0a1119]/95 backdrop-blur border border-[#1e2d45] rounded-lg p-3 pointer-events-auto overflow-y-auto max-h-80 shadow-2xl">
-                  <div className="space-y-2 text-xs">
-                    <div className="pb-2 border-b border-[#1e2d45]">
-                      <p className="text-slate-500">ID</p>
-                      <p className="text-slate-100 font-semibold">{selectedAsset.id} v{selectedAsset.version}</p>
-                    </div>
-
-                    <div>
-                      <p className="text-slate-500">Category</p>
-                      <p className="text-slate-100 font-semibold">{selectedAsset.category}</p>
+                <div className="absolute bottom-3 right-3 w-64 bg-[#0a1119]/70 backdrop-blur-md border border-[#1e2d45]/50 rounded-lg p-2 pointer-events-auto overflow-y-auto max-h-72 shadow-2xl">
+                  <div className="space-y-1 text-xs">
+                    <div className="pb-1 border-b border-[#1e2d45]/30">
+                      <p className="text-slate-500 text-[10px]">ID {selectedAsset.id} v{selectedAsset.version}</p>
+                      <p className="text-slate-100 font-semibold text-sm">{selectedAsset.category}</p>
                     </div>
 
                     {selectedAsset.file_size_kb && (
-                      <div>
-                        <p className="text-slate-500">File Size</p>
-                        <p className="text-slate-100 font-semibold">{Math.round(selectedAsset.file_size_kb / 1024)}MB</p>
-                      </div>
+                      <p className="text-slate-400"><span className="text-slate-500">Size:</span> {Math.round(selectedAsset.file_size_kb / 1024)}MB</p>
                     )}
 
                     {selectedAsset.poly_count && (
-                      <div>
-                        <p className="text-slate-500">Polygons</p>
-                        <p className="text-slate-100 font-semibold">{(selectedAsset.poly_count / 1000).toFixed(1)}k</p>
-                      </div>
+                      <p className="text-slate-400"><span className="text-slate-500">Polys:</span> {(selectedAsset.poly_count / 1000).toFixed(1)}k</p>
                     )}
 
                     {selectedAsset.notes && (
-                      <div className="p-2 bg-slate-700/30 rounded border border-slate-600 text-xs text-slate-300 mt-2">
-                        <p className="text-slate-500 text-[10px] mb-1 uppercase">Notes</p>
+                      <div className="p-1 bg-slate-700/20 rounded border border-slate-600/30 text-slate-300 mt-1 text-[10px]">
                         {selectedAsset.notes}
                       </div>
                     )}
 
                     {/* Approval buttons */}
-                    <div className="pt-2 border-t border-[#1e2d45] mt-2">
-                      <div className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-semibold whitespace-nowrap mb-2 ${getStatusStyle(selectedAsset.status)}`}>
+                    <div className="pt-1 border-t border-[#1e2d45]/30 mt-1">
+                      <div className={`inline-block px-1.5 py-0.5 rounded text-[10px] font-semibold mb-1 ${getStatusStyle(selectedAsset.status)}`}>
                         {selectedAsset.status.toUpperCase()}
                       </div>
 
                       {selectedAsset.status === "meshy_draft" && (
-                        <div className="flex gap-1 flex-wrap">
-                          <button onClick={() => handleStatusChange(selectedAsset.id, "rejected")} className="flex-1 min-w-12 px-2 py-1 rounded text-xs font-semibold bg-red-600/30 text-red-300 border border-red-500/50 hover:bg-red-600/50">
+                        <div className="flex gap-0.5 flex-wrap">
+                          <button onClick={() => handleStatusChange(selectedAsset.id, "rejected")} className="flex-1 min-w-10 px-1 py-0.5 rounded text-[10px] font-semibold bg-red-600/40 text-red-300 border border-red-500/50 hover:bg-red-600/60">
                             Reject
                           </button>
-                          <button onClick={() => handleStatusChange(selectedAsset.id, "cleaned")} className="flex-1 min-w-12 px-2 py-1 rounded text-xs font-semibold bg-blue-600/30 text-blue-300 border border-blue-500/50 hover:bg-blue-600/50">
+                          <button onClick={() => handleStatusChange(selectedAsset.id, "cleaned")} className="flex-1 min-w-10 px-1 py-0.5 rounded text-[10px] font-semibold bg-blue-600/40 text-blue-300 border border-blue-500/50 hover:bg-blue-600/60">
                             Clean
                           </button>
-                          <button onClick={() => handleStatusChange(selectedAsset.id, "validated")} className="flex-1 min-w-12 px-2 py-1 rounded text-xs font-semibold bg-purple-600/30 text-purple-300 border border-purple-500/50 hover:bg-purple-600/50">
+                          <button onClick={() => handleStatusChange(selectedAsset.id, "validated")} className="flex-1 min-w-10 px-1 py-0.5 rounded text-[10px] font-semibold bg-purple-600/40 text-purple-300 border border-purple-500/50 hover:bg-purple-600/60">
                             Valid
                           </button>
                         </div>
                       )}
 
                       {selectedAsset.status === "validated" && (
-                        <button onClick={() => handleStatusChange(selectedAsset.id, "final")} className="w-full px-2 py-1 rounded text-xs font-semibold bg-[#00dc82]/30 text-[#00dc82] border border-[#00dc82]/50 hover:bg-[#00dc82]/50">
+                        <button onClick={() => handleStatusChange(selectedAsset.id, "final")} className="w-full px-1 py-0.5 rounded text-[10px] font-semibold bg-[#00dc82]/40 text-[#00dc82] border border-[#00dc82]/50 hover:bg-[#00dc82]/60">
                           Mark Final
                         </button>
                       )}
@@ -428,5 +425,6 @@ export default function Components3DReviewPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
