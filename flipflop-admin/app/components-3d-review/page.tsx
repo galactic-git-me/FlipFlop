@@ -351,7 +351,7 @@ export default function Components3DReviewPage() {
         {/* CENTER+RIGHT: 3D Viewer with overlays */}
         <div className="flex-1 flex flex-col min-h-0">
           {selectedAsset ? (
-            <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 flex flex-col bg-[#0a1119] relative">
+            <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 flex flex-col relative">
               <div className="flex-1 min-h-0 relative">
                 <Viewer3D glbUrl={selectedAsset.glb_ref} />
 
