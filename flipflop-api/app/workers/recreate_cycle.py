@@ -62,14 +62,20 @@ async def run_deferred_publish_job() -> dict:
             try:
                 ok = await publish_flip_now(flip, db)
                 if ok:
+                    # Commit immediately after each successful eBay post, not
+                    # once at the end of the loop — otherwise a crash between
+                    # this flip's create-listing call succeeding and the batch
+                    # commit leaves flip.listed_at NULL, so the next run's
+                    # query selects it again and posts it to eBay a second
+                    # time, creating a real duplicate live listing.
+                    await db.commit()
                     published += 1
                 else:
                     skipped_no_token += 1
             except Exception as exc:
                 errors += 1
                 log.warning("recreate_cycle.publish_failed", flip_id=flip.id, error=str(exc))
-
-        await db.commit()
+                await db.rollback()
 
     return {"published": published, "skipped_no_token": skipped_no_token, "errors": errors}
 
@@ -95,14 +101,27 @@ async def run_recreate_cycle_job() -> dict:
         for flip in due:
             try:
                 await _recreate_flip(flip, db)
+                # Commit immediately, not once at the end of the loop — same
+                # reasoning as run_deferred_publish_job above: _recreate_flip
+                # calls the real eBay create-listing API, so a crash before a
+                # batched commit would leave next_recreate_at unadvanced and
+                # get this flip re-processed (and re-posted to eBay) on the
+                # next run.
+                await db.commit()
                 recreated += 1
                 if flip.price_floor_hit_review_needed:
                     floor_hit += 1
             except Exception as exc:
                 errors += 1
                 log.warning("recreate_cycle.recreate_failed", flip_id=flip.id, error=str(exc))
-
-        await db.commit()
+                # Roll back this flip's partial state (price/title mutations
+                # made before the failure) rather than letting the next
+                # iteration's commit silently persist it half-applied — a
+                # committed price step-down with no advanced next_recreate_at
+                # would otherwise cause this flip to be re-selected and
+                # re-processed (repeated price drops, repeated eBay posts)
+                # on every subsequent run.
+                await db.rollback()
 
     return {"recreated": recreated, "floor_hit_review_needed": floor_hit, "errors": errors}
 

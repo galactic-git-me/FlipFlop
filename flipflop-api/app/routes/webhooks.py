@@ -248,6 +248,35 @@ async def _handle_product_payment_succeeded(intent: dict, db: AsyncSession) -> N
         log.error("webhook.product_payment.customer_not_found", customer_id=customer_id, intent_id=intent_id)
         return
 
+    # Find any linked ManualBuild before taking locks (unlocked — these FKs
+    # don't change concurrently). Global lock order across this codebase's
+    # cross-channel paths is always ManualBuild before Product (see
+    # manual_builds.py's sync_ebay_order and cross_channel_guard.py), to
+    # avoid an ABBA deadlock against the primary /checkout-confirm path this
+    # webhook is a fallback for.
+    manual_build = None
+    if product.build_id:
+        build_result = await db.execute(select(Build).where(Build.id == product.build_id))
+        orchestration_build = build_result.scalar_one_or_none()
+        if orchestration_build and orchestration_build.manual_build_id:
+            manual_locked = await db.execute(
+                select(ManualBuild).where(ManualBuild.id == orchestration_build.manual_build_id).with_for_update()
+            )
+            manual_build = manual_locked.scalar_one_or_none()
+
+    # Re-check under a row lock right before finalising the sale — this
+    # webhook races the primary /checkout-confirm path by design (it exists
+    # specifically for when that call is delayed or never fires), so the
+    # unlocked check above is not sufficient on its own.
+    locked_result = await db.execute(select(Product).where(Product.id == product_id).with_for_update())
+    product = locked_result.scalar_one_or_none()
+    if not product or product.status == ProductStatus.SOLD:
+        log.info("webhook.product_payment.already_sold", product_id=product_id, intent_id=intent_id)
+        return
+    if manual_build and manual_build.status == "sold":
+        log.info("webhook.product_payment.already_sold", product_id=product_id, intent_id=intent_id)
+        return
+
     order = Order(
         order_id=f"ORD-PROD-{intent_id[-12:]}",
         customer_id=customer_id,
@@ -267,7 +296,21 @@ async def _handle_product_payment_succeeded(intent: dict, db: AsyncSession) -> N
     product.sold_order_id = order.id
     product.reserved_until = None
     product.updated_at = datetime.utcnow()
-    await db.flush()
+
+    # manual_build.status is deliberately left unset here — withdraw_ebay_for_sold_build's
+    # own idempotency guard skips the withdrawal once status == "sold", so it
+    # must stay unset until after that call runs below. Product.status = SOLD,
+    # committed next, is the authoritative signal a concurrent confirm_checkout
+    # / sync_ebay_order check relies on.
+    will_withdraw_ebay = bool(manual_build and manual_build.ebay_sku)
+
+    # Commit the sale now, before any external network calls — the payment
+    # already succeeded, so the sale must be durable even if the eBay
+    # withdrawal or alert below fails or hangs. This also releases the
+    # ManualBuild/Product row locks instead of holding them across slow
+    # external I/O.
+    await db.commit()
+    order_id, product_id_out = order.id, product.id
 
     # Same alert code the admin dashboard's confetti listens for
     # (top-command-bar.tsx), so a direct storefront sale celebrates too —
@@ -282,25 +325,16 @@ async def _handle_product_payment_succeeded(intent: dict, db: AsyncSession) -> N
             message=f"Sale detected: {product.title or 'Pre-built PC'} sold on storefront for £{amount:.2f}.",
         )
     except Exception as e:
-        log.warning("webhook.product_payment.alert_emit_failed", error=str(e), product_id=product.id)
+        log.warning("webhook.product_payment.alert_emit_failed", error=str(e), product_id=product_id_out)
 
-    if product.build_id:
-        build_result = await db.execute(select(Build).where(Build.id == product.build_id))
-        orchestration_build = build_result.scalar_one_or_none()
-        if orchestration_build and orchestration_build.manual_build_id:
-            manual_result = await db.execute(
-                select(ManualBuild).where(ManualBuild.id == orchestration_build.manual_build_id)
-            )
-            manual_build = manual_result.scalar_one_or_none()
-            if manual_build and manual_build.ebay_sku:
-                settings = get_settings()
-                await withdraw_ebay_for_sold_build(manual_build, settings.ebay_listing_environment)
-                manual_build.status = "sold"
-                manual_build.updated_at = datetime.utcnow()
-                await db.flush()
+    if will_withdraw_ebay:
+        settings = get_settings()
+        await withdraw_ebay_for_sold_build(manual_build, settings.ebay_listing_environment)
+        manual_build.status = "sold"
+        manual_build.updated_at = datetime.utcnow()
+        await db.commit()
 
-    await db.commit()
-    log.info("webhook.product_payment.order_created", order_id=order.id, product_id=product.id, intent_id=intent_id)
+    log.info("webhook.product_payment.order_created", order_id=order_id, product_id=product_id_out, intent_id=intent_id)
 
     try:
         await send_order_confirmation_email(

@@ -244,6 +244,38 @@ async def confirm_checkout(
     except ValueError as e:
         raise HTTPException(400, str(e))
 
+    # Find any linked ManualBuild before taking locks (unlocked — these FKs
+    # don't change concurrently), so we can lock it first below. Global lock
+    # order across this codebase's cross-channel paths is always ManualBuild
+    # before Product (see manual_builds.py's sync_ebay_order and
+    # cross_channel_guard.py), to avoid an ABBA deadlock between this route
+    # and the eBay-side sale-confirmation route.
+    manual_build = None
+    if product.build_id:
+        from app.models.build import Build
+        build_result = await db.execute(select(Build).where(Build.id == product.build_id))
+        orchestration_build = build_result.scalar_one_or_none()
+        if orchestration_build and orchestration_build.manual_build_id:
+            manual_locked = await db.execute(
+                select(ManualBuild).where(ManualBuild.id == orchestration_build.manual_build_id).with_for_update()
+            )
+            manual_build = manual_locked.scalar_one_or_none()
+
+    # Re-check under a row lock right before finalising the sale — closes the
+    # race window between the unlocked check above and this write, where a
+    # concurrent eBay-side sale (manual_builds.py's sync_ebay_order ->
+    # cross_channel_guard.withdraw_storefront_for_sold_build, which takes the
+    # same lock) could otherwise also pass its own unlocked check and both
+    # sides end up marking this unit sold.
+    locked_result = await db.execute(
+        select(Product).where(Product.id == product_id).with_for_update()
+    )
+    product = locked_result.scalar_one_or_none()
+    if not product or product.status == ProductStatus.SOLD:
+        raise HTTPException(409, "This build has already been sold.")
+    if manual_build and manual_build.status == "sold":
+        raise HTTPException(409, "This build has already been sold.")
+
     order = Order(
         order_id=f"ORD-PROD-{body.intent_id[-12:]}",
         customer_id=customer.id,
@@ -263,7 +295,23 @@ async def confirm_checkout(
     product.sold_order_id = order.id
     product.reserved_until = None
     product.updated_at = datetime.utcnow()
-    await db.flush()
+
+    # Deliberately NOT setting manual_build.status = "sold" here — that must
+    # stay unset until after withdraw_ebay_for_sold_build runs below, because
+    # that function's own idempotency guard skips the withdrawal entirely
+    # once status == "sold". The Product.status = SOLD write above (still
+    # under the lock, about to be committed) is the authoritative signal a
+    # concurrent sync_ebay_order/cross_channel_guard check relies on, so it's
+    # safe to defer this bookkeeping field to the second commit below.
+    will_withdraw_ebay = bool(manual_build and manual_build.ebay_sku)
+
+    # Commit the sale now, before any external network calls — the payment
+    # already succeeded, so the sale must be durable even if the eBay
+    # withdrawal or email below fails or hangs. This also releases the
+    # ManualBuild/Product row locks taken above instead of holding them
+    # across slow external I/O, which is what turned an unlikely race into a
+    # routine deadlock risk between this route and sync_ebay_order.
+    await db.commit()
 
     # Same alert code the admin dashboard's confetti listens for
     # (top-command-bar.tsx), so a direct storefront sale celebrates too.
@@ -281,22 +329,13 @@ async def confirm_checkout(
         )
 
     ebay_withdrawn = None
-    if product.build_id:
-        from app.models.build import Build
-        build_result = await db.execute(select(Build).where(Build.id == product.build_id))
-        orchestration_build = build_result.scalar_one_or_none()
-        if orchestration_build and orchestration_build.manual_build_id:
-            manual_result = await db.execute(
-                select(ManualBuild).where(ManualBuild.id == orchestration_build.manual_build_id)
-            )
-            manual_build = manual_result.scalar_one_or_none()
-            if manual_build and manual_build.ebay_sku:
-                settings = get_settings()
-                await withdraw_ebay_for_sold_build(manual_build, settings.ebay_listing_environment)
-                manual_build.status = "sold"
-                manual_build.updated_at = datetime.utcnow()
-                await db.flush()
-                ebay_withdrawn = True
+    if will_withdraw_ebay:
+        settings = get_settings()
+        await withdraw_ebay_for_sold_build(manual_build, settings.ebay_listing_environment)
+        manual_build.status = "sold"
+        manual_build.updated_at = datetime.utcnow()
+        await db.commit()
+        ebay_withdrawn = True
 
     try:
         await send_order_confirmation_email(
