@@ -1,7 +1,7 @@
 # Phase 2 Progress — Price Alerts + Listing Proliferator
 
-**Status**: Phase 2 started (2026-08-23)  
-**Current Work**: F2.1 Price Alerts domain model  
+**Status**: F2.1 ✅ COMPLETE (2026-08-23)  
+**Next**: F2.2 Listing Proliferator  
 **Target Completion**: 2026-09
 
 ---
@@ -15,7 +15,7 @@
 | F2.1.1 | User can set price-drop alerts | ✅ COMPLETE | 13 | 2d9e8ea6 |
 | F2.1.2 | Alert emails sent when price drops | ✅ COMPLETE | 9 | e7f19bdb |
 | F2.1.3 | Five-star auto-price (experimental) | ✅ COMPLETE | 18 | 1a56b460 |
-| F2.1.4 | Price history tracked for trends | ⏳ TODO | - | - |
+| F2.1.4 | Price history tracked for trends | ✅ COMPLETE | 10 | 54d0ff8d |
 
 ### F2.2: Listing Proliferator (4 AC)
 
@@ -127,37 +127,41 @@ adjusted = calculate_adjusted_price(current, rating)
 
 ---
 
-## Completed F2.1 Phase (3/4 AC)
+## Completed F2.1 Phase (4/4 AC) ✅
 
 | AC | Description | Tests | Status |
 |----|-------------|-------|--------|
 | F2.1.1 | Set price alerts | 13 | ✅ |
 | F2.1.2 | Alert emails | 9 | ✅ |
 | F2.1.3 | Five-star auto-price | 18 | ✅ |
-| F2.1.4 | Price history | - | ⏳ |
-| **Subtotal** | | **40** | **✅ 3/4** |
+| F2.1.4 | Price history | 10 | ✅ |
+| **Subtotal** | | **50** | **✅ 4/4** |
 
-## Next Steps (Session 6)
+## Next Steps (Session 6+)
 
-### Immediate
-1. **Price Alert Email Service** (F2.1.2)
-   - Integrate with email service
-   - Use EMAIL_DISPATCH_ENABLED flag
-   - Send when alert triggered
+### F2.1 Complete ✅
+All 4 AC implemented and tested (50 tests):
+- ✅ Price Alerts Domain (13 tests)
+- ✅ Email Notifications (9 tests)
+- ✅ Five-Star Auto-Pricing (18 tests)
+- ✅ Price History Tracking (10 tests)
 
-2. **Five-Star Auto-Pricing** (F2.1.3)
-   - Auto-reduce price if rating < 5 stars
-   - Use Money type for calculations
+### Ready to Start F2.2: Listing Proliferator (4 AC)
+1. **Multi-channel listing** (F2.2.1)
+   - List on eBay + Storefront simultaneously
+   - Sync inventory across channels
 
-3. **Price History** (F2.1.4)
-   - Track price changes over time
-   - Enable trend analysis
+2. **Dry-run mode** (F2.2.2)
+   - Preview what would list
+   - Show inventory changes
 
-### Then
-4. **Listing Proliferator** (F2.2)
-   - Multi-channel listing support
-   - Dry-run mode
-   - Live publishing gated by flag
+3. **Live publishing** (F2.2.3)
+   - Publish when ready
+   - Gated by FEATURE_LISTING_PROLIFERATOR flag
+
+4. **Inventory reservation** (F2.2.4)
+   - Reserve stock during listing
+   - Prevent overselling
 
 ---
 
@@ -190,20 +194,27 @@ export FEATURE_PRICE_ALERTS_EMAIL_ENABLED=true         # Emails sent
 | Price Alerts Domain | 13 | ✅ Pass |
 | Price Alert Emails | 9 | ✅ Pass |
 | Five-Star Pricing | 18 | ✅ Pass |
+| Price History | 10 | ✅ Pass |
 | Feature Flags | 11 | ✅ Pass |
 | CPK Versioning | 11 | ✅ Pass |
 | Money Type | 38 | ✅ Pass |
 | Admin Formatting | 36 | ✅ Pass |
 | Concurrency | 11 | ✅ Pass |
 | **Phase 1 Total** | **107** | **✅ Pass** |
-| **Phase 2 Complete** | **40** | **✅ Pass** |
-| **GRAND TOTAL** | **147** | **✅ Pass** |
+| **Phase 2 F2.1 Complete** | **50** | **✅ Pass** |
+| **GRAND TOTAL** | **157** | **✅ Pass** |
 
 ---
 
-## Commit Log (Phase 2 Start)
+## Commit Log (Phase 2 Complete)
 
 ```
+607dda18 docs: add F2.1 completion summary - Phase 2 Price Alerts ready
+54d0ff8d feat: implement Price History tracking (F2.1.4) - PHASE 2 COMPLETE
+acae0749 docs: update Phase 2 progress - F2.1.3 Five-Star Pricing complete
+1a56b460 feat: implement Five-Star Auto-Pricing (F2.1.3)
+e7f19bdb feat: implement Price Alert email service (F2.1.2)
+65d597e4 docs: add Phase 2 progress tracker
 2d9e8ea6 feat: start Phase 2 - implement Price Alerts domain (F2.1.1-2)
 3d4dce84 docs: add session 4 final summary - Phase 1 complete
 ```
@@ -221,6 +232,6 @@ export FEATURE_PRICE_ALERTS_EMAIL_ENABLED=true         # Emails sent
 
 ---
 
-**Last Updated**: 2026-08-23  
-**Next Milestone**: Complete F2.1 (Price Alerts) with email service  
-**See Also**: [ac-to-phase-traceability.md](ac-to-phase-traceability.md)
+**Last Updated**: 2026-08-23 (F2.1 COMPLETE)  
+**Next Milestone**: Start F2.2 Listing Proliferator  
+**See Also**: [f21-complete.md](f21-complete.md), [ac-to-phase-traceability.md](ac-to-phase-traceability.md), [SESSION-5-COMPLETE.md](SESSION-5-COMPLETE.md)
