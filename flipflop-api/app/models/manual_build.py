@@ -14,6 +14,12 @@ class ManualBuild(Base):
     last_evaluation: Mapped[dict | None] = mapped_column(JSON)
     # in_progress -> built -> listed -> sold
     status: Mapped[str] = mapped_column(String(20), default="in_progress")
+    # Builds are never hard-deleted — a live eBay listing can outlive the
+    # local row with no way to reconcile the two afterwards (see the
+    # ManualBuild-deletion incident this field was added to prevent).
+    # "Deleting" a build in the UI sets this instead; the row and its
+    # ebay_listing_id/ebay_sku stay intact for later reference or recovery.
+    is_archived: Mapped[bool] = mapped_column(default=False)
     generated_title: Mapped[str | None] = mapped_column(String(80))
     generated_description: Mapped[str | None] = mapped_column(String)
     # eBay Item Specifics for this category, e.g. {"Processor": ["AMD Ryzen 7 7800X3D"], ...}
@@ -131,6 +137,17 @@ class ManualBuild(Base):
     tracking_number: Mapped[str | None] = mapped_column(String(100))
     shipping_label_url: Mapped[str | None] = mapped_column(String(500))
     shipment_booked_at: Mapped[datetime | None] = mapped_column(DateTime)
+    # ── CPK Versioning (PRD 02 Phase 1: soft supersession) ──
+    # Semantic tag identifying CPU-Mobo-RAM triplet for this build.
+    # Examples: "Ryzen7-7800X3D_B850_DDR5-48GB"
+    # Enables deduplication: same triplet = same CPK version.
+    cpk_version: Mapped[str | None] = mapped_column(String(200), index=True)
+    # When set, a newer compatible build exists with this CPK version.
+    # Allows "Rebuild with X" flow without duplicating data — storefront
+    # fetches the superseding version's pricing and photos, reuses components.
+    superseded_by_cpk_version: Mapped[str | None] = mapped_column(String(200))
+    # Reason for supersession, e.g., "Newer CPU (same socket)" or "Lower price".
+    compatibility_reason: Mapped[str | None] = mapped_column(String(500))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
