@@ -49,6 +49,9 @@ from app.models.price_alert import PriceAlert, PriceAlertEvent
 from app.models.channel_listing import ChannelListing
 from app.models.inventory_reservation import InventoryReservation
 from app.models.listing_publish_event import ListingPublishEvent
+from app.models.demand_metrics_snapshot import DemandMetricsSnapshot
+from app.models.demand_alert import DemandAlert
+from app.models.demand_export_audit import DemandExportAudit
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -110,6 +113,9 @@ __all__ = [
     "ChannelListing",
     "InventoryReservation",
     "ListingPublishEvent",
+    "DemandMetricsSnapshot",
+    "DemandAlert",
+    "DemandExportAudit",
 ]
 
 from .customer import Customer
