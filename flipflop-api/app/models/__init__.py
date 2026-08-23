@@ -36,6 +36,7 @@ from app.models.gem_radar_seller_profile import GemRadarSellerProfile
 from app.models.gem_radar_sold_observation import GemRadarSoldObservation
 from app.models.gem_radar_amazon_observation import GemRadarAmazonObservation
 from app.models.gem_radar_scan_observation import GemRadarScanObservation
+from app.models.gem_radar_scan_run import GemRadarScanRun
 from app.models.gem_radar_listing_cpk import GemRadarListingCpk
 from app.models.gem_radar_cpk_listing_price import GemRadarCpkListingPrice
 from app.models.gem_radar_cpk_market_price import GemRadarCpkMarketPrice
@@ -44,6 +45,10 @@ from app.models.gem_radar_sweep_signal import GemRadarSweepSignal
 from app.models.gem_radar_listing_demand_history import GemRadarListingDemandHistory
 from app.models.gem_radar_intelligence import GemRadarDecisionEvent, ComponentRatingEvent, PreferredComponent
 from app.models.submission_queue import SubmissionQueue
+from app.models.price_alert import PriceAlert, PriceAlertEvent
+from app.models.channel_listing import ChannelListing
+from app.models.inventory_reservation import InventoryReservation
+from app.models.listing_publish_event import ListingPublishEvent
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -90,6 +95,7 @@ __all__ = [
     "GemRadarSoldObservation",
     "GemRadarAmazonObservation",
     "GemRadarScanObservation",
+    "GemRadarScanRun",
     "GemRadarListingCpk",
     "GemRadarCpkListingPrice",
     "GemRadarCpkMarketPrice",
@@ -99,6 +105,11 @@ __all__ = [
     "ComponentRatingEvent",
     "PreferredComponent",
     "SubmissionQueue",
+    "PriceAlert",
+    "PriceAlertEvent",
+    "ChannelListing",
+    "InventoryReservation",
+    "ListingPublishEvent",
 ]
 
 from .customer import Customer
