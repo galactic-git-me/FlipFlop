@@ -18,7 +18,7 @@ from fake_useragent import UserAgent
 
 from app.database import AsyncSessionLocal
 from app.models.part import Part, PartCategory, PartCondition
-from app.models.price_history import PriceHistory, PriceHistoryType
+from app.models.price_history import PriceHistory
 from app.models.source_search_term import SourceSearchTerm
 from app.services.search_telemetry import record_term_result
 from app.services.scraper import scrape_ebay, scrape_overclockers_cases
@@ -1848,14 +1848,6 @@ async def _upsert_case(db, case: RawCase):
             )
             db.add(part)
             await db.flush()
-
-    db.add(PriceHistory(
-        entity_type=PriceHistoryType.part,
-        entity_id=part.id,
-        price=case.price,
-        condition="new",
-        source=case.source_site,
-    ))
 
 
 async def _upsert_case_new(db, case: RawCase):
