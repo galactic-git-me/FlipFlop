@@ -27,7 +27,6 @@ from sqlalchemy import select, and_
 
 from app.database import get_db
 from app.models.part import Part, PartCategory, PartCondition
-from app.models.price_history import PriceHistory, PriceHistoryType
 
 log = structlog.get_logger(__name__)
 router = APIRouter(prefix="/cases", tags=["cases"])
@@ -136,16 +135,6 @@ async def bulk_import_cases(
                 await db.flush()
                 stats["inserted"] += 1
 
-            # Record price history
-            db.add(
-                PriceHistory(
-                    entity_type=PriceHistoryType.part,
-                    entity_id=part.id,
-                    price=case.price,
-                    condition="new",
-                    source=case.source_site or "Overclockers",
-                )
-            )
 
         except Exception as exc:
             stats["errors"] += 1
