@@ -71,3 +71,15 @@ async def send_order_status_email(customer_email: str, customer_name: str, order
     portal = f"https://theflipflop.shop/my-builds/{order_id}" if order_id else "https://theflipflop.shop/my-builds"
     msg.attach(MIMEText(f"<html><body><h2>{subject}</h2><p>Hello {customer_name},</p><p>{body}</p><p><a href=\"{portal}\">Open your customer portal</a></p></body></html>", "html"))
     return _send(msg, order_reference)
+
+async def send_email_async(to: str, subject: str, body: str, reference: str = "generic") -> bool:
+    """Generic async email sender for transactional emails."""
+    if not settings.smtp_host or not settings.smtp_user:
+        log.warning("Email not configured, skipping email", reference=reference, to=to)
+        return False
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"] = settings.smtp_from or "noreply@flipflop.co.uk"
+    msg["To"] = to
+    msg.attach(MIMEText(body, "html"))
+    return _send(msg, reference)
