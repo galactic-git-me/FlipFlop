@@ -2,12 +2,22 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from app.config import get_settings
+from app.services.feature_flags import is_enabled, FeatureFlags
 import structlog
 
 log = structlog.get_logger(__name__)
 settings = get_settings()
 
 def _send(msg: MIMEMultipart, reference: str) -> bool:
+    # Kill switch: EMAIL_DISPATCH_ENABLED can suppress all email
+    if not is_enabled(FeatureFlags.EMAIL_DISPATCH_ENABLED):
+        log.warning(
+            "Email dispatch disabled by feature flag; suppressing send",
+            reference=reference,
+            to=msg.get("To"),
+            subject=msg.get("Subject"),
+        )
+        return False
     try:
         with smtplib.SMTP_SSL(settings.smtp_host, 465) as server:
             server.login(settings.smtp_user, settings.smtp_pass)
