@@ -16,5 +16,5 @@ class ListingPublishEvent(Base):
     channel_listing_id: Mapped[int] = mapped_column(Integer, ForeignKey("channel_listings.id"), nullable=False)
     event_type: Mapped[str] = mapped_column(String(50), nullable=False)  # published, withdrawn, dry_run, validation_failed
     message: Mapped[str | None] = mapped_column(String(500))
-    metadata: Mapped[dict | None] = mapped_column(JSON)
+    event_metadata: Mapped[dict | None] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
