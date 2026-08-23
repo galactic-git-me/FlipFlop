@@ -1,7 +1,7 @@
 # Phase 2 Progress — Price Alerts + Listing Proliferator
 
-**Status**: F2.1 ✅ COMPLETE (2026-08-23)  
-**Next**: F2.2 Listing Proliferator  
+**Status**: F2.1 ✅ + F2.2 ✅ COMPLETE (2026-08-23)  
+**Next**: Phase 3 (Demand Intelligence) or Deploy to Staging  
 **Target Completion**: 2026-09
 
 ---
@@ -17,14 +17,14 @@
 | F2.1.3 | Five-star auto-price (experimental) | ✅ COMPLETE | 18 | 1a56b460 |
 | F2.1.4 | Price history tracked for trends | ✅ COMPLETE | 10 | 54d0ff8d |
 
-### F2.2: Listing Proliferator (4 AC)
+### F2.2: Listing Proliferator (4 AC) ✅ COMPLETE
 
-| AC | Description | Status | Tests | Notes |
-|----|-------------|--------|-------|-------|
-| F2.2.1 | User can list on multiple channels | ⏳ TODO | - | eBay + Storefront |
-| F2.2.2 | Dry-run mode shows what would list | ⏳ TODO | - | Preview before publish |
-| F2.2.3 | Live listing publishes when ready | ⏳ TODO | - | Gated by flag |
-| F2.2.4 | Inventory reserved during listing | ⏳ TODO | - | Phase 2 |
+| AC | Description | Status | Tests | Commit |
+|----|-------------|--------|-------|--------|
+| F2.2.1 | User can list on multiple channels | ✅ COMPLETE | 13 | b0245839 |
+| F2.2.2 | Dry-run mode shows what would list | ✅ COMPLETE | 14 | b0245839 |
+| F2.2.3 | Live listing publishes when ready | ✅ COMPLETE | 14 | 52954228 |
+| F2.2.4 | Inventory reserved during listing | ✅ COMPLETE | 14 | 52954228 |
 
 ---
 
@@ -137,31 +137,27 @@ adjusted = calculate_adjusted_price(current, rating)
 | F2.1.4 | Price history | 10 | ✅ |
 | **Subtotal** | | **50** | **✅ 4/4** |
 
-## Next Steps (Session 6+)
+## Phase 2 Complete ✅ (Session 6)
 
-### F2.1 Complete ✅
+### F2.1: Price Alerts ✅ Complete
 All 4 AC implemented and tested (50 tests):
 - ✅ Price Alerts Domain (13 tests)
 - ✅ Email Notifications (9 tests)
 - ✅ Five-Star Auto-Pricing (18 tests)
 - ✅ Price History Tracking (10 tests)
 
-### Ready to Start F2.2: Listing Proliferator (4 AC)
-1. **Multi-channel listing** (F2.2.1)
-   - List on eBay + Storefront simultaneously
-   - Sync inventory across channels
+### F2.2: Listing Proliferator ✅ Complete
+All 4 AC implemented and tested (55 tests):
+- ✅ Multi-channel Listing (13 tests) — eBay + Storefront simultaneously
+- ✅ Dry-run Mode (14 tests) — Preview without committing
+- ✅ Live Publishing (14 tests) — Gated by feature flag
+- ✅ Inventory Reservation (14 tests) — Prevent overselling
 
-2. **Dry-run mode** (F2.2.2)
-   - Preview what would list
-   - Show inventory changes
+### Next: Phase 3 or Deploy?
 
-3. **Live publishing** (F2.2.3)
-   - Publish when ready
-   - Gated by FEATURE_LISTING_PROLIFERATOR flag
-
-4. **Inventory reservation** (F2.2.4)
-   - Reserve stock during listing
-   - Prevent overselling
+**Option 1**: Deploy Phase 1+F2.1+F2.2 to Staging (all flags OFF, safe)
+**Option 2**: Continue Phase 3 Demand Intelligence (4 AC, ~45 tests)
+**Option 3**: Both in parallel
 
 ---
 
@@ -195,20 +191,28 @@ export FEATURE_PRICE_ALERTS_EMAIL_ENABLED=true         # Emails sent
 | Price Alert Emails | 9 | ✅ Pass |
 | Five-Star Pricing | 18 | ✅ Pass |
 | Price History | 10 | ✅ Pass |
+| Multi-Channel Publisher | 13 | ✅ Pass |
+| Dry-Run Validator | 14 | ✅ Pass |
+| Inventory Reservation | 14 | ✅ Pass |
+| Live Publisher | 14 | ✅ Pass |
 | Feature Flags | 11 | ✅ Pass |
 | CPK Versioning | 11 | ✅ Pass |
 | Money Type | 38 | ✅ Pass |
 | Admin Formatting | 36 | ✅ Pass |
 | Concurrency | 11 | ✅ Pass |
 | **Phase 1 Total** | **107** | **✅ Pass** |
-| **Phase 2 F2.1 Complete** | **50** | **✅ Pass** |
-| **GRAND TOTAL** | **157** | **✅ Pass** |
+| **Phase 2 F2.1** | **50** | **✅ Pass** |
+| **Phase 2 F2.2** | **55** | **✅ Pass** |
+| **GRAND TOTAL** | **212** | **✅ Pass** |
 
 ---
 
-## Commit Log (Phase 2 Complete)
+## Commit Log (Phase 2a+b Complete)
 
 ```
+b0245839 feat: add comprehensive tests for F2.2 (55 tests across all 4 AC)
+52954228 feat: implement F2.2.1-F2.2.4 services and models (Phase 2 Listing Proliferator)
+859f0e72 docs: Phase 2 F2.1 complete - 157 tests passing, all AC delivered
 607dda18 docs: add F2.1 completion summary - Phase 2 Price Alerts ready
 54d0ff8d feat: implement Price History tracking (F2.1.4) - PHASE 2 COMPLETE
 acae0749 docs: update Phase 2 progress - F2.1.3 Five-Star Pricing complete
@@ -232,6 +236,6 @@ e7f19bdb feat: implement Price Alert email service (F2.1.2)
 
 ---
 
-**Last Updated**: 2026-08-23 (F2.1 COMPLETE)  
-**Next Milestone**: Start F2.2 Listing Proliferator  
-**See Also**: [f21-complete.md](f21-complete.md), [ac-to-phase-traceability.md](ac-to-phase-traceability.md), [SESSION-5-COMPLETE.md](SESSION-5-COMPLETE.md)
+**Last Updated**: 2026-08-23 (F2.1+F2.2 COMPLETE)  
+**Next Milestone**: Deploy to Staging OR Start Phase 3  
+**See Also**: [f21-complete.md](f21-complete.md), [f22-complete.md](f22-complete.md), [ac-to-phase-traceability.md](ac-to-phase-traceability.md), [SESSION-5-COMPLETE.md](SESSION-5-COMPLETE.md)
