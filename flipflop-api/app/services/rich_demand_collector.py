@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import re
+import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from typing import Any
 
@@ -180,7 +181,7 @@ async def _fetch_reddit_posts(
         headers={"User-Agent": "FlipFlopDemandBot/1.0"},
     )
     if resp.status_code != 200:
-        return []
+        return await _fetch_reddit_posts_rss(client, query, topic, now)
 
     children = resp.json().get("data", {}).get("children", [])
     posts = []
@@ -205,6 +206,51 @@ async def _fetch_reddit_posts(
             "num_comments": int(d.get("num_comments", 0) or 0),
             "permalink": f"https://reddit.com{permalink}" if permalink else None,
             "created_utc": created_dt,
+            "collected_at": now,
+        })
+    return posts
+
+
+async def _fetch_reddit_posts_rss(
+    client: httpx.AsyncClient, query: str, topic: str, now: datetime,
+) -> list[dict]:
+    """Fallback for environments where Reddit blocks anonymous JSON search."""
+    resp = await client.get(
+        "https://www.reddit.com/search.rss",
+        params={"q": query, "sort": "new", "t": "month"},
+        headers={"User-Agent": "Mozilla/5.0 FlipFlopDemand/1.0"},
+    )
+    if resp.status_code != 200:
+        return []
+    try:
+        root = ET.fromstring(resp.text)
+    except ET.ParseError:
+        return []
+    ns = {"atom": "http://www.w3.org/2005/Atom"}
+    posts: list[dict] = []
+    for entry in root.findall("atom:entry", ns):
+        raw_id = entry.findtext("atom:id", default="", namespaces=ns)
+        # Reddit RSS search may include communities (t5_) as well as posts.
+        if not raw_id.startswith("t3_"):
+            continue
+        link_node = entry.find("atom:link", ns)
+        link = link_node.get("href") if link_node is not None else None
+        subreddit_match = re.search(r"/r/([^/]+)", link or "")
+        updated = entry.findtext("atom:updated", default="", namespaces=ns)
+        try:
+            created = datetime.fromisoformat(updated.replace("Z", "+00:00")).replace(tzinfo=None)
+        except (ValueError, TypeError):
+            created = now
+        posts.append({
+            "reddit_id": raw_id.removeprefix("t3_"),
+            "query": query,
+            "topic": topic,
+            "title": entry.findtext("atom:title", default="", namespaces=ns)[:500],
+            "subreddit": subreddit_match.group(1) if subreddit_match else "unknown",
+            "post_score": 0,
+            "num_comments": 0,
+            "permalink": link,
+            "created_utc": created,
             "collected_at": now,
         })
     return posts
@@ -279,6 +325,51 @@ def _parse_steam_survey(html: str, now: datetime) -> list[dict]:
     Falls back to scanning for percentage patterns in page text.
     """
     rows: list[dict] = []
+
+    # Current Steam markup (2026): each top-level `stats_row row_0` names a
+    # category and its leading item; the following `stats_row_details` holds
+    # the remaining item/percentage/change columns.
+    try:
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(html, "html.parser")
+        for heading in soup.select("div.stats_row.row_0"):
+            section_name = heading.select_one(".stats_col_left")
+            category = _map_steam_category(section_name.get_text(" ", strip=True) if section_name else "")
+            if not category:
+                continue
+            item_nodes = list(heading.select(".stats_col_mid"))
+            pct_nodes = list(heading.select(".stats_col_right"))
+            change_nodes = list(heading.select(".stats_col_right2"))
+            details = heading.find_next_sibling("div", class_="stats_row_details")
+            if details:
+                item_nodes.extend(details.select(".stats_col_mid.data_row"))
+                pct_nodes.extend(details.select(".stats_col_right.data_row"))
+                change_nodes.extend(details.select(".stats_col_right2.data_row"))
+            for index, (item_node, pct_node) in enumerate(zip(item_nodes, pct_nodes)):
+                name = item_node.get_text(" ", strip=True)
+                pct_text = pct_node.get_text(" ", strip=True).replace("%", "")
+                try:
+                    percentage = float(pct_text)
+                except ValueError:
+                    continue
+                change = None
+                if index < len(change_nodes):
+                    change_text = change_nodes[index].get_text(" ", strip=True).replace("%", "").replace("+", "")
+                    try:
+                        change = float(change_text)
+                    except ValueError:
+                        pass
+                if name and percentage > 0:
+                    rows.append({
+                        "category": category, "item_name": name[:255],
+                        "percentage": round(percentage, 4),
+                        "change_pct": round(change, 4) if change is not None else None,
+                        "collected_at": now,
+                    })
+        if rows:
+            return rows
+    except Exception:
+        rows = []
 
     # Try JSON embedded as JavaScript variable: UserHWSurveyData = {...}
     json_match = re.search(r"UserHWSurveyData\s*=\s*(\[.*?\]);", html, re.DOTALL)
