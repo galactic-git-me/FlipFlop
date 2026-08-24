@@ -2647,22 +2647,22 @@ async def ebay_search(
         }
 
 
-@router.get("/selling-principles")
-async def get_selling_principles(
+@router.get("/about-flipflop")
+async def get_about_flipflop(
     _: None = Depends(require_operator),
 ) -> dict:
-    """Retrieve FlipFlop selling principles for display in listings."""
+    """Retrieve About FlipFlop information for display on the sourcing dashboard."""
     from pathlib import Path
 
-    principles_path = Path(__file__).resolve().parent.parent.parent / "config" / "selling_principles.md"
+    about_path = Path(__file__).resolve().parent.parent.parent / "config" / "about_flipflop.md"
 
-    if principles_path.exists():
+    if about_path.exists():
         return {
             "success": True,
-            "content": principles_path.read_text(encoding="utf-8"),
+            "content": about_path.read_text(encoding="utf-8"),
         }
     return {
         "success": False,
-        "error": "Selling principles file not found",
+        "error": "About FlipFlop file not found",
         "content": "",
     }
