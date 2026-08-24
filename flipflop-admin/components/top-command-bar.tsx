@@ -206,7 +206,14 @@ export function TopCommandBar() {
           <Image src="/pics/logo_simple_no_bg.png" alt="FlipFlop" width={240} height={120} className="h-[120px] w-auto object-contain" />
         </div>
         <div className="node-top-icons relative">
-          <Radio className="h-4 w-4" />
+          <button
+            type="button"
+            onClick={() => router.push("/sources")}
+            aria-label="Source activity"
+            title="Source activity"
+          >
+            <Radio className="h-4 w-4 transition-colors hover:text-cyan-300" />
+          </button>
           <button
             type="button"
             onClick={() => setFavouritesOpen(true)}
