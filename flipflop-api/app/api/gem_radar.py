@@ -2650,9 +2650,9 @@ async def ebay_search(
         # Extract URL's listing ID from eBay URL format: https://www.ebay.co.uk/itm/LISTINGID
         now = datetime.now(timezone.utc).isoformat()
 
-        # Pagination: keep going if we got results (could be a partial page but still more)
-        # Only stop if we got ZERO results
-        has_next_page = len(listings) > 0
+        # A short page is the API's end-of-results signal. Returning true for
+        # any non-empty page forced one unnecessary empty request at the end.
+        has_next_page = len(listings) >= limit
 
         return {
             "success": True,
