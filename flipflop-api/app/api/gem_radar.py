@@ -19,7 +19,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import require_operator
 from app.database import AsyncSessionLocal, get_db
-from app.gem_radar.adapters.amazon_price import UnavailableAmazonPriceAdapter
+from app.gem_radar.adapters.amazon_price import UnavailableAmazonPriceAdapter, LiveAmazonPriceAdapter
 from app.gem_radar.adapters.sold_comps import PlaywrightSoldCompsAdapter
 from app.gem_radar.evidence import update_latest_gems
 from app.gem_radar import identity as identity_mod
@@ -75,7 +75,7 @@ _category_stats: dict[str, tuple[float, float]] = {}
 # API-only path (eBay Browse API) has no sold/completed-listings endpoint at
 # all, so this is the only working source for sold comps.
 _sold_adapter = PlaywrightSoldCompsAdapter()
-_amazon_adapter = UnavailableAmazonPriceAdapter()
+_amazon_adapter = LiveAmazonPriceAdapter()
 
 
 # score_listing() does a real eBay sold-comps scrape (and, for deep_research
