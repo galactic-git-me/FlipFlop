@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
+import { memo, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer, Info, X, History } from "lucide-react";
@@ -1833,12 +1833,12 @@ function ScatterTooltip({ active, payload }: { active?: boolean; payload?: Array
   );
 }
 
-function DealScoreRoiChart({ listings }: { listings: Listing[] }) {
-  const points = buildScatterPoints(listings);
-  const byClassification = CLASSIFICATION_ORDER.map((c) => ({
+const DealScoreRoiChart = memo(function DealScoreRoiChart({ listings }: { listings: Listing[] }) {
+  const points = useMemo(() => buildScatterPoints(listings), [listings]);
+  const byClassification = useMemo(() => CLASSIFICATION_ORDER.map((c) => ({
     classification: c,
     data: points.filter((p) => p.classification === c),
-  })).filter((g) => g.data.length > 0);
+  })).filter((g) => g.data.length > 0), [points]);
 
   if (points.length === 0) {
     return (
@@ -1890,6 +1890,7 @@ function DealScoreRoiChart({ listings }: { listings: Listing[] }) {
               data={data}
               fill={CLASSIFICATION_COLORS[classification]}
               fillOpacity={0.7}
+              isAnimationActive={false}
             />
           ))}
         </ScatterChart>
@@ -1904,7 +1905,7 @@ function DealScoreRoiChart({ listings }: { listings: Listing[] }) {
       </div>
     </div>
   );
-}
+});
 
 interface ScanRunHistory {
   id: number;
@@ -1968,7 +1969,7 @@ function groupScanHistoryIntoSessions(runs: ScanRunHistory[]) {
   });
 }
 
-function ScanRunsOverTimeChart() {
+const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
   const [runs, setRuns] = useState<ScanRunHistory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -1999,12 +2000,14 @@ function ScanRunsOverTimeChart() {
     };
   }, []);
 
-  const chartData = groupScanHistoryIntoSessions(runs);
-  const presentVendors = new Set(runs.flatMap((run) => (run.vendors.length > 0 ? run.vendors : ["unknown"])));
-  const vendorKeys = [
-    ...VENDOR_ORDER.filter((vendor) => presentVendors.has(vendor)),
-    ...[...presentVendors].filter((vendor) => !VENDOR_ORDER.includes(vendor as (typeof VENDOR_ORDER)[number])).sort(),
-  ];
+  const chartData = useMemo(() => groupScanHistoryIntoSessions(runs), [runs]);
+  const vendorKeys = useMemo(() => {
+    const presentVendors = new Set(runs.flatMap((run) => (run.vendors.length > 0 ? run.vendors : ["unknown"])));
+    return [
+      ...VENDOR_ORDER.filter((vendor) => presentVendors.has(vendor)),
+      ...[...presentVendors].filter((vendor) => !VENDOR_ORDER.includes(vendor as (typeof VENDOR_ORDER)[number])).sort(),
+    ];
+  }, [runs]);
 
   if (loading) {
     return (
@@ -2084,15 +2087,16 @@ function ScanRunsOverTimeChart() {
               name={VENDOR_META[vendor]?.label ?? vendor}
               stackId="vendors"
               fill={VENDOR_META[vendor]?.color ?? FALLBACK_VENDOR_COLORS[index % FALLBACK_VENDOR_COLORS.length]}
+              isAnimationActive={false}
             />
           ))}
         </BarChart>
       </ResponsiveContainer>
     </div>
   );
-}
+});
 
-function AnalyticsTab({ listings }: { listings: Listing[] }) {
+const AnalyticsTab = memo(function AnalyticsTab({ listings }: { listings: Listing[] }) {
   return (
     <div className="space-y-6">
       <ScanRunsOverTimeChart />
@@ -2122,7 +2126,7 @@ function AnalyticsTab({ listings }: { listings: Listing[] }) {
       </div>
     </div>
   );
-}
+});
 
 // Submissions the extension has fired at /scans-queued but the worker
 // hasn't drained yet — pending+processing is "left to process", completed
