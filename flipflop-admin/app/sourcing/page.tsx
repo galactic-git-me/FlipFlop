@@ -1905,79 +1905,39 @@ function DealScoreRoiChart({ listings }: { listings: Listing[] }) {
   );
 }
 
-interface RunSummary {
-  search_run_id: string;
-  run_at: string;
-  total: number;
-  gem_count: number;
-  super_gem_count: number;
-  new_gem: number;
-  recurring_gem: number;
-  new_super_gem: number;
-  recurring_super_gem: number;
+interface ScanRunHistory {
+  id: number;
+  searchTerm: string;
+  totalListingsFound: number;
+  vendors: string[];
+  runBy: string;
+  durationSeconds: number;
+  occurredAt: string;
 }
 
-// Groups runs into fixed-width time buckets (bucketHours wide each) instead
-// of one bar per scan run — e.g. bucketHours=3 means every x-axis increment
-// spans 3 hours, bucketHours=24 means one increment per day. Bucket
-// boundaries are anchored to the Unix epoch (not the first run's timestamp)
-// so a 24h bucket always lands on a calendar-day boundary rather than an
-// arbitrary offset from whenever the data happens to start.
-function bucketRunsByHours(runs: RunSummary[], bucketHours: number) {
-  const bucketMs = bucketHours * 60 * 60 * 1000;
-  const buckets = new Map<
-    number,
-    { total: number; newGems: number; recurringGems: number; newSuperGems: number; recurringSuperGems: number }
-  >();
-
-  for (const r of runs) {
-    const t = new Date(r.run_at).getTime();
-    if (Number.isNaN(t)) continue;
-    const bucketStart = Math.floor(t / bucketMs) * bucketMs;
-    const existing =
-      buckets.get(bucketStart) ?? { total: 0, newGems: 0, recurringGems: 0, newSuperGems: 0, recurringSuperGems: 0 };
-    existing.total += r.total;
-    existing.newGems += r.new_gem;
-    existing.recurringGems += r.recurring_gem;
-    existing.newSuperGems += r.new_super_gem;
-    existing.recurringSuperGems += r.recurring_super_gem;
-    buckets.set(bucketStart, existing);
-  }
-
-  return [...buckets.entries()]
-    .sort(([a], [b]) => a - b)
-    .map(([bucketStart, agg]) => {
-      const start = new Date(bucketStart);
-      const label =
-        bucketHours >= 24
-          ? start.toLocaleDateString(undefined, { month: "short", day: "numeric" })
-          : start.toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric" });
-      return {
-        run: label,
-        runAt: start.toLocaleString(),
-        newGems: agg.newGems,
-        recurringGems: agg.recurringGems,
-        newSuperGems: agg.newSuperGems,
-        recurringSuperGems: agg.recurringSuperGems,
-      };
-    });
-}
-
-const DEFAULT_BUCKET_HOURS = 3;
-
-function GemsByRunChart() {
-  const [runs, setRuns] = useState<RunSummary[]>([]);
+function ScanRunsOverTimeChart() {
+  const [runs, setRuns] = useState<ScanRunHistory[]>([]);
   const [loading, setLoading] = useState(true);
-  const [bucketHoursInput, setBucketHoursInput] = useState(String(DEFAULT_BUCKET_HOURS));
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/gem-radar/runs-summary")
-      .then((res) => (res.ok ? res.json() : []))
-      .then((data: RunSummary[]) => {
+    fetch("/api/gem-radar/scan-run-history?limit=100", {
+      cache: "no-store",
+      signal: AbortSignal.timeout(15_000),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Scan history request failed (${res.status})`);
+        return res.json();
+      })
+      .then((data: ScanRunHistory[]) => {
         if (!cancelled) setRuns(data);
       })
-      .catch(() => {})
+      .catch((requestError: unknown) => {
+        if (!cancelled) {
+          setError(requestError instanceof Error ? requestError.message : "Could not load scan history");
+        }
+      })
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
@@ -1986,9 +1946,19 @@ function GemsByRunChart() {
     };
   }, []);
 
-  const parsedBucketHours = parseFloat(bucketHoursInput);
-  const bucketHours = Number.isFinite(parsedBucketHours) && parsedBucketHours > 0 ? parsedBucketHours : DEFAULT_BUCKET_HOURS;
-  const chartData = bucketRunsByHours(runs, bucketHours);
+  const chartData = runs
+    .map((run) => ({
+      ...run,
+      timestamp: new Date(run.occurredAt).getTime(),
+      occurredAtLabel: new Date(run.occurredAt).toLocaleString(undefined, {
+        day: "numeric",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    }))
+    .filter((run) => Number.isFinite(run.timestamp))
+    .sort((a, b) => a.timestamp - b.timestamp);
 
   if (loading) {
     return (
@@ -1998,76 +1968,51 @@ function GemsByRunChart() {
     );
   }
 
+  if (error) {
+    return (
+      <div className="p-4 bg-red-950/30 rounded-lg border border-red-700/40 text-red-200 text-sm">
+        Scan history could not be loaded. {error}
+      </div>
+    );
+  }
+
   if (chartData.length === 0) {
     return (
       <div className="p-4 bg-slate-800 rounded-lg border border-slate-700 text-slate-400 text-sm">
-        No scan-run data yet — this needs at least one extension scan since the run-tracking fix shipped.
+        No scan-run history yet. New extension runs will appear here at the time they occurred.
       </div>
     );
   }
 
   return (
     <div className="p-4 bg-slate-800 rounded-lg border border-slate-700">
-      <div className="flex items-center justify-between mb-3">
-        <div className="text-sm text-slate-400">Gems &amp; Super Gems by Scan Run</div>
-        <label className="flex items-center gap-2 text-xs text-slate-400">
-          Bucket width (hours)
-          <input
-            type="number"
-            min="0.5"
-            step="0.5"
-            value={bucketHoursInput}
-            onChange={(e) => setBucketHoursInput(e.target.value)}
-            className="w-16 bg-slate-900 border border-slate-600 rounded px-2 py-1 text-slate-100 text-xs"
-          />
-        </label>
-      </div>
-      <div className="flex gap-4 mb-2 text-xs text-slate-400">
-        <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm" style={{ background: "#3b82f6" }} /> New Gems
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm" style={{ background: "url(#gem-hatch)" }} /> Recurring Gems
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm" style={{ background: "#f59e0b" }} /> New Super Gems
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm" style={{ background: "url(#super-gem-hatch)" }} /> Recurring Super Gems
-        </span>
+      <div className="mb-3">
+        <div className="text-sm font-medium text-slate-200">Scan Runs Over Time</div>
+        <div className="mt-0.5 text-xs text-slate-400">
+          Each bar is one recorded data run, positioned by its actual date and time.
+        </div>
       </div>
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={chartData} margin={{ top: 10, right: 20, bottom: 10, left: 0 }}>
-          <defs>
-            {/* Hatched = same colour as the solid "new" bar but textured, so a
-                recurring (still-active, previously-seen) gem/super-gem reads as
-                a continuation of the same colour rather than a different series. */}
-            <pattern id="gem-hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
-              <rect width="6" height="6" fill="#3b82f6" fillOpacity="0.35" />
-              <line x1="0" y1="0" x2="0" y2="6" stroke="#3b82f6" strokeWidth="2" />
-            </pattern>
-            <pattern
-              id="super-gem-hatch"
-              patternUnits="userSpaceOnUse"
-              width="6"
-              height="6"
-              patternTransform="rotate(45)"
-            >
-              <rect width="6" height="6" fill="#f59e0b" fillOpacity="0.35" />
-              <line x1="0" y1="0" x2="0" y2="6" stroke="#f59e0b" strokeWidth="2" />
-            </pattern>
-          </defs>
+        <BarChart data={chartData} margin={{ top: 10, right: 20, bottom: 34, left: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-          <XAxis dataKey="run" stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 12 }} />
+          <XAxis
+            dataKey="occurredAtLabel"
+            stroke="#94a3b8"
+            tick={{ fill: "#94a3b8", fontSize: 11 }}
+            angle={-25}
+            textAnchor="end"
+            interval="preserveStartEnd"
+            minTickGap={36}
+          />
           <YAxis stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 12 }} allowDecimals={false} />
           <Tooltip
             contentStyle={{ background: "#0f172a", border: "1px solid #334155", borderRadius: 6 }}
-            labelFormatter={(_, payload) => payload?.[0]?.payload?.runAt ?? ""}
+            labelFormatter={(_, payload) => {
+              const run = payload?.[0]?.payload;
+              return run ? `${run.occurredAtLabel} · ${run.searchTerm} · ${run.runBy}` : "";
+            }}
           />
-          <Bar dataKey="recurringGems" name="Recurring Gems" stackId="gems" fill="url(#gem-hatch)" />
-          <Bar dataKey="newGems" name="New Gems" stackId="gems" fill="#3b82f6" />
-          <Bar dataKey="recurringSuperGems" name="Recurring Super Gems" stackId="superGems" fill="url(#super-gem-hatch)" />
-          <Bar dataKey="newSuperGems" name="New Super Gems" stackId="superGems" fill="#f59e0b" />
+          <Bar dataKey="totalListingsFound" name="Listings found" fill="#3b82f6" radius={[3, 3, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
@@ -2077,7 +2022,7 @@ function GemsByRunChart() {
 function AnalyticsTab({ listings }: { listings: Listing[] }) {
   return (
     <div className="space-y-6">
-      <GemsByRunChart />
+      <ScanRunsOverTimeChart />
       <DealScoreRoiChart listings={listings} />
 
       <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700/30">
@@ -2210,10 +2155,14 @@ function SourcingPageInner() {
 
   const fetchData = async () => {
     try {
+      // Do not let one unhealthy Gem Radar endpoint leave the whole page in
+      // its initial loading state forever. Each poll gets a bounded lifetime;
+      // the next scheduled refresh can recover normally.
+      const signal = AbortSignal.timeout(15_000);
       const [listingsRes, componentRes, queueRes] = await Promise.all([
-        fetch(`/api/gem-radar/scored-listings-latest-run`),
-        fetch(`/api/gem-radar/gem-by-component`, { cache: "no-store" }),
-        fetch(`/api/gem-radar/queue-status`),
+        fetch(`/api/gem-radar/scored-listings-latest-run`, { signal }),
+        fetch(`/api/gem-radar/gem-by-component`, { cache: "no-store", signal }),
+        fetch(`/api/gem-radar/queue-status`, { signal }),
       ]);
 
       if (listingsRes.ok) {
