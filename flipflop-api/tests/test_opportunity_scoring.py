@@ -230,3 +230,39 @@ def test_desirability_separates_modern_build_friendly_parts():
         {"category": "ssd", "brand": "Generic", "model": "SATA SSD", "specs": {"interface": "sata"}},
     )
     assert modern > basic
+
+
+def test_gem_economics_do_not_require_a_redundant_market_discount_gate():
+    policy = OpportunityPolicy(gem_discount_pct=-20.0)
+    market = robust_sold_market(comps([100, 100, 100, 100, 100]), subject_listing_id="999", policy=policy)
+    assert market is not None
+    result = score_opportunity(
+        listing_price=82, title="Noctua NH-D15 CPU Cooler",
+        cpk_data={"category": "cooler", "brand": "Noctua", "model": "NH-D15"},
+        market=market, sold_count_90d=5, active_count=3,
+        watch_velocity=1, bid_velocity=1, policy=policy, listing_condition="new",
+    )
+    assert result.roi_pct and result.roi_pct >= 15
+    assert result.classification == "GEM"
+    assert result.decision == "BUY_NOW"
+    assert 75 <= result.score < 85
+
+
+def test_strong_economics_with_low_confidence_are_evidence_limited():
+    policy = OpportunityPolicy(minimum_sold_comps=3, minimum_source_diversity=1, gem_confidence=100)
+    market = robust_sold_market(
+        [SoldComparable(value, source_url=f"https://retailer.test/{index}") for index, value in enumerate([100, 150, 200], 1)],
+        subject_listing_id="subject", policy=policy,
+    )
+    assert market is not None and market.confidence < 80
+    result = score_opportunity(
+        listing_price=70, title="Noctua NH-D15 CPU Cooler",
+        cpk_data={"category": "cooler", "brand": "Noctua", "model": "NH-D15"},
+        market=market, sold_count_90d=2, active_count=3,
+        watch_velocity=None, bid_velocity=None, policy=policy, listing_condition="new",
+    )
+    assert result.expected_profit and result.expected_profit >= 3
+    assert result.roi_pct and result.roi_pct >= 15
+    assert result.classification == "EVIDENCE_LIMITED_DEAL"
+    assert result.decision == "INVESTIGATE"
+    assert 70 <= result.score < 75

@@ -77,6 +77,25 @@ def category_economics(category: str, policy: OpportunityPolicy) -> CategoryEcon
     )
 
 
+_CLASSIFICATION_SCORE_BANDS: dict[str, tuple[float, float]] = {
+    "SUPER_GEM": (85.0, 100.0),
+    "GEM": (75.0, 84.9),
+    "EVIDENCE_LIMITED_DEAL": (70.0, 74.9),
+    "OK_DEAL": (65.0, 69.9),
+    "AVERAGE_DEAL": (50.0, 64.9),
+    "POOR_DEAL": (0.0, 49.9),
+}
+
+
+def score_within_classification(raw_score: float, classification: str) -> float:
+    """Preserve ranking within a tier without contradicting the tier label."""
+    band = _CLASSIFICATION_SCORE_BANDS.get(classification)
+    if band is None:
+        return max(0.0, min(100.0, raw_score))
+    lower, upper = band
+    return lower + (upper - lower) * max(0.0, min(100.0, raw_score)) / 100.0
+
+
 async def load_opportunity_policy(db) -> OpportunityPolicy:
     from sqlalchemy import select
     from app.models.app_settings import AppSettings
@@ -452,7 +471,6 @@ def score_opportunity(
             f"SUPER_GEM £{economics.super_profit:.0f}/{economics.super_roi_pct:.0f}% ROI."
         )
     emerging_profit_floor = min(policy.gem_profit, 10.0) if is_component else policy.gem_profit
-    discount_pct = (listing_price - resale_value) / resale_value * 100.0
     # Deal tier answers "how exceptional is the buy?"  Evidence and identity
     # remain hard gates, but liquidity/desirability rank urgency rather than
     # vetoing a genuine bargain.  The former all-gates-at-once rule made a
@@ -472,14 +490,21 @@ def score_opportunity(
     elif evidence_limited:
         classification, decision = "INSUFFICIENT_DATA", "INVESTIGATE"
         reasons.append("The comparable cohort is below the minimum evidence requirement and the provisional opportunity gates were not all met.")
-    elif eligible and discount_pct <= policy.super_discount_pct and profit >= economics.super_profit and roi >= economics.super_roi_pct and market.confidence >= super_confidence_floor:
+    elif eligible and profit >= economics.super_profit and roi >= economics.super_roi_pct and market.confidence >= super_confidence_floor:
         classification, decision = "SUPER_GEM", "BUY_NOW"
-    elif eligible and discount_pct <= policy.gem_discount_pct and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market.confidence >= gem_confidence_floor:
+    elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market.confidence >= gem_confidence_floor:
         classification, decision = "GEM", "BUY_NOW"
+    elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct:
+        classification, decision = "EVIDENCE_LIMITED_DEAL", "INVESTIGATE"
+        reasons.append(
+            f"Economics pass the {category.upper() or 'configured'} GEM gates, but market confidence "
+            f"{market.confidence:.0f}/100 is below the {gem_confidence_floor:.0f}/100 action threshold."
+        )
     elif profit > 0 and eligible:
         classification, decision = "OK_DEAL", "MAKE_OFFER"
     elif profit > 0:
         classification, decision = "AVERAGE_DEAL", "INVESTIGATE"
     else:
         classification, decision = "POOR_DEAL", "IGNORE"
-    return OpportunityResult(classification, decision, round(total_score, 1), round(profit, 2), round(roi, 2), round(walk_away, 2), None if liquidity is None else round(liquidity, 1), round(desirability, 1), round(risk, 1), market, eligible, reasons, risk_flags, {k: round(v, 2) for k, v in costs.items()})
+    tier_aligned_score = score_within_classification(total_score, classification)
+    return OpportunityResult(classification, decision, round(tier_aligned_score, 1), round(profit, 2), round(roi, 2), round(walk_away, 2), None if liquidity is None else round(liquidity, 1), round(desirability, 1), round(risk, 1), market, eligible, reasons, risk_flags, {k: round(v, 2) for k, v in costs.items()})
