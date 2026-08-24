@@ -16626,3 +16626,341 @@ INFO:     127.0.0.1:49937 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Acce
 2026-08-24 21:34:50 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=19 ingested=0 submission_id=64668
 2026-08-24 21:34:50 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=ddr5-udimm-ram
 2026-08-24 21:34:50 [info     ] queue_processor.processing_submission active_searches=2 n_listings=61 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=64683
+2026-08-24 21:34:54 [info     ] submission_queued              search_run_id=8762059f-076f-46d6-8e1a-920feda402aa submission_id=64695
+INFO:     127.0.0.1:60875 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 21:34:59 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Crucial P310 512GB M.2 2280 NVMe PCIe + Ediloca 1T
+2026-08-24 21:34:59 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=63 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=68 elapsed_s=11.9 excluded_auctions=0 new_listings=0
+2026-08-24 21:34:59 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=63 ingested=0 submission_id=64675
+2026-08-24 21:34:59 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=m2-nvme-ssd
+2026-08-24 21:34:59 [info     ] queue_processor.processing_submission active_searches=2 n_listings=32 query=M.2 NVMe SSD -"m.2 case" -adapter -"heatsink only" -enclosure -"ssd case" -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=64676
+2026-08-24 21:35:00 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=60 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=61 elapsed_s=9.9 excluded_auctions=0 new_listings=0
+2026-08-24 21:35:00 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=60 ingested=0 submission_id=64683
+2026-08-24 21:35:00 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=psu-gold-750w-modular
+2026-08-24 21:35:00 [info     ] queue_processor.processing_submission active_searches=2 n_listings=48 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=64685
+2026-08-24 21:35:00 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=48 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=48 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-08-24 21:35:00 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=48 ingested=0 submission_id=64685
+2026-08-24 21:35:00 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=psu-gold-750w-modular
+2026-08-24 21:35:00 [info     ] queue_processor.processing_submission active_searches=2 n_listings=32 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=64686
+2026-08-24 21:35:02 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewHot Seller
+2026-08-24 21:35:02 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewHot Seller
+2026-08-24 21:35:02 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewHot Seller
+2026-08-24 21:35:02 [info     ] submission_queued              search_run_id=8762059f-076f-46d6-8e1a-920feda402aa submission_id=64696
+INFO:     127.0.0.1:51147 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 21:35:03 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewHot Seller
+2026-08-24 21:35:04 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewOffer
+2026-08-24 21:35:04 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewOffer
+2026-08-24 21:35:04 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewOffer
+2026-08-24 21:35:05 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewHot Seller
+2026-08-24 21:35:08 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewHot Seller
+2026-08-24 21:35:09 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewOffer
+2026-08-24 21:35:10 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=21 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=32 elapsed_s=10.5 excluded_auctions=0 new_listings=0
+2026-08-24 21:35:10 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=21 ingested=0 submission_id=64676
+2026-08-24 21:35:10 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=m2-nvme-ssd
+2026-08-24 21:35:10 [info     ] queue_processor.processing_submission active_searches=2 n_listings=5 query=M.2 NVMe SSD -"m.2 case" -adapter -"heatsink only" -enclosure -"ssd case" -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=64678
+2026-08-24 21:35:10 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=5 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=4 elapsed_s=0.0 excluded_auctions=0 new_listings=0
+2026-08-24 21:35:10 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=5 ingested=0 submission_id=64678
+2026-08-24 21:35:10 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=m2-nvme-ssd
+2026-08-24 21:35:10 [info     ] queue_processor.processing_submission active_searches=2 n_listings=43 query=M.2 NVMe SSD -"m.2 case" -adapter -"heatsink only" -enclosure -"ssd case" -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=64679
+INFO:     127.0.0.1:55844 - "POST /api/gem-radar/scan-run-history HTTP/1.1" 201 Created
+2026-08-24 21:35:11 [info     ] scan_sweep_complete.signalled
+INFO:     127.0.0.1:55844 - "POST /api/gem-radar/scan-sweep-complete HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55844 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:35:13 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram|ssd title=AWD-IT Atlas AMD Ryzen 5, Radeon RX 9070 XT 16GB ,
+INFO:     127.0.0.1:64499 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:35:14 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Astraeus AMD Ryzen 5, Radeon RX 9070 GRE, 1
+INFO:     127.0.0.1:57331 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:35:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT Hecate AMD Ryzen 5, NVIDIA RTX 5050, 16GB R
+2026-08-24 21:35:16 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X49 X 49 Inch QD-OLED Curved Gaming
+INFO:     127.0.0.1:57627 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:35:18 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X32X5 31.5 Inch QD-OLED 240Hz Gaming
+2026-08-24 21:35:19 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X27 X1 26.5 Inch 4K QD-OLED 240Hz Ga
+2026-08-24 21:35:20 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator XB273U F5 27 Inch IPS 360Hz Gaming M
+2026-08-24 21:35:21 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Nitro XZ322QU V3 32 Inch WQHD Curved Gaming M
+2026-08-24 21:35:21 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=24 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=32 elapsed_s=20.8 excluded_auctions=0 new_listings=0
+2026-08-24 21:35:21 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=24 ingested=0 submission_id=64686
+2026-08-24 21:35:21 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=psu-gold-750w-modular
+2026-08-24 21:35:21 [info     ] queue_processor.processing_submission active_searches=2 n_listings=48 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=64689
+2026-08-24 21:35:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=ORBIT X2 Home/Office Desktop PC
+2026-08-24 21:35:22 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=48 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=48 elapsed_s=0.4 excluded_auctions=0 new_listings=0
+2026-08-24 21:35:22 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=48 ingested=0 submission_id=64689
+2026-08-24 21:35:22 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=psu-gold-750w-modular
+2026-08-24 21:35:22 [info     ] queue_processor.processing_submission active_searches=2 n_listings=10 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=64691
+INFO:     127.0.0.1:54529 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:49646 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:35:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=ORBIT X1 Home/Office Desktop PC
+INFO:     127.0.0.1:55923 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:35:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Gorilla Gaming DROP_02 Gaming PC
+2026-08-24 21:35:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=M.2 Screw & Standoff
+INFO:     127.0.0.1:54552 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:35:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=M.2 Screw
+2026-08-24 21:35:29 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=36 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=43 elapsed_s=19.3 excluded_auctions=0 new_listings=0
+2026-08-24 21:35:29 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=36 ingested=0 submission_id=64679
+2026-08-24 21:35:29 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=m2-nvme-ssd
+2026-08-24 21:35:29 [info     ] queue_processor.processing_submission active_searches=2 n_listings=45 query=M.2 NVMe SSD -"m.2 case" -adapter -"heatsink only" -enclosure -"ssd case" -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=64682
+2026-08-24 21:35:30 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Juniper QFX10008 13U Modular Switch
+2026-08-24 21:35:32 [debug    ] cpk_extractor.invalid_category category=switch title=Dell Networking Z9100-ON 32xQSFP28 100G, 2xSFP+ 10
+2026-08-24 21:35:32 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=8 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=10.6 excluded_auctions=0 new_listings=0
+2026-08-24 21:35:32 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=8 ingested=0 submission_id=64691
+2026-08-24 21:35:32 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=psu-gold-750w-modular
+2026-08-24 21:35:32 [info     ] queue_processor.processing_submission active_searches=2 n_listings=21 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=64694
+2026-08-24 21:35:33 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=21 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=21 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-08-24 21:35:33 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=21 ingested=0 submission_id=64694
+2026-08-24 21:35:33 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=psu-gold-750w-modular
+2026-08-24 21:35:33 [info     ] queue_processor.processing_submission active_searches=2 n_listings=19 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=64695
+2026-08-24 21:35:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Gorilla Gaming Killer Elite Gaming PC
+2026-08-24 21:35:34 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|motherboard|ram|ssd|psu|cooler|case|fan title=MSI Modern 15 16GB RAM 512GB SSD Windows 11 Home L
+2026-08-24 21:35:37 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|motherboard|ram|ssd|psu|cooler|case|fan title=MSI Modern 14 AMD Ryzen 5 8GB RAM 512GB SSD 14 Inc
+2026-08-24 21:35:37 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=18 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=19 elapsed_s=4.6 excluded_auctions=0 new_listings=0
+2026-08-24 21:35:37 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=18 ingested=0 submission_id=64695
+2026-08-24 21:35:37 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=psu-gold-750w-modular
+2026-08-24 21:35:37 [info     ] queue_processor.processing_submission active_searches=2 n_listings=22 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=64696
+2026-08-24 21:35:37 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=21 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=21 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-08-24 21:35:37 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=21 ingested=0 submission_id=64696
+2026-08-24 21:35:37 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=psu-gold-750w-modular
+2026-08-24 21:35:38 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|motherboard|ram|ssd|psu|cooler|case|fan title=MSI Modern 14 Intel Core i5 16GB RAM 512GB SSD 14
+2026-08-24 21:35:39 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|motherboard|ram|ssd|psu|cooler|case|fan title=MSI Modern 14 Intel Core 5 8GB RAM 512GB SSD Windo
+2026-08-24 21:35:39 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=38 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=45 elapsed_s=9.3 excluded_auctions=0 new_listings=0
+2026-08-24 21:35:39 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=38 ingested=0 submission_id=64682
+2026-08-24 21:35:39 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=m2-nvme-ssd
+INFO:     127.0.0.1:50277 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:62633 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:35:47 [info     ] phase2_trigger.queue_drained_running_phase2
+2026-08-24 21:35:54 [info     ] ebay_search.searching          limit=100 offset=0 page=1 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller"
+2026-08-24 21:35:55 [info     ] ebay_search.success            count=83 page=1 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller"
+INFO:     127.0.0.1:50369 - "GET /api/gem-radar/ebay-search?query=CPU+cooler+-bundle+-laptop+-%22mounting+kit+only%22+-%22replacement+fan%22+-%22thermal+pad%22+-%22fan+controller%22&page=1&limit=100 HTTP/1.1" 200 OK
+2026-08-24 21:35:55 [info     ] submission_queued              search_run_id=b5806e78-326c-4c82-a054-f1aec6e371e6 submission_id=64697
+INFO:     127.0.0.1:59927 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 21:35:56 [warning  ] ebay_catalog.get_product_failed epid=2342803947 status=403
+2026-08-24 21:35:56 [info     ] queue_processor.processing_submission active_searches=1 n_listings=83 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=64697
+2026-08-24 21:35:57 [info     ] ebay_search.searching          limit=100 offset=100 page=2 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller"
+2026-08-24 21:35:58 [info     ] ebay_search.success            count=86 page=2 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller"
+INFO:     127.0.0.1:50369 - "GET /api/gem-radar/ebay-search?query=CPU+cooler+-bundle+-laptop+-%22mounting+kit+only%22+-%22replacement+fan%22+-%22thermal+pad%22+-%22fan+controller%22&page=2&limit=100 HTTP/1.1" 200 OK
+2026-08-24 21:35:58 [info     ] submission_queued              search_run_id=b5806e78-326c-4c82-a054-f1aec6e371e6 submission_id=64698
+INFO:     127.0.0.1:59927 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 21:35:59 [info     ] submission_queued              search_run_id=7a28e724-7ac2-4c89-83e5-c9eab21a7d22 submission_id=64699
+INFO:     127.0.0.1:59927 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 21:36:00 [info     ] ebay_search.searching          limit=100 offset=200 page=3 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller"
+2026-08-24 21:36:00 [warning  ] ebay_catalog.get_product_failed epid=20083999353 status=403
+2026-08-24 21:36:00 [info     ] submission_queued              search_run_id=c2199c5f-7135-479a-9822-745bd4bde1e3 submission_id=64700
+INFO:     127.0.0.1:59927 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 21:36:01 [info     ] ebay_search.success            count=80 page=3 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller"
+INFO:     127.0.0.1:50369 - "GET /api/gem-radar/ebay-search?query=CPU+cooler+-bundle+-laptop+-%22mounting+kit+only%22+-%22replacement+fan%22+-%22thermal+pad%22+-%22fan+controller%22&page=3&limit=100 HTTP/1.1" 200 OK
+2026-08-24 21:36:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Coolmaster Watercooling CPU Cooler
+2026-08-24 21:36:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Generic 240mm CPU Cooler
+2026-08-24 21:36:01 [warning  ] ebay_catalog.get_product_failed epid=15035053028 status=403
+2026-08-24 21:36:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=cpu cooler lga 1150/1151/1155/1156
+2026-08-24 21:36:02 [info     ] submission_queued              search_run_id=c7889844-edb4-4d40-8281-2abbb6cbbe12 submission_id=64701
+INFO:     127.0.0.1:59927 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 21:36:02 [info     ] submission_queued              search_run_id=b5806e78-326c-4c82-a054-f1aec6e371e6 submission_id=64702
+INFO:     127.0.0.1:57146 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 21:36:02 [info     ] submission_queued              search_run_id=c9e420ac-86ea-4110-8f05-9e0a2716a987 submission_id=64703
+INFO:     127.0.0.1:57146 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:57146 - "POST /api/gem-radar/scan-run-history HTTP/1.1" 201 Created
+2026-08-24 21:36:03 [warning  ] ebay_catalog.get_product_failed epid=9026644830 status=403
+2026-08-24 21:36:03 [info     ] ebay_search.searching          limit=100 offset=300 page=4 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller"
+2026-08-24 21:36:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=cpu cooler alphacool/xspc
+2026-08-24 21:36:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Cooler Master 240mm AIO CPU Water Cooler
+2026-08-24 21:36:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=corsair cw-906009-ww CPU Cooler
+2026-08-24 21:36:05 [info     ] ebay_search.success            count=81 page=4 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller"
+INFO:     127.0.0.1:50369 - "GET /api/gem-radar/ebay-search?query=CPU+cooler+-bundle+-laptop+-%22mounting+kit+only%22+-%22replacement+fan%22+-%22thermal+pad%22+-%22fan+controller%22&page=4&limit=100 HTTP/1.1" 200 OK
+2026-08-24 21:36:05 [info     ] submission_queued              search_run_id=b5806e78-326c-4c82-a054-f1aec6e371e6 submission_id=64704
+INFO:     127.0.0.1:57146 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 21:36:05 [warning  ] ebay_catalog.get_product_failed epid=21055215778 status=403
+2026-08-24 21:36:06 [info     ] submission_queued              search_run_id=5161f9c8-6cce-4b8b-a259-19a8c77185ff submission_id=64705
+INFO:     127.0.0.1:57146 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 21:36:06 [info     ] submission_queued              search_run_id=7a28e724-7ac2-4c89-83e5-c9eab21a7d22 submission_id=64706
+INFO:     127.0.0.1:59927 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 21:36:06 [info     ] ebay_search.searching          limit=100 offset=400 page=5 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller"
+2026-08-24 21:36:06 [warning  ] ebay_catalog.get_product_failed epid=21006000248 status=403
+INFO:     127.0.0.1:59927 - "POST /api/gem-radar/scan-run-history HTTP/1.1" 201 Created
+2026-08-24 21:36:07 [info     ] submission_queued              search_run_id=c2199c5f-7135-479a-9822-745bd4bde1e3 submission_id=64707
+INFO:     127.0.0.1:59927 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 21:36:07 [info     ] ebay_search.success            count=81 page=5 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller"
+INFO:     127.0.0.1:50369 - "GET /api/gem-radar/ebay-search?query=CPU+cooler+-bundle+-laptop+-%22mounting+kit+only%22+-%22replacement+fan%22+-%22thermal+pad%22+-%22fan+controller%22&page=5&limit=100 HTTP/1.1" 200 OK
+2026-08-24 21:36:07 [warning  ] ebay_catalog.get_product_failed epid=26074766741 status=403
+2026-08-24 21:36:08 [info     ] submission_queued              search_run_id=c7889844-edb4-4d40-8281-2abbb6cbbe12 submission_id=64708
+INFO:     127.0.0.1:59927 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 21:36:08 [info     ] submission_queued              search_run_id=b5806e78-326c-4c82-a054-f1aec6e371e6 submission_id=64709
+INFO:     127.0.0.1:57146 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 21:36:08 [warning  ] ebay_catalog.get_product_failed epid=14057273295 status=403
+2026-08-24 21:36:08 [debug    ] cpk_extractor.low_confidence   confidence=None title=CPU MOBO & Cooler Combo
+2026-08-24 21:36:09 [warning  ] ebay_catalog.get_product_failed epid=24011217776 status=403
+INFO:     127.0.0.1:57146 - "GET /api/gem-radar/sold-comp-targets?query=CPU+cooler+-bundle+-laptop+-%22mounting+kit+only%22+-%22replacement+fan%22+-%22thermal+pad%22+-%22fan+controller%22&limit=3&category=cooler HTTP/1.1" 200 OK
+2026-08-24 21:36:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Cooler Master Hyper 212 Black Edition CPU cooler w
+2026-08-24 21:36:10 [warning  ] ebay_catalog.get_product_failed epid=23063751086 status=403
+2026-08-24 21:36:10 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=71 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=81 elapsed_s=14.4 excluded_auctions=0 new_listings=2
+2026-08-24 21:36:10 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=71 ingested=2 submission_id=64697
+2026-08-24 21:36:10 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=cpu-cooler
+2026-08-24 21:36:10 [info     ] queue_processor.processing_submission active_searches=1 n_listings=48 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=64699
+2026-08-24 21:36:11 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=48 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=48 elapsed_s=0.3 excluded_auctions=0 new_listings=0
+2026-08-24 21:36:11 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=48 ingested=0 submission_id=64699
+2026-08-24 21:36:11 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=cpu-cooler
+2026-08-24 21:36:11 [info     ] queue_processor.processing_submission active_searches=1 n_listings=46 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=64700
+INFO:     127.0.0.1:57146 - "POST /api/gem-radar/scan-run-history HTTP/1.1" 201 Created
+2026-08-24 21:36:12 [info     ] submission_queued              search_run_id=7a28e724-7ac2-4c89-83e5-c9eab21a7d22 submission_id=64710
+INFO:     127.0.0.1:59927 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+2026-08-24 21:36:14 [warning  ] ebay_catalog.get_product_failed epid=22060653182 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 21:36:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT Astraeus AMD Ryzen 5, Radeon RX 9070 GRE, 1
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 21:36:15 [info     ] gem_radar.sold_comps_ingested  inserted=0 query=thermalright phantom-spirit-120-se search_id=cpu-cooler skipped=36
+INFO:     127.0.0.1:57146 - "POST /api/gem-radar/sold-comps HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57146 - "GET /api/builds/sold-comp-targets?limit=2 HTTP/1.1" 404 Not Found
+2026-08-24 21:36:15 [info     ] submission_queued              search_run_id=5161f9c8-6cce-4b8b-a259-19a8c77185ff submission_id=64711
+INFO:     127.0.0.1:59927 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:53462 - "POST /api/gem-radar/scan-run-history HTTP/1.1" 201 Created
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53462 - "POST /api/gem-radar/scan-run-history HTTP/1.1" 201 Created
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 21:36:15 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X49 X 49 Inch QD-OLED Curved Gaming
+2026-08-24 21:36:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT Hecate AMD Ryzen 5, NVIDIA RTX 5050, 16GB R
+2026-08-24 21:36:17 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram|ssd title=AWD-IT Atlas AMD Ryzen 5, Radeon RX 9070 XT 16GB ,
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 21:36:17 [warning  ] ebay_catalog.get_product_failed epid=21063417861 status=403
+INFO:     127.0.0.1:53462 - "POST /api/gem-radar/scan-run-history HTTP/1.1" 201 Created
+2026-08-24 21:36:19 [warning  ] ebay_catalog.get_product_failed epid=596722843 status=403
+2026-08-24 21:36:19 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X32X5 31.5 Inch QD-OLED 240Hz Gaming
+2026-08-24 21:36:20 [warning  ] ebay_catalog.get_product_failed epid=11049336609 status=403
+2026-08-24 21:36:20 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator XB273U F5 27 Inch IPS 360Hz Gaming M
+2026-08-24 21:36:21 [warning  ] ebay_catalog.get_product_failed epid=21055215778 status=403
+2026-08-24 21:36:21 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X27 X1 26.5 Inch 4K QD-OLED 240Hz Ga
+2026-08-24 21:36:21 [warning  ] ebay_catalog.get_product_failed epid=27063370160 status=403
+2026-08-24 21:36:23 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Nitro XZ322QU V3 32 Inch WQHD Curved Gaming M
+2026-08-24 21:36:23 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=38 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=46 elapsed_s=12.0 excluded_auctions=0 new_listings=0
+2026-08-24 21:36:23 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=38 ingested=0 submission_id=64700
+2026-08-24 21:36:23 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=cpu-cooler
+2026-08-24 21:36:23 [info     ] queue_processor.processing_submission active_searches=1 n_listings=46 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=64703
+2026-08-24 21:36:23 [warning  ] ebay_catalog.get_product_failed epid=27024805358 status=403
+2026-08-24 21:36:24 [info     ] submission_queued              search_run_id=5161f9c8-6cce-4b8b-a259-19a8c77185ff submission_id=64712
+INFO:     127.0.0.1:53462 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 21:36:24 [warning  ] ebay_catalog.get_product_failed epid=2164346035 status=403
+2026-08-24 21:36:25 [warning  ] ebay_catalog.get_product_failed epid=7039321256 status=403
+2026-08-24 21:36:25 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewOffer
+2026-08-24 21:36:26 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewRefurbished
+2026-08-24 21:36:26 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewOffer
+2026-08-24 21:36:27 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewToday Only
+2026-08-24 21:36:27 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewNew
+2026-08-24 21:36:27 [warning  ] ebay_catalog.get_product_failed epid=2133201568 status=403
+2026-08-24 21:36:27 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewOffer
+2026-08-24 21:36:28 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewOffer
+2026-08-24 21:36:28 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewRefurbished
+2026-08-24 21:36:29 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewOffer
+2026-08-24 21:36:29 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewOffer
+2026-08-24 21:36:29 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewOffer
+2026-08-24 21:36:30 [warning  ] ebay_catalog.get_product_failed epid=18080744981 status=403
+2026-08-24 21:36:30 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewOffer
+2026-08-24 21:36:30 [warning  ] ebay_catalog.get_product_failed epid=28078689758 status=403
+2026-08-24 21:36:31 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CompareQuick viewOffer
+2026-08-24 21:36:31 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=33 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=46 elapsed_s=8.0 excluded_auctions=0 new_listings=0
+2026-08-24 21:36:31 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=33 ingested=0 submission_id=64703
+2026-08-24 21:36:31 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=cpu-cooler
+2026-08-24 21:36:31 [info     ] queue_processor.processing_submission active_searches=1 n_listings=24 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=64705
+2026-08-24 21:36:31 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=24 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=24 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-08-24 21:36:31 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=24 ingested=0 submission_id=64705
+2026-08-24 21:36:31 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=cpu-cooler
+2026-08-24 21:36:31 [info     ] queue_processor.processing_submission active_searches=1 n_listings=47 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=64706
+2026-08-24 21:36:31 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=47 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=47 elapsed_s=0.3 excluded_auctions=0 new_listings=0
+2026-08-24 21:36:31 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=47 ingested=0 submission_id=64706
+2026-08-24 21:36:31 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=cpu-cooler
+2026-08-24 21:36:31 [info     ] queue_processor.processing_submission active_searches=1 n_listings=3 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=64707
+INFO:     127.0.0.1:58034 - "POST /api/gem-radar/scan-run-history HTTP/1.1" 201 Created
+2026-08-24 21:36:31 [info     ] scan_sweep_complete.signalled
+INFO:     127.0.0.1:62429 - "POST /api/gem-radar/scan-sweep-complete HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62429 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:58034 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:54674 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:36:35 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Level UP AMD Ryzen 8500G Six Core Radeon 74
+2026-08-24 21:36:36 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT LEVEL UP Ryzen 5 5600G with AMD VEGA Graphi
+2026-08-24 21:36:36 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=1 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=3 elapsed_s=5.0 excluded_auctions=0 new_listings=0
+2026-08-24 21:36:36 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=1 ingested=0 submission_id=64707
+2026-08-24 21:36:36 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=cpu-cooler
+2026-08-24 21:36:36 [info     ] queue_processor.processing_submission active_searches=1 n_listings=10 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=64708
+INFO:     127.0.0.1:51036 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:36:38 [warning  ] ebay_catalog.get_product_failed epid=15022766353 status=403
+2026-08-24 21:36:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision T3600, T5600, T7600, T7610, T5610 C
+2026-08-24 21:36:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z620 2nd CPU Riser Board Heatsink & Fan
+2026-08-24 21:36:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP ProLiant BL465C G7 CPU 2 Heatsink
+2026-08-24 21:36:41 [warning  ] ebay_catalog.get_product_failed epid=14097616404 status=403
+2026-08-24 21:36:41 [debug    ] cpk_extractor.low_confidence   confidence=None title=Dell T3600, T5600, T7600, T7610 CPU 2 Heatsink
+2026-08-24 21:36:42 [warning  ] ebay_catalog.get_product_failed epid=27043488634 status=403
+2026-08-24 21:36:42 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP ProLiant BL490C G7 CPU 2 Heatsink
+2026-08-24 21:36:42 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP ProLiant BL460c Gen8 Katar Wide CPU 2 Heatsink
+2026-08-24 21:36:43 [warning  ] ebay_catalog.get_product_failed epid=22060653182 status=403
+2026-08-24 21:36:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP ProLiant BL460c Gen8 Katar Wide CPU 1 Heatsink
+INFO:     127.0.0.1:54192 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:56059 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:36:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP ProLiant XL170R Gen9 CPU 1 Heatsink
+2026-08-24 21:36:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP ProLiant XL170R Gen9 CPU 2 Heatsink
+INFO:     127.0.0.1:52106 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:36:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP ProLiant BL460c Gen8 CPU 2 Heatsink
+2026-08-24 21:36:46 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=10.2 excluded_auctions=0 new_listings=0
+2026-08-24 21:36:46 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=64708
+2026-08-24 21:36:46 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=cpu-cooler
+2026-08-24 21:36:47 [warning  ] ebay_catalog.get_product_failed epid=17067645721 status=403
+2026-08-24 21:36:48 [warning  ] ebay_catalog.get_product_failed epid=21055215778 status=403
+INFO:     127.0.0.1:62578 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:36:49 [warning  ] ebay_catalog.get_product_failed epid=12087061105 status=403
+2026-08-24 21:36:50 [warning  ] ebay_catalog.get_product_failed epid=5055644105 status=403
+2026-08-24 21:36:50 [warning  ] ebay_catalog.get_product_failed epid=24072183122 status=403
+2026-08-24 21:36:51 [warning  ] ebay_catalog.get_product_failed epid=15035053028 status=403
+2026-08-24 21:36:52 [warning  ] ebay_catalog.get_product_failed epid=15022766353 status=403
+2026-08-24 21:36:54 [warning  ] ebay_catalog.get_product_failed epid=4047395999 status=403
+2026-08-24 21:36:54 [warning  ] ebay_catalog.get_product_failed epid=4072341403 status=403
+2026-08-24 21:36:55 [warning  ] ebay_catalog.get_product_failed epid=20058459039 status=403
+2026-08-24 21:36:57 [warning  ] ebay_catalog.get_product_failed epid=25037107771 status=403
+2026-08-24 21:36:58 [warning  ] ebay_catalog.get_product_failed epid=22035210445 status=403
+2026-08-24 21:36:59 [warning  ] ebay_catalog.get_product_failed epid=28021985077 status=403
+2026-08-24 21:36:59 [warning  ] ebay_catalog.get_product_failed epid=24031977695 status=403
+INFO:     127.0.0.1:51872 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60290 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:37:01 [warning  ] ebay_catalog.get_product_failed epid=16047998159 status=403
+2026-08-24 21:37:02 [warning  ] ebay_catalog.get_product_failed epid=1223123243 status=403
+INFO:     127.0.0.1:57379 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:37:03 [warning  ] ebay_catalog.get_product_failed epid=5063752260 status=403
+2026-08-24 21:37:04 [warning  ] ebay_catalog.get_product_failed epid=4056997650 status=403
+INFO:     127.0.0.1:61461 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:37:06 [warning  ] ebay_catalog.get_product_failed epid=596722843 status=403
+2026-08-24 21:37:06 [warning  ] ebay_catalog.get_product_failed epid=20093457019 status=403
+2026-08-24 21:37:07 [warning  ] ebay_catalog.get_product_failed epid=27012667008 status=403
+2026-08-24 21:37:08 [warning  ] ebay_catalog.get_product_failed epid=28021985077 status=403
+2026-08-24 21:37:09 [warning  ] ebay_catalog.get_product_failed epid=21055215778 status=403
+2026-08-24 21:37:10 [warning  ] ebay_catalog.get_product_failed epid=18061556609 status=403
+2026-08-24 21:37:11 [warning  ] ebay_catalog.get_product_failed epid=26052471756 status=403
+2026-08-24 21:37:12 [warning  ] ebay_catalog.get_product_failed epid=23054558619 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 21:37:13 [warning  ] ebay_catalog.get_product_failed epid=8074560701 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 21:37:14 [warning  ] ebay_catalog.get_product_failed epid=26017133930 status=403
+2026-08-24 21:37:14 [warning  ] ebay_catalog.get_product_failed epid=5063752260 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 21:37:15 [warning  ] ebay_catalog.get_product_failed epid=245229045 status=403
+2026-08-24 21:37:16 [warning  ] ebay_catalog.get_product_failed epid=7034418565 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 21:37:17 [warning  ] ebay_catalog.get_product_failed epid=9074501677 status=403
+2026-08-24 21:37:20 [warning  ] ebay_catalog.get_product_failed epid=12040753445 status=403
+2026-08-24 21:37:20 [warning  ] ebay_catalog.get_product_failed epid=14031184229 status=403
+INFO:     127.0.0.1:50645 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:37:21 [warning  ] ebay_catalog.get_product_failed epid=10038985083 status=403
+INFO:     127.0.0.1:63949 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 21:37:22 [warning  ] ebay_catalog.get_product_failed epid=20039124574 status=403
+2026-08-24 21:37:22 [warning  ] ebay_catalog.get_product_failed epid=12039141953 status=403
+2026-08-24 21:37:23 [warning  ] ebay_catalog.get_product_failed epid=2350744644 status=403
+2026-08-24 21:37:25 [warning  ] ebay_catalog.get_product_failed epid=28046500692 status=403
+2026-08-24 21:37:27 [warning  ] ebay_catalog.get_product_failed epid=17091132811 status=403
+2026-08-24 21:37:27 [warning  ] ebay_catalog.get_product_failed epid=8035053517 status=403
+2026-08-24 21:37:28 [warning  ] ebay_catalog.get_product_failed epid=596722843 status=403
+2026-08-24 21:37:30 [warning  ] ebay_catalog.get_product_failed epid=4064073857 status=403
+2026-08-24 21:37:30 [warning  ] ebay_catalog.get_product_failed epid=12080430099 status=403
+2026-08-24 21:37:31 [warning  ] ebay_catalog.get_product_failed epid=21073865366 status=403
+2026-08-24 21:37:33 [warning  ] ebay_catalog.get_product_failed epid=27041987087 status=403
+2026-08-24 21:37:40 [warning  ] ebay_catalog.get_product_failed epid=18042422571 status=403
+2026-08-24 21:37:40 [warning  ] ebay_catalog.get_product_failed epid=3072105977 status=403
+2026-08-24 21:37:40 [warning  ] ebay_catalog.get_product_failed epid=4050622593 status=403
+2026-08-24 21:37:41 [warning  ] ebay_catalog.get_product_failed epid=11049336609 status=403
+2026-08-24 21:37:42 [warning  ] ebay_catalog.get_product_failed epid=8051118057 status=403
+2026-08-24 21:37:43 [warning  ] ebay_catalog.get_product_failed epid=8088217145 status=403
+2026-08-24 21:37:43 [warning  ] ebay_catalog.get_product_failed epid=14057273295 status=403
+2026-08-24 21:37:44 [warning  ] ebay_catalog.get_product_failed epid=5090310525 status=403
