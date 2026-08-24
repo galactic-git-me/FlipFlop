@@ -943,13 +943,11 @@ function SoldMarketTab({ data, insight, loading, error, refreshingInsight, onRet
   ];
   const [soldCategory, setSoldCategory] = useState<SoldComponentCategory>("cpu");
   const [soldRows, setSoldRows] = useState<SoldMarketListing[]>([]);
-  const [soldRowsLoading, setSoldRowsLoading] = useState(false);
+  const [soldRowsLoading, setSoldRowsLoading] = useState(true);
   const [soldRowsError, setSoldRowsError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    setSoldRowsLoading(true);
-    setSoldRowsError(null);
     api.demand.soldMarketListings(soldCategory, 90, 250)
       .then((rows) => { if (!cancelled) setSoldRows(rows); })
       .catch((e: Error) => { if (!cancelled) { setSoldRows([]); setSoldRowsError(e.message); } })
@@ -1052,7 +1050,11 @@ function SoldMarketTab({ data, insight, loading, error, refreshingInsight, onRet
           <select
             id="sold-component-category"
             value={soldCategory}
-            onChange={(event) => setSoldCategory(event.target.value as SoldComponentCategory)}
+            onChange={(event) => {
+              setSoldRowsLoading(true);
+              setSoldRowsError(null);
+              setSoldCategory(event.target.value as SoldComponentCategory);
+            }}
             className="cursor-pointer rounded-md border border-white/15 bg-[#0a1628] px-3 py-2 text-xs text-slate-200 outline-none transition-colors hover:border-emerald-300/40 focus-visible:ring-2 focus-visible:ring-emerald-300"
           >
             {componentOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
