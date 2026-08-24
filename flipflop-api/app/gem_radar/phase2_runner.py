@@ -43,7 +43,7 @@ class Phase2Result:
     classification_counts: dict[str, int] = field(default_factory=dict)
 
 
-async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
+async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews: bool = True) -> Phase2Result:
     policy = await load_opportunity_policy(db)
 
     result = await db.execute(
@@ -114,6 +114,19 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
 
     favourites = (await db.execute(select(Favourite))).scalars().all()
     preferred_keys = set((await db.execute(select(PreferredComponent.component_key))).scalars().all())
+    existing_reviews = {
+        listing_id: (average, count)
+        for listing_id, average, count in (
+            await db.execute(
+                select(
+                    GemRadarScoredListing.listing_id,
+                    GemRadarScoredListing.review_average_rating,
+                    GemRadarScoredListing.review_count,
+                )
+            )
+        ).all()
+        if average is not None or count is not None
+    }
 
     await db.execute(text("DELETE FROM gem_radar_scored_listings WHERE search_run_id = :run_id"), {"run_id": SEARCH_RUN_ID})
 
@@ -197,9 +210,8 @@ async def run_phase2_classification(db: AsyncSession) -> Phase2Result:
         # cached, see services/ebay_catalog.py) — only worth paying for on
         # the tier the user actually acts on. OK_DEAL/AVERAGE_DEAL/POOR_DEAL
         # listings never fetch it.
-        review_average_rating: float | None = None
-        review_count: int | None = None
-        if classification in ("GEM", "SUPER_GEM") and epid:
+        review_average_rating, review_count = existing_reviews.get(listing_id, (None, None))
+        if enrich_product_reviews and classification in ("GEM", "SUPER_GEM") and epid:
             reviews = await get_product_reviews(epid)
             review_average_rating = reviews.average_rating
             review_count = reviews.review_count

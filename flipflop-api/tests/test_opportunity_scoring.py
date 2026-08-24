@@ -88,7 +88,9 @@ def test_preliminary_cohort_is_evidence_limited():
     )
     assert result.classification == "EVIDENCE_LIMITED_DEAL"
     assert result.decision == "INVESTIGATE"
-    assert not result.eligible
+    # Eligibility means no hard identity veto; evidence still prevents an
+    # actionable buy decision through classification/decision.
+    assert result.eligible
 
 
 def test_component_does_not_repeat_whole_build_fulfilment_costs():
@@ -108,11 +110,11 @@ def test_component_does_not_repeat_whole_build_fulfilment_costs():
 
 def test_category_economics_preserve_higher_gpu_and_build_cash_hurdles():
     policy = OpportunityPolicy()
-    assert category_economics("cpu", policy).gem_profit == 5
-    assert category_economics("gpu", policy).gem_profit == 20
-    assert category_economics("cpu", policy).super_roi_pct == 35
-    assert category_economics("motherboard", policy).super_roi_pct == 30
-    assert category_economics("gpu", policy).super_roi_pct == 25
+    assert category_economics("cpu", policy).gem_profit == 3
+    assert category_economics("gpu", policy).gem_profit == 12
+    assert category_economics("cpu", policy).super_roi_pct == 25
+    assert category_economics("motherboard", policy).super_roi_pct == 22
+    assert category_economics("gpu", policy).super_roi_pct == 20
     assert category_economics("whole_pc", policy).gem_profit == policy.gem_profit
 
 

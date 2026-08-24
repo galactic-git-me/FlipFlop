@@ -21,7 +21,10 @@ from app.gem_radar.phase2_runner import run_phase2_classification
 async def main():
     try:
         async with AsyncSessionLocal() as db:
-            result = await run_phase2_classification(db)
+            # A retrospective policy rescore must be deterministic and local;
+            # retain stored review enrichment without making one eBay request
+            # per newly promoted GEM. Live sweep-triggered runs still enrich.
+            result = await run_phase2_classification(db, enrich_product_reviews=False)
     except Exception as exc:
         print(f"Error: {exc}")
         import traceback
