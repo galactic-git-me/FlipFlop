@@ -14,6 +14,7 @@ import httpx
 from bs4 import BeautifulSoup
 from datetime import datetime
 from dataclasses import dataclass
+from uuid import uuid4
 from fake_useragent import UserAgent
 
 from app.database import AsyncSessionLocal
@@ -208,8 +209,21 @@ async def _playbook_extra_themes() -> list[dict]:
 
 
 async def run_cases_swarm(mode: str = "main") -> dict:
-    log.info("cases_swarm.start")
-    stats = {"found": 0, "upserted": 0, "errors": 0}
+    catalogue_run_id = f"cases-{uuid4()}"
+    log.info("cases_swarm.start", run_id=catalogue_run_id, mode=mode)
+    stats = {
+        "run_id": catalogue_run_id,
+        "found": 0,
+        "upserted": 0,
+        "errors": 0,
+        "sources": {},
+    }
+    for source in SOURCES:
+        record_term_result(
+            source_name=f"Cases:{source['name']}",
+            term="__run_started__",
+            run_id=catalogue_run_id,
+        )
 
     max_terms = max(1, int(os.getenv("CASES_MAX_TERMS", "20")))
 
@@ -337,7 +351,13 @@ async def run_cases_swarm(mode: str = "main") -> dict:
                     source_name=f"Cases:{source['name']}",
                     term=term,
                     error="playwright.chromium_not_installed",
+                    run_id=catalogue_run_id,
                 )
+            stats["sources"][source["name"]] = {
+                "status": "failed",
+                "found": 0,
+                "errors": ["playwright.chromium_not_installed"],
+            }
     source_batches: list[list[dict]] = await asyncio.gather(
         *[_scrape_source_seq(source) for source in enabled_sources],
         return_exceptions=False,
@@ -354,6 +374,7 @@ async def run_cases_swarm(mode: str = "main") -> dict:
                     source_name=f"Cases:{source_name}",
                     term=term,
                     error=err,
+                    run_id=catalogue_run_id,
                 )
                 log.error("cases.scrape.error", source=source_name, term=term, error=err)
             else:
@@ -365,7 +386,15 @@ async def run_cases_swarm(mode: str = "main") -> dict:
                     term=term,
                     found=raw_found,
                     new=saved_count,
+                    run_id=catalogue_run_id,
                 )
+
+            source_stats = stats["sources"].setdefault(
+                source_name, {"status": "success", "found": 0, "errors": []}
+            )
+            source_stats["found"] += len(r.get("cases") or [])
+            if err:
+                source_stats["errors"].append(err)
 
     async with AsyncSessionLocal() as db:
         for r in scrape_results:
@@ -387,6 +416,7 @@ async def run_cases_swarm(mode: str = "main") -> dict:
                     source_name=f"Cases:{source_name}",
                     term=term,
                     error=str(exc),
+                    run_id=catalogue_run_id,
                 )
                 log.error("cases.upsert.error", source=source_name, term=term, error=str(exc))
 
@@ -402,6 +432,29 @@ async def run_cases_swarm(mode: str = "main") -> dict:
         stats["errors"] += 1
         log.error("cases_swarm.bestsellers_error", error=str(exc))
 
+    for source in SOURCES:
+        source_stats = stats["sources"].setdefault(
+            source["name"],
+            {"status": "failed", "found": 0, "errors": ["source_not_run"]},
+        )
+        if source_stats["found"] <= 0:
+            source_stats["status"] = "failed"
+            if not source_stats.get("errors"):
+                source_stats["errors"] = ["zero_results"]
+        elif source_stats.get("errors"):
+            source_stats["status"] = "partial"
+        else:
+            source_stats["status"] = "success"
+    stats["ok"] = all(s["status"] == "success" for s in stats["sources"].values())
+    if not stats["ok"]:
+        stats["reason"] = "one_or_more_case_sources_failed"
+    for source_name, source_stats in stats["sources"].items():
+        record_term_result(
+            source_name=f"Cases:{source_name}",
+            term="__run_finished__",
+            error=(source_stats.get("errors") or [None])[0] if source_stats["status"] != "success" else None,
+            run_id=catalogue_run_id,
+        )
     log.info("cases_swarm.done", **stats)
     return stats
 

@@ -9,6 +9,7 @@ import {
   History,
   ListChecks,
   Loader2,
+  PackageSearch,
   RefreshCw,
   TableProperties,
   XCircle,
@@ -42,7 +43,22 @@ interface ScanSession {
   terms: Map<string, TermResult>;
 }
 
-type PageTab = "summary" | "terms";
+interface CaseSourceResult {
+  found: number;
+  terms: number;
+  errors: string[];
+  completed: boolean;
+}
+
+interface CaseSourceRun {
+  runId: string;
+  startedAt: string;
+  finishedAt: string;
+  completed: boolean;
+  sources: Record<"Amazon" | "Overclockers", CaseSourceResult>;
+}
+
+type PageTab = "summary" | "terms" | "cases";
 type MatrixMetric = "listings" | "duration" | "completed" | "vendors";
 
 const SESSION_GAP_MS = 10 * 60 * 1000;
@@ -210,8 +226,18 @@ async function fetchRunHistory(): Promise<ScanRunHistoryRecord[]> {
   return response.json();
 }
 
+async function fetchCaseRunHistory(): Promise<CaseSourceRun[]> {
+  const response = await fetch("/api/search-telemetry/case-runs?limit=100", {
+    cache: "no-store",
+    signal: AbortSignal.timeout(15_000),
+  });
+  if (!response.ok) throw new Error(`Case supplier history request failed (${response.status})`);
+  return response.json();
+}
+
 export default function RunHistoryPage() {
   const [records, setRecords] = useState<ScanRunHistoryRecord[]>([]);
+  const [caseRuns, setCaseRuns] = useState<CaseSourceRun[]>([]);
   const [activeTab, setActiveTab] = useState<PageTab>("summary");
   const [metric, setMetric] = useState<MatrixMetric>("listings");
   const [loading, setLoading] = useState(true);
@@ -221,7 +247,9 @@ export default function RunHistoryPage() {
     setLoading(true);
     setError(null);
     try {
-      setRecords(await fetchRunHistory());
+      const [history, supplierRuns] = await Promise.all([fetchRunHistory(), fetchCaseRunHistory()]);
+      setRecords(history);
+      setCaseRuns(supplierRuns);
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : "Run history could not be loaded");
     } finally {
@@ -231,9 +259,12 @@ export default function RunHistoryPage() {
 
   useEffect(() => {
     let cancelled = false;
-    fetchRunHistory()
-      .then((history) => {
-        if (!cancelled) setRecords(history);
+    Promise.all([fetchRunHistory(), fetchCaseRunHistory()])
+      .then(([history, supplierRuns]) => {
+        if (!cancelled) {
+          setRecords(history);
+          setCaseRuns(supplierRuns);
+        }
       })
       .catch((loadError: unknown) => {
         if (!cancelled) {
@@ -332,6 +363,15 @@ export default function RunHistoryPage() {
             >
               <TableProperties className="h-4 w-4" /> By Search Term
             </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "cases"}
+              onClick={() => setActiveTab("cases")}
+              className={`inline-flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 ${activeTab === "cases" ? "bg-blue-500 text-white" : "text-slate-400 hover:bg-white/[0.06] hover:text-slate-200"}`}
+            >
+              <PackageSearch className="h-4 w-4" /> Case Suppliers
+            </button>
           </div>
 
           {activeTab === "terms" && (
@@ -366,7 +406,7 @@ export default function RunHistoryPage() {
           <div className="grid flex-1 place-items-center text-sm text-slate-400"><span className="inline-flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> Loading run history…</span></div>
         ) : error ? (
           <div className="m-4 rounded-xl border border-red-500/30 bg-red-950/30 p-4 text-sm text-red-200">{error}</div>
-        ) : sessions.length === 0 ? (
+        ) : sessions.length === 0 && activeTab !== "cases" ? (
           <div className="grid flex-1 place-items-center p-6 text-center text-sm text-slate-400">No recorded sourcing runs yet.</div>
         ) : activeTab === "summary" ? (
           <div role="tabpanel" className="min-h-0 flex-1 overflow-auto">
@@ -398,7 +438,7 @@ export default function RunHistoryPage() {
               </tbody>
             </table>
           </div>
-        ) : (
+        ) : activeTab === "terms" ? (
           <div role="tabpanel" className="min-h-0 flex-1 overflow-auto">
             <table className="min-w-max border-separate border-spacing-0 text-left text-xs">
               <thead className="sticky top-0 z-20 bg-slate-900/95 text-slate-400 backdrop-blur">
@@ -422,6 +462,42 @@ export default function RunHistoryPage() {
                     ))}
                   </tr>
                 ))}
+              </tbody>
+            </table>
+          </div>
+        ) : caseRuns.length === 0 ? (
+          <div className="grid flex-1 place-items-center p-6 text-center text-sm text-slate-400">
+            No case-supplier runs have been recorded yet. The next scheduled or manual Cases Catalogue run will appear here.
+          </div>
+        ) : (
+          <div role="tabpanel" className="min-h-0 flex-1 overflow-auto">
+            <table className="w-full min-w-[900px] border-collapse text-left text-sm">
+              <thead className="sticky top-0 z-10 bg-slate-900/95 text-xs uppercase tracking-wide text-slate-400 backdrop-blur">
+                <tr>
+                  <th className="px-4 py-3 font-semibold">Date/time</th>
+                  <th className="px-4 py-3 font-semibold">Overall</th>
+                  <th className="px-4 py-3 font-semibold">Amazon</th>
+                  <th className="px-4 py-3 font-semibold">Overclockers</th>
+                  <th className="px-4 py-3 font-semibold">Duration</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/[0.06]">
+                {caseRuns.map((run) => {
+                  const started = new Date(run.startedAt).getTime();
+                  const finished = new Date(run.finishedAt).getTime();
+                  return (
+                    <tr key={run.runId} className="transition-colors duration-150 hover:bg-white/[0.04]">
+                      <td className="whitespace-nowrap px-4 py-3 font-mono text-xs text-slate-200">{formatDateTime(started)}</td>
+                      <td className="px-4 py-3">{run.completed ? <span className="inline-flex items-center gap-1.5 text-emerald-300"><CheckCircle2 className="h-4 w-4" /> Both succeeded</span> : <span className="inline-flex items-center gap-1.5 text-red-300"><XCircle className="h-4 w-4" /> Attention needed</span>}</td>
+                      {(["Amazon", "Overclockers"] as const).map((supplier) => {
+                        const result = run.sources[supplier];
+                        const detail = result.errors.length ? result.errors.join(", ") : `${result.terms} search${result.terms === 1 ? "" : "es"}`;
+                        return <td key={supplier} className="px-4 py-3" title={detail}>{result.completed ? <span className="inline-flex items-center gap-1.5 text-emerald-300"><CheckCircle2 className="h-4 w-4" /> {result.found.toLocaleString()} cases</span> : <span className="inline-flex items-center gap-1.5 text-red-300"><XCircle className="h-4 w-4" /> {result.found.toLocaleString()} · {detail}</span>}</td>;
+                      })}
+                      <td className="whitespace-nowrap px-4 py-3 text-slate-300">{formatDuration(Math.max(0, (finished - started) / 1000))}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
