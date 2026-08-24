@@ -1,12 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   BarChart, Bar, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
   LabelList,
 } from "recharts";
 import { RefreshCw, TrendingUp, TrendingDown, Minus, ExternalLink, BrainCircuit, Database, Activity } from "lucide-react";
-import { api } from "@/lib/api";
+import { api, type BuildComponent } from "@/lib/api";
 import { ClassificationBadge } from "@/components/classification-badge";
 import type { DemandCategory, AuctionIntelItem, DemandSummary, SoldMarketDemand, SoldMarketInsight, SoldMarketListing, SoldComponentCategory } from "@/lib/types";
 
@@ -376,8 +377,11 @@ function ExternalSignalsTab({ data, loading, error, onRetry }: {
 function GoogleTrendsView({ data }: {
   data: RichSignals["google_trends"];
 }) {
+  const router = useRouter();
   const queries = data.queries;
   const [selectedQuery, setSelectedQuery] = useState<string>(queries[0] ?? "");
+  const [creatingBuildFor, setCreatingBuildFor] = useState<string | null>(null);
+  const [createBuildError, setCreateBuildError] = useState<string | null>(null);
 
   const tsData = useMemo(
     () => (selectedQuery && data.timeseries[selectedQuery]) ? data.timeseries[selectedQuery] : [],
@@ -388,6 +392,54 @@ function GoogleTrendsView({ data }: {
     () => (selectedQuery && data.geo[selectedQuery]) ? data.geo[selectedQuery].slice(0, 15) : [],
     [data.geo, selectedQuery],
   );
+
+  const buildOpportunities = useMemo(() => {
+    const configs: Record<string, { useCase: string; budget: number; specification: string }> = {
+      "ai pc": { useCase: "ai_workstation", budget: 2000, specification: "Strong GPU, 64GB+ RAM and upgrade headroom" },
+      "workstation pc": { useCase: "workstation", budget: 1800, specification: "High-core CPU, 64GB RAM and fast NVMe storage" },
+      "budget gaming pc": { useCase: "budget", budget: 700, specification: "Best-value 1080p gaming combination" },
+      "gaming pc": { useCase: "gaming", budget: 1200, specification: "Balanced 1440p CPU and GPU combination" },
+      "custom pc": { useCase: "gaming", budget: 1400, specification: "Flexible performance-led custom build" },
+    };
+    return queries.filter((query) => configs[query.toLowerCase()]).map((query) => {
+      const series = data.timeseries[query] ?? [];
+      const latest = series.at(-1)?.value ?? 0;
+      const previous = series.length > 1 ? series[series.length - 2]!.value : latest;
+      return { query, latest, change: latest - previous, ...configs[query.toLowerCase()]! };
+    }).sort((a, b) => b.latest - a.latest);
+  }, [data.timeseries, queries]);
+
+  const createDemandBuild = useCallback(async (opportunity: typeof buildOpportunities[number]) => {
+    setCreatingBuildFor(opportunity.query);
+    setCreateBuildError(null);
+    try {
+      const playbooks = await api.buildWizard.playbooks();
+      const playbook = playbooks.find((item) => item.target_use_case === opportunity.useCase)
+        ?? playbooks.find((item) => item.status === "active") ?? playbooks[0];
+      if (!playbook) throw new Error("No active build playbook is available.");
+      const generated = await api.buildWizard.generate({
+        playbook_id: playbook.id, budget: opportunity.budget,
+        user_notes: `Demand-led build for '${opportunity.query}'. Use current live listings and choose the best compatible combination.`,
+        priorities: ["Demand fit", "Compatibility", "Maximum profit"],
+        constraints: [`Total component cost no more than £${opportunity.budget}`],
+      });
+      const best = generated.builds.find((build) => build.valid) ?? generated.builds[0];
+      if (!best) throw new Error("No compatible listing combination was found.");
+      const components: BuildComponent[] = [{
+        slot: "Base PC", name: best.base_spec, price_paid: best.base_cost, source: "manual",
+        listing_url: best.base_listing_url || best.listing_url, image_url: best.base_image_url, purchased: false,
+      }, ...best.upgrades.map((upgrade) => ({
+        slot: upgrade.role, name: upgrade.item, price_paid: upgrade.cost_estimate, source: "manual" as const,
+        listing_url: upgrade.listing_url, image_url: upgrade.image_url, purchased: false,
+      }))];
+      const draft = await api.manualBuilds.create(`${opportunity.query} · demand suggested`);
+      await api.manualBuilds.patch(draft.id, { components });
+      router.push(`/builds/${draft.id}`);
+    } catch (error) {
+      setCreateBuildError(error instanceof Error ? error.message : "Unable to create the suggested build.");
+      setCreatingBuildFor(null);
+    }
+  }, [router]);
 
   if (queries.length === 0) return <Empty label="No Google Trends data — click Refresh." />;
 
@@ -503,6 +555,33 @@ function GoogleTrendsView({ data }: {
           </tbody>
         </table>
       </div>
+
+      {buildOpportunities.length > 0 && (
+        <section className="overflow-hidden rounded-lg border border-emerald-300/15 bg-[#070e1a]" aria-labelledby="demand-builds-heading">
+          <div className="border-b border-white/[0.07] px-4 py-3">
+            <h3 id="demand-builds-heading" className="text-sm font-bold text-slate-200">Demand-suggested builds</h3>
+            <p className="mt-1 text-[11px] text-slate-500">Creates a draft from the highest-ranked compatible live-listing combination. Nothing is purchased automatically.</p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[760px] text-left text-xs">
+              <thead className="bg-white/[0.025] text-[10px] uppercase tracking-wider text-slate-500"><tr><th className="px-3 py-2.5">Build opportunity</th><th className="px-3 py-2.5">Trend</th><th className="px-3 py-2.5">Movement</th><th className="px-3 py-2.5">Target specification</th><th className="px-3 py-2.5">Parts budget</th><th className="px-3 py-2.5">Action</th></tr></thead>
+              <tbody className="divide-y divide-white/[0.06]">
+                {buildOpportunities.map((opportunity) => (
+                  <tr key={opportunity.query} className="transition-colors hover:bg-white/[0.025]">
+                    <td className="px-3 py-3 font-semibold capitalize text-slate-200">{opportunity.query}</td>
+                    <td className="px-3 py-3 font-mono text-emerald-300">{Math.round(opportunity.latest)}</td>
+                    <td className={`px-3 py-3 font-mono ${opportunity.change > 0 ? "text-emerald-300" : opportunity.change < 0 ? "text-red-300" : "text-slate-500"}`}>{opportunity.change > 0 ? "+" : ""}{Math.round(opportunity.change)}</td>
+                    <td className="px-3 py-3 text-slate-400">{opportunity.specification}</td>
+                    <td className="px-3 py-3 font-mono text-slate-300">£{opportunity.budget.toLocaleString()}</td>
+                    <td className="px-3 py-3"><button type="button" disabled={creatingBuildFor !== null} onClick={() => void createDemandBuild(opportunity)} className="cursor-pointer whitespace-nowrap rounded-md border border-emerald-300/25 bg-emerald-300/[0.07] px-3 py-1.5 font-semibold text-emerald-200 transition-colors hover:bg-emerald-300/[0.14] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 disabled:cursor-wait disabled:opacity-50">{creatingBuildFor === opportunity.query ? "Finding best combo…" : "Create best build"}</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {createBuildError && <div role="alert" className="border-t border-red-300/15 bg-red-400/[0.06] px-4 py-2 text-xs text-red-200">{createBuildError}</div>}
+        </section>
+      )}
     </div>
   );
 }
@@ -1092,6 +1171,7 @@ function SoldMarketTab({ data, insight, loading, error, refreshingInsight, onRet
       <p className="rounded-md border border-amber-400/15 bg-amber-400/[0.05] px-3 py-2 text-xs leading-5 text-amber-100/70">{data.methodology}</p>
     </div>
   );
+
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
