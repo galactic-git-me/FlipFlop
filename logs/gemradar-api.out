@@ -16964,3 +16964,12 @@ INFO:     127.0.0.1:63949 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 In
 2026-08-24 21:37:43 [warning  ] ebay_catalog.get_product_failed epid=8088217145 status=403
 2026-08-24 21:37:43 [warning  ] ebay_catalog.get_product_failed epid=14057273295 status=403
 2026-08-24 21:37:44 [warning  ] ebay_catalog.get_product_failed epid=5090310525 status=403
+2026-08-24 21:38:10 [info     ] phase2_trigger.phase2_complete classified=35214 total_cpk_tagged=35214 unsettled=29703
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
