@@ -1,4 +1,4 @@
-from app.services.browser_pool import managed_playwright
+from app.services.browser_pool import BACKGROUND_HEADED_ARGS, managed_playwright
 import asyncio
 import os
 import sys
@@ -127,7 +127,8 @@ async def run_antibot_preflight() -> None:
                         log.info("runtime.preflight.antibot.cdp_attached", cdp_url=cdp_url)
                     else:
                         browser = await p.chromium.launch(
-                            headless=False, args=["--no-sandbox", "--disable-dev-shm-usage"]
+                            headless=False,
+                            args=["--no-sandbox", "--disable-dev-shm-usage", *BACKGROUND_HEADED_ARGS],
                         )
                         context = await browser.new_context()
                     for url in CHALLENGE_URLS:

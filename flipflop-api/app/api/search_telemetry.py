@@ -72,22 +72,25 @@ async def get_case_source_runs(limit: int = 50):
         run["finishedAt"] = max(run["finishedAt"], row.ts)
         source_name = str(row.source or "").removeprefix("Cases:")
         source = run["sources"].setdefault(source_name, {
-            "found": 0, "terms": 0, "errors": [],
+            "found": 0, "terms": 0, "errors": [], "finished": False,
         })
         source["found"] += int(row.found or 0)
         if not str(row.term or "").startswith("__run_"):
             source["terms"] += 1
         if row.error:
             source["errors"].append(str(row.error))
+        if row.term == "__run_finished__":
+            source["finished"] = True
 
     output = []
     for run in grouped.values():
         for expected in ("Amazon", "Overclockers"):
             source = run["sources"].setdefault(expected, {
-                "found": 0, "terms": 0, "errors": ["source_not_run"],
+                "found": 0, "terms": 0, "errors": [], "finished": False,
             })
-            source["completed"] = source["found"] > 0 and not source["errors"]
+            source["completed"] = source["finished"] and source["found"] > 0 and not source["errors"]
         run["completed"] = all(s["completed"] for s in run["sources"].values())
+        run["status"] = "running" if not all(s["finished"] for s in run["sources"].values()) else ("success" if run["completed"] else "failed")
         run["startedAt"] = run["startedAt"].isoformat()
         run["finishedAt"] = run["finishedAt"].isoformat()
         output.append(run)

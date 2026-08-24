@@ -1,4 +1,4 @@
-from app.services.browser_pool import managed_playwright
+from app.services.browser_pool import BACKGROUND_HEADED_ARGS, managed_playwright
 """
 PC Cases Swarm — runs daily.
 Searches for PC cases (new and used) across eBay UK, Amazon UK, Temu, AliExpress, and Etsy.
@@ -1049,7 +1049,10 @@ async def _scrape_overclockers_once() -> list[RawCase]:
     async with managed_playwright(engine="patchright") as p:
         try:
             browser = await p.chromium.launch(
-                headless=False,  # MUST be False for Overclockers - headless blocks product rendering
+                # Cloudflare blocks true headless mode. Keep the required real
+                # browser minimized/off-screen so it cannot steal user focus.
+                headless=False,
+                args=BACKGROUND_HEADED_ARGS,
                 proxy=playwright_proxy_config(),
             )
             context = await browser.new_context(

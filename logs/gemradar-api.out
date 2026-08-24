@@ -10869,3 +10869,23 @@ INFO:     127.0.0.1:56237 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 In
 2026-08-24 17:53:09 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=14 ingested=0 submission_id=64141
 2026-08-24 17:53:09 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=pc-case-chassis
 2026-08-24 17:53:09 [info     ] queue_processor.processing_submission active_searches=2 n_listings=48 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=64142
+2026-08-24 17:53:12 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=43 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=47 elapsed_s=62.7 excluded_auctions=0 new_listings=0
+2026-08-24 17:53:12 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=43 ingested=0 submission_id=64148
+2026-08-24 17:53:12 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=lian-li-pc-case
+2026-08-24 17:53:12 [info     ] queue_processor.processing_submission active_searches=2 n_listings=3 query=Lian Li case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=lian-li-pc-case submission_id=64149
+2026-08-24 17:53:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HAVN HS420 Premium White ATX PC Case
+2026-08-24 17:53:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HAVN BF360 Flow Premium White ATX PC Case
+2026-08-24 17:53:22 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=39 cross_run_dupes_price_updated=5 cross_run_dupes_unchanged_price=43 elapsed_s=12.6 excluded_auctions=0 new_listings=0
+2026-08-24 17:53:22 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=39 ingested=0 submission_id=64142
+2026-08-24 17:53:22 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=pc-case-chassis
+2026-08-24 17:53:24 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT LEVEL UP Ryzen 5 5600G with AMD VEGA Graphi
+2026-08-24 17:53:25 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Level UP AMD Ryzen 8500G Six Core Radeon 74
+2026-08-24 17:53:25 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=1 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=3 elapsed_s=12.7 excluded_auctions=0 new_listings=0
+2026-08-24 17:53:25 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=1 ingested=0 submission_id=64149
+2026-08-24 17:53:25 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=lian-li-pc-case
+2026-08-24 17:53:25 [info     ] queue_processor.processing_submission active_searches=1 n_listings=48 query=Lian Li case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=lian-li-pc-case submission_id=64150
+2026-08-24 17:53:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lian Li ARGB and USB Module for Lancool 216 White
+2026-08-24 17:53:29 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=42 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=48 elapsed_s=3.7 excluded_auctions=0 new_listings=0
+2026-08-24 17:53:29 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=42 ingested=0 submission_id=64150
+2026-08-24 17:53:29 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=lian-li-pc-case
+2026-08-24 17:53:30 [info     ] phase2_trigger.phase2_complete classified=35078 total_cpk_tagged=35078 unsettled=29623

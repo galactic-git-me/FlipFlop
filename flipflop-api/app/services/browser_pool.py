@@ -37,6 +37,15 @@ log = structlog.get_logger(__name__)
 #   • You are certain only ONE backend process is running
 MAX_CONCURRENT_BROWSERS: int = 1
 
+# Some anti-bot sites reject Chromium's true headless mode. When a real
+# window is unavoidable, keep it minimized and off the user's working area.
+# --disable-backgrounding-occluded-windows preserves rendering while hidden.
+BACKGROUND_HEADED_ARGS = [
+    "--start-minimized",
+    "--window-position=-32000,-32000",
+    "--disable-backgrounding-occluded-windows",
+]
+
 # Lazily created so it binds to the correct running event loop.
 _sem: asyncio.Semaphore | None = None
 

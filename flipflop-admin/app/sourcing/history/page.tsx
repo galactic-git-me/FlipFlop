@@ -48,6 +48,7 @@ interface CaseSourceResult {
   terms: number;
   errors: string[];
   completed: boolean;
+  finished: boolean;
 }
 
 interface CaseSourceRun {
@@ -55,6 +56,7 @@ interface CaseSourceRun {
   startedAt: string;
   finishedAt: string;
   completed: boolean;
+  status: "running" | "success" | "failed";
   sources: Record<"Amazon" | "Overclockers", CaseSourceResult>;
 }
 
@@ -488,11 +490,11 @@ export default function RunHistoryPage() {
                   return (
                     <tr key={run.runId} className="transition-colors duration-150 hover:bg-white/[0.04]">
                       <td className="whitespace-nowrap px-4 py-3 font-mono text-xs text-slate-200">{formatDateTime(started)}</td>
-                      <td className="px-4 py-3">{run.completed ? <span className="inline-flex items-center gap-1.5 text-emerald-300"><CheckCircle2 className="h-4 w-4" /> Both succeeded</span> : <span className="inline-flex items-center gap-1.5 text-red-300"><XCircle className="h-4 w-4" /> Attention needed</span>}</td>
+                      <td className="px-4 py-3">{run.status === "running" ? <span className="inline-flex items-center gap-1.5 text-blue-300"><Loader2 className="h-4 w-4 animate-spin" /> Running</span> : run.completed ? <span className="inline-flex items-center gap-1.5 text-emerald-300"><CheckCircle2 className="h-4 w-4" /> Both succeeded</span> : <span className="inline-flex items-center gap-1.5 text-red-300"><XCircle className="h-4 w-4" /> Attention needed</span>}</td>
                       {(["Amazon", "Overclockers"] as const).map((supplier) => {
                         const result = run.sources[supplier];
                         const detail = result.errors.length ? result.errors.join(", ") : `${result.terms} search${result.terms === 1 ? "" : "es"}`;
-                        return <td key={supplier} className="px-4 py-3" title={detail}>{result.completed ? <span className="inline-flex items-center gap-1.5 text-emerald-300"><CheckCircle2 className="h-4 w-4" /> {result.found.toLocaleString()} cases</span> : <span className="inline-flex items-center gap-1.5 text-red-300"><XCircle className="h-4 w-4" /> {result.found.toLocaleString()} · {detail}</span>}</td>;
+                        return <td key={supplier} className="px-4 py-3" title={detail}>{!result.finished ? <span className="inline-flex items-center gap-1.5 text-blue-300"><Loader2 className="h-4 w-4 animate-spin" /> Pending</span> : result.completed ? <span className="inline-flex items-center gap-1.5 text-emerald-300"><CheckCircle2 className="h-4 w-4" /> {result.found.toLocaleString()} cases</span> : <span className="inline-flex items-center gap-1.5 text-red-300"><XCircle className="h-4 w-4" /> {result.found.toLocaleString()} · {detail}</span>}</td>;
                       })}
                       <td className="whitespace-nowrap px-4 py-3 text-slate-300">{formatDuration(Math.max(0, (finished - started) / 1000))}</td>
                     </tr>
