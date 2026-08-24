@@ -1915,6 +1915,58 @@ interface ScanRunHistory {
   occurredAt: string;
 }
 
+const SCAN_SESSION_GAP_MS = 10 * 60 * 1000;
+const FALLBACK_VENDOR_COLORS = ["#06b6d4", "#84cc16", "#ec4899", "#a855f7"];
+
+function groupScanHistoryIntoSessions(runs: ScanRunHistory[]) {
+  const validRuns = runs
+    .map((run) => ({ ...run, timestamp: new Date(run.occurredAt).getTime() }))
+    .filter((run) => Number.isFinite(run.timestamp))
+    .sort((a, b) => a.timestamp - b.timestamp);
+  const sessions: typeof validRuns[] = [];
+
+  for (const run of validRuns) {
+    const current = sessions.at(-1);
+    const previous = current?.at(-1);
+    if (!current || !previous || run.timestamp - previous.timestamp > SCAN_SESSION_GAP_MS) {
+      sessions.push([run]);
+    } else {
+      current.push(run);
+    }
+  }
+
+  return sessions.map((session, sessionIndex) => {
+    const startedAt = session[0].timestamp;
+    const vendorTotals: Record<string, number> = {};
+
+    for (const run of session) {
+      const vendors = run.vendors.length > 0 ? run.vendors : ["unknown"];
+      // Current history records contain one vendor. If an older record
+      // combines vendors, divide its collective result without inflating the
+      // session total.
+      const baseShare = Math.floor(run.totalListingsFound / vendors.length);
+      let remainder = run.totalListingsFound % vendors.length;
+      for (const vendor of vendors) {
+        vendorTotals[vendor] = (vendorTotals[vendor] ?? 0) + baseShare + (remainder-- > 0 ? 1 : 0);
+      }
+    }
+
+    return {
+      sessionId: sessionIndex,
+      occurredAtLabel: new Date(startedAt).toLocaleString(undefined, {
+        day: "numeric",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      runBy: session.every((run) => run.runBy === session[0].runBy) ? session[0].runBy : "Mixed",
+      searchCount: session.length,
+      totalListings: session.reduce((total, run) => total + run.totalListingsFound, 0),
+      ...vendorTotals,
+    };
+  });
+}
+
 function ScanRunsOverTimeChart() {
   const [runs, setRuns] = useState<ScanRunHistory[]>([]);
   const [loading, setLoading] = useState(true);
@@ -1922,7 +1974,7 @@ function ScanRunsOverTimeChart() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/gem-radar/scan-run-history?limit=100", {
+    fetch("/api/gem-radar/scan-run-history?limit=500", {
       cache: "no-store",
       signal: AbortSignal.timeout(15_000),
     })
@@ -1946,19 +1998,12 @@ function ScanRunsOverTimeChart() {
     };
   }, []);
 
-  const chartData = runs
-    .map((run) => ({
-      ...run,
-      timestamp: new Date(run.occurredAt).getTime(),
-      occurredAtLabel: new Date(run.occurredAt).toLocaleString(undefined, {
-        day: "numeric",
-        month: "short",
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    }))
-    .filter((run) => Number.isFinite(run.timestamp))
-    .sort((a, b) => a.timestamp - b.timestamp);
+  const chartData = groupScanHistoryIntoSessions(runs);
+  const presentVendors = new Set(runs.flatMap((run) => (run.vendors.length > 0 ? run.vendors : ["unknown"])));
+  const vendorKeys = [
+    ...VENDOR_ORDER.filter((vendor) => presentVendors.has(vendor)),
+    ...[...presentVendors].filter((vendor) => !VENDOR_ORDER.includes(vendor as (typeof VENDOR_ORDER)[number])).sort(),
+  ];
 
   if (loading) {
     return (
@@ -1989,8 +2034,19 @@ function ScanRunsOverTimeChart() {
       <div className="mb-3">
         <div className="text-sm font-medium text-slate-200">Scan Runs Over Time</div>
         <div className="mt-0.5 text-xs text-slate-400">
-          Each bar is one recorded data run, positioned by its actual date and time.
+          Each stacked bar is one complete scan session, split by vendor.
         </div>
+      </div>
+      <div className="mb-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
+        {vendorKeys.map((vendor, index) => (
+          <span key={vendor} className="flex items-center gap-1.5">
+            <span
+              className="h-3 w-3 rounded-sm"
+              style={{ backgroundColor: VENDOR_META[vendor]?.color ?? FALLBACK_VENDOR_COLORS[index % FALLBACK_VENDOR_COLORS.length] }}
+            />
+            {VENDOR_META[vendor]?.label ?? vendor}
+          </span>
+        ))}
       </div>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={chartData} margin={{ top: 10, right: 20, bottom: 34, left: 0 }}>
@@ -2004,15 +2060,31 @@ function ScanRunsOverTimeChart() {
             interval="preserveStartEnd"
             minTickGap={36}
           />
-          <YAxis stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 12 }} allowDecimals={false} />
+          <YAxis
+            stroke="#94a3b8"
+            tick={{ fill: "#94a3b8", fontSize: 12 }}
+            allowDecimals={false}
+            domain={[0, "dataMax"]}
+            label={{ value: "Listings found", angle: -90, position: "insideLeft", fill: "#94a3b8" }}
+          />
           <Tooltip
             contentStyle={{ background: "#0f172a", border: "1px solid #334155", borderRadius: 6 }}
             labelFormatter={(_, payload) => {
-              const run = payload?.[0]?.payload;
-              return run ? `${run.occurredAtLabel} · ${run.searchTerm} · ${run.runBy}` : "";
+              const session = payload?.[0]?.payload;
+              return session
+                ? `${session.occurredAtLabel} · ${session.runBy} · ${session.totalListings.toLocaleString()} listings`
+                : "";
             }}
           />
-          <Bar dataKey="totalListingsFound" name="Listings found" fill="#3b82f6" radius={[3, 3, 0, 0]} />
+          {vendorKeys.map((vendor, index) => (
+            <Bar
+              key={vendor}
+              dataKey={vendor}
+              name={VENDOR_META[vendor]?.label ?? vendor}
+              stackId="vendors"
+              fill={VENDOR_META[vendor]?.color ?? FALLBACK_VENDOR_COLORS[index % FALLBACK_VENDOR_COLORS.length]}
+            />
+          ))}
         </BarChart>
       </ResponsiveContainer>
     </div>
