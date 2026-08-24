@@ -50,6 +50,8 @@ from app.gem_radar.schemas import (
     ScanSubmitRequest,
     ScanIngestResponse,
     ScanQueuedResponse,
+    ScanRunHistorySubmitRequest,
+    ScanRunHistoryOut,
     ScoredListing,
     SellerIntelligence,
     ExtractedListing,
@@ -1731,6 +1733,49 @@ async def get_scan_schedule_status(db: AsyncSession = Depends(get_db), _: None =
         "next_scan_at": next_scan_at.isoformat() if next_scan_at else None,
         "estimate_only": True,
     }
+
+
+@router.post("/scan-run-history", response_model=ScanRunHistoryOut, status_code=201)
+async def record_scan_run_history(
+    payload: ScanRunHistorySubmitRequest,
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+) -> ScanRunHistoryOut:
+    """Mirrors one row of FlipFlopXtension's local scan-history CSV
+    (search term, listings found, vendors, run_by, duration) so the admin
+    Sourcing Dashboard can show it — the CSV only lives in the user's local
+    Downloads folder and isn't otherwise queryable."""
+    from app.models.gem_radar_scan_run import GemRadarScanRun
+
+    row = GemRadarScanRun(
+        search_term=payload.search_term,
+        total_listings_found=payload.total_listings_found,
+        vendors=payload.vendors,
+        run_by=payload.run_by,
+        duration_seconds=payload.duration_seconds,
+        occurred_at=payload.occurred_at.replace(tzinfo=None) if payload.occurred_at.tzinfo else payload.occurred_at,
+    )
+    db.add(row)
+    await db.flush()
+    await db.refresh(row)
+    return ScanRunHistoryOut.model_validate(row, from_attributes=True)
+
+
+@router.get("/scan-run-history", response_model=list[ScanRunHistoryOut])
+async def list_scan_run_history(
+    limit: int = Query(50, ge=1, le=500),
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+) -> list[ScanRunHistoryOut]:
+    from sqlalchemy import select as _select
+    from app.models.gem_radar_scan_run import GemRadarScanRun
+
+    rows = (
+        await db.execute(
+            _select(GemRadarScanRun).order_by(GemRadarScanRun.occurred_at.desc()).limit(limit)
+        )
+    ).scalars().all()
+    return [ScanRunHistoryOut.model_validate(r, from_attributes=True) for r in rows]
 
 
 @router.get("/sold-comp-targets", response_model=list[SoldCompTarget])

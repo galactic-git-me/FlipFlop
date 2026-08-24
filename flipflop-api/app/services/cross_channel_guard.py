@@ -50,7 +50,13 @@ async def withdraw_storefront_for_sold_build(build: ManualBuild, db: AsyncSessio
     if not build.storefront_product_id:
         return
 
-    result = await db.execute(select(Product).where(Product.id == build.storefront_product_id))
+    # FOR UPDATE closes the race with public_showcase.py's confirm_checkout,
+    # which locks this same Product row before finalising a storefront sale —
+    # whichever transaction gets here first wins, and the loser sees the
+    # already-SOLD status once it acquires the lock.
+    result = await db.execute(
+        select(Product).where(Product.id == build.storefront_product_id).with_for_update()
+    )
     product = result.scalar_one_or_none()
     if not product or product.status not in (ProductStatus.LISTED, ProductStatus.RESERVED):
         return

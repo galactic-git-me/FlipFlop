@@ -97,6 +97,19 @@ async def _store_generated_glb(family_key: str, version: int, source_url: str) -
     return f"{_PUBLIC_MEDIA_URL}/{filename}", max(1, len(response.content) // 1024)
 
 
+def _case_status_to_asset_status(case_status: str) -> str:
+    """Map Case workflow status to Component3DAsset status."""
+    status_map = {
+        "pending": "meshy_draft",
+        "sourcing": "meshy_draft",
+        "ready_for_approval": "meshy_draft",
+        "approved": "validated",
+        "modeling": "validated",
+        "completed": "final",
+    }
+    return status_map.get(case_status, "meshy_draft")
+
+
 def _serialize(a: Component3DAsset) -> dict:
     return {
         "id": a.id,
@@ -262,7 +275,8 @@ async def list_assets_public(
         except ValueError:
             raise HTTPException(status_code=422, detail=f"Unknown status '{status}'")
     rows = (await db.execute(q)).scalars().all()
-    results.extend([_serialize(a) for a in rows])
+    # Filter: only include component assets that have both category and glb_ref
+    results.extend([_serialize(a) for a in rows if a.category and a.glb_ref])
 
     # Fetch PC cases with 3D models
     case_query = select(Case).where(Case.has_3d_model == True).order_by(Case.id)
@@ -276,7 +290,7 @@ async def list_assets_public(
             "subject_id": case.id,
             "category": "case",
             "family_key": None,
-            "status": "validated",  # Cases with models are considered validated
+            "status": _case_status_to_asset_status(case.status),
             "version": 1,
             "is_active": True,
             "glb_ref": case.model_3d_url,

@@ -96,6 +96,28 @@ class ScanSubmitRequest(CamelModel):
     listings: list[ExtractedListing]
 
 
+class ScanRunHistorySubmitRequest(CamelModel):
+    """One row of FlipFlopXtension's local scan-history CSV, mirrored to the
+    backend so the admin Sourcing Dashboard can show it without reading a
+    file from the user's Downloads folder."""
+    search_term: str
+    total_listings_found: int
+    vendors: list[str]
+    run_by: Literal["Manual", "Automatic"]
+    duration_seconds: float
+    occurred_at: datetime
+
+
+class ScanRunHistoryOut(CamelModel):
+    id: int
+    search_term: str
+    total_listings_found: int
+    vendors: list[str]
+    run_by: str
+    duration_seconds: float
+    occurred_at: datetime
+
+
 class SoldCompSubmitRequest(CamelModel):
     """FlipFlopXtension's sold/completed-listings scrape (LH_Sold=1&
     LH_Complete=1), extracted via the same real-browser-tab mechanism as

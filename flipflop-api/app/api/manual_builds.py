@@ -354,10 +354,11 @@ async def create_build(body: ManualBuildCreate, db: AsyncSession = Depends(get_d
 
 
 @router.get("/", response_model=list[ManualBuildSummary])
-async def list_builds(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(
-        select(ManualBuild).order_by(ManualBuild.updated_at.desc())
-    )
+async def list_builds(include_archived: bool = False, db: AsyncSession = Depends(get_db)):
+    query = select(ManualBuild).order_by(ManualBuild.updated_at.desc())
+    if not include_archived:
+        query = query.where(ManualBuild.is_archived.is_(False))
+    result = await db.execute(query)
     builds = result.scalars().all()
     return [
         ManualBuildSummary(
@@ -503,11 +504,21 @@ async def patch_build(build_id: int, body: ManualBuildPatch, db: AsyncSession = 
 
 @router.delete("/{build_id}", status_code=204)
 async def delete_build(build_id: int, db: AsyncSession = Depends(get_db)):
+    """Archives the build rather than deleting it.
+
+    A hard delete here previously left any live eBay listing (ebay_listing_id/
+    ebay_sku) with no local record at all — orphaned from every reprice, Best
+    Offer, and relist automation, and untraceable since the delete wasn't
+    logged. Archiving keeps the row (and those eBay identifiers) intact so
+    it can still be found and reconciled later.
+    """
     result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
     build = result.scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
-    await db.delete(build)
+    build.is_archived = True
+    build.updated_at = datetime.utcnow()
+    await db.flush()
 
 
 @router.post("/{build_id}/evaluate", response_model=EvaluationResult)
@@ -970,6 +981,8 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
     Requires ebay_listing_id to already be set (i.e. the build was actually
     posted to eBay). Safe to call again later — it just re-fetches and
     overwrites with the current order state."""
+    # Unlocked existence/precondition check first — fast-fail path, no lock
+    # held across the eBay API call below.
     result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
     build = result.scalar_one_or_none()
     if not build:
@@ -992,6 +1005,19 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
             "or the sale is older than the lookback window.",
         )
 
+    # FOR UPDATE taken only now, right before the write — not across the eBay
+    # API call above. Global lock order across this codebase's cross-channel
+    # paths is always ManualBuild before Product (see cross_channel_guard.py
+    # and public_showcase.py's confirm_checkout), to avoid an ABBA deadlock
+    # between this route and the storefront-checkout route, which both touch
+    # the same ManualBuild/Product pair when a sale is confirmed.
+    locked_result = await db.execute(
+        select(ManualBuild).where(ManualBuild.id == build_id).with_for_update()
+    )
+    build = locked_result.scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+
     build.ebay_order_id = order.order_id
     build.buyer_name = order.buyer_address.contact_name
     # line_item_id is embedded here (not its own column) since it's only
@@ -1005,8 +1031,11 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
 
     # This build just sold on eBay — pull any matching storefront listing
     # so the same physical unit can't also sell there. See
-    # app/services/cross_channel_guard.py.
+    # app/services/cross_channel_guard.py. Still within the ManualBuild lock
+    # taken above, then takes the Product lock — ManualBuild-before-Product,
+    # matching the global order.
     await withdraw_storefront_for_sold_build(build, db)
+    await db.commit()
 
     return SyncEbayOrderResult(
         ebay_order_id=order.order_id,

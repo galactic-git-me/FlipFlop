@@ -456,6 +456,17 @@ class EbayListingPoster:
                         "paymentPolicyId": payment_policy_id,
                         "returnPolicyId": return_policy_id,
                         "fulfillmentPolicyId": fulfillment_policy_id,
+                        "bestOfferTerms": {
+                            "bestOfferEnabled": True,
+                            "autoAcceptPrice": {
+                                "currency": "GBP",
+                                "value": str(round(price * 0.90, 2)),
+                            },
+                            "autoDeclinePrice": {
+                                "currency": "GBP",
+                                "value": str(round(price * 0.80, 2)),
+                            },
+                        },
                     },
                 }
 
@@ -635,6 +646,17 @@ class EbayListingPoster:
                         "paymentPolicyId": payment_policy_id,
                         "returnPolicyId": return_policy_id,
                         "fulfillmentPolicyId": fulfillment_policy_id,
+                        "bestOfferTerms": {
+                            "bestOfferEnabled": True,
+                            "autoAcceptPrice": {
+                                "currency": "GBP",
+                                "value": str(round(price * 0.90, 2)),
+                            },
+                            "autoDeclinePrice": {
+                                "currency": "GBP",
+                                "value": str(round(price * 0.80, 2)),
+                            },
+                        },
                     },
                 }
                 offer_resp = await client.put(
