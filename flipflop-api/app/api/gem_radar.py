@@ -2650,9 +2650,13 @@ async def ebay_search(
         # Extract URL's listing ID from eBay URL format: https://www.ebay.co.uk/itm/LISTINGID
         now = datetime.now(timezone.utc).isoformat()
 
-        # A short page is the API's end-of-results signal. Returning true for
-        # any non-empty page forced one unnecessary empty request at the end.
-        has_next_page = len(listings) >= limit
+        # `listings` is shorter than eBay's raw API page whenever normalization
+        # drops an item (for example a non-GBP or malformed-price result). A
+        # 96-item normalized page can therefore still have a full raw 100-item
+        # page behind it. Only an empty page is a safe stop signal here; the
+        # bounded extension page budget prevents unbounded requests, and the
+        # one final empty request is preferable to silently losing later pages.
+        has_next_page = bool(listings)
 
         return {
             "success": True,
