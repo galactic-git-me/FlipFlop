@@ -11,6 +11,7 @@ import {
   Package,
   AlertTriangle,
   Box,
+  Warehouse,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +20,7 @@ const PRIMARY_NAV = [
   { href: "/builds", icon: Package, label: "Pre-Built" },
   { href: "/configurator-config", icon: Settings2, label: "Custom Builds" },
   { href: "/pc-builder", icon: Zap, label: "Curated Builds" },
+  { href: "/inventory", icon: Warehouse, label: "Inventory" },
   { href: "/components-3d-review", icon: Box, label: "3D Assets" },
   { href: "/problems", icon: AlertTriangle, label: "Problems" },
 ];
