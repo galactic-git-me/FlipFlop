@@ -903,6 +903,8 @@ export const api = {
     auctionIntel: (limit?: number) => request<import("./types").AuctionIntelItem[]>(`/demand/auction-intel${limit ? `?limit=${limit}` : ""}`),
     summary: () => request<import("./types").DemandSummary>("/demand/summary"),
     soldMarket: (days = 90) => request<import("./types").SoldMarketDemand>(`/demand/sold-market?days=${days}`),
+    soldMarketListings: (category: import("./types").SoldComponentCategory, days = 90, limit = 250) =>
+      request<import("./types").SoldMarketListing[]>(`/demand/sold-market/listings?category=${category}&days=${days}&limit=${limit}`),
     soldMarketInsights: (days = 90, refresh = false) =>
       request<import("./types").SoldMarketInsight>(`/demand/sold-market/insights?days=${days}&refresh=${refresh}`),
     externalSignals: (limit_per_source?: number) =>

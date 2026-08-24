@@ -13,7 +13,7 @@ from app.services.demand_service import compute_demand, compute_auction_intel
 from app.services.external_demand import latest_external_signal_snapshot, ingest_external_demand_signals
 from app.services.rich_demand_collector import get_rich_signals
 from app.services.demand_pricing import compute_demand_pricing_multipliers
-from app.services.sold_market_demand import build_sold_market_snapshot, generate_ai_insights
+from app.services.sold_market_demand import build_sold_market_snapshot, generate_ai_insights, list_sold_market_observations
 
 router = APIRouter(prefix="/demand", tags=["demand"])
 
@@ -122,3 +122,13 @@ async def get_sold_market_insights(
 ):
     snapshot = await build_sold_market_snapshot(db, days=days)
     return await generate_ai_insights(snapshot, refresh=refresh)
+
+
+@router.get("/sold-market/listings")
+async def get_sold_market_listings(
+    category: str = Query(..., pattern="^(cpu|gpu|motherboard|ram|case|psu)$"),
+    days: int = Query(90, ge=30, le=365),
+    limit: int = Query(250, ge=1, le=500),
+    db: AsyncSession = Depends(get_db),
+):
+    return await list_sold_market_observations(db, category=category, days=days, limit=limit)

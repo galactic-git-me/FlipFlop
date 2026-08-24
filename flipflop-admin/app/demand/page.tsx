@@ -8,7 +8,7 @@ import {
 import { RefreshCw, TrendingUp, TrendingDown, Minus, ExternalLink, BrainCircuit, Database, Activity } from "lucide-react";
 import { api } from "@/lib/api";
 import { ClassificationBadge } from "@/components/classification-badge";
-import type { DemandCategory, AuctionIntelItem, DemandSummary, SoldMarketDemand, SoldMarketInsight } from "@/lib/types";
+import type { DemandCategory, AuctionIntelItem, DemandSummary, SoldMarketDemand, SoldMarketInsight, SoldMarketListing, SoldComponentCategory } from "@/lib/types";
 
 // ── Local types ───────────────────────────────────────────────────────────────
 
@@ -936,6 +936,27 @@ function SoldMarketTab({ data, insight, loading, error, refreshingInsight, onRet
   onRetry: () => void;
   onRefreshInsight: () => void;
 }) {
+  const componentOptions: Array<{ value: SoldComponentCategory; label: string }> = [
+    { value: "cpu", label: "CPUs" }, { value: "gpu", label: "GPUs" },
+    { value: "motherboard", label: "Motherboards" }, { value: "ram", label: "RAM" },
+    { value: "case", label: "PC Cases" }, { value: "psu", label: "PSUs" },
+  ];
+  const [soldCategory, setSoldCategory] = useState<SoldComponentCategory>("cpu");
+  const [soldRows, setSoldRows] = useState<SoldMarketListing[]>([]);
+  const [soldRowsLoading, setSoldRowsLoading] = useState(false);
+  const [soldRowsError, setSoldRowsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setSoldRowsLoading(true);
+    setSoldRowsError(null);
+    api.demand.soldMarketListings(soldCategory, 90, 250)
+      .then((rows) => { if (!cancelled) setSoldRows(rows); })
+      .catch((e: Error) => { if (!cancelled) { setSoldRows([]); setSoldRowsError(e.message); } })
+      .finally(() => { if (!cancelled) setSoldRowsLoading(false); });
+    return () => { cancelled = true; };
+  }, [soldCategory]);
+
   if (loading) return <Spinner />;
   if (error) return <ErrorBanner msg={`Failed to load sold-market demand — ${error}`} onRetry={onRetry} />;
   if (!data) return <Empty label="No sold-market snapshot is available yet." />;
@@ -1019,6 +1040,51 @@ function SoldMarketTab({ data, insight, loading, error, refreshingInsight, onRet
             </div>
           ))}
         </div>
+      </section>
+
+      <section className="rounded-lg border border-white/10 bg-[#070e1a]" aria-labelledby="sold-listings-heading">
+        <div className="flex flex-wrap items-center gap-3 border-b border-white/[0.07] p-4">
+          <div>
+            <h2 id="sold-listings-heading" className="text-sm font-bold text-slate-200">Completed listings</h2>
+            <p className="mt-0.5 text-[11px] text-slate-500">Most recently collected eBay sold evidence from the last 90 days.</p>
+          </div>
+          <label htmlFor="sold-component-category" className="ml-auto text-xs font-medium text-slate-400">Component type</label>
+          <select
+            id="sold-component-category"
+            value={soldCategory}
+            onChange={(event) => setSoldCategory(event.target.value as SoldComponentCategory)}
+            className="cursor-pointer rounded-md border border-white/15 bg-[#0a1628] px-3 py-2 text-xs text-slate-200 outline-none transition-colors hover:border-emerald-300/40 focus-visible:ring-2 focus-visible:ring-emerald-300"
+          >
+            {componentOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+          </select>
+        </div>
+        {soldRowsLoading ? <Spinner /> : soldRowsError ? (
+          <div className="p-4 text-xs text-red-300">Could not load completed listings: {soldRowsError}</div>
+        ) : soldRows.length === 0 ? (
+          <div className="p-8 text-center text-xs text-slate-500">No matched sold evidence for this component type.</div>
+        ) : (
+          <div className="max-h-[560px] overflow-auto">
+            <table className="w-full min-w-[820px] text-left text-xs">
+              <thead className="sticky top-0 z-10 bg-[#0a1628] text-[10px] uppercase tracking-wider text-slate-500">
+                <tr>{["Sold item", "Condition", "Item price", "Postage", "Delivered", "Observed", "Source"].map((heading) => <th key={heading} className="px-3 py-2.5">{heading}</th>)}</tr>
+              </thead>
+              <tbody className="divide-y divide-white/[0.06]">
+                {soldRows.map((row) => (
+                  <tr key={row.id} className="transition-colors hover:bg-white/[0.025]">
+                    <td className="max-w-[360px] px-3 py-3 font-medium text-slate-200"><span className="line-clamp-2" title={row.name}>{row.name}</span></td>
+                    <td className="px-3 py-3 capitalize text-slate-400">{row.condition}</td>
+                    <td className="px-3 py-3 font-mono text-slate-300">{fmt(row.item_price)}</td>
+                    <td className="px-3 py-3 font-mono text-slate-400">{fmt(row.postage)}</td>
+                    <td className="px-3 py-3 font-mono font-semibold text-emerald-300">{fmt(row.delivered_price)}</td>
+                    <td className="whitespace-nowrap px-3 py-3 text-slate-400" title={new Date(row.observed_at).toLocaleString()}>{fmtRelative(row.observed_at)}</td>
+                    <td className="px-3 py-3">{row.source_url ? <a href={row.source_url} target="_blank" rel="noopener noreferrer" className="inline-flex cursor-pointer items-center gap-1 text-cyan-300 transition-colors hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"><ExternalLink className="h-3 w-3" /> eBay</a> : <span className="text-slate-600">—</span>}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        <div className="border-t border-white/[0.07] px-4 py-2 text-[10px] text-slate-500">Showing {soldRows.length.toLocaleString()} most recent matched observations (maximum 250).</div>
       </section>
 
       <p className="rounded-md border border-amber-400/15 bg-amber-400/[0.05] px-3 py-2 text-xs leading-5 text-amber-100/70">{data.methodology}</p>

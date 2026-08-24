@@ -439,6 +439,21 @@ export interface SoldMarketInsight {
   generated_at: string;
 }
 
+export type SoldComponentCategory = "cpu" | "gpu" | "motherboard" | "ram" | "case" | "psu";
+
+export interface SoldMarketListing {
+  id: number;
+  cpk: string | null;
+  name: string;
+  category: SoldComponentCategory;
+  condition: string;
+  item_price: number;
+  postage: number;
+  delivered_price: number;
+  source_url: string | null;
+  observed_at: string;
+}
+
 export const PLAYBOOK_STATUS_CONFIG: Record<PlaybookStatus, { label: string; color: string; bg: string; dot: string }> = {
   active:     { label: "Active",     color: "text-emerald-400", bg: "bg-emerald-400/10 border-emerald-400/30", dot: "bg-emerald-400" },
   candidate:  { label: "Candidate",  color: "text-yellow-400",  bg: "bg-yellow-400/10 border-yellow-400/30",   dot: "bg-yellow-400"  },

@@ -162,6 +162,48 @@ async def build_sold_market_snapshot(db: AsyncSession, days: int = 90) -> dict:
     }
 
 
+async def list_sold_market_observations(
+    db: AsyncSession, category: str, days: int = 90, limit: int = 250,
+) -> list[dict]:
+    """Return recent completed-listing evidence for one component category."""
+    if category not in _CATEGORY_LABELS:
+        return []
+    cutoff = datetime.utcnow() - timedelta(days=days)
+    category_cpks = select(GemRadarScoredListing.cpk).where(
+        GemRadarScoredListing.category == category,
+        GemRadarScoredListing.cpk.is_not(None),
+    ).distinct()
+    rows = list((await db.execute(
+        select(GemRadarSoldObservation).where(
+            GemRadarSoldObservation.observed_at >= cutoff,
+            GemRadarSoldObservation.cpk.in_(category_cpks),
+        ).order_by(GemRadarSoldObservation.observed_at.desc()).limit(limit)
+    )).scalars().all())
+    cpks = {row.cpk for row in rows if row.cpk}
+    identities = list((await db.execute(
+        select(GemRadarScoredListing).where(GemRadarScoredListing.cpk.in_(cpks))
+    )).scalars().all()) if cpks else []
+    identity_by_cpk: dict[str, GemRadarScoredListing] = {}
+    for identity in sorted(identities, key=lambda item: item.scored_at or datetime.min):
+        if identity.cpk:
+            identity_by_cpk[identity.cpk] = identity
+    return [{
+        "id": row.id,
+        "cpk": row.cpk,
+        "name": (
+            identity_by_cpk[row.cpk].canonical_model_id
+            or identity_by_cpk[row.cpk].title
+        ) if row.cpk in identity_by_cpk else row.match_key,
+        "category": category,
+        "condition": row.condition,
+        "item_price": row.price,
+        "postage": row.postage or 0,
+        "delivered_price": row.price + (row.postage or 0),
+        "source_url": row.source_url,
+        "observed_at": row.observed_at.isoformat() + "Z",
+    } for row in rows]
+
+
 def fallback_insights(snapshot: dict) -> dict:
     categories = snapshot["categories"]
     if not categories:
