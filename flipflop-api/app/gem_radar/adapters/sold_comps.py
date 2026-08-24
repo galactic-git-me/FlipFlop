@@ -27,7 +27,7 @@ from fake_useragent import UserAgent
 import structlog
 
 from app.services.proxy import apply_httpx_proxy, playwright_proxy_config
-from app.services.browser_pool import managed_playwright
+from app.services.browser_pool import BACKGROUND_HEADED_ARGS, managed_playwright
 from app.services.playwright_scraper import chromium_available
 
 log = structlog.get_logger(__name__)
@@ -377,14 +377,16 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                     except Exception as exc:
                         log.debug("sold_comps.playwright.cdp_unavailable", cdp_url=cdp_url, error=str(exc))
                 if browser is None:
+                    headless = os.getenv("EBAY_HEADLESS", "1").lower() not in {"0", "false", "no"}
                     browser = await p.chromium.launch(
-                        headless=os.getenv("EBAY_HEADLESS", "1").lower() not in {"0", "false", "no"},
+                        headless=headless,
                         args=[
                             "--disable-blink-features=AutomationControlled",
                             "--disable-dev-shm-usage",
                             "--disable-infobars",
                             "--window-size=1366,768",
                             "--lang=en-GB",
+                            *([] if headless else BACKGROUND_HEADED_ARGS),
                         ],
                         proxy=playwright_proxy_config(),
                     )

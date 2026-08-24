@@ -1,4 +1,4 @@
-from app.services.browser_pool import BACKGROUND_HEADED_ARGS, managed_playwright
+from app.services.browser_pool import BACKGROUND_HEADED_ARGS, focus_page_for_human, managed_playwright
 import asyncio
 import os
 import sys
@@ -20,6 +20,36 @@ _LAST_RUN_AT: str | None = None
 CHALLENGE_URLS = [
     "https://www.temu.com/",
 ]
+_CHALLENGE_MARKERS = (
+    "captcha", "verify you are human", "verification", "just a moment",
+    "access denied", "bgn_verification", "challenge",
+)
+
+
+async def _has_human_challenge(page) -> bool:
+    try:
+        title = (await page.title() or "").lower()
+        url = (page.url or "").lower()
+        body = (await page.locator("body").inner_text(timeout=3000) or "").lower()[:20000]
+        text = f"{title}\n{url}\n{body}"
+        return any(marker in text for marker in _CHALLENGE_MARKERS)
+    except Exception:
+        return False
+
+
+async def _wait_for_human_verification(page) -> None:
+    """Keep a detected challenge open until solved, closed, or 30 minutes."""
+    await focus_page_for_human(page)
+    deadline = asyncio.get_running_loop().time() + max(
+        300, int(os.getenv("HUMAN_VERIFICATION_MAX_WAIT_SECONDS", "1800"))
+    )
+    while not page.is_closed() and asyncio.get_running_loop().time() < deadline:
+        await asyncio.sleep(5)
+        if not await _has_human_challenge(page):
+            log.info("runtime.preflight.antibot.challenge_resolved", url=page.url)
+            return
+    if not page.is_closed():
+        log.warning("runtime.preflight.antibot.challenge_wait_expired", url=page.url)
 _GATED_SOURCES = {
     "Temu",
 }
@@ -136,9 +166,15 @@ async def run_antibot_preflight() -> None:
                             page = await context.new_page()
                             await page.goto(url, wait_until="domcontentloaded", timeout=45000)
                             log.info("runtime.preflight.antibot.page_opened", url=url)
+                            await asyncio.sleep(3)
+                            if await _has_human_challenge(page):
+                                log.warning("runtime.preflight.antibot.challenge_detected", url=page.url)
+                                await _wait_for_human_verification(page)
                         except Exception as page_exc:
                             log.warning("runtime.preflight.antibot.page_open_failed", url=url, error=str(page_exc))
-                    await asyncio.sleep(wait_seconds)
+                    # No challenge windows need foreground time. A small
+                    # background settle preserves the original preflight.
+                    await asyncio.sleep(min(wait_seconds, 10))
                     _LAST_RESULT = "success"
                     _LAST_MESSAGE = "Preflight browser session completed"
                 finally:

@@ -1,4 +1,4 @@
-from app.services.browser_pool import managed_playwright
+from app.services.browser_pool import BACKGROUND_HEADED_ARGS, managed_playwright
 """
 Playwright-based scrapers for sites that require a real browser:
   - Gumtree  (JS SPA, no login needed)
@@ -291,7 +291,7 @@ async def _make_context(
                 context = await playwright.chromium.launch_persistent_context(
                     user_data_dir=str(FB_PROFILE_DIR),
                     headless=headless,
-                    args=_STEALTH_ARGS,
+                    args=[*_STEALTH_ARGS, *([] if headless else BACKGROUND_HEADED_ARGS)],
                     proxy=playwright_proxy_config(),
                     user_agent=_USER_AGENT,
                     viewport={"width": 1366, "height": 768},
@@ -327,7 +327,7 @@ async def _make_context(
         async with _PLAYWRIGHT_LAUNCH_SEM:
             browser = await playwright.chromium.launch(
                 headless=headless,
-                args=_STEALTH_ARGS,
+                args=[*_STEALTH_ARGS, *([] if headless else BACKGROUND_HEADED_ARGS)],
                 proxy=playwright_proxy_config(),
             )
     except Exception as exc:

@@ -1,4 +1,4 @@
-from app.services.browser_pool import BACKGROUND_HEADED_ARGS, managed_playwright
+from app.services.browser_pool import BACKGROUND_HEADED_ARGS, focus_page_for_human, managed_playwright
 """
 PC Cases Swarm — runs daily.
 Searches for PC cases (new and used) across eBay UK, Amazon UK, Temu, AliExpress, and Etsy.
@@ -1103,11 +1103,32 @@ async def _scrape_overclockers_once() -> list[RawCase]:
                     await asyncio.sleep(2)  # Extra wait for all products to render
                 except Exception as e:
                     log.warning("overclockers.wait_product_timeout", page=page_num, error=str(e))
-                    # Don't break - CAPTCHA page might need manual intervention on first page
-                    # but session persists, so keep trying
+                    # A real headed browser is already available. Promote it
+                    # only after a confirmed no-products challenge and keep it
+                    # alive while the user completes verification.
                     if page_num == 1:
+                        challenge_resolved = False
                         log.warning("overclockers.first_page_no_products", likely_captcha=True)
-                    continue
+                        await focus_page_for_human(page)
+                        deadline = asyncio.get_running_loop().time() + max(
+                            300, int(os.getenv("HUMAN_VERIFICATION_MAX_WAIT_SECONDS", "1800"))
+                        )
+                        while asyncio.get_running_loop().time() < deadline:
+                            if page.is_closed():
+                                break
+                            try:
+                                await page.wait_for_selector("ck-product-box", timeout=5000)
+                                log.info("overclockers.challenge_resolved")
+                                challenge_resolved = True
+                                break
+                            except Exception:
+                                continue
+                        if challenge_resolved:
+                            await asyncio.sleep(2)
+                        else:
+                            continue
+                    else:
+                        continue
 
                 # Extract products from this page
                 products = await page.evaluate(f"""() => {{

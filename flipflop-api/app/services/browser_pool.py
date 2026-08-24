@@ -46,6 +46,26 @@ BACKGROUND_HEADED_ARGS = [
     "--disable-backgrounding-occluded-windows",
 ]
 
+
+async def focus_page_for_human(page) -> None:
+    """Promote a previously hidden Chromium window for a confirmed challenge."""
+    try:
+        session = await page.context.new_cdp_session(page)
+        target = await session.send("Browser.getWindowForTarget")
+        window_id = target.get("windowId")
+        if window_id is not None:
+            await session.send("Browser.setWindowBounds", {
+                "windowId": window_id,
+                "bounds": {"windowState": "normal"},
+            })
+            await session.send("Browser.setWindowBounds", {
+                "windowId": window_id,
+                "bounds": {"left": 80, "top": 80, "width": 1280, "height": 900},
+            })
+        await page.bring_to_front()
+    except Exception as exc:
+        log.warning("browser_pool.challenge_focus_failed", error=str(exc))
+
 # Lazily created so it binds to the correct running event loop.
 _sem: asyncio.Semaphore | None = None
 
