@@ -1741,83 +1741,37 @@ interface ScatterPoint {
   title: string;
   dealScore: number;
   roiPercent: number;
-  roiIndexed: number; // roiPercent minus the outlier-trimmed, leave-one-out mean ROI — 0 = average listing
+  roiPlotted: number;
   profit: number;
   absProfit: number;
   classification: string;
 }
 
-// Tukey's-fence outlier bounds: values outside Q1-1.5*IQR..Q3+1.5*IQR are
-// "anomalous" for both baseline-mean and axis-scaling purposes. Shared by
-// buildScatterPoints (trims the mean) and computeSymmetricDomain (trims
-// what sets the axis range) so the two use one consistent definition of
-// "outlier".
-function tukeyFence(values: number[]): { lower: number; upper: number } {
-  if (values.length < 4) return { lower: -Infinity, upper: Infinity };
-  const sorted = [...values].sort((a, b) => a - b);
-  const quantile = (q: number) => {
-    const pos = (sorted.length - 1) * q;
-    const base = Math.floor(pos);
-    const rest = pos - base;
-    return sorted[base + 1] !== undefined ? sorted[base] + rest * (sorted[base + 1] - sorted[base]) : sorted[base];
-  };
-  const q1 = quantile(0.25);
-  const q3 = quantile(0.75);
-  const iqr = q3 - q1;
-  return { lower: q1 - 1.5 * iqr, upper: q3 + 1.5 * iqr };
-}
-
-// Resale estimate falls back to market_new_price, then delivered_price
-// (treated as break-even) when no used-market comp is available — same
-// convention as the "Potential Profit" tile in StatsTab.
+// Only plot economics produced by the scoring model. Falling back to the
+// listing's own delivered price manufactured a 0% ROI for every unscored
+// listing and flattened the useful 1,500-point distribution into one line.
 function buildScatterPoints(listings: Listing[]): ScatterPoint[] {
-  const raw = listings
-    .filter((l) => l.delivered_price > 0)
-    .map((l) => {
-      const resale = l.market_used_price || l.market_new_price || l.delivered_price;
-      const profit = resale - l.delivered_price;
-      return {
+  return listings
+    .filter((l) => Number.isFinite(l.roi_pct) && Number.isFinite(l.expected_profit))
+    .map((l) => ({
         title: l.title,
         dealScore: l.deal_score,
-        roiPercent: (profit / l.delivered_price) * 100,
-        profit,
-        absProfit: Math.abs(profit),
+        roiPercent: l.roi_pct!,
+        roiPlotted: l.roi_pct!,
+        profit: l.expected_profit!,
+        absProfit: Math.abs(l.expected_profit!),
         classification: l.classification,
-      };
-    });
-
-  // The baseline each point is compared against excludes outliers (so one
-  // extreme listing doesn't drag everyone else's "vs average" reading up or
-  // down) AND excludes the point's own value (leave-one-out — a listing
-  // never gets to bias the average it's being measured against).
-  const fence = tukeyFence(raw.map((p) => p.roiPercent));
-  const isOutlier = (roi: number) => roi < fence.lower || roi > fence.upper;
-
-  const cleanRois = raw.map((p) => p.roiPercent).filter((roi) => !isOutlier(roi));
-  const cleanSum = cleanRois.reduce((sum, roi) => sum + roi, 0);
-  const cleanCount = cleanRois.length;
-  const cleanMean = cleanCount > 0 ? cleanSum / cleanCount : 0;
-
-  return raw.map((p) => {
-    // Outliers were never part of the clean set, so there's nothing to
-    // leave out — they compare against the plain clean mean. Non-outliers
-    // compare against the clean mean with their own value removed first.
-    const baseline =
-      isOutlier(p.roiPercent) || cleanCount <= 1 ? cleanMean : (cleanSum - p.roiPercent) / (cleanCount - 1);
-    return { ...p, roiIndexed: p.roiPercent - baseline };
-  });
+      }));
 }
 
-// Quartiles of the indexed values decide what's "normal" spread, and only
-// that spread sets the axis scale — a handful of extreme outliers no
-// longer squash every other point into a sliver near zero. The domain is
-// kept symmetric (same +/- extent) so a listing exactly at the dataset
-// average always sits dead-center on the chart.
-function computeSymmetricDomain(values: number[]): [number, number] {
-  const fence = tukeyFence(values);
-  const withinFence = values.filter((v) => v >= fence.lower && v <= fence.upper);
-  const bound = Math.max(10, ...(withinFence.length > 0 ? withinFence : values).map((v) => Math.abs(v)));
-  return [-bound * 1.1, bound * 1.1]; // 10% padding so edge points aren't clipped against the axis
+function computeRoiDomain(values: number[]): [number, number] {
+  if (values.length === 0) return [-10, 10];
+  const sorted = [...values].sort((a, b) => a - b);
+  const percentile = (fraction: number) => sorted[Math.min(sorted.length - 1, Math.floor((sorted.length - 1) * fraction))];
+  const lower = Math.min(0, percentile(0.02));
+  const upper = Math.max(0, percentile(0.98));
+  const padding = Math.max(2, (upper - lower) * 0.08);
+  return [Math.floor(lower - padding), Math.ceil(upper + padding)];
 }
 
 function ScatterTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: ScatterPoint }> }) {
@@ -1827,7 +1781,7 @@ function ScatterTooltip({ active, payload }: { active?: boolean; payload?: Array
     <div className="bg-slate-900 border border-slate-600 rounded p-3 text-xs max-w-xs">
       <div className="text-slate-100 font-semibold mb-1 truncate">{p.title}</div>
       <div className="text-slate-300">Deal Score: {p.dealScore.toFixed(1)}</div>
-      <div className="text-slate-300">ROI: {p.roiPercent.toFixed(1)}% ({p.roiIndexed >= 0 ? "+" : ""}{p.roiIndexed.toFixed(1)} vs avg)</div>
+      <div className="text-slate-300">Model ROI: {p.roiPercent.toFixed(1)}%</div>
       <div className="text-slate-300">Est. Profit: £{p.profit.toFixed(2)}</div>
     </div>
   );
@@ -1835,10 +1789,15 @@ function ScatterTooltip({ active, payload }: { active?: boolean; payload?: Array
 
 const DealScoreRoiChart = memo(function DealScoreRoiChart({ listings }: { listings: Listing[] }) {
   const points = useMemo(() => buildScatterPoints(listings), [listings]);
+  const yDomain = useMemo(() => computeRoiDomain(points.map((p) => p.roiPercent)), [points]);
+  const plottedPoints = useMemo(() => points.map((point) => ({
+    ...point,
+    roiPlotted: Math.max(yDomain[0], Math.min(yDomain[1], point.roiPercent)),
+  })), [points, yDomain]);
   const byClassification = useMemo(() => CLASSIFICATION_ORDER.map((c) => ({
     classification: c,
-    data: points.filter((p) => p.classification === c),
-  })).filter((g) => g.data.length > 0), [points]);
+    data: plottedPoints.filter((p) => p.classification === c),
+  })).filter((g) => g.data.length > 0), [plottedPoints]);
 
   if (points.length === 0) {
     return (
@@ -1848,11 +1807,16 @@ const DealScoreRoiChart = memo(function DealScoreRoiChart({ listings }: { listin
     );
   }
 
-  const yDomain = computeSymmetricDomain(points.map((p) => p.roiIndexed));
+  const pinnedCount = points.filter((point) => point.roiPercent < yDomain[0] || point.roiPercent > yDomain[1]).length;
 
   return (
     <div className="p-4 bg-slate-800 rounded-lg border border-slate-700">
-      <div className="text-sm text-slate-400 mb-3">Deal Score vs ROI % vs Average (dot size = est. profit)</div>
+      <div className="mb-3">
+        <div className="text-sm text-slate-300">Deal Score vs Model ROI (dot size = expected profit)</div>
+        <div className="mt-0.5 text-xs text-slate-500">
+          {points.length.toLocaleString()} listings with model-backed economics. The central 96% sets the scale{pinnedCount > 0 ? `; ${pinnedCount} extreme values are pinned to the chart edges.` : "."}
+        </div>
+      </div>
       <ResponsiveContainer width="100%" height={360}>
         <ScatterChart margin={{ top: 10, right: 20, bottom: 10, left: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
@@ -1866,20 +1830,13 @@ const DealScoreRoiChart = memo(function DealScoreRoiChart({ listings }: { listin
           />
           <YAxis
             type="number"
-            dataKey="roiIndexed"
-            name="ROI % vs Avg"
-            unit="pp"
+            dataKey="roiPlotted"
+            name="Model ROI"
+            unit="%"
             domain={yDomain}
-            // yDomain is deliberately computed excluding statistical
-            // outliers so a few extreme values don't squash the "normal"
-            // cluster flat — but SUPER_GEM listings are, by definition,
-            // likely to BE those outliers. allowDataOverflow would clip
-            // them off the chart entirely instead of just widening the
-            // axis to include them, silently hiding the most interesting
-            // points on a chart whose whole purpose is finding them.
             stroke="#94a3b8"
             tick={{ fill: "#94a3b8", fontSize: 12 }}
-            label={{ value: "ROI % vs Avg", angle: -90, position: "insideLeft", fill: "#94a3b8" }}
+            label={{ value: "Model ROI %", angle: -90, position: "insideLeft", fill: "#94a3b8" }}
           />
           <ZAxis type="number" dataKey="absProfit" range={[30, 500]} name="Est. Profit" />
           <Tooltip content={<ScatterTooltip />} cursor={{ strokeDasharray: "3 3" }} />
