@@ -58,22 +58,20 @@ class UnavailableAmazonPriceAdapter(AmazonPriceAdapter):
 
 
 class LiveAmazonPriceAdapter(AmazonPriceAdapter):
-    """Production adapter — real Amazon UK search via
-    app.scrapers.amazon_scraper.fetch_amazon_listings (Playwright, a genuine
-    browser session, which is why it isn't blocked the way eBay's raw-HTTP
-    sold-comps scrape is — see adapters/sold_comps.py). Takes the first
-    (most relevant, per Amazon's own search ranking) matching result rather
-    than an average across several: this benchmark represents "a single
+    """Production adapter — real Amazon UK search via direct HTTP with realistic
+    browser headers (app.scrapers.amazon_scraper_http.fetch_amazon_listings_http).
+    Takes the first (most relevant, per Amazon's own search ranking) matching result
+    rather than an average across several: this benchmark represents "a single
     retail listing, not a market sample" (see benchmarks.fetch_amazon_benchmark),
     the same semantics the previous stub adapter's caller already expected.
     """
 
     async def fetch(self, query: str) -> AmazonPriceResult:
-        from app.scrapers.amazon_scraper import fetch_amazon_listings
+        from app.scrapers.amazon_scraper_http import fetch_amazon_listings_http
 
         try:
             async with _amazon_scrape_semaphore:
-                listings = await fetch_amazon_listings(search_terms=[query], min_price=1, max_price=20000)
+                listings = await fetch_amazon_listings_http(search_terms=[query], min_price=1, max_price=20000)
         except Exception as exc:
             return AmazonPriceResult(available=False, unavailable_reason=f"Amazon scrape failed: {exc}")
 
