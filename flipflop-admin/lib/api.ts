@@ -902,6 +902,9 @@ export const api = {
     categories: () => request<import("./types").DemandCategory[]>("/demand/categories"),
     auctionIntel: (limit?: number) => request<import("./types").AuctionIntelItem[]>(`/demand/auction-intel${limit ? `?limit=${limit}` : ""}`),
     summary: () => request<import("./types").DemandSummary>("/demand/summary"),
+    soldMarket: (days = 90) => request<import("./types").SoldMarketDemand>(`/demand/sold-market?days=${days}`),
+    soldMarketInsights: (days = 90, refresh = false) =>
+      request<import("./types").SoldMarketInsight>(`/demand/sold-market/insights?days=${days}&refresh=${refresh}`),
     externalSignals: (limit_per_source?: number) =>
       request<{ summary: Record<string, { count: number; avg_score: number; avg_confidence: number }>; items: Record<string, unknown[]> }>(
         `/demand/external-signals${limit_per_source ? `?limit_per_source=${limit_per_source}` : ""}`,

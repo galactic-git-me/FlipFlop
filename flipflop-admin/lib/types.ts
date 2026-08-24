@@ -396,6 +396,49 @@ export interface DemandSummary {
   ending_soon_auctions: number;
 }
 
+export interface SoldMarketCategory {
+  category: string;
+  label: string;
+  sold_observations: number;
+  active_listings: number;
+  products_with_sold_evidence: number;
+  median_sold_price: number | null;
+  median_active_price: number | null;
+  evidence_ratio_pct: number;
+  sample_confidence_pct: number;
+  demand_score: number;
+  strength: "High" | "Medium" | "Low";
+  recent_30d: number;
+  previous_30d: number;
+  trend_pct: number | null;
+}
+
+export interface SoldMarketDemand {
+  generated_at: string;
+  window_days: number;
+  methodology: string;
+  totals: {
+    sold_observations: number;
+    matched_sold_observations: number;
+    unmatched_sold_observations: number;
+    active_listings: number;
+    products_with_sold_evidence: number;
+  };
+  categories: SoldMarketCategory[];
+  top_products: Array<{
+    cpk: string; name: string; category: string; sold_observations: number;
+    active_listings: number; median_sold_price: number | null;
+    median_active_price: number | null; evidence_ratio_pct: number;
+  }>;
+  weekly: Array<{ week: string; sold_observations: number }>;
+}
+
+export interface SoldMarketInsight {
+  insight: string;
+  model: string;
+  generated_at: string;
+}
+
 export const PLAYBOOK_STATUS_CONFIG: Record<PlaybookStatus, { label: string; color: string; bg: string; dot: string }> = {
   active:     { label: "Active",     color: "text-emerald-400", bg: "bg-emerald-400/10 border-emerald-400/30", dot: "bg-emerald-400" },
   candidate:  { label: "Candidate",  color: "text-yellow-400",  bg: "bg-yellow-400/10 border-yellow-400/30",   dot: "bg-yellow-400"  },
