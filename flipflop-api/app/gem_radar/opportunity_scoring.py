@@ -66,11 +66,11 @@ def category_economics(category: str, policy: OpportunityPolicy) -> CategoryEcon
     hurdle. Complete systems continue to use the configured global policy.
     """
     if category in {"cpu", "ram", "ssd", "cooler", "fan"}:
-        return CategoryEconomics(15.0, 35.0, 5.0, 18.0, 80.0, 60.0)
+        return CategoryEconomics(8.0, 25.0, 3.0, 15.0, 80.0, 60.0)
     if category in {"motherboard", "psu", "case"}:
-        return CategoryEconomics(25.0, 30.0, 10.0, 20.0, 82.0, 65.0)
+        return CategoryEconomics(15.0, 22.0, 6.0, 16.0, 82.0, 65.0)
     if category == "gpu":
-        return CategoryEconomics(40.0, 25.0, 20.0, 18.0, 83.0, 70.0)
+        return CategoryEconomics(25.0, 20.0, 12.0, 15.0, 83.0, 70.0)
     return CategoryEconomics(
         policy.super_profit, policy.super_roi_pct, policy.gem_profit,
         policy.gem_roi_pct, policy.super_score, policy.gem_score,
@@ -425,8 +425,12 @@ def score_opportunity(
     total_score = sum(value * weight for value, weight in score_parts) / sum(weight for _, weight in score_parts)
     provisional_evidence = "preliminary_sold_cohort" in risk_flags
     evidence_limited = provisional_evidence or market.sample_size < policy.minimum_sold_comps
-    blocking_flags = [flag for flag in risk_flags if flag != "preliminary_sold_cohort"]
-    eligible = not risk_flags
+    hard_identity_vetoes = {
+        "identity_incomplete", "accessory_or_parts_listing", "category_identity_conflict",
+        "whole_system_misclassified_as_component", "bundle_listing", "specialised_mining_hardware"
+    }
+    blocking_flags = [flag for flag in risk_flags if flag in hard_identity_vetoes]
+    eligible = not blocking_flags
     evidence_label = "completed sales" if market.basis == "SOLD_REFINED" else "active market prices"
     reasons = [
         f"Resale basis uses the median of {market.sample_size} robust same-condition {evidence_label}; lower quartile remains the downside case.",
@@ -454,8 +458,8 @@ def score_opportunity(
     # vetoing a genuine bargain.  The former all-gates-at-once rule made a
     # slow-moving item mathematically incapable of being a SUPER_GEM even at
     # a 60% discount with a strong comparable cohort.
-    super_confidence_floor = max(70.0, policy.super_confidence - 10.0)
-    gem_confidence_floor = max(65.0, policy.gem_confidence - 5.0)
+    super_confidence_floor = max(55.0, policy.super_confidence - 25.0)
+    gem_confidence_floor = max(50.0, policy.gem_confidence - 20.0)
     if blocking_flags:
         classification, decision = "INELIGIBLE", "IGNORE"
         reasons.append("A hard identity or market-quality veto prevents deal classification.")
