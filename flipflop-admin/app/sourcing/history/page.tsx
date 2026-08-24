@@ -45,6 +45,28 @@ type MatrixMetric = "listings" | "duration" | "completed" | "vendors";
 
 const SESSION_GAP_MS = 10 * 60 * 1000;
 
+// Mirrors FlipFlopXtension/src/lib/search-defs.ts, which is the ordered
+// source used by the extension Settings screen and scan orchestrator. The
+// history API stores the query but not its position, so known searches are
+// restored to that configured order here; custom/retired searches follow.
+const CONFIGURED_SEARCH_TERM_ORDER = [
+  "AMD CPU",
+  "Intel CPU",
+  "NVIDIA GPU",
+  "AMD GPU",
+  "Intel GPU",
+  "ASUS motherboard",
+  "MSI motherboard",
+  "Gigabyte motherboard",
+  "DDR4 UDIMM",
+  "DDR5 UDIMM",
+  "M.2 NVMe SSD",
+  "750W Gold modular power supply",
+  "CPU cooler",
+  "PC case",
+  "Lian Li case",
+];
+
 const METRICS: Array<{ value: MatrixMetric; label: string }> = [
   { value: "listings", label: "Listings processed" },
   { value: "duration", label: "Duration" },
@@ -129,7 +151,11 @@ function formatRunBy(value: string) {
   return value;
 }
 
-function MatrixValue({ result, metric }: { result?: TermResult; metric: MatrixMetric }) {
+function formatSearchTerm(value: string) {
+  return value.split(/\s+-/u, 1)[0].trim();
+}
+
+function MatrixValue({ result, metric, maxValue }: { result?: TermResult; metric: MatrixMetric; maxValue: number }) {
   if (!result) {
     return metric === "completed" ? (
       <span className="inline-flex items-center gap-1 text-red-300"><XCircle className="h-3.5 w-3.5" /> No</span>
@@ -137,13 +163,34 @@ function MatrixValue({ result, metric }: { result?: TermResult; metric: MatrixMe
       <span className="text-slate-600">—</span>
     );
   }
-  if (metric === "listings") return <>{result.listingsProcessed.toLocaleString()}</>;
-  if (metric === "duration") return <>{formatDuration(result.durationSeconds)}</>;
-  if (metric === "vendors") return <>{result.vendors.size}</>;
-  return result.completed ? (
-    <span className="inline-flex items-center gap-1 text-emerald-300"><CheckCircle2 className="h-3.5 w-3.5" /> Yes</span>
-  ) : (
-    <span className="inline-flex items-center gap-1 text-red-300"><XCircle className="h-3.5 w-3.5" /> No</span>
+  const value = metric === "listings"
+    ? result.listingsProcessed
+    : metric === "duration"
+      ? result.durationSeconds
+      : metric === "vendors"
+        ? result.vendors.size
+        : result.completed ? 1 : 0;
+  const width = maxValue > 0 ? Math.max(0, Math.min(100, (value / maxValue) * 100)) : 0;
+  const label = metric === "listings"
+    ? result.listingsProcessed.toLocaleString()
+    : metric === "duration"
+      ? formatDuration(result.durationSeconds)
+      : metric === "vendors"
+        ? String(result.vendors.size)
+        : result.completed ? "Yes" : "No";
+
+  return (
+    <span className="relative block min-h-6 overflow-hidden rounded bg-slate-900/40 px-2 py-1">
+      <span
+        aria-hidden="true"
+        className={`absolute inset-y-0 left-0 ${metric === "completed" ? "bg-emerald-500/25" : "bg-blue-500/25"}`}
+        style={{ width: `${width}%` }}
+      />
+      <span className={`relative z-10 inline-flex items-center gap-1 ${metric === "completed" ? (result.completed ? "text-emerald-200" : "text-red-300") : "text-slate-100"}`}>
+        {metric === "completed" && (result.completed ? <CheckCircle2 className="h-3.5 w-3.5" /> : <XCircle className="h-3.5 w-3.5" />)}
+        {label}
+      </span>
+    </span>
   );
 }
 
@@ -196,10 +243,35 @@ export default function RunHistoryPage() {
 
   const sessions = useMemo(() => buildSessions(records), [records]);
   const searchTerms = useMemo(
-    () => [...new Set(records.map((record) => record.searchTerm))].sort((a, b) => a.localeCompare(b)),
+    () => {
+      const order = new Map(CONFIGURED_SEARCH_TERM_ORDER.map((term, index) => [term.toLowerCase(), index]));
+      return [...new Set(records.map((record) => record.searchTerm))].sort((a, b) => {
+        const aLabel = formatSearchTerm(a);
+        const bLabel = formatSearchTerm(b);
+        const aIndex = order.get(aLabel.toLowerCase()) ?? Number.POSITIVE_INFINITY;
+        const bIndex = order.get(bLabel.toLowerCase()) ?? Number.POSITIVE_INFINITY;
+        return aIndex - bIndex || aLabel.localeCompare(bLabel);
+      });
+    },
     [records],
   );
   const expectedTermCount = sessions.reduce((largest, session) => Math.max(largest, session.terms.size), 0);
+  const matrixMaxValue = useMemo(() => {
+    let maximum = metric === "completed" ? 1 : 0;
+    for (const session of sessions) {
+      for (const result of session.terms.values()) {
+        const value = metric === "listings"
+          ? result.listingsProcessed
+          : metric === "duration"
+            ? result.durationSeconds
+            : metric === "vendors"
+              ? result.vendors.size
+              : result.completed ? 1 : 0;
+        maximum = Math.max(maximum, value);
+      }
+    }
+    return maximum;
+  }, [metric, sessions]);
 
   return (
     <main className="relative flex h-full min-h-0 flex-col overflow-hidden bg-slate-950 p-4 text-slate-100 sm:p-6">
@@ -329,7 +401,7 @@ export default function RunHistoryPage() {
                   <th className="sticky left-0 z-30 min-w-[190px] border-b border-r border-white/10 bg-slate-900 px-4 py-3 font-semibold uppercase tracking-wide">Date/time</th>
                   {searchTerms.map((term) => (
                     <th key={term} title={term} className="max-w-[220px] min-w-[170px] border-b border-r border-white/10 px-3 py-3 align-bottom font-semibold">
-                      <span className="block line-clamp-3 leading-4">{term}</span>
+                      <span className="block line-clamp-3 leading-4">{formatSearchTerm(term)}</span>
                     </th>
                   ))}
                 </tr>
@@ -340,7 +412,7 @@ export default function RunHistoryPage() {
                     <th className="sticky left-0 z-10 whitespace-nowrap border-b border-r border-white/[0.06] bg-slate-950 px-4 py-3 font-mono font-normal text-slate-300 group-hover:bg-slate-900">{formatDateTime(session.startedAt)}</th>
                     {searchTerms.map((term) => (
                       <td key={term} className="border-b border-r border-white/[0.06] px-3 py-3 text-center font-mono text-slate-200 transition-colors duration-150 group-hover:bg-white/[0.035]">
-                        <MatrixValue result={session.terms.get(term)} metric={metric} />
+                        <MatrixValue result={session.terms.get(term)} metric={metric} maxValue={matrixMaxValue} />
                       </td>
                     ))}
                   </tr>
