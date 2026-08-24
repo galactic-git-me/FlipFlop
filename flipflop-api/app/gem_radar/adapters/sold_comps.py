@@ -15,6 +15,7 @@ import re
 import os
 import random
 import asyncio
+import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -31,6 +32,7 @@ from app.services.playwright_scraper import chromium_available
 
 log = structlog.get_logger(__name__)
 ua = UserAgent()
+_EBAY_VERIFICATION_BLOCK_UNTIL = 0.0
 
 
 @dataclass
@@ -315,6 +317,15 @@ class PlaywrightSoldCompsAdapter(SoldCompsAdapter):
     _MIN_PRICE = 3.0
     _MAX_PRICE = 3000.0
     _MIN_COMPS_BEFORE_BREAK = 5
+    _CHALLENGE_MARKERS = (
+        "captcha",
+        "verify you are human",
+        "security verification",
+        "checking your browser",
+        "pardon our interruption",
+        "confirm your identity",
+        "robot check",
+    )
 
     _STEALTH_JS = """
 Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
@@ -332,8 +343,16 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
             return SoldCompsResult(available=False, unavailable_reason=f"eBay sold-comps scrape failed: {exc}")
 
     async def _fetch_sold_comps(self, query: str, condition: str) -> list[SoldComp]:
+        global _EBAY_VERIFICATION_BLOCK_UNTIL
         if not chromium_available():
             log.warning("sold_comps.playwright.chromium_unavailable")
+            return []
+        if time.monotonic() < _EBAY_VERIFICATION_BLOCK_UNTIL:
+            log.info(
+                "sold_comps.playwright.verification_cooldown",
+                query=query,
+                remaining_seconds=round(_EBAY_VERIFICATION_BLOCK_UNTIL - time.monotonic()),
+            )
             return []
 
         # Deferred import: app.services.scraper owns the shared login-state
@@ -347,17 +366,28 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
 
         async with _EBAY_PLAYWRIGHT_SEM:
             async with managed_playwright() as p:
-                browser = await p.chromium.launch(
-                    headless=os.getenv("EBAY_HEADLESS", "1").lower() not in {"0", "false", "no"},
-                    args=[
-                        "--disable-blink-features=AutomationControlled",
-                        "--disable-dev-shm-usage",
-                        "--disable-infobars",
-                        "--window-size=1366,768",
-                        "--lang=en-GB",
-                    ],
-                    proxy=playwright_proxy_config(),
-                )
+                browser = None
+                attached_cdp = False
+                cdp_url = os.getenv("BROWSER_CDP_URL", "http://localhost:9222").strip()
+                if cdp_url:
+                    try:
+                        browser = await p.chromium.connect_over_cdp(cdp_url, timeout=5000)
+                        attached_cdp = True
+                        log.debug("sold_comps.playwright.cdp_attached", cdp_url=cdp_url)
+                    except Exception as exc:
+                        log.debug("sold_comps.playwright.cdp_unavailable", cdp_url=cdp_url, error=str(exc))
+                if browser is None:
+                    browser = await p.chromium.launch(
+                        headless=os.getenv("EBAY_HEADLESS", "1").lower() not in {"0", "false", "no"},
+                        args=[
+                            "--disable-blink-features=AutomationControlled",
+                            "--disable-dev-shm-usage",
+                            "--disable-infobars",
+                            "--window-size=1366,768",
+                            "--lang=en-GB",
+                        ],
+                        proxy=playwright_proxy_config(),
+                    )
                 state_path = _ebay_state_path()
                 context_kwargs = {
                     "user_agent": ua.random,
@@ -366,7 +396,10 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                 }
                 if state_path.exists():
                     context_kwargs["storage_state"] = str(state_path)
-                context = await browser.new_context(**context_kwargs)
+                if attached_cdp and browser.contexts:
+                    context = browser.contexts[0]
+                else:
+                    context = await browser.new_context(**context_kwargs)
                 await context.add_init_script(self._STEALTH_JS)
                 page = await context.new_page()
                 try:
@@ -395,6 +428,22 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                             log.debug("sold_comps.playwright.page_error", query=query, sacat=sacat, error=str(exc))
                             continue
 
+                        if self._is_human_verification_page(await page.title(), html):
+                            if os.getenv("EBAY_HEADLESS", "1").lower() in {"0", "false", "no"}:
+                                html = await self._wait_for_human_verification(page, query)
+                            else:
+                                log.warning(
+                                    "sold_comps.playwright.verification_required_headless",
+                                    query=query,
+                                )
+                                break
+
+                        if self._is_human_verification_page(await page.title(), html):
+                            # Do not immediately open another window for the
+                            # fallback category. One unresolved challenge is
+                            # authoritative for this lookup.
+                            break
+
                         batch = self._extract_comps_from_html(html, condition)
                         comps.extend(batch)
                         log.debug(
@@ -409,14 +458,57 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                             break
                         await asyncio.sleep(random.uniform(0.8, 1.5))
                 finally:
-                    try:
-                        await context.storage_state(path=str(state_path))
-                    except Exception as exc:
-                        log.debug("sold_comps.playwright.state_persist_failed", error=str(exc))
-                    await context.close()
-                    await browser.close()
+                    if attached_cdp:
+                        await page.close()
+                    else:
+                        try:
+                            await context.storage_state(path=str(state_path))
+                        except Exception as exc:
+                            log.debug("sold_comps.playwright.state_persist_failed", error=str(exc))
+                        await context.close()
+                        await browser.close()
 
         return comps
+
+    @classmethod
+    def _is_human_verification_page(cls, title: str, html: str) -> bool:
+        probe = f"{title} {html[:150000]}".lower()
+        return any(marker in probe for marker in cls._CHALLENGE_MARKERS)
+
+    async def _wait_for_human_verification(self, page, query: str) -> str:
+        """Keep the one visible eBay window alive while the operator solves
+        the challenge, instead of closing/reopening it for every comp query."""
+        global _EBAY_VERIFICATION_BLOCK_UNTIL
+        wait_seconds = max(60, int(os.getenv("EBAY_HUMAN_VERIFICATION_WAIT_SECONDS", "300")))
+        poll_seconds = 2
+        log.warning(
+            "sold_comps.playwright.waiting_for_human_verification",
+            query=query,
+            wait_seconds=wait_seconds,
+            url=page.url,
+        )
+
+        loop = asyncio.get_running_loop()
+        deadline = loop.time() + wait_seconds
+        html = await page.content()
+        while loop.time() < deadline:
+            await asyncio.sleep(poll_seconds)
+            try:
+                html = await page.content()
+                title = await page.title()
+            except Exception:
+                break
+            if not self._is_human_verification_page(title, html):
+                await page.wait_for_timeout(1200)
+                html = await page.content()
+                _EBAY_VERIFICATION_BLOCK_UNTIL = 0.0
+                log.info("sold_comps.playwright.human_verification_completed", query=query)
+                return html
+
+        cooldown_seconds = max(300, int(os.getenv("EBAY_HUMAN_VERIFICATION_COOLDOWN_SECONDS", "1800")))
+        _EBAY_VERIFICATION_BLOCK_UNTIL = time.monotonic() + cooldown_seconds
+        log.warning("sold_comps.playwright.human_verification_timed_out", query=query)
+        return html
 
     # Same markup, same parsing rules as LiveSoldCompsAdapter — eBay serves
     # identical HTML regardless of which client fetched it.
