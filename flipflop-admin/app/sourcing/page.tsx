@@ -1917,6 +1917,8 @@ interface ScanRunHistory {
   occurredAt: string;
 }
 
+type ScanChartMetric = "processed" | "observations";
+
 const SCAN_SESSION_GAP_MS = 10 * 60 * 1000;
 const FALLBACK_VENDOR_COLORS = ["#06b6d4", "#84cc16", "#ec4899", "#a855f7"];
 
@@ -1970,13 +1972,14 @@ function groupScanHistoryIntoSessions(runs: ScanRunHistory[]) {
 }
 
 const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
+  const [metric, setMetric] = useState<ScanChartMetric>("processed");
   const [runs, setRuns] = useState<ScanRunHistory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/gem-radar/scan-run-history?limit=10000", {
+    fetch(`/api/gem-radar/scan-run-history?limit=10000&basis=${metric}`, {
       cache: "no-store",
       signal: AbortSignal.timeout(15_000),
     })
@@ -1998,7 +2001,7 @@ const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [metric]);
 
   const chartData = useMemo(() => groupScanHistoryIntoSessions(runs), [runs]);
   const vendorKeys = useMemo(() => {
@@ -2035,11 +2038,41 @@ const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
 
   return (
     <div className="p-4 bg-slate-800 rounded-lg border border-slate-700">
-      <div className="mb-3">
-        <div className="text-sm font-medium text-slate-200">Scan Runs Over Time</div>
-        <div className="mt-0.5 text-xs text-slate-400">
-          Each stacked bar is one complete scan session, split by vendor.
+      <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <div className="text-sm font-medium text-slate-200">Scan Runs Over Time</div>
+          <div className="mt-0.5 text-xs text-slate-400">
+            {metric === "processed"
+              ? "Exact listings returned by each scan since total-history recording began, split by vendor."
+              : "New or changed listing observations written during each scan, split by vendor."}
+          </div>
         </div>
+        <fieldset className="flex rounded-lg border border-slate-600 bg-slate-900/70 p-1" aria-label="Scan chart metric">
+          <legend className="sr-only">Choose the scan chart measurement</legend>
+          {([
+            ["processed", "Total processed"],
+            ["observations", "New/changed"],
+          ] as const).map(([value, label]) => (
+            <label
+              key={value}
+              className={`cursor-pointer rounded-md px-3 py-1.5 text-xs font-medium transition-colors duration-200 focus-within:ring-2 focus-within:ring-blue-400 ${metric === value ? "bg-blue-600 text-white" : "text-slate-400 hover:bg-slate-700 hover:text-slate-200"}`}
+            >
+              <input
+                type="radio"
+                name="scanChartMetric"
+                value={value}
+                checked={metric === value}
+                onChange={() => {
+                  setLoading(true);
+                  setError(null);
+                  setMetric(value);
+                }}
+                className="sr-only"
+              />
+              {label}
+            </label>
+          ))}
+        </fieldset>
       </div>
       <div className="mb-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
         {vendorKeys.map((vendor, index) => (
@@ -2069,7 +2102,7 @@ const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
             tick={{ fill: "#94a3b8", fontSize: 12 }}
             allowDecimals={false}
             domain={[0, "dataMax"]}
-            label={{ value: "Listings found", angle: -90, position: "insideLeft", fill: "#94a3b8" }}
+            label={{ value: metric === "processed" ? "Listings processed" : "New/changed observations", angle: -90, position: "insideLeft", fill: "#94a3b8" }}
           />
           <Tooltip
             contentStyle={{ background: "#0f172a", border: "1px solid #334155", borderRadius: 6 }}

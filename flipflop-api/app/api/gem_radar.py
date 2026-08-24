@@ -1777,6 +1777,7 @@ async def record_scan_run_history(
 @router.get("/scan-run-history", response_model=list[ScanRunHistoryOut])
 async def list_scan_run_history(
     limit: int = Query(50, ge=1, le=10000),
+    basis: Literal["combined", "processed", "observations"] = Query("combined"),
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
 ) -> list[ScanRunHistoryOut]:
@@ -1788,7 +1789,10 @@ async def list_scan_run_history(
             _select(GemRadarScanRun).order_by(GemRadarScanRun.occurred_at.desc()).limit(limit)
         )
     ).scalars().all()
-    history = [ScanRunHistoryOut.model_validate(r, from_attributes=True) for r in rows]
+    history = [] if basis == "observations" else [ScanRunHistoryOut.model_validate(r, from_attributes=True) for r in rows]
+
+    if basis == "processed":
+        return history
 
     # The explicit history mirror was introduced after observation ingestion
     # had already been running for weeks. Recover those earlier search runs
@@ -1798,10 +1802,11 @@ async def list_scan_run_history(
     remaining = limit - len(history)
     if remaining > 0:
         cutoff = min((row.occurred_at for row in rows), default=datetime.utcnow())
+        time_filter = "AND observed_at < :cutoff" if basis == "combined" else ""
         legacy_rows = (
             await db.execute(
                 _text(
-                    """
+                    f"""
                     SELECT
                         search_run_id,
                         MIN(search_query) AS search_term,
@@ -1812,7 +1817,7 @@ async def list_scan_run_history(
                     FROM gem_radar_listing_observations
                     WHERE search_run_id IS NOT NULL
                       AND search_query IS NOT NULL
-                      AND observed_at < :cutoff
+                      {time_filter}
                     GROUP BY search_run_id
                     ORDER BY MAX(observed_at) DESC
                     LIMIT :remaining
