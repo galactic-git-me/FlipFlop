@@ -1,9 +1,9 @@
 {
   "ram_watcher": {
-    "last_success_at": "2026-08-24T08:29:11.164023+00:00"
+    "last_success_at": "2026-08-24T08:44:10.670665+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-08-24T08:40:10.937926+00:00"
+    "last_success_at": "2026-08-24T08:45:11.183221+00:00"
   },
   "ebay_sales_tracker": {
     "last_success_at": "2026-08-24T08:31:10.510154+00:00"
@@ -24,7 +24,7 @@
     "last_success_at": "2026-08-24T08:29:11.210634+00:00"
   },
   "deferred_publish": {
-    "last_success_at": "2026-08-24T08:29:11.211196+00:00"
+    "last_success_at": "2026-08-24T08:44:10.676083+00:00"
   },
   "price_refresh": {
     "last_success_at": "2026-08-24T04:34:12.062370+00:00"
