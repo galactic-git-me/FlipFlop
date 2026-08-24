@@ -9964,3 +9964,908 @@ INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1"
 INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
 INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
 INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58764 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:07 [info     ] ebay_search.searching          limit=100 offset=0 page=1 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:08 [info     ] ebay_search.success            count=86 page=1 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:60557 - "GET /api/gem-radar/ebay-search?query=PC+case+-bundle+-laptop+-phone+-iphone+-samsung+-tablet+-%22pencil+case%22+-sleeve+-guitar+-camera+-toy+-cosmetic+-watch+-sticker+-%22decorative+panel%22+-%22dust+filter%22+-%22carrying+case%22&page=1&limit=100 HTTP/1.1" 200 OK
+2026-08-24 17:49:09 [info     ] submission_queued              search_run_id=7477c212-a75e-4421-9c44-46b6f4f3a5bf submission_id=64133
+INFO:     127.0.0.1:52673 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:10 [info     ] ebay_search.searching          limit=100 offset=100 page=2 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:12 [info     ] submission_queued              search_run_id=59d2f7d1-6e59-4e9b-a15f-2fb6f3513937 submission_id=64134
+INFO:     127.0.0.1:52673 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 17:49:12 [info     ] ebay_search.success            count=79 page=2 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:60557 - "GET /api/gem-radar/ebay-search?query=PC+case+-bundle+-laptop+-phone+-iphone+-samsung+-tablet+-%22pencil+case%22+-sleeve+-guitar+-camera+-toy+-cosmetic+-watch+-sticker+-%22decorative+panel%22+-%22dust+filter%22+-%22carrying+case%22&page=2&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:13 [info     ] submission_queued              search_run_id=7477c212-a75e-4421-9c44-46b6f4f3a5bf submission_id=64135
+INFO:     127.0.0.1:52673 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:49:14 [info     ] submission_queued              search_run_id=89452f36-2758-4b9b-9707-acc8de699978 submission_id=64136
+INFO:     127.0.0.1:52673 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:49:14 [info     ] ebay_search.searching          limit=100 offset=200 page=3 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+2026-08-24 17:49:15 [info     ] queue_processor.processing_submission active_searches=1 n_listings=48 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=64134
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:16 [info     ] ebay_search.success            count=77 page=3 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:60557 - "GET /api/gem-radar/ebay-search?query=PC+case+-bundle+-laptop+-phone+-iphone+-samsung+-tablet+-%22pencil+case%22+-sleeve+-guitar+-camera+-toy+-cosmetic+-watch+-sticker+-%22decorative+panel%22+-%22dust+filter%22+-%22carrying+case%22&page=3&limit=100 HTTP/1.1" 200 OK
+2026-08-24 17:49:16 [info     ] submission_queued              search_run_id=7477c212-a75e-4421-9c44-46b6f4f3a5bf submission_id=64137
+INFO:     127.0.0.1:52673 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+2026-08-24 17:49:17 [info     ] ebay_search.searching          limit=100 offset=300 page=4 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:49:18 [info     ] submission_queued              search_run_id=59d2f7d1-6e59-4e9b-a15f-2fb6f3513937 submission_id=64138
+INFO:     127.0.0.1:52673 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:19 [info     ] submission_queued              search_run_id=89452f36-2758-4b9b-9707-acc8de699978 submission_id=64139
+INFO:     127.0.0.1:52673 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:49:19 [info     ] ebay_search.success            count=79 page=4 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:60557 - "GET /api/gem-radar/ebay-search?query=PC+case+-bundle+-laptop+-phone+-iphone+-samsung+-tablet+-%22pencil+case%22+-sleeve+-guitar+-camera+-toy+-cosmetic+-watch+-sticker+-%22decorative+panel%22+-%22dust+filter%22+-%22carrying+case%22&page=4&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:49:20 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=46 cross_run_dupes_price_updated=5 cross_run_dupes_unchanged_price=43 elapsed_s=5.0 excluded_auctions=0 new_listings=0
+2026-08-24 17:49:20 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=46 ingested=0 submission_id=64134
+2026-08-24 17:49:20 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=pc-case-chassis
+2026-08-24 17:49:20 [info     ] queue_processor.processing_submission active_searches=1 n_listings=78 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=64135
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:20 [info     ] submission_queued              search_run_id=7477c212-a75e-4421-9c44-46b6f4f3a5bf submission_id=64140
+INFO:     127.0.0.1:52673 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 17:49:21 [info     ] ebay_search.searching          limit=100 offset=400 page=5 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:23 [warning  ] ebay_catalog.get_product_failed epid=2342803947 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+2026-08-24 17:49:23 [info     ] ebay_search.success            count=85 page=5 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:60557 - "GET /api/gem-radar/ebay-search?query=PC+case+-bundle+-laptop+-phone+-iphone+-samsung+-tablet+-%22pencil+case%22+-sleeve+-guitar+-camera+-toy+-cosmetic+-watch+-sticker+-%22decorative+panel%22+-%22dust+filter%22+-%22carrying+case%22&page=5&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:23 [info     ] submission_queued              search_run_id=7477c212-a75e-4421-9c44-46b6f4f3a5bf submission_id=64141
+INFO:     127.0.0.1:52673 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60557 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+2026-08-24 17:49:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Universal PC Case Holder Adjustable Host Box Stand
+2026-08-24 17:49:24 [info     ] submission_queued              search_run_id=59d2f7d1-6e59-4e9b-a15f-2fb6f3513937 submission_id=64142
+INFO:     127.0.0.1:52673 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:26 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=10pc Pro Body Piercing Tool Kit Tongue Belly Septu
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:49:28 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=4pc IPX8 Waterproof AirTag Case Loop Holder Keyrin
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:29 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Travel Waterproof Soap Dishes Soap Case Soap Box S
+2026-08-24 17:49:29 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=1 PC Glasses holder Leather Portable Case Cover Ey
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:49:30 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=1/2" 1/4" 3/8" Inch Drive Click Torque Wrench Set
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:32 [warning  ] ebay_catalog.get_product_failed epid=20083999353 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=12Pc Injector Rail Blanking Plugs CRD Common Rail
+2026-08-24 17:49:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Open Computer Case,Open Air Pc Case, Motherboard A
+2026-08-24 17:49:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Open Computer Case,Open Air Pc Case, Motherboard A
+2026-08-24 17:49:34 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=14PC E Torx Socket Set Female Start Bit External H
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:36 [warning  ] ebay_catalog.get_product_failed epid=15035053028 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:37 [info     ] gem_radar.sold_comps_ingested  inserted=6 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis skipped=170
+INFO:     127.0.0.1:59116 - "POST /api/gem-radar/sold-comps HTTP/1.1" 200 OK
+2026-08-24 17:49:37 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=25PC   Spark Plug Thread Repair Kit M14 x 1.25 wit
+INFO:     127.0.0.1:59116 - "GET /api/gem-radar/sold-comp-targets?query=PC+case+-bundle+-laptop+-phone+-iphone+-samsung+-tablet+-%22pencil+case%22+-sleeve+-guitar+-camera+-toy+-cosmetic+-watch+-sticker+-%22decorative+panel%22+-%22dust+filter%22+-%22carrying+case%22&limit=3&category=case HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:38 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=CR2032 Battery Holder Case 3V Button Coin Cell Box
+2026-08-24 17:49:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Painted Hard PC Fully Wrapped Protective Case Cove
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:49:41 [info     ] gem_radar.sold_comps_ingested  inserted=0 query=msi mag-infinite-s3 search_id=pc-case-chassis skipped=3
+INFO:     127.0.0.1:59116 - "POST /api/gem-radar/sold-comps HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+2026-08-24 17:49:42 [warning  ] ebay_catalog.get_product_failed epid=9026644830 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+2026-08-24 17:49:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PC Temperature Display 8.8 Inch Landscape Portrait
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:44 [info     ] gem_radar.sold_comps_ingested  inserted=0 query=msi mag-pano-110r-pz search_id=pc-case-chassis skipped=2
+INFO:     127.0.0.1:59116 - "POST /api/gem-radar/sold-comps HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59116 - "GET /api/builds/sold-comp-targets?limit=2 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:49:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Ultra Thin Shockproof Case For Motorola Razr 60 50
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:46 [warning  ] ebay_catalog.get_product_failed epid=21055215778 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:47 [warning  ] ebay_catalog.get_product_failed epid=21006000248 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:51 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=5pc Mini Soft Grip Plier Set + Case Crafts Jewelle
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+2026-08-24 17:49:52 [warning  ] ebay_catalog.get_product_failed epid=26074766741 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:54 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=4Pc Duvet Cover Set With Fitted Sheet & Pillow Cas
+2026-08-24 17:49:54 [warning  ] ebay_catalog.get_product_failed epid=14057273295 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:49:55 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Stainless Steel PC Stand Extra Large ATX Case Trol
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:49:55 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=For Amazfit GTR 4 PC Hard Case Screen Protector Fu
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:56 [warning  ] ebay_catalog.get_product_failed epid=24011217776 status=403
+2026-08-24 17:49:57 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=20pc Metric Tap Die Set M3-M12 +Plastic Store Case
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:49:57 [warning  ] ebay_catalog.get_product_failed epid=23063751086 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:49:59 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=2 Pcs Li-Ion M12-Battery Plastic Case Cover Top Sh
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:50:00 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=131Pc Thread Repair Kit HSS Drill Helicoil Metric
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:01 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=New 1pc Finger Pulse Oximeter Storage Case Heart R
+2026-08-24 17:50:02 [warning  ] ebay_catalog.get_product_failed epid=22060653182 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:04 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=131Pc Thread Repair Kit HSS Drill Helicoil Heli Co
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:06 [warning  ] ebay_catalog.get_product_failed epid=21063417861 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+2026-08-24 17:50:07 [warning  ] ebay_catalog.get_product_failed epid=3057007701 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:07 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=120pc ROLL PIN ASSORTMENT SET AMTECH PINS SPRING T
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:50:09 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Router Bit Set 35pc 1/4" Shank Professional Woodwo
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:10 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=AirTag Case For Apple Air Tag Cover Tracker Silico
+2026-08-24 17:50:11 [warning  ] ebay_catalog.get_product_failed epid=596722843 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+2026-08-24 17:50:12 [warning  ] ebay_catalog.get_product_failed epid=11049336609 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:14 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=For Garmin Forerunner 165 PC Full Coverage Tempere
+2026-08-24 17:50:14 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=131Pc Thread Repair Kit HSS Drill Helicoil Metric
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:16 [warning  ] ebay_catalog.get_product_failed epid=21055215778 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+2026-08-24 17:50:17 [warning  ] ebay_catalog.get_product_failed epid=27063370160 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:50:17 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Sports Silicone Strap + PC Case For Xiaomi Mi Band
+2026-08-24 17:50:18 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=PORTABLE SEWING KIT TRAVEL SMALL HOME CASE NEEDLE
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:50:19 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Fibre Sealing Washer Set 600pc Sump Plug Gasket Se
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:20 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=PS2 DVD Wii U Xbox 360 GameCube PC Game Box Protec
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:21 [warning  ] ebay_catalog.get_product_failed epid=27024805358 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:22 [warning  ] ebay_catalog.get_product_failed epid=2164346035 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:23 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Ray Ban GLASSES CASE-Ray Ban SUNGLASSES CASE-Ray B
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:50:23 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=SMT Tantalum Capacitors. Various Values & Case Siz
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:50:25 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=SDS Plus Drill & Chisel Set 17pc Masonry Bits Tung
+2026-08-24 17:50:25 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=131Pc Thread Repair Kit HSS Drill Helicoil Metric
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:26 [info     ] scan_sweep_complete.signalled
+INFO:     127.0.0.1:55642 - "POST /api/gem-radar/scan-sweep-complete HTTP/1.1" 200 OK
+2026-08-24 17:50:26 [warning  ] ebay_catalog.get_product_failed epid=7039321256 status=403
+2026-08-24 17:50:26 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Sewing Machine Bobbin Case - WILL FIT BROTHER JANO
+2026-08-24 17:50:27 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=1 Pc 18x18in Cartoon Cat Pillow Cover 3 Cats Print
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55642 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:28 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Metric Imperial AF Allen Hex Hexagon Wrench Key Se
+2026-08-24 17:50:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Portable Reader Slim Pen Reading Glasses with Pen
+2026-08-24 17:50:29 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=For Xiaomi Smart Band 10 9 8 Tempered Glass Screen
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:50:30 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=1PC Macrame Pillow Cover Home Decor Knitted Pillow
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:31 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=30pc Allen Key Set Metric & Imperial Hex Keys Hexa
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63235 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:50:33 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=TePe Interdental Brush Travel Case 1pc Portable Hy
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:34 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=131Pc Thread Repair Kit HSS Drill Helicoil Heli Co
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:50:34 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Plain Dyed Flat Bed Sheet Polycotton Easy Care Mat
+INFO:     127.0.0.1:55674 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 17:50:35 [debug    ] cpk_extractor.low_confidence   confidence=0.6 title=VonHaus Universal 99pc Titanium Coated HSS Drill B
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:36 [warning  ] ebay_catalog.get_product_failed epid=2133201568 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+2026-08-24 17:50:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1PC Double Sided Fishing Tackle Box Lure Hook Bait
+2026-08-24 17:50:37 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=18 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=75 elapsed_s=76.9 excluded_auctions=0 new_listings=1
+2026-08-24 17:50:37 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=18 ingested=1 submission_id=64135
+2026-08-24 17:50:37 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=pc-case-chassis
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:37 [info     ] queue_processor.processing_submission active_searches=1 n_listings=46 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=64136
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59099 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:42 [warning  ] ebay_catalog.get_product_failed epid=18080744981 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:44 [warning  ] ebay_catalog.get_product_failed epid=28078689758 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:50:44 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X49 X 49 Inch QD-OLED Curved Gaming
+2026-08-24 17:50:44 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT Hecate AMD Ryzen 5, NVIDIA RTX 5050, 16GB R
+INFO:     127.0.0.1:54440 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:50:45 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram|ssd title=AWD-IT Atlas AMD Ryzen 5, Radeon RX 9070 XT 16GB ,
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49714 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 17:50:46 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Astraeus AMD Ryzen 5, Radeon RX 9070 GRE, 1
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:50:48 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X32X5 31.5 Inch QD-OLED 240Hz Gaming
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:50:49 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator X27 X1 26.5 Inch 4K QD-OLED 240Hz Ga
+INFO:     127.0.0.1:61942 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 17:50:49 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Predator XB273U F5 27 Inch IPS 360Hz Gaming M
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:52 [debug    ] cpk_extractor.invalid_category category=monitor title=Acer Nitro XZ322QU V3 32 Inch WQHD Curved Gaming M
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49872 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:50:55 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=34 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=44 elapsed_s=18.3 excluded_auctions=0 new_listings=0
+2026-08-24 17:50:55 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=34 ingested=0 submission_id=64136
+2026-08-24 17:50:55 [info     ] queue_processor.search_term_released active_searches_remaining=0 search_id=pc-case-chassis
+2026-08-24 17:50:55 [info     ] queue_processor.processing_submission active_searches=1 n_listings=77 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=64137
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:50:59 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Wall Mounted Soap Dish Holder Waterproof Drain Soa
+2026-08-24 17:51:00 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=1pc Baby Travel Wipe Case Child Wet Wipes Box Chan
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:51:03 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=For Motorola Razr 60 50 40 Ultra 360 Rotating Stan
+2026-08-24 17:51:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Luxury Shockproof Business Retro Leather Hybird PC
+2026-08-24 17:51:03 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Portable Toothpick Case Holder Travel Pocket Stora
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:51:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1pc Metal Frame Slim Reading Glasses/Spring Hinges
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:51:06 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=1pc Leather Car Key Fob Cover Wallet Organizer Zip
+2026-08-24 17:51:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Black Computer Dust Cover Waterproof Desktop Case
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:07 [info     ] ebay_search.searching          limit=100 offset=0 page=1 query=Lian Li case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:08 [info     ] ebay_search.success            count=91 page=1 query=Lian Li case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:52185 - "GET /api/gem-radar/ebay-search?query=Lian+Li+case+-bundle+-laptop+-phone+-iphone+-samsung+-tablet+-%22pencil+case%22+-sleeve+-guitar+-camera+-toy+-cosmetic+-watch+-sticker+-%22decorative+panel%22+-%22dust+filter%22+-%22carrying+case%22&page=1&limit=100 HTTP/1.1" 200 OK
+2026-08-24 17:51:09 [info     ] submission_queued              search_run_id=f5a56a26-e5c2-4daa-9386-0b288b637454 submission_id=64143
+INFO:     127.0.0.1:50994 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 17:51:11 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Hard PC Matte Case Full Cover Shell For MacBook Ai
+2026-08-24 17:51:11 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=2, 4 X PILLOW CASE LUXURY CASES COTTON-BLEND HOUSE
+2026-08-24 17:51:11 [info     ] ebay_search.searching          limit=100 offset=100 page=2 query=Lian Li case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+2026-08-24 17:51:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Gaming PC - RTX 2080 Super, i7, 1TB NVMe, Water Co
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:13 [info     ] ebay_search.success            count=91 page=2 query=Lian Li case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:52185 - "GET /api/gem-radar/ebay-search?query=Lian+Li+case+-bundle+-laptop+-phone+-iphone+-samsung+-tablet+-%22pencil+case%22+-sleeve+-guitar+-camera+-toy+-cosmetic+-watch+-sticker+-%22decorative+panel%22+-%22dust+filter%22+-%22carrying+case%22&page=2&limit=100 HTTP/1.1" 200 OK
+2026-08-24 17:51:13 [info     ] submission_queued              search_run_id=5f724423-855d-4bd4-bafa-6716282b71f2 submission_id=64144
+INFO:     127.0.0.1:50994 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 17:51:13 [info     ] queue_processor.processing_submission active_searches=2 n_listings=48 query=Lian Li case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=lian-li-pc-case submission_id=64144
+2026-08-24 17:51:14 [info     ] submission_queued              search_run_id=f5a56a26-e5c2-4daa-9386-0b288b637454 submission_id=64145
+INFO:     127.0.0.1:50994 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:51:15 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=AirTag Case For Apple Air Tag Cover Tracker Silico
+2026-08-24 17:51:15 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=For Google Pixel 10 Pro Fold Magsafe Case PC TPU H
+2026-08-24 17:51:15 [info     ] ebay_search.searching          limit=100 offset=200 page=3 query=Lian Li case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+2026-08-24 17:51:16 [info     ] submission_queued              search_run_id=53816d4d-722c-4ce7-ac7e-806a95266cdf submission_id=64146
+INFO:     127.0.0.1:50994 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:16 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=25PC COMBINATION SPANNER WRENCH SET METRIC AF IMPE
+2026-08-24 17:51:16 [info     ] ebay_search.success            count=86 page=3 query=Lian Li case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:52185 - "GET /api/gem-radar/ebay-search?query=Lian+Li+case+-bundle+-laptop+-phone+-iphone+-samsung+-tablet+-%22pencil+case%22+-sleeve+-guitar+-camera+-toy+-cosmetic+-watch+-sticker+-%22decorative+panel%22+-%22dust+filter%22+-%22carrying+case%22&page=3&limit=100 HTTP/1.1" 200 OK
+2026-08-24 17:51:16 [info     ] submission_queued              search_run_id=f5a56a26-e5c2-4daa-9386-0b288b637454 submission_id=64147
+INFO:     127.0.0.1:50994 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:17 [warning  ] ebay_catalog.get_product_failed epid=15022766353 status=403
+2026-08-24 17:51:17 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PC Temperature Display 170\xb0 IPS Wide Viewing Angle
+2026-08-24 17:51:18 [info     ] ebay_search.searching          limit=100 offset=300 page=4 query=Lian Li case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:51:19 [info     ] ebay_search.success            count=86 page=4 query=Lian Li case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:52185 - "GET /api/gem-radar/ebay-search?query=Lian+Li+case+-bundle+-laptop+-phone+-iphone+-samsung+-tablet+-%22pencil+case%22+-sleeve+-guitar+-camera+-toy+-cosmetic+-watch+-sticker+-%22decorative+panel%22+-%22dust+filter%22+-%22carrying+case%22&page=4&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:51:19 [info     ] submission_queued              search_run_id=5f724423-855d-4bd4-bafa-6716282b71f2 submission_id=64148
+INFO:     127.0.0.1:50994 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:20 [info     ] ebay_search.searching          limit=100 offset=400 page=5 query=Lian Li case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+2026-08-24 17:51:20 [info     ] submission_queued              search_run_id=53816d4d-722c-4ce7-ac7e-806a95266cdf submission_id=64149
+INFO:     127.0.0.1:50994 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Stackable Ventilated Frame PC Case Modular ATX Mot
+2026-08-24 17:51:21 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=For Xiaomi Mi 13 14 15 Pro Ultra Matte Magnetic Ha
+2026-08-24 17:51:21 [info     ] ebay_search.success            count=86 page=5 query=Lian Li case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case"
+INFO:     127.0.0.1:52185 - "GET /api/gem-radar/ebay-search?query=Lian+Li+case+-bundle+-laptop+-phone+-iphone+-samsung+-tablet+-%22pencil+case%22+-sleeve+-guitar+-camera+-toy+-cosmetic+-watch+-sticker+-%22decorative+panel%22+-%22dust+filter%22+-%22carrying+case%22&page=5&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52185 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:23 [warning  ] ebay_catalog.get_product_failed epid=14097616404 status=403
+2026-08-24 17:51:23 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=1pc Cot Pillowcase / Box Pillow Cover Only Plain D
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:25 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=131Pc Thread Repair Kit HSS Drill Helicoil Metric
+2026-08-24 17:51:25 [warning  ] ebay_catalog.get_product_failed epid=27043488634 status=403
+2026-08-24 17:51:25 [info     ] submission_queued              search_run_id=5f724423-855d-4bd4-bafa-6716282b71f2 submission_id=64150
+INFO:     127.0.0.1:50994 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-08-24 17:51:25 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=20pc Ratchet Spanners Wrench Polished Tool Kit Imp
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Full Case 300 Packs 1500pc 10cm x 10cm Sterile Gau
+2026-08-24 17:51:26 [warning  ] ebay_catalog.get_product_failed epid=22060653182 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Colorful Armor PC+TPU Case Protective Cover For Go
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:29 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Antique Jewelry Box Case Decorative Hasp Cabinet F
+2026-08-24 17:51:29 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=SPANNER SET 14PC METRIC SINGLE OPEN END BLACK COMB
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:51:30 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Jewellery Making Craft Tools 4pc Set in Case or Ch
+2026-08-24 17:51:31 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=1/2/4PCS Floral Cushion Cover Pillow Case Square S
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Carbon Fibre Texture Magnetic Case For Google Pixe
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:33 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=1pc Car Seat Belt Buckle Covers Interior Protectiv
+2026-08-24 17:51:34 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=1PC Real Leather Car Remote Key Fob Cover Case For
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:51:35 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=4Pc Duvet Cover Set With Fitted Sheet & Pillow Cas
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+2026-08-24 17:51:35 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Small Clear Acrylic Display Case Dustproof Perspex
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:36 [warning  ] ebay_catalog.get_product_failed epid=17067645721 status=403
+2026-08-24 17:51:37 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=1pc Carry Handle Cymbal Storage Case Double- Layer
+2026-08-24 17:51:37 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=130w Rotary Mini Drill Multi Tool + Bits  + Case D
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=for Xbox One S|X Consoles Bottom Case - 4pc Rubber
+2026-08-24 17:51:38 [warning  ] ebay_catalog.get_product_failed epid=21055215778 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Portable Reader Slim Pen Reading Glasses with Pen
+2026-08-24 17:51:40 [warning  ] ebay_catalog.get_product_failed epid=12087061105 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Frameless Magsafe Case For Xiaomi 17 Pro Max 15 Ul
+2026-08-24 17:51:41 [warning  ] ebay_catalog.get_product_failed epid=5055644105 status=403
+2026-08-24 17:51:41 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=8pc Mini Precision CRV Pliers Set + Case Electroni
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:42 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=For Google Pixel 10 Pro Fold Case PC TPU Ring Hold
+2026-08-24 17:51:42 [info     ] gem_radar.sold_comps_ingested  inserted=42 query=Lian Li case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=lian-li-pc-case skipped=94
+INFO:     127.0.0.1:62883 - "POST /api/gem-radar/sold-comps HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62883 - "GET /api/gem-radar/sold-comp-targets?query=Lian+Li+case+-bundle+-laptop+-phone+-iphone+-samsung+-tablet+-%22pencil+case%22+-sleeve+-guitar+-camera+-toy+-cosmetic+-watch+-sticker+-%22decorative+panel%22+-%22dust+filter%22+-%22carrying+case%22&limit=3&category=case HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:43 [warning  ] ebay_catalog.get_product_failed epid=24072183122 status=403
+2026-08-24 17:51:43 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Flat & Spring Washers 790pc Assorted Sizes Rust Re
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:44 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Lotus 240pc Nuts Bolts Set Metric Hex Fasteners Bl
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:45 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Ray Ban GLASSES CASE-Ray Ban SUNGLASSES CASE-Ray B
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:46 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Draper 3/8" Dr Ratchet Torque Wrench + Case + 4pc
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:48 [warning  ] ebay_catalog.get_product_failed epid=15035053028 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:48 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Toolzone 29pc Large Compression Spring Assortment
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-08-24 17:51:50 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=110pc Grease Nipple Set Mixed Assortment Fittings
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-08-24 17:51:52 [info     ] gem_radar.sold_comps_ingested  inserted=0 query=lian-li uni-fan-sl-wireless-lcd-120-black search_id=lian-li-pc-case skipped=2
+INFO:     127.0.0.1:51320 - "POST /api/gem-radar/sold-comps HTTP/1.1" 200 OK
+2026-08-24 17:51:52 [warning  ] ebay_catalog.get_product_failed epid=15022766353 status=403
+2026-08-24 17:51:54 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=14pc 1/2" Drive Jumbo Crows Foot Metric Spanners S
+2026-08-24 17:51:54 [warning  ] ebay_catalog.get_product_failed epid=4047395999 status=403
+INFO:     127.0.0.1:51320 - "GET /api/builds/sold-comp-targets?limit=2 HTTP/1.1" 404 Not Found
+2026-08-24 17:51:55 [warning  ] ebay_catalog.get_product_failed epid=4072341403 status=403
+2026-08-24 17:51:56 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Amtech 12pc Double-Ended Wax Carving Set: Spatulas
+2026-08-24 17:51:57 [warning  ] ebay_catalog.get_product_failed epid=20058459039 status=403
+2026-08-24 17:51:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Box Protector PC Amiga Big Games STRONG 0.5mm Plas
+2026-08-24 17:51:58 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Engine Valve Spring Compressor Tool Set 10pc + Cas
+2026-08-24 17:51:59 [warning  ] ebay_catalog.get_product_failed epid=25037107771 status=403
+2026-08-24 17:51:59 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Hollow Hole Punch Tool 5mm-35mm Leather Rubber Gas
+2026-08-24 17:52:01 [warning  ] ebay_catalog.get_product_failed epid=22035210445 status=403
+2026-08-24 17:52:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=24pc Ratchet Spanners Wrench Polished Tool Kit Imp
+2026-08-24 17:52:02 [warning  ] ebay_catalog.get_product_failed epid=28021985077 status=403
+2026-08-24 17:52:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1pc 12 Slots Essential Oil Bag Storage Case Portab
+2026-08-24 17:52:03 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Neilsen 7pc Countersink Carpentry Woodworking Dril
+2026-08-24 17:52:04 [warning  ] ebay_catalog.get_product_failed epid=16047998159 status=403
+2026-08-24 17:52:05 [warning  ] ebay_catalog.get_product_failed epid=1223123243 status=403
+2026-08-24 17:52:05 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=13 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=75 elapsed_s=70.0 excluded_auctions=0 new_listings=1
+2026-08-24 17:52:05 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=13 ingested=1 submission_id=64137
+2026-08-24 17:52:06 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=pc-case-chassis
+2026-08-24 17:52:06 [info     ] queue_processor.processing_submission active_searches=2 n_listings=84 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=64141
+2026-08-24 17:52:06 [warning  ] ebay_catalog.get_product_failed epid=5063752260 status=403
+2026-08-24 17:52:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dan Case A4-H2O A4 Mini-ITX Case Silver
+2026-08-24 17:52:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dan Case A4-H2O A4 Mini-ITX Case Black
+2026-08-24 17:52:08 [warning  ] ebay_catalog.get_product_failed epid=4056997650 status=403
+2026-08-24 17:52:09 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Sandwich Storage Case Bread Lunch Box Food Storage
+2026-08-24 17:52:09 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=44 cross_run_dupes_price_updated=5 cross_run_dupes_unchanged_price=43 elapsed_s=55.3 excluded_auctions=0 new_listings=0
+2026-08-24 17:52:09 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=44 ingested=0 submission_id=64144
+2026-08-24 17:52:09 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Black Alloy Sponge Backed Pc Case Cooling Bay Cove
+2026-08-24 17:52:09 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=lian-li-pc-case
+2026-08-24 17:52:09 [info     ] queue_processor.processing_submission active_searches=2 n_listings=48 query=Lian Li case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=lian-li-pc-case submission_id=64148
+2026-08-24 17:52:10 [warning  ] ebay_catalog.get_product_failed epid=596722843 status=403
+2026-08-24 17:52:10 [warning  ] ebay_catalog.get_product_failed epid=20093457019 status=403
+2026-08-24 17:52:11 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=For Fitbit Versa 4 / Sense 2 Case Hard PC Bumper S
+2026-08-24 17:52:11 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1/2x Plain Plush Cushion Cover Soft Throw Pillow C
+2026-08-24 17:52:11 [warning  ] ebay_catalog.get_product_failed epid=27012667008 status=403
+2026-08-24 17:52:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Missile Switch Gaming PC Case 20x20mm Power Cover
+2026-08-24 17:52:13 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=24pc Imperial Tap and Die Set Alloy Steel With Sto
+2026-08-24 17:52:13 [warning  ] ebay_catalog.get_product_failed epid=28021985077 status=403
+2026-08-24 17:52:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=155 PC FLAT SPRING WASHERS SET BOX CASE DIY ASSORT
+2026-08-24 17:52:14 [warning  ] ebay_catalog.get_product_failed epid=21055215778 status=403
+2026-08-24 17:52:16 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Universal Bobbins Case Holder Industrial Sewing Ma
+2026-08-24 17:52:16 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=For Google Pixel 10 Pro Fold Case PC Lether Protec
+2026-08-24 17:52:16 [info     ] scan_sweep_complete.signalled
+INFO:     127.0.0.1:64500 - "POST /api/gem-radar/scan-sweep-complete HTTP/1.1" 200 OK
+2026-08-24 17:52:16 [warning  ] ebay_catalog.get_product_failed epid=18061556609 status=403
+INFO:     127.0.0.1:64500 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 17:52:17 [warning  ] ebay_catalog.get_product_failed epid=26052471756 status=403
+2026-08-24 17:52:17 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=50Pc Coins Storage Box Clear Coin Capsules Protect
+2026-08-24 17:52:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Case Leather Wallet Cover With Wristband For Motor
+INFO:     127.0.0.1:55366 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 17:52:19 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Lumberjack 300pc Drill Bit & Driver Set HSS Wood M
+2026-08-24 17:52:19 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Tempered Glass Screen Protector Hard PC Case Cover
+INFO:     127.0.0.1:62683 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 17:52:21 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Soft Felt Cloth Glasses Case Portable Cover Colorf
+2026-08-24 17:52:22 [warning  ] ebay_catalog.get_product_failed epid=23054558619 status=403
+2026-08-24 17:52:22 [warning  ] ebay_catalog.get_product_failed epid=8074560701 status=403
+2026-08-24 17:52:23 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=4/5PC 18" Vintage Christmas Santa Retro Cushion Co
+2026-08-24 17:52:23 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=240Pc Nut And Bolt Assortment Set Hex Head Fastene
+2026-08-24 17:52:23 [warning  ] ebay_catalog.get_product_failed epid=26017133930 status=403
+2026-08-24 17:52:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=23Pc Combination Spanner Wrench Set In Canvas Case
+INFO:     127.0.0.1:60353 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 17:52:24 [warning  ] ebay_catalog.get_product_failed epid=5063752260 status=403
+2026-08-24 17:52:25 [warning  ] ebay_catalog.get_product_failed epid=245229045 status=403
+2026-08-24 17:52:26 [warning  ] ebay_catalog.get_product_failed epid=7034418565 status=403
+2026-08-24 17:52:27 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=1 Pc Stroller Handle Cover Protective Cover Pushch
+2026-08-24 17:52:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Portable Small Computer Case Plexiglass Shell Comp
+2026-08-24 17:52:28 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=1Pc Christmas Cushion Cover Plaid Tartan Sofa Thro
+2026-08-24 17:52:29 [warning  ] ebay_catalog.get_product_failed epid=9074501677 status=403
+2026-08-24 17:52:30 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=1-4Pcs Pocket Reading Glasses Slim Mini Metal Read
+INFO:     127.0.0.1:53649 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:55801 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 17:52:31 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=1pc Leather Car Key Fob Cover Wallet Organizer Zip
+2026-08-24 17:52:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PC led strip Computer Case Adhesive tape Light 505
+2026-08-24 17:52:33 [warning  ] ebay_catalog.get_product_failed epid=12040753445 status=403
+INFO:     127.0.0.1:58894 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 17:52:33 [warning  ] ebay_catalog.get_product_failed epid=14031184229 status=403
+2026-08-24 17:52:34 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Dispenser Travel Wet Wipe Bag Pouch Baby Care Port
+2026-08-24 17:52:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Venom Handheld PC Storage Case for Steam Deck, Rog
+2026-08-24 17:52:34 [warning  ] ebay_catalog.get_product_failed epid=10038985083 status=403
+2026-08-24 17:52:35 [warning  ] ebay_catalog.get_product_failed epid=20039124574 status=403
+2026-08-24 17:52:35 [warning  ] ebay_catalog.get_product_failed epid=12039141953 status=403
+2026-08-24 17:52:35 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Pokemon TCG Booster Box Acrylic Case Magnetic Disp
+INFO:     127.0.0.1:56237 - "GET /api/gem-radar/scored-listings HTTP/1.1" 500 Internal Server Error
+2026-08-24 17:52:36 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Pleated Ruffles Pillow Case Cover Soft Pillowcase
+2026-08-24 17:52:37 [warning  ] ebay_catalog.get_product_failed epid=2350744644 status=403
+2026-08-24 17:52:39 [warning  ] ebay_catalog.get_product_failed epid=28046500692 status=403
+2026-08-24 17:52:39 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=UNF (AF) and UNC Tap and Die 24pc Set Metric with
+2026-08-24 17:52:40 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=12pc  Portable Travel Small Home Sewing Kit Case N
+2026-08-24 17:52:40 [warning  ] ebay_catalog.get_product_failed epid=17091132811 status=403
+2026-08-24 17:52:41 [warning  ] ebay_catalog.get_product_failed epid=8035053517 status=403
+2026-08-24 17:52:42 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Grilling Barbecue Tool Set with Case 3pc Amazon Ba
+2026-08-24 17:52:42 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Empty Graded Card Slab | PSA Case Alternative | St
+2026-08-24 17:52:42 [warning  ] ebay_catalog.get_product_failed epid=596722843 status=403
+2026-08-24 17:52:43 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=131Pc Thread Repair Kit HSS Drill Helicoil Metric
+2026-08-24 17:52:43 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=HSS Drill Bit Set for Metal, Wood, Plastic With Ca
+2026-08-24 17:52:44 [warning  ] ebay_catalog.get_product_failed epid=4064073857 status=403
+2026-08-24 17:52:44 [warning  ] ebay_catalog.get_product_failed epid=12080430099 status=403
+2026-08-24 17:52:45 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=For Motorola Razr 70 Ultra Plus 60 50 Removable Ma
+2026-08-24 17:52:45 [warning  ] ebay_catalog.get_product_failed epid=21073865366 status=403
+2026-08-24 17:52:46 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=KnitPro Zing Crochet Hook Set 2\u20136mm \u2022 9pc Aluminiu
+2026-08-24 17:52:46 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=For Google Pixel 9 Pro Fold Carbon Fibre Case Mag
+2026-08-24 17:52:47 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=14PC HOLLOW HOLE CUTTER PUNCH SET 5-35mm LEATHER R
+2026-08-24 17:52:48 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=160pcs Sewing Kit with Case - Portable For Home &
+2026-08-24 17:52:49 [warning  ] ebay_catalog.get_product_failed epid=27041987087 status=403
+2026-08-24 17:52:51 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=For POCO F7 F6 F5 X5 X6 X7 Pro c65 C75 C71 Matte H
+2026-08-24 17:52:52 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=NGT XPR Wireless Bite Alarm Set 3+1 Carp Fishing C
+2026-08-24 17:52:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=145Pc Art Case Colouring Pencil Set Aluminium Pain
+2026-08-24 17:52:54 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=131Pc Thread Repair Kit HSS Drill Helicoil Heli Co
+2026-08-24 17:52:56 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=NGT 3 Piece Cook Set Carp Fishing Cooking Kettle,
+2026-08-24 17:52:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Kpop Stray Kids Stay In Our Little House MD SKZOO
+2026-08-24 17:52:58 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=14PC Travel Sewing Kit Small Sewing Set Case Needl
+2026-08-24 17:52:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=145pc Artists Aluminium Art Case Colouring Pencils
+2026-08-24 17:52:59 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Sealing Washer Set Rubber & Fiber Washer Assorted
+2026-08-24 17:52:59 [warning  ] ebay_catalog.get_product_failed epid=18042422571 status=403
+2026-08-24 17:52:59 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=1/2/3x Tennis Ball Display Case Baseball Storage B
+2026-08-24 17:53:00 [warning  ] ebay_catalog.get_product_failed epid=3072105977 status=403
+2026-08-24 17:53:01 [warning  ] ebay_catalog.get_product_failed epid=4050622593 status=403
+2026-08-24 17:53:01 [warning  ] ebay_catalog.get_product_failed epid=11049336609 status=403
+2026-08-24 17:53:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1PC Hanging Tissue Holder Paper Storage Case Plush
+2026-08-24 17:53:03 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=Contact Lens Applicator 2pc with Case Inserter Rem
+2026-08-24 17:53:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=145pc Artists Aluminium Art Case Colouring Pencils
+2026-08-24 17:53:03 [warning  ] ebay_catalog.get_product_failed epid=8051118057 status=403
+2026-08-24 17:53:03 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=2pc M12 Battery Parts 12V Backshell Case Fit For M
+2026-08-24 17:53:04 [warning  ] ebay_catalog.get_product_failed epid=8088217145 status=403
+2026-08-24 17:53:05 [warning  ] ebay_catalog.get_product_failed epid=14057273295 status=403
+2026-08-24 17:53:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=60pc Mini Rotary Hobby Drill Grinder Power Tool Ac
+2026-08-24 17:53:06 [warning  ] ebay_catalog.get_product_failed epid=5090310525 status=403
+2026-08-24 17:53:07 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=14Pc Professional Makeup Brush Set Rose Gold Soft
+2026-08-24 17:53:09 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=14 cross_run_dupes_price_updated=3 cross_run_dupes_unchanged_price=81 elapsed_s=63.6 excluded_auctions=0 new_listings=0
+2026-08-24 17:53:09 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=14 ingested=0 submission_id=64141
+2026-08-24 17:53:09 [info     ] queue_processor.search_term_released active_searches_remaining=1 search_id=pc-case-chassis
+2026-08-24 17:53:09 [info     ] queue_processor.processing_submission active_searches=2 n_listings=48 query=PC case -bundle -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=64142
