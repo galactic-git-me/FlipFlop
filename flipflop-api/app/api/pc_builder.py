@@ -86,12 +86,16 @@ async def create_build(
     db: AsyncSession = Depends(get_db),
 ):
     """Create a new PC build (draft)."""
+    components_data = []
+    if build.components:
+        components_data = [c.model_dump() if hasattr(c, 'model_dump') else c.dict() for c in build.components]
+
     db_build = PCBuild(
         name=build.name,
         playbook_id=build.playbook_id,
         playbook_tier=build.playbook_tier,
         status="draft",
-        components={"components": [c.dict() for c in (build.components or [])]},
+        components={"components": components_data},
         estimated_total_cost=build.estimated_total_cost,
         estimated_market_new_price=build.estimated_market_new_price,
         estimated_market_used_price=build.estimated_market_used_price,
