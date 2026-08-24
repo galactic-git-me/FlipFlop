@@ -1478,7 +1478,8 @@ def _is_obsolete_socket(title: str, price: float | None = None) -> bool:
 
 
 async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, require_modern: bool = False) -> dict | None:
-    """Best gem for a specific component category, sorted by deal_score."""
+    """Best gem for a specific component category, sorted by deal_score.
+    If no qualifying GEM/SUPER_GEM exists, falls back to the highest-scoring listing."""
     from sqlalchemy import select
 
     actionable_ids = await get_active_buy_it_now_listing_ids(db)
@@ -1556,8 +1557,20 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
                 continue
             best = candidate
             break
+
     if best is None:
-        return None
+        fallback_query = (
+            select(GemRadarScoredListing)
+            .where(
+                GemRadarScoredListing.listing_id.in_(actionable_ids),
+                GemRadarScoredListing.listing_observed_at >= since,
+                GemRadarScoredListing.category == category,
+            )
+            .order_by(GemRadarScoredListing.deal_score.desc())
+            .limit(1)
+        )
+        result = await db.execute(fallback_query)
+        best = result.scalar_one_or_none()
 
     cpu = None
     if best.category == "cpu" and best.title:
@@ -2632,3 +2645,24 @@ async def ebay_search(
             "listings": [],
             "count": 0,
         }
+
+
+@router.get("/selling-principles")
+async def get_selling_principles(
+    _: None = Depends(require_operator),
+) -> dict:
+    """Retrieve FlipFlop selling principles for display in listings."""
+    from pathlib import Path
+
+    principles_path = Path(__file__).resolve().parent.parent.parent / "config" / "selling_principles.md"
+
+    if principles_path.exists():
+        return {
+            "success": True,
+            "content": principles_path.read_text(encoding="utf-8"),
+        }
+    return {
+        "success": False,
+        "error": "Selling principles file not found",
+        "content": "",
+    }
