@@ -7,7 +7,6 @@ eBay's complete sales volume or a literal sell-through rate.
 from __future__ import annotations
 
 import json
-import math
 import statistics
 from collections import defaultdict
 from datetime import datetime, timedelta
@@ -17,6 +16,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.models.gem_radar_sold_observation import GemRadarSoldObservation
+from app.gem_radar.observations import get_active_buy_it_now_listing_ids
 
 _CATEGORY_LABELS = {
     "cpu": "CPUs", "gpu": "Graphics Cards", "motherboard": "Motherboards",
@@ -44,9 +44,17 @@ async def build_sold_market_snapshot(db: AsyncSession, days: int = 90) -> dict:
             GemRadarSoldObservation.cpk.is_not(None),
         )
     )).scalars().all())
+    active_ids = await get_active_buy_it_now_listing_ids(db)
     active = list((await db.execute(
         select(GemRadarScoredListing).where(
-            GemRadarScoredListing.scored_at >= cutoff,
+            GemRadarScoredListing.listing_id.in_(active_ids),
+            GemRadarScoredListing.cpk.is_not(None),
+            GemRadarScoredListing.category.is_not(None),
+        )
+    )).scalars().all())
+    identity_rows = list((await db.execute(
+        select(GemRadarScoredListing).where(
+            GemRadarScoredListing.scored_at >= now - timedelta(days=365),
             GemRadarScoredListing.cpk.is_not(None),
             GemRadarScoredListing.category.is_not(None),
         )
@@ -55,10 +63,11 @@ async def build_sold_market_snapshot(db: AsyncSession, days: int = 90) -> dict:
     # Latest scored row provides the human-readable identity/category for a CPK.
     active_by_id: dict[str, GemRadarScoredListing] = {}
     cpk_identity: dict[str, GemRadarScoredListing] = {}
-    for row in sorted(active, key=lambda item: item.scored_at or datetime.min):
-        active_by_id[row.listing_id] = row
+    for row in sorted(identity_rows, key=lambda item: item.scored_at or datetime.min):
         if row.cpk:
             cpk_identity[row.cpk] = row
+    for row in sorted(active, key=lambda item: item.scored_at or datetime.min):
+        active_by_id[row.listing_id] = row
 
     category_active: dict[str, list[GemRadarScoredListing]] = defaultdict(list)
     for row in active_by_id.values():
