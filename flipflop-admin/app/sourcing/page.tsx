@@ -1,8 +1,9 @@
 "use client";
 
 import { Suspense, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer, Info, X } from "lucide-react";
+import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer, Info, X, History } from "lucide-react";
 import PixelCard from "../../components/ui/PixelCard";
 import { VendorLogo } from "../../components/VendorLogo";
 import { PriceHistorySparkline } from "../../components/listings/PriceHistorySparkline";
@@ -2347,6 +2348,15 @@ function SourcingPageInner() {
               </span>
             </div>
           </div>
+
+          <Link
+            href="/sourcing/history"
+            aria-label="Open run history"
+            title="Open run history"
+            className="grid h-[50px] w-[50px] cursor-pointer place-items-center rounded-2xl border border-white/10 bg-white/[0.06] text-slate-300 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-colors duration-200 hover:border-blue-400/40 hover:bg-blue-500/15 hover:text-blue-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+          >
+            <History className="h-5 w-5" />
+          </Link>
 
           <button
             onClick={fetchData}
