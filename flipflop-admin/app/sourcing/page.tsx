@@ -1366,100 +1366,6 @@ function VendorSummaryTable({ listings }: { listings: Listing[] }) {
   );
 }
 
-function AboutFlipFlopSection() {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [content, setContent] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const fetchContent = async () => {
-    if (content !== null) return;
-    setLoading(true);
-    try {
-      const res = await fetch("/api/gem-radar/about-flipflop");
-      if (res.ok) {
-        const data = await res.json();
-        if (data.success) {
-          setContent(data.content);
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching about flipflop:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleToggle = () => {
-    if (!isExpanded && content === null && !loading) {
-      fetchContent();
-    }
-    setIsExpanded(!isExpanded);
-  };
-
-  return (
-    <div className="mb-6 bg-slate-800 rounded-lg border border-slate-700">
-      <button
-        onClick={handleToggle}
-        className="w-full flex items-center justify-between p-4 hover:bg-slate-700/50 transition"
-      >
-        <h3 className="text-sm font-semibold text-slate-100">About FlipFlop</h3>
-        <span className={`text-slate-400 transition-transform ${isExpanded ? "rotate-180" : ""}`}>▼</span>
-      </button>
-
-      {isExpanded && (
-        <div className="px-4 pb-4 border-t border-slate-700 max-h-96 overflow-y-auto">
-          {loading ? (
-            <p className="text-slate-400 text-sm py-4">Loading...</p>
-          ) : content ? (
-            <div className="prose prose-invert prose-sm max-w-none text-slate-300 space-y-3">
-              {content.split("\n\n").map((section, idx) => {
-                const lines = section.split("\n");
-                return (
-                  <div key={idx}>
-                    {lines.map((line, lineIdx) => {
-                      if (line.startsWith("# ")) {
-                        return (
-                          <h2 key={lineIdx} className="text-base font-bold text-slate-100 mt-2 mb-2">
-                            {line.replace("# ", "")}
-                          </h2>
-                        );
-                      }
-                      if (line.startsWith("## ")) {
-                        return (
-                          <h3 key={lineIdx} className="text-sm font-semibold text-slate-200 mt-2 mb-1">
-                            {line.replace("## ", "")}
-                          </h3>
-                        );
-                      }
-                      if (line.startsWith("- ")) {
-                        return (
-                          <div key={lineIdx} className="text-slate-300 ml-4 mb-1 text-sm">
-                            • {line.substring(2)}
-                          </div>
-                        );
-                      }
-                      if (line.trim() === "") {
-                        return null;
-                      }
-                      return (
-                        <p key={lineIdx} className="text-slate-300 text-sm">
-                          {line}
-                        </p>
-                      );
-                    })}
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <p className="text-slate-400 text-sm py-4">Could not load content</p>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
 function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; highlightListingId?: string | null }) {
   const PAGE_SIZE = 100;
   const [componentTab, setComponentTab] = useState<ComponentType>("CPU");
@@ -1771,9 +1677,6 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
           );
         })}
       </div>
-
-      <AboutFlipFlopSection />
-
       {explanationListing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4" role="dialog" aria-modal="true" aria-labelledby="opportunity-explanation-title">
           <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-white/10 bg-[#0b1422] p-5 shadow-2xl">

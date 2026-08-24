@@ -2,6 +2,7 @@
 Selling Toolkit — generates eBay/Facebook listing titles and descriptions.
 Uses AI when available; falls back to template generation.
 """
+from pathlib import Path
 from app.services.ai_service import chat
 
 TITLE_PROMPT = """Generate 3 optimised eBay listing titles for this PC.
@@ -95,7 +96,14 @@ async def generate_description(
     specs = _specs_string(cpu, ram_gb, ram_type, storage_gb, storage_type, gpu, location)
     prompt = DESCRIPTION_PROMPT.format(specs=specs, price=price, location=location or "UK")
     response, _ = await chat(prompt, [])
-    return response.strip() if response else _template_description(cpu, ram_gb, gpu, price)
+    base_desc = response.strip() if response else _template_description(cpu, ram_gb, gpu, price)
+
+    about_content = _load_about_flipflop()
+    formatted_about = _format_about_flipflop(about_content)
+
+    if formatted_about:
+        return f"{base_desc}\n\n{formatted_about}"
+    return base_desc
 
 
 def _template_titles(
@@ -115,16 +123,49 @@ def _template_titles(
     ]
 
 
+def _load_about_flipflop() -> str:
+    """Load the About FlipFlop content to append to listings."""
+    about_path = Path(__file__).resolve().parent.parent.parent / "config" / "about_flipflop.md"
+    if about_path.exists():
+        return about_path.read_text(encoding="utf-8")
+    return ""
+
+
+def _format_about_flipflop(content: str) -> str:
+    """Convert markdown About FlipFlop to plain text for eBay listing."""
+    if not content:
+        return ""
+    lines = content.split("\n")
+    formatted = []
+    for line in lines:
+        if line.startswith("# "):
+            formatted.append("\n" + line.replace("# ", "").upper())
+        elif line.startswith("## "):
+            formatted.append("\n" + line.replace("## ", ""))
+        elif line.startswith("- "):
+            formatted.append("• " + line[2:])
+        elif line.strip():
+            formatted.append(line)
+    return "\n".join(formatted)
+
+
 def _template_description(
     cpu: str | None,
     ram_gb: int | None,
     gpu: str | None,
     price: float,
 ) -> str:
-    return (
+    base_desc = (
         f"Desktop PC for sale. {cpu or 'Good processor'}, "
         f"{ram_gb or 8}GB RAM"
         f"{', ' + gpu if gpu else ''}. "
         f"Tested and working. Asking £{price:.0f}. "
         "Collection preferred. Message with any questions."
     )
+
+    about_content = _load_about_flipflop()
+    formatted_about = _format_about_flipflop(about_content)
+
+    if formatted_about:
+        return f"{base_desc}\n\n{formatted_about}"
+    return base_desc
