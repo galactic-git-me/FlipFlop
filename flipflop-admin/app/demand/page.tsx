@@ -2,13 +2,13 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
+  BarChart, Bar, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
   LabelList,
 } from "recharts";
-import { RefreshCw, TrendingUp, TrendingDown, Minus, ExternalLink } from "lucide-react";
+import { RefreshCw, TrendingUp, TrendingDown, Minus, ExternalLink, BrainCircuit, Database, Activity } from "lucide-react";
 import { api } from "@/lib/api";
 import { ClassificationBadge } from "@/components/classification-badge";
-import type { DemandCategory, AuctionIntelItem, DemandSummary } from "@/lib/types";
+import type { DemandCategory, AuctionIntelItem, DemandSummary, SoldMarketDemand, SoldMarketInsight } from "@/lib/types";
 
 // ── Local types ───────────────────────────────────────────────────────────────
 
@@ -36,7 +36,7 @@ const EMPTY_RICH: RichSignals = {
   steam: { stats: [] },
 };
 
-type Tab = "categories" | "signals" | "auctions";
+type Tab = "sold" | "categories" | "signals" | "auctions";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -372,8 +372,6 @@ function ExternalSignalsTab({ data, loading, error, onRetry }: {
 }
 
 // ── Google Trends view ────────────────────────────────────────────────────────
-
-import { LineChart, Line } from "recharts";
 
 function GoogleTrendsView({ data }: {
   data: RichSignals["google_trends"];
@@ -929,33 +927,144 @@ function KpiChip({ label, value, color }: { label: string; value: string | numbe
   );
 }
 
+function SoldMarketTab({ data, insight, loading, error, refreshingInsight, onRetry, onRefreshInsight }: {
+  data: SoldMarketDemand | null;
+  insight: SoldMarketInsight | null;
+  loading: boolean;
+  error: string | null;
+  refreshingInsight: boolean;
+  onRetry: () => void;
+  onRefreshInsight: () => void;
+}) {
+  if (loading) return <Spinner />;
+  if (error) return <ErrorBanner msg={`Failed to load sold-market demand — ${error}`} onRetry={onRetry} />;
+  if (!data) return <Empty label="No sold-market snapshot is available yet." />;
+
+  return (
+    <div className="space-y-5">
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+        {[
+          ["Completed evidence", data.totals.sold_observations],
+          ["Matched evidence", data.totals.matched_sold_observations],
+          ["Live supply", data.totals.active_listings],
+          ["Products covered", data.totals.products_with_sold_evidence],
+          ["Unmatched", data.totals.unmatched_sold_observations],
+        ].map(([label, value]) => (
+          <div key={label} className="rounded-lg border border-white/10 bg-[#081323] p-4">
+            <div className="text-[10px] uppercase tracking-wider text-slate-500">{label}</div>
+            <div className="mt-1 text-2xl font-black text-slate-100">{Number(value).toLocaleString()}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+        <section className="rounded-lg border border-cyan-400/20 bg-gradient-to-br from-cyan-400/[0.06] to-purple-500/[0.04] p-4" aria-labelledby="ai-demand-heading">
+          <div className="flex items-center gap-2">
+            <BrainCircuit className="h-4 w-4 text-cyan-300" />
+            <h2 id="ai-demand-heading" className="text-sm font-bold text-cyan-100">AI market brief</h2>
+            {insight && <span className="text-[10px] text-slate-500">{insight.model}</span>}
+            <button onClick={onRefreshInsight} disabled={refreshingInsight} className="ml-auto cursor-pointer rounded-md border border-cyan-300/20 px-2.5 py-1 text-xs text-cyan-200 transition-colors hover:bg-cyan-300/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 disabled:opacity-50">
+              {refreshingInsight ? "Analysing…" : "Reanalyse"}
+            </button>
+          </div>
+          <div className="mt-3 whitespace-pre-wrap text-sm leading-6 text-slate-300">
+            {insight?.insight ?? "AI analysis is unavailable; the evidence tables below remain fully usable."}
+          </div>
+        </section>
+
+        <section className="rounded-lg border border-white/10 bg-[#070e1a] p-4" aria-labelledby="evidence-trend-heading">
+          <div className="mb-2 flex items-center gap-2">
+            <Activity className="h-4 w-4 text-emerald-300" />
+            <h2 id="evidence-trend-heading" className="text-sm font-bold text-slate-200">Completed evidence collected</h2>
+          </div>
+          <ResponsiveContainer width="100%" height={165}>
+            <LineChart data={data.weekly} margin={{ top: 8, right: 8, bottom: 0, left: -24 }}>
+              <CartesianGrid stroke="#1e293b" strokeDasharray="3 3" />
+              <XAxis dataKey="week" tick={{ fill: "#64748b", fontSize: 10 }} />
+              <YAxis tick={{ fill: "#64748b", fontSize: 10 }} />
+              <Tooltip content={<ChartTooltip />} />
+              <Line type="monotone" dataKey="sold_observations" stroke="#00dc82" strokeWidth={2} dot={false} />
+            </LineChart>
+          </ResponsiveContainer>
+        </section>
+      </div>
+
+      <div className="overflow-x-auto rounded-lg border border-white/10">
+        <table className="w-full min-w-[900px] text-left text-xs">
+          <thead className="bg-white/[0.03] text-[10px] uppercase tracking-wider text-slate-500">
+            <tr>{["Category", "Demand", "Completed", "Live", "Evidence balance", "Confidence", "Sold median", "Live median", "30d change"].map((h) => <th key={h} className="px-3 py-2.5">{h}</th>)}</tr>
+          </thead>
+          <tbody>
+            {data.categories.map((row) => (
+              <tr key={row.category} className="border-t border-white/[0.06] text-slate-300">
+                <td className="px-3 py-3 font-semibold text-slate-100">{row.label}</td>
+                <td className="px-3 py-3"><span style={{ color: strengthColor(row.strength) }}>{row.demand_score.toFixed(0)}/100 · {row.strength}</span></td>
+                <td className="px-3 py-3">{row.sold_observations}</td><td className="px-3 py-3">{row.active_listings}</td>
+                <td className="px-3 py-3">{fmtPct(row.evidence_ratio_pct)}</td><td className="px-3 py-3">{fmtPct(row.sample_confidence_pct)}</td>
+                <td className="px-3 py-3">{fmt(row.median_sold_price)}</td><td className="px-3 py-3">{fmt(row.median_active_price)}</td>
+                <td className={`px-3 py-3 ${row.trend_pct == null ? "text-slate-500" : row.trend_pct >= 0 ? "text-emerald-400" : "text-red-400"}`}>{row.trend_pct == null ? "New sample" : `${row.trend_pct > 0 ? "+" : ""}${row.trend_pct}%`}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <section className="rounded-lg border border-white/10 bg-[#070e1a] p-4">
+        <div className="mb-3 flex items-center gap-2"><Database className="h-4 w-4 text-purple-300" /><h2 className="text-sm font-bold text-slate-200">Products with the strongest completed-sale evidence</h2></div>
+        <div className="grid gap-2 md:grid-cols-2">
+          {data.top_products.slice(0, 10).map((product) => (
+            <div key={product.cpk} className="flex items-center gap-3 rounded-md border border-white/[0.07] bg-white/[0.02] px-3 py-2.5">
+              <div className="min-w-0 flex-1"><div className="truncate text-xs font-semibold text-slate-200" title={product.name}>{product.name}</div><div className="mt-0.5 text-[10px] uppercase text-slate-500">{product.category}</div></div>
+              <div className="text-right"><div className="text-xs text-emerald-300">{product.sold_observations} completed</div><div className="text-[10px] text-slate-500">{product.active_listings} live · {fmt(product.median_sold_price)}</div></div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <p className="rounded-md border border-amber-400/15 bg-amber-400/[0.05] px-3 py-2 text-xs leading-5 text-amber-100/70">{data.methodology}</p>
+    </div>
+  );
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function DemandPage() {
-  const [tab, setTab] = useState<Tab>("categories");
+  const [tab, setTab] = useState<Tab>("sold");
 
   const [summary, setSummary] = useState<DemandSummary | null>(null);
   const [categories, setCategories] = useState<DemandCategory[]>([]);
   const [richSignals, setRichSignals] = useState<RichSignals>(EMPTY_RICH);
   const [auctions, setAuctions] = useState<AuctionIntelItem[]>([]);
+  const [soldMarket, setSoldMarket] = useState<SoldMarketDemand | null>(null);
+  const [soldInsight, setSoldInsight] = useState<SoldMarketInsight | null>(null);
 
   const [loadingSummary, setLoadingSummary] = useState(true);
   const [loadingCat, setLoadingCat] = useState(true);
   const [loadingSig, setLoadingSig] = useState(true);
   const [loadingAuc, setLoadingAuc] = useState(true);
+  const [loadingSold, setLoadingSold] = useState(true);
+  const [refreshingInsight, setRefreshingInsight] = useState(false);
 
   const [errorCat, setErrorCat] = useState<string | null>(null);
   const [errorSig, setErrorSig] = useState<string | null>(null);
   const [errorAuc, setErrorAuc] = useState<string | null>(null);
+  const [errorSold, setErrorSold] = useState<string | null>(null);
 
   const fetchAll = useCallback(() => {
     setLoadingSummary(true);
     setLoadingCat(true);
     setLoadingSig(true);
     setLoadingAuc(true);
+    setLoadingSold(true);
     setErrorCat(null);
     setErrorSig(null);
     setErrorAuc(null);
+    setErrorSold(null);
+
+    Promise.all([api.demand.soldMarket(90), api.demand.soldMarketInsights(90)])
+      .then(([market, insight]) => { setSoldMarket(market); setSoldInsight(insight); })
+      .catch((e: Error) => setErrorSold(e.message))
+      .finally(() => setLoadingSold(false));
 
     api.demand.summary()
       .then(setSummary)
@@ -978,9 +1087,21 @@ export default function DemandPage() {
       .finally(() => setLoadingAuc(false));
   }, []);
 
-  useEffect(() => { fetchAll(); }, [fetchAll]);
+  useEffect(() => {
+    const timer = window.setTimeout(fetchAll, 0);
+    return () => window.clearTimeout(timer);
+  }, [fetchAll]);
+
+  const refreshSoldInsight = useCallback(() => {
+    setRefreshingInsight(true);
+    api.demand.soldMarketInsights(90, true)
+      .then(setSoldInsight)
+      .catch((e: Error) => setErrorSold(e.message))
+      .finally(() => setRefreshingInsight(false));
+  }, []);
 
   const tabs: { id: Tab; label: string }[] = [
+    { id: "sold", label: "Sold Market" },
     { id: "categories", label: "📦 Categories" },
     { id: "signals", label: "📡 External Signals" },
     { id: "auctions", label: "⏱ Auction Intel" },
@@ -1016,7 +1137,7 @@ export default function DemandPage() {
 
         <button
           onClick={fetchAll}
-          className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-white/10 text-slate-400 hover:text-[#00dc82] hover:border-[#00dc82]/30 transition-all text-xs"
+          className="ml-auto flex cursor-pointer items-center gap-1.5 px-3 py-1.5 rounded-md border border-white/10 text-slate-400 hover:text-[#00dc82] hover:border-[#00dc82]/30 transition-all text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00dc82]"
         >
           <RefreshCw className="w-3.5 h-3.5" />
           Refresh
@@ -1029,7 +1150,7 @@ export default function DemandPage() {
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
-            className={`px-4 py-2 text-sm font-medium border-b-2 transition-all -mb-px ${
+            className={`-mb-px cursor-pointer border-b-2 px-4 py-2 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00dc82] ${
               tab === t.id
                 ? "border-[#00dc82] text-[#00dc82]"
                 : "border-transparent text-slate-500 hover:text-slate-300"
@@ -1042,6 +1163,9 @@ export default function DemandPage() {
 
       {/* Tab content */}
       <div>
+        {tab === "sold" && (
+          <SoldMarketTab data={soldMarket} insight={soldInsight} loading={loadingSold} error={errorSold} refreshingInsight={refreshingInsight} onRetry={fetchAll} onRefreshInsight={refreshSoldInsight} />
+        )}
         {tab === "categories" && (
           <CategoriesTab
             categories={categories}
