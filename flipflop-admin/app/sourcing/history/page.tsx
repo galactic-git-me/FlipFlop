@@ -100,9 +100,13 @@ function buildSessions(records: ScanRunHistoryRecord[]): ScanSession[] {
       let endedAt = 0;
 
       for (const record of group) {
+        // Exclusion clauses have changed over time, but they are still the
+        // same configured search. Group by the visible positive term so old
+        // and new query variants do not become duplicate columns.
+        const searchTerm = formatSearchTerm(record.searchTerm);
         startedAt = Math.min(startedAt, record.timestamp - Math.max(0, record.durationSeconds) * 1000);
         endedAt = Math.max(endedAt, record.timestamp);
-        const existing = terms.get(record.searchTerm) ?? {
+        const existing = terms.get(searchTerm) ?? {
           listingsProcessed: 0,
           durationSeconds: 0,
           vendors: new Set<string>(),
@@ -114,7 +118,7 @@ function buildSessions(records: ScanRunHistoryRecord[]): ScanSession[] {
         existing.durationSeconds = Math.max(existing.durationSeconds, record.durationSeconds);
         for (const vendor of record.vendors) existing.vendors.add(vendor);
         if (record.completionKnown !== false) existing.completed = true;
-        terms.set(record.searchTerm, existing);
+        terms.set(searchTerm, existing);
       }
 
       const runTypes = [...new Set(group.map((record) => record.runBy))];
@@ -248,12 +252,10 @@ export default function RunHistoryPage() {
   const searchTerms = useMemo(
     () => {
       const order = new Map(CONFIGURED_SEARCH_TERM_ORDER.map((term, index) => [term.toLowerCase(), index]));
-      return [...new Set(records.map((record) => record.searchTerm))].sort((a, b) => {
-        const aLabel = formatSearchTerm(a);
-        const bLabel = formatSearchTerm(b);
-        const aIndex = order.get(aLabel.toLowerCase()) ?? Number.POSITIVE_INFINITY;
-        const bIndex = order.get(bLabel.toLowerCase()) ?? Number.POSITIVE_INFINITY;
-        return aIndex - bIndex || aLabel.localeCompare(bLabel);
+      return [...new Set(records.map((record) => formatSearchTerm(record.searchTerm)))].sort((a, b) => {
+        const aIndex = order.get(a.toLowerCase()) ?? Number.POSITIVE_INFINITY;
+        const bIndex = order.get(b.toLowerCase()) ?? Number.POSITIVE_INFINITY;
+        return aIndex - bIndex || a.localeCompare(b);
       });
     },
     [records],
