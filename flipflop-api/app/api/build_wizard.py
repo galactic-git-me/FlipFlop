@@ -8,7 +8,7 @@ from sqlalchemy import select
 from typing import Any
 
 from app.database import get_db
-from app.models.playbook import Playbook
+from app.models.playbook import Playbook, PlaybookStatus
 from app.models.listing import Listing, Classification, ListingStatus
 from app.services.build_wizard import run_build_wizard, run_planner
 
@@ -201,7 +201,7 @@ async def generate_gem_matrix(body: GemMatrixRequest, db: AsyncSession = Depends
     Build wizard-first matrix: for each top gem, propose one build per active/candidate playbook.
     """
     pb_query = await db.execute(
-        select(Playbook).where(Playbook.status.in_(["active", "candidate"])).order_by(Playbook.id).limit(max(1, body.playbook_limit))
+        select(Playbook).where(Playbook.status == PlaybookStatus.ACTIVE).order_by(Playbook.id).limit(max(1, body.playbook_limit))
     )
     playbooks = pb_query.scalars().all()
     if not playbooks:
@@ -273,7 +273,7 @@ async def generate_plan(body: PlanRequest):
 async def list_wizard_playbooks(db: AsyncSession = Depends(get_db)):
     """Return active playbooks for the wizard playbook-picker."""
     result = await db.execute(
-        select(Playbook).where(Playbook.status.in_(["active", "candidate"]))
+        select(Playbook).where(Playbook.status == PlaybookStatus.ACTIVE)
         .order_by(Playbook.id)
     )
     playbooks = result.scalars().all()
@@ -282,9 +282,9 @@ async def list_wizard_playbooks(db: AsyncSession = Depends(get_db)):
             "id": p.id,
             "name": p.name,
             "emoji": p.emoji or "🔧",
-            "description": p.description or "",
+            "description": p.what_they_use_it_for or "",
             "target_use_case": p.target_use_case,
-            "status": p.status,
+            "status": p.status.value if isinstance(p.status, PlaybookStatus) else str(p.status),
             "profit_strategy": p.profit_strategy or {},
         }
         for p in playbooks
