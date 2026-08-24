@@ -22,13 +22,15 @@ interface ScanRunHistoryRecord {
   runBy: string;
   durationSeconds: number;
   occurredAt: string;
+  isLegacy?: boolean;
+  completionKnown?: boolean;
 }
 
 interface TermResult {
   listingsProcessed: number;
   durationSeconds: number;
   vendors: Set<string>;
-  completed: boolean;
+  completed: boolean | null;
 }
 
 interface ScanSession {
@@ -104,13 +106,14 @@ function buildSessions(records: ScanRunHistoryRecord[]): ScanSession[] {
           listingsProcessed: 0,
           durationSeconds: 0,
           vendors: new Set<string>(),
-          completed: true,
+          completed: record.completionKnown === false ? null : true,
         };
         existing.listingsProcessed += record.totalListingsFound;
         // Vendor searches run concurrently, so the slowest vendor is the
         // best representation of the term's elapsed duration.
         existing.durationSeconds = Math.max(existing.durationSeconds, record.durationSeconds);
         for (const vendor of record.vendors) existing.vendors.add(vendor);
+        if (record.completionKnown !== false) existing.completed = true;
         terms.set(record.searchTerm, existing);
       }
 
@@ -177,7 +180,7 @@ function MatrixValue({ result, metric, maxValue }: { result?: TermResult; metric
       ? formatDuration(result.durationSeconds)
       : metric === "vendors"
         ? String(result.vendors.size)
-        : result.completed ? "Yes" : "No";
+        : result.completed === null ? "Unknown" : result.completed ? "Yes" : "No";
 
   return (
     <span className="relative block min-h-6 overflow-hidden rounded bg-slate-900/40 px-2 py-1">
@@ -186,8 +189,8 @@ function MatrixValue({ result, metric, maxValue }: { result?: TermResult; metric
         className={`absolute inset-y-0 left-0 ${metric === "completed" ? "bg-emerald-500/25" : "bg-blue-500/25"}`}
         style={{ width: `${width}%` }}
       />
-      <span className={`relative z-10 inline-flex items-center gap-1 ${metric === "completed" ? (result.completed ? "text-emerald-200" : "text-red-300") : "text-slate-100"}`}>
-        {metric === "completed" && (result.completed ? <CheckCircle2 className="h-3.5 w-3.5" /> : <XCircle className="h-3.5 w-3.5" />)}
+      <span className={`relative z-10 inline-flex items-center gap-1 ${metric === "completed" ? (result.completed === null ? "text-slate-400" : result.completed ? "text-emerald-200" : "text-red-300") : "text-slate-100"}`}>
+        {metric === "completed" && result.completed !== null && (result.completed ? <CheckCircle2 className="h-3.5 w-3.5" /> : <XCircle className="h-3.5 w-3.5" />)}
         {label}
       </span>
     </span>
@@ -195,7 +198,7 @@ function MatrixValue({ result, metric, maxValue }: { result?: TermResult; metric
 }
 
 async function fetchRunHistory(): Promise<ScanRunHistoryRecord[]> {
-  const response = await fetch("/api/gem-radar/scan-run-history?limit=500", {
+  const response = await fetch("/api/gem-radar/scan-run-history?limit=10000", {
     cache: "no-store",
     signal: AbortSignal.timeout(15_000),
   });

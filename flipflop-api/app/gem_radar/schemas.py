@@ -116,6 +116,8 @@ class ScanRunHistoryOut(CamelModel):
     run_by: str
     duration_seconds: float
     occurred_at: datetime
+    is_legacy: bool = False
+    completion_known: bool = True
 
 
 class SoldCompSubmitRequest(CamelModel):

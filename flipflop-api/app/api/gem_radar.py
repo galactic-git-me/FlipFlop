@@ -1776,11 +1776,11 @@ async def record_scan_run_history(
 
 @router.get("/scan-run-history", response_model=list[ScanRunHistoryOut])
 async def list_scan_run_history(
-    limit: int = Query(50, ge=1, le=500),
+    limit: int = Query(50, ge=1, le=10000),
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
 ) -> list[ScanRunHistoryOut]:
-    from sqlalchemy import select as _select
+    from sqlalchemy import select as _select, text as _text
     from app.models.gem_radar_scan_run import GemRadarScanRun
 
     rows = (
@@ -1788,7 +1788,55 @@ async def list_scan_run_history(
             _select(GemRadarScanRun).order_by(GemRadarScanRun.occurred_at.desc()).limit(limit)
         )
     ).scalars().all()
-    return [ScanRunHistoryOut.model_validate(r, from_attributes=True) for r in rows]
+    history = [ScanRunHistoryOut.model_validate(r, from_attributes=True) for r in rows]
+
+    # The explicit history mirror was introduced after observation ingestion
+    # had already been running for weeks. Recover those earlier search runs
+    # from their immutable observations so the UI does not appear to have
+    # started today. Trigger/completion were not persisted historically and
+    # are deliberately marked unknown rather than guessed.
+    remaining = limit - len(history)
+    if remaining > 0:
+        cutoff = min((row.occurred_at for row in rows), default=datetime.utcnow())
+        legacy_rows = (
+            await db.execute(
+                _text(
+                    """
+                    SELECT
+                        search_run_id,
+                        MIN(search_query) AS search_term,
+                        COUNT(*) AS total_listings_found,
+                        ARRAY_REMOVE(ARRAY_AGG(DISTINCT source), NULL) AS vendors,
+                        EXTRACT(EPOCH FROM (MAX(observed_at) - MIN(observed_at))) AS duration_seconds,
+                        MAX(observed_at) AS occurred_at
+                    FROM gem_radar_listing_observations
+                    WHERE search_run_id IS NOT NULL
+                      AND search_query IS NOT NULL
+                      AND observed_at < :cutoff
+                    GROUP BY search_run_id
+                    ORDER BY MAX(observed_at) DESC
+                    LIMIT :remaining
+                    """
+                ),
+                {"cutoff": cutoff, "remaining": remaining},
+            )
+        ).mappings().all()
+        history.extend(
+            ScanRunHistoryOut(
+                id=-(index + 1),
+                search_term=row["search_term"],
+                total_listings_found=int(row["total_listings_found"] or 0),
+                vendors=list(row["vendors"] or []),
+                run_by="Unknown (historical)",
+                duration_seconds=float(row["duration_seconds"] or 0),
+                occurred_at=row["occurred_at"],
+                is_legacy=True,
+                completion_known=False,
+            )
+            for index, row in enumerate(legacy_rows)
+        )
+
+    return sorted(history, key=lambda row: row.occurred_at, reverse=True)
 
 
 @router.get("/sold-comp-targets", response_model=list[SoldCompTarget])
