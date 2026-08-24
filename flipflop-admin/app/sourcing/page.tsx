@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer, Info, X } from "lucide-react";
 import PixelCard from "../../components/ui/PixelCard";
@@ -2121,6 +2121,7 @@ function SourcingPageInner() {
   const [scanIntervalMinutes, setScanIntervalMinutes] = useState<number | null>(null);
   const [nowTick, setNowTick] = useState(() => Date.now());
   const [marketSnapshot, setMarketSnapshot] = useState<MarketSnapshot | null>(null);
+  const dataRequestInFlight = useRef(false);
 
   useEffect(() => {
     if (highlightListingId) setMainTab("listings");
@@ -2154,6 +2155,8 @@ function SourcingPageInner() {
   };
 
   const fetchData = async () => {
+    if (dataRequestInFlight.current) return;
+    dataRequestInFlight.current = true;
     try {
       // Do not let one unhealthy Gem Radar endpoint leave the whole page in
       // its initial loading state forever. Each poll gets a bounded lifetime;
@@ -2189,9 +2192,10 @@ function SourcingPageInner() {
 
       setLastUpdate(new Date());
       setNextRefreshIn(5);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      dataRequestInFlight.current = false;
       setLoading(false);
     }
   };
