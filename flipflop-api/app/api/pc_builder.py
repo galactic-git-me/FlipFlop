@@ -151,7 +151,8 @@ async def update_build(
     if update.name is not None:
         build.name = update.name
     if update.components is not None:
-        build.components = {"components": [c.dict() for c in update.components]}
+        components_data = [c.model_dump() if hasattr(c, 'model_dump') else c.dict() for c in update.components]
+        build.components = {"components": components_data}
     if update.estimated_total_cost is not None:
         build.estimated_total_cost = update.estimated_total_cost
     if update.estimated_market_new_price is not None:
