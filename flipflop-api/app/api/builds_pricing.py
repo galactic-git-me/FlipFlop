@@ -428,21 +428,19 @@ async def _component_valuations(components: list[dict]) -> list[ComponentValuati
 
 
 async def _active_build_comparables(cpu_model: str | None, gpu_model: str | None) -> list[MarketComparable]:
-    matchers = []
+    identity_filters = []
     if cpu_model:
-        matchers.append(Listing.cpu.ilike(f"%{cpu_model}%"))
-        matchers.append(Listing.title.ilike(f"%{cpu_model}%"))
+        identity_filters.append(or_(Listing.cpu.ilike(f"%{cpu_model}%"), Listing.title.ilike(f"%{cpu_model}%")))
     if gpu_model:
-        matchers.append(Listing.gpu.ilike(f"%{gpu_model}%"))
-        matchers.append(Listing.title.ilike(f"%{gpu_model}%"))
-    if not matchers:
+        identity_filters.append(or_(Listing.gpu.ilike(f"%{gpu_model}%"), Listing.title.ilike(f"%{gpu_model}%")))
+    if not identity_filters:
         return []
     async with AsyncSessionLocal() as db:
         rows = (await db.execute(
             select(Listing).where(
                 Listing.status == ListingStatus.active,
                 Listing.price >= 400,
-                or_(*matchers),
+                and_(*identity_filters),
                 or_(Listing.title.ilike("%pc%"), Listing.title.ilike("%desktop%"), Listing.title.ilike("%gaming%")),
             ).order_by(Listing.last_seen_at.desc()).limit(12)
         )).scalars().all()
@@ -488,8 +486,10 @@ async def _live_close_build_comparables(
             price = float(item.get("price") or 0)
             if price < 400:
                 continue
-            has_cpu = bool(cpu_model and re.sub(r"[^a-z0-9]", "", cpu_model.lower()) in title_key)
-            has_gpu = bool(gpu_model and re.sub(r"[^a-z0-9]", "", gpu_model.lower()) in title_key)
+            has_cpu = _title_has_model(title, cpu_model)
+            has_gpu = _title_has_model(title, gpu_model)
+            if cpu_model and gpu_model and not (has_cpu and has_gpu):
+                continue
             ram_gb = _extract_ram_gb(title)
             ram_close = bool(target_ram_gb and ram_gb and abs(ram_gb - target_ram_gb) <= _RAM_TOLERANCE_GB)
             score = (4 if has_cpu else 0) + (4 if has_gpu else 0) + (1 if ram_close else 0)
