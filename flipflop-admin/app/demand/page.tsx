@@ -395,7 +395,7 @@ function GoogleTrendsView({ data }: {
 
   const buildOpportunities = useMemo(() => {
     const configs: Record<string, { useCase: string; budget: number; specification: string }> = {
-      "ai pc": { useCase: "ai_workstation", budget: 2000, specification: "Strong GPU, 64GB+ RAM and upgrade headroom" },
+      "ai pc": { useCase: "ai_workstation", budget: 2000, specification: "16GB+ GPU VRAM, 64GB+ RAM, 1TB NVMe, 650W+ PSU and expandable workstation/ATX platform" },
       "workstation pc": { useCase: "workstation", budget: 1800, specification: "High-core CPU, 64GB RAM and fast NVMe storage" },
       "budget gaming pc": { useCase: "budget", budget: 700, specification: "Best-value 1080p gaming combination" },
       "gaming pc": { useCase: "gaming", budget: 1200, specification: "Balanced 1440p CPU and GPU combination" },
@@ -421,7 +421,15 @@ function GoogleTrendsView({ data }: {
         playbook_id: playbook.id, budget: opportunity.budget,
         user_notes: `Demand-led build for '${opportunity.query}'. Use current live listings and choose the best compatible combination.`,
         priorities: ["Demand fit", "Compatibility", "Maximum profit"],
-        constraints: [`Total component cost no more than £${opportunity.budget}`],
+        constraints: opportunity.useCase === "ai_workstation" ? [
+          `Total component cost no more than £${opportunity.budget}`,
+          "GPU must have at least 16GB VRAM",
+          "At least 64GB compatible RAM",
+          "At least 1TB NVMe storage",
+          "At least 650W PSU with suitable GPU connectors",
+          "Expandable workstation or custom ATX base; no SFF office PC",
+          "No OEM CPU swap without confirmed motherboard, BIOS and cooling support",
+        ] : [`Total component cost no more than £${opportunity.budget}`],
       });
       const best = generated.builds.find((build) => build.valid) ?? generated.builds[0];
       if (!best) throw new Error("No compatible listing combination was found.");

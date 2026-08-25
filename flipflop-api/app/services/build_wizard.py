@@ -48,6 +48,43 @@ class RefinedIntent:
     owned_components: list[dict] = field(default_factory=list)
 
 
+@dataclass(frozen=True)
+class BuildRequirements:
+    """Deterministic use-case gates applied before profitability ranking."""
+    min_gpu_vram_gb: int = 0
+    min_ram_gb: int = 0
+    min_storage_gb: int = 0
+    min_psu_watts: int = 0
+    forbid_sff: bool = False
+    forbid_unverified_oem_cpu_swap: bool = False
+    require_expandable_base: bool = False
+
+
+_USE_CASE_REQUIREMENTS: dict[str, BuildRequirements] = {
+    "ai_workstation": BuildRequirements(
+        min_gpu_vram_gb=16,
+        min_ram_gb=64,
+        min_storage_gb=1000,
+        min_psu_watts=650,
+        forbid_sff=True,
+        forbid_unverified_oem_cpu_swap=True,
+        require_expandable_base=True,
+    ),
+    "workstation": BuildRequirements(
+        min_gpu_vram_gb=8,
+        min_ram_gb=32,
+        min_storage_gb=1000,
+        min_psu_watts=550,
+        forbid_sff=True,
+        forbid_unverified_oem_cpu_swap=True,
+    ),
+}
+
+
+def _requirements_for(use_case: str) -> BuildRequirements:
+    return _USE_CASE_REQUIREMENTS.get((use_case or "").lower(), BuildRequirements())
+
+
 @dataclass
 class BuildUpgrade:
     role: str                       # "gpu" | "storage" | "ram" | "psu" | "os"
@@ -159,7 +196,7 @@ async def wizard_agent(
     )
 
 
-async def _fetch_available_components(budget_remaining: float) -> dict[str, list[dict]]:
+async def _fetch_available_components(budget_remaining: float, requirements: BuildRequirements) -> dict[str, list[dict]]:
     """
     Query the Parts library for available CPUs, motherboards, GPUs, RAM, SSDs, PSUs within budget.
     Returns dict: category → list of available parts with prices.
@@ -183,10 +220,24 @@ async def _fetch_available_components(budget_remaining: float) -> dict[str, list
                 Part.category == category,
                 Part.is_active == True,
                 Part.price <= budget_remaining
-            ).order_by(Part.price.asc()).limit(5)  # Top 5 cheapest in each category
+            ).order_by(Part.price.asc()).limit(40)
 
             result = await db.execute(query)
             parts = result.scalars().all()
+
+            def meets_requirements(part: Part) -> bool:
+                text = f"{part.name or ''} {part.model or ''} {json.dumps(part.specs or {})}".lower()
+                if category == PartCategory.gpu and requirements.min_gpu_vram_gb:
+                    return _largest_gb([text]) >= requirements.min_gpu_vram_gb
+                if category == PartCategory.ram and requirements.min_ram_gb:
+                    return _largest_gb([text]) >= requirements.min_ram_gb
+                if category == PartCategory.ssd and requirements.min_storage_gb:
+                    return _largest_storage_gb([text]) >= requirements.min_storage_gb
+                if category == PartCategory.psu and requirements.min_psu_watts:
+                    return _largest_watts([text]) >= requirements.min_psu_watts
+                return True
+
+            parts = [part for part in parts if meets_requirements(part)][:8]
 
             components[category.value] = [
                 {
@@ -246,9 +297,10 @@ async def composer_agent(intent: RefinedIntent, playbook: dict, attempt: int = 1
 
     upgrade_strategy = playbook.get("upgrade_strategy", {})
     profit_strategy  = playbook.get("profit_strategy", {})
+    requirements = _requirements_for(intent.target_use_case)
 
     # Fetch real available components from Parts library
-    available_components = await _fetch_available_components(intent.budget_max * 0.6)  # Reserve 40% for base unit
+    available_components = await _fetch_available_components(intent.budget_max * 0.6, requirements)  # Reserve 40% for base unit
 
     # Format components for the prompt
     components_context = "AVAILABLE COMPONENTS FROM LIBRARY (real market prices):\n"
@@ -269,6 +321,7 @@ User notes: {intent.user_notes or 'none'}
 
 Playbook upgrade requirements: {json.dumps(upgrade_strategy)}
 Playbook profit strategy: {json.dumps(profit_strategy)}
+HARD USE-CASE REQUIREMENTS (every candidate must meet all of these): {json.dumps(asdict(requirements))}
 
 {components_context}
 
@@ -282,6 +335,9 @@ CRITICAL RULES FOR base_spec:
 - NEVER use individual components as base_spec — RAM sticks, SSDs, GPUs, CPUs, PSUs are UPGRADES, not base systems
 - If a component from the library looks like RAM/DDR/SSD/GPU/CPU, it belongs in "upgrades", NOT in "base_spec"
 - The base PC must be a whole machine you can buy on eBay as a complete unit
+- Do not propose a CPU replacement in an OEM Dell/HP/Lenovo base unless the exact motherboard and BIOS support are established in the base specification
+- Include every mandatory component explicitly. Never assume missing RAM, storage, PSU wattage, GPU VRAM, motherboard support, or chassis clearance
+- For AI workstations, GPU VRAM capacity is a hard requirement, not a general gaming-performance proxy
 
 COMPONENTS FROM THE LIBRARY are UPGRADE PARTS ONLY — use them in the "upgrades" array, never as the base system.
 
@@ -301,9 +357,10 @@ Respond with ONLY valid JSON. No explanation outside the JSON.
       "base_spec": "Exact eBay search target e.g. Dell OptiPlex 7060 i7-8700 16GB no GPU",
       "base_cost": 85,
       "upgrades": [
-        {{"role": "gpu", "item": "RTX 3060 12GB", "cost_estimate": 170, "source": "eBay used", "required": true}},
-        {{"role": "cpu", "item": "Intel Core i7-9700K", "cost_estimate": 120, "source": "Parts library", "required": false}},
-        {{"role": "storage", "item": "500GB NVMe SSD", "cost_estimate": 25, "source": "Parts library", "required": false}}
+        {{"role": "gpu", "item": "RTX 4070 Ti Super 16GB", "cost_estimate": 650, "source": "Parts library", "required": true}},
+        {{"role": "ram", "item": "64GB DDR5 RAM", "cost_estimate": 140, "source": "Parts library", "required": true}},
+        {{"role": "storage", "item": "1TB NVMe SSD", "cost_estimate": 55, "source": "Parts library", "required": true}},
+        {{"role": "psu", "item": "750W ATX PSU", "cost_estimate": 80, "source": "Parts library", "required": true}}
       ],
       "total_cost": 280,
       "estimated_resale": 420,
@@ -402,7 +459,77 @@ _COMPONENT_KEYWORDS = {
 def _base_spec_is_component(base_spec: str) -> bool:
     """Return True if base_spec looks like an individual component rather than a complete PC."""
     lower = base_spec.lower()
+    # CPU/GPU names legitimately appear in complete-system descriptions. A
+    # clear system noun wins unless the title explicitly says it is a part.
+    if any(noun in lower for noun in [" desktop", " tower", "workstation", "gaming pc", "complete pc", "base pc"]):
+        if not any(marker in lower for marker in ["cpu only", "processor only", "motherboard only", "parts only"]):
+            return False
     return any(kw in lower for kw in _COMPONENT_KEYWORDS)
+
+
+def _role_items(build: Build, *roles: str) -> list[str]:
+    wanted = {role.lower() for role in roles}
+    return [u.item.lower() for u in build.upgrades if (u.role or "").lower() in wanted]
+
+
+def _largest_gb(texts: list[str]) -> int:
+    values: list[int] = []
+    for text in texts:
+        values.extend(int(value) for value in re.findall(r"(?<!\d)(\d{1,3})\s*gb\b", text.lower()))
+    return max(values, default=0)
+
+
+def _largest_storage_gb(texts: list[str]) -> int:
+    values: list[int] = []
+    for text in texts:
+        lower = text.lower()
+        values.extend(int(value) * 1000 for value in re.findall(r"(?<!\d)(\d{1,2})\s*tb\b", lower))
+        values.extend(int(value) for value in re.findall(r"(?<!\d)(\d{3,4})\s*gb\b", lower))
+    return max(values, default=0)
+
+
+def _largest_watts(texts: list[str]) -> int:
+    values: list[int] = []
+    for text in texts:
+        values.extend(int(value) for value in re.findall(r"(?<!\d)(\d{3,4})\s*w(?:att)?s?\b", text.lower()))
+    return max(values, default=0)
+
+
+def _validate_use_case_requirements(build: Build, intent: RefinedIntent) -> str | None:
+    requirements = _requirements_for(intent.target_use_case)
+    base = build.base_spec.lower()
+
+    if requirements.forbid_sff and any(token in base for token in [" sff", "small form factor", "mini pc", "micro pc"]):
+        return f"{intent.target_use_case} requires GPU expansion; SFF/mini base is unsuitable"
+
+    if requirements.require_expandable_base and any(
+        token in base for token in ["optiplex", "prodesk", "elitedesk", "thinkcentre"]
+    ):
+        return "AI workstation requires an expandable workstation/custom ATX base, not an office OEM platform"
+
+    cpu_upgrades = _role_items(build, "cpu", "processor")
+    if requirements.forbid_unverified_oem_cpu_swap and cpu_upgrades and any(
+        token in base for token in ["dell", "hp", "lenovo", "optiplex", "prodesk", "elitedesk", "thinkcentre"]
+    ):
+        return "Unverified CPU replacement in an OEM base (motherboard/BIOS/cooling support not established)"
+
+    gpu_vram = _largest_gb(_role_items(build, "gpu", "graphics", "graphics card"))
+    if gpu_vram < requirements.min_gpu_vram_gb:
+        return f"GPU VRAM {gpu_vram or 'unknown'}GB is below the {requirements.min_gpu_vram_gb}GB {intent.target_use_case} minimum"
+
+    ram_gb = max(_largest_gb(_role_items(build, "ram", "memory")), _largest_gb([base]))
+    if ram_gb < requirements.min_ram_gb:
+        return f"RAM {ram_gb or 'unknown'}GB is below the {requirements.min_ram_gb}GB {intent.target_use_case} minimum"
+
+    storage_gb = max(_largest_storage_gb(_role_items(build, "storage", "ssd", "nvme")), _largest_storage_gb([base]))
+    if storage_gb < requirements.min_storage_gb:
+        return f"Storage {storage_gb or 'unknown'}GB is below the {requirements.min_storage_gb}GB {intent.target_use_case} minimum"
+
+    psu_watts = max(_largest_watts(_role_items(build, "psu", "power supply")), _largest_watts([base]))
+    if psu_watts < requirements.min_psu_watts:
+        return f"PSU {psu_watts or 'unknown'}W is below the {requirements.min_psu_watts}W {intent.target_use_case} minimum"
+
+    return None
 
 
 def _hard_validate(build: Build, intent: RefinedIntent) -> tuple[bool, str]:
@@ -417,6 +544,18 @@ def _hard_validate(build: Build, intent: RefinedIntent) -> tuple[bool, str]:
     # Budget check
     if build.total_cost > intent.budget_max * 1.05:   # 5% tolerance
         return False, f"Total cost £{build.total_cost:.0f} exceeds budget £{intent.budget_max:.0f}"
+
+    # Never trust an AI-supplied total when the component arithmetic disagrees.
+    calculated_cost = round(build.base_cost + sum(max(0.0, u.cost_estimate) for u in build.upgrades), 2)
+    build.total_cost = calculated_cost
+    build.estimated_profit = round(build.estimated_resale - calculated_cost, 2)
+    build.profit_margin_pct = round((build.estimated_profit / calculated_cost * 100) if calculated_cost else 0, 1)
+    if calculated_cost > intent.budget_max * 1.05:
+        return False, f"Calculated component cost £{calculated_cost:.0f} exceeds budget £{intent.budget_max:.0f}"
+
+    requirement_failure = _validate_use_case_requirements(build, intent)
+    if requirement_failure:
+        return False, requirement_failure
 
     # Must be profitable
     if build.estimated_profit <= 0:
