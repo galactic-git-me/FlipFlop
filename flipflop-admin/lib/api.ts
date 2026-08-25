@@ -134,6 +134,27 @@ export interface ComponentRating {
   notes?: string | null;
 }
 
+export interface PriceAlert {
+  id: number;
+  manual_build_id: number;
+  build_name: string;
+  build_status: string | null;
+  current_price_gbp: number | null;
+  user_email: string;
+  target_price_gbp: number;
+  is_active: boolean;
+  triggered_at: string | null;
+  triggered_price_gbp: number | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PriceAlertList {
+  items: PriceAlert[];
+  active_count: number;
+  triggered_count: number;
+}
+
 export interface ManualBuild {
   id: number;
   name: string;
@@ -470,6 +491,14 @@ function qs(params?: Record<string, string | undefined>): string {
 }
 
 export const api = {
+  priceAlerts: {
+    list: () => request<PriceAlertList>("/price-alerts"),
+    create: (data: { manual_build_id: number; user_email: string; target_price_gbp: number }) =>
+      request<PriceAlert>("/price-alerts", { method: "POST", body: JSON.stringify(data) }),
+    dismiss: (id: number) => request<{ ok: boolean }>(`/price-alerts/${id}/dismiss`, { method: "POST" }),
+    rearm: (id: number) => request<{ ok: boolean }>(`/price-alerts/${id}/re-arm`, { method: "POST" }),
+    history: (id: number) => request<{ items: Array<{ id: number; event_type: string; price_gbp: number | null; notes: string | null; created_at: string }> }>(`/price-alerts/${id}/history`),
+  },
   listings: {
     // DEPRECATED: Use gemRadar.scoredListings instead
     list: (params?: Record<string, string>) => request<unknown[]>(`/listings/${qs(params)}`),
