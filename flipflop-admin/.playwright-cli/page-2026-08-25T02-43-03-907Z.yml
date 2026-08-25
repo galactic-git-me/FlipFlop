@@ -1,0 +1,34 @@
+- generic [active] [ref=f1e1]:
+  - complementary [ref=f1e2]:
+    - generic [ref=f1e3]:
+      - img "FlipFlop" [ref=f1e5]
+      - navigation [ref=f1e6]:
+        - link "Sourcing" [ref=f1e7] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Pre-Built" [ref=f1e11] [cursor=pointer]:
+          - /url: /builds
+        - link "Custom Builds" [ref=f1e16] [cursor=pointer]:
+          - /url: /configurator-config
+        - link "Curated Builds" [ref=f1e20] [cursor=pointer]:
+          - /url: /pc-builder
+        - link "Inventory" [ref=f1e23] [cursor=pointer]:
+          - /url: /inventory
+        - link "Demand" [ref=f1e27] [cursor=pointer]:
+          - /url: /demand
+        - link "3D Assets" [ref=f1e30] [cursor=pointer]:
+          - /url: /components-3d-review
+        - link "Problems" [ref=f1e34] [cursor=pointer]:
+          - /url: /problems
+  - generic [ref=f1e37]:
+    - banner [ref=f1e38]:
+      - textbox "QUERY MARKET DATA..." [ref=f1e43]
+      - generic [ref=f1e44]:
+        - img "FlipFlop" [ref=f1e47]
+        - generic [ref=f1e48]:
+          - button "Source activity" [ref=f1e49]
+          - button "Favourites" [ref=f1e56]
+          - button "Notifications" [ref=f1e59]
+          - button "Price alerts" [ref=f1e63] [cursor=pointer]
+    - main [ref=f1e69]:
+      - button [ref=f1e73]:
+        - img "Hermes" [ref=f1e74]

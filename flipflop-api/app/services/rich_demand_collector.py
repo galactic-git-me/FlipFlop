@@ -55,7 +55,7 @@ async def _fetch_trends_detail(
 ) -> tuple[list[dict], list[dict]]:
     headers = {"User-Agent": "Mozilla/5.0 (compatible; FlipFlopBot/1.0)"}
     req = {
-        "comparisonItem": [{"keyword": query, "geo": "GB", "time": "now 7-d"} for query in queries],
+        "comparisonItem": [{"keyword": query, "geo": "", "time": "now 7-d"} for query in queries],
         "category": 0,
         "property": "",
     }
@@ -564,3 +564,4 @@ async def get_rich_signals() -> dict:
             ]
         },
     }
+
