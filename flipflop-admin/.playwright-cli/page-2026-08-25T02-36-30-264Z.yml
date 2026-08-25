@@ -1,0 +1,45 @@
+- generic [active] [ref=e1]:
+  - complementary [ref=e2]:
+    - generic [ref=e3]:
+      - img "FlipFlop" [ref=e5]
+      - navigation [ref=e6]:
+        - link "Sourcing" [ref=e7] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Pre-Built" [ref=e11] [cursor=pointer]:
+          - /url: /builds
+        - link "Custom Builds" [ref=e16] [cursor=pointer]:
+          - /url: /configurator-config
+        - link "Curated Builds" [ref=e20] [cursor=pointer]:
+          - /url: /pc-builder
+        - link "Inventory" [ref=e23] [cursor=pointer]:
+          - /url: /inventory
+        - link "Demand" [ref=e27] [cursor=pointer]:
+          - /url: /demand
+        - link "3D Assets" [ref=e30] [cursor=pointer]:
+          - /url: /components-3d-review
+        - link "Problems" [ref=e34] [cursor=pointer]:
+          - /url: /problems
+  - generic [ref=e37]:
+    - banner [ref=e38]:
+      - textbox "QUERY MARKET DATA..." [ref=e43]
+      - generic [ref=e44]:
+        - img "FlipFlop" [ref=e47]
+        - generic [ref=e48]:
+          - button "Source activity" [ref=e49]
+          - button "Favourites" [ref=e56]
+          - button "Notifications" [ref=e59]
+          - button "Price alerts" [ref=e63] [cursor=pointer]
+    - main [ref=e69]:
+      - generic [ref=e70]:
+        - generic [ref=e71]:
+          - heading "Demand Explorer" [level=1] [ref=e76]
+          - button "Refresh" [ref=e77] [cursor=pointer]
+        - generic [ref=e83]:
+          - button "Market Overview" [ref=e84] [cursor=pointer]
+          - button "Sold Market" [ref=e85] [cursor=pointer]
+          - button "Categories" [ref=e86] [cursor=pointer]
+          - button "External Signals" [ref=e87] [cursor=pointer]
+          - button "Auction Intel" [ref=e88] [cursor=pointer]
+        - generic [ref=e89]: Loading…
+      - button [ref=e96]:
+        - img "Hermes" [ref=e97]

@@ -158,7 +158,7 @@ async def build_sold_market_snapshot(db: AsyncSession, days: int = 90) -> dict:
             "unmatched_sold_observations": unmatched, "active_listings": len(active_by_id),
             "products_with_sold_evidence": len(product_sold),
         },
-        "categories": categories, "top_products": products[:20], "weekly": weekly,
+        "categories": categories, "top_products": products[:100], "weekly": weekly,
     }
 
 
