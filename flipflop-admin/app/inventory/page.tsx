@@ -3,10 +3,10 @@
 import { useEffect, useState, useCallback } from "react";
 import {
   Package, Plus, Trash2, Edit2, X, RefreshCw, DollarSign,
-  MemoryStick, Cpu, HardDrive, CircuitBoard, Zap, Wind, MonitorSpeaker,
+  MemoryStick, Cpu, HardDrive, CircuitBoard, Zap, Wind, MonitorSpeaker, Layers3,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { api } from "@/lib/api";
+import { api, type ManualBuildSummary } from "@/lib/api";
 import { formatCurrency, formatRelativeTime } from "@/lib/utils";
 
 interface InventoryItem {
@@ -14,6 +14,7 @@ interface InventoryItem {
   component_name: string;
   component_type: string;
   quantity: number;
+  quantity_unallocated: number;
   actual_cost: number;
   purchase_date: string;
   source: string | null;
@@ -21,18 +22,13 @@ interface InventoryItem {
   created_at: string;
 }
 
-interface Flip {
-  id: number;
-  name?: string;
-}
-
-interface InventoryAllocation {
-  id: number;
+interface ManualBuildAssignment {
+  allocation_id: number;
   inventory_item_id: number;
-  flip_id: number;
   quantity_allocated: number;
-  cost_per_unit_at_allocation: number;
-  notes: string | null;
+  build_id: number;
+  manual_build_id: number;
+  build_name: string;
 }
 
 interface FormData {
@@ -61,9 +57,13 @@ export default function InventoryPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [stats, setStats] = useState({ total_cost: 0, total_quantity: 0, total_items: 0 });
-  const [flips, setFlips] = useState<Flip[]>([]);
-  const [selectedFlipId, setSelectedFlipId] = useState<number | null>(null);
-  const [allocations, setAllocations] = useState<InventoryAllocation[]>([]);
+  const [draftBuilds, setDraftBuilds] = useState<ManualBuildSummary[]>([]);
+  const [selectedDraftBuildId, setSelectedDraftBuildId] = useState<number | null>(null);
+  const [assignments, setAssignments] = useState<ManualBuildAssignment[]>([]);
+  const [activeTab, setActiveTab] = useState<"free" | "assigned">("free");
+  const [selectedItemIds, setSelectedItemIds] = useState<Set<number>>(new Set());
+  const [assigning, setAssigning] = useState(false);
+  const [assignmentMessage, setAssignmentMessage] = useState<string | null>(null);
   const [showBulkModal, setShowBulkModal] = useState(false);
 
   const [form, setForm] = useState<FormData>({
@@ -79,44 +79,56 @@ export default function InventoryPage() {
   const loadInventory = useCallback(async () => {
     setLoading(true);
     try {
-      const [itemsData, statsData, flipsData, allocationsData] = await Promise.all([
+      const [itemsData, statsData, buildsData, assignmentsData] = await Promise.all([
         fetch("/api/inventory/").then(r => r.json()),
         fetch("/api/inventory/summary/stats").then(r => r.json()),
-        fetch("/api/flips/").then(r => r.json()),
-        fetch("/api/inventory-allocations/").then(r => r.json()),
+        api.manualBuilds.list(),
+        fetch("/api/inventory-allocations/manual-build-assignments").then(r => r.json()),
       ]);
       setItems(itemsData);
       setStats(statsData);
-      setFlips(flipsData);
-      setAllocations(allocationsData);
+      setDraftBuilds(buildsData.filter(build => build.status === "in_progress"));
+      setAssignments(assignmentsData);
     } catch {
       setItems([]);
-      setFlips([]);
-      setAllocations([]);
+      setDraftBuilds([]);
+      setAssignments([]);
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    void loadInventory();
+    const timer = window.setTimeout(() => void loadInventory(), 0);
+    return () => window.clearTimeout(timer);
   }, [loadInventory]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      let response: Response;
       if (editingId) {
-        await fetch(`/api/inventory/${editingId}`, {
+        response = await fetch(`/api/inventory/${editingId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(form),
         });
       } else {
-        await fetch("/api/inventory/", {
+        response = await fetch("/api/inventory/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(form),
         });
+      }
+      if (!response.ok) throw new Error((await response.json()).detail || "Unable to save item");
+      const savedItem = await response.json() as InventoryItem;
+      if (selectedDraftBuildId) {
+        const assignmentResponse = await fetch(`/api/inventory-allocations/manual-builds/${selectedDraftBuildId}/bulk`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ inventory_item_ids: [savedItem.id] }),
+        });
+        if (!assignmentResponse.ok) throw new Error((await assignmentResponse.json()).detail || "Unable to assign item");
       }
       setShowForm(false);
       setEditingId(null);
@@ -129,6 +141,7 @@ export default function InventoryPage() {
         source: "eBay",
         notes: "",
       });
+      setSelectedDraftBuildId(null);
       await loadInventory();
     } catch (err) {
       alert("Error saving item: " + String(err));
@@ -156,14 +169,33 @@ export default function InventoryPage() {
       notes: item.notes || "",
     });
     setEditingId(item.id);
-    setSelectedFlipId(null);
+    setSelectedDraftBuildId(null);
     setShowForm(true);
   };
 
-  const getFlipForItem = (itemId: number): Flip | null => {
-    const allocation = allocations.find(a => a.inventory_item_id === itemId);
-    if (!allocation) return null;
-    return flips.find(f => f.id === allocation.flip_id) || null;
+  const getAssignmentsForItem = (itemId: number) => assignments.filter(a => a.inventory_item_id === itemId);
+
+  const handleAssignSelected = async () => {
+    if (!selectedDraftBuildId || selectedItemIds.size === 0) return;
+    setAssigning(true);
+    setAssignmentMessage(null);
+    try {
+      const response = await fetch(`/api/inventory-allocations/manual-builds/${selectedDraftBuildId}/bulk`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ inventory_item_ids: Array.from(selectedItemIds) }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.detail || "Unable to assign inventory");
+      setAssignmentMessage(`${result.units_assigned} unit${result.units_assigned === 1 ? "" : "s"} assigned to ${result.build_name}.`);
+      setSelectedItemIds(new Set());
+      setSelectedDraftBuildId(null);
+      await loadInventory();
+    } catch (error) {
+      setAssignmentMessage(error instanceof Error ? error.message : "Unable to assign inventory");
+    } finally {
+      setAssigning(false);
+    }
   };
 
   const handleBulkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -395,17 +427,20 @@ Example:
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Assign to Build</label>
+              <label className="block text-sm font-medium text-slate-300 mb-1">Assign to draft build</label>
               <select
-                value={selectedFlipId || ""}
-                onChange={e => setSelectedFlipId(e.target.value ? parseInt(e.target.value) : null)}
+                value={selectedDraftBuildId || ""}
+                onChange={e => setSelectedDraftBuildId(e.target.value ? parseInt(e.target.value) : null)}
                 className="w-full px-3 py-2 bg-[#0d1320] border border-[#1e2d45] rounded text-slate-300 text-sm focus:border-[#00dc82] outline-none"
               >
                 <option value="">Unassigned</option>
-                {flips.map(flip => (
-                  <option key={flip.id} value={flip.id}>Flip #{flip.id}</option>
+                {draftBuilds.map(build => (
+                  <option key={build.id} value={build.id}>{build.name}</option>
                 ))}
               </select>
+              {draftBuilds.length === 0 && (
+                <p className="mt-1 text-xs text-slate-500">Create an in-progress draft build first to assign inventory.</p>
+              )}
             </div>
 
             <div className="flex gap-2 justify-end">
@@ -427,6 +462,53 @@ Example:
         </div>
       )}
 
+      {/* Inventory status tabs and bulk assignment */}
+      {!loading && items.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#1e2d45]">
+            <div className="flex" role="tablist" aria-label="Inventory status">
+              {([
+                { id: "free" as const, label: "Free", count: items.filter(item => item.quantity_unallocated > 0).length },
+                { id: "assigned" as const, label: "Assigned", count: new Set(assignments.map(item => item.inventory_item_id)).size },
+              ]).map(tab => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeTab === tab.id}
+                  onClick={() => { setActiveTab(tab.id); setSelectedItemIds(new Set()); setAssignmentMessage(null); }}
+                  className={`cursor-pointer border-b-2 px-5 py-3 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00dc82] ${activeTab === tab.id ? "border-[#00dc82] text-[#00dc82]" : "border-transparent text-slate-500 hover:text-slate-300"}`}
+                >
+                  {tab.label} <span className="ml-1.5 rounded-full bg-[#172235] px-2 py-0.5 text-xs text-slate-300">{tab.count}</span>
+                </button>
+              ))}
+            </div>
+            {activeTab === "free" && selectedItemIds.size > 0 && (
+              <div className="mb-2 flex flex-wrap items-center gap-2 rounded-lg border border-[#00dc82]/30 bg-[#00dc82]/5 p-2">
+                <span className="px-1 text-xs font-semibold text-[#00dc82]">{selectedItemIds.size} selected</span>
+                <label htmlFor="bulk-draft-build" className="sr-only">Draft build</label>
+                <select
+                  id="bulk-draft-build"
+                  value={selectedDraftBuildId || ""}
+                  onChange={event => setSelectedDraftBuildId(event.target.value ? Number(event.target.value) : null)}
+                  className="min-w-52 cursor-pointer rounded border border-[#30405c] bg-[#0d1320] px-3 py-2 text-sm text-slate-200 outline-none focus:border-[#00dc82]"
+                >
+                  <option value="">Choose a draft build…</option>
+                  {draftBuilds.map(build => <option key={build.id} value={build.id}>{build.name}</option>)}
+                </select>
+                <Button onClick={() => void handleAssignSelected()} disabled={!selectedDraftBuildId || assigning} className="gap-2">
+                  {assigning ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Layers3 className="h-4 w-4" />}
+                  Assign to build
+                </Button>
+              </div>
+            )}
+          </div>
+          {assignmentMessage && (
+            <div role="status" className="rounded border border-[#00dc82]/25 bg-[#00dc82]/5 px-3 py-2 text-sm text-slate-300">{assignmentMessage}</div>
+          )}
+        </div>
+      )}
+
       {/* List */}
       {loading ? (
         <div className="flex items-center justify-center py-12 text-slate-500 gap-2">
@@ -437,14 +519,32 @@ Example:
           <Package className="w-12 h-12 text-slate-600 mx-auto mb-3" />
           <p className="text-slate-400">No inventory items yet. Add one to get started.</p>
         </div>
-      ) : (
+      ) : (() => {
+        const visibleItems = activeTab === "free"
+          ? items.filter(item => item.quantity_unallocated > 0)
+          : items.filter(item => getAssignmentsForItem(item.id).length > 0);
+        const allVisibleSelected = visibleItems.length > 0 && visibleItems.every(item => selectedItemIds.has(item.id));
+        return visibleItems.length === 0 ? (
+          <div className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-8 text-center text-slate-400">
+            No {activeTab} inventory items.
+          </div>
+        ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#1e2d45]">
+                <th className="w-12 px-4 py-3 text-left">
+                  <input
+                    type="checkbox"
+                    aria-label={`Select all ${activeTab} inventory items`}
+                    checked={allVisibleSelected}
+                    onChange={event => setSelectedItemIds(event.target.checked ? new Set(visibleItems.map(item => item.id)) : new Set())}
+                    className="h-4 w-4 cursor-pointer accent-[#00dc82]"
+                  />
+                </th>
                 <th className="text-left px-4 py-3 text-slate-400 font-medium">Component</th>
                 <th className="text-left px-4 py-3 text-slate-400 font-medium">Type</th>
-                <th className="text-center px-4 py-3 text-slate-400 font-medium">Qty</th>
+                <th className="text-center px-4 py-3 text-slate-400 font-medium">{activeTab === "free" ? "Free / Total" : "Assigned / Total"}</th>
                 <th className="text-right px-4 py-3 text-slate-400 font-medium">Cost Each</th>
                 <th className="text-right px-4 py-3 text-slate-400 font-medium">Total</th>
                 <th className="text-left px-4 py-3 text-slate-400 font-medium">Source</th>
@@ -454,20 +554,40 @@ Example:
               </tr>
             </thead>
             <tbody>
-              {items.map(item => {
-                const assignedFlip = getFlipForItem(item.id);
+              {visibleItems.map(item => {
+                const itemAssignments = getAssignmentsForItem(item.id);
+                const assignedQuantity = itemAssignments.reduce((total, assignment) => total + assignment.quantity_allocated, 0);
                 return (
-                  <tr key={item.id} className="border-b border-[#1e2d45] hover:bg-[#0a1119]">
+                  <tr key={item.id} className={`border-b border-[#1e2d45] transition-colors hover:bg-[#0a1119] ${selectedItemIds.has(item.id) ? "bg-[#00dc82]/5" : ""}`}>
+                    <td className="px-4 py-3">
+                      <input
+                        type="checkbox"
+                        aria-label={`Select ${item.component_name}`}
+                        checked={selectedItemIds.has(item.id)}
+                        onChange={event => setSelectedItemIds(previous => {
+                          const next = new Set(previous);
+                          if (event.target.checked) next.add(item.id); else next.delete(item.id);
+                          return next;
+                        })}
+                        className="h-4 w-4 cursor-pointer accent-[#00dc82]"
+                      />
+                    </td>
                     <td className="px-4 py-3 text-slate-200">{item.component_name}</td>
                     <td className="px-4 py-3 text-slate-400">{item.component_type}</td>
-                    <td className="px-4 py-3 text-center text-slate-300">{item.quantity}</td>
+                    <td className="px-4 py-3 text-center text-slate-300">{activeTab === "free" ? item.quantity_unallocated : assignedQuantity} / {item.quantity}</td>
                     <td className="px-4 py-3 text-right text-amber-400">{formatCurrency(item.actual_cost)}</td>
                     <td className="px-4 py-3 text-right text-amber-400 font-semibold">{formatCurrency(item.actual_cost * item.quantity)}</td>
                     <td className="px-4 py-3 text-slate-400">{item.source || "—"}</td>
                     <td className="px-4 py-3 text-slate-400">{formatRelativeTime(new Date(item.purchase_date))}</td>
                     <td className="px-4 py-3 text-slate-400">
-                      {assignedFlip ? (
-                        <span className="text-[#00dc82]">Flip #{assignedFlip.id}</span>
+                      {itemAssignments.length > 0 ? (
+                        <div className="flex flex-wrap gap-1">
+                          {itemAssignments.map(assignment => (
+                            <span key={assignment.allocation_id} className="rounded bg-[#00dc82]/10 px-2 py-1 text-xs text-[#00dc82]">
+                              {assignment.build_name} ({assignment.quantity_allocated})
+                            </span>
+                          ))}
+                        </div>
                       ) : (
                         <span className="text-slate-600">Unassigned</span>
                       )}
@@ -496,7 +616,8 @@ Example:
             </tbody>
           </table>
         </div>
-      )}
+        );
+      })()}
 
       {/* Bulk Upload Modal */}
       {showBulkModal && (
@@ -516,7 +637,7 @@ Example:
               <div className="bg-[#0d1320] border border-[#1e2d45] rounded p-4">
                 <h3 className="text-sm font-semibold text-slate-300 mb-3">Required & Optional Fields</h3>
                 <div className="space-y-2 text-xs text-slate-400 font-mono">
-                  <div><span className="text-amber-400">component_name</span> (required) - Component name, e.g. "RTX 4070 12GB"</div>
+                  <div><span className="text-amber-400">component_name</span> (required) - Component name, e.g. &quot;RTX 4070 12GB&quot;</div>
                   <div><span className="text-amber-400">component_type</span> (required) - gpu | cpu | ram | motherboard | cooler | ssd | psu</div>
                   <div><span className="text-amber-400">quantity</span> (required) - Number of units (integer)</div>
                   <div><span className="text-amber-400">base_price</span> (required) - Price per unit (number)</div>
