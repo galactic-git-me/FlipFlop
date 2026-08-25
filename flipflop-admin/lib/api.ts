@@ -114,6 +114,10 @@ export interface BuildComponent {
   image_url?: string;
   purchased?: boolean;
   inventory_item_id?: number;
+  condition?: "new" | "new_other" | "refurbished" | "used" | "unknown";
+  warranty_expires_at?: string | null;
+  proof_of_purchase?: boolean;
+  original_packaging?: boolean;
 }
 
 export type ManualBuildStatus = "in_progress" | "built" | "listed" | "sold";
@@ -209,6 +213,10 @@ export interface ManualBuild {
   buyer_name?: string | null;
   buyer_address_json?: BuyerAddress | null;
   sale_price_actual?: number | null;
+  marketplace_fees_actual?: number | null;
+  promotion_cost_actual?: number | null;
+  refund_amount?: number | null;
+  warranty_claim_cost?: number | null;
   parcel2go_order_id?: string | null;
   parcel2go_service_slug?: string | null;
   tracking_number?: string | null;

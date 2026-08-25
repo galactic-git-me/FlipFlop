@@ -1323,6 +1323,14 @@ async def update_ebay_config(
         build.packaging_cost = max(0.0, body.packaging_cost)
     if body.warranty_reserve_pct is not None:
         build.warranty_reserve_pct = min(25.0, max(0.0, body.warranty_reserve_pct))
+    if body.marketplace_fees_actual is not None:
+        build.marketplace_fees_actual = max(0.0, body.marketplace_fees_actual)
+    if body.promotion_cost_actual is not None:
+        build.promotion_cost_actual = max(0.0, body.promotion_cost_actual)
+    if body.refund_amount is not None:
+        build.refund_amount = max(0.0, body.refund_amount)
+    if body.warranty_claim_cost is not None:
+        build.warranty_claim_cost = max(0.0, body.warranty_claim_cost)
     if body.handling_time_days is not None:
         build.handling_time_days = body.handling_time_days
     if body.shipping_damage_cover_confirmed is not None:

@@ -14,6 +14,10 @@ class BuildComponent(BaseModel):
     image_url: Optional[str] = None
     purchased: bool = False
     inventory_item_id: int | None = None
+    condition: str = "unknown"
+    warranty_expires_at: Optional[str] = None
+    proof_of_purchase: bool = False
+    original_packaging: bool = False
 
 
 class ManualBuildCreate(BaseModel):
@@ -93,6 +97,10 @@ class ManualBuildOut(BaseModel):
     buyer_name: Optional[str] = None
     buyer_address_json: Optional[dict] = None
     sale_price_actual: Optional[float] = None
+    marketplace_fees_actual: Optional[float] = None
+    promotion_cost_actual: Optional[float] = None
+    refund_amount: Optional[float] = None
+    warranty_claim_cost: Optional[float] = None
     parcel2go_order_id: Optional[str] = None
     parcel2go_service_slug: Optional[str] = None
     tracking_number: Optional[str] = None
@@ -124,6 +132,10 @@ class ManualBuildOut(BaseModel):
     traffic_band: Optional[str] = None
     listed_at: Optional[datetime] = None
     promoted_ad_rate_pct: Optional[float] = None
+    marketplace_fees_actual: Optional[float] = None
+    promotion_cost_actual: Optional[float] = None
+    refund_amount: Optional[float] = None
+    warranty_claim_cost: Optional[float] = None
     promoted_enabled: bool = False
     markdown_event_opt_in: bool = False
     created_at: datetime

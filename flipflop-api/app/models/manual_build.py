@@ -102,6 +102,10 @@ class ManualBuild(Base):
     buyer_name: Mapped[str | None] = mapped_column(String(200))
     buyer_address_json: Mapped[dict | None] = mapped_column(JSON)
     sale_price_actual: Mapped[float | None] = mapped_column(Float)
+    marketplace_fees_actual: Mapped[float | None] = mapped_column(Float)
+    promotion_cost_actual: Mapped[float | None] = mapped_column(Float)
+    refund_amount: Mapped[float | None] = mapped_column(Float)
+    warranty_claim_cost: Mapped[float | None] = mapped_column(Float)
     # ── Pricing engine (playbook rows 10, 19, 20, 21, 22, 23, 33, 49) —
     # ported from the retired Flip system, adapted to ManualBuild's fields
     # (ebay_price is this system's listing-price anchor, auto_reject_below_price

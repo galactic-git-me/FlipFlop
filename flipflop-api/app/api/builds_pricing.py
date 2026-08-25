@@ -31,6 +31,7 @@ from app.gem_radar.identity import resolve_identity
 from app.gem_radar.adapters.sold_comps import SoldCompsResult
 from app.services.ebay_browse import search_active_listings
 from app.services.sold_comps_cache import get_sold_comps_cache
+from app.services.figural_insurance import FiguralError, get_insurance_quote
 
 log = structlog.get_logger(__name__)
 router = APIRouter(prefix="/api/builds", tags=["builds"])
@@ -80,7 +81,7 @@ def _condition_cohort(value: str | None) -> str:
     return "unknown"
 
 
-def _build_condition(ebay_condition: str | None) -> str:
+def _build_condition(ebay_condition: str | None, components: list[dict] | None = None) -> str:
     value = (ebay_condition or "").upper()
     if value == "NEW":
         return "new"
@@ -90,6 +91,16 @@ def _build_condition(ebay_condition: str | None) -> str:
         return "refurbished"
     if value.startswith("USED"):
         return "used"
+    component_conditions = [_condition_cohort(item.get("condition")) for item in (components or [])]
+    known = [value for value in component_conditions if value != "unknown"]
+    if known and len(known) == len(component_conditions):
+        if all(value == "new" for value in known):
+            return "new"
+        if any(value == "used" for value in known):
+            return "used"
+        if any(value == "refurbished" for value in known):
+            return "refurbished"
+        return "new_other"
     return "unknown"
 
 
@@ -105,6 +116,46 @@ def _title_has_model(title: str | None, model: str | None) -> bool:
     distinctive = cpu.group(0) if cpu else gpu.group(0) if gpu else None
     distinctive_key = re.sub(r"[^a-z0-9]", "", distinctive.lower()) if distinctive else ""
     return bool(distinctive_key and distinctive_key in title_key)
+
+
+def _motherboard_chipset(title: str | None) -> str | None:
+    if not title:
+        return None
+    match = re.search(r"\b(?:A|B|X|H|Z|Q|W)\d{3}[A-Z]?\b", title, re.IGNORECASE)
+    return match.group(0).upper() if match else None
+
+
+async def _standalone_capacity_value(kind: str, capacity_gb: int, condition: str) -> float | None:
+    """Current UK standalone-component median used for spec deltas.
+
+    Full PCs are excluded so a 64GB-vs-32GB adjustment reflects RAM kits,
+    rather than accidentally comparing complete computers.
+    """
+    field = Listing.ram_gb if kind == "ram" else Listing.storage_gb
+    condition_terms = ("new",) if condition == "new" else ("used", "refurbished")
+    async with AsyncSessionLocal() as db:
+        rows = (await db.execute(select(Listing.price).where(
+            Listing.status == ListingStatus.active,
+            field == capacity_gb,
+            Listing.price > 2,
+            Listing.price < (400 if kind == "ram" else 600),
+            ~or_(Listing.title.ilike("%gaming pc%"), Listing.title.ilike("%desktop%"), Listing.title.ilike("%computer%")),
+            or_(*(Listing.condition.ilike(f"%{term}%") for term in condition_terms)),
+        ).limit(100))).scalars().all()
+    return statistics.median(rows) if len(rows) >= 2 else None
+
+
+async def _standalone_chipset_value(chipset: str, condition: str) -> float | None:
+    condition_terms = ("new",) if condition == "new" else ("used", "refurbished")
+    async with AsyncSessionLocal() as db:
+        rows = (await db.execute(select(Listing.price).where(
+            Listing.status == ListingStatus.active,
+            Listing.title.ilike(f"%{chipset}%"),
+            Listing.price.between(20, 800),
+            or_(Listing.title.ilike("%motherboard%"), Listing.title.ilike("%mainboard%"), Listing.title.ilike("% mobo%")),
+            or_(*(Listing.condition.ilike(f"%{term}%") for term in condition_terms)),
+        ).limit(100))).scalars().all()
+    return statistics.median(rows) if len(rows) >= 2 else None
 
 
 def _find_component(components: list[dict], slot_keywords: tuple[str, ...]) -> dict | None:
@@ -166,6 +217,7 @@ class SoldCompDetail(BaseModel):
     storage_gb: int | None = None
     original_price: float | None = None
     specification_adjustment: float = 0.0
+    condition_adjustment: float = 0.0
     motherboard_match: str = "unknown"
     match_quality: str = "unverified"
 
@@ -194,6 +246,7 @@ class MarketComparable(BaseModel):
     condition: str = "unknown"
     original_price: float | None = None
     specification_adjustment: float = 0.0
+    condition_adjustment: float = 0.0
     match_quality: str = "unverified"
 
 
@@ -233,6 +286,14 @@ class PriceBridge(BaseModel):
     recommended_listing_price: float
 
 
+class PricingCalibration(BaseModel):
+    completed_sales: int
+    offer_headroom_pct: float
+    warranty_reserve_pct: float
+    effective_fee_rate_pct: float
+    basis: str
+
+
 class PricingBreakdown(BaseModel):
     estimated_price: float
     primary_reasoning: PricingDetail
@@ -253,6 +314,8 @@ class PricingBreakdown(BaseModel):
     build_condition: str
     condition_cohorts: dict[str, dict]
     excluded_comparable_count: int = 0
+    component_condition_profile: dict
+    calibration: PricingCalibration
 
 
 class BuildSoldCompTarget(CamelModel):
@@ -452,12 +515,23 @@ def _build_sold_queries(components: list[dict]) -> list[str]:
     cpu_model = resolve_identity(cpu.get("name")).model if cpu else None
     gpu_model = resolve_identity(gpu.get("name")).model if gpu else None
     queries: list[str] = []
+    cpu_search = None
+    gpu_search = None
     if gpu_model:
         match = re.search(r"\b(?:RTX|GTX|RX)\s*\d{3,4}(?:\s*(?:Ti|Super|XT|XTX))?\b", gpu_model, re.IGNORECASE)
-        queries.append(f"{match.group(0) if match else gpu_model} PC")
+        gpu_search = match.group(0) if match else gpu_model
     if cpu_model:
         match = re.search(r"\b\d{4,5}(?:X3D|X|G|F|K|KF)?\b", cpu_model, re.IGNORECASE)
-        queries.append(f"{match.group(0) if match else cpu_model} PC")
+        cpu_search = match.group(0) if match else cpu_model
+    # The combined query is the primary collection path. Separate searches
+    # remain only to recover poorly titled listings; ingestion still requires
+    # both exact identities before accepting a result.
+    if cpu_search and gpu_search:
+        queries.append(f'gaming PC "{cpu_search}" "{gpu_search}"')
+    if gpu_search:
+        queries.append(f'"{gpu_search}" PC')
+    if cpu_search:
+        queries.append(f'"{cpu_search}" PC')
     return list(dict.fromkeys(queries))
 
 
@@ -466,24 +540,29 @@ async def build_sold_comp_targets(limit: int = Query(2, ge=1, le=5)) -> list[Bui
     """Builds for FlipFlopXtension to enrich through the signed-in eBay tab."""
     cutoff = datetime.utcnow() - timedelta(days=90)
     async with AsyncSessionLocal() as db:
-        counts = (
-            select(BuildSoldObservation.build_id, func.count().label("sold_count"))
-            .where(BuildSoldObservation.observed_at >= cutoff)
-            .group_by(BuildSoldObservation.build_id)
-            .subquery()
-        )
-        rows = (await db.execute(
-            select(ManualBuild, counts.c.sold_count)
-            .outerjoin(counts, counts.c.build_id == ManualBuild.id)
+        builds = (await db.execute(
+            select(ManualBuild)
             .where(ManualBuild.status.in_(("built", "listed")))
-            .where(func.coalesce(counts.c.sold_count, 0) < 5)
             .order_by(ManualBuild.updated_at.desc())
-            .limit(limit)
-        )).all()
-    return [
-        BuildSoldCompTarget(build_id=build.id, name=build.name, queries=_build_sold_queries(build.components or []))
-        for build, _ in rows if _build_sold_queries(build.components or [])
-    ]
+            .limit(30)
+        )).scalars().all()
+        observations = (await db.execute(select(BuildSoldObservation).where(
+            BuildSoldObservation.build_id.in_([build.id for build in builds] or [-1]),
+            BuildSoldObservation.observed_at >= cutoff,
+        ))).scalars().all()
+    counts: dict[tuple[int, str], int] = {}
+    for observation in observations:
+        key = (observation.build_id, _condition_cohort(observation.condition))
+        counts[key] = counts.get(key, 0) + 1
+    targets: list[BuildSoldCompTarget] = []
+    for build in builds:
+        target_condition = _build_condition(build.ebay_condition, build.components or [])
+        queries = _build_sold_queries(build.components or [])
+        if queries and counts.get((build.id, target_condition), 0) < 5:
+            targets.append(BuildSoldCompTarget(build_id=build.id, name=build.name, queries=queries))
+        if len(targets) >= limit:
+            break
+    return targets
 
 
 @router.post("/sold-comps", response_model=BuildSoldCompSubmitResponse)
@@ -561,7 +640,14 @@ async def get_build_pricing(
     cpu_model = resolve_identity(cpu_title).model if cpu_title else None
     gpu_model = resolve_identity(gpu_title).model if gpu_title else None
     mobo_model = resolve_identity(mobo_title).model if mobo_title else None
-    target_condition = _build_condition(build.ebay_condition)
+    target_condition = _build_condition(build.ebay_condition, components)
+    component_condition_profile = {
+        "components": len(components),
+        "known_condition": sum(_condition_cohort(item.get("condition")) != "unknown" for item in components),
+        "with_warranty": sum(bool(item.get("warranty_expires_at")) for item in components),
+        "with_proof_of_purchase": sum(bool(item.get("proof_of_purchase")) for item in components),
+        "with_original_packaging": sum(bool(item.get("original_packaging")) for item in components),
+    }
 
     cache_key = _build_cache_key(cpu_title, mobo_title, gpu_title)
     query = _build_search_query(cpu_title, gpu_title)
@@ -642,22 +728,60 @@ async def get_build_pricing(
     excluded_comparable_count = len(raw_sold) - len(exact_identity)
     ram_value = float((ram or {}).get("market_price") or (ram or {}).get("market_price_avg") or (ram or {}).get("price_paid") or 0)
     storage_value = float((storage or {}).get("market_price") or (storage or {}).get("market_price_avg") or (storage or {}).get("price_paid") or 0)
+    pricing_condition = "new" if target_condition in {"new", "new_other"} else "used"
+    target_ram_market = await _standalone_capacity_value("ram", target_ram_gb, pricing_condition) if target_ram_gb else None
+    target_storage_market = await _standalone_capacity_value("storage", target_storage_gb, pricing_condition) if target_storage_gb else None
+    target_chipset = _motherboard_chipset(mobo_title)
+    target_mobo_market = await _standalone_chipset_value(target_chipset, pricing_condition) if target_chipset else None
+    ram_markets: dict[int, float | None] = {}
+    storage_markets: dict[int, float | None] = {}
+    chipset_markets: dict[str, float | None] = {}
     for comp in exact_identity:
         adjustment = 0.0
         if target_ram_gb and comp.ram_gb:
-            adjustment += (target_ram_gb - comp.ram_gb) * (ram_value / target_ram_gb)
+            if comp.ram_gb not in ram_markets:
+                ram_markets[comp.ram_gb] = await _standalone_capacity_value("ram", comp.ram_gb, pricing_condition)
+            comp_ram_market = ram_markets[comp.ram_gb]
+            adjustment += (target_ram_market - comp_ram_market) if target_ram_market is not None and comp_ram_market is not None else (target_ram_gb - comp.ram_gb) * (ram_value / target_ram_gb)
         if target_storage_gb and comp.storage_gb:
-            adjustment += (target_storage_gb - comp.storage_gb) * (storage_value / target_storage_gb)
+            if comp.storage_gb not in storage_markets:
+                storage_markets[comp.storage_gb] = await _standalone_capacity_value("storage", comp.storage_gb, pricing_condition)
+            comp_storage_market = storage_markets[comp.storage_gb]
+            adjustment += (target_storage_market - comp_storage_market) if target_storage_market is not None and comp_storage_market is not None else (target_storage_gb - comp.storage_gb) * (storage_value / target_storage_gb)
+        comp_chipset = _motherboard_chipset(comp.title)
+        if target_chipset and comp_chipset and comp_chipset != target_chipset:
+            if comp_chipset not in chipset_markets:
+                chipset_markets[comp_chipset] = await _standalone_chipset_value(comp_chipset, pricing_condition)
+            comp_mobo_market = chipset_markets[comp_chipset]
+            if target_mobo_market is not None and comp_mobo_market is not None:
+                adjustment += target_mobo_market - comp_mobo_market
         comp.original_price = comp.price
         comp.specification_adjustment = round(adjustment, 2)
         comp.price = round(comp.price + adjustment, 2)
-        comp.motherboard_match = "exact" if _title_has_model(comp.title, mobo_model) else "unknown"
+        comp.motherboard_match = "exact" if _title_has_model(comp.title, mobo_model) else "normalised" if target_chipset and comp_chipset else "unknown"
         comp.match_quality = "exact major specification" if comp.motherboard_match == "exact" and (not target_ram_gb or comp.ram_gb == target_ram_gb) and (not target_storage_gb or comp.storage_gb == target_storage_gb) else "normalised"
 
     cohorts: dict[str, list[SoldCompDetail]] = {name: [] for name in ("new", "new_other", "refurbished", "used", "unknown")}
     for comp in exact_identity:
         cohorts[_condition_cohort(comp.condition)].append(comp)
     sold_comps_list = cohorts.get(target_condition, []) if target_condition != "unknown" else cohorts["unknown"]
+    # Cross-condition evidence is allowed only when both cohorts have enough
+    # exact CPU+GPU observations to learn the condition spread from the market.
+    # This avoids fixed "new is worth X%" assumptions.
+    if target_condition != "unknown" and len(sold_comps_list) >= 3:
+        target_median = statistics.median(item.price for item in sold_comps_list)
+        for source_condition in ("new", "new_other", "refurbished", "used"):
+            source_items = cohorts[source_condition]
+            if source_condition == target_condition or len(source_items) < 3:
+                continue
+            condition_delta = target_median - statistics.median(item.price for item in source_items)
+            for source in source_items:
+                adjusted = source.model_copy(deep=True)
+                adjusted.original_price = adjusted.original_price if adjusted.original_price is not None else adjusted.price
+                adjusted.condition_adjustment = round(condition_delta, 2)
+                adjusted.price = round(adjusted.price + condition_delta, 2)
+                adjusted.match_quality = f"{adjusted.match_quality}; condition-normalised from {source_condition}"
+                sold_comps_list.append(adjusted)
 
     # If this request didn't trigger a fresh fetch, market_data is still empty
     # — reconstruct just enough of it from the filtered cached comps so the
@@ -684,10 +808,42 @@ async def get_build_pricing(
     }
 
     component_cost = build.total_cost or sum(c.get("price_paid", 0) for c in components)
+    async with AsyncSessionLocal() as db:
+        outcome_rows = (await db.execute(select(ManualBuild).where(
+            ManualBuild.status == "sold",
+            ManualBuild.sale_price_actual.is_not(None),
+            ManualBuild.sale_price_actual > 0,
+        ).order_by(ManualBuild.updated_at.desc()).limit(100))).scalars().all()
+    realised_discounts = [
+        max(0.0, (row.ebay_price / row.sale_price_actual - 1) * 100)
+        for row in outcome_rows if row.ebay_price and row.sale_price_actual and row.ebay_price >= row.sale_price_actual
+    ]
+    observed_fee_rates = [
+        ((row.marketplace_fees_actual or 0) + (row.promotion_cost_actual or 0)) / row.sale_price_actual
+        for row in outcome_rows if row.sale_price_actual and row.marketplace_fees_actual is not None
+    ]
+    warranty_rates = [
+        ((row.warranty_claim_cost or 0) / row.total_cost) * 100
+        for row in outcome_rows if row.total_cost and row.warranty_claim_cost is not None
+    ]
+    calibrated_headroom = min(15.0, max(4.0, statistics.median(realised_discounts))) if len(realised_discounts) >= 3 else (10.0 if build.allow_offers else 4.0)
+    configured_warranty_pct = build.warranty_reserve_pct if build.warranty_reserve_pct is not None else 3.0
+    warranty_reserve_pct = min(10.0, max(1.0, statistics.mean(warranty_rates))) if len(warranty_rates) >= 5 else configured_warranty_pct
+    configured_fee_rate = float(get_settings().ebay_final_value_fee_pct)
+    fee_rate = statistics.median(observed_fee_rates) if len(observed_fee_rates) >= 3 else configured_fee_rate
+    if build.promoted_enabled and build.promoted_ad_rate_pct:
+        fee_rate += build.promoted_ad_rate_pct / 100.0
+    fee_rate = min(0.45, max(0.0, fee_rate))
+    calibration = PricingCalibration(
+        completed_sales=len(outcome_rows),
+        offer_headroom_pct=round(calibrated_headroom, 2),
+        warranty_reserve_pct=round(warranty_reserve_pct, 2),
+        effective_fee_rate_pct=round(fee_rate * 100, 2),
+        basis="Observed outcomes" if len(outcome_rows) >= 3 else "Configured defaults until three completed sales are recorded",
+    )
     delivery_cost = build.shipping_cost or 0.0
     insurance_cost = build.shipping_insurance_cost or 0.0
     packaging_cost = build.packaging_cost or 0.0
-    warranty_reserve_pct = build.warranty_reserve_pct if build.warranty_reserve_pct is not None else 3.0
     warranty_reserve = component_cost * (warranty_reserve_pct / 100.0)
 
     if market_data["sold"]["available"]:
@@ -728,6 +884,7 @@ async def get_build_pricing(
         condition=comp.condition,
         original_price=comp.original_price,
         specification_adjustment=comp.specification_adjustment,
+        condition_adjustment=comp.condition_adjustment,
         match_quality=comp.match_quality,
     ) for comp in sold_comps_list]
     market_comparables = sold_market_comparables + live_close_comparables + active_comparables
@@ -752,15 +909,31 @@ async def get_build_pricing(
         confidence = "low"
         rationale = "No comparable-build evidence is available; provisional range uses component values plus a modest complete-build premium"
 
-    fee_rate = float(get_settings().ebay_final_value_fee_pct)
     # Floor is the sale price required to net a 10% return after configured
     # marketplace fees and delivery, not merely the cash component total.
     floor_price = (total_cost * 1.10) / max(0.01, 1 - fee_rate)
     # Leave deliberate negotiating room above the protected floor when offers
     # are enabled; otherwise every non-full-price offer would be rejected.
-    negotiation_headroom_pct = 10.0 if build.allow_offers else 4.0
+    negotiation_headroom_pct = calibrated_headroom if build.allow_offers else 4.0
     market_launch_price = market_mid * (1 + negotiation_headroom_pct / 100.0)
     recommended_price = max(market_launch_price, floor_price)
+    # Requote cover against the recommendation instead of retaining a quote
+    # based on a stale provisional asking price. Persist it so Shipping & Risk
+    # and later pricing loads share the same premium.
+    try:
+        quote = await get_insurance_quote(recommended_price)
+        if abs(quote.price_gbp - insurance_cost) >= 0.01:
+            total_cost += quote.price_gbp - insurance_cost
+            insurance_cost = quote.price_gbp
+            floor_price = (total_cost * 1.10) / max(0.01, 1 - fee_rate)
+            recommended_price = max(market_launch_price, floor_price)
+            async with AsyncSessionLocal() as db:
+                persisted = await db.get(ManualBuild, build_id)
+                if persisted:
+                    persisted.shipping_insurance_cost = insurance_cost
+                    await db.commit()
+    except FiguralError as exc:
+        log.info("builds_pricing.insurance_quote_unavailable", build_id=build_id, reason=str(exc))
     recommended_price = _round_price(recommended_price)
     floor_price = _round_price(floor_price)
     auto_accept_at = _round_price(max(floor_price, recommended_price * 0.96))
@@ -820,6 +993,8 @@ async def get_build_pricing(
         build_condition=target_condition,
         condition_cohorts=condition_cohorts,
         excluded_comparable_count=excluded_comparable_count,
+        component_condition_profile=component_condition_profile,
+        calibration=calibration,
     )
 
 

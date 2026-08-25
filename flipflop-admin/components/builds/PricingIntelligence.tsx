@@ -33,6 +33,7 @@ type Comparable = {
   condition: string;
   original_price: number | null;
   specification_adjustment: number;
+  condition_adjustment: number;
   match_quality: string;
 };
 type Recommendation = {
@@ -77,6 +78,8 @@ type PricingData = {
   build_condition: string;
   condition_cohorts: Record<string, { count: number; median: number | null; exact_spec_count: number; used_for_valuation: boolean }>;
   excluded_comparable_count: number;
+  component_condition_profile: { components: number; known_condition: number; with_warranty: number; with_proof_of_purchase: number; with_original_packaging: number };
+  calibration: { completed_sales: number; offer_headroom_pct: number; warranty_reserve_pct: number; effective_fee_rate_pct: number; basis: string };
   fetched_at: string;
 };
 
@@ -234,7 +237,7 @@ function EvidenceTable({
                 <span className="block text-xs text-slate-500">
                   {item.source} · {item.match_basis}
                 </span>
-                {sold && <span className="mt-1 block text-[10px] uppercase tracking-wide text-slate-600">{item.condition.replaceAll("_", " ")} · {item.match_quality}{item.specification_adjustment ? ` · ${item.specification_adjustment > 0 ? "+" : ""}${formatCurrency(item.specification_adjustment)} spec adjustment` : ""}</span>}
+                {sold && <span className="mt-1 block text-[10px] uppercase tracking-wide text-slate-600">{item.condition.replaceAll("_", " ")} · {item.match_quality}{item.specification_adjustment ? ` · ${item.specification_adjustment > 0 ? "+" : ""}${formatCurrency(item.specification_adjustment)} spec` : ""}{item.condition_adjustment ? ` · ${item.condition_adjustment > 0 ? "+" : ""}${formatCurrency(item.condition_adjustment)} condition` : ""}</span>}
               </td>
               <td className="whitespace-nowrap py-3 pr-3 text-xs text-slate-400">
                 {sold && item.date_kind !== "sold"
@@ -505,6 +508,12 @@ export function PricingIntelligence({
           ))}
         </div>
         {data.build_condition === "unknown" && <p className="mt-3 rounded-lg border border-amber-300/20 bg-amber-300/[0.05] px-3 py-2 text-xs text-amber-200">Set the eBay condition in Shipping &amp; Risk to unlock a new, refurbished or used valuation cohort.</p>}
+        <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-[11px] text-slate-500">
+          <span>{data.component_condition_profile.known_condition}/{data.component_condition_profile.components} component conditions recorded</span>
+          <span>{data.component_condition_profile.with_warranty} warranties</span>
+          <span>{data.component_condition_profile.with_proof_of_purchase} receipts</span>
+          <span>{data.component_condition_profile.with_original_packaging} with original packaging</span>
+        </div>
       </section>
 
       <section className="rounded-xl border border-emerald-400/15 bg-emerald-400/[0.025] p-4">
@@ -539,6 +548,7 @@ export function PricingIntelligence({
           <span className="text-sm font-bold text-slate-100">Recommended listing price</span>
           <strong className="text-xl text-emerald-300">{formatCurrency(data.price_bridge.recommended_listing_price)}</strong>
         </div>
+        <p className="mt-2 text-[10px] text-slate-500">{data.calibration.basis} · {data.calibration.completed_sales} completed sales · calibrated fees {data.calibration.effective_fee_rate_pct}% · warranty reserve {data.calibration.warranty_reserve_pct}% · offer headroom {data.calibration.offer_headroom_pct}%</p>
       </section>
 
       <section className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">

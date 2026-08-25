@@ -320,6 +320,19 @@ export default function BuildDetailPage() {
     }
   };
 
+  const updateComponentEvidence = async (slot: string, changes: Partial<ManualBuild["components"][number]>) => {
+    if (!build) return;
+    setSavingSlot(slot);
+    try {
+      const components = build.components.map(component => component.slot === slot ? { ...component, ...changes } : component);
+      setBuild(await api.manualBuilds.patch(buildId, { components }));
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not save component condition");
+    } finally {
+      setSavingSlot(null);
+    }
+  };
+
   const assignInventoryToSlot = async (slot: string) => {
     const inventoryItemId = Number(inventoryChoice[slot]);
     if (!inventoryItemId) return;
@@ -888,6 +901,20 @@ export default function BuildDetailPage() {
                         {c.purchased ? <span className="flex items-center gap-1"><Undo2 className="h-3 w-3" /> Release</span> : "Mark purchased"}
                       </button>
                     )}
+                  </div>
+                  <div className="mt-2 grid gap-2 border-t border-white/[0.05] pt-2 pl-7 sm:grid-cols-[150px_170px_1fr] sm:items-end">
+                    <label className="text-[10px] uppercase tracking-wide text-slate-500">Condition
+                      <select value={c.condition ?? "unknown"} onChange={event => void updateComponentEvidence(c.slot, { condition: event.target.value as ManualBuild["components"][number]["condition"] })} className="mt-1 w-full cursor-pointer rounded border border-white/10 bg-[#080e18] px-2 py-1.5 text-xs normal-case text-slate-200">
+                        <option value="unknown">Unknown</option><option value="new">New</option><option value="new_other">New / opened</option><option value="refurbished">Refurbished</option><option value="used">Used</option>
+                      </select>
+                    </label>
+                    <label className="text-[10px] uppercase tracking-wide text-slate-500">Warranty expires
+                      <input type="date" value={c.warranty_expires_at?.slice(0, 10) ?? ""} onChange={event => void updateComponentEvidence(c.slot, { warranty_expires_at: event.target.value || null })} className="mt-1 w-full rounded border border-white/10 bg-[#080e18] px-2 py-1.5 text-xs normal-case text-slate-200" />
+                    </label>
+                    <div className="flex flex-wrap gap-3 pb-1 text-xs text-slate-400">
+                      <label className="flex cursor-pointer items-center gap-1.5"><input type="checkbox" checked={c.proof_of_purchase ?? false} onChange={event => void updateComponentEvidence(c.slot, { proof_of_purchase: event.target.checked })} /> Receipt/invoice</label>
+                      <label className="flex cursor-pointer items-center gap-1.5"><input type="checkbox" checked={c.original_packaging ?? false} onChange={event => void updateComponentEvidence(c.slot, { original_packaging: event.target.checked })} /> Original packaging</label>
+                    </div>
                   </div>
                   {!c.purchased && build.status === "in_progress" && availableInventory.length > 0 && (
                     <div className="mt-2 flex flex-wrap items-center gap-2 border-t border-white/[0.05] pt-2 pl-7">
@@ -1693,6 +1720,22 @@ export default function BuildDetailPage() {
       {(build.status === "sold" || !!build.ebay_order_id) && activeTab === "fulfillment" && (
         <div className="flex flex-col gap-6 mb-6">
           <EbayShipmentBookingSection build={build} onRefresh={refreshBuild} />
+          <section className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
+            <h2 className="text-sm font-semibold text-slate-100">Actual selling outcomes</h2>
+            <p className="mt-1 text-xs text-slate-500">These figures calibrate future fee, promotion, warranty and offer assumptions.</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              {([
+                ["Marketplace fees (£)", "marketplace_fees_actual", build.marketplace_fees_actual],
+                ["Promotion cost (£)", "promotion_cost_actual", build.promotion_cost_actual],
+                ["Refunds (£)", "refund_amount", build.refund_amount],
+                ["Warranty claim cost (£)", "warranty_claim_cost", build.warranty_claim_cost],
+              ] as const).map(([label, field, value]) => (
+                <label key={field} className="text-[10px] uppercase tracking-wide text-slate-500">{label}
+                  <input type="number" min="0" step="0.01" defaultValue={value ?? ""} onBlur={event => void updateEbayConfig({ [field]: event.target.value ? Number(event.target.value) : 0 })} className="mt-1 w-full rounded border border-white/10 bg-black/25 px-3 py-2 text-sm normal-case text-slate-100 focus:border-cyan-300/50 focus:outline-none" />
+                </label>
+              ))}
+            </div>
+          </section>
         </div>
       )}
 
