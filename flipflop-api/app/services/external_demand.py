@@ -31,6 +31,9 @@ TOPIC_QUERIES: dict[str, list[str]] = {
     "workstation_cpu": ["ryzen 7900", "ryzen 9700x", "i7 12700", "i9 12900"],
     # Demand-intent lanes: what buyers are actively searching for.
     "pc_intent": ["gaming pc", "ai pc", "workstation pc", "budget gaming pc", "custom pc"],
+    "market_tier": ["cheap gaming pc", "mid range gaming pc", "high end gaming pc"],
+    "platform_builds": ["am4 gaming pc", "am5 gaming pc", "intel gaming pc", "ryzen gaming pc"],
+    "ai_builds": ["local ai pc", "stable diffusion pc", "llm pc", "ai workstation", "ollama pc"],
 }
 
 

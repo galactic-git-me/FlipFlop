@@ -6,7 +6,7 @@ import {
   BarChart, Bar, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
   LabelList,
 } from "recharts";
-import { RefreshCw, TrendingUp, TrendingDown, Minus, ExternalLink, BrainCircuit, Database, Activity } from "lucide-react";
+import { RefreshCw, TrendingUp, TrendingDown, Minus, ExternalLink, BrainCircuit, Database, Activity, Search, ShoppingCart, Cpu, Bot, Gauge, Layers3 } from "lucide-react";
 import { api, type BuildComponent } from "@/lib/api";
 import { ClassificationBadge } from "@/components/classification-badge";
 import type { DemandCategory, AuctionIntelItem, DemandSummary, SoldMarketDemand, SoldMarketInsight, SoldMarketListing, SoldComponentCategory } from "@/lib/types";
@@ -37,7 +37,7 @@ const EMPTY_RICH: RichSignals = {
   steam: { stats: [] },
 };
 
-type Tab = "sold" | "categories" | "signals" | "auctions";
+type Tab = "overview" | "sold" | "categories" | "signals" | "auctions";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -1197,10 +1197,112 @@ function SoldMarketTab({ data, insight, loading, error, refreshingInsight, onRet
 
 }
 
+// ── Combined intelligence overview ───────────────────────────────────────────
+
+type TrendRow = { name: string; interest: number; movement: number; queries: string[] };
+
+function queryStats(data: RichSignals["google_trends"], query: string) {
+  const values = (data.timeseries[query] ?? []).map(point => point.value);
+  if (!values.length) return { interest: 0, movement: 0, available: false };
+  const window = Math.min(24, Math.max(1, Math.floor(values.length / 3)));
+  const current = values.slice(-window);
+  const previous = values.slice(-(window * 2), -window);
+  const avg = (items: number[]) => items.length ? items.reduce((sum, value) => sum + value, 0) / items.length : 0;
+  const currentAvg = avg(current);
+  const previousAvg = avg(previous);
+  return { interest: currentAvg, movement: previousAvg ? ((currentAvg - previousAvg) / previousAvg) * 100 : 0, available: true };
+}
+
+function groupedTrend(data: RichSignals["google_trends"], name: string, queries: string[]): TrendRow {
+  const available = queries.map(query => queryStats(data, query)).filter(row => row.available);
+  const avg = (key: "interest" | "movement") => available.length ? available.reduce((sum, row) => sum + row[key], 0) / available.length : 0;
+  return { name, interest: Math.round(avg("interest")), movement: Math.round(avg("movement") * 10) / 10, queries };
+}
+
+function Movement({ value }: { value: number }) {
+  if (value > 1) return <span className="inline-flex items-center gap-1 text-emerald-300"><TrendingUp className="h-3.5 w-3.5" />+{value.toFixed(1)}%</span>;
+  if (value < -1) return <span className="inline-flex items-center gap-1 text-red-300"><TrendingDown className="h-3.5 w-3.5" />{value.toFixed(1)}%</span>;
+  return <span className="inline-flex items-center gap-1 text-slate-400"><Minus className="h-3.5 w-3.5" />stable</span>;
+}
+
+function DemandIntelligenceOverview({ rich, sold, loading }: { rich: RichSignals; sold: SoldMarketDemand | null; loading: boolean }) {
+  const intelligence = useMemo(() => {
+    const buildTypes = [
+      groupedTrend(rich.google_trends, "Gaming", ["gaming pc", "custom pc"]),
+      groupedTrend(rich.google_trends, "AI / local LLM", ["ai pc", "local ai pc", "llm pc", "ai workstation", "ollama pc"]),
+      groupedTrend(rich.google_trends, "Workstation", ["workstation pc"]),
+      groupedTrend(rich.google_trends, "Budget gaming", ["budget gaming pc", "cheap gaming pc"]),
+    ];
+    const tiers = [
+      groupedTrend(rich.google_trends, "Budget", ["budget gaming pc", "cheap gaming pc"]),
+      groupedTrend(rich.google_trends, "Mid-range", ["mid range gaming pc", "gaming pc"]),
+      groupedTrend(rich.google_trends, "High-end", ["high end gaming pc", "workstation pc", "ai pc"]),
+    ];
+    const platforms = [
+      groupedTrend(rich.google_trends, "AM4", ["am4 gaming pc"]),
+      groupedTrend(rich.google_trends, "AM5", ["am5 gaming pc", "am5 bundle"]),
+      groupedTrend(rich.google_trends, "Intel", ["intel gaming pc", "i7 12700", "i9 12900"]),
+    ];
+    const gpuQueries = ["rtx 3060", "rtx 3070", "rx 6700 xt", "rx 7600"];
+    const gpuRows = gpuQueries.map(query => {
+      const trend = queryStats(rich.google_trends, query);
+      const soldProducts = sold?.top_products.filter(product => product.category === "gpu" && product.name.toLowerCase().includes(query)) ?? [];
+      const soldCount = soldProducts.reduce((sum, product) => sum + product.sold_observations, 0);
+      const steam = rich.steam.stats.find(stat => stat.category.toLowerCase().includes("video") && stat.name.toLowerCase().includes(query.replace("rtx ", "")));
+      return { name: query.toUpperCase(), interest: Math.round(trend.interest), movement: trend.movement, sold: soldCount, steam: steam?.percentage ?? null };
+    });
+    const currentSold = sold?.categories.reduce((sum, row) => sum + row.recent_30d, 0) ?? 0;
+    const previousSold = sold?.categories.reduce((sum, row) => sum + row.previous_30d, 0) ?? 0;
+    const marketMovement = previousSold ? ((currentSold - previousSold) / previousSold) * 100 : 0;
+    const aiPosts = rich.reddit.posts.filter(post => /\b(ai|llm|ollama|stable diffusion|machine learning)\b/i.test(`${post.query} ${post.title}`));
+    const ai = buildTypes.find(row => row.name === "AI / local LLM")!;
+    const coverage = [
+      { name: "Google Trends", value: rich.google_trends.queries.length, detail: "tracked searches" },
+      { name: "eBay sold", value: sold?.totals.matched_sold_observations ?? 0, detail: "matched sales" },
+      { name: "Reddit", value: rich.reddit.posts.length, detail: "discussion posts" },
+      { name: "Steam", value: new Set(rich.steam.stats.map(row => `${row.category}|${row.name}`)).size, detail: "hardware measures" },
+    ];
+    return { buildTypes, tiers, platforms, gpuRows, currentSold, marketMovement, aiPosts, ai, coverage };
+  }, [rich, sold]);
+
+  if (loading) return <Spinner />;
+
+  const strongestBuild = [...intelligence.buildTypes].sort((a, b) => b.movement - a.movement)[0];
+  return (
+    <div className="space-y-5">
+      <section className="rounded-xl border border-cyan-300/15 bg-gradient-to-r from-cyan-400/[0.07] via-blue-500/[0.04] to-transparent p-4">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div><div className="flex items-center gap-2 text-cyan-300"><Gauge className="h-4 w-4" /><span className="text-xs font-semibold uppercase tracking-[0.18em]">Market answer board</span></div><h2 className="mt-2 text-lg font-bold text-slate-100">What should we build next?</h2><p className="mt-1 max-w-3xl text-xs leading-5 text-slate-400">Search momentum is combined with completed eBay sales, Reddit discussion and Steam hardware adoption. Google values are comparable within their tracked topic group; movement compares each term with its own preceding period.</p></div>
+          <div className="flex flex-wrap gap-2">{intelligence.coverage.map(source => <div key={source.name} className="rounded-lg border border-white/10 bg-slate-950/50 px-3 py-2"><div className="text-[10px] uppercase tracking-wider text-slate-500">{source.name}</div><div className="mt-0.5 text-sm font-bold text-slate-200">{source.value.toLocaleString()} <span className="text-[10px] font-normal text-slate-500">{source.detail}</span></div></div>)}</div>
+        </div>
+      </section>
+
+      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="rounded-xl border border-white/10 bg-[#08111f] p-4"><div className="flex items-center gap-2 text-slate-500"><ShoppingCart className="h-4 w-4" /><span className="text-[10px] uppercase tracking-wider">Total sold market</span></div><div className="mt-3 text-2xl font-bold">{intelligence.currentSold.toLocaleString()}</div><div className="mt-1 text-xs"><Movement value={intelligence.marketMovement} /> <span className="text-slate-500">vs previous 30 days</span></div></div>
+        <div className="rounded-xl border border-white/10 bg-[#08111f] p-4"><div className="flex items-center gap-2 text-slate-500"><Search className="h-4 w-4" /><span className="text-[10px] uppercase tracking-wider">Fastest-growing build intent</span></div><div className="mt-3 text-lg font-bold text-cyan-200">{strongestBuild?.name ?? "No signal"}</div><div className="mt-1 text-xs">{strongestBuild && <Movement value={strongestBuild.movement} />}</div></div>
+        <div className="rounded-xl border border-white/10 bg-[#08111f] p-4"><div className="flex items-center gap-2 text-slate-500"><Bot className="h-4 w-4" /><span className="text-[10px] uppercase tracking-wider">AI build interest</span></div><div className="mt-3 text-2xl font-bold text-purple-200">{intelligence.ai.interest}</div><div className="mt-1 flex items-center gap-2 text-xs"><Movement value={intelligence.ai.movement} /><span className="text-slate-500">· {intelligence.aiPosts.length} Reddit posts</span></div></div>
+        <div className="rounded-xl border border-white/10 bg-[#08111f] p-4"><div className="flex items-center gap-2 text-slate-500"><Database className="h-4 w-4" /><span className="text-[10px] uppercase tracking-wider">Sold evidence coverage</span></div><div className="mt-3 text-2xl font-bold text-emerald-200">{sold?.totals.products_with_sold_evidence.toLocaleString() ?? "—"}</div><div className="mt-1 text-xs text-slate-500">products with matched completed sales</div></div>
+      </section>
+
+      <section className="grid gap-4 xl:grid-cols-2">
+        <div className="rounded-xl border border-white/10 bg-[#07101d] p-4"><div className="mb-3 flex items-start justify-between"><div><h3 className="flex items-center gap-2 text-sm font-bold"><Layers3 className="h-4 w-4 text-cyan-300" />Build types people are searching</h3><p className="mt-1 text-[11px] text-slate-500">Current grouped Google interest; movement is the decision signal.</p></div></div><ResponsiveContainer width="100%" height={250}><BarChart data={intelligence.buildTypes} layout="vertical" margin={{ left: 20, right: 55 }}><CartesianGrid stroke="#17304a" strokeDasharray="3 3" horizontal={false} /><XAxis type="number" tick={{ fill: "#64748b", fontSize: 10 }} domain={[0, 100]} /><YAxis dataKey="name" type="category" width={105} tick={{ fill: "#94a3b8", fontSize: 11 }} /><Tooltip content={<ChartTooltip />} /><Bar dataKey="interest" fill="#22d3ee" radius={[0, 4, 4, 0]}><LabelList dataKey="movement" position="right" formatter={(value: unknown) => `${Number(value) >= 0 ? "+" : ""}${Number(value).toFixed(1)}%`} fill="#94a3b8" fontSize={10} /></Bar></BarChart></ResponsiveContainer></div>
+        <div className="rounded-xl border border-white/10 bg-[#07101d] p-4"><div className="mb-3"><h3 className="flex items-center gap-2 text-sm font-bold"><Gauge className="h-4 w-4 text-amber-300" />Budget vs mid-range vs high-end</h3><p className="mt-1 text-[11px] text-slate-500">Search-interest proxy grouped by price-positioning language.</p></div><ResponsiveContainer width="100%" height={250}><BarChart data={intelligence.tiers} margin={{ top: 10, right: 15, left: -20 }}><CartesianGrid stroke="#17304a" strokeDasharray="3 3" vertical={false} /><XAxis dataKey="name" tick={{ fill: "#94a3b8", fontSize: 11 }} /><YAxis tick={{ fill: "#64748b", fontSize: 10 }} domain={[0, 100]} /><Tooltip content={<ChartTooltip />} /><Bar dataKey="interest" radius={[4, 4, 0, 0]}>{intelligence.tiers.map((_, index) => <Cell key={index} fill={["#34d399", "#38bdf8", "#a78bfa"][index]} />)}<LabelList dataKey="movement" position="top" formatter={(value: unknown) => `${Number(value) >= 0 ? "+" : ""}${Number(value).toFixed(1)}%`} fill="#cbd5e1" fontSize={10} /></Bar></BarChart></ResponsiveContainer></div>
+      </section>
+
+      <section className="grid gap-4 xl:grid-cols-[0.8fr_1.2fr]">
+        <div className="rounded-xl border border-white/10 bg-[#07101d] p-4"><div className="mb-3"><h3 className="flex items-center gap-2 text-sm font-bold"><Cpu className="h-4 w-4 text-purple-300" />AM4, AM5 or Intel?</h3><p className="mt-1 text-[11px] text-slate-500">Build-platform searches, with unavailable lanes shown as zero until the next collection.</p></div><div className="space-y-3">{intelligence.platforms.map(row => <div key={row.name}><div className="mb-1 flex items-center justify-between text-xs"><span className="font-semibold text-slate-200">{row.name}</span><Movement value={row.movement} /></div><div className="h-2 overflow-hidden rounded-full bg-slate-900"><div className="h-full rounded-full bg-purple-400" style={{ width: `${Math.min(100, row.interest)}%` }} /></div><div className="mt-1 text-[10px] text-slate-600">Interest {row.interest}/100</div></div>)}</div></div>
+        <div className="overflow-hidden rounded-xl border border-white/10 bg-[#07101d]"><div className="p-4"><h3 className="flex items-center gap-2 text-sm font-bold"><Activity className="h-4 w-4 text-emerald-300" />Which GPUs are searched and sold?</h3><p className="mt-1 text-[11px] text-slate-500">Google search momentum beside matched completed-sale observations.</p></div><div className="overflow-x-auto"><table className="w-full min-w-[620px] text-xs"><thead className="border-y border-white/[0.07] bg-white/[0.025] text-left uppercase tracking-wider text-slate-500"><tr><th className="px-4 py-2.5">GPU</th><th className="px-4 py-2.5">Search interest</th><th className="px-4 py-2.5">Movement</th><th className="px-4 py-2.5">Matched sold</th><th className="px-4 py-2.5">Steam share</th></tr></thead><tbody className="divide-y divide-white/[0.06]">{intelligence.gpuRows.map(row => <tr key={row.name}><td className="px-4 py-3 font-semibold text-slate-200">{row.name}</td><td className="px-4 py-3"><div className="flex items-center gap-2"><div className="h-1.5 w-24 rounded-full bg-slate-900"><div className="h-full rounded-full bg-cyan-400" style={{ width: `${Math.min(100, row.interest)}%` }} /></div><span>{row.interest}</span></div></td><td className="px-4 py-3"><Movement value={row.movement} /></td><td className="px-4 py-3 font-mono text-emerald-300">{row.sold.toLocaleString()}</td><td className="px-4 py-3 text-slate-400">{row.steam == null ? "—" : `${row.steam.toFixed(2)}%`}</td></tr>)}</tbody></table></div></div>
+      </section>
+
+      {sold && <section className="rounded-xl border border-white/10 bg-[#07101d] p-4"><h3 className="text-sm font-bold">Completed-sales direction by component market</h3><p className="mt-1 text-[11px] text-slate-500">Actual matched eBay sales: recent 30 days versus the preceding 30 days.</p><ResponsiveContainer width="100%" height={270}><BarChart data={sold.categories.map(row => ({ name: row.label, current: row.recent_30d, previous: row.previous_30d, movement: row.trend_pct }))} margin={{ top: 18, right: 10, bottom: 35, left: -15 }}><CartesianGrid stroke="#17304a" strokeDasharray="3 3" vertical={false} /><XAxis dataKey="name" angle={-25} textAnchor="end" interval={0} tick={{ fill: "#94a3b8", fontSize: 10 }} /><YAxis tick={{ fill: "#64748b", fontSize: 10 }} /><Tooltip content={<ChartTooltip />} /><Bar dataKey="previous" fill="#334155" name="Previous 30d" /><Bar dataKey="current" fill="#34d399" name="Recent 30d" /></BarChart></ResponsiveContainer></section>}
+    </div>
+  );
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function DemandPage() {
-  const [tab, setTab] = useState<Tab>("sold");
+  const [tab, setTab] = useState<Tab>("overview");
 
   const [summary, setSummary] = useState<DemandSummary | null>(null);
   const [categories, setCategories] = useState<DemandCategory[]>([]);
@@ -1272,10 +1374,11 @@ export default function DemandPage() {
   }, []);
 
   const tabs: { id: Tab; label: string }[] = [
+    { id: "overview", label: "Market Overview" },
     { id: "sold", label: "Sold Market" },
-    { id: "categories", label: "📦 Categories" },
-    { id: "signals", label: "📡 External Signals" },
-    { id: "auctions", label: "⏱ Auction Intel" },
+    { id: "categories", label: "Categories" },
+    { id: "signals", label: "External Signals" },
+    { id: "auctions", label: "Auction Intel" },
   ];
 
   return (
@@ -1334,6 +1437,9 @@ export default function DemandPage() {
 
       {/* Tab content */}
       <div>
+        {tab === "overview" && (
+          <DemandIntelligenceOverview rich={richSignals} sold={soldMarket} loading={loadingSig || loadingSold} />
+        )}
         {tab === "sold" && (
           <SoldMarketTab data={soldMarket} insight={soldInsight} loading={loadingSold} error={errorSold} refreshingInsight={refreshingInsight} onRetry={fetchAll} onRefreshInsight={refreshSoldInsight} />
         )}

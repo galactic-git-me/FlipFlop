@@ -34,13 +34,12 @@ async def collect_google_trends_rich(now: datetime) -> dict:
 
     async with httpx.AsyncClient(timeout=25, follow_redirects=True) as client:
         for topic, queries in TOPIC_QUERIES.items():
-            for query in queries:
-                try:
-                    ts, geo = await _fetch_trends_detail(client, query, topic, now)
-                    ts_rows.extend(ts)
-                    geo_rows.extend(geo)
-                except Exception:
-                    continue
+            try:
+                ts, geo = await _fetch_trends_detail(client, queries[:5], topic, now)
+                ts_rows.extend(ts)
+                geo_rows.extend(geo)
+            except Exception:
+                continue
 
     if ts_rows or geo_rows:
         await _persist_trends(ts_rows, geo_rows, now)
@@ -50,13 +49,13 @@ async def collect_google_trends_rich(now: datetime) -> dict:
 
 async def _fetch_trends_detail(
     client: httpx.AsyncClient,
-    query: str,
+    queries: list[str],
     topic: str,
     now: datetime,
 ) -> tuple[list[dict], list[dict]]:
     headers = {"User-Agent": "Mozilla/5.0 (compatible; FlipFlopBot/1.0)"}
     req = {
-        "comparisonItem": [{"keyword": query, "geo": "", "time": "now 7-d"}],
+        "comparisonItem": [{"keyword": query, "geo": "GB", "time": "now 7-d"} for query in queries],
         "category": 0,
         "property": "",
     }
@@ -90,18 +89,16 @@ async def _fetch_trends_detail(
             ts_data = _parse_trends_json(ts_resp.text)
             for row in (ts_data.get("default", {}).get("timelineData") or []):
                 label = (row.get("formattedTime") or row.get("formattedAxisTime") or "")
-                val_list = row.get("value") or [0]
-                try:
-                    val = float(val_list[0])
-                except Exception:
-                    val = 0.0
-                ts_rows.append({
-                    "query": query,
-                    "topic": topic,
-                    "date_label": str(label),
-                    "value": val,
-                    "collected_at": now,
-                })
+                val_list = row.get("value") or []
+                for index, query in enumerate(queries):
+                    try:
+                        val = float(val_list[index])
+                    except (IndexError, TypeError, ValueError):
+                        val = 0.0
+                    ts_rows.append({
+                        "query": query, "topic": topic, "date_label": str(label),
+                        "value": val, "collected_at": now,
+                    })
 
     geo_rows: list[dict] = []
     if geo_widget and geo_widget.get("request") and geo_widget.get("token"):
@@ -119,20 +116,18 @@ async def _fetch_trends_detail(
             for r in (geo_data.get("default", {}).get("geoMapData") or []):
                 region_name = r.get("geoName")
                 region_code = r.get("geoCode")
-                val_list = r.get("value") or [0]
-                try:
-                    val = float(val_list[0])
-                except Exception:
-                    val = 0.0
-                if region_name and val > 0:
-                    geo_rows.append({
-                        "query": query,
-                        "topic": topic,
-                        "region_name": str(region_name),
-                        "region_code": str(region_code) if region_code else None,
-                        "value": val,
-                        "collected_at": now,
-                    })
+                val_list = r.get("value") or []
+                for index, query in enumerate(queries):
+                    try:
+                        val = float(val_list[index])
+                    except (IndexError, TypeError, ValueError):
+                        val = 0.0
+                    if region_name and val > 0:
+                        geo_rows.append({
+                            "query": query, "topic": topic, "region_name": str(region_name),
+                            "region_code": str(region_code) if region_code else None,
+                            "value": val, "collected_at": now,
+                        })
 
     return ts_rows, geo_rows
 
@@ -509,11 +504,11 @@ async def get_rich_signals() -> dict:
 
     # Build Google Trends response — keep latest collection per query
     ts_by_query: dict[str, list[dict]] = {}
-    seen_ts: set[str] = set()
+    latest_ts_collection: dict[str, datetime] = {}
     for r in ts_rows:
-        key = f"{r.query}|{r.collected_at.isoformat()}"
-        if r.query not in ts_by_query and key not in seen_ts:
-            pass
+        latest_ts_collection.setdefault(r.query, r.collected_at)
+        if r.collected_at != latest_ts_collection[r.query]:
+            continue
         ts_by_query.setdefault(r.query, [])
         ts_by_query[r.query].append({
             "date": r.date_label,
@@ -521,11 +516,12 @@ async def get_rich_signals() -> dict:
         })
 
     geo_by_query: dict[str, list[dict]] = {}
-    seen_geo_queries: set[str] = set()
+    latest_geo_collection: dict[str, datetime] = {}
     for r in geo_rows:
-        if r.query not in seen_geo_queries:
-            geo_by_query[r.query] = []
-            seen_geo_queries.add(r.query)
+        latest_geo_collection.setdefault(r.query, r.collected_at)
+        if r.collected_at != latest_geo_collection[r.query]:
+            continue
+        geo_by_query.setdefault(r.query, [])
         if len(geo_by_query[r.query]) < 20:
             geo_by_query[r.query].append({
                 "region": r.region_name,
