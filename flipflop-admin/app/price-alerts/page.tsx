@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { BellRing, CheckCircle2, History, Loader2, Plus, RefreshCw, RotateCcw, X } from "lucide-react";
+import { BellRing, CheckCircle2, Loader2, Plus, RefreshCw, RotateCcw, X } from "lucide-react";
 import { api, type ManualBuildSummary, type PriceAlert, type PriceAlertList } from "@/lib/api";
 
 const EMPTY: PriceAlertList = { items: [], active_count: 0, triggered_count: 0 };
@@ -34,7 +34,10 @@ export default function PriceAlertsPage() {
     } finally { setLoading(false); }
   }, []);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void load(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, [load]);
 
   const rows = useMemo(() => data.items.filter((item) =>
     tab === "triggered" ? item.is_active && !!item.triggered_at :
@@ -54,7 +57,11 @@ export default function PriceAlertsPage() {
 
   const changeState = async (item: PriceAlert) => {
     setBusy(item.id); setError(null);
-    try { item.is_active ? await api.priceAlerts.dismiss(item.id) : await api.priceAlerts.rearm(item.id); await load(); }
+    try {
+      if (item.is_active) await api.priceAlerts.dismiss(item.id);
+      else await api.priceAlerts.rearm(item.id);
+      await load();
+    }
     catch (err) { setError(err instanceof Error ? err.message : "Alert could not be updated."); }
     finally { setBusy(null); }
   };

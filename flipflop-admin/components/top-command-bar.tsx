@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { Bell, Heart, Radio, Search } from "lucide-react";
+import { Bell, BellRing, Heart, Radio, Search } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import type { PlaybookProposal } from "@/lib/types";
@@ -19,6 +19,7 @@ const PLACEHOLDERS: Record<string, string> = {
   "/intel": "QUERY ANALYTICS...",
   "/logs": "QUERY AI INSIGHTS...",
   "/settings": "QUERY SETTINGS...",
+  "/price-alerts": "QUERY PRICE ALERTS...",
   "/community": "SEARCH COMMUNITY POSTS...",
 };
 
@@ -30,6 +31,7 @@ export function TopCommandBar() {
   const [favouritesOpen, setFavouritesOpen] = useState(false);
   const [pendingProposals, setPendingProposals] = useState<PlaybookProposal[]>([]);
   const [alerts, setAlerts] = useState<Array<{ id: number; code: string; message: string; link_url?: string | null; created_at?: string | null }>>([]);
+  const [priceAlertCount, setPriceAlertCount] = useState(0);
   const [toasts, setToasts] = useState<Array<{ id: string; text: string; linkUrl?: string | null; persistent?: boolean }>>([]);
   const [confettiPieces, setConfettiPieces] = useState<Array<{ id: string; left: number; delay: number; duration: number; size: number; color: string; drift: number }>>([]);
   const seenProposalIdsRef = useRef<Set<number>>(new Set());
@@ -54,15 +56,17 @@ export function TopCommandBar() {
     let mounted = true;
     const load = async () => {
       try {
-        const [rows, alertRowsRaw] = await Promise.all([
+        const [rows, alertRowsRaw, priceAlertRows] = await Promise.all([
           api.playbooks.proposals.list("pending"),
           api.alerts.list(100, false),
+          api.priceAlerts.list().catch(() => ({ items: [], active_count: 0, triggered_count: 0 })),
         ]);
         if (!mounted) return;
         setPendingProposals(rows);
         const alertRows = (alertRowsRaw as Array<{ id: number; code: string; message: string; link_url?: string | null; created_at?: string | null }>)
           .slice(0, 25);
         setAlerts(alertRows);
+        setPriceAlertCount(priceAlertRows.active_count);
 
         if (seenProposalIdsRef.current.size === 0) {
           const seeded = new Set(rows.map((r) => r.id));
@@ -231,6 +235,20 @@ export function TopCommandBar() {
             {pendingCount > 0 && (
               <span className="absolute -top-1.5 -right-2 min-w-[16px] h-4 px-1 rounded-full bg-[#00dc82] text-[10px] leading-4 text-[#04120d] font-bold text-center">
                 {pendingCount > 9 ? "9+" : pendingCount}
+              </span>
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push("/price-alerts")}
+            className="relative cursor-pointer"
+            aria-label={`Price alerts${priceAlertCount ? ` (${priceAlertCount} active)` : ""}`}
+            title="Price alerts"
+          >
+            <BellRing className="h-4 w-4 transition-colors hover:text-amber-300" />
+            {priceAlertCount > 0 && (
+              <span className="absolute -top-1.5 -right-2 min-w-[16px] h-4 px-1 rounded-full bg-amber-400 text-[10px] leading-4 text-[#1b1200] font-bold text-center">
+                {priceAlertCount > 99 ? "99+" : priceAlertCount}
               </span>
             )}
           </button>
