@@ -27,7 +27,7 @@ from fake_useragent import UserAgent
 import structlog
 
 from app.services.proxy import apply_httpx_proxy, playwright_proxy_config
-from app.services.browser_pool import BACKGROUND_HEADED_ARGS, managed_playwright
+from app.services.browser_pool import BACKGROUND_HEADED_ARGS, focus_page_for_human, managed_playwright
 from app.services.playwright_scraper import chromium_available
 
 log = structlog.get_logger(__name__)
@@ -377,7 +377,10 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                     except Exception as exc:
                         log.debug("sold_comps.playwright.cdp_unavailable", cdp_url=cdp_url, error=str(exc))
                 if browser is None:
-                    headless = os.getenv("EBAY_HEADLESS", "1").lower() not in {"0", "false", "no"}
+                    # This fallback starts minimized so normal work is not
+                    # interrupted. It must remain headed, however, because an
+                    # eBay challenge can only be completed by the operator.
+                    headless = os.getenv("SOLD_COMPS_HEADLESS", "0").lower() not in {"0", "false", "no"}
                     browser = await p.chromium.launch(
                         headless=headless,
                         args=[
@@ -431,7 +434,7 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                             continue
 
                         if self._is_human_verification_page(await page.title(), html):
-                            if os.getenv("EBAY_HEADLESS", "1").lower() in {"0", "false", "no"}:
+                            if not headless:
                                 html = await self._wait_for_human_verification(page, query)
                             else:
                                 log.warning(
@@ -481,6 +484,7 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
         """Keep the one visible eBay window alive while the operator solves
         the challenge, instead of closing/reopening it for every comp query."""
         global _EBAY_VERIFICATION_BLOCK_UNTIL
+        await focus_page_for_human(page)
         wait_seconds = max(60, int(os.getenv("EBAY_HUMAN_VERIFICATION_WAIT_SECONDS", "300")))
         poll_seconds = 2
         log.warning(

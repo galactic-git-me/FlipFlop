@@ -28,7 +28,7 @@ from app.models.listing import Listing, ListingStatus
 from app.gem_radar.schemas import CamelModel, ExtractedListing
 from app.config import get_settings
 from app.gem_radar.identity import resolve_identity
-from app.gem_radar.adapters.sold_comps import SoldCompsResult
+from app.gem_radar.adapters.sold_comps import LiveSoldCompsAdapter, PlaywrightSoldCompsAdapter, SoldCompsResult
 from app.services.ebay_browse import search_active_listings
 from app.services.sold_comps_cache import get_sold_comps_cache
 from app.services.figural_insurance import FiguralError, get_insurance_quote
@@ -179,7 +179,14 @@ def _build_cache_key(cpu_title: str | None, mobo_title: str | None, gpu_title: s
 def _build_search_query(cpu_title: str | None, gpu_title: str | None) -> str:
     cpu_model = (resolve_identity(cpu_title).model if cpu_title else None) or (cpu_title or "")[:30]
     gpu_model = (resolve_identity(gpu_title).model if gpu_title else None) or (gpu_title or "")[:30]
-    return f"gaming pc {cpu_model} {gpu_model}".strip()
+    cpu_token = re.search(r"\b\d{4,5}(?:X3D|X|G|F|K|KF)?\b", cpu_model, re.IGNORECASE)
+    gpu_token = re.search(r"\b(?:RTX|GTX|RX)\s*\d{3,4}(?:\s*(?:Ti|Super|XT|XTX))?\b", gpu_model, re.IGNORECASE)
+    # Keep the marketplace query broad enough to return results, then enforce
+    # both exact model identities locally. Full component names (brand, cooler
+    # and VRAM wording) make eBay searches unnecessarily return zero rows.
+    cpu_query = cpu_token.group(0) if cpu_token else cpu_model
+    gpu_query = gpu_token.group(0) if gpu_token else gpu_model
+    return f"gaming pc {cpu_query} {gpu_query}".strip()
 
 
 def _filter_by_ram_proximity(comps: list["SoldCompDetail"], target_ram: int | None) -> list["SoldCompDetail"]:
@@ -641,6 +648,9 @@ async def get_build_pricing(
     gpu_model = resolve_identity(gpu_title).model if gpu_title else None
     mobo_model = resolve_identity(mobo_title).model if mobo_title else None
     target_condition = _build_condition(build.ebay_condition, components)
+    # eBay's sold search supports broad new/used lanes. The detailed condition
+    # extracted from each result is still retained and cohort-filtered below.
+    pricing_condition = "new" if target_condition in {"new", "new_other"} else "used"
     component_condition_profile = {
         "components": len(components),
         "known_condition": sum(_condition_cohort(item.get("condition")) != "unknown" for item in components),
@@ -660,6 +670,24 @@ async def get_build_pricing(
     if fetch_sold:
         log.info("builds_pricing.fetch_sold", build_id=build_id, query=query, cache_key=cache_key)
         try:
+            # Fetch completed sales first. A previous refactor left this path
+            # searching active listings only, which guaranteed an empty sold
+            # cohort whenever the extension had not already submitted results.
+            sold_result = await LiveSoldCompsAdapter().fetch(query, condition=pricing_condition)
+            if not sold_result.available:
+                # ScrapingBee credentials can expire independently of the app.
+                # Reuse the persisted eBay browser session as the supported
+                # fallback instead of silently returning an empty cohort.
+                log.warning(
+                    "builds_pricing.sold_proxy_unavailable",
+                    build_id=build_id,
+                    reason=sold_result.unavailable_reason,
+                )
+                sold_result = await PlaywrightSoldCompsAdapter().fetch(
+                    query, condition=pricing_condition,
+                )
+            if sold_result.available:
+                await cache.set(cache_key, sold_result)
             cpu_model_for_search = resolve_identity(cpu_title).model if cpu_title else None
             gpu_model_for_search = resolve_identity(gpu_title).model if gpu_title else None
             live_close_comparables = await _live_close_build_comparables(
@@ -667,7 +695,7 @@ async def get_build_pricing(
             )
             # Cache the source details as well as sold comps so a page reload
             # does not erase the evidence just fetched by the operator.
-            sold_for_cache = await cache.get(cache_key)
+            sold_for_cache = sold_result if sold_result.available else await cache.get(cache_key)
             if sold_for_cache is None:
                 sold_for_cache = SoldCompsResult(
                     available=False, comps=[], unavailable_reason="No completed-sale evidence",
@@ -728,7 +756,6 @@ async def get_build_pricing(
     excluded_comparable_count = len(raw_sold) - len(exact_identity)
     ram_value = float((ram or {}).get("market_price") or (ram or {}).get("market_price_avg") or (ram or {}).get("price_paid") or 0)
     storage_value = float((storage or {}).get("market_price") or (storage or {}).get("market_price_avg") or (storage or {}).get("price_paid") or 0)
-    pricing_condition = "new" if target_condition in {"new", "new_other"} else "used"
     target_ram_market = await _standalone_capacity_value("ram", target_ram_gb, pricing_condition) if target_ram_gb else None
     target_storage_market = await _standalone_capacity_value("storage", target_storage_gb, pricing_condition) if target_storage_gb else None
     target_chipset = _motherboard_chipset(mobo_title)
@@ -764,7 +791,13 @@ async def get_build_pricing(
     cohorts: dict[str, list[SoldCompDetail]] = {name: [] for name in ("new", "new_other", "refurbished", "used", "unknown")}
     for comp in exact_identity:
         cohorts[_condition_cohort(comp.condition)].append(comp)
-    sold_comps_list = cohorts.get(target_condition, []) if target_condition != "unknown" else cohorts["unknown"]
+    valuation_condition = target_condition
+    if target_condition == "new_other" and not cohorts["new_other"] and cohorts["new"]:
+        # eBay's public completed-search filter groups factory-new and
+        # new-other together. Use only that new lane as the closest proxy;
+        # never blend it with used results.
+        valuation_condition = "new"
+    sold_comps_list = cohorts.get(valuation_condition, []) if valuation_condition != "unknown" else cohorts["unknown"]
     # Cross-condition evidence is allowed only when both cohorts have enough
     # exact CPU+GPU observations to learn the condition spread from the market.
     # This avoids fixed "new is worth X%" assumptions.
@@ -802,7 +835,7 @@ async def get_build_pricing(
             "count": len(items),
             "median": round(statistics.median(item.price for item in items), 2) if items else None,
             "exact_spec_count": sum(item.match_quality == "exact major specification" for item in items),
-            "used_for_valuation": name == target_condition,
+            "used_for_valuation": name == valuation_condition,
         }
         for name, items in cohorts.items()
     }

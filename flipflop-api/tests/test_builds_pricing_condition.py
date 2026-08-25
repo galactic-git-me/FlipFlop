@@ -1,6 +1,7 @@
 from app.api.builds_pricing import (
     SoldCompDetail,
     _build_condition,
+    _build_search_query,
     _build_sold_queries,
     _extract_ram_gb,
     _extract_storage_gb,
@@ -33,6 +34,13 @@ def test_combined_exact_query_is_first():
         {"slot": "GPU", "name": "NVIDIA RTX 4070 Super"},
     ]
     assert _build_sold_queries(components)[0] == 'gaming PC "7800X3D" "RTX 4070 Super"'
+
+
+def test_live_sold_query_uses_distinctive_models_not_full_component_names():
+    assert _build_search_query(
+        "AMD Ryzen 7 7800X3D",
+        "Palit GameRock NVIDIA GeForce RTX 3070 8GB",
+    ) == "gaming pc 7800X3D RTX 3070"
 
 
 def test_exact_spec_comps_receive_more_weight():
