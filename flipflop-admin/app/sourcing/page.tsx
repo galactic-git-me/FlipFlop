@@ -795,6 +795,11 @@ function GemSpotlightCard({
 }
 
 function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | null> }) {
+  const [inventoryHealth, setInventoryHealth] = useState<Awaited<ReturnType<typeof api.inventory.health>> | null>(null);
+  useEffect(() => {
+    const timer = window.setTimeout(() => api.inventory.health().then(setInventoryHealth).catch(() => undefined), 0);
+    return () => window.clearTimeout(timer);
+  }, []);
   const componentLabels: Record<string, { label: string; emoji: string }> = {
     cpu: { label: "Gem CPU", emoji: "⚡" },
     gpu: { label: "Gem GPU", emoji: "🎮" },
@@ -805,6 +810,21 @@ function StatsTab({ componentGems }: { componentGems?: Record<string, GemData | 
 
   return (
     <>
+      {inventoryHealth && (
+        <div className="mt-6 rounded-xl border border-cyan-300/15 bg-cyan-300/[0.035] p-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div><h3 className="text-sm font-semibold text-slate-100">Inventory-aware sourcing</h3><p className="mt-1 text-xs text-slate-500">Use these signals before buying duplicates or prioritise parts blocking active builds.</p></div>
+            <Link href="/inventory" className="cursor-pointer rounded-md border border-cyan-300/25 px-3 py-1.5 text-xs font-semibold text-cyan-200 transition-colors hover:bg-cyan-300/10">Open inventory</Link>
+          </div>
+          <div className="mt-3 grid gap-2 sm:grid-cols-4">
+            <MiniStat label="Free units" value={inventoryHealth.free_units} color="#67e8f9" />
+            <MiniStat label="Reserved units" value={inventoryHealth.reserved_units} color="#fcd34d" />
+            <MiniStat label="Builds blocked" value={inventoryHealth.build_blockers.length} color="#fb7185" />
+            <MiniStat label="Excess categories" value={inventoryHealth.excess_stock.length} color="#a78bfa" />
+          </div>
+          {inventoryHealth.build_blockers.length > 0 && <p className="mt-3 text-xs text-amber-200">Prioritise: {Array.from(new Set(inventoryHealth.build_blockers.flatMap(blocker => blocker.missing))).join(", ")}</p>}
+        </div>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6 mt-6">
         {Object.keys(componentLabels).map((category) => {
           const gem = componentGems?.[category];

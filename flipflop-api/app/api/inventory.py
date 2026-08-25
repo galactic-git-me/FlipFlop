@@ -106,6 +106,26 @@ async def create_inventory_item(
     return await _build_item_with_allocations(new_item, db)
 
 
+# Static collection routes must be registered before /{item_id}; Starlette
+# otherwise treats names such as "free-items" as an integer item id.
+@router.get("/summary/stats")
+async def inventory_stats_route(db: AsyncSession = Depends(get_db)):
+    return await _inventory_stats(db)
+
+
+@router.get("/free-items")
+async def free_inventory_items_route(
+    component_type: str | None = Query(None),
+    db: AsyncSession = Depends(get_db),
+):
+    return await _free_inventory_items(component_type, db)
+
+
+@router.get("/summary/health")
+async def inventory_health_route(db: AsyncSession = Depends(get_db)):
+    return await _inventory_health(db)
+
+
 @router.get("/{item_id}", response_model=InventoryItemOut)
 async def get_inventory_item(
     item_id: int,
@@ -275,8 +295,7 @@ async def bulk_import_inventory(
     }
 
 
-@router.get("/summary/stats")
-async def inventory_stats(db: AsyncSession = Depends(get_db)):
+async def _inventory_stats(db: AsyncSession):
     """Get inventory statistics."""
     result = await db.execute(select(InventoryItem))
     items = result.scalars().all()
@@ -299,11 +318,7 @@ async def inventory_stats(db: AsyncSession = Depends(get_db)):
     }
 
 
-@router.get("/free-items")
-async def free_inventory_items(
-    component_type: str | None = Query(None),
-    db: AsyncSession = Depends(get_db),
-):
+async def _free_inventory_items(component_type: str | None, db: AsyncSession):
     """Free physical inventory, cheapest landed-cost item first."""
     item_query = select(InventoryItem)
     if component_type:
@@ -330,8 +345,7 @@ async def free_inventory_items(
     ], key=lambda item: item["actual_cost"])
 
 
-@router.get("/summary/health")
-async def inventory_health(db: AsyncSession = Depends(get_db)):
+async def _inventory_health(db: AsyncSession):
     """Operational stock health across free, reserved and consumed units."""
     items_result = await db.execute(select(InventoryItem))
     items = items_result.scalars().all()

@@ -12,7 +12,7 @@ import {
 import { Toaster, toast } from "sonner";
 import confetti from "canvas-confetti";
 import JSZip from "jszip";
-import { api, ManualBuild, BuildComponent, ComponentRating, ProductFaq } from "@/lib/api";
+import { api, ManualBuild, ComponentRating, ProductFaq } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
 import { drawRegistrationPlate, drawSpecCard, canvasToBlob, loadLogo } from "@/lib/build-cards";
 import { EbayOffersSection } from "@/components/builds/EbayOffersSection";

@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import {
   Package, Plus, Trash2, Edit2, X, RefreshCw, DollarSign,
   MemoryStick, Cpu, HardDrive, CircuitBoard, Zap, Wind, MonitorSpeaker, Layers3,
+  History, AlertTriangle, TrendingUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { api, type ManualBuildSummary } from "@/lib/api";
@@ -29,6 +30,20 @@ interface ManualBuildAssignment {
   build_id: number;
   manual_build_id: number;
   build_name: string;
+  lifecycle_status: "reserved" | "consumed";
+}
+
+interface InventoryHealth {
+  free_units: number; reserved_units: number; consumed_units: number;
+  free_value: number; reserved_value: number; consumed_value: number; expected_profit: number;
+  stale_items: Array<{ id: number; name: string; days: number; value: number }>;
+  excess_stock: Array<{ component_type: string; free_units: number }>;
+  build_blockers: Array<{ build_id: number; build_name: string; missing: string[] }>;
+}
+
+interface InventoryEvent {
+  id: number; event_type: string; quantity: number; manual_build_id: number | null;
+  build_name: string | null; detail: Record<string, unknown>; created_at: string;
 }
 
 interface FormData {
@@ -64,6 +79,9 @@ export default function InventoryPage() {
   const [selectedItemIds, setSelectedItemIds] = useState<Set<number>>(new Set());
   const [assigning, setAssigning] = useState(false);
   const [assignmentMessage, setAssignmentMessage] = useState<string | null>(null);
+  const [health, setHealth] = useState<InventoryHealth | null>(null);
+  const [historyItem, setHistoryItem] = useState<InventoryItem | null>(null);
+  const [historyEvents, setHistoryEvents] = useState<InventoryEvent[]>([]);
   const [showBulkModal, setShowBulkModal] = useState(false);
 
   const [form, setForm] = useState<FormData>({
@@ -79,20 +97,23 @@ export default function InventoryPage() {
   const loadInventory = useCallback(async () => {
     setLoading(true);
     try {
-      const [itemsData, statsData, buildsData, assignmentsData] = await Promise.all([
+      const [itemsData, statsData, buildsData, assignmentsData, healthData] = await Promise.all([
         fetch("/api/inventory/").then(r => r.json()),
         fetch("/api/inventory/summary/stats").then(r => r.json()),
         api.manualBuilds.list(),
         fetch("/api/inventory-allocations/manual-build-assignments").then(r => r.json()),
+        api.inventory.health(),
       ]);
       setItems(itemsData);
       setStats(statsData);
       setDraftBuilds(buildsData.filter(build => build.status === "in_progress"));
       setAssignments(assignmentsData);
+      setHealth(healthData);
     } catch {
       setItems([]);
       setDraftBuilds([]);
       setAssignments([]);
+      setHealth(null);
     } finally {
       setLoading(false);
     }
@@ -195,6 +216,16 @@ export default function InventoryPage() {
       setAssignmentMessage(error instanceof Error ? error.message : "Unable to assign inventory");
     } finally {
       setAssigning(false);
+    }
+  };
+
+  const showHistory = async (item: InventoryItem) => {
+    setHistoryItem(item);
+    setHistoryEvents([]);
+    try {
+      setHistoryEvents(await api.inventory.events(item.id));
+    } catch {
+      setHistoryEvents([]);
     }
   };
 
@@ -310,7 +341,7 @@ Example:
 
       {/* Stats */}
       {!loading && (
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
           <div className="bg-[#0a1119] border border-[#1e2d45] rounded-lg p-4">
             <div className="text-slate-600 text-sm">Total Items</div>
             <div className="text-2xl font-bold text-slate-200 mt-1">{stats.total_items}</div>
@@ -325,7 +356,40 @@ Example:
             </div>
             <div className="text-2xl font-bold text-amber-400 mt-1">{formatCurrency(stats.total_cost)}</div>
           </div>
+          <div className="bg-[#0a1119] border border-[#1e2d45] rounded-lg p-4">
+            <div className="flex items-center gap-1 text-sm text-slate-500"><TrendingUp className="h-4 w-4" /> Expected stock profit</div>
+            <div className="mt-1 text-2xl font-bold text-[#00dc82]">{formatCurrency(health?.expected_profit ?? 0)}</div>
+          </div>
         </div>
+      )}
+
+      {!loading && health && (
+        <section className="grid gap-3 lg:grid-cols-[1.2fr_1fr_1fr]" aria-label="Inventory health">
+          <div className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-4">
+            <h2 className="text-sm font-semibold text-slate-200">Stock lifecycle</h2>
+            <div className="mt-3 grid grid-cols-3 gap-2">
+              {[
+                { label: "Free", units: health.free_units, value: health.free_value, color: "text-cyan-300" },
+                { label: "Reserved", units: health.reserved_units, value: health.reserved_value, color: "text-amber-300" },
+                { label: "Consumed", units: health.consumed_units, value: health.consumed_value, color: "text-[#00dc82]" },
+              ].map(metric => <div key={metric.label} className="rounded-md bg-[#0d1624] p-3"><p className="text-[10px] uppercase tracking-wider text-slate-500">{metric.label}</p><p className={`mt-1 text-lg font-bold ${metric.color}`}>{metric.units}</p><p className="text-xs text-slate-400">{formatCurrency(metric.value)}</p></div>)}
+            </div>
+          </div>
+          <div className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-4">
+            <h2 className="flex items-center gap-2 text-sm font-semibold text-slate-200"><AlertTriangle className="h-4 w-4 text-amber-300" /> Build blockers</h2>
+            <div className="mt-3 space-y-2 text-xs">
+              {health.build_blockers.length === 0 ? <p className="text-slate-500">No active builds are waiting on parts.</p> : health.build_blockers.slice(0, 3).map(blocker => <div key={blocker.build_id}><p className="font-semibold text-slate-300">{blocker.build_name}</p><p className="truncate text-slate-500">Missing: {blocker.missing.join(", ")}</p></div>)}
+            </div>
+          </div>
+          <div className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-4">
+            <h2 className="text-sm font-semibold text-slate-200">Stock risks</h2>
+            <div className="mt-3 space-y-2 text-xs text-slate-400">
+              <p><span className="font-bold text-amber-300">{health.stale_items.length}</span> free rows held for 90+ days</p>
+              <p><span className="font-bold text-cyan-300">{health.excess_stock.length}</span> component types with 3+ free units</p>
+              {health.stale_items[0] && <p className="truncate text-slate-500">Oldest: {health.stale_items[0].name} · {health.stale_items[0].days}d</p>}
+            </div>
+          </div>
+        </section>
       )}
 
       {/* Form */}
@@ -584,7 +648,7 @@ Example:
                         <div className="flex flex-wrap gap-1">
                           {itemAssignments.map(assignment => (
                             <span key={assignment.allocation_id} className="rounded bg-[#00dc82]/10 px-2 py-1 text-xs text-[#00dc82]">
-                              {assignment.build_name} ({assignment.quantity_allocated})
+                              {assignment.build_name} · {assignment.lifecycle_status} ({assignment.quantity_allocated})
                             </span>
                           ))}
                         </div>
@@ -594,6 +658,14 @@ Example:
                     </td>
                     <td className="px-4 py-3 text-center">
                       <div className="flex justify-center gap-2">
+                        <button
+                          onClick={() => void showHistory(item)}
+                          className="cursor-pointer p-1 text-slate-500 transition-colors hover:text-cyan-300"
+                          title="View history"
+                          aria-label={`View history for ${item.component_name}`}
+                        >
+                          <History className="w-4 h-4" />
+                        </button>
                         <button
                           onClick={() => handleEdit(item)}
                           className="text-slate-500 hover:text-[#00dc82] p-1"
@@ -618,6 +690,26 @@ Example:
         </div>
         );
       })()}
+
+      {historyItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" role="dialog" aria-modal="true" aria-labelledby="inventory-history-title">
+          <div className="max-h-[80vh] w-full max-w-xl overflow-y-auto rounded-xl border border-[#263650] bg-[#08111d] p-5 shadow-2xl">
+            <div className="flex items-start justify-between gap-3">
+              <div><h2 id="inventory-history-title" className="flex items-center gap-2 font-semibold text-slate-100"><History className="h-4 w-4 text-cyan-300" /> Inventory history</h2><p className="mt-1 text-sm text-slate-400">{historyItem.component_name}</p></div>
+              <button type="button" onClick={() => setHistoryItem(null)} className="cursor-pointer rounded p-1 text-slate-500 hover:text-white" aria-label="Close inventory history"><X className="h-5 w-5" /></button>
+            </div>
+            <div className="mt-5 space-y-0">
+              {historyEvents.length === 0 ? <p className="rounded-lg border border-white/5 p-4 text-sm text-slate-500">No lifecycle events have been recorded yet.</p> : historyEvents.map((event, index) => (
+                <div key={event.id} className="relative flex gap-3 pb-5">
+                  {index < historyEvents.length - 1 && <span className="absolute left-[7px] top-4 h-full w-px bg-[#263650]" />}
+                  <span className="relative mt-1.5 h-3.5 w-3.5 shrink-0 rounded-full border-2 border-cyan-300 bg-[#08111d]" />
+                  <div className="min-w-0"><p className="text-sm font-semibold capitalize text-slate-200">{event.event_type} · {event.quantity}</p><p className="text-xs text-slate-500">{event.build_name ? `${event.build_name} · ` : ""}{new Date(event.created_at).toLocaleString()}</p></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Bulk Upload Modal */}
       {showBulkModal && (
