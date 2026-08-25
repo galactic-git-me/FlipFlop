@@ -8,8 +8,9 @@ from app.models.inventory import InventoryItem
 from app.models.inventory_allocation import InventoryAllocation
 from app.models.flip import Flip
 from app.models.build import Build
-from app.models.build import BuildStatus, BuildType
 from app.models.manual_build import ManualBuild
+from app.models.inventory_event import InventoryEvent
+from app.services.inventory_lifecycle import add_event, apply_inventory_component, orchestration_build_for
 from app.schemas.inventory_allocation import InventoryAllocationIn, InventoryAllocationPartialIn, InventoryAllocationOut
 
 router = APIRouter(prefix="/inventory-allocations", tags=["inventory-allocations"])
@@ -46,6 +47,7 @@ class ManualBuildAssignmentOut(BaseModel):
     build_id: int
     manual_build_id: int
     build_name: str
+    lifecycle_status: str
 
 
 @router.post("/", response_model=InventoryAllocationOut, status_code=201)
@@ -135,6 +137,7 @@ async def list_manual_build_assignments(db: AsyncSession = Depends(get_db)):
             build_id=build.id,
             manual_build_id=manual_build.id,
             build_name=manual_build.name,
+            lifecycle_status="reserved" if manual_build.status == "in_progress" else "consumed",
         )
         for allocation, build, manual_build in result.all()
     ]
@@ -146,7 +149,7 @@ async def bulk_assign_to_manual_build(
     body: BulkManualBuildAllocationIn,
     db: AsyncSession = Depends(get_db),
 ):
-    """Assign every currently-free unit of selected inventory rows to a draft build."""
+    """Reserve one free unit from each selected inventory row for a draft build."""
     item_ids = list(dict.fromkeys(body.inventory_item_ids))
     if not item_ids:
         raise HTTPException(400, "Select at least one inventory item")
@@ -157,17 +160,7 @@ async def bulk_assign_to_manual_build(
     if manual_build.status != "in_progress":
         raise HTTPException(400, "Inventory can only be assigned to an in-progress draft build")
 
-    result = await db.execute(select(Build).where(Build.manual_build_id == manual_build_id))
-    build = result.scalar_one_or_none()
-    if build is None:
-        build = Build(
-            build_type=BuildType.PREBUILT,
-            manual_build_id=manual_build_id,
-            spec_json=manual_build.components or [],
-            status=BuildStatus.PLANNING,
-        )
-        db.add(build)
-        await db.flush()
+    build = await orchestration_build_for(db, manual_build)
 
     result = await db.execute(select(InventoryItem).where(InventoryItem.id.in_(item_ids)))
     inventory_by_id = {item.id: item for item in result.scalars().all()}
@@ -191,16 +184,27 @@ async def bulk_assign_to_manual_build(
         free_quantity = item.quantity - allocated_by_item.get(item_id, 0)
         if free_quantity <= 0:
             continue
-        db.add(InventoryAllocation(
+        quantity_to_assign = 1
+        allocation = InventoryAllocation(
             inventory_item_id=item.id,
             build_id=build.id,
             flip_id=None,
-            quantity_allocated=free_quantity,
+            quantity_allocated=quantity_to_assign,
             cost_per_unit_at_allocation=item.actual_cost,
             notes=f"Assigned to draft build: {manual_build.name}",
-        ))
+        )
+        db.add(allocation)
+        apply_inventory_component(manual_build, item, quantity_to_assign)
+        add_event(
+            db,
+            inventory_item_id=item.id,
+            manual_build_id=manual_build.id,
+            event_type="reserved",
+            quantity=quantity_to_assign,
+            detail={"build_name": manual_build.name},
+        )
         created += 1
-        units_assigned += free_quantity
+        units_assigned += quantity_to_assign
 
     if created == 0:
         raise HTTPException(400, "The selected inventory has no free units to assign")
@@ -211,6 +215,70 @@ async def bulk_assign_to_manual_build(
         "manual_build_id": manual_build.id,
         "build_name": manual_build.name,
     }
+
+
+@router.delete("/manual-builds/{manual_build_id}/items/{inventory_item_id}", status_code=204)
+async def release_from_manual_build(
+    manual_build_id: int,
+    inventory_item_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    manual_build = await db.get(ManualBuild, manual_build_id)
+    if not manual_build:
+        raise HTTPException(404, "Draft build not found")
+    if manual_build.status != "in_progress":
+        raise HTTPException(400, "Consumed inventory cannot be released from a completed build")
+    build = await orchestration_build_for(db, manual_build, create=False)
+    if build is None:
+        raise HTTPException(404, "Inventory assignment not found")
+    result = await db.execute(select(InventoryAllocation).where(
+        InventoryAllocation.build_id == build.id,
+        InventoryAllocation.inventory_item_id == inventory_item_id,
+    ))
+    allocation = result.scalar_one_or_none()
+    if allocation is None:
+        raise HTTPException(404, "Inventory assignment not found")
+    add_event(
+        db,
+        inventory_item_id=inventory_item_id,
+        manual_build_id=manual_build_id,
+        event_type="released",
+        quantity=allocation.quantity_allocated,
+        detail={"reason": "manual release", "allocation_id": allocation.id},
+    )
+    components = [
+        component for component in (manual_build.components or [])
+        if component.get("inventory_item_id") != inventory_item_id
+    ]
+    manual_build.components = components
+    manual_build.total_cost = sum(float(component.get("price_paid") or 0) for component in components)
+    await db.delete(allocation)
+    await db.commit()
+
+
+@router.get("/inventory/{inventory_item_id}/events")
+async def inventory_item_events(
+    inventory_item_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(InventoryEvent, ManualBuild)
+        .outerjoin(ManualBuild, ManualBuild.id == InventoryEvent.manual_build_id)
+        .where(InventoryEvent.inventory_item_id == inventory_item_id)
+        .order_by(InventoryEvent.created_at.desc())
+    )
+    return [
+        {
+            "id": event.id,
+            "event_type": event.event_type,
+            "quantity": event.quantity,
+            "manual_build_id": event.manual_build_id,
+            "build_name": build.name if build else None,
+            "detail": event.detail,
+            "created_at": event.created_at,
+        }
+        for event, build in result.all()
+    ]
 
 
 @router.get("/{allocation_id}", response_model=InventoryAllocationOut)

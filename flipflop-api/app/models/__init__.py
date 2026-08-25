@@ -48,6 +48,7 @@ from app.models.submission_queue import SubmissionQueue
 from app.models.price_alert import PriceAlert, PriceAlertEvent
 from app.models.channel_listing import ChannelListing
 from app.models.inventory_reservation import InventoryReservation
+from app.models.inventory_event import InventoryEvent
 from app.models.listing_publish_event import ListingPublishEvent
 from app.models.demand_metrics_snapshot import DemandMetricsSnapshot
 from app.models.demand_alert import DemandAlert
@@ -112,6 +113,7 @@ __all__ = [
     "PriceAlertEvent",
     "ChannelListing",
     "InventoryReservation",
+    "InventoryEvent",
     "ListingPublishEvent",
     "DemandMetricsSnapshot",
     "DemandAlert",

@@ -13,6 +13,7 @@ class BuildComponent(BaseModel):
     listing_url: Optional[str] = None
     image_url: Optional[str] = None
     purchased: bool = False
+    inventory_item_id: int | None = None
 
 
 class ManualBuildCreate(BaseModel):

@@ -113,6 +113,7 @@ export interface BuildComponent {
   listing_url?: string;
   image_url?: string;
   purchased?: boolean;
+  inventory_item_id?: number;
 }
 
 export type ManualBuildStatus = "in_progress" | "built" | "listed" | "sold";
