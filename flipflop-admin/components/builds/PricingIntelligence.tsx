@@ -57,6 +57,19 @@ type PricingData = {
   component_valuations: ComponentValuation[];
   market_comparables: Comparable[];
   recommendation: Recommendation;
+  price_bridge: {
+    expected_sold_price: number;
+    build_cost: number;
+    delivery_cost: number;
+    insurance_cost: number;
+    packaging_cost: number;
+    warranty_reserve_pct: number;
+    warranty_reserve: number;
+    marketplace_fee_allowance: number;
+    negotiation_headroom_pct: number;
+    negotiation_headroom: number;
+    recommended_listing_price: number;
+  };
   fetched_at: string;
 };
 
@@ -462,6 +475,40 @@ export function PricingIntelligence({
             {error}; showing the previous analysis.
           </p>
         )}
+      </section>
+
+      <section className="rounded-xl border border-emerald-400/15 bg-emerald-400/[0.025] p-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="font-semibold text-slate-100">Expected sale → listing price</h2>
+            <p className="mt-1 text-xs leading-5 text-slate-500">The market valuation stays separate from fulfilment costs, risk reserves, fees and offer headroom.</p>
+          </div>
+          <p className="text-right text-xs text-slate-500">Recommended<br/><strong className="text-xl text-emerald-300">{formatCurrency(data.price_bridge.recommended_listing_price)}</strong></p>
+        </div>
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[640px] text-sm">
+            <tbody>
+              {[
+                ["Normalised expected sold price", data.price_bridge.expected_sold_price, "Evidence-based target—not an asking price"],
+                ["Delivery", data.price_bridge.delivery_cost, "Baked into free-delivery pricing"],
+                ["Shipping insurance", data.price_bridge.insurance_cost, "Saved live quote"],
+                ["Packaging", data.price_bridge.packaging_cost, "Box and protective materials"],
+                [`Warranty reserve (${data.price_bridge.warranty_reserve_pct}%)`, data.price_bridge.warranty_reserve, "Reserve against claims and repairs"],
+                ["Marketplace fee allowance", data.price_bridge.marketplace_fee_allowance, `Configured rate ${r.fee_rate_pct}%`],
+                [`Offer headroom (${data.price_bridge.negotiation_headroom_pct}%)`, data.price_bridge.negotiation_headroom, "Room for offers and price reductions"],
+              ].map(([label, value, note]) => (
+                <tr key={String(label)} className="border-b border-white/[0.055] last:border-0">
+                  <td className="py-2.5 text-slate-300">{label}<span className="ml-2 text-xs text-slate-600">{note}</span></td>
+                  <td className="py-2.5 text-right font-semibold text-slate-200">{formatCurrency(Number(value))}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="mt-3 flex items-center justify-between rounded-lg border border-emerald-300/20 bg-emerald-300/[0.06] px-3 py-3">
+          <span className="text-sm font-bold text-slate-100">Recommended listing price</span>
+          <strong className="text-xl text-emerald-300">{formatCurrency(data.price_bridge.recommended_listing_price)}</strong>
+        </div>
       </section>
 
       <section className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">

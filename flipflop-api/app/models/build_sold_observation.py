@@ -18,7 +18,7 @@ class BuildSoldObservation(Base):
     title: Mapped[str] = mapped_column(String(1000))
     price: Mapped[float] = mapped_column(Float)
     postage: Mapped[float] = mapped_column(Float, default=0.0)
-    condition: Mapped[str] = mapped_column(String(20), default="used")
+    condition: Mapped[str] = mapped_column(String(20), default="unknown")
     sold_at: Mapped[str | None] = mapped_column(String(50), nullable=True)
     source_url: Mapped[str] = mapped_column(String(1000))
     match_basis: Mapped[str] = mapped_column(String(255))

@@ -73,6 +73,9 @@ class ManualBuildOut(BaseModel):
     return_days: int = 30
     shipping_method: str = "tracked"
     shipping_cost: float = 0.0
+    shipping_insurance_cost: float = 0.0
+    packaging_cost: float = 0.0
+    warranty_reserve_pct: float = 3.0
     handling_time_days: int = 1
     delivery_min_days: int = 1
     delivery_max_days: int = 2
@@ -207,6 +210,9 @@ class UpdateEbayListingConfigRequest(BaseModel):
     return_days: Optional[int] = None
     shipping_method: Optional[str] = None
     shipping_cost: Optional[float] = None
+    shipping_insurance_cost: Optional[float] = None
+    packaging_cost: Optional[float] = None
+    warranty_reserve_pct: Optional[float] = None
     handling_time_days: Optional[int] = None
     ships_to_countries: Optional[list[str]] = None
     domestic_only: Optional[bool] = None

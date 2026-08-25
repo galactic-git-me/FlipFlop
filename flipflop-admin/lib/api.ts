@@ -188,6 +188,9 @@ export interface ManualBuild {
   return_days?: number;
   shipping_method?: string;
   shipping_cost?: number;
+  shipping_insurance_cost?: number;
+  packaging_cost?: number;
+  warranty_reserve_pct?: number;
   handling_time_days?: number;
   delivery_min_days?: number;
   delivery_max_days?: number;

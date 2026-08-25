@@ -64,6 +64,9 @@ class ManualBuild(Base):
     # Shipping Configuration
     shipping_method: Mapped[str] = mapped_column(String(30), default="tracked")  # tracked, untracked, local_pickup
     shipping_cost: Mapped[float] = mapped_column(Float, default=0.0)
+    shipping_insurance_cost: Mapped[float] = mapped_column(Float, default=0.0)
+    packaging_cost: Mapped[float] = mapped_column(Float, default=0.0)
+    warranty_reserve_pct: Mapped[float] = mapped_column(Float, default=3.0)
     handling_time_days: Mapped[int] = mapped_column(Integer, default=1)  # 1-3 typical
     delivery_min_days: Mapped[int] = mapped_column(Integer, default=1)
     delivery_max_days: Mapped[int] = mapped_column(Integer, default=2)

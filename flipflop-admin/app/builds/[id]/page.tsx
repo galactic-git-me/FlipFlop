@@ -793,7 +793,15 @@ export default function BuildDetailPage() {
           onClick={() => setActiveTab("build")}
         />
         <TabButton
-          label="2. Pricing"
+          label="2. Shipping & Risk"
+          icon={Truck}
+          active={activeTab === "shipping"}
+          completed={!!build.ebay_condition && (build.shipping_method === "local_pickup" || (build.shipping_cost ?? 0) >= 0)}
+          disabled={!canSell}
+          onClick={() => setActiveTab("shipping")}
+        />
+        <TabButton
+          label="3. Pricing"
           icon={PoundSterling}
           active={activeTab === "pricing"}
           completed={!!build.total_cost && !!build.last_evaluation}
@@ -801,7 +809,7 @@ export default function BuildDetailPage() {
           onClick={() => setActiveTab("pricing")}
         />
         <TabButton
-          label="3. Listing"
+          label="4. Listing"
           icon={Sparkles}
           active={activeTab === "listing"}
           completed={!!build.generated_title && parseFloat(price) > 0}
@@ -809,7 +817,7 @@ export default function BuildDetailPage() {
           onClick={() => setActiveTab("listing")}
         />
         <TabButton
-          label="4. Media & Cards"
+          label="5. Media & Cards"
           icon={ImagePlus}
           active={activeTab === "media"}
           completed={!!build.hero_photo_url && build.photos.some(p => p.kind === "spec_card") && build.photos.some(p => p.kind === "registration_plate")}
@@ -817,7 +825,7 @@ export default function BuildDetailPage() {
           onClick={() => setActiveTab("media")}
         />
         <TabButton
-          label="5. Item Specifics"
+          label="6. Item Specifics"
           icon={IdCard}
           active={activeTab === "specifics"}
           completed={hasRequiredAspects}
@@ -825,20 +833,12 @@ export default function BuildDetailPage() {
           onClick={() => setActiveTab("specifics")}
         />
         <TabButton
-          label="6. FAQs"
+          label="7. FAQs"
           icon={HelpCircle}
           active={activeTab === "faqs"}
           completed={selectedFaqIds.length > 0}
           disabled={!canSell}
           onClick={() => setActiveTab("faqs")}
-        />
-        <TabButton
-          label="7. Shipping & Offers"
-          icon={Truck}
-          active={activeTab === "shipping"}
-          completed={!!build.ebay_condition}
-          disabled={!canSell}
-          onClick={() => setActiveTab("shipping")}
         />
         {(build.status === "sold" || !!build.ebay_order_id) && (
           <TabButton

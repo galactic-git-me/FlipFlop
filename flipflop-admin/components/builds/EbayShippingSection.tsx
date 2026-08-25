@@ -21,6 +21,8 @@ const SHIPPING_METHODS = [
 export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAskingPriceUpdate }: Props) {
   const [shippingMethod, setShippingMethod] = useState(build.shipping_method ?? "tracked");
   const [shippingCost, setShippingCost] = useState((build.shipping_cost ?? 0).toString());
+  const [packagingCost, setPackagingCost] = useState((build.packaging_cost ?? 0).toString());
+  const [warrantyReservePct, setWarrantyReservePct] = useState((build.warranty_reserve_pct ?? 3).toString());
   const [handlingDays, setHandlingDays] = useState((build.handling_time_days ?? 1).toString());
   const [fulfillmentPolicyId, setFulfillmentPolicyId] = useState(build.fulfillment_policy_id ?? "");
   const [weightKg, setWeightKg] = useState((build.package_weight_kg ?? "").toString());
@@ -47,7 +49,9 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
     setLoadingInsurance(true);
     setInsuranceError(null);
     try {
-      setInsuranceQuote(await api.manualBuilds.getInsuranceQuote(build.id, listingValue));
+      const nextQuote = await api.manualBuilds.getInsuranceQuote(build.id, listingValue);
+      setInsuranceQuote(nextQuote);
+      await onUpdate({ shipping_insurance_cost: nextQuote.price_gbp });
     } catch (error) {
       setInsuranceQuote(null);
       setInsuranceError(error instanceof Error ? error.message : "Failed to get insurance quote");
@@ -213,6 +217,8 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
     const update: Parameters<typeof onUpdate>[0] = {
       shipping_method: shippingMethod,
       shipping_cost: parseFloat(shippingCost) || 0,
+      packaging_cost: parseFloat(packagingCost) || 0,
+      warranty_reserve_pct: parseFloat(warrantyReservePct) || 0,
       handling_time_days: parseInt(handlingDays, 10),
       fulfillment_policy_id: fulfillmentPolicyId || null,
     };
@@ -229,6 +235,8 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
     dimensionsChanged ||
     shippingMethod !== (build.shipping_method ?? "tracked") ||
     parseFloat(shippingCost) !== (build.shipping_cost ?? 0) ||
+    parseFloat(packagingCost) !== (build.packaging_cost ?? 0) ||
+    parseFloat(warrantyReservePct) !== (build.warranty_reserve_pct ?? 3) ||
     parseInt(handlingDays, 10) !== (build.handling_time_days ?? 1) ||
     fulfillmentPolicyId !== (build.fulfillment_policy_id ?? "");
 
@@ -274,6 +282,19 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
           </p>
         </div>
       )}
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        <label className="text-xs font-semibold text-slate-300">
+          Packaging cost (£)
+          <input type="number" step="0.01" min="0" value={packagingCost} onChange={(event) => setPackagingCost(event.target.value)} className="mt-2 w-full rounded border border-slate-600 bg-slate-700 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none" />
+          <span className="mt-1 block font-normal text-slate-500">Box, foam and protective materials.</span>
+        </label>
+        <label className="text-xs font-semibold text-slate-300">
+          Warranty reserve (%)
+          <input type="number" step="0.5" min="0" max="25" value={warrantyReservePct} onChange={(event) => setWarrantyReservePct(event.target.value)} className="mt-2 w-full rounded border border-slate-600 bg-slate-700 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none" />
+          <span className="mt-1 block font-normal text-slate-500">Held back from proceeds for expected warranty claims.</span>
+        </label>
+      </div>
 
       {/* Handling Time */}
       {shippingMethod !== "local_pickup" && (
@@ -497,7 +518,7 @@ export function EbayShippingSection({ build, onUpdate, saving, askingPrice, onAs
 
         {!loadingPolicies && !policiesError && policies && policies.length === 0 && (
           <p className="text-xs text-amber-300">
-            No fulfillment policies found on your eBay account. Create at least one in eBay's Seller Hub
+            No fulfillment policies found on your eBay account. Create at least one in eBay&apos;s Seller Hub
             (Account → Shipping preferences → Business policies) before listing.
           </p>
         )}

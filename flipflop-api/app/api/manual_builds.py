@@ -1317,6 +1317,12 @@ async def update_ebay_config(
         build.shipping_method = body.shipping_method
     if body.shipping_cost is not None:
         build.shipping_cost = body.shipping_cost
+    if body.shipping_insurance_cost is not None:
+        build.shipping_insurance_cost = max(0.0, body.shipping_insurance_cost)
+    if body.packaging_cost is not None:
+        build.packaging_cost = max(0.0, body.packaging_cost)
+    if body.warranty_reserve_pct is not None:
+        build.warranty_reserve_pct = min(25.0, max(0.0, body.warranty_reserve_pct))
     if body.handling_time_days is not None:
         build.handling_time_days = body.handling_time_days
     if body.shipping_damage_cover_confirmed is not None:
