@@ -413,33 +413,41 @@ function GoogleTrendsView({ data }: {
     setCreatingBuildFor(opportunity.query);
     setCreateBuildError(null);
     try {
-      const playbooks = await api.buildWizard.playbooks();
-      const playbook = playbooks.find((item) => item.target_use_case === opportunity.useCase)
-        ?? playbooks.find((item) => item.status === "active") ?? playbooks[0];
-      if (!playbook) throw new Error("No active build playbook is available.");
-      const generated = await api.buildWizard.generate({
-        playbook_id: playbook.id, budget: opportunity.budget,
-        user_notes: `Demand-led build for '${opportunity.query}'. Use current live listings and choose the best compatible combination.`,
-        priorities: ["Demand fit", "Compatibility", "Maximum profit"],
-        constraints: opportunity.useCase === "ai_workstation" ? [
-          `Total component cost no more than £${opportunity.budget}`,
-          "GPU must have at least 16GB VRAM",
-          "At least 64GB compatible RAM",
-          "At least 1TB NVMe storage",
-          "At least 650W PSU with suitable GPU connectors",
-          "Expandable workstation or custom ATX base; no SFF office PC",
-          "No OEM CPU swap without confirmed motherboard, BIOS and cooling support",
-        ] : [`Total component cost no more than £${opportunity.budget}`],
-      });
-      const best = generated.builds.find((build) => build.valid) ?? generated.builds[0];
-      if (!best) throw new Error("No compatible listing combination was found.");
-      const components: BuildComponent[] = [{
-        slot: "Base PC", name: best.base_spec, price_paid: best.base_cost, source: "manual",
-        listing_url: best.base_listing_url || best.listing_url, image_url: best.base_image_url, purchased: false,
-      }, ...best.upgrades.map((upgrade) => ({
-        slot: upgrade.role, name: upgrade.item, price_paid: upgrade.cost_estimate, source: "manual" as const,
-        listing_url: upgrade.listing_url, image_url: upgrade.image_url, purchased: false,
-      }))];
+      const generated = await api.buildWizard.componentCandidates();
+      const capacityGb = (title: string) => Math.max(0, ...Array.from(title.matchAll(/(\d{1,3})\s*gb\b/gi), match => Number(match[1])));
+      const storageGb = (title: string) => Math.max(0,
+        ...Array.from(title.matchAll(/(\d{1,2})\s*tb\b/gi), match => Number(match[1]) * 1000),
+        ...Array.from(title.matchAll(/(\d{3,4})\s*gb\b/gi), match => Number(match[1])),
+      );
+      const watts = (title: string) => Math.max(0, ...Array.from(title.matchAll(/(\d{3,4})\s*w(?:att)?s?\b/gi), match => Number(match[1])));
+      const byCategory = (build: typeof generated.builds[number], category: string) =>
+        build.components.find(component => component.category.toLowerCase() === category);
+      const coreCategories = ["cpu", "motherboard", "gpu", "ram"];
+      const suitable = generated.builds.filter(build => {
+        if (build.build_cost > opportunity.budget || build.compatibility_confidence !== "matched") return false;
+        if (!coreCategories.every(category => byCategory(build, category)?.url)) return false;
+        if (opportunity.useCase !== "ai_workstation") return true;
+        const gpu = byCategory(build, "gpu");
+        const ram = byCategory(build, "ram");
+        const ssd = byCategory(build, "ssd");
+        const psu = byCategory(build, "psu");
+        return !!gpu && capacityGb(gpu.title) >= 16
+          && !!ram && capacityGb(ram.title) >= 64
+          && !!ssd && storageGb(ssd.title) >= 1000
+          && !!psu && watts(psu.title) >= 650
+          && !!byCategory(build, "case")
+          && !!byCategory(build, "cooler");
+      }).sort((a, b) => b.super_gem_count - a.super_gem_count || b.estimated_profit - a.estimated_profit);
+      const best = suitable[0];
+      if (!best) {
+        throw new Error(generated.unavailable_reason || "No fully compatible component-by-component build currently meets this opportunity. No draft was created.");
+      }
+      const slotLabels: Record<string, string> = { cpu: "CPU", motherboard: "Motherboard", gpu: "GPU", ram: "RAM", ssd: "Storage", psu: "PSU", case: "PC Case", cooler: "CPU Cooler" };
+      const components: BuildComponent[] = best.components.map(component => ({
+        slot: slotLabels[component.category.toLowerCase()] ?? component.category,
+        name: component.title, price_paid: component.delivered_price, source: "manual" as const,
+        listing_url: component.url, image_url: component.image_url ?? undefined, purchased: false,
+      }));
       const draft = await api.manualBuilds.create(`${opportunity.query} · demand suggested`);
       await api.manualBuilds.patch(draft.id, { components });
       router.push(`/builds/${draft.id}`);

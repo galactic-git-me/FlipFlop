@@ -983,6 +983,28 @@ export const api = {
   },
 
   buildWizard: {
+    componentCandidates: () => request<{
+      generated_at: string | null;
+      unavailable_reason?: string;
+      builds: Array<{
+        rank: number;
+        build_cost: number;
+        estimated_profit: number;
+        compatibility_confidence: "matched" | "unknown";
+        super_gem_count: number;
+        components: Array<{
+          id: number;
+          listing_id: string;
+          category: string;
+          title: string;
+          seller: string | null;
+          image_url: string | null;
+          delivered_price: number;
+          classification: string;
+          url: string;
+        }>;
+      }>;
+    }>("/pc-builder/ai-generated-builds"),
     playbooks: () => request<WizardPlaybook[]>("/build-wizard/playbooks"),
     generate: (body: GenerateRequest) =>
       request<GenerateResult>("/build-wizard/generate", {
