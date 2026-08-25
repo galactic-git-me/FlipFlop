@@ -8,6 +8,8 @@ from app.models.inventory import InventoryItem
 from app.models.inventory_allocation import InventoryAllocation
 from app.models.flip import Flip
 from app.models.build import Build
+from app.models.build import BuildStatus, BuildType
+from app.models.manual_build import ManualBuild
 from app.schemas.inventory_allocation import InventoryAllocationIn, InventoryAllocationPartialIn, InventoryAllocationOut
 
 router = APIRouter(prefix="/inventory-allocations", tags=["inventory-allocations"])
@@ -31,6 +33,19 @@ class ProfitBreakdownOut(BaseModel):
     profit: float
     profit_margin_pct: float
     allocations: list[AllocationDetail]
+
+
+class BulkManualBuildAllocationIn(BaseModel):
+    inventory_item_ids: list[int]
+
+
+class ManualBuildAssignmentOut(BaseModel):
+    allocation_id: int
+    inventory_item_id: int
+    quantity_allocated: int
+    build_id: int
+    manual_build_id: int
+    build_name: str
 
 
 @router.post("/", response_model=InventoryAllocationOut, status_code=201)
@@ -101,6 +116,101 @@ async def list_allocations(
         q = q.where(InventoryAllocation.build_id == build_id)
     result = await db.execute(q)
     return result.scalars().all()
+
+
+@router.get("/manual-build-assignments", response_model=list[ManualBuildAssignmentOut])
+async def list_manual_build_assignments(db: AsyncSession = Depends(get_db)):
+    """List inventory assigned to the current Manual Build workflow."""
+    result = await db.execute(
+        select(InventoryAllocation, Build, ManualBuild)
+        .join(Build, Build.id == InventoryAllocation.build_id)
+        .join(ManualBuild, ManualBuild.id == Build.manual_build_id)
+        .order_by(InventoryAllocation.created_at.desc())
+    )
+    return [
+        ManualBuildAssignmentOut(
+            allocation_id=allocation.id,
+            inventory_item_id=allocation.inventory_item_id,
+            quantity_allocated=allocation.quantity_allocated,
+            build_id=build.id,
+            manual_build_id=manual_build.id,
+            build_name=manual_build.name,
+        )
+        for allocation, build, manual_build in result.all()
+    ]
+
+
+@router.post("/manual-builds/{manual_build_id}/bulk", status_code=201)
+async def bulk_assign_to_manual_build(
+    manual_build_id: int,
+    body: BulkManualBuildAllocationIn,
+    db: AsyncSession = Depends(get_db),
+):
+    """Assign every currently-free unit of selected inventory rows to a draft build."""
+    item_ids = list(dict.fromkeys(body.inventory_item_ids))
+    if not item_ids:
+        raise HTTPException(400, "Select at least one inventory item")
+
+    manual_build = await db.get(ManualBuild, manual_build_id)
+    if not manual_build or manual_build.is_archived:
+        raise HTTPException(404, f"Draft build {manual_build_id} not found")
+    if manual_build.status != "in_progress":
+        raise HTTPException(400, "Inventory can only be assigned to an in-progress draft build")
+
+    result = await db.execute(select(Build).where(Build.manual_build_id == manual_build_id))
+    build = result.scalar_one_or_none()
+    if build is None:
+        build = Build(
+            build_type=BuildType.PREBUILT,
+            manual_build_id=manual_build_id,
+            spec_json=manual_build.components or [],
+            status=BuildStatus.PLANNING,
+        )
+        db.add(build)
+        await db.flush()
+
+    result = await db.execute(select(InventoryItem).where(InventoryItem.id.in_(item_ids)))
+    inventory_by_id = {item.id: item for item in result.scalars().all()}
+    missing = [item_id for item_id in item_ids if item_id not in inventory_by_id]
+    if missing:
+        raise HTTPException(404, f"Inventory items not found: {missing}")
+
+    result = await db.execute(
+        select(InventoryAllocation).where(InventoryAllocation.inventory_item_id.in_(item_ids))
+    )
+    allocated_by_item: dict[int, int] = {}
+    for allocation in result.scalars().all():
+        allocated_by_item[allocation.inventory_item_id] = (
+            allocated_by_item.get(allocation.inventory_item_id, 0) + allocation.quantity_allocated
+        )
+
+    created = 0
+    units_assigned = 0
+    for item_id in item_ids:
+        item = inventory_by_id[item_id]
+        free_quantity = item.quantity - allocated_by_item.get(item_id, 0)
+        if free_quantity <= 0:
+            continue
+        db.add(InventoryAllocation(
+            inventory_item_id=item.id,
+            build_id=build.id,
+            flip_id=None,
+            quantity_allocated=free_quantity,
+            cost_per_unit_at_allocation=item.actual_cost,
+            notes=f"Assigned to draft build: {manual_build.name}",
+        ))
+        created += 1
+        units_assigned += free_quantity
+
+    if created == 0:
+        raise HTTPException(400, "The selected inventory has no free units to assign")
+    await db.commit()
+    return {
+        "created": created,
+        "units_assigned": units_assigned,
+        "manual_build_id": manual_build.id,
+        "build_name": manual_build.name,
+    }
 
 
 @router.get("/{allocation_id}", response_model=InventoryAllocationOut)

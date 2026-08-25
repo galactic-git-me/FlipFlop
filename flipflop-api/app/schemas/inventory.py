@@ -5,7 +5,8 @@ from pydantic import BaseModel, field_validator, model_validator
 class AllocationInfo(BaseModel):
     """Info about a single allocation of an inventory item."""
     allocation_id: int
-    flip_id: int
+    flip_id: int | None = None
+    build_id: int | None = None
     quantity_allocated: int
 
 

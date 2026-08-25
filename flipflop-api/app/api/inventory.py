@@ -23,6 +23,7 @@ async def _build_item_with_allocations(item: InventoryItem, db: AsyncSession) ->
         AllocationInfo(
             allocation_id=a.id,
             flip_id=a.flip_id,
+            build_id=a.build_id,
             quantity_allocated=a.quantity_allocated
         )
         for a in allocations_records
