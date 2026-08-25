@@ -1270,6 +1270,48 @@ export const api = {
       id: number; event_type: string; quantity: number; manual_build_id: number | null;
       build_name: string | null; detail: Record<string, unknown>; created_at: string;
     }>>(`/inventory-allocations/inventory/${inventoryItemId}/events`),
+    units: (inventoryItemId: number) => request<Array<{
+      id: number; inventory_item_id: number; unit_number: number; serial_number: string | null;
+      condition_grade: string; status: string; storage_location: string | null;
+      warranty_expires_at: string | null; test_results: Record<string, unknown>; photos: string[];
+      exception_reason: string | null; writeoff_amount: number | null; received_at: string | null;
+      inspected_at: string | null; created_at: string; updated_at: string;
+    }>>(`/inventory-intelligence/items/${inventoryItemId}/units`),
+    updateUnit: (unitId: number, data: Record<string, unknown>) => request<Record<string, unknown>>(
+      `/inventory-intelligence/units/${unitId}`, { method: "PATCH", body: JSON.stringify(data) },
+    ),
+    unitLabel: (unitId: number) => request<{
+      unit_id: number; sku: string; component_name: string; serial_number: string | null;
+      location: string | null; qr_payload: string;
+    }>(`/inventory-intelligence/units/${unitId}/label`),
+    buildCandidates: (manualBuildId: number) => request<Array<{
+      id: number; component_name: string; component_type: string; slot: string; quantity_free: number;
+      actual_cost: number; source: string | null; compatible: boolean; confidence: string;
+      reasons: string[]; warnings: string[];
+    }>>(`/inventory-intelligence/builds/${manualBuildId}/candidates`),
+    forecast: (days = 30) => request<{
+      horizon_days: number; capital_required: number; rows: Array<{
+        component_type: string; free_now: number; monthly_usage: number; projected_free: number;
+        recommendation: "buy" | "hold" | "liquidate"; units: number; estimated_capital: number;
+      }>;
+    }>(`/inventory-intelligence/forecast?days=${days}`),
+    sourcingAdjustments: () => request<Array<{
+      component_type: string; free_now: number; recommendation: string; units: number;
+      deal_score_adjustment: number; reason: string;
+    }>>("/inventory-intelligence/sourcing-adjustments"),
+    buildOpportunities: () => request<Array<{
+      name: string; completion_pct: number; ready: boolean; missing: string[]; owned_cost: number;
+      additional_spend_estimate: number; components: Array<{ inventory_item_id: number; component_type: string; name: string; cost: number }>;
+      warnings: string[];
+    }>>("/inventory-intelligence/build-opportunities"),
+    reorderRules: () => request<Array<{
+      id: number; component_type: string; minimum_free: number; maximum_free: number; target_free: number; notes: string | null;
+    }>>("/inventory-intelligence/reorder-rules"),
+    saveReorderRule: (componentType: string, data: { minimum_free: number; maximum_free: number; target_free: number; notes?: string }) =>
+      request<Record<string, unknown>>(`/inventory-intelligence/reorder-rules/${encodeURIComponent(componentType)}`, {
+        method: "PUT", body: JSON.stringify({ component_type: componentType, ...data }),
+      }),
+    accountingExportUrl: () => `${API_BASE_URL}/inventory-intelligence/accounting-export.csv`,
   },
 
   flipProfitBreakdown: {

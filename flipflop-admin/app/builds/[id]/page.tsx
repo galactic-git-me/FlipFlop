@@ -113,7 +113,8 @@ export default function BuildDetailPage() {
   const [savingSlot, setSavingSlot] = useState<string | null>(null);
   const [freeInventory, setFreeInventory] = useState<Array<{
     id: number; component_name: string; component_type: string; quantity_free: number;
-    actual_cost: number; source: string | null;
+    actual_cost: number; source: string | null; compatible: boolean; confidence: string;
+    reasons: string[]; warnings: string[];
   }>>([]);
   const [inventoryChoice, setInventoryChoice] = useState<Record<string, string>>({});
   const [markingBuilt, setMarkingBuilt] = useState(false);
@@ -204,8 +205,8 @@ export default function BuildDetailPage() {
   }, [buildId]);
 
   const refreshFreeInventory = useCallback(() => {
-    api.inventory.freeItems().then(setFreeInventory).catch(() => setFreeInventory([]));
-  }, []);
+    api.inventory.buildCandidates(buildId).then(setFreeInventory).catch(() => setFreeInventory([]));
+  }, [buildId]);
 
   useEffect(() => {
     const timer = window.setTimeout(refreshFreeInventory, 0);
@@ -866,7 +867,7 @@ export default function BuildDetailPage() {
                 cpu: "cpu", gpu: "gpu", ram: "ram", motherboard: "motherboard", storage: "ssd",
                 ssd: "ssd", psu: "psu", "pc case": "case", case: "case", "cpu cooler": "cooler", cooler: "cooler",
               };
-              const availableInventory = freeInventory.filter(item => item.component_type === typeBySlot[c.slot.toLowerCase()]);
+              const availableInventory = freeInventory.filter(item => item.component_type === typeBySlot[c.slot.toLowerCase()] && item.compatible);
               return (
                 <div key={c.slot} className="rounded-lg border border-white/[0.05] bg-black/10 p-2.5 transition-colors hover:border-white/[0.1]">
                   <div className="flex items-center gap-3">
@@ -898,9 +899,9 @@ export default function BuildDetailPage() {
                         onChange={event => setInventoryChoice(previous => ({ ...previous, [c.slot]: event.target.value }))}
                         className="min-w-64 flex-1 cursor-pointer rounded border border-white/10 bg-[#080e18] px-2.5 py-1.5 text-xs text-slate-200 outline-none focus:border-cyan-300/50"
                       >
-                        <option value="">Choose inventory (verify compatibility)…</option>
+                        <option value="">Choose compatibility-checked inventory…</option>
                         {availableInventory.map(item => (
-                          <option key={item.id} value={item.id}>{item.component_name} · {formatCurrency(item.actual_cost)} · {item.quantity_free} free</option>
+                          <option key={item.id} value={item.id}>{item.component_name} · {formatCurrency(item.actual_cost)} · {item.quantity_free} free · {item.confidence} confidence</option>
                         ))}
                       </select>
                       <button

@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.build import Build, BuildStatus, BuildType
 from app.models.inventory_allocation import InventoryAllocation
 from app.models.inventory_event import InventoryEvent
+from app.models.inventory_unit import InventoryUnit
 from app.models.manual_build import ManualBuild
 
 
@@ -101,6 +102,13 @@ async def release_manual_build_inventory(
             quantity=allocation.quantity_allocated,
             detail={"reason": reason, "allocation_id": allocation.id},
         )
+        unit_result = await db.execute(select(InventoryUnit).where(
+            InventoryUnit.inventory_item_id == allocation.inventory_item_id,
+            InventoryUnit.status == "reserved",
+        ).order_by(InventoryUnit.unit_number))
+        unit = unit_result.scalars().first()
+        if unit:
+            unit.status = "free"
         await db.delete(allocation)
     return len(allocations)
 
@@ -130,6 +138,13 @@ async def record_consumption(db: AsyncSession, manual_build: ManualBuild) -> int
             quantity=allocation.quantity_allocated,
             detail={"allocation_id": allocation.id},
         )
+        unit_result = await db.execute(select(InventoryUnit).where(
+            InventoryUnit.inventory_item_id == allocation.inventory_item_id,
+            InventoryUnit.status == "reserved",
+        ).order_by(InventoryUnit.unit_number))
+        unit = unit_result.scalars().first()
+        if unit:
+            unit.status = "consumed"
     return len(allocations)
 
 
@@ -157,4 +172,11 @@ async def record_sale(db: AsyncSession, manual_build: ManualBuild, sale_price: f
             quantity=allocation.quantity_allocated,
             detail={"sale_price": sale_price},
         )
+        unit_result = await db.execute(select(InventoryUnit).where(
+            InventoryUnit.inventory_item_id == allocation.inventory_item_id,
+            InventoryUnit.status.in_(["consumed", "reserved"]),
+        ).order_by(InventoryUnit.unit_number))
+        unit = unit_result.scalars().first()
+        if unit:
+            unit.status = "sold"
     return len(allocations)

@@ -10,7 +10,9 @@ from app.models.flip import Flip
 from app.models.build import Build
 from app.models.manual_build import ManualBuild
 from app.models.inventory_event import InventoryEvent
+from app.models.inventory_unit import InventoryUnit
 from app.services.inventory_lifecycle import add_event, apply_inventory_component, orchestration_build_for
+from app.services.inventory_compatibility import check_component
 from app.schemas.inventory_allocation import InventoryAllocationIn, InventoryAllocationPartialIn, InventoryAllocationOut
 
 router = APIRouter(prefix="/inventory-allocations", tags=["inventory-allocations"])
@@ -184,6 +186,20 @@ async def bulk_assign_to_manual_build(
         free_quantity = item.quantity - allocated_by_item.get(item_id, 0)
         if free_quantity <= 0:
             continue
+        compatibility = check_component(manual_build.components or [], item.component_type, item.component_name)
+        if not compatibility.compatible:
+            raise HTTPException(400, {
+                "message": f"{item.component_name} is incompatible with {manual_build.name}",
+                "reasons": compatibility.warnings,
+            })
+        units_result = await db.execute(select(InventoryUnit).where(
+            InventoryUnit.inventory_item_id == item.id,
+            InventoryUnit.status == "free",
+        ))
+        tracked_units = units_result.scalars().all()
+        all_units_result = await db.execute(select(InventoryUnit.id).where(InventoryUnit.inventory_item_id == item.id))
+        if all_units_result.first() and not tracked_units:
+            raise HTTPException(400, f"{item.component_name} has not passed receiving and inspection")
         quantity_to_assign = 1
         allocation = InventoryAllocation(
             inventory_item_id=item.id,
@@ -194,6 +210,9 @@ async def bulk_assign_to_manual_build(
             notes=f"Assigned to draft build: {manual_build.name}",
         )
         db.add(allocation)
+        reserved_unit = tracked_units[0] if tracked_units else None
+        if reserved_unit:
+            reserved_unit.status = "reserved"
         apply_inventory_component(manual_build, item, quantity_to_assign)
         add_event(
             db,
@@ -201,7 +220,7 @@ async def bulk_assign_to_manual_build(
             manual_build_id=manual_build.id,
             event_type="reserved",
             quantity=quantity_to_assign,
-            detail={"build_name": manual_build.name},
+            detail={"build_name": manual_build.name, "unit_id": reserved_unit.id if reserved_unit else None},
         )
         created += 1
         units_assigned += quantity_to_assign
@@ -246,6 +265,13 @@ async def release_from_manual_build(
         quantity=allocation.quantity_allocated,
         detail={"reason": "manual release", "allocation_id": allocation.id},
     )
+    unit_result = await db.execute(select(InventoryUnit).where(
+        InventoryUnit.inventory_item_id == inventory_item_id,
+        InventoryUnit.status == "reserved",
+    ).order_by(InventoryUnit.unit_number))
+    unit = unit_result.scalars().first()
+    if unit:
+        unit.status = "free"
     components = [
         component for component in (manual_build.components or [])
         if component.get("inventory_item_id") != inventory_item_id
