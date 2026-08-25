@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-24T23:19:32.200518+00:00",
+  "generated_at": "2026-08-25T00:19:34.323884+00:00",
   "builds": [
     {
       "components": [
@@ -130,14 +130,14 @@
         "bin": {
           "available": true,
           "count": 48,
-          "min_price": 78.55,
+          "min_price": 100.0,
           "max_price": 799.99,
-          "average_price": 289.01
+          "average_price": 299.95
         }
       },
-      "resale_estimate": 289.01,
+      "resale_estimate": 299.95,
       "resale_source": "bin_average",
-      "estimated_profit": 215.64,
+      "estimated_profit": 226.58,
       "rank": 1
     },
     {
@@ -269,154 +269,15 @@
         "bin": {
           "available": true,
           "count": 48,
-          "min_price": 78.55,
-          "max_price": 799.99,
-          "average_price": 289.01
-        }
-      },
-      "resale_estimate": 289.01,
-      "resale_source": "bin_average",
-      "estimated_profit": 210.52,
-      "rank": 2
-    },
-    {
-      "components": [
-        {
-          "id": 22784049,
-          "listing_id": "237013778781",
-          "category": "cpu",
-          "title": "Intel i3-6100 3.70GHz LGA1151 Skylake-S CPU SR2HG",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/OYwAAeSwS3BqhDec/s-l225.jpg",
-          "delivered_price": 13.64,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -13.64,
-          "url": "https://www.ebay.co.uk/itm/237013778781"
-        },
-        {
-          "id": 22786517,
-          "listing_id": "287519175539",
-          "category": "motherboard",
-          "title": "Gigabyte B450M DS3H Micro ATX Motherboard with Back Panel",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/VHQAAeSwYVRqe3EE/s-l225.jpg",
-          "delivered_price": 30.07,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -30.07,
-          "url": "https://www.ebay.co.uk/itm/287519175539"
-        },
-        {
-          "id": 22795513,
-          "listing_id": "407164098393",
-          "category": "gpu",
-          "title": "NVIDIA Quadro P620 2GB GDDR5 PCIe x16 Graphics Card 4x Mini DisplayPort GPU",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/ND4AAeSwqn9qip~Q/s-l225.jpg",
-          "delivered_price": 24.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -24.0,
-          "url": "https://www.ebay.co.uk/itm/407164098393"
-        },
-        {
-          "id": 22789054,
-          "listing_id": "318753151543",
-          "category": "ram",
-          "title": "Kingston 8GB DDR4 3200MHz PC4-3200AA Desktop RAM Memory 1Rx16 UDIMM",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/gaoAAeSw92lqhYTM/s-l225.jpg",
-          "delivered_price": 12.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -12.99,
-          "url": "https://www.ebay.co.uk/itm/318753151543"
-        },
-        {
-          "id": 22795685,
-          "listing_id": "601099520392240",
-          "category": "psu",
-          "title": "Top pickComputer Fan Mesh Cover, Metal Iron Mesh Protective Cover, Case Fan Power Supply Mesh, Radiator Protective Mesh CoverOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 3.06,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "IDENTITY_PENDING",
-          "estimated_profit": -3.06,
-          "url": "https://www.temu.com/search_result.html?search_key=Top+pickComputer+Fan+Mesh+Cover%2C+Metal+Iron+Mesh+Protective+Cover%2C+Case+Fan+Power+Supply+Mesh%2C+Radiator+Protective+Mesh+CoverOpen+in+new+tab."
-        },
-        {
-          "id": 22796903,
-          "listing_id": "605593003735804",
-          "category": "ssd",
-          "title": "Top pick1pc Solid State Drive Storage Protection Case, Suitable for Gridfinity M.2 SSD 22 X 80 Storage. Allows for Free Stacking And Compact Storage of The DrivesOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.87,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "IDENTITY_PENDING",
-          "estimated_profit": -0.87,
-          "url": "https://www.temu.com/search_result.html?search_key=Top+pick1pc+Solid+State+Drive+Storage+Protection+Case%2C+Suitable+for+Gridfinity+M.2+SSD+22+X+80+Storage.+Allows+for+Free+Stacking+And+Compact+Storage+of+The+DrivesOpen+in+new+tab."
-        },
-        {
-          "id": 22797509,
-          "listing_id": "607122532211230",
-          "category": "cooler",
-          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 0.79,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -0.79,
-          "url": "https://www.temu.com/search_result.html?search_key=Top+pick8pcs+Set+of+Mini+Heatsinks%2C+9x9x5mm+in+Size%2C+Radiators+with+Thermal+Conductive+Double-Sided+Tape%2C+Suitable+for+VRM%2C+GPU+Step-Down+Drivers%2C+MOSFETs%2C+VRAM+RegulatorsOpen+in+new+tab."
-        },
-        {
-          "id": 22797352,
-          "listing_id": "606364621483887",
-          "category": "case",
-          "title": "Top pick3 Sets/5 Sets Full-Height PCI Slot Heat Dissipation Dust Shutter, Universal Desktop Computer Case Panel with Hex ScrewsOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 1.02,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INELIGIBLE",
-          "estimated_profit": -1.02,
-          "url": "https://www.temu.com/search_result.html?search_key=Top+pick3+Sets%2F5+Sets+Full-Height+PCI+Slot+Heat+Dissipation+Dust+Shutter%2C+Universal+Desktop+Computer+Case+Panel+with+Hex+ScrewsOpen+in+new+tab."
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 4,
-      "build_cost": 86.44,
-      "market": {
-        "query": "gaming pc Intel i3-6100 Quadro P620 8gb",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "No comparable sold listings found"
-        },
-        "bin": {
-          "available": true,
-          "count": 48,
           "min_price": 100.0,
           "max_price": 799.99,
-          "average_price": 296.34
+          "average_price": 299.95
         }
       },
-      "resale_estimate": 296.34,
+      "resale_estimate": 299.95,
       "resale_source": "bin_average",
-      "estimated_profit": 209.9,
-      "rank": 3
+      "estimated_profit": 221.46,
+      "rank": 2
     },
     {
       "components": [
@@ -547,15 +408,15 @@
         "bin": {
           "available": true,
           "count": 48,
-          "min_price": 78.55,
+          "min_price": 100.0,
           "max_price": 799.99,
-          "average_price": 288.63
+          "average_price": 299.43
         }
       },
-      "resale_estimate": 288.63,
+      "resale_estimate": 299.43,
       "resale_source": "bin_average",
-      "estimated_profit": 207.31,
-      "rank": 4
+      "estimated_profit": 218.11,
+      "rank": 3
     },
     {
       "components": [
@@ -685,15 +546,154 @@
         },
         "bin": {
           "available": true,
-          "count": 48,
-          "min_price": 78.55,
+          "count": 49,
+          "min_price": 90.0,
           "max_price": 799.99,
-          "average_price": 289.22
+          "average_price": 299.73
         }
       },
-      "resale_estimate": 289.22,
+      "resale_estimate": 299.73,
       "resale_source": "bin_average",
-      "estimated_profit": 204.57,
+      "estimated_profit": 215.08,
+      "rank": 4
+    },
+    {
+      "components": [
+        {
+          "id": 22784049,
+          "listing_id": "237013778781",
+          "category": "cpu",
+          "title": "Intel i3-6100 3.70GHz LGA1151 Skylake-S CPU SR2HG",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/OYwAAeSwS3BqhDec/s-l225.jpg",
+          "delivered_price": 13.64,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -13.64,
+          "url": "https://www.ebay.co.uk/itm/237013778781"
+        },
+        {
+          "id": 22786517,
+          "listing_id": "287519175539",
+          "category": "motherboard",
+          "title": "Gigabyte B450M DS3H Micro ATX Motherboard with Back Panel",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/VHQAAeSwYVRqe3EE/s-l225.jpg",
+          "delivered_price": 30.07,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -30.07,
+          "url": "https://www.ebay.co.uk/itm/287519175539"
+        },
+        {
+          "id": 22795513,
+          "listing_id": "407164098393",
+          "category": "gpu",
+          "title": "NVIDIA Quadro P620 2GB GDDR5 PCIe x16 Graphics Card 4x Mini DisplayPort GPU",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/ND4AAeSwqn9qip~Q/s-l225.jpg",
+          "delivered_price": 24.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -24.0,
+          "url": "https://www.ebay.co.uk/itm/407164098393"
+        },
+        {
+          "id": 22789054,
+          "listing_id": "318753151543",
+          "category": "ram",
+          "title": "Kingston 8GB DDR4 3200MHz PC4-3200AA Desktop RAM Memory 1Rx16 UDIMM",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/gaoAAeSw92lqhYTM/s-l225.jpg",
+          "delivered_price": 12.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -12.99,
+          "url": "https://www.ebay.co.uk/itm/318753151543"
+        },
+        {
+          "id": 22795685,
+          "listing_id": "601099520392240",
+          "category": "psu",
+          "title": "Top pickComputer Fan Mesh Cover, Metal Iron Mesh Protective Cover, Case Fan Power Supply Mesh, Radiator Protective Mesh CoverOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 3.06,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "IDENTITY_PENDING",
+          "estimated_profit": -3.06,
+          "url": "https://www.temu.com/search_result.html?search_key=Top+pickComputer+Fan+Mesh+Cover%2C+Metal+Iron+Mesh+Protective+Cover%2C+Case+Fan+Power+Supply+Mesh%2C+Radiator+Protective+Mesh+CoverOpen+in+new+tab."
+        },
+        {
+          "id": 22796903,
+          "listing_id": "605593003735804",
+          "category": "ssd",
+          "title": "Top pick1pc Solid State Drive Storage Protection Case, Suitable for Gridfinity M.2 SSD 22 X 80 Storage. Allows for Free Stacking And Compact Storage of The DrivesOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 0.87,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "IDENTITY_PENDING",
+          "estimated_profit": -0.87,
+          "url": "https://www.temu.com/search_result.html?search_key=Top+pick1pc+Solid+State+Drive+Storage+Protection+Case%2C+Suitable+for+Gridfinity+M.2+SSD+22+X+80+Storage.+Allows+for+Free+Stacking+And+Compact+Storage+of+The+DrivesOpen+in+new+tab."
+        },
+        {
+          "id": 22797509,
+          "listing_id": "607122532211230",
+          "category": "cooler",
+          "title": "Top pick8pcs Set of Mini Heatsinks, 9x9x5mm in Size, Radiators with Thermal Conductive Double-Sided Tape, Suitable for VRM, GPU Step-Down Drivers, MOSFETs, VRAM RegulatorsOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 0.79,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -0.79,
+          "url": "https://www.temu.com/search_result.html?search_key=Top+pick8pcs+Set+of+Mini+Heatsinks%2C+9x9x5mm+in+Size%2C+Radiators+with+Thermal+Conductive+Double-Sided+Tape%2C+Suitable+for+VRM%2C+GPU+Step-Down+Drivers%2C+MOSFETs%2C+VRAM+RegulatorsOpen+in+new+tab."
+        },
+        {
+          "id": 22797352,
+          "listing_id": "606364621483887",
+          "category": "case",
+          "title": "Top pick3 Sets/5 Sets Full-Height PCI Slot Heat Dissipation Dust Shutter, Universal Desktop Computer Case Panel with Hex ScrewsOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 1.02,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INELIGIBLE",
+          "estimated_profit": -1.02,
+          "url": "https://www.temu.com/search_result.html?search_key=Top+pick3+Sets%2F5+Sets+Full-Height+PCI+Slot+Heat+Dissipation+Dust+Shutter%2C+Universal+Desktop+Computer+Case+Panel+with+Hex+ScrewsOpen+in+new+tab."
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 86.44,
+      "market": {
+        "query": "gaming pc Intel i3-6100 Quadro P620 8gb",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "No comparable sold listings found"
+        },
+        "bin": {
+          "available": true,
+          "count": 49,
+          "min_price": 78.55,
+          "max_price": 799.99,
+          "average_price": 286.13
+        }
+      },
+      "resale_estimate": 286.13,
+      "resale_source": "bin_average",
+      "estimated_profit": 199.69,
       "rank": 5
     },
     {
@@ -824,15 +824,15 @@
         },
         "bin": {
           "available": true,
-          "count": 43,
+          "count": 44,
           "min_price": 78.55,
           "max_price": 751.08,
-          "average_price": 266.67
+          "average_price": 262.38
         }
       },
-      "resale_estimate": 266.67,
+      "resale_estimate": 262.38,
       "resale_source": "bin_average",
-      "estimated_profit": 193.01,
+      "estimated_profit": 188.72,
       "rank": 6
     }
   ],
