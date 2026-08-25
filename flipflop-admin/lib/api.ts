@@ -656,6 +656,12 @@ export const api = {
       }),
     markBuilt: (id: number) =>
       request<ManualBuild>(`/manual-builds/${id}/mark-built`, { method: "POST" }),
+    purchaseComponent: (id: number, slot: string, data: { price_paid?: number; source?: string }) =>
+      request<ManualBuild>(`/manual-builds/${id}/components/${encodeURIComponent(slot)}/purchase`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }),
     getComponentRatings: (id: number) =>
       request<ComponentRating[]>(`/manual-builds/${id}/component-ratings`),
     saveComponentRatings: (id: number, ratings: ComponentRating[]) =>
@@ -1239,6 +1245,31 @@ export const api = {
       ),
     delete: (id: number) =>
       request<void>(`/inventory-allocations/${id}`, { method: "DELETE" }),
+    assignToManualBuild: (manualBuildId: number, inventoryItemIds: number[]) =>
+      request<{ created: number; units_assigned: number; build_name: string }>(
+        `/inventory-allocations/manual-builds/${manualBuildId}/bulk`,
+        { method: "POST", body: JSON.stringify({ inventory_item_ids: inventoryItemIds }) },
+      ),
+    releaseFromManualBuild: (manualBuildId: number, inventoryItemId: number) =>
+      request<void>(`/inventory-allocations/manual-builds/${manualBuildId}/items/${inventoryItemId}`, { method: "DELETE" }),
+  },
+
+  inventory: {
+    freeItems: (componentType?: string) => request<Array<{
+      id: number; component_name: string; component_type: string; quantity_free: number;
+      actual_cost: number; source: string | null; listing_url: string | null; purchase_date: string;
+    }>>(`/inventory/free-items${componentType ? `?component_type=${encodeURIComponent(componentType)}` : ""}`),
+    health: () => request<{
+      free_units: number; reserved_units: number; consumed_units: number;
+      free_value: number; reserved_value: number; consumed_value: number; expected_profit: number;
+      stale_items: Array<{ id: number; name: string; days: number; value: number }>;
+      excess_stock: Array<{ component_type: string; free_units: number }>;
+      build_blockers: Array<{ build_id: number; build_name: string; missing: string[] }>;
+    }>("/inventory/summary/health"),
+    events: (inventoryItemId: number) => request<Array<{
+      id: number; event_type: string; quantity: number; manual_build_id: number | null;
+      build_name: string | null; detail: Record<string, unknown>; created_at: string;
+    }>>(`/inventory-allocations/inventory/${inventoryItemId}/events`),
   },
 
   flipProfitBreakdown: {

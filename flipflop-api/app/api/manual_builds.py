@@ -16,6 +16,8 @@ from app.models.manual_build import ManualBuild
 from app.models.gem_radar_intelligence import ComponentRatingEvent, PreferredComponent
 from app.models.build import Build, BuildType, BuildStatus
 from app.models.product import Product, ProductType, ProductStatus
+from app.models.inventory import InventoryItem
+from app.models.inventory_allocation import InventoryAllocation
 from app.schemas.manual_build import (
     ManualBuildCreate, ManualBuildPatch, ManualBuildOut, ManualBuildSummary,
     EvaluationResult, EvaluationSuggestion, GenerateListingResult,
@@ -74,6 +76,11 @@ class ComponentRatingInput(BaseModel):
 
 class ComponentRatingsInput(BaseModel):
     ratings: list[ComponentRatingInput]
+
+
+class ComponentPurchaseInput(BaseModel):
+    price_paid: float | None = Field(default=None, ge=0)
+    source: str | None = None
 
 
 class FaqSelectionInput(BaseModel):
@@ -502,6 +509,80 @@ async def patch_build(build_id: int, body: ManualBuildPatch, db: AsyncSession = 
     return build
 
 
+@router.post("/{build_id}/components/{slot}/purchase", response_model=ManualBuildOut)
+async def purchase_build_component(
+    build_id: int,
+    slot: str,
+    body: ComponentPurchaseInput,
+    db: AsyncSession = Depends(get_db),
+):
+    """Record an external component purchase and reserve it to this draft."""
+    from app.services.inventory_lifecycle import add_event, orchestration_build_for
+
+    build = await db.get(ManualBuild, build_id)
+    if not build or build.is_archived:
+        raise HTTPException(404, "Build not found")
+    if build.status != "in_progress":
+        raise HTTPException(400, "Only draft builds can record component purchases")
+    components = list(build.components or [])
+    index = next((i for i, component in enumerate(components) if component.get("slot") == slot), None)
+    if index is None:
+        raise HTTPException(404, f"Component slot {slot} not found")
+    component = dict(components[index])
+    if component.get("inventory_item_id"):
+        component["purchased"] = True
+        components[index] = component
+        build.components = components
+        await db.flush()
+        await db.refresh(build)
+        return build
+
+    component_type_by_slot = {
+        "cpu": "cpu", "gpu": "gpu", "ram": "ram", "motherboard": "motherboard",
+        "storage": "ssd", "ssd": "ssd", "psu": "psu", "pc case": "case",
+        "case": "case", "cpu cooler": "cooler", "cooler": "cooler",
+    }
+    item = InventoryItem(
+        component_name=component.get("name") or slot,
+        component_type=component_type_by_slot.get(slot.lower(), slot.lower().replace(" ", "_")),
+        quantity=1,
+        base_price=body.price_paid if body.price_paid is not None else float(component.get("price_paid") or 0),
+        shipping_cost=0,
+        discount_amount=0,
+        purchase_date=datetime.utcnow(),
+        source=body.source or "Build purchase",
+        notes=f"Purchased for draft build: {build.name}",
+        listing_url=component.get("listing_url"),
+        purchase_status="PURCHASED",
+        reconciliation_status="PENDING" if component.get("listing_url") else "NOT_APPLICABLE",
+    )
+    db.add(item)
+    await db.flush()
+    orchestration = await orchestration_build_for(db, build)
+    allocation = InventoryAllocation(
+        inventory_item_id=item.id,
+        build_id=orchestration.id,
+        flip_id=None,
+        quantity_allocated=1,
+        cost_per_unit_at_allocation=item.actual_cost,
+        notes=f"Reserved for draft build: {build.name}",
+    )
+    db.add(allocation)
+    component["price_paid"] = item.actual_cost
+    component["purchased"] = True
+    component["inventory_item_id"] = item.id
+    components[index] = component
+    build.components = components
+    build.total_cost = sum(float(existing.get("price_paid") or 0) for existing in components)
+    add_event(db, inventory_item_id=item.id, manual_build_id=build.id, event_type="purchased", quantity=1,
+              detail={"source": item.source, "listing_url": item.listing_url})
+    add_event(db, inventory_item_id=item.id, manual_build_id=build.id, event_type="reserved", quantity=1,
+              detail={"build_name": build.name})
+    await db.flush()
+    await db.refresh(build)
+    return build
+
+
 @router.delete("/{build_id}", status_code=204)
 async def delete_build(build_id: int, db: AsyncSession = Depends(get_db)):
     """Archives the build rather than deleting it.
@@ -516,6 +597,8 @@ async def delete_build(build_id: int, db: AsyncSession = Depends(get_db)):
     build = result.scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
+    from app.services.inventory_lifecycle import release_manual_build_inventory
+    await release_manual_build_inventory(db, build, reason="draft archived")
     build.is_archived = True
     build.updated_at = datetime.utcnow()
     await db.flush()
@@ -623,6 +706,8 @@ async def mark_built(build_id: int, db: AsyncSession = Depends(get_db)):
 
     build.status = "built"
     build.updated_at = datetime.utcnow()
+    from app.services.inventory_lifecycle import record_consumption
+    await record_consumption(db, build)
 
     # Rows 10/33/19/20: demand check + initial pricing anchor/floor fire
     # automatically once cost is finalized (all components purchased), no
@@ -1026,6 +1111,8 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
     build.buyer_address_json = {**order.buyer_address.to_dict(), "line_item_id": order.line_item_id}
     build.sale_price_actual = order.sale_price
     build.status = "sold"
+    from app.services.inventory_lifecycle import record_sale
+    await record_sale(db, build, order.sale_price)
     build.updated_at = datetime.utcnow()
     await db.flush()
 

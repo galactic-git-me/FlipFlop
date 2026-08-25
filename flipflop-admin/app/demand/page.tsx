@@ -450,13 +450,31 @@ function GoogleTrendsView({ data }: {
         throw new Error(generated.unavailable_reason || "No fully compatible component-by-component build currently meets this opportunity. No draft was created.");
       }
       const slotLabels: Record<string, string> = { cpu: "CPU", motherboard: "Motherboard", gpu: "GPU", ram: "RAM", ssd: "Storage", psu: "PSU", case: "PC Case", cooler: "CPU Cooler" };
-      const components: BuildComponent[] = best.components.map(component => ({
-        slot: slotLabels[component.category.toLowerCase()] ?? component.category,
-        name: component.title, price_paid: component.delivered_price, source: "manual" as const,
-        listing_url: component.url, image_url: component.image_url ?? undefined, purchased: false,
-      }));
+      const freeInventory = await api.inventory.freeItems();
+      const claimedInventory = new Set<number>();
+      const components: BuildComponent[] = best.components.map(component => {
+        const category = component.category.toLowerCase();
+        const owned = freeInventory.find(item => item.component_type === category && !claimedInventory.has(item.id));
+        if (owned) claimedInventory.add(owned.id);
+        return owned ? {
+          slot: slotLabels[category] ?? component.category,
+          name: owned.component_name,
+          price_paid: owned.actual_cost,
+          source: "manual" as const,
+          listing_url: owned.listing_url ?? undefined,
+          purchased: true,
+          inventory_item_id: owned.id,
+        } : {
+          slot: slotLabels[category] ?? component.category,
+          name: component.title, price_paid: component.delivered_price, source: "manual" as const,
+          listing_url: component.url, image_url: component.image_url ?? undefined, purchased: false,
+        };
+      });
       const draft = await api.manualBuilds.create(`${opportunity.query} · demand suggested`);
       await api.manualBuilds.patch(draft.id, { components });
+      if (claimedInventory.size > 0) {
+        await api.inventoryAllocations.assignToManualBuild(draft.id, Array.from(claimedInventory));
+      }
       router.push(`/builds/${draft.id}`);
     } catch (error) {
       setCreateBuildError(error instanceof Error ? error.message : "Unable to create the suggested build.");

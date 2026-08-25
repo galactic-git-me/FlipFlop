@@ -115,6 +115,13 @@ async def record_consumption(db: AsyncSession, manual_build: ManualBuild) -> int
     )
     allocations = result.scalars().all()
     for allocation in allocations:
+        existing = await db.execute(select(InventoryEvent.id).where(
+            InventoryEvent.inventory_item_id == allocation.inventory_item_id,
+            InventoryEvent.manual_build_id == manual_build.id,
+            InventoryEvent.event_type == "consumed",
+        ))
+        if existing.scalar_one_or_none() is not None:
+            continue
         add_event(
             db,
             inventory_item_id=allocation.inventory_item_id,
@@ -122,5 +129,32 @@ async def record_consumption(db: AsyncSession, manual_build: ManualBuild) -> int
             event_type="consumed",
             quantity=allocation.quantity_allocated,
             detail={"allocation_id": allocation.id},
+        )
+    return len(allocations)
+
+
+async def record_sale(db: AsyncSession, manual_build: ManualBuild, sale_price: float | None) -> int:
+    build = await orchestration_build_for(db, manual_build, create=False)
+    if build is None:
+        return 0
+    result = await db.execute(
+        select(InventoryAllocation).where(InventoryAllocation.build_id == build.id)
+    )
+    allocations = result.scalars().all()
+    for allocation in allocations:
+        existing = await db.execute(select(InventoryEvent.id).where(
+            InventoryEvent.inventory_item_id == allocation.inventory_item_id,
+            InventoryEvent.manual_build_id == manual_build.id,
+            InventoryEvent.event_type == "sold",
+        ))
+        if existing.scalar_one_or_none() is not None:
+            continue
+        add_event(
+            db,
+            inventory_item_id=allocation.inventory_item_id,
+            manual_build_id=manual_build.id,
+            event_type="sold",
+            quantity=allocation.quantity_allocated,
+            detail={"sale_price": sale_price},
         )
     return len(allocations)

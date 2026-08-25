@@ -7,6 +7,7 @@ import {
   Loader2, ShoppingBag, ImagePlus, Star, X, IdCard, BadgeCheck, Store, Download, Zap,
   CalendarClock, Truck, AlertTriangle, PoundSterling, UploadCloud,
   HelpCircle, Shuffle,
+  Warehouse, Undo2,
 } from "lucide-react";
 import { Toaster, toast } from "sonner";
 import confetti from "canvas-confetti";
@@ -110,6 +111,11 @@ export default function BuildDetailPage() {
   const [build, setBuild] = useState<ManualBuild | null>(null);
   const [loading, setLoading] = useState(true);
   const [savingSlot, setSavingSlot] = useState<string | null>(null);
+  const [freeInventory, setFreeInventory] = useState<Array<{
+    id: number; component_name: string; component_type: string; quantity_free: number;
+    actual_cost: number; source: string | null;
+  }>>([]);
+  const [inventoryChoice, setInventoryChoice] = useState<Record<string, string>>({});
   const [markingBuilt, setMarkingBuilt] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [posting, setPosting] = useState(false);
@@ -197,6 +203,15 @@ export default function BuildDetailPage() {
       .finally(() => setLoading(false));
   }, [buildId]);
 
+  const refreshFreeInventory = useCallback(() => {
+    api.inventory.freeItems().then(setFreeInventory).catch(() => setFreeInventory([]));
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(refreshFreeInventory, 0);
+    return () => window.clearTimeout(timer);
+  }, [refreshFreeInventory]);
+
   useEffect(() => {
     api.manualBuilds.getFaqs(buildId).then((result) => {
       setFaqBank(result.bank);
@@ -278,15 +293,45 @@ export default function BuildDetailPage() {
   const togglePurchased = async (slot: string) => {
     if (!build) return;
     setSavingSlot(slot);
-    const updated: BuildComponent[] = build.components.map((c) =>
-      c.slot === slot ? { ...c, purchased: !c.purchased } : c
-    );
+    const component = build.components.find(c => c.slot === slot);
+    if (!component) return;
     try {
-      const saved = await api.manualBuilds.patch(buildId, { components: updated });
+      let saved: ManualBuild;
+      if (!component.purchased) {
+        saved = await api.manualBuilds.purchaseComponent(buildId, slot, {
+          price_paid: component.price_paid,
+          source: component.listing_url ? "Purchased listing" : "Build purchase",
+        });
+      } else if (component.inventory_item_id) {
+        await api.inventoryAllocations.releaseFromManualBuild(buildId, component.inventory_item_id);
+        saved = await api.manualBuilds.get(buildId);
+      } else {
+        const updated = build.components.map(c => c.slot === slot ? { ...c, purchased: false } : c);
+        saved = await api.manualBuilds.patch(buildId, { components: updated });
+      }
       setBuild(saved);
+      refreshFreeInventory();
     } catch (error) {
       console.error("Error updating component:", error);
       alert("Failed to save. Please check the console for details.");
+    } finally {
+      setSavingSlot(null);
+    }
+  };
+
+  const assignInventoryToSlot = async (slot: string) => {
+    const inventoryItemId = Number(inventoryChoice[slot]);
+    if (!inventoryItemId) return;
+    setSavingSlot(slot);
+    try {
+      await api.inventoryAllocations.assignToManualBuild(buildId, [inventoryItemId]);
+      const saved = await api.manualBuilds.get(buildId);
+      setBuild(saved);
+      setInventoryChoice(previous => ({ ...previous, [slot]: "" }));
+      refreshFreeInventory();
+      toast.success("Inventory reserved to this build");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not reserve inventory");
     } finally {
       setSavingSlot(null);
     }
@@ -816,25 +861,61 @@ export default function BuildDetailPage() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            {build.components.map((c) => (
-              <button
-                key={c.slot}
-                onClick={() => togglePurchased(c.slot)}
-                disabled={savingSlot === c.slot || build.status !== "in_progress"}
-                className="w-full flex items-center gap-3 p-2.5 rounded-lg hover:bg-white/[0.03] transition-colors text-left disabled:opacity-60 disabled:cursor-default"
-              >
-                {savingSlot === c.slot ? (
-                  <Loader2 className="w-4 h-4 text-slate-500 animate-spin shrink-0" />
-                ) : c.purchased ? (
-                  <CheckCircle2 className="w-4 h-4 text-[#00dc82] shrink-0" />
-                ) : (
-                  <Circle className="w-4 h-4 text-slate-600 shrink-0" />
-                )}
-                <span className="text-xs text-slate-500 uppercase font-mono w-24 shrink-0">{c.slot}</span>
-                <span className="text-sm flex-1 truncate">{c.name}</span>
-                <span className="text-sm font-semibold text-slate-400">{formatCurrency(c.price_paid)}</span>
-              </button>
-            ))}
+            {build.components.map((c) => {
+              const typeBySlot: Record<string, string> = {
+                cpu: "cpu", gpu: "gpu", ram: "ram", motherboard: "motherboard", storage: "ssd",
+                ssd: "ssd", psu: "psu", "pc case": "case", case: "case", "cpu cooler": "cooler", cooler: "cooler",
+              };
+              const compatibleInventory = freeInventory.filter(item => item.component_type === typeBySlot[c.slot.toLowerCase()]);
+              return (
+                <div key={c.slot} className="rounded-lg border border-white/[0.05] bg-black/10 p-2.5 transition-colors hover:border-white/[0.1]">
+                  <div className="flex items-center gap-3">
+                    {savingSlot === c.slot ? <Loader2 className="h-4 w-4 shrink-0 animate-spin text-slate-500" />
+                      : c.purchased ? <CheckCircle2 className="h-4 w-4 shrink-0 text-[#00dc82]" />
+                      : <Circle className="h-4 w-4 shrink-0 text-slate-600" />}
+                    <span className="w-24 shrink-0 font-mono text-xs uppercase text-slate-500">{c.slot}</span>
+                    <span className="min-w-0 flex-1 truncate text-sm">{c.name}</span>
+                    {c.inventory_item_id && <span className="rounded bg-[#00dc82]/10 px-2 py-1 text-[10px] font-semibold uppercase text-[#00dc82]">Inventory</span>}
+                    <span className="text-sm font-semibold text-slate-400">{formatCurrency(c.price_paid)}</span>
+                    {build.status === "in_progress" && (
+                      <button
+                        type="button"
+                        onClick={() => void togglePurchased(c.slot)}
+                        disabled={savingSlot === c.slot}
+                        className="cursor-pointer rounded-md border border-white/10 px-2.5 py-1.5 text-xs text-slate-300 transition-colors hover:border-cyan-300/40 hover:text-cyan-200 disabled:cursor-wait disabled:opacity-50"
+                      >
+                        {c.purchased ? <span className="flex items-center gap-1"><Undo2 className="h-3 w-3" /> Release</span> : "Mark purchased"}
+                      </button>
+                    )}
+                  </div>
+                  {!c.purchased && build.status === "in_progress" && compatibleInventory.length > 0 && (
+                    <div className="mt-2 flex flex-wrap items-center gap-2 border-t border-white/[0.05] pt-2 pl-7">
+                      <Warehouse className="h-3.5 w-3.5 text-cyan-300" />
+                      <label htmlFor={`inventory-${c.slot}`} className="text-xs text-slate-400">Use owned stock</label>
+                      <select
+                        id={`inventory-${c.slot}`}
+                        value={inventoryChoice[c.slot] ?? ""}
+                        onChange={event => setInventoryChoice(previous => ({ ...previous, [c.slot]: event.target.value }))}
+                        className="min-w-64 flex-1 cursor-pointer rounded border border-white/10 bg-[#080e18] px-2.5 py-1.5 text-xs text-slate-200 outline-none focus:border-cyan-300/50"
+                      >
+                        <option value="">Choose compatible inventory…</option>
+                        {compatibleInventory.map(item => (
+                          <option key={item.id} value={item.id}>{item.component_name} · {formatCurrency(item.actual_cost)} · {item.quantity_free} free</option>
+                        ))}
+                      </select>
+                      <button
+                        type="button"
+                        disabled={!inventoryChoice[c.slot] || savingSlot === c.slot}
+                        onClick={() => void assignInventoryToSlot(c.slot)}
+                        className="cursor-pointer rounded bg-cyan-400 px-3 py-1.5 text-xs font-bold text-slate-950 hover:bg-cyan-300 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-slate-600"
+                      >
+                        Reserve
+                      </button>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           <div className="mt-3 flex items-center justify-between rounded-lg border border-cyan-400/15 bg-cyan-400/[0.04] px-3 py-3">
