@@ -333,6 +333,9 @@ async def confirm_checkout(
         settings = get_settings()
         await withdraw_ebay_for_sold_build(manual_build, settings.ebay_listing_environment)
         manual_build.status = "sold"
+        manual_build.sale_price_actual = payment_data["amount"]
+        from app.services.inventory_lifecycle import record_sale
+        await record_sale(db, manual_build, payment_data["amount"])
         manual_build.updated_at = datetime.utcnow()
         await db.commit()
         ebay_withdrawn = True

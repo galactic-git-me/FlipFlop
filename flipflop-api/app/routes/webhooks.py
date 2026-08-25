@@ -331,6 +331,9 @@ async def _handle_product_payment_succeeded(intent: dict, db: AsyncSession) -> N
         settings = get_settings()
         await withdraw_ebay_for_sold_build(manual_build, settings.ebay_listing_environment)
         manual_build.status = "sold"
+        manual_build.sale_price_actual = amount
+        from app.services.inventory_lifecycle import record_sale
+        await record_sale(db, manual_build, amount)
         manual_build.updated_at = datetime.utcnow()
         await db.commit()
 
