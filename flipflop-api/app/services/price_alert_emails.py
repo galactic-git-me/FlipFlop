@@ -48,8 +48,8 @@ async def send_price_alert_email(
 
     try:
         # Get build details
-        build = await db.get(ManualBuild, alert.manual_build_id)
-        if not build:
+        build = await db.get(ManualBuild, alert.manual_build_id) if alert.manual_build_id else None
+        if alert.alert_type != "component" and not build:
             log.error(
                 "price_alert_email_build_not_found",
                 alert_id=alert.id,
@@ -64,14 +64,16 @@ async def send_price_alert_email(
         savings = (target_display - current_display) if current_display < target_display else 0
 
         # Build email content
-        subject = f"Price Alert: {build.name} now £{current_display:.2f}"
+        item_name = alert.component_key if alert.alert_type == "component" else build.name
+        subject = f"Price Alert: {item_name} now £{current_display:.2f}"
+        destination = "/sourcing" if alert.alert_type == "component" else f"/builds/{build.id}"
 
         html_body = f"""
         <html>
             <body style="font-family: Arial, sans-serif;">
                 <h2>Price Alert Triggered! 🎯</h2>
 
-                <p>Good news! Your price alert for <strong>{build.name}</strong> has been triggered.</p>
+                <p>Good news! Your price alert for <strong>{item_name}</strong> has been triggered.</p>
 
                 <div style="background-color: #f0f0f0; padding: 15px; border-radius: 5px; margin: 20px 0;">
                     <p><strong>Current Price:</strong> £{current_display:.2f}</p>
@@ -80,9 +82,9 @@ async def send_price_alert_email(
                 </div>
 
                 <p>
-                    <a href="https://flipflop.local/builds/{build.id}"
+                    <a href="https://flipflop.local{destination}"
                        style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
-                        View Build
+                        View matching listings
                     </a>
                 </p>
 
@@ -107,7 +109,7 @@ async def send_price_alert_email(
             "price_alert_email_sent",
             alert_id=alert.id,
             user_email=alert.user_email,
-            build_id=build.id,
+            build_id=build.id if build else None,
             current_price=current_display,
             target_price=target_display,
         )

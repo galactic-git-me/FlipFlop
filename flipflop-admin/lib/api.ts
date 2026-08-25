@@ -141,7 +141,7 @@ export interface ComponentRating {
 
 export interface PriceAlert {
   id: number;
-  manual_build_id: number;
+  manual_build_id: number | null;
   build_name: string;
   build_status: string | null;
   current_price_gbp: number | null;
@@ -152,6 +152,11 @@ export interface PriceAlert {
   triggered_price_gbp: number | null;
   created_at: string;
   updated_at: string;
+  alert_type: "build" | "component";
+  component_key: string | null;
+  component_slot: string | null;
+  market_reference_price_gbp: number | null;
+  discount_threshold_pct: number | null;
 }
 
 export interface PriceAlertList {
@@ -676,7 +681,7 @@ export const api = {
     getComponentRatings: (id: number) =>
       request<ComponentRating[]>(`/manual-builds/${id}/component-ratings`),
     saveComponentRatings: (id: number, ratings: ComponentRating[]) =>
-      request<{ saved: number; preferred_added: number }>(`/manual-builds/${id}/component-ratings`, {
+      request<{ saved: number; preferred_added: number; alerts_created: number; alerts_updated: number }>(`/manual-builds/${id}/component-ratings`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ratings }),

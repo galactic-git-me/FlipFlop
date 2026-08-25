@@ -18,6 +18,8 @@ from app.models.build import Build, BuildType, BuildStatus
 from app.models.product import Product, ProductType, ProductStatus
 from app.models.inventory import InventoryItem
 from app.models.inventory_allocation import InventoryAllocation
+from app.models.price_alert import PriceAlert
+from app.models.admin_user import AdminUser
 from app.schemas.manual_build import (
     ManualBuildCreate, ManualBuildPatch, ManualBuildOut, ManualBuildSummary,
     EvaluationResult, EvaluationSuggestion, GenerateListingResult,
@@ -753,7 +755,12 @@ async def get_component_ratings(build_id: int, db: AsyncSession = Depends(get_db
 
 
 @router.put("/{build_id}/component-ratings")
-async def save_component_ratings(build_id: int, body: ComponentRatingsInput, db: AsyncSession = Depends(get_db)):
+async def save_component_ratings(
+    build_id: int,
+    body: ComponentRatingsInput,
+    db: AsyncSession = Depends(get_db),
+    admin: AdminUser = Depends(get_current_admin),
+):
     build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
@@ -763,6 +770,8 @@ async def save_component_ratings(build_id: int, body: ComponentRatingsInput, db:
         (str(component.get("slot", "")).lower(), str(component.get("name", "")).strip().lower())
         for component in build.components if isinstance(component, dict)
     }
+    alerts_created = 0
+    alerts_updated = 0
     for incoming in body.ratings:
         identity = (incoming.component_slot.lower(), incoming.component_key.strip().lower())
         if identity not in valid_components:
@@ -800,8 +809,54 @@ async def save_component_ratings(build_id: int, body: ComponentRatingsInput, db:
                 preferred.status = "preferred"
                 preferred.last_build_id = build_id
                 preferred.last_used_at = datetime.utcnow()
+        if incoming.overall_rating == 5:
+            component = next(
+                item for item in build.components
+                if str(item.get("slot", "")).lower() == incoming.component_slot.lower()
+                and str(item.get("name", "")).strip().lower() == incoming.component_key.strip().lower()
+            )
+            # Use the same source-backed component valuation shown in Pricing.
+            # If market evidence is sparse, estimated_resale already falls back
+            # transparently to recorded market/paid value.
+            from app.api.builds_pricing import _component_valuations
+            valuation = (await _component_valuations([component]))[0]
+            market_reference = max(0.01, valuation.estimated_resale)
+            target_pennies = round(market_reference * 0.85 * 100)
+            reference_pennies = round(market_reference * 100)
+            alert = (await db.execute(select(PriceAlert).where(
+                PriceAlert.alert_type == "component",
+                PriceAlert.component_key == incoming.component_key,
+            ))).scalar_one_or_none()
+            if alert is None:
+                db.add(PriceAlert(
+                    manual_build_id=None,
+                    alert_type="component",
+                    component_key=incoming.component_key,
+                    component_slot=incoming.component_slot,
+                    market_reference_price_gbp=reference_pennies,
+                    discount_threshold_pct=15.0,
+                    target_price_gbp=target_pennies,
+                    user_email=admin.email,
+                    is_active=True,
+                ))
+                alerts_created += 1
+            else:
+                alert.component_slot = incoming.component_slot
+                alert.market_reference_price_gbp = reference_pennies
+                alert.discount_threshold_pct = 15.0
+                alert.target_price_gbp = target_pennies
+                alert.user_email = admin.email
+                alert.is_active = True
+                alert.triggered_at = None
+                alert.triggered_price_gbp = None
+                alerts_updated += 1
     await db.flush()
-    return {"saved": len(body.ratings), "preferred_added": sum(r.overall_rating == 5 for r in body.ratings)}
+    return {
+        "saved": len(body.ratings),
+        "preferred_added": sum(r.overall_rating == 5 for r in body.ratings),
+        "alerts_created": alerts_created,
+        "alerts_updated": alerts_updated,
+    }
 
 
 @router.post("/{build_id}/generate-listing", response_model=GenerateListingResult)

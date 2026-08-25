@@ -1,7 +1,7 @@
 """Price alert models for Phase 2 Price Alerts feature."""
 
 from datetime import datetime
-from sqlalchemy import String, Integer, DateTime, Boolean, ForeignKey
+from sqlalchemy import String, Integer, DateTime, Boolean, ForeignKey, Float
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
@@ -14,7 +14,12 @@ class PriceAlert(Base):
     __tablename__ = "price_alerts"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    manual_build_id: Mapped[int] = mapped_column(Integer, ForeignKey("manual_builds.id"), index=True)
+    manual_build_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("manual_builds.id"), index=True, nullable=True)
+    alert_type: Mapped[str] = mapped_column(String(20), default="build", index=True)
+    component_key: Mapped[str | None] = mapped_column(String(255), index=True)
+    component_slot: Mapped[str | None] = mapped_column(String(50), index=True)
+    market_reference_price_gbp: Mapped[int | None] = mapped_column(Integer)
+    discount_threshold_pct: Mapped[float | None] = mapped_column(Float)
     user_email: Mapped[str] = mapped_column(String(255), index=True)
     # Stored in pennies (£79.99 → 7999 pennies) to avoid float rounding
     target_price_gbp: Mapped[int] = mapped_column(Integer)

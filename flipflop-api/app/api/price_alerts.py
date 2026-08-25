@@ -20,12 +20,18 @@ class CreatePriceAlert(BaseModel):
 
 
 def _out(alert: PriceAlert, build: ManualBuild | None) -> dict:
+    is_component = alert.alert_type == "component"
     return {
         "id": alert.id,
         "manual_build_id": alert.manual_build_id,
-        "build_name": build.name if build else f"Build {alert.manual_build_id}",
-        "build_status": build.status if build else None,
-        "current_price_gbp": (build.ebay_price or build.total_cost) if build else None,
+        "build_name": alert.component_key if is_component else build.name if build else f"Build {alert.manual_build_id}",
+        "build_status": "preferred component" if is_component else build.status if build else None,
+        "current_price_gbp": (alert.market_reference_price_gbp / 100 if alert.market_reference_price_gbp is not None else None) if is_component else (build.ebay_price or build.total_cost) if build else None,
+        "alert_type": alert.alert_type,
+        "component_key": alert.component_key,
+        "component_slot": alert.component_slot,
+        "market_reference_price_gbp": alert.market_reference_price_gbp / 100 if alert.market_reference_price_gbp is not None else None,
+        "discount_threshold_pct": alert.discount_threshold_pct,
         "user_email": alert.user_email,
         "target_price_gbp": alert.target_price_gbp / 100,
         "is_active": alert.is_active,

@@ -17,6 +17,7 @@ from __future__ import annotations
 from collections import defaultdict
 from dataclasses import dataclass, field, replace
 from datetime import datetime, timedelta
+import re
 
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -29,6 +30,8 @@ from app.gem_radar.marketplace import fallback_listing_url
 from app.models.favourite import Favourite
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.models.gem_radar_intelligence import GemRadarDecisionEvent, PreferredComponent
+from app.models.price_alert import PriceAlert, PriceAlertEvent
+from app.gem_radar.identity import resolve_identity
 from app.services.alerts import emit_alert
 from app.services.ebay_catalog import get_product_reviews
 
@@ -114,6 +117,11 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
 
     favourites = (await db.execute(select(Favourite))).scalars().all()
     preferred_keys = set((await db.execute(select(PreferredComponent.component_key))).scalars().all())
+    component_price_alerts = (await db.execute(select(PriceAlert).where(
+        PriceAlert.alert_type == "component",
+        PriceAlert.is_active.is_(True),
+        PriceAlert.triggered_at.is_(None),
+    ))).scalars().all()
     existing_reviews = {
         listing_id: (average, count)
         for listing_id, average, count in (
@@ -172,6 +180,31 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
             db, listing_id, SEARCH_RUN_ID,
             watch_count, bid_count, delivered_price
         )
+        title_key = re.sub(r"[^a-z0-9]", "", (title or "").lower())
+        for alert in component_price_alerts:
+            identity = resolve_identity(alert.component_key or "")
+            model = identity.model or alert.component_key or ""
+            model_key = re.sub(r"[^a-z0-9]", "", model.lower())
+            if not model_key or model_key not in title_key:
+                # Marketplace titles commonly omit manufacturer/family words;
+                # accept the distinctive CPU/GPU model token as the fallback.
+                token = re.search(r"\b(?:RTX|GTX|RX)?\s*\d{3,5}(?:X3D|XTX|SUPER|TI|XT|X|G|KF|K|F)?\b", model, re.IGNORECASE)
+                token_key = re.sub(r"[^a-z0-9]", "", token.group(0).lower()) if token else ""
+                if not token_key or token_key not in title_key:
+                    continue
+            if market is not None:
+                alert.market_reference_price_gbp = round(float(market.median) * 100)
+                alert.target_price_gbp = round(float(market.median) * (1 - (alert.discount_threshold_pct or 15) / 100) * 100)
+            current_pennies = round(float(delivered_price) * 100)
+            if current_pennies <= alert.target_price_gbp:
+                alert.triggered_at = datetime.utcnow()
+                alert.triggered_price_gbp = current_pennies
+                db.add(PriceAlertEvent(
+                    alert_id=alert.id,
+                    event_type="triggered",
+                    price_gbp=current_pennies,
+                    notes=f"{title} reached at least {alert.discount_threshold_pct or 15:.0f}% below its market reference",
+                ))
 
         sold_count = len({_source.source_url or f"price:{_source.delivered_price}" for _source in sold_comps})
         active_count = max(0, len(active_cohorts.get((cpk, normalised_condition), [])) - 1)

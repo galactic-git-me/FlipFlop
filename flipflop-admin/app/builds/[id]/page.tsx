@@ -283,7 +283,8 @@ export default function BuildDetailPage() {
           overall_rating: componentRatings[component.slot],
         }));
       const result = await api.manualBuilds.saveComponentRatings(buildId, ratings);
-      toast.success(`Saved ${result.saved} ratings${result.preferred_added ? ` · ${result.preferred_added} added to preferred components` : ""}`);
+      const alerts = result.alerts_created + result.alerts_updated;
+      toast.success(`Saved ${result.saved} ratings${result.preferred_added ? ` · ${result.preferred_added} preferred` : ""}${alerts ? ` · ${alerts} price alert${alerts === 1 ? "" : "s"} set at 15% below market` : ""}`);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not save component ratings");
     } finally {
@@ -972,7 +973,7 @@ export default function BuildDetailPage() {
                   <Star className="h-4 w-4 text-amber-400" /> Rate this build&apos;s components
                 </p>
                 <p className="mt-1 text-xs text-slate-400">
-                  Five-star components are added to your preferred list and improve future build-fit ranking.
+                  Five-star components are added to Preferred and automatically monitored at 15% below their current market value.
                 </p>
               </div>
               <div className="space-y-2">
