@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T06:15:44.604577+00:00",
+  "generated_at": "2026-08-25T07:15:47.105476+00:00",
   "builds": [
     {
       "components": [
@@ -129,15 +129,15 @@
         },
         "bin": {
           "available": true,
-          "count": 47,
+          "count": 46,
           "min_price": 78.55,
           "max_price": 799.99,
-          "average_price": 281.56
+          "average_price": 285.06
         }
       },
-      "resale_estimate": 281.56,
+      "resale_estimate": 285.06,
       "resale_source": "bin_average",
-      "estimated_profit": 199.92,
+      "estimated_profit": 203.42,
       "rank": 1
     },
     {
@@ -268,15 +268,15 @@
         },
         "bin": {
           "available": true,
-          "count": 47,
+          "count": 46,
           "min_price": 78.55,
           "max_price": 799.99,
-          "average_price": 281.56
+          "average_price": 286.8
         }
       },
-      "resale_estimate": 281.56,
+      "resale_estimate": 286.8,
       "resale_source": "bin_average",
-      "estimated_profit": 194.8,
+      "estimated_profit": 200.04,
       "rank": 2
     },
     {
@@ -407,15 +407,15 @@
         },
         "bin": {
           "available": true,
-          "count": 47,
+          "count": 46,
           "min_price": 78.55,
           "max_price": 799.99,
-          "average_price": 281.56
+          "average_price": 285.16
         }
       },
-      "resale_estimate": 281.56,
+      "resale_estimate": 285.16,
       "resale_source": "bin_average",
-      "estimated_profit": 191.97,
+      "estimated_profit": 195.57,
       "rank": 3
     },
     {
@@ -546,15 +546,15 @@
         },
         "bin": {
           "available": true,
-          "count": 47,
+          "count": 46,
           "min_price": 78.55,
           "max_price": 799.99,
-          "average_price": 281.56
+          "average_price": 284.83
         }
       },
-      "resale_estimate": 281.56,
+      "resale_estimate": 284.83,
       "resale_source": "bin_average",
-      "estimated_profit": 188.64,
+      "estimated_profit": 191.91,
       "rank": 4
     },
     {
@@ -685,15 +685,15 @@
         },
         "bin": {
           "available": true,
-          "count": 47,
+          "count": 46,
           "min_price": 78.55,
           "max_price": 799.99,
-          "average_price": 281.56
+          "average_price": 284.83
         }
       },
-      "resale_estimate": 281.56,
+      "resale_estimate": 284.83,
       "resale_source": "bin_average",
-      "estimated_profit": 186.85,
+      "estimated_profit": 190.12,
       "rank": 5
     },
     {
@@ -827,12 +827,12 @@
           "count": 44,
           "min_price": 78.55,
           "max_price": 734.76,
-          "average_price": 256.52
+          "average_price": 254.68
         }
       },
-      "resale_estimate": 256.52,
+      "resale_estimate": 254.68,
       "resale_source": "bin_average",
-      "estimated_profit": 174.59,
+      "estimated_profit": 172.75,
       "rank": 6
     }
   ],
