@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import Link from "next/link";
 import {
   Package, Plus, Trash2, Edit2, X, RefreshCw, DollarSign,
   MemoryStick, Cpu, HardDrive, CircuitBoard, Zap, Wind, MonitorSpeaker, Layers3,
   History, AlertTriangle, TrendingUp,
+  BrainCircuit, MapPin, Tag,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { api, type ManualBuildSummary } from "@/lib/api";
@@ -46,6 +48,13 @@ interface InventoryEvent {
   build_name: string | null; detail: Record<string, unknown>; created_at: string;
 }
 
+interface InventoryUnit {
+  id: number; inventory_item_id: number; unit_number: number; serial_number: string | null;
+  condition_grade: string; status: string; storage_location: string | null;
+  warranty_expires_at: string | null; test_results: Record<string, unknown>;
+  exception_reason: string | null; writeoff_amount: number | null;
+}
+
 interface FormData {
   component_name: string;
   component_type: string;
@@ -82,6 +91,8 @@ export default function InventoryPage() {
   const [health, setHealth] = useState<InventoryHealth | null>(null);
   const [historyItem, setHistoryItem] = useState<InventoryItem | null>(null);
   const [historyEvents, setHistoryEvents] = useState<InventoryEvent[]>([]);
+  const [unitsItem, setUnitsItem] = useState<InventoryItem | null>(null);
+  const [units, setUnits] = useState<InventoryUnit[]>([]);
   const [showBulkModal, setShowBulkModal] = useState(false);
 
   const [form, setForm] = useState<FormData>({
@@ -229,6 +240,31 @@ export default function InventoryPage() {
     }
   };
 
+  const showUnits = async (item: InventoryItem) => {
+    setUnitsItem(item);
+    setUnits([]);
+    try {
+      setUnits(await api.inventory.units(item.id));
+    } catch {
+      setUnits([]);
+    }
+  };
+
+  const updateUnit = async (unitId: number, data: Record<string, unknown>) => {
+    try {
+      await api.inventory.updateUnit(unitId, data);
+      if (unitsItem) setUnits(await api.inventory.units(unitsItem.id));
+      await loadInventory();
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Unable to update inventory unit");
+    }
+  };
+
+  const copyUnitLabel = async (unitId: number) => {
+    const label = await api.inventory.unitLabel(unitId);
+    await navigator.clipboard.writeText(`${label.sku}\n${label.component_name}\nSerial: ${label.serial_number || "—"}\nLocation: ${label.location || "—"}\n${window.location.origin}${label.qr_payload}`);
+  };
+
   const handleBulkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -316,6 +352,9 @@ Example:
           </p>
         </div>
         <div className="flex gap-2">
+          <Button asChild variant="outline" className="gap-2">
+            <Link href="/inventory/intelligence"><BrainCircuit className="h-4 w-4" /> Intelligence</Link>
+          </Button>
           <Button
             onClick={() => { setShowForm(!showForm); setEditingId(null); }}
             className="gap-2"
@@ -659,6 +698,14 @@ Example:
                     <td className="px-4 py-3 text-center">
                       <div className="flex justify-center gap-2">
                         <button
+                          onClick={() => void showUnits(item)}
+                          className="cursor-pointer p-1 text-slate-500 transition-colors hover:text-violet-300"
+                          title="Manage physical units"
+                          aria-label={`Manage units for ${item.component_name}`}
+                        >
+                          <Tag className="w-4 h-4" />
+                        </button>
+                        <button
                           onClick={() => void showHistory(item)}
                           className="cursor-pointer p-1 text-slate-500 transition-colors hover:text-cyan-300"
                           title="View history"
@@ -690,6 +737,29 @@ Example:
         </div>
         );
       })()}
+
+      {unitsItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" role="dialog" aria-modal="true" aria-labelledby="inventory-units-title">
+          <div className="max-h-[88vh] w-full max-w-5xl overflow-y-auto rounded-xl border border-[#263650] bg-[#08111d] p-5 shadow-2xl">
+            <div className="flex items-start justify-between gap-3"><div><h2 id="inventory-units-title" className="flex items-center gap-2 font-semibold text-slate-100"><Tag className="h-4 w-4 text-violet-300" /> Physical units</h2><p className="mt-1 text-sm text-slate-400">{unitsItem.component_name} · receiving, testing and storage</p></div><button type="button" onClick={() => setUnitsItem(null)} className="cursor-pointer rounded p-1 text-slate-500 hover:text-white" aria-label="Close physical units"><X className="h-5 w-5" /></button></div>
+            <div className="mt-4 space-y-3">
+              {units.map(unit => (
+                <div key={unit.id} className="rounded-lg border border-white/8 bg-black/20 p-4">
+                  <div className="grid gap-3 md:grid-cols-[70px_1fr_150px_160px_1fr_auto] md:items-end">
+                    <div><p className="text-[10px] uppercase text-slate-500">Unit</p><p className="mt-1 font-mono font-bold text-cyan-300">#{unit.unit_number}</p></div>
+                    <label className="text-[10px] uppercase text-slate-500">Serial number<input defaultValue={unit.serial_number ?? ""} onBlur={event => { if (event.target.value !== (unit.serial_number ?? "")) void updateUnit(unit.id, { serial_number: event.target.value || null }); }} className="mt-1 w-full rounded border border-white/10 bg-slate-950 px-2 py-1.5 text-xs normal-case text-slate-200" /></label>
+                    <label className="text-[10px] uppercase text-slate-500">Condition<select value={unit.condition_grade} onChange={event => void updateUnit(unit.id, { condition_grade: event.target.value })} className="mt-1 w-full cursor-pointer rounded border border-white/10 bg-slate-950 px-2 py-1.5 text-xs normal-case text-slate-200"><option value="unknown">Unknown</option><option value="new">New</option><option value="excellent">Excellent</option><option value="good">Good</option><option value="fair">Fair</option><option value="parts">Parts only</option></select></label>
+                    <label className="text-[10px] uppercase text-slate-500">Status<select value={unit.status} onChange={event => void updateUnit(unit.id, { status: event.target.value })} className="mt-1 w-full cursor-pointer rounded border border-white/10 bg-slate-950 px-2 py-1.5 text-xs normal-case text-slate-200">{["ordered", "dispatched", "delivered", "inspection", "free", "reserved", "consumed", "quarantined", "faulty", "returned", "spares", "written_off", "sold"].map(status => <option key={status} value={status}>{status.replace("_", " ")}</option>)}</select></label>
+                    <label className="text-[10px] uppercase text-slate-500">Location<div className="relative mt-1"><MapPin className="absolute left-2 top-2 h-3.5 w-3.5 text-slate-600" /><input defaultValue={unit.storage_location ?? ""} onBlur={event => { if (event.target.value !== (unit.storage_location ?? "")) void updateUnit(unit.id, { storage_location: event.target.value || null }); }} placeholder="Shelf / box" className="w-full rounded border border-white/10 bg-slate-950 py-1.5 pl-7 pr-2 text-xs normal-case text-slate-200" /></div></label>
+                    <button type="button" onClick={() => void copyUnitLabel(unit.id)} className="flex h-8 cursor-pointer items-center gap-1 rounded border border-violet-300/20 px-2 text-xs text-violet-300 hover:bg-violet-300/10"><Tag className="h-3.5 w-3.5" /> Copy label</button>
+                  </div>
+                  {(unit.status === "quarantined" || unit.status === "faulty" || unit.status === "returned" || unit.status === "spares" || unit.status === "written_off") && <div className="mt-3 grid gap-2 border-t border-white/5 pt-3 sm:grid-cols-[1fr_160px]"><label className="text-[10px] uppercase text-slate-500">Exception / return reason<input defaultValue={unit.exception_reason ?? ""} onBlur={event => void updateUnit(unit.id, { exception_reason: event.target.value || null })} className="mt-1 w-full rounded border border-white/10 bg-slate-950 px-2 py-1.5 text-xs normal-case text-slate-200" /></label><label className="text-[10px] uppercase text-slate-500">Write-off (£)<input type="number" min={0} step="0.01" defaultValue={unit.writeoff_amount ?? ""} onBlur={event => void updateUnit(unit.id, { writeoff_amount: event.target.value ? Number(event.target.value) : null })} className="mt-1 w-full rounded border border-white/10 bg-slate-950 px-2 py-1.5 text-xs normal-case text-slate-200" /></label></div>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {historyItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" role="dialog" aria-modal="true" aria-labelledby="inventory-history-title">

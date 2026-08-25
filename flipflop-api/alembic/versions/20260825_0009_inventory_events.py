@@ -16,6 +16,11 @@ depends_on = None
 
 
 def upgrade() -> None:
+    # Development databases may already have this table because the service
+    # creates newly registered metadata on startup.  Keep Alembic able to
+    # adopt those databases without destroying their audit history.
+    if sa.inspect(op.get_bind()).has_table("inventory_events"):
+        return
     op.create_table(
         "inventory_events",
         sa.Column("id", sa.Integer(), primary_key=True),

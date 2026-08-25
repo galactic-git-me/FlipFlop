@@ -16,7 +16,9 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.create_table(
+    inspector = sa.inspect(op.get_bind())
+    if not inspector.has_table("inventory_units"):
+        op.create_table(
         "inventory_units",
         sa.Column("id", sa.Integer(), primary_key=True),
         sa.Column("inventory_item_id", sa.Integer(), nullable=False),
@@ -37,10 +39,11 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(["inventory_item_id"], ["inventory.id"], ondelete="CASCADE"),
         sa.UniqueConstraint("inventory_item_id", "unit_number", name="uq_inventory_unit_number"),
     )
-    op.create_index("ix_inventory_units_inventory_item_id", "inventory_units", ["inventory_item_id"])
-    op.create_index("ix_inventory_units_status", "inventory_units", ["status"])
-    op.create_index("ix_inventory_units_storage_location", "inventory_units", ["storage_location"])
-    op.create_table(
+        op.create_index("ix_inventory_units_inventory_item_id", "inventory_units", ["inventory_item_id"])
+        op.create_index("ix_inventory_units_status", "inventory_units", ["status"])
+        op.create_index("ix_inventory_units_storage_location", "inventory_units", ["storage_location"])
+    if not inspector.has_table("inventory_reorder_rules"):
+        op.create_table(
         "inventory_reorder_rules",
         sa.Column("id", sa.Integer(), primary_key=True),
         sa.Column("component_type", sa.String(length=50), nullable=False, unique=True),
@@ -51,7 +54,7 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
     )
-    op.create_index("ix_inventory_reorder_rules_component_type", "inventory_reorder_rules", ["component_type"])
+        op.create_index("ix_inventory_reorder_rules_component_type", "inventory_reorder_rules", ["component_type"])
 
 
 def downgrade() -> None:
