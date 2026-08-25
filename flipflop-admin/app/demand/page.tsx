@@ -454,7 +454,17 @@ function GoogleTrendsView({ data }: {
       const claimedInventory = new Set<number>();
       const components: BuildComponent[] = best.components.map(component => {
         const category = component.category.toLowerCase();
-        const owned = freeInventory.find(item => item.component_type === category && !claimedInventory.has(item.id));
+        const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+        const modelTokens = (value: string) => normalize(value).match(/\b(?:rtx|gtx|rx|ryzen|core)?\s*[a-z]?\d{4,5}[a-z0-9]*\b/g) ?? [];
+        const plannedName = normalize(component.title);
+        const plannedModels = modelTokens(component.title);
+        const owned = freeInventory.find(item => {
+          if (item.component_type !== category || claimedInventory.has(item.id)) return false;
+          const ownedName = normalize(item.component_name);
+          const exactIdentity = plannedName.includes(ownedName) || ownedName.includes(plannedName);
+          const sameModel = plannedModels.length > 0 && plannedModels.some(model => modelTokens(item.component_name).includes(model));
+          return exactIdentity || sameModel;
+        });
         if (owned) claimedInventory.add(owned.id);
         return owned ? {
           slot: slotLabels[category] ?? component.category,

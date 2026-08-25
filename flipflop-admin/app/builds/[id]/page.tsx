@@ -866,7 +866,7 @@ export default function BuildDetailPage() {
                 cpu: "cpu", gpu: "gpu", ram: "ram", motherboard: "motherboard", storage: "ssd",
                 ssd: "ssd", psu: "psu", "pc case": "case", case: "case", "cpu cooler": "cooler", cooler: "cooler",
               };
-              const compatibleInventory = freeInventory.filter(item => item.component_type === typeBySlot[c.slot.toLowerCase()]);
+              const availableInventory = freeInventory.filter(item => item.component_type === typeBySlot[c.slot.toLowerCase()]);
               return (
                 <div key={c.slot} className="rounded-lg border border-white/[0.05] bg-black/10 p-2.5 transition-colors hover:border-white/[0.1]">
                   <div className="flex items-center gap-3">
@@ -888,18 +888,18 @@ export default function BuildDetailPage() {
                       </button>
                     )}
                   </div>
-                  {!c.purchased && build.status === "in_progress" && compatibleInventory.length > 0 && (
+                  {!c.purchased && build.status === "in_progress" && availableInventory.length > 0 && (
                     <div className="mt-2 flex flex-wrap items-center gap-2 border-t border-white/[0.05] pt-2 pl-7">
                       <Warehouse className="h-3.5 w-3.5 text-cyan-300" />
-                      <label htmlFor={`inventory-${c.slot}`} className="text-xs text-slate-400">Use owned stock</label>
+                      <label htmlFor={`inventory-${c.slot}`} className="text-xs text-slate-400">Available owned stock</label>
                       <select
                         id={`inventory-${c.slot}`}
                         value={inventoryChoice[c.slot] ?? ""}
                         onChange={event => setInventoryChoice(previous => ({ ...previous, [c.slot]: event.target.value }))}
                         className="min-w-64 flex-1 cursor-pointer rounded border border-white/10 bg-[#080e18] px-2.5 py-1.5 text-xs text-slate-200 outline-none focus:border-cyan-300/50"
                       >
-                        <option value="">Choose compatible inventory…</option>
-                        {compatibleInventory.map(item => (
+                        <option value="">Choose inventory (verify compatibility)…</option>
+                        {availableInventory.map(item => (
                           <option key={item.id} value={item.id}>{item.component_name} · {formatCurrency(item.actual_cost)} · {item.quantity_free} free</option>
                         ))}
                       </select>
