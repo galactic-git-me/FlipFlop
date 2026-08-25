@@ -1,15 +1,15 @@
 {
   "ram_watcher": {
-    "last_success_at": "2026-08-25T20:03:39.590650+00:00"
+    "last_success_at": "2026-08-25T20:18:38.884135+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-08-25T20:14:39.302137+00:00"
+    "last_success_at": "2026-08-25T20:24:39.130524+00:00"
   },
   "ebay_sales_tracker": {
     "last_success_at": "2026-08-25T20:05:38.708886+00:00"
   },
   "manual_build_deferred_publish": {
-    "last_success_at": "2026-08-25T20:03:39.623740+00:00"
+    "last_success_at": "2026-08-25T20:18:38.910820+00:00"
   },
   "message_poll": {
     "last_success_at": "2026-08-25T20:03:40.211704+00:00"
@@ -24,13 +24,13 @@
     "last_success_at": "2026-08-25T20:03:39.854653+00:00"
   },
   "deferred_publish": {
-    "last_success_at": "2026-08-25T20:03:39.853966+00:00"
+    "last_success_at": "2026-08-25T20:18:38.914254+00:00"
   },
   "price_refresh": {
     "last_success_at": "2026-08-25T17:08:40.736849+00:00"
   },
   "ai_build_generator": {
-    "last_success_at": "2026-08-25T18:18:58.766860+00:00"
+    "last_success_at": "2026-08-25T20:19:09.251339+00:00"
   },
   "compliant_market_ingestion": {
     "last_success_at": "2026-08-25T20:03:38.713658+00:00"
