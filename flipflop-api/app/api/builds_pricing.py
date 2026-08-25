@@ -98,7 +98,13 @@ def _title_has_model(title: str | None, model: str | None) -> bool:
         return False
     title_key = re.sub(r"[^a-z0-9]", "", title.lower())
     model_key = re.sub(r"[^a-z0-9]", "", model.lower())
-    return bool(model_key and model_key in title_key)
+    if model_key and model_key in title_key:
+        return True
+    cpu = re.search(r"\b\d{4,5}(?:X3D|X|G|F|K|KF)?\b", model, re.IGNORECASE)
+    gpu = re.search(r"\b(?:RTX|GTX|RX)\s*\d{3,4}(?:\s*(?:Ti|Super|XT|XTX))?\b", model, re.IGNORECASE)
+    distinctive = cpu.group(0) if cpu else gpu.group(0) if gpu else None
+    distinctive_key = re.sub(r"[^a-z0-9]", "", distinctive.lower()) if distinctive else ""
+    return bool(distinctive_key and distinctive_key in title_key)
 
 
 def _find_component(components: list[dict], slot_keywords: tuple[str, ...]) -> dict | None:
@@ -185,6 +191,10 @@ class MarketComparable(BaseModel):
     # "sold" is reserved for a genuine marketplace completion date. Existing
     # build sold-comp ingestion currently supplies only its retrieval time.
     date_kind: str = "observed"
+    condition: str = "unknown"
+    original_price: float | None = None
+    specification_adjustment: float = 0.0
+    match_quality: str = "unverified"
 
 
 class PriceAutomationStep(BaseModel):
@@ -715,6 +725,10 @@ async def get_build_pricing(
         # The extension and current cache record when the comp was retrieved,
         # not the eBay completion date. Do not present that as a sold date.
         date_kind="observed",
+        condition=comp.condition,
+        original_price=comp.original_price,
+        specification_adjustment=comp.specification_adjustment,
+        match_quality=comp.match_quality,
     ) for comp in sold_comps_list]
     market_comparables = sold_market_comparables + live_close_comparables + active_comparables
 

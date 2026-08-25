@@ -30,6 +30,10 @@ type Comparable = {
   url: string | null;
   match_basis: string;
   date_kind: "sold" | "observed" | "unknown";
+  condition: string;
+  original_price: number | null;
+  specification_adjustment: number;
+  match_quality: string;
 };
 type Recommendation = {
   market_low: number;
@@ -70,6 +74,9 @@ type PricingData = {
     negotiation_headroom: number;
     recommended_listing_price: number;
   };
+  build_condition: string;
+  condition_cohorts: Record<string, { count: number; median: number | null; exact_spec_count: number; used_for_valuation: boolean }>;
+  excluded_comparable_count: number;
   fetched_at: string;
 };
 
@@ -227,6 +234,7 @@ function EvidenceTable({
                 <span className="block text-xs text-slate-500">
                   {item.source} · {item.match_basis}
                 </span>
+                {sold && <span className="mt-1 block text-[10px] uppercase tracking-wide text-slate-600">{item.condition.replaceAll("_", " ")} · {item.match_quality}{item.specification_adjustment ? ` · ${item.specification_adjustment > 0 ? "+" : ""}${formatCurrency(item.specification_adjustment)} spec adjustment` : ""}</span>}
               </td>
               <td className="whitespace-nowrap py-3 pr-3 text-xs text-slate-400">
                 {sold && item.date_kind !== "sold"
@@ -337,6 +345,8 @@ export function PricingIntelligence({
   );
 
   useEffect(() => {
+    // Initial remote-data synchronisation for this client-only panel.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void load(false);
   }, [load]);
 
@@ -475,6 +485,26 @@ export function PricingIntelligence({
             {error}; showing the previous analysis.
           </p>
         )}
+      </section>
+
+      <section className="rounded-xl border border-violet-400/15 bg-violet-400/[0.025] p-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="font-semibold text-slate-100">Condition-matched evidence</h2>
+            <p className="mt-1 text-xs leading-5 text-slate-500">This build is priced as <strong className="text-violet-300">{data.build_condition.replaceAll("_", " ")}</strong>. Other conditions are shown for context but are not blended into its valuation.</p>
+          </div>
+          <p className="text-xs text-slate-500">{data.excluded_comparable_count} rejected for non-exact CPU/GPU identity</p>
+        </div>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-5">
+          {Object.entries(data.condition_cohorts).map(([condition, cohort]) => (
+            <div key={condition} className={`rounded-lg border p-3 ${cohort.used_for_valuation ? "border-violet-300/35 bg-violet-300/[0.08]" : "border-white/[0.07] bg-black/15"}`}>
+              <div className="flex items-center justify-between gap-2"><span className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">{condition.replaceAll("_", " ")}</span>{cohort.used_for_valuation && <span className="rounded bg-violet-300/15 px-1.5 py-0.5 text-[9px] font-bold uppercase text-violet-200">Used</span>}</div>
+              <p className="mt-2 text-lg font-bold text-slate-100">{cohort.median == null ? "—" : formatCurrency(cohort.median)}</p>
+              <p className="mt-1 text-[10px] text-slate-500">{cohort.count} sold · {cohort.exact_spec_count} exact full spec</p>
+            </div>
+          ))}
+        </div>
+        {data.build_condition === "unknown" && <p className="mt-3 rounded-lg border border-amber-300/20 bg-amber-300/[0.05] px-3 py-2 text-xs text-amber-200">Set the eBay condition in Shipping &amp; Risk to unlock a new, refurbished or used valuation cohort.</p>}
       </section>
 
       <section className="rounded-xl border border-emerald-400/15 bg-emerald-400/[0.025] p-4">
