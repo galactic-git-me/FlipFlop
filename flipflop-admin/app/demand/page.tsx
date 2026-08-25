@@ -423,20 +423,27 @@ function GoogleTrendsView({ data }: {
       const byCategory = (build: typeof generated.builds[number], category: string) =>
         build.components.find(component => component.category.toLowerCase() === category);
       const coreCategories = ["cpu", "motherboard", "gpu", "ram"];
+      const supportCategories = ["ssd", "psu", "case", "cooler"];
       const suitable = generated.builds.filter(build => {
         if (build.build_cost > opportunity.budget || build.compatibility_confidence !== "matched") return false;
-        if (!coreCategories.every(category => byCategory(build, category)?.url)) return false;
-        if (opportunity.useCase !== "ai_workstation") return true;
+        if (![...coreCategories, ...supportCategories].every(category => byCategory(build, category)?.url)) return false;
         const gpu = byCategory(build, "gpu");
         const ram = byCategory(build, "ram");
         const ssd = byCategory(build, "ssd");
         const psu = byCategory(build, "psu");
+        const pcCase = byCategory(build, "case");
+        const cooler = byCategory(build, "cooler");
+        if (!ssd || storageGb(ssd.title) < 256 || /\b(case|enclosure|caddy|adapter)\b/i.test(ssd.title)) return false;
+        if (!psu || watts(psu.title) < 400 || !/(psu|power supply)/i.test(psu.title)) return false;
+        if (!pcCase || !/(pc case|computer case|atx case|matx case|mid tower|full tower|chassis)/i.test(pcCase.title) || /(cover|panel|dust|screw|bag)/i.test(pcCase.title)) return false;
+        if (!cooler || !/(cpu cooler|aio cooler|liquid cooler|tower cooler|240mm aio|280mm aio|360mm aio)/i.test(cooler.title)) return false;
+        if (opportunity.useCase !== "ai_workstation") return true;
         return !!gpu && capacityGb(gpu.title) >= 16
           && !!ram && capacityGb(ram.title) >= 64
           && !!ssd && storageGb(ssd.title) >= 1000
           && !!psu && watts(psu.title) >= 650
-          && !!byCategory(build, "case")
-          && !!byCategory(build, "cooler");
+          && !!pcCase
+          && !!cooler;
       }).sort((a, b) => b.super_gem_count - a.super_gem_count || b.estimated_profit - a.estimated_profit);
       const best = suitable[0];
       if (!best) {

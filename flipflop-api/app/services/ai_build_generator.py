@@ -60,6 +60,32 @@ _SOCKET_PATTERN = re.compile(r"\b(am4|am5|lga\s?1700|lga\s?1200|lga\s?1151|lga\s
 _DDR_PATTERN = re.compile(r"\bddr([345])\b", re.IGNORECASE)
 
 
+def _capacity_gb(title: str) -> int:
+    tb = [int(v) * 1000 for v in re.findall(r"\b(\d{1,2})\s*tb\b", title, re.IGNORECASE)]
+    gb = [int(v) for v in re.findall(r"\b(\d{2,4})\s*gb\b", title, re.IGNORECASE)]
+    return max([0, *tb, *gb])
+
+
+def _psu_watts(title: str) -> int:
+    values = [int(v) for v in re.findall(r"\b(\d{3,4})\s*w(?:att)?s?\b", title, re.IGNORECASE)]
+    return max([0, *values])
+
+
+def _valid_optional_component(listing: GemRadarScoredListing) -> bool:
+    """Reject accessories that were loosely classified into required build slots."""
+    title = (listing.title or "").lower()
+    category = listing.category
+    if category == "psu":
+        return _psu_watts(title) >= 400 and any(k in title for k in ["psu", "power supply"])
+    if category == "ssd":
+        return _capacity_gb(title) >= 256 and any(k in title for k in ["ssd", "nvme", "solid state drive"]) and not any(k in title for k in ["case", "enclosure", "caddy", "adapter"])
+    if category == "case":
+        return any(k in title for k in ["pc case", "computer case", "atx case", "matx case", "mid tower", "full tower", "chassis"]) and not any(k in title for k in ["cover", "panel", "dust", "screw", "bag"])
+    if category == "cooler":
+        return any(k in title for k in ["cpu cooler", "aio cooler", "liquid cooler", "tower cooler", "240mm aio", "280mm aio", "360mm aio"]) and not any(k in title for k in ["mini heatsink", "tape", "cover", "bracket only"])
+    return False
+
+
 def _normalize_socket(raw: str) -> str:
     return raw.upper().replace(" ", "")
 
@@ -268,7 +294,7 @@ async def generate_ai_builds() -> dict:
 
     best_optional: dict[str, GemRadarScoredListing] = {}
     for category in _OPTIONAL_CATEGORIES:
-        candidates = [l for l in optional_listings if l.category == category]
+        candidates = [l for l in optional_listings if l.category == category and _valid_optional_component(l)]
         if candidates:
             best_optional[category] = max(candidates, key=_listing_profit)
 
