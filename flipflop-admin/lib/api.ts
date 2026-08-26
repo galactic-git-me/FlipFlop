@@ -808,6 +808,23 @@ export const api = {
         method: "POST",
         body: JSON.stringify({ assets }),
       }),
+    generate3dAssetsWithUploads: async (id: number, selectedUrls: string[], files: File[]) => {
+      const formData = new FormData();
+      formData.append("selected_urls", JSON.stringify(selectedUrls));
+      for (const file of files) formData.append("files", file);
+      const token = getAdminToken();
+      const res = await fetch(`${API_BASE_URL}/manual-builds/${id}/model-3d/generate-upload`, {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      });
+      if (!res.ok) {
+        const detail = await res.json().then((body) => body?.detail).catch(() => undefined);
+        throw new Error(detail ? String(detail) : `3D generation upload failed (${res.status})`);
+      }
+      return res.json() as Promise<{ queued: string[]; assets: Record<string, Build3DAsset> }>;
+    },
     removePhoto: (id: number, url: string) =>
       request<ManualBuild>(`/manual-builds/${id}/photos`, { method: "DELETE", body: JSON.stringify({ url }) }),
     reorderPhotos: (id: number, urls: string[]) =>

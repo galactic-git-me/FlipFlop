@@ -3,6 +3,7 @@ import asyncio
 import re
 import uuid
 import os
+import base64
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
 import httpx
@@ -141,7 +142,11 @@ async def create_build_portal_preview(
     }
 
 
-async def _run_build_3d_generation(build_id: int, requested: dict[str, list[str]]) -> None:
+async def _run_build_3d_generation(
+    build_id: int,
+    requested: dict[str, list[str]],
+    source_refs: dict[str, list[str]] | None = None,
+) -> None:
     """Run Meshy jobs off-request, mirror expiring results, then persist once."""
     results = await asyncio.gather(
         *(generate_multi_image_asset(urls) for urls in requested.values()),
@@ -149,7 +154,10 @@ async def _run_build_3d_generation(build_id: int, requested: dict[str, list[str]
     )
     completed: dict[str, dict] = {}
     for (asset_type, source_urls), result in zip(requested.items(), results):
-        entry = {"provider": "meshy", "source_image_urls": source_urls}
+        # Never persist uploaded data URIs. They are retained in memory only
+        # until Meshy has accepted the background job.
+        persisted_sources = (source_refs or {}).get(asset_type, source_urls)
+        entry = {"provider": "meshy", "source_image_urls": persisted_sources}
         if isinstance(result, Exception) or result is None:
             entry.update(status="failed", error=str(result) if result else "Meshy did not accept the task")
         elif result.status != "SUCCEEDED" or not result.glb_url:
@@ -224,6 +232,71 @@ async def queue_build_3d_generation(
     await db.commit()
     background_tasks.add_task(_run_build_3d_generation, build_id, requested)
     return {"queued": list(requested), "assets": assets}
+
+
+@router.post("/{build_id}/model-3d/generate-upload", status_code=202)
+async def queue_build_3d_generation_with_uploads(
+    build_id: int,
+    background_tasks: BackgroundTasks,
+    selected_urls: str = Form("[]"),
+    files: list[UploadFile] = File(default=[]),
+    db: AsyncSession = Depends(get_db),
+):
+    """Queue a mixed saved-photo/temporary-upload Meshy generation.
+
+    Uploaded source images become in-memory data URIs and are never written to
+    disk or attached to the build. Only the finished GLB is persisted.
+    """
+    build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
+    if not build:
+        raise HTTPException(status_code=404, detail="Build not found")
+    try:
+        urls = json.loads(selected_urls)
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=422, detail="selected_urls must be a JSON array")
+    if not isinstance(urls, list) or any(not isinstance(url, str) for url in urls):
+        raise HTTPException(status_code=422, detail="selected_urls must be a JSON array of photo URLs")
+
+    valid_urls = {p.get("url") for p in (build.photos or []) if p.get("kind") == "photo"}
+    if len(set(urls)) != len(urls) or any(url not in valid_urls for url in urls):
+        raise HTTPException(status_code=422, detail="The selection contains an invalid or duplicate saved photo")
+    if not 1 <= len(urls) + len(files) <= 4:
+        raise HTTPException(status_code=422, detail="Meshy requires 1 to 4 source pictures in total")
+
+    generation_inputs = list(urls)
+    source_labels = list(urls)
+    for index, file in enumerate(files, start=1):
+        content_type = file.content_type or ""
+        if content_type not in {"image/jpeg", "image/png"}:
+            raise HTTPException(status_code=415, detail="Temporary 3D source pictures must be JPEG or PNG")
+        image_bytes = await file.read()
+        if not image_bytes:
+            raise HTTPException(status_code=400, detail=f"{file.filename or 'Uploaded picture'} is empty")
+        if len(image_bytes) > _MAX_IMAGE_BYTES:
+            raise HTTPException(status_code=413, detail="Each source picture must be 15 MB or smaller")
+        encoded = base64.b64encode(image_bytes).decode("ascii")
+        generation_inputs.append(f"data:{content_type};base64,{encoded}")
+        source_labels.append(f"temporary-upload:{file.filename or index}")
+
+    requested = {"complete_build": generation_inputs}
+    assets = dict(build.model_3d_assets or {})
+    assets["complete_build"] = {
+        "provider": "meshy",
+        "status": "queued",
+        "source_image_urls": source_labels,
+        "queued_at": datetime.utcnow().isoformat(),
+        "textured": True,
+        "pbr": True,
+    }
+    build.model_3d_assets = assets
+    await db.commit()
+    background_tasks.add_task(
+        _run_build_3d_generation,
+        build_id,
+        requested,
+        {"complete_build": source_labels},
+    )
+    return {"queued": ["complete_build"], "assets": assets}
 
 
 def _description_with_selected_faqs(description: str, build: ManualBuild) -> str:

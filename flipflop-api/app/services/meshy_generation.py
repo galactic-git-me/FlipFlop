@@ -124,6 +124,10 @@ async def generate_multi_image_asset(image_urls: list[str]) -> MeshyGenerationRe
                 headers=_headers(),
                 json={
                     "image_urls": image_urls,
+                    # Use the same views to guide both geometry and surface
+                    # appearance. Meshy 7 supports multi-view texturing.
+                    "texture_image_urls": image_urls,
+                    "ai_model": "latest",
                     "should_texture": True,
                     "enable_pbr": True,
                     "target_formats": ["glb"],
