@@ -505,8 +505,8 @@ async def get_ebay_fulfillment_policies():
         raise HTTPException(
             e.status_code or 502,
             f"Couldn't fetch fulfillment policies from eBay: {e}. "
-            "If this is a 403, the stored eBay OAuth token likely wasn't granted "
-            "the sell.account scope — it needs to be re-authorized.",
+            "Reconnect eBay in Settings if authorization has expired; if this is "
+            "a 403, re-authorize with the sell.account scope.",
         )
     return [
         FulfillmentPolicyOut(

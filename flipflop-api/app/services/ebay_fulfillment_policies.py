@@ -71,7 +71,24 @@ async def list_fulfillment_policies(
     on failure — most commonly a 403 if the stored OAuth token was granted
     sell.inventory but not sell.account scope, which needs re-consenting via
     eBay's OAuth flow rather than anything fixable here."""
-    access_token = await get_valid_ebay_access_token(environment)
+    try:
+        access_token = await get_valid_ebay_access_token(environment)
+    except ValueError as exc:
+        # Token refresh failures happen before the Account API request below.
+        # Normalize them into this service's public error type so the route
+        # returns a useful HTTP response instead of an unhandled 500 (which
+        # browsers commonly reduce to the opaque message "Failed to fetch").
+        message = str(exc)
+        if "invalid_grant" in message:
+            raise EbayFulfillmentPoliciesError(
+                "Your eBay connection has expired or belongs to different app credentials. "
+                "Reconnect the production eBay account in Settings, then try again.",
+                401,
+            ) from exc
+        raise EbayFulfillmentPoliciesError(
+            f"Couldn't refresh the eBay access token: {message}",
+            502,
+        ) from exc
     base_url = _EBAY_API_BASE[environment]
 
     async with httpx.AsyncClient(timeout=30.0) as client:
