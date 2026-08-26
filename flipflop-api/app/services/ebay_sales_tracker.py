@@ -113,8 +113,16 @@ class eBaySalesTracker:
                     ManualBuild.ebay_listing_id.isnot(None),
                     ManualBuild.ebay_listing_status.in_(["active", "unknown"]),
                 ))).scalars().all()
+                orphaned_local_rows = (await db.execute(select(ManualBuild).where(
+                    ManualBuild.status == "listed",
+                    ManualBuild.ebay_listing_id.is_(None),
+                ))).scalars().all()
+                for build in orphaned_local_rows:
+                    build.status = "built"
+                    build.ebay_listing_status = "never_listed"
+                    build.ebay_listing_status_checked_at = datetime.utcnow()
                 result["manual_builds_checked"] = len(manual_rows)
-                result["manual_builds_changed"] = 0
+                result["manual_builds_changed"] = len(orphaned_local_rows)
                 for build in manual_rows:
                     previous = build.ebay_listing_status
                     try:

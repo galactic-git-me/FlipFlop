@@ -488,6 +488,8 @@ async def get_build(build_id: int, db: AsyncSession = Depends(get_db)):
             build.ebay_listing_status = "unknown"
     else:
         build.ebay_listing_status = "never_listed"
+        if build.status == "listed":
+            build.status = "built"
     build.ebay_live = build.ebay_listing_status == "active"
     build.storefront_live = False
     if build.storefront_product_id:
