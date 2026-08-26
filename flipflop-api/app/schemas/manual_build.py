@@ -228,6 +228,10 @@ class UpdateEbayListingConfigRequest(BaseModel):
     shipping_insurance_cost: Optional[float] = None
     packaging_cost: Optional[float] = None
     warranty_reserve_pct: Optional[float] = None
+    marketplace_fees_actual: Optional[float] = None
+    promotion_cost_actual: Optional[float] = None
+    refund_amount: Optional[float] = None
+    warranty_claim_cost: Optional[float] = None
     handling_time_days: Optional[int] = None
     ships_to_countries: Optional[list[str]] = None
     domestic_only: Optional[bool] = None
