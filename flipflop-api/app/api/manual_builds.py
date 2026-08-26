@@ -11,7 +11,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, UploadFi
 from jose import jwt
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, text
 from app.database import AsyncSessionLocal, get_db
 from app.models.manual_build import ManualBuild
 from app.models.gem_radar_intelligence import ComponentRatingEvent, PreferredComponent
@@ -471,6 +471,22 @@ async def list_builds(include_archived: bool = False, db: AsyncSession = Depends
         )
         for b in builds
     ]
+
+
+@router.get("/deletion-audit")
+async def get_manual_build_deletion_audit(
+    limit: int = Query(default=100, ge=1, le=500),
+    db: AsyncSession = Depends(get_db),
+):
+    """Show blocked hard-deletion attempts and normal archive activity."""
+    rows = (await db.execute(text("""
+        SELECT id, manual_build_id, build_name, action, attempted_at,
+               database_user, application_name, client_address
+        FROM manual_build_deletion_audit
+        ORDER BY attempted_at DESC
+        LIMIT :limit
+    """), {"limit": limit})).mappings().all()
+    return {"items": [dict(row) for row in rows]}
 
 
 @router.get("/ebay-fulfillment-policies", response_model=list[FulfillmentPolicyOut])

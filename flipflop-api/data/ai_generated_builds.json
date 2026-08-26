@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-26T13:46:28.044489+00:00",
+  "generated_at": "2026-08-26T14:47:28.161711+00:00",
   "builds": [
     {
       "components": [
         {
-          "id": 27302519,
+          "id": 27377550,
           "listing_id": "168189646726",
           "category": "cpu",
           "title": "Intel i5-6500 3.2GHz Quad Core LGA1151 Skylake-S CPU Processor SR2L6",
@@ -18,7 +18,7 @@
           "url": "https://www.ebay.co.uk/itm/168189646726"
         },
         {
-          "id": 27306536,
+          "id": 27381570,
           "listing_id": "227442336516",
           "category": "motherboard",
           "title": "ASUS H110M-R Intel H110 LGA1151 Micro ATX Motherboard DDR4 USB 3.0 SATA",
@@ -32,7 +32,7 @@
           "url": "https://www.ebay.co.uk/itm/227442336516"
         },
         {
-          "id": 27319454,
+          "id": 27394506,
           "listing_id": "407164098393",
           "category": "gpu",
           "title": "NVIDIA Quadro P620 2GB GDDR5 PCIe x16 Graphics Card 4x Mini DisplayPort GPU",
@@ -46,7 +46,7 @@
           "url": "https://www.ebay.co.uk/itm/407164098393"
         },
         {
-          "id": 27312707,
+          "id": 27387750,
           "listing_id": "318753151543",
           "category": "ram",
           "title": "Kingston 8GB DDR4 3200MHz PC4-3200AA Desktop RAM Memory 1Rx16 UDIMM",
@@ -60,7 +60,7 @@
           "url": "https://www.ebay.co.uk/itm/318753151543"
         },
         {
-          "id": 27329701,
+          "id": 27404757,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -74,7 +74,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
         },
         {
-          "id": 27311823,
+          "id": 27386866,
           "listing_id": "316327714586",
           "category": "ssd",
           "title": "128GB 256GB 512GB M.2 2280 NVMe SSD Solid State Drive - Various Brands Used LOT",
@@ -88,7 +88,7 @@
           "url": "https://www.ebay.co.uk/itm/316327714586"
         },
         {
-          "id": 27324730,
+          "id": 27399785,
           "listing_id": "9355314284",
           "category": "cooler",
           "title": "Intel E97378-001 Stock CPU Cooler Heatsink Fan LGA1150/1151/1155/1156",
@@ -102,7 +102,7 @@
           "url": "https://www.vinted.co.uk/items/9355314284"
         },
         {
-          "id": 27321184,
+          "id": 27396237,
           "listing_id": "606106302669800",
           "category": "case",
           "title": "Top pick188pcs 5V 3-Pin to SATA ARGB PC Case Fan 10-Port Hub 9CM, 1-To-10 Expansion Splitter, Suitable for PC ARGB Lighting Controller, 5V 3-Pin Lighting Controller Hub - SATA Power SupplyOpen in new tab.",
@@ -132,157 +132,18 @@
           "count": 50,
           "min_price": 89.81,
           "max_price": 1049.0,
-          "average_price": 386.19
+          "average_price": 373.34
         }
       },
-      "resale_estimate": 386.19,
+      "resale_estimate": 373.34,
       "resale_source": "bin_average",
-      "estimated_profit": 304.21,
+      "estimated_profit": 291.36,
       "rank": 1
     },
     {
       "components": [
         {
-          "id": 27316258,
-          "listing_id": "377370908880",
-          "category": "cpu",
-          "title": "SR2L6 Intel I5-6500 3.20ghz 4 Core 4 Thread LGA1151 CPU Processor SR2L6",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/QCUAAeSwHjVqZe-C/s-l500.webp",
-          "delivered_price": 10.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -10.0,
-          "url": "https://www.ebay.co.uk/itm/377370908880"
-        },
-        {
-          "id": 27306536,
-          "listing_id": "227442336516",
-          "category": "motherboard",
-          "title": "ASUS H110M-R Intel H110 LGA1151 Micro ATX Motherboard DDR4 USB 3.0 SATA",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/grEAAeSwZsBqhBej/s-l225.jpg",
-          "delivered_price": 20.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -20.99,
-          "url": "https://www.ebay.co.uk/itm/227442336516"
-        },
-        {
-          "id": 27319454,
-          "listing_id": "407164098393",
-          "category": "gpu",
-          "title": "NVIDIA Quadro P620 2GB GDDR5 PCIe x16 Graphics Card 4x Mini DisplayPort GPU",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/ND4AAeSwqn9qip~Q/s-l225.jpg",
-          "delivered_price": 24.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -24.0,
-          "url": "https://www.ebay.co.uk/itm/407164098393"
-        },
-        {
-          "id": 27312707,
-          "listing_id": "318753151543",
-          "category": "ram",
-          "title": "Kingston 8GB DDR4 3200MHz PC4-3200AA Desktop RAM Memory 1Rx16 UDIMM",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/gaoAAeSw92lqhYTM/s-l225.jpg",
-          "delivered_price": 12.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -12.99,
-          "url": "https://www.ebay.co.uk/itm/318753151543"
-        },
-        {
-          "id": 27329701,
-          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
-          "category": "psu",
-          "title": "HP Common Slot HS PSU 460W Gold",
-          "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
-          "delivered_price": 4.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -4.0,
-          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
-        },
-        {
-          "id": 27311823,
-          "listing_id": "316327714586",
-          "category": "ssd",
-          "title": "128GB 256GB 512GB M.2 2280 NVMe SSD Solid State Drive - Various Brands Used LOT",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/Fs4AAOSwo0lntbtS/s-l225.jpg",
-          "delivered_price": 3.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INELIGIBLE",
-          "estimated_profit": -3.99,
-          "url": "https://www.ebay.co.uk/itm/316327714586"
-        },
-        {
-          "id": 27324730,
-          "listing_id": "9355314284",
-          "category": "cooler",
-          "title": "Intel E97378-001 Stock CPU Cooler Heatsink Fan LGA1150/1151/1155/1156",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 3.33,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -3.33,
-          "url": "https://www.vinted.co.uk/items/9355314284"
-        },
-        {
-          "id": 27321184,
-          "listing_id": "606106302669800",
-          "category": "case",
-          "title": "Top pick188pcs 5V 3-Pin to SATA ARGB PC Case Fan 10-Port Hub 9CM, 1-To-10 Expansion Splitter, Suitable for PC ARGB Lighting Controller, 5V 3-Pin Lighting Controller Hub - SATA Power SupplyOpen in new tab.",
-          "seller": null,
-          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
-          "delivered_price": 2.69,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -2.69,
-          "url": "https://www.temu.com/search_result.html?search_key=Top+pick188pcs+5V+3-Pin+to+SATA+ARGB+PC+Case+Fan+10-Port+Hub+9CM%2C+1-To-10+Expansion+Splitter%2C+Suitable+for+PC+ARGB+Lighting+Controller%2C+5V+3-Pin+Lighting+Controller+Hub+-+SATA+Power+SupplyOpen+in+new+tab."
-        }
-      ],
-      "compatibility_confidence": "matched",
-      "super_gem_count": 4,
-      "build_cost": 81.99,
-      "market": {
-        "query": "gaming pc Intel I5-6500 Quadro P620 8gb",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "No comparable sold listings found"
-        },
-        "bin": {
-          "available": true,
-          "count": 50,
-          "min_price": 89.81,
-          "max_price": 1049.0,
-          "average_price": 385.96
-        }
-      },
-      "resale_estimate": 385.96,
-      "resale_source": "bin_average",
-      "estimated_profit": 303.97,
-      "rank": 2
-    },
-    {
-      "components": [
-        {
-          "id": 27313160,
+          "id": 27388205,
           "listing_id": "327301087991",
           "category": "cpu",
           "title": "SR2L6 Intel I5-6500 3.20ghz 6mb Quad Core CPU Processor",
@@ -296,7 +157,7 @@
           "url": "https://www.ebay.co.uk/itm/327301087991"
         },
         {
-          "id": 27306536,
+          "id": 27381570,
           "listing_id": "227442336516",
           "category": "motherboard",
           "title": "ASUS H110M-R Intel H110 LGA1151 Micro ATX Motherboard DDR4 USB 3.0 SATA",
@@ -310,7 +171,7 @@
           "url": "https://www.ebay.co.uk/itm/227442336516"
         },
         {
-          "id": 27319454,
+          "id": 27394506,
           "listing_id": "407164098393",
           "category": "gpu",
           "title": "NVIDIA Quadro P620 2GB GDDR5 PCIe x16 Graphics Card 4x Mini DisplayPort GPU",
@@ -324,7 +185,7 @@
           "url": "https://www.ebay.co.uk/itm/407164098393"
         },
         {
-          "id": 27312707,
+          "id": 27387750,
           "listing_id": "318753151543",
           "category": "ram",
           "title": "Kingston 8GB DDR4 3200MHz PC4-3200AA Desktop RAM Memory 1Rx16 UDIMM",
@@ -338,7 +199,7 @@
           "url": "https://www.ebay.co.uk/itm/318753151543"
         },
         {
-          "id": 27329701,
+          "id": 27404757,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -352,7 +213,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
         },
         {
-          "id": 27311823,
+          "id": 27386866,
           "listing_id": "316327714586",
           "category": "ssd",
           "title": "128GB 256GB 512GB M.2 2280 NVMe SSD Solid State Drive - Various Brands Used LOT",
@@ -366,7 +227,7 @@
           "url": "https://www.ebay.co.uk/itm/316327714586"
         },
         {
-          "id": 27324730,
+          "id": 27399785,
           "listing_id": "9355314284",
           "category": "cooler",
           "title": "Intel E97378-001 Stock CPU Cooler Heatsink Fan LGA1150/1151/1155/1156",
@@ -380,7 +241,7 @@
           "url": "https://www.vinted.co.uk/items/9355314284"
         },
         {
-          "id": 27321184,
+          "id": 27396237,
           "listing_id": "606106302669800",
           "category": "case",
           "title": "Top pick188pcs 5V 3-Pin to SATA ARGB PC Case Fan 10-Port Hub 9CM, 1-To-10 Expansion Splitter, Suitable for PC ARGB Lighting Controller, 5V 3-Pin Lighting Controller Hub - SATA Power SupplyOpen in new tab.",
@@ -410,32 +271,32 @@
           "count": 50,
           "min_price": 89.81,
           "max_price": 1049.0,
-          "average_price": 385.96
+          "average_price": 373.34
         }
       },
-      "resale_estimate": 385.96,
+      "resale_estimate": 373.34,
       "resale_source": "bin_average",
-      "estimated_profit": 303.44,
-      "rank": 3
+      "estimated_profit": 290.82,
+      "rank": 2
     },
     {
       "components": [
         {
-          "id": 27317981,
-          "listing_id": "398303284345",
+          "id": 27391306,
+          "listing_id": "377370908880",
           "category": "cpu",
-          "title": "INTEL SR2L6 Core i5-6500 Quad Core 3.2GHz Socket 1151 Skylake-S Processor CPU",
+          "title": "SR2L6 Intel I5-6500 3.20ghz 4 Core 4 Thread LGA1151 CPU Processor SR2L6",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/3W8AAeSwFfJqhX5H/s-l225.jpg",
-          "delivered_price": 7.95,
+          "image_url": "https://i.ebayimg.com/images/g/QCUAAeSwHjVqZe-C/s-l500.webp",
+          "delivered_price": 10.0,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -7.95,
-          "url": "https://www.ebay.co.uk/itm/398303284345"
+          "estimated_profit": -10.0,
+          "url": "https://www.ebay.co.uk/itm/377370908880"
         },
         {
-          "id": 27306536,
+          "id": 27381570,
           "listing_id": "227442336516",
           "category": "motherboard",
           "title": "ASUS H110M-R Intel H110 LGA1151 Micro ATX Motherboard DDR4 USB 3.0 SATA",
@@ -449,7 +310,7 @@
           "url": "https://www.ebay.co.uk/itm/227442336516"
         },
         {
-          "id": 27319454,
+          "id": 27394506,
           "listing_id": "407164098393",
           "category": "gpu",
           "title": "NVIDIA Quadro P620 2GB GDDR5 PCIe x16 Graphics Card 4x Mini DisplayPort GPU",
@@ -463,7 +324,7 @@
           "url": "https://www.ebay.co.uk/itm/407164098393"
         },
         {
-          "id": 27312707,
+          "id": 27387750,
           "listing_id": "318753151543",
           "category": "ram",
           "title": "Kingston 8GB DDR4 3200MHz PC4-3200AA Desktop RAM Memory 1Rx16 UDIMM",
@@ -477,7 +338,7 @@
           "url": "https://www.ebay.co.uk/itm/318753151543"
         },
         {
-          "id": 27329701,
+          "id": 27404757,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -491,7 +352,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
         },
         {
-          "id": 27311823,
+          "id": 27386866,
           "listing_id": "316327714586",
           "category": "ssd",
           "title": "128GB 256GB 512GB M.2 2280 NVMe SSD Solid State Drive - Various Brands Used LOT",
@@ -505,7 +366,7 @@
           "url": "https://www.ebay.co.uk/itm/316327714586"
         },
         {
-          "id": 27324730,
+          "id": 27399785,
           "listing_id": "9355314284",
           "category": "cooler",
           "title": "Intel E97378-001 Stock CPU Cooler Heatsink Fan LGA1150/1151/1155/1156",
@@ -519,7 +380,7 @@
           "url": "https://www.vinted.co.uk/items/9355314284"
         },
         {
-          "id": 27321184,
+          "id": 27396237,
           "listing_id": "606106302669800",
           "category": "case",
           "title": "Top pick188pcs 5V 3-Pin to SATA ARGB PC Case Fan 10-Port Hub 9CM, 1-To-10 Expansion Splitter, Suitable for PC ARGB Lighting Controller, 5V 3-Pin Lighting Controller Hub - SATA Power SupplyOpen in new tab.",
@@ -533,11 +394,11 @@
           "url": "https://www.temu.com/search_result.html?search_key=Top+pick188pcs+5V+3-Pin+to+SATA+ARGB+PC+Case+Fan+10-Port+Hub+9CM%2C+1-To-10+Expansion+Splitter%2C+Suitable+for+PC+ARGB+Lighting+Controller%2C+5V+3-Pin+Lighting+Controller+Hub+-+SATA+Power+SupplyOpen+in+new+tab."
         }
       ],
-      "compatibility_confidence": "unknown",
+      "compatibility_confidence": "matched",
       "super_gem_count": 4,
-      "build_cost": 79.94,
+      "build_cost": 81.99,
       "market": {
-        "query": "gaming pc Core i5-6500 Quadro P620 8gb",
+        "query": "gaming pc Intel I5-6500 Quadro P620 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -546,21 +407,21 @@
         },
         "bin": {
           "available": true,
-          "count": 49,
+          "count": 50,
           "min_price": 89.81,
           "max_price": 1049.0,
-          "average_price": 361.32
+          "average_price": 367.31
         }
       },
-      "resale_estimate": 361.32,
+      "resale_estimate": 367.31,
       "resale_source": "bin_average",
-      "estimated_profit": 281.38,
-      "rank": 4
+      "estimated_profit": 285.32,
+      "rank": 3
     },
     {
       "components": [
         {
-          "id": 27313732,
+          "id": 27388779,
           "listing_id": "336731371115",
           "category": "cpu",
           "title": "Intel SR2BX Core i5-6500 3.2GHz LGA1151 Quad-Core CPU Processor",
@@ -574,7 +435,7 @@
           "url": "https://www.ebay.co.uk/itm/336731371115"
         },
         {
-          "id": 27306536,
+          "id": 27381570,
           "listing_id": "227442336516",
           "category": "motherboard",
           "title": "ASUS H110M-R Intel H110 LGA1151 Micro ATX Motherboard DDR4 USB 3.0 SATA",
@@ -588,7 +449,7 @@
           "url": "https://www.ebay.co.uk/itm/227442336516"
         },
         {
-          "id": 27319454,
+          "id": 27394506,
           "listing_id": "407164098393",
           "category": "gpu",
           "title": "NVIDIA Quadro P620 2GB GDDR5 PCIe x16 Graphics Card 4x Mini DisplayPort GPU",
@@ -602,7 +463,7 @@
           "url": "https://www.ebay.co.uk/itm/407164098393"
         },
         {
-          "id": 27312707,
+          "id": 27387750,
           "listing_id": "318753151543",
           "category": "ram",
           "title": "Kingston 8GB DDR4 3200MHz PC4-3200AA Desktop RAM Memory 1Rx16 UDIMM",
@@ -616,7 +477,7 @@
           "url": "https://www.ebay.co.uk/itm/318753151543"
         },
         {
-          "id": 27329701,
+          "id": 27404757,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -630,7 +491,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
         },
         {
-          "id": 27311823,
+          "id": 27386866,
           "listing_id": "316327714586",
           "category": "ssd",
           "title": "128GB 256GB 512GB M.2 2280 NVMe SSD Solid State Drive - Various Brands Used LOT",
@@ -644,7 +505,7 @@
           "url": "https://www.ebay.co.uk/itm/316327714586"
         },
         {
-          "id": 27324730,
+          "id": 27399785,
           "listing_id": "9355314284",
           "category": "cooler",
           "title": "Intel E97378-001 Stock CPU Cooler Heatsink Fan LGA1150/1151/1155/1156",
@@ -658,7 +519,7 @@
           "url": "https://www.vinted.co.uk/items/9355314284"
         },
         {
-          "id": 27321184,
+          "id": 27396237,
           "listing_id": "606106302669800",
           "category": "case",
           "title": "Top pick188pcs 5V 3-Pin to SATA ARGB PC Case Fan 10-Port Hub 9CM, 1-To-10 Expansion Splitter, Suitable for PC ARGB Lighting Controller, 5V 3-Pin Lighting Controller Hub - SATA Power SupplyOpen in new tab.",
@@ -688,18 +549,18 @@
           "count": 49,
           "min_price": 89.81,
           "max_price": 1049.0,
-          "average_price": 360.91
+          "average_price": 358.37
         }
       },
-      "resale_estimate": 360.91,
+      "resale_estimate": 358.37,
       "resale_source": "bin_average",
-      "estimated_profit": 279.93,
-      "rank": 5
+      "estimated_profit": 277.39,
+      "rank": 4
     },
     {
       "components": [
         {
-          "id": 27311731,
+          "id": 27386773,
           "listing_id": "307139175569",
           "category": "cpu",
           "title": "Intel Quad-Core i5-6500 3.2GHz LGA1151 CPU Processor SR2BX",
@@ -713,7 +574,7 @@
           "url": "https://www.ebay.co.uk/itm/307139175569"
         },
         {
-          "id": 27306536,
+          "id": 27381570,
           "listing_id": "227442336516",
           "category": "motherboard",
           "title": "ASUS H110M-R Intel H110 LGA1151 Micro ATX Motherboard DDR4 USB 3.0 SATA",
@@ -727,7 +588,7 @@
           "url": "https://www.ebay.co.uk/itm/227442336516"
         },
         {
-          "id": 27319454,
+          "id": 27394506,
           "listing_id": "407164098393",
           "category": "gpu",
           "title": "NVIDIA Quadro P620 2GB GDDR5 PCIe x16 Graphics Card 4x Mini DisplayPort GPU",
@@ -741,7 +602,7 @@
           "url": "https://www.ebay.co.uk/itm/407164098393"
         },
         {
-          "id": 27312707,
+          "id": 27387750,
           "listing_id": "318753151543",
           "category": "ram",
           "title": "Kingston 8GB DDR4 3200MHz PC4-3200AA Desktop RAM Memory 1Rx16 UDIMM",
@@ -755,7 +616,7 @@
           "url": "https://www.ebay.co.uk/itm/318753151543"
         },
         {
-          "id": 27329701,
+          "id": 27404757,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -769,7 +630,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
         },
         {
-          "id": 27311823,
+          "id": 27386866,
           "listing_id": "316327714586",
           "category": "ssd",
           "title": "128GB 256GB 512GB M.2 2280 NVMe SSD Solid State Drive - Various Brands Used LOT",
@@ -783,7 +644,7 @@
           "url": "https://www.ebay.co.uk/itm/316327714586"
         },
         {
-          "id": 27324730,
+          "id": 27399785,
           "listing_id": "9355314284",
           "category": "cooler",
           "title": "Intel E97378-001 Stock CPU Cooler Heatsink Fan LGA1150/1151/1155/1156",
@@ -797,7 +658,7 @@
           "url": "https://www.vinted.co.uk/items/9355314284"
         },
         {
-          "id": 27321184,
+          "id": 27396237,
           "listing_id": "606106302669800",
           "category": "case",
           "title": "Top pick188pcs 5V 3-Pin to SATA ARGB PC Case Fan 10-Port Hub 9CM, 1-To-10 Expansion Splitter, Suitable for PC ARGB Lighting Controller, 5V 3-Pin Lighting Controller Hub - SATA Power SupplyOpen in new tab.",
@@ -827,12 +688,151 @@
           "count": 49,
           "min_price": 89.81,
           "max_price": 1049.0,
-          "average_price": 361.19
+          "average_price": 351.7
         }
       },
-      "resale_estimate": 361.19,
+      "resale_estimate": 351.7,
       "resale_source": "bin_average",
-      "estimated_profit": 279.21,
+      "estimated_profit": 269.72,
+      "rank": 5
+    },
+    {
+      "components": [
+        {
+          "id": 27393031,
+          "listing_id": "398303284345",
+          "category": "cpu",
+          "title": "INTEL SR2L6 Core i5-6500 Quad Core 3.2GHz Socket 1151 Skylake-S Processor CPU",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/3W8AAeSwFfJqhX5H/s-l225.jpg",
+          "delivered_price": 7.95,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -7.95,
+          "url": "https://www.ebay.co.uk/itm/398303284345"
+        },
+        {
+          "id": 27381570,
+          "listing_id": "227442336516",
+          "category": "motherboard",
+          "title": "ASUS H110M-R Intel H110 LGA1151 Micro ATX Motherboard DDR4 USB 3.0 SATA",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/grEAAeSwZsBqhBej/s-l225.jpg",
+          "delivered_price": 20.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -20.99,
+          "url": "https://www.ebay.co.uk/itm/227442336516"
+        },
+        {
+          "id": 27394506,
+          "listing_id": "407164098393",
+          "category": "gpu",
+          "title": "NVIDIA Quadro P620 2GB GDDR5 PCIe x16 Graphics Card 4x Mini DisplayPort GPU",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/ND4AAeSwqn9qip~Q/s-l225.jpg",
+          "delivered_price": 24.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -24.0,
+          "url": "https://www.ebay.co.uk/itm/407164098393"
+        },
+        {
+          "id": 27387750,
+          "listing_id": "318753151543",
+          "category": "ram",
+          "title": "Kingston 8GB DDR4 3200MHz PC4-3200AA Desktop RAM Memory 1Rx16 UDIMM",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/gaoAAeSw92lqhYTM/s-l225.jpg",
+          "delivered_price": 12.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -12.99,
+          "url": "https://www.ebay.co.uk/itm/318753151543"
+        },
+        {
+          "id": 27404757,
+          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
+          "category": "psu",
+          "title": "HP Common Slot HS PSU 460W Gold",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
+          "delivered_price": 4.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -4.0,
+          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
+        },
+        {
+          "id": 27386866,
+          "listing_id": "316327714586",
+          "category": "ssd",
+          "title": "128GB 256GB 512GB M.2 2280 NVMe SSD Solid State Drive - Various Brands Used LOT",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/Fs4AAOSwo0lntbtS/s-l225.jpg",
+          "delivered_price": 3.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INELIGIBLE",
+          "estimated_profit": -3.99,
+          "url": "https://www.ebay.co.uk/itm/316327714586"
+        },
+        {
+          "id": 27399785,
+          "listing_id": "9355314284",
+          "category": "cooler",
+          "title": "Intel E97378-001 Stock CPU Cooler Heatsink Fan LGA1150/1151/1155/1156",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 3.33,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -3.33,
+          "url": "https://www.vinted.co.uk/items/9355314284"
+        },
+        {
+          "id": 27396237,
+          "listing_id": "606106302669800",
+          "category": "case",
+          "title": "Top pick188pcs 5V 3-Pin to SATA ARGB PC Case Fan 10-Port Hub 9CM, 1-To-10 Expansion Splitter, Suitable for PC ARGB Lighting Controller, 5V 3-Pin Lighting Controller Hub - SATA Power SupplyOpen in new tab.",
+          "seller": null,
+          "image_url": "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
+          "delivered_price": 2.69,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -2.69,
+          "url": "https://www.temu.com/search_result.html?search_key=Top+pick188pcs+5V+3-Pin+to+SATA+ARGB+PC+Case+Fan+10-Port+Hub+9CM%2C+1-To-10+Expansion+Splitter%2C+Suitable+for+PC+ARGB+Lighting+Controller%2C+5V+3-Pin+Lighting+Controller+Hub+-+SATA+Power+SupplyOpen+in+new+tab."
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 79.94,
+      "market": {
+        "query": "gaming pc Core i5-6500 Quadro P620 8gb",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "eBay sold-comps scrape failed: Page.title: Target page, context or browser has been closed"
+        },
+        "bin": {
+          "available": true,
+          "count": 49,
+          "min_price": 89.81,
+          "max_price": 1049.0,
+          "average_price": 348.76
+        }
+      },
+      "resale_estimate": 348.76,
+      "resale_source": "bin_average",
+      "estimated_profit": 268.82,
       "rank": 6
     }
   ],

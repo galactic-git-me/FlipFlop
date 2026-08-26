@@ -28,6 +28,7 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy import text
 
 from app.config import get_settings
 from app.database import engine, Base
@@ -58,6 +59,71 @@ from app.api.catalogue import router as catalogue_router
 from app.api.configurator_admin import router as configurator_admin_router
 from app.api.public_catalogue import router as public_catalogue_router
 from app.api.public_configurator import router as public_configurator_router
+
+
+async def _install_manual_build_delete_guard(conn) -> None:
+    """Install the final database-layer guard for irreplaceable build rows."""
+    if conn.dialect.name != "postgresql":
+        return
+    statements = [
+        """
+        CREATE TABLE IF NOT EXISTS manual_build_deletion_audit (
+            id BIGSERIAL PRIMARY KEY,
+            manual_build_id INTEGER NOT NULL,
+            build_name TEXT,
+            action VARCHAR(30) NOT NULL,
+            attempted_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+            database_user TEXT NOT NULL DEFAULT current_user,
+            application_name TEXT DEFAULT current_setting('application_name', true),
+            client_address TEXT DEFAULT inet_client_addr()::text,
+            row_snapshot JSONB NOT NULL
+        )
+        """,
+        """
+        CREATE OR REPLACE FUNCTION protect_manual_build_from_delete()
+        RETURNS trigger LANGUAGE plpgsql AS $$
+        BEGIN
+            INSERT INTO manual_build_deletion_audit
+                (manual_build_id, build_name, action, row_snapshot)
+            VALUES (OLD.id, OLD.name, 'hard_delete_blocked', to_jsonb(OLD));
+            RAISE WARNING 'Blocked hard deletion of manual build % (%)', OLD.id, OLD.name;
+            RETURN NULL;
+        END;
+        $$
+        """,
+        "DROP TRIGGER IF EXISTS trg_protect_manual_build_delete ON manual_builds",
+        """
+        CREATE TRIGGER trg_protect_manual_build_delete
+        BEFORE DELETE ON manual_builds
+        FOR EACH ROW EXECUTE FUNCTION protect_manual_build_from_delete()
+        """,
+        """
+        CREATE OR REPLACE FUNCTION audit_manual_build_archive()
+        RETURNS trigger LANGUAGE plpgsql AS $$
+        BEGIN
+            IF OLD.is_archived IS DISTINCT FROM NEW.is_archived THEN
+                INSERT INTO manual_build_deletion_audit
+                    (manual_build_id, build_name, action, row_snapshot)
+                VALUES (
+                    NEW.id,
+                    NEW.name,
+                    CASE WHEN NEW.is_archived THEN 'archived' ELSE 'restored' END,
+                    to_jsonb(NEW)
+                );
+            END IF;
+            RETURN NEW;
+        END;
+        $$
+        """,
+        "DROP TRIGGER IF EXISTS trg_audit_manual_build_archive ON manual_builds",
+        """
+        CREATE TRIGGER trg_audit_manual_build_archive
+        AFTER UPDATE OF is_archived ON manual_builds
+        FOR EACH ROW EXECUTE FUNCTION audit_manual_build_archive()
+        """,
+    ]
+    for statement in statements:
+        await conn.execute(text(statement))
 from app.api.public_products import router as public_products_router
 from app.api.public_showcase import router as public_showcase_router
 from app.api.public_reviews import router as public_reviews_router
@@ -416,6 +482,7 @@ async def lifespan(app: FastAPI):
     log.info("app.startup", event_loop_type=type(loop).__name__, app_env=settings.app_env)
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        await _install_manual_build_delete_guard(conn)
     # DISABLED: migrations deadlock on ALTER TABLE (PostgreSQL constraint acquisition)
     # Safe to skip because all migrations use IF NOT EXISTS and are idempotent
     # await _migrate_add_columns()
