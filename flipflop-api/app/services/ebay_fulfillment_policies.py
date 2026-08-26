@@ -65,14 +65,16 @@ class EbayFulfillmentPoliciesError(Exception):
 
 
 async def list_fulfillment_policies(
-    environment: str, marketplace_id: str = "EBAY_GB"
+    environment: str,
+    marketplace_id: str = "EBAY_GB",
+    access_token: str | None = None,
 ) -> list[FulfillmentPolicySummary]:
     """Raises EbayFulfillmentPoliciesError (with the real eBay error message)
     on failure — most commonly a 403 if the stored OAuth token was granted
     sell.inventory but not sell.account scope, which needs re-consenting via
     eBay's OAuth flow rather than anything fixable here."""
     try:
-        access_token = await get_valid_ebay_access_token(environment)
+        token = access_token or await get_valid_ebay_access_token(environment)
     except ValueError as exc:
         # Token refresh failures happen before the Account API request below.
         # Normalize them into this service's public error type so the route
@@ -96,7 +98,7 @@ async def list_fulfillment_policies(
             f"{base_url}/sell/account/v1/fulfillment_policy",
             params={"marketplace_id": marketplace_id},
             headers={
-                "Authorization": f"Bearer {access_token}",
+                "Authorization": f"Bearer {token}",
                 "Accept": "application/json",
             },
         )

@@ -490,7 +490,7 @@ async def get_manual_build_deletion_audit(
 
 
 @router.get("/ebay-fulfillment-policies", response_model=list[FulfillmentPolicyOut])
-async def get_ebay_fulfillment_policies():
+async def get_ebay_fulfillment_policies(db: AsyncSession = Depends(get_db)):
     """Real shipping-destination options for the Shipping & Delivery section
     — fetched live from the seller's own eBay account, not a hardcoded list.
     Uses whichever environment (sandbox/production) is currently configured
@@ -500,7 +500,22 @@ async def get_ebay_fulfillment_policies():
     to parse "ebay-fulfillment-policies" as an int."""
     settings = get_settings()
     try:
-        policies = await list_fulfillment_policies(settings.ebay_listing_environment)
+        # The Settings OAuth flow stores the newly consented seller token in
+        # AppSettings. Use that token here; falling back directly to the old
+        # EBAY_PRODUCTION_REFRESH_TOKEN made reconnect appear successful while
+        # this endpoint kept refreshing the obsolete environment token.
+        from app.services.ebay_oauth import get_valid_access_token
+
+        access_token = await get_valid_access_token(db)
+        if not access_token:
+            raise EbayFulfillmentPoliciesError(
+                "No valid connected eBay seller token is available. Reconnect eBay in Settings.",
+                401,
+            )
+        policies = await list_fulfillment_policies(
+            settings.ebay_listing_environment,
+            access_token=access_token,
+        )
     except EbayFulfillmentPoliciesError as e:
         raise HTTPException(
             e.status_code or 502,
