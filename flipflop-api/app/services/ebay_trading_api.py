@@ -109,6 +109,29 @@ async def revise_fixed_price_item(
     return item_id
 
 
+async def get_item_status(
+    item_id: str, token: str, environment: str = "production",
+) -> dict:
+    """Return eBay's authoritative lifecycle fields for one legacy item ID."""
+    tree = await _call(
+        "GetItem",
+        f"<ItemID>{item_id}</ItemID><DetailLevel>ReturnAll</DetailLevel>",
+        token,
+        environment=environment,
+    )
+    item = tree.find(f".//{{{_NS}}}Item")
+    if item is None:
+        raise RuntimeError(f"eBay GetItem returned no item for {item_id}")
+    selling = item.find(f"{{{_NS}}}SellingStatus")
+    listing_status = selling.findtext(f"{{{_NS}}}ListingStatus") if selling is not None else None
+    quantity_sold_text = selling.findtext(f"{{{_NS}}}QuantitySold") if selling is not None else None
+    return {
+        "listing_status": listing_status or "Unknown",
+        "quantity_sold": int(quantity_sold_text or 0),
+        "end_time": item.findtext(f"{{{_NS}}}ListingDetails/{{{_NS}}}EndTime"),
+    }
+
+
 async def get_best_offers(item_id: str, token: str) -> list[dict]:
     """Poll for open Best Offers on a listing (rows 8/45's read side)."""
     body = f"""<ItemID>{item_id}</ItemID>

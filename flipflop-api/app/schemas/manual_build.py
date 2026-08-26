@@ -60,6 +60,9 @@ class ManualBuildOut(BaseModel):
     ebay_listing_id: Optional[str]
     ebay_listing_url: Optional[str]
     ebay_sku: Optional[str] = None
+    ebay_listing_status: str = "never_listed"
+    ebay_listing_status_checked_at: Optional[datetime] = None
+    ebay_listing_end_reason: Optional[str] = None
     photos: list[BuildPhoto]
     evidence_data: dict = {}
     hero_photo_url: Optional[str]

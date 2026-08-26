@@ -7,6 +7,7 @@ interface ListingStatus {
   isListed: boolean;
   listingId?: string;
   lastUpdated?: string;
+  remoteStatus?: string;
 }
 
 interface CommandPanelProps {
@@ -109,7 +110,7 @@ export function CommandPanel({
         {ebayStatus && (
           <span
             className={`h-2 w-2 rounded-full ${ebayStatus.isListed ? "bg-green-400" : "bg-slate-500"}`}
-            title={ebayStatus.isListed ? "Listed on eBay" : "Not listed"}
+            title={ebayStatus.isListed ? "Active on eBay" : `eBay: ${(ebayStatus.remoteStatus || "not listed").replaceAll("_", " ")}`}
           />
         )}
       </div>

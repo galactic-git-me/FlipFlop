@@ -727,6 +727,7 @@ export default function BuildDetailPage() {
           isListed: !!build.ebay_live,
           listingId: build.ebay_listing_id || undefined,
           lastUpdated: build.updated_at,
+          remoteStatus: build.ebay_listing_status,
         },
         {
           platform: "storefront",
@@ -780,6 +781,11 @@ export default function BuildDetailPage() {
       {/* Channel status — where this build is actually purchasable right now */}
       <div className="flex items-center gap-2 mb-6">
         <ChannelBadge label="eBay" icon={ShoppingBag} live={!!build.ebay_live} />
+        {build.ebay_listing_status && build.ebay_listing_status !== "never_listed" && (
+          <span className="rounded-md border border-white/10 bg-white/[0.03] px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+            {build.ebay_listing_status.replaceAll("_", " ")}
+          </span>
+        )}
         <ChannelBadge label="FlipFlop.shop" icon={Store} live={!!build.storefront_live} />
         {build.status !== "in_progress" && build.model_3d_url && (
           <button

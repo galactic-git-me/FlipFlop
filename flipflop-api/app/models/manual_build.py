@@ -26,6 +26,12 @@ class ManualBuild(Base):
     generated_aspects: Mapped[dict | None] = mapped_column(JSON)
     ebay_listing_id: Mapped[str | None] = mapped_column(String(60))
     ebay_listing_url: Mapped[str | None] = mapped_column(String(300))
+    # Remote lifecycle last confirmed with eBay. Kept separate from the
+    # build workflow status so an ended listing is not confused with a build
+    # that has never been listed: never_listed|active|sold|ended|missing|unknown.
+    ebay_listing_status: Mapped[str] = mapped_column(String(20), default="never_listed")
+    ebay_listing_status_checked_at: Mapped[datetime | None] = mapped_column(DateTime)
+    ebay_listing_end_reason: Mapped[str | None] = mapped_column(String(40))
     # eBay Inventory API SKU used to create this listing's offer — needed
     # later to look up the offerId and withdraw the listing (see
     # app/services/ebay_listing_withdraw.py), since eBay's publish response

@@ -175,8 +175,11 @@ export interface ManualBuild {
   generated_title: string | null;
   generated_description: string | null;
   generated_aspects: Record<string, string[]> | null;
-  ebay_listing_id: string | null;
-  ebay_listing_url: string | null;
+    ebay_listing_id: string | null;
+    ebay_listing_url: string | null;
+    ebay_listing_status?: "never_listed" | "active" | "sold" | "ended" | "missing" | "unknown";
+    ebay_listing_status_checked_at?: string | null;
+    ebay_listing_end_reason?: string | null;
   photos: BuildPhoto[];
   // Structured factual data behind the rendered spec card / registration
   // plate / performance card — this is what's actually sent to the LLM for

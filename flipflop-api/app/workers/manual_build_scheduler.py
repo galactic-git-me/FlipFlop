@@ -36,7 +36,7 @@ async def run_deferred_manual_build_publish_job() -> dict:
                 ManualBuild.deferred_publish_at.isnot(None),
                 ManualBuild.deferred_publish_at <= now,
                 ManualBuild.status != "listed",
-                ManualBuild.ebay_listing_id.is_(None),
+                ManualBuild.ebay_listing_status != "active",
             )
         )
         due = result.scalars().all()
@@ -158,6 +158,9 @@ async def post_build_to_ebay(build) -> str:
         build.ebay_listing_id = result["listing_id"]
         build.ebay_listing_url = result["url"]
         build.ebay_sku = result.get("sku")
+        build.ebay_listing_status = "active"
+        build.ebay_listing_status_checked_at = datetime.utcnow()
+        build.ebay_listing_end_reason = None
         build.updated_at = datetime.utcnow()
 
         # Row 40: promote automatically if opted in — a failure here doesn't

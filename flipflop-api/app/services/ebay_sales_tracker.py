@@ -103,6 +103,32 @@ class eBaySalesTracker:
                             "actual_profit": updated_flip.actual_profit,
                         })
 
+                # Manual builds use the same eBay account but have their own
+                # lifecycle model. Reconcile every locally-active/unknown
+                # listing so disappeared offers become sold or ended instead
+                # of remaining falsely "listed" forever.
+                from app.models.manual_build import ManualBuild
+                from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
+                manual_rows = (await db.execute(select(ManualBuild).where(
+                    ManualBuild.ebay_listing_id.isnot(None),
+                    ManualBuild.ebay_listing_status.in_(["active", "unknown"]),
+                ))).scalars().all()
+                result["manual_builds_checked"] = len(manual_rows)
+                result["manual_builds_changed"] = 0
+                for build in manual_rows:
+                    previous = build.ebay_listing_status
+                    try:
+                        current = await reconcile_manual_build_listing(build, db, force=True)
+                        if current != previous:
+                            result["manual_builds_changed"] += 1
+                    except Exception as exc:
+                        log.warning(
+                            "ebay_sales_tracker.manual_build_reconcile_failed",
+                            build_id=build.id,
+                            listing_id=build.ebay_listing_id,
+                            error=str(exc),
+                        )
+
                 await db.commit()
 
             log.info(

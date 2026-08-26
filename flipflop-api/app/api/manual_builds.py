@@ -476,12 +476,19 @@ async def get_build(build_id: int, db: AsyncSession = Depends(get_db)):
     if not build:
         raise HTTPException(404, "Build not found")
 
-    # Channel-live status for the "which sites is this actually purchasable
-    # on right now" badges — computed here rather than stored, since it can
-    # change independently (cross-channel-guard withdrawal, a manual eBay
-    # end-listing, etc.) and must always reflect current reality, not
-    # whatever was true when the build was last written to.
-    build.ebay_live = bool(build.ebay_listing_id) and build.status == "listed"
+    # eBay is authoritative. Poll at most once per minute while this detail
+    # view is being opened/refreshed; a transient API failure remains unknown
+    # and never grants permission to create a duplicate listing.
+    if build.ebay_listing_id:
+        try:
+            from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
+            await reconcile_manual_build_listing(build, db)
+        except Exception as exc:
+            log.warning("manual_build.ebay_reconcile_on_read_failed", build_id=build.id, error=str(exc))
+            build.ebay_listing_status = "unknown"
+    else:
+        build.ebay_listing_status = "never_listed"
+    build.ebay_live = build.ebay_listing_status == "active"
     build.storefront_live = False
     if build.storefront_product_id:
         from app.models.product import Product, ProductStatus
@@ -1463,12 +1470,12 @@ async def end_ebay_listing(build_id: int, db: AsyncSession = Depends(get_db)):
             "eBay could not end the listing. Nothing was changed in FlipFlop; please try again.",
         ) from exc
 
-    # Only clear the local live-listing link after eBay confirms withdrawal.
-    # Generated content, photos, item specifics and selling configuration stay
-    # on the build so it can be corrected and published as a fresh listing.
-    build.ebay_listing_id = None
-    build.ebay_listing_url = None
-    build.ebay_sku = None
+    # Preserve the ended listing ID/SKU as historical evidence. Publishing
+    # logic keys off ebay_listing_status, not mere ID presence, so the next
+    # publish creates a fresh offer rather than trying to revise this one.
+    build.ebay_listing_status = "ended"
+    build.ebay_listing_status_checked_at = datetime.utcnow()
+    build.ebay_listing_end_reason = "ended_early"
     build.deferred_publish_at = None
     if build.status == "listed":
         build.status = "built"
@@ -1602,8 +1609,26 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
         fulfillment_policy_id = build.fulfillment_policy_id
 
     try:
-        # Check if already listed on eBay — if so, update instead of create
-        is_relisting = bool(build.ebay_listing_id)
+        # Reconcile before choosing create vs revise. An ID by itself only
+        # proves this build was listed historically; it does not prove that
+        # the offer is still live.
+        if build.ebay_listing_id:
+            from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
+            remote_state = await reconcile_manual_build_listing(
+                build,
+                db,
+                force=True,
+                access_token=oauth_token,
+                environment=listing_environment,
+            )
+        else:
+            remote_state = "never_listed"
+        if remote_state == "unknown":
+            raise HTTPException(
+                503,
+                "eBay listing status could not be verified. No listing was created or updated; retry when eBay is reachable.",
+            )
+        is_relisting = remote_state == "active"
 
         if is_relisting:
             # Update existing eBay listing
@@ -1645,6 +1670,9 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
             build.ebay_listing_url = result["url"]
             build.ebay_sku = result.get("sku")
             build.status = "listed"
+            build.ebay_listing_status = "active"
+            build.ebay_listing_status_checked_at = datetime.utcnow()
+            build.ebay_listing_end_reason = None
             build.deferred_publish_at = None
             build.updated_at = datetime.utcnow()
             if not build.ebay_price:
@@ -1682,9 +1710,11 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
             return PostToEbayResult(success=True, listing_id=result["listing_id"], url=result["url"], action=action)
 
         return PostToEbayResult(success=False, error=result.get("error", f"Failed to {'update' if is_relisting else 'post'} listing"))
+    except HTTPException:
+        raise
     except Exception as e:
         error_msg = str(e)
-        return PostToEbayResult(success=False, error=f"Error {'updating' if build.ebay_listing_id else 'posting'} to eBay: {error_msg}")
+        return PostToEbayResult(success=False, error=f"Error {'updating' if locals().get('is_relisting') else 'posting'} to eBay: {error_msg}")
 
 
 @router.post("/{build_id}/photos", response_model=ManualBuildOut)
