@@ -148,6 +148,23 @@ async def _run_build_3d_generation(
     source_refs: dict[str, list[str]] | None = None,
 ) -> None:
     """Run Meshy jobs off-request, mirror expiring results, then persist once."""
+    # Make it visible that the background task actually started. Previously
+    # the row stayed "queued" throughout Meshy's (potentially ten-minute)
+    # generation, which was indistinguishable from a dead worker.
+    async with AsyncSessionLocal() as session:
+        build = (await session.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
+        if not build:
+            return
+        assets = dict(build.model_3d_assets or {})
+        started_at = datetime.utcnow().isoformat()
+        for asset_type in requested:
+            current = dict(assets.get(asset_type) or {})
+            current.update(status="processing", started_at=started_at)
+            assets[asset_type] = current
+        build.model_3d_assets = assets
+        await session.commit()
+    log.info("manual_build.3d_generation_started", build_id=build_id, asset_types=list(requested))
+
     results = await asyncio.gather(
         *(generate_multi_image_asset(urls) for urls in requested.values()),
         return_exceptions=True,
@@ -157,7 +174,7 @@ async def _run_build_3d_generation(
         # Never persist uploaded data URIs. They are retained in memory only
         # until Meshy has accepted the background job.
         persisted_sources = (source_refs or {}).get(asset_type, source_urls)
-        entry = {"provider": "meshy", "source_image_urls": persisted_sources}
+        entry = {"provider": "meshy", "source_image_urls": persisted_sources, "textured": True, "pbr": True}
         if isinstance(result, Exception) or result is None:
             entry.update(status="failed", error=str(result) if result else "Meshy did not accept the task")
         elif result.status != "SUCCEEDED" or not result.glb_url:
@@ -193,6 +210,7 @@ async def _run_build_3d_generation(
         if completed.get("complete_build", {}).get("status") == "succeeded":
             build.model_3d_url = completed["complete_build"]["glb_url"]
         await session.commit()
+    log.info("manual_build.3d_generation_finished", build_id=build_id, statuses={key: value.get("status") for key, value in completed.items()})
 
 
 @router.post("/{build_id}/model-3d/generate", status_code=202)
@@ -548,6 +566,34 @@ async def get_build(build_id: int, db: AsyncSession = Depends(get_db)):
     build = result.scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
+
+    # FastAPI background tasks live in the API process. If that process was
+    # restarted during a Meshy job, there is no task left to update the row.
+    # Surface that interruption as a retryable failure instead of displaying
+    # "Queued" forever.
+    assets = dict(build.model_3d_assets or {})
+    assets_changed = False
+    stale_before = datetime.utcnow() - timedelta(minutes=15)
+    for asset_type, raw_asset in list(assets.items()):
+        asset = dict(raw_asset or {})
+        if asset.get("status") not in {"queued", "processing"}:
+            continue
+        timestamp = asset.get("started_at") or asset.get("queued_at")
+        try:
+            queued_at = datetime.fromisoformat(str(timestamp).replace("Z", "+00:00")).replace(tzinfo=None)
+        except (TypeError, ValueError):
+            queued_at = build.updated_at or datetime.utcnow()
+        if queued_at < stale_before:
+            asset.update(
+                status="failed",
+                error="The 3D generation worker was interrupted or timed out. Select the pictures and try again.",
+                failed_at=datetime.utcnow().isoformat(),
+            )
+            assets[asset_type] = asset
+            assets_changed = True
+    if assets_changed:
+        build.model_3d_assets = assets
+        await db.flush()
 
     # eBay is authoritative. Poll at most once per minute while this detail
     # view is being opened/refreshed; a transient API failure remains unknown

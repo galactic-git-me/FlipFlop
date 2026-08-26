@@ -23,6 +23,7 @@ import { DescriptionPreview } from "@/components/builds/DescriptionPreview";
 import { EbayListingHTMLPreview } from "@/components/builds/EbayListingHTMLPreview";
 import { PricingIntelligence } from "@/components/builds/PricingIntelligence";
 import { CommandPanel } from "@/components/builds/CommandPanel";
+import { Build3DViewer } from "@/components/builds/Build3DViewer";
 
 // eBay-required Item Specifics for "PC Desktops & All-in-Ones" — mirrors
 // EbaySpecificsSection.tsx's own EBAY_ASPECT_FIELDS list (that component owns
@@ -106,6 +107,7 @@ export default function BuildDetailPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const performanceCardInputRef = useRef<HTMLInputElement>(null);
   const model3dInputRef = useRef<HTMLInputElement>(null);
+  const modelSourceInputRef = useRef<HTMLInputElement>(null);
   const hiddenCanvasRef = useRef<HTMLCanvasElement>(null);
 
   const [build, setBuild] = useState<ManualBuild | null>(null);
@@ -124,6 +126,7 @@ export default function BuildDetailPage() {
   const [uploading3dModel, setUploading3dModel] = useState(false);
   const [queueing3dModels, setQueueing3dModels] = useState(false);
   const [selected3dPhotos, setSelected3dPhotos] = useState<Record<string, string[]>>({});
+  const [temporary3dPhotos, setTemporary3dPhotos] = useState<Array<{ file: File; preview: string }>>([]);
   const [savingAspects, setSavingAspects] = useState(false);
   const [generatingSpecifics, setGeneratingSpecifics] = useState(false);
   const [savingEbayConfig, setSavingEbayConfig] = useState(false);
@@ -608,7 +611,7 @@ export default function BuildDetailPage() {
     setSelected3dPhotos((current) => {
       const selected = current[assetType] ?? [];
       if (selected.includes(url)) return { ...current, [assetType]: selected.filter((item) => item !== url) };
-      if (selected.length >= 4) {
+      if (selected.length + temporary3dPhotos.length >= 4) {
         toast.error("Meshy accepts up to four views for each model");
         return current;
       }
@@ -616,18 +619,45 @@ export default function BuildDetailPage() {
     });
   };
 
+  const addTemporary3dPhotos = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const incoming = Array.from(event.target.files ?? []);
+    const capacity = 4 - (selected3dPhotos.complete_build?.length ?? 0) - temporary3dPhotos.length;
+    if (incoming.length > capacity) toast.error(`You can use four pictures in total; ${Math.max(capacity, 0)} slot${capacity === 1 ? " is" : "s are"} available`);
+    const accepted = incoming.slice(0, Math.max(capacity, 0)).filter((file) => {
+      if (!["image/jpeg", "image/png"].includes(file.type)) {
+        toast.error(`${file.name} is not JPEG or PNG`);
+        return false;
+      }
+      return true;
+    });
+    setTemporary3dPhotos((current) => [...current, ...accepted.map((file) => ({ file, preview: URL.createObjectURL(file) }))]);
+    event.target.value = "";
+  };
+
+  const removeTemporary3dPhoto = (preview: string) => {
+    setTemporary3dPhotos((current) => {
+      const removed = current.find((item) => item.preview === preview);
+      if (removed) URL.revokeObjectURL(removed.preview);
+      return current.filter((item) => item.preview !== preview);
+    });
+  };
+
   const queue3dModels = async () => {
     const completeBuildPhotos = selected3dPhotos.complete_build ?? [];
-    if (!completeBuildPhotos.length) {
+    if (!completeBuildPhotos.length && !temporary3dPhotos.length) {
       toast.error("Select at least one photo of the real completed PC");
       return;
     }
     setQueueing3dModels(true);
     try {
-      const result = await api.manualBuilds.generate3dAssets(buildId, { complete_build: completeBuildPhotos });
+      const result = temporary3dPhotos.length
+        ? await api.manualBuilds.generate3dAssetsWithUploads(buildId, completeBuildPhotos, temporary3dPhotos.map((item) => item.file))
+        : await api.manualBuilds.generate3dAssets(buildId, { complete_build: completeBuildPhotos });
       setBuild((current) => current ? { ...current, model_3d_assets: result.assets } : current);
       toast.success("Complete-build 3D model queued");
       setSelected3dPhotos({});
+      temporary3dPhotos.forEach((item) => URL.revokeObjectURL(item.preview));
+      setTemporary3dPhotos([]);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not queue 3D generation");
     } finally {
@@ -1162,18 +1192,27 @@ export default function BuildDetailPage() {
                   <Sparkles className="h-4 w-4 text-cyan-300" /> Generate 3D assets from photos
                 </p>
                 <p className="mt-1 max-w-2xl text-[11px] leading-5 text-slate-400">
-                  Select up to four clear photos of the finished PC.
+                  Select or temporarily upload 1–4 clear photos of the finished PC. The first is the front view. Uploaded source pictures are sent directly to Meshy and are not saved.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
                   onClick={queue3dModels}
-                  disabled={queueing3dModels || regularPhotos.length === 0 || !(selected3dPhotos.complete_build?.length)}
+                  disabled={queueing3dModels || !((selected3dPhotos.complete_build?.length ?? 0) + temporary3dPhotos.length)}
                   className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg bg-cyan-400 px-4 py-2 text-sm font-black text-slate-950 transition-colors hover:bg-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-200 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {queueing3dModels ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
                   Generate from photos
+                </button>
+                <input ref={modelSourceInputRef} type="file" accept="image/jpeg,image/png" multiple onChange={addTemporary3dPhotos} className="hidden" />
+                <button
+                  type="button"
+                  onClick={() => modelSourceInputRef.current?.click()}
+                  disabled={queueing3dModels || (selected3dPhotos.complete_build?.length ?? 0) + temporary3dPhotos.length >= 4}
+                  className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-cyan-400/30 px-4 py-2 text-sm font-semibold text-cyan-200 transition-colors hover:bg-cyan-400/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <ImagePlus className="h-4 w-4" /> Add temporary pictures
                 </button>
                 <input ref={model3dInputRef} type="file" accept=".glb,model/gltf-binary" onChange={handle3dModelUpload} className="hidden" />
                 <button
@@ -1189,8 +1228,8 @@ export default function BuildDetailPage() {
               </div>
             </div>
 
-            {regularPhotos.length === 0 ? (
-              <p className="mt-4 rounded-lg border border-amber-400/20 bg-amber-400/[0.05] p-3 text-xs text-amber-200">Upload ordinary build photos first.</p>
+            {regularPhotos.length === 0 && temporary3dPhotos.length === 0 ? (
+              <p className="mt-4 rounded-lg border border-amber-400/20 bg-amber-400/[0.05] p-3 text-xs text-amber-200">Select “Add temporary pictures,” or add ordinary build photos above.</p>
             ) : (
               <div className="mt-5 space-y-3">
                 {BUILD_3D_TARGETS.map((target) => {
@@ -1206,7 +1245,7 @@ export default function BuildDetailPage() {
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-[10px] font-mono text-slate-500">
-                            {selected.length}/4 selected
+                            {selected.length + temporary3dPhotos.length}/4 selected
                           </span>
                           {existing && (
                             <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase ${
@@ -1238,6 +1277,22 @@ export default function BuildDetailPage() {
                             </button>
                             );
                           })}
+                          {temporary3dPhotos.map((photo, index) => (
+                            <button
+                              key={photo.preview}
+                              type="button"
+                              onClick={() => removeTemporary3dPhoto(photo.preview)}
+                              aria-label={`Remove temporary picture ${index + 1}`}
+                              className="relative h-20 w-20 shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 border-violet-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
+                            >
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img src={photo.preview} alt="" className="h-full w-full object-cover" />
+                              <span className="absolute inset-x-0 bottom-0 bg-violet-950/90 px-1 py-0.5 text-[9px] font-bold text-violet-100">Temporary</span>
+                              <span className="absolute right-1 top-1 grid h-5 w-5 place-items-center rounded-full bg-violet-300 text-[10px] font-black text-slate-950">
+                                {selected.length + index + 1}
+                              </span>
+                            </button>
+                          ))}
                       </div>
                       {existing?.error && <p className="mt-2 text-[10px] text-red-300">{existing.error}</p>}
                     </section>
@@ -1245,6 +1300,7 @@ export default function BuildDetailPage() {
                 })}
               </div>
             )}
+            {build.model_3d_url && <Build3DViewer url={build.model_3d_url} />}
           </div>
 
           {/* Branded cards */}

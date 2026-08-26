@@ -119,19 +119,22 @@ async def generate_multi_image_asset(image_urls: list[str]) -> MeshyGenerationRe
 
     try:
         async with httpx.AsyncClient(timeout=30) as client:
+            payload = {
+                "image_urls": image_urls,
+                "ai_model": "latest",
+                "should_texture": True,
+                "enable_pbr": True,
+                "target_formats": ["glb"],
+            }
+            # Explicit multi-view texture guidance is valuable for public
+            # URLs. For base64 uploads, image_urls already drives Meshy's
+            # texture phase and repeating the data would double a large body.
+            if not any(url.startswith("data:") for url in image_urls):
+                payload["texture_image_urls"] = image_urls
             response = await client.post(
                 _MESHY_MULTI_IMAGE_BASE,
                 headers=_headers(),
-                json={
-                    "image_urls": image_urls,
-                    # Use the same views to guide both geometry and surface
-                    # appearance. Meshy 7 supports multi-view texturing.
-                    "texture_image_urls": image_urls,
-                    "ai_model": "latest",
-                    "should_texture": True,
-                    "enable_pbr": True,
-                    "target_formats": ["glb"],
-                },
+                json=payload,
             )
             response.raise_for_status()
             task_id = response.json().get("result")
