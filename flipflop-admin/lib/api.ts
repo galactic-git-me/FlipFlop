@@ -715,6 +715,7 @@ export const api = {
     updateEbayConfig: (id: number, config: Partial<Pick<ManualBuild,
       | "ebay_condition" | "ebay_price" | "allow_offers" | "auto_reject_below_price"
       | "auction_start_price" | "return_days" | "shipping_method" | "shipping_cost"
+      | "marketplace_fees_actual" | "promotion_cost_actual" | "refund_amount" | "warranty_claim_cost"
       | "handling_time_days" | "ships_to_countries" | "domestic_only"
       | "shipping_damage_cover_confirmed"
       | "fulfillment_policy_id" | "package_weight_kg" | "package_length_cm"
