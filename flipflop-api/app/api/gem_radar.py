@@ -1705,20 +1705,20 @@ async def get_scan_schedule_status(db: AsyncSession = Depends(get_db), _: None =
     from sqlalchemy import text
     from datetime import datetime, timedelta
     interval_minutes = await get_current_scan_interval_minutes(db)
-    # Fetch the start of each extension search batch. A complete market scan
-    # is a burst of these batches; walking backwards until a substantial gap
-    # finds the first batch in the latest burst without letting later batches
-    # continually reset the timer.
+    # Use explicit run history rather than raw listing observations. Manual
+    # ad-hoc scans submit observations too, but must never move the scheduled
+    # cadence shown by this countdown. A complete automatic market scan is a
+    # burst of search-term rows; walking backwards until a substantial gap
+    # finds the first row in the latest scheduled sweep.
     lookback = datetime.utcnow() - timedelta(minutes=max(interval_minutes * 3, 360))
     run_rows = (
         await db.execute(
             text(
                 """
-                SELECT search_run_id, MIN(observed_at) AS started_at
-                FROM gem_radar_listing_observations
-                WHERE search_run_id IS NOT NULL AND observed_at >= :lookback
-                GROUP BY search_run_id
-                ORDER BY started_at DESC
+                SELECT id AS search_run_id, occurred_at AS started_at
+                FROM gem_radar_scan_runs
+                WHERE run_by = 'Automatic' AND occurred_at >= :lookback
+                ORDER BY occurred_at DESC
                 """
             ),
             {"lookback": lookback},
