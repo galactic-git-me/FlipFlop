@@ -171,7 +171,9 @@ class LiveSoldCompsAdapter(SoldCompsAdapter):
                             condition=condition,
                             status=resp.status_code,
                         )
-                        return []
+                        raise RuntimeError(
+                            f"ScrapingBee rejected the configured credential (HTTP {resp.status_code})"
+                        )
 
                     if resp.status_code != 200:
                         log.debug(
@@ -348,12 +350,29 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
             log.warning("sold_comps.playwright.chromium_unavailable")
             return []
         if time.monotonic() < _EBAY_VERIFICATION_BLOCK_UNTIL:
-            log.info(
-                "sold_comps.playwright.verification_cooldown",
-                query=query,
-                remaining_seconds=round(_EBAY_VERIFICATION_BLOCK_UNTIL - time.monotonic()),
-            )
-            return []
+            # The cooldown belongs only to the disposable fallback browser
+            # that hit a verification wall. If the operator has since started
+            # the dedicated signed-in CDP browser, use it immediately instead
+            # of making Refresh sold evidence remain broken for 30 minutes.
+            cdp_url = os.getenv("BROWSER_CDP_URL", "http://localhost:9222").strip()
+            cdp_ready = False
+            if cdp_url:
+                try:
+                    async with httpx.AsyncClient(timeout=2.0) as client:
+                        probe = await client.get(f"{cdp_url.rstrip('/')}/json/version")
+                    cdp_ready = probe.status_code == 200
+                except Exception:
+                    cdp_ready = False
+            if cdp_ready:
+                _EBAY_VERIFICATION_BLOCK_UNTIL = 0.0
+                log.info("sold_comps.playwright.verification_cooldown_cleared", query=query)
+            else:
+                log.info(
+                    "sold_comps.playwright.verification_cooldown",
+                    query=query,
+                    remaining_seconds=round(_EBAY_VERIFICATION_BLOCK_UNTIL - time.monotonic()),
+                )
+                return []
 
         # Deferred import: app.services.scraper owns the shared login-state
         # file and semaphore for eBay Playwright sessions — reuse both so a
@@ -368,6 +387,7 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
             async with managed_playwright() as p:
                 browser = None
                 attached_cdp = False
+                headless = False
                 cdp_url = os.getenv("BROWSER_CDP_URL", "http://localhost:9222").strip()
                 if cdp_url:
                     try:

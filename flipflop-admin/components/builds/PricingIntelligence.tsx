@@ -80,6 +80,7 @@ type PricingData = {
   excluded_comparable_count: number;
   component_condition_profile: { components: number; known_condition: number; with_warranty: number; with_proof_of_purchase: number; with_original_packaging: number };
   calibration: { completed_sales: number; offer_headroom_pct: number; warranty_reserve_pct: number; effective_fee_rate_pct: number; basis: string };
+  sold_evidence_status: string | null;
   fetched_at: string;
 };
 
@@ -450,9 +451,16 @@ export function PricingIntelligence({
                 {formatCurrency(r.market_mid)} · view evidence
               </button>
             ) : (
-              <p className="mt-2 text-sm font-semibold text-amber-300">
-                No sourced market range is available.
-              </p>
+              <div className="mt-2 space-y-1">
+                <p className="text-sm font-semibold text-amber-300">
+                  No sourced market range is available.
+                </p>
+                {data.sold_evidence_status && (
+                  <p className="text-xs text-red-300">
+                    Refresh failed: {data.sold_evidence_status}
+                  </p>
+                )}
+              </div>
             )}
             <p className="mt-1 max-w-3xl text-xs leading-5 text-slate-500">
               {hasMarketEvidence

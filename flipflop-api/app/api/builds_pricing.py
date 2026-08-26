@@ -323,6 +323,7 @@ class PricingBreakdown(BaseModel):
     excluded_comparable_count: int = 0
     component_condition_profile: dict
     calibration: PricingCalibration
+    sold_evidence_status: str | None = None
 
 
 class BuildSoldCompTarget(CamelModel):
@@ -666,6 +667,7 @@ async def get_build_pricing(
     cache_info = CacheInfo(is_cached=False)
     market_data: dict = {}
     live_close_comparables: list[MarketComparable] = []
+    sold_evidence_status: str | None = None
 
     if fetch_sold:
         log.info("builds_pricing.fetch_sold", build_id=build_id, query=query, cache_key=cache_key)
@@ -688,6 +690,8 @@ async def get_build_pricing(
                 )
             if sold_result.available:
                 await cache.set(cache_key, sold_result)
+            else:
+                sold_evidence_status = sold_result.unavailable_reason or "Sold evidence could not be retrieved"
             cpu_model_for_search = resolve_identity(cpu_title).model if cpu_title else None
             gpu_model_for_search = resolve_identity(gpu_title).model if gpu_title else None
             live_close_comparables = await _live_close_build_comparables(
@@ -1028,6 +1032,7 @@ async def get_build_pricing(
         excluded_comparable_count=excluded_comparable_count,
         component_condition_profile=component_condition_profile,
         calibration=calibration,
+        sold_evidence_status=sold_evidence_status,
     )
 
 
