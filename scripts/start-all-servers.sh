@@ -21,7 +21,7 @@ NC='\033[0m' # No Color
 NO_BACKEND=false
 NO_ADMIN=false
 NO_FRONTEND=false
-VERBOSE=falseáÁZZZZ \
+VERBOSE=falseáÁZZZZ \8
 
 while [[ $# -gt 0 ]]; do
     case $1 in
