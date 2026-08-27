@@ -47,6 +47,54 @@
         "https://m.media-amazon.com/images/I/81Eo38IhkDL._AC_SL1500_.jpg"
       ],
       "rights_note": "Marketplace product imagery. Confirm permission for use as AI reference material before publication; generated output remains an inactive draft."
+    },
+    {
+      "priority_rank": 1, "case_id": 340, "brand": "CORSAIR", "model": "FRAME 4500X RS-R ARGB", "asin": "B0FJ2QMQYC",
+      "dimensions_mm": { "depth": 478, "width": 246, "height": 499 },
+      "source_page": "https://www.amazon.co.uk/dp/B0FJ2QMQYC", "reference_directory": "corsair-frame-4500x",
+      "selected_for_meshy": ["candidate-1.jpg", "candidate-7.jpg", "candidate-9.jpg", "candidate-10.jpg"],
+      "source_image_urls": ["https://m.media-amazon.com/images/I/61czK2BMa9L._AC_SL1500_.jpg", "https://m.media-amazon.com/images/I/81KTTKAcIOL._AC_SL1500_.jpg", "https://m.media-amazon.com/images/I/814SflUuw-L._AC_SL1500_.jpg", "https://m.media-amazon.com/images/I/71lhCFQnPYL._AC_SL1500_.jpg"],
+      "rights_note": "Marketplace product imagery; generated output remains an inactive draft pending rights and visual review."
+    },
+    {
+      "priority_rank": 2, "case_id": 72, "brand": "MSI", "model": "MAG FORGE 321R AIRFLOW", "asin": "B0CXQ664BW",
+      "dimensions_mm": { "depth": 472, "width": 210, "height": 498 },
+      "source_page": "https://www.amazon.co.uk/dp/B0CXQ664BW", "reference_directory": "msi-mag-forge-321r",
+      "selected_for_meshy": ["candidate-1.jpg", "candidate-2.jpg", "candidate-3.jpg", "candidate-5.jpg"],
+      "source_image_urls": ["https://m.media-amazon.com/images/I/719vOY+xxjL._AC_SL1500_.jpg", "https://m.media-amazon.com/images/I/81eszHlykqL._AC_SL1500_.jpg", "https://m.media-amazon.com/images/I/712JcSN7wbL._AC_SL1500_.jpg", "https://m.media-amazon.com/images/I/71U+7RPbcGL._AC_SL1500_.jpg"],
+      "rights_note": "Marketplace product imagery; generated output remains an inactive draft pending rights and visual review."
+    },
+    {
+      "priority_rank": 3, "case_id": 803, "brand": "Fractal Design", "model": "North", "asin": "B09V8HNWW9",
+      "dimensions_mm": { "depth": 447, "width": 215, "height": 469 },
+      "source_page": "https://www.amazon.co.uk/dp/B09V8HNWW9", "reference_directory": "fractal-north",
+      "selected_for_meshy": ["candidate-1.jpg", "candidate-2.jpg", "candidate-3.jpg", "candidate-5.jpg"],
+      "source_image_urls": ["https://m.media-amazon.com/images/I/71MSloBQcCL._AC_SL1500_.jpg", "https://m.media-amazon.com/images/I/71v1mehp4VL._AC_SL1500_.jpg", "https://m.media-amazon.com/images/I/7118qv5RyWL._AC_SL1500_.jpg", "https://m.media-amazon.com/images/I/71gyFsHYKDL._AC_SL1500_.jpg"],
+      "rights_note": "Sketchfab candidate was non-downloadable and unlicensed; Meshy draft uses marketplace imagery and remains inactive."
+    },
+    {
+      "priority_rank": 4, "case_id": 194, "brand": "NZXT", "model": "H6 Flow", "asin": "B0C89FCDFP",
+      "dimensions_mm": { "depth": 415, "width": 287, "height": 435 },
+      "source_page": "https://www.amazon.co.uk/dp/B0C89FCDFP", "reference_directory": "nzxt-h6-flow",
+      "selected_for_meshy": ["candidate-1.jpg", "candidate-3.jpg", "candidate-4.jpg", "candidate-7.jpg"],
+      "source_image_urls": ["https://m.media-amazon.com/images/I/71x+i8yRgrL._AC_SL1500_.jpg", "https://m.media-amazon.com/images/I/71vtU8bv48L._AC_SL1500_.jpg", "https://m.media-amazon.com/images/I/81AXVnTj-vL._AC_SL1500_.jpg", "https://m.media-amazon.com/images/I/71XnNWrFUML._AC_SL1500_.jpg"],
+      "rights_note": "Marketplace product imagery; generated output remains an inactive draft pending rights and visual review."
+    },
+    {
+      "priority_rank": 7, "case_id": 461, "brand": "CORSAIR", "model": "FRAME 4000D RS ARGB", "asin": "B0DFHNV7TK",
+      "dimensions_mm": { "depth": 490, "width": 239, "height": 486 },
+      "source_page": "https://www.amazon.co.uk/dp/B0DFHNV7TK", "reference_directory": "corsair-frame-4000d",
+      "selected_for_meshy": ["candidate-1.jpg", "candidate-4.jpg", "candidate-7.jpg", "candidate-10.jpg"],
+      "source_image_urls": ["https://m.media-amazon.com/images/I/61-u3G8Bg9L._AC_SL1100_.jpg", "https://m.media-amazon.com/images/I/81g6E8yE8uL._AC_SL1500_.jpg", "https://m.media-amazon.com/images/I/81M-0nvn6oL._AC_SL1500_.jpg", "https://m.media-amazon.com/images/I/81DYF4nEB9L._AC_SL1500_.jpg"],
+      "rights_note": "Marketplace product imagery; generated output remains an inactive draft pending rights and visual review."
+    },
+    {
+      "priority_rank": 8, "case_id": 196, "brand": "NZXT", "model": "H5 Flow (2024)", "asin": "B0D2MK6NML",
+      "dimensions_mm": { "depth": 430, "width": 225, "height": 465 },
+      "source_page": "https://www.amazon.co.uk/dp/B0D2MK6NML", "reference_directory": "nzxt-h5-flow",
+      "selected_for_meshy": ["candidate-1.jpg", "candidate-2.jpg", "candidate-7.jpg", "candidate-8.jpg"],
+      "source_image_urls": ["https://m.media-amazon.com/images/I/51wAv5q4adL._AC_SL1000_.jpg", "https://m.media-amazon.com/images/I/51KW6EwGXlL._AC_SL1000_.jpg", "https://m.media-amazon.com/images/I/516jxBVfgNL._AC_SL1000_.jpg", "https://m.media-amazon.com/images/I/51KJYRXZzKL._AC_SL1000_.jpg"],
+      "rights_note": "Marketplace product imagery; generated output remains an inactive draft pending rights and visual review."
     }
   ]
 }
