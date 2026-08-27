@@ -1,16 +1,12 @@
 """Admin API for creating and managing build price alerts."""
 
-import re
-
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
-from app.gem_radar.identity import resolve_identity
-from app.gem_radar.marketplace import fallback_listing_url
-from app.models import GemRadarScoredListing, ManualBuild, PriceAlert
+from app.models import ManualBuild, PriceAlert
 from app.services.money import Money
 from app.services.price_alerts import PriceAlertError, PriceAlertsService
 
@@ -23,7 +19,7 @@ class CreatePriceAlert(BaseModel):
     target_price_gbp: float = Field(gt=0)
 
 
-def _out(alert: PriceAlert, build: ManualBuild | None, current_listing_url: str | None = None) -> dict:
+def _out(alert: PriceAlert, build: ManualBuild | None) -> dict:
     is_component = alert.alert_type == "component"
     return {
         "id": alert.id,
@@ -41,7 +37,7 @@ def _out(alert: PriceAlert, build: ManualBuild | None, current_listing_url: str 
         "is_active": alert.is_active,
         "triggered_at": alert.triggered_at,
         "triggered_price_gbp": alert.triggered_price_gbp / 100 if alert.triggered_price_gbp is not None else None,
-        "listing_url": (alert.triggered_listing_url or current_listing_url) if is_component else build.ebay_listing_url if build else None,
+        "listing_url": alert.triggered_listing_url if is_component else build.ebay_listing_url if build else None,
         "created_at": alert.created_at,
         "updated_at": alert.updated_at,
     }
@@ -54,35 +50,7 @@ async def list_price_alerts(db: AsyncSession = Depends(get_db)):
         .outerjoin(ManualBuild, ManualBuild.id == PriceAlert.manual_build_id)
         .order_by(PriceAlert.created_at.desc())
     )
-    alert_rows = result.all()
-    component_alerts = [alert for alert, _ in alert_rows if alert.alert_type == "component" and not alert.triggered_listing_url]
-    current_urls: dict[int, str] = {}
-    if component_alerts:
-        scored = (await db.execute(select(GemRadarScoredListing))).scalars().all()
-        for alert in component_alerts:
-            wanted_category = alert.component_slot or resolve_identity(alert.component_key or "").category
-            wanted_terms = {
-                term for term in re.findall(r"[a-z0-9]+", (alert.component_key or "").lower())
-                if len(term) >= 3 and term not in {"the", "with", "white", "black", "iridescent", "chassis"}
-            }
-            candidates: list[tuple[int, float, GemRadarScoredListing]] = []
-            for listing in scored:
-                listing_identity = resolve_identity(listing.title or "")
-                if wanted_category and listing_identity.category != wanted_category:
-                    continue
-                title_terms = set(re.findall(r"[a-z0-9]+", (listing.title or "").lower()))
-                overlap = len(wanted_terms & title_terms)
-                # Require the brand/model wording to agree strongly enough to
-                # avoid linking RAM alerts to enclosures or CPU alerts to boards.
-                if overlap < min(2, len(wanted_terms)):
-                    continue
-                candidates.append((overlap, float(listing.delivered_price), listing))
-            if candidates:
-                _, _, best = min(candidates, key=lambda item: (-item[0], item[1]))
-                url = best.url or fallback_listing_url(best.listing_id, best.source, best.title)
-                if url:
-                    current_urls[alert.id] = url
-    items = [_out(alert, build, current_urls.get(alert.id)) for alert, build in alert_rows]
+    items = [_out(alert, build) for alert, build in result.all()]
     return {
         "items": items,
         "active_count": sum(1 for item in items if item["is_active"]),

@@ -200,6 +200,9 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
                 token_key = re.sub(r"[^a-z0-9]", "", token.group(0).lower()) if token else ""
                 if not token_key or token_key not in title_key:
                     continue
+            # Precompute the current destination during the background scan;
+            # the alerts page must never rescan the whole listings table.
+            alert.triggered_listing_url = fallback_listing_url(listing_id, source, title)
             if market is not None:
                 alert.market_reference_price_gbp = round(float(market.median) * 100)
                 alert.target_price_gbp = round(float(market.median) * (1 - (alert.discount_threshold_pct or 15) / 100) * 100)
