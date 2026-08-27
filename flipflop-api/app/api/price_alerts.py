@@ -37,6 +37,7 @@ def _out(alert: PriceAlert, build: ManualBuild | None) -> dict:
         "is_active": alert.is_active,
         "triggered_at": alert.triggered_at,
         "triggered_price_gbp": alert.triggered_price_gbp / 100 if alert.triggered_price_gbp is not None else None,
+        "listing_url": alert.triggered_listing_url if is_component else build.ebay_listing_url if build else None,
         "created_at": alert.created_at,
         "updated_at": alert.updated_at,
     }

@@ -150,6 +150,7 @@ export interface PriceAlert {
   is_active: boolean;
   triggered_at: string | null;
   triggered_price_gbp: number | null;
+  listing_url: string | null;
   created_at: string;
   updated_at: string;
   alert_type: "build" | "component";

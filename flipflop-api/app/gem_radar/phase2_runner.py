@@ -204,6 +204,7 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
             if current_pennies <= alert.target_price_gbp:
                 alert.triggered_at = datetime.utcnow()
                 alert.triggered_price_gbp = current_pennies
+                alert.triggered_listing_url = fallback_listing_url(listing_id, source, title)
                 db.add(PriceAlertEvent(
                     alert_id=alert.id,
                     event_type="triggered",

@@ -29,6 +29,8 @@ class PriceAlert(Base):
     triggered_at: Mapped[datetime | None] = mapped_column(DateTime)
     # Price at time of trigger (pennies)
     triggered_price_gbp: Mapped[int | None] = mapped_column(Integer)
+    # Exact marketplace listing that caused a component alert to fire.
+    triggered_listing_url: Mapped[str | None] = mapped_column(String(1000))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
