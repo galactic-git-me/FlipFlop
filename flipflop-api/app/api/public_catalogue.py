@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 import json
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -78,14 +78,39 @@ async def public_playbook_slots(playbook_id: int, db: AsyncSession = Depends(get
     slots = slots_result.scalars().all()
     slot_ids = [s.id for s in slots]
 
-    # Single query for all active variants across all customer-visible slots
+    # Load curation before the catalogue query. An explicitly public variant is
+    # a fixed configurator choice and must survive the automated marketplace
+    # freshness job changing its catalogue status to ``hidden``. Previously the
+    # status filter ran first, so every curated build could become empty after
+    # a refresh even though its visibility rows still said it was public.
+    visible_variant_ids: set[int] = set()
+    curated_slot_ids: set[int] = set()
     if slot_ids:
+        vis_result = await db.execute(
+            select(ConfiguratorCatalogueVisibility).where(
+                ConfiguratorCatalogueVisibility.playbook_slot_id.in_(slot_ids)
+            )
+        )
+        vis_rows = vis_result.scalars().all()
+        curated_slot_ids = {r.playbook_slot_id for r in vis_rows}
+        visible_variant_ids = {
+            r.catalogue_variant_id for r in vis_rows if r.is_publicly_visible
+        }
+
+    # Active catalogue candidates plus explicitly curated fixed choices.
+    if slot_ids:
+        status_filter = CatalogueVariant.status == "active"
+        if visible_variant_ids:
+            status_filter = or_(
+                status_filter,
+                CatalogueVariant.id.in_(visible_variant_ids),
+            )
         variants_result = await db.execute(
             select(CatalogueVariant, Listing)
             .join(Listing, CatalogueVariant.listing_id == Listing.id)
             .where(
                 CatalogueVariant.slot_id.in_(slot_ids),
-                CatalogueVariant.status == "active",
+                status_filter,
             )
             .order_by(CatalogueVariant.slot_id, CatalogueVariant.display_price)
         )
@@ -103,22 +128,11 @@ async def public_playbook_slots(playbook_id: int, db: AsyncSession = Depends(get
     # rows) silently hid every OTHER slot type in the same playbook that had
     # no visibility rows of its own yet — a real regression caught 2026-08-12
     # (see PC_BUILDER_DISCOVERY_AND_IMPLEMENTATION_PLAN.md).
-    if slot_ids:
-        vis_result = await db.execute(
-            select(ConfiguratorCatalogueVisibility).where(
-                ConfiguratorCatalogueVisibility.playbook_slot_id.in_(slot_ids)
-            )
-        )
-        vis_rows = vis_result.scalars().all()
-        if vis_rows:
-            curated_slot_ids = {r.playbook_slot_id for r in vis_rows}
-            visible_variant_ids = {
-                r.catalogue_variant_id for r in vis_rows if r.is_publicly_visible
-            }
-            all_rows = [
-                (v, l) for v, l in all_rows
-                if v.slot_id not in curated_slot_ids or v.id in visible_variant_ids
-            ]
+    if curated_slot_ids:
+        all_rows = [
+            (v, l) for v, l in all_rows
+            if v.slot_id not in curated_slot_ids or v.id in visible_variant_ids
+        ]
 
     # Group by slot_id in Python, guarding against unexpected tier values
     variants_by_slot: dict[int, dict[str, list]] = defaultdict(

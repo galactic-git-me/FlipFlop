@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-27T00:46:49.758179+00:00",
+  "generated_at": "2026-08-27T01:45:22.277923+00:00",
   "builds": [
     {
       "components": [
@@ -132,12 +132,12 @@
           "count": 49,
           "min_price": 89.81,
           "max_price": 970.0,
-          "average_price": 362.16
+          "average_price": 375.17
         }
       },
-      "resale_estimate": 362.16,
+      "resale_estimate": 375.17,
       "resale_source": "bin_average",
-      "estimated_profit": 280.18,
+      "estimated_profit": 293.19,
       "rank": 1
     },
     {
@@ -271,12 +271,12 @@
           "count": 49,
           "min_price": 89.81,
           "max_price": 970.0,
-          "average_price": 362.16
+          "average_price": 373.52
         }
       },
-      "resale_estimate": 362.16,
+      "resale_estimate": 373.52,
       "resale_source": "bin_average",
-      "estimated_profit": 280.17,
+      "estimated_profit": 291.53,
       "rank": 2
     },
     {
@@ -403,19 +403,19 @@
           "available": false,
           "count": 0,
           "average_price": null,
-          "unavailable_reason": "eBay sold-comps scrape failed: BrowserContext.add_init_script: Target page, context or browser has been closed"
+          "unavailable_reason": "No comparable sold listings found"
         },
         "bin": {
           "available": true,
-          "count": 50,
+          "count": 49,
           "min_price": 89.81,
           "max_price": 1049.0,
-          "average_price": 356.57
+          "average_price": 363.35
         }
       },
-      "resale_estimate": 356.57,
+      "resale_estimate": 363.35,
       "resale_source": "bin_average",
-      "estimated_profit": 276.63,
+      "estimated_profit": 283.41,
       "rank": 3
     },
     {
@@ -549,12 +549,12 @@
           "count": 50,
           "min_price": 89.81,
           "max_price": 1049.0,
-          "average_price": 356.32
+          "average_price": 358.61
         }
       },
-      "resale_estimate": 356.32,
+      "resale_estimate": 358.61,
       "resale_source": "bin_average",
-      "estimated_profit": 275.34,
+      "estimated_profit": 277.63,
       "rank": 4
     },
     {
@@ -688,12 +688,12 @@
           "count": 50,
           "min_price": 89.81,
           "max_price": 1049.0,
-          "average_price": 356.32
+          "average_price": 358.61
         }
       },
-      "resale_estimate": 356.32,
+      "resale_estimate": 358.61,
       "resale_source": "bin_average",
-      "estimated_profit": 274.34,
+      "estimated_profit": 276.63,
       "rank": 5
     },
     {
@@ -820,19 +820,19 @@
           "available": false,
           "count": 0,
           "average_price": null,
-          "unavailable_reason": "eBay sold-comps scrape failed: Page.title: Target page, context or browser has been closed"
+          "unavailable_reason": "No comparable sold listings found"
         },
         "bin": {
           "available": true,
-          "count": 46,
+          "count": 47,
           "min_price": 78.55,
           "max_price": 1399.99,
-          "average_price": 340.39
+          "average_price": 342.42
         }
       },
-      "resale_estimate": 340.39,
+      "resale_estimate": 342.42,
       "resale_source": "bin_average",
-      "estimated_profit": 260.41,
+      "estimated_profit": 262.44,
       "rank": 6
     }
   ],
