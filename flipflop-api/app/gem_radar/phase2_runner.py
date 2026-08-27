@@ -181,11 +181,14 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
             watch_count, bid_count, delivered_price
         )
         title_key = re.sub(r"[^a-z0-9]", "", (title or "").lower())
+        listing_identity = resolve_identity(title or "")
         for alert in component_price_alerts:
             # An alert can match several listings in the same scoring batch.
             # Once the first qualifying listing triggers it, do not overwrite
             # that price or create duplicate trigger events later in the run.
             if alert.triggered_at is not None:
+                continue
+            if alert.component_slot and listing_identity.category != alert.component_slot:
                 continue
             identity = resolve_identity(alert.component_key or "")
             model = identity.model or alert.component_key or ""
