@@ -61,13 +61,49 @@ must not silently exceed the customer's budget.
 
 ### 5. Produce the asset library
 
+#### Case sourcing funnel
+
+Start with the **top 30 cases by catalogue rank**. Freeze a ranked snapshot for
+the campaign so cases do not move between approval batches while marketplace
+rankings change. Preserve rank and all source evidence in the asset record.
+
+For every case, use this order and stop at the first commercially usable source:
+
+1. Search the manufacturer's product, support, press, and download pages for an
+   official GLB, GLTF, FBX, OBJ, STEP, CAD, BIM, or downloadable 3D model.
+2. Search reputable third-party model/CAD libraries for an exact case model,
+   recording creator, licence, commercial-use rights, redistribution rights,
+   source URL, and required attribution. A downloadable model is not assumed to
+   be legally publishable.
+3. Search for official and high-quality product imagery: front, rear, both side
+   panels, three-quarter angles, top, interior, and important I/O/details.
+4. Search YouTube for official showcases, reviews, unboxings, teardowns, and
+   full rotations. Record video URLs and timestamps for useful viewpoints.
+5. If no publishable exact 3D model exists, feed the best consistent multi-angle
+   image set to Meshy.ai. Video frames may fill missing angles, but should not
+   replace clean manufacturer photos when those exist.
+6. Download the generated candidate, preserve the raw output, clean and optimise
+   it, produce a web GLB, and validate appearance, dimensions, scale, orientation,
+   pivot, textures, polygon count, and file size.
+7. Put the candidate into the next ten-model owner-review batch. It remains
+   unpublished until explicitly approved and the completed batch is published.
+
+Use one evidence manifest per case containing all searches attempted—including
+unsuccessful searches—source URLs, image/video references, licence conclusions,
+Meshy job/version information, validation results, and revision history. This
+prevents repeatedly searching the same dead ends and gives every public model an
+auditable provenance trail.
+
+#### Batch order
+
 Initial order:
 
 1. One web-ready model for each highest-priority component family.
-2. The first ten priority cases.
+2. Ranked cases 1–10 (approval batch 1).
 3. Remaining component-family coverage.
-4. Cases 11–20, then cases 21–30.
-5. Exact popular-product models where a generic family representation is no
+4. Ranked cases 11–20 (approval batch 2).
+5. Ranked cases 21–30 (approval batch 3).
+6. Exact popular-product models where a generic family representation is no
    longer sufficient.
 
 Work stops at the end of every generated batch until the owner reviews all ten.

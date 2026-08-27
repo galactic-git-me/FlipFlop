@@ -134,6 +134,17 @@ interface Component3DAsset {
   created_at: string | null;
   rank?: number | null;
   source_image_refs?: string[];
+  review_batch_id?: string | null;
+  review_decision?: "approved" | "rejected" | null;
+}
+
+interface ReviewBatch {
+  batch_id: string;
+  size: number;
+  decided: number;
+  complete: boolean;
+  published: boolean;
+  assets: Component3DAsset[];
 }
 
 function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
@@ -335,6 +346,10 @@ export default function Components3DReviewPage() {
   const [loading, setLoading] = useState(true);
   const [selectedAsset, setSelectedAsset] = useState<Component3DAsset | null>(null);
   const [filter, setFilter] = useState<"meshy_draft" | "all">("all");
+  const [batch, setBatch] = useState<ReviewBatch | null>(null);
+  const [reviewNotes, setReviewNotes] = useState("");
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [actionBusy, setActionBusy] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -393,24 +408,70 @@ export default function Components3DReviewPage() {
     }
   };
 
-  const handleStatusChange = async (assetId: number, newStatus: string) => {
+  const startReviewBatch = async () => {
+    setActionBusy(true);
+    setActionError(null);
     try {
-      const response = await fetch(`/api/assets-3d/${assetId}`, {
-        method: "PATCH",
+      const response = await fetch("/api/assets-3d/review-batches", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          status: newStatus,
-          commercial_use_approved: newStatus === "validated" || newStatus === "final",
-          redistribution_approved: newStatus === "validated" || newStatus === "final",
-        }),
+        body: JSON.stringify({ size: 10 }),
       });
-      if (response.ok) {
-        const updated = (await response.json()) as Component3DAsset;
-        setAssets(prev => prev.map(a => a.id === assetId ? updated : a));
-        if (selectedAsset?.id === assetId) setSelectedAsset(updated);
-      }
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail || data.error || "Could not create review batch");
+      setBatch(data as ReviewBatch);
+      setAssets((data as ReviewBatch).assets);
+      setSelectedAsset((data as ReviewBatch).assets[0] || null);
+      setFilter("all");
     } catch (error) {
-      console.error("Error updating asset:", error);
+      setActionError(error instanceof Error ? error.message : "Could not create review batch");
+    } finally {
+      setActionBusy(false);
+    }
+  };
+
+  const decideAsset = async (decision: "approved" | "rejected") => {
+    if (!batch || !selectedAsset) return;
+    setActionBusy(true);
+    setActionError(null);
+    try {
+      const response = await fetch(`/api/assets-3d/review-batches/${batch.batch_id}/assets/${selectedAsset.id}/decision`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ decision, notes: reviewNotes || null }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail || data.error || "Could not save decision");
+      const updatedAssets = batch.assets.map(asset => asset.id === data.id ? data : asset);
+      const updatedBatch = { ...batch, assets: updatedAssets, decided: updatedAssets.filter(asset => asset.review_decision).length };
+      updatedBatch.complete = updatedBatch.decided === updatedBatch.size;
+      setBatch(updatedBatch);
+      setAssets(updatedAssets);
+      setSelectedAsset(data as Component3DAsset);
+      setReviewNotes("");
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : "Could not save decision");
+    } finally {
+      setActionBusy(false);
+    }
+  };
+
+  const publishBatch = async () => {
+    if (!batch) return;
+    setActionBusy(true);
+    setActionError(null);
+    try {
+      const response = await fetch(`/api/assets-3d/review-batches/${batch.batch_id}/publish`, { method: "POST" });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail || data.error || "Could not publish batch");
+      setBatch(data as ReviewBatch);
+      setAssets((data as ReviewBatch).assets);
+      const selected = (data as ReviewBatch).assets.find(asset => asset.id === selectedAsset?.id);
+      if (selected) setSelectedAsset(selected);
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : "Could not publish batch");
+    } finally {
+      setActionBusy(false);
     }
   };
 
@@ -436,6 +497,32 @@ export default function Components3DReviewPage() {
       <div style={{ height: "100vh", animation: "bgShift 8s ease-in-out infinite" }} className="w-full flex flex-col gap-3 p-4 pb-0 overflow-hidden">
       <div className="flex items-center justify-between">
         <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
+        <div className="flex items-center gap-3">
+          {batch ? (
+            <>
+              <div className="rounded-md border border-slate-600 bg-slate-950/80 px-3 py-2 text-sm text-slate-200" role="status">
+                Batch {batch.decided}/{batch.size} reviewed
+              </div>
+              <button
+                type="button"
+                onClick={publishBatch}
+                disabled={!batch.complete || batch.published || actionBusy}
+                className="cursor-pointer rounded-md border border-emerald-500 bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                {batch.published ? "Published" : "Publish approved models"}
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={startReviewBatch}
+              disabled={actionBusy}
+              className="cursor-pointer rounded-md border border-sky-500 bg-sky-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-sky-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Start next batch of 10
+            </button>
+          )}
+        </div>
         <div className="bg-white/50 rounded-lg px-6 py-2 text-lg font-semibold flex items-center gap-4">
           <span className="text-orange-500">{draftCount} Draft</span>
           <span className="text-purple-500">{validatedCount} Valid</span>
@@ -443,6 +530,7 @@ export default function Components3DReviewPage() {
           <span className="text-slate-800">{assets.length} Total</span>
         </div>
       </div>
+      {actionError && <div role="alert" className="rounded-md border border-red-500/60 bg-red-950/80 px-4 py-2 text-sm text-red-200">{actionError}</div>}
 
       <div style={{ flex: 1, minHeight: 0 }} className="flex gap-3 relative">
         {/* LEFT/RIGHT Navigation Arrows */}
@@ -579,22 +667,23 @@ export default function Components3DReviewPage() {
 
                       <div className="space-y-2 relative z-50">
                         <div className="flex gap-1 relative z-50">
-                          <button onClick={() => handleStatusChange(selectedAsset.id, "rejected")} className="flex-1 px-2 py-1 rounded text-xs font-semibold bg-red-600/40 text-red-300 border border-red-500/50 hover:bg-red-600/60 relative z-50">
+                          <button disabled={!batch || actionBusy} onClick={() => decideAsset("rejected")} className="flex-1 cursor-pointer px-2 py-1 rounded text-xs font-semibold bg-red-600/40 text-red-300 border border-red-500/50 hover:bg-red-600/60 disabled:cursor-not-allowed disabled:opacity-40 relative z-50">
                             Reject
                           </button>
-                          <button onClick={() => handleStatusChange(selectedAsset.id, "validated")} className="flex-1 px-2 py-1 rounded text-xs font-semibold bg-[#00dc82]/40 text-[#00dc82] border border-[#00dc82]/50 hover:bg-[#00dc82]/60 relative z-50">
+                          <button disabled={!batch || actionBusy} onClick={() => decideAsset("approved")} className="flex-1 cursor-pointer px-2 py-1 rounded text-xs font-semibold bg-[#00dc82]/40 text-[#00dc82] border border-[#00dc82]/50 hover:bg-[#00dc82]/60 disabled:cursor-not-allowed disabled:opacity-40 relative z-50">
                             Approve
                           </button>
                         </div>
 
                         <textarea
                           placeholder="Add guidance comments for regeneration..."
+                          aria-label="Review notes"
+                          value={reviewNotes}
+                          onChange={(event) => setReviewNotes(event.target.value)}
                           className="w-full px-2 py-1 rounded text-xs bg-slate-800/50 text-slate-300 border border-slate-600/50 placeholder-slate-500 resize-none h-16 focus:outline-none focus:border-slate-500/80 relative z-50"
                         />
 
-                        <button onClick={() => handleStatusChange(selectedAsset.id, "meshy_draft")} className="w-full px-2 py-1 rounded text-xs font-semibold bg-blue-600/40 text-blue-300 border border-blue-500/50 hover:bg-blue-600/60 relative z-50">
-                          Regenerate
-                        </button>
+                        {selectedAsset.review_decision && <p className="text-xs text-slate-300" role="status">Decision: {selectedAsset.review_decision}</p>}
                       </div>
                     </div>
                   </div>

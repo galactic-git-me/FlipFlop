@@ -10,11 +10,12 @@ export async function PATCH(
   try {
     const body = await request.json();
 
-    const response = await fetch(`${BACKEND_URL}/assets-3d/${id}`, {
+    const response = await fetch(`${BACKEND_URL}/api/assets-3d/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         "Authorization": request.headers.get("authorization") || "",
+        "Cookie": request.headers.get("cookie") || "",
       },
       body: JSON.stringify(body),
     });
