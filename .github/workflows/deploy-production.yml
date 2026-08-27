@@ -1,0 +1,64 @@
+name: Deploy production to Andromeda
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "flipflop-api/**"
+      - "deploy/**"
+      - ".github/workflows/deploy-production.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: flipflop-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: flipflop-api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: flipflop-api/requirements*.txt
+      - name: Install API dependencies
+        run: pip install -r requirements.txt -r requirements-dev.txt
+      - name: Verify eBay OAuth and price alerts
+        run: >-
+          pytest -q
+          tests/test_ebay_oauth.py
+          tests/test_component_price_alert_matching.py
+
+  deploy:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.ANDROMEDA_SSH_KEY }}
+          SSH_HOST_KEY: ${{ secrets.ANDROMEDA_HOST_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/andromeda
+          chmod 600 ~/.ssh/andromeda
+          printf '%s\n' "$SSH_HOST_KEY" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+      - name: Deploy exact commit
+        env:
+          ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}
+          ANDROMEDA_USER: ${{ secrets.ANDROMEDA_USER }}
+          ANDROMEDA_PORT: ${{ secrets.ANDROMEDA_PORT }}
+        run: |
+          ssh -i ~/.ssh/andromeda \
+            -p "${ANDROMEDA_PORT:-22}" \
+            "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
+            "/home/mac/CODING/FlipFlop/deploy/deploy-andromeda.sh '${{ github.sha }}'"
