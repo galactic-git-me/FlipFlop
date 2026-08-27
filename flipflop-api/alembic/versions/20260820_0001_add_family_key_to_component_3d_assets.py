@@ -21,8 +21,15 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.add_column('component_3d_assets', sa.Column('family_key', sa.String(length=60), nullable=True))
+    # Some early deployments created this model column through metadata
+    # bootstrap before the Alembic revision was applied. Treat that state as
+    # already migrated so the remaining revision chain can run normally.
+    columns = {column['name'] for column in sa.inspect(op.get_bind()).get_columns('component_3d_assets')}
+    if 'family_key' not in columns:
+        op.add_column('component_3d_assets', sa.Column('family_key', sa.String(length=60), nullable=True))
 
 
 def downgrade() -> None:
-    op.drop_column('component_3d_assets', 'family_key')
+    columns = {column['name'] for column in sa.inspect(op.get_bind()).get_columns('component_3d_assets')}
+    if 'family_key' in columns:
+        op.drop_column('component_3d_assets', 'family_key')

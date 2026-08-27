@@ -18,6 +18,10 @@ depends_on = None
 
 
 def upgrade() -> None:
+    # A pre-Alembic production bootstrap created this table from model
+    # metadata. Preserve it and continue the revision chain when present.
+    if sa.inspect(op.get_bind()).has_table("price_history"):
+        return
     op.create_table(
         "price_history",
         sa.Column("id", sa.Integer(), nullable=False),
@@ -34,4 +38,5 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_table("price_history")
+    if sa.inspect(op.get_bind()).has_table("price_history"):
+        op.drop_table("price_history")
