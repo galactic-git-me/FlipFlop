@@ -111,7 +111,7 @@ def _case_status_to_asset_status(case_status: str) -> str:
     return status_map.get(case_status, "meshy_draft")
 
 
-def _serialize(a: Component3DAsset) -> dict:
+def _serialize(a: Component3DAsset, source_video_refs: list[dict] | None = None) -> dict:
     return {
         "id": a.id,
         "subject_type": a.subject_type.value,
@@ -124,6 +124,7 @@ def _serialize(a: Component3DAsset) -> dict:
         "glb_ref": a.glb_ref,
         "preview_image_ref": a.preview_image_ref,
         "source_image_refs": a.source_image_refs,
+        "source_video_refs": source_video_refs or [],
         "poly_count": a.poly_count,
         "file_size_kb": a.file_size_kb,
         "dimensions_mm": a.dimensions_mm,
@@ -150,6 +151,41 @@ def _serialize(a: Component3DAsset) -> dict:
     }
 
 
+def _youtube_refs(evidence: dict | None) -> list[dict]:
+    """Extract genuine YouTube results from the case sourcing evidence."""
+    stage = ((evidence or {}).get("stages") or {}).get("youtube_video") or {}
+    refs: list[dict] = []
+    for attempt in stage.get("attempts") or []:
+        url = attempt.get("source_url")
+        if not isinstance(url, str) or not ("youtube.com/" in url or "youtu.be/" in url):
+            continue
+        refs.append({
+            "url": url,
+            "title": attempt.get("result") or attempt.get("query") or "YouTube reference",
+            "timestamp": attempt.get("timestamp"),
+        })
+    return refs
+
+
+async def _serialize_many(db: AsyncSession, assets: list[Component3DAsset]) -> list[dict]:
+    case_ids = {
+        asset.subject_id
+        for asset in assets
+        if asset.subject_type == AssetSubjectType.CASE and asset.subject_id is not None
+    }
+    videos_by_case: dict[int, list[dict]] = {}
+    if case_ids:
+        cases = (await db.execute(select(Case).where(Case.id.in_(case_ids)))).scalars().all()
+        videos_by_case = {
+            case.id: _youtube_refs(case.sourcing_3d_evidence)
+            for case in cases
+        }
+    return [
+        _serialize(asset, videos_by_case.get(asset.subject_id, []))
+        for asset in assets
+    ]
+
+
 @router.get("")
 async def list_assets(
     subject_type: str | None = None,
@@ -172,7 +208,7 @@ async def list_assets(
         except ValueError:
             raise HTTPException(status_code=422, detail=f"Unknown status '{status}'")
     rows = (await db.execute(q)).scalars().all()
-    return [_serialize(a) for a in rows]
+    return await _serialize_many(db, rows)
 
 
 class ReviewBatchCreate(BaseModel):
@@ -180,7 +216,7 @@ class ReviewBatchCreate(BaseModel):
     asset_ids: list[int] | None = Field(default=None, min_length=1, max_length=10)
 
 
-def _batch_payload(batch_id: str, assets: list[Component3DAsset]) -> dict:
+async def _batch_payload(batch_id: str, assets: list[Component3DAsset], db: AsyncSession) -> dict:
     decided = sum(asset.review_decision is not None for asset in assets)
     return {
         "batch_id": batch_id,
@@ -190,7 +226,7 @@ def _batch_payload(batch_id: str, assets: list[Component3DAsset]) -> dict:
         "published": bool(assets) and all(
             asset.review_decision == "rejected" or asset.is_active for asset in assets
         ),
-        "assets": [_serialize(asset) for asset in assets],
+        "assets": await _serialize_many(db, assets),
     }
 
 
@@ -230,7 +266,7 @@ async def create_review_batch(
     for asset in candidates:
         asset.review_batch_id = batch_id
     await db.commit()
-    return _batch_payload(batch_id, candidates)
+    return await _batch_payload(batch_id, candidates, db)
 
 
 @router.get("/review-batches/{batch_id}")
@@ -244,7 +280,7 @@ async def get_review_batch(batch_id: str, db: AsyncSession = Depends(get_db)):
     ).scalars().all()
     if not assets:
         raise HTTPException(status_code=404, detail="Review batch not found")
-    return _batch_payload(batch_id, assets)
+    return await _batch_payload(batch_id, assets, db)
 
 
 class ReviewDecision(BaseModel):
@@ -329,7 +365,7 @@ async def publish_review_batch(
         asset.provenance_reviewed_at = asset.provenance_reviewed_at or datetime.utcnow()
         asset.provenance_reviewed_by = asset.provenance_reviewed_by or getattr(admin, "email", None)
     await db.commit()
-    return _batch_payload(batch_id, assets)
+    return await _batch_payload(batch_id, assets, db)
 
 
 class AssetCreate(BaseModel):

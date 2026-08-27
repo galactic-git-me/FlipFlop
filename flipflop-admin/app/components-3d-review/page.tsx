@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { ChevronLeft, ChevronRight, Images } from "lucide-react";
+import { ChevronLeft, ChevronRight, Images, Youtube } from "lucide-react";
 
 interface Star {
   x: number;
@@ -136,8 +136,27 @@ interface Component3DAsset {
   rank?: number | null;
   subject_name?: string | null;
   source_image_refs?: string[];
+  source_video_refs?: Array<{
+    url: string;
+    title: string;
+    timestamp?: string | null;
+  }>;
   review_batch_id?: string | null;
   review_decision?: "approved" | "rejected" | null;
+}
+
+function youtubeEmbedUrl(url: string) {
+  try {
+    const parsed = new URL(url);
+    const videoId = parsed.hostname.includes("youtu.be")
+      ? parsed.pathname.slice(1).split("/")[0]
+      : parsed.searchParams.get("v") || parsed.pathname.split("/").filter(Boolean).pop();
+    if (!videoId) return null;
+    const start = parsed.searchParams.get("t") || parsed.searchParams.get("start");
+    return `https://www.youtube-nocookie.com/embed/${videoId}${start ? `?start=${parseInt(start, 10) || 0}` : ""}`;
+  } catch {
+    return null;
+  }
 }
 
 interface ReviewBatch {
@@ -790,6 +809,49 @@ export default function Components3DReviewPage() {
                     No source pictures are attached. This item should not be approved until comparison images are supplied.
                   </div>
                 )}
+
+                <div className="my-4 border-t border-[#1e2d45] pt-4">
+                  <h2 className="mb-3 flex items-center gap-2 text-sm font-bold text-slate-100">
+                    <Youtube className="h-4 w-4 text-red-400" aria-hidden="true" />
+                    YouTube references
+                  </h2>
+                  {selectedAsset.source_video_refs?.length ? (
+                    <div className="space-y-4">
+                      {selectedAsset.source_video_refs.map((video, index) => {
+                        const embedUrl = youtubeEmbedUrl(video.url);
+                        return (
+                          <article key={`${video.url}-${index}`} className="overflow-hidden rounded-md border border-slate-700 bg-slate-950">
+                            {embedUrl && (
+                              <iframe
+                                src={embedUrl}
+                                title={`${video.title} — video reference ${index + 1}`}
+                                className="aspect-video w-full"
+                                loading="lazy"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                              />
+                            )}
+                            <div className="p-2">
+                              <p className="text-xs leading-relaxed text-slate-300">{video.title}</p>
+                              <a
+                                href={video.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="mt-2 inline-flex cursor-pointer text-xs font-semibold text-red-300 transition-colors hover:text-red-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
+                              >
+                                Open on YouTube
+                              </a>
+                            </div>
+                          </article>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className="rounded-md border border-slate-700 bg-slate-900/60 p-3 text-xs text-slate-400">
+                      No exact YouTube reference was found for this item.
+                    </p>
+                  )}
+                </div>
 
                 <p className="mt-4 text-center text-xs text-slate-500">Use the left/right arrow keys to move between items.</p>
               </aside>
