@@ -16,17 +16,14 @@ class EbayScraper:
         self.normal_delay_range = (2, 5)
         self.block_jitter_range = (8, 25)
         
-        # Sample User-Agents to simulate fake_useragent functionality
-        self.user_agents = [
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"
-        ]
+        # Fixed identity — one consistent fingerprint for the life of this session,
+        # not rotated per-request (session/account consistency > per-request anonymity).
+        self.user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
     def _get_random_headers(self):
-        """Generates realistic browser headers."""
+        """Generates the fixed header set for this session's identity."""
         return {
-            "User-Agent": random.choice(self.user_agents),
+            "User-Agent": self.user_agent,
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
             "Accept-Language": "en-US,en;q=0.5",
             "Accept-Encoding": "gzip, deflate, br",
