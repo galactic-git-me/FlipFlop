@@ -61,4 +61,4 @@ jobs:
           ssh -i ~/.ssh/andromeda \
             -p "${ANDROMEDA_PORT:-22}" \
             "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
-            "/home/mac/CODING/FlipFlop/deploy/deploy-andromeda.sh '${{ github.sha }}'"
+            "/home/mac/CODING/FlipFlop-production/deploy/deploy-andromeda.sh '${{ github.sha }}'"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-REPO_DIR="${FLIPFLOP_REPO_DIR:-/home/mac/CODING/FlipFlop}"
+REPO_DIR="${FLIPFLOP_REPO_DIR:-/home/mac/CODING/FlipFlop-production}"
 COMPOSE_FILE="$REPO_DIR/deploy/andromeda-api.compose.yml"
 BRANCH="${FLIPFLOP_DEPLOY_BRANCH:-master}"
 TARGET_SHA="${1:-}"
