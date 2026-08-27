@@ -157,6 +157,7 @@ export interface PriceAlert {
   component_key: string | null;
   component_slot: string | null;
   market_reference_price_gbp: number | null;
+  reference_basis: "build_valuation" | "market_median" | null;
   discount_threshold_pct: number | null;
 }
 

@@ -993,6 +993,7 @@ async def save_component_ratings(
                     component_key=incoming.component_key,
                     component_slot=incoming.component_slot,
                     market_reference_price_gbp=reference_pennies,
+                    reference_basis="build_valuation",
                     discount_threshold_pct=15.0,
                     target_price_gbp=target_pennies,
                     user_email=admin.email,
@@ -1002,6 +1003,7 @@ async def save_component_ratings(
             else:
                 alert.component_slot = incoming.component_slot
                 alert.market_reference_price_gbp = reference_pennies
+                alert.reference_basis = "build_valuation"
                 alert.discount_threshold_pct = 15.0
                 alert.target_price_gbp = target_pennies
                 alert.user_email = admin.email

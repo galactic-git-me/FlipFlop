@@ -19,6 +19,7 @@ class PriceAlert(Base):
     component_key: Mapped[str | None] = mapped_column(String(255), index=True)
     component_slot: Mapped[str | None] = mapped_column(String(50), index=True)
     market_reference_price_gbp: Mapped[int | None] = mapped_column(Integer)
+    reference_basis: Mapped[str | None] = mapped_column(String(40))
     discount_threshold_pct: Mapped[float | None] = mapped_column(Float)
     user_email: Mapped[str] = mapped_column(String(255), index=True)
     # Stored in pennies (£79.99 → 7999 pennies) to avoid float rounding

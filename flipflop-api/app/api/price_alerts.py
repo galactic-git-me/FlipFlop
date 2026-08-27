@@ -31,6 +31,7 @@ def _out(alert: PriceAlert, build: ManualBuild | None) -> dict:
         "component_key": alert.component_key,
         "component_slot": alert.component_slot,
         "market_reference_price_gbp": alert.market_reference_price_gbp / 100 if alert.market_reference_price_gbp is not None else None,
+        "reference_basis": alert.reference_basis,
         "discount_threshold_pct": alert.discount_threshold_pct,
         "user_email": alert.user_email,
         "target_price_gbp": alert.target_price_gbp / 100,
