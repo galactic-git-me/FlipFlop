@@ -49,6 +49,27 @@ class Phase2Result:
     classification_counts: dict[str, int] = field(default_factory=dict)
 
 
+def component_alert_matches_listing(
+    alert: PriceAlert,
+    *,
+    listing_cpk: str | None,
+    listing_condition: str,
+    observed_at: datetime,
+    now: datetime | None = None,
+) -> bool:
+    """Identity and freshness gate for component alerts; title text is irrelevant."""
+    current_time = now or datetime.utcnow()
+    return bool(
+        alert.is_active
+        and alert.monitoring_status in {"pending_evidence", "armed"}
+        and alert.triggered_at is None
+        and alert.cpk
+        and listing_cpk == alert.cpk
+        and (not alert.condition_cohort or listing_condition == alert.condition_cohort)
+        and observed_at >= current_time - timedelta(hours=48)
+    )
+
+
 async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews: bool = True) -> Phase2Result:
     policy = await load_opportunity_policy(db)
 
@@ -191,12 +212,11 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
             watch_count, bid_count, delivered_price
         )
         for alert in alerts_by_cpk.get(cpk, []):
-            if alert.triggered_at is not None:
-                continue
             alert.last_evaluated_at = datetime.utcnow()
-            if observed_at < datetime.utcnow() - timedelta(hours=48):
-                continue
-            if alert.condition_cohort and normalised_condition != alert.condition_cohort:
+            if not component_alert_matches_listing(
+                alert, listing_cpk=cpk, listing_condition=normalised_condition,
+                observed_at=observed_at,
+            ):
                 continue
             if alert.monitoring_status == "pending_evidence" and market is not None:
                 alert.market_reference_price_gbp = round(float(market.median) * 100)

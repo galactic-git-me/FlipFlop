@@ -17,6 +17,7 @@ from app.models import PriceAlert, ManualBuild
 from app.services.email_service import send_email_async
 from app.services.money import Money
 from app.services.feature_flags import is_enabled, FeatureFlags
+from app.services.email_service import _send
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -105,9 +106,9 @@ async def send_price_alert_email(
 
         # Send email
         sent = await send_email_async(
-            to=alert.user_email,
+            recipient=alert.user_email,
             subject=subject,
-            body=html_body,
+            html_body=html_body,
             reference=f"price_alert_{alert.id}",
         )
 
@@ -229,7 +230,7 @@ async def send_alert_summary_email(
 
         subject = f"Price Alerts: {len(triggered_alerts)} builds on sale today!"
 
-        await send_email_async(
+        sent = await send_email_async(
             recipient=user_email,
             subject=subject,
             html_body=html_body,
@@ -243,7 +244,7 @@ async def send_alert_summary_email(
             total_savings=total_savings.to_float(),
         )
 
-        return True
+        return sent
 
     except Exception as e:
         log.error(
@@ -266,8 +267,6 @@ async def send_email_async(
     For now, delegates to sync email_service.
     In production, would use async SMTP client.
     """
-    # Import here to avoid circular imports
-    from app.services.email_service import _send
     from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
     from app.config import get_settings
