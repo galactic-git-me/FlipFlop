@@ -70,6 +70,10 @@ class Settings(BaseSettings):
     # it to your real callback URL (ebay_oauth_callback_url below) server-side.
     ebay_ru_name: str = ""
     ebay_oauth_callback_url: str = "http://localhost:8000/api/ebay/oauth/callback"
+    # Optional dedicated key material for encrypting OAuth tokens at rest.
+    # When omitted, the eBay client secret is used so existing deployments
+    # gain encryption without introducing another unmanaged production secret.
+    ebay_token_encryption_key: str = ""
     ebay_reselling_enabled: bool = True
     ebay_message_poll_interval_seconds: int = 300
     ebay_sales_poll_interval_seconds: int = 1800

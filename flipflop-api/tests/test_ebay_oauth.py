@@ -92,6 +92,9 @@ async def test_exchange_code_for_tokens_failure_raises():
 
 
 async def test_store_and_get_valid_token_roundtrip(db_session):
+    from app.models.app_settings import AppSettings
+    from sqlalchemy import select
+
     payload = {
         "access_token": "AT-1", "expires_in": 7200,
         "refresh_token": "RT-1", "refresh_token_expires_in": 47304000,
@@ -99,6 +102,12 @@ async def test_store_and_get_valid_token_roundtrip(db_session):
     }
     await ebay_oauth.store_tokens_from_exchange(db_session, payload)
     await db_session.commit()
+
+    row = (await db_session.execute(select(AppSettings).where(AppSettings.name == "default"))).scalar_one()
+    assert row.ebay_seller_access_token.startswith("enc:v1:")
+    assert row.ebay_seller_refresh_token.startswith("enc:v1:")
+    assert "AT-1" not in row.ebay_seller_access_token
+    assert "RT-1" not in row.ebay_seller_refresh_token
 
     token = await ebay_oauth.get_valid_access_token(db_session)
     assert token == "AT-1"
@@ -137,9 +146,29 @@ async def test_get_valid_access_token_auto_refreshes_when_expired(db_session):
         with patch("app.services.ebay_oauth.get_settings") as mock_settings:
             mock_settings.return_value.ebay_app_id = "id"
             mock_settings.return_value.ebay_client_secret = "secret"
+            mock_settings.return_value.ebay_token_encryption_key = "test-encryption-key"
             token = await ebay_oauth.get_valid_access_token(db_session)
 
     assert token == "AT-new"
+    assert row.ebay_seller_access_token.startswith("enc:v1:")
+    assert row.ebay_seller_refresh_token.startswith("enc:v1:")
+
+
+async def test_plaintext_token_is_migrated_on_read(db_session):
+    from app.models.app_settings import AppSettings
+
+    row = AppSettings(
+        name="default",
+        ebay_seller_access_token="legacy-access-token",
+        ebay_seller_access_token_expires_at=datetime.utcnow() + timedelta(hours=1),
+        ebay_seller_refresh_token="legacy-refresh-token",
+        ebay_seller_refresh_token_expires_at=datetime.utcnow() + timedelta(days=300),
+    )
+    db_session.add(row)
+    await db_session.commit()
+
+    assert await ebay_oauth.get_valid_access_token(db_session) == "legacy-access-token"
+    assert row.ebay_seller_access_token.startswith("enc:v1:")
 
 
 async def test_get_valid_access_token_none_when_refresh_token_expired(db_session):

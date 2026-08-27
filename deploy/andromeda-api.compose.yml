@@ -45,6 +45,7 @@ services:
       REDIS_URL: redis://redis:6379/0
       OLLAMA_BASE_URL: ""
       OLLAMA_MODEL: disabled-on-web-tier
+      FRONTEND_URL: https://www.theflipflop.shop
     ports:
       - "127.0.0.1:4311:4311"
     healthcheck:

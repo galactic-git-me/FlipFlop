@@ -26,12 +26,14 @@ eBay's documented OAuth2 token-endpoint contract.
 from __future__ import annotations
 
 import base64
+import hashlib
 import urllib.parse
 from datetime import datetime, timedelta
 from typing import Optional
 
 import httpx
 import structlog
+from cryptography.fernet import Fernet, InvalidToken
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
@@ -58,10 +60,51 @@ _AUTH_ROOT = {
 # Refresh 5 minutes before actual expiry to avoid a race where a call starts
 # with a token that expires mid-flight.
 _REFRESH_SKEW = timedelta(minutes=5)
+_ENCRYPTED_PREFIX = "enc:v1:"
 
 
 class EbayOAuthError(Exception):
     pass
+
+
+def _token_cipher() -> Fernet:
+    """Build a stable application cipher without ever persisting raw key material."""
+    settings = get_settings()
+    key_material = (
+        settings.ebay_token_encryption_key
+        or settings.ebay_client_secret
+        or settings.secret_key
+    )
+    if not key_material or key_material == "dev-secret-key-change-in-production":
+        raise EbayOAuthError(
+            "Configure EBAY_TOKEN_ENCRYPTION_KEY, EBAY_CLIENT_SECRET, or a production SECRET_KEY"
+        )
+    key = base64.urlsafe_b64encode(hashlib.sha256(key_material.encode("utf-8")).digest())
+    return Fernet(key)
+
+
+def _encrypt_token(token: str) -> str:
+    if not token:
+        return ""
+    if token.startswith(_ENCRYPTED_PREFIX):
+        return token
+    encrypted = _token_cipher().encrypt(token.encode("utf-8")).decode("ascii")
+    return f"{_ENCRYPTED_PREFIX}{encrypted}"
+
+
+def _decrypt_token(token: str) -> tuple[str, bool]:
+    """Return plaintext plus whether a legacy plaintext value needs migration."""
+    if not token:
+        return "", False
+    if not token.startswith(_ENCRYPTED_PREFIX):
+        return token, True
+    try:
+        plaintext = _token_cipher().decrypt(
+            token.removeprefix(_ENCRYPTED_PREFIX).encode("ascii")
+        )
+    except (InvalidToken, ValueError) as exc:
+        raise EbayOAuthError("Stored eBay OAuth token could not be decrypted") from exc
+    return plaintext.decode("utf-8"), False
 
 
 def _basic_auth_header() -> str:
@@ -136,9 +179,9 @@ async def store_tokens_from_exchange(db: AsyncSession, payload: dict) -> None:
         db.add(settings_row)
 
     now = datetime.utcnow()
-    settings_row.ebay_seller_access_token = payload["access_token"]
+    settings_row.ebay_seller_access_token = _encrypt_token(payload["access_token"])
     settings_row.ebay_seller_access_token_expires_at = now + timedelta(seconds=int(payload.get("expires_in", 7200)))
-    settings_row.ebay_seller_refresh_token = payload["refresh_token"]
+    settings_row.ebay_seller_refresh_token = _encrypt_token(payload["refresh_token"])
     settings_row.ebay_seller_refresh_token_expires_at = now + timedelta(
         seconds=int(payload.get("refresh_token_expires_in", 47304000))
     )
@@ -165,7 +208,11 @@ async def get_valid_access_token(db: AsyncSession) -> Optional[str]:
     now = datetime.utcnow()
     expires_at = settings_row.ebay_seller_access_token_expires_at
     if settings_row.ebay_seller_access_token and expires_at and now < expires_at - _REFRESH_SKEW:
-        return settings_row.ebay_seller_access_token
+        access_token, needs_migration = _decrypt_token(settings_row.ebay_seller_access_token)
+        if needs_migration:
+            settings_row.ebay_seller_access_token = _encrypt_token(access_token)
+            await db.flush()
+        return access_token
 
     # Access token missing/expiring soon — refresh via the long-lived refresh_token.
     if settings_row.ebay_seller_refresh_token_expires_at and now >= settings_row.ebay_seller_refresh_token_expires_at:
@@ -173,15 +220,18 @@ async def get_valid_access_token(db: AsyncSession) -> Optional[str]:
         return None
 
     try:
-        payload = await refresh_access_token(settings_row.ebay_seller_refresh_token)
+        refresh_token, refresh_needs_migration = _decrypt_token(settings_row.ebay_seller_refresh_token)
+        if refresh_needs_migration:
+            settings_row.ebay_seller_refresh_token = _encrypt_token(refresh_token)
+        payload = await refresh_access_token(refresh_token)
     except EbayOAuthError as exc:
         log.warning("ebay_oauth.auto_refresh_failed", error=str(exc))
         return None
 
-    settings_row.ebay_seller_access_token = payload["access_token"]
+    settings_row.ebay_seller_access_token = _encrypt_token(payload["access_token"])
     settings_row.ebay_seller_access_token_expires_at = now + timedelta(seconds=int(payload.get("expires_in", 7200)))
     await db.flush()
-    return settings_row.ebay_seller_access_token
+    return payload["access_token"]
 
 
 async def disconnect(db: AsyncSession) -> None:
