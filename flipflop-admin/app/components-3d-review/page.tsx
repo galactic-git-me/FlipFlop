@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Check } from "lucide-react";
+import { ChevronLeft, ChevronRight, Images } from "lucide-react";
 
 interface Star {
   x: number;
@@ -444,6 +444,24 @@ export default function Components3DReviewPage() {
     }
   };
 
+  useEffect(() => {
+    const handleKeyboardNavigation = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target?.matches("input, textarea, select, [contenteditable='true']")) return;
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        handlePreviousAsset();
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        handleNextAsset();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyboardNavigation);
+    return () => window.removeEventListener("keydown", handleKeyboardNavigation);
+  });
+
   const startReviewBatch = async () => {
     setActionBusy(true);
     setActionError(null);
@@ -573,27 +591,6 @@ export default function Components3DReviewPage() {
       {actionError && <div role="alert" className="rounded-md border border-red-500/60 bg-red-950/80 px-4 py-2 text-sm text-red-200">{actionError}</div>}
 
       <div style={{ flex: 1, minHeight: 0 }} className="flex gap-3 relative">
-        {/* LEFT/RIGHT Navigation Arrows */}
-        {selectedAsset && (
-          <>
-            <button
-              onClick={handlePreviousAsset}
-              disabled={filteredAssets.findIndex(a => a.id === selectedAsset.id) === 0}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-700/60 hover:bg-slate-600/80 text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-              style={{ textShadow: "0 0 8px rgba(0,0,0,0.8)" }}
-            >
-              ◀
-            </button>
-            <button
-              onClick={handleNextAsset}
-              disabled={filteredAssets.findIndex(a => a.id === selectedAsset.id) === filteredAssets.length - 1}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-700/60 hover:bg-slate-600/80 text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-              style={{ textShadow: "0 0 8px rgba(0,0,0,0.8)" }}
-            >
-              ▶
-            </button>
-          </>
-        )}
         {/* LEFT: Asset grid grouped by component */}
         <div style={{ width: "280px", minHeight: "400px" }} className="border border-[#1e2d45] rounded-lg overflow-y-auto p-3 bg-[#0a1119] flex flex-col">
           <div className="flex gap-2 mb-3 justify-end">
@@ -659,13 +656,34 @@ export default function Components3DReviewPage() {
           </div>
         </div>
 
-        {/* CENTER+RIGHT: 3D Viewer with overlays */}
+        {/* CENTER+RIGHT: model/reference comparison workspace */}
         <div className="flex-1 flex flex-col min-h-0 z-30 relative">
           {selectedAsset ? (
-            <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 flex flex-col relative z-30" style={{ background: "transparent" }}>
-              <div className="flex-1 min-h-0 relative" ref={containerRef}>
+            <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] relative z-30 bg-[#050b12]/80">
+              <section className="min-h-[420px] lg:min-h-0 relative" ref={containerRef} aria-label="Interactive 3D model">
                 <StarfieldBackground containerRef={containerRef} />
                 <Viewer3D glbUrl={selectedAsset.glb_ref} />
+
+                <button
+                  type="button"
+                  onClick={handlePreviousAsset}
+                  disabled={filteredAssets.findIndex(a => a.id === selectedAsset.id) <= 0}
+                  aria-label="Previous approval item"
+                  title="Previous item (Left arrow)"
+                  className="absolute left-3 top-1/2 z-[60] -translate-y-1/2 cursor-pointer rounded-full border border-slate-500 bg-slate-950/85 p-3 text-white shadow-xl transition-colors hover:border-orange-400 hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-300 disabled:cursor-not-allowed disabled:opacity-30"
+                >
+                  <ChevronLeft className="h-6 w-6" aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleNextAsset}
+                  disabled={filteredAssets.findIndex(a => a.id === selectedAsset.id) >= filteredAssets.length - 1}
+                  aria-label="Next approval item"
+                  title="Next item (Right arrow)"
+                  className="absolute right-3 top-1/2 z-[60] -translate-y-1/2 cursor-pointer rounded-full border border-slate-500 bg-slate-950/85 p-3 text-white shadow-xl transition-colors hover:border-orange-400 hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-300 disabled:cursor-not-allowed disabled:opacity-30"
+                >
+                  <ChevronRight className="h-6 w-6" aria-hidden="true" />
+                </button>
 
                 {/* Title overlay - top center */}
                 <div className="absolute top-0 left-0 right-0 flex justify-center pt-8 pointer-events-none z-10">
@@ -728,7 +746,53 @@ export default function Components3DReviewPage() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </section>
+
+              <aside className="min-h-0 overflow-y-auto border-t border-[#1e2d45] bg-[#07111b] p-3 lg:border-l lg:border-t-0" aria-label="Source reference pictures">
+                <div className="mb-3 flex items-start justify-between gap-3 border-b border-[#1e2d45] pb-3">
+                  <div>
+                    <h2 className="flex items-center gap-2 text-sm font-bold text-slate-100">
+                      <Images className="h-4 w-4 text-orange-300" aria-hidden="true" />
+                      Source pictures
+                    </h2>
+                    <p className="mt-1 text-xs text-slate-400">Compare shape, panels, vents and details with the model.</p>
+                  </div>
+                  <span className="shrink-0 rounded bg-slate-800 px-2 py-1 text-xs text-slate-300">
+                    {filteredAssets.findIndex(a => a.id === selectedAsset.id) + 1}/{filteredAssets.length}
+                  </span>
+                </div>
+
+                {selectedAsset.source_image_refs?.length ? (
+                  <div className="space-y-3">
+                    {selectedAsset.source_image_refs.map((imageUrl, index) => (
+                      <a
+                        key={`${imageUrl}-${index}`}
+                        href={imageUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="group block cursor-zoom-in overflow-hidden rounded-md border border-slate-700 bg-white transition-colors hover:border-orange-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-300"
+                        aria-label={`Open source picture ${index + 1} full size`}
+                      >
+                        {/* Source URLs can be temporary signed URLs, so Next Image optimisation cannot safely proxy them. */}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={imageUrl}
+                          alt={`Source reference ${index + 1} for ${selectedAsset.subject_name || selectedAsset.family_key}`}
+                          className="h-44 w-full object-contain transition-opacity group-hover:opacity-90"
+                          loading={index === 0 ? "eager" : "lazy"}
+                        />
+                        <span className="block border-t border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-300">Reference {index + 1} · open full size</span>
+                      </a>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="rounded-md border border-amber-500/40 bg-amber-950/30 p-4 text-sm text-amber-200" role="note">
+                    No source pictures are attached. This item should not be approved until comparison images are supplied.
+                  </div>
+                )}
+
+                <p className="mt-4 text-center text-xs text-slate-500">Use the left/right arrow keys to move between items.</p>
+              </aside>
             </div>
           ) : (
             <div className="flex items-center justify-center flex-1 text-slate-500">
