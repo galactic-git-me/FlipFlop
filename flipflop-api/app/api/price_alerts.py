@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, EmailStr, Field
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -10,8 +10,8 @@ from app.models import ManualBuild, PriceAlert
 from app.routes.admin_auth import get_current_admin
 from app.services.money import Money
 from app.services.price_alerts import PriceAlertError, PriceAlertsService
-from app.config import get_settings
 from app.services.feature_flags import FeatureFlags, is_enabled
+from app.services.email_service import smtp_is_configured
 
 router = APIRouter(prefix="/price-alerts", tags=["price-alerts"], dependencies=[Depends(get_current_admin)])
 
@@ -54,10 +54,11 @@ def _out(alert: PriceAlert, build: ManualBuild | None) -> dict:
 
 
 @router.get("")
-async def list_price_alerts(db: AsyncSession = Depends(get_db)):
+async def list_price_alerts(admin=Depends(get_current_admin), db: AsyncSession = Depends(get_db)):
     result = await db.execute(
         select(PriceAlert, ManualBuild)
         .outerjoin(ManualBuild, ManualBuild.id == PriceAlert.manual_build_id)
+        .where(or_(PriceAlert.owner_admin_id == admin.id, PriceAlert.user_email == admin.email))
         .order_by(PriceAlert.created_at.desc())
     )
     items = [_out(alert, build) for alert, build in result.all()]
@@ -68,39 +69,48 @@ async def list_price_alerts(db: AsyncSession = Depends(get_db)):
         "triggered_count": sum(1 for item in items if item["monitoring_status"] == "triggered"),
         "rules_enabled": is_enabled(FeatureFlags.PRICE_ALERTS_RULES_ENABLED),
         "email_enabled": is_enabled(FeatureFlags.PRICE_ALERTS_EMAIL_ENABLED) and is_enabled(FeatureFlags.EMAIL_DISPATCH_ENABLED),
-        "smtp_configured": bool(get_settings().smtp_host and get_settings().smtp_user and get_settings().smtp_pass),
+        "smtp_configured": smtp_is_configured(),
     }
 
 
 @router.post("", status_code=201)
-async def create_price_alert(body: CreatePriceAlert, db: AsyncSession = Depends(get_db)):
+async def create_price_alert(body: CreatePriceAlert, admin=Depends(get_current_admin), db: AsyncSession = Depends(get_db)):
     try:
         alert = await PriceAlertsService.create_alert(
-            db, body.manual_build_id, body.user_email, Money(body.target_price_gbp, "GBP")
+            db, body.manual_build_id, admin.email, Money(body.target_price_gbp, "GBP")
         )
     except PriceAlertError as exc:
         raise HTTPException(400, str(exc)) from exc
     build = await db.get(ManualBuild, alert.manual_build_id)
+    alert.owner_admin_id = admin.id
+    await db.commit()
     return _out(alert, build)
 
 
 @router.post("/{alert_id}/dismiss")
-async def dismiss_price_alert(alert_id: int, db: AsyncSession = Depends(get_db)):
+async def dismiss_price_alert(alert_id: int, admin=Depends(get_current_admin), db: AsyncSession = Depends(get_db)):
+    alert = await db.get(PriceAlert, alert_id)
+    if not alert or (alert.owner_admin_id not in (None, admin.id) and alert.user_email != admin.email):
+        raise HTTPException(404, "Price alert not found")
     if not await PriceAlertsService.dismiss_alert(db, alert_id):
         raise HTTPException(404, "Price alert not found")
     return {"ok": True}
 
 
 @router.post("/{alert_id}/re-arm")
-async def rearm_price_alert(alert_id: int, db: AsyncSession = Depends(get_db)):
+async def rearm_price_alert(alert_id: int, admin=Depends(get_current_admin), db: AsyncSession = Depends(get_db)):
+    alert = await db.get(PriceAlert, alert_id)
+    if not alert or (alert.owner_admin_id not in (None, admin.id) and alert.user_email != admin.email):
+        raise HTTPException(404, "Price alert not found")
     if not await PriceAlertsService.re_arm_alert(db, alert_id):
         raise HTTPException(404, "Price alert not found")
     return {"ok": True}
 
 
 @router.get("/{alert_id}/history")
-async def price_alert_history(alert_id: int, db: AsyncSession = Depends(get_db)):
-    if not await db.get(PriceAlert, alert_id):
+async def price_alert_history(alert_id: int, admin=Depends(get_current_admin), db: AsyncSession = Depends(get_db)):
+    alert = await db.get(PriceAlert, alert_id)
+    if not alert or (alert.owner_admin_id not in (None, admin.id) and alert.user_email != admin.email):
         raise HTTPException(404, "Price alert not found")
     events = await PriceAlertsService.get_alert_history(db, alert_id)
     return {"items": [{

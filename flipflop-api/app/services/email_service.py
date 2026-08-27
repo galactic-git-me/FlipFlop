@@ -8,6 +8,24 @@ import structlog
 log = structlog.get_logger(__name__)
 settings = get_settings()
 
+
+def smtp_credentials() -> tuple[str, str, str]:
+    """IONOS uses the mailbox login for both IMAP and SMTP.
+
+    Keep a separately configured SMTP password authoritative, but safely fall
+    back to the existing IMAP mailbox credentials so the secret is not copied
+    into multiple environment variables.
+    """
+    return (
+        settings.smtp_host,
+        settings.smtp_user or settings.imap_user,
+        settings.smtp_pass or settings.imap_pass,
+    )
+
+
+def smtp_is_configured() -> bool:
+    return all(smtp_credentials())
+
 def _send(msg: MIMEMultipart, reference: str) -> bool:
     # Kill switch: EMAIL_DISPATCH_ENABLED can suppress all email
     if not is_enabled(FeatureFlags.EMAIL_DISPATCH_ENABLED):
@@ -19,8 +37,9 @@ def _send(msg: MIMEMultipart, reference: str) -> bool:
         )
         return False
     try:
-        with smtplib.SMTP_SSL(settings.smtp_host, 465) as server:
-            server.login(settings.smtp_user, settings.smtp_pass)
+        smtp_host, smtp_user, smtp_password = smtp_credentials()
+        with smtplib.SMTP_SSL(smtp_host, 465) as server:
+            server.login(smtp_user, smtp_password)
             server.send_message(msg)
         log.info("Email sent", reference=reference, to=msg["To"])
         return True
@@ -29,7 +48,7 @@ def _send(msg: MIMEMultipart, reference: str) -> bool:
         return False
 
 async def send_order_confirmation_email(customer_email: str, customer_name: str, order_reference: str, build_summary: str, assigned_week: str, order_id: int | None = None) -> bool:
-    if not settings.smtp_host or not settings.smtp_user:
+    if not smtp_is_configured():
         log.warning("Email not configured, skipping confirmation email")
         return False
     msg = MIMEMultipart("alternative")
@@ -41,7 +60,7 @@ async def send_order_confirmation_email(customer_email: str, customer_name: str,
     return _send(msg, order_reference)
 
 async def send_shipment_update_email(customer_email: str, customer_name: str, order_reference: str, carrier: str | None, tracking_number: str | None, tracking_url: str | None, estimated_delivery: object | None, order_id: int | None = None) -> bool:
-    if not settings.smtp_host or not settings.smtp_user:
+    if not smtp_is_configured():
         log.warning("Email not configured, skipping shipment email")
         return False
     tracking = f'<a href="{tracking_url}">{tracking_number}</a>' if tracking_url and tracking_number else (tracking_number or "Not available yet")
@@ -55,7 +74,7 @@ async def send_shipment_update_email(customer_email: str, customer_name: str, or
     return _send(msg, order_reference)
 
 async def send_order_status_email(customer_email: str, customer_name: str, order_reference: str, status: str, order_id: int | None = None) -> bool:
-    if not settings.smtp_host or not settings.smtp_user:
+    if not smtp_is_configured():
         log.warning("Email not configured, skipping status email")
         return False
     messages = {
@@ -74,7 +93,7 @@ async def send_order_status_email(customer_email: str, customer_name: str, order
 
 async def send_email_async(to: str, subject: str, body: str, reference: str = "generic") -> bool:
     """Generic async email sender for transactional emails."""
-    if not settings.smtp_host or not settings.smtp_user:
+    if not smtp_is_configured():
         log.warning("Email not configured, skipping email", reference=reference, to=to)
         return False
     msg = MIMEMultipart("alternative")
