@@ -169,6 +169,16 @@ function orderAndLabelAssets(items: Component3DAsset[], cases: PriorityCaseItem[
     .sort((left, right) => (left.rank ?? Number.MAX_SAFE_INTEGER) - (right.rank ?? Number.MAX_SAFE_INTEGER));
 }
 
+function preserveAssetLabels(items: Component3DAsset[], existing: Component3DAsset[]) {
+  const existingById = new Map(existing.map(asset => [asset.id, asset]));
+  return items.map(asset => ({
+    ...existingById.get(asset.id),
+    ...asset,
+    rank: existingById.get(asset.id)?.rank ?? asset.rank ?? null,
+    subject_name: existingById.get(asset.id)?.subject_name ?? asset.subject_name ?? null,
+  }));
+}
+
 function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
   // 3D Viewer Configuration:
   // - Camera position: (5, 6, 9) — controls zoom/perspective from the model
@@ -469,12 +479,13 @@ export default function Components3DReviewPage() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.detail || data.error || "Could not save decision");
-      const updatedAssets = batch.assets.map(asset => asset.id === data.id ? data : asset);
+      const reviewedAsset = { ...selectedAsset, ...data } as Component3DAsset;
+      const updatedAssets = batch.assets.map(asset => asset.id === data.id ? reviewedAsset : asset);
       const updatedBatch = { ...batch, assets: updatedAssets, decided: updatedAssets.filter(asset => asset.review_decision).length };
       updatedBatch.complete = updatedBatch.decided === updatedBatch.size;
       setBatch(updatedBatch);
       setAssets(updatedAssets);
-      setSelectedAsset(data as Component3DAsset);
+      setSelectedAsset(reviewedAsset);
       setReviewNotes("");
     } catch (error) {
       setActionError(error instanceof Error ? error.message : "Could not save decision");
@@ -491,9 +502,11 @@ export default function Components3DReviewPage() {
       const response = await fetch(`/api/assets-3d/review-batches/${batch.batch_id}/publish`, { method: "POST" });
       const data = await response.json();
       if (!response.ok) throw new Error(data.detail || data.error || "Could not publish batch");
-      setBatch(data as ReviewBatch);
-      setAssets((data as ReviewBatch).assets);
-      const selected = (data as ReviewBatch).assets.find(asset => asset.id === selectedAsset?.id);
+      const publishedBatch = data as ReviewBatch;
+      const labelledAssets = preserveAssetLabels(publishedBatch.assets, batch.assets);
+      setBatch({ ...publishedBatch, assets: labelledAssets });
+      setAssets(labelledAssets);
+      const selected = labelledAssets.find(asset => asset.id === selectedAsset?.id);
       if (selected) setSelectedAsset(selected);
     } catch (error) {
       setActionError(error instanceof Error ? error.message : "Could not publish batch");

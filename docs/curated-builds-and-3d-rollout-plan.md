@@ -106,6 +106,17 @@ Initial order:
 6. Exact popular-product models where a generic family representation is no
    longer sufficient.
 
+Priority exceptions are appended without changing the frozen top-30 ranking:
+
+1. **APNX Creator C1 ChromaFlair Mid Tower** — process immediately after the
+   frozen top-30 case campaign (or use it to fill an abandoned/rejected slot in
+   a later ten-model batch). Track the ChromaFlair finish as its own visual
+   variant; do not substitute the black or white C1 texture. Initial verified
+   identity: manufacturer APNX, model C1, part number `APCM-CR01043.C1`, chassis
+   dimensions 230 × 502 × 464 mm. Begin with APNX product/support/manual assets,
+   then Sketchfab and other licensed model libraries, product images, YouTube,
+   and finally Meshy under the standard sourcing funnel.
+
 Work stops at the end of every generated batch until the owner reviews all ten.
 
 ### 6. Storefront integration and release

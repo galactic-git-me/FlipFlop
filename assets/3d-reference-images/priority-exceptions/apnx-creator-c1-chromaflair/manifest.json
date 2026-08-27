@@ -1,0 +1,28 @@
+{
+  "campaign_position": "priority-exception-1",
+  "product_name": "APNX Creator C1 ChromaFlair Mid Tower",
+  "manufacturer": "APNX",
+  "model": "C1",
+  "finish": "ChromaFlair",
+  "manufacturer_part_number": "APCM-CR01043.C1",
+  "dimensions_mm": {
+    "width": 230,
+    "height": 502,
+    "depth": 464
+  },
+  "catalogue_case_id": null,
+  "priority_3d_rank": null,
+  "priority_rule": "Append after the frozen top 30 without renumbering them; retain ten-model approval batches.",
+  "sourcing_status": "manufacturer_search_started",
+  "sources": [
+    {
+      "type": "manufacturer_manual",
+      "url": "https://www.apnx.com/wp-content/uploads/2024/04/APNX-C1-Manual_V11.pdf"
+    }
+  ],
+  "requirements": [
+    "Preserve the distinctive ChromaFlair finish; do not substitute black or white C1 textures.",
+    "Follow manufacturer 3D/CAD, licensed third-party and Sketchfab, images, YouTube, then Meshy order.",
+    "Do not publish without owner batch approval, dimensional validation, and redistribution clearance."
+  ]
+}
