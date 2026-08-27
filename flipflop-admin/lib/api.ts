@@ -146,7 +146,7 @@ export interface PriceAlert {
   build_status: string | null;
   current_price_gbp: number | null;
   user_email: string;
-  target_price_gbp: number;
+  target_price_gbp: number | null;
   is_active: boolean;
   triggered_at: string | null;
   triggered_price_gbp: number | null;
@@ -157,7 +157,13 @@ export interface PriceAlert {
   component_key: string | null;
   component_slot: string | null;
   market_reference_price_gbp: number | null;
-  reference_basis: "build_valuation" | "market_median" | null;
+  reference_basis: "build_valuation" | "market_median" | "fixed_retailer" | null;
+  cpk: string | null;
+  condition_cohort: "new" | "used" | null;
+  monitoring_status: "pending_identity" | "pending_evidence" | "armed" | "triggered" | "dismissed";
+  reference_evidence: Record<string, unknown> | null;
+  triggered_evidence: Record<string, unknown> | null;
+  last_evaluated_at: string | null;
   discount_threshold_pct: number | null;
 }
 
@@ -165,6 +171,10 @@ export interface PriceAlertList {
   items: PriceAlert[];
   active_count: number;
   triggered_count: number;
+  pending_count: number;
+  rules_enabled: boolean;
+  email_enabled: boolean;
+  smtp_configured: boolean;
 }
 
 export interface ManualBuild {

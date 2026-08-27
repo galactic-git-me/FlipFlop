@@ -974,42 +974,49 @@ async def save_component_ratings(
                 if str(item.get("slot", "")).lower() == incoming.component_slot.lower()
                 and str(item.get("name", "")).strip().lower() == incoming.component_key.strip().lower()
             )
-            # Use the same source-backed component valuation shown in Pricing.
-            # If market evidence is sparse, estimated_resale already falls back
-            # transparently to recorded market/paid value.
-            from app.api.builds_pricing import _component_valuations
-            valuation = (await _component_valuations([component]))[0]
-            market_reference = max(0.01, valuation.estimated_resale)
-            target_pennies = round(market_reference * 0.85 * 100)
-            reference_pennies = round(market_reference * 100)
+            # A five-star rating requests monitoring; it does not prove market
+            # identity. Only an upstream CPK may arm the component alert.
+            component_cpk = str(component.get("cpk") or "").strip() or None
+            condition_cohort = str(component.get("condition") or "used").lower()
+            if condition_cohort not in {"new", "used"}:
+                condition_cohort = "used"
             alert = (await db.execute(select(PriceAlert).where(
                 PriceAlert.alert_type == "component",
-                PriceAlert.component_key == incoming.component_key,
+                PriceAlert.owner_admin_id == admin.id,
+                (PriceAlert.cpk == component_cpk) if component_cpk else (PriceAlert.component_key == incoming.component_key),
             ))).scalar_one_or_none()
             if alert is None:
                 db.add(PriceAlert(
                     manual_build_id=None,
+                    owner_admin_id=admin.id,
                     alert_type="component",
                     component_key=incoming.component_key,
                     component_slot=incoming.component_slot,
-                    market_reference_price_gbp=reference_pennies,
-                    reference_basis="build_valuation",
+                    cpk=component_cpk,
+                    condition_cohort=condition_cohort,
+                    monitoring_status="pending_evidence" if component_cpk else "pending_identity",
+                    market_reference_price_gbp=None,
+                    reference_basis=None,
+                    reference_evidence_json={
+                        "purchase_price_gbp": component.get("price_paid"),
+                        "note": "Purchase price is informational and is not market evidence",
+                    },
                     discount_threshold_pct=15.0,
-                    target_price_gbp=target_pennies,
+                    target_price_gbp=None,
                     user_email=admin.email,
                     is_active=True,
                 ))
                 alerts_created += 1
             else:
                 alert.component_slot = incoming.component_slot
-                alert.market_reference_price_gbp = reference_pennies
-                alert.reference_basis = "build_valuation"
+                alert.owner_admin_id = admin.id
+                if alert.monitoring_status == "pending_identity" and component_cpk:
+                    alert.cpk = component_cpk
+                    alert.monitoring_status = "pending_evidence"
+                alert.condition_cohort = condition_cohort
                 alert.discount_threshold_pct = 15.0
-                alert.target_price_gbp = target_pennies
                 alert.user_email = admin.email
                 alert.is_active = True
-                alert.triggered_at = None
-                alert.triggered_price_gbp = None
                 alerts_updated += 1
     await db.flush()
     return {

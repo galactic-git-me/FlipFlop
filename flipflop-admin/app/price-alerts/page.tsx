@@ -23,8 +23,12 @@ const EMPTY: PriceAlertList = {
   items: [],
   active_count: 0,
   triggered_count: 0,
+  pending_count: 0,
+  rules_enabled: false,
+  email_enabled: false,
+  smtp_configured: false,
 };
-type Tab = "active" | "triggered" | "inactive";
+type Tab = "active" | "pending" | "triggered" | "inactive";
 
 const money = (value: number | null) =>
   value == null ? "—" : `£${value.toFixed(2)}`;
@@ -77,10 +81,12 @@ export default function PriceAlertsPage() {
     () =>
       data.items.filter((item) =>
         tab === "triggered"
-          ? item.is_active && !!item.triggered_at
+          ? item.monitoring_status === "triggered"
+          : tab === "pending"
+          ? item.monitoring_status.startsWith("pending_")
           : tab === "active"
-          ? item.is_active && !item.triggered_at
-          : !item.is_active
+          ? item.monitoring_status === "armed"
+          : item.monitoring_status === "dismissed"
       ),
     [data.items, tab]
   );
@@ -159,8 +165,13 @@ export default function PriceAlertsPage() {
           </div>
         </header>
 
-        <section className="grid gap-3 sm:grid-cols-3">
+        <section className="grid gap-3 sm:grid-cols-4">
           {[
+            {
+              label: "Pending",
+              value: data.pending_count,
+              tone: "text-violet-300",
+            },
             {
               label: "Active",
               value: data.active_count,
@@ -200,9 +211,18 @@ export default function PriceAlertsPage() {
           </div>
         )}
 
+        {(!data.rules_enabled || !data.email_enabled || !data.smtp_configured) && (
+          <div role="status" className="rounded-lg border border-amber-400/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
+            Monitoring is not fully operational:
+            {!data.rules_enabled ? " rules are disabled;" : ""}
+            {!data.smtp_configured ? " SMTP is not configured;" : ""}
+            {!data.email_enabled ? " email dispatch is disabled." : ""}
+          </div>
+        )}
+
         <section className="overflow-hidden rounded-xl border border-white/10 bg-slate-950/45">
           <div className="flex border-b border-white/10 p-2">
-            {(["active", "triggered", "inactive"] as Tab[]).map((value) => (
+            {(["active", "pending", "triggered", "inactive"] as Tab[]).map((value) => (
               <button
                 key={value}
                 onClick={() => setTab(value)}
@@ -264,6 +284,13 @@ export default function PriceAlertsPage() {
                             : item.build_status?.replaceAll("_", " ") ??
                               "Unknown"}
                         </div>
+                        <div className="mt-1 text-xs text-slate-400">
+                          {item.monitoring_status === "pending_identity"
+                            ? "Pending exact CPK identity — monitoring has not started"
+                            : item.monitoring_status === "pending_evidence"
+                              ? "CPK confirmed; waiting for sufficient fresh market evidence"
+                              : item.monitoring_status.replaceAll("_", " ")}
+                        </div>
                       </td>
                       <td className="px-4 py-3 font-semibold text-emerald-300">
                         {money(item.target_price_gbp)}
@@ -300,9 +327,13 @@ export default function PriceAlertsPage() {
                             <ExternalLink className="h-3.5 w-3.5" />
                             View listing
                           </a>
+                        ) : item.monitoring_status === "pending_identity" ? (
+                          <span className="text-xs text-slate-500">Not monitoring—CPK required</span>
+                        ) : item.monitoring_status === "pending_evidence" ? (
+                          <span className="text-xs text-slate-500">Waiting for fresh CPK evidence</span>
                         ) : (
                           <span className="text-xs text-slate-500">
-                            No live exact match
+                            No triggered listing
                           </span>
                         )}
                       </td>

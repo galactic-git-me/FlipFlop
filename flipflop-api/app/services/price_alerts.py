@@ -66,6 +66,7 @@ class PriceAlertsService:
             manual_build_id=manual_build_id,
             user_email=user_email,
             target_price_gbp=target_price.to_pennies(),
+            monitoring_status="armed",
             is_active=True,
         )
 
@@ -149,6 +150,7 @@ class PriceAlertsService:
                 # Update alert
                 alert.triggered_at = datetime.utcnow()
                 alert.triggered_price_gbp = current_price_pennies
+                alert.monitoring_status = "triggered"
 
                 triggered.append(alert)
                 log.info(
@@ -184,6 +186,7 @@ class PriceAlertsService:
             return False
 
         alert.is_active = False
+        alert.monitoring_status = "dismissed"
 
         event = PriceAlertEvent(
             alert_id=alert_id,
@@ -218,6 +221,9 @@ class PriceAlertsService:
         alert.is_active = True
         alert.triggered_at = None
         alert.triggered_price_gbp = None
+        alert.triggered_listing_url = None
+        alert.triggered_evidence_json = None
+        alert.monitoring_status = "pending_evidence" if alert.alert_type == "component" and alert.cpk else "pending_identity" if alert.alert_type == "component" else "armed"
 
         event = PriceAlertEvent(
             alert_id=alert_id,

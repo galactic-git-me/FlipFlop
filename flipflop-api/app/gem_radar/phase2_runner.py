@@ -33,6 +33,9 @@ from app.models.gem_radar_intelligence import GemRadarDecisionEvent, PreferredCo
 from app.models.price_alert import PriceAlert, PriceAlertEvent
 from app.gem_radar.identity import resolve_identity
 from app.services.alerts import emit_alert
+from app.services.feature_flags import FeatureFlags, is_enabled
+from app.services.money import Money
+from app.services.price_alert_emails import send_price_alert_email
 from app.services.ebay_catalog import get_product_reviews
 
 SEARCH_RUN_ID = "cpk-phase2-classify"
@@ -121,7 +124,14 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
         PriceAlert.alert_type == "component",
         PriceAlert.is_active.is_(True),
         PriceAlert.triggered_at.is_(None),
+        PriceAlert.cpk.isnot(None),
+        PriceAlert.monitoring_status.in_(("pending_evidence", "armed")),
     ))).scalars().all()
+    alerts_by_cpk: dict[str, list[PriceAlert]] = defaultdict(list)
+    if is_enabled(FeatureFlags.PRICE_ALERTS_RULES_ENABLED):
+        for component_alert in component_price_alerts:
+            alerts_by_cpk[component_alert.cpk].append(component_alert)
+    triggered_component_alerts: list[tuple[PriceAlert, Money]] = []
     existing_reviews = {
         listing_id: (average, count)
         for listing_id, average, count in (
@@ -180,41 +190,53 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
             db, listing_id, SEARCH_RUN_ID,
             watch_count, bid_count, delivered_price
         )
-        title_key = re.sub(r"[^a-z0-9]", "", (title or "").lower())
-        listing_identity = resolve_identity(title or "")
-        for alert in component_price_alerts:
-            # An alert can match several listings in the same scoring batch.
-            # Once the first qualifying listing triggers it, do not overwrite
-            # that price or create duplicate trigger events later in the run.
+        for alert in alerts_by_cpk.get(cpk, []):
             if alert.triggered_at is not None:
                 continue
-            if alert.component_slot and listing_identity.category != alert.component_slot:
+            alert.last_evaluated_at = datetime.utcnow()
+            if observed_at < datetime.utcnow() - timedelta(hours=48):
                 continue
-            identity = resolve_identity(alert.component_key or "")
-            model = identity.model or alert.component_key or ""
-            model_key = re.sub(r"[^a-z0-9]", "", model.lower())
-            if not model_key or model_key not in title_key:
-                # Marketplace titles commonly omit manufacturer/family words;
-                # accept the distinctive CPU/GPU model token as the fallback.
-                token = re.search(r"\b(?:RTX|GTX|RX)?\s*\d{3,5}(?:X3D|XTX|SUPER|TI|XT|X|G|KF|K|F)?\b", model, re.IGNORECASE)
-                token_key = re.sub(r"[^a-z0-9]", "", token.group(0).lower()) if token else ""
-                if not token_key or token_key not in title_key:
-                    continue
-            if market is not None:
+            if alert.condition_cohort and normalised_condition != alert.condition_cohort:
+                continue
+            if alert.monitoring_status == "pending_evidence" and market is not None:
                 alert.market_reference_price_gbp = round(float(market.median) * 100)
                 alert.reference_basis = "market_median"
                 alert.target_price_gbp = round(float(market.median) * (1 - (alert.discount_threshold_pct or 15) / 100) * 100)
+                alert.reference_evidence_json = {
+                    "cpk": cpk, "basis": market.basis, "median_gbp": market.median,
+                    "sample_size": market.sample_size, "confidence": market.confidence,
+                    "captured_at": datetime.utcnow().isoformat(),
+                }
+                alert.monitoring_status = "armed"
+            if alert.monitoring_status != "armed" or alert.target_price_gbp is None:
+                continue
             current_pennies = round(float(delivered_price) * 100)
             if current_pennies <= alert.target_price_gbp:
+                # Only sources with reconstructable exact item URLs may fire.
+                # Search-page fallbacks are evidence discovery, not listings.
+                if source not in {"ebay", "amazon", "vinted"}:
+                    continue
+                exact_url = fallback_listing_url(listing_id, source, title)
+                if not exact_url:
+                    continue
                 alert.triggered_at = datetime.utcnow()
                 alert.triggered_price_gbp = current_pennies
-                alert.triggered_listing_url = fallback_listing_url(listing_id, source, title)
+                alert.triggered_listing_url = exact_url
+                alert.monitoring_status = "triggered"
+                alert.triggered_evidence_json = {
+                    "listing_id": listing_id, "url": exact_url, "title": title,
+                    "cpk": cpk, "source": source, "condition": normalised_condition,
+                    "item_price_gbp": float(item_price), "postage_gbp": float(postage_price or 0),
+                    "delivered_price_gbp": float(delivered_price),
+                    "observed_at": observed_at.isoformat(),
+                }
                 db.add(PriceAlertEvent(
                     alert_id=alert.id,
                     event_type="triggered",
                     price_gbp=current_pennies,
                     notes=f"{title} reached at least {alert.discount_threshold_pct or 15:.0f}% below its market reference",
                 ))
+                triggered_component_alerts.append((alert, Money(float(delivered_price), "GBP")))
 
         sold_count = len({_source.source_url or f"price:{_source.delivered_price}" for _source in sold_comps})
         active_count = max(0, len(active_cohorts.get((cpk, normalised_condition), [])) - 1)
@@ -386,6 +408,9 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
                 db.add(matched_fav)
 
     await db.commit()
+
+    for alert, trigger_price in triggered_component_alerts:
+        await send_price_alert_email(db, alert, trigger_price)
 
     return Phase2Result(
         total_cpk_tagged=len(listings),

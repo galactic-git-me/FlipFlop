@@ -11,6 +11,7 @@ Pattern:
 4. User receives notification with action links
 """
 
+from html import escape
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import PriceAlert, ManualBuild
 from app.services.email_service import send_email_async
@@ -65,15 +66,20 @@ async def send_price_alert_email(
 
         # Build email content
         item_name = alert.component_key if alert.alert_type == "component" else build.name
+        safe_item_name = escape(item_name or "Price alert")
         subject = f"Price Alert: {item_name} now £{current_display:.2f}"
-        destination = "/sourcing" if alert.alert_type == "component" else f"/builds/{build.id}"
+        destination = alert.triggered_listing_url if alert.alert_type == "component" else f"https://admin.theflipflop.shop/builds/{build.id}"
+        if not destination:
+            log.error("price_alert_email_missing_exact_destination", alert_id=alert.id)
+            return False
+        safe_destination = escape(destination, quote=True)
 
         html_body = f"""
         <html>
             <body style="font-family: Arial, sans-serif;">
                 <h2>Price Alert Triggered! 🎯</h2>
 
-                <p>Good news! Your price alert for <strong>{item_name}</strong> has been triggered.</p>
+                <p>Good news! Your price alert for <strong>{safe_item_name}</strong> has been triggered.</p>
 
                 <div style="background-color: #f0f0f0; padding: 15px; border-radius: 5px; margin: 20px 0;">
                     <p><strong>Current Price:</strong> £{current_display:.2f}</p>
@@ -82,9 +88,9 @@ async def send_price_alert_email(
                 </div>
 
                 <p>
-                    <a href="https://flipflop.local{destination}"
+                    <a href="{safe_destination}"
                        style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
-                        View matching listings
+                        View exact listing
                     </a>
                 </p>
 
@@ -98,10 +104,10 @@ async def send_price_alert_email(
         """
 
         # Send email
-        await send_email_async(
-            recipient=alert.user_email,
+        sent = await send_email_async(
+            to=alert.user_email,
             subject=subject,
-            html_body=html_body,
+            body=html_body,
             reference=f"price_alert_{alert.id}",
         )
 
@@ -114,7 +120,7 @@ async def send_price_alert_email(
             target_price=target_display,
         )
 
-        return True
+        return sent
 
     except Exception as e:
         log.error(

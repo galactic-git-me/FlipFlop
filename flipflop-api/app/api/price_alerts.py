@@ -7,10 +7,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.models import ManualBuild, PriceAlert
+from app.routes.admin_auth import get_current_admin
 from app.services.money import Money
 from app.services.price_alerts import PriceAlertError, PriceAlertsService
+from app.config import get_settings
+from app.services.feature_flags import FeatureFlags, is_enabled
 
-router = APIRouter(prefix="/price-alerts", tags=["price-alerts"])
+router = APIRouter(prefix="/price-alerts", tags=["price-alerts"], dependencies=[Depends(get_current_admin)])
 
 
 class CreatePriceAlert(BaseModel):
@@ -30,15 +33,21 @@ def _out(alert: PriceAlert, build: ManualBuild | None) -> dict:
         "alert_type": alert.alert_type,
         "component_key": alert.component_key,
         "component_slot": alert.component_slot,
+        "cpk": alert.cpk,
+        "condition_cohort": alert.condition_cohort,
+        "monitoring_status": alert.monitoring_status,
         "market_reference_price_gbp": alert.market_reference_price_gbp / 100 if alert.market_reference_price_gbp is not None else None,
         "reference_basis": alert.reference_basis,
         "discount_threshold_pct": alert.discount_threshold_pct,
         "user_email": alert.user_email,
-        "target_price_gbp": alert.target_price_gbp / 100,
+        "target_price_gbp": alert.target_price_gbp / 100 if alert.target_price_gbp is not None else None,
         "is_active": alert.is_active,
         "triggered_at": alert.triggered_at,
         "triggered_price_gbp": alert.triggered_price_gbp / 100 if alert.triggered_price_gbp is not None else None,
         "listing_url": alert.triggered_listing_url if is_component else build.ebay_listing_url if build else None,
+        "reference_evidence": alert.reference_evidence_json,
+        "triggered_evidence": alert.triggered_evidence_json,
+        "last_evaluated_at": alert.last_evaluated_at,
         "created_at": alert.created_at,
         "updated_at": alert.updated_at,
     }
@@ -54,8 +63,12 @@ async def list_price_alerts(db: AsyncSession = Depends(get_db)):
     items = [_out(alert, build) for alert, build in result.all()]
     return {
         "items": items,
-        "active_count": sum(1 for item in items if item["is_active"]),
-        "triggered_count": sum(1 for item in items if item["triggered_at"] is not None and item["is_active"]),
+        "active_count": sum(1 for item in items if item["monitoring_status"] == "armed"),
+        "pending_count": sum(1 for item in items if item["monitoring_status"].startswith("pending_")),
+        "triggered_count": sum(1 for item in items if item["monitoring_status"] == "triggered"),
+        "rules_enabled": is_enabled(FeatureFlags.PRICE_ALERTS_RULES_ENABLED),
+        "email_enabled": is_enabled(FeatureFlags.PRICE_ALERTS_EMAIL_ENABLED) and is_enabled(FeatureFlags.EMAIL_DISPATCH_ENABLED),
+        "smtp_configured": bool(get_settings().smtp_host and get_settings().smtp_user and get_settings().smtp_pass),
     }
 
 
