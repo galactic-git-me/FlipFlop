@@ -52,6 +52,15 @@ class Case(Base):
         comment="pending → sourcing → ready_for_approval → approved → modeling → completed"
     )
 
+    # Frozen top-30 campaign position. This is intentionally separate from the
+    # live Amazon rank, which can change while a ten-case batch is being worked.
+    priority_3d_rank = Column(Integer, nullable=True, index=True)
+    priority_3d_batch = Column(Integer, nullable=True, index=True)
+    priority_3d_frozen_at = Column(DateTime, nullable=True)
+    # Auditable sourcing funnel: manufacturer model search, third-party model
+    # search, image set, YouTube references, Meshy job, validation and rights.
+    sourcing_3d_evidence = Column(JSON, nullable=False, default=dict)
+
     # Timestamps
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

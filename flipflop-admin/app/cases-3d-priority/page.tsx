@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Box, Check, AlertCircle, RefreshCw } from "lucide-react";
+import { Box, Check, AlertCircle, RefreshCw, LockKeyhole } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { api } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
 
 interface PriorityCaseItem {
@@ -16,6 +15,9 @@ interface PriorityCaseItem {
   source_site?: string;
   image_url?: string;
   bestseller_rank?: number;
+  priority_3d_rank?: number;
+  priority_3d_batch?: number;
+  priority_3d_frozen_at?: string;
   rating?: number;
   review_count?: number;
   sales_velocity?: string;
@@ -27,6 +29,23 @@ export default function Cases3DPriorityPage() {
   const [cases, setCases] = useState<PriorityCaseItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [completedCount, setCompletedCount] = useState(0);
+  const [freezing, setFreezing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const freezeCampaign = async () => {
+    setFreezing(true);
+    setError(null);
+    try {
+      const response = await fetch("/api/cases/priority-for-3d", { method: "POST" });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail || data.error || "Could not freeze campaign");
+      setCases(data.cases || []);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Could not freeze campaign");
+    } finally {
+      setFreezing(false);
+    }
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -63,7 +82,12 @@ export default function Cases3DPriorityPage() {
             Top 30 popular cases to create 3D models for. Ranked by Amazon bestseller position.
           </p>
         </div>
+        <Button onClick={freezeCampaign} disabled={freezing || cases.some(item => item.priority_3d_rank)} className="cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-300">
+          {freezing ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <LockKeyhole className="mr-2 h-4 w-4" />}
+          {cases.some(item => item.priority_3d_rank) ? "Top 30 frozen" : "Freeze top 30"}
+        </Button>
       </div>
+      {error && <div role="alert" className="rounded-md border border-red-500/60 bg-red-950/60 px-4 py-3 text-sm text-red-200">{error}</div>}
 
       {/* Progress summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -139,11 +163,12 @@ export default function Cases3DPriorityPage() {
                           </h3>
                           <p className="text-xs text-slate-500 mt-0.5">
                             #{caseItem.bestseller_rank ? caseItem.bestseller_rank : "—"} bestseller
+                            {caseItem.priority_3d_batch ? ` · Batch ${caseItem.priority_3d_batch}` : ""}
                           </p>
                         </div>
                         <div className="text-right flex-shrink-0">
                           <div className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-purple-400/10 border border-purple-400/30">
-                            <span className="text-sm font-bold text-purple-400">{idx + 1}</span>
+                            <span className="text-sm font-bold text-purple-400">{caseItem.priority_3d_rank || idx + 1}</span>
                           </div>
                         </div>
                       </div>
@@ -193,16 +218,16 @@ export default function Cases3DPriorityPage() {
         </CardHeader>
         <CardContent className="text-xs text-slate-400 space-y-2">
           <p>
-            1. <strong>Create 3D models</strong> for the priority cases listed above using your mesh allowance.
+            1. <strong>Search the manufacturer</strong> for official CAD or 3D downloads.
           </p>
           <p>
-            2. <strong>Mark each case as complete</strong> by checking the database (update has_3d_model = true).
+            2. <strong>Search third-party libraries</strong> and verify commercial-use and redistribution rights.
           </p>
           <p>
-            3. <strong>Refresh this page</strong> to see progress and the next batch.
+            3. <strong>Collect multi-angle images and YouTube references</strong> when an exact publishable model is unavailable.
           </p>
           <p>
-            4. <strong>Enable cases in the customer builder</strong> once you have 20-30 models ready.
+            4. <strong>Use Meshy only as the fallback</strong>, then validate and submit each group of ten for owner approval.
           </p>
         </CardContent>
       </Card>
