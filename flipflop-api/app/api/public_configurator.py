@@ -40,6 +40,7 @@ def _asset_payload(asset: Component3DAsset, fallback_level: str) -> dict:
         "preview_image_ref": asset.preview_image_ref,
         "anchor_manifest": asset.anchor_manifest_json,
         "dimensions_mm": asset.dimensions_mm,
+        "scale_validated": asset.scale_validated,
         "fallback_level": fallback_level,  # exact | category_generic
     }
 
@@ -149,6 +150,120 @@ async def resolve_assets(body: AssetResolveRequest, db: AsyncSession = Depends(g
         )
 
     return {"results": results}
+
+
+class BuildSceneComponent(BaseModel):
+    category: str = Field(pattern="^(motherboard|cpu|gpu|ram|storage|cooling|psu|fan)$")
+    variant_id: int
+    label: str | None = None
+
+
+class BuildSceneRequest(BaseModel):
+    case_id: int
+    components: list[BuildSceneComponent] = Field(default_factory=list, max_length=30)
+
+
+_MOUNT_CATEGORY = {
+    "motherboard": "Motherboard",
+    "gpu": "GPU",
+    "psu": "PSU",
+    "cooling": "CPUCooler",
+    "storage": "Storage",
+    "fan": "CaseFan",
+}
+
+# Relative-to-motherboard offsets are only used for components whose physical
+# mount is not represented by the current case manifest schema. They are
+# deliberately labelled approximate in the response and must not be used for AR
+# clearance claims.
+_BOARD_RELATIVE_MM = {
+    "cpu": (0.0, 0.0, 12.0),
+    "ram": (42.0, 0.0, 18.0),
+}
+
+
+@router.post("/build-scene")
+async def compose_build_scene(body: BuildSceneRequest, db: AsyncSession = Depends(get_db)):
+    """Resolve a case plus interchangeable component assets into one scene manifest.
+
+    The browser keeps this manifest stable while replacing individual component
+    groups, so a selection change does not reload the whole viewer.
+    """
+    subjects = [AssetSubjectQuery(subject_type="case", subject_id=body.case_id, category="case")]
+    subjects.extend(
+        AssetSubjectQuery(subject_type="variant", subject_id=item.variant_id, category=item.category)
+        for item in body.components
+    )
+    resolved = await resolve_assets(AssetResolveRequest(subjects=subjects), db)
+    case_asset = resolved["results"][0]["asset"]
+    if not case_asset:
+        raise HTTPException(status_code=404, detail="No approved 3D asset is available for this case")
+
+    anchor = case_asset.get("anchor_manifest") or {}
+    mounts = anchor.get("mounts") or []
+    motherboard_mount = next((m for m in mounts if m.get("category") == "Motherboard"), None)
+
+    def find_mount(category: str, occurrence: int = 0) -> dict | None:
+        mount_category = _MOUNT_CATEGORY.get(category)
+        matches = [m for m in mounts if m.get("category") == mount_category]
+        return matches[occurrence] if occurrence < len(matches) else (matches[0] if matches else None)
+
+    component_entries = []
+    fan_occurrence = 0
+    for requested, result in zip(body.components, resolved["results"][1:]):
+        asset = result["asset"]
+        if not asset:
+            component_entries.append({
+                "category": requested.category,
+                "variant_id": requested.variant_id,
+                "label": requested.label,
+                "asset": None,
+                "placement": None,
+            })
+            continue
+        occurrence = fan_occurrence if requested.category == "fan" else 0
+        mount = find_mount(requested.category, occurrence)
+        if requested.category == "fan":
+            fan_occurrence += 1
+        approximate = False
+        if not mount and requested.category in _BOARD_RELATIVE_MM and motherboard_mount:
+            base = motherboard_mount.get("position_mm", (0, 0, 0))
+            offset = _BOARD_RELATIVE_MM[requested.category]
+            mount = {
+                "id": f"motherboard-relative-{requested.category}",
+                "position_mm": [base[i] + offset[i] for i in range(3)],
+                "rotation_deg": motherboard_mount.get("rotation_deg", (0, 0, 0)),
+            }
+            approximate = True
+        component_entries.append({
+            "category": requested.category,
+            "variant_id": requested.variant_id,
+            "label": requested.label,
+            "asset": asset,
+            "placement": {
+                "mount_id": mount.get("id") if mount else None,
+                "position_mm": mount.get("position_mm", (0, 0, 0)) if mount else (0, 0, 0),
+                "rotation_deg": mount.get("rotation_deg", (0, 0, 0)) if mount else (0, 0, 0),
+                "approximate": approximate or mount is None,
+            },
+            "argb": {
+                "supported": requested.category in {"fan", "ram", "gpu", "cooling"},
+                "zone_id": f"{requested.category}-{requested.variant_id}",
+                "mesh_name_patterns": ["rgb", "argb", "led", "light", "glow"],
+            },
+        })
+
+    envelope = anchor.get("case_envelope_mm") or case_asset.get("dimensions_mm")
+    return {
+        "schema_version": 1,
+        "case": {"case_id": body.case_id, "asset": case_asset},
+        "components": component_entries,
+        "case_envelope_mm": envelope,
+        "ar": {
+            "ready": bool(case_asset.get("scale_validated") and envelope),
+            "reason": None if case_asset.get("scale_validated") and envelope else "AR requires a scale-validated case model with real dimensions",
+        },
+    }
 
 
 class CompatibilityEvaluateRequest(BaseModel):
