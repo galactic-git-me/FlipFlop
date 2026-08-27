@@ -23,6 +23,25 @@ interface PriorityCaseItem {
   sales_velocity?: string;
   keywords?: string[];
   form_factors?: string[];
+  sourcing_3d_evidence?: {
+    stages?: Record<string, { status?: string; attempts?: Array<{ provider?: string; source_url?: string }> }>;
+  };
+}
+
+const sourcingLabels: Array<[string, string]> = [
+  ["manufacturer_3d", "Maker 3D"],
+  ["third_party_3d", "Sketchfab / 3rd party"],
+  ["product_images", "Images"],
+  ["youtube_video", "YouTube"],
+  ["meshy_generation", "Meshy"],
+  ["validation", "Validation"],
+];
+
+function statusColour(status = "not_started") {
+  if (["found", "complete"].includes(status)) return "border-emerald-500/40 bg-emerald-500/10 text-emerald-300";
+  if (["searching", "blocked"].includes(status)) return "border-amber-500/40 bg-amber-500/10 text-amber-200";
+  if (status === "not_found") return "border-slate-600 bg-slate-800 text-slate-400";
+  return "border-slate-700 bg-slate-900 text-slate-500";
 }
 
 export default function Cases3DPriorityPage() {
@@ -200,6 +219,17 @@ export default function Cases3DPriorityPage() {
                           ))}
                         </div>
                       )}
+
+                      <div className="mt-3 flex flex-wrap gap-1.5" aria-label="3D sourcing progress">
+                        {sourcingLabels.map(([key, label]) => {
+                          const status = caseItem.sourcing_3d_evidence?.stages?.[key]?.status || "not_started";
+                          return (
+                            <span key={key} title={`${label}: ${status.replaceAll("_", " ")}`} className={`rounded border px-1.5 py-0.5 text-[10px] ${statusColour(status)}`}>
+                              {label}: {status.replaceAll("_", " ")}
+                            </span>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -221,7 +251,7 @@ export default function Cases3DPriorityPage() {
             1. <strong>Search the manufacturer</strong> for official CAD or 3D downloads.
           </p>
           <p>
-            2. <strong>Search third-party libraries</strong> and verify commercial-use and redistribution rights.
+            2. <strong>Search Sketchfab and other third-party libraries</strong> and verify commercial-use and redistribution rights.
           </p>
           <p>
             3. <strong>Collect multi-angle images and YouTube references</strong> when an exact publishable model is unavailable.

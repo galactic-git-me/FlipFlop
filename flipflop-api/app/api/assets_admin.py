@@ -341,6 +341,97 @@ class AssetCreate(BaseModel):
     created_by: str | None = None
 
 
+class CaseMeshyGenerate(BaseModel):
+    image_urls: list[str] = Field(min_length=1, max_length=4)
+    notes: str | None = None
+
+
+@router.post("/cases/{case_id}/generate")
+async def generate_case_asset(
+    case_id: int,
+    body: CaseMeshyGenerate,
+    admin=Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    """Generate an exact-case draft only after its sourcing funnel is exhausted.
+
+    The result deliberately remains a non-active MESHY_DRAFT. It must pass the
+    ten-at-a-time owner review, provenance review and dimensional validation
+    before the storefront can serve it.
+    """
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    if case.priority_3d_rank is None:
+        raise HTTPException(status_code=409, detail="Case is not in the frozen top-30 campaign")
+
+    stages = (case.sourcing_3d_evidence or {}).get("stages", {})
+    if stages.get("manufacturer_3d", {}).get("status") not in ("not_found", "complete"):
+        raise HTTPException(status_code=409, detail="Complete the manufacturer 3D search first")
+    if stages.get("third_party_3d", {}).get("status") != "not_found":
+        raise HTTPException(status_code=409, detail="Meshy is only allowed when no usable third-party model was found")
+    if stages.get("product_images", {}).get("status") != "found":
+        raise HTTPException(status_code=409, detail="An approved product image set is required")
+
+    result = await generate_multi_image_asset(body.image_urls)
+    if result is None:
+        raise HTTPException(status_code=502, detail="Meshy generation failed — check service configuration")
+    if result.status != "SUCCEEDED" or not result.glb_url:
+        raise HTTPException(status_code=502, detail=f"Meshy task ended as {result.status}")
+
+    prior_version = (
+        await db.execute(
+            select(Component3DAsset.version)
+            .where(
+                Component3DAsset.subject_type == AssetSubjectType.CASE,
+                Component3DAsset.subject_id == case.id,
+            )
+            .order_by(Component3DAsset.version.desc())
+            .limit(1)
+        )
+    ).scalar_one_or_none()
+    version = (prior_version or 0) + 1
+    stable_glb_url, file_size_kb = await _store_generated_glb(f"case-{case.id}", version, result.glb_url)
+    asset = Component3DAsset(
+        subject_type=AssetSubjectType.CASE,
+        subject_id=case.id,
+        category="case",
+        status=Component3DAssetStatus.MESHY_DRAFT,
+        version=version,
+        glb_ref=stable_glb_url,
+        preview_image_ref=result.thumbnail_url,
+        source_image_refs=body.image_urls,
+        file_size_kb=file_size_kb,
+        notes=body.notes or f"Top-30 rank {case.priority_3d_rank}; Meshy task {result.task_id}",
+        created_by=getattr(admin, "email", None),
+        provenance_status="original-recreation",
+        source_name=f"Meshy AI multi-image recreation (task {result.task_id})",
+        commercial_use_approved=False,
+        redistribution_approved=False,
+    )
+    db.add(asset)
+
+    evidence = dict(case.sourcing_3d_evidence or {"schema_version": 1, "stages": {}})
+    evidence_stages = dict(evidence.get("stages") or {})
+    generation = dict(evidence_stages.get("meshy_generation") or {"attempts": []})
+    attempts = list(generation.get("attempts") or [])
+    attempts.append({
+        "provider": "Meshy",
+        "task_id": result.task_id,
+        "asset_version": version,
+        "source_image_urls": body.image_urls,
+        "recorded_at": datetime.utcnow().isoformat(),
+    })
+    generation.update(status="found", attempts=attempts, updated_at=datetime.utcnow().isoformat())
+    evidence_stages["meshy_generation"] = generation
+    evidence["stages"] = evidence_stages
+    case.sourcing_3d_evidence = evidence
+    case.status = "ready_for_approval"
+    await db.commit()
+    await db.refresh(asset)
+    return _serialize(asset)
+
+
 @router.post("")
 async def create_asset(body: AssetCreate, db: AsyncSession = Depends(get_db)):
     stype = AssetSubjectType(body.subject_type)
