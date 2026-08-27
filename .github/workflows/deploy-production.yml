@@ -21,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       OLLAMA_MODEL: disabled-in-ci
+      EBAY_TOKEN_ENCRYPTION_KEY: ci-only-ebay-token-encryption-test-key
     defaults:
       run:
         working-directory: flipflop-api
