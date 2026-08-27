@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-27T09:22:45.010794+00:00",
+  "generated_at": "2026-08-27T09:49:20.952598+00:00",
   "builds": [
     {
       "components": [
@@ -132,12 +132,12 @@
           "count": 49,
           "min_price": 48.18,
           "max_price": 1049.0,
-          "average_price": 359.9
+          "average_price": 359.73
         }
       },
-      "resale_estimate": 359.9,
+      "resale_estimate": 359.73,
       "resale_source": "bin_average",
-      "estimated_profit": 278.92,
+      "estimated_profit": 278.75,
       "rank": 1
     },
     {
@@ -271,12 +271,12 @@
           "count": 49,
           "min_price": 48.18,
           "max_price": 1049.0,
-          "average_price": 359.9
+          "average_price": 359.73
         }
       },
-      "resale_estimate": 359.9,
+      "resale_estimate": 359.73,
       "resale_source": "bin_average",
-      "estimated_profit": 277.92,
+      "estimated_profit": 277.75,
       "rank": 2
     },
     {
@@ -410,12 +410,12 @@
           "count": 49,
           "min_price": 48.18,
           "max_price": 970.0,
-          "average_price": 359.43
+          "average_price": 359.7
         }
       },
-      "resale_estimate": 359.43,
+      "resale_estimate": 359.7,
       "resale_source": "bin_average",
-      "estimated_profit": 277.45,
+      "estimated_profit": 277.72,
       "rank": 3
     },
     {
@@ -549,12 +549,12 @@
           "count": 49,
           "min_price": 48.18,
           "max_price": 970.0,
-          "average_price": 359.43
+          "average_price": 359.7
         }
       },
-      "resale_estimate": 359.43,
+      "resale_estimate": 359.7,
       "resale_source": "bin_average",
-      "estimated_profit": 277.44,
+      "estimated_profit": 277.71,
       "rank": 4
     },
     {
@@ -688,29 +688,29 @@
           "count": 50,
           "min_price": 48.18,
           "max_price": 1049.0,
-          "average_price": 354.78
+          "average_price": 353.86
         }
       },
-      "resale_estimate": 354.78,
+      "resale_estimate": 353.86,
       "resale_source": "bin_average",
-      "estimated_profit": 274.84,
+      "estimated_profit": 273.92,
       "rank": 5
     },
     {
       "components": [
         {
-          "id": 27687765,
-          "listing_id": "287542734621",
+          "id": 27691491,
+          "listing_id": "336762739170",
           "category": "cpu",
-          "title": "Intel Core CPU i3-6100 3.7 LGA1151 Dual Core, please read details ",
+          "title": "Intel SR3N5 Core i3-8100 3.6GHz LGA1151 4-Core CPU Processor",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/enIAAeSwh-VpOYDv/s-l225.jpg",
-          "delivered_price": 5.98,
+          "image_url": "https://i.ebayimg.com/images/g/mO4AAOSwU0dkBe2P/s-l225.jpg",
+          "delivered_price": 7.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -5.98,
-          "url": "https://www.ebay.co.uk/itm/287542734621"
+          "estimated_profit": -7.99,
+          "url": "https://www.ebay.co.uk/itm/336762739170"
         },
         {
           "id": 27683876,
@@ -813,9 +813,9 @@
       ],
       "compatibility_confidence": "matched",
       "super_gem_count": 4,
-      "build_cost": 77.97,
+      "build_cost": 79.98,
       "market": {
-        "query": "gaming pc i3-6100 Quadro P620 8gb",
+        "query": "gaming pc Core i3-8100 Quadro P620 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -824,15 +824,15 @@
         },
         "bin": {
           "available": true,
-          "count": 44,
+          "count": 46,
           "min_price": 48.18,
-          "max_price": 784.76,
-          "average_price": 276.34
+          "max_price": 1025.0,
+          "average_price": 291.59
         }
       },
-      "resale_estimate": 276.34,
+      "resale_estimate": 291.59,
       "resale_source": "bin_average",
-      "estimated_profit": 198.37,
+      "estimated_profit": 211.61,
       "rank": 6
     }
   ],
