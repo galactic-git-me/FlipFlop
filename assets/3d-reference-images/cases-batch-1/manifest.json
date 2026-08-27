@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "purpose": "Top-30 case campaign, owner approval batch 1",
+  "cases": [
+    {
+      "priority_rank": 6,
+      "case_id": 67,
+      "brand": "PCZZOI",
+      "model": "P4",
+      "asin": "B0F7QZ623J",
+      "dimensions_mm": { "depth": 445, "width": 220, "height": 490 },
+      "source_page": "https://www.amazon.co.uk/dp/B0F7QZ623J",
+      "reference_directory": "pczzoi-p4",
+      "selected_for_meshy": [
+        "candidate-1.jpg",
+        "candidate-5.jpg",
+        "candidate-7.jpg",
+        "candidate-9.jpg"
+      ],
+      "source_image_urls": [
+        "https://m.media-amazon.com/images/I/81LeU6swhWL._AC_SL1500_.jpg",
+        "https://m.media-amazon.com/images/I/81OOdxHfmHL._AC_SL1500_.jpg",
+        "https://m.media-amazon.com/images/I/81dwGpFJsFL._AC_SL1500_.jpg",
+        "https://m.media-amazon.com/images/I/81vg+UUM03L._AC_SL1500_.jpg"
+      ],
+      "rights_note": "Marketplace product imagery. Confirm permission for use as AI reference material before publication; generated output remains an inactive draft."
+    },
+    {
+      "priority_rank": 10,
+      "case_id": 32,
+      "brand": "PCZZOI",
+      "model": "New P6",
+      "asin": "B0GFKX4Y7X",
+      "dimensions_mm": { "depth": 445, "width": 220, "height": 490 },
+      "source_page": "https://www.amazon.co.uk/dp/B0GFKX4Y7X",
+      "reference_directory": "pczzoi-new-p6",
+      "selected_for_meshy": [
+        "candidate-1.jpg",
+        "candidate-3.jpg",
+        "candidate-4.jpg",
+        "candidate-7.jpg"
+      ],
+      "source_image_urls": [
+        "https://m.media-amazon.com/images/I/81gzAvbIrIL._AC_SL1500_.jpg",
+        "https://m.media-amazon.com/images/I/81kvhWitfwL._AC_SL1500_.jpg",
+        "https://m.media-amazon.com/images/I/81vzM0se0nL._AC_SL1500_.jpg",
+        "https://m.media-amazon.com/images/I/81Eo38IhkDL._AC_SL1500_.jpg"
+      ],
+      "rights_note": "Marketplace product imagery. Confirm permission for use as AI reference material before publication; generated output remains an inactive draft."
+    }
+  ]
+}

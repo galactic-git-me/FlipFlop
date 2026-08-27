@@ -370,7 +370,7 @@ async def generate_case_asset(
         raise HTTPException(status_code=409, detail="Complete the manufacturer 3D search first")
     if stages.get("third_party_3d", {}).get("status") != "not_found":
         raise HTTPException(status_code=409, detail="Meshy is only allowed when no usable third-party model was found")
-    if stages.get("product_images", {}).get("status") != "found":
+    if stages.get("product_images", {}).get("status") not in ("found", "complete"):
         raise HTTPException(status_code=409, detail="An approved product image set is required")
 
     result = await generate_multi_image_asset(body.image_urls)
