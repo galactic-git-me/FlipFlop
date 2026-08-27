@@ -11,7 +11,7 @@ export function formatCurrency(amount: number | null | undefined, currency = 'GB
     return '-'
   }
 
-  const formatter = new Intl.NumberFormat('en-GB', {
+  const formatter = new Intl.NumberFormat(currency === 'USD' ? 'en-US' : 'en-GB', {
     style: 'currency',
     currency,
     minimumFractionDigits: 2,
@@ -102,7 +102,7 @@ export function truncate(text: string | null | undefined, maxLength: number): st
  */
 export function percentChange(current: number, previous: number): number {
   if (previous === 0) return 0
-  return ((current - previous) / previous) * 100
+  return ((current - previous) / Math.abs(previous)) * 100
 }
 
 /**
