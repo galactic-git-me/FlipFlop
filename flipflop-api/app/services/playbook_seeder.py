@@ -950,17 +950,26 @@ _INITIAL_PLAYBOOKS: list[dict] = [
     },
 ]
 
-# Day-one Curated Builds. The source names preserve the strongest existing
-# strategy, economics, catalogue slots and variants while presenting the same
-# five outcomes internally and to customers.
+# Fixed Curated Builds. Each customer journey type maps to its own stable,
+# sellable playbook/SKU instead of collapsing distinct buyers into one product.
 _CURATED_RENAMES = {
     "Budget Gamer": "Great-value Gaming",
     "High-end Gamer": "High-performance Gaming",
-    "Student Build": "Work & Study",
-    "Content Creator": "Creation & Development",
+    "Student Build": "Student Hybrid",
+    "Office Station Flip": "Business & Office",
+    "Content Creator": "Content Creation",
     "AI Workstation": "AI Workstation",
+    "Dev Workstation": "Software Development",
+    "Family PC": "Family & Home",
 }
 _CURATED_NAMES = set(_CURATED_RENAMES.values())
+
+# Customer-facing names from the previous five-build catalogue. Renaming these
+# rows in place preserves their IDs, slots, variants, drafts and order history.
+_PREVIOUS_CURATED_RENAMES = {
+    "Work & Study": "Student Hybrid",
+    "Creation & Development": "Content Creation",
+}
 
 
 def _curated_seed_data() -> list[dict]:
@@ -969,17 +978,17 @@ def _curated_seed_data() -> list[dict]:
     for source_name, curated_name in _CURATED_RENAMES.items():
         data = dict(by_name[source_name])
         data["name"] = curated_name
-        if curated_name == "Work & Study":
+        if curated_name == "Student Hybrid":
             data.update({
-                "target_customer": "Students, home workers, families and small-business users",
-                "what_they_use_it_for": "Study, office work, video calls, coding, browsing and everyday home computing",
-                "what_they_want_from_build": "Quiet, responsive, reliable performance with flexible memory and storage",
+                "target_customer": "Students who need one affordable machine for coursework and gaming",
+                "what_they_use_it_for": "Study, coding, video calls, research, media and 1080p gaming",
+                "what_they_want_from_build": "Strong everyday responsiveness and credible gaming performance on a student budget",
             })
-        elif curated_name == "Creation & Development":
+        elif curated_name == "Content Creation":
             data.update({
-                "target_customer": "Creators, developers, engineers and technical professionals",
-                "what_they_use_it_for": "Editing, rendering, streaming, software development, containers and local virtual machines",
-                "what_they_want_from_build": "Strong multi-core performance, generous RAM and fast expandable NVMe storage",
+                "target_customer": "Video editors, streamers, photographers, designers and 3D artists",
+                "what_they_use_it_for": "Editing, rendering, streaming, photography, design and animation",
+                "what_they_want_from_build": "Strong multi-core and GPU performance with fast expandable storage",
             })
         curated.append(data)
     return curated
@@ -1049,7 +1058,7 @@ async def refresh_playbook_economics_from_benchmarks() -> int:
 async def seed_playbooks(db: AsyncSession) -> int:
     """
     Idempotent playbook migration:
-    1. Rename the five retained strategies to their customer-facing names
+    1. Rename retained strategies to their customer-facing product names
     2. Deprecate every other strategy (never delete: preserve foreign keys)
     3. Insert any missing curated playbooks
     4. Refresh pricing_model / profit_model on every curated playbook
@@ -1061,8 +1070,18 @@ async def seed_playbooks(db: AsyncSession) -> int:
 
     benchmarks = load_benchmarks()
 
-    # ── Step 0: preserve the existing IDs, slots and variants of the five
-    # retained strategies by renaming their rows in place.
+    # ── Step 0: preserve existing IDs, slots and variants by renaming rows.
+    for source_name, curated_name in _PREVIOUS_CURATED_RENAMES.items():
+        source_result = await db.execute(select(Playbook).where(Playbook.name == source_name))
+        source = source_result.scalar_one_or_none()
+        target_result = await db.execute(select(Playbook).where(Playbook.name == curated_name))
+        target = target_result.scalar_one_or_none()
+        if source and target is None:
+            source.name = curated_name
+            source.status = PlaybookStatus.ACTIVE
+        elif source and target is not None:
+            source.status = PlaybookStatus.DEPRECATED
+
     for source_name, curated_name in _CURATED_RENAMES.items():
         if source_name == curated_name:
             continue
