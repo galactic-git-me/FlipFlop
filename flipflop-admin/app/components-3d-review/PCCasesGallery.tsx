@@ -335,7 +335,7 @@ export function PCCasesGallery({ cases, loading }: PCCasesGalleryProps) {
   const formFactors = Array.from(new Set(cases.map((c) => c.formFactor)));
   const statuses: Array<PCCase["status"]> = ["has-model", "reference-only", "pending"];
 
-  let filtered = cases.filter((c) => {
+  const filtered = cases.filter((c) => {
     if (filterFormFactor && c.formFactor !== filterFormFactor) return false;
     if (filterStatus && c.status !== filterStatus) return false;
     return true;
