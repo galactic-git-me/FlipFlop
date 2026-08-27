@@ -121,6 +121,7 @@ const gradientStyle = `
 
 interface Component3DAsset {
   id: number;
+  subject_id?: number | null;
   category: string;
   family_key: string;
   status: "missing" | "meshy_draft" | "cleaned" | "validated" | "final" | "rejected";
@@ -133,6 +134,7 @@ interface Component3DAsset {
   created_by: string | null;
   created_at: string | null;
   rank?: number | null;
+  subject_name?: string | null;
   source_image_refs?: string[];
   review_batch_id?: string | null;
   review_decision?: "approved" | "rejected" | null;
@@ -145,6 +147,26 @@ interface ReviewBatch {
   complete: boolean;
   published: boolean;
   assets: Component3DAsset[];
+}
+
+interface PriorityCaseItem {
+  id: number;
+  name: string;
+  priority_3d_rank?: number | null;
+}
+
+function orderAndLabelAssets(items: Component3DAsset[], cases: PriorityCaseItem[]) {
+  const caseById = new Map(cases.map(item => [item.id, item]));
+  return items
+    .map(asset => {
+      const matchedCase = asset.subject_id ? caseById.get(asset.subject_id) : undefined;
+      return {
+        ...asset,
+        rank: matchedCase?.priority_3d_rank ?? asset.rank ?? null,
+        subject_name: matchedCase?.name ?? asset.subject_name ?? null,
+      };
+    })
+    .sort((left, right) => (left.rank ?? Number.MAX_SAFE_INTEGER) - (right.rank ?? Number.MAX_SAFE_INTEGER));
 }
 
 function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
@@ -356,11 +378,13 @@ export default function Components3DReviewPage() {
     const load = async () => {
       setLoading(true);
       try {
-        console.log("Fetching /api/assets-3d");
-        const response = await fetch("/api/assets-3d");
-        console.log("Response status:", response.status);
+        const batchId = new URLSearchParams(window.location.search).get("batch");
+        const [response, casesResponse] = await Promise.all([
+          fetch(batchId ? `/api/assets-3d/review-batches/${batchId}` : "/api/assets-3d"),
+          fetch("/api/cases/priority-for-3d?limit=30"),
+        ]);
         const data = await response.json();
-        console.log("Response data type:", typeof data, "Is array:", Array.isArray(data), "Length:", Array.isArray(data) ? data.length : "n/a");
+        const priorityCases = casesResponse.ok ? await casesResponse.json() as PriorityCaseItem[] : [];
 
         if (data.detail) {
           console.error("API Error:", data.detail);
@@ -374,11 +398,13 @@ export default function Components3DReviewPage() {
           return;
         }
 
-        const assets = Array.isArray(data) ? data : (data.data || data.assets || []);
-        console.log("Processed assets count:", assets.length);
-        setAssets(assets as Component3DAsset[]);
-        const firstDraft = assets.find((a: Component3DAsset) => a.status === "meshy_draft");
-        if (firstDraft) setSelectedAsset(firstDraft);
+        const loadedAssets = orderAndLabelAssets(
+          (Array.isArray(data) ? data : (data.data || data.assets || [])) as Component3DAsset[],
+          priorityCases,
+        );
+        if (batchId) setBatch({ ...data, assets: loadedAssets } as ReviewBatch);
+        setAssets(loadedAssets);
+        setSelectedAsset(loadedAssets[0] || null);
       } catch (error) {
         console.error("Error loading assets:", error);
         setAssets([]);
@@ -419,9 +445,10 @@ export default function Components3DReviewPage() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.detail || data.error || "Could not create review batch");
-      setBatch(data as ReviewBatch);
-      setAssets((data as ReviewBatch).assets);
-      setSelectedAsset((data as ReviewBatch).assets[0] || null);
+      const nextBatch = data as ReviewBatch;
+      setBatch(nextBatch);
+      setAssets(nextBatch.assets);
+      setSelectedAsset(nextBatch.assets[0] || null);
       setFilter("all");
     } catch (error) {
       setActionError(error instanceof Error ? error.message : "Could not create review batch");
@@ -597,7 +624,7 @@ export default function Components3DReviewPage() {
                         key={asset.id}
                         onClick={() => setSelectedAsset(asset)}
                         className={`rounded border overflow-hidden cursor-pointer transition hover:scale-105 relative flex flex-col ${selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""} ${statusColors[asset.status] || ""}`}
-                        style={{ width: "120px", height: "120px", backgroundImage: asset.source_image_refs && asset.source_image_refs.length > 0 ? `url('${asset.source_image_refs[0]}')` : undefined, backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "#1a3a52" }}
+                        style={{ width: "120px", height: "120px", backgroundImage: asset.preview_image_ref ? `url('${asset.preview_image_ref}')` : asset.source_image_refs && asset.source_image_refs.length > 0 ? `url('${asset.source_image_refs[0]}')` : undefined, backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "#1a3a52" }}
                       >
                         {/* Status badge overlay */}
                         {asset.glb_ref && (
@@ -607,7 +634,7 @@ export default function Components3DReviewPage() {
                         )}
                         <div className="flex-1"></div>
                         <div className="w-full bg-black/70 text-center py-2 px-1">
-                          <div className="text-xs font-bold text-white">{asset.family_key}</div>
+                          <div className="text-xs font-bold text-white">{asset.rank ? `#${asset.rank} ` : ""}{asset.subject_name || asset.family_key}</div>
                         </div>
                       </button>
                     );
@@ -630,7 +657,7 @@ export default function Components3DReviewPage() {
                 {/* Title overlay - top center */}
                 <div className="absolute top-0 left-0 right-0 flex justify-center pt-8 pointer-events-none z-10">
                   <h1 className="text-5xl font-black text-white text-center drop-shadow-lg" style={{ textShadow: "0 2px 20px rgba(0,0,0,0.8)" }}>
-                    {selectedAsset.family_key}
+                    {selectedAsset.rank ? `#${selectedAsset.rank} ` : ""}{selectedAsset.subject_name || selectedAsset.family_key}
                   </h1>
                 </div>
 

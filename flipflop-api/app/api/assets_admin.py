@@ -177,6 +177,7 @@ async def list_assets(
 
 class ReviewBatchCreate(BaseModel):
     size: int = Field(default=10, ge=1, le=10)
+    asset_ids: list[int] | None = Field(default=None, min_length=1, max_length=10)
 
 
 def _batch_payload(batch_id: str, assets: list[Component3DAsset]) -> dict:
@@ -199,22 +200,29 @@ async def create_review_batch(
     db: AsyncSession = Depends(get_db),
 ):
     """Claim the next unreviewed candidates, with a hard maximum of ten."""
+    query = select(Component3DAsset).where(
+        Component3DAsset.review_batch_id.is_(None),
+        Component3DAsset.status.in_((
+            Component3DAssetStatus.MESHY_DRAFT,
+            Component3DAssetStatus.CLEANED,
+        )),
+        Component3DAsset.glb_ref.isnot(None),
+    )
+    if body.asset_ids is not None:
+        requested_ids = list(dict.fromkeys(body.asset_ids))
+        if len(requested_ids) != len(body.asset_ids):
+            raise HTTPException(status_code=422, detail="asset_ids must be unique")
+        query = query.where(Component3DAsset.id.in_(requested_ids)).limit(len(requested_ids))
+    else:
+        query = query.limit(body.size)
     candidates = (
         await db.execute(
-            select(Component3DAsset)
-            .where(
-                Component3DAsset.review_batch_id.is_(None),
-                Component3DAsset.status.in_((
-                    Component3DAssetStatus.MESHY_DRAFT,
-                    Component3DAssetStatus.CLEANED,
-                )),
-                Component3DAsset.glb_ref.isnot(None),
-            )
-            .order_by(Component3DAsset.created_at, Component3DAsset.id)
+            query.order_by(Component3DAsset.created_at, Component3DAsset.id)
             .with_for_update(skip_locked=True)
-            .limit(body.size)
         )
     ).scalars().all()
+    if body.asset_ids is not None and len(candidates) != len(body.asset_ids):
+        raise HTTPException(status_code=409, detail="One or more requested assets are unavailable for review")
     if not candidates:
         raise HTTPException(status_code=409, detail="No unbatched 3D candidates are ready for review")
 
