@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { ChevronLeft, ChevronRight, Images, Youtube } from "lucide-react";
+import { ChevronLeft, ChevronRight, CirclePlay, Images } from "lucide-react";
 
 interface Star {
   x: number;
@@ -13,7 +13,7 @@ interface Star {
   animationDelay: number;
 }
 
-function StarfieldBackground({ containerRef }: { containerRef: React.RefObject<HTMLDivElement> }) {
+function StarfieldBackground({ containerRef }: { containerRef: React.RefObject<HTMLDivElement | null> }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Star[]>([]);
   const animationRef = useRef<number | null>(null);
@@ -812,7 +812,7 @@ export default function Components3DReviewPage() {
 
                 <div className="my-4 border-t border-[#1e2d45] pt-4">
                   <h2 className="mb-3 flex items-center gap-2 text-sm font-bold text-slate-100">
-                    <Youtube className="h-4 w-4 text-red-400" aria-hidden="true" />
+                    <CirclePlay className="h-4 w-4 text-red-400" aria-hidden="true" />
                     YouTube references
                   </h2>
                   {selectedAsset.source_video_refs?.length ? (

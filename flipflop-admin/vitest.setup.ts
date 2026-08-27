@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom'
+import React from 'react'
 import { vi } from 'vitest'
 
 // Mock Next.js router
@@ -31,8 +32,7 @@ vi.mock('next/image', () => ({
     height,
     ...props
   }: any) => {
-    // eslint-disable-next-line jsx-a11y/alt-text
-    return <img src={src} alt={alt} width={width} height={height} {...props} />
+    return React.createElement('img', { src, alt, width, height, ...props })
   },
 }))
 
