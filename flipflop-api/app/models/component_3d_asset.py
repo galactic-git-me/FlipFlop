@@ -72,6 +72,14 @@ class Component3DAsset(Base):
     notes = Column(String(2000), nullable=True)
     created_by = Column(String(100), nullable=True)
 
+    # Owner review is deliberately batched. Candidates are assigned to a
+    # ten-item review batch and cannot become active storefront assets until
+    # every item in that batch has an explicit decision.
+    review_batch_id = Column(String(36), nullable=True, index=True)
+    review_decision = Column(String(20), nullable=True)  # approved | rejected
+    reviewed_at = Column(DateTime, nullable=True)
+    reviewed_by = Column(String(100), nullable=True)
+
     # Provenance — see flipflop-3d-builder-claude-prd.md §5/§11. A row must
     # never be promoted to VALIDATED/FINAL without commercial_use_approved
     # AND redistribution_approved both true; a publicly downloadable CAD/model

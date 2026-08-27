@@ -9,6 +9,7 @@ from datetime import datetime
 import json
 from pathlib import Path
 import shutil
+from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException
 import httpx
@@ -130,6 +131,10 @@ def _serialize(a: Component3DAsset) -> dict:
         "anchor_manifest_json": a.anchor_manifest_json,
         "notes": a.notes,
         "created_by": a.created_by,
+        "review_batch_id": a.review_batch_id,
+        "review_decision": a.review_decision,
+        "reviewed_at": a.reviewed_at.isoformat() if a.reviewed_at else None,
+        "reviewed_by": a.reviewed_by,
         "provenance_status": a.provenance_status,
         "source_name": a.source_name,
         "source_url": a.source_url,
@@ -168,6 +173,155 @@ async def list_assets(
             raise HTTPException(status_code=422, detail=f"Unknown status '{status}'")
     rows = (await db.execute(q)).scalars().all()
     return [_serialize(a) for a in rows]
+
+
+class ReviewBatchCreate(BaseModel):
+    size: int = Field(default=10, ge=1, le=10)
+
+
+def _batch_payload(batch_id: str, assets: list[Component3DAsset]) -> dict:
+    decided = sum(asset.review_decision is not None for asset in assets)
+    return {
+        "batch_id": batch_id,
+        "size": len(assets),
+        "decided": decided,
+        "complete": bool(assets) and decided == len(assets),
+        "published": bool(assets) and all(
+            asset.review_decision == "rejected" or asset.is_active for asset in assets
+        ),
+        "assets": [_serialize(asset) for asset in assets],
+    }
+
+
+@router.post("/review-batches")
+async def create_review_batch(
+    body: ReviewBatchCreate,
+    db: AsyncSession = Depends(get_db),
+):
+    """Claim the next unreviewed candidates, with a hard maximum of ten."""
+    candidates = (
+        await db.execute(
+            select(Component3DAsset)
+            .where(
+                Component3DAsset.review_batch_id.is_(None),
+                Component3DAsset.status.in_((
+                    Component3DAssetStatus.MESHY_DRAFT,
+                    Component3DAssetStatus.CLEANED,
+                )),
+                Component3DAsset.glb_ref.isnot(None),
+            )
+            .order_by(Component3DAsset.created_at, Component3DAsset.id)
+            .with_for_update(skip_locked=True)
+            .limit(body.size)
+        )
+    ).scalars().all()
+    if not candidates:
+        raise HTTPException(status_code=409, detail="No unbatched 3D candidates are ready for review")
+
+    batch_id = str(uuid4())
+    for asset in candidates:
+        asset.review_batch_id = batch_id
+    await db.commit()
+    return _batch_payload(batch_id, candidates)
+
+
+@router.get("/review-batches/{batch_id}")
+async def get_review_batch(batch_id: str, db: AsyncSession = Depends(get_db)):
+    assets = (
+        await db.execute(
+            select(Component3DAsset)
+            .where(Component3DAsset.review_batch_id == batch_id)
+            .order_by(Component3DAsset.created_at, Component3DAsset.id)
+        )
+    ).scalars().all()
+    if not assets:
+        raise HTTPException(status_code=404, detail="Review batch not found")
+    return _batch_payload(batch_id, assets)
+
+
+class ReviewDecision(BaseModel):
+    decision: str = Field(pattern="^(approved|rejected)$")
+    notes: str | None = None
+
+
+@router.post("/review-batches/{batch_id}/assets/{asset_id}/decision")
+async def decide_review_asset(
+    batch_id: str,
+    asset_id: int,
+    body: ReviewDecision,
+    admin=Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    asset = (
+        await db.execute(
+            select(Component3DAsset).where(
+                Component3DAsset.id == asset_id,
+                Component3DAsset.review_batch_id == batch_id,
+            )
+        )
+    ).scalar_one_or_none()
+    if not asset:
+        raise HTTPException(status_code=404, detail="Asset is not part of this review batch")
+
+    asset.review_decision = body.decision
+    asset.reviewed_at = datetime.utcnow()
+    asset.reviewed_by = getattr(admin, "email", None)
+    if body.notes is not None:
+        asset.notes = body.notes
+    if body.decision == "rejected":
+        asset.status = Component3DAssetStatus.REJECTED
+        asset.is_active = False
+    elif asset.status == Component3DAssetStatus.MESHY_DRAFT:
+        asset.status = Component3DAssetStatus.CLEANED
+    await db.commit()
+    return _serialize(asset)
+
+
+@router.post("/review-batches/{batch_id}/publish")
+async def publish_review_batch(
+    batch_id: str,
+    admin=Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    assets = (
+        await db.execute(
+            select(Component3DAsset)
+            .where(Component3DAsset.review_batch_id == batch_id)
+            .order_by(Component3DAsset.id)
+            .with_for_update()
+        )
+    ).scalars().all()
+    if not assets:
+        raise HTTPException(status_code=404, detail="Review batch not found")
+    if any(asset.review_decision is None for asset in assets):
+        raise HTTPException(status_code=409, detail="Every model in the batch must be approved or rejected before publishing")
+
+    approved = [asset for asset in assets if asset.review_decision == "approved"]
+    for asset in approved:
+        if not (asset.commercial_use_approved and asset.redistribution_approved):
+            raise HTTPException(
+                status_code=409,
+                detail=f"Asset {asset.id} is approved visually but its commercial-use and redistribution rights are not approved",
+            )
+        if not asset.scale_validated:
+            raise HTTPException(status_code=409, detail=f"Asset {asset.id} has not passed scale validation")
+        await db.execute(
+            update(Component3DAsset)
+            .where(
+                Component3DAsset.id != asset.id,
+                Component3DAsset.subject_type == asset.subject_type,
+                Component3DAsset.subject_id == asset.subject_id,
+                Component3DAsset.category == asset.category,
+                Component3DAsset.family_key == asset.family_key,
+            )
+            .values(is_active=False)
+        )
+        asset.status = Component3DAssetStatus.FINAL
+        asset.is_active = True
+        asset.provenance_reviewed_at = asset.provenance_reviewed_at or datetime.utcnow()
+        asset.provenance_reviewed_by = asset.provenance_reviewed_by or getattr(admin, "email", None)
+    await db.commit()
+    return _batch_payload(batch_id, assets)
 
 
 class AssetCreate(BaseModel):
