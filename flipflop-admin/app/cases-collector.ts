@@ -171,6 +171,8 @@ async function collectAndSubmitCases(): Promise<void> {
 }
 
 // Export for browser console
+export {};
+
 declare global {
   interface Window {
     collectAndSubmitCases: typeof collectAndSubmitCases

@@ -262,7 +262,7 @@ export default function Cases3DSourcingPage() {
               ) : activeTask.status === "approved" ? (
                 <ModelingPhase task={activeTask} onUpdate={(updates) => updateTask(activeTask.case.id, updates)} />
               ) : activeTask.status === "modeling" ? (
-                <ModelingInProgressPhase task={activeTask} />
+                <ModelingInProgressPhase task={activeTask} onUpdate={(updates) => updateTask(activeTask.case.id, updates)} />
               ) : (
                 <CompletedPhase task={activeTask} />
               )}

@@ -455,7 +455,7 @@ function GoogleTrendsView({ data }: {
       const components: BuildComponent[] = best.components.map(component => {
         const category = component.category.toLowerCase();
         const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-        const modelTokens = (value: string) => normalize(value).match(/\b(?:rtx|gtx|rx|ryzen|core)?\s*[a-z]?\d{4,5}[a-z0-9]*\b/g) ?? [];
+        const modelTokens = (value: string): string[] => Array.from(normalize(value).match(/\b(?:rtx|gtx|rx|ryzen|core)?\s*[a-z]?\d{4,5}[a-z0-9]*\b/g) ?? []);
         const plannedName = normalize(component.title);
         const plannedModels = modelTokens(component.title);
         const owned = freeInventory.find(item => {

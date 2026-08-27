@@ -352,9 +352,9 @@ Example:
           </p>
         </div>
         <div className="flex gap-2">
-          <Button asChild variant="outline" className="gap-2">
-            <Link href="/inventory/intelligence"><BrainCircuit className="h-4 w-4" /> Intelligence</Link>
-          </Button>
+          <Link href="/inventory/intelligence" className="inline-flex items-center gap-2 rounded-lg border border-[#2d4a6b] bg-[#0d1320] px-4 py-2 text-sm text-white transition-all hover:border-[#00dc82]/50 hover:text-[#00dc82]">
+            <BrainCircuit className="h-4 w-4" /> Intelligence
+          </Link>
           <Button
             onClick={() => { setShowForm(!showForm); setEditingId(null); }}
             className="gap-2"

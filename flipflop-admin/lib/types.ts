@@ -86,6 +86,9 @@ export interface Part {
   price_refurb: number | null;
   image_url: string | null;
   theme: string | null;
+  keywords?: string[] | null;
+  rating?: number | null;
+  sales_velocity?: string | number | null;
   resale_value_add: number;
   is_active: boolean;
   last_price_update: string | null;

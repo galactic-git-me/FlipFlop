@@ -69,7 +69,7 @@ export default function InventoryIntelligencePage() {
     if (!rule) return;
     setSavingRule(componentType);
     try {
-      await api.inventory.saveReorderRule(componentType, rule);
+      await api.inventory.saveReorderRule(componentType, { ...rule, notes: rule.notes ?? undefined });
       toast.success(`${componentType.toUpperCase()} stock targets saved`);
       await load();
     } catch (error) {
