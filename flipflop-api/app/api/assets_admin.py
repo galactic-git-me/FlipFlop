@@ -298,6 +298,20 @@ def _regeneration_file_key(asset: Component3DAsset) -> str:
     return f"{asset.category or 'component'}-generic"
 
 
+def _approved_case_image_urls(evidence: dict | None) -> set[str]:
+    """URLs that passed the empty illuminated chassis acquisition gate."""
+    approved: set[str] = set()
+    stages = (evidence or {}).get("stages") or {}
+    for stage_name in ("product_images", "meshy_generation"):
+        for attempt in (stages.get(stage_name) or {}).get("attempts") or []:
+            for item in attempt.get("image_assessments") or []:
+                if not isinstance(item, dict) or not isinstance(item.get("url"), str):
+                    continue
+                if all(item.get(field) is True for field in _CASE_MESHY_IMAGE_REQUIREMENTS):
+                    approved.add(item["url"])
+    return approved
+
+
 async def _run_rejected_asset_regeneration(
     replacement_id: int,
     source_image_refs: list[str],
@@ -378,6 +392,10 @@ async def decide_review_asset(
         asset.status = Component3DAssetStatus.REJECTED
         asset.is_active = False
         source_images = [url for url in (asset.source_image_refs or []) if isinstance(url, str)][:4]
+        if asset.subject_type == AssetSubjectType.CASE and asset.subject_id is not None:
+            case = (await db.execute(select(Case).where(Case.id == asset.subject_id))).scalar_one_or_none()
+            approved_case_urls = _approved_case_image_urls(case.sourcing_3d_evidence if case else None)
+            source_images = [url for url in source_images if url in approved_case_urls]
         if source_images:
             feedback = (body.notes or "").strip() or (
                 "Recreate the object more faithfully from the source photographs. "
@@ -439,7 +457,10 @@ async def decide_review_asset(
         else:
             regeneration = {
                 "status": "not_queued",
-                "message": "Rejected, but regeneration needs at least one source picture.",
+                "message": (
+                    "Rejected, but regeneration needs at least one acquisition-approved source picture "
+                    "showing the empty chassis with its RGB fans installed and illuminated."
+                ),
             }
     elif asset.status == Component3DAssetStatus.MESHY_DRAFT:
         asset.status = Component3DAssetStatus.CLEANED
