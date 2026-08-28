@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles, ExternalLink } from "lucide-react";
+import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles, ExternalLink, Upload } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
@@ -120,6 +120,35 @@ export default function Cases3DPriorityPage() {
       setNewReferenceUrl("");
     } catch {
       setError("Enter a complete http:// or https:// picture URL");
+    }
+  };
+
+  const uploadReferenceCandidates = async (caseId: number, files: FileList | null) => {
+    if (!files?.length) return;
+    setReferenceBusy(true);
+    setError(null);
+    setReferenceNotice(`Uploading ${files.length} picture${files.length === 1 ? "" : "s"}…`);
+    try {
+      const formData = new FormData();
+      Array.from(files).forEach(file => formData.append("files", file));
+      const response = await fetch(`/api/cases/${caseId}/3d-reference-candidates/upload`, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json() as { uploaded?: ReferenceCandidate[]; detail?: string };
+      if (!response.ok) throw new Error(data.detail || "Could not upload reference pictures");
+      const uploaded = data.uploaded || [];
+      setReferenceData(current => current ? {
+        ...current,
+        approved_selection: undefined,
+        candidates: [...current.candidates, ...uploaded.filter(candidate => !current.candidates.some(existing => existing.url === candidate.url))],
+      } : current);
+      setReferenceNotice(`${uploaded.length} uploaded picture${uploaded.length === 1 ? " is" : "s are"} now available to select.`);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Could not upload reference pictures");
+      setReferenceNotice(null);
+    } finally {
+      setReferenceBusy(false);
     }
   };
 
@@ -409,6 +438,28 @@ export default function Cases3DPriorityPage() {
                         </select>
                         <input value={newReferenceUrl} onChange={event => setNewReferenceUrl(event.target.value)} placeholder="Paste an additional direct picture URL" className="min-w-0 flex-1 rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-slate-200" />
                         <Button type="button" variant="outline" onClick={addReferenceCandidate} className="cursor-pointer"><Plus className="mr-1 h-4 w-4" /> Add</Button>
+                      </div>
+                      <div className="mt-3 rounded-md border border-dashed border-cyan-500/40 bg-cyan-500/5 p-3">
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                          <div>
+                            <p className="text-xs font-medium text-cyan-100">Upload your own reference pictures</p>
+                            <p className="mt-1 text-[11px] text-slate-400">JPG, PNG or WebP, up to 15 MB each. Uploaded pictures join the gallery above.</p>
+                          </div>
+                          <label className={`inline-flex items-center rounded-md border border-cyan-500/50 px-3 py-2 text-xs font-medium text-cyan-100 hover:bg-cyan-500/10 ${referenceBusy ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}>
+                            <Upload className="mr-2 h-4 w-4" /> Choose pictures
+                            <input
+                              type="file"
+                              accept="image/jpeg,image/png,image/webp"
+                              multiple
+                              className="sr-only"
+                              disabled={referenceBusy}
+                              onChange={event => {
+                                void uploadReferenceCandidates(caseItem.id, event.target.files);
+                                event.target.value = "";
+                              }}
+                            />
+                          </label>
+                        </div>
                       </div>
                       <div className="mt-3 flex flex-wrap items-center gap-2">
                         <Button type="button" onClick={() => void approveReferences(caseItem.id)} disabled={referenceBusy || !referenceData.sourcing_ready || selectedReferences.length !== 4} className="cursor-pointer bg-cyan-700 hover:bg-cyan-600">

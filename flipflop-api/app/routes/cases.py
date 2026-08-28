@@ -1,12 +1,15 @@
 """PC Case sourcing and 3D model management endpoints."""
 from datetime import datetime
-from fastapi import APIRouter, Depends, HTTPException
+from pathlib import Path
+from uuid import uuid4
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from pydantic import BaseModel, Field, HttpUrl
 from sqlalchemy import select, and_, func, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.case import Case
 from app.models.catalogue import CaseCatalogue
+from app.services.media_sync import sync_to_public_media
 
 router = APIRouter(prefix="/cases", tags=["cases"])
 
@@ -28,6 +31,15 @@ CASE_MESHY_PHOTO_REQUIREMENTS = (
     "no_exploded_view",
     "same_chassis_configuration",
 )
+
+CASE_REFERENCE_UPLOAD_TYPES = {
+    "image/jpeg": ".jpg",
+    "image/png": ".png",
+    "image/webp": ".webp",
+}
+CASE_REFERENCE_UPLOAD_LIMIT = 15 * 1024 * 1024
+CASE_REFERENCE_PUBLIC_ROOT = Path(__file__).resolve().parents[3].parent / "FlipFlop.shop" / "public" / "media"
+CASE_REFERENCE_PUBLIC_URL = "https://theflipflop.shop/media"
 
 
 def _priority_payload(case: Case) -> dict:
@@ -180,6 +192,74 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
         "candidates": candidates,
         "approved_selection": approved,
     }
+
+
+@router.post("/{case_id}/3d-reference-candidates/upload")
+async def upload_3d_reference_candidates(
+    case_id: int,
+    files: list[UploadFile] = File(...),
+    db: AsyncSession = Depends(get_db),
+):
+    """Store owner-supplied photos and add them to the case's candidate set."""
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    if not files:
+        raise HTTPException(status_code=422, detail="Choose at least one picture")
+    if len(files) > 12:
+        raise HTTPException(status_code=422, detail="Upload no more than 12 pictures at once")
+
+    # Meshy must be able to fetch every approved reference from the public
+    # internet, so local-only /uploads URLs are not sufficient here.
+    CASE_REFERENCE_PUBLIC_ROOT.mkdir(parents=True, exist_ok=True)
+    uploaded: list[dict] = []
+    created_paths: list[Path] = []
+    try:
+        for upload in files:
+            extension = CASE_REFERENCE_UPLOAD_TYPES.get((upload.content_type or "").lower())
+            if not extension:
+                raise HTTPException(status_code=415, detail=f"{upload.filename or 'File'} must be JPG, PNG or WebP")
+            content = await upload.read(CASE_REFERENCE_UPLOAD_LIMIT + 1)
+            if not content:
+                raise HTTPException(status_code=422, detail=f"{upload.filename or 'File'} is empty")
+            if len(content) > CASE_REFERENCE_UPLOAD_LIMIT:
+                raise HTTPException(status_code=413, detail=f"{upload.filename or 'File'} exceeds the 15 MB limit")
+            filename = f"case-3d-ref-{case_id}-{uuid4().hex}{extension}"
+            destination = CASE_REFERENCE_PUBLIC_ROOT / filename
+            destination.write_bytes(content)
+            created_paths.append(destination)
+            if not await sync_to_public_media(destination):
+                raise HTTPException(status_code=502, detail=f"Could not publish {upload.filename or 'picture'} for 3D generation")
+            uploaded.append({
+                "url": f"{CASE_REFERENCE_PUBLIC_URL}/{filename}",
+                "source": "manual",
+                "source_page": None,
+                "label": f"Owner upload · {Path(upload.filename or 'picture').name[:120]}",
+            })
+    except Exception:
+        for path in created_paths:
+            path.unlink(missing_ok=True)
+        raise
+    finally:
+        for upload in files:
+            await upload.close()
+
+    evidence = dict(case.sourcing_3d_evidence or {"schema_version": 1, "stages": {}})
+    stages = dict(evidence.get("stages") or {})
+    product_stage = dict(stages.get("product_images") or {"attempts": []})
+    existing = {item.get("url"): item for item in product_stage.get("candidate_images") or [] if isinstance(item, dict)}
+    for item in uploaded:
+        existing[item["url"]] = item
+    product_stage.update({
+        "candidate_images": list(existing.values()),
+        "selection_required": True,
+        "updated_at": datetime.utcnow().isoformat(),
+    })
+    stages["product_images"] = product_stage
+    evidence["stages"] = stages
+    case.sourcing_3d_evidence = evidence
+    await db.commit()
+    return {"uploaded": uploaded}
 
 
 @router.post("/{case_id}/3d-reference-selection")
