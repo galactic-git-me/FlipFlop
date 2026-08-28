@@ -302,6 +302,11 @@ def _approved_case_image_urls(evidence: dict | None) -> set[str]:
     """URLs that passed the empty illuminated chassis acquisition gate."""
     approved: set[str] = set()
     stages = (evidence or {}).get("stages") or {}
+    selection = (stages.get("product_images") or {}).get("approved_selection") or {}
+    if selection.get("status") == "approved":
+        for item in selection.get("images") or []:
+            if isinstance(item, dict) and isinstance(item.get("url"), str):
+                approved.add(item["url"])
     for stage_name in ("product_images", "meshy_generation"):
         for attempt in (stages.get(stage_name) or {}).get("attempts") or []:
             for item in attempt.get("image_assessments") or []:
@@ -535,8 +540,7 @@ class AssetCreate(BaseModel):
 
 
 class CaseMeshyGenerate(BaseModel):
-    image_urls: list[str] = Field(min_length=1, max_length=4)
-    image_assessments: list[dict] = Field(default_factory=list)
+    image_urls: list[str] = Field(min_length=4, max_length=4)
     notes: str | None = None
 
 
@@ -551,45 +555,18 @@ _CASE_MESHY_IMAGE_REQUIREMENTS = (
 )
 
 
-def _validated_case_meshy_images(body: CaseMeshyGenerate) -> list[str]:
-    """Accept only clean, consistent empty-chassis photos for case modelling.
-
-    Reference pictures that fail this gate remain useful in the owner review
-    gallery, but must not be sent to Meshy where text panels, full builds or
-    conflicting RGB/configurations can be fused into the generated geometry.
-    """
-    assessments_by_url = {
-        item.get("url"): item
-        for item in body.image_assessments
-        if isinstance(item, dict) and isinstance(item.get("url"), str)
-    }
-    missing = [url for url in body.image_urls if url not in assessments_by_url]
-    if missing:
-        raise HTTPException(
-            status_code=422,
-            detail=(
-                "Every Meshy case image needs an acquisition assessment. Only empty chassis photos "
-                "with installed, illuminated RGB fans and no text/dimension/exploded overlays are accepted."
-            ),
-        )
-    rejected: list[dict] = []
-    accepted: list[str] = []
-    for url in body.image_urls:
-        assessment = assessments_by_url[url]
-        failed = [field for field in _CASE_MESHY_IMAGE_REQUIREMENTS if assessment.get(field) is not True]
-        if failed:
-            rejected.append({"url": url, "failed_requirements": failed})
-        else:
-            accepted.append(url)
-    if rejected:
-        raise HTTPException(
-            status_code=422,
-            detail={
-                "message": "One or more photos are unsuitable for Meshy case generation.",
-                "rejected_images": rejected,
-            },
-        )
-    return accepted
+def _owner_approved_case_images(case: Case, requested_urls: list[str]) -> list[str]:
+    selection = (
+        ((case.sourcing_3d_evidence or {}).get("stages") or {})
+        .get("product_images", {})
+        .get("approved_selection", {})
+    )
+    approved = [item.get("url") for item in selection.get("images") or [] if isinstance(item, dict)]
+    if selection.get("status") != "approved" or len(approved) != 4:
+        raise HTTPException(status_code=409, detail="Approve exactly four reference pictures before generating the model")
+    if requested_urls != approved:
+        raise HTTPException(status_code=409, detail="Generation must use the four owner-approved pictures in their approved order")
+    return approved
 
 
 @router.post("/cases/{case_id}/generate")
@@ -619,7 +596,7 @@ async def generate_case_asset(
     if stages.get("product_images", {}).get("status") not in ("found", "complete"):
         raise HTTPException(status_code=409, detail="An approved product image set is required")
 
-    approved_image_urls = _validated_case_meshy_images(body)
+    approved_image_urls = _owner_approved_case_images(case, body.image_urls)
     result = await generate_multi_image_asset(approved_image_urls)
     if result is None:
         raise HTTPException(status_code=502, detail="Meshy generation failed — check service configuration")
@@ -667,7 +644,9 @@ async def generate_case_asset(
         "task_id": result.task_id,
         "asset_version": version,
         "source_image_urls": approved_image_urls,
-        "image_assessments": body.image_assessments,
+        "reference_selection_approved": True,
+        "texture_reference_url": approved_image_urls[0],
+        "requires_separate_model_approval": True,
         "recorded_at": datetime.utcnow().isoformat(),
     })
     generation.update(status="found", attempts=attempts, updated_at=datetime.utcnow().isoformat())

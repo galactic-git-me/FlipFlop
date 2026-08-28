@@ -1,11 +1,12 @@
 """PC Case sourcing and 3D model management endpoints."""
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, HttpUrl
 from sqlalchemy import select, and_, func, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.case import Case
+from app.models.catalogue import CaseCatalogue
 
 router = APIRouter(prefix="/cases", tags=["cases"])
 
@@ -97,6 +98,131 @@ class SourcingEvidencePatch(BaseModel):
     stage: str
     status: str = Field(pattern="^(not_started|searching|found|not_found|blocked|complete)$")
     attempt: dict | None = None
+
+
+class CaseReferenceImage(BaseModel):
+    url: HttpUrl
+    source: str = Field(pattern="^(amazon|manufacturer|google|retailer|manual)$")
+    source_page: HttpUrl | None = None
+    label: str | None = None
+
+
+class CaseReferenceApproval(BaseModel):
+    selected_images: list[CaseReferenceImage] = Field(min_length=4, max_length=4)
+
+
+def _candidate_source(url: str, fallback: str = "manual") -> str:
+    lowered = url.lower()
+    if "amazon." in lowered or "media-amazon.com" in lowered:
+        return "amazon"
+    if "apnx.com" in lowered or "corsair.com" in lowered or "lian-li.com" in lowered:
+        return "manufacturer"
+    return fallback
+
+
+def _append_candidate(items: list[dict], seen: set[str], url: object, source: str, source_page: str | None = None, label: str | None = None) -> None:
+    if not isinstance(url, str) or not url.startswith(("https://", "http://")) or url in seen:
+        return
+    seen.add(url)
+    items.append({"url": url, "source": _candidate_source(url, source), "source_page": source_page, "label": label})
+
+
+@router.get("/{case_id}/3d-reference-candidates")
+async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(get_db)):
+    """Collate candidate photos without silently deciding which four are sent to Meshy."""
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+
+    evidence = dict(case.sourcing_3d_evidence or {})
+    stages = dict(evidence.get("stages") or {})
+    product_stage = dict(stages.get("product_images") or {})
+    candidates: list[dict] = []
+    seen: set[str] = set()
+    _append_candidate(candidates, seen, case.image_url, _candidate_source(case.image_url or ""), case.source_url, "Catalogue image")
+
+    for item in product_stage.get("candidate_images") or []:
+        if isinstance(item, dict):
+            _append_candidate(candidates, seen, item.get("url"), item.get("source") or "manual", item.get("source_page"), item.get("label"))
+    for url in product_stage.get("urls") or []:
+        _append_candidate(candidates, seen, url, "manual", case.source_url)
+    for attempt in product_stage.get("attempts") or []:
+        if not isinstance(attempt, dict):
+            continue
+        source = attempt.get("source") or attempt.get("provider") or "manual"
+        source_page = attempt.get("source_page") or attempt.get("source_url")
+        for key in ("image_urls", "urls", "source_image_urls"):
+            for url in attempt.get(key) or []:
+                _append_candidate(candidates, seen, url, str(source).lower(), source_page)
+        for assessment in attempt.get("image_assessments") or []:
+            if isinstance(assessment, dict):
+                _append_candidate(candidates, seen, assessment.get("url"), str(source).lower(), source_page)
+
+    # Amazon galleries captured by FlipflopXtension are stored on the case
+    # catalogue. Match conservatively by brand plus model/name tokens.
+    catalogue_rows = (await db.execute(select(CaseCatalogue).where(CaseCatalogue.brand.ilike(case.brand or "%")))).scalars().all()
+    model_tokens = [token.lower() for token in (case.model or "").replace("-", " ").split() if len(token) > 1]
+    for row in catalogue_rows:
+        haystack = row.name.lower()
+        if model_tokens and not all(token in haystack for token in model_tokens):
+            continue
+        for url in row.images or []:
+            _append_candidate(candidates, seen, url, "amazon", case.source_url, f"Stored Amazon gallery · {row.name}")
+
+    approved = product_stage.get("approved_selection") or {}
+    return {
+        "case_id": case.id,
+        "case_name": case.name,
+        "sourcing_ready": (
+            (stages.get("manufacturer_3d") or {}).get("status") in ("not_found", "complete")
+            and (stages.get("third_party_3d") or {}).get("status") == "not_found"
+        ),
+        "candidates": candidates,
+        "approved_selection": approved,
+    }
+
+
+@router.post("/{case_id}/3d-reference-selection")
+async def approve_3d_reference_selection(case_id: int, body: CaseReferenceApproval, db: AsyncSession = Depends(get_db)):
+    """Persist the owner's four-photo approval as a gate separate from generation."""
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    urls = [str(item.url) for item in body.selected_images]
+    if len(set(urls)) != 4:
+        raise HTTPException(status_code=422, detail="Choose four different reference pictures")
+
+    evidence = dict(case.sourcing_3d_evidence or {"schema_version": 1, "stages": {}})
+    stages = dict(evidence.get("stages") or {})
+    if (stages.get("manufacturer_3d") or {}).get("status") not in ("not_found", "complete"):
+        raise HTTPException(status_code=409, detail="Finish the official/manufacturer 3D-model search before approving fallback photos")
+    if (stages.get("third_party_3d") or {}).get("status") != "not_found":
+        raise HTTPException(status_code=409, detail="Finish the licensed third-party 3D-model search before approving fallback photos")
+
+    selected = [item.model_dump(mode="json") for item in body.selected_images]
+    now = datetime.utcnow().isoformat()
+    product_stage = dict(stages.get("product_images") or {"attempts": []})
+    existing = {item.get("url"): item for item in product_stage.get("candidate_images") or [] if isinstance(item, dict)}
+    for item in selected:
+        existing[item["url"]] = item
+    product_stage.update({
+        "status": "complete",
+        "candidate_images": list(existing.values()),
+        "approved_selection": {
+            "status": "approved",
+            "images": selected,
+            "approved_at": now,
+            "texture_reference_url": urls[0],
+            "requires_separate_model_approval": True,
+        },
+        "updated_at": now,
+    })
+    stages["product_images"] = product_stage
+    evidence["stages"] = stages
+    case.sourcing_3d_evidence = evidence
+    case.status = "ready_for_approval"
+    await db.commit()
+    return _priority_payload(case)
 
 
 @router.patch("/{case_id}/3d-sourcing")
