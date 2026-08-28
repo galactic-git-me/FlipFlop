@@ -269,7 +269,7 @@ async def update_3d_sourcing_evidence(
 
 @router.get("/priority-for-3d")
 async def get_cases_priority_for_3d(
-    limit: int = 30,
+    limit: int = 100,
     db: AsyncSession = Depends(get_db),
 ):
     """

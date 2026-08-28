@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const limit = searchParams.get("limit") || "30";
+  // The campaign starts with 30 frozen cases, but curated exceptions may have
+  // a later rank and must remain visible in the review UI.
+  const limit = searchParams.get("limit") || "100";
 
   const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:18000";
   const apiUrl = `${backendUrl}/api/cases/priority-for-3d?limit=${limit}`;

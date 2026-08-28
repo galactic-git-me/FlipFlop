@@ -197,7 +197,9 @@ export default function Cases3DPriorityPage() {
       setLoading(true);
       try {
         // Fetch priority cases for 3D modeling (top 30)
-        const response = await fetch("/api/cases/priority-for-3d?limit=30");
+        // Include explicitly-added priority exceptions (for example APNX C1 at
+        // rank 31) as well as the original frozen top-30 campaign.
+        const response = await fetch("/api/cases/priority-for-3d?limit=100");
         const data = (await response.json()) as PriorityCaseItem[];
         setCases(data);
 
@@ -224,7 +226,7 @@ export default function Cases3DPriorityPage() {
             <Box className="w-6 h-6 text-purple-400" /> 3D Model Priority Queue
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Top 30 popular cases to create 3D models for. Ranked by Amazon bestseller position.
+            Frozen priority cases plus manually added exceptions. Select four source pictures before generating a draft model.
           </p>
         </div>
         <Button onClick={freezeCampaign} disabled={freezing || cases.some(item => item.priority_3d_rank)} className="cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-300">
