@@ -176,7 +176,7 @@ interface PriorityCaseItem {
 
 function orderAndLabelAssets(items: Component3DAsset[], cases: PriorityCaseItem[]) {
   const caseById = new Map(cases.map(item => [item.id, item]));
-  return items
+  const labelled = items
     .map(asset => {
       const matchedCase = asset.subject_id ? caseById.get(asset.subject_id) : undefined;
       return {
@@ -184,8 +184,19 @@ function orderAndLabelAssets(items: Component3DAsset[], cases: PriorityCaseItem[
         rank: matchedCase?.priority_3d_rank ?? asset.rank ?? null,
         subject_name: matchedCase?.name ?? asset.subject_name ?? null,
       };
-    })
-    .sort((left, right) => (left.rank ?? Number.MAX_SAFE_INTEGER) - (right.rank ?? Number.MAX_SAFE_INTEGER));
+    });
+
+  // The registry deliberately retains historical versions for audit. The
+  // review queue should show only the newest version of each logical asset.
+  const newest = new Map<string, Component3DAsset>();
+  for (const asset of labelled) {
+    const key = [asset.subject_id ?? "generic", asset.category, asset.family_key].join(":");
+    const current = newest.get(key);
+    if (!current || asset.version > current.version || (asset.version === current.version && asset.id > current.id)) {
+      newest.set(key, asset);
+    }
+  }
+  return [...newest.values()].sort((left, right) => (left.rank ?? Number.MAX_SAFE_INTEGER) - (right.rank ?? Number.MAX_SAFE_INTEGER));
 }
 
 function preserveAssetLabels(items: Component3DAsset[], existing: Component3DAsset[]) {
@@ -211,11 +222,15 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
   const modelRef = useRef<any>(null);
   const cameraRef = useRef<any>(null);
   const zoomRef = useRef(1);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!containerRef.current || !glbUrl) return;
+    setLoadError(null);
+    let disposed = false;
+    let disposeViewer: (() => void) | undefined;
 
-    setTimeout(() => {
+    const setupTimer = window.setTimeout(() => {
       const setupViewer = async () => {
         try {
           const THREE = await import("three");
@@ -243,6 +258,10 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           cameraRef.current = camera;
 
           const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: true });
+          let animationId = 0;
+          renderer.outputColorSpace = THREE.SRGBColorSpace;
+          renderer.toneMapping = THREE.ACESFilmicToneMapping;
+          renderer.toneMappingExposure = 1.15;
           renderer.setSize(width, height);
           renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
           renderer.setClearColor(0x000000, 0);
@@ -258,22 +277,22 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           }
           containerRef.current.appendChild(renderer.domElement);
 
-          const ambientLight = new THREE.AmbientLight(0xffffff, 3.5);
+          const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
           scene.add(ambientLight);
 
-          const pointLight = new THREE.PointLight(0xffffff, 4.0);
+          const pointLight = new THREE.PointLight(0xffead8, 2.2);
           pointLight.position.set(5, 5, -5);
           scene.add(pointLight);
 
-          const directionalLight = new THREE.DirectionalLight(0xffffff, 3.0);
+          const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8);
           directionalLight.position.set(3, 5, 2);
           scene.add(directionalLight);
 
-          const fillLight = new THREE.PointLight(0xccddff, 2.5);
+          const fillLight = new THREE.PointLight(0x9fc7ff, 0.9);
           fillLight.position.set(-5, 2, 5);
           scene.add(fillLight);
 
-          const backLight = new THREE.PointLight(0xffffff, 3.5);
+          const backLight = new THREE.PointLight(0xff8a32, 1.2);
           backLight.position.set(0, 3, -8);
           scene.add(backLight);
 
@@ -289,6 +308,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           loader.load(
             loadUrl,
             (gltf) => {
+              if (disposed) return;
               const model = gltf.scene;
 
               // Apply bright material to all meshes if they don't have one
@@ -325,8 +345,6 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
               modelRef.current = model;
 
               let isAutoRotating = true;
-              let animationId: number;
-
               const animate = () => {
                 animationId = requestAnimationFrame(animate);
 
@@ -366,16 +384,29 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
             undefined,
             (error) => {
               console.error("Failed to load GLB:", error, "URL:", glbUrl);
+              if (!disposed) setLoadError("This model could not be loaded. Try opening its GLB directly or regenerate the cleaned asset.");
             }
           );
 
           renderer.render(scene, camera);
+          disposeViewer = () => {
+            window.cancelAnimationFrame(animationId);
+            renderer.setAnimationLoop(null);
+            renderer.dispose();
+            renderer.domElement.remove();
+          };
         } catch (error) {
           console.error("Error setting up 3D viewer:", error);
+          if (!disposed) setLoadError("The 3D viewer could not initialise for this asset.");
         }
       };
-      setupViewer();
+      void setupViewer();
     }, 100);
+    return () => {
+      disposed = true;
+      window.clearTimeout(setupTimer);
+      disposeViewer?.();
+    };
   }, [glbUrl]);
 
   if (!glbUrl) {
@@ -389,7 +420,11 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
     );
   }
 
-  return <div ref={containerRef} className="w-full h-full rounded border border-slate-700/50 bg-white" />;
+  return (
+    <div ref={containerRef} className="relative h-full w-full rounded border border-slate-700/50 bg-[#080d12]">
+      {loadError && <div role="alert" className="absolute inset-x-4 top-20 z-50 rounded border border-red-400/50 bg-red-950/90 p-3 text-sm text-red-100">{loadError}</div>}
+    </div>
+  );
 }
 
 export default function Components3DReviewPage() {
@@ -427,11 +462,26 @@ export default function Components3DReviewPage() {
           return;
         }
 
-        const loadedAssets = orderAndLabelAssets(
+        let loadedAssets = orderAndLabelAssets(
           (Array.isArray(data) ? data : (data.data || data.assets || [])) as Component3DAsset[],
           priorityCases,
         );
-        if (batchId) setBatch({ ...data, assets: loadedAssets } as ReviewBatch);
+        if (batchId) {
+          setBatch({ ...data, assets: loadedAssets } as ReviewBatch);
+        } else {
+          // Resume an already-claimed review batch automatically. Previously
+          // these assets looked reviewable but both decision buttons remained disabled.
+          const pendingBatchId = loadedAssets.find(asset => asset.review_batch_id && !asset.review_decision)?.review_batch_id;
+          if (pendingBatchId) {
+            const batchResponse = await fetch(`/api/assets-3d/review-batches/${pendingBatchId}`);
+            if (batchResponse.ok) {
+              const batchData = await batchResponse.json() as ReviewBatch;
+              loadedAssets = orderAndLabelAssets(batchData.assets, priorityCases);
+              setBatch({ ...batchData, assets: loadedAssets });
+              window.history.replaceState(null, "", `?batch=${pendingBatchId}`);
+            }
+          }
+        }
         setAssets(loadedAssets);
         setSelectedAsset(loadedAssets[0] || null);
       } catch (error) {
