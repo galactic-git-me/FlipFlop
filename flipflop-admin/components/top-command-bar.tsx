@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { Bell, BellRing, Heart, Radio, Search } from "lucide-react";
+import { Bell, BellRing, Heart, Radio, Search, Settings } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import type { PlaybookProposal } from "@/lib/types";
@@ -251,6 +251,15 @@ export function TopCommandBar() {
                 {priceAlertCount > 99 ? "99+" : priceAlertCount}
               </span>
             )}
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push("/settings")}
+            className="cursor-pointer"
+            aria-label="Settings"
+            title="Settings"
+          >
+            <Settings className="h-4 w-4 transition-colors hover:text-cyan-300" />
           </button>
           {notifOpen && (
             <div className="absolute right-0 top-7 w-[400px] rounded-xl border border-white/10 bg-[#0b111d]/98 backdrop-blur-md shadow-2xl z-50 flex flex-col" style={{ maxHeight: "480px" }}>
