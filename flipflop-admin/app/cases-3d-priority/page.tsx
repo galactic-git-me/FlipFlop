@@ -254,7 +254,7 @@ export default function Cases3DPriorityPage() {
             2. <strong>Search Sketchfab and other third-party libraries</strong> and verify commercial-use and redistribution rights.
           </p>
           <p>
-            3. <strong>Collect multi-angle images and YouTube references</strong> when an exact publishable model is unavailable.
+            3. <strong>Collect Meshy-safe chassis images:</strong> the same empty chassis from clean angles, with its included RGB fans installed and illuminated. Reject populated builds, text/dimension overlays, exploded views, removed panels and conflicting configurations. Keep other useful images only as review references.
           </p>
           <p>
             4. <strong>Use Meshy only as the fallback</strong>, then validate and submit each group of ten for owner approval.

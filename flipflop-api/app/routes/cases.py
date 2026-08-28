@@ -18,6 +18,16 @@ SOURCING_STAGES = (
     "validation",
 )
 
+CASE_MESHY_PHOTO_REQUIREMENTS = (
+    "chassis_empty",
+    "included_rgb_fans_installed",
+    "rgb_illuminated",
+    "no_text_overlay",
+    "no_dimension_overlay",
+    "no_exploded_view",
+    "same_chassis_configuration",
+)
+
 
 def _priority_payload(case: Case) -> dict:
     return {
@@ -97,6 +107,22 @@ async def update_3d_sourcing_evidence(
 ):
     if body.stage not in SOURCING_STAGES:
         raise HTTPException(status_code=422, detail=f"Unknown sourcing stage '{body.stage}'")
+    if body.stage == "product_images" and body.status == "complete":
+        assessments = (body.attempt or {}).get("image_assessments") or []
+        eligible = [
+            item for item in assessments
+            if isinstance(item, dict)
+            and isinstance(item.get("url"), str)
+            and all(item.get(field) is True for field in CASE_MESHY_PHOTO_REQUIREMENTS)
+        ]
+        if not eligible:
+            raise HTTPException(
+                status_code=422,
+                detail=(
+                    "Product-image acquisition cannot be completed until at least one photo shows the same empty "
+                    "chassis with its included RGB fans installed and illuminated, without text, dimensions, or an exploded view."
+                ),
+            )
     case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
