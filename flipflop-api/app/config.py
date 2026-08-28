@@ -159,6 +159,9 @@ class Settings(BaseSettings):
     ram_watch_gpu_threshold_gbp: float = 200.0
 
     frontend_url: str = "http://localhost:4313"
+    # Admin UI destination for backend-owned browser flows such as eBay OAuth.
+    # Kept separate from the public storefront URL used by customer-facing links.
+    admin_frontend_url: str = ""
     admin_api_key: str = ""
 
     # Comma-separated list of origins allowed to call this API in dev/CORS.

@@ -29,16 +29,17 @@ async def oauth_callback(
     db: AsyncSession = Depends(get_db),
 ):
     settings = get_settings()
+    admin_url = (settings.admin_frontend_url or settings.frontend_url).rstrip("/")
     if error or not code:
-        return RedirectResponse(f"{settings.frontend_url}/settings?ebay_connected=0&reason={error or 'no_code'}")
+        return RedirectResponse(f"{admin_url}/settings?ebay_connected=0&reason={error or 'no_code'}")
 
     try:
         payload = await ebay_oauth.exchange_code_for_tokens(code)
         await ebay_oauth.store_tokens_from_exchange(db, payload)
     except ebay_oauth.EbayOAuthError:
-        return RedirectResponse(f"{settings.frontend_url}/settings?ebay_connected=0&reason=exchange_failed")
+        return RedirectResponse(f"{admin_url}/settings?ebay_connected=0&reason=exchange_failed")
 
-    return RedirectResponse(f"{settings.frontend_url}/settings?ebay_connected=1")
+    return RedirectResponse(f"{admin_url}/settings?ebay_connected=1")
 
 
 @router.get("/status")
