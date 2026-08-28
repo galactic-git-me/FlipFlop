@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-28T18:47:28.275482+00:00",
+  "generated_at": "2026-08-28T19:52:28.223178+00:00",
   "builds": [
     {
       "components": [
@@ -129,15 +129,15 @@
         },
         "bin": {
           "available": true,
-          "count": 49,
-          "min_price": 126.49,
-          "max_price": 1049.0,
-          "average_price": 333.52
+          "count": 48,
+          "min_price": 100.0,
+          "max_price": 1050.0,
+          "average_price": 348.11
         }
       },
-      "resale_estimate": 333.52,
+      "resale_estimate": 348.11,
       "resale_source": "bin_average",
-      "estimated_profit": 253.04,
+      "estimated_profit": 267.63,
       "rank": 1
     },
     {
@@ -271,12 +271,12 @@
           "count": 45,
           "min_price": 78.55,
           "max_price": 980.99,
-          "average_price": 286.94
+          "average_price": 286.77
         }
       },
-      "resale_estimate": 286.94,
+      "resale_estimate": 286.77,
       "resale_source": "bin_average",
-      "estimated_profit": 211.47,
+      "estimated_profit": 211.3,
       "rank": 2
     },
     {
@@ -410,12 +410,12 @@
           "count": 45,
           "min_price": 78.55,
           "max_price": 980.99,
-          "average_price": 286.94
+          "average_price": 285.18
         }
       },
-      "resale_estimate": 286.94,
+      "resale_estimate": 285.18,
       "resale_source": "bin_average",
-      "estimated_profit": 208.97,
+      "estimated_profit": 207.21,
       "rank": 3
     },
     {
@@ -546,32 +546,32 @@
         },
         "bin": {
           "available": true,
-          "count": 45,
+          "count": 46,
           "min_price": 78.55,
           "max_price": 980.99,
-          "average_price": 286.94
+          "average_price": 284.78
         }
       },
-      "resale_estimate": 286.94,
+      "resale_estimate": 284.78,
       "resale_source": "bin_average",
-      "estimated_profit": 207.51,
+      "estimated_profit": 205.35,
       "rank": 4
     },
     {
       "components": [
         {
-          "id": 29070553,
-          "listing_id": "336762739170",
+          "id": 29057730,
+          "listing_id": "158009026504",
           "category": "cpu",
-          "title": "Intel SR3N5 Core i3-8100 3.6GHz LGA1151 4-Core CPU Processor",
+          "title": "Intel i3-6100 3.70GHz LGA1151 Skylake-S CPU SR2HG",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/mO4AAOSwU0dkBe2P/s-l225.jpg",
-          "delivered_price": 7.99,
+          "image_url": "https://i.ebayimg.com/images/g/PqkAAeSwRjVqjwRp/s-l225.jpg",
+          "delivered_price": 5.49,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -7.99,
-          "url": "https://www.ebay.co.uk/itm/336762739170"
+          "estimated_profit": -5.49,
+          "url": "https://www.ebay.co.uk/itm/158009026504"
         },
         {
           "id": 29062672,
@@ -588,18 +588,18 @@
           "url": "https://www.ebay.co.uk/itm/227442336516"
         },
         {
-          "id": 29064498,
-          "listing_id": "257705800973",
+          "id": 29076287,
+          "listing_id": "407164098393",
           "category": "gpu",
-          "title": "Nvidia Quadro P620 Single Slot Graphics Card GPU 2GB VRAM Mini DisplayPort x4",
+          "title": "NVIDIA Quadro P620 2GB GDDR5 PCIe x16 Graphics Card 4x Mini DisplayPort GPU",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/wIcAAeSwzbZqkBRv/s-l500.webp",
-          "delivered_price": 21.5,
+          "image_url": "https://i.ebayimg.com/images/g/ND4AAeSwqn9qip~Q/s-l225.jpg",
+          "delivered_price": 24.0,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -21.5,
-          "url": "https://www.ebay.co.uk/itm/257705800973"
+          "estimated_profit": -24.0,
+          "url": "https://www.ebay.co.uk/itm/407164098393"
         },
         {
           "id": 29069210,
@@ -676,7 +676,7 @@
       "super_gem_count": 4,
       "build_cost": 77.48,
       "market": {
-        "query": "gaming pc Core i3-8100 Quadro P620 8gb",
+        "query": "gaming pc Intel i3-6100 Quadro P620 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -685,15 +685,15 @@
         },
         "bin": {
           "available": true,
-          "count": 48,
+          "count": 50,
           "min_price": 78.55,
-          "max_price": 735.0,
-          "average_price": 267.68
+          "max_price": 784.76,
+          "average_price": 273.91
         }
       },
-      "resale_estimate": 267.68,
+      "resale_estimate": 273.91,
       "resale_source": "bin_average",
-      "estimated_profit": 190.2,
+      "estimated_profit": 196.43,
       "rank": 5
     },
     {
@@ -827,12 +827,12 @@
           "count": 50,
           "min_price": 78.55,
           "max_price": 784.76,
-          "average_price": 264.05
+          "average_price": 270.95
         }
       },
-      "resale_estimate": 264.05,
+      "resale_estimate": 270.95,
       "resale_source": "bin_average",
-      "estimated_profit": 189.07,
+      "estimated_profit": 195.97,
       "rank": 6
     }
   ],
