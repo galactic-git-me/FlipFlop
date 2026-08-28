@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles, ExternalLink } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -61,6 +62,7 @@ function statusColour(status = "not_started") {
 }
 
 export default function Cases3DPriorityPage() {
+  const router = useRouter();
   const [cases, setCases] = useState<PriorityCaseItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [completedCount, setCompletedCount] = useState(0);
@@ -97,6 +99,8 @@ export default function Cases3DPriorityPage() {
   };
 
   const toggleReference = (candidate: ReferenceCandidate) => {
+    setReferenceData(current => current ? { ...current, approved_selection: undefined } : current);
+    setReferenceNotice(null);
     setSelectedReferences(current => {
       if (current.some(item => item.url === candidate.url)) return current.filter(item => item.url !== candidate.url);
       if (current.length >= 4) return current;
@@ -110,6 +114,7 @@ export default function Cases3DPriorityPage() {
       if (!referenceData || referenceData.candidates.some(item => item.url === url)) return;
       setReferenceData({
         ...referenceData,
+        approved_selection: undefined,
         candidates: [...referenceData.candidates, { url, source: newReferenceSource, label: "Manually added reference" }],
       });
       setNewReferenceUrl("");
@@ -163,7 +168,7 @@ export default function Cases3DPriorityPage() {
       });
       const batch = await batchResponse.json();
       if (!batchResponse.ok) throw new Error(batch.detail || "Model generated, but its review batch could not be created");
-      window.location.assign(`/components-3d-review?batch=${batch.batch_id}`);
+      router.push(`/components-3d-review?batch=${batch.batch_id}`);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "3D generation failed");
       setReferenceNotice(null);
