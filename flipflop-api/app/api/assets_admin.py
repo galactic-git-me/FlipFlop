@@ -11,13 +11,13 @@ from pathlib import Path
 import shutil
 from uuid import uuid4
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 import httpx
 from pydantic import BaseModel, Field
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database import get_db
+from app.database import AsyncSessionLocal, get_db
 from app.models.case import Case
 from app.models.component_3d_asset import (
     AssetSubjectType,
@@ -288,11 +288,70 @@ class ReviewDecision(BaseModel):
     notes: str | None = None
 
 
+def _regeneration_file_key(asset: Component3DAsset) -> str:
+    if asset.subject_type == AssetSubjectType.CASE:
+        return f"case-{asset.subject_id}"
+    if asset.family_key:
+        return asset.family_key
+    if asset.subject_type == AssetSubjectType.VARIANT:
+        return f"variant-{asset.subject_id}"
+    return f"{asset.category or 'component'}-generic"
+
+
+async def _run_rejected_asset_regeneration(
+    replacement_id: int,
+    source_image_refs: list[str],
+    feedback: str,
+    file_key: str,
+) -> None:
+    """Finish a queued replacement using a fresh DB session.
+
+    The placeholder row remains ``missing`` if Meshy or media publication
+    fails, leaving a visible, retryable audit record instead of losing the
+    owner's rejection feedback.
+    """
+    result = await generate_multi_image_asset(source_image_refs, texture_prompt=feedback)
+    async with AsyncSessionLocal() as task_db:
+        replacement = (
+            await task_db.execute(
+                select(Component3DAsset).where(Component3DAsset.id == replacement_id)
+            )
+        ).scalar_one_or_none()
+        if replacement is None:
+            return
+        if result is None or result.status != "SUCCEEDED" or not result.glb_url:
+            outcome = "service unavailable" if result is None else f"Meshy status {result.status}"
+            replacement.notes = f"{replacement.notes}\nRegeneration failed: {outcome}. Retry required."
+            replacement.updated_at = datetime.utcnow()
+            await task_db.commit()
+            return
+
+        try:
+            stable_url, file_size_kb = await _store_generated_glb(
+                file_key, replacement.version, result.glb_url
+            )
+        except Exception as exc:
+            replacement.notes = f"{replacement.notes}\nRegeneration failed while publishing: {exc}"
+            replacement.updated_at = datetime.utcnow()
+            await task_db.commit()
+            return
+
+        replacement.glb_ref = stable_url
+        replacement.preview_image_ref = result.thumbnail_url
+        replacement.file_size_kb = file_size_kb
+        replacement.status = Component3DAssetStatus.MESHY_DRAFT
+        replacement.source_name = f"Meshy AI feedback regeneration (task {result.task_id})"
+        replacement.notes = f"{replacement.notes}\nCompleted Meshy task {result.task_id}; ready for review."
+        replacement.updated_at = datetime.utcnow()
+        await task_db.commit()
+
+
 @router.post("/review-batches/{batch_id}/assets/{asset_id}/decision")
 async def decide_review_asset(
     batch_id: str,
     asset_id: int,
     body: ReviewDecision,
+    background_tasks: BackgroundTasks,
     admin=Depends(get_current_admin),
     db: AsyncSession = Depends(get_db),
 ):
@@ -312,13 +371,80 @@ async def decide_review_asset(
     asset.reviewed_by = getattr(admin, "email", None)
     if body.notes is not None:
         asset.notes = body.notes
+    regeneration: dict | None = None
     if body.decision == "rejected":
         asset.status = Component3DAssetStatus.REJECTED
         asset.is_active = False
+        source_images = [url for url in (asset.source_image_refs or []) if isinstance(url, str)][:4]
+        if source_images:
+            feedback = (body.notes or "").strip() or (
+                "Recreate the object more faithfully from the source photographs. "
+                "Correct the rejected model's shape, materials, colours, lighting details and proportions."
+            )
+            prompt = (
+                "Match the source photographs closely. Preserve distinctive product colours, "
+                f"including illuminated fan and ARGB colours. Owner feedback: {feedback}"
+            )[:600]
+            prior_version = (
+                await db.execute(
+                    select(Component3DAsset.version)
+                    .where(
+                        Component3DAsset.subject_type == asset.subject_type,
+                        Component3DAsset.subject_id == asset.subject_id,
+                        Component3DAsset.category == asset.category,
+                        Component3DAsset.family_key == asset.family_key,
+                    )
+                    .order_by(Component3DAsset.version.desc())
+                    .limit(1)
+                )
+            ).scalar_one_or_none()
+            replacement = Component3DAsset(
+                subject_type=asset.subject_type,
+                subject_id=asset.subject_id,
+                category=asset.category,
+                family_key=asset.family_key,
+                status=Component3DAssetStatus.MISSING,
+                version=(prior_version or asset.version) + 1,
+                is_active=False,
+                source_image_refs=source_images,
+                dimensions_mm=asset.dimensions_mm,
+                anchor_manifest_json=asset.anchor_manifest_json,
+                notes=(
+                    f"Queued automatically from rejected asset {asset.id}. "
+                    f"Owner feedback: {feedback}"
+                ),
+                created_by=getattr(admin, "email", None),
+                provenance_status="original-recreation",
+                source_name="Meshy AI feedback regeneration (queued)",
+                commercial_use_approved=False,
+                redistribution_approved=False,
+            )
+            db.add(replacement)
+            await db.flush()
+            regeneration = {
+                "status": "queued",
+                "asset_id": replacement.id,
+                "version": replacement.version,
+                "message": f"Replacement v{replacement.version} queued using your feedback.",
+            }
+            background_tasks.add_task(
+                _run_rejected_asset_regeneration,
+                replacement.id,
+                source_images,
+                prompt,
+                _regeneration_file_key(asset),
+            )
+        else:
+            regeneration = {
+                "status": "not_queued",
+                "message": "Rejected, but regeneration needs at least one source picture.",
+            }
     elif asset.status == Component3DAssetStatus.MESHY_DRAFT:
         asset.status = Component3DAssetStatus.CLEANED
     await db.commit()
-    return _serialize(asset)
+    payload = _serialize(asset)
+    payload["regeneration"] = regeneration
+    return payload
 
 
 @router.post("/review-batches/{batch_id}/publish")

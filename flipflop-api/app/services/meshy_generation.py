@@ -108,8 +108,17 @@ async def generate_family_asset(prompt: str) -> MeshyGenerationResult | None:
     return MeshyGenerationResult(task_id=task_id, status="TIMED_OUT", glb_url=None, thumbnail_url=None, poly_count=None)
 
 
-async def generate_multi_image_asset(image_urls: list[str]) -> MeshyGenerationResult | None:
-    """Generate one textured GLB from one to four views of the same object."""
+async def generate_multi_image_asset(
+    image_urls: list[str],
+    texture_prompt: str | None = None,
+) -> MeshyGenerationResult | None:
+    """Generate one textured GLB from one to four views of the same object.
+
+    ``texture_prompt`` is used for owner-requested regeneration guidance. Meshy
+    limits it to 600 characters and does not allow it alongside
+    ``texture_image_urls``, so the latter is only sent for first-pass jobs.
+    The source ``image_urls`` still drive geometry generation in both cases.
+    """
     settings = get_settings()
     if not settings.meshy_api_key:
         log.warning("meshy_generation.no_api_key")
@@ -126,10 +135,13 @@ async def generate_multi_image_asset(image_urls: list[str]) -> MeshyGenerationRe
                 "enable_pbr": True,
                 "target_formats": ["glb"],
             }
+            cleaned_texture_prompt = (texture_prompt or "").strip()[:600]
+            if cleaned_texture_prompt:
+                payload["texture_prompt"] = cleaned_texture_prompt
             # Explicit multi-view texture guidance is valuable for public
             # URLs. For base64 uploads, image_urls already drives Meshy's
             # texture phase and repeating the data would double a large body.
-            if not any(url.startswith("data:") for url in image_urls):
+            if not cleaned_texture_prompt and not any(url.startswith("data:") for url in image_urls):
                 payload["texture_image_urls"] = image_urls
             response = await client.post(
                 _MESHY_MULTI_IMAGE_BASE,
