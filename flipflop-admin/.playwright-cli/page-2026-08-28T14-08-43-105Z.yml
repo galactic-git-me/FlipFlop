@@ -1,0 +1,48 @@
+- generic [active] [ref=e1]:
+  - complementary [ref=e2]:
+    - generic [ref=e3]:
+      - img "FlipFlop" [ref=e5]
+      - navigation [ref=e6]:
+        - link "Sourcing" [ref=e7] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Pre-Built" [ref=e11] [cursor=pointer]:
+          - /url: /builds
+        - link "Custom Builds" [ref=e16] [cursor=pointer]:
+          - /url: /configurator-config
+        - link "Curated Builds" [ref=e20] [cursor=pointer]:
+          - /url: /pc-builder
+        - link "Inventory" [ref=e23] [cursor=pointer]:
+          - /url: /inventory
+        - link "Demand" [ref=e27] [cursor=pointer]:
+          - /url: /demand
+        - link "3D Assets" [ref=e30] [cursor=pointer]:
+          - /url: /components-3d-review
+        - link "Problems" [ref=e34] [cursor=pointer]:
+          - /url: /problems
+  - generic [ref=e37]:
+    - banner [ref=e38]:
+      - textbox "QUERY MARKET DATA..." [ref=e43]
+      - generic [ref=e44]:
+        - img "FlipFlop" [ref=e47]
+        - generic [ref=e48]:
+          - button "Source activity" [ref=e49]
+          - button "Favourites" [ref=e56]
+          - button "Notifications" [ref=e59]
+          - button "Price alerts" [ref=e63] [cursor=pointer]
+    - main [ref=e69]:
+      - generic [ref=e70]:
+        - generic [ref=e71]:
+          - heading "3D Asset Review" [level=1] [ref=e72]
+          - button "Start next batch of 10" [ref=e74] [cursor=pointer]
+          - generic [ref=e75]:
+            - generic [ref=e76]: 0 Draft
+            - generic [ref=e77]: 0 Valid
+            - generic [ref=e78]: 0 Final
+            - generic [ref=e79]: 0 Total
+        - generic [ref=e80]:
+          - generic [ref=e82]:
+            - button "Review (0)" [ref=e83]
+            - button "All (0)" [ref=e84]
+          - paragraph [ref=e89]: Select an asset to review
+      - button [ref=e90]:
+        - img "Hermes" [ref=e91]

@@ -235,6 +235,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
         try {
           const THREE = await import("three");
           const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+          const { MeshoptDecoder } = await import("three/examples/jsm/libs/meshopt_decoder.module.js");
 
           if (!containerRef.current) return;
 
@@ -261,7 +262,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           let animationId = 0;
           renderer.outputColorSpace = THREE.SRGBColorSpace;
           renderer.toneMapping = THREE.ACESFilmicToneMapping;
-          renderer.toneMappingExposure = 1.15;
+          renderer.toneMappingExposure = 1.3;
           renderer.setSize(width, height);
           renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
           renderer.setClearColor(0x000000, 0);
@@ -277,27 +278,30 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           }
           containerRef.current.appendChild(renderer.domElement);
 
-          const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+          const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
           scene.add(ambientLight);
+          const hemisphereLight = new THREE.HemisphereLight(0xe7f1ff, 0x342014, 1.2);
+          scene.add(hemisphereLight);
 
-          const pointLight = new THREE.PointLight(0xffead8, 2.2);
+          const pointLight = new THREE.PointLight(0xffead8, 8.0);
           pointLight.position.set(5, 5, -5);
           scene.add(pointLight);
 
-          const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8);
+          const directionalLight = new THREE.DirectionalLight(0xffffff, 3.0);
           directionalLight.position.set(3, 5, 2);
           scene.add(directionalLight);
 
-          const fillLight = new THREE.PointLight(0x9fc7ff, 0.9);
+          const fillLight = new THREE.PointLight(0x9fc7ff, 4.0);
           fillLight.position.set(-5, 2, 5);
           scene.add(fillLight);
 
-          const backLight = new THREE.PointLight(0xff8a32, 1.2);
+          const backLight = new THREE.PointLight(0xff8a32, 3.0);
           backLight.position.set(0, 3, -8);
           scene.add(backLight);
 
 
           const loader = new GLTFLoader();
+          loader.setMeshoptDecoder(MeshoptDecoder);
           loader.crossOrigin = "anonymous";
 
           // Handle CORS by proxying through local backend
@@ -695,6 +699,8 @@ export default function Components3DReviewPage() {
                       if (asset.status === "final") return { icon: "✓", color: "bg-[#00dc82]" };
                       if (asset.status === "rejected") return { icon: "✗", color: "bg-red-500" };
                       if (asset.status === "meshy_draft") return { icon: "?", color: "bg-amber-500" };
+                      if (asset.status === "cleaned") return { icon: "C", color: "bg-blue-500" };
+                      if (asset.status === "validated") return { icon: "V", color: "bg-purple-500" };
                       return { icon: "?", color: "bg-slate-600" };
                     };
                     const statusIcon = getStatusIcon();
