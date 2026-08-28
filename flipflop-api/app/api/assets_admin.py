@@ -365,6 +365,8 @@ async def decide_review_asset(
     ).scalar_one_or_none()
     if not asset:
         raise HTTPException(status_code=404, detail="Asset is not part of this review batch")
+    if asset.review_decision is not None:
+        raise HTTPException(status_code=409, detail="This asset already has a review decision")
 
     asset.review_decision = body.decision
     asset.reviewed_at = datetime.utcnow()

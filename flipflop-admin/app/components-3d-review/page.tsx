@@ -143,6 +143,12 @@ interface Component3DAsset {
   }>;
   review_batch_id?: string | null;
   review_decision?: "approved" | "rejected" | null;
+  regeneration?: {
+    status: "queued" | "not_queued";
+    asset_id?: number;
+    version?: number;
+    message: string;
+  } | null;
 }
 
 function youtubeEmbedUrl(url: string) {
@@ -439,6 +445,7 @@ export default function Components3DReviewPage() {
   const [batch, setBatch] = useState<ReviewBatch | null>(null);
   const [reviewNotes, setReviewNotes] = useState("");
   const [actionError, setActionError] = useState<string | null>(null);
+  const [actionNotice, setActionNotice] = useState<string | null>(null);
   const [actionBusy, setActionBusy] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -562,6 +569,7 @@ export default function Components3DReviewPage() {
     if (!batch || !selectedAsset) return;
     setActionBusy(true);
     setActionError(null);
+    setActionNotice(null);
     try {
       const response = await fetch(`/api/assets-3d/review-batches/${batch.batch_id}/assets/${selectedAsset.id}/decision`, {
         method: "POST",
@@ -578,6 +586,7 @@ export default function Components3DReviewPage() {
       setAssets(updatedAssets);
       setSelectedAsset(reviewedAsset);
       setReviewNotes("");
+      if (data.regeneration?.message) setActionNotice(data.regeneration.message);
     } catch (error) {
       setActionError(error instanceof Error ? error.message : "Could not save decision");
     } finally {
@@ -662,6 +671,7 @@ export default function Components3DReviewPage() {
         </div>
       </div>
       {actionError && <div role="alert" className="rounded-md border border-red-500/60 bg-red-950/80 px-4 py-2 text-sm text-red-200">{actionError}</div>}
+      {actionNotice && <div role="status" className="rounded-md border border-sky-500/60 bg-sky-950/80 px-4 py-2 text-sm text-sky-100">{actionNotice}</div>}
 
       <div style={{ flex: 1, minHeight: 0 }} className="flex gap-3 relative">
         {/* LEFT: Asset grid grouped by component */}
@@ -800,10 +810,10 @@ export default function Components3DReviewPage() {
 
                       <div className="space-y-2 relative z-50">
                         <div className="flex gap-1 relative z-50">
-                          <button disabled={!batch || actionBusy} onClick={() => decideAsset("rejected")} className="flex-1 cursor-pointer px-2 py-1 rounded text-xs font-semibold bg-red-600/40 text-red-300 border border-red-500/50 hover:bg-red-600/60 disabled:cursor-not-allowed disabled:opacity-40 relative z-50">
+                          <button disabled={!batch || actionBusy || Boolean(selectedAsset.review_decision)} onClick={() => decideAsset("rejected")} className="flex-1 cursor-pointer px-2 py-1 rounded text-xs font-semibold bg-red-600/40 text-red-300 border border-red-500/50 hover:bg-red-600/60 disabled:cursor-not-allowed disabled:opacity-40 relative z-50">
                             Reject
                           </button>
-                          <button disabled={!batch || actionBusy} onClick={() => decideAsset("approved")} className="flex-1 cursor-pointer px-2 py-1 rounded text-xs font-semibold bg-[#00dc82]/40 text-[#00dc82] border border-[#00dc82]/50 hover:bg-[#00dc82]/60 disabled:cursor-not-allowed disabled:opacity-40 relative z-50">
+                          <button disabled={!batch || actionBusy || Boolean(selectedAsset.review_decision)} onClick={() => decideAsset("approved")} className="flex-1 cursor-pointer px-2 py-1 rounded text-xs font-semibold bg-[#00dc82]/40 text-[#00dc82] border border-[#00dc82]/50 hover:bg-[#00dc82]/60 disabled:cursor-not-allowed disabled:opacity-40 relative z-50">
                             Approve
                           </button>
                         </div>
@@ -817,6 +827,11 @@ export default function Components3DReviewPage() {
                         />
 
                         {selectedAsset.review_decision && <p className="text-xs text-slate-300" role="status">Decision: {selectedAsset.review_decision}</p>}
+                        {selectedAsset.regeneration?.message && (
+                          <p className={selectedAsset.regeneration.status === "queued" ? "text-xs text-sky-300" : "text-xs text-amber-300"}>
+                            {selectedAsset.regeneration.message}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
