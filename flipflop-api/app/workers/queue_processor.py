@@ -115,6 +115,7 @@ async def _sync_supplier_case_catalogue(db: AsyncSession, payload: ScanSubmitReq
         ):
             continue
         name = offer.title.strip()[:200]
+        case_images = list(dict.fromkeys(offer.image_urls or ([offer.image_url] if offer.image_url else [])))[:12]
         existing = (await db.execute(select(CaseCatalogue).where(CaseCatalogue.name == name))).scalar_one_or_none()
         supplier = {
             "vendor": vendor,
@@ -128,7 +129,7 @@ async def _sync_supplier_case_catalogue(db: AsyncSession, payload: ScanSubmitReq
         }
         if existing:
             existing.rrp_gbp = offer.current_delivered_price
-            existing.images = [offer.image_url] if offer.image_url else existing.images
+            existing.images = case_images or existing.images
             existing.notes = json.dumps({"supplier_offer": supplier})
             existing.status = "active"
             existing.updated_at = now
@@ -137,7 +138,7 @@ async def _sync_supplier_case_catalogue(db: AsyncSession, payload: ScanSubmitReq
                 name=name,
                 brand=_case_brand(name),
                 form_factor=_case_form_factor(name),
-                images=[offer.image_url] if offer.image_url else [],
+                images=case_images,
                 rrp_gbp=offer.current_delivered_price,
                 is_transparent_panel=bool(re.search(r"glass|tempered|window", name, re.I)),
                 status="active",

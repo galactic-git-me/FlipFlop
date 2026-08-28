@@ -48,6 +48,9 @@ class ExtractedListing(CamelModel):
     watch_count: Optional[int] = None
     auction_end_at: Optional[datetime]
     image_url: Optional[str]
+    # Populated by FlipflopXtension only for Amazon PC-case searches. Keeping
+    # this optional preserves the existing payload for every other category.
+    image_urls: Optional[list[str]] = None
     sponsored: bool
     extracted_at: datetime
     # Barcode scan price (new retail price from physical scan, not used condition)
