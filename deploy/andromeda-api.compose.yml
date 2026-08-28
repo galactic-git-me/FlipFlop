@@ -53,6 +53,9 @@ services:
       FRONTEND_URL: https://www.theflipflop.shop
       ADMIN_FRONTEND_URL: https://admin.theflipflop.shop
       EBAY_OAUTH_CALLBACK_URL: https://www.theflipflop.shop/api/ebay/oauth/callback
+      EBAY_PRODUCTION_PAYMENT_POLICY_ID: "260999533010"
+      EBAY_PRODUCTION_RETURN_POLICY_ID: "260999539010"
+      EBAY_PRODUCTION_FULFILLMENT_POLICY_ID: "260999549010"
     ports:
       - "127.0.0.1:4311:4311"
     healthcheck:
