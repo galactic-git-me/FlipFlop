@@ -130,19 +130,25 @@ async def generate_multi_image_asset(
         async with httpx.AsyncClient(timeout=30) as client:
             payload = {
                 "image_urls": image_urls,
-                "ai_model": "latest",
+                # Meshy 6 retains an emission map in GLB output. That matters
+                # for illuminated PC parts: Meshy 7/latest currently omits it,
+                # which made vivid ARGB fan rings render flat and grey.
+                "ai_model": "meshy-6",
                 "should_texture": True,
                 "enable_pbr": True,
+                "texture_resolution": "4k",
+                # Meshy's API recommends disabling remesh for maximum quality.
+                "should_remesh": False,
                 "target_formats": ["glb"],
             }
             cleaned_texture_prompt = (texture_prompt or "").strip()[:600]
             if cleaned_texture_prompt:
                 payload["texture_prompt"] = cleaned_texture_prompt
-            # Explicit multi-view texture guidance is valuable for public
-            # URLs. For base64 uploads, image_urls already drives Meshy's
-            # texture phase and repeating the data would double a large body.
-            if not cleaned_texture_prompt and not any(url.startswith("data:") for url in image_urls):
-                payload["texture_image_urls"] = image_urls
+            # Meshy 6 accepts one explicit texture reference (multi-view
+            # texture references require Meshy 7, which has no emission map).
+            # The complete image list still drives geometry and appearance.
+            if not cleaned_texture_prompt:
+                payload["texture_image_url"] = image_urls[0]
             response = await client.post(
                 _MESHY_MULTI_IMAGE_BASE,
                 headers=_headers(),
