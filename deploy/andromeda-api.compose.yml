@@ -36,8 +36,12 @@ services:
       redis:
         condition: service_started
     env_file:
-      - ../.env.local
-      - ../flipflop-api/.env
+      - path: ../.env.local
+        required: true
+      # Developer-local API overrides are gitignored and are not present in
+      # the production checkout. Production secrets live in ../.env.local.
+      - path: ../flipflop-api/.env
+        required: false
     environment:
       APP_ENV: production
       WEB_ONLY: "true"
