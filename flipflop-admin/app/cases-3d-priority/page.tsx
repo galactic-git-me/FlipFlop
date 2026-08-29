@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles, ExternalLink, Upload } from "lucide-react";
+import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles, ExternalLink, Upload, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
@@ -75,6 +75,7 @@ export default function Cases3DPriorityPage() {
   const [referenceNotice, setReferenceNotice] = useState<string | null>(null);
   const [newReferenceUrl, setNewReferenceUrl] = useState("");
   const [newReferenceSource, setNewReferenceSource] = useState<ReferenceSource>("manufacturer");
+  const [generatedReviewUrl, setGeneratedReviewUrl] = useState<string | null>(null);
 
   const openReferenceSelection = async (caseId: number) => {
     if (referenceCaseId === caseId) {
@@ -91,6 +92,7 @@ export default function Cases3DPriorityPage() {
       setReferenceCaseId(caseId);
       setReferenceData(data);
       setSelectedReferences(data.approved_selection?.images || []);
+      setGeneratedReviewUrl(window.localStorage.getItem(`case-3d-review-${caseId}`));
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not load reference pictures");
     } finally {
@@ -178,7 +180,7 @@ export default function Cases3DPriorityPage() {
     if (selectedReferences.length !== 4 || referenceData?.approved_selection?.status !== "approved") return;
     setReferenceBusy(true);
     setError(null);
-    setReferenceNotice("Generating the textured model. This can take several minutes…");
+    setReferenceNotice("Generating the textured model. Keep this page open — Meshy can take up to 10 minutes. You will be taken to the approval viewer when it finishes.");
     try {
       const response = await fetch(`/api/assets-3d/cases/${caseId}/generate`, {
         method: "POST",
@@ -197,7 +199,12 @@ export default function Cases3DPriorityPage() {
       });
       const batch = await batchResponse.json();
       if (!batchResponse.ok) throw new Error(batch.detail || "Model generated, but its review batch could not be created");
-      router.push(`/components-3d-review?batch=${batch.batch_id}`);
+      const reviewUrl = `/components-3d-review?batch=${batch.batch_id}`;
+      setGeneratedReviewUrl(reviewUrl);
+      window.localStorage.setItem(`case-3d-review-${caseId}`, reviewUrl);
+      setReferenceNotice("Draft generated successfully. Opening the 3D approval viewer…");
+      // Force a fresh viewer mount after the long-running generation request.
+      window.location.assign(reviewUrl);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "3D generation failed");
       setReferenceNotice(null);
