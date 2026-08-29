@@ -50,8 +50,6 @@ interface ReferenceCandidateResponse {
 const DIRECT_BACKEND_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4311").replace(/\/$/, "");
 
 const sourcingLabels: Array<[string, string]> = [
-  ["manufacturer_3d", "Maker 3D"],
-  ["third_party_3d", "Sketchfab / 3rd party"],
   ["product_images", "Images"],
   ["youtube_video", "YouTube"],
   ["meshy_generation", "Meshy"],
@@ -109,9 +107,17 @@ function compactCaseName(caseItem: PriorityCaseItem) {
     .replace(/[,:;|–-]+$/g, "")
     .trim() || "Case";
   const lowerName = fullName.toLocaleLowerCase();
-  const colour = caseColours.find(candidate => new RegExp(`\\b${candidate}\\b`, "i").test(lowerName)) || "Colour unknown";
+  const colour = caseColours.find(candidate => new RegExp(`\\b${candidate}\\b`, "i").test(lowerName));
 
-  return `${brand}-${model}-${colour}`.toLocaleUpperCase();
+  return [brand, model, colour].filter(Boolean).join("-").toLocaleUpperCase();
+}
+
+function hasIncludedFans(caseItem: PriorityCaseItem) {
+  const title = caseItem.name;
+  if (/(?:fans?\s+(?:included|pre-installed)|pre-installed[^,;–|]{0,60}fans?|includes?\s+\d+\s*(?:x\s*)?(?:\d+\s*mm\s*)?(?:\w+\s+){0,3}fans?|with\s+\d+\s*(?:x\s*)?(?:\d+\s*mm\s*)?(?:\w+\s+){0,3}fans?)/i.test(title)) return true;
+
+  const withoutCapacityClaims = title.replace(/(?:supports?|fits?|capacity(?:\s+for)?)[^,;–|]{0,70}fans?/gi, "");
+  return /\b(?:(?:PWM|ARGB|RGB)\s+)+fans?\b/i.test(withoutCapacityClaims);
 }
 
 function statusColour(status = "not_started") {
@@ -400,7 +406,7 @@ export default function Cases3DPriorityPage() {
             <p className="text-xs text-slate-500">{cases.length} cases</p>
           </div>
           <div className="overflow-x-auto rounded-xl border border-[#1e2d45] bg-[#0b121d]">
-            <table className="w-full min-w-[960px] border-collapse text-left text-sm">
+            <table className="w-full min-w-[1080px] border-collapse text-left text-sm">
               <thead className="sticky top-0 z-10 bg-[#111b2a] text-[11px] uppercase tracking-wider text-slate-400">
                 <tr>
                   <th scope="col" className="w-16 px-4 py-3 text-center">Rank</th>
@@ -408,6 +414,7 @@ export default function Cases3DPriorityPage() {
                   <th scope="col" className="w-28 px-4 py-3">Price</th>
                   <th scope="col" className="w-28 px-4 py-3">Rating</th>
                   <th scope="col" className="w-24 px-4 py-3">Batch</th>
+                  <th scope="col" className="w-44 px-4 py-3">Compatible boards</th>
                   <th scope="col" className="px-4 py-3">Sourcing progress</th>
                   <th scope="col" className="w-52 px-4 py-3 text-right">Action</th>
                 </tr>
@@ -444,6 +451,11 @@ export default function Cases3DPriorityPage() {
                           {caseItem.keywords?.slice(0, 2).map(keyword => (
                             <span key={keyword} className="rounded bg-slate-700/50 px-1.5 py-0.5 text-[10px] text-slate-300">{keyword}</span>
                           ))}
+                          {hasIncludedFans(caseItem) && (
+                            <span className="rounded border border-cyan-500/35 bg-cyan-500/10 px-1.5 py-0.5 text-[10px] font-medium text-cyan-200">
+                              FANS INCLUDED
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -453,6 +465,17 @@ export default function Cases3DPriorityPage() {
                     {caseItem.rating ? <span className="font-semibold text-amber-300">{caseItem.rating.toFixed(1)} <span aria-hidden="true">★</span><span className="sr-only"> stars</span></span> : <span className="text-slate-600">—</span>}
                   </td>
                   <td className="px-4 py-3 align-middle text-slate-300">{caseItem.priority_3d_batch || "—"}</td>
+                  <td className="px-4 py-3 align-middle">
+                    {caseItem.form_factors?.length ? (
+                      <div className="flex flex-wrap gap-1">
+                        {caseItem.form_factors.map(formFactor => (
+                          <span key={formFactor} className="rounded border border-blue-500/30 bg-blue-500/10 px-1.5 py-0.5 text-[10px] font-medium uppercase text-blue-200">
+                            {formFactor}
+                          </span>
+                        ))}
+                      </div>
+                    ) : <span className="text-slate-600">—</span>}
+                  </td>
                   <td className="px-4 py-3 align-middle">
                     <div className="flex max-w-md flex-wrap gap-1.5" aria-label="3D sourcing progress">
                         {sourcingLabels.map(([key, label]) => {
@@ -481,7 +504,7 @@ export default function Cases3DPriorityPage() {
 
                   {referenceCaseId === caseItem.id && referenceData && (
                     <tr className="bg-slate-900/65">
-                      <td colSpan={7} className="px-6 py-5">
+                      <td colSpan={8} className="px-6 py-5">
                     <section aria-label={`Reference picture approval for ${caseItem.name}`}>
                       <div className="mb-3 rounded-md border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-100">
                         Choose exactly four clean pictures of the same empty chassis. They must show useful exterior angles and the interior, with no text panels or noisy backgrounds. Select the best colour/texture view first.
