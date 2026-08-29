@@ -5,7 +5,9 @@ from functools import lru_cache
 class Settings(BaseSettings):
     database_url: str = "postgresql+asyncpg://flipper:flipper@127.0.0.1:5432/pcflipper"
     sync_database_url: str = "postgresql://flipper:flipper@127.0.0.1:5432/pcflipper"
-    redis_url: str = "redis://localhost:6379/0"  # Used for sold_comps_cache (fast in-memory)
+    # Optional acceleration cache. Leave blank when Redis is not installed;
+    # sold-comps pricing continues to use its database-backed path.
+    redis_url: str = ""
 
     anthropic_api_key: str = ""
     openrouter_api_key: str = ""

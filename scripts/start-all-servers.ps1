@@ -450,13 +450,22 @@ Write-Host ""
 
 # Keep servers alive
 try {
+    $lastKnownRunning = @{}
+    foreach ($proc in $processes) {
+        $lastKnownRunning[$proc.name] = $true
+    }
     while ($true) {
         Start-Sleep -Seconds 10
-        # Check if any process has died
+        # cmd/npm/python launchers can hand work to child processes and exit.
+        # The listening port is the authoritative health signal for each server.
         foreach ($proc in $processes) {
-            if ($proc.process.HasExited) {
+            $isRunning = [bool](Get-NetTCPConnection -LocalPort $proc.port -State Listen -ErrorAction SilentlyContinue)
+            if (-not $isRunning -and $lastKnownRunning[$proc.name]) {
                 Write-Host "[WARN] $($proc.name) has exited" -ForegroundColor Yellow
+            } elseif ($isRunning -and -not $lastKnownRunning[$proc.name]) {
+                Write-Host "[OK] $($proc.name) is running again" -ForegroundColor $proc.color
             }
+            $lastKnownRunning[$proc.name] = $isRunning
         }
     }
 } finally {

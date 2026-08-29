@@ -30,7 +30,7 @@ class SoldCompsCacheService:
     async def connect(self) -> None:
         """Connect to Redis."""
         if not self._settings.redis_url:
-            log.warning("sold_comps_cache.redis_url_not_configured")
+            log.info("sold_comps_cache.disabled")
             return
         try:
             self._redis = await redis.from_url(self._settings.redis_url, decode_responses=True)
