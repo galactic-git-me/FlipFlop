@@ -76,6 +76,7 @@ export default function Cases3DPriorityPage() {
   const [newReferenceUrl, setNewReferenceUrl] = useState("");
   const [newReferenceSource, setNewReferenceSource] = useState<ReferenceSource>("manufacturer");
   const [generatedReviewUrl, setGeneratedReviewUrl] = useState<string | null>(null);
+  const [generatingCaseId, setGeneratingCaseId] = useState<number | null>(null);
 
   const openReferenceSelection = async (caseId: number) => {
     if (referenceCaseId === caseId) {
@@ -179,6 +180,7 @@ export default function Cases3DPriorityPage() {
   const generateFromApprovedReferences = async (caseId: number) => {
     if (selectedReferences.length !== 4 || referenceData?.approved_selection?.status !== "approved") return;
     setReferenceBusy(true);
+    setGeneratingCaseId(caseId);
     setError(null);
     setReferenceNotice("Generating the textured model. Keep this page open — Meshy can take up to 10 minutes. You will be taken to the approval viewer when it finishes.");
     try {
@@ -203,13 +205,13 @@ export default function Cases3DPriorityPage() {
       setGeneratedReviewUrl(reviewUrl);
       window.localStorage.setItem(`case-3d-review-${caseId}`, reviewUrl);
       setReferenceNotice("Draft generated successfully. Opening the 3D approval viewer…");
-      // Force a fresh viewer mount after the long-running generation request.
-      window.location.assign(reviewUrl);
+      router.push(reviewUrl);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "3D generation failed");
       setReferenceNotice(null);
     } finally {
       setReferenceBusy(false);
+      setGeneratingCaseId(null);
     }
   };
 
@@ -265,10 +267,15 @@ export default function Cases3DPriorityPage() {
             Frozen priority cases plus manually added exceptions. Select four source pictures before generating a draft model.
           </p>
         </div>
-        <Button onClick={freezeCampaign} disabled={freezing || cases.some(item => item.priority_3d_rank)} className="cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-300">
-          {freezing ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <LockKeyhole className="mr-2 h-4 w-4" />}
-          {cases.some(item => item.priority_3d_rank) ? "Top 30 frozen" : "Freeze top 30"}
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" variant="outline" onClick={() => router.push("/components-3d-review")} className="cursor-pointer border-purple-500/40 text-purple-200">
+            <Eye className="mr-2 h-4 w-4" /> Open 3D approval viewer
+          </Button>
+          <Button onClick={freezeCampaign} disabled={freezing || cases.some(item => item.priority_3d_rank)} className="cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-300">
+            {freezing ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <LockKeyhole className="mr-2 h-4 w-4" />}
+            {cases.some(item => item.priority_3d_rank) ? "Top 30 frozen" : "Freeze top 30"}
+          </Button>
+        </div>
       </div>
       {error && <div role="alert" className="rounded-md border border-red-500/60 bg-red-950/60 px-4 py-3 text-sm text-red-200">{error}</div>}
 
@@ -473,8 +480,14 @@ export default function Cases3DPriorityPage() {
                           <Check className="mr-2 h-4 w-4" /> Approve these 4 pictures
                         </Button>
                         <Button type="button" onClick={() => void generateFromApprovedReferences(caseItem.id)} disabled={referenceBusy || referenceData.approved_selection?.status !== "approved" || selectedReferences.length !== 4} className="cursor-pointer bg-purple-700 hover:bg-purple-600">
-                          {referenceBusy ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />} Generate draft model
+                          {generatingCaseId === caseItem.id ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                          {generatingCaseId === caseItem.id ? "Generating — keep this page open" : "Generate draft model"}
                         </Button>
+                        {generatedReviewUrl && (
+                          <Button type="button" variant="outline" onClick={() => router.push(generatedReviewUrl)} className="cursor-pointer border-emerald-500/50 text-emerald-200">
+                            <Eye className="mr-2 h-4 w-4" /> View and approve generated model
+                          </Button>
+                        )}
                         <span className="text-xs text-slate-400">{selectedReferences.length}/4 selected</span>
                         {caseItem.source_url && <a href={caseItem.source_url} target="_blank" rel="noreferrer" className="ml-auto inline-flex items-center text-xs text-cyan-300 hover:text-cyan-200">Product page <ExternalLink className="ml-1 h-3 w-3" /></a>}
                       </div>

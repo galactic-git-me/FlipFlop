@@ -456,7 +456,7 @@ export default function Components3DReviewPage() {
         const batchId = new URLSearchParams(window.location.search).get("batch");
         const [response, casesResponse] = await Promise.all([
           fetch(batchId ? `/api/assets-3d/review-batches/${batchId}` : "/api/assets-3d"),
-          fetch("/api/cases/priority-for-3d?limit=30"),
+          fetch("/api/cases/priority-for-3d?limit=100"),
         ]);
         const data = await response.json();
         const priorityCases = casesResponse.ok ? await casesResponse.json() as PriorityCaseItem[] : [];
