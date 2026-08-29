@@ -145,6 +145,9 @@ interface Component3DAsset {
   }>;
   review_batch_id?: string | null;
   review_decision?: "approved" | "rejected" | null;
+  commercial_use_approved?: boolean;
+  redistribution_approved?: boolean;
+  scale_validated?: boolean;
   regeneration?: {
     status: "queued" | "not_queued";
     asset_id?: number;
@@ -199,7 +202,8 @@ function conciseCaseName(item: PriorityCaseItem) {
       .replace(/\s+-\s*$/, "")
       .trim();
   }
-  const parts = [manufacturer, model || undefined, colour].filter(Boolean);
+  const displayColour = colour && !model?.toLowerCase().includes(colour.toLowerCase()) ? colour : undefined;
+  const parts = [manufacturer, model || undefined, displayColour].filter(Boolean);
   return [...new Set(parts.map(value => value!.toLowerCase()))].map(key => parts.find(value => value!.toLowerCase() === key)).join(" · ");
 }
 
@@ -470,7 +474,14 @@ export default function Components3DReviewPage() {
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionNotice, setActionNotice] = useState<string | null>(null);
   const [actionBusy, setActionBusy] = useState(false);
+  const [rightsConfirmed, setRightsConfirmed] = useState(false);
+  const [scaleConfirmed, setScaleConfirmed] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setRightsConfirmed(Boolean(selectedAsset?.commercial_use_approved && selectedAsset?.redistribution_approved));
+    setScaleConfirmed(Boolean(selectedAsset?.scale_validated));
+  }, [selectedAsset?.id, selectedAsset?.commercial_use_approved, selectedAsset?.redistribution_approved, selectedAsset?.scale_validated]);
 
   useEffect(() => {
     const load = async () => {
@@ -612,6 +623,36 @@ export default function Components3DReviewPage() {
       if (data.regeneration?.message) setActionNotice(data.regeneration.message);
     } catch (error) {
       setActionError(error instanceof Error ? error.message : "Could not save decision");
+    } finally {
+      setActionBusy(false);
+    }
+  };
+
+  const savePublishingChecks = async () => {
+    if (!selectedAsset || !rightsConfirmed || !scaleConfirmed) return;
+    setActionBusy(true);
+    setActionError(null);
+    setActionNotice(null);
+    try {
+      const response = await fetch(`/api/assets-3d/${selectedAsset.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          provenance_status: "original-recreation",
+          commercial_use_approved: true,
+          redistribution_approved: true,
+          scale_validated: true,
+        }),
+      });
+      const data = await readJsonResponse<Component3DAsset & { detail?: string; error?: string }>(response);
+      if (!response.ok) throw new Error(data.detail || data.error || "Could not save publishing checks");
+      const updatedAssets = assets.map(asset => asset.id === data.id ? { ...asset, ...data } : asset);
+      setAssets(updatedAssets);
+      setSelectedAsset(current => current?.id === data.id ? { ...current, ...data } : current);
+      setBatch(current => current ? { ...current, assets: current.assets.map(asset => asset.id === data.id ? { ...asset, ...data } : asset) } : current);
+      setActionNotice("Publishing rights and scale checks saved. This approved model can now be published.");
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : "Could not save publishing checks");
     } finally {
       setActionBusy(false);
     }
@@ -854,6 +895,22 @@ export default function Components3DReviewPage() {
                         />
 
                         {selectedAsset.review_decision && <p className="text-xs text-slate-300" role="status">Decision: {selectedAsset.review_decision}</p>}
+                        {selectedAsset.review_decision === "approved" && (
+                          <div className="space-y-2 rounded border border-amber-500/40 bg-amber-950/30 p-2 text-[11px] text-slate-200">
+                            <p className="font-semibold text-amber-200">Publishing checks</p>
+                            <label className="flex cursor-pointer items-start gap-2">
+                              <input type="checkbox" checked={rightsConfirmed} onChange={event => setRightsConfirmed(event.target.checked)} className="mt-0.5" />
+                              <span>I confirm this in-house recreation is cleared for commercial use and redistribution.</span>
+                            </label>
+                            <label className="flex cursor-pointer items-start gap-2">
+                              <input type="checkbox" checked={scaleConfirmed} onChange={event => setScaleConfirmed(event.target.checked)} className="mt-0.5" />
+                              <span>I confirm its scale and proportions are acceptable for the configurator.</span>
+                            </label>
+                            <button type="button" disabled={actionBusy || !rightsConfirmed || !scaleConfirmed || Boolean(selectedAsset.commercial_use_approved && selectedAsset.redistribution_approved && selectedAsset.scale_validated)} onClick={savePublishingChecks} className="w-full cursor-pointer rounded border border-amber-400/60 bg-amber-600/30 px-2 py-1 font-semibold text-amber-100 hover:bg-amber-600/50 disabled:cursor-not-allowed disabled:opacity-40">
+                              {selectedAsset.commercial_use_approved && selectedAsset.redistribution_approved && selectedAsset.scale_validated ? "Publishing checks saved" : "Save publishing checks"}
+                            </button>
+                          </div>
+                        )}
                         {selectedAsset.regeneration?.message && (
                           <p className={selectedAsset.regeneration.status === "queued" ? "text-xs text-sky-300" : "text-xs text-amber-300"}>
                             {selectedAsset.regeneration.message}
