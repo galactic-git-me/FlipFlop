@@ -24,7 +24,7 @@ from app.gem_radar.adapters.sold_comps import PlaywrightSoldCompsAdapter
 from app.gem_radar.evidence import update_latest_gems
 from app.gem_radar import identity as identity_mod
 from app.gem_radar.inventory_match import fetch_inventory_awareness
-from app.gem_radar.marketplace import fallback_listing_url, infer_marketplace
+from app.gem_radar.marketplace import fallback_listing_url, infer_marketplace, usable_listing_url
 from app.gem_radar.observations import (
     get_active_buy_it_now_listing_ids,
     get_active_listing_ids,
@@ -480,7 +480,7 @@ async def _fetch_best_gem(db: AsyncSession, since, require_modern: bool = False)
         "price": best.delivered_price,
         "seller": best.seller_name,
         "condition": best.condition,
-        "url": best.url or fallback_listing_url(best.listing_id, best.source, best.title),
+        "url": usable_listing_url(best.url, best.listing_id, best.source, best.title),
         "image_url": best.image_url,
         "deal_score": best.deal_score,
         "classification": best.classification,
@@ -1583,7 +1583,7 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
         "price": best.delivered_price,
         "seller": best.seller_name,
         "condition": best.condition,
-        "url": best.url or fallback_listing_url(best.listing_id, best.source, best.title),
+        "url": usable_listing_url(best.url, best.listing_id, best.source, best.title),
         "image_url": best.image_url,
         "deal_score": best.deal_score,
         "classification": best.classification,

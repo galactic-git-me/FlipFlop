@@ -96,7 +96,7 @@ _FALLBACK_URL_TEMPLATES: dict[str, str] = {
 # different item (the exact bug this module's docstring already describes,
 # just for the marketplaces the ID-template dict never covered).
 _FALLBACK_SEARCH_TEMPLATES: dict[str, str] = {
-    "overclockers": "https://www.overclockers.co.uk/search?q={query}",
+    "overclockers": "https://www.overclockers.co.uk/search?sSearch={query}",
     "cex": "https://uk.webuy.com/search?stext={query}",
     "temu": "https://www.temu.com/search_result.html?search_key={query}",
     "aliexpress": "https://www.aliexpress.com/wholesale?SearchText={query}",
@@ -126,3 +126,29 @@ def fallback_listing_url(listing_id: str, source: str | None, title: str | None 
     # same degraded behavior this function has always had for truly
     # unknown sources, not a regression.
     return _FALLBACK_URL_TEMPLATES["ebay"].format(listing_id=listing_id)
+
+
+def usable_listing_url(
+    url: str | None,
+    listing_id: str,
+    source: str | None,
+    title: str | None = None,
+) -> str:
+    """Return an item-level URL, replacing retailer homepages with a fallback.
+
+    Older extension observations sometimes recorded the page's canonical
+    retailer homepage instead of the product anchor.  A non-empty homepage is
+    not useful as a "view listing" target, so treat it the same as a missing
+    URL.  This is deliberately narrow: paths, query strings, and fragments are
+    preserved because they can identify a product or a useful search page.
+    """
+    if url:
+        try:
+            parsed = urlparse(url)
+            is_homepage = parsed.path.rstrip("/") == "" and not parsed.query and not parsed.fragment
+        except ValueError:
+            is_homepage = False
+        if not is_homepage:
+            return url
+
+    return fallback_listing_url(listing_id, source, title)
