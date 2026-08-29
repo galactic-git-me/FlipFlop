@@ -560,8 +560,8 @@ export default function Cases3DPriorityPage() {
                 <tr>
                   <th scope="col" className="w-16 px-4 py-3 text-center">Rank</th>
                   <th scope="col" className="px-4 py-3">Case</th>
-                  <th scope="col" className="w-36 px-4 py-3">Manufacturer</th>
                   <th scope="col" className="w-24 px-4 py-3 text-center">Preferred</th>
+                  <th scope="col" className="w-36 px-4 py-3">Manufacturer</th>
                   <th scope="col" className="w-28 px-4 py-3">Price</th>
                   <th scope="col" className="w-40 px-4 py-3">RRP / Discount</th>
                   <th scope="col" className="w-40 px-4 py-3">Product rating</th>
@@ -615,12 +615,12 @@ export default function Cases3DPriorityPage() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 align-middle font-medium uppercase text-slate-300">{caseManufacturer(caseItem)}</td>
                   <td className="px-4 py-3 text-center align-middle">
                     {caseItem.is_preferred ? (
                       <Heart className="mx-auto h-5 w-5 fill-rose-500 text-rose-400" aria-label="Preferred case" />
                     ) : <span className="text-slate-700">—</span>}
                   </td>
+                  <td className="px-4 py-3 align-middle font-medium uppercase text-slate-300">{caseManufacturer(caseItem)}</td>
                   <td className="px-4 py-3 align-middle font-semibold tabular-nums text-[#00dc82]">{formatCurrency(caseItem.price)}</td>
                   <td className="px-4 py-3 align-middle">
                     {caseItem.rrp && caseItem.rrp > caseItem.price ? (
