@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles, ExternalLink, Upload, Eye, Star } from "lucide-react";
+import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles, ExternalLink, Upload, Eye, Star, Heart, Youtube } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
@@ -33,6 +33,9 @@ interface PriorityCaseItem {
   sales_velocity?: string;
   keywords?: string[];
   form_factors?: string[];
+  is_preferred?: boolean;
+  has_3d_model?: boolean;
+  model_3d_url?: string;
   sourcing_3d_evidence?: {
     stages?: Record<string, SourcingStageEvidence>;
   };
@@ -59,7 +62,6 @@ const sourcingLabels: Array<[string, string]> = [
   ["product_images", "Images"],
   ["youtube_video", "YouTube"],
   ["meshy_generation", "Meshy"],
-  ["validation", "Validation"],
 ];
 
 const knownCaseBrands = [
@@ -176,9 +178,30 @@ function youtubeEmbedUrl(url: string) {
 
 function statusColour(status = "not_started") {
   if (["found", "complete"].includes(status)) return "border-emerald-500/40 bg-emerald-500/10 text-emerald-300";
-  if (["searching", "blocked"].includes(status)) return "border-amber-500/40 bg-amber-500/10 text-amber-200";
+  if (status === "blocked") return "border-red-500/50 bg-red-500/10 text-red-200";
+  if (status === "searching") return "border-amber-500/40 bg-amber-500/10 text-amber-200";
   if (status === "not_found") return "border-slate-600 bg-slate-800 text-slate-400";
-  return "border-slate-700 bg-slate-900 text-slate-500";
+  return "border-amber-500/40 bg-amber-500/10 text-amber-200";
+}
+
+function imageSetApproved(caseItem: PriorityCaseItem) {
+  const stage = caseItem.sourcing_3d_evidence?.stages?.product_images;
+  const selection = stage?.approved_selection as { status?: string } | undefined;
+  return stage?.status === "complete" && selection?.status === "approved";
+}
+
+function liveStatus(caseItem: PriorityCaseItem) {
+  const stages = caseItem.sourcing_3d_evidence?.stages || {};
+  const rejected = ["product_images", "youtube_video", "meshy_generation", "validation"].some(key => stages[key]?.status === "blocked");
+  if (rejected) return { label: "LIVE: REJECTED", colour: "border-red-500/50 bg-red-500/10 text-red-200" };
+  const approvalsComplete = imageSetApproved(caseItem)
+    && stages.youtube_video?.status === "complete"
+    && stages.meshy_generation?.status === "complete"
+    && stages.validation?.status === "complete";
+  if (approvalsComplete && caseItem.has_3d_model && caseItem.model_3d_url) {
+    return { label: "LIVE", colour: "border-emerald-500/50 bg-emerald-500/10 text-emerald-300" };
+  }
+  return { label: "LIVE: PENDING", colour: "border-amber-500/50 bg-amber-500/10 text-amber-200" };
 }
 
 export default function Cases3DPriorityPage() {
@@ -361,12 +384,12 @@ export default function Cases3DPriorityPage() {
   };
 
   const openEvidenceReview = async (caseItem: PriorityCaseItem, stage: "product_images" | "youtube_video" | "meshy_generation") => {
-    if (stage === "product_images") await openReferenceSelection(caseItem.id);
+    if (stage === "product_images" || stage === "meshy_generation") await openReferenceSelection(caseItem.id);
     setEvidenceReview({ caseItem, stage });
   };
 
   const closeEvidenceReview = () => {
-    if (evidenceReview?.stage === "product_images") setReferenceCaseId(null);
+    if (evidenceReview?.stage === "product_images" || evidenceReview?.stage === "meshy_generation") setReferenceCaseId(null);
     setEvidenceReview(null);
   };
 
@@ -498,12 +521,13 @@ export default function Cases3DPriorityPage() {
             <p className="text-xs text-slate-500">{cases.length} cases</p>
           </div>
           <div className="overflow-x-auto rounded-xl border border-[#1e2d45] bg-[#0b121d]">
-            <table className="w-full min-w-[1100px] border-collapse text-left text-sm">
+            <table className="w-full min-w-[1160px] border-collapse text-left text-sm">
               <thead className="sticky top-0 z-10 bg-[#111b2a] text-[11px] uppercase tracking-wider text-slate-400">
                 <tr>
                   <th scope="col" className="w-16 px-4 py-3 text-center">Rank</th>
                   <th scope="col" className="px-4 py-3">Case</th>
                   <th scope="col" className="w-36 px-4 py-3">Manufacturer</th>
+                  <th scope="col" className="w-24 px-4 py-3 text-center">Preferred</th>
                   <th scope="col" className="w-28 px-4 py-3">Price</th>
                   <th scope="col" className="w-40 px-4 py-3">Product rating</th>
                   <th scope="col" className="w-44 px-4 py-3">Compatible boards</th>
@@ -557,6 +581,11 @@ export default function Cases3DPriorityPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 align-middle font-medium uppercase text-slate-300">{caseManufacturer(caseItem)}</td>
+                  <td className="px-4 py-3 text-center align-middle">
+                    {caseItem.is_preferred ? (
+                      <Heart className="mx-auto h-5 w-5 fill-rose-500 text-rose-400" aria-label="Preferred case" />
+                    ) : <span className="text-slate-700">—</span>}
+                  </td>
                   <td className="px-4 py-3 align-middle font-semibold tabular-nums text-[#00dc82]">{formatCurrency(caseItem.price)}</td>
                   <td className="px-4 py-3 align-middle tabular-nums">
                     {caseItem.rating ? (
@@ -588,42 +617,51 @@ export default function Cases3DPriorityPage() {
                     <div className="flex max-w-md flex-wrap gap-1.5" aria-label="3D sourcing progress">
                         {sourcingLabels.map(([key, label]) => {
                           const status = caseItem.sourcing_3d_evidence?.stages?.[key]?.status || "not_started";
-                          const reviewable = key === "product_images" || key === "youtube_video" || key === "meshy_generation";
-                          return reviewable ? (
+                          const meshyLocked = key === "meshy_generation" && !imageSetApproved(caseItem);
+                          return (
                             <button
                               key={key}
                               type="button"
-                              title={`Review ${label}: ${status.replaceAll("_", " ")}`}
+                              title={meshyLocked ? "Approve four product pictures before reviewing or creating a Meshy model" : `Review ${label}: ${status.replaceAll("_", " ")}`}
                               onClick={() => void openEvidenceReview(caseItem, key as "product_images" | "youtube_video" | "meshy_generation")}
-                              className={`cursor-pointer rounded border px-1.5 py-0.5 text-[10px] transition-colors hover:border-cyan-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${statusColour(status)}`}
+                              disabled={meshyLocked}
+                              className={`rounded border px-1.5 py-0.5 text-[10px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 disabled:cursor-not-allowed disabled:opacity-40 ${meshyLocked ? "" : "cursor-pointer hover:border-cyan-300"} ${statusColour(status)}`}
                             >
                               {label}
                             </button>
-                          ) : (
-                            <span key={key} title={`${label}: ${status.replaceAll("_", " ")}`} className={`rounded border px-1.5 py-0.5 text-[10px] ${statusColour(status)}`}>
-                              {label}
-                            </span>
                           );
                         })}
+                        {(() => {
+                          const live = liveStatus(caseItem);
+                          return <span title={live.label} className={`rounded border px-1.5 py-0.5 text-[10px] ${live.colour}`}>{live.label}</span>;
+                        })()}
                       </div>
                   </td>
                   <td className="px-4 py-3 text-right align-middle">
-                      <Button
+                    <div className="flex items-center justify-end gap-1.5" aria-label="Approval actions">
+                      <button type="button" title="Approve pictures" aria-label="Approve pictures" onClick={() => void openEvidenceReview(caseItem, "product_images")} className="cursor-pointer rounded-md border border-cyan-500/40 p-2 text-cyan-200 transition-colors hover:bg-cyan-500/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300">
+                        <Images className="h-4 w-4" />
+                      </button>
+                      <button type="button" title="Approve YouTube evidence" aria-label="Approve YouTube evidence" onClick={() => void openEvidenceReview(caseItem, "youtube_video")} className="cursor-pointer rounded-md border border-red-500/40 p-2 text-red-200 transition-colors hover:bg-red-500/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300">
+                        <Youtube className="h-4 w-4" />
+                      </button>
+                      <button
                         type="button"
-                        variant="outline"
-                        className="cursor-pointer border-cyan-500/40 text-cyan-200 hover:bg-cyan-500/10 focus-visible:ring-2 focus-visible:ring-cyan-300"
-                        onClick={() => void openReferenceSelection(caseItem.id)}
-                        disabled={referenceBusy}
+                        title={imageSetApproved(caseItem) ? "Approve Meshy model" : "Approve pictures before creating or approving Meshy"}
+                        aria-label={imageSetApproved(caseItem) ? "Approve Meshy model" : "Meshy locked until pictures are approved"}
+                        disabled={!imageSetApproved(caseItem)}
+                        onClick={() => void openEvidenceReview(caseItem, "meshy_generation")}
+                        className="cursor-pointer rounded-md border border-purple-500/40 p-2 text-purple-200 transition-colors hover:bg-purple-500/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-300 disabled:cursor-not-allowed disabled:opacity-35"
                       >
-                        <Images className="mr-2 h-4 w-4" />
-                        {referenceCaseId === caseItem.id ? "Close pictures" : "Review pictures"}
-                      </Button>
+                        <Sparkles className="h-4 w-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
 
                   {referenceCaseId === caseItem.id && referenceData && (
                     <tr className="bg-slate-900/65">
-                      <td colSpan={8} className="px-6 py-5">
+                      <td colSpan={9} className="px-6 py-5">
                     <section aria-label={`Reference picture approval for ${caseItem.name}`}>
                       <div className="mb-3 rounded-md border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-100">
                         Choose exactly four clean pictures of the same empty chassis. They must show useful exterior angles and the interior, with no text panels or noisy backgrounds. Select the best colour/texture view first.
@@ -790,9 +828,22 @@ export default function Cases3DPriorityPage() {
                       <a key={url} href={url} target="_blank" rel="noreferrer" className="mt-2 flex items-center break-all text-xs text-cyan-300 hover:text-cyan-200">{url}<ExternalLink className="ml-1 h-3 w-3 flex-none" /></a>
                     ))}
                   </div>
-                  <Button type="button" variant="outline" onClick={() => router.push(generatedReviewUrl || "/components-3d-review")} className="cursor-pointer border-purple-500/40 text-purple-200">
-                    <Eye className="mr-2 h-4 w-4" /> Open 3D approval viewer
-                  </Button>
+                  <div className="flex flex-wrap gap-2">
+                    {evidenceReview.caseItem.sourcing_3d_evidence?.stages?.meshy_generation?.status !== "found" && evidenceReview.caseItem.sourcing_3d_evidence?.stages?.meshy_generation?.status !== "complete" && (
+                      <Button
+                        type="button"
+                        disabled={referenceBusy || referenceData?.approved_selection?.status !== "approved" || selectedReferences.length !== 4}
+                        onClick={() => void generateFromApprovedReferences(evidenceReview.caseItem.id)}
+                        className="cursor-pointer bg-purple-700 hover:bg-purple-600"
+                      >
+                        {generatingCaseId === evidenceReview.caseItem.id ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                        {generatingCaseId === evidenceReview.caseItem.id ? "Generating model…" : "Create Meshy draft from approved pictures"}
+                      </Button>
+                    )}
+                    <Button type="button" variant="outline" onClick={() => router.push(generatedReviewUrl || "/components-3d-review")} className="cursor-pointer border-purple-500/40 text-purple-200">
+                      <Eye className="mr-2 h-4 w-4" /> Open 3D approval viewer
+                    </Button>
+                  </div>
                 </div>
               )}
 
@@ -812,7 +863,12 @@ export default function Cases3DPriorityPage() {
                     <Check className="mr-2 h-4 w-4" /> Approve selected 4 ({selectedReferences.length}/4)
                   </Button>
                 ) : (
-                  <Button type="button" disabled={referenceBusy} onClick={() => void decideEvidenceStage("complete")} className="cursor-pointer bg-emerald-700 hover:bg-emerald-600">
+                  <Button
+                    type="button"
+                    disabled={referenceBusy || (evidenceReview.stage === "meshy_generation" && !["found", "complete"].includes(evidenceReview.caseItem.sourcing_3d_evidence?.stages?.meshy_generation?.status || ""))}
+                    onClick={() => void decideEvidenceStage("complete")}
+                    className="cursor-pointer bg-emerald-700 hover:bg-emerald-600"
+                  >
                     <Check className="mr-2 h-4 w-4" /> Approve
                   </Button>
                 )}

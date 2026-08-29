@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.case import Case
 from app.models.catalogue import CaseCatalogue
+from app.models.gem_radar_intelligence import PreferredComponent
 from app.services.media_sync import sync_to_public_media
 
 router = APIRouter(prefix="/cases", tags=["cases"])
@@ -42,7 +43,29 @@ CASE_REFERENCE_PUBLIC_ROOT = Path(__file__).resolve().parents[3].parent / "FlipF
 CASE_REFERENCE_PUBLIC_URL = "https://theflipflop.shop/media"
 
 
-def _priority_payload(case: Case) -> dict:
+_PREFERENCE_NOISE_WORDS = {"case", "chassis", "tower", "mid", "full", "pc", "computer", "gaming", "iridescent"}
+
+
+def _is_preferred_case(case: Case, preferred_names: list[str]) -> bool:
+    case_tokens = {token for token in "".join(char.lower() if char.isalnum() else " " for char in case.name).split() if token not in _PREFERENCE_NOISE_WORDS}
+    for preferred_name in preferred_names:
+        preferred_tokens = {token for token in "".join(char.lower() if char.isalnum() else " " for char in preferred_name).split() if token not in _PREFERENCE_NOISE_WORDS}
+        if preferred_tokens and preferred_tokens.issubset(case_tokens):
+            return True
+    return False
+
+
+async def _preferred_case_names(db: AsyncSession) -> list[str]:
+    result = await db.execute(
+        select(PreferredComponent.component_key).where(
+            PreferredComponent.component_slot == "case",
+            PreferredComponent.status == "preferred",
+        )
+    )
+    return list(result.scalars().all())
+
+
+def _priority_payload(case: Case, preferred_names: list[str] | None = None) -> dict:
     return {
         "id": case.id,
         "name": case.name,
@@ -61,6 +84,9 @@ def _priority_payload(case: Case) -> dict:
         "sales_velocity": case.sales_velocity,
         "keywords": case.keywords or [],
         "form_factors": case.form_factors or [],
+        "is_preferred": _is_preferred_case(case, preferred_names or []),
+        "has_3d_model": bool(case.has_3d_model),
+        "model_3d_url": case.model_3d_url,
         "status": case.status,
         "sourcing_3d_evidence": case.sourcing_3d_evidence or {},
     }
@@ -78,8 +104,9 @@ async def freeze_top_30_3d_campaign(db: AsyncSession = Depends(get_db)):
             .order_by(Case.priority_3d_rank)
         )
     ).scalars().all()
+    preferred_names = await _preferred_case_names(db)
     if existing:
-        return {"frozen": False, "reason": "campaign_already_frozen", "cases": [_priority_payload(case) for case in existing]}
+        return {"frozen": False, "reason": "campaign_already_frozen", "cases": [_priority_payload(case, preferred_names) for case in existing]}
 
     ranked = (
         await db.execute(
@@ -105,7 +132,7 @@ async def freeze_top_30_3d_campaign(db: AsyncSession = Depends(get_db)):
             "stages": {stage: {"status": "not_started", "attempts": []} for stage in SOURCING_STAGES},
         }
     await db.commit()
-    return {"frozen": True, "cases": [_priority_payload(case) for case in ranked]}
+    return {"frozen": True, "cases": [_priority_payload(case, preferred_names) for case in ranked]}
 
 
 class SourcingEvidencePatch(BaseModel):
@@ -304,7 +331,7 @@ async def approve_3d_reference_selection(case_id: int, body: CaseReferenceApprov
     case.sourcing_3d_evidence = evidence
     case.status = "ready_for_approval"
     await db.commit()
-    return _priority_payload(case)
+    return _priority_payload(case, await _preferred_case_names(db))
 
 
 @router.patch("/{case_id}/3d-sourcing")
@@ -346,7 +373,7 @@ async def update_3d_sourcing_evidence(
     case.sourcing_3d_evidence = evidence
     case.status = "sourcing" if body.status not in ("complete", "blocked") else case.status
     await db.commit()
-    return _priority_payload(case)
+    return _priority_payload(case, await _preferred_case_names(db))
 
 
 @router.get("/priority-for-3d")
@@ -378,8 +405,9 @@ async def get_cases_priority_for_3d(
         .limit(limit)
     )
     cases = result.scalars().all()
+    preferred_names = await _preferred_case_names(db)
 
-    return [_priority_payload(case) for case in cases]
+    return [_priority_payload(case, preferred_names) for case in cases]
 
 
 @router.get("/with-3d-models")
