@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { ChevronLeft, ChevronRight, CirclePlay, Images } from "lucide-react";
+import { ThreeDWorkflowNav } from "@/components/three-d-workflow-nav";
 
 interface Star {
   x: number;
@@ -657,7 +658,10 @@ export default function Components3DReviewPage() {
       <style>{gradientStyle}</style>
       <div style={{ height: "100vh", animation: "bgShift 8s ease-in-out infinite" }} className="w-full flex flex-col gap-3 p-4 pb-0 overflow-hidden">
       <div className="flex items-center justify-between">
-        <h1 className="text-lg font-bold text-slate-100">3D Asset Review</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="whitespace-nowrap text-lg font-bold text-slate-100">3D Assets</h1>
+          <ThreeDWorkflowNav compact />
+        </div>
         <div className="flex items-center gap-3">
           {batch ? (
             <>

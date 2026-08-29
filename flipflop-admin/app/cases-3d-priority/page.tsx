@@ -6,6 +6,7 @@ import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
+import { ThreeDWorkflowNav } from "@/components/three-d-workflow-nav";
 
 interface PriorityCaseItem {
   id: number;
@@ -277,6 +278,7 @@ export default function Cases3DPriorityPage() {
           </Button>
         </div>
       </div>
+      <ThreeDWorkflowNav />
       {error && <div role="alert" className="rounded-md border border-red-500/60 bg-red-950/60 px-4 py-3 text-sm text-red-200">{error}</div>}
 
       {/* Progress summary */}

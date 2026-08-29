@@ -23,7 +23,7 @@ const PRIMARY_NAV = [
   { href: "/pc-builder", icon: Zap, label: "Curated Builds" },
   { href: "/inventory", icon: Warehouse, label: "Inventory" },
   { href: "/demand", icon: ChartNoAxesCombined, label: "Demand" },
-  { href: "/components-3d-review", icon: Box, label: "3D Assets" },
+  { href: "/cases-3d-priority", icon: Box, label: "3D Assets" },
   { href: "/problems", icon: AlertTriangle, label: "Problems" },
 ];
 
@@ -108,7 +108,7 @@ export function Sidebar() {
 
         <nav className="node-nav">
           {PRIMARY_NAV.map((item) => {
-            const active = pathname === item.href;
+            const active = pathname === item.href || (item.href === "/cases-3d-priority" && pathname === "/components-3d-review");
             return (
               <Link
                 key={item.href}
