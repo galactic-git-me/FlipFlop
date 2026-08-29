@@ -9,6 +9,12 @@ import { formatCurrency } from "@/lib/utils";
 import { ThreeDWorkflowNav } from "@/components/three-d-workflow-nav";
 import { readJsonResponse } from "@/lib/read-json-response";
 
+interface SourcingStageEvidence {
+  status?: string;
+  attempts?: Array<Record<string, unknown>>;
+  [key: string]: unknown;
+}
+
 interface PriorityCaseItem {
   id: number;
   name: string;
@@ -28,7 +34,7 @@ interface PriorityCaseItem {
   keywords?: string[];
   form_factors?: string[];
   sourcing_3d_evidence?: {
-    stages?: Record<string, { status?: string; attempts?: Array<{ provider?: string; source_url?: string }> }>;
+    stages?: Record<string, SourcingStageEvidence>;
   };
 }
 
@@ -153,6 +159,21 @@ function compatibleBoardFormats(caseItem: PriorityCaseItem) {
   return [...formats];
 }
 
+function evidenceUrls(stage?: SourcingStageEvidence) {
+  const matches = JSON.stringify(stage || {}).match(/https?:\\?\/\\?\/[^"\\\s]+/g) || [];
+  return [...new Set(matches.map(url => url.replaceAll("\\/", "/")))];
+}
+
+function youtubeEmbedUrl(url: string) {
+  try {
+    const parsed = new URL(url);
+    const videoId = parsed.hostname.includes("youtu.be") ? parsed.pathname.slice(1) : parsed.searchParams.get("v");
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+  } catch {
+    return null;
+  }
+}
+
 function statusColour(status = "not_started") {
   if (["found", "complete"].includes(status)) return "border-emerald-500/40 bg-emerald-500/10 text-emerald-300";
   if (["searching", "blocked"].includes(status)) return "border-amber-500/40 bg-amber-500/10 text-amber-200";
@@ -176,6 +197,7 @@ export default function Cases3DPriorityPage() {
   const [newReferenceSource, setNewReferenceSource] = useState<ReferenceSource>("manufacturer");
   const [generatedReviewUrl, setGeneratedReviewUrl] = useState<string | null>(null);
   const [generatingCaseId, setGeneratingCaseId] = useState<number | null>(null);
+  const [evidenceReview, setEvidenceReview] = useState<{ caseItem: PriorityCaseItem; stage: "product_images" | "youtube_video" | "meshy_generation" } | null>(null);
 
   const openReferenceSelection = async (caseId: number) => {
     if (referenceCaseId === caseId) {
@@ -269,8 +291,10 @@ export default function Cases3DPriorityPage() {
       setCases(current => current.map(item => item.id === caseId ? data : item));
       setReferenceData(current => current ? { ...current, approved_selection: { status: "approved", images: selectedReferences } } : current);
       setReferenceNotice("Four reference pictures approved. Picture 1 is the texture and colour master.");
+      return true;
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not approve reference pictures");
+      return false;
     } finally {
       setReferenceBusy(false);
     }
@@ -333,6 +357,41 @@ export default function Cases3DPriorityPage() {
       setError(caught instanceof Error ? caught.message : "Could not freeze campaign");
     } finally {
       setFreezing(false);
+    }
+  };
+
+  const openEvidenceReview = async (caseItem: PriorityCaseItem, stage: "product_images" | "youtube_video" | "meshy_generation") => {
+    if (stage === "product_images") await openReferenceSelection(caseItem.id);
+    setEvidenceReview({ caseItem, stage });
+  };
+
+  const closeEvidenceReview = () => {
+    if (evidenceReview?.stage === "product_images") setReferenceCaseId(null);
+    setEvidenceReview(null);
+  };
+
+  const decideEvidenceStage = async (decision: "complete" | "blocked") => {
+    if (!evidenceReview) return;
+    setReferenceBusy(true);
+    setError(null);
+    try {
+      const response = await fetch(`/api/cases/${evidenceReview.caseItem.id}/3d-sourcing`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          stage: evidenceReview.stage,
+          status: decision,
+          attempt: { owner_decision: decision === "complete" ? "approved" : "declined" },
+        }),
+      });
+      const updated = await readJsonResponse<PriorityCaseItem & { detail?: string; error?: string }>(response);
+      if (!response.ok) throw new Error(updated.detail || updated.error || "Could not save review decision");
+      setCases(current => current.map(item => item.id === updated.id ? updated : item));
+      setEvidenceReview(null);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Could not save review decision");
+    } finally {
+      setReferenceBusy(false);
     }
   };
 
@@ -529,7 +588,18 @@ export default function Cases3DPriorityPage() {
                     <div className="flex max-w-md flex-wrap gap-1.5" aria-label="3D sourcing progress">
                         {sourcingLabels.map(([key, label]) => {
                           const status = caseItem.sourcing_3d_evidence?.stages?.[key]?.status || "not_started";
-                          return (
+                          const reviewable = key === "product_images" || key === "youtube_video" || key === "meshy_generation";
+                          return reviewable ? (
+                            <button
+                              key={key}
+                              type="button"
+                              title={`Review ${label}: ${status.replaceAll("_", " ")}`}
+                              onClick={() => void openEvidenceReview(caseItem, key as "product_images" | "youtube_video" | "meshy_generation")}
+                              className={`cursor-pointer rounded border px-1.5 py-0.5 text-[10px] transition-colors hover:border-cyan-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${statusColour(status)}`}
+                            >
+                              {label}
+                            </button>
+                          ) : (
                             <span key={key} title={`${label}: ${status.replaceAll("_", " ")}`} className={`rounded border px-1.5 py-0.5 text-[10px] ${statusColour(status)}`}>
                               {label}
                             </span>
@@ -641,6 +711,113 @@ export default function Cases3DPriorityPage() {
             ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {evidenceReview && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="evidence-review-title"
+          onMouseDown={event => {
+            if (event.target === event.currentTarget) closeEvidenceReview();
+          }}
+        >
+          <div className="max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-xl border border-slate-700 bg-[#0b121d] shadow-2xl">
+            <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-slate-700 bg-[#111b2a] px-5 py-4">
+              <div>
+                <h2 id="evidence-review-title" className="font-semibold text-slate-100">
+                  {evidenceReview.stage === "product_images" ? "Review product images" : evidenceReview.stage === "youtube_video" ? "Review YouTube evidence" : "Review Meshy model"}
+                </h2>
+                <p className="mt-1 text-xs text-slate-400" title={evidenceReview.caseItem.name}>{compactCaseName(evidenceReview.caseItem)}</p>
+              </div>
+              <Button type="button" variant="outline" onClick={closeEvidenceReview} className="cursor-pointer">Close</Button>
+            </div>
+
+            <div className="p-5">
+              {evidenceReview.stage === "product_images" && (
+                <>
+                  <p className="mb-4 text-sm text-slate-300">Select exactly four images. The first selected image is the texture and colour master.</p>
+                  {referenceBusy && !referenceData ? (
+                    <div className="flex items-center justify-center py-16 text-slate-400"><RefreshCw className="mr-2 h-4 w-4 animate-spin" /> Loading images…</div>
+                  ) : referenceData?.candidates.length ? (
+                    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
+                      {referenceData.candidates.map(candidate => {
+                        const selectedIndex = selectedReferences.findIndex(item => item.url === candidate.url);
+                        return (
+                          <button
+                            key={candidate.url}
+                            type="button"
+                            onClick={() => toggleReference(candidate)}
+                            className={`relative cursor-pointer overflow-hidden rounded-md border bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700 hover:border-slate-500"}`}
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={candidate.url} alt={candidate.label || "Case reference"} className="h-44 w-full object-contain" />
+                            {selectedIndex >= 0 && <span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{selectedIndex + 1}</span>}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ) : <p className="py-12 text-center text-slate-500">No candidate images have been recorded.</p>}
+                </>
+              )}
+
+              {evidenceReview.stage === "youtube_video" && (() => {
+                const urls = evidenceUrls(evidenceReview.caseItem.sourcing_3d_evidence?.stages?.youtube_video);
+                return urls.length ? (
+                  <div className="grid gap-4 md:grid-cols-2">
+                    {urls.map(url => {
+                      const embedUrl = youtubeEmbedUrl(url);
+                      return embedUrl ? (
+                        <div key={url} className="overflow-hidden rounded-lg border border-slate-700 bg-slate-950">
+                          <iframe src={embedUrl} title="Case sourcing video" className="aspect-video w-full" allowFullScreen />
+                          <a href={url} target="_blank" rel="noreferrer" className="flex items-center px-3 py-2 text-xs text-cyan-300 hover:text-cyan-200">Open on YouTube <ExternalLink className="ml-1 h-3 w-3" /></a>
+                        </div>
+                      ) : null;
+                    })}
+                  </div>
+                ) : <p className="py-12 text-center text-slate-500">No YouTube evidence has been recorded.</p>;
+              })()}
+
+              {evidenceReview.stage === "meshy_generation" && (
+                <div className="space-y-4">
+                  <div className="rounded-lg border border-purple-500/30 bg-purple-500/5 p-4 text-sm text-slate-300">
+                    <p className="font-medium text-purple-200">Generated model evidence</p>
+                    <p className="mt-2 text-xs text-slate-400">Review the generated geometry, textures, scale and publishing rights before approving it.</p>
+                    {evidenceUrls(evidenceReview.caseItem.sourcing_3d_evidence?.stages?.meshy_generation).map(url => (
+                      <a key={url} href={url} target="_blank" rel="noreferrer" className="mt-2 flex items-center break-all text-xs text-cyan-300 hover:text-cyan-200">{url}<ExternalLink className="ml-1 h-3 w-3 flex-none" /></a>
+                    ))}
+                  </div>
+                  <Button type="button" variant="outline" onClick={() => router.push(generatedReviewUrl || "/components-3d-review")} className="cursor-pointer border-purple-500/40 text-purple-200">
+                    <Eye className="mr-2 h-4 w-4" /> Open 3D approval viewer
+                  </Button>
+                </div>
+              )}
+
+              <div className="mt-6 flex flex-wrap items-center justify-end gap-2 border-t border-slate-700 pt-4">
+                <Button type="button" variant="outline" disabled={referenceBusy} onClick={() => void decideEvidenceStage("blocked")} className="cursor-pointer border-red-500/50 text-red-200 hover:bg-red-500/10">
+                  Decline
+                </Button>
+                {evidenceReview.stage === "product_images" ? (
+                  <Button
+                    type="button"
+                    disabled={referenceBusy || !referenceData?.sourcing_ready || selectedReferences.length !== 4}
+                    onClick={async () => {
+                      if (await approveReferences(evidenceReview.caseItem.id)) closeEvidenceReview();
+                    }}
+                    className="cursor-pointer bg-cyan-700 hover:bg-cyan-600"
+                  >
+                    <Check className="mr-2 h-4 w-4" /> Approve selected 4 ({selectedReferences.length}/4)
+                  </Button>
+                ) : (
+                  <Button type="button" disabled={referenceBusy} onClick={() => void decideEvidenceStage("complete")} className="cursor-pointer bg-emerald-700 hover:bg-emerald-600">
+                    <Check className="mr-2 h-4 w-4" /> Approve
+                  </Button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}
