@@ -3,10 +3,10 @@
     "last_success_at": "2026-08-29T23:12:31.979260+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-08-29T23:18:32.060821+00:00"
+    "last_success_at": "2026-08-29T23:28:32.087182+00:00"
   },
   "ebay_sales_tracker": {
-    "last_success_at": "2026-08-29T22:59:32.384213+00:00"
+    "last_success_at": "2026-08-29T23:29:32.550875+00:00"
   },
   "manual_build_deferred_publish": {
     "last_success_at": "2026-08-29T23:12:31.984100+00:00"
@@ -33,7 +33,7 @@
     "last_success_at": "2026-08-29T23:06:44.268443+00:00"
   },
   "compliant_market_ingestion": {
-    "last_success_at": "2026-08-29T22:23:23.107718+00:00"
+    "last_success_at": "2026-08-29T23:27:34.307751+00:00"
   },
   "retrain_checkpoint_watchdog": {
     "last_success_at": "2026-08-29T22:23:23.774505+00:00"
@@ -42,7 +42,7 @@
     "last_success_at": "2026-08-29T22:23:23.786993+00:00"
   },
   "catalogue_pipeline": {
-    "last_success_at": "2026-08-29T22:23:24.180760+00:00"
+    "last_success_at": "2026-08-29T23:27:35.920564+00:00"
   },
   "playbook_evolution": {
     "last_success_at": "2026-08-29T22:23:24.178294+00:00"
@@ -78,7 +78,7 @@
     "last_success_at": "2026-08-29T20:23:24.303888+00:00"
   },
   "case_content_sourcing": {
-    "last_success_at": "2026-08-29T22:57:53.026513+00:00"
+    "last_success_at": "2026-08-29T23:27:53.155032+00:00"
   },
   "amazon_case_bestsellers": {
     "last_success_at": "2026-08-29T22:29:59.428241+00:00"
