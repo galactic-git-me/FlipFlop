@@ -62,7 +62,7 @@ const DIRECT_BACKEND_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost
 const sourcingLabels: Array<[string, string]> = [
   ["product_images", "Images"],
   ["youtube_video", "YouTube"],
-  ["meshy_generation", "Meshy"],
+  ["meshy_generation", "3D Model"],
 ];
 
 const knownCaseBrands = [
@@ -189,6 +189,15 @@ function imageSetApproved(caseItem: PriorityCaseItem) {
   const stage = caseItem.sourcing_3d_evidence?.stages?.product_images;
   const selection = stage?.approved_selection as { status?: string } | undefined;
   return stage?.status === "complete" && selection?.status === "approved";
+}
+
+function modelEvidenceStatus(caseItem: PriorityCaseItem) {
+  const stages = caseItem.sourcing_3d_evidence?.stages || {};
+  const statuses = [stages.manufacturer_3d?.status, stages.third_party_3d?.status, stages.meshy_generation?.status];
+  if (statuses.some(status => status === "found" || status === "complete")) return "complete";
+  if (statuses.some(status => status === "blocked")) return "blocked";
+  if (statuses.some(status => status === "searching")) return "searching";
+  return "not_started";
 }
 
 function liveStatus(caseItem: PriorityCaseItem) {
@@ -664,8 +673,10 @@ export default function Cases3DPriorityPage() {
                   <td className="w-80 min-w-80 px-4 py-3 align-middle">
                     <div className="flex flex-wrap gap-1.5" aria-label="3D sourcing progress">
                         {sourcingLabels.map(([key, label]) => {
-                          const status = caseItem.sourcing_3d_evidence?.stages?.[key]?.status || "not_started";
-                          const meshyLocked = key === "meshy_generation" && !imageSetApproved(caseItem);
+                          const status = key === "meshy_generation"
+                            ? modelEvidenceStatus(caseItem)
+                            : caseItem.sourcing_3d_evidence?.stages?.[key]?.status || "not_started";
+                          const meshyLocked = key === "meshy_generation" && status !== "complete" && !imageSetApproved(caseItem);
                           return (
                             <button
                               key={key}
@@ -695,9 +706,9 @@ export default function Cases3DPriorityPage() {
                       </button>
                       <button
                         type="button"
-                        title={imageSetApproved(caseItem) ? "Approve Meshy model" : "Approve pictures before creating or approving Meshy"}
-                        aria-label={imageSetApproved(caseItem) ? "Approve Meshy model" : "Meshy locked until pictures are approved"}
-                        disabled={!imageSetApproved(caseItem)}
+                        title={modelEvidenceStatus(caseItem) === "complete" ? "Review 3D model" : imageSetApproved(caseItem) ? "Create or approve 3D model" : "Approve pictures before creating a Meshy model"}
+                        aria-label={modelEvidenceStatus(caseItem) === "complete" ? "Review 3D model" : imageSetApproved(caseItem) ? "Create or approve 3D model" : "3D model locked until pictures are approved"}
+                        disabled={modelEvidenceStatus(caseItem) !== "complete" && !imageSetApproved(caseItem)}
                         onClick={() => void openEvidenceReview(caseItem, "meshy_generation")}
                         className="cursor-pointer rounded-md border border-purple-500/40 p-2 text-purple-200 transition-colors hover:bg-purple-500/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-300 disabled:cursor-not-allowed disabled:opacity-35"
                       >
@@ -815,7 +826,7 @@ export default function Cases3DPriorityPage() {
             <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-slate-700 bg-[#111b2a] px-5 py-4">
               <div>
                 <h2 id="evidence-review-title" className="font-semibold text-slate-100">
-                  {evidenceReview.stage === "product_images" ? "Review product images" : evidenceReview.stage === "youtube_video" ? "Review YouTube evidence" : "Review Meshy model"}
+                  {evidenceReview.stage === "product_images" ? "Review product images" : evidenceReview.stage === "youtube_video" ? "Review YouTube evidence" : "Review 3D model"}
                 </h2>
                 <p className="mt-1 text-xs text-slate-400" title={evidenceReview.caseItem.name}>{compactCaseName(evidenceReview.caseItem)}</p>
               </div>
