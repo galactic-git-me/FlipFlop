@@ -432,12 +432,14 @@ export default function Cases3DPriorityPage() {
                               key={candidate.url}
                               type="button"
                               onClick={() => toggleReference(candidate)}
-                              className={`relative cursor-pointer overflow-hidden rounded-md border text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700 hover:border-slate-500"}`}
+                              className={`group relative cursor-pointer overflow-hidden rounded-md border text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700 hover:border-slate-500"}`}
                             >
                               {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img src={candidate.url} alt="" className="h-36 w-full bg-white object-contain" />
                               {selectedIndex >= 0 && <span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{selectedIndex + 1}</span>}
-                              <span className="block truncate bg-slate-950 px-2 py-1 text-[10px] uppercase text-slate-300">{candidate.source}{selectedIndex === 0 ? " · texture master" : ""}</span>
+                              <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-1 bg-slate-950/85 px-1.5 py-0.5 text-[9px] uppercase text-slate-200 opacity-0 backdrop-blur-sm transition group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+                                {candidate.source}{selectedIndex === 0 ? " · texture master" : ""}
+                              </span>
                             </button>
                           );
                         })}
