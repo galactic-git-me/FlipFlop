@@ -194,15 +194,15 @@ function imageSetApproved(caseItem: PriorityCaseItem) {
 function liveStatus(caseItem: PriorityCaseItem) {
   const stages = caseItem.sourcing_3d_evidence?.stages || {};
   const rejected = ["product_images", "youtube_video", "meshy_generation", "validation"].some(key => stages[key]?.status === "blocked");
-  if (rejected) return { label: "LIVE: REJECTED", colour: "border-red-500/50 bg-red-500/10 text-red-200" };
+  if (rejected) return { label: "LIVE", title: "Live status: rejected", colour: "border-red-500/50 bg-red-500/10 text-red-200" };
   const approvalsComplete = imageSetApproved(caseItem)
     && stages.youtube_video?.status === "complete"
     && stages.meshy_generation?.status === "complete"
     && stages.validation?.status === "complete";
   if (approvalsComplete && caseItem.has_3d_model && caseItem.model_3d_url) {
-    return { label: "LIVE", colour: "border-emerald-500/50 bg-emerald-500/10 text-emerald-300" };
+    return { label: "LIVE", title: "Live status: deployed", colour: "border-emerald-500/50 bg-emerald-500/10 text-emerald-300" };
   }
-  return { label: "LIVE: PENDING", colour: "border-amber-500/50 bg-amber-500/10 text-amber-200" };
+  return { label: "LIVE", title: "Live status: pending", colour: "border-amber-500/50 bg-amber-500/10 text-amber-200" };
 }
 
 export default function Cases3DPriorityPage() {
@@ -487,8 +487,8 @@ export default function Cases3DPriorityPage() {
             <CardTitle className="text-xs uppercase text-slate-500">Total Cases</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-slate-100">{allWorkflowCases.length}</div>
-            <p className="mt-1 text-xs text-slate-500">in the 3D workflow</p>
+            <div className="text-3xl font-bold text-slate-100">{cases.length}</div>
+            <p className="mt-1 text-xs text-slate-500">cases shown in the priority table</p>
           </CardContent>
         </Card>
 
@@ -515,7 +515,7 @@ export default function Cases3DPriorityPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-xs uppercase text-slate-500">
-              <Check className="h-3.5 w-3.5 text-amber-400" /> 3D Model Ready
+              <Eye className="h-3.5 w-3.5 text-amber-400" /> 3D Model Ready
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -555,7 +555,7 @@ export default function Cases3DPriorityPage() {
             <p className="text-xs text-slate-500">{cases.length} cases</p>
           </div>
           <div className="overflow-x-auto rounded-xl border border-[#1e2d45] bg-[#0b121d]">
-            <table className="w-full min-w-[1320px] border-collapse text-left text-sm">
+            <table className="w-full min-w-[1380px] border-collapse text-left text-sm">
               <thead className="sticky top-0 z-10 bg-[#111b2a] text-[11px] uppercase tracking-wider text-slate-400">
                 <tr>
                   <th scope="col" className="w-16 px-4 py-3 text-center">Rank</th>
@@ -563,11 +563,10 @@ export default function Cases3DPriorityPage() {
                   <th scope="col" className="w-36 px-4 py-3">Manufacturer</th>
                   <th scope="col" className="w-24 px-4 py-3 text-center">Preferred</th>
                   <th scope="col" className="w-28 px-4 py-3">Price</th>
-                  <th scope="col" className="w-28 px-4 py-3">RRP</th>
-                  <th scope="col" className="w-28 px-4 py-3">Discount</th>
+                  <th scope="col" className="w-40 px-4 py-3">RRP / Discount</th>
                   <th scope="col" className="w-40 px-4 py-3">Product rating</th>
                   <th scope="col" className="w-44 px-4 py-3">Compatible boards</th>
-                  <th scope="col" className="px-4 py-3">Sourcing progress</th>
+                  <th scope="col" className="w-80 min-w-80 px-4 py-3">Sourcing progress</th>
                   <th scope="col" className="w-52 px-4 py-3 text-right">Action</th>
                 </tr>
               </thead>
@@ -623,18 +622,18 @@ export default function Cases3DPriorityPage() {
                     ) : <span className="text-slate-700">—</span>}
                   </td>
                   <td className="px-4 py-3 align-middle font-semibold tabular-nums text-[#00dc82]">{formatCurrency(caseItem.price)}</td>
-                  <td className="px-4 py-3 align-middle tabular-nums text-slate-400">
-                    {caseItem.rrp ? formatCurrency(caseItem.rrp) : "—"}
-                  </td>
                   <td className="px-4 py-3 align-middle">
                     {caseItem.rrp && caseItem.rrp > caseItem.price ? (
-                      <span
-                        className="inline-flex rounded-md border border-emerald-500/40 bg-emerald-500/10 px-2 py-1 font-semibold tabular-nums text-emerald-300"
-                        title={`${formatCurrency(caseItem.rrp - caseItem.price)} below RRP`}
-                      >
-                        {Math.round(((caseItem.rrp - caseItem.price) / caseItem.rrp) * 100)}% OFF
-                      </span>
-                    ) : caseItem.rrp ? <span className="text-xs text-slate-500">No sale</span> : <span className="text-slate-700">—</span>}
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="tabular-nums text-slate-400 line-through">{formatCurrency(caseItem.rrp)}</span>
+                        <span
+                          className="inline-flex rounded-md border border-emerald-500/40 bg-emerald-500/10 px-2 py-1 font-semibold tabular-nums text-emerald-300"
+                          title={`${formatCurrency(caseItem.rrp - caseItem.price)} below RRP`}
+                        >
+                          {Math.round(((caseItem.rrp - caseItem.price) / caseItem.rrp) * 100)}% OFF
+                        </span>
+                      </div>
+                    ) : caseItem.rrp ? <span className="tabular-nums text-slate-400">{formatCurrency(caseItem.rrp)} <span className="ml-1 text-xs text-slate-600">No sale</span></span> : <span className="text-slate-700">—</span>}
                   </td>
                   <td className="px-4 py-3 align-middle tabular-nums">
                     {caseItem.rating ? (
@@ -662,8 +661,8 @@ export default function Cases3DPriorityPage() {
                       </div>
                     ) : <span className="text-slate-600">—</span>}
                   </td>
-                  <td className="px-4 py-3 align-middle">
-                    <div className="flex max-w-md flex-wrap gap-1.5" aria-label="3D sourcing progress">
+                  <td className="w-80 min-w-80 px-4 py-3 align-middle">
+                    <div className="flex flex-wrap gap-1.5" aria-label="3D sourcing progress">
                         {sourcingLabels.map(([key, label]) => {
                           const status = caseItem.sourcing_3d_evidence?.stages?.[key]?.status || "not_started";
                           const meshyLocked = key === "meshy_generation" && !imageSetApproved(caseItem);
@@ -682,7 +681,7 @@ export default function Cases3DPriorityPage() {
                         })}
                         {(() => {
                           const live = liveStatus(caseItem);
-                          return <span title={live.label} className={`rounded border px-1.5 py-0.5 text-[10px] ${live.colour}`}>{live.label}</span>;
+                          return <span title={live.title} className={`rounded border px-1.5 py-0.5 text-[10px] ${live.colour}`}>{live.label}</span>;
                         })()}
                       </div>
                   </td>
@@ -710,7 +709,7 @@ export default function Cases3DPriorityPage() {
 
                   {referenceCaseId === caseItem.id && referenceData && (
                     <tr className="bg-slate-900/65">
-                      <td colSpan={11} className="px-6 py-5">
+                      <td colSpan={10} className="px-6 py-5">
                     <section aria-label={`Reference picture approval for ${caseItem.name}`}>
                       <div className="mb-3 rounded-md border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-100">
                         Choose exactly four clean pictures of the same empty chassis. They must show useful exterior angles and the interior, with no text panels or noisy backgrounds. Select the best colour/texture view first.
