@@ -36,6 +36,7 @@ from app.workers.manual_build_lifecycle import (
     run_manual_build_recreate_cycle_job,
 )
 from app.workers.message_poll import run_message_poll_job
+from app.workers.case_content_sourcing import run_case_content_sourcing
 from app.services.ai_build_generator import generate_ai_builds
 from app.services.email_monitor import EmailMonitor
 from app.services.ebay_sales_tracker import get_tracker as get_ebay_sales_tracker
@@ -48,6 +49,7 @@ settings = get_settings()
 _scheduler: AsyncIOScheduler | None = None
 _job_history: dict[str, deque[dict]] = {
     "cases": deque(maxlen=50),
+    "case_content_sourcing": deque(maxlen=50),
     "external_demand": deque(maxlen=50),
     "playbook_evolution": deque(maxlen=50),
     "autonomous": deque(maxlen=50),
@@ -300,6 +302,16 @@ def start_scheduler():
         replace_existing=True,
         max_instances=1,
         next_run_time=now + timedelta(hours=24),  # Run 24 hours from now, not immediately
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=settings.case_content_sourcing_interval_minutes),
+        id="case_content_sourcing",
+        name="Case Photo & YouTube Full Queue",
+        kwargs={"job_id": "case_content_sourcing", "fn": run_case_content_sourcing},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(seconds=20),
     )
     #
     # scheduler.add_job(
@@ -683,6 +695,8 @@ async def trigger_swarm(swarm_id: str) -> dict:
         return {"ok": False, "reason": "Backend scrapers disabled — data sourcing handled by FlipFlopXtension"}
     if swarm_id == "cases":
         return await _run_job_with_history("cases", partial(run_cases_swarm, "main"))
+    if swarm_id == "case_content_sourcing":
+        return await _run_job_with_history("case_content_sourcing", run_case_content_sourcing)
     if swarm_id == "external_demand":
         return await _run_job_with_history("external_demand", ingest_external_demand_signals)
     if swarm_id == "playbook_evolution":

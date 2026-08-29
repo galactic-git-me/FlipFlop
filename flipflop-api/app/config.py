@@ -143,6 +143,14 @@ class Settings(BaseSettings):
     compliant_ingestion_manifest_path: str = "config/compliant_sources.json"
     compliant_ingestion_interval_hours: int = 6
 
+    # Full frozen-priority queue content sourcing. Candidates still require
+    # owner approval before Meshy generation or publishing.
+    case_content_sourcing_enabled: bool = True
+    case_content_sourcing_interval_minutes: int = 30
+    case_content_sourcing_batch_size: int = 100
+    case_content_sourcing_concurrency: int = 2
+    case_content_request_delay_seconds: float = 0.4
+
     max_concurrent_flips: int = 1
     max_concurrent_search_terms: int = 2  # Limit concurrent gem_radar searches to ease RAM pressure (95% full)
     auto_buy_autonomous: bool = False
