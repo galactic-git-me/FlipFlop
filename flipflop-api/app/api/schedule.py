@@ -18,7 +18,7 @@ router = APIRouter(prefix="/schedule", tags=["schedule"])
 def _job_category(job_id: str) -> str:
     if job_id == "flip_opportunities":
         return "sourcing"
-    if job_id in {"upgrade_parts", "cases", "accessories", "external_demand"}:
+    if job_id in {"upgrade_parts", "cases", "amazon_case_bestsellers", "accessories", "external_demand"}:
         return "scraping"
     if job_id == "playbook_evolution":
         return "analysis"
@@ -36,6 +36,7 @@ _JOB_DESCRIPTIONS: dict[str, str] = {
     "flip_opportunities": "Scans enabled marketplaces and auctions for profitable PCs, scores gems, and updates listing lifecycle.",
     "upgrade_parts": "Refreshes component pricing from sold comps and retail references for build-cost accuracy.",
     "cases": "Updates themed case catalogue pricing and availability from supported sources.",
+    "amazon_case_bestsellers": "Refreshes Amazon UK's live best-selling PC case ranks, prices, RRP, ratings, reviews, and sales velocity.",
     "accessories": "Updates accessory pricing and inventory candidates used for upsell opportunities.",
     "external_demand": "Collects external demand signals (Reddit + scaffolded Google Trends/Steam) for playbook intelligence.",
     "playbook_evolution": "Creates pending playbook update proposals from sold-flip outcomes for human approval.",

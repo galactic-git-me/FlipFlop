@@ -25,6 +25,8 @@ async def trigger(swarm_id: str, background_tasks: BackgroundTasks):
         "flip_opportunities",
         "upgrade_parts",
         "cases",
+        "case_content_sourcing",
+        "amazon_case_bestsellers",
         "accessories",
         "external_demand",
         "playbook_evolution",

@@ -150,6 +150,7 @@ class Settings(BaseSettings):
     case_content_sourcing_batch_size: int = 100
     case_content_sourcing_concurrency: int = 2
     case_content_request_delay_seconds: float = 0.4
+    amazon_case_bestsellers_interval_hours: int = 24
 
     max_concurrent_flips: int = 1
     max_concurrent_search_terms: int = 2  # Limit concurrent gem_radar searches to ease RAM pressure (95% full)
