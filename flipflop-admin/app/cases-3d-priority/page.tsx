@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles, ExternalLink, Upload, Eye } from "lucide-react";
+import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles, ExternalLink, Upload, Eye, Star } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
@@ -92,11 +92,16 @@ const caseColours = [
   "pink",
 ];
 
-function compactCaseName(caseItem: PriorityCaseItem) {
+function caseManufacturer(caseItem: PriorityCaseItem) {
   const fullName = caseItem.name.replaceAll("™", "").replaceAll("®", "").trim();
-  const brand = caseItem.brand?.trim() || knownCaseBrands.find(candidate =>
+  return caseItem.brand?.trim() || knownCaseBrands.find(candidate =>
     fullName.toLocaleLowerCase().startsWith(candidate.toLocaleLowerCase()),
   ) || "Unbranded";
+}
+
+function compactCaseName(caseItem: PriorityCaseItem) {
+  const fullName = caseItem.name.replaceAll("™", "").replaceAll("®", "").trim();
+  const brand = caseManufacturer(caseItem);
 
   const withoutBrand = fullName.slice(
     fullName.toLocaleLowerCase().startsWith(brand.toLocaleLowerCase()) ? brand.length : 0,
@@ -118,6 +123,31 @@ function hasIncludedFans(caseItem: PriorityCaseItem) {
 
   const withoutCapacityClaims = title.replace(/(?:supports?|fits?|capacity(?:\s+for)?)[^,;–|]{0,70}fans?/gi, "");
   return /\b(?:(?:PWM|ARGB|RGB)\s+)+fans?\b/i.test(withoutCapacityClaims);
+}
+
+function compatibleBoardFormats(caseItem: PriorityCaseItem) {
+  const formats = new Set(
+    (caseItem.form_factors || []).map(format => format.trim().toLocaleUpperCase()).filter(Boolean),
+  );
+  const title = caseItem.name;
+  let remainingTitle = title;
+
+  if (/\bE-?ATX\b/i.test(title)) {
+    formats.add("E-ATX");
+    remainingTitle = remainingTitle.replace(/\bE-?ATX\b/gi, "");
+  }
+  if (/\b(?:MICRO[- ]?ATX|M-?ATX)\b/i.test(title)) {
+    formats.add("MATX");
+    remainingTitle = remainingTitle.replace(/\b(?:MICRO[- ]?ATX|M-?ATX)\b/gi, "");
+  }
+  if (/\b(?:MINI[- ]?ITX|M-?ITX)\b/i.test(title)) {
+    formats.add("ITX");
+    remainingTitle = remainingTitle.replace(/\b(?:MINI[- ]?ITX|M-?ITX)\b/gi, "");
+  }
+  if (/\bATX\b/i.test(remainingTitle)) formats.add("ATX");
+  if (/\bITX\b/i.test(remainingTitle)) formats.add("ITX");
+
+  return [...formats];
 }
 
 function statusColour(status = "not_started") {
@@ -406,13 +436,14 @@ export default function Cases3DPriorityPage() {
             <p className="text-xs text-slate-500">{cases.length} cases</p>
           </div>
           <div className="overflow-x-auto rounded-xl border border-[#1e2d45] bg-[#0b121d]">
-            <table className="w-full min-w-[1080px] border-collapse text-left text-sm">
+            <table className="w-full min-w-[1180px] border-collapse text-left text-sm">
               <thead className="sticky top-0 z-10 bg-[#111b2a] text-[11px] uppercase tracking-wider text-slate-400">
                 <tr>
                   <th scope="col" className="w-16 px-4 py-3 text-center">Rank</th>
                   <th scope="col" className="px-4 py-3">Case</th>
+                  <th scope="col" className="w-36 px-4 py-3">Manufacturer</th>
                   <th scope="col" className="w-28 px-4 py-3">Price</th>
-                  <th scope="col" className="w-28 px-4 py-3">Rating</th>
+                  <th scope="col" className="w-40 px-4 py-3">Product rating</th>
                   <th scope="col" className="w-24 px-4 py-3">Batch</th>
                   <th scope="col" className="w-44 px-4 py-3">Compatible boards</th>
                   <th scope="col" className="px-4 py-3">Sourcing progress</th>
@@ -456,19 +487,37 @@ export default function Cases3DPriorityPage() {
                               FANS INCLUDED
                             </span>
                           )}
+                          {/\bARGB\b/i.test(caseItem.name) && (
+                            <span className="rounded border border-fuchsia-500/35 bg-fuchsia-500/10 px-1.5 py-0.5 text-[10px] font-medium text-fuchsia-200">
+                              ARGB
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
                   </td>
+                  <td className="px-4 py-3 align-middle font-medium uppercase text-slate-300">{caseManufacturer(caseItem)}</td>
                   <td className="px-4 py-3 align-middle font-semibold tabular-nums text-[#00dc82]">{formatCurrency(caseItem.price)}</td>
                   <td className="px-4 py-3 align-middle tabular-nums">
-                    {caseItem.rating ? <span className="font-semibold text-amber-300">{caseItem.rating.toFixed(1)} <span aria-hidden="true">★</span><span className="sr-only"> stars</span></span> : <span className="text-slate-600">—</span>}
+                    {caseItem.rating ? (
+                      <div className="flex items-center gap-2" aria-label={`${caseItem.rating.toFixed(1)} out of 5 stars`}>
+                        <div className="flex gap-0.5" aria-hidden="true">
+                          {[1, 2, 3, 4, 5].map(star => (
+                            <Star
+                              key={star}
+                              className={`h-3.5 w-3.5 ${star <= Math.round(caseItem.rating || 0) ? "fill-amber-400 text-amber-400" : "fill-slate-800 text-slate-600"}`}
+                            />
+                          ))}
+                        </div>
+                        <span className="font-semibold text-amber-300">{caseItem.rating.toFixed(1)}</span>
+                      </div>
+                    ) : <span className="text-slate-600">—</span>}
                   </td>
                   <td className="px-4 py-3 align-middle text-slate-300">{caseItem.priority_3d_batch || "—"}</td>
                   <td className="px-4 py-3 align-middle">
-                    {caseItem.form_factors?.length ? (
+                    {compatibleBoardFormats(caseItem).length ? (
                       <div className="flex flex-wrap gap-1">
-                        {caseItem.form_factors.map(formFactor => (
+                        {compatibleBoardFormats(caseItem).map(formFactor => (
                           <span key={formFactor} className="rounded border border-blue-500/30 bg-blue-500/10 px-1.5 py-0.5 text-[10px] font-medium uppercase text-blue-200">
                             {formFactor}
                           </span>
@@ -504,7 +553,7 @@ export default function Cases3DPriorityPage() {
 
                   {referenceCaseId === caseItem.id && referenceData && (
                     <tr className="bg-slate-900/65">
-                      <td colSpan={8} className="px-6 py-5">
+                      <td colSpan={9} className="px-6 py-5">
                     <section aria-label={`Reference picture approval for ${caseItem.name}`}>
                       <div className="mb-3 rounded-md border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-100">
                         Choose exactly four clean pictures of the same empty chassis. They must show useful exterior angles and the interior, with no text panels or noisy backgrounds. Select the best colour/texture view first.
