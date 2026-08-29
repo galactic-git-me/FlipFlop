@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { ChevronLeft, ChevronRight, CirclePlay, Images } from "lucide-react";
 import { ThreeDWorkflowNav } from "@/components/three-d-workflow-nav";
+import { readJsonResponse } from "@/lib/read-json-response";
 
 interface Star {
   x: number;
@@ -480,23 +481,23 @@ export default function Components3DReviewPage() {
           fetch(batchId ? `/api/assets-3d/review-batches/${batchId}` : "/api/assets-3d"),
           fetch("/api/cases/priority-for-3d?limit=100"),
         ]);
-        const data = await response.json();
-        const priorityCases = casesResponse.ok ? await casesResponse.json() as PriorityCaseItem[] : [];
+        const data = await readJsonResponse<Component3DAsset[] | { detail?: string; error?: string; data?: Component3DAsset[]; assets?: Component3DAsset[] }>(response);
+        const priorityCases = casesResponse.ok ? await readJsonResponse<PriorityCaseItem[]>(casesResponse) : [];
 
-        if (data.detail) {
+        if (!Array.isArray(data) && data.detail) {
           console.error("API Error:", data.detail);
           setAssets([]);
           return;
         }
 
-        if (data.error) {
+        if (!Array.isArray(data) && data.error) {
           console.error("API returned error:", data.error);
           setAssets([]);
           return;
         }
 
         let loadedAssets = orderAndLabelAssets(
-          (Array.isArray(data) ? data : (data.data || data.assets || [])) as Component3DAsset[],
+          Array.isArray(data) ? data : (data.data || data.assets || []),
           priorityCases,
         );
         if (batchId) {
@@ -508,7 +509,7 @@ export default function Components3DReviewPage() {
           if (pendingBatchId) {
             const batchResponse = await fetch(`/api/assets-3d/review-batches/${pendingBatchId}`);
             if (batchResponse.ok) {
-              const batchData = await batchResponse.json() as ReviewBatch;
+              const batchData = await readJsonResponse<ReviewBatch>(batchResponse);
               loadedAssets = orderAndLabelAssets(batchData.assets, priorityCases);
               setBatch({ ...batchData, assets: loadedAssets });
               window.history.replaceState(null, "", `?batch=${pendingBatchId}`);
@@ -573,7 +574,7 @@ export default function Components3DReviewPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ size: 10 }),
       });
-      const data = await response.json();
+      const data = await readJsonResponse<ReviewBatch & { detail?: string; error?: string }>(response);
       if (!response.ok) throw new Error(data.detail || data.error || "Could not create review batch");
       const nextBatch = data as ReviewBatch;
       setBatch(nextBatch);
@@ -598,7 +599,7 @@ export default function Components3DReviewPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ decision, notes: reviewNotes || null }),
       });
-      const data = await response.json();
+      const data = await readJsonResponse<Partial<Component3DAsset> & { id: number; detail?: string; error?: string }>(response);
       if (!response.ok) throw new Error(data.detail || data.error || "Could not save decision");
       const reviewedAsset = { ...selectedAsset, ...data } as Component3DAsset;
       const updatedAssets = batch.assets.map(asset => asset.id === data.id ? reviewedAsset : asset);
@@ -622,7 +623,7 @@ export default function Components3DReviewPage() {
     setActionError(null);
     try {
       const response = await fetch(`/api/assets-3d/review-batches/${batch.batch_id}/publish`, { method: "POST" });
-      const data = await response.json();
+      const data = await readJsonResponse<ReviewBatch & { detail?: string; error?: string }>(response);
       if (!response.ok) throw new Error(data.detail || data.error || "Could not publish batch");
       const publishedBatch = data as ReviewBatch;
       const labelledAssets = preserveAssetLabels(publishedBatch.assets, batch.assets);

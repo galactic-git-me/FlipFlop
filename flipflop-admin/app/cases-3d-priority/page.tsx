@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
 import { ThreeDWorkflowNav } from "@/components/three-d-workflow-nav";
+import { readJsonResponse } from "@/lib/read-json-response";
 
 interface PriorityCaseItem {
   id: number;
@@ -89,7 +90,7 @@ export default function Cases3DPriorityPage() {
     setReferenceNotice(null);
     try {
       const response = await fetch(`/api/cases/${caseId}/3d-reference-candidates`, { cache: "no-store" });
-      const data = await response.json() as ReferenceCandidateResponse & { detail?: string };
+      const data = await readJsonResponse<ReferenceCandidateResponse & { detail?: string }>(response);
       if (!response.ok) throw new Error(data.detail || "Could not load reference pictures");
       setReferenceCaseId(caseId);
       setReferenceData(data);
@@ -139,7 +140,7 @@ export default function Cases3DPriorityPage() {
         method: "POST",
         body: formData,
       });
-      const data = await response.json() as { uploaded?: ReferenceCandidate[]; detail?: string };
+      const data = await readJsonResponse<{ uploaded?: ReferenceCandidate[]; detail?: string }>(response);
       if (!response.ok) throw new Error(data.detail || "Could not upload reference pictures");
       const uploaded = data.uploaded || [];
       setReferenceData(current => current ? {
@@ -166,7 +167,7 @@ export default function Cases3DPriorityPage() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ selected_images: selectedReferences }),
       });
-      const data = await response.json();
+      const data = await readJsonResponse<PriorityCaseItem & { detail?: string }>(response);
       if (!response.ok) throw new Error(data.detail || "Could not approve reference pictures");
       setCases(current => current.map(item => item.id === caseId ? data : item));
       setReferenceData(current => current ? { ...current, approved_selection: { status: "approved", images: selectedReferences } } : current);
@@ -193,14 +194,14 @@ export default function Cases3DPriorityPage() {
           notes: "Generated only from the separately owner-approved four-picture set. Preserve the first picture as the texture and colour master; match case finish and illuminated RGB faithfully.",
         }),
       });
-      const asset = await response.json();
+      const asset = await readJsonResponse<{ id: number; detail?: string }>(response);
       if (!response.ok) throw new Error(asset.detail || "3D generation failed");
       const batchResponse = await fetch("/api/assets-3d/review-batches", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ asset_ids: [asset.id] }),
       });
-      const batch = await batchResponse.json();
+      const batch = await readJsonResponse<{ batch_id: string; detail?: string }>(batchResponse);
       if (!batchResponse.ok) throw new Error(batch.detail || "Model generated, but its review batch could not be created");
       const reviewUrl = `/components-3d-review?batch=${batch.batch_id}`;
       setGeneratedReviewUrl(reviewUrl);
@@ -221,7 +222,7 @@ export default function Cases3DPriorityPage() {
     setError(null);
     try {
       const response = await fetch("/api/cases/priority-for-3d", { method: "POST" });
-      const data = await response.json();
+      const data = await readJsonResponse<{ cases?: PriorityCaseItem[]; detail?: string; error?: string }>(response);
       if (!response.ok) throw new Error(data.detail || data.error || "Could not freeze campaign");
       setCases(data.cases || []);
     } catch (caught) {
@@ -239,12 +240,12 @@ export default function Cases3DPriorityPage() {
         // Include explicitly-added priority exceptions (for example APNX C1 at
         // rank 31) as well as the original frozen top-30 campaign.
         const response = await fetch("/api/cases/priority-for-3d?limit=100");
-        const data = (await response.json()) as PriorityCaseItem[];
+        const data = await readJsonResponse<PriorityCaseItem[]>(response);
         setCases(data);
 
         // Count how many already have models
         const withModels = await fetch("/api/cases/with-3d-models?limit=1000");
-        const completed = (await withModels.json()) as PriorityCaseItem[];
+        const completed = await readJsonResponse<PriorityCaseItem[]>(withModels);
         setCompletedCount(completed.length);
       } catch (error) {
         console.error("Error loading cases:", error);
