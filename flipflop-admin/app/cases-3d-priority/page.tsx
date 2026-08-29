@@ -209,7 +209,7 @@ export default function Cases3DPriorityPage() {
   const router = useRouter();
   const [cases, setCases] = useState<PriorityCaseItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [completedCount, setCompletedCount] = useState(0);
+  const [completedCases, setCompletedCases] = useState<PriorityCaseItem[]>([]);
   const [freezing, setFreezing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [referenceCaseId, setReferenceCaseId] = useState<number | null>(null);
@@ -433,7 +433,7 @@ export default function Cases3DPriorityPage() {
         // Count how many already have models
         const withModels = await fetch("/api/cases/with-3d-models?limit=1000");
         const completed = await readJsonResponse<PriorityCaseItem[]>(withModels);
-        setCompletedCount(completed.length);
+        setCompletedCases(completed.filter(caseItem => !/raspberry\s*pi|raspberrypi|\brpi\b/i.test(caseItem.name)));
       } catch (error) {
         console.error("Error loading cases:", error);
       } finally {
@@ -448,6 +448,12 @@ export default function Cases3DPriorityPage() {
     const status = caseItem.sourcing_3d_evidence?.stages?.meshy_generation?.status || "not_started";
     return imageSetApproved(caseItem) && !["found", "complete", "blocked"].includes(status);
   }).length;
+  const allWorkflowCases = [...cases, ...completedCases];
+  const photosApprovedCount = allWorkflowCases.filter(imageSetApproved).length;
+  const modelReadyCount = allWorkflowCases.filter(caseItem =>
+    !caseItem.has_3d_model && caseItem.sourcing_3d_evidence?.stages?.meshy_generation?.status === "found",
+  ).length;
+  const liveCount = completedCases.filter(caseItem => caseItem.has_3d_model && caseItem.model_3d_url).length;
 
   return (
     <div className="p-6 space-y-6">
@@ -475,46 +481,56 @@ export default function Cases3DPriorityPage() {
       {error && <div role="alert" className="rounded-md border border-red-500/60 bg-red-950/60 px-4 py-3 text-sm text-red-200">{error}</div>}
 
       {/* Progress summary */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-slate-500 uppercase">Models Completed</CardTitle>
+            <CardTitle className="text-xs uppercase text-slate-500">Total Cases</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-[#00dc82]">{completedCount}</div>
-            <p className="text-xs text-slate-500 mt-1">cases with 3D models ready</p>
+            <div className="text-3xl font-bold text-slate-100">{allWorkflowCases.length}</div>
+            <p className="mt-1 text-xs text-slate-500">in the 3D workflow</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-slate-500 uppercase">Priority Queue</CardTitle>
+            <CardTitle className="flex items-center gap-2 text-xs uppercase text-slate-500"><Images className="h-3.5 w-3.5 text-cyan-400" /> Photos Approved</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-cyan-400">{cases.length}</div>
-            <p className="text-xs text-slate-500 mt-1">waiting for 3D models</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-slate-500 uppercase">Total Available</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-purple-400">{completedCount + cases.length}</div>
-            <p className="text-xs text-slate-500 mt-1">cases in catalogue</p>
+            <div className="text-3xl font-bold text-cyan-400">{photosApprovedCount}</div>
+            <p className="mt-1 text-xs text-slate-500">four-picture sets approved</p>
           </CardContent>
         </Card>
 
         <Card className="border-purple-500/30 bg-purple-500/5">
           <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-xs uppercase text-slate-500">
-              <Sparkles className="h-3.5 w-3.5 text-purple-400" /> Meshy Queue
-            </CardTitle>
+            <CardTitle className="flex items-center gap-2 text-xs uppercase text-slate-500"><Sparkles className="h-3.5 w-3.5 text-purple-400" /> Meshy Queue</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-purple-400">{meshyQueueCount}</div>
-            <p className="mt-1 text-xs text-slate-500">approved image sets ready to generate</p>
+            <p className="mt-1 text-xs text-slate-500">ready to generate</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-xs uppercase text-slate-500">
+              <Check className="h-3.5 w-3.5 text-amber-400" /> 3D Model Ready
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-amber-400">{modelReadyCount}</div>
+            <p className="mt-1 text-xs text-slate-500">unapproved models ready for review</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-[#00dc82]/30 bg-[#00dc82]/5">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-xs uppercase text-slate-500"><Eye className="h-3.5 w-3.5 text-[#00dc82]" /> Live</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-[#00dc82]">{liveCount}</div>
+            <p className="mt-1 text-xs text-slate-500">deployed models</p>
           </CardContent>
         </Card>
       </div>

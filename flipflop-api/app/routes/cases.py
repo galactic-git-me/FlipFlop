@@ -449,6 +449,8 @@ async def get_cases_with_3d_models(
             "form_factors": c.form_factors or [],
             "model_3d_url": c.model_3d_url,
             "has_3d_model": True,
+            "status": c.status,
+            "sourcing_3d_evidence": c.sourcing_3d_evidence or {},
         }
         for c in cases
     ]
