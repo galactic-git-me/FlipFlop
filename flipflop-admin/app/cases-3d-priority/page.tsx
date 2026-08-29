@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles, ExternalLink, Upload, Eye, Star, Heart, Youtube } from "lucide-react";
+import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles, ExternalLink, Upload, Eye, Star, Heart, Video } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
@@ -21,6 +21,7 @@ interface PriorityCaseItem {
   brand?: string;
   model?: string;
   price: number;
+  rrp?: number;
   source_site?: string;
   source_url?: string;
   image_url?: string;
@@ -443,6 +444,11 @@ export default function Cases3DPriorityPage() {
     void load();
   }, []);
 
+  const meshyQueueCount = cases.filter(caseItem => {
+    const status = caseItem.sourcing_3d_evidence?.stages?.meshy_generation?.status || "not_started";
+    return imageSetApproved(caseItem) && !["found", "complete", "blocked"].includes(status);
+  }).length;
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -469,7 +475,7 @@ export default function Cases3DPriorityPage() {
       {error && <div role="alert" className="rounded-md border border-red-500/60 bg-red-950/60 px-4 py-3 text-sm text-red-200">{error}</div>}
 
       {/* Progress summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-xs text-slate-500 uppercase">Models Completed</CardTitle>
@@ -499,6 +505,18 @@ export default function Cases3DPriorityPage() {
             <p className="text-xs text-slate-500 mt-1">cases in catalogue</p>
           </CardContent>
         </Card>
+
+        <Card className="border-purple-500/30 bg-purple-500/5">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-xs uppercase text-slate-500">
+              <Sparkles className="h-3.5 w-3.5 text-purple-400" /> Meshy Queue
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-purple-400">{meshyQueueCount}</div>
+            <p className="mt-1 text-xs text-slate-500">approved image sets ready to generate</p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Cases list */}
@@ -521,7 +539,7 @@ export default function Cases3DPriorityPage() {
             <p className="text-xs text-slate-500">{cases.length} cases</p>
           </div>
           <div className="overflow-x-auto rounded-xl border border-[#1e2d45] bg-[#0b121d]">
-            <table className="w-full min-w-[1160px] border-collapse text-left text-sm">
+            <table className="w-full min-w-[1320px] border-collapse text-left text-sm">
               <thead className="sticky top-0 z-10 bg-[#111b2a] text-[11px] uppercase tracking-wider text-slate-400">
                 <tr>
                   <th scope="col" className="w-16 px-4 py-3 text-center">Rank</th>
@@ -529,6 +547,8 @@ export default function Cases3DPriorityPage() {
                   <th scope="col" className="w-36 px-4 py-3">Manufacturer</th>
                   <th scope="col" className="w-24 px-4 py-3 text-center">Preferred</th>
                   <th scope="col" className="w-28 px-4 py-3">Price</th>
+                  <th scope="col" className="w-28 px-4 py-3">RRP</th>
+                  <th scope="col" className="w-28 px-4 py-3">Discount</th>
                   <th scope="col" className="w-40 px-4 py-3">Product rating</th>
                   <th scope="col" className="w-44 px-4 py-3">Compatible boards</th>
                   <th scope="col" className="px-4 py-3">Sourcing progress</th>
@@ -587,6 +607,19 @@ export default function Cases3DPriorityPage() {
                     ) : <span className="text-slate-700">—</span>}
                   </td>
                   <td className="px-4 py-3 align-middle font-semibold tabular-nums text-[#00dc82]">{formatCurrency(caseItem.price)}</td>
+                  <td className="px-4 py-3 align-middle tabular-nums text-slate-400">
+                    {caseItem.rrp ? formatCurrency(caseItem.rrp) : "—"}
+                  </td>
+                  <td className="px-4 py-3 align-middle">
+                    {caseItem.rrp && caseItem.rrp > caseItem.price ? (
+                      <span
+                        className="inline-flex rounded-md border border-emerald-500/40 bg-emerald-500/10 px-2 py-1 font-semibold tabular-nums text-emerald-300"
+                        title={`${formatCurrency(caseItem.rrp - caseItem.price)} below RRP`}
+                      >
+                        {Math.round(((caseItem.rrp - caseItem.price) / caseItem.rrp) * 100)}% OFF
+                      </span>
+                    ) : caseItem.rrp ? <span className="text-xs text-slate-500">No sale</span> : <span className="text-slate-700">—</span>}
+                  </td>
                   <td className="px-4 py-3 align-middle tabular-nums">
                     {caseItem.rating ? (
                       <div className="flex items-center gap-2" aria-label={`${caseItem.rating.toFixed(1)} out of 5 stars`}>
@@ -643,7 +676,7 @@ export default function Cases3DPriorityPage() {
                         <Images className="h-4 w-4" />
                       </button>
                       <button type="button" title="Approve YouTube evidence" aria-label="Approve YouTube evidence" onClick={() => void openEvidenceReview(caseItem, "youtube_video")} className="cursor-pointer rounded-md border border-red-500/40 p-2 text-red-200 transition-colors hover:bg-red-500/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300">
-                        <Youtube className="h-4 w-4" />
+                        <Video className="h-4 w-4" />
                       </button>
                       <button
                         type="button"
@@ -661,7 +694,7 @@ export default function Cases3DPriorityPage() {
 
                   {referenceCaseId === caseItem.id && referenceData && (
                     <tr className="bg-slate-900/65">
-                      <td colSpan={9} className="px-6 py-5">
+                      <td colSpan={11} className="px-6 py-5">
                     <section aria-label={`Reference picture approval for ${caseItem.name}`}>
                       <div className="mb-3 rounded-md border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-100">
                         Choose exactly four clean pictures of the same empty chassis. They must show useful exterior angles and the interior, with no text panels or noisy backgrounds. Select the best colour/texture view first.

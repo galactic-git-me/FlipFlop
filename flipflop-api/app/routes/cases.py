@@ -72,6 +72,7 @@ def _priority_payload(case: Case, preferred_names: list[str] | None = None) -> d
         "brand": case.brand,
         "model": case.model,
         "price": case.price_new or case.price or 0,
+        "rrp": case.rrp,
         "source_site": case.source_site,
         "source_url": case.source_url,
         "image_url": case.image_url,
