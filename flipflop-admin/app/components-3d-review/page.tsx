@@ -177,7 +177,28 @@ interface ReviewBatch {
 interface PriorityCaseItem {
   id: number;
   name: string;
+  brand?: string | null;
+  model?: string | null;
   priority_3d_rank?: number | null;
+}
+
+const CASE_BRANDS = ["Fractal Design", "Cooler Master", "be quiet!", "Thermaltake", "SilverStone", "Phanteks", "Corsair", "NZXT", "Lian Li", "Montech", "DeepCool", "Antec", "Hyte", "MSI", "ASUS", "APNX", "PCZZOI"];
+const CASE_COLOURS = ["Charcoal Black", "ChromaFlair", "Gunmetal Grey", "Satin Black", "Matte Black", "Snow White", "Black", "White", "Grey", "Gray", "Silver", "Red", "Blue"];
+
+function conciseCaseName(item: PriorityCaseItem) {
+  const title = item.name.replaceAll("–", "-").replace(/\s+/g, " ").trim();
+  const manufacturer = item.brand?.trim() || CASE_BRANDS.find(brand => title.toLowerCase().startsWith(brand.toLowerCase())) || "Case";
+  const colour = CASE_COLOURS.find(value => new RegExp(`\\b${value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(title));
+  let model = item.model?.trim();
+  if (!model) {
+    const withoutBrand = title.slice(manufacturer === "Case" ? 0 : manufacturer.length).trim();
+    model = withoutBrand
+      .split(/\s(?:Panoramic|Mid[- ]Tower|Full[- ]Tower|Compact|ATX|Micro[- ]ATX|PC Case|Gaming Case|Tempered|Charcoal|Black|White|Silver)\b|\s*[|,]\s*/i)[0]
+      .replace(/\s+-\s*$/, "")
+      .trim();
+  }
+  const parts = [manufacturer, model || undefined, colour].filter(Boolean);
+  return [...new Set(parts.map(value => value!.toLowerCase()))].map(key => parts.find(value => value!.toLowerCase() === key)).join(" · ");
 }
 
 function orderAndLabelAssets(items: Component3DAsset[], cases: PriorityCaseItem[]) {
@@ -188,7 +209,7 @@ function orderAndLabelAssets(items: Component3DAsset[], cases: PriorityCaseItem[
       return {
         ...asset,
         rank: matchedCase?.priority_3d_rank ?? asset.rank ?? null,
-        subject_name: matchedCase?.name ?? asset.subject_name ?? null,
+        subject_name: matchedCase ? conciseCaseName(matchedCase) : asset.subject_name ?? null,
       };
     });
 
@@ -718,18 +739,19 @@ export default function Components3DReviewPage() {
                       <button
                         key={asset.id}
                         onClick={() => setSelectedAsset(asset)}
-                        className={`rounded border overflow-hidden cursor-pointer transition hover:scale-105 relative flex flex-col ${selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""} ${statusColors[asset.status] || ""}`}
+                        className={`group rounded border overflow-hidden cursor-pointer transition hover:scale-105 relative flex flex-col ${selectedAsset?.id === asset.id ? "ring-2 ring-orange-400" : ""} ${statusColors[asset.status] || ""}`}
                         style={{ width: "120px", height: "120px", backgroundImage: asset.preview_image_ref ? `url('${asset.preview_image_ref}')` : asset.source_image_refs && asset.source_image_refs.length > 0 ? `url('${asset.source_image_refs[0]}')` : undefined, backgroundSize: "cover", backgroundPosition: "center", backgroundColor: "#1a3a52" }}
                       >
                         {/* Status badge overlay */}
                         {asset.glb_ref && (
-                          <div className={`absolute top-1 right-1 w-5 h-5 rounded-full ${statusIcon.color} flex items-center justify-center text-white text-[10px] font-bold shadow-lg`}>
+                          <div className={`absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 ${statusIcon.color}`}>
                             {statusIcon.icon}
                           </div>
                         )}
+                        {asset.rank && <div className="absolute left-1 top-1 rounded bg-black/80 px-1.5 py-0.5 text-[10px] font-bold text-white shadow">#{asset.rank}</div>}
                         <div className="flex-1"></div>
-                        <div className="w-full bg-black/70 text-center py-2 px-1">
-                          <div className="text-xs font-bold text-white">{asset.rank ? `#${asset.rank} ` : ""}{asset.subject_name || asset.family_key}</div>
+                        <div className="w-full translate-y-1 bg-black/75 px-1 py-1.5 text-center opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+                          <div className="line-clamp-2 text-[10px] font-semibold leading-tight text-white">{asset.subject_name || asset.family_key}</div>
                         </div>
                       </button>
                     );
@@ -771,9 +793,9 @@ export default function Components3DReviewPage() {
                 </button>
 
                 {/* Title overlay - top center */}
-                <div className="absolute top-0 left-0 right-0 flex justify-center pt-8 pointer-events-none z-10">
-                  <h1 className="text-5xl font-black text-white text-center drop-shadow-lg" style={{ textShadow: "0 2px 20px rgba(0,0,0,0.8)" }}>
-                    {selectedAsset.rank ? `#${selectedAsset.rank} ` : ""}{selectedAsset.subject_name || selectedAsset.family_key}
+                <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex justify-center px-20 pt-4">
+                  <h1 className="max-w-2xl rounded-md bg-black/45 px-3 py-1.5 text-center text-xl font-bold text-white drop-shadow-lg backdrop-blur-sm" style={{ textShadow: "0 2px 12px rgba(0,0,0,0.8)" }}>
+                    {selectedAsset.subject_name || selectedAsset.family_key}
                   </h1>
                 </div>
 
