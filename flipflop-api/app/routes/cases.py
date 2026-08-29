@@ -1,8 +1,10 @@
 """PC Case sourcing and 3D model management endpoints."""
 from datetime import datetime
+import os
 from pathlib import Path
 from uuid import uuid4
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
+import httpx
 from pydantic import BaseModel, Field, HttpUrl
 from sqlalchemy import select, and_, func, update
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -222,6 +224,68 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
         "candidates": candidates,
         "approved_selection": approved,
     }
+
+
+@router.get("/{case_id}/3d-reference-image-search")
+async def search_3d_reference_images(
+    case_id: int,
+    query: str = Query(min_length=2, max_length=180),
+    db: AsyncSession = Depends(get_db),
+):
+    """Search Google Images for owner-reviewed 3D reference candidates."""
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+
+    api_key = os.getenv("GOOGLE_CUSTOM_SEARCH_API_KEY", "").strip()
+    engine_id = os.getenv("GOOGLE_CUSTOM_SEARCH_ENGINE_ID", "").strip()
+    if not api_key or not engine_id:
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "Google Images search is not configured. Add "
+                "GOOGLE_CUSTOM_SEARCH_API_KEY and GOOGLE_CUSTOM_SEARCH_ENGINE_ID to flipflop-api/.env."
+            ),
+        )
+
+    params = {
+        "key": api_key,
+        "cx": engine_id,
+        "q": query,
+        "searchType": "image",
+        "safe": "active",
+        "num": 10,
+        "imgType": "photo",
+    }
+    try:
+        async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
+            response = await client.get("https://customsearch.googleapis.com/customsearch/v1", params=params)
+            response.raise_for_status()
+            payload = response.json()
+    except httpx.HTTPStatusError as exc:
+        detail = "Google Images rejected the search request"
+        try:
+            detail = exc.response.json().get("error", {}).get("message") or detail
+        except ValueError:
+            pass
+        raise HTTPException(status_code=502, detail=detail) from exc
+    except (httpx.HTTPError, ValueError) as exc:
+        raise HTTPException(status_code=502, detail=f"Google Images search failed: {exc}") from exc
+
+    results = []
+    for item in payload.get("items") or []:
+        image_url = item.get("link")
+        if not isinstance(image_url, str) or not image_url.startswith(("https://", "http://")):
+            continue
+        image_meta = item.get("image") or {}
+        results.append({
+            "url": image_url,
+            "source": "google",
+            "source_page": image_meta.get("contextLink"),
+            "label": item.get("title") or f"Google Images · {case.name}",
+            "thumbnail_url": image_meta.get("thumbnailLink") or image_url,
+        })
+    return {"query": query, "results": results}
 
 
 @router.post("/{case_id}/3d-reference-candidates/upload")
