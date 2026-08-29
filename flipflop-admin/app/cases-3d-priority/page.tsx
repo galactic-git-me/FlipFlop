@@ -47,6 +47,8 @@ interface ReferenceCandidateResponse {
   approved_selection?: { status?: string; images?: ReferenceCandidate[] };
 }
 
+const DIRECT_BACKEND_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4311").replace(/\/$/, "");
+
 const sourcingLabels: Array<[string, string]> = [
   ["manufacturer_3d", "Maker 3D"],
   ["third_party_3d", "Sketchfab / 3rd party"],
@@ -186,9 +188,12 @@ export default function Cases3DPriorityPage() {
     setError(null);
     setReferenceNotice("Generating the textured model. Keep this page open — Meshy can take up to 10 minutes. You will be taken to the approval viewer when it finishes.");
     try {
-      const response = await fetch(`/api/assets-3d/cases/${caseId}/generate`, {
+      // Meshy can take up to ten minutes. Calling the backend directly avoids
+      // Next's rewrite proxy terminating the long-lived connection.
+      const response = await fetch(`${DIRECT_BACKEND_URL}/api/assets-3d/cases/${caseId}/generate`, {
         method: "POST",
         headers: { "content-type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
           image_urls: selectedReferences.map(item => item.url),
           notes: "Generated only from the separately owner-approved four-picture set. Preserve the first picture as the texture and colour master; match case finish and illuminated RGB faithfully.",
