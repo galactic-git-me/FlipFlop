@@ -345,7 +345,7 @@ export default function Cases3DPriorityPage() {
         // rank 31) as well as the original frozen top-30 campaign.
         const response = await fetch("/api/cases/priority-for-3d?limit=100");
         const data = await readJsonResponse<PriorityCaseItem[]>(response);
-        setCases(data);
+        setCases(data.filter(caseItem => !/raspberry\s*pi|raspberrypi|\brpi\b/i.test(caseItem.name)));
 
         // Count how many already have models
         const withModels = await fetch("/api/cases/with-3d-models?limit=1000");
@@ -439,7 +439,7 @@ export default function Cases3DPriorityPage() {
             <p className="text-xs text-slate-500">{cases.length} cases</p>
           </div>
           <div className="overflow-x-auto rounded-xl border border-[#1e2d45] bg-[#0b121d]">
-            <table className="w-full min-w-[1180px] border-collapse text-left text-sm">
+            <table className="w-full min-w-[1100px] border-collapse text-left text-sm">
               <thead className="sticky top-0 z-10 bg-[#111b2a] text-[11px] uppercase tracking-wider text-slate-400">
                 <tr>
                   <th scope="col" className="w-16 px-4 py-3 text-center">Rank</th>
@@ -447,7 +447,6 @@ export default function Cases3DPriorityPage() {
                   <th scope="col" className="w-36 px-4 py-3">Manufacturer</th>
                   <th scope="col" className="w-28 px-4 py-3">Price</th>
                   <th scope="col" className="w-40 px-4 py-3">Product rating</th>
-                  <th scope="col" className="w-24 px-4 py-3">Batch</th>
                   <th scope="col" className="w-44 px-4 py-3">Compatible boards</th>
                   <th scope="col" className="px-4 py-3">Sourcing progress</th>
                   <th scope="col" className="w-52 px-4 py-3 text-right">Action</th>
@@ -481,7 +480,6 @@ export default function Cases3DPriorityPage() {
                           {compactCaseName(caseItem)}
                         </p>
                         <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
-                          <span>#{caseItem.bestseller_rank || "—"} bestseller</span>
                           {caseItem.keywords?.slice(0, 2).map(keyword => (
                             <span key={keyword} className="rounded bg-slate-700/50 px-1.5 py-0.5 text-[10px] text-slate-300">{keyword}</span>
                           ))}
@@ -516,7 +514,6 @@ export default function Cases3DPriorityPage() {
                       </div>
                     ) : <span className="text-slate-600">—</span>}
                   </td>
-                  <td className="px-4 py-3 align-middle text-slate-300">{caseItem.priority_3d_batch || "—"}</td>
                   <td className="px-4 py-3 align-middle">
                     {compatibleBoardFormats(caseItem).length ? (
                       <div className="flex flex-wrap gap-1">
@@ -556,7 +553,7 @@ export default function Cases3DPriorityPage() {
 
                   {referenceCaseId === caseItem.id && referenceData && (
                     <tr className="bg-slate-900/65">
-                      <td colSpan={9} className="px-6 py-5">
+                      <td colSpan={8} className="px-6 py-5">
                     <section aria-label={`Reference picture approval for ${caseItem.name}`}>
                       <div className="mb-3 rounded-md border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-100">
                         Choose exactly four clean pictures of the same empty chassis. They must show useful exterior angles and the interior, with no text panels or noisy backgrounds. Select the best colour/texture view first.

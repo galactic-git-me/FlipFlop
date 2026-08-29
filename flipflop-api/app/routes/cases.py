@@ -73,7 +73,9 @@ async def freeze_top_30_3d_campaign(db: AsyncSession = Depends(get_db)):
 
     existing = (
         await db.execute(
-            select(Case).where(Case.priority_3d_rank.isnot(None)).order_by(Case.priority_3d_rank)
+            select(Case)
+            .where(Case.priority_3d_rank.isnot(None), ~Case.name.ilike("%raspberry%"))
+            .order_by(Case.priority_3d_rank)
         )
     ).scalars().all()
     if existing:
@@ -82,7 +84,7 @@ async def freeze_top_30_3d_campaign(db: AsyncSession = Depends(get_db)):
     ranked = (
         await db.execute(
             select(Case)
-            .where(Case.has_3d_model == False)  # noqa: E712
+            .where(Case.has_3d_model == False, ~Case.name.ilike("%raspberry%"))  # noqa: E712
             .order_by(
                 Case.bestseller_rank.asc().nullslast(),
                 sql_case((Case.source_site == "Amazon", 0), else_=1),
@@ -367,7 +369,7 @@ async def get_cases_priority_for_3d(
     )
     result = await db.execute(
         select(Case)
-        .where(priority_filter)
+        .where(priority_filter, ~Case.name.ilike("%raspberry%"))
         .order_by(
             Case.priority_3d_rank.asc().nullslast() if frozen_exists else Case.bestseller_rank.asc().nullslast(),
             sql_case((Case.source_site == "Amazon", 0), else_=1),  # Amazon prioritized
