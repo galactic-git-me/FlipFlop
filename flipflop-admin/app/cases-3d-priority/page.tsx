@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles, ExternalLink, Upload, Eye } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -57,6 +57,62 @@ const sourcingLabels: Array<[string, string]> = [
   ["meshy_generation", "Meshy"],
   ["validation", "Validation"],
 ];
+
+const knownCaseBrands = [
+  "Fractal Design",
+  "Cooler Master",
+  "Thermaltake",
+  "SilverStone",
+  "be quiet!",
+  "Lian Li",
+  "Phanteks",
+  "Corsair",
+  "Antec",
+  "Asus",
+  "DeepCool",
+  "FOIFKIN",
+  "ANSAITE",
+  "PCZZOI",
+  "HYXN",
+  "Montech",
+  "NZXT",
+  "MSI",
+];
+
+const caseColours = [
+  "charcoal black",
+  "satin black",
+  "matte black",
+  "black",
+  "white",
+  "silver",
+  "grey",
+  "gray",
+  "red",
+  "blue",
+  "green",
+  "pink",
+];
+
+function compactCaseName(caseItem: PriorityCaseItem) {
+  const fullName = caseItem.name.replaceAll("™", "").replaceAll("®", "").trim();
+  const brand = caseItem.brand?.trim() || knownCaseBrands.find(candidate =>
+    fullName.toLocaleLowerCase().startsWith(candidate.toLocaleLowerCase()),
+  ) || "Unbranded";
+
+  const withoutBrand = fullName.slice(
+    fullName.toLocaleLowerCase().startsWith(brand.toLocaleLowerCase()) ? brand.length : 0,
+  ).trim();
+  const modelSource = caseItem.model?.trim() || withoutBrand;
+  const model = modelSource
+    .split(/\s(?:RS(?:120)?-?R?|ARGB|Panoramic|Charcoal|Tempered|Compact|ATX|mATX|Micro-ATX|Mid-Tower|Mid Tower|PC Case|Computer Case)\b|\s[–|]\s|\s-\s/i)[0]
+    .replace(/[,:;|–-]+$/g, "")
+    .trim() || "Case";
+  const lowerName = fullName.toLocaleLowerCase();
+  const colour = caseColours.find(candidate => new RegExp(`\\b${candidate}\\b`, "i").test(lowerName)) || "Colour unknown";
+
+  return `${brand}-${model}-${colour}`.toLocaleUpperCase();
+}
 
 function statusColour(status = "not_started") {
   if (["found", "complete"].includes(status)) return "border-emerald-500/40 bg-emerald-500/10 text-emerald-300";
@@ -339,95 +395,94 @@ export default function Cases3DPriorityPage() {
         </Card>
       ) : (
         <div className="space-y-3">
-          <p className="text-xs text-slate-500 uppercase">Next to create (prioritized by popularity):</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-xs font-medium uppercase tracking-wider text-slate-500">Next to create, ordered by popularity</p>
+            <p className="text-xs text-slate-500">{cases.length} cases</p>
+          </div>
+          <div className="overflow-x-auto rounded-xl border border-[#1e2d45] bg-[#0b121d]">
+            <table className="w-full min-w-[960px] border-collapse text-left text-sm">
+              <thead className="sticky top-0 z-10 bg-[#111b2a] text-[11px] uppercase tracking-wider text-slate-400">
+                <tr>
+                  <th scope="col" className="w-16 px-4 py-3 text-center">Rank</th>
+                  <th scope="col" className="px-4 py-3">Case</th>
+                  <th scope="col" className="w-28 px-4 py-3">Price</th>
+                  <th scope="col" className="w-28 px-4 py-3">Rating</th>
+                  <th scope="col" className="w-24 px-4 py-3">Batch</th>
+                  <th scope="col" className="px-4 py-3">Sourcing progress</th>
+                  <th scope="col" className="w-52 px-4 py-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#1e2d45]">
             {cases.map((caseItem, idx) => (
-              <Card key={caseItem.id} className="border-[#1e2d45] hover:border-[#2a3f5a] transition-colors">
-                <CardContent className="pt-4">
-                  <div className="flex gap-4">
-                    {/* Image */}
-                    {caseItem.image_url && (
-                      <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-[#0a1119]">
+              <Fragment key={caseItem.id}>
+                <tr className="transition-colors hover:bg-slate-800/35">
+                  <td className="px-4 py-3 text-center align-middle">
+                    <span className="inline-flex min-w-8 items-center justify-center rounded-md border border-purple-400/30 bg-purple-400/10 px-2 py-1 font-bold text-purple-300">
+                      {caseItem.priority_3d_rank || idx + 1}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 align-middle">
+                    <div className="flex min-w-[260px] items-center gap-3">
+                      <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded-md border border-slate-700 bg-[#0a1119]">
+                        {caseItem.image_url ? (
                         <img
                           src={caseItem.image_url}
-                          alt=""
-                          className="w-full h-full object-cover"
+                          alt={`${caseItem.name} product thumbnail`}
+                          className="h-full w-full object-cover"
                         />
+                        ) : <Box className="m-4 h-5 w-5 text-slate-600" />}
                       </div>
-                    )}
-
-                    {/* Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2 mb-2">
-                        <div className="min-w-0">
-                          <h3 className="font-semibold text-slate-100 text-sm line-clamp-2">
-                            {caseItem.name}
-                          </h3>
-                          <p className="text-xs text-slate-500 mt-0.5">
-                            #{caseItem.bestseller_rank ? caseItem.bestseller_rank : "—"} bestseller
-                            {caseItem.priority_3d_batch ? ` · Batch ${caseItem.priority_3d_batch}` : ""}
-                          </p>
-                        </div>
-                        <div className="text-right flex-shrink-0">
-                          <div className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-purple-400/10 border border-purple-400/30">
-                            <span className="text-sm font-bold text-purple-400">{caseItem.priority_3d_rank || idx + 1}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Stats */}
-                      <div className="grid grid-cols-2 gap-2 text-xs mb-2">
-                        <div>
-                          <span className="text-slate-600">Price:</span>
-                          <div className="font-semibold text-[#00dc82]">{formatCurrency(caseItem.price)}</div>
-                        </div>
-                        {caseItem.rating && (
-                          <div>
-                            <span className="text-slate-600">Rating:</span>
-                            <div className="font-semibold text-amber-400">{caseItem.rating.toFixed(1)}★</div>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Keywords */}
-                      {caseItem.keywords && caseItem.keywords.length > 0 && (
-                        <div className="flex flex-wrap gap-1">
-                          {caseItem.keywords.slice(0, 2).map((kw) => (
-                            <span
-                              key={kw}
-                              className="text-[10px] px-1.5 py-0.5 rounded bg-slate-700/50 text-slate-300"
-                            >
-                              {kw}
-                            </span>
+                      <div className="min-w-0">
+                        <p
+                          className="max-w-md cursor-help font-semibold text-slate-100 decoration-slate-600 underline-offset-4 hover:underline"
+                          title={caseItem.name}
+                        >
+                          {compactCaseName(caseItem)}
+                        </p>
+                        <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
+                          <span>#{caseItem.bestseller_rank || "—"} bestseller</span>
+                          {caseItem.keywords?.slice(0, 2).map(keyword => (
+                            <span key={keyword} className="rounded bg-slate-700/50 px-1.5 py-0.5 text-[10px] text-slate-300">{keyword}</span>
                           ))}
                         </div>
-                      )}
-
-                      <div className="mt-3 flex flex-wrap gap-1.5" aria-label="3D sourcing progress">
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 align-middle font-semibold tabular-nums text-[#00dc82]">{formatCurrency(caseItem.price)}</td>
+                  <td className="px-4 py-3 align-middle tabular-nums">
+                    {caseItem.rating ? <span className="font-semibold text-amber-300">{caseItem.rating.toFixed(1)} <span aria-hidden="true">★</span><span className="sr-only"> stars</span></span> : <span className="text-slate-600">—</span>}
+                  </td>
+                  <td className="px-4 py-3 align-middle text-slate-300">{caseItem.priority_3d_batch || "—"}</td>
+                  <td className="px-4 py-3 align-middle">
+                    <div className="flex max-w-md flex-wrap gap-1.5" aria-label="3D sourcing progress">
                         {sourcingLabels.map(([key, label]) => {
                           const status = caseItem.sourcing_3d_evidence?.stages?.[key]?.status || "not_started";
                           return (
                             <span key={key} title={`${label}: ${status.replaceAll("_", " ")}`} className={`rounded border px-1.5 py-0.5 text-[10px] ${statusColour(status)}`}>
-                              {label}: {status.replaceAll("_", " ")}
+                              {label}
                             </span>
                           );
                         })}
                       </div>
+                  </td>
+                  <td className="px-4 py-3 text-right align-middle">
                       <Button
                         type="button"
                         variant="outline"
-                        className="mt-3 w-full cursor-pointer border-cyan-500/40 text-cyan-200 hover:bg-cyan-500/10"
+                        className="cursor-pointer border-cyan-500/40 text-cyan-200 hover:bg-cyan-500/10 focus-visible:ring-2 focus-visible:ring-cyan-300"
                         onClick={() => void openReferenceSelection(caseItem.id)}
                         disabled={referenceBusy}
                       >
                         <Images className="mr-2 h-4 w-4" />
-                        {referenceCaseId === caseItem.id ? "Close picture selection" : "Review source pictures"}
+                        {referenceCaseId === caseItem.id ? "Close pictures" : "Review pictures"}
                       </Button>
-                    </div>
-                  </div>
+                  </td>
+                </tr>
 
                   {referenceCaseId === caseItem.id && referenceData && (
-                    <section className="mt-4 border-t border-slate-700 pt-4" aria-label={`Reference picture approval for ${caseItem.name}`}>
+                    <tr className="bg-slate-900/65">
+                      <td colSpan={7} className="px-6 py-5">
+                    <section aria-label={`Reference picture approval for ${caseItem.name}`}>
                       <div className="mb-3 rounded-md border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-100">
                         Choose exactly four clean pictures of the same empty chassis. They must show useful exterior angles and the interior, with no text panels or noisy backgrounds. Select the best colour/texture view first.
                       </div>
@@ -507,10 +562,13 @@ export default function Cases3DPriorityPage() {
                       </div>
                       {referenceNotice && <p className="mt-2 text-xs text-emerald-300" role="status">{referenceNotice}</p>}
                     </section>
+                      </td>
+                    </tr>
                   )}
-                </CardContent>
-              </Card>
+              </Fragment>
             ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
