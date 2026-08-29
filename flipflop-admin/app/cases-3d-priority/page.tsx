@@ -94,18 +94,21 @@ const caseColours = [
 
 function caseManufacturer(caseItem: PriorityCaseItem) {
   const fullName = caseItem.name.replaceAll("™", "").replaceAll("®", "").trim();
-  return caseItem.brand?.trim() || knownCaseBrands.find(candidate =>
-    fullName.toLocaleLowerCase().startsWith(candidate.toLocaleLowerCase()),
-  ) || "Unbranded";
+  return caseItem.brand?.trim() || knownCaseBrands.find(candidate => {
+    const escapedBrand = candidate.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp(`(^|[^a-z0-9])${escapedBrand}(?=$|[^a-z0-9])`, "i").test(fullName);
+  }) || "Unbranded";
 }
 
 function compactCaseName(caseItem: PriorityCaseItem) {
   const fullName = caseItem.name.replaceAll("™", "").replaceAll("®", "").trim();
   const brand = caseManufacturer(caseItem);
-
-  const withoutBrand = fullName.slice(
-    fullName.toLocaleLowerCase().startsWith(brand.toLocaleLowerCase()) ? brand.length : 0,
-  ).trim();
+  const brandIndex = fullName.toLocaleLowerCase().indexOf(brand.toLocaleLowerCase());
+  const withoutBrand = brandIndex === 0
+    ? fullName.slice(brand.length).trim()
+    : brandIndex > 0
+      ? fullName.slice(0, brandIndex).trim()
+      : fullName;
   const modelSource = caseItem.model?.trim() || withoutBrand;
   const model = modelSource
     .split(/\s(?:RS(?:120)?-?R?|ARGB|Panoramic|Charcoal|Tempered|Compact|ATX|mATX|Micro-ATX|Mid-Tower|Mid Tower|PC Case|Computer Case)\b|\s[–|]\s|\s-\s/i)[0]
