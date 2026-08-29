@@ -632,6 +632,10 @@ async def generate_case_asset(
         source_name=f"Meshy AI multi-image recreation (task {result.task_id})",
         commercial_use_approved=False,
         redistribution_approved=False,
+        # Create the one-model review batch atomically with the asset. The
+        # browser may disconnect during a long Meshy request, but a completed
+        # draft must never be left undiscoverable and unreviewable.
+        review_batch_id=str(uuid4()),
     )
     db.add(asset)
 

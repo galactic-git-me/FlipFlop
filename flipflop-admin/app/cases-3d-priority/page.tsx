@@ -199,16 +199,20 @@ export default function Cases3DPriorityPage() {
           notes: "Generated only from the separately owner-approved four-picture set. Preserve the first picture as the texture and colour master; match case finish and illuminated RGB faithfully.",
         }),
       });
-      const asset = await readJsonResponse<{ id: number; detail?: string }>(response);
+      const asset = await readJsonResponse<{ id: number; review_batch_id?: string | null; detail?: string }>(response);
       if (!response.ok) throw new Error(asset.detail || "3D generation failed");
-      const batchResponse = await fetch("/api/assets-3d/review-batches", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ asset_ids: [asset.id] }),
-      });
-      const batch = await readJsonResponse<{ batch_id: string; detail?: string }>(batchResponse);
-      if (!batchResponse.ok) throw new Error(batch.detail || "Model generated, but its review batch could not be created");
-      const reviewUrl = `/components-3d-review?batch=${batch.batch_id}`;
+      let batchId = asset.review_batch_id;
+      if (!batchId) {
+        const batchResponse = await fetch("/api/assets-3d/review-batches", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ asset_ids: [asset.id] }),
+        });
+        const batch = await readJsonResponse<{ batch_id: string; detail?: string }>(batchResponse);
+        if (!batchResponse.ok) throw new Error(batch.detail || "Model generated, but its review batch could not be created");
+        batchId = batch.batch_id;
+      }
+      const reviewUrl = `/components-3d-review?batch=${batchId}`;
       setGeneratedReviewUrl(reviewUrl);
       window.localStorage.setItem(`case-3d-review-${caseId}`, reviewUrl);
       setReferenceNotice("Draft generated successfully. Opening the 3D approval viewer…");
