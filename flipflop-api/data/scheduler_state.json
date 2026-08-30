@@ -1,48 +1,48 @@
 {
   "ram_watcher": {
-    "last_success_at": "2026-08-30T19:12:59.447710+00:00"
+    "last_success_at": "2026-08-30T19:27:59.936094+00:00"
   },
   "manual_build_deferred_publish": {
-    "last_success_at": "2026-08-30T19:12:59.457589+00:00"
+    "last_success_at": "2026-08-30T19:27:59.950901+00:00"
   },
   "deferred_publish": {
-    "last_success_at": "2026-08-30T19:12:59.469494+00:00"
+    "last_success_at": "2026-08-30T19:27:59.966246+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-08-30T19:18:59.665184+00:00"
+    "last_success_at": "2026-08-30T19:23:59.624304+00:00"
   },
   "ai_build_generator": {
     "last_success_at": "2026-08-30T18:38:43.473013+00:00"
   },
   "compliant_market_ingestion": {
-    "last_success_at": "2026-08-30T18:27:59.240171+00:00"
+    "last_success_at": "2026-08-30T19:27:59.240094+00:00"
   },
   "manual_build_recreate_cycle": {
-    "last_success_at": "2026-08-30T18:28:00.037986+00:00"
+    "last_success_at": "2026-08-30T19:27:59.950245+00:00"
   },
   "offer_poll": {
-    "last_success_at": "2026-08-30T18:57:59.754820+00:00"
+    "last_success_at": "2026-08-30T19:27:59.948178+00:00"
   },
   "retrain_checkpoint_watchdog": {
-    "last_success_at": "2026-08-30T18:28:00.039916+00:00"
+    "last_success_at": "2026-08-30T19:27:59.945145+00:00"
   },
   "outcome_capture": {
-    "last_success_at": "2026-08-30T18:28:00.053306+00:00"
+    "last_success_at": "2026-08-30T19:27:59.965689+00:00"
   },
   "recreate_cycle": {
-    "last_success_at": "2026-08-30T18:28:00.047415+00:00"
+    "last_success_at": "2026-08-30T19:27:59.965078+00:00"
   },
   "playbook_evolution": {
-    "last_success_at": "2026-08-30T18:28:00.503079+00:00"
+    "last_success_at": "2026-08-30T19:28:00.365977+00:00"
   },
   "catalogue_pipeline": {
-    "last_success_at": "2026-08-30T18:28:00.539879+00:00"
+    "last_success_at": "2026-08-30T19:28:00.392721+00:00"
   },
   "message_poll": {
-    "last_success_at": "2026-08-30T18:58:00.152357+00:00"
+    "last_success_at": "2026-08-30T19:28:00.693635+00:00"
   },
   "manual_build_offer_poll": {
-    "last_success_at": "2026-08-30T18:58:00.218002+00:00"
+    "last_success_at": "2026-08-30T19:28:00.797455+00:00"
   },
   "case_content_sourcing": {
     "last_success_at": "2026-08-30T18:58:20.861858+00:00"
