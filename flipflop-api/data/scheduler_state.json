@@ -9,7 +9,7 @@
     "last_success_at": "2026-08-30T06:55:57.963947+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-08-30T06:56:58.210286+00:00"
+    "last_success_at": "2026-08-30T07:01:58.489934+00:00"
   },
   "ai_build_generator": {
     "last_success_at": "2026-08-30T06:52:10.517351+00:00"
@@ -64,5 +64,8 @@
   },
   "markdown_event_scan": {
     "last_success_at": "2026-08-30T05:40:58.934658+00:00"
+  },
+  "catalogue_digest": {
+    "last_success_at": "2026-08-30T07:00:00.006054+00:00"
   }
 }
