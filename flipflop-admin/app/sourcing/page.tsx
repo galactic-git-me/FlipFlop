@@ -313,8 +313,8 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
     const fetchStatus = async () => {
       try {
         const [res, queueRes] = await Promise.all([
-          fetch("/api/gem-radar/pipeline-status"),
-          fetch("/api/gem-radar/queue-items"),
+          fetch("/api/gem-radar/pipeline-status", { cache: "no-store" }),
+          fetch("/api/gem-radar/queue-items", { cache: "no-store" }),
         ]);
         if (res.ok) {
           const data = await res.json();
@@ -2265,9 +2265,9 @@ function SourcingPageInner() {
       // the next scheduled refresh can recover normally.
       const signal = AbortSignal.timeout(15_000);
       const [listingsRes, componentRes, queueRes] = await Promise.all([
-        fetch(`/api/gem-radar/scored-listings-latest-run`, { signal }),
+        fetch(`/api/gem-radar/scored-listings-latest-run`, { cache: "no-store", signal }),
         fetch(`/api/gem-radar/gem-by-component`, { cache: "no-store", signal }),
-        fetch(`/api/gem-radar/queue-status`, { signal }),
+        fetch(`/api/gem-radar/queue-status`, { cache: "no-store", signal }),
       ]);
 
       if (listingsRes.ok) {

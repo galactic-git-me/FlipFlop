@@ -544,7 +544,7 @@ export const api = {
     currentGem: () => request<unknown>("/gem-radar/current-gem"),
     // Whole-DB market snapshot (all currently-active listings, not just the
     // latest scan run) — same shape as the Current Scan Run panel's stats.
-    marketSnapshot: () => request<MarketSnapshot>("/gem-radar/market-snapshot"),
+    marketSnapshot: () => request<MarketSnapshot>("/gem-radar/market-snapshot", { cache: "no-store" }),
     // Real scan cadence derived from actual observation activity, since
     // there's no backend-scheduled "next scan" job (scanning happens
     // client-side in the browser extension) — see the endpoint's docstring.
