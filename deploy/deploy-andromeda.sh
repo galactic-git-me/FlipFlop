@@ -49,13 +49,13 @@ if [[ -n "$OLD_IMAGE" ]]; then
 fi
 
 log "Building production API"
-docker compose -f "$COMPOSE_FILE" build api
+docker compose -f "$COMPOSE_FILE" build api gemradar-worker
 
 log "Applying database migrations"
 docker compose -f "$COMPOSE_FILE" run --rm api alembic upgrade head
 
 log "Starting production API"
-docker compose -f "$COMPOSE_FILE" up -d --no-deps api
+docker compose -f "$COMPOSE_FILE" up -d --no-deps api gemradar-worker
 
 healthy=0
 for _ in $(seq 1 30); do

@@ -2248,6 +2248,18 @@ class QueueStatusResponse(BaseModel):
     completed: int
     failed: int
 
+class QueueItemResponse(BaseModel):
+    id: int
+    search_run_id: str
+    search_id: str
+    query: str
+    status: str
+    listings_count: int
+    last_attempt_at: datetime
+
+class QueueItemsResponse(BaseModel):
+    items: list[QueueItemResponse]
+
 
 @router.get("/queue-status", response_model=QueueStatusResponse)
 async def queue_status(
@@ -2256,6 +2268,18 @@ async def queue_status(
 ) -> QueueStatusResponse:
     stats = await SubmissionQueueService.get_queue_stats(db)
     return QueueStatusResponse(**stats)
+
+@router.get("/queue-items", response_model=QueueItemsResponse)
+async def queue_items(
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+) -> QueueItemsResponse:
+    rows = await SubmissionQueueService.get_live_items(db)
+    return QueueItemsResponse(items=[QueueItemResponse(
+        id=row.id, search_run_id=row.search_run_id, search_id=row.search_id,
+        query=row.query, status=row.status, listings_count=len(row.listings_json or []),
+        last_attempt_at=row.last_attempt_at,
+    ) for row in rows])
 
 
 class SweepCompleteResponse(BaseModel):

@@ -264,3 +264,14 @@ class SubmissionQueueService:
             "completed": counts.get("completed", 0),
             "failed": counts.get("failed", 0),
         }
+
+    @staticmethod
+    async def get_live_items(db: AsyncSession, limit: int = 100) -> list[SubmissionQueue]:
+        """Return lightweight metadata for work still visible to operators."""
+        result = await db.execute(
+            select(SubmissionQueue)
+            .where(SubmissionQueue.status.in_(("pending", "processing")))
+            .order_by(SubmissionQueue.status.desc(), SubmissionQueue.last_attempt_at)
+            .limit(limit)
+        )
+        return list(result.scalars().all())

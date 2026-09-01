@@ -95,6 +95,12 @@ services:
       OLLAMA_BASE_URL: ""
       OLLAMA_MODEL: disabled-on-web-tier
     command: ["uvicorn", "app.gem_radar_standalone:app", "--host", "0.0.0.0", "--port", "8000"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/openapi.json"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
 volumes:
   flipflop_production_postgres:

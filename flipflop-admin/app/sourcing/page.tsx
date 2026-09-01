@@ -87,6 +87,13 @@ interface QueueStatus {
   failed: number;
 }
 
+interface QueueItem {
+  id: number;
+  query: string;
+  status: "pending" | "processing";
+  listings_count: number;
+}
+
 interface ScanProgress {
   searchId: string;
   query: string;
@@ -297,6 +304,7 @@ function formatElapsedTime(seconds: number): string {
 
 function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null }) {
   const [status, setStatus] = useState<PipelineStatusResponse | null>(null);
+  const [queueItems, setQueueItems] = useState<QueueItem[]>([]);
   const [clientElapsed, setClientElapsed] = useState(0);
   const [displayedScans, setDisplayedScans] = useState<ScanProgress[]>([]);
   const [lastRunLength, setLastRunLength] = useState(0);
@@ -304,7 +312,10 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
   useEffect(() => {
     const fetchStatus = async () => {
       try {
-        const res = await fetch("/api/gem-radar/pipeline-status");
+        const [res, queueRes] = await Promise.all([
+          fetch("/api/gem-radar/pipeline-status"),
+          fetch("/api/gem-radar/queue-items"),
+        ]);
         if (res.ok) {
           const data = await res.json();
           setStatus(data);
@@ -335,6 +346,10 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             );
             setClientElapsed(0);
           }
+        }
+        if (queueRes.ok) {
+          const queueData = await queueRes.json();
+          setQueueItems(queueData.items ?? []);
         }
       } catch (error) {
         console.error("Error fetching pipeline status:", error);
