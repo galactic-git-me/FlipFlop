@@ -266,45 +266,7 @@ async def pipeline_status_endpoint(
     """Live snapshot of what /scans is doing right now — powers the
     Sourcing Dashboard's pipeline diagram. Ephemeral, in-memory (see
     app/gem_radar/pipeline_status.py); resets on API restart."""
-    snapshot = await pipeline_status.snapshot(db)
-    # The queue worker runs in a separate process, so it cannot update the
-    # API process's ephemeral pipeline_status object.  Keep the original
-    # response shape/card rendering, but hydrate activeScans from the shared
-    # database whenever the in-memory view is empty.
-    if not snapshot.get("activeScans"):
-        live_items = await SubmissionQueueService.get_live_items(db, limit=500)
-        grouped: dict[tuple[str, str], dict] = {}
-        for row in live_items:
-            key = (row.search_id, row.query)
-            scan = grouped.setdefault(key, {
-                "searchId": row.search_id,
-                "query": row.query,
-                "elapsedSeconds": 0,
-                "activeSubmissions": 0,
-                "totalListings": 0,
-                "ingestedCount": 0,
-                "ingestedNewCount": 0,
-                "cpkAssignedCount": 0,
-                "marketPricedCount": 0,
-                "classifiedCount": 0,
-                "processedPercent": 0,
-                "excludedAuctionCount": 0,
-                "byVendor": {},
-                "isComplete": False,
-            })
-            scan["totalListings"] += len(row.listings_json or [])
-            if row.status == "processing":
-                scan["activeSubmissions"] += 1
-        snapshot["activeScans"] = list(grouped.values())
-        snapshot["totalsAcrossActive"] = {
-            "listings": sum(s["totalListings"] for s in snapshot["activeScans"]),
-            "ingestedCount": 0,
-            "cpkAssignedCount": 0,
-            "classifiedInternalCount": 0,
-            "marketPricedCount": 0,
-            "processedCount": 0,
-        }
-    return snapshot
+    return await pipeline_status.snapshot(db)
 
 
 @router.get("/listings")
