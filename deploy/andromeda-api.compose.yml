@@ -66,6 +66,36 @@ services:
       retries: 12
       start_period: 30s
 
+  # Keep queue processing separate from the web tier. The API intentionally
+  # runs WEB_ONLY=true, so this service is the process that claims and drains
+  # extension submissions from submission_queue.
+  gemradar-worker:
+    build:
+      context: ../flipflop-api
+      dockerfile: Dockerfile
+      target: backend
+    container_name: flipflop-production-gemradar-worker
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    env_file:
+      - path: ../.env.local
+        required: true
+      - path: ../flipflop-api/.env
+        required: false
+    environment:
+      APP_ENV: production
+      WEB_ONLY: "false"
+      DATABASE_URL: postgresql+asyncpg://flipper:flipper@postgres:5432/pcflipper
+      SYNC_DATABASE_URL: postgresql://flipper:flipper@postgres:5432/pcflipper
+      REDIS_URL: redis://redis:6379/0
+      OLLAMA_BASE_URL: ""
+      OLLAMA_MODEL: disabled-on-web-tier
+    command: ["uvicorn", "app.gem_radar_standalone:app", "--host", "0.0.0.0", "--port", "8000"]
+
 volumes:
   flipflop_production_postgres:
   flipflop_production_redis:
