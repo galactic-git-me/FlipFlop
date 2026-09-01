@@ -12,7 +12,7 @@ COPY . .
 EXPOSE 3000
 
 ENV NODE_ENV=development
-ENV NEXT_PUBLIC_API_URL=http://andromeda-ts:18000
+ENV NEXT_PUBLIC_API_URL=https://admin.theflipflop.shop
 
 # Development: run next dev for hot reload
 CMD ["npm", "run", "dev"]

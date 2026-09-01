@@ -51,7 +51,8 @@ services:
       OLLAMA_BASE_URL: ""
       OLLAMA_MODEL: disabled-on-web-tier
       FRONTEND_URL: https://www.theflipflop.shop
-      ADMIN_FRONTEND_URL: https://admin.theflipflop.shop
+      # OAuth is completed by the local admin UI in the operator's browser.
+      ADMIN_FRONTEND_URL: http://localhost:4312
       EBAY_OAUTH_CALLBACK_URL: https://www.theflipflop.shop/api/ebay/oauth/callback
       EBAY_PRODUCTION_PAYMENT_POLICY_ID: "260999533010"
       EBAY_PRODUCTION_RETURN_POLICY_ID: "260999539010"
