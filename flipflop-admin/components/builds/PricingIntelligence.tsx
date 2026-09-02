@@ -76,7 +76,7 @@ type PricingData = {
     recommended_listing_price: number;
   };
   build_condition: string;
-  condition_cohorts: Record<string, { count: number; median: number | null; exact_spec_count: number; used_for_valuation: boolean }>;
+  condition_cohorts: Record<string, { count: number; median: number | null; same_identity_count?: number; used_for_valuation: boolean }>;
   excluded_comparable_count: number;
   component_condition_profile: { components: number; known_condition: number; with_warranty: number; with_proof_of_purchase: number; with_original_packaging: number };
   calibration: { completed_sales: number; offer_headroom_pct: number; warranty_reserve_pct: number; effective_fee_rate_pct: number; basis: string };
@@ -511,7 +511,7 @@ export function PricingIntelligence({
             <div key={condition} className={`rounded-lg border p-3 ${cohort.used_for_valuation ? "border-violet-300/35 bg-violet-300/[0.08]" : "border-white/[0.07] bg-black/15"}`}>
               <div className="flex items-center justify-between gap-2"><span className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">{condition.replaceAll("_", " ")}</span>{cohort.used_for_valuation && <span className="rounded bg-violet-300/15 px-1.5 py-0.5 text-[9px] font-bold uppercase text-violet-200">Used</span>}</div>
               <p className="mt-2 text-lg font-bold text-slate-100">{cohort.median == null ? "—" : formatCurrency(cohort.median)}</p>
-              <p className="mt-1 text-[10px] text-slate-500">{cohort.count} sold · {cohort.exact_spec_count} exact full spec</p>
+              <p className="mt-1 text-[10px] text-slate-500">{cohort.count} sold · {cohort.same_identity_count ?? cohort.count} same CPU/GPU</p>
             </div>
           ))}
         </div>

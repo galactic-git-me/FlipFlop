@@ -596,7 +596,9 @@ async def submit_build_sold_comps(payload: BuildSoldCompSubmit) -> BuildSoldComp
             title_key = re.sub(r"[^a-z0-9]", "", comp.title.lower())
             has_cpu = bool(cpu_key and cpu_key in title_key)
             has_gpu = bool(gpu_key and gpu_key in title_key)
-            is_pc = any(term in comp.title.lower() for term in (" pc", "desktop", "gaming computer"))
+            is_pc = any(term in comp.title.lower() for term in (
+                " pc", "desktop", "gaming computer", "gaming system", "gaming rig", "tower",
+            ))
             if comp.listing_type == "auction" or not is_pc or not (has_cpu and has_gpu) or comp.current_delivered_price < 400:
                 skipped += 1
                 continue
@@ -838,7 +840,11 @@ async def get_build_pricing(
         name: {
             "count": len(items),
             "median": round(statistics.median(item.price for item in items), 2) if items else None,
-            "exact_spec_count": sum(item.match_quality == "exact major specification" for item in items),
+            # Every item in a cohort has already passed the exact CPU + GPU
+            # identity filter. Motherboard/RAM/storage are rarely present in
+            # eBay titles, so using the old full-spec label made real matches
+            # look like zero matches.
+            "same_identity_count": len(items),
             "used_for_valuation": name == valuation_condition,
         }
         for name, items in cohorts.items()
