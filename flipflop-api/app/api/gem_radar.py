@@ -272,6 +272,9 @@ async def pipeline_status_endpoint(
     # response shape/card rendering, but hydrate activeScans from the shared
     # database whenever the in-memory view is empty.
     if not snapshot.get("activeScans"):
+        from sqlalchemy import text
+        from app.gem_radar.cpk_market import MIN_LISTINGS_FOR_SETTLED_PRICE
+
         live_items = await SubmissionQueueService.get_live_items(db, limit=500)
         grouped: dict[tuple[str, str], dict] = {}
         for row in live_items:
@@ -291,18 +294,82 @@ async def pipeline_status_endpoint(
                 "excludedAuctionCount": 0,
                 "byVendor": {},
                 "isComplete": False,
+                "searchRunIds": set(),
             })
             scan["totalListings"] += len(row.listings_json or [])
+            scan["searchRunIds"].add(row.search_run_id)
             if row.status == "processing":
                 scan["activeSubmissions"] += 1
+
+        # The queue worker runs in a different process from this API. Its
+        # in-memory counters are therefore not visible here, but the listing
+        # observations and enrichment records are shared and durable. Hydrate
+        # each active scan from those rows so a restart never leaves the
+        # dashboard claiming that it is processing zero listings.
+        run_id_to_scan = {
+            run_id: scan
+            for scan in grouped.values()
+            for run_id in scan["searchRunIds"]
+        }
+        run_ids = list(run_id_to_scan)
+        if run_ids:
+            progress_rows = await db.execute(
+                text(
+                    """
+                    SELECT
+                        o.search_run_id,
+                        COUNT(DISTINCT o.listing_id) AS ingested_count,
+                        COUNT(DISTINCT o.listing_id) FILTER (WHERE lc.cpk IS NOT NULL) AS cpk_count,
+                        COUNT(DISTINCT o.listing_id) FILTER (
+                            WHERE mp.median_price IS NOT NULL
+                              AND mp.listing_count >= :min_listings
+                        ) AS priced_count,
+                        COUNT(DISTINCT o.listing_id) FILTER (
+                            WHERE sl.classification IS NOT NULL
+                        ) AS classified_count
+                    FROM gem_radar_listing_observations o
+                    LEFT JOIN gem_radar_listing_cpk lc ON lc.listing_id = o.listing_id
+                    LEFT JOIN gem_radar_cpk_market_price mp ON mp.cpk = lc.cpk
+                    LEFT JOIN gem_radar_scored_listings sl ON sl.listing_id = o.listing_id
+                    WHERE o.search_run_id = ANY(:run_ids)
+                    GROUP BY o.search_run_id
+                    """
+                ),
+                {"run_ids": run_ids, "min_listings": MIN_LISTINGS_FOR_SETTLED_PRICE},
+            )
+            for run_id, ingested, cpk, priced, classified in progress_rows:
+                scan = run_id_to_scan[run_id]
+                scan["ingestedCount"] += ingested
+                scan["cpkAssignedCount"] += cpk
+                scan["marketPricedCount"] += priced
+                scan["classifiedCount"] += classified
+
+        for scan in grouped.values():
+            # Completed queue rows intentionally discard their payload. The
+            # DB observation total is the best durable measure of completed
+            # work; outstanding payloads represent the work still to do.
+            scan["totalListings"] += scan["ingestedCount"]
+            processed = max(
+                scan["cpkAssignedCount"],
+                scan["marketPricedCount"],
+                scan["classifiedCount"],
+            )
+            scan["processedPercent"] = round(
+                (processed / scan["totalListings"] * 100) if scan["totalListings"] else 0,
+                1,
+            )
+            del scan["searchRunIds"]
         snapshot["activeScans"] = list(grouped.values())
         snapshot["totalsAcrossActive"] = {
             "listings": sum(s["totalListings"] for s in snapshot["activeScans"]),
-            "ingestedCount": 0,
-            "cpkAssignedCount": 0,
-            "classifiedInternalCount": 0,
-            "marketPricedCount": 0,
-            "processedCount": 0,
+            "ingestedCount": sum(s["ingestedCount"] for s in snapshot["activeScans"]),
+            "cpkAssignedCount": sum(s["cpkAssignedCount"] for s in snapshot["activeScans"]),
+            "classifiedInternalCount": sum(s["classifiedCount"] for s in snapshot["activeScans"]),
+            "marketPricedCount": sum(s["marketPricedCount"] for s in snapshot["activeScans"]),
+            "processedCount": sum(
+                max(s["cpkAssignedCount"], s["marketPricedCount"], s["classifiedCount"])
+                for s in snapshot["activeScans"]
+            ),
         }
     return snapshot
 
