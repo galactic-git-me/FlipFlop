@@ -222,7 +222,11 @@ function Ensure-EbayCdpBrowser {
     Write-Host "[*] Checking eBay CDP browser on port 9222..." -ForegroundColor Cyan
 
     $chromeExe = "C:\Program Files\Google\Chrome\Application\chrome.exe"
-    $profileDir = Join-Path $projectRoot "flipflop-api\experiments\.chrome-cdp-profile"
+    # This is a clean, persistent Chrome profile solely for eBay.  It is not
+    # Playwright's Chromium and does not share the user's everyday cookies or
+    # extensions, which makes Google OAuth behave like a fresh Incognito
+    # session while allowing eBay's signed-in session to persist.
+    $profileDir = Join-Path $projectRoot "flipflop-api\data\ebay-cdp-profile"
     $checkScript = Join-Path $projectRoot "flipflop-api\.venv\Scripts\python.exe"
 
     if (-not (Test-Path $chromeExe)) {
@@ -242,7 +246,9 @@ function Ensure-EbayCdpBrowser {
         Write-Host "[*] Launching eBay CDP browser (port 9222)..." -ForegroundColor Cyan
         Start-Process -FilePath $chromeExe -ArgumentList @(
             "--remote-debugging-port=9222",
-            "--user-data-dir=`"$profileDir`""
+            "--user-data-dir=`"$profileDir`"",
+            "--new-window",
+            "https://www.ebay.co.uk/myb/WatchList"
         )
         Start-Sleep -Seconds 3
     } else {

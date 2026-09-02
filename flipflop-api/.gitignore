@@ -27,6 +27,7 @@ Thumbs.db
 # session cookies (eBay/AliExpress/Temu/Vinted) - must never be tracked
 .fb-profile/
 .chrome-cdp-profile/
+/data/ebay-cdp-profile/
 BrowserMetrics/
 DeferredBrowserMetrics/
 /data/uploads/
