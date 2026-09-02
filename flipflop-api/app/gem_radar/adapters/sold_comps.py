@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import re
 import os
+import json
 import random
 import asyncio
 import time
@@ -50,6 +51,10 @@ class SoldCompsResult:
     available: bool
     comps: list[SoldComp] = field(default_factory=list)
     unavailable_reason: str | None = None
+
+
+class EbayLoginRequired(RuntimeError):
+    """Raised when sold-comps retrieval needs a human eBay sign-in."""
 
 
 class SoldCompsAdapter(ABC):
@@ -328,6 +333,13 @@ class PlaywrightSoldCompsAdapter(SoldCompsAdapter):
         "confirm your identity",
         "robot check",
     )
+    _EBAY_ACCOUNT_CHECK_URL = "https://www.ebay.co.uk/myb/WatchList"
+    _LOGIN_MARKERS = (
+        "signin.ebay.",
+        "sign in or register | ebay",
+        "sign in to continue",
+        '"pagename":"signin',
+    )
 
     _STEALTH_JS = """
 Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
@@ -341,6 +353,8 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
             if not comps:
                 return SoldCompsResult(available=False, unavailable_reason="No comparable sold listings found")
             return SoldCompsResult(available=True, comps=comps)
+        except EbayLoginRequired as exc:
+            return SoldCompsResult(available=False, unavailable_reason=str(exc))
         except Exception as exc:
             return SoldCompsResult(available=False, unavailable_reason=f"eBay sold-comps scrape failed: {exc}")
 
@@ -420,7 +434,21 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                     "viewport": {"width": 1366, "height": 768},
                 }
                 if state_path.exists():
-                    context_kwargs["storage_state"] = str(state_path)
+                    try:
+                        with state_path.open(encoding="utf-8") as state_file:
+                            state = json.load(state_file)
+                        if not isinstance(state, dict):
+                            raise ValueError("storage state is not an object")
+                        context_kwargs["storage_state"] = str(state_path)
+                    except (OSError, ValueError, json.JSONDecodeError) as exc:
+                        # A zero-byte/partial state file must not prevent the
+                        # headed browser from opening the eBay sign-in page.
+                        # Successful manual login below replaces it cleanly.
+                        log.warning(
+                            "sold_comps.playwright.invalid_saved_state_ignored",
+                            path=str(state_path),
+                            error=str(exc),
+                        )
                 if attached_cdp and browser.contexts:
                     context = browser.contexts[0]
                 else:
@@ -428,6 +456,7 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                 await context.add_init_script(self._STEALTH_JS)
                 page = await context.new_page()
                 try:
+                    await self._ensure_ebay_login(page, query=query, headless=headless)
                     for sacat in ("179", "0"):  # Desktop PCs → all categories
                         params = {
                             "_nkw": query,
@@ -469,6 +498,20 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                             # authoritative for this lookup.
                             break
 
+                        if self._is_ebay_login_page(page.url, await page.title(), html):
+                            # eBay can expire a session between the account
+                            # check and the actual sold-results request. Put
+                            # the same real window in front of the operator
+                            # and resume this exact request once signed in.
+                            await self._ensure_ebay_login(page, query=query, headless=headless)
+                            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+                            await page.wait_for_timeout(1200)
+                            html = await page.content()
+                            if self._is_ebay_login_page(page.url, await page.title(), html):
+                                raise EbayLoginRequired(
+                                    "eBay sign-in did not complete, so sold prices were not refreshed."
+                                )
+
                         batch = self._extract_comps_from_html(html, condition)
                         comps.extend(batch)
                         log.debug(
@@ -499,6 +542,74 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
     def _is_human_verification_page(cls, title: str, html: str) -> bool:
         probe = f"{title} {html[:150000]}".lower()
         return any(marker in probe for marker in cls._CHALLENGE_MARKERS)
+
+    @classmethod
+    def _is_ebay_login_page(cls, url: str, title: str, html: str) -> bool:
+        """Detect eBay's authentication wall without relying on fragile nav UI.
+
+        The protected Watch List route is eBay's own signed-in check.  The
+        URL is the primary signal; the title/body markers cover their newer
+        in-page sign-in experience.
+        """
+        probe = f"{url} {title} {html[:150000]}".lower()
+        return any(marker in probe for marker in cls._LOGIN_MARKERS)
+
+    async def _ensure_ebay_login(self, page, *, query: str, headless: bool) -> None:
+        """Require a real signed-in eBay session before reading sold comps.
+
+        Credentials are entered only by the operator in eBay's own window.
+        On the headed fallback browser the window is initially hidden to keep
+        normal work unobtrusive, then promoted here only when sign-in is
+        actually required.  Its saved storage state is persisted by the
+        caller's normal cleanup path.
+        """
+        try:
+            await page.goto(self._EBAY_ACCOUNT_CHECK_URL, wait_until="domcontentloaded", timeout=30000)
+            await page.wait_for_timeout(800)
+            html = await page.content()
+            if not self._is_ebay_login_page(page.url, await page.title(), html):
+                return
+        except Exception as exc:
+            log.warning("sold_comps.playwright.login_check_failed", query=query, error=str(exc))
+            return
+
+        if headless:
+            raise EbayLoginRequired(
+                "eBay sign-in is required for sold prices, but SOLD_COMPS_HEADLESS is enabled. "
+                "Run it headed so the eBay login window can be completed."
+            )
+
+        await focus_page_for_human(page)
+        wait_seconds = max(60, int(os.getenv("EBAY_LOGIN_WAIT_SECONDS", "900")))
+        poll_seconds = 2
+        log.warning(
+            "sold_comps.playwright.waiting_for_ebay_login",
+            query=query,
+            wait_seconds=wait_seconds,
+            url=page.url,
+        )
+
+        loop = asyncio.get_running_loop()
+        deadline = loop.time() + wait_seconds
+        while loop.time() < deadline:
+            await asyncio.sleep(poll_seconds)
+            try:
+                html = await page.content()
+                if not self._is_ebay_login_page(page.url, await page.title(), html):
+                    # Verify the account session on eBay's protected route,
+                    # rather than trusting a cosmetic page transition.
+                    await page.goto(self._EBAY_ACCOUNT_CHECK_URL, wait_until="domcontentloaded", timeout=30000)
+                    await page.wait_for_timeout(800)
+                    html = await page.content()
+                    if not self._is_ebay_login_page(page.url, await page.title(), html):
+                        log.info("sold_comps.playwright.ebay_login_completed", query=query)
+                        return
+            except Exception as exc:
+                log.debug("sold_comps.playwright.login_wait_poll_failed", query=query, error=str(exc))
+
+        raise EbayLoginRequired(
+            f"Timed out after {wait_seconds // 60} minutes waiting for eBay sign-in; sold prices were not refreshed."
+        )
 
     async def _wait_for_human_verification(self, page, query: str) -> str:
         """Keep the one visible eBay window alive while the operator solves
