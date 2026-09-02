@@ -363,14 +363,29 @@ def risk_safety_score(flags: Iterable[str]) -> float:
     return max(0.0, min(100.0, 100.0 - penalty))
 
 
+def sell_through_rate_pct(sold_count: int, active_count: int) -> float | None:
+    """Return matched-cohort sell-through, or None when there is no cohort.
+
+    The denominator intentionally includes both sold and live listings.  This
+    is the conventional rate; ``active / sold`` is retained only as an
+    optional supply-to-sales diagnostic, not called sell-through.
+    """
+    total = max(0, sold_count) + max(0, active_count)
+    return None if total == 0 else max(0, sold_count) / total * 100.0
+
+
 def liquidity_score(sold_count_90d: int, active_count: int,
                     watch_velocity: float | None, bid_velocity: float | None) -> float | None:
-    """Return demand strength, or None when no demand evidence exists."""
-    if sold_count_90d <= 0 and watch_velocity is None and bid_velocity is None:
+    """Return demand strength using sales volume and matched sell-through."""
+    sell_through = sell_through_rate_pct(sold_count_90d, active_count)
+    if sell_through is None and watch_velocity is None and bid_velocity is None:
         return None
-    score = min(70.0, sold_count_90d * 7.0)
-    if active_count > 0 and sold_count_90d > 0:
-        score += max(-20.0, min(15.0, (sold_count_90d / active_count - 0.5) * 20.0))
+    # Volume prevents a single sale from being over-valued; rate prevents a
+    # large live supply from being mistaken for strong demand.  Together they
+    # retain the existing 0-100 liquidity contribution (20% of deal score).
+    score = min(55.0, max(0, sold_count_90d) * 9.0)
+    if sell_through is not None:
+        score += sell_through * 0.35
     if watch_velocity is not None: score += min(8.0, max(0.0, watch_velocity) * 4.0)
     if bid_velocity is not None: score += min(12.0, max(0.0, bid_velocity) * 12.0)
     return max(0.0, min(100.0, score))
@@ -456,6 +471,12 @@ def score_opportunity(
         f"Expected net profit £{profit:.2f}; ROI {roi:.1f}%; "
         + (f"liquidity {liquidity:.0f}/100." if liquidity is not None else "liquidity unknown (no demand evidence)."),
     ]
+    sell_through = sell_through_rate_pct(sold_count_90d, active_count)
+    if sell_through is not None:
+        reasons.append(
+            f"Sampled 90-day sell-through is {sell_through:.1f}% "
+            f"({sold_count_90d} sold / {active_count} active matched listings)."
+        )
     if market.basis == "BIN_ESTIMATED":
         reasons.append(
             f"BIN estimate applies a {100 * (1 - market.realisation_factor):.0f}% realisation haircut and lower confidence until sold evidence refines it."
@@ -490,15 +511,17 @@ def score_opportunity(
     elif evidence_limited:
         classification, decision = "INSUFFICIENT_DATA", "INVESTIGATE"
         reasons.append("The comparable cohort is below the minimum evidence requirement and the provisional opportunity gates were not all met.")
-    elif eligible and profit >= economics.super_profit and roi >= economics.super_roi_pct and market.confidence >= super_confidence_floor:
+    elif eligible and profit >= economics.super_profit and roi >= economics.super_roi_pct and market.confidence >= super_confidence_floor and liquidity is not None and liquidity >= policy.super_liquidity:
         classification, decision = "SUPER_GEM", "BUY_NOW"
-    elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market.confidence >= gem_confidence_floor:
+    elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market.confidence >= gem_confidence_floor and liquidity is not None and liquidity >= policy.gem_liquidity:
         classification, decision = "GEM", "BUY_NOW"
     elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct:
         classification, decision = "EVIDENCE_LIMITED_DEAL", "INVESTIGATE"
+        liquidity_text = "unknown" if liquidity is None else f"{liquidity:.0f}/100"
         reasons.append(
-            f"Economics pass the {category.upper() or 'configured'} GEM gates, but market confidence "
-            f"{market.confidence:.0f}/100 is below the {gem_confidence_floor:.0f}/100 action threshold."
+            f"Economics pass the {category.upper() or 'configured'} GEM gates, but "
+            f"market confidence is {market.confidence:.0f}/100 (needs {gem_confidence_floor:.0f}) "
+            f"and liquidity is {liquidity_text} (needs {policy.gem_liquidity:.0f}/100)."
         )
     elif profit > 0 and eligible:
         classification, decision = "OK_DEAL", "MAKE_OFFER"

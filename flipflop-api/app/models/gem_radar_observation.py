@@ -89,6 +89,11 @@ class GemRadarListingObservation(Base):
     # app.gem_radar.observations.get_cached_score.
     scored_result_json: Mapped[str | None] = mapped_column(Text)
     scored_at: Mapped[datetime | None] = mapped_column(DateTime)
+    # Peer-sync conflict clock. Bumped by touch_observation() and any other
+    # ORM-level mutation via SQLAlchemy's onupdate; a raw-SQL UPDATE against
+    # this table must set it explicitly or the change won't be recognised
+    # as newer by app.services.peer_sync.
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, index=True)
 
     def __repr__(self):
         return f"<GemRadarListingObservation {self.listing_id} £{self.delivered_price} @{self.observed_at}>"

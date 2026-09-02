@@ -34,6 +34,7 @@ class GemRadarAmazonObservation(Base):
     price: Mapped[float] = mapped_column(Float)
     source_url: Mapped[str | None] = mapped_column(String(1000), nullable=True)
     observed_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def __repr__(self):
         return f"<GemRadarAmazonObservation {self.match_key} £{self.price} @{self.observed_at}>"

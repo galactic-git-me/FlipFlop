@@ -2,6 +2,8 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 
+const API_BASE = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
+
 interface PCCase {
   id: number;
   name: string;
@@ -33,7 +35,7 @@ export function PCCasesGallery() {
     const fetchCases = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:18000/api/cases/gallery?limit=50&sort_by=${sortBy}`);
+        const response = await fetch(`${API_BASE}/api/cases/gallery?limit=50&sort_by=${sortBy}`);
         if (!response.ok) throw new Error(`API error: ${response.status}`);
         const data = await response.json();
         setCases(data);

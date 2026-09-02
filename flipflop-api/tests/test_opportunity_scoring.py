@@ -1,6 +1,7 @@
 from app.gem_radar.opportunity_scoring import (
     OpportunityPolicy, SoldComparable, category_economics, desirability_score,
-    identity_gates, risk_safety_score, robust_sold_market, score_opportunity,
+    identity_gates, liquidity_score, risk_safety_score, robust_sold_market,
+    score_opportunity, sell_through_rate_pct,
 )
 
 
@@ -184,7 +185,7 @@ def test_single_active_comparable_is_evidence_limited_not_ok_deal():
     assert result.decision == "INVESTIGATE"
 
 
-def test_liquidity_ranks_urgency_but_does_not_veto_a_verified_super_gem():
+def test_zero_sell_through_prevents_a_verified_bargain_becoming_a_super_gem():
     policy = OpportunityPolicy()
     market = robust_sold_market(comps([85, 88, 90, 92, 95, 97]), subject_listing_id="999", policy=policy)
     assert market is not None
@@ -194,11 +195,12 @@ def test_liquidity_ranks_urgency_but_does_not_veto_a_verified_super_gem():
         market=market, sold_count_90d=0, active_count=10,
         watch_velocity=None, bid_velocity=None, policy=policy,
     )
-    assert result.liquidity_score is None
-    assert result.classification == "SUPER_GEM"
+    assert result.liquidity_score == 0.0
+    assert result.classification == "EVIDENCE_LIMITED_DEAL"
+    assert result.decision == "INVESTIGATE"
 
 
-def test_missing_demand_is_unknown_but_observed_demand_is_scored():
+def test_observed_live_supply_without_sales_is_zero_sell_through():
     market = robust_sold_market(comps([85, 88, 90]), subject_listing_id="999", policy=OpportunityPolicy())
     unknown = score_opportunity(
         listing_price=40, title="Noctua NH-D15 CPU Cooler",
@@ -212,8 +214,15 @@ def test_missing_demand_is_unknown_but_observed_demand_is_scored():
         market=market, sold_count_90d=0, active_count=10,
         watch_velocity=1.0, bid_velocity=0.0, policy=OpportunityPolicy(),
     )
-    assert unknown.liquidity_score is None
+    assert unknown.liquidity_score == 0.0
     assert observed.liquidity_score == 4.0
+
+
+def test_sell_through_uses_sold_over_sold_plus_active_and_changes_liquidity():
+    assert sell_through_rate_pct(5, 5) == 50.0
+    assert sell_through_rate_pct(0, 10) == 0.0
+    assert sell_through_rate_pct(0, 0) is None
+    assert liquidity_score(5, 5, None, None) > liquidity_score(5, 50, None, None)
 
 
 def test_risk_flags_have_distinct_severity_and_are_deduplicated():

@@ -19,6 +19,7 @@ class GemRadarScanRun(Base):
     run_by: Mapped[str] = mapped_column(String(20), default="Automatic")  # "Manual" | "Automatic"
     duration_seconds: Mapped[float] = mapped_column(Float, default=0.0)
     occurred_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def __repr__(self):
         return f"<GemRadarScanRun {self.search_term!r} {self.total_listings_found} listings @{self.occurred_at}>"

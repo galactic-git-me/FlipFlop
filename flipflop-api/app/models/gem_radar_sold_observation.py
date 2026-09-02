@@ -35,6 +35,10 @@ class GemRadarSoldObservation(Base):
     postage: Mapped[float] = mapped_column(Float, default=0.0)
     source_url: Mapped[str | None] = mapped_column(String(1000), nullable=True)
     observed_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
+    # Peer-sync conflict clock. cpk_pipeline.py's CPK-backfill path updates
+    # this table with raw SQL, which bypasses SQLAlchemy's onupdate -- that
+    # call site sets updated_at explicitly.
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def __repr__(self):
         return f"<GemRadarSoldObservation {self.match_key} {self.condition} £{self.price} @{self.observed_at}>"

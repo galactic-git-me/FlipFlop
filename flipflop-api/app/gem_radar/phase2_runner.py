@@ -24,7 +24,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.gem_radar.cpk_market import robust_active_market
 from app.gem_radar.demand_velocity import record_demand_snapshot
-from app.gem_radar.opportunity_scoring import OpportunityResult, SoldComparable, identity_gates, load_opportunity_policy, risk_safety_score, robust_sold_market, score_opportunity
+from app.gem_radar.opportunity_scoring import OpportunityResult, SoldComparable, identity_gates, load_opportunity_policy, risk_safety_score, robust_sold_market, score_opportunity, sell_through_rate_pct
 from app.gem_radar.favourite_matching import find_matching_favourite
 from app.gem_radar.marketplace import fallback_listing_url
 from app.models.favourite import Favourite
@@ -260,6 +260,7 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
 
         sold_count = len({_source.source_url or f"price:{_source.delivered_price}" for _source in sold_comps})
         active_count = max(0, len(active_cohorts.get((cpk, normalised_condition), [])) - 1)
+        sell_through_rate = sell_through_rate_pct(sold_count, active_count) if cpk else None
         preferred = cpk in preferred_keys
         watch_velocity, bid_velocity = velocities.get(listing_id, (None, None))
         if cpk:
@@ -346,6 +347,11 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
             market_sample_size=market.sample_size if market else 0,
             market_source_diversity=market.source_diversity if market else 0,
             market_spread_pct=market.spread_pct if market else None,
+            active_listing_count=active_count if cpk else None,
+            sold_listing_count=sold_count if cpk else None,
+            sell_through_rate_pct=round(sell_through_rate, 1) if sell_through_rate is not None else None,
+            sell_through_window_days=policy.sold_lookback_days if cpk else None,
+            sell_through_source="sampled_cpk_condition_cohort" if cpk else None,
             liquidity_score=opportunity.liquidity_score,
             desirability_score=opportunity.desirability_score,
             risk_score=opportunity.risk_score,
@@ -374,7 +380,8 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
                     market_upper_price = :upper,
                     pct_offset = :offset,
                     recommendation = :recommendation,
-                    cpk = :cpk
+                    cpk = :cpk,
+                    updated_at = now()
                 WHERE id = :id
                 """
             ),

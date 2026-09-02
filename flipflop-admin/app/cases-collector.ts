@@ -126,7 +126,8 @@ async function submitCasesToBackend(cases: CaseData[]): Promise<void> {
     return
   }
 
-  const apiUrl = 'http://localhost:18000/api/cases/bulk-import'
+  const apiBase = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '')
+  const apiUrl = `${apiBase}/api/cases/bulk-import`
 
   try {
     const response = await fetch(apiUrl, {

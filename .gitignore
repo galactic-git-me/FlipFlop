@@ -38,6 +38,8 @@ yarn-error.log*
 flipflop.db
 flipflop.db-shm
 flipflop.db-wal
+# Local database backups are operational artifacts, not source code.
+*.dump
 pc-flipper-backend/flipflop.db*
 pc-flipper-backend/data/ebay_playwright_state.json
 pc-flipper-backend/data/scheduler_state.json

@@ -5,6 +5,13 @@
 param(
     [switch]$Verbose = $false,
     [switch]$NoOllama = $false,
+    # The production API and PostgreSQL database run on Andromeda. These
+    # switches are only for explicitly testing the legacy local services.
+    [switch]$LocalBackend = $false,
+    [switch]$LocalGemRadar = $false,
+    # Start the customer site locally for development; use -NoFrontend when
+    # only the admin tool is needed.
+    [switch]$LocalFrontend = $true,
     [switch]$NoBackend = $false,
     [switch]$NoGemRadar = $false,
     [switch]$NoAdmin = $false,
@@ -277,9 +284,14 @@ Get-ChildItem -Path $logsDir -Filter "*.log" -ErrorAction SilentlyContinue | Rem
 Write-Host "  [OK] Logs directory: $logsDir" -ForegroundColor Green
 Write-Host ""
 
-# Clean up lingering processes on dev ports
+# Clean up lingering processes on the ports selected for this run.
+# The normal target setup only runs the admin tool locally; the API/database
+# and customer-facing website remain on Andromeda.
 Write-Host "[*] Cleaning up lingering processes on dev ports..." -ForegroundColor Cyan
-$devPorts = @(4311, 18000, 4312, 4313, 5173)
+$devPorts = @(4312, 5173)
+if ($LocalBackend) { $devPorts += 4311 }
+if ($LocalGemRadar) { $devPorts += 18000 }
+if ($LocalFrontend) { $devPorts += 4313 }
 foreach ($port in $devPorts) {
     $processes = Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue | Where-Object { $_.State -eq "Listen" }
     if ($processes) {
@@ -334,25 +346,25 @@ $servers = @(
         cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4311")
         port     = 4311
         color    = "Yellow"
-        skip     = $NoBackend
+        skip     = $NoBackend -or (-not $LocalBackend)
     },
     @{
         name     = "gemradar-api"
         cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set PYTHONUNBUFFERED=1 && .venv\Scripts\python.exe -m uvicorn app.gem_radar_standalone:app --host 0.0.0.0 --port 18000")
         port     = 18000
         color    = "Blue"
-        skip     = $NoGemRadar
+        skip     = $NoGemRadar -or (-not $LocalGemRadar)
     },
     @{
         name     = "admin"
-        cmdArgs  = @("/c", "cd flipflop-admin && set ""BACKEND_URL=http://localhost:4311"" && set ""NEXT_PUBLIC_API_URL=http://localhost:4311"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4312 -H 0.0.0.0")
+        cmdArgs  = @("/c", "cd flipflop-admin && set ""BACKEND_URL=https://admin.theflipflop.shop"" && set ""NEXT_PUBLIC_API_URL=https://admin.theflipflop.shop"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4312 -H 0.0.0.0")
         port     = 4312
         color    = "Green"
         skip     = $NoAdmin
     },
     @{
         name     = "frontend"
-        cmdArgs  = @("/c", "cd ..\FlipFlop.shop && set ""BACKEND_URL=http://localhost:4311"" && set ""NEXT_PUBLIC_API_URL=http://localhost:4311"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4313 -H 0.0.0.0")
+        cmdArgs  = @("/c", "cd ..\FlipFlop.shop && set ""BACKEND_URL=https://admin.theflipflop.shop"" && set ""NEXT_PUBLIC_API_URL=https://admin.theflipflop.shop"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4313 -H 0.0.0.0")
         port     = 4313
         color    = "Magenta"
         skip     = $NoFrontend
@@ -423,27 +435,19 @@ Write-Host ""
 Write-Host "URLs to Access:" -ForegroundColor Cyan
 Write-Host "  eBay CDP browser:  localhost:9222" -ForegroundColor Cyan
 Write-Host "  Ollama:            http://localhost:11434" -ForegroundColor Cyan
-Write-Host "  Backend:           http://localhost:4311" -ForegroundColor Yellow
-Write-Host "  Gem Radar API:     http://localhost:18000" -ForegroundColor Blue
 Write-Host "  Admin:             http://localhost:4312" -ForegroundColor Green
-Write-Host "  Frontend:          http://localhost:4313" -ForegroundColor Magenta
 Write-Host "  Performance Card:  http://localhost:5173" -ForegroundColor Cyan
+if ($LocalBackend -and -not $NoBackend) { Write-Host "  Legacy backend:     http://localhost:4311" -ForegroundColor Yellow }
+if ($LocalGemRadar -and -not $NoGemRadar) { Write-Host "  Legacy Gem Radar:   http://localhost:18000" -ForegroundColor Blue }
+if ($LocalFrontend -and -not $NoFrontend) { Write-Host "  Local frontend:     http://localhost:4313" -ForegroundColor Magenta }
 Write-Host ""
 Write-Host "Log Files:" -ForegroundColor Cyan
 foreach ($proc in $processes) {
     Write-Host "  $($proc.name).log" -ForegroundColor Gray
 }
 Write-Host ""
-Write-Host "View logs:" -ForegroundColor Cyan
-Write-Host "  Get-Content C:\Users\mclar\CODING\FlipFlop\logs\backend.log -Tail 50 -Wait" -ForegroundColor Gray
-Write-Host "View logs:" -ForegroundColor Cyan
-Write-Host "  Get-Content C:\Users\mclar\CODING\FlipFlop\logs\gemradar-api.log -Tail 50 -Wait" -ForegroundColor Gray
-Write-Host "View logs:" -ForegroundColor Cyan
-Write-Host "  Get-Content C:\Users\mclar\CODING\FlipFlop\logs\admin.log -Tail 50 -Wait" -ForegroundColor Gray
-Write-Host "View logs:" -ForegroundColor Cyan
-Write-Host "  Get-Content C:\Users\mclar\CODING\FlipFlop\logs\frontend.log -Tail 50 -Wait" -ForegroundColor Gray
-Write-Host "View logs:" -ForegroundColor Cyan
-Write-Host "  Get-Content C:\Users\mclar\CODING\FlipFlop\logs\performance-card.log -Tail 50 -Wait" -ForegroundColor Gray
+Write-Host "View logs (example):" -ForegroundColor Cyan
+Write-Host "  Get-Content $logsDir\admin.log -Tail 50 -Wait" -ForegroundColor Gray
 Write-Host ""
 Write-Host "Press Ctrl+C to stop all servers" -ForegroundColor Gray
 Write-Host ""

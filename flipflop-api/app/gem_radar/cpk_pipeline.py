@@ -142,7 +142,7 @@ async def assign_cpk_and_accumulate_price(
         text(
             """
             UPDATE gem_radar_sold_observations
-            SET cpk = :cpk
+            SET cpk = :cpk, updated_at = now()
             WHERE match_key = :match_key AND cpk IS NULL
             """
         ),
@@ -152,7 +152,7 @@ async def assign_cpk_and_accumulate_price(
     if identity_keys:
         await db.execute(
             text("""
-                UPDATE gem_radar_sold_observations SET cpk = :cpk
+                UPDATE gem_radar_sold_observations SET cpk = :cpk, updated_at = now()
                 WHERE match_key = ANY(:identity_keys) AND cpk IS NULL
             """),
             {"cpk": cpk, "identity_keys": list(identity_keys)},

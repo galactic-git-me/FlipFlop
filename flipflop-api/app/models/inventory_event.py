@@ -22,3 +22,4 @@ class InventoryEvent(Base):
     quantity: Mapped[int] = mapped_column(Integer, default=1)
     detail: Mapped[dict] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

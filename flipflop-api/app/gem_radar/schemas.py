@@ -280,6 +280,11 @@ class ScoredListing(CamelModel):
     offer_strategy: Optional[OfferStrategy]
     reasoning_summary: Optional[str]
     release_year: Optional[int] = None
+    active_listing_count: Optional[int] = None
+    sold_listing_count: Optional[int] = None
+    sell_through_rate_pct: Optional[float] = None
+    sell_through_window_days: Optional[int] = None
+    sell_through_source: Optional[str] = None
     watch_signals: Optional[WatchSignals] = None
     seller_intelligence: Optional[SellerIntelligence] = None
 

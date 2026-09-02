@@ -101,6 +101,15 @@ class GemRadarScoredListing(Base):
     market_sample_size: Mapped[int | None] = mapped_column(Integer, nullable=True)
     market_source_diversity: Mapped[int | None] = mapped_column(Integer, nullable=True)
     market_spread_pct: Mapped[float | None] = mapped_column(Float, nullable=True)
+    # Matched CPK + condition demand evidence.  These are deliberately
+    # nullable: a missing value means evidence was not available, whereas 0
+    # is a measured zero.  The current source is a bounded 90-day cohort, so
+    # this must not be presented as marketplace-wide sell-through.
+    active_listing_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    sold_listing_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    sell_through_rate_pct: Mapped[float | None] = mapped_column(Float, nullable=True)
+    sell_through_window_days: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    sell_through_source: Mapped[str | None] = mapped_column(String(64), nullable=True)
     liquidity_score: Mapped[float | None] = mapped_column(Float, nullable=True)
     desirability_score: Mapped[float | None] = mapped_column(Float, nullable=True)
     risk_score: Mapped[float | None] = mapped_column(Float, nullable=True)
@@ -118,6 +127,10 @@ class GemRadarScoredListing(Base):
     # Timestamps
     listing_observed_at: Mapped[datetime] = mapped_column(DateTime)
     scored_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
+    # Peer-sync conflict clock. phase2_runner's rescore path updates this
+    # table with raw SQL, which bypasses SQLAlchemy's onupdate -- that call
+    # site sets updated_at explicitly (see app/gem_radar/phase2_runner.py).
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, index=True)
 
     def __repr__(self):
         return f"<GemRadarScoredListing {self.listing_id} {self.classification} £{self.delivered_price} @{self.scored_at}>"

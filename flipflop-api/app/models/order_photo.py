@@ -35,3 +35,4 @@ class OrderPhoto(Base):
     is_hero_shot = Column(Boolean, default=False, nullable=False)
 
     created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
