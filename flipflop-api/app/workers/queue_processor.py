@@ -1,7 +1,9 @@
 """Background worker to process gem-radar submission queue."""
 import asyncio
 import json
+import os
 import re
+import threading
 import structlog
 from datetime import datetime
 from urllib.parse import urlparse
@@ -46,6 +48,75 @@ _EMPTY_QUEUE_POLL_SECONDS = 5
 # Track actively-processing search_ids to enforce concurrent search term limit
 _active_search_ids: set[str] = set()
 _active_search_lock = asyncio.Lock()
+
+
+def _start_stall_watchdog() -> threading.Event:
+    """Start an independent queue-stall watchdog.
+
+    The ordinary stale reaper is an asyncio task.  It cannot run when the
+    event loop is wedged, which is precisely the failure mode it is intended
+    to recover from.  This thread uses its own synchronous PostgreSQL
+    connection and deliberately exits the worker process when it sees a
+    submission older than the overall submission timeout. Docker's restart
+    policy then starts a clean worker, whose startup recovery puts those rows
+    back into the pending queue and clears the in-memory search-term slots.
+    """
+    settings = get_settings()
+    stop_event = threading.Event()
+    thread = threading.Thread(
+        target=_stall_watchdog_loop,
+        args=(stop_event, settings.sync_database_url, settings.queue_stall_watchdog_seconds,
+              settings.queue_stall_watchdog_poll_seconds),
+        name="submission-queue-stall-watchdog",
+        daemon=True,
+    )
+    thread.start()
+    return stop_event
+
+
+def _stall_watchdog_loop(
+    stop_event: threading.Event,
+    database_url: str,
+    stale_after_seconds: int,
+    poll_seconds: int,
+) -> None:
+    """Exit the process when queue work is stale, even if asyncio is stuck."""
+    import psycopg2
+
+    while not stop_event.wait(poll_seconds):
+        try:
+            with psycopg2.connect(database_url, connect_timeout=10) as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        SELECT id
+                        FROM submission_queue
+                        WHERE status = 'processing'
+                          AND last_attempt_at < (
+                              (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')
+                              - make_interval(secs => %s)
+                          )
+                        ORDER BY last_attempt_at
+                        LIMIT 10
+                        """,
+                        (stale_after_seconds,),
+                    )
+                    stale_ids = [row[0] for row in cursor.fetchall()]
+            if stale_ids:
+                logger.critical(
+                    "queue_processor.stall_watchdog_restarting_worker",
+                    stale_submission_ids=stale_ids,
+                    stale_after_seconds=stale_after_seconds,
+                )
+                # Do not try to cancel tasks from this thread: an event-loop
+                # stall may prevent cancellation/finally handlers from ever
+                # running. A fresh process is the reliable recovery point.
+                os._exit(75)
+        except Exception as exc:
+            # The watchdog must not make a transient DB outage fatal; the
+            # normal worker and Docker health checks retain responsibility for
+            # that case. Keep checking on the next interval.
+            logger.warning("queue_processor.stall_watchdog_error", error=str(exc))
 
 
 def _case_brand(title: str) -> str:
@@ -176,13 +247,17 @@ async def process_submission_queue(process_interval_seconds: int = _EMPTY_QUEUE_
         if recovered:
             logger.warning("queue_processor.recovered_stuck_submissions", count=recovered)
 
-    workers = [
-        asyncio.create_task(_worker_loop(worker_id, process_interval_seconds))
-        for worker_id in range(_WORKER_COUNT)
-    ]
-    reaper = asyncio.create_task(_stale_reaper_loop())
-    phase2_trigger = asyncio.create_task(_phase2_trigger_loop())
-    await asyncio.gather(*workers, reaper, phase2_trigger, return_exceptions=True)
+    watchdog_stop = _start_stall_watchdog()
+    try:
+        workers = [
+            asyncio.create_task(_worker_loop(worker_id, process_interval_seconds))
+            for worker_id in range(_WORKER_COUNT)
+        ]
+        reaper = asyncio.create_task(_stale_reaper_loop())
+        phase2_trigger = asyncio.create_task(_phase2_trigger_loop())
+        await asyncio.gather(*workers, reaper, phase2_trigger, return_exceptions=True)
+    finally:
+        watchdog_stop.set()
 
 
 async def _stale_reaper_loop() -> None:

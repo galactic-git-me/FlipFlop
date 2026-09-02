@@ -151,6 +151,9 @@ class SubmissionQueueService:
             logger.warning(
                 f"Submission {submission_id} failed (attempt {submission.retry_count}/{max_retries}): {error_message}"
             )
+        await db.commit()
+        await db.refresh(submission)
+        return submission
 
     @staticmethod
     async def reap_stale_processing(

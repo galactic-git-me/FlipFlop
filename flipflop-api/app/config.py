@@ -154,6 +154,10 @@ class Settings(BaseSettings):
 
     max_concurrent_flips: int = 1
     max_concurrent_search_terms: int = 2  # Limit concurrent gem_radar searches to ease RAM pressure (95% full)
+    # A separate OS thread watches this timeout, so it still protects the
+    # queue if the asyncio event loop itself stops scheduling work.
+    queue_stall_watchdog_seconds: int = 960
+    queue_stall_watchdog_poll_seconds: int = 60
     auto_buy_autonomous: bool = False
     auto_buy_daily_limit: int = 3
 
