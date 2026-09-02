@@ -249,6 +249,14 @@ class LiveSoldCompsAdapter(SoldCompsAdapter):
 
         for item in items:
             try:
+                # The new result layout includes sponsored "Shop on eBay"
+                # cards alongside completed listings.  Only accept cards that
+                # eBay itself labels as sold.
+                if "s-card" in (item.get("class") or []) and not item.select_one(
+                    "[aria-label='Sold item']"
+                ):
+                    continue
+
                 # Skip auction items (those with bid counts)
                 bid_el = item.select_one(
                     ".s-item__bids, .x-bid-count, [class*='bid--'], [class*='bidCount']"
@@ -276,9 +284,14 @@ class LiveSoldCompsAdapter(SoldCompsAdapter):
                     continue
 
                 # Extract URL and title
-                link_el = item.select_one("a[href*='itm/']")
+                title_el = item.select_one(".s-card__title")
+                link_el = (
+                    title_el.find_parent("a", href=re.compile(r"/itm/"))
+                    if title_el
+                    else None
+                ) or item.select_one("a[href*='itm/']")
                 url = link_el["href"].split("?")[0] if link_el else None
-                title = link_el.get_text(strip=True) if link_el else None
+                title = title_el.get_text(strip=True) if title_el else (link_el.get_text(strip=True) if link_el else None)
 
                 comps.append(
                     SoldComp(
@@ -325,13 +338,20 @@ class PlaywrightSoldCompsAdapter(SoldCompsAdapter):
     _MAX_PRICE = 3000.0
     _MIN_COMPS_BEFORE_BREAK = 5
     _CHALLENGE_MARKERS = (
-        "captcha",
         "verify you are human",
         "security verification",
         "checking your browser",
         "pardon our interruption",
         "confirm your identity",
         "robot check",
+    )
+    # eBay includes an invisible reCAPTCHA iframe in ordinary result pages.
+    # Treat a page with actual result cards as usable even when that background
+    # integration puts the word "captcha" in the raw HTML.
+    _RESULTS_MARKERS = (
+        "s-item__title",
+        "srp-river-results",
+        "srp-results",
     )
     _EBAY_ACCOUNT_CHECK_URL = "https://www.ebay.co.uk/myb/WatchList"
     _LOGIN_MARKERS = (
@@ -540,7 +560,10 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
 
     @classmethod
     def _is_human_verification_page(cls, title: str, html: str) -> bool:
-        probe = f"{title} {html[:150000]}".lower()
+        body = html[:150000].lower()
+        if any(marker in body for marker in cls._RESULTS_MARKERS):
+            return False
+        probe = f"{title} {body}".lower()
         return any(marker in probe for marker in cls._CHALLENGE_MARKERS)
 
     @classmethod
@@ -650,7 +673,7 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
     # Same markup, same parsing rules as LiveSoldCompsAdapter — eBay serves
     # identical HTML regardless of which client fetched it.
     _extract_comps_from_html = LiveSoldCompsAdapter._extract_comps_from_html
-    _parse_price = LiveSoldCompsAdapter._parse_price
+    _parse_price = staticmethod(LiveSoldCompsAdapter._parse_price)
 
 
 class FixtureSoldCompsAdapter(SoldCompsAdapter):
