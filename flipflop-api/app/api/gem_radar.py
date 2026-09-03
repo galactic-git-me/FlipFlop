@@ -62,6 +62,12 @@ from app.gem_radar.schemas import (
 from app.services.submission_queue_service import SubmissionQueueService
 
 router = APIRouter(prefix="/gem-radar", tags=["gem-radar"])
+
+# Phase 2 can persist temporary/non-actionable classifications while identity
+# resolution is still running (for example ``IDENTITY_PENDING``).  Those
+# statuses are useful to pipeline monitoring, but are deliberately not part of
+# the ScoredListing contract consumed by the extension dashboard.
+_API_CLASSIFICATIONS = frozenset({"SUPER_GEM", "GEM", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL"})
 log = structlog.get_logger(__name__)
 
 # Opportunity #4: Statistical outlier detection
@@ -684,6 +690,13 @@ async def get_scored_listings(
         .order_by(GemRadarScoredListing.scored_at.desc())
     )
     scored = result.scalars().all()
+    # Do not construct the response model for pipeline-internal statuses.
+    # Before this guard an ``IDENTITY_PENDING`` row caused Pydantic to raise a
+    # ValidationError, turning an otherwise healthy admin request into a 500.
+    unsupported_count = sum(1 for row in scored if row.classification not in _API_CLASSIFICATIONS)
+    if unsupported_count:
+        log.warning("gem_radar.scored_listings.unsupported_classifications", count=unsupported_count)
+        scored = [row for row in scored if row.classification in _API_CLASSIFICATIONS]
     if not scored:
         return []
 
