@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, text
 
-engine = create_engine('postgresql://flipper:flipper@127.0.0.1:5432/pcflipper')
+ 
 
 with engine.connect() as conn:
     query = text('''
