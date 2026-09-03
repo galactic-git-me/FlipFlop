@@ -5,10 +5,12 @@ Each platform has its own adapter. Falls back to HTML scraping when no API.
 """
 import asyncio
 import base64
+import hashlib
 import random
 import re
 import os
 import time
+from urllib.parse import urlencode
 from pathlib import Path
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -1948,6 +1950,13 @@ async def fetch_listings(
             title_selector='h2 span, h2',
         )
 
+    if "google shopping" in name or "google_shopping" in name:
+        return await _scrape_google_shopping_listings(
+            search_terms=search_terms[:20],
+            min_price=min_price,
+            max_price=max_price,
+        )
+
     if "temu" in name:
         http_rows = await _scrape_temu_http(
             search_terms=search_terms[:20],
@@ -2066,6 +2075,146 @@ async def fetch_listings(
 
     print(f"[scraper] No adapter for source {source_name!r}, skipping")
     return []
+
+
+def google_shopping_search_url(term: str) -> str:
+    """Build a UK Google Shopping search URL from a source search term.
+
+    ``tbm=shop`` is the important addition to the supplied Google search URL:
+    without it Google returns ordinary web results rather than merchant offers.
+    """
+    query = urlencode(
+        {
+            "num": 10,
+            "tbm": "shop",
+            "hl": "en-GB",
+            "gl": "GB",
+            "q": term.strip(),
+        }
+    )
+    return f"https://www.google.com/search?{query}"
+
+
+async def _scrape_google_shopping_listings(
+    *,
+    search_terms: list[str],
+    min_price: float,
+    max_price: float,
+) -> list[RawListing]:
+    """Collect UK merchant offers from Google's rendered Shopping result cards."""
+    source_name = "Google Shopping"
+    results: list[RawListing] = []
+    seen: set[str] = set()
+
+    async with managed_playwright() as p:
+        cdp_url = str(getattr(settings, "browser_cdp_url", "") or "").strip()
+        browser = None
+        attached_cdp = False
+        try:
+            if cdp_url:
+                try:
+                    browser = await p.chromium.connect_over_cdp(cdp_url)
+                    attached_cdp = True
+                except Exception:
+                    browser = None
+            if browser is None:
+                browser = await p.chromium.launch(
+                    headless=True,
+                    args=[
+                        "--disable-blink-features=AutomationControlled",
+                        "--no-sandbox",
+                        "--disable-dev-shm-usage",
+                    ],
+                    proxy=playwright_proxy_config(),
+                )
+            ctx = browser.contexts[0] if attached_cdp and browser.contexts else await browser.new_context(
+                user_agent=(
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/124.0.0.0 Safari/537.36"
+                ),
+                locale="en-GB",
+                timezone_id="Europe/London",
+            )
+            await ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
+            await ctx.add_cookies([
+                {"name": "SOCS", "value": "CAI", "domain": ".google.com", "path": "/"},
+                {"name": "SOCS", "value": "CAI", "domain": ".google.co.uk", "path": "/"},
+            ])
+            page = await ctx.new_page()
+
+            for term in search_terms:
+                added = 0
+                try:
+                    await page.goto(google_shopping_search_url(term), wait_until="domcontentloaded", timeout=30_000)
+                    for selector in ("#L2AGLb", "button:has-text('Accept all')", "[aria-label='Accept all']"):
+                        try:
+                            await page.click(selector, timeout=1_000)
+                            break
+                        except Exception:
+                            pass
+                    body = (await page.content()).lower()
+                    if "unusual traffic" in body or "captcha" in body or "/sorry/" in (page.url or ""):
+                        record_term_result(term=term, found=0, new=0, error="captcha_required", source_name=source_name)
+                        continue
+                    await asyncio.sleep(random.uniform(1.2, 2.0))
+                    await page.evaluate("window.scrollBy(0, 550)")
+                    raw = await page.evaluate("""() => {
+                        const out = [], seen = new Set(), priceRe = /[£]\\s*([\\d,]+(?:\\.\\d{1,2})?)/;
+                        const cards = document.querySelectorAll('.pla-unit-container, .sh-dgr__grid-result, [data-sh-sr], .g.sh-np');
+                        for (const card of cards) {
+                            const titleEl = card.querySelector('h3, h4, .ropLT, .orXoSd, .rwVHAc');
+                            const priceEl = card.querySelector('.VbBaOe, .a8Pemb, .T14wmb');
+                            const linkEl = card.querySelector("a.plantl, a[href*='aclk'], a[href*='/shopping/product/']");
+                            const match = priceRe.exec(priceEl?.textContent || '');
+                            const title = (titleEl?.textContent || '').replace(/\\s+/g, ' ').trim();
+                            const href = linkEl?.href || '';
+                            const price = match ? Number(match[1].replace(/,/g, '')) : 0;
+                            const key = `${title.toLowerCase()}|${price}`;
+                            if (!title || !href || !price || seen.has(key)) continue;
+                            seen.add(key);
+                            out.push({ title, href, price, image: card.querySelector('img')?.src || '' });
+                        }
+                        return out.slice(0, 10);
+                    }""")
+                    for item in raw or []:
+                        price = float(item.get("price") or 0)
+                        if price < float(min_price) or price > float(max_price):
+                            continue
+                        href = str(item.get("href") or "")
+                        title = str(item.get("title") or "").strip()
+                        if not href.startswith("http") or len(title) < 5:
+                            continue
+                        external_id = f"google_shopping_{hashlib.sha256(href.encode()).hexdigest()[:24]}"
+                        if external_id in seen:
+                            continue
+                        seen.add(external_id)
+                        image = str(item.get("image") or "")
+                        results.append(RawListing(
+                            external_id=external_id,
+                            title=title[:240],
+                            price=price,
+                            url=href,
+                            location="UK",
+                            condition="new",
+                            description="Google Shopping merchant offer",
+                            image_urls=[image] if image.startswith("http") else [],
+                            source_name=source_name,
+                            listing_type="buy_it_now",
+                            found_via_term=term,
+                        ))
+                        added += 1
+                    record_term_result(term=term, found=added, new=added, source_name=source_name)
+                except Exception as exc:
+                    record_term_result(term=term, found=0, new=0, error=str(exc), source_name=source_name)
+        finally:
+            if browser is not None:
+                if attached_cdp:
+                    if 'page' in locals():
+                        await page.close()
+                else:
+                    await browser.close()
+    return results
 
 
 async def _scrape_generic_marketplace_listings(

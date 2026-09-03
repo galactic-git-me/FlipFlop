@@ -11,7 +11,7 @@ from sqlalchemy import select, update
 
 from app.database import AsyncSessionLocal
 from app.models.listing import Listing, ListingStatus, Classification
-from app.models.source import DataSource
+from app.models.source import DataSource, SourceType
 from app.models.search_config import SearchConfig
 from app.models.search_telemetry import SearchTelemetry
 from app.models.source_search_term import SourceSearchTerm
@@ -136,6 +136,27 @@ async def run_flip_opportunities_swarm(mode: str = "main") -> dict:
         )
         sources = sources_result.scalars().all()
 
+        # Google Shopping is an aggregator rather than a single retailer, so it
+        # is registered here for existing installations as soon as the pipeline
+        # is used.  This avoids relying on the disabled legacy startup seeder.
+        if not any(source.name == "Google Shopping" for source in sources):
+            google_source = await db.scalar(
+                select(DataSource).where(DataSource.name == "Google Shopping")
+            )
+            if google_source is None:
+                google_source = DataSource(
+                    name="Google Shopping",
+                    url="https://www.google.com/search?num=10&tbm=shop&hl=en-GB&gl=GB&q={query}",
+                    source_type=SourceType.scrape,
+                    enabled=True,
+                    config={"market": "GB", "result_limit": 10},
+                )
+                db.add(google_source)
+                await db.flush()
+                log.info("source.registered", source="Google Shopping")
+            if google_source.enabled:
+                sources.append(google_source)
+
         fallback_terms = config.keywords or ["PC tower", "desktop computer", "gaming PC"]
         rows = (
             await db.execute(
@@ -164,6 +185,10 @@ async def run_flip_opportunities_swarm(mode: str = "main") -> dict:
                 terms_by_source[src.name] = list(fallback_terms)
 
         terms_by_source = {k: list(dict.fromkeys(v)) for k, v in terms_by_source.items()}
+        # Existing term rows were saved before Google Shopping was available.
+        # Use the configured fallback terms until users explicitly tailor its set.
+        if any(source.name == "Google Shopping" for source in sources):
+            terms_by_source.setdefault("Google Shopping", list(fallback_terms))
         batch_terms_by_source = terms_by_source
 
     # Announce scan started
