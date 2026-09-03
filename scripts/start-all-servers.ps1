@@ -309,6 +309,25 @@ foreach ($port in $devPorts) {
         }
     }
 }
+
+# A previous launcher can leave its cmd.exe wrapper behind after Ctrl+C (the
+# child Next process exits, but the wrapper still owns the redirected log
+# handle).  That stale wrapper has no listening port, so port cleanup above
+# cannot find it and the next launch fails with a file-lock error.  Remove
+# only wrappers that explicitly belong to this project's admin server.
+$staleAdminLaunchers = Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
+    Where-Object {
+        $_.Name -ieq "cmd.exe" -and
+        $_.CommandLine -match "flipflop-admin" -and
+        $_.CommandLine -match "next dev.*4312|npm run dev.*4312"
+    }
+foreach ($launcher in $staleAdminLaunchers) {
+    Write-Host "  [*] Removing stale admin launcher (PID: $($launcher.ProcessId))" -ForegroundColor Gray
+    & cmd /c "taskkill /PID $($launcher.ProcessId) /T /F 2>&1" | Out-Null
+}
+if ($staleAdminLaunchers) {
+    Start-Sleep -Milliseconds 300
+}
 Write-Host ""
 
 if (-not $NoOllama) {
