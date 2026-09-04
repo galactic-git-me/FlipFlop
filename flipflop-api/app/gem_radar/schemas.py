@@ -7,9 +7,10 @@ API agree on shape without a translation layer drifting out of sync.
 from __future__ import annotations
 
 from datetime import datetime
+from hashlib import sha256
 from typing import Literal, Optional
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 
 def _to_camel(snake: str) -> str:
@@ -88,6 +89,44 @@ class ExtractedListing(CamelModel):
     prime_eligible: Optional[bool] = None
     delivery_text: Optional[str] = None
     delivery_postcode: Optional[str] = None
+
+    @field_validator("listing_id", mode="before")
+    @classmethod
+    def bound_listing_id(cls, value: object) -> str:
+        """Keep externally-derived identifiers within the observation index.
+
+        A Google Shopping fallback identifier includes a merchant URL and can
+        exceed PostgreSQL's VARCHAR(255). Preserve a readable prefix and add a
+        digest, rather than truncating it into a collision-prone identifier.
+        """
+        identifier = str(value or "").strip()
+        if len(identifier) <= 255:
+            return identifier
+        return f"{identifier[:190]}:{sha256(identifier.encode()).hexdigest()[:64]}"
+
+    @field_validator("title", mode="before")
+    @classmethod
+    def bound_title(cls, value: object) -> str:
+        return str(value or "").strip()[:500]
+
+    @field_validator("seller", mode="before")
+    @classmethod
+    def bound_seller(cls, value: object) -> str | None:
+        if value is None:
+            return None
+        seller = str(value).strip()
+        return seller[:200] or None
+
+    @field_validator("image_url", mode="before")
+    @classmethod
+    def keep_storable_image_url(cls, value: object) -> str | None:
+        """Reject inline/broken images before they can abort a scan batch."""
+        if not isinstance(value, str):
+            return None
+        image_url = value.strip()
+        if len(image_url) > 1000 or not image_url.lower().startswith(("https://", "http://")):
+            return None
+        return image_url
 
 
 class ScanSubmitRequest(CamelModel):
