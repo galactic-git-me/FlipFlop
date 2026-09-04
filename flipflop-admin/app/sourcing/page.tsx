@@ -175,8 +175,44 @@ function sortScansByDefinitionOrder(scans: ScanProgress[]): ScanProgress[] {
     if (aIdx === -1 && bIdx === -1) return 0;
     if (aIdx === -1) return 1;
     if (bIdx === -1) return -1;
-    return aIdx - bIdx;
+  return aIdx - bIdx;
   });
+}
+
+// One card represents one configured search term. The durable queue fallback
+// can report the same search ID with slightly different generated query text;
+// merge those submissions before rendering so the card and its React key stay
+// stable while queue data updates.
+function coalesceScansBySearchId(scans: ScanProgress[]): ScanProgress[] {
+  const merged = new Map<string, ScanProgress>();
+  for (const scan of scans) {
+    const key = scan.searchId || scan.query;
+    const existing = merged.get(key);
+    if (!existing) {
+      merged.set(key, { ...scan, byVendor: { ...scan.byVendor } });
+      continue;
+    }
+    for (const [vendor, count] of Object.entries(scan.byVendor || {})) {
+      existing.byVendor[vendor] = (existing.byVendor[vendor] ?? 0) + count;
+    }
+    existing.query = scan.query || existing.query;
+    existing.elapsedSeconds = Math.max(existing.elapsedSeconds, scan.elapsedSeconds);
+    existing.activeSubmissions += scan.activeSubmissions;
+    existing.totalListings += scan.totalListings;
+    existing.ingestedCount += scan.ingestedCount;
+    existing.ingestedNewCount += scan.ingestedNewCount;
+    existing.cpkAssignedCount += scan.cpkAssignedCount;
+    existing.marketPricedCount += scan.marketPricedCount;
+    existing.classifiedCount += scan.classifiedCount;
+    existing.excludedAuctionCount += scan.excludedAuctionCount;
+    existing.isComplete = existing.isComplete && scan.isComplete;
+    const configuredVendors = Array.from(new Set([
+      ...(existing.configuredVendors ?? []),
+      ...(scan.configuredVendors ?? []),
+    ]));
+    existing.configuredVendors = configuredVendors.length > 0 ? configuredVendors : undefined;
+  }
+  return [...merged.values()];
 }
 
 // Small circular gauge -- replaces the earlier linear progress bars per
@@ -422,7 +458,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
           <p className="text-xs text-slate-500">No scans to display.</p>
         ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-          {sortScansByDefinitionOrder(displayedScans).map((scan) => {
+          {sortScansByDefinitionOrder(coalesceScansBySearchId(displayedScans)).map((scan) => {
             // Preserve a consistent vendor row. When configuration metadata is
             // absent, an unreported vendor gets null (rendered as an em dash),
             // not a fabricated zero.
@@ -464,7 +500,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
               scan.cpkAssignedCount >= scan.ingestedCount;
 
             return (
-              <PixelCard key={scan.searchId ?? scan.query} variant={isComplete ? "emerald" : "default"}>
+              <PixelCard key={scan.searchId || scan.query} variant={isComplete ? "emerald" : "default"}>
                 <div className={`p-2 space-y-2 ${isComplete ? "opacity-80" : ""}`}>
                   <div className="flex justify-between items-start gap-2 min-w-0">
                     <div className="min-w-0">

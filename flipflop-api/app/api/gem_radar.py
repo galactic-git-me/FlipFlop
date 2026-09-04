@@ -283,9 +283,13 @@ async def pipeline_status_endpoint(
         from datetime import datetime
 
         live_items = await SubmissionQueueService.get_live_items(db, limit=500)
-        grouped: dict[tuple[str, str], dict] = {}
+        # search_id is the configured search-term identity. One extension
+        # sweep can submit pages with query text that differs only in generated
+        # exclusions, so grouping by (search_id, query) created duplicate
+        # dashboard cards for a single search.
+        grouped: dict[str, dict] = {}
         for row in live_items:
-            key = (row.search_id, row.query)
+            key = row.search_id
             scan = grouped.setdefault(key, {
                 "searchId": row.search_id,
                 "query": row.query,
