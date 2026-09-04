@@ -2299,14 +2299,21 @@ async def _submit_scan_body(
                     await task_db.commit()
                     return (listing.listing_id, cpk)
 
-        results = await asyncio.gather(
-            *[assign_cpk_with_semaphore(listing) for listing in listings_to_assign_cpk],
-            return_exceptions=True
-        )
-
-        for result in results:
-            if isinstance(result, Exception):
-                log.warning("diag.cpk_assignment.error", error=str(result))
+        # Do not wait for the entire page before publishing progress. A page can
+        # contain hundreds of listings while the global CPK semaphore permits
+        # only four model calls at once. ``gather`` kept every CPK/market-price
+        # gauge at zero until the slowest listing finished, making a healthy run
+        # appear frozen for minutes. Consume tasks as they complete so the
+        # dashboard and durable CPK rows advance listing by listing.
+        cpk_tasks = [
+            asyncio.create_task(assign_cpk_with_semaphore(listing))
+            for listing in listings_to_assign_cpk
+        ]
+        for task in asyncio.as_completed(cpk_tasks):
+            try:
+                result = await task
+            except Exception as exc:
+                log.warning("diag.cpk_assignment.error", error=str(exc))
                 pipeline_status.increment(payload.search_id, cpk_failed_count=1)
                 continue
             listing_id, cpk = result
