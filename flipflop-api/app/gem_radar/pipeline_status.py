@@ -349,11 +349,16 @@ async def snapshot(db) -> dict:
         priced_count = sum(1 for lid in s.listing_ids if lid in priced_listing_ids)
         classified_count = sum(1 for lid in s.listing_ids if lid in classified_listing_ids)
 
-        # Total listings for THIS run = count of unique listing_ids we've tracked
-        # (listings that got CPK assigned). This is the ground truth for what we've
-        # actually processed in THIS run, scoped to only the listing_ids we know about.
-        # Avoids the problem of s.total_listings or DB queries mixing in old run data.
-        actual_total_listings = len(s.listing_ids) if s.listing_ids else (s.total_listings or 1)
+        # ``listing_ids`` only fills after CPK assignment. It is therefore a
+        # progress numerator, never a valid denominator: using it here made the
+        # CPK gauge show 100% while the remaining submitted listings waited.
+        # Auctions are excluded before ingestion and should not hold a fixed-price
+        # scan short of completion.
+        actual_total_listings = max(
+            s.total_listings - s.excluded_auction_count,
+            s.ingested_count,
+            0,
+        )
 
         # By_vendor: aggregate vendor counts from the listing_ids we've tracked,
         # counting observations per source. This gives us the true vendor breakdown
@@ -379,7 +384,10 @@ async def snapshot(db) -> dict:
 
         # Processed: listings that completed full pipeline (ingested → CPK → market/classified)
         processed_count = sum(1 for lid in s.listing_ids if lid in priced_listing_ids or lid in classified_listing_ids)
-        processed_pct = round((processed_count / len(s.listing_ids) * 100) if s.listing_ids else 0, 1)
+        processed_pct = round(
+            (processed_count / actual_total_listings * 100) if actual_total_listings else 0,
+            1,
+        )
 
         # Complete only once:
         # 1. No submissions still in flight

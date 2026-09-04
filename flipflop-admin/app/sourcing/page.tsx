@@ -362,7 +362,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
   }, [lastRunLength, displayedScans.length]);
 
   useEffect(() => {
-    const isProcessing = queueStatus && queueStatus.pending > 0;
+    const isProcessing = queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0);
     if (!isProcessing) {
       setClientElapsed(0);
       return;
@@ -375,7 +375,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
     return () => clearInterval(timer);
   }, [queueStatus]);
 
-  const isRunning = queueStatus && queueStatus.pending > 0;
+  const isRunning = queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0);
 
   // Sourced from pipeline-status, scoped to THIS run's listing_ids -- NOT
   // derived from the whole-DB `listings` array (see pipeline_status.py's
@@ -447,8 +447,21 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
               .filter(([v, count]) => count > 0 && !(VENDOR_ORDER as readonly string[]).includes(v))
               .sort((a, b) => b[1] - a[1]);
             const vendorEntries = [...knownVendorEntries, ...extraVendorEntries];
-            const searchTermTotal = Object.values(scan.byVendor || {}).reduce((sum, count) => sum + count, 0) || 1;
+            // Vendor counts describe work already observed, not the submitted
+            // workload. Using them as the denominator makes CPK appear complete
+            // as soon as observations arrive. totalListings is the server's
+            // fixed-price workload for this search.
+            const searchTermTotal = Math.max(
+              scan.totalListings - scan.excludedAuctionCount,
+              scan.ingestedCount,
+              1,
+            );
             const { isComplete } = scan;
+            const awaitingFinalScoring =
+              !isComplete &&
+              scan.activeSubmissions === 0 &&
+              scan.ingestedCount > 0 &&
+              scan.cpkAssignedCount >= scan.ingestedCount;
 
             return (
               <PixelCard key={scan.searchId ?? scan.query} variant={isComplete ? "emerald" : "default"}>
@@ -460,8 +473,10 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                       </div>
                       <div className="text-[11px] text-slate-400 truncate">
                         {isComplete
-                          ? "Complete"
-                          : `${scan.activeSubmissions} page${scan.activeSubmissions !== 1 ? "s" : ""} in flight`}{" "}
+                          ? "Phase 1 complete — final scoring follows queue drain"
+                          : awaitingFinalScoring
+                            ? "Waiting for the sweep to finish before final scoring"
+                            : `${scan.activeSubmissions} page${scan.activeSubmissions !== 1 ? "s" : ""} in flight`}{" "}
                         • {scan.elapsedSeconds}s
                         {scan.excludedAuctionCount > 0 && <> • {scan.excludedAuctionCount} auctions excl.</>}
                       </div>

@@ -280,6 +280,7 @@ async def pipeline_status_endpoint(
     if not snapshot.get("activeScans"):
         from sqlalchemy import text
         from app.gem_radar.cpk_market import MIN_LISTINGS_FOR_SETTLED_PRICE
+        from datetime import datetime
 
         live_items = await SubmissionQueueService.get_live_items(db, limit=500)
         grouped: dict[tuple[str, str], dict] = {}
@@ -304,6 +305,13 @@ async def pipeline_status_endpoint(
             })
             scan["totalListings"] += len(row.listings_json or [])
             scan["searchRunIds"].add(row.search_run_id)
+            # Queue work may be processed by a different process, where the
+            # in-memory stopwatch is unavailable.  Use the durable enqueue
+            # timestamp so the dashboard timer does not remain at 0s for an
+            # actively-processing queue.
+            if row.first_attempt_at:
+                elapsed = max(0, int((datetime.utcnow() - row.first_attempt_at).total_seconds()))
+                scan["elapsedSeconds"] = max(scan["elapsedSeconds"], elapsed)
             if row.status == "processing":
                 scan["activeSubmissions"] += 1
 
