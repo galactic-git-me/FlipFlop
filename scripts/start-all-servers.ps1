@@ -382,14 +382,14 @@ $servers = @(
     },
     @{
         name     = "admin"
-        cmdArgs  = @("/c", "cd flipflop-admin && set ""BACKEND_URL=https://admin.theflipflop.shop"" && set ""NEXT_PUBLIC_API_URL=https://admin.theflipflop.shop"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4312 -H 0.0.0.0")
+        cmdArgs  = @("/c", "cd flipflop-admin && set ""BACKEND_URL=https://www.theflipflop.shop"" && set ""NEXT_PUBLIC_API_URL=https://www.theflipflop.shop"" && set ""GEMRADAR_URL=https://www.theflipflop.shop"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4312 -H 0.0.0.0")
         port     = 4312
         color    = "Green"
         skip     = $NoAdmin
     },
     @{
         name     = "frontend"
-        cmdArgs  = @("/c", "cd ..\FlipFlop.shop && set ""BACKEND_URL=https://admin.theflipflop.shop"" && set ""NEXT_PUBLIC_API_URL=https://admin.theflipflop.shop"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4313 -H 0.0.0.0")
+        cmdArgs  = @("/c", "cd ..\FlipFlop.shop && set ""BACKEND_URL=https://www.theflipflop.shop"" && set ""NEXT_PUBLIC_API_URL=https://www.theflipflop.shop"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4313 -H 0.0.0.0")
         port     = 4313
         color    = "Magenta"
         skip     = $NoFrontend
