@@ -14,3 +14,6 @@ Creating turbopack project {
 }
 
  GET /sourcing 200 in 485ms (next.js: 173ms, proxy.ts: 64ms, application-code: 247ms)
+ GET /sourcing 200 in 80ms (next.js: 8ms, proxy.ts: 3ms, application-code: 69ms)
+ GET / 200 in 219ms (next.js: 129ms, proxy.ts: 3ms, application-code: 87ms)
+ GET /sourcing 200 in 53ms (next.js: 3ms, proxy.ts: 1.5ms, application-code: 48ms)
