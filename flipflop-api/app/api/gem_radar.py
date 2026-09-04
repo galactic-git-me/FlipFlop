@@ -332,6 +332,7 @@ async def pipeline_status_endpoint(
                     """
                     SELECT
                         o.search_run_id,
+                        o.source,
                         COUNT(DISTINCT o.listing_id) AS ingested_count,
                         COUNT(DISTINCT o.listing_id) FILTER (WHERE lc.cpk IS NOT NULL) AS cpk_count,
                         COUNT(DISTINCT o.listing_id) FILTER (
@@ -346,17 +347,89 @@ async def pipeline_status_endpoint(
                     LEFT JOIN gem_radar_cpk_market_price mp ON mp.cpk = lc.cpk
                     LEFT JOIN gem_radar_scored_listings sl ON sl.listing_id = o.listing_id
                     WHERE o.search_run_id = ANY(:run_ids)
-                    GROUP BY o.search_run_id
+                    GROUP BY o.search_run_id, o.source
                     """
                 ),
                 {"run_ids": run_ids, "min_listings": MIN_LISTINGS_FOR_SETTLED_PRICE},
             )
-            for run_id, ingested, cpk, priced, classified in progress_rows:
+            for run_id, source, ingested, cpk, priced, classified in progress_rows:
                 scan = run_id_to_scan[run_id]
                 scan["ingestedCount"] += ingested
                 scan["cpkAssignedCount"] += cpk
                 scan["marketPricedCount"] += priced
                 scan["classifiedCount"] += classified
+                vendor = source or "unknown"
+                scan["byVendor"][vendor] = scan["byVendor"].get(vendor, 0) + ingested
+
+            # The card-level classifiedCount above only says that a score
+            # exists. The header needs its actual tier and score. The in-memory
+            # path already calculates these in pipeline_status.snapshot(), but
+            # the durable worker/queue fallback used to leave every header value
+            # at its default zero even while the cards showed scored listings.
+            latest_score_rows = await db.execute(
+                text(
+                    """
+                    SELECT DISTINCT ON (o.listing_id)
+                        o.listing_id, sl.classification, sl.deal_score
+                    FROM gem_radar_listing_observations o
+                    JOIN gem_radar_scored_listings sl ON sl.listing_id = o.listing_id
+                    WHERE o.search_run_id = ANY(:run_ids)
+                      AND sl.classification IS NOT NULL
+                    ORDER BY o.listing_id, sl.scored_at DESC
+                    """
+                ),
+                {"run_ids": run_ids},
+            )
+            gem_scores: list[float] = []
+            super_gem_scores: list[float] = []
+            for _listing_id, classification, deal_score in latest_score_rows:
+                if classification == "GEM":
+                    gem_scores.append(float(deal_score))
+                elif classification == "SUPER_GEM":
+                    super_gem_scores.append(float(deal_score))
+
+            snapshot["gemCount"] = len(gem_scores)
+            snapshot["superGemCount"] = len(super_gem_scores)
+            snapshot["avgGemScore"] = round(sum(gem_scores) / len(gem_scores), 1) if gem_scores else 0.0
+            snapshot["avgSuperGemScore"] = (
+                round(sum(super_gem_scores) / len(super_gem_scores), 1)
+                if super_gem_scores
+                else 0.0
+            )
+
+            price_count_row = (
+                await db.execute(
+                    text(
+                        """
+                        SELECT
+                            (
+                                SELECT COUNT(DISTINCT price.listing_id)
+                                FROM gem_radar_cpk_listing_price price
+                                WHERE price.listing_id IN (
+                                    SELECT DISTINCT listing_id
+                                    FROM gem_radar_listing_observations
+                                    WHERE search_run_id = ANY(:run_ids)
+                                )
+                            ) AS bin_count,
+                            (
+                                SELECT COUNT(*) FROM gem_radar_sold_observations sold
+                                WHERE sold.cpk IN (
+                                    SELECT DISTINCT cpk
+                                    FROM gem_radar_listing_cpk
+                                    WHERE listing_id IN (
+                                        SELECT DISTINCT listing_id
+                                        FROM gem_radar_listing_observations
+                                        WHERE search_run_id = ANY(:run_ids)
+                                    )
+                                )
+                            ) AS sold_count
+                        """
+                    ),
+                    {"run_ids": run_ids},
+                )
+            ).fetchone()
+            snapshot["binPricesCount"] = price_count_row[0] if price_count_row else 0
+            snapshot["soldPricesCount"] = price_count_row[1] if price_count_row else 0
 
         for scan in grouped.values():
             # Completed queue rows intentionally discard their payload. The
