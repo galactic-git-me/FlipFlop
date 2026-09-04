@@ -1,0 +1,16 @@
+
+> pc-flipper@0.1.0 dev
+> next dev -p 4312 -H 0.0.0.0
+
+▲ Next.js 16.3.1 (Turbopack)
+- Local:         http://localhost:4312
+- Network:       http://0.0.0.0:4312
+- Environments: .env.local
+✓ Ready in 521ms
+✓ Running next.config.ts took 91ms
+Creating turbopack project {
+  dir: 'C:\\Users\\mclar\\CODING\\FlipFlop\\flipflop-admin',
+  testMode: true
+}
+
+ GET /sourcing 200 in 485ms (next.js: 173ms, proxy.ts: 64ms, application-code: 247ms)
