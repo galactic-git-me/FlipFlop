@@ -17,3 +17,21 @@ Creating turbopack project {
  GET /sourcing 200 in 80ms (next.js: 8ms, proxy.ts: 3ms, application-code: 69ms)
  GET / 200 in 219ms (next.js: 129ms, proxy.ts: 3ms, application-code: 87ms)
  GET /sourcing 200 in 53ms (next.js: 3ms, proxy.ts: 1.5ms, application-code: 48ms)
+✓ Compiled in 417ms
+ GET /sourcing 200 in 36ms (next.js: 9ms, proxy.ts: 1.9ms, application-code: 25ms)
+✓ Compiled in 87ms
+ GET /sourcing 200 in 38ms (next.js: 5ms, proxy.ts: 1.9ms, application-code: 31ms)
+✓ Compiled in 91ms
+ GET /sourcing 200 in 36ms (next.js: 7ms, proxy.ts: 3ms, application-code: 27ms)
+✓ Compiled in 76ms
+ GET /sourcing 200 in 56ms (next.js: 9ms, proxy.ts: 2ms, application-code: 45ms)
+ GET /sourcing 200 in 125ms (next.js: 37ms, proxy.ts: 3ms, application-code: 85ms)
+ GET /sourcing 200 in 349ms (next.js: 188ms, proxy.ts: 3ms, application-code: 158ms)
+ GET /sourcing 200 in 154ms (next.js: 11ms, proxy.ts: 3ms, application-code: 139ms)
+ GET /sourcing 200 in 51ms (next.js: 8ms, proxy.ts: 2ms, application-code: 41ms)
+ GET /sourcing 200 in 67ms (next.js: 8ms, proxy.ts: 3ms, application-code: 56ms)
+ GET /sourcing 200 in 27ms (next.js: 4ms, proxy.ts: 4ms, application-code: 19ms)
+ GET /sourcing 200 in 102ms (next.js: 10ms, proxy.ts: 4ms, application-code: 89ms)
+ GET /sourcing 200 in 37ms (next.js: 4ms, proxy.ts: 4ms, application-code: 30ms)
+ GET / 200 in 119ms (next.js: 44ms, proxy.ts: 2ms, application-code: 72ms)
+ GET /sourcing 200 in 96ms (next.js: 10ms, proxy.ts: 3ms, application-code: 83ms)

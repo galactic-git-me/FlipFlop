@@ -2393,3 +2393,36 @@ TimeoutError: signal timed out (app/sourcing/page.tsx:2313:15)
 TimeoutError: signal timed out (app/sourcing/page.tsx:2313:15)
 [browser] Error fetching data: TimeoutError: signal timed out
 TimeoutError: signal timed out (app/sourcing/page.tsx:2313:15)
+[browser] Error fetching data: TimeoutError: signal timed out
+TimeoutError: signal timed out (app/sourcing/page.tsx:2313:15)
+[browser] Error fetching data: TimeoutError: signal timed out
+TimeoutError: signal timed out (app/sourcing/page.tsx:2313:15)
+[browser] Error fetching scan schedule: TypeError: Failed to fetch
+    at request (lib/api.ts:496:21)
+    at Object.scanScheduleStatus (lib/api.ts:551:31)
+    at fetchScanSchedule (app/sourcing/page.tsx:2257:8)
+  494 |   const url = apiUrl(path).replace(/([^/])(\?)/, "$1/$2");
+  495 |   const token = getAdminToken();
+> 496 |   const res = await fetch(url, {
+      |                     ^
+  497 |     credentials: "include",
+  498 |     headers: {
+  499 |       "Content-Type": "application/json", (app/sourcing/page.tsx:2254:25)
+[browser] Error fetching market snapshot: TypeError: Failed to fetch
+    at request (lib/api.ts:496:21)
+    at Object.marketSnapshot (lib/api.ts:547:27)
+    at fetchMarketSnapshot (app/sourcing/page.tsx:2265:33)
+  494 |   const url = apiUrl(path).replace(/([^/])(\?)/, "$1/$2");
+  495 |   const token = getAdminToken();
+> 496 |   const res = await fetch(url, {
+      |                     ^
+  497 |     credentials: "include",
+  498 |     headers: {
+  499 |       "Content-Type": "application/json", (app/sourcing/page.tsx:2267:10)
+[browser] scored-listings returned 502 (app/sourcing/page.tsx:2299:5)
+[browser] Error fetching data: TimeoutError: signal timed out
+TimeoutError: signal timed out (app/sourcing/page.tsx:2313:15)
+[browser] Error fetching data: TimeoutError: signal timed out
+TimeoutError: signal timed out (app/sourcing/page.tsx:2313:15)
+[browser] scored-listings returned 502 (app/sourcing/page.tsx:2299:5)
+[browser] Error fetching data: AbortError: The user aborted a request. (app/sourcing/page.tsx:2313:15)
