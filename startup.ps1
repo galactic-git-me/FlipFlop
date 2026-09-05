@@ -45,9 +45,34 @@ function Start-Services {
   Write-Host "Starting FlipFlop services..." -ForegroundColor Cyan
 
   # Start GemRadar API
-  Write-Host "  → Starting GemRadar API (port 18000)..." -ForegroundColor Yellow
-  cd $FlipFlopApiDir
-  & python -m uvicorn app.main:app --host 0.0.0.0 --port 18000 --log-level info 2>&1 | Tee-Object -FilePath $GebradarLog -Append &
+  # Wrapped in a restart loop: the backend's own stall-watchdog thread used
+  # to kill the whole process on the assumption "Docker's restart policy"
+  # would bring up a clean one — but this deployment has never run under
+  # Docker/PM2/any supervisor, so the first time it fired, the API died and
+  # stayed dead for days with nothing noticing (see git history around
+  # 2026-09-02). That watchdog no longer kills the process, but this loop
+  # is a second line of defense against ANY future crash (OOM, unhandled
+  # exception, etc.) — if uvicorn exits for any reason, relaunch it after a
+  # few seconds instead of silently leaving the API dead.
+  Write-Host "  → Starting GemRadar API (port 18000, auto-restart on crash)..." -ForegroundColor Yellow
+  # Start-Job was tried here first but is scoped to the PowerShell PROCESS
+  # that creates it — if that process exits (e.g. a non-interactive command
+  # invocation finishing), the job and everything under it dies too, which
+  # defeats the entire point of a supervisor loop. A genuinely detached
+  # child process (Start-Process, hidden window) survives independently of
+  # whatever launched it, the same way the admin dashboard's own `npm run
+  # dev &` background invocation already does.
+  $watchdogScript = Join-Path $FlipFlopApiDir "_gemradar_watchdog.ps1"
+  @"
+Set-Location '$FlipFlopApiDir'
+while (`$true) {
+  "`$(Get-Date -Format o) [watchdog] starting uvicorn..." | Out-File -FilePath '$GebradarLog' -Append -Encoding utf8
+  & python -m uvicorn app.main:app --host 0.0.0.0 --port 18000 --log-level info *>> '$GebradarLog'
+  "`$(Get-Date -Format o) [watchdog] uvicorn exited (code `$LASTEXITCODE) - restarting in 5s..." | Out-File -FilePath '$GebradarLog' -Append -Encoding utf8
+  Start-Sleep -Seconds 5
+}
+"@ | Set-Content -Path $watchdogScript -Encoding utf8
+  Start-Process -FilePath "pwsh.exe" -ArgumentList @("-NoProfile", "-WindowStyle", "Hidden", "-File", $watchdogScript) -WindowStyle Hidden | Out-Null
 
   # Start Admin Dashboard
   Write-Host "  → Starting Admin Dashboard (port 3002)..." -ForegroundColor Yellow
@@ -113,6 +138,12 @@ function Show-Status {
 
 function Stop-Services {
   Write-Host "Stopping FlipFlop services..." -ForegroundColor Yellow
+
+  # Stop the watchdog process FIRST — otherwise it just relaunches uvicorn
+  # the moment Stop-Process kills it below.
+  Get-CimInstance Win32_Process -Filter "Name='pwsh.exe'" -ErrorAction SilentlyContinue |
+    Where-Object { $_.CommandLine -match "_gemradar_watchdog\.ps1" } |
+    ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
 
   Get-Process | Where-Object {
     $_.ProcessName -eq "python" -or $_.ProcessName -eq "node"
