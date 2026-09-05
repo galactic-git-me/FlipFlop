@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-09-05T06:51:36.438850+00:00",
+  "generated_at": "2026-09-05T07:51:26.556727+00:00",
   "builds": [
     {
       "components": [
         {
-          "id": 31008697,
-          "listing_id": "158009026504",
+          "id": 31022442,
+          "listing_id": "336771849156",
           "category": "cpu",
-          "title": "Intel i3-6100 3.70GHz LGA1151 Skylake-S CPU SR2HG",
+          "title": "Intel SR2HG Core i3-6100 3.70Ghz Skylake Dual Core Processor CPU LGA1151 Used",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/PqkAAeSwRjVqjwRp/s-l225.jpg",
-          "delivered_price": 5.49,
+          "image_url": "https://i.ebayimg.com/images/g/JXcAAeSwT-hqlhyC/s-l225.jpg",
+          "delivered_price": 6.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -5.49,
-          "url": "https://www.ebay.co.uk/itm/158009026504"
+          "estimated_profit": -6.99,
+          "url": "https://www.ebay.co.uk/itm/336771849156"
         },
         {
           "id": 31013952,
@@ -118,9 +118,9 @@
       ],
       "compatibility_confidence": "matched",
       "super_gem_count": 4,
-      "build_cost": 74.98,
+      "build_cost": 76.48,
       "market": {
-        "query": "gaming pc Intel i3-6100 Quadro P620 8gb",
+        "query": "gaming pc Core i3-6100 Quadro P620 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -129,15 +129,15 @@
         },
         "bin": {
           "available": true,
-          "count": 49,
+          "count": 48,
           "min_price": 68.31,
-          "max_price": 1100.0,
-          "average_price": 303.43
+          "max_price": 1178.36,
+          "average_price": 330.1
         }
       },
-      "resale_estimate": 303.43,
+      "resale_estimate": 330.1,
       "resale_source": "bin_average",
-      "estimated_profit": 228.45,
+      "estimated_profit": 253.62,
       "rank": 1
     },
     {
@@ -157,32 +157,32 @@
           "url": "https://www.ebay.co.uk/itm/158009026504"
         },
         {
-          "id": 31018043,
-          "listing_id": "287524946216",
+          "id": 31013952,
+          "listing_id": "227442336516",
           "category": "motherboard",
-          "title": "ASUS H110M-R Intel H110 LGA1151 Micro ATX Motherboard DDR4 USB 3.0 SATA i5 7400",
+          "title": "ASUS H110M-R Intel H110 LGA1151 Micro ATX Motherboard DDR4 USB 3.0 SATA",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/U~IAAeSwUiNqfzDj/s-l225.jpg",
-          "delivered_price": 24.95,
+          "image_url": "https://i.ebayimg.com/images/g/grEAAeSwZsBqhBej/s-l225.jpg",
+          "delivered_price": 20.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -24.95,
-          "url": "https://www.ebay.co.uk/itm/287524946216"
+          "estimated_profit": -20.99,
+          "url": "https://www.ebay.co.uk/itm/227442336516"
         },
         {
-          "id": 31015894,
-          "listing_id": "257705800973",
+          "id": 31028395,
+          "listing_id": "407164098393",
           "category": "gpu",
-          "title": "Nvidia Quadro P620 Single Slot Graphics Card GPU 2GB VRAM Mini DisplayPort x4",
+          "title": "NVIDIA Quadro P620 2GB GDDR5 PCIe x16 Graphics Card 4x Mini DisplayPort GPU",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/wIcAAeSwzbZqkBRv/s-l500.webp",
-          "delivered_price": 21.5,
+          "image_url": "https://i.ebayimg.com/images/g/ND4AAeSwqn9qip~Q/s-l225.jpg",
+          "delivered_price": 24.0,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -21.5,
-          "url": "https://www.ebay.co.uk/itm/257705800973"
+          "estimated_profit": -24.0,
+          "url": "https://www.ebay.co.uk/itm/407164098393"
         },
         {
           "id": 31020923,
@@ -257,7 +257,7 @@
       ],
       "compatibility_confidence": "matched",
       "super_gem_count": 4,
-      "build_cost": 78.94,
+      "build_cost": 77.48,
       "market": {
         "query": "gaming pc Intel i3-6100 Quadro P620 8gb",
         "sold": {
@@ -270,13 +270,13 @@
           "available": true,
           "count": 49,
           "min_price": 68.31,
-          "max_price": 980.99,
-          "average_price": 286.26
+          "max_price": 1100.0,
+          "average_price": 307.91
         }
       },
-      "resale_estimate": 286.26,
+      "resale_estimate": 307.91,
       "resale_source": "bin_average",
-      "estimated_profit": 207.32,
+      "estimated_profit": 230.43,
       "rank": 2
     },
     {
@@ -410,7 +410,7 @@
           "count": 50,
           "min_price": 112.34,
           "max_price": 866.39,
-          "average_price": 287.27
+          "average_price": 288.07
         }
       },
       "resale_estimate": 245.03,
@@ -541,7 +541,7 @@
         "sold": {
           "available": true,
           "count": 60,
-          "average_price": 198.45,
+          "average_price": 196.61,
           "unavailable_reason": null
         },
         "bin": {
@@ -549,12 +549,12 @@
           "count": 47,
           "min_price": 68.31,
           "max_price": 1178.36,
-          "average_price": 304.07
+          "average_price": 301.87
         }
       },
-      "resale_estimate": 198.45,
+      "resale_estimate": 196.61,
       "resale_source": "sold_average",
-      "estimated_profit": 122.98,
+      "estimated_profit": 121.14,
       "rank": 4
     },
     {
@@ -680,51 +680,51 @@
         "sold": {
           "available": true,
           "count": 60,
-          "average_price": 197.03,
+          "average_price": 196.61,
           "unavailable_reason": null
         },
         "bin": {
           "available": true,
-          "count": 46,
+          "count": 47,
           "min_price": 68.31,
           "max_price": 1178.36,
-          "average_price": 308.1
+          "average_price": 300.84
         }
       },
-      "resale_estimate": 197.03,
+      "resale_estimate": 196.61,
       "resale_source": "sold_average",
-      "estimated_profit": 119.06,
+      "estimated_profit": 118.64,
       "rank": 5
     },
     {
       "components": [
         {
-          "id": 31018247,
-          "listing_id": "287542734621",
+          "id": 31022394,
+          "listing_id": "336762739170",
           "category": "cpu",
-          "title": "Intel Core CPU i3-6100 3.7 LGA1151 Dual Core, please read details ",
+          "title": "Intel SR3N5 Core i3-8100 3.6GHz LGA1151 4-Core CPU Processor",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/enIAAeSwh-VpOYDv/s-l225.jpg",
-          "delivered_price": 5.98,
+          "image_url": "https://i.ebayimg.com/images/g/mO4AAOSwU0dkBe2P/s-l225.jpg",
+          "delivered_price": 7.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -5.98,
-          "url": "https://www.ebay.co.uk/itm/287542734621"
+          "estimated_profit": -7.99,
+          "url": "https://www.ebay.co.uk/itm/336762739170"
         },
         {
-          "id": 31018043,
-          "listing_id": "287524946216",
+          "id": 31013952,
+          "listing_id": "227442336516",
           "category": "motherboard",
-          "title": "ASUS H110M-R Intel H110 LGA1151 Micro ATX Motherboard DDR4 USB 3.0 SATA i5 7400",
+          "title": "ASUS H110M-R Intel H110 LGA1151 Micro ATX Motherboard DDR4 USB 3.0 SATA",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/U~IAAeSwUiNqfzDj/s-l225.jpg",
-          "delivered_price": 24.95,
+          "image_url": "https://i.ebayimg.com/images/g/grEAAeSwZsBqhBej/s-l225.jpg",
+          "delivered_price": 20.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -24.95,
-          "url": "https://www.ebay.co.uk/itm/287524946216"
+          "estimated_profit": -20.99,
+          "url": "https://www.ebay.co.uk/itm/227442336516"
         },
         {
           "id": 31015894,
@@ -813,26 +813,26 @@
       ],
       "compatibility_confidence": "matched",
       "super_gem_count": 4,
-      "build_cost": 79.43,
+      "build_cost": 77.48,
       "market": {
-        "query": "gaming pc i3-6100 Quadro P620 8gb",
+        "query": "gaming pc Core i3-8100 Quadro P620 8gb",
         "sold": {
           "available": true,
           "count": 60,
-          "average_price": 197.03,
+          "average_price": 195.05,
           "unavailable_reason": null
         },
         "bin": {
           "available": true,
-          "count": 46,
+          "count": 49,
           "min_price": 68.31,
           "max_price": 1178.36,
-          "average_price": 308.1
+          "average_price": 331.48
         }
       },
-      "resale_estimate": 197.03,
+      "resale_estimate": 195.05,
       "resale_source": "sold_average",
-      "estimated_profit": 117.6,
+      "estimated_profit": 117.57,
       "rank": 6
     }
   ],
