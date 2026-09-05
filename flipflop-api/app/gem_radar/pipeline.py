@@ -10,6 +10,7 @@ spot rather than scattered.
 """
 from __future__ import annotations
 
+import asyncio
 import time as _time
 from collections import defaultdict
 from datetime import datetime, timedelta
@@ -64,6 +65,21 @@ BatchPriceIndex = dict[str, dict[str, list[tuple[str, float]]]]
 _HISTORICAL_LOOKBACK_DAYS = 14
 _HISTORICAL_QUERY_LIMIT = 20_000
 
+# The 3 historical DB queries in build_batch_price_index (title/observations,
+# canonical_model_id/scored_listings, epid/observations) scan up to
+# _HISTORICAL_QUERY_LIMIT rows each and regex-parse every title via
+# identity.resolve_identity — real cost that scales with how much the tables
+# have grown. Submissions land every few seconds per marketplace/page during
+# a scan (see scan-orchestrator.ts submitPage), so consecutive submissions
+# within this window are looking at the same 14-day window and will not see
+# meaningfully different historical data — short-TTL caching this trades a
+# small staleness window for skipping the rebuild on every single submission.
+_HISTORICAL_INDEX_CACHE_TTL_SECONDS = 60.0
+
+_historical_index_cache: BatchPriceIndex | None = None
+_historical_index_cache_built_at: float = 0.0
+_historical_index_cache_lock = asyncio.Lock()
+
 
 def _bucket_for_condition(condition_normalised: str) -> str | None:
     if condition_normalised == "new":
@@ -111,36 +127,11 @@ def _merge_bucket_dicts(
     return merged
 
 
-async def build_batch_price_index(db: AsyncSession, listings: list[ExtractedListing]) -> BatchPriceIndex:
-    """Groups same-model listings into new/used price buckets, drawing from
-    FOUR sources: (1) this scan's own listings, keyed by the regex-derived
-    model (no per-listing canonical id exists yet — that's only assigned
-    during THIS scan's own deep-research pass, too late to key its own
-    lookup); (2) every listing observed in the last _HISTORICAL_LOOKBACK_DAYS
-    days via gem_radar_listing_observations, also regex-keyed; (3) every
-    GEM/SUPER_GEM-tier listing SCORED in that window with a Claude-assigned
-    canonical_model_id (see claude_screening.py), keyed by that stable
-    identifier instead; (4) every listing (this scan or historical, ANY
-    tier) that carries an eBay-assigned epid (Browse API catalog product
-    ID), keyed by that id directly. (3) and (4) are what actually fix
-    cross-listing matching — a listing whose title varies from a past
-    sighting's title (different word order, "Core" present/absent, SKU code
-    placement) now lands in the same bucket, where regex-only matching would
-    have fragmented them into separate keys. (4) doesn't need the GEM/
-    SUPER_GEM restriction (3) has: canonical_model_id is only ever assigned
-    during the deep-research pass reserved for top candidates, but epid comes
-    straight from eBay on every Browse-API-sourced listing regardless of
-    tier, so its historical pool is far larger. Multiple sources can include
-    the same underlying listing_id under different keys; that's fine, each
-    source only ever gets consulted by a lookup for its own key type — see
-    _get_or_compute_research, which merges the epid-keyed and title/
-    canonical-keyed buckets for a given listing rather than picking one.
-
-    Marketplaces in UNTRUSTED_FOR_PRICE_BENCHMARKS (Temu: counterfeit/
-    drop-ship risk for PC components) are excluded from ALL sources — their
-    listings can still be scored as candidates themselves, they just never
-    get to set the price bar other listings are measured against."""
-    index: BatchPriceIndex = defaultdict(lambda: {"new": [], "used": []})
+def _make_index_adders(index: BatchPriceIndex):
+    """Shared bucket-adding closures over a given index dict — used both for
+    the per-request current-batch index and the cached historical index, so
+    the two build the exact same bucket shape independently before being
+    merged in build_batch_price_index."""
 
     def _add(key: str, bucket: str, listing_id: str, delivered_price: float) -> None:
         # Normalised so cosmetic title-wording differences (case, spacing,
@@ -180,23 +171,16 @@ async def build_batch_price_index(db: AsyncSession, listings: list[ExtractedList
             return
         _add(resolved.model, bucket, listing_id, delivered_price)
 
-    for listing in listings:
-        if infer_marketplace(listing.url) in UNTRUSTED_FOR_PRICE_BENCHMARKS:
-            continue
-        _add_from_title(listing.listing_id, listing.title, listing.condition_normalised, listing.current_delivered_price)
-        bucket = _bucket_for_condition(listing.condition_normalised)
-        if bucket is not None:
-            # Prefer canonical identifiers (GTIN > MPN > model_number > epid) for grouping,
-            # as they consolidate the same product across all title variants and retailers.
-            # All keys are added (not mutually exclusive) so any lookup path can find matches.
-            if listing.gtin:
-                _add_gtin(listing.gtin, bucket, listing.listing_id, listing.current_delivered_price)
-            if listing.mpn:
-                _add_mpn(listing.mpn, bucket, listing.listing_id, listing.current_delivered_price)
-            if listing.model_number:
-                _add_model_number(listing.model_number, bucket, listing.listing_id, listing.current_delivered_price)
-            if listing.epid:
-                _add_epid(listing.epid, bucket, listing.listing_id, listing.current_delivered_price)
+    return _add, _add_epid, _add_gtin, _add_mpn, _add_model_number, _add_from_title
+
+
+async def _fetch_historical_price_index(db: AsyncSession) -> BatchPriceIndex:
+    """Runs the 3 historical DB queries (title/observations, canonical_model_id
+    /scored_listings, epid/observations) that build_batch_price_index used to
+    run inline on every call — factored out so the result can be cached (see
+    _historical_index_cache) instead of rebuilt from scratch per submission."""
+    index: BatchPriceIndex = defaultdict(lambda: {"new": [], "used": []})
+    _add, _add_epid, _add_gtin, _add_mpn, _add_model_number, _add_from_title = _make_index_adders(index)
 
     cutoff = datetime.utcnow() - timedelta(days=_HISTORICAL_LOOKBACK_DAYS)
     result = await db.execute(
@@ -285,6 +269,92 @@ async def build_batch_price_index(db: AsyncSession, listings: list[ExtractedList
         _add_epid(epid, bucket, listing_id, delivered_price)
 
     return index
+
+
+async def _get_cached_historical_price_index(db: AsyncSession) -> BatchPriceIndex:
+    """Returns _fetch_historical_price_index's result, rebuilding only once
+    every _HISTORICAL_INDEX_CACHE_TTL_SECONDS instead of on every call. The
+    lock ensures concurrent submissions racing a cold/expired cache trigger
+    one rebuild, not one each."""
+    global _historical_index_cache, _historical_index_cache_built_at
+
+    now = _time.monotonic()
+    if _historical_index_cache is not None and (now - _historical_index_cache_built_at) < _HISTORICAL_INDEX_CACHE_TTL_SECONDS:
+        return _historical_index_cache
+
+    async with _historical_index_cache_lock:
+        # Re-check after acquiring the lock — another task may have already
+        # rebuilt it while this one was waiting.
+        now = _time.monotonic()
+        if _historical_index_cache is not None and (now - _historical_index_cache_built_at) < _HISTORICAL_INDEX_CACHE_TTL_SECONDS:
+            return _historical_index_cache
+
+        fresh = await _fetch_historical_price_index(db)
+        _historical_index_cache = fresh
+        _historical_index_cache_built_at = _time.monotonic()
+        return fresh
+
+
+async def build_batch_price_index(db: AsyncSession, listings: list[ExtractedListing]) -> BatchPriceIndex:
+    """Groups same-model listings into new/used price buckets, drawing from
+    FOUR sources: (1) this scan's own listings, keyed by the regex-derived
+    model (no per-listing canonical id exists yet — that's only assigned
+    during THIS scan's own deep-research pass, too late to key its own
+    lookup); (2) every listing observed in the last _HISTORICAL_LOOKBACK_DAYS
+    days via gem_radar_listing_observations, also regex-keyed; (3) every
+    GEM/SUPER_GEM-tier listing SCORED in that window with a Claude-assigned
+    canonical_model_id (see claude_screening.py), keyed by that stable
+    identifier instead; (4) every listing (this scan or historical, ANY
+    tier) that carries an eBay-assigned epid (Browse API catalog product
+    ID), keyed by that id directly. (3) and (4) are what actually fix
+    cross-listing matching — a listing whose title varies from a past
+    sighting's title (different word order, "Core" present/absent, SKU code
+    placement) now lands in the same bucket, where regex-only matching would
+    have fragmented them into separate keys. (4) doesn't need the GEM/
+    SUPER_GEM restriction (3) has: canonical_model_id is only ever assigned
+    during the deep-research pass reserved for top candidates, but epid comes
+    straight from eBay on every Browse-API-sourced listing regardless of
+    tier, so its historical pool is far larger. Multiple sources can include
+    the same underlying listing_id under different keys; that's fine, each
+    source only ever gets consulted by a lookup for its own key type — see
+    _get_or_compute_research, which merges the epid-keyed and title/
+    canonical-keyed buckets for a given listing rather than picking one.
+
+    Sources (2)-(4) (the historical DB queries) are shared across calls via
+    _get_cached_historical_price_index rather than re-queried every time —
+    see _HISTORICAL_INDEX_CACHE_TTL_SECONDS. Only source (1), this call's own
+    batch, is built fresh every time.
+
+    Marketplaces in UNTRUSTED_FOR_PRICE_BENCHMARKS (Temu: counterfeit/
+    drop-ship risk for PC components) are excluded from ALL sources — their
+    listings can still be scored as candidates themselves, they just never
+    get to set the price bar other listings are measured against."""
+    batch_index: BatchPriceIndex = defaultdict(lambda: {"new": [], "used": []})
+    _add, _add_epid, _add_gtin, _add_mpn, _add_model_number, _add_from_title = _make_index_adders(batch_index)
+
+    for listing in listings:
+        if infer_marketplace(listing.url) in UNTRUSTED_FOR_PRICE_BENCHMARKS:
+            continue
+        _add_from_title(listing.listing_id, listing.title, listing.condition_normalised, listing.current_delivered_price)
+        bucket = _bucket_for_condition(listing.condition_normalised)
+        if bucket is not None:
+            # Prefer canonical identifiers (GTIN > MPN > model_number > epid) for grouping,
+            # as they consolidate the same product across all title variants and retailers.
+            # All keys are added (not mutually exclusive) so any lookup path can find matches.
+            if listing.gtin:
+                _add_gtin(listing.gtin, bucket, listing.listing_id, listing.current_delivered_price)
+            if listing.mpn:
+                _add_mpn(listing.mpn, bucket, listing.listing_id, listing.current_delivered_price)
+            if listing.model_number:
+                _add_model_number(listing.model_number, bucket, listing.listing_id, listing.current_delivered_price)
+            if listing.epid:
+                _add_epid(listing.epid, bucket, listing.listing_id, listing.current_delivered_price)
+
+    historical_index = await _get_cached_historical_price_index(db)
+    merged: BatchPriceIndex = defaultdict(lambda: {"new": [], "used": []})
+    for key in set(batch_index) | set(historical_index):
+        merged[key] = _merge_bucket_dicts(batch_index.get(key), historical_index.get(key)) or {"new": [], "used": []}
+    return merged
 
 
 async def _get_last_canonical_model_id(db: AsyncSession, listing_id: str) -> str | None:

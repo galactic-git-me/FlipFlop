@@ -961,6 +961,31 @@ async def _migrate_add_columns():
             except Exception as exc:
                 log.warning("migration.index_create_failed", table=table, column="epid", error=str(exc))
 
+        # gtin/mpn/model_number were added via alembic (20260801_0006,
+        # 20260801_0007) using op.add_column(..., index=True) — that flag is
+        # only honored by SQLAlchemy's create_all()/autogenerate, Alembic's
+        # op.add_column never issues the CREATE INDEX itself. So every
+        # already-migrated DB has these three columns completely unindexed
+        # even though the model claims otherwise. build_batch_price_index
+        # (app/gem_radar/pipeline.py) filters on all three every scan over a
+        # growing 14-day/20k-row window — missing indexes here make that a
+        # full-column scan and are the leading suspect for sourcing pipeline
+        # processing slowing down as the observations table grows.
+        for column in ("gtin", "mpn", "model_number"):
+            try:
+                await conn.exec_driver_sql(
+                    f"CREATE INDEX IF NOT EXISTS ix_gem_radar_listing_observations_{column} "
+                    f"ON gem_radar_listing_observations ({column})"
+                )
+                log.debug("migration.index_ensured", table="gem_radar_listing_observations", column=column)
+            except Exception as exc:
+                log.warning(
+                    "migration.index_create_failed",
+                    table="gem_radar_listing_observations",
+                    column=column,
+                    error=str(exc),
+                )
+
         # Add 'cooler' to the partcategory enum if not already present
         try:
             await conn.exec_driver_sql(
