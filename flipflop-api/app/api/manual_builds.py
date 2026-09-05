@@ -52,7 +52,6 @@ from app.services.parcel2go_booking import (
 from app.services.ebay_shipping_fulfillment import mark_order_shipped, EbayShippingFulfillmentError
 from app.services.ebay_listing_withdraw import withdraw_listing_by_sku, EbayListingWithdrawError
 from app.services.cross_channel_guard import withdraw_storefront_for_sold_build
-from app.services.media_sync import sync_to_public_media
 from app.services.meshy_generation import generate_multi_image_asset
 from app.services.product_faqs import FAQ_BANK, FAQ_BY_ID, selected_faqs, render_ebay_faq_html
 from app.services import pricing_engine
@@ -182,17 +181,16 @@ async def _run_build_3d_generation(
         else:
             try:
                 filename = f"build_{build_id}_{asset_type}_{uuid.uuid4().hex}.glb"
-                local_path = _PUBLIC_MEDIA_ROOT / filename
+                local_path = _MODELS_ROOT / filename
                 async with httpx.AsyncClient(timeout=120, follow_redirects=True) as client:
                     response = await client.get(result.glb_url)
                     response.raise_for_status()
                 local_path.parent.mkdir(parents=True, exist_ok=True)
                 local_path.write_bytes(response.content)
-                await sync_to_public_media(local_path)
                 entry.update(
                     status="succeeded",
                     task_id=result.task_id,
-                    glb_url=f"https://theflipflop.shop/media/{filename}",
+                    glb_url=f"{_PUBLIC_API_BASE}/uploads/models/{filename}",
                     preview_url=result.thumbnail_url,
                     completed_at=datetime.utcnow().isoformat(),
                 )
@@ -331,7 +329,10 @@ def _description_with_selected_faqs(description: str, build: ManualBuild) -> str
 _IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 _MAX_IMAGE_BYTES = 15 * 1024 * 1024  # 15 MB
 _UPLOADS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "manual_builds"
-_PUBLIC_MEDIA_ROOT = Path(__file__).resolve().parent.parent.parent.parent / "FlipFlop.shop" / "public" / "media"
+_MODELS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "models"
+# Served directly by this process (see app.mount("/api/uploads", ...) in
+# main.py) — files never leave this container, so no cross-host sync needed.
+_PUBLIC_API_BASE = "https://www.theflipflop.shop/api"
 _SELLING_PRINCIPLES_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "selling_principles.md"
 _EBAY_LISTING_SYSTEM_PROMPT_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "ebay_listing_system_prompt.md"
 
@@ -1732,7 +1733,7 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
     image_urls = []
     if build.photos:
         for photo in build.photos:
-            # Photo is stored as {"url": "https://theflipflop.shop/media/...", "kind": "photo"}
+            # Photo is stored as {"url": "https://www.theflipflop.shop/api/uploads/...", "kind": "photo"}
             photo_url = photo.get("url") if isinstance(photo, dict) else photo
             if photo_url:
                 image_urls.append(photo_url)
@@ -1902,7 +1903,6 @@ async def upload_photos(
     build_dir.mkdir(parents=True, exist_ok=True)
 
     photos = list(build.photos or [])
-    _PUBLIC_MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
 
     uploaded_urls = []
     for file in files:
@@ -1916,18 +1916,10 @@ async def upload_photos(
         ext = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp"}[content_type]
         filename = f"{uuid.uuid4().hex}.{ext}"
 
-        # Save to local uploads directory
         (build_dir / filename).write_bytes(image_bytes)
 
-        # Also copy to public FlipFlop.shop media directory for eBay
-        public_path = _PUBLIC_MEDIA_ROOT / filename
-        public_path.write_bytes(image_bytes)
-
-        # Push to the live flipflop-shop VPS so the public URL actually resolves
-        await sync_to_public_media(public_path)
-
-        # Use public URL for eBay listings
-        public_url = f"https://theflipflop.shop/media/{filename}"
+        # Served directly from this container via /api/uploads (see main.py)
+        public_url = f"{_PUBLIC_API_BASE}/uploads/manual_builds/{build_id}/{filename}"
         photos.append({"url": public_url, "kind": kind})
         uploaded_urls.append(public_url)
 
@@ -1957,16 +1949,12 @@ async def upload_branded_asset(
 
     build_dir = _UPLOADS_ROOT / str(build_id)
     build_dir.mkdir(parents=True, exist_ok=True)
-    _PUBLIC_MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
     image_bytes = await file.read()
     filename = f"{kind}-{uuid.uuid4().hex}.png"
     (build_dir / filename).write_bytes(image_bytes)
-    public_path = _PUBLIC_MEDIA_ROOT / filename
-    public_path.write_bytes(image_bytes)
-    await sync_to_public_media(public_path)
 
     photos = [p for p in (build.photos or []) if p.get("kind") != kind]
-    photos.append({"url": f"https://theflipflop.shop/media/{filename}", "kind": kind})
+    photos.append({"url": f"{_PUBLIC_API_BASE}/uploads/manual_builds/{build_id}/{filename}", "kind": kind})
     build.photos = photos
     build.updated_at = datetime.utcnow()
     await db.flush()
@@ -1997,12 +1985,11 @@ async def upload_build_3d_model(
     if not build:
         raise HTTPException(404, "Build not found")
 
-    _PUBLIC_MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
+    _MODELS_ROOT.mkdir(parents=True, exist_ok=True)
     filename = f"build-{build_id}-3d-{uuid.uuid4().hex}.glb"
-    public_path = _PUBLIC_MEDIA_ROOT / filename
-    public_path.write_bytes(model_bytes)
-    await sync_to_public_media(public_path)
-    build.model_3d_url = f"https://theflipflop.shop/media/{filename}"
+    local_path = _MODELS_ROOT / filename
+    local_path.write_bytes(model_bytes)
+    build.model_3d_url = f"{_PUBLIC_API_BASE}/uploads/models/{filename}"
     build.updated_at = datetime.utcnow()
     await db.flush()
     await db.refresh(build)

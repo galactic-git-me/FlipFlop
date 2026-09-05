@@ -619,7 +619,10 @@ app = FastAPI(
 # uploads live under data/uploads and are served directly by this process.
 _uploads_dir = _app_dir / "data" / "uploads"
 _uploads_dir.mkdir(parents=True, exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=str(_uploads_dir)), name="uploads")
+# Mounted under /api so Caddy's existing /api/* proxy to this service (see
+# flipflop-shop's next.config.ts) makes these reachable publicly — plain
+# /uploads/* would fall through to the customer Next app instead.
+app.mount("/api/uploads", StaticFiles(directory=str(_uploads_dir)), name="uploads")
 
 app.add_middleware(
     CORSMiddleware,
@@ -663,10 +666,6 @@ class PrivateNetworkAccessMiddleware:
 
 
 app.add_middleware(PrivateNetworkAccessMiddleware)
-
-_uploads_dir = Path(__file__).resolve().parents[1] / "data" / "uploads"
-_uploads_dir.mkdir(parents=True, exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=str(_uploads_dir)), name="uploads")
 
 app.include_router(listings.router, prefix="/api")
 app.include_router(flips.router, prefix="/api")
