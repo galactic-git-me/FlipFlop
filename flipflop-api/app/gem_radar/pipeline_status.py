@@ -57,9 +57,25 @@ class SearchRunState:
     started_at: float = field(default_factory=time.monotonic)
     # How many submissions (pages/marketplaces) for this search are
     # currently mid-flight — shown as context ("3 pages in flight") on the
-    # dashboard card, not itself a progress metric.
+    # dashboard card, not itself a progress metric. Derived from
+    # active_submission_ids' length whenever submission ids are used (see
+    # start_submission), so a retried submission_id doesn't inflate it.
     active_submissions: int = 0
+    # Submission ids (SubmissionQueue.id) currently believed in-flight. A
+    # submission that gets reaped/retried (see reap_stale_processing) keeps
+    # the SAME id across attempts, so tracking by id — not a plain counter —
+    # means a stuck original attempt that eventually finishes late can't
+    # double-decrement, and a retried attempt re-adding the same id is a
+    # no-op rather than another +1.
+    active_submission_ids: set[object] = field(default_factory=set)
     total_listings: int = 0
+    # submission_ids already folded into total_listings — see start_submission.
+    # A retried submission (same id, reprocessed after a reap/failure) must
+    # not add its listing count onto the total a second time: that's what
+    # made the "processed" gauge cap out well below 100%, since ingested/
+    # processed counts only ever advance once per submission while the
+    # naive total kept growing by one full re-add per retry.
+    counted_submission_ids: set[object] = field(default_factory=set)
     # Track search_run_ids that belong to THIS run so we can filter by them
     # in the database queries (avoid mixing in observations from previous runs).
     search_run_ids: set[str] = field(default_factory=set)
@@ -98,6 +114,16 @@ class SearchRunState:
     # simple incremental counter — snapshot() re-checks this list against
     # gem_radar_cpk_market_price on every call.
     listing_ids: list[str] = field(default_factory=list)
+    # Once a listing_id is confirmed priced/classified, that fact is final —
+    # a settled market price or an assigned classification is never revoked.
+    # snapshot() is polled every ~1s for the run's whole life (see the
+    # Sourcing tab's poll), and listing_ids only grows, so without this cache
+    # every poll re-queried the DB for every listing this run has EVER seen,
+    # not just the ones still unresolved -- making each poll more expensive
+    # than the last as a run goes on. These let snapshot() only ask the DB
+    # about listing_ids it hasn't already gotten a definitive answer for.
+    resolved_priced_ids: set[str] = field(default_factory=set)
+    resolved_classification: dict[str, tuple[str, float]] = field(default_factory=dict)
 
     def elapsed_s(self) -> float:
         return round(time.monotonic() - self.started_at, 1)
@@ -114,18 +140,41 @@ _MAX_HISTORY = 20
 _history: deque[dict] = deque(maxlen=_MAX_HISTORY)
 
 
-def start_submission(search_id: str, query: str, total_listings: int, search_run_id: str | None = None) -> None:
-    """Called once per submission, when it begins ingesting. Adds this
-    submission's listing count onto the search's running total rather than
-    overwriting it — a search_id normally receives many submissions (one
-    per page/marketplace) over the course of a run."""
+def start_submission(
+    search_id: str,
+    query: str,
+    total_listings: int,
+    search_run_id: str | None = None,
+    submission_id: object | None = None,
+) -> None:
+    """Called once per submission attempt, when it begins ingesting. Adds
+    this submission's listing count onto the search's running total rather
+    than overwriting it — a search_id normally receives many submissions
+    (one per page/marketplace) over the course of a run.
+
+    submission_id (the queue row's stable id) is what makes this idempotent
+    across retries: reap_stale_processing/mark_failed can send the SAME
+    submission through this function multiple times (same id, new attempt)
+    when the first attempt hung or errored. Without keying on it, every
+    retry re-added that submission's listing count to total_listings while
+    ingested/processed counts only ever advance once — the exact mechanism
+    behind the "processed" gauge capping out well short of 100%. Callers
+    that don't have a submission_id (the unqueued /scans path) fall back to
+    the old always-add behaviour."""
     state = _active.get(search_id)
     if state is None:
         state = SearchRunState(search_id=search_id, query=query)
         _active[search_id] = state
     state.query = query
-    state.total_listings += total_listings
-    state.active_submissions += 1
+    if submission_id is None:
+        state.total_listings += total_listings
+        state.active_submissions += 1
+    else:
+        if submission_id not in state.counted_submission_ids:
+            state.counted_submission_ids.add(submission_id)
+            state.total_listings += total_listings
+        state.active_submission_ids.add(submission_id)
+        state.active_submissions = len(state.active_submission_ids)
     if search_run_id:
         state.search_run_ids.add(search_run_id)
 
@@ -162,14 +211,25 @@ def track_listing(search_id: str, listing_id: str) -> None:
     state.listing_ids.append(listing_id)
 
 
-def finish_submission(search_id: str) -> None:
-    """Called once a submission completes (success or failure) — only
-    decrements the in-flight counter, never removes the search_id from
-    _active, so its accumulated progress survives until reset_run()."""
+def finish_submission(search_id: str, submission_id: object | None = None) -> None:
+    """Called once a submission attempt completes (success, failure, or
+    timeout) — only decrements the in-flight counter, never removes the
+    search_id from _active, so its accumulated progress survives until
+    reset_run().
+
+    With submission_id: discards it from active_submission_ids (a no-op if
+    it was already removed, e.g. a stuck original attempt finally returning
+    long after its retry already finished) rather than blindly decrementing
+    a counter, which could otherwise go negative or under-count when the
+    same submission is in flight twice (original hung attempt + its retry)."""
     state = _active.get(search_id)
     if state is None:
         return
-    state.active_submissions = max(0, state.active_submissions - 1)
+    if submission_id is None:
+        state.active_submissions = max(0, state.active_submissions - 1)
+    else:
+        state.active_submission_ids.discard(submission_id)
+        state.active_submissions = len(state.active_submission_ids)
 
 
 def reset_run() -> None:
@@ -276,12 +336,34 @@ async def snapshot(db) -> dict:
     bin_prices_count = 0
     sold_prices_count = 0
 
-    if all_listing_ids:
+    # Which listing_id belongs to which state, so a freshly-resolved id can
+    # be written back into that state's cache below.
+    owning_state_by_listing_id: dict[str, "SearchRunState"] = {}
+    for s in states:
+        for lid in s.listing_ids:
+            owning_state_by_listing_id[lid] = s
+            if lid in s.resolved_priced_ids:
+                priced_listing_ids.add(lid)
+            cached_classification = s.resolved_classification.get(lid)
+            if cached_classification is not None:
+                classified_listing_ids.add(lid)
+
+    unresolved_priced_ids = [
+        lid for s in states for lid in s.listing_ids if lid not in s.resolved_priced_ids
+    ]
+    unresolved_classified_ids = [
+        lid for s in states for lid in s.listing_ids if lid not in s.resolved_classification
+    ]
+
+    if unresolved_priced_ids:
         # Get listings with market price (non-null median price). Threshold
         # matches cpk_market.py's actual settlement rule exactly (imported,
         # not hardcoded) -- a stale hardcoded ">= 2" here previously
         # undercounted "priced" listings after that threshold was lowered
         # to 1, making M Prices lag CPK-assigned for no real reason.
+        #
+        # Only asks about listing_ids not already confirmed priced in a
+        # past snapshot() call -- see resolved_priced_ids on SearchRunState.
         result = await db.execute(
             text(
                 """
@@ -292,15 +374,21 @@ async def snapshot(db) -> dict:
                 AND mp.median_price IS NOT NULL
                 """
             ),
-            {"ids": all_listing_ids, "min_listings": MIN_LISTINGS_FOR_SETTLED_PRICE},
+            {"ids": unresolved_priced_ids, "min_listings": MIN_LISTINGS_FOR_SETTLED_PRICE},
         )
-        priced_listing_ids = {row[0] for row in result.fetchall()}
+        for (lid,) in result.fetchall():
+            priced_listing_ids.add(lid)
+            owning_state_by_listing_id[lid].resolved_priced_ids.add(lid)
 
+    if unresolved_classified_ids:
         # Get listings with classification (GEM, SUPER_GEM, etc.), plus a
         # breakdown by classification + avg deal_score per class -- this
         # replaces the frontend's earlier use of /scored-listings-latest-run
         # (whole-DB, mislabeled as "this run") for the SUPER GEM/GEM/Avg
         # Gem/Avg Super Gem header stats.
+        #
+        # Only asks about listing_ids with no cached classification yet --
+        # see resolved_classification on SearchRunState.
         result = await db.execute(
             text(
                 """
@@ -309,18 +397,25 @@ async def snapshot(db) -> dict:
                 WHERE listing_id = ANY(:ids) AND classification IS NOT NULL
                 """
             ),
-            {"ids": all_listing_ids},
+            {"ids": unresolved_classified_ids},
         )
-        rows = result.fetchall()
-        classified_listing_ids = {row[0] for row in rows}
-        scores_by_class: dict[str, list[float]] = {}
-        for _lid, classification, deal_score in rows:
+        for lid, classification, deal_score in result.fetchall():
+            classified_listing_ids.add(lid)
+            owning_state_by_listing_id[lid].resolved_classification[lid] = (classification, deal_score)
+
+    # classification_counts / classification_avg_score are derived fresh
+    # each call from the (now mostly-cached) resolved_classification maps --
+    # cheap, pure-Python bookkeeping, not a DB round-trip.
+    scores_by_class: dict[str, list[float]] = {}
+    for s in states:
+        for classification, deal_score in s.resolved_classification.values():
             classification_counts[classification] = classification_counts.get(classification, 0) + 1
             scores_by_class.setdefault(classification, []).append(deal_score)
-        classification_avg_score = {
-            cls: round(sum(scores) / len(scores), 1) for cls, scores in scores_by_class.items()
-        }
+    classification_avg_score = {
+        cls: round(sum(scores) / len(scores), 1) for cls, scores in scores_by_class.items()
+    }
 
+    if all_listing_ids:
         # BIN prices: this run's listings that have their own recorded BIN
         # price (one row per listing_id in gem_radar_cpk_listing_price).
         # Sold prices: sold comps recorded against any CPK that appears
