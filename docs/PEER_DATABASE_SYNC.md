@@ -170,7 +170,8 @@ sync runner process) every 30 seconds, and restarts either if it drops.
 
 ## Start / stop / check
 
-**Windows** (one-time registration, then automatic at every logon):
+**Windows** (one-time registration, then automatic at every boot and logon,
+restarting itself up to 999 times at 1-minute intervals if it dies):
 
 ```powershell
 scripts\install-peer-sync-task.ps1      # registers the FlipFlopPeerSync scheduled task
