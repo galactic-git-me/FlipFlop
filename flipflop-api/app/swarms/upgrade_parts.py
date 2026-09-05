@@ -15,7 +15,8 @@ Scrapes current prices for tracked upgrade components from:
 Architecture:
   - eBay requests use a single persistent httpx session with bounded concurrency
     per part to improve throughput while still limiting request pressure.
-    3-attempt exponential-backoff retry on 403 / empty response.
+    Sold HTML requests are single-attempt; repeated 403s are circuit-broken by
+    the caller rather than retried, to avoid amplifying eBay blocks.
   - BargainHardware uses a shared Playwright browser context (one launch per swarm).
   - Scan / Overclockers / Box run concurrently at the end (they're new-retail and
     less aggressive about bot detection).
@@ -365,7 +366,7 @@ async def _ebay_sold_median(client: httpx.AsyncClient, search: str) -> tuple[flo
         "LH_Sold": "1", "LH_Complete": "1",
         "_sop": "12", "_ipg": "60",
     }
-    for attempt in range(3):
+    for attempt in range(1):
         try:
             r = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=_EBAY_HEADERS)
             if r.status_code == 200:
