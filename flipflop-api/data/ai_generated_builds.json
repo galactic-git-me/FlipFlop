@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-05T18:51:28.930305+00:00",
+  "generated_at": "2026-09-05T19:51:25.178041+00:00",
   "builds": [
     {
       "components": [
@@ -32,18 +32,18 @@
           "url": "https://www.ebay.co.uk/itm/227442336516"
         },
         {
-          "id": 31015894,
-          "listing_id": "257705800973",
+          "id": 31028395,
+          "listing_id": "407164098393",
           "category": "gpu",
-          "title": "Nvidia Quadro P620 Single Slot Graphics Card GPU 2GB VRAM Mini DisplayPort x4",
+          "title": "NVIDIA Quadro P620 2GB GDDR5 PCIe x16 Graphics Card 4x Mini DisplayPort GPU",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/wIcAAeSwzbZqkBRv/s-l500.webp",
-          "delivered_price": 21.5,
+          "image_url": "https://i.ebayimg.com/images/g/ND4AAeSwqn9qip~Q/s-l225.jpg",
+          "delivered_price": 24.0,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -21.5,
-          "url": "https://www.ebay.co.uk/itm/257705800973"
+          "estimated_profit": -24.0,
+          "url": "https://www.ebay.co.uk/itm/407164098393"
         },
         {
           "id": 31020923,
@@ -118,7 +118,7 @@
       ],
       "compatibility_confidence": "matched",
       "super_gem_count": 4,
-      "build_cost": 76.48,
+      "build_cost": 78.98,
       "market": {
         "query": "gaming pc Core i3-6100 Quadro P620 8gb",
         "sold": {
@@ -129,15 +129,15 @@
         },
         "bin": {
           "available": true,
-          "count": 48,
-          "min_price": 68.31,
-          "max_price": 1178.36,
-          "average_price": 334.6
+          "count": 47,
+          "min_price": 78.55,
+          "max_price": 799.99,
+          "average_price": 295.44
         }
       },
-      "resale_estimate": 334.6,
+      "resale_estimate": 295.44,
       "resale_source": "bin_average",
-      "estimated_profit": 258.12,
+      "estimated_profit": 216.46,
       "rank": 1
     },
     {
@@ -270,13 +270,13 @@
           "available": true,
           "count": 48,
           "min_price": 68.31,
-          "max_price": 980.99,
-          "average_price": 271.71
+          "max_price": 750.0,
+          "average_price": 252.84
         }
       },
-      "resale_estimate": 271.71,
+      "resale_estimate": 252.84,
       "resale_source": "bin_average",
-      "estimated_profit": 196.73,
+      "estimated_profit": 177.86,
       "rank": 2
     },
     {
@@ -409,8 +409,8 @@
           "available": true,
           "count": 50,
           "min_price": 119.0,
-          "max_price": 866.39,
-          "average_price": 279.09
+          "max_price": 750.0,
+          "average_price": 267.0
         }
       },
       "resale_estimate": 245.78,
@@ -548,8 +548,8 @@
           "available": true,
           "count": 47,
           "min_price": 68.31,
-          "max_price": 1178.36,
-          "average_price": 295.46
+          "max_price": 980.99,
+          "average_price": 255.13
         }
       },
       "resale_estimate": 196.01,
@@ -685,10 +685,10 @@
         },
         "bin": {
           "available": true,
-          "count": 47,
+          "count": 46,
           "min_price": 68.31,
-          "max_price": 1178.36,
-          "average_price": 295.46
+          "max_price": 980.99,
+          "average_price": 253.57
         }
       },
       "resale_estimate": 196.01,
@@ -825,9 +825,9 @@
         "bin": {
           "available": true,
           "count": 48,
-          "min_price": 68.31,
+          "min_price": 78.55,
           "max_price": 1178.36,
-          "average_price": 329.49
+          "average_price": 292.14
         }
       },
       "resale_estimate": 195.05,
