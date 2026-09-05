@@ -36,6 +36,7 @@ from app.services.estimator import (
     BUDGET_GPU_RESALE_ADD,
     BUDGET_SSD_RESALE_ADD,
 )
+from app.services.ebay_browse import search_active_listings
 
 # When no eBay comps are found we fall back to a price derived from what the
 # seller is already asking (the market has priced the PC).  We then stack on
@@ -54,6 +55,9 @@ _RESALE_EBAY_BLOCK_UNTIL_TS: float = 0.0
 _RESALE_EBAY_BLOCK_LOGGED: bool = False
 _RESALE_EBAY_BLOCK_COOLDOWN_SECONDS = 900.0
 _RESALE_LOG_THROTTLE_TS: dict[str, float] = {}
+_RESALE_EBAY_403_THRESHOLD = 2
+_RESALE_EBAY_403_COUNT = 0
+_RESALE_EBAY_BLOCK_LOCK = asyncio.Lock()
 
 # Rate limiting: only allow 2 concurrent eBay requests to avoid overwhelming rate limits
 # Prevents all workers from hammering eBay simultaneously
@@ -65,6 +69,34 @@ def _get_ebay_semaphore() -> asyncio.Semaphore:
     if _ebay_semaphore is None:
         _ebay_semaphore = asyncio.Semaphore(2)
     return _ebay_semaphore
+
+
+def _resale_ebay_is_blocked() -> bool:
+    return time.monotonic() < _RESALE_EBAY_BLOCK_UNTIL_TS
+
+
+async def _record_resale_ebay_response(status: int) -> None:
+    """Open a process-wide cooldown after repeated HTML-scrape blocks.
+
+    A 403 is an anti-bot response, not a transient application error.  Retrying
+    every query multiplies the queue latency and makes the block worse.
+    """
+    global _RESALE_EBAY_403_COUNT, _RESALE_EBAY_BLOCK_UNTIL_TS, _RESALE_EBAY_BLOCK_LOGGED
+    async with _RESALE_EBAY_BLOCK_LOCK:
+        if status == 403:
+            _RESALE_EBAY_403_COUNT += 1
+            if _RESALE_EBAY_403_COUNT >= _RESALE_EBAY_403_THRESHOLD:
+                _RESALE_EBAY_BLOCK_UNTIL_TS = time.monotonic() + _RESALE_EBAY_BLOCK_COOLDOWN_SECONDS
+                if not _RESALE_EBAY_BLOCK_LOGGED:
+                    _RESALE_EBAY_BLOCK_LOGGED = True
+                    log.warning(
+                        "resale_scraper.ebay_circuit_opened",
+                        consecutive_403s=_RESALE_EBAY_403_COUNT,
+                        cooldown_seconds=_RESALE_EBAY_BLOCK_COOLDOWN_SECONDS,
+                    )
+        elif status == 200:
+            _RESALE_EBAY_403_COUNT = 0
+            _RESALE_EBAY_BLOCK_LOGGED = False
 
 
 
@@ -251,6 +283,11 @@ async def _fetch_sold_prices(query: str) -> list[float]:
     async with _get_ebay_semaphore():
         prices: list[float] = []
 
+        if _resale_ebay_is_blocked():
+            _info_throttled("resale_scraper.ebay_circuit_open", query=query,
+                            resumes_in_s=round(_RESALE_EBAY_BLOCK_UNTIL_TS - time.monotonic(), 1))
+            return prices
+
         for sacat in ("179", "0"):
             params = {
                 "_nkw": query,
@@ -277,7 +314,12 @@ async def _fetch_sold_prices(query: str) -> list[float]:
                 if resp.status_code != 200 or len(resp.text) < 2000:
                     log.debug("resale_scraper.ebay_sold_bad_response",
                               query=query, sacat=sacat, status=resp.status_code)
+                    await _record_resale_ebay_response(resp.status_code)
+                    if _resale_ebay_is_blocked():
+                        break
                     continue
+
+                await _record_resale_ebay_response(200)
 
                 soup = BeautifulSoup(resp.text, "lxml")
                 batch = _extract_prices(soup)
@@ -304,51 +346,21 @@ async def _fetch_active_prices(query: str) -> list[float]:
 
     Rate limited to max 2 concurrent requests to avoid eBay throttling.
     """
-    async with _get_ebay_semaphore():
-        prices: list[float] = []
-
-        for sacat in ("179", "0"):
-            params = {
-                "_nkw": query,
-                "LH_BIN": "1",
-                "_sacat": sacat,
-                "_sop": "12",
-                "LH_PrefLoc": "1",
-                "_ipg": "60",
-            }
-            headers = {
-                "User-Agent": ua.random,
-                "Accept-Language": "en-GB,en;q=0.9",
-                "Accept": "text/html,application/xhtml+xml",
-            }
-            try:
-                async with httpx.AsyncClient(timeout=25, follow_redirects=True) as client:
-                    resp = await client.get(
-                        "https://www.ebay.co.uk/sch/i.html",
-                        params=params,
-                        headers=headers,
-                    )
-                if resp.status_code != 200 or len(resp.text) < 2000:
-                    log.debug("resale_scraper.ebay_active_bad_response",
-                              query=query, sacat=sacat, status=resp.status_code)
-                    continue
-
-                soup = BeautifulSoup(resp.text, "lxml")
-                batch = _extract_prices(soup)
-                prices.extend(batch)
-                log.debug("resale_scraper.ebay_active_pass",
-                          query=query, sacat=sacat, found=len(batch))
-
-            except Exception as exc:
-                log.debug("resale_scraper.ebay_active_error", query=query, error=str(exc))
-
-            if len(prices) >= 5:
-                break
-
-            await asyncio.sleep(0.3)
-
+    # Current listings use the authenticated Browse API.  This avoids the
+    # HTML endpoint that is generating the 403 storm in the queue.
+    try:
+        listings = await search_active_listings(
+            query,
+            condition_filter="USED|EXCELLENT|VERY_GOOD|GOOD|ACCEPTABLE",
+            limit=50,
+            min_price=80.0,
+        )
+        prices = [float(item["price"]) for item in listings if 80.0 < float(item["price"]) < 1400.0]
+        log.debug("resale_scraper.ebay_active_api", query=query, found=len(prices))
         return prices
-
+    except Exception as exc:
+        log.warning("resale_scraper.ebay_active_api_error", query=query, error=str(exc))
+        return []
 
 async def get_resale_range(
     cpu: str | None,

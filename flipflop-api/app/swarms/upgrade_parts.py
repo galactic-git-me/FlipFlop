@@ -44,6 +44,7 @@ from app.services.antibot_preflight import should_defer_source_scrape
 from app.services.delivery_filters import allow_temu_aliexpress_listing
 from app.models.source_search_term import SourceSearchTerm
 from app.services.component_models import CANONICAL_MODELS
+from app.services.ebay_browse import search_active_listings
 from sqlalchemy import select as sa_select
 import structlog
 
@@ -387,31 +388,19 @@ async def _ebay_sold_median(client: httpx.AsyncClient, search: str) -> tuple[flo
 
 
 async def _ebay_buy_price(client: httpx.AsyncClient, search: str) -> tuple[float | None, int]:
-    """25th-percentile Buy-It-Now used price from eBay — 3-attempt retry.
-    Returns (price, listing_count)."""
-    params = {
-        "_nkw": search, "_sacat": "0",
-        "LH_BIN": "1", "LH_ItemCondition": "3000",
-        "_sop": "15", "_ipg": "60",
-    }
-    for attempt in range(3):
-        try:
-            r = await client.get("https://www.ebay.co.uk/sch/i.html", params=params, headers=_EBAY_HEADERS)
-            if r.status_code == 200:
-                prices = _parse_ebay_prices(r.text)
-                if prices:
-                    prices.sort()
-                    return round(prices[max(0, len(prices) // 4)], 2), len(prices)
-                if "access denied" in r.text.lower() or "interruption" in r.text.lower():
-                    await asyncio.sleep(2.5 * (attempt + 1))
-                    continue
-                return None, 0
-            if r.status_code == 403:
-                await asyncio.sleep(2.5 * (attempt + 1))
-                continue
-        except Exception as exc:
-            log.debug("ebay_buy.request_retry", search=search, attempt=attempt + 1, error=str(exc))
-            await asyncio.sleep(1.5)
+    """25th-percentile Buy-It-Now used price via the official Browse API."""
+    try:
+        listings = await search_active_listings(
+            search,
+            condition_filter="USED|EXCELLENT|VERY_GOOD|GOOD|ACCEPTABLE",
+            limit=50,
+            min_price=10.0,
+        )
+        prices = sorted(float(item["price"]) for item in listings)
+        if prices:
+            return round(prices[max(0, len(prices) // 4)], 2), len(prices)
+    except Exception as exc:
+        log.warning("ebay_buy.api_error", search=search, error=str(exc))
     return None, 0
 
 
