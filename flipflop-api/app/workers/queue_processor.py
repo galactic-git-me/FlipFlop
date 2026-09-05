@@ -1,7 +1,6 @@
 """Background worker to process gem-radar submission queue."""
 import asyncio
 import json
-import os
 import re
 import threading
 import structlog
@@ -50,16 +49,30 @@ _active_search_ids: set[str] = set()
 _active_search_lock = asyncio.Lock()
 
 
+_STALL_WATCHDOG_MAX_RETRIES = 5
+
+
 def _start_stall_watchdog() -> threading.Event:
     """Start an independent queue-stall watchdog.
 
-    The ordinary stale reaper is an asyncio task.  It cannot run when the
-    event loop is wedged, which is precisely the failure mode it is intended
-    to recover from.  This thread uses its own synchronous PostgreSQL
-    connection and deliberately exits the worker process when it sees a
-    submission older than the overall submission timeout. Docker's restart
-    policy then starts a clean worker, whose startup recovery puts those rows
-    back into the pending queue and clears the in-memory search-term slots.
+    The ordinary stale reaper (_stale_reaper_loop) is an asyncio task. It
+    cannot run when the event loop is wedged, which is precisely the failure
+    mode this exists to recover from. This thread uses its own synchronous
+    PostgreSQL connection so it keeps working even if the event loop is
+    stuck, and resets stale 'processing' rows back to 'pending' directly via
+    raw SQL (mirroring SubmissionQueueService.reap_stale_processing) rather
+    than going through the asyncio ORM session that may itself be wedged.
+
+    This used to call os._exit() and rely on "Docker's restart policy" to
+    bring up a clean worker — but this deployment runs uvicorn directly (see
+    startup.ps1), with no supervisor watching for the process to die. That
+    meant the very first time this fired, it killed the API outright and
+    nothing ever restarted it — a multi-day total outage (see the 76a538de8
+    commit that introduced it, and the "chore: sync" gap in submission_queue
+    activity right after). Resetting the stale rows directly, without
+    killing the process, gets the same recovery (someone else's worker loop
+    picks the row back up) without depending on infrastructure that isn't
+    actually part of this deployment.
     """
     settings = get_settings()
     stop_event = threading.Event()
@@ -80,7 +93,7 @@ def _stall_watchdog_loop(
     stale_after_seconds: int,
     poll_seconds: int,
 ) -> None:
-    """Exit the process when queue work is stale, even if asyncio is stuck."""
+    """Reset queue work that's gone stale, even if asyncio is stuck."""
     import psycopg2
 
     while not stop_event.wait(poll_seconds):
@@ -89,7 +102,7 @@ def _stall_watchdog_loop(
                 with connection.cursor() as cursor:
                     cursor.execute(
                         """
-                        SELECT id
+                        SELECT id, retry_count
                         FROM submission_queue
                         WHERE status = 'processing'
                           AND last_attempt_at < (
@@ -101,21 +114,53 @@ def _stall_watchdog_loop(
                         """,
                         (stale_after_seconds,),
                     )
-                    stale_ids = [row[0] for row in cursor.fetchall()]
-            if stale_ids:
+                    rows = cursor.fetchall()
+                    retry_ids = [rid for rid, rc in rows if rc + 1 < _STALL_WATCHDOG_MAX_RETRIES]
+                    failed_ids = [rid for rid, rc in rows if rc + 1 >= _STALL_WATCHDOG_MAX_RETRIES]
+
+                    if retry_ids:
+                        cursor.execute(
+                            """
+                            UPDATE submission_queue
+                            SET status = 'pending',
+                                retry_count = retry_count + 1,
+                                last_error = %s,
+                                last_attempt_at = (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')
+                            WHERE id = ANY(%s)
+                            """,
+                            (
+                                f"Stall watchdog: stuck in 'processing' past {stale_after_seconds}s "
+                                "(event loop may have been wedged)",
+                                retry_ids,
+                            ),
+                        )
+                    if failed_ids:
+                        cursor.execute(
+                            """
+                            UPDATE submission_queue
+                            SET status = 'failed',
+                                retry_count = retry_count + 1,
+                                last_error = %s,
+                                last_attempt_at = (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')
+                            WHERE id = ANY(%s)
+                            """,
+                            (
+                                f"Stall watchdog: stuck in 'processing' past {stale_after_seconds}s, "
+                                "exceeded max retries",
+                                failed_ids,
+                            ),
+                        )
+                connection.commit()
+            if rows:
                 logger.critical(
-                    "queue_processor.stall_watchdog_restarting_worker",
-                    stale_submission_ids=stale_ids,
+                    "queue_processor.stall_watchdog_reset_stale_submissions",
+                    retried_ids=retry_ids,
+                    failed_ids=failed_ids,
                     stale_after_seconds=stale_after_seconds,
                 )
-                # Do not try to cancel tasks from this thread: an event-loop
-                # stall may prevent cancellation/finally handlers from ever
-                # running. A fresh process is the reliable recovery point.
-                os._exit(75)
         except Exception as exc:
-            # The watchdog must not make a transient DB outage fatal; the
-            # normal worker and Docker health checks retain responsibility for
-            # that case. Keep checking on the next interval.
+            # The watchdog must not crash on a transient DB outage — just
+            # keep checking on the next interval.
             logger.warning("queue_processor.stall_watchdog_error", error=str(exc))
 
 
