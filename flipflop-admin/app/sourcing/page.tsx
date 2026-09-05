@@ -486,9 +486,13 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             // Vendor counts describe work already observed, not the submitted
             // workload. Using them as the denominator makes CPK appear complete
             // as soon as observations arrive. totalListings is the server's
-            // fixed-price workload for this search.
+            // fixed-price workload for this search — the backend already nets
+            // out excludedAuctionCount before sending it (see
+            // pipeline_status.py's actual_total_listings), so subtracting it
+            // again here double-counted auctions out of the total, shrinking
+            // the denominator below its real value.
             const searchTermTotal = Math.max(
-              scan.totalListings - scan.excludedAuctionCount,
+              scan.totalListings,
               scan.ingestedCount,
               1,
             );

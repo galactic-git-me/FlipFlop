@@ -424,7 +424,7 @@ async def _process_single_submission(submission):
             _t0 = _time.monotonic()
             try:
                 result = await asyncio.wait_for(
-                    _submit_scan_body(payload, db, _t0), timeout=_SUBMISSION_TIMEOUT_S
+                    _submit_scan_body(payload, db, _t0, submission_id=submission.id), timeout=_SUBMISSION_TIMEOUT_S
                 )
                 catalogue_upserted = await _sync_supplier_case_catalogue(db, payload)
                 logger.info(
@@ -471,4 +471,4 @@ async def _process_single_submission(submission):
             search_id=submission.search_id,
             active_searches_remaining=len(_active_search_ids),
         )
-        pipeline_status.finish_submission(payload.search_id)
+        pipeline_status.finish_submission(submission.search_id, submission_id=submission.id)

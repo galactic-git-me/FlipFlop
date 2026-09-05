@@ -2415,7 +2415,7 @@ async def _submit_scan_body(
         cross_run_dupes_price_updated=touched_price_updated_count,
         excluded_auctions=excluded_auction_count,
     )
-    pipeline_status.finish_submission(payload.search_id)
+    pipeline_status.finish_submission(payload.search_id, submission_id=submission_id)
 
     return ScanIngestResponse(
         search_run_id=payload.search_run_id,
