@@ -9,7 +9,7 @@
     "last_success_at": "2026-09-06T06:54:38.897123+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-09-06T06:55:39.045274+00:00"
+    "last_success_at": "2026-09-06T07:00:39.054893+00:00"
   },
   "ai_build_generator": {
     "last_success_at": "2026-09-06T04:20:50.770407+00:00"
@@ -66,7 +66,7 @@
     "last_success_at": "2026-09-05T08:39:39.474430+00:00"
   },
   "catalogue_digest": {
-    "last_success_at": "2026-09-05T07:00:00.012559+00:00"
+    "last_success_at": "2026-09-06T07:00:00.017940+00:00"
   },
   "manual_build_send_to_watchers": {
     "last_success_at": "2026-09-06T04:39:40.823087+00:00"
