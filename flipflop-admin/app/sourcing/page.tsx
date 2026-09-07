@@ -355,6 +355,8 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
   const [clientElapsed, setClientElapsed] = useState(0);
   const [displayedScans, setDisplayedScans] = useState<ScanProgress[]>([]);
   const [lastRunLength, setLastRunLength] = useState(0);
+  const lastLiveStatus = useRef<PipelineStatusResponse | null>(null);
+  const lastLiveAt = useRef(0);
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -365,10 +367,12 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
         ]);
         if (res.ok) {
           const data = await res.json();
-          setStatus(data);
           const activeScans = data.activeScans ?? [];
 
           if (activeScans.length > 0) {
+            lastLiveStatus.current = data;
+            lastLiveAt.current = Date.now();
+            setStatus(data);
             setClientElapsed(activeScans[0].elapsedSeconds ?? 0);
             // If this is a new run (different length), reset displayed scans
             if (activeScans.length !== lastRunLength) {
@@ -378,7 +382,20 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
               // Same run, update displayed scans with new data
               setDisplayedScans(activeScans);
             }
-          } else if (displayedScans.length > 0) {
+          } else if (
+            lastLiveStatus.current &&
+            Date.now() - lastLiveAt.current < 5000 &&
+            (queueStatus?.pending ?? 0) + (queueStatus?.processing ?? 0) > 0
+          ) {
+            // A submission can finish a few milliseconds before the next
+            // queued page is visible to this API process. Do not turn that
+            // hand-off into a false all-zero dashboard reset.
+            setStatus(lastLiveStatus.current);
+          } else {
+            setStatus(data);
+          }
+
+          if (activeScans.length === 0 && displayedScans.length > 0) {
             // Backend's activeScans went empty -- it already called reset_run()
             // and archived this run into recentHistory (see pipeline_status.py).
             // Keep the cards visible until the next run starts, but flip them to
@@ -406,7 +423,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
     fetchStatus();
     const interval = setInterval(fetchStatus, 1000); // Update every second
     return () => clearInterval(interval);
-  }, [lastRunLength, displayedScans.length]);
+  }, [lastRunLength, displayedScans.length, queueStatus]);
 
   useEffect(() => {
     const isProcessing = queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0);
