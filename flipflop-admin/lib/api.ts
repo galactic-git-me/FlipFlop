@@ -477,12 +477,13 @@ export interface SourceSearchTerm {
   created_at: string;
 }
 
-// NEXT_PUBLIC_API_URL (when set) is the bare backend origin, used elsewhere for
-// direct SSE/websocket connections that can't go through the Next.js rewrite
-// proxy — so it never includes "/api". Append it here rather than changing the
-// env var itself, since other call sites depend on the bare-origin form.
-const backendOrigin = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
-export const API_BASE_URL = backendOrigin ? `${backendOrigin}/api` : "/api";
+// Keep browser REST calls same-origin so they pass through the Next.js rewrite
+// and middleware. The middleware reads the httpOnly admin_session cookie and
+// attaches the backend Authorization header; using NEXT_PUBLIC_API_URL here
+// would bypass that path and fail whenever the client-readable fallback cookie
+// is missing or stale. NEXT_PUBLIC_API_URL remains available to the dedicated
+// SSE/websocket callers that cannot use this proxy.
+export const API_BASE_URL = "/api";
 
 export function apiUrl(path: string): string {
   return `${API_BASE_URL}${path}`;
