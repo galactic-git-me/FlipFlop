@@ -684,28 +684,46 @@ async def get_build_pricing(
     sold_result: SoldCompsResult | None = None
 
     if fetch_sold:
-        log.info("builds_pricing.fetch_sold", build_id=build_id, query=query, cache_key=cache_key)
+        sold_queries = list(dict.fromkeys([query, *_build_sold_queries(components)]))
+        log.info("builds_pricing.fetch_sold", build_id=build_id, queries=sold_queries, cache_key=cache_key)
         try:
-            # Fetch completed sales first. A previous refactor left this path
-            # searching active listings only, which guaranteed an empty sold
-            # cohort whenever the extension had not already submitted results.
-            sold_result = await LiveSoldCompsAdapter().fetch(query, condition=pricing_condition)
-            if not sold_result.available:
-                # ScrapingBee credentials can expire independently of the app.
-                # Reuse the persisted eBay browser session as the supported
-                # fallback instead of silently returning an empty cohort.
-                log.warning(
-                    "builds_pricing.sold_proxy_unavailable",
-                    build_id=build_id,
-                    reason=sold_result.unavailable_reason,
-                )
-                sold_result = await PlaywrightSoldCompsAdapter().fetch(
-                    query, condition=pricing_condition,
-                )
-            if sold_result.available:
+            # Search the combined query plus CPU/GPU anchor queries. Sellers
+            # often omit one identity from a PC title, so a single combined
+            # query can return sold listings that are visible on eBay but are
+            # uselessly absent from our exact CPU+GPU cohort. Every query is
+            # still completed/sold-only; active listings never enter this set.
+            collected: list = []
+            unavailable_reasons: list[str] = []
+            seen_urls: set[str] = set()
+            for sold_query in sold_queries:
+                result = await LiveSoldCompsAdapter().fetch(sold_query, condition=pricing_condition)
+                if not result.available:
+                    # ScrapingBee credentials can expire independently of the
+                    # app. Reuse the persisted eBay browser session as the
+                    # supported fallback instead of silently returning empty.
+                    log.warning(
+                        "builds_pricing.sold_proxy_unavailable",
+                        build_id=build_id,
+                        query=sold_query,
+                        reason=result.unavailable_reason,
+                    )
+                    result = await PlaywrightSoldCompsAdapter().fetch(
+                        sold_query, condition=pricing_condition,
+                    )
+                if result.available:
+                    for comp in result.comps:
+                        key = comp.url or f"{comp.title}|{comp.price}|{comp.sold_at}"
+                        if key not in seen_urls:
+                            seen_urls.add(key)
+                            collected.append(comp)
+                elif result.unavailable_reason:
+                    unavailable_reasons.append(result.unavailable_reason)
+            if collected:
+                sold_result = SoldCompsResult(available=True, comps=collected)
                 await cache.set(cache_key, sold_result)
             else:
-                sold_evidence_status = sold_result.unavailable_reason or "Sold evidence could not be retrieved"
+                sold_evidence_status = (unavailable_reasons[-1] if unavailable_reasons
+                                        else "Sold evidence could not be retrieved")
         except Exception as exc:
             # A sold-data outage must not prevent the independent live BIN
             # search below from supplying useful asking-price evidence.
