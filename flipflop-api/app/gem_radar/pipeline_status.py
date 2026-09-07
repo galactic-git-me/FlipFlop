@@ -476,7 +476,7 @@ async def snapshot(db) -> dict:
             s.ingested_count,
             0,
         )
-        discovered_count = max(len(s.discovered_keys), s.total_listings)
+        discovered_count = len(s.discovered_keys) if s.discovered_keys else s.total_listings
         eligible_count = actual_total_listings
 
         # By_vendor: aggregate vendor counts from the listing_ids we've tracked,
