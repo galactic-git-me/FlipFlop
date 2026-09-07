@@ -29,6 +29,8 @@ interface Listing {
   source: string;
   url: string;
   category: string | null;
+  cpk?: string | null;
+  merged_listing_count?: number;
   title: string;
   seller?: string;
   image_url?: string | null;
@@ -1649,7 +1651,18 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
     ? byComponent.filter((l) => fuzzyMatches(titleQuery, l.title))
     : byComponent;
   const byClassification = gemFilter === "all" ? byTitle : byTitle.filter((listing) => listing.classification === gemFilter);
-  const filtered = [...byClassification].sort((a, b) => {
+  const mergedByProduct = new Map<string, Listing>();
+  for (const listing of byClassification) {
+    const key = listing.cpk || `listing:${listing.listing_id}`;
+    const existing = mergedByProduct.get(key);
+    if (!existing || listing.delivered_price < existing.delivered_price) {
+      mergedByProduct.set(key, { ...listing, merged_listing_count: (existing?.merged_listing_count ?? 1) + (existing ? 0 : 0) });
+    } else {
+      existing.merged_listing_count = (existing.merged_listing_count ?? 1) + 1;
+    }
+  }
+  const mergedListings = [...mergedByProduct.values()];
+  const filtered = mergedListings.sort((a, b) => {
     const cmp = compareSortValue(a, b, sortKey);
     return sortDir === "asc" ? cmp : -cmp;
   });
@@ -1826,6 +1839,11 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                       >
                         {listing.title}
                       </a>
+                      {(listing.merged_listing_count ?? 1) > 1 && (
+                        <span className="ml-2 inline-flex rounded-full bg-cyan-500/20 px-2 py-0.5 text-[10px] font-semibold text-cyan-300" title="Other listings for the same canonical product are merged into this row">
+                          {listing.merged_listing_count} listings
+                        </span>
+                      )}
                     </td>
                     <td className="p-3">
                       <ConditionBadge condition={listing.condition} />
