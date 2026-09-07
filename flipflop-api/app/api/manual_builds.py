@@ -1819,7 +1819,7 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
     listing_environment = settings.ebay_listing_environment
 
     try:
-        oauth_token = await get_valid_ebay_access_token(listing_environment)
+        oauth_token = await get_valid_ebay_access_token(listing_environment, db=db)
     except ValueError as e:
         raise HTTPException(400, str(e))
 
@@ -1972,7 +1972,7 @@ async def publish_ebay_draft(build_id: int, db: AsyncSession = Depends(get_db)):
     settings = get_settings()
     try:
         from app.services.ebay_token_manager import get_valid_ebay_access_token
-        oauth_token = await get_valid_ebay_access_token(settings.ebay_listing_environment)
+        oauth_token = await get_valid_ebay_access_token(settings.ebay_listing_environment, db=db)
         poster = EbayListingPoster(environment=settings.ebay_listing_environment, access_token=oauth_token)
         published = await poster.publish_offer(build.ebay_offer_id)
     except ValueError as exc:
