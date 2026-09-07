@@ -14,7 +14,7 @@ from typing import Literal
 import structlog
 from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
-from sqlalchemy import select
+from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import require_operator
@@ -37,6 +37,7 @@ from app.gem_radar.pipeline import score_listing
 from app.gem_radar import pipeline_status
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.models.gem_radar_listing_cpk import GemRadarListingCpk
+from app.models.submission_queue import SubmissionQueue
 from app.gem_radar.purchases import create_provisional_purchase
 from app.gem_radar.seller_intelligence import get_seller_profile
 from app.gem_radar.schemas import (
@@ -318,6 +319,7 @@ async def pipeline_status_endpoint(
                 scan["elapsedSeconds"] = max(scan["elapsedSeconds"], elapsed)
             if row.status == "processing":
                 scan["activeSubmissions"] += 1
+            scan["ingestedNewCount"] += int(row.ingested_new_count or 0)
 
         # The queue worker runs in a different process from this API. Its
         # in-memory counters are therefore not visible here, but the listing
@@ -2371,6 +2373,19 @@ async def _submit_scan_body(
         pipeline_status.increment(payload.search_id, ingested_count=1)
         pipeline_status.increment_ingested_new(payload.search_id)
         pipeline_status.increment_vendor(payload.search_id, vendor, 1)
+        if submission_id is not None:
+            # The queue worker is a separate process from the API. Persist the
+            # new-listing counter as each genuinely new listing is committed
+            # so the API's durable fallback can render it, including across
+            # retries or worker restarts.
+            await db.execute(
+                update(SubmissionQueue)
+                .where(SubmissionQueue.id == submission_id)
+                .values(
+                    ingested_new_count=func.coalesce(SubmissionQueue.ingested_new_count, 0) + 1
+                )
+            )
+            await db.commit()
         listings_to_assign_cpk.append(listing)
 
     # Persist ingestion before model enrichment. Otherwise the request keeps

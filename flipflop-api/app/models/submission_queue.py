@@ -20,6 +20,11 @@ class SubmissionQueue(BaseModel):
     # Listings data (stored as JSON)
     listings_json = Column(JSON, nullable=False)
 
+    # Durable progress used by the API process when the queue worker is
+    # running separately from it.  This is incremented only for listings that
+    # pass the scan's cross-run dedupe check.
+    ingested_new_count = Column(Integer, default=0, nullable=False)
+
     # Retry tracking
     retry_count = Column(Integer, default=0)
     last_error = Column(Text, nullable=True)
