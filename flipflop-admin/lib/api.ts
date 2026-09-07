@@ -477,13 +477,10 @@ export interface SourceSearchTerm {
   created_at: string;
 }
 
-// Keep browser REST calls same-origin so they pass through the Next.js rewrite
-// and middleware. The middleware reads the httpOnly admin_session cookie and
-// attaches the backend Authorization header; using NEXT_PUBLIC_API_URL here
-// would bypass that path and fail whenever the client-readable fallback cookie
-// is missing or stale. NEXT_PUBLIC_API_URL remains available to the dedicated
-// SSE/websocket callers that cannot use this proxy.
-export const API_BASE_URL = "/api";
+// REST calls stay same-origin. The dedicated Next route forwards them to the
+// backend after middleware has attached the httpOnly admin_session token.
+// NEXT_PUBLIC_API_URL remains reserved for browser-only SSE/websocket callers.
+export const API_BASE_URL = "/api/backend";
 
 export function apiUrl(path: string): string {
   return `${API_BASE_URL}${path}`;
