@@ -111,11 +111,11 @@ async def exchange_authorization_code(body: dict) -> dict:
     {
         "code": "v^1.1^i^1^...",
         "redirect_uri": "Michael_Clark-MichaelC-FlipFl-uooqypq",
-        "environment": "sandbox"  // or "production" — defaults to "sandbox"
+        "environment": "production"  // or "sandbox" — defaults to "production"
     }
     """
     settings = get_settings()
-    environment = body.get("environment", "sandbox")
+    environment = body.get("environment", "production")
     if environment not in _OAUTH_TOKEN_ENDPOINTS:
         raise HTTPException(400, "environment must be 'sandbox' or 'production'")
 

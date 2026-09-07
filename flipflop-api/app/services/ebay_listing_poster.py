@@ -724,7 +724,7 @@ async def post_flip_to_ebay(
     price: float,
     image_urls: list[str],
     access_token: str,
-    environment: str = "sandbox",
+    environment: str = "production",
     app_id: Optional[str] = None,
     client_secret: Optional[str] = None,
     condition: str = "USED_EXCELLENT",
