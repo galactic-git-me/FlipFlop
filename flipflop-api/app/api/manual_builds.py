@@ -482,17 +482,51 @@ async def list_builds(include_archived: bool = False, db: AsyncSession = Depends
         query = query.where(ManualBuild.is_archived.is_(False))
     result = await db.execute(query)
     builds = result.scalars().all()
-    return [
-        ManualBuildSummary(
-            id=b.id,
-            name=b.name,
-            total_cost=b.total_cost,
-            component_count=len(b.components or []),
-            status=b.status,
-            updated_at=b.updated_at,
+
+    # The list page must reflect a currently purchasable channel, not the
+    # historical workflow value in ManualBuild.status. Reconcile eBay when
+    # needed, then check the direct storefront product in the same response.
+    for build in builds:
+        if build.ebay_listing_id:
+            try:
+                from app.services.ebay_listing_reconciliation import reconcile_manual_build_listing
+                await reconcile_manual_build_listing(build, db)
+            except Exception as exc:
+                log.warning("manual_build.ebay_reconcile_on_list_failed", build_id=build.id, error=str(exc))
+                build.ebay_listing_status = "unknown"
+        else:
+            build.ebay_listing_status = "never_listed"
+
+    storefront_product_ids = {build.storefront_product_id for build in builds if build.storefront_product_id}
+    storefront_products: dict[int, Product] = {}
+    if storefront_product_ids:
+        product_result = await db.execute(
+            select(Product).where(Product.id.in_(storefront_product_ids))
         )
-        for b in builds
-    ]
+        storefront_products = {product.id: product for product in product_result.scalars().all()}
+
+    summaries = []
+    for build in builds:
+        ebay_live = build.ebay_listing_status == "active"
+        storefront_live = bool(
+            build.storefront_product_id
+            and storefront_products.get(build.storefront_product_id)
+            and storefront_products[build.storefront_product_id].status == ProductStatus.LISTED
+        )
+        live_status = "listed" if ebay_live or storefront_live else (
+            "built" if build.status == "listed" else build.status
+        )
+        summaries.append(
+            ManualBuildSummary(
+                id=build.id,
+                name=build.name,
+                total_cost=build.total_cost,
+                component_count=len(build.components or []),
+                status=live_status,
+                updated_at=build.updated_at,
+            )
+        )
+    return summaries
 
 
 @router.get("/deletion-audit")
@@ -671,6 +705,12 @@ async def get_build(build_id: int, db: AsyncSession = Depends(get_db)):
         )
         product = product_result.scalar_one_or_none()
         build.storefront_live = bool(product and product.status == ProductStatus.LISTED)
+    if build.ebay_live or build.storefront_live:
+        build.status = "listed"
+    elif build.status == "listed":
+        # "listed" is reserved for a currently live sales channel. Keep
+        # historical eBay state in ebay_listing_status instead.
+        build.status = "built"
 
     return build
 
