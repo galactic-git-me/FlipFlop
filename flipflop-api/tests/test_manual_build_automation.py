@@ -306,3 +306,70 @@ async def test_post_to_ebay_starts_recreate_clock(client, test_db):
         refreshed = await db.get(ManualBuild, build_id)
         assert refreshed.listed_at is not None
         assert refreshed.next_recreate_at is not None
+
+
+@pytest.mark.asyncio
+async def test_get_build_faqs_is_read_only(client, test_db):
+    build_id = await _built_build(client, test_db)
+
+    resp = client.get(f"/api/manual-builds/{build_id}/faqs")
+
+    assert resp.status_code == 200
+    assert "selected_ids" in resp.json()
+
+
+@pytest.mark.asyncio
+async def test_get_build_preserves_reconciled_live_ebay_status(client, test_db):
+    build_id = await _built_build(client, test_db)
+    async with test_db() as db:
+        build = await db.get(ManualBuild, build_id)
+        build.ebay_listing_id = "item-1"
+        build.ebay_listing_status = "active"
+        await db.commit()
+
+    with patch(
+        "app.services.ebay_listing_reconciliation.reconcile_manual_build_listing",
+        new=AsyncMock(return_value="active"),
+    ) as mock_reconcile:
+        resp = client.get(f"/api/manual-builds/{build_id}")
+
+    assert resp.status_code == 200
+    assert resp.json()["ebay_listing_status"] == "active"
+    assert resp.json()["ebay_live"] is True
+    mock_reconcile.assert_awaited_once()
+
+
+@pytest.mark.asyncio
+async def test_post_to_ebay_creates_remote_draft(client, test_db):
+    build_id = await _built_build(client, test_db)
+    async with test_db() as db:
+        build = await db.get(ManualBuild, build_id)
+        build.generated_title = "Title"
+        build.generated_description = "<p>desc</p>"
+        build.generated_aspects = {"Brand": ["FlipFlop"], "Type": ["Desktop"]}
+        build.photos = [{"url": "https://x/1.jpg", "kind": "photo"}]
+        await db.commit()
+
+    with patch(
+        "app.services.ebay_token_manager.get_valid_ebay_access_token", new=AsyncMock(return_value="TOKEN")
+    ), patch(
+        "app.api.manual_builds.post_flip_to_ebay",
+        new=AsyncMock(return_value={"success": True, "offer_id": "offer-1", "sku": "sku-1", "status": "DRAFT"}),
+    ) as mock_post:
+        resp = client.post(
+            f"/api/manual-builds/{build_id}/post-to-ebay",
+            json={"price": 320.0, "condition": "USED_EXCELLENT", "publish": False},
+        )
+
+    assert resp.status_code == 200
+    response_body = resp.json()
+    assert response_body["success"] is True
+    assert response_body["offer_id"] == "offer-1"
+    assert response_body["action"] == "drafted"
+    assert mock_post.await_args.kwargs["publish"] is False
+
+    async with test_db() as db:
+        refreshed = await db.get(ManualBuild, build_id)
+        assert refreshed.ebay_offer_id == "offer-1"
+        assert refreshed.ebay_sku == "sku-1"
+        assert refreshed.ebay_listing_status == "draft"

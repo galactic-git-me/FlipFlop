@@ -601,8 +601,6 @@ async def get_build_faqs(build_id: int, db: AsyncSession = Depends(get_db)):
     if not build:
         raise HTTPException(404, "Build not found")
 
-    if not body.publish and (build.ebay_listing_id or build.ebay_offer_id):
-        raise HTTPException(400, "This build already has an eBay listing or draft offer. Publish the existing draft or end the listing first.")
     effective = selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides)
     return {
         "bank": FAQ_BANK,
@@ -697,8 +695,6 @@ async def get_build(build_id: int, db: AsyncSession = Depends(get_db)):
         except Exception as exc:
             log.warning("manual_build.ebay_reconcile_on_read_failed", build_id=build.id, error=str(exc))
             build.ebay_listing_status = "unknown"
-        else:
-            build.ebay_listing_status = "draft" if build.ebay_offer_id else "never_listed"
         if build.status == "listed":
             build.status = "built"
     build.ebay_live = build.ebay_listing_status == "active"
@@ -1727,6 +1723,12 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
     build = result.scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
+
+    # A draft is a real eBay offer, so don't create a second offer for the
+    # same build when the user clicks the draft button more than once. Live
+    # listings are likewise protected from an accidental duplicate listing.
+    if not body.publish and (build.ebay_listing_id or build.ebay_offer_id):
+        raise HTTPException(400, "This build already has an eBay listing or draft offer. Publish the existing draft or end the listing first.")
 
     # Persist the seller's asking price as build configuration before making
     # the external eBay request. This keeps the value after reloads and also
