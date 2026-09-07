@@ -2265,9 +2265,18 @@ async def _submit_scan_body(
     touched_unchanged_count = 0
     touched_price_updated_count = 0
     vendor = infer_marketplace(payload.source_url) or "unknown"
+    discovered_keys = {
+        f"{vendor}:{listing.listing_id}" for listing in payload.listings
+    }
 
     pipeline_status.start_submission(
-        payload.search_id, payload.query, len(payload.listings), payload.search_run_id, submission_id=submission_id
+        payload.search_id,
+        payload.query,
+        len(payload.listings),
+        payload.search_run_id,
+        submission_id=submission_id,
+        discovered_keys=discovered_keys,
+        vendor=vendor,
     )
 
     # Separate listings into buckets:
@@ -2281,6 +2290,9 @@ async def _submit_scan_body(
         if listing.listing_type == "auction":
             excluded_auction_count += 1
             pipeline_status.increment(payload.search_id, excluded_auction_count=1)
+            pipeline_status.exclude_discovered(
+                payload.search_id, f"{vendor}:{listing.listing_id}"
+            )
             continue
 
         # Check for cross-run duplicate (same listing from previous runs)
@@ -2360,6 +2372,11 @@ async def _submit_scan_body(
         pipeline_status.increment_ingested_new(payload.search_id)
         pipeline_status.increment_vendor(payload.search_id, vendor, 1)
         listings_to_assign_cpk.append(listing)
+
+    # Persist ingestion before model enrichment. Otherwise the request keeps
+    # its original database transaction open while waiting on CPK calls,
+    # leaving an idle-in-transaction connection held for the whole batch.
+    await db.commit()
 
     # Process CPK assignment concurrently (up to 4 parallel, matching Ollama's OLLAMA_NUM_PARALLEL)
     # Uses GLOBAL _CPK_SEMAPHORE (not per-submission) to prevent 6 workers × 4 slots = 24 concurrent requests
