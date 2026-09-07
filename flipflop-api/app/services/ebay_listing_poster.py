@@ -253,6 +253,7 @@ class EbayListingPoster:
         return_policy_id: Optional[str] = None,
         fulfillment_policy_id: Optional[str] = None,
         aspects: Optional[dict[str, list[str]]] = None,
+        publish: bool = True,
     ) -> dict:
         """
         Create a new fixed-price listing on eBay using Inventory API.
@@ -501,6 +502,17 @@ class EbayListingPoster:
 
                 log.info("ebay.offer_created", offer_id=offer_id, sku=sku)
 
+                # An eBay offer can remain unpublished. This is the real eBay
+                # draft state; it is not a local-only placeholder.
+                if not publish:
+                    log.info("ebay.offer_saved_as_draft", offer_id=offer_id, sku=sku)
+                    return {
+                        "success": True,
+                        "offer_id": offer_id,
+                        "sku": sku,
+                        "status": "DRAFT",
+                    }
+
                 # Step 3: Publish offer (this creates the actual listing)
                 log.info("ebay.publishing_offer", offer_id=offer_id)
 
@@ -558,6 +570,34 @@ class EbayListingPoster:
                 "success": False,
                 "error": f"Failed to post listing: {str(exc)}",
             }
+
+    async def publish_offer(self, offer_id: str) -> dict:
+        """Publish an existing unpublished Inventory API offer."""
+        if not offer_id:
+            return {"success": False, "error": "No eBay draft offer is saved for this build."}
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.post(
+                    f"{self.base_url}/sell/inventory/v1/offer/{offer_id}/publish",
+                    headers={**self.headers, "Content-Language": "en-GB"},
+                )
+            if response.status_code not in (200, 201):
+                return {"success": False, "error": f"Failed to publish eBay draft: {response.status_code}: {response.text}"}
+            data = response.json()
+            listing_id = data.get("listingId")
+            if not listing_id:
+                return {"success": False, "error": "eBay did not return a listing ID when publishing the draft."}
+            domain = "www.ebay.co.uk" if self.environment == "production" else "sandbox.ebay.com"
+            return {
+                "success": True,
+                "listing_id": listing_id,
+                "url": f"https://{domain}/itm/{listing_id}",
+                "offer_id": offer_id,
+                "status": "ACTIVE",
+            }
+        except Exception as exc:
+            log.error("ebay.draft_publish_exception", offer_id=offer_id, error=str(exc))
+            return {"success": False, "error": f"Failed to publish eBay draft: {exc}"}
 
     async def update_listing(
         self,
@@ -694,6 +734,7 @@ async def post_flip_to_ebay(
     aspects: Optional[dict[str, list[str]]] = None,
     listing_id: Optional[str] = None,  # If provided, update existing listing; else create new
     sku: Optional[str] = None,
+    publish: bool = True,
 ) -> dict:
     """
     Convenience function to post or update a flip's listing on eBay.
@@ -754,6 +795,7 @@ async def post_flip_to_ebay(
         return_policy_id=return_policy_id,
         fulfillment_policy_id=fulfillment_policy_id,
         aspects=aspects,
+        publish=publish,
     )
 
     # Recover builds whose original successful listing ID was never saved by

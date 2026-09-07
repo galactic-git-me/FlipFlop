@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, Send, Trash2, Plus, RotateCcw, Loader2, Store, type LucideIcon } from "lucide-react";
+import { Eye, Send, Trash2, Plus, RotateCcw, Loader2, Store, FilePenLine, type LucideIcon } from "lucide-react";
 
 interface ListingStatus {
   platform: string;
@@ -18,6 +18,8 @@ interface CommandPanelProps {
   onGenerateTitle?: () => void;
   onPreviewEbay?: () => void;
   onPublishEbay?: () => void;
+  onPublishEbayDraft?: () => void;
+  onPublishEbayLive?: () => void;
   onUpdateEbay?: () => void;
   onDeleteEbay?: () => void;
   onPublishStorefront?: () => void;
@@ -25,6 +27,8 @@ interface CommandPanelProps {
   isLoading?: boolean;
   isDeletingEbay?: boolean;
   isPublishingStorefront?: boolean;
+  isPublishingEbayDraft?: boolean;
+  isPublishingEbayLive?: boolean;
 }
 
 type ActionAccent = "blue" | "amber" | "red" | "green";
@@ -88,12 +92,16 @@ export function CommandPanel({
   onGenerateTitle,
   onPreviewEbay,
   onPublishEbay,
+  onPublishEbayDraft,
+  onPublishEbayLive,
   onUpdateEbay,
   onDeleteEbay,
   onPublishStorefront,
   isLoading = false,
   isDeletingEbay = false,
   isPublishingStorefront = false,
+  isPublishingEbayDraft = false,
+  isPublishingEbayLive = false,
 }: CommandPanelProps) {
   const ebayStatus = listingStatuses.find((s) => s.platform === "ebay");
   const storefrontStatus = listingStatuses.find((s) => s.platform === "storefront");
@@ -125,10 +133,27 @@ export function CommandPanel({
           <RailButton label="End eBay listing" icon={Trash2} onClick={onDeleteEbay} disabled={isLoading || isDeletingEbay} isLoading={isDeletingEbay} accent="red" />
         </>
       ) : (
-        <RailButton label="Create eBay listing" icon={Plus} onClick={onPublishEbay} disabled={isLoading} isLoading={isLoading} accent="green" />
+        <>
+          <RailButton
+            label="Publish draft to eBay"
+            icon={FilePenLine}
+            onClick={onPublishEbayDraft}
+            disabled={isLoading || isPublishingEbayDraft || !onPublishEbayDraft || !!ebayStatus?.remoteStatus && ebayStatus.remoteStatus === "draft"}
+            isLoading={isPublishingEbayDraft}
+            accent="amber"
+          />
+          <RailButton
+            label="Publish to eBay"
+            icon={Send}
+            onClick={onPublishEbayLive}
+            disabled={isLoading || isPublishingEbayLive || !onPublishEbayLive || ebayStatus?.remoteStatus !== "draft"}
+            isLoading={isPublishingEbayLive}
+            accent="green"
+          />
+        </>
       )}
       <RailButton
-        label={storefrontStatus?.isListed ? "Update FlipFlop.shop listing" : "Publish to FlipFlop.shop"}
+        label={storefrontStatus?.isListed ? "Update website listing" : "Publish to website"}
         icon={Store}
         onClick={onPublishStorefront}
         disabled={isLoading || isPublishingStorefront || !onPublishStorefront}

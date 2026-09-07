@@ -31,7 +31,7 @@ from app.schemas.manual_build import (
     BookShipmentResult, UpdateEvidenceDataRequest,
 )
 from app.services import ai_service
-from app.services.ebay_listing_poster import post_flip_to_ebay, prepare_ebay_listing_description
+from app.services.ebay_listing_poster import EbayListingPoster, post_flip_to_ebay, prepare_ebay_listing_description
 from app.services.ebay_specifics_generator import (
     generate_item_specifics,
     repair_legacy_aspect_cardinality,
@@ -497,7 +497,7 @@ async def list_builds(include_archived: bool = False, db: AsyncSession = Depends
                 log.warning("manual_build.ebay_reconcile_on_list_failed", build_id=build.id, error=str(exc))
                 build.ebay_listing_status = "unknown"
         else:
-            build.ebay_listing_status = "never_listed"
+            build.ebay_listing_status = "draft" if build.ebay_offer_id else "never_listed"
 
     storefront_product_ids = {build.storefront_product_id for build in builds if build.storefront_product_id}
     storefront_products: dict[int, Product] = {}
@@ -600,6 +600,9 @@ async def get_build_faqs(build_id: int, db: AsyncSession = Depends(get_db)):
     ).scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
+
+    if not body.publish and (build.ebay_listing_id or build.ebay_offer_id):
+        raise HTTPException(400, "This build already has an eBay listing or draft offer. Publish the existing draft or end the listing first.")
     effective = selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides)
     return {
         "bank": FAQ_BANK,
@@ -694,8 +697,8 @@ async def get_build(build_id: int, db: AsyncSession = Depends(get_db)):
         except Exception as exc:
             log.warning("manual_build.ebay_reconcile_on_read_failed", build_id=build.id, error=str(exc))
             build.ebay_listing_status = "unknown"
-    else:
-        build.ebay_listing_status = "never_listed"
+        else:
+            build.ebay_listing_status = "draft" if build.ebay_offer_id else "never_listed"
         if build.status == "listed":
             build.status = "built"
     build.ebay_live = build.ebay_listing_status == "active"
@@ -1886,12 +1889,24 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
                 return_policy_id=return_policy_id,
                 fulfillment_policy_id=fulfillment_policy_id,
                 aspects=build.generated_aspects or {},
+                publish=body.publish,
             )
 
         if result["success"]:
+            if not body.publish:
+                build.ebay_offer_id = result.get("offer_id")
+                build.ebay_sku = result.get("sku")
+                build.ebay_listing_status = "draft"
+                build.ebay_listing_status_checked_at = datetime.utcnow()
+                build.ebay_listing_end_reason = None
+                build.updated_at = datetime.utcnow()
+                await db.flush()
+                return PostToEbayResult(success=True, offer_id=result.get("offer_id"), action="drafted")
+
             from app.services.traffic_bands import jittered_recreate_slot, DEFAULT_BAND
 
             build.ebay_listing_id = result["listing_id"]
+            build.ebay_offer_id = None
             build.ebay_listing_url = result["url"]
             build.ebay_sku = result.get("sku")
             build.status = "listed"
@@ -1932,7 +1947,7 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
 
             await db.flush()
             action = "updated" if is_relisting else "posted"
-            return PostToEbayResult(success=True, listing_id=result["listing_id"], url=result["url"], action=action)
+            return PostToEbayResult(success=True, listing_id=result["listing_id"], url=result["url"], action=action, offer_id=result.get("offer_id"))
 
         return PostToEbayResult(success=False, error=result.get("error", f"Failed to {'update' if is_relisting else 'post'} listing"))
     except HTTPException:
@@ -1940,6 +1955,40 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
     except Exception as e:
         error_msg = str(e)
         return PostToEbayResult(success=False, error=f"Error {'updating' if locals().get('is_relisting') else 'posting'} to eBay: {error_msg}")
+
+
+@router.post("/{build_id}/publish-ebay-draft", response_model=PostToEbayResult)
+async def publish_ebay_draft(build_id: int, db: AsyncSession = Depends(get_db)):
+    """Publish the unpublished eBay Inventory API offer saved for a build."""
+    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
+    build = result.scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+    if not build.ebay_offer_id:
+        raise HTTPException(400, "Create an eBay draft before publishing it.")
+
+    settings = get_settings()
+    try:
+        from app.services.ebay_token_manager import get_valid_ebay_access_token
+        oauth_token = await get_valid_ebay_access_token(settings.ebay_listing_environment)
+        poster = EbayListingPoster(environment=settings.ebay_listing_environment, access_token=oauth_token)
+        published = await poster.publish_offer(build.ebay_offer_id)
+    except ValueError as exc:
+        raise HTTPException(400, str(exc))
+
+    if not published.get("success"):
+        return PostToEbayResult(success=False, error=published.get("error", "eBay rejected the draft publication."))
+
+    build.ebay_listing_id = published["listing_id"]
+    build.ebay_listing_url = published["url"]
+    build.ebay_offer_id = None
+    build.ebay_listing_status = "active"
+    build.ebay_listing_status_checked_at = datetime.utcnow()
+    build.ebay_listing_end_reason = None
+    build.status = "listed"
+    build.updated_at = datetime.utcnow()
+    await db.flush()
+    return PostToEbayResult(success=True, listing_id=published["listing_id"], url=published["url"], action="posted")
 
 
 @router.post("/{build_id}/photos", response_model=ManualBuildOut)

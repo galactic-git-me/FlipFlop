@@ -58,6 +58,7 @@ class ManualBuildOut(BaseModel):
     generated_description: Optional[str]
     generated_aspects: Optional[dict[str, list[str]]] = None
     ebay_listing_id: Optional[str]
+    ebay_offer_id: Optional[str] = None
     ebay_listing_url: Optional[str]
     ebay_sku: Optional[str] = None
     ebay_listing_status: str = "never_listed"
@@ -176,6 +177,7 @@ class UpdateEvidenceDataRequest(BaseModel):
 class PostToEbayRequest(BaseModel):
     price: float
     condition: str = "USED_EXCELLENT"
+    publish: bool = True
 
 
 class PostToEbayResult(BaseModel):
@@ -184,6 +186,7 @@ class PostToEbayResult(BaseModel):
     url: Optional[str] = None
     error: Optional[str] = None
     action: Optional[str] = None  # "posted" or "updated"
+    offer_id: Optional[str] = None
 
 
 class SetHeroPhotoRequest(BaseModel):

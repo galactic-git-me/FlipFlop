@@ -25,6 +25,9 @@ class ManualBuild(Base):
     # eBay Item Specifics for this category, e.g. {"Processor": ["AMD Ryzen 7 7800X3D"], ...}
     generated_aspects: Mapped[dict | None] = mapped_column(JSON)
     ebay_listing_id: Mapped[str | None] = mapped_column(String(60))
+    # Unpublished eBay Inventory API offer retained between "draft" and
+    # "publish" actions.
+    ebay_offer_id: Mapped[str | None] = mapped_column(String(60))
     ebay_listing_url: Mapped[str | None] = mapped_column(String(300))
     # Remote lifecycle last confirmed with eBay. Kept separate from the
     # build workflow status so an ended listing is not confused with a build
