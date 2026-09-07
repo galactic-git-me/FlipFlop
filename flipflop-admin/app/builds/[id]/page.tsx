@@ -452,8 +452,15 @@ export default function BuildDetailPage() {
     if (!files.length) return;
     setUploadingPhotos(true);
     try {
-      const saved = await api.manualBuilds.uploadPhotos(buildId, files);
-      setBuild(saved);
+      // Upload files one at a time. Some reverse proxies/multipart parsers
+      // silently truncate a multi-file request, which previously made larger
+      // selections appear to stop after three photos. Updating after every
+      // successful upload also keeps the gallery accurate if one file fails.
+      let saved = build;
+      for (const file of files) {
+        saved = await api.manualBuilds.uploadPhotos(buildId, [file]);
+        setBuild(saved);
+      }
     } catch (error) {
       const msg = error instanceof Error ? error.message : "Unknown error";
       alert(`Couldn't upload photos: ${msg}`);
