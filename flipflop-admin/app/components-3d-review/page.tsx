@@ -340,7 +340,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
 
           // Handle CORS by proxying through local backend
           const loadUrl = glbUrl.startsWith("http") && !glbUrl.includes("localhost")
-            ? `/api/glb-proxy?url=${encodeURIComponent(glbUrl)}`
+            ? `/api/proxy-glb?url=${encodeURIComponent(glbUrl)}`
             : glbUrl;
 
           loader.load(

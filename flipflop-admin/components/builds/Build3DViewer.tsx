@@ -72,7 +72,7 @@ export function Build3DViewer({ url }: { url: string }) {
           renderer.dispose();
         };
 
-        const loadUrl = url.startsWith("http") ? `/api/glb-proxy?url=${encodeURIComponent(url)}` : url;
+        const loadUrl = url.startsWith("http") ? `/api/proxy-glb?url=${encodeURIComponent(url)}` : url;
         const gltf = await new GLTFLoader().loadAsync(loadUrl);
         if (disposed) return;
         const model = gltf.scene;
