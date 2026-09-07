@@ -16,6 +16,7 @@ import hashlib
 import re
 from dataclasses import dataclass
 from typing import Optional
+from urllib.parse import urlparse
 
 import httpx
 import structlog
@@ -165,20 +166,19 @@ Input: "Mystery Box - PC Parts"
 Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.0,"extraction_notes":"no product data"}}
 """
 
-    # Retry up to 4 times for transient errors, backing off exponentially
-    # (1s, 2s, 4s) rather than a flat 1s -- a flat delay gives up in ~2s
-    # total, too short to survive Ollama being briefly unreachable (e.g. a
-    # WSL/Docker network hiccup), which is exactly the failure mode that
-    # was permanently stranding listings without a CPK for the rest of
-    # that run (see cpk_extractor.exception in the logs).
     # CPK extraction is enrichment and must not hold the queue hostage. A
-    # missing model endpoint should fail in seconds, not occupy one of the
-    # four global extraction slots for several minutes.
+    # missing model endpoint should fail immediately, not occupy one of the
+    # four global extraction slots while the queue waits for retries.
     settings = get_settings()
-    if not settings.ollama_base_url:
+    endpoint = (settings.ollama_base_url or "").strip().rstrip("/")
+    parsed_endpoint = urlparse(endpoint)
+    # The production web tier must never silently try to use a model on its
+    # own loopback interface. The database used to contain the default local
+    # Ollama URL even though no Ollama service exists in that container.
+    if not endpoint or parsed_endpoint.hostname in {"localhost", "127.0.0.1", "::1"}:
         log.warning("cpk_extractor.no_model_endpoint")
         return None
-    max_attempts = 2
+    max_attempts = 1
     timeout = httpx.Timeout(15.0, connect=3.0)
 
     for attempt in range(max_attempts):
@@ -200,12 +200,8 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
                     )
 
                 if resp.status_code == 500:
-                    if attempt < max_attempts - 1:
-                        await asyncio.sleep(0.5 * (attempt + 1))
-                        continue
-                    else:
-                        log.warning("cpk_extractor.ollama_error", status=resp.status_code, attempt=attempt)
-                        return None
+                    log.warning("cpk_extractor.ollama_error", status=resp.status_code, attempt=attempt)
+                    return None
                 elif resp.status_code != 200:
                     log.warning("cpk_extractor.ollama_error", status=resp.status_code)
                     return None
@@ -288,9 +284,6 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
                 )
 
         except Exception as exc:
-            if attempt < max_attempts - 1:
-                await asyncio.sleep(2 ** attempt)  # 1s, 2s, 4s
-                continue
             log.warning("cpk_extractor.exception", error=str(exc), title=_safe_title(title))
             return None
 
