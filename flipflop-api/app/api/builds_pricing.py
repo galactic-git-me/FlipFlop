@@ -496,7 +496,11 @@ async def _live_close_build_comparables(
                 continue
             has_cpu = _title_has_model(title, cpu_model)
             has_gpu = _title_has_model(title, gpu_model)
-            if cpu_model and gpu_model and not (has_cpu and has_gpu):
+            # The query is deliberately an anchor search: a listing with the
+            # same CPU or the same GPU is useful live-market context even when
+            # the seller omitted the other part from the title. Completed-sale
+            # valuation remains stricter and still requires both identities.
+            if cpu_model and gpu_model and not (has_cpu or has_gpu):
                 continue
             ram_gb = _extract_ram_gb(title)
             ram_close = bool(target_ram_gb and ram_gb and abs(ram_gb - target_ram_gb) <= _RAM_TOLERANCE_GB)
@@ -670,6 +674,7 @@ async def get_build_pricing(
     market_data: dict = {}
     live_close_comparables: list[MarketComparable] = []
     sold_evidence_status: str | None = None
+    sold_result: SoldCompsResult | None = None
 
     if fetch_sold:
         log.info("builds_pricing.fetch_sold", build_id=build_id, query=query, cache_key=cache_key)
@@ -694,25 +699,39 @@ async def get_build_pricing(
                 await cache.set(cache_key, sold_result)
             else:
                 sold_evidence_status = sold_result.unavailable_reason or "Sold evidence could not be retrieved"
-            cpu_model_for_search = resolve_identity(cpu_title).model if cpu_title else None
-            gpu_model_for_search = resolve_identity(gpu_title).model if gpu_title else None
-            live_close_comparables = await _live_close_build_comparables(
-                cpu_model_for_search, gpu_model_for_search, target_ram_gb,
-            )
-            # Cache the source details as well as sold comps so a page reload
-            # does not erase the evidence just fetched by the operator.
-            sold_for_cache = sold_result if sold_result.available else await cache.get(cache_key)
-            if sold_for_cache is None:
-                sold_for_cache = SoldCompsResult(
-                    available=False, comps=[], unavailable_reason="No completed-sale evidence",
-                )
-            await cache.set(
-                cache_key,
-                sold_for_cache,
-                listings_data={"active_close_matches": [item.model_dump() for item in live_close_comparables]},
-            )
         except Exception as exc:
-            log.warning("builds_pricing.close_match_fetch_failed", build_id=build_id, error=str(exc))
+            # A sold-data outage must not prevent the independent live BIN
+            # search below from supplying useful asking-price evidence.
+            sold_evidence_status = f"Sold evidence fetch failed: {exc}"
+            log.warning("builds_pricing.sold_fetch_failed", build_id=build_id, error=str(exc))
+
+    # Current asking prices are a separate evidence lane from completed sales.
+    # Fetch them independently so a ScrapingBee/Playwright sold-search failure
+    # cannot erase the active matches that the seller can already see on eBay.
+    try:
+        cpu_model_for_search = resolve_identity(cpu_title).model if cpu_title else None
+        gpu_model_for_search = resolve_identity(gpu_title).model if gpu_title else None
+        live_close_comparables = await _live_close_build_comparables(
+            cpu_model_for_search, gpu_model_for_search, target_ram_gb,
+        )
+    except Exception as exc:
+        log.warning("builds_pricing.live_close_match_fetch_failed", build_id=build_id, error=str(exc))
+
+    # Cache the source details as well as sold comps so a page reload does not
+    # erase the evidence just fetched by the operator. Keep this write separate
+    # from sold retrieval: active listings remain cacheable even when sold data
+    # is unavailable.
+    if fetch_sold or live_close_comparables:
+        sold_for_cache = sold_result if sold_result and sold_result.available else await cache.get(cache_key)
+        if sold_for_cache is None:
+            sold_for_cache = SoldCompsResult(
+                available=False, comps=[], unavailable_reason="No completed-sale evidence",
+            )
+        await cache.set(
+            cache_key,
+            sold_for_cache,
+            listings_data={"active_close_matches": [item.model_dump() for item in live_close_comparables]},
+        )
 
     cached_result = await cache.get(cache_key)
     if not live_close_comparables:
