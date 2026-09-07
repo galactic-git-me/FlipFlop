@@ -2373,6 +2373,11 @@ async def _submit_scan_body(
         pipeline_status.increment_vendor(payload.search_id, vendor, 1)
         listings_to_assign_cpk.append(listing)
 
+    # Persist ingestion before model enrichment. Otherwise the request keeps
+    # its original database transaction open while waiting on CPK calls,
+    # leaving an idle-in-transaction connection held for the whole batch.
+    await db.commit()
+
     # Process CPK assignment concurrently (up to 4 parallel, matching Ollama's OLLAMA_NUM_PARALLEL)
     # Uses GLOBAL _CPK_SEMAPHORE (not per-submission) to prevent 6 workers × 4 slots = 24 concurrent requests
     if listings_to_assign_cpk:

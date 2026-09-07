@@ -171,13 +171,20 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
     # WSL/Docker network hiccup), which is exactly the failure mode that
     # was permanently stranding listings without a CPK for the rest of
     # that run (see cpk_extractor.exception in the logs).
+    # CPK extraction is enrichment and must not hold the queue hostage. A
+    # missing model endpoint should fail in seconds, not occupy one of the
+    # four global extraction slots for several minutes.
     settings = get_settings()
-    max_attempts = 4
+    if not settings.ollama_base_url:
+        log.warning("cpk_extractor.no_model_endpoint")
+        return None
+    max_attempts = 2
+    timeout = httpx.Timeout(15.0, connect=3.0)
 
     for attempt in range(max_attempts):
         try:
             async with _CPK_EXTRACTOR_SEMAPHORE:
-                async with httpx.AsyncClient(timeout=60) as client:
+                async with httpx.AsyncClient(timeout=timeout) as client:
                     resp = await client.post(
                         f"{settings.ollama_base_url}/api/generate",
                         json={
@@ -194,7 +201,7 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
 
                 if resp.status_code == 500:
                     if attempt < max_attempts - 1:
-                        await asyncio.sleep(2 ** attempt)  # 1s, 2s, 4s
+                        await asyncio.sleep(0.5 * (attempt + 1))
                         continue
                     else:
                         log.warning("cpk_extractor.ollama_error", status=resp.status_code, attempt=attempt)
