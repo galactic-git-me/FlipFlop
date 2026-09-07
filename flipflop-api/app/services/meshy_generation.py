@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import asyncio
 from dataclasses import dataclass
+from typing import Awaitable, Callable
 
 import httpx
 import structlog
@@ -35,6 +36,7 @@ class MeshyGenerationResult:
     glb_url: str | None
     thumbnail_url: str | None
     poly_count: int | None
+    progress: int = 0
 
 
 def _headers() -> dict[str, str]:
@@ -78,6 +80,7 @@ async def generate_family_asset(prompt: str) -> MeshyGenerationResult | None:
         log.warning("meshy_generation.submit_failed", error=str(exc))
         return None
 
+    last_progress = 0
     for attempt in range(_MAX_POLL_ATTEMPTS):
         await asyncio.sleep(_POLL_INTERVAL_SECONDS)
         try:
@@ -111,6 +114,7 @@ async def generate_family_asset(prompt: str) -> MeshyGenerationResult | None:
 async def generate_multi_image_asset(
     image_urls: list[str],
     texture_prompt: str | None = None,
+    progress_callback: Callable[[int, str], Awaitable[None]] | None = None,
 ) -> MeshyGenerationResult | None:
     """Generate one textured GLB from one to four views of the same object.
 
@@ -136,7 +140,11 @@ async def generate_multi_image_asset(
                 "ai_model": "meshy-6",
                 "should_texture": True,
                 "enable_pbr": True,
-                "texture_resolution": "4k",
+                # 2K is the right default for the interactive storefront
+                # viewer. 4K substantially increases Meshy's processing time
+                # and produces a much larger GLB without improving the normal
+                # browser viewing experience.
+                "texture_resolution": "2k",
                 # Meshy's API recommends disabling remesh for maximum quality.
                 "should_remesh": False,
                 "target_formats": ["glb"],
@@ -162,6 +170,7 @@ async def generate_multi_image_asset(
         log.warning("meshy_generation.multi_image_submit_failed", error=str(exc))
         return None
 
+    last_progress = 0
     for attempt in range(_MAX_POLL_ATTEMPTS):
         await asyncio.sleep(_POLL_INTERVAL_SECONDS)
         try:
@@ -173,6 +182,14 @@ async def generate_multi_image_asset(
             log.warning("meshy_generation.multi_image_poll_failed", attempt=attempt, error=str(exc))
             continue
         status = data.get("status", "")
+        progress = max(0, min(100, int(data.get("progress") or 0)))
+        last_progress = progress
+        if progress_callback:
+            try:
+                await progress_callback(progress, status)
+            except Exception as exc:
+                # A status-display write must never cancel the Meshy job.
+                log.warning("meshy_generation.progress_callback_failed", error=str(exc))
         if status == "SUCCEEDED":
             return MeshyGenerationResult(
                 task_id=task_id,
@@ -180,10 +197,11 @@ async def generate_multi_image_asset(
                 glb_url=(data.get("model_urls") or {}).get("glb"),
                 thumbnail_url=data.get("thumbnail_url"),
                 poly_count=None,
+                progress=progress,
             )
         if status in ("FAILED", "CANCELED"):
-            return MeshyGenerationResult(task_id, status, None, None, None)
-    return MeshyGenerationResult(task_id, "TIMED_OUT", None, None, None)
+            return MeshyGenerationResult(task_id, status, None, None, None, progress)
+    return MeshyGenerationResult(task_id, "TIMED_OUT", None, None, None, last_progress)
 
 
 def build_prompt(category: str, family_key: str) -> str:

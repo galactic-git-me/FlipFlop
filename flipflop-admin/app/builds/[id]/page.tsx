@@ -1264,6 +1264,20 @@ export default function BuildDetailPage() {
                           {existing?.glb_url && <a href={existing.glb_url} target="_blank" rel="noreferrer" className="text-[10px] font-bold text-cyan-300 hover:text-cyan-200">Open GLB</a>}
                         </div>
                       </div>
+                      {pending && (
+                        <div className="mt-3" aria-label={`${existing?.progress ?? 0}% complete`}>
+                          <div className="mb-1 flex items-center justify-between text-[10px] text-slate-500">
+                            <span>{existing?.meshy_status === "PENDING" ? "Waiting for Meshy" : "Generating 3D model"}</span>
+                            <span className="font-mono text-cyan-300">{existing?.progress ?? 0}%</span>
+                          </div>
+                          <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+                            <div
+                              className="h-full rounded-full bg-cyan-300 transition-[width] duration-700"
+                              style={{ width: `${Math.max(0, Math.min(100, existing?.progress ?? 0))}%` }}
+                            />
+                          </div>
+                        </div>
+                      )}
                       <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
                           {regularPhotos.map((photo, index) => {
                           const isSelected = selected.includes(photo.url);

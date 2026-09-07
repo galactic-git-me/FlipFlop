@@ -267,6 +267,8 @@ export interface CourierQuote {
 export interface Build3DAsset {
   provider: "meshy";
   status: "queued" | "processing" | "succeeded" | "failed";
+  progress?: number;
+  meshy_status?: string;
   source_image_urls: string[];
   task_id?: string;
   glb_url?: string;

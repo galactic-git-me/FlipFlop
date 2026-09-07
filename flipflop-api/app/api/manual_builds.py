@@ -164,8 +164,28 @@ async def _run_build_3d_generation(
         await session.commit()
     log.info("manual_build.3d_generation_started", build_id=build_id, asset_types=list(requested))
 
+    async def persist_progress(asset_type: str, progress: int, status: str) -> None:
+        async with AsyncSessionLocal() as session:
+            build = (await session.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
+            if not build:
+                return
+            assets = dict(build.model_3d_assets or {})
+            asset = dict(assets.get(asset_type) or {})
+            asset.update(progress=progress, meshy_status=status, status="processing")
+            assets[asset_type] = asset
+            build.model_3d_assets = assets
+            await session.commit()
+
     results = await asyncio.gather(
-        *(generate_multi_image_asset(urls) for urls in requested.values()),
+        *(
+            generate_multi_image_asset(
+                urls,
+                progress_callback=lambda progress, status, asset_type=asset_type: persist_progress(
+                    asset_type, progress, status
+                ),
+            )
+            for asset_type, urls in requested.items()
+        ),
         return_exceptions=True,
     )
     completed: dict[str, dict] = {}
@@ -189,6 +209,7 @@ async def _run_build_3d_generation(
                 local_path.write_bytes(response.content)
                 entry.update(
                     status="succeeded",
+                    progress=result.progress,
                     task_id=result.task_id,
                     glb_url=f"{_PUBLIC_API_BASE}/uploads/models/{filename}",
                     preview_url=result.thumbnail_url,
