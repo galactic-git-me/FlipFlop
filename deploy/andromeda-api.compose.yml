@@ -51,6 +51,9 @@ services:
       OLLAMA_BASE_URL: ""
       OLLAMA_MODEL: disabled-on-web-tier
       FRONTEND_URL: https://www.theflipflop.shop
+      # Live listings must never silently fall back to the eBay sandbox when
+      # the host env file omits this optional setting.
+      EBAY_LISTING_ENVIRONMENT: production
       # OAuth is completed by the local admin UI in the operator's browser.
       ADMIN_FRONTEND_URL: http://localhost:4312
       EBAY_OAUTH_CALLBACK_URL: https://www.theflipflop.shop/api/ebay/oauth/callback
@@ -95,6 +98,7 @@ services:
       OLLAMA_BASE_URL: ""
       MAX_CONCURRENT_SEARCH_TERMS: "4"
       OLLAMA_MODEL: disabled-on-web-tier
+      EBAY_LISTING_ENVIRONMENT: production
       # Was capped at 2 (config.py default) as an emergency throttle during a
       # past RAM-pressure incident. Confirmed 2026-09-07: 16GiB available,
       # no OOM history, no crash-loop — raising to 4 as a conservative first

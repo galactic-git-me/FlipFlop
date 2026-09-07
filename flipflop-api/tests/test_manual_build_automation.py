@@ -274,7 +274,7 @@ async def test_post_to_ebay_promotes_when_opted_in(client, test_db):
         )
 
     assert resp.status_code == 200
-    mock_promote.assert_awaited_once_with("item-1", 6.0, "TOKEN", "sandbox")
+    mock_promote.assert_awaited_once_with("item-1", 6.0, "TOKEN", "production")
 
 
 @pytest.mark.asyncio

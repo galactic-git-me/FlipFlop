@@ -76,7 +76,7 @@ def _save_cache(environment: str, access_token: str, expires_at: float) -> None:
     path.write_text(json.dumps({"access_token": access_token, "expires_at": expires_at}))
 
 
-async def get_valid_ebay_access_token(environment: str = "sandbox", force_refresh: bool = False) -> str:
+async def get_valid_ebay_access_token(environment: str = "production", force_refresh: bool = False) -> str:
     """
     Returns a currently-valid eBay access token for the given environment
     ("sandbox" or "production"), refreshing it via the stored refresh token

@@ -35,10 +35,13 @@ class Settings(BaseSettings):
     ebay_sandbox_fulfillment_policy_id: str = ""
 
     # Which environment the listing/publish flow actually posts to —
-    # "sandbox" (default, no real fees) or "production" (live, real listing).
+    # "sandbox" (testing only) or "production" (live, real listing).
     # Everything below this line mirrors the sandbox_* fields above but for
     # production, so credentials/token/policies switch together with this.
-    ebay_listing_environment: str = "sandbox"
+    # Production is the live operating mode. Sandbox must be selected
+    # explicitly for testing so a missing deployment env var cannot silently
+    # send listing/draft creation to the wrong eBay account.
+    ebay_listing_environment: str = "production"
     ebay_production_oauth_user_token: str = ""
     ebay_production_refresh_token: str = ""
     ebay_production_payment_policy_id: str = ""

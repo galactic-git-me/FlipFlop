@@ -183,7 +183,7 @@ class EbayListingPoster:
 
     def __init__(
         self,
-        environment: str = "sandbox",
+        environment: str = "production",
         access_token: Optional[str] = None,
         app_id: Optional[str] = None,
         client_secret: Optional[str] = None,
