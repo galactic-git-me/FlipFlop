@@ -79,6 +79,7 @@ def _manual_build_to_portal_out(build: ManualBuild) -> MyOrderOut:
             "preview_image_ref": build.hero_photo_url,
             "ar_ready": True,
         },
+        model_3d_url=build.model_3d_url,
         created_at=build.created_at,
     )
 
@@ -123,6 +124,11 @@ def _order_to_my_order_out(order: Order, capture_3d: Capture3DAsset | None = Non
              "preview_image_ref": capture_3d.preview_image_ref,
              "ar_ready": bool(capture_3d.ar_ready)}
             if capture_3d and capture_3d.status == Capture3DStatus.PUBLISHED and capture_3d.optimized_asset_ref else None
+        ),
+        model_3d_url=(
+            capture_3d.optimized_asset_ref
+            if capture_3d and capture_3d.status == Capture3DStatus.PUBLISHED and capture_3d.optimized_asset_ref
+            else None
         ),
         created_at=order.created_at,
     )

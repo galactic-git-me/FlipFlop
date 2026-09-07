@@ -107,6 +107,10 @@ class MyOrderOut(BaseModel):
     tracking_url: Optional[str] = None
     live_tracking_available: bool = False
     capture_3d: Optional[Dict[str, Any]] = None
+    # Direct URL for the completed build GLB.  Keep this alongside the
+    # capture metadata so storefront clients can render the viewer without
+    # having to know the internal capture-asset field names.
+    model_3d_url: Optional[str] = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=False)
