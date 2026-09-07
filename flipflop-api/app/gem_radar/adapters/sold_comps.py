@@ -112,22 +112,9 @@ class LiveSoldCompsAdapter(SoldCompsAdapter):
             return SoldCompsResult(available=False, unavailable_reason=f"eBay scrape failed: {exc}")
 
     async def _fetch_sold_comps(self, query: str, condition: str) -> list[SoldComp]:
-        """Dual-pass scrape via ScrapingBee: Desktop PCs category first (179), then all categories (0).
-
-        Uses ScrapingBee to bypass eBay anti-bot detection via residential IP rotation
-        and realistic browser rendering.
-        """
-        import random
-        from app.config import get_settings
-
+        """Direct eBay scrape matching the component sold-price collector."""
         comps: list[SoldComp] = []
         condition_id = self._CONDITION_IDS.get(condition)
-        settings = get_settings()
-        scrapingbee_key = settings.scrapingbee_api_key
-
-        if not scrapingbee_key:
-            log.error("sold_comps.missing_scrapingbee_key")
-            return []
 
         for sacat in ("179", "0"):  # Desktop PCs → all categories
             params = {
@@ -135,103 +122,36 @@ class LiveSoldCompsAdapter(SoldCompsAdapter):
                 "LH_Sold": "1",
                 "LH_Complete": "1",
                 "_sacat": sacat,
-                "_sop": "12",        # most recent first
-                "LH_PrefLoc": "1",   # UK sellers preferred
+                "_sop": "12",
+                "LH_PrefLoc": "1",
                 "_ipg": "60",
             }
             if condition_id:
                 params["LH_ItemCondition"] = condition_id
-
-            # Build eBay URL
-            from urllib.parse import urlencode
-            ebay_url = f"https://www.ebay.co.uk/sch/i.html?{urlencode(params)}"
-
-            # Retry with backoff
-            for attempt in range(3):
-                try:
-                    # Use ScrapingBee API to fetch HTML (handles anti-bot)
-                    # ScrapingBee: premium_proxy required for eBay's strict anti-bot
-                    scrapingbee_params = {
-                        "api_key": scrapingbee_key,
-                        "url": ebay_url,
-                        "premium_proxy": "true",  # Required for eBay
-                        "block_resources": "false",  # Allow all resources for proper parsing
-                    }
-
-                    async with httpx.AsyncClient(timeout=60) as client:
-                        resp = await client.get(
-                            "https://app.scrapingbee.com/api/v1",
-                            params=scrapingbee_params,
-                        )
-
-                    if resp.status_code in (401, 403):
-                        # Authentication/authorisation failures are
-                        # configuration errors, not transient network errors.
-                        # Retrying them only stalls pricing while guaranteeing
-                        # the same response on every attempt/category pass.
-                        log.error(
-                            "sold_comps.scrapingbee_auth_failed",
-                            query=query,
-                            condition=condition,
-                            status=resp.status_code,
-                        )
-                        raise RuntimeError(
-                            f"ScrapingBee rejected the configured credential (HTTP {resp.status_code})"
-                        )
-
-                    if resp.status_code != 200:
-                        log.debug(
-                            "sold_comps.scrapingbee_error",
-                            query=query,
-                            condition=condition,
-                            sacat=sacat,
-                            status=resp.status_code,
-                            attempt=attempt,
-                        )
-                        await asyncio.sleep(2.0 + random.uniform(0, 2.0))
-                        continue
-
-                    html = resp.text
-                    if len(html) < 2000:
-                        log.debug(
-                            "sold_comps.scrapingbee_small_response",
-                            query=query,
-                            condition=condition,
-                            sacat=sacat,
-                            size=len(html),
-                        )
-                        await asyncio.sleep(1.0)
-                        continue
-
-                    batch = self._extract_comps_from_html(html, condition)
-                    comps.extend(batch)
-                    log.debug(
-                        "sold_comps.fetch_pass",
-                        query=query,
-                        condition=condition,
-                        sacat=sacat,
-                        found=len(batch),
+            headers = {
+                "User-Agent": ua.random,
+                "Accept-Language": "en-GB,en;q=0.9",
+                "Accept": "text/html,application/xhtml+xml",
+            }
+            try:
+                async with httpx.AsyncClient(timeout=25, follow_redirects=True) as client:
+                    resp = await client.get(
+                        "https://www.ebay.co.uk/sch/i.html",
+                        params=params,
+                        headers=headers,
                     )
-                    break  # Success, break retry loop
+                if resp.status_code != 200 or len(resp.text) < 1000:
+                    log.debug("sold_comps.direct_bad_response", query=query, sacat=sacat, status=resp.status_code)
+                    continue
+                batch = self._extract_comps_from_html(resp.text, condition)
+                comps.extend(batch)
+                log.debug("sold_comps.direct_fetch_pass", query=query, sacat=sacat, found=len(batch))
+            except Exception as exc:
+                log.debug("sold_comps.direct_fetch_error", query=query, sacat=sacat, error=str(exc))
 
-                except Exception as exc:
-                    log.debug(
-                        "sold_comps.fetch_error",
-                        query=query,
-                        condition=condition,
-                        sacat=sacat,
-                        attempt=attempt,
-                        error=str(exc),
-                    )
-                    if attempt < 2:
-                        await asyncio.sleep(2.0 + random.uniform(0, 2.0))
-
-            # Break early if we have enough comps
             if len(comps) >= self._MIN_COMPS_BEFORE_BREAK:
                 break
-
-            # Delay between category passes
-            await asyncio.sleep(random.uniform(1.0, 2.0))
+            await asyncio.sleep(0.3)
 
         return comps
 

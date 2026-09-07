@@ -28,7 +28,7 @@ from app.models.listing import Listing, ListingStatus
 from app.gem_radar.schemas import CamelModel, ExtractedListing
 from app.config import get_settings
 from app.gem_radar.identity import resolve_identity
-from app.gem_radar.adapters.sold_comps import LiveSoldCompsAdapter, PlaywrightSoldCompsAdapter, SoldCompsResult
+from app.gem_radar.adapters.sold_comps import PlaywrightSoldCompsAdapter, SoldCompsResult
 from app.services.ebay_browse import search_active_listings
 from app.services.sold_comps_cache import get_sold_comps_cache
 from app.services.figural_insurance import FiguralError, get_insurance_quote
@@ -695,27 +695,13 @@ async def get_build_pricing(
             collected: list = []
             unavailable_reasons: list[str] = []
             seen_urls: set[str] = set()
-            playwright_attempted = False
             for sold_query in sold_queries:
-                result = await LiveSoldCompsAdapter().fetch(sold_query, condition=pricing_condition)
-                if not result.available and not playwright_attempted:
-                    # Only one browser fallback may run per request. If eBay
-                    # asks for sign-in on a later anchor query, the endpoint
-                    # must return promptly rather than opening another
-                    # interactive login wait.
-                    # ScrapingBee credentials can expire independently of the
-                    # app. Reuse the persisted eBay browser session as the
-                    # supported fallback instead of silently returning empty.
-                    log.warning(
-                        "builds_pricing.sold_proxy_unavailable",
-                        build_id=build_id,
-                        query=sold_query,
-                        reason=result.unavailable_reason,
-                    )
-                    playwright_attempted = True
-                    result = await PlaywrightSoldCompsAdapter().fetch(
-                        sold_query, condition=pricing_condition,
-                    )
+                # Sold evidence comes directly from eBay's completed/sold
+                # results in a real browser session. Do not route this through
+                # ScrapingBee or any active-listing provider.
+                result = await PlaywrightSoldCompsAdapter().fetch(
+                    sold_query, condition=pricing_condition,
+                )
                 if result.available:
                     for comp in result.comps:
                         key = comp.url or f"{comp.title}|{comp.price}|{comp.sold_at}"
