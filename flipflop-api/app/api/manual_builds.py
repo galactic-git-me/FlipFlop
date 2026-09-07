@@ -158,13 +158,13 @@ async def _run_build_3d_generation(
         started_at = datetime.utcnow().isoformat()
         for asset_type in requested:
             current = dict(assets.get(asset_type) or {})
-            current.update(status="processing", started_at=started_at)
+            current.update(status="processing", progress=0, meshy_status="SUBMITTING", started_at=started_at)
             assets[asset_type] = current
         build.model_3d_assets = assets
         await session.commit()
     log.info("manual_build.3d_generation_started", build_id=build_id, asset_types=list(requested))
 
-    async def persist_progress(asset_type: str, progress: int, status: str) -> None:
+    async def persist_progress(asset_type: str, progress: int, status: str, task_id: str | None = None) -> None:
         async with AsyncSessionLocal() as session:
             build = (await session.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
             if not build:
@@ -172,6 +172,8 @@ async def _run_build_3d_generation(
             assets = dict(build.model_3d_assets or {})
             asset = dict(assets.get(asset_type) or {})
             asset.update(progress=progress, meshy_status=status, status="processing")
+            if task_id:
+                asset["task_id"] = task_id
             assets[asset_type] = asset
             build.model_3d_assets = assets
             await session.commit()
@@ -180,8 +182,8 @@ async def _run_build_3d_generation(
         *(
             generate_multi_image_asset(
                 urls,
-                progress_callback=lambda progress, status, asset_type=asset_type: persist_progress(
-                    asset_type, progress, status
+                progress_callback=lambda progress, status, task_id=None, asset_type=asset_type: persist_progress(
+                    asset_type, progress, status, task_id
                 ),
             )
             for asset_type, urls in requested.items()

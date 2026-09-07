@@ -114,7 +114,7 @@ async def generate_family_asset(prompt: str) -> MeshyGenerationResult | None:
 async def generate_multi_image_asset(
     image_urls: list[str],
     texture_prompt: str | None = None,
-    progress_callback: Callable[[int, str], Awaitable[None]] | None = None,
+    progress_callback: Callable[[int, str, str | None], Awaitable[None]] | None = None,
 ) -> MeshyGenerationResult | None:
     """Generate one textured GLB from one to four views of the same object.
 
@@ -175,7 +175,7 @@ async def generate_multi_image_asset(
     # is still pending.
     if progress_callback:
         try:
-            await progress_callback(0, "SUBMITTED")
+            await progress_callback(0, "SUBMITTED", task_id)
         except Exception as exc:
             log.warning("meshy_generation.progress_callback_failed", error=str(exc))
 
@@ -195,7 +195,7 @@ async def generate_multi_image_asset(
         last_progress = progress
         if progress_callback:
             try:
-                await progress_callback(progress, status)
+                await progress_callback(progress, status, task_id)
             except Exception as exc:
                 # A status-display write must never cancel the Meshy job.
                 log.warning("meshy_generation.progress_callback_failed", error=str(exc))

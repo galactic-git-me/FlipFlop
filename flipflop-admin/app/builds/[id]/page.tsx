@@ -1276,8 +1276,10 @@ export default function BuildDetailPage() {
                         <div className="mt-3" aria-label={`${existing?.progress ?? 0}% complete`}>
                           <div className="mb-1 flex items-center justify-between text-[10px] text-slate-500">
                             <span>
-                              {existing?.meshy_status === "SUBMITTED" || existing?.meshy_status === "PENDING"
-                                ? "Waiting for Meshy to start"
+                              {existing?.meshy_status === "SUBMITTING"
+                                ? "Submitting photos to Meshy"
+                                : existing?.meshy_status === "SUBMITTED" || existing?.meshy_status === "PENDING"
+                                  ? "Waiting for Meshy to start"
                                 : existing?.meshy_status === "POLL_ERROR"
                                   ? "Meshy status temporarily unavailable"
                                   : "Generating 3D model"}
