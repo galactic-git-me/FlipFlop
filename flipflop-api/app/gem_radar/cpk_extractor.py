@@ -175,19 +175,44 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
     # The production web tier must never silently try to use a model on its
     # own loopback interface. The database used to contain the default local
     # Ollama URL even though no Ollama service exists in that container.
-    if not endpoint or parsed_endpoint.hostname in {"localhost", "127.0.0.1", "::1"}:
+    use_openrouter = bool(settings.openrouter_api_key)
+    if not use_openrouter and (
+        not endpoint or parsed_endpoint.hostname in {"localhost", "127.0.0.1", "::1"}
+    ):
         log.warning("cpk_extractor.no_model_endpoint")
         return None
     max_attempts = 1
-    timeout = httpx.Timeout(15.0, connect=3.0)
+    timeout = httpx.Timeout(20.0, connect=3.0)
 
     for attempt in range(max_attempts):
         try:
             async with _CPK_EXTRACTOR_SEMAPHORE:
                 async with httpx.AsyncClient(timeout=timeout) as client:
-                    resp = await client.post(
-                        f"{settings.ollama_base_url}/api/generate",
-                        json={
+                    if use_openrouter:
+                        request_url = "https://openrouter.ai/api/v1/chat/completions"
+                        request_headers = {
+                            "Authorization": f"Bearer {settings.openrouter_api_key}",
+                            "Content-Type": "application/json",
+                            "HTTP-Referer": settings.frontend_url,
+                            "X-Title": "FlipFlop Gem Radar",
+                        }
+                        request_body = {
+                            "model": settings.openrouter_primary_model,
+                            "messages": [
+                                {
+                                    "role": "system",
+                                    "content": "Return only valid JSON. Do not use markdown or explanations.",
+                                },
+                                {"role": "user", "content": prompt},
+                            ],
+                            "temperature": 0.1,
+                            "max_tokens": 256,
+                            "response_format": {"type": "json_object"},
+                        }
+                    else:
+                        request_url = f"{endpoint}/api/generate"
+                        request_headers = None
+                        request_body = {
                             "model": settings.ollama_model,
                             "prompt": prompt,
                             "stream": False,
@@ -196,10 +221,14 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
                                 "temperature": 0.1,
                                 "num_predict": 256,
                             },
-                        },
+                        }
+                    resp = await client.post(
+                        request_url,
+                        headers=request_headers,
+                        json=request_body,
                     )
 
-                if resp.status_code == 500:
+                if resp.status_code == 500 and not use_openrouter:
                     log.warning("cpk_extractor.ollama_error", status=resp.status_code, attempt=attempt)
                     return None
                 elif resp.status_code != 200:
@@ -208,7 +237,10 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
 
                 # Success, process response
                 result = resp.json()
-                output = result.get("response", "").strip()
+                if use_openrouter:
+                    output = result.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
+                else:
+                    output = result.get("response", "").strip()
 
                 # Extract JSON from response
                 try:
