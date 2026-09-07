@@ -1,9 +1,8 @@
 """Sold/completed-listing comparables adapter (PRD §11.4/§11.5 — eBay New/Used
 Sold, the two mandatory benchmarks).
 
-Scrapes eBay UK's public sold/completed listings using ScrapingBee proxy service
-to bypass anti-bot detection. ScrapingBee handles residential IP rotation,
-realistic headers, and JavaScript rendering if needed.
+Scrapes eBay UK's public sold/completed listings directly using the same
+httpx request and HTML parsing path as the component sold-price collector.
 
 Falls back gracefully: if sold comps are unavailable, the pricing engine
 (benchmarks.py) treats that as first-class and degrades to the next source
@@ -82,10 +81,7 @@ class UnavailableSoldCompsAdapter(SoldCompsAdapter):
 
 
 class LiveSoldCompsAdapter(SoldCompsAdapter):
-    """Production adapter — scrapes eBay UK's public completed/sold listings
-    using direct HTTP requests with spoofed headers, the same proven technique
-    as app.services.resale_scraper. Avoids Playwright/headless-browser detection
-    by using httpx with random User-Agent and browser-mimicking headers.
+    """Direct eBay completed/sold scraper matching component pricing.
 
     Strategy:
     1. Two-pass approach: Desktop PCs category (179) first, then all categories (0)
@@ -93,8 +89,8 @@ class LiveSoldCompsAdapter(SoldCompsAdapter):
     3. Breaks early when sufficient results found (5+ comps)
     4. Graceful error handling: returns unavailable rather than fabricating
 
-    This is a compliant public-search scrape, the same class of access eBay's
-    own public search UI performs.
+    This deliberately does not use ScrapingBee, the Browse API, or active
+    listings.
     """
 
     _CONDITION_IDS = {"new": "1000", "used": "3000"}
@@ -233,9 +229,8 @@ class PlaywrightSoldCompsAdapter(SoldCompsAdapter):
     same storage_state file app.services.scraper's general listing scraper
     maintains at settings.ebay_playwright_state_path).
 
-    Unauthenticated access to LH_Sold=1&LH_Complete=1 (both the direct httpx
-    path in resale_scraper.py and the ScrapingBee-proxied path in
-    LiveSoldCompsAdapter above) gets blocked/403'd by eBay's anti-bot — sold
+    Unauthenticated access to LH_Sold=1&LH_Complete=1 can be blocked by eBay's
+    anti-bot controls — sold
     listings are gated harder than active ones since there's no official API
     fallback for them. A real logged-in session reading the page like an
     actual signed-in user is what gets past that wall.

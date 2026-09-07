@@ -28,7 +28,7 @@ from app.models.listing import Listing, ListingStatus
 from app.gem_radar.schemas import CamelModel, ExtractedListing
 from app.config import get_settings
 from app.gem_radar.identity import resolve_identity
-from app.gem_radar.adapters.sold_comps import PlaywrightSoldCompsAdapter, SoldCompsResult
+from app.gem_radar.adapters.sold_comps import LiveSoldCompsAdapter, PlaywrightSoldCompsAdapter, SoldCompsResult
 from app.services.ebay_browse import search_active_listings
 from app.services.sold_comps_cache import get_sold_comps_cache
 from app.services.figural_insurance import FiguralError, get_insurance_quote
@@ -631,7 +631,7 @@ async def submit_build_sold_comps(payload: BuildSoldCompSubmit) -> BuildSoldComp
 @router.get("/{build_id}/pricing")
 async def get_build_pricing(
     build_id: int,
-    fetch_sold: bool = Query(False, description="If True, fetch fresh sold comps via ScrapingBee; otherwise use cache only"),
+    fetch_sold: bool = Query(False, description="If True, fetch fresh sold comps directly from eBay; otherwise use cache only"),
 ) -> PricingBreakdown:
     """
     Fetch a ManualBuild's pricing breakdown, optionally triggering a fresh
@@ -695,13 +695,21 @@ async def get_build_pricing(
             collected: list = []
             unavailable_reasons: list[str] = []
             seen_urls: set[str] = set()
+            browser_fallback_attempted = False
             for sold_query in sold_queries:
-                # Sold evidence comes directly from eBay's completed/sold
-                # results in a real browser session. Do not route this through
-                # ScrapingBee or any active-listing provider.
-                result = await PlaywrightSoldCompsAdapter().fetch(
+                # Use the same direct eBay completed/sold HTML scrape as
+                # component pricing. No ScrapingBee or active listings.
+                result = await LiveSoldCompsAdapter().fetch(
                     sold_query, condition=pricing_condition,
                 )
+                if not result.available and not browser_fallback_attempted:
+                    # eBay may block the plain HTTP request with 403. Reuse
+                    # the signed-in eBay browser session, still scraping
+                    # eBay's own sold page directly and never ScrapingBee.
+                    browser_fallback_attempted = True
+                    result = await PlaywrightSoldCompsAdapter().fetch(
+                        sold_query, condition=pricing_condition,
+                    )
                 if result.available:
                     for comp in result.comps:
                         key = comp.url or f"{comp.title}|{comp.price}|{comp.sold_at}"
