@@ -11,11 +11,32 @@ from app.database import get_db
 from app.models.order import Order, OrderStatus
 from app.models.order_checklist import OrderChecklist
 from app.models.customer import Customer
+from app.models.admin_user import AdminUser
+from app.routes.admin_auth import get_current_admin
 
 
 @pytest.fixture
 def client():
-    return TestClient(app)
+    # These tests exercise the admin order handlers, not the JWT/login flow.
+    # Supply a test-only admin identity so protected routes are not called as
+    # an anonymous client.  Production authentication remains unchanged.
+    test_admin = AdminUser(
+        id=1,
+        email="test-admin@example.com",
+        password_hash="unused-in-handler-tests",
+        name="Test Admin",
+        role="owner",
+        is_active=True,
+    )
+
+    async def override_current_admin():
+        return test_admin
+
+    app.dependency_overrides[get_current_admin] = override_current_admin
+    try:
+        yield TestClient(app)
+    finally:
+        app.dependency_overrides.pop(get_current_admin, None)
 
 
 @pytest.fixture
