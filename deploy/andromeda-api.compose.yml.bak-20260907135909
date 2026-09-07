@@ -93,7 +93,6 @@ services:
       SYNC_DATABASE_URL: postgresql://flipper:flipper@postgres:5432/pcflipper
       REDIS_URL: redis://redis:6379/0
       OLLAMA_BASE_URL: ""
-      MAX_CONCURRENT_SEARCH_TERMS: "4"
       OLLAMA_MODEL: disabled-on-web-tier
     command: ["uvicorn", "app.gem_radar_standalone:app", "--host", "0.0.0.0", "--port", "8000"]
     healthcheck:
