@@ -384,8 +384,12 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             }
           } else if (
             lastLiveStatus.current &&
-            Date.now() - lastLiveAt.current < 5000 &&
-            (queueStatus?.pending ?? 0) + (queueStatus?.processing ?? 0) > 0
+            // The queue can briefly be idle between submissions, and Phase 2
+            // can also leave the queue idle while the just-finished run is
+            // still the run the operator is watching. Keep the last valid
+            // totals until a new live scan replaces them; rendering the raw
+            // empty response here makes every gauge flash back to zero.
+            (displayedScans.length > 0 || Date.now() - lastLiveAt.current < 30000)
           ) {
             // A submission can finish a few milliseconds before the next
             // queued page is visible to this API process. Do not turn that
