@@ -169,11 +169,47 @@ class OpportunityResult:
     reasons: list[str] = field(default_factory=list)
     risk_flags: list[str] = field(default_factory=list)
     cost_breakdown: dict[str, float] = field(default_factory=dict)
+    evidence_status: str = "CLASSIFIABLE"
+    evidence_reason: str | None = None
+    evidence_confidence: dict[str, float] = field(default_factory=dict)
 
     def explanation(self) -> dict[str, Any]:
         payload = asdict(self)
         payload["market"] = asdict(self.market) if self.market else None
         return payload
+
+
+def assess_evidence(*, title: str, cpk_data: dict[str, Any] | None,
+                    market: RobustMarket | None, sold_count: int,
+                    active_count: int, policy: OpportunityPolicy,
+                    listing_condition: str | None = None) -> tuple[str, str | None, dict[str, float]]:
+    """Explain missing evidence without weakening the high-confidence gates."""
+    data = cpk_data or {}
+    identity = 1.0 if data.get("category") and data.get("brand") and data.get("model") else 0.0
+    if any(data.get(key) for key in ("gtin", "mpn", "model_number", "epid")):
+        identity = 1.0
+    elif data.get("category") and data.get("brand"):
+        identity = 0.65
+    sold = min(1.0, sold_count / max(1, policy.minimum_sold_comps))
+    comparable = 0.0 if market is None else min(1.0, market.sample_size / max(1, policy.minimum_sold_comps))
+    condition = 1.0 if (listing_condition or "").lower() in {"new", "used", "refurbished", "new_other"} else 0.5
+    price = 1.0 if market is not None and market.median > 0 else (0.5 if active_count else 0.0)
+    scores = {"identity": round(identity, 2), "comparable_quality": round(comparable, 2),
+              "sold_evidence": round(sold, 2), "condition": round(condition, 2),
+              "price_completeness": round(price, 2),
+              "freshness": 1.0 if market and market.basis != "STALE" else 0.0}
+    if identity == 0:
+        return "IDENTITY_UNCERTAIN", "IDENTITY_UNCERTAIN", scores
+    if market is None and active_count == 0:
+        return "NO_COMPARABLES", "NO_COMPARABLES", scores
+    if market is None or market.basis != "SOLD_REFINED":
+        return ("ACTIVE_ONLY" if sold_count == 0 else "SPARSE_SOLD_EVIDENCE"), \
+            ("ACTIVE_ONLY" if sold_count == 0 else "SPARSE_SOLD_EVIDENCE"), scores
+    if sold_count < policy.minimum_sold_comps:
+        return "SPARSE_SOLD_EVIDENCE", "SPARSE_SOLD_EVIDENCE", scores
+    if condition < 1.0:
+        return "CONDITION_UNCERTAIN", "CONDITION_UNCERTAIN", scores
+    return "CLASSIFIABLE", None, scores
 
 
 def _percentile(values: list[float], percentile: float) -> float:
@@ -401,6 +437,10 @@ def score_opportunity(
     listing_condition: str | None = None,
 ) -> OpportunityResult:
     risk_flags = identity_gates(title, cpk_data, strategy) + list(extra_risk_flags)
+    evidence_status, evidence_reason, evidence_confidence = assess_evidence(
+        title=title, cpk_data=cpk_data, market=market, sold_count=sold_count_90d,
+        active_count=active_count, policy=policy, listing_condition=listing_condition,
+    )
     if market is None:
         risk_flags.append("insufficient_same_condition_sold_comparables")
     elif market.source_diversity < policy.minimum_source_diversity and market.basis != "FIXED_RETAIL_CONTEXT":
@@ -417,11 +457,15 @@ def score_opportunity(
                 "INELIGIBLE", "IGNORE", 0.0, None, None, None,
                 liquidity, desirability, risk, None, False,
                 ["A hard identity veto prevents deal classification."], risk_flags,
+                evidence_status=evidence_status, evidence_reason=evidence_reason,
+                evidence_confidence=evidence_confidence,
             )
         return OpportunityResult(
-            "INSUFFICIENT_DATA", "INVESTIGATE", 0.0, None, None, None,
+            "EVIDENCE_LIMITED_DEAL", "INVESTIGATE", 0.0, None, None, None,
             liquidity, desirability, risk, None, False,
-            ["A same-condition completed-sale cohort is required before a buy classification."], risk_flags,
+            [f"Evidence status: {evidence_status}.", "No robust same-condition sold cohort is available; active evidence or manual research is required."], risk_flags,
+            evidence_status=evidence_status, evidence_reason=evidence_reason,
+            evidence_confidence=evidence_confidence,
         )
 
     category = str((cpk_data or {}).get("category") or "").lower()
@@ -530,4 +574,4 @@ def score_opportunity(
     else:
         classification, decision = "POOR_DEAL", "IGNORE"
     tier_aligned_score = score_within_classification(total_score, classification)
-    return OpportunityResult(classification, decision, round(tier_aligned_score, 1), round(profit, 2), round(roi, 2), round(walk_away, 2), None if liquidity is None else round(liquidity, 1), round(desirability, 1), round(risk, 1), market, eligible, reasons, risk_flags, {k: round(v, 2) for k, v in costs.items()})
+    return OpportunityResult(classification, decision, round(tier_aligned_score, 1), round(profit, 2), round(roi, 2), round(walk_away, 2), None if liquidity is None else round(liquidity, 1), round(desirability, 1), round(risk, 1), market, eligible, reasons, risk_flags, {k: round(v, 2) for k, v in costs.items()}, evidence_status, evidence_reason, evidence_confidence)
