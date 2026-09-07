@@ -6,11 +6,13 @@ import type { Material, Mesh } from "three";
 
 export function Build3DViewer({ url }: { url: string }) {
   const hostRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
 
   useEffect(() => {
     const host = hostRef.current;
-    if (!host) return;
+    const canvas = canvasRef.current;
+    if (!host || !canvas) return;
     let disposed = false;
     let cleanup: () => void = () => {};
 
@@ -25,13 +27,11 @@ export function Build3DViewer({ url }: { url: string }) {
         scene.background = new THREE.Color(0x07101f);
         const camera = new THREE.PerspectiveCamera(42, 1, 0.01, 100);
         camera.position.set(2.6, 1.8, 3.2);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
         renderer.outputColorSpace = THREE.SRGBColorSpace;
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.toneMappingExposure = 1.1;
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.domElement.className = "h-full w-full";
-        host.replaceChildren(renderer.domElement);
 
         scene.add(new THREE.HemisphereLight(0xdbeafe, 0x0f172a, 2.5));
         const key = new THREE.DirectionalLight(0xffffff, 3.5);
@@ -58,6 +58,20 @@ export function Build3DViewer({ url }: { url: string }) {
         const observer = new ResizeObserver(resize);
         observer.observe(host);
 
+        let frame = 0;
+        cleanup = () => {
+          cancelAnimationFrame(frame);
+          observer.disconnect();
+          controls.dispose();
+          scene.traverse((object) => {
+            const mesh = object as Mesh;
+            mesh.geometry?.dispose?.();
+            const materials: Material[] = Array.isArray(mesh.material) ? mesh.material : mesh.material ? [mesh.material] : [];
+            materials.forEach((material: Material) => material.dispose());
+          });
+          renderer.dispose();
+        };
+
         const loadUrl = url.startsWith("http") ? `/api/glb-proxy?url=${encodeURIComponent(url)}` : url;
         const gltf = await new GLTFLoader().loadAsync(loadUrl);
         if (disposed) return;
@@ -71,25 +85,12 @@ export function Build3DViewer({ url }: { url: string }) {
         scene.add(model);
         setState("ready");
 
-        let frame = 0;
         const animate = () => {
           frame = requestAnimationFrame(animate);
           controls.update();
           renderer.render(scene, camera);
         };
         animate();
-        cleanup = () => {
-          cancelAnimationFrame(frame);
-          observer.disconnect();
-          controls.dispose();
-          scene.traverse((object) => {
-            const mesh = object as Mesh;
-            mesh.geometry?.dispose?.();
-            const materials: Material[] = Array.isArray(mesh.material) ? mesh.material : mesh.material ? [mesh.material] : [];
-            materials.forEach((material: Material) => material.dispose());
-          });
-          renderer.dispose();
-        };
       } catch {
         if (!disposed) setState("error");
       }
@@ -108,6 +109,7 @@ export function Build3DViewer({ url }: { url: string }) {
         <span className="text-[10px] text-slate-500">Drag to rotate · scroll to zoom</span>
       </div>
       <div className="relative h-80" ref={hostRef} aria-label="Interactive 3D model viewer">
+        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden="true" />
         {state === "loading" && <div className="absolute inset-0 grid place-items-center text-xs text-slate-400"><span className="flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> Loading textured model…</span></div>}
         {state === "error" && <div className="absolute inset-0 grid place-items-center px-4 text-center text-xs text-red-300">The saved GLB could not be displayed. Use “Open GLB” to inspect the file.</div>}
       </div>
