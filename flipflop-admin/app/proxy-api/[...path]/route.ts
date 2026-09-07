@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
 
 const backendUrl = (process.env.BACKEND_URL ?? "http://localhost:4311").replace(/\/$/, "");
 
@@ -19,10 +18,14 @@ async function forward(request: NextRequest, context: { params: Promise<{ path: 
   // request header override is not preserved when entering an App Router
   // handler. Read the session cookie here as the authoritative fallback.
   if (!headers.has("authorization")) {
-    const cookieStore = await cookies();
-    const token =
-      cookieStore.get("admin_session")?.value ??
-      cookieStore.get("admin_token")?.value;
+    const cookieHeader = request.headers.get("cookie") ?? "";
+    console.log("proxy auth probe", { cookieHeader, incomingAuthorization: request.headers.get("authorization") });
+    const cookieValue = (name: string) => cookieHeader
+      .split(";")
+      .map((part) => part.trim())
+      .find((part) => part.startsWith(`${name}=`))
+      ?.slice(name.length + 1);
+    const token = cookieValue("admin_session") ?? cookieValue("admin_token");
     if (token) headers.set("authorization", `Bearer ${token}`);
   }
 

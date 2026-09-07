@@ -1,12 +1,12 @@
 {
   "ram_watcher": {
-    "last_success_at": "2026-09-07T16:54:38.947062+00:00"
+    "last_success_at": "2026-09-07T17:09:39.411452+00:00"
   },
   "manual_build_deferred_publish": {
-    "last_success_at": "2026-09-07T16:54:38.957279+00:00"
+    "last_success_at": "2026-09-07T17:09:39.428109+00:00"
   },
   "deferred_publish": {
-    "last_success_at": "2026-09-07T16:54:38.955928+00:00"
+    "last_success_at": "2026-09-07T17:09:39.434402+00:00"
   },
   "email_monitor": {
     "last_success_at": "2026-09-07T17:05:39.095002+00:00"
@@ -21,7 +21,7 @@
     "last_success_at": "2026-09-07T16:39:39.720750+00:00"
   },
   "offer_poll": {
-    "last_success_at": "2026-09-07T16:39:39.723115+00:00"
+    "last_success_at": "2026-09-07T17:09:39.428890+00:00"
   },
   "retrain_checkpoint_watchdog": {
     "last_success_at": "2026-09-07T15:39:39.518620+00:00"
@@ -39,10 +39,10 @@
     "last_success_at": "2026-09-07T16:39:40.250933+00:00"
   },
   "message_poll": {
-    "last_success_at": "2026-09-07T16:39:40.618124+00:00"
+    "last_success_at": "2026-09-07T17:09:39.830522+00:00"
   },
   "manual_build_offer_poll": {
-    "last_success_at": "2026-09-07T16:39:40.562044+00:00"
+    "last_success_at": "2026-09-07T17:09:39.805865+00:00"
   },
   "case_content_sourcing": {
     "last_success_at": "2026-09-07T16:40:00.451280+00:00"

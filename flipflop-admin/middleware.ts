@@ -8,16 +8,23 @@ import { ADMIN_SESSION_COOKIE, verifyAdminToken } from "@/lib/admin-session";
 // that can attach it to the outgoing request.
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const token = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+  const session = token ? await verifyAdminToken(token) : null;
 
   if (pathname.startsWith("/api/") || pathname.startsWith("/proxy-api/")) {
-    const token = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
-    const session = token ? await verifyAdminToken(token) : null;
     if (!session || !token) {
       return NextResponse.next();
     }
     const headers = new Headers(request.headers);
     headers.set("Authorization", `Bearer ${token}`);
     return NextResponse.next({ request: { headers } });
+  }
+
+  // Do not render dashboard pages without the session required by their API
+  // calls. Previously these pages loaded first and produced a cascade of
+  // "Missing authorization header" errors from their useEffect hooks.
+  if (pathname !== "/login" && (!session || !token)) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   return NextResponse.next();

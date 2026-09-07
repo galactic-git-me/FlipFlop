@@ -53,6 +53,7 @@ export function TopCommandBar() {
   };
 
   useEffect(() => {
+    if (pathname === "/login") return;
     let mounted = true;
     const load = async () => {
       try {
@@ -128,7 +129,7 @@ export function TopCommandBar() {
       mounted = false;
       clearInterval(id);
     };
-  }, []);
+  }, [pathname]);
 
   const [notifTab, setNotifTab] = useState<"all" | "errors" | "flips" | "proposals" | "favourites" | "system">("all");
   const [clearing, setClearing] = useState(false);
@@ -195,6 +196,8 @@ export function TopCommandBar() {
   );
 
   const pendingCount = pendingProposals.length + alerts.length;
+
+  if (pathname === "/login") return null;
 
   return (
     <>
