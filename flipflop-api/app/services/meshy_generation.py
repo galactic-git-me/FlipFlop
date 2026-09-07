@@ -170,6 +170,15 @@ async def generate_multi_image_asset(
         log.warning("meshy_generation.multi_image_submit_failed", error=str(exc))
         return None
 
+    # Persist a visible state as soon as Meshy accepts the task. Without this
+    # first callback the dashboard can look frozen at 0% while the first poll
+    # is still pending.
+    if progress_callback:
+        try:
+            await progress_callback(0, "SUBMITTED")
+        except Exception as exc:
+            log.warning("meshy_generation.progress_callback_failed", error=str(exc))
+
     last_progress = 0
     for attempt in range(_MAX_POLL_ATTEMPTS):
         await asyncio.sleep(_POLL_INTERVAL_SECONDS)

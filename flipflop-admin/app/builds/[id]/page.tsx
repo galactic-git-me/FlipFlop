@@ -125,6 +125,7 @@ export default function BuildDetailPage() {
   const [uploadingPhotos, setUploadingPhotos] = useState(false);
   const [uploading3dModel, setUploading3dModel] = useState(false);
   const [queueing3dModels, setQueueing3dModels] = useState(false);
+  const [model3dPollError, setModel3dPollError] = useState<string | null>(null);
   const [selected3dPhotos, setSelected3dPhotos] = useState<Record<string, string[]>>({});
   const [temporary3dPhotos, setTemporary3dPhotos] = useState<Array<{ file: File; preview: string }>>([]);
   const [savingAspects, setSavingAspects] = useState(false);
@@ -231,7 +232,14 @@ export default function BuildDetailPage() {
     );
     if (!pending) return;
     const timer = window.setInterval(() => {
-      api.manualBuilds.get(buildId).then(setBuild).catch(() => undefined);
+      api.manualBuilds.get(buildId)
+        .then((nextBuild) => {
+          setModel3dPollError(null);
+          setBuild(nextBuild);
+        })
+        .catch((error) => {
+          setModel3dPollError(error instanceof Error ? error.message : "Could not refresh 3D generation status");
+        });
     }, 5000);
     return () => window.clearInterval(timer);
   }, [buildId, build?.model_3d_assets]);
@@ -1267,7 +1275,13 @@ export default function BuildDetailPage() {
                       {pending && (
                         <div className="mt-3" aria-label={`${existing?.progress ?? 0}% complete`}>
                           <div className="mb-1 flex items-center justify-between text-[10px] text-slate-500">
-                            <span>{existing?.meshy_status === "PENDING" ? "Waiting for Meshy" : "Generating 3D model"}</span>
+                            <span>
+                              {existing?.meshy_status === "SUBMITTED" || existing?.meshy_status === "PENDING"
+                                ? "Waiting for Meshy to start"
+                                : existing?.meshy_status === "POLL_ERROR"
+                                  ? "Meshy status temporarily unavailable"
+                                  : "Generating 3D model"}
+                            </span>
                             <span className="font-mono text-cyan-300">{existing?.progress ?? 0}%</span>
                           </div>
                           <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
@@ -1277,6 +1291,11 @@ export default function BuildDetailPage() {
                             />
                           </div>
                         </div>
+                      )}
+                      {pending && model3dPollError && (
+                        <p className="mt-2 text-[10px] text-amber-300" role="status">
+                          Status refresh failed: {model3dPollError}. The job may still be running; retrying automatically.
+                        </p>
                       )}
                       <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
                           {regularPhotos.map((photo, index) => {
