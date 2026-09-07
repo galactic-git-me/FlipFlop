@@ -462,6 +462,7 @@ async def _active_build_comparables(cpu_model: str | None, gpu_model: str | None
 
 async def _live_close_build_comparables(
     cpu_model: str | None, gpu_model: str | None, target_ram_gb: int | None,
+    condition: str = "used",
 ) -> list[MarketComparable]:
     """Find source-backed close matches even when no exact CPU+GPU result exists.
 
@@ -475,11 +476,17 @@ async def _live_close_build_comparables(
         ram_term = f" {target_ram_gb}GB" if target_ram_gb else ""
         queries.append((f'gaming PC "{gpu_model}"{ram_term}', "same GPU"))
 
+    condition_filter = (
+        "NEW|LIKE_NEW|MANUFACTURER_REFURBISHED"
+        if condition in {"new", "new_other"}
+        else "USED|EXCELLENT|VERY_GOOD|GOOD|ACCEPTABLE"
+    )
+
     found: dict[str, tuple[int, MarketComparable]] = {}
     for query, anchor_label in queries:
         items = await search_active_listings(
             query,
-            condition_filter="USED|EXCELLENT|VERY_GOOD|GOOD|ACCEPTABLE",
+            condition_filter=condition_filter,
             limit=50,
         )
         anchor = cpu_model if anchor_label == "same CPU" else gpu_model
@@ -712,7 +719,7 @@ async def get_build_pricing(
         cpu_model_for_search = resolve_identity(cpu_title).model if cpu_title else None
         gpu_model_for_search = resolve_identity(gpu_title).model if gpu_title else None
         live_close_comparables = await _live_close_build_comparables(
-            cpu_model_for_search, gpu_model_for_search, target_ram_gb,
+            cpu_model_for_search, gpu_model_for_search, target_ram_gb, pricing_condition,
         )
     except Exception as exc:
         log.warning("builds_pricing.live_close_match_fetch_failed", build_id=build_id, error=str(exc))
