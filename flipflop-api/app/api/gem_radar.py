@@ -2265,9 +2265,18 @@ async def _submit_scan_body(
     touched_unchanged_count = 0
     touched_price_updated_count = 0
     vendor = infer_marketplace(payload.source_url) or "unknown"
+    discovered_keys = {
+        f"{vendor}:{listing.listing_id}" for listing in payload.listings
+    }
 
     pipeline_status.start_submission(
-        payload.search_id, payload.query, len(payload.listings), payload.search_run_id, submission_id=submission_id
+        payload.search_id,
+        payload.query,
+        len(payload.listings),
+        payload.search_run_id,
+        submission_id=submission_id,
+        discovered_keys=discovered_keys,
+        vendor=vendor,
     )
 
     # Separate listings into buckets:
@@ -2281,6 +2290,9 @@ async def _submit_scan_body(
         if listing.listing_type == "auction":
             excluded_auction_count += 1
             pipeline_status.increment(payload.search_id, excluded_auction_count=1)
+            pipeline_status.exclude_discovered(
+                payload.search_id, f"{vendor}:{listing.listing_id}"
+            )
             continue
 
         # Check for cross-run duplicate (same listing from previous runs)

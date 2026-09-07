@@ -28,6 +28,7 @@ from __future__ import annotations
 import time
 from collections import deque
 from dataclasses import dataclass, field
+from collections.abc import Iterable
 from sqlalchemy import select
 
 # Scoring concurrency slot usage — incremented/decremented around the
@@ -69,6 +70,12 @@ class SearchRunState:
     # no-op rather than another +1.
     active_submission_ids: set[object] = field(default_factory=set)
     total_listings: int = 0
+    # Distinct ads discovered for this search term. Keys include the
+    # marketplace so a cross-posted ad is not accidentally collapsed with a
+    # different marketplace's listing that happens to use the same id.
+    discovered_keys: set[str] = field(default_factory=set)
+    discovered_by_vendor: dict[str, set[str]] = field(default_factory=dict)
+    excluded_discovered_keys: set[str] = field(default_factory=set)
     # submission_ids already folded into total_listings — see start_submission.
     # A retried submission (same id, reprocessed after a reap/failure) must
     # not add its listing count onto the total a second time: that's what
@@ -146,6 +153,8 @@ def start_submission(
     total_listings: int,
     search_run_id: str | None = None,
     submission_id: object | None = None,
+    discovered_keys: Iterable[str] | None = None,
+    vendor: str | None = None,
 ) -> None:
     """Called once per submission attempt, when it begins ingesting. Adds
     this submission's listing count onto the search's running total rather
@@ -166,6 +175,11 @@ def start_submission(
         state = SearchRunState(search_id=search_id, query=query)
         _active[search_id] = state
     state.query = query
+    if discovered_keys is not None:
+        keys = set(discovered_keys)
+        state.discovered_keys.update(keys)
+        if vendor:
+            state.discovered_by_vendor.setdefault(vendor, set()).update(keys)
     if submission_id is None:
         state.total_listings += total_listings
         state.active_submissions += 1
@@ -177,6 +191,12 @@ def start_submission(
         state.active_submissions = len(state.active_submission_ids)
     if search_run_id:
         state.search_run_ids.add(search_run_id)
+
+
+def exclude_discovered(search_id: str, discovered_key: str) -> None:
+    state = _active.get(search_id)
+    if state is not None:
+        state.excluded_discovered_keys.add(discovered_key)
 
 
 def increment(search_id: str, **deltas: int) -> None:
@@ -450,14 +470,27 @@ async def snapshot(db) -> dict:
         # Auctions are excluded before ingestion and should not hold a fixed-price
         # scan short of completion.
         actual_total_listings = max(
-            s.total_listings - s.excluded_auction_count,
+            (len(s.discovered_keys) - len(s.excluded_discovered_keys))
+            if s.discovered_keys
+            else s.total_listings - s.excluded_auction_count,
             s.ingested_count,
             0,
         )
+        discovered_count = max(len(s.discovered_keys), s.total_listings)
+        eligible_count = actual_total_listings
 
         # By_vendor: aggregate vendor counts from the listing_ids we've tracked,
         # counting observations per source. This gives us the true vendor breakdown
         # for only the listings THIS run has processed.
+        if s.discovered_by_vendor:
+            # Discovery is populated when the submission enters the pipeline,
+            # so it includes queued work rather than only ingested work.
+            discovered_by_vendor = {
+                vendor: len(keys) for vendor, keys in s.discovered_by_vendor.items()
+            }
+        else:
+            discovered_by_vendor = {}
+
         if all_listing_ids and s.listing_ids:
             # Count observations per vendor for only THIS search's listing_ids
             vendor_obs_result = await db.execute(
@@ -511,7 +544,12 @@ async def snapshot(db) -> dict:
                 "query": s.query,
                 "elapsedSeconds": s.elapsed_s(),
                 "activeSubmissions": s.active_submissions,
+                # Keep totalListings as the processable denominator for older
+                # clients; new clients should use discoveredCount and
+                # eligibleCount explicitly.
                 "totalListings": actual_total_listings,
+                "discoveredCount": discovered_count,
+                "eligibleCount": eligible_count,
                 "ingestedCount": s.ingested_count,
                 "ingestedNewCount": s.ingested_new_count,
                 "cpkAssignedCount": s.cpk_assigned_count,
@@ -526,6 +564,7 @@ async def snapshot(db) -> dict:
                 "processedPercent": processed_pct,
                 "excludedAuctionCount": s.excluded_auction_count,
                 "byVendor": by_vendor,
+                "discoveredByVendor": discovered_by_vendor,
                 "configuredVendors": configured_vendors_by_search.get(s.search_id),
                 "isComplete": is_complete,
             }

@@ -100,6 +100,8 @@ interface ScanProgress {
   elapsedSeconds: number;
   activeSubmissions: number;
   totalListings: number;
+  discoveredCount?: number;
+  eligibleCount?: number;
   ingestedCount: number;
   ingestedNewCount: number;
   cpkAssignedCount: number;
@@ -108,6 +110,7 @@ interface ScanProgress {
   processedPercent: number;  // % through full pipeline
   excludedAuctionCount: number;
   byVendor: Record<string, number>;
+  discoveredByVendor?: Record<string, number>;
   isComplete: boolean;
   // Demand signals (average across active search's listings)
   avgWatchCount?: number;
@@ -195,10 +198,18 @@ function coalesceScansBySearchId(scans: ScanProgress[]): ScanProgress[] {
     for (const [vendor, count] of Object.entries(scan.byVendor || {})) {
       existing.byVendor[vendor] = (existing.byVendor[vendor] ?? 0) + count;
     }
+    for (const [vendor, count] of Object.entries(scan.discoveredByVendor || {})) {
+      existing.discoveredByVendor = existing.discoveredByVendor ?? {};
+      existing.discoveredByVendor[vendor] = (existing.discoveredByVendor[vendor] ?? 0) + count;
+    }
     existing.query = scan.query || existing.query;
     existing.elapsedSeconds = Math.max(existing.elapsedSeconds, scan.elapsedSeconds);
     existing.activeSubmissions += scan.activeSubmissions;
     existing.totalListings += scan.totalListings;
+    existing.discoveredCount = (existing.discoveredCount ?? existing.totalListings) +
+      (scan.discoveredCount ?? scan.totalListings);
+    existing.eligibleCount = (existing.eligibleCount ?? existing.totalListings) +
+      (scan.eligibleCount ?? scan.totalListings);
     existing.ingestedCount += scan.ingestedCount;
     existing.ingestedNewCount += scan.ingestedNewCount;
     existing.cpkAssignedCount += scan.cpkAssignedCount;
@@ -469,30 +480,30 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             // yet added here) used to be silently dropped from the tile row
             // while still counting toward the gauges' denominator above,
             // making the displayed vendor sum quietly undercount the total.
+            const vendorCounts = scan.discoveredByVendor ?? scan.byVendor ?? {};
             const knownVendorEntries = VENDOR_ORDER
               .filter((v) => !searchConfiguredVendors || searchConfiguredVendors.includes(v))
               .map((v): [string, number | null] => [
                 v,
-                Object.prototype.hasOwnProperty.call(scan.byVendor || {}, v)
-                  ? scan.byVendor[v]
+                Object.prototype.hasOwnProperty.call(vendorCounts, v)
+                  ? vendorCounts[v]
                   : searchConfiguredVendors
                     ? 0
                     : null,
               ]);
-            const extraVendorEntries = Object.entries(scan.byVendor || {})
+            const extraVendorEntries = Object.entries(vendorCounts)
               .filter(([v, count]) => count > 0 && !(VENDOR_ORDER as readonly string[]).includes(v))
               .sort((a, b) => b[1] - a[1]);
             const vendorEntries = [...knownVendorEntries, ...extraVendorEntries];
-            // Vendor counts describe work already observed, not the submitted
-            // workload. Using them as the denominator makes CPK appear complete
-            // as soon as observations arrive. totalListings is the server's
-            // fixed-price workload for this search — the backend already nets
-            // out excludedAuctionCount before sending it (see
-            // pipeline_status.py's actual_total_listings), so subtracting it
-            // again here double-counted auctions out of the total, shrinking
-            // the denominator below its real value.
+            // Discovery is the user-facing search-term total. Processing
+            // gauges use only eligible (non-auction) ads as their denominator.
+            const discoveredTotal = Math.max(
+              scan.discoveredCount ?? scan.totalListings,
+              scan.ingestedCount,
+              0,
+            );
             const searchTermTotal = Math.max(
-              scan.totalListings,
+              scan.eligibleCount ?? scan.totalListings,
               scan.ingestedCount,
               1,
             );
@@ -525,6 +536,9 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                         title="New listings ingested this run (not a dupe of a previous run)"
                       >
                         +{scan.ingestedNewCount}
+                      </div>
+                      <div className="text-[11px] text-slate-400">
+                        {discoveredTotal.toLocaleString()} discovered · {searchTermTotal.toLocaleString()} eligible
                       </div>
                     </div>
                     <span
