@@ -9,7 +9,7 @@ import { ADMIN_SESSION_COOKIE, verifyAdminToken } from "@/lib/admin-session";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname.startsWith("/api/")) {
+  if (pathname.startsWith("/api/") || pathname.startsWith("/proxy-api/")) {
     const token = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
     const session = token ? await verifyAdminToken(token) : null;
     if (!session || !token) {

@@ -480,7 +480,7 @@ export interface SourceSearchTerm {
 // REST calls stay same-origin. The dedicated Next route forwards them to the
 // backend after middleware has attached the httpOnly admin_session token.
 // NEXT_PUBLIC_API_URL remains reserved for browser-only SSE/websocket callers.
-export const API_BASE_URL = "/api/backend";
+export const API_BASE_URL = "/proxy-api";
 
 export function apiUrl(path: string): string {
   return `${API_BASE_URL}${path}`;
