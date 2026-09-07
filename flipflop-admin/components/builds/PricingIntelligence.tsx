@@ -373,7 +373,9 @@ export function PricingIntelligence({
   const active = data.market_comparables.filter(
     (item) => item.status === "active"
   );
-  const hasMarketEvidence = data.market_comparables.length > 0;
+  // Pricing is intentionally based on completed sales only. Active BIN
+  // listings are not sale outcomes and must not create a market range.
+  const hasMarketEvidence = sold.length > 0;
 
   return (
     <div className="space-y-5">
@@ -453,11 +455,11 @@ export function PricingIntelligence({
             ) : (
               <div className="mt-2 space-y-1">
                 <p className="text-sm font-semibold text-amber-300">
-                  No sourced market range is available.
+                  No sourced sold-market range is available.
                 </p>
                 {data.sold_evidence_status && (
                   <p className="text-xs text-red-300">
-                    Refresh failed: {data.sold_evidence_status}
+                    Sold evidence unavailable: {data.sold_evidence_status}
                   </p>
                 )}
               </div>
@@ -465,7 +467,7 @@ export function PricingIntelligence({
             <p className="mt-1 max-w-3xl text-xs leading-5 text-slate-500">
               {hasMarketEvidence
                 ? r.rationale
-                : "The displayed provisional price is derived from component values and the fee-aware margin floor, not comparable PC sales"}
+                : "The displayed provisional price is derived from component values and the fee-aware margin floor, not completed PC sales"}
               . The floor protects a 10% margin after configured marketplace
               fees.
             </p>

@@ -89,7 +89,7 @@ class LiveSoldCompsAdapter(SoldCompsAdapter):
 
     Strategy:
     1. Two-pass approach: Desktop PCs category (179) first, then all categories (0)
-    2. Dual-filter for BIN+sold/completed (LH_Sold=1&LH_Complete=1&LH_BIN=1)
+    2. Sold/completed filter (LH_Sold=1&LH_Complete=1), including completed auctions
     3. Breaks early when sufficient results found (5+ comps)
     4. Graceful error handling: returns unavailable rather than fabricating
 
@@ -134,7 +134,6 @@ class LiveSoldCompsAdapter(SoldCompsAdapter):
                 "_nkw": query,
                 "LH_Sold": "1",
                 "LH_Complete": "1",
-                "LH_BIN": "1",       # fixed-price sold comps only
                 "_sacat": sacat,
                 "_sop": "12",        # most recent first
                 "LH_PrefLoc": "1",   # UK sellers preferred
@@ -255,13 +254,6 @@ class LiveSoldCompsAdapter(SoldCompsAdapter):
                 if "s-card" in (item.get("class") or []) and not item.select_one(
                     "[aria-label='Sold item']"
                 ):
-                    continue
-
-                # Skip auction items (those with bid counts)
-                bid_el = item.select_one(
-                    ".s-item__bids, .x-bid-count, [class*='bid--'], [class*='bidCount']"
-                )
-                if bid_el and re.search(r"\d+\s*bid", bid_el.get_text(strip=True), re.I):
                     continue
 
                 # Extract price
@@ -482,7 +474,6 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                             "_nkw": query,
                             "LH_Sold": "1",
                             "LH_Complete": "1",
-                            "LH_BIN": "1",  # fixed-price sold comps only
                             "_sacat": sacat,
                             "_sop": "12",  # most recent first
                             "LH_PrefLoc": "1",

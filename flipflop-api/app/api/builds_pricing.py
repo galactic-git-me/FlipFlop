@@ -712,33 +712,9 @@ async def get_build_pricing(
             sold_evidence_status = f"Sold evidence fetch failed: {exc}"
             log.warning("builds_pricing.sold_fetch_failed", build_id=build_id, error=str(exc))
 
-    # Current asking prices are a separate evidence lane from completed sales.
-    # Fetch them independently so a ScrapingBee/Playwright sold-search failure
-    # cannot erase the active matches that the seller can already see on eBay.
-    try:
-        cpu_model_for_search = resolve_identity(cpu_title).model if cpu_title else None
-        gpu_model_for_search = resolve_identity(gpu_title).model if gpu_title else None
-        live_close_comparables = await _live_close_build_comparables(
-            cpu_model_for_search, gpu_model_for_search, target_ram_gb, pricing_condition,
-        )
-    except Exception as exc:
-        log.warning("builds_pricing.live_close_match_fetch_failed", build_id=build_id, error=str(exc))
-
-    # Cache the source details as well as sold comps so a page reload does not
-    # erase the evidence just fetched by the operator. Keep this write separate
-    # from sold retrieval: active listings remain cacheable even when sold data
-    # is unavailable.
-    if fetch_sold or live_close_comparables:
-        sold_for_cache = sold_result if sold_result and sold_result.available else await cache.get(cache_key)
-        if sold_for_cache is None:
-            sold_for_cache = SoldCompsResult(
-                available=False, comps=[], unavailable_reason="No completed-sale evidence",
-            )
-        await cache.set(
-            cache_key,
-            sold_for_cache,
-            listings_data={"active_close_matches": [item.model_dump() for item in live_close_comparables]},
-        )
+    # Pricing is intentionally sold-only. Current asking prices may be useful
+    # as a separate market-context view, but must never become a sale-price
+    # proxy or change the recommendation.
 
     cached_result = await cache.get(cache_key)
     if not live_close_comparables:
@@ -942,7 +918,7 @@ async def get_build_pricing(
     component_resale_total = round(sum(item.estimated_resale for item in component_valuations), 2)
     cpu_model = resolve_identity(cpu_title).model if cpu_title else None
     gpu_model = resolve_identity(gpu_title).model if gpu_title else None
-    active_comparables = await _active_build_comparables(cpu_model, gpu_model)
+    active_comparables = []
     sold_market_comparables = [MarketComparable(
         source="eBay sold", title=comp.title or "Comparable gaming PC", price=comp.price,
         status="sold", observed_or_sold_at=comp.sold_at, url=comp.url,
@@ -956,11 +932,10 @@ async def get_build_pricing(
         condition_adjustment=comp.condition_adjustment,
         match_quality=comp.match_quality,
     ) for comp in sold_comps_list]
-    market_comparables = sold_market_comparables + live_close_comparables + active_comparables
+    market_comparables = sold_market_comparables
 
     sold_prices = [comp.price for comp in sold_comps_list]
-    active_prices = [comp.price for comp in live_close_comparables + active_comparables]
-    evidence_prices = sold_prices or active_prices
+    evidence_prices = sold_prices
     if evidence_prices:
         market_low = _percentile(evidence_prices, 0.25)
         market_mid = _weighted_median(sold_comps_list) if sold_comps_list else statistics.median(evidence_prices)
@@ -968,7 +943,7 @@ async def get_build_pricing(
         confidence = "high" if len(sold_prices) >= 5 else "medium" if len(evidence_prices) >= 3 else "low"
         rationale = (
             f"Anchored to {len(sold_prices)} completed sales" if sold_prices
-            else f"Provisional range from {len(active_prices)} active asking prices; no completed-sale cohort is cached"
+            else ""
         )
     else:
         # A sum-of-parts value is context, not proof of what a complete PC will
