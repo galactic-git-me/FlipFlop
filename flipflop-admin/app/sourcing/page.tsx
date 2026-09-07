@@ -63,6 +63,9 @@ interface Listing {
   risk_score?: number | null;
   eligible?: boolean;
   scoring_explanation?: { reasons?: string[]; risk_flags?: string[]; cost_breakdown?: Record<string, number>; market?: { comparable_urls?: string[]; basis?: string; realisation_factor?: number } } | null;
+  evidence_status?: string | null;
+  evidence_reason?: string | null;
+  evidence_confidence?: Record<string, number> | null;
   release_year: number | null;
   scored_at: string;
   listing_observed_at: string | null;
@@ -1447,6 +1450,17 @@ function SortHeader({
 // a column per classification tier, worst to best left-to-right so the
 // "good stuff" columns land next to each other on the right.
 const VENDOR_TABLE_TIERS: string[] = [...CLASSIFICATION_BADGE_ORDER].reverse();
+// Replace the old opaque INSUFFICIENT_DATA segment with its diagnostic reason
+// codes. This keeps each vendor bar additive (it still sums to Total) while
+// showing where coverage is actually being lost.
+const VENDOR_EVIDENCE_TIERS = [
+  "IDENTITY_UNCERTAIN", "NO_COMPARABLES", "ACTIVE_ONLY",
+  "SPARSE_SOLD_EVIDENCE", "CONDITION_UNCERTAIN", "INSUFFICIENT_DATA",
+];
+const VENDOR_CHART_TIERS = [
+  ...VENDOR_TABLE_TIERS.filter((tier) => tier !== "INSUFFICIENT_DATA"),
+  ...VENDOR_EVIDENCE_TIERS,
+];
 const VENDOR_SUMMARY_TABLE_TIERS = VENDOR_TABLE_TIERS.filter(
   (tier) => tier !== "AVERAGE_DEAL" && tier !== "EVIDENCE_LIMITED_DEAL",
 );
@@ -1463,6 +1477,11 @@ const CLASSIFICATION_CHART_COLORS: Record<string, string> = {
   POOR_DEAL: "#991b1b",
   INSUFFICIENT_DATA: "#334155",
   INELIGIBLE: "#881337",
+  IDENTITY_UNCERTAIN: "#64748b",
+  NO_COMPARABLES: "#475569",
+  ACTIVE_ONLY: "#0891b2",
+  SPARSE_SOLD_EVIDENCE: "#0e7490",
+  CONDITION_UNCERTAIN: "#155e75",
 };
 
 function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
@@ -1475,8 +1494,12 @@ function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
   const chartData = sources.map((source) => {
     const vendorListings = listings.filter((l) => l.source === source);
     const row: Record<string, string | number> = { vendor: SOURCE_LABELS[source] || source };
-    for (const tier of VENDOR_TABLE_TIERS) {
-      row[tier] = vendorListings.filter((l) => l.classification === tier).length;
+    for (const tier of VENDOR_CHART_TIERS) {
+      row[tier] = tier === "INSUFFICIENT_DATA"
+        ? vendorListings.filter((l) => l.classification === tier && !l.evidence_status).length
+        : VENDOR_EVIDENCE_TIERS.includes(tier)
+          ? vendorListings.filter((l) => l.classification === "INSUFFICIENT_DATA" && (l.evidence_status || "INSUFFICIENT_DATA") === tier).length
+          : vendorListings.filter((l) => l.classification === tier).length;
     }
     return row;
   });
@@ -1492,7 +1515,7 @@ function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
             contentStyle={{ background: "#0f172a", border: "1px solid #334155", borderRadius: 6 }}
             labelStyle={{ color: "#e2e8f0" }}
           />
-          {VENDOR_TABLE_TIERS.map((tier) => (
+          {VENDOR_CHART_TIERS.map((tier) => (
             <Bar
               key={tier}
               dataKey={tier}
@@ -1504,7 +1527,7 @@ function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
         </BarChart>
       </ResponsiveContainer>
       <div className="mt-3 flex flex-wrap justify-center gap-x-3 gap-y-2 border-t border-slate-700 pt-3" aria-label="Classification legend">
-        {VENDOR_TABLE_TIERS.map((tier) => (
+        {VENDOR_CHART_TIERS.map((tier) => (
           <div key={tier} className="flex items-center gap-1.5 text-[11px] text-slate-300">
             <span
               className="h-2.5 w-2.5 shrink-0 rounded-sm"
@@ -1893,6 +1916,8 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                 ["Conservative resale", explanationListing.conservative_resale_price == null ? "—" : `£${explanationListing.conservative_resale_price.toFixed(2)}`],
                 ["Comparables", explanationListing.market_sample_size ?? 0],
                 ["Market evidence", (explanationListing.scoring_explanation?.market?.basis ?? "NONE").replace(/_/g, " ")],
+                ["Evidence status", (explanationListing.evidence_status ?? "UNKNOWN").replace(/_/g, " ")],
+                ["Evidence reason", (explanationListing.evidence_reason ?? "—").replace(/_/g, " ")],
                 ["Market confidence", `${(explanationListing.market_confidence ?? 0).toFixed(0)}/100`],
                 ["Liquidity", explanationListing.liquidity_score == null ? "Unknown" : `${explanationListing.liquidity_score.toFixed(0)}/100`],
                 ["Build fit", explanationListing.desirability_score == null ? "Unknown" : `${explanationListing.desirability_score.toFixed(0)}/100`],
@@ -1910,6 +1935,7 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
             )}
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <div><p className="text-sm font-semibold text-white">Reasons</p><ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-300">{(explanationListing.scoring_explanation?.reasons ?? ["Awaiting recalculation under the new model."]).map((reason) => <li key={reason}>{reason}</li>)}</ul></div>
+              {!!explanationListing.evidence_confidence && <div><p className="text-sm font-semibold text-white">Evidence confidence</p><dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-sm">{Object.entries(explanationListing.evidence_confidence).map(([name, value]) => <div key={name} className="flex justify-between gap-2"><dt className="text-slate-400">{name.replace(/_/g, " ")}</dt><dd className="text-slate-200">{Math.round(value * 100)}%</dd></div>)}</dl></div>}
               <div><p className="text-sm font-semibold text-white">Cost stack</p><dl className="mt-2 space-y-1 text-sm">{Object.entries(explanationListing.scoring_explanation?.cost_breakdown ?? {}).map(([name, amount]) => <div key={name} className="flex justify-between gap-3"><dt className="text-slate-400">{name.replace(/_/g, " ")}</dt><dd className="text-slate-200">£{amount.toFixed(2)}</dd></div>)}</dl></div>
             </div>
           </div>

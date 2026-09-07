@@ -115,6 +115,12 @@ class GemRadarScoredListing(Base):
     risk_score: Mapped[float | None] = mapped_column(Float, nullable=True)
     eligible: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
     scoring_explanation: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    # Structured evidence diagnosis. This keeps ACTIVE_ONLY / sparse sold
+    # evidence distinct from an identity failure while remaining additive to
+    # the existing classification taxonomy.
+    evidence_status: Mapped[str | None] = mapped_column(String(40), nullable=True, index=True)
+    evidence_reason: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    evidence_confidence: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
     # Reasoning
     reasoning_summary: Mapped[str | None] = mapped_column(Text, nullable=True)

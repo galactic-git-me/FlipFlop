@@ -357,6 +357,9 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
             risk_score=opportunity.risk_score,
             eligible=opportunity.eligible,
             scoring_explanation=opportunity.explanation(),
+            evidence_status=opportunity.evidence_status,
+            evidence_reason=opportunity.evidence_reason,
+            evidence_confidence=opportunity.evidence_confidence,
             reasoning_summary=" ".join(opportunity.reasons),
             listing_observed_at=observed_at,
         )

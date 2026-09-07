@@ -461,7 +461,7 @@ def score_opportunity(
                 evidence_confidence=evidence_confidence,
             )
         return OpportunityResult(
-            "EVIDENCE_LIMITED_DEAL", "INVESTIGATE", 0.0, None, None, None,
+            "INSUFFICIENT_DATA", "INVESTIGATE", 0.0, None, None, None,
             liquidity, desirability, risk, None, False,
             [f"Evidence status: {evidence_status}.", "No robust same-condition sold cohort is available; active evidence or manual research is required."], risk_flags,
             evidence_status=evidence_status, evidence_reason=evidence_reason,
