@@ -1475,14 +1475,25 @@ const CLASSIFICATION_CHART_COLORS: Record<string, string> = {
   OK_DEAL: "#047857",
   AVERAGE_DEAL: "#475569",
   POOR_DEAL: "#991b1b",
-  INSUFFICIENT_DATA: "#334155",
+  INSUFFICIENT_DATA: "#1e293b",
   INELIGIBLE: "#881337",
-  IDENTITY_UNCERTAIN: "#64748b",
-  NO_COMPARABLES: "#475569",
-  ACTIVE_ONLY: "#0891b2",
-  SPARSE_SOLD_EVIDENCE: "#0e7490",
-  CONDITION_UNCERTAIN: "#155e75",
+  IDENTITY_UNCERTAIN: "#a855f7",
+  NO_COMPARABLES: "#f97316",
+  ACTIVE_ONLY: "#06b6d4",
+  SPARSE_SOLD_EVIDENCE: "#14b8a6",
+  CONDITION_UNCERTAIN: "#ec4899",
 };
+
+function evidenceStatusForChart(listing: Listing): string {
+  if (listing.evidence_status) return listing.evidence_status;
+  const fromExplanation = (listing.scoring_explanation as { evidence_status?: string } | null | undefined)?.evidence_status;
+  if (fromExplanation) return fromExplanation;
+  // Legacy rows predate the dedicated columns; preserve their useful
+  // distinction where the old explanation contains the market basis.
+  const basis = listing.scoring_explanation?.market?.basis;
+  if (basis && basis !== "SOLD_REFINED") return "ACTIVE_ONLY";
+  return "INSUFFICIENT_DATA";
+}
 
 function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
   const sources = [...new Set(listings.map((l) => l.source))].sort(
@@ -1496,9 +1507,9 @@ function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
     const row: Record<string, string | number> = { vendor: SOURCE_LABELS[source] || source };
     for (const tier of VENDOR_CHART_TIERS) {
       row[tier] = tier === "INSUFFICIENT_DATA"
-        ? vendorListings.filter((l) => l.classification === tier && !l.evidence_status).length
+        ? vendorListings.filter((l) => l.classification === tier && evidenceStatusForChart(l) === "INSUFFICIENT_DATA").length
         : VENDOR_EVIDENCE_TIERS.includes(tier)
-          ? vendorListings.filter((l) => l.classification === "INSUFFICIENT_DATA" && (l.evidence_status || "INSUFFICIENT_DATA") === tier).length
+          ? vendorListings.filter((l) => l.classification === "INSUFFICIENT_DATA" && evidenceStatusForChart(l) === tier).length
           : vendorListings.filter((l) => l.classification === tier).length;
     }
     return row;
