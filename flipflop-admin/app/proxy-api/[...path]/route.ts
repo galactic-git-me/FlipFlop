@@ -19,7 +19,6 @@ async function forward(request: NextRequest, context: { params: Promise<{ path: 
   // handler. Read the session cookie here as the authoritative fallback.
   if (!headers.has("authorization")) {
     const cookieHeader = request.headers.get("cookie") ?? "";
-    console.log("proxy auth probe", { cookieHeader, incomingAuthorization: request.headers.get("authorization") });
     const cookieValue = (name: string) => cookieHeader
       .split(";")
       .map((part) => part.trim())
@@ -29,13 +28,22 @@ async function forward(request: NextRequest, context: { params: Promise<{ path: 
     if (token) headers.set("authorization", `Bearer ${token}`);
   }
 
-  const response = await fetch(target, {
+  const fetchOptions = {
     method: request.method,
     headers,
     body: ["GET", "HEAD"].includes(request.method) ? undefined : await request.arrayBuffer(),
-    redirect: "follow",
+    redirect: "manual" as const,
     signal: AbortSignal.timeout(120_000),
-  });
+  };
+  let response = await fetch(target, fetchOptions);
+
+  // Preserve Authorization across backend canonical-host/trailing-slash
+  // redirects. Native fetch can drop it when following to another origin.
+  for (let hop = 0; hop < 3 && response.status >= 300 && response.status < 400; hop += 1) {
+    const location = response.headers.get("location");
+    if (!location) break;
+    response = await fetch(new URL(location, target), fetchOptions);
+  }
 
   const responseHeaders = new Headers();
   for (const name of ["content-type", "content-disposition"]) {
