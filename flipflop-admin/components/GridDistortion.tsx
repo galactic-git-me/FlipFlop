@@ -45,6 +45,7 @@ const GridDistortion = ({
   className = "",
 }: GridDistortionProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const cameraRef = useRef<THREE.OrthographicCamera | null>(null);
@@ -57,10 +58,13 @@ const GridDistortion = ({
     if (!containerRef.current) return;
 
     const container = containerRef.current;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
     const scene = new THREE.Scene();
     sceneRef.current = scene;
 
     const renderer = new THREE.WebGLRenderer({
+      canvas,
       antialias: true,
       alpha: true,
       powerPreference: "high-performance",
@@ -68,9 +72,6 @@ const GridDistortion = ({
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0);
     rendererRef.current = renderer;
-
-    container.innerHTML = "";
-    container.appendChild(renderer.domElement);
 
     const camera = new THREE.OrthographicCamera(0, 0, 0, 0, -1000, 1000);
     camera.position.z = 2;
@@ -240,9 +241,6 @@ const GridDistortion = ({
 
       renderer.dispose();
       renderer.forceContextLoss();
-      if (container.contains(renderer.domElement)) {
-        container.removeChild(renderer.domElement);
-      }
       geometry.dispose();
       material.dispose();
       dataTexture.dispose();
@@ -266,7 +264,9 @@ const GridDistortion = ({
         minWidth: "0",
         minHeight: "0",
       }}
-    />
+    >
+      <canvas ref={canvasRef} aria-hidden="true" />
+    </div>
   );
 };
 

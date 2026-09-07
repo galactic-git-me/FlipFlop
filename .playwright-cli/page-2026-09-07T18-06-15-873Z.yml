@@ -1,0 +1,32 @@
+- generic [ref=e1]:
+  - complementary [ref=e2]:
+    - generic [ref=e3]:
+      - img "FlipFlop" [ref=e5]
+      - navigation [ref=e6]:
+        - link "Sourcing" [ref=e7] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Pre-Built" [ref=e11] [cursor=pointer]:
+          - /url: /builds
+        - link "Custom Builds" [ref=e16] [cursor=pointer]:
+          - /url: /configurator-config
+        - link "Curated Builds" [ref=e20] [cursor=pointer]:
+          - /url: /pc-builder
+        - link "Inventory" [ref=e23] [cursor=pointer]:
+          - /url: /inventory
+        - link "Demand" [ref=e27] [cursor=pointer]:
+          - /url: /demand
+        - link "3D Assets" [ref=e30] [cursor=pointer]:
+          - /url: /cases-3d-priority
+        - link "Problems" [ref=e34] [cursor=pointer]:
+          - /url: /problems
+  - main [ref=e38]:
+    - generic [ref=e40]:
+      - heading "FlipFlop Admin" [level=1] [ref=e41]
+      - paragraph [ref=e42]: Sign in to continue
+      - generic [ref=e43]: Email
+      - textbox [active] [ref=e44]
+      - generic [ref=e45]: Password
+      - textbox [ref=e46]
+      - button "Sign in" [ref=e47]
+    - button [ref=e48]:
+      - img "Hermes" [ref=e49]

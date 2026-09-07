@@ -251,6 +251,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
   // - Starfield: twinkling background at z-index 0, model canvas at z-index 2
   // - Grid horizon: y = -1.49 (centered in viewport for perspective)
   const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: 0, y: 0, isDown: false });
   const modelRef = useRef<any>(null);
   const cameraRef = useRef<any>(null);
@@ -270,7 +271,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
           const { MeshoptDecoder } = await import("three/examples/jsm/libs/meshopt_decoder.module.js");
 
-          if (!containerRef.current) return;
+          if (!containerRef.current || !canvasRef.current || disposed) return;
 
           const width = containerRef.current.clientWidth;
           const height = containerRef.current.clientHeight;
@@ -291,7 +292,12 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           camera.lookAt(0, 0, 0);
           cameraRef.current = camera;
 
-          const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: true });
+          const renderer = new THREE.WebGLRenderer({
+            canvas: canvasRef.current,
+            antialias: true,
+            alpha: true,
+            premultipliedAlpha: true,
+          });
           let animationId = 0;
           renderer.outputColorSpace = THREE.SRGBColorSpace;
           renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -305,11 +311,6 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           renderer.domElement.style.background = "transparent";
           renderer.domElement.style.backgroundColor = "transparent";
           renderer.domElement.style.zIndex = "2";
-
-          while (containerRef.current.firstChild) {
-            containerRef.current.removeChild(containerRef.current.firstChild);
-          }
-          containerRef.current.appendChild(renderer.domElement);
 
           const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
           scene.add(ambientLight);
@@ -430,7 +431,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
             window.cancelAnimationFrame(animationId);
             renderer.setAnimationLoop(null);
             renderer.dispose();
-            renderer.domElement.remove();
+            renderer.forceContextLoss();
           };
         } catch (error) {
           console.error("Error setting up 3D viewer:", error);
@@ -459,6 +460,7 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
 
   return (
     <div ref={containerRef} className="relative h-full w-full rounded border border-slate-700/50 bg-[#080d12]">
+      <canvas ref={canvasRef} className="absolute inset-0 z-10 h-full w-full" aria-label="3D model viewer" />
       {loadError && <div role="alert" className="absolute inset-x-4 top-20 z-50 rounded border border-red-400/50 bg-red-950/90 p-3 text-sm text-red-100">{loadError}</div>}
     </div>
   );
