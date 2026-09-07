@@ -295,7 +295,9 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
             # that hit a verification wall. If the operator has since started
             # the dedicated signed-in CDP browser, use it immediately instead
             # of making Refresh sold evidence remain broken for 30 minutes.
-            cdp_url = os.getenv("BROWSER_CDP_URL", "http://localhost:9222").strip()
+            # Sold-price refreshes must not attach to or commandeer a visible
+            # operator browser. CDP is an explicit opt-in for debugging.
+            cdp_url = os.getenv("SOLD_COMPS_CDP_URL", "").strip()
             cdp_ready = False
             if cdp_url:
                 try:
@@ -328,8 +330,11 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
             async with managed_playwright() as p:
                 browser = None
                 attached_cdp = False
-                headless = False
-                cdp_url = os.getenv("BROWSER_CDP_URL", "http://localhost:9222").strip()
+                # Keep routine sold-price scraping out of the foreground.
+                # A visible/CDP session is available only when explicitly
+                # requested for interactive eBay verification.
+                headless = os.getenv("SOLD_COMPS_HEADLESS", "1").lower() not in {"0", "false", "no"}
+                cdp_url = os.getenv("SOLD_COMPS_CDP_URL", "").strip()
                 if cdp_url:
                     try:
                         browser = await p.chromium.connect_over_cdp(cdp_url, timeout=5000)
@@ -338,10 +343,10 @@ Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
                     except Exception as exc:
                         log.debug("sold_comps.playwright.cdp_unavailable", cdp_url=cdp_url, error=str(exc))
                 if browser is None:
-                    # This fallback starts minimized so normal work is not
-                    # interrupted. It must remain headed, however, because an
-                    # eBay challenge can only be completed by the operator.
-                    headless = os.getenv("SOLD_COMPS_HEADLESS", "0").lower() not in {"0", "false", "no"}
+                    # Headless is the default so scheduled pricing refreshes
+                    # never open URLs in the foreground. Set
+                    # SOLD_COMPS_HEADLESS=0 only for an intentional manual
+                    # verification session.
                     browser = await p.chromium.launch(
                         headless=headless,
                         args=[

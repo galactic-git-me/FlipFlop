@@ -14,6 +14,7 @@ Requires:
   - Valid OAuth tokens in database or session
 """
 
+import asyncio
 import httpx
 import structlog
 from typing import Optional
@@ -21,6 +22,7 @@ from datetime import datetime
 import uuid
 import base64
 import re
+from urllib.parse import urlparse
 from html import unescape
 from html.parser import HTMLParser
 from bs4 import BeautifulSoup
@@ -34,6 +36,44 @@ EBAY_API_BASE = {
 
 EBAY_PRODUCT_DESCRIPTION_MAX_LENGTH = 4000
 EBAY_LISTING_DESCRIPTION_MAX_LENGTH = 500_000
+EBAY_MAX_IMAGE_URLS = 24
+
+
+def _normalise_ebay_image_urls(image_urls: list[str]) -> list[str]:
+    """Return the public HTTPS image URLs accepted by eBay's Inventory API.
+
+    Build photos can contain duplicate entries after reordering/re-uploading,
+    and old records can contain relative or non-HTTP URLs. eBay sometimes
+    reports those cases as a generic Core Inventory Service 500, so reject
+    them locally with an actionable message instead.
+    """
+    normalised: list[str] = []
+    invalid: list[str] = []
+    for raw_url in image_urls or []:
+        url = str(raw_url or "").strip()
+        parsed = urlparse(url)
+        if parsed.scheme != "https" or not parsed.netloc:
+            if url:
+                invalid.append(url)
+            continue
+        if url not in normalised:
+            normalised.append(url)
+
+    if invalid:
+        raise ValueError(
+            "eBay listing photos must use public HTTPS URLs. "
+            f"Invalid photo URL: {invalid[0]}"
+        )
+    if len(normalised) > EBAY_MAX_IMAGE_URLS:
+        log.warning(
+            "ebay.image_urls_truncated",
+            supplied=len(normalised),
+            retained=EBAY_MAX_IMAGE_URLS,
+        )
+        normalised = normalised[:EBAY_MAX_IMAGE_URLS]
+    if not normalised:
+        raise ValueError("At least one public HTTPS image URL is required for an eBay listing")
+    return normalised
 
 
 class _DescriptionTextExtractor(HTMLParser):
@@ -270,11 +310,10 @@ class EbayListingPoster:
             "status": "ACTIVE",
         }
         """
-        if not image_urls:
-            return {
-                "success": False,
-                "error": "At least one image URL is required for an eBay listing",
-            }
+        try:
+            image_urls = _normalise_ebay_image_urls(image_urls)
+        except ValueError as exc:
+            return {"success": False, "error": str(exc)}
 
         sku = f"FLP-{uuid.uuid4().hex[:12].upper()}"
 
@@ -384,11 +423,29 @@ class EbayListingPoster:
                     url=f"{self.base_url}/sell/inventory/v1/inventory_item/{sku}",
                     payload=inventory_item,
                 )
+                inventory_url = f"{self.base_url}/sell/inventory/v1/inventory_item/{sku}"
                 inventory_resp = await client.put(
-                    f"{self.base_url}/sell/inventory/v1/inventory_item/{sku}",
+                    inventory_url,
                     json=inventory_item,
                     headers=headers,
                 )
+                # PUT is idempotent for this SKU. eBay occasionally returns a
+                # generic Core Inventory Service 500/503 during a brief
+                # backend outage; one short retry avoids losing an otherwise
+                # valid draft without creating a duplicate inventory item.
+                if inventory_resp.status_code in (500, 503):
+                    log.warning(
+                        "ebay.inventory_retry",
+                        status=inventory_resp.status_code,
+                        sku=sku,
+                        request_id=inventory_resp.headers.get("X-EBAY-C-REQUEST-ID"),
+                    )
+                    await asyncio.sleep(1.0)
+                    inventory_resp = await client.put(
+                        inventory_url,
+                        json=inventory_item,
+                        headers=headers,
+                    )
                 log.info(
                     "ebay.inventory_response",
                     status=inventory_resp.status_code,
@@ -430,6 +487,7 @@ class EbayListingPoster:
                             "status": inventory_resp.status_code,
                             "response": error_msg,
                             "sku": sku,
+                            "ebay_request_id": inventory_resp.headers.get("X-EBAY-C-REQUEST-ID"),
                         },
                     }
 
@@ -623,8 +681,10 @@ class EbayListingPoster:
             return {"success": False, "error": "Existing eBay listing has no inventory SKU; it must be relisted."}
         if not all((payment_policy_id, return_policy_id, fulfillment_policy_id)):
             return {"success": False, "error": "eBay business policy IDs are required (payment, returns and fulfilment)."}
-        if not image_urls:
-            return {"success": False, "error": "At least one image URL is required for an eBay listing."}
+        try:
+            image_urls = _normalise_ebay_image_urls(image_urls)
+        except ValueError as exc:
+            return {"success": False, "error": str(exc)}
 
         valid_conditions = {
             "NEW", "LIKE_NEW", "NEW_OTHER", "NEW_WITH_DEFECTS",

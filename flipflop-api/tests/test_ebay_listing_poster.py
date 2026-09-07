@@ -1,10 +1,26 @@
 from app.services.ebay_listing_poster import (
     EBAY_PRODUCT_DESCRIPTION_MAX_LENGTH,
+    EBAY_MAX_IMAGE_URLS,
     _inventory_product_description,
+    _normalise_ebay_image_urls,
     prepare_ebay_listing_description,
     post_flip_to_ebay,
 )
 from unittest.mock import AsyncMock, patch
+
+
+def test_ebay_image_urls_are_deduplicated_and_capped():
+    urls = [f"https://images.example.test/{i}.jpg" for i in range(EBAY_MAX_IMAGE_URLS + 3)]
+    result = _normalise_ebay_image_urls([urls[0], *urls, urls[1]])
+
+    assert result == urls[:EBAY_MAX_IMAGE_URLS]
+
+
+def test_ebay_image_urls_reject_non_public_urls():
+    import pytest
+
+    with pytest.raises(ValueError, match="public HTTPS"):
+        _normalise_ebay_image_urls(["/api/uploads/manual_builds/1/photo.jpg"])
 
 
 def test_inventory_description_is_plain_text_and_within_limit():
