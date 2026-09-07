@@ -7,6 +7,12 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Sold/completed eBay results use the persisted Playwright browser fallback
+# when the proxy provider is unavailable or unauthorised. Install the browser
+# and its system dependencies in the production image; without this, the API
+# can only return "No comparable sold listings found" after a proxy failure.
+RUN python -m playwright install --with-deps chromium
+
 COPY . .
 
 EXPOSE 4311
