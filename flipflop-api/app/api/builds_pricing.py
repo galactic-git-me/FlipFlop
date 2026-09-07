@@ -695,9 +695,14 @@ async def get_build_pricing(
             collected: list = []
             unavailable_reasons: list[str] = []
             seen_urls: set[str] = set()
+            playwright_attempted = False
             for sold_query in sold_queries:
                 result = await LiveSoldCompsAdapter().fetch(sold_query, condition=pricing_condition)
-                if not result.available:
+                if not result.available and not playwright_attempted:
+                    # Only one browser fallback may run per request. If eBay
+                    # asks for sign-in on a later anchor query, the endpoint
+                    # must return promptly rather than opening another
+                    # interactive login wait.
                     # ScrapingBee credentials can expire independently of the
                     # app. Reuse the persisted eBay browser session as the
                     # supported fallback instead of silently returning empty.
@@ -707,6 +712,7 @@ async def get_build_pricing(
                         query=sold_query,
                         reason=result.unavailable_reason,
                     )
+                    playwright_attempted = True
                     result = await PlaywrightSoldCompsAdapter().fetch(
                         sold_query, condition=pricing_condition,
                     )
