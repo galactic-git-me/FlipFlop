@@ -23,7 +23,7 @@ jobs:
     # otherwise trigger a full rebuild + container recreate (brief prod
     # downtime) on every autosync instead of only real changes. Manual
     # workflow_dispatch runs (no head_commit) are never skipped.
-    if: ${{ !startsWith(github.event.head_commit.message, 'chore: sync') }}
+    if: "${{ !startsWith(github.event.head_commit.message, 'chore: sync') }}"
     runs-on: ubuntu-latest
     env:
       OLLAMA_MODEL: disabled-in-ci
