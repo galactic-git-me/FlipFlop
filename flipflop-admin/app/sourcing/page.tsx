@@ -354,9 +354,17 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
   const [queueItems, setQueueItems] = useState<QueueItem[]>([]);
   const [clientElapsed, setClientElapsed] = useState(0);
   const [displayedScans, setDisplayedScans] = useState<ScanProgress[]>([]);
-  const [lastRunLength, setLastRunLength] = useState(0);
   const lastLiveStatus = useRef<PipelineStatusResponse | null>(null);
   const lastLiveAt = useRef(0);
+  const runScans = useRef(new Map<string, ScanProgress>());
+  const runMaxima = useRef({
+    binPricesCount: 0,
+    soldPricesCount: 0,
+    gemCount: 0,
+    superGemCount: 0,
+    avgGemScore: 0,
+    avgSuperGemScore: 0,
+  });
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -370,18 +378,80 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
           const activeScans = data.activeScans ?? [];
 
           if (activeScans.length > 0) {
-            lastLiveStatus.current = data;
-            lastLiveAt.current = Date.now();
-            setStatus(data);
-            setClientElapsed(activeScans[0].elapsedSeconds ?? 0);
-            // If this is a new run (different length), reset displayed scans
-            if (activeScans.length !== lastRunLength) {
-              setLastRunLength(activeScans.length);
-              setDisplayedScans(activeScans);
-            } else {
-              // Same run, update displayed scans with new data
-              setDisplayedScans(activeScans);
+            for (const scan of activeScans) {
+              const previous = runScans.current.get(scan.searchId);
+              if (!previous) {
+                runScans.current.set(scan.searchId, scan);
+                continue;
+              }
+              // The API may briefly report the current page for a search
+              // rather than the already-accumulated term total. Counters are
+              // monotonic within a sweep, so never let a newer partial
+              // snapshot overwrite a larger value already displayed.
+              const mergedVendors = { ...previous.byVendor };
+              for (const [vendor, count] of Object.entries(scan.byVendor ?? {})) {
+                mergedVendors[vendor] = Math.max(mergedVendors[vendor] ?? 0, Number(count));
+              }
+              runScans.current.set(scan.searchId, {
+                ...previous,
+                ...scan,
+                totalListings: Math.max(previous.totalListings ?? 0, scan.totalListings ?? 0),
+                ingestedCount: Math.max(previous.ingestedCount ?? 0, scan.ingestedCount ?? 0),
+                ingestedNewCount: Math.max(previous.ingestedNewCount ?? 0, scan.ingestedNewCount ?? 0),
+                cpkAssignedCount: Math.max(previous.cpkAssignedCount ?? 0, scan.cpkAssignedCount ?? 0),
+                marketPricedCount: Math.max(previous.marketPricedCount ?? 0, scan.marketPricedCount ?? 0),
+                classifiedCount: Math.max(previous.classifiedCount ?? 0, scan.classifiedCount ?? 0),
+                processedPercent: Math.max(previous.processedPercent ?? 0, scan.processedPercent ?? 0),
+                byVendor: mergedVendors,
+                isComplete: previous.isComplete && scan.isComplete,
+              });
             }
+            const accumulatedScans = Array.from(runScans.current.values());
+            const maxima = runMaxima.current;
+            maxima.binPricesCount = Math.max(maxima.binPricesCount, data.binPricesCount ?? 0);
+            maxima.soldPricesCount = Math.max(maxima.soldPricesCount, data.soldPricesCount ?? 0);
+            maxima.gemCount = Math.max(maxima.gemCount, data.gemCount ?? 0);
+            maxima.superGemCount = Math.max(maxima.superGemCount, data.superGemCount ?? 0);
+            maxima.avgGemScore = Math.max(maxima.avgGemScore, data.avgGemScore ?? 0);
+            maxima.avgSuperGemScore = Math.max(maxima.avgSuperGemScore, data.avgSuperGemScore ?? 0);
+            const accumulatedTotals = accumulatedScans.reduce(
+              (totals, scan) => ({
+                listings: totals.listings + (scan.totalListings ?? 0),
+                ingestedCount: totals.ingestedCount + (scan.ingestedCount ?? 0),
+                cpkAssignedCount: totals.cpkAssignedCount + (scan.cpkAssignedCount ?? 0),
+                classifiedInternalCount: totals.classifiedInternalCount + (scan.classifiedCount ?? 0),
+                marketPricedCount: totals.marketPricedCount + (scan.marketPricedCount ?? 0),
+                processedCount: totals.processedCount + Math.max(
+                  scan.cpkAssignedCount ?? 0,
+                  scan.marketPricedCount ?? 0,
+                  scan.classifiedCount ?? 0,
+                ),
+              }),
+              {
+                listings: 0,
+                ingestedCount: 0,
+                cpkAssignedCount: 0,
+                classifiedInternalCount: 0,
+                marketPricedCount: 0,
+                processedCount: 0,
+              },
+            );
+            const accumulatedStatus = {
+              ...data,
+              activeScans: accumulatedScans,
+              totalsAcrossActive: accumulatedTotals,
+              binPricesCount: maxima.binPricesCount,
+              soldPricesCount: maxima.soldPricesCount,
+              gemCount: maxima.gemCount,
+              superGemCount: maxima.superGemCount,
+              avgGemScore: maxima.avgGemScore,
+              avgSuperGemScore: maxima.avgSuperGemScore,
+            };
+            lastLiveStatus.current = accumulatedStatus;
+            lastLiveAt.current = Date.now();
+            setStatus(accumulatedStatus);
+            setClientElapsed(activeScans[0].elapsedSeconds ?? 0);
+            setDisplayedScans(accumulatedScans);
           } else if (
             lastLiveStatus.current &&
             // The queue can briefly be idle between submissions, and Phase 2
@@ -427,7 +497,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
     fetchStatus();
     const interval = setInterval(fetchStatus, 1000); // Update every second
     return () => clearInterval(interval);
-  }, [lastRunLength, displayedScans.length, queueStatus]);
+  }, [displayedScans.length, queueStatus]);
 
   useEffect(() => {
     const isProcessing = queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0);
