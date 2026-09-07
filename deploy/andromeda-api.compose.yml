@@ -95,6 +95,12 @@ services:
       OLLAMA_BASE_URL: ""
       MAX_CONCURRENT_SEARCH_TERMS: "4"
       OLLAMA_MODEL: disabled-on-web-tier
+      # Was capped at 2 (config.py default) as an emergency throttle during a
+      # past RAM-pressure incident. Confirmed 2026-09-07: 16GiB available,
+      # no OOM history, no crash-loop — raising to 4 as a conservative first
+      # step (the previous cap of 2 left 13 of 15 queue workers idle whenever
+      # a backlog spanned more than 2 distinct search terms).
+      MAX_CONCURRENT_SEARCH_TERMS: "4"
     command: ["uvicorn", "app.gem_radar_standalone:app", "--host", "0.0.0.0", "--port", "8000"]
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/openapi.json"]
