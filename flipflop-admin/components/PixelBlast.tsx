@@ -411,6 +411,7 @@ const PixelBlast = ({
   noiseAmount = 0,
 }: PixelBlastProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const visibilityRef = useRef({ visible: true });
   const speedRef = useRef(speed);
   const threeRef = useRef<ThreeState | null>(null);
@@ -418,7 +419,8 @@ const PixelBlast = ({
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    const canvas = canvasRef.current;
+    if (!container || !canvas) return;
     speedRef.current = speed;
 
     const needsReinitKeys: (keyof typeof cfg)[] = ["antialias", "liquid", "noiseAmount"];
@@ -441,13 +443,10 @@ const PixelBlast = ({
         t.composer?.dispose();
         t.renderer.dispose();
         t.renderer.forceContextLoss();
-        if (t.renderer.domElement.parentElement === container)
-          container.removeChild(t.renderer.domElement);
         threeRef.current = null;
       }
 
       // ── Renderer ────────────────────────────────────────────────────
-      const canvas = document.createElement("canvas");
       const renderer = new THREE.WebGLRenderer({
         canvas,
         antialias,
@@ -457,7 +456,6 @@ const PixelBlast = ({
       renderer.domElement.style.width = "100%";
       renderer.domElement.style.height = "100%";
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-      container.appendChild(renderer.domElement);
       if (transparent) renderer.setClearAlpha(0);
       else renderer.setClearColor(0x000000, 1);
 
@@ -688,8 +686,6 @@ const PixelBlast = ({
       t.composer?.dispose();
       t.renderer.dispose();
       t.renderer.forceContextLoss();
-      if (t.renderer.domElement.parentElement === container)
-        container.removeChild(t.renderer.domElement);
       threeRef.current = null;
     };
   }, [
@@ -705,7 +701,9 @@ const PixelBlast = ({
       className={`pixel-blast-container${className ? ` ${className}` : ""}`}
       style={style}
       aria-label="PixelBlast interactive background"
-    />
+    >
+      <canvas ref={canvasRef} aria-hidden="true" />
+    </div>
   );
 };
 
