@@ -50,6 +50,8 @@ SCOPES = [
     "https://api.ebay.com/oauth/api_scope/sell.account",
     "https://api.ebay.com/oauth/api_scope/sell.marketing",
     "https://api.ebay.com/oauth/api_scope/sell.fulfillment",
+    # Required by the Listing API's native item-draft endpoint.
+    "https://api.ebay.com/oauth/api_scope/sell.item.draft",
 ]
 
 _AUTH_ROOT = {

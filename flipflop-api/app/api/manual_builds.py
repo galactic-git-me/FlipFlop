@@ -1855,19 +1855,24 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
         fulfillment_policy_id = build.fulfillment_policy_id
 
     try:
-        # Seller Hub drafts use the FX_LISTING Seller Hub Feed template. An
-        # unpublished Inventory offer, or the limited Listing API draft, does
-        # not create a row in Seller Hub > Listings > Drafts.
+        # Use eBay's native item-draft endpoint for a draft. The Seller Hub
+        # feed mapper currently accepts the upload but completes with an empty
+        # error report, so it cannot reliably create a draft row.
         if not body.publish:
             poster = EbayListingPoster(environment=listing_environment, access_token=oauth_token)
-            draft_result = await poster.create_seller_hub_draft(
+            draft_result = await poster.create_item_draft(
                 title=build.generated_title,
+                description=build.generated_description,
+                price=body.price,
+                image_urls=image_urls,
                 category_id="179",
+                condition=body.condition,
+                aspects=build.generated_aspects or {},
             )
             if not draft_result.get("success"):
                 error = draft_result.get("error", "eBay rejected the Seller Hub draft")
                 if "403" in error or "401" in error:
-                    error += " Reconnect eBay so the Sell Feed permission is granted."
+                    error += " Reconnect eBay so the item-draft permission is granted."
                 return PostToEbayResult(success=False, error=error)
             build.ebay_draft_id = draft_result.get("draft_id")
             build.ebay_draft_url = draft_result.get("draft_url")
