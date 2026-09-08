@@ -367,6 +367,12 @@ export default function SettingsPage() {
                 one-time eBay seller consent. Without it, everything below still runs
                 internally (pricing, scheduling, rules) but doesn&apos;t reach eBay itself.
               </p>
+              {!ebayStatus?.connected && typeof window !== "undefined" && window.location.hostname === "localhost" && (
+                <p className="text-xs text-amber-300/80">
+                  This is the local development instance. eBay consent is stored by the backend/database,
+                  so consent completed on the deployed FlipFlop app will not appear here.
+                </p>
+              )}
               {ebayStatus?.connected ? (
                 <div className="flex items-center justify-between p-3 rounded-lg border border-emerald-500/30 bg-emerald-500/5">
                   <div>
