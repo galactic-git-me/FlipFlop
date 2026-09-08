@@ -398,8 +398,11 @@ class EbayListingPoster:
         if not self.access_token:
             return {"success": False, "error": "eBay user OAuth token required"}
 
+        # Seller Hub's upload parser is sensitive to the template's line ending
+        # format. Generate the same Windows CSV shape as eBay's downloaded
+        # templates, including the final CRLF.
         csv_buffer = io.StringIO(newline="")
-        writer = csv.writer(csv_buffer, lineterminator="\n")
+        writer = csv.writer(csv_buffer, lineterminator="\r\n")
         writer.writerow(["Action", "Custom label (SKU)", "Category ID", "Title"])
         writer.writerow(["Draft", sku or f"FLP-{uuid.uuid4().hex[:12].upper()}", str(category_id), title[:80]])
         feed_headers = {
@@ -488,6 +491,13 @@ class EbayListingPoster:
                         if result_response.status_code == 200
                         else f"Unable to download eBay result file ({result_response.status_code})"
                     )
+                    if result_detail.count(",") > 8 and result_detail.count("\n") <= 1:
+                        summary = ""
+                        if isinstance(task_payload, dict):
+                            upload_summary = task_payload.get("uploadSummary")
+                            if upload_summary:
+                                summary = f" Task summary: {upload_summary}."
+                        result_detail = "eBay returned no row-level error details." + summary
                     return {
                         "success": False,
                         "error": (
