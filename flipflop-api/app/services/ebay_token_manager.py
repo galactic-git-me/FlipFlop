@@ -144,6 +144,16 @@ async def get_valid_ebay_access_token(
 
         if resp.status_code != 200:
             log.error("ebay.token_refresh_failed", environment=environment, status=resp.status_code, body=resp.text)
+            # A deployment can retain an old env-var refresh token after the
+            # seller reconnects through Settings. Prefer the current
+            # database-backed OAuth connection when that happens, otherwise a
+            # stale env token prevents every live-write action from working.
+            if environment == "production" and db is not None:
+                from app.services.ebay_oauth import get_valid_access_token as get_valid_db_access_token
+
+                db_token = await get_valid_db_access_token(db)
+                if db_token:
+                    return db_token
             raise ValueError(f"Failed to refresh eBay {environment} token: {resp.text}")
 
         data = resp.json()
