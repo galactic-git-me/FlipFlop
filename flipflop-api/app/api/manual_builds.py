@@ -1727,7 +1727,7 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
     # A draft is a real eBay offer, so don't create a second offer for the
     # same build when the user clicks the draft button more than once. Live
     # listings are likewise protected from an accidental duplicate listing.
-    if not body.publish and (build.ebay_listing_id or build.ebay_offer_id or build.ebay_draft_id):
+    if not body.publish and (build.ebay_listing_id or build.ebay_offer_id):
         raise HTTPException(400, "This build already has an eBay listing or draft offer. Publish the existing draft or end the listing first.")
 
     # Persist the seller's asking price as build configuration before making
@@ -1839,23 +1839,19 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
         fulfillment_policy_id = build.fulfillment_policy_id
 
     try:
-        # Seller Hub drafts use eBay's Listing API, not an unpublished
-        # Inventory API offer. The latter is API-only and never appears in
-        # Seller Hub Drafts.
+        # Seller Hub drafts use the FX_LISTING Seller Hub Feed template. An
+        # unpublished Inventory offer, or the limited Listing API draft, does
+        # not create a row in Seller Hub > Listings > Drafts.
         if not body.publish:
             poster = EbayListingPoster(environment=listing_environment, access_token=oauth_token)
-            draft_result = await poster.create_item_draft(
+            draft_result = await poster.create_seller_hub_draft(
                 title=build.generated_title,
-                description=build.generated_description,
-                price=body.price,
-                image_urls=image_urls,
-                condition=body.condition,
-                aspects=build.generated_aspects or {},
+                category_id="179",
             )
             if not draft_result.get("success"):
                 error = draft_result.get("error", "eBay rejected the Seller Hub draft")
-                if "sell.item.draft" in error or "403" in error or "401" in error:
-                    error += " Reconnect eBay so the new sell.item.draft permission is granted."
+                if "403" in error or "401" in error:
+                    error += " Reconnect eBay so the Sell Feed permission is granted."
                 return PostToEbayResult(success=False, error=error)
             build.ebay_draft_id = draft_result.get("draft_id")
             build.ebay_draft_url = draft_result.get("draft_url")

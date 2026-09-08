@@ -135,15 +135,15 @@ export function CommandPanel({
       ) : (
         <>
           <RailButton
-            label="Save eBay API draft"
+            label="Create Seller Hub draft"
             icon={FilePenLine}
             onClick={onPublishEbayDraft}
-            disabled={isLoading || isPublishingEbayDraft || !onPublishEbayDraft || !!ebayStatus?.remoteStatus && ebayStatus.remoteStatus === "draft"}
+            disabled={isLoading || isPublishingEbayDraft || !onPublishEbayDraft}
             isLoading={isPublishingEbayDraft}
             accent="amber"
           />
           <RailButton
-            label="Open Seller Hub draft"
+            label="Open Seller Hub drafts"
             icon={Send}
             onClick={onPublishEbayLive}
             disabled={isLoading || isPublishingEbayLive || !onPublishEbayLive || ebayStatus?.remoteStatus !== "draft"}

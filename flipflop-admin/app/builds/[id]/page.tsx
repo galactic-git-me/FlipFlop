@@ -649,7 +649,7 @@ export default function BuildDetailPage() {
       if (!result.success) throw new Error(result.error ?? "eBay rejected the draft");
       const refreshed = await api.manualBuilds.get(buildId);
       setBuild(refreshed);
-      toast.success("eBay Seller Hub draft saved. Use the green button to open it in eBay.");
+      toast.success("Seller Hub draft upload submitted. eBay may take a few minutes to show it in Drafts.");
     } catch (error) {
       toast.error(`Couldn't create the eBay draft: ${error instanceof Error ? error.message : "Unknown error"}`);
     } finally {
@@ -658,8 +658,8 @@ export default function BuildDetailPage() {
   };
 
   const publishEbayDraftLive = async () => {
-    if (build?.ebay_draft_url) {
-      window.open(build.ebay_draft_url, "_blank", "noopener,noreferrer");
+    if (build?.ebay_listing_status === "draft") {
+      window.open("https://www.ebay.co.uk/sh/lst/drafts", "_blank", "noopener,noreferrer");
       return;
     }
     setPublishingEbayLive(true);

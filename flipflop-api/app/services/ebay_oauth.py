@@ -46,9 +46,6 @@ log = structlog.get_logger(__name__)
 # (Promoted Listings campaigns). Trading API calls (legacy, e.g. message
 # polling / Best Offer response) accept the same OAuth token via IAF auth.
 SCOPES = [
-    # Required for the eBay-native draft returned to Seller Hub / eBay's
-    # listing experience. This is a limited-release eBay capability.
-    "https://api.ebay.com/oauth/api_scope/sell.item.draft",
     "https://api.ebay.com/oauth/api_scope/sell.inventory",
     "https://api.ebay.com/oauth/api_scope/sell.account",
     "https://api.ebay.com/oauth/api_scope/sell.marketing",

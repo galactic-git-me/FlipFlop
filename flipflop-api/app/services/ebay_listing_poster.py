@@ -21,6 +21,8 @@ from typing import Optional
 from datetime import datetime
 import uuid
 import base64
+import csv
+import io
 import re
 from urllib.parse import urlparse
 from html import unescape
@@ -342,6 +344,65 @@ class EbayListingPoster:
         except Exception as exc:
             log.exception("ebay.item_draft_creation_failed")
             return {"success": False, "error": f"eBay Seller Hub draft request failed: {exc}"}
+
+    async def create_seller_hub_draft(
+        self,
+        title: str,
+        category_id: str = "179",
+        sku: Optional[str] = None,
+    ) -> dict:
+        """Upload the minimal Seller Hub Reports draft template via Sell Feed.
+
+        This is the documented path that creates a row in Seller Hub >
+        Listings > Drafts. The feed is asynchronous; eBay may take several
+        minutes to process it.
+        """
+        if not self.access_token:
+            return {"success": False, "error": "eBay user OAuth token required"}
+
+        csv_buffer = io.StringIO(newline="")
+        writer = csv.writer(csv_buffer, lineterminator="\n")
+        writer.writerow(["Action", "Custom label (SKU)", "Category ID", "Title"])
+        writer.writerow(["Draft", sku or f"FLP-{uuid.uuid4().hex[:12].upper()}", str(category_id), title[:80]])
+        feed_headers = {
+            "Authorization": f"Bearer {self.access_token}",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "X-EBAY-C-MARKETPLACE-ID": "EBAY_GB",
+        }
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                task_response = await client.post(
+                    f"{self.base_url}/sell/feed/v1/task",
+                    json={"feedType": "FX_LISTING", "schemaVersion": "1.0"},
+                    headers=feed_headers,
+                )
+                if task_response.status_code not in (200, 201, 202):
+                    return {"success": False, "error": f"eBay Seller Hub feed task failed ({task_response.status_code}): {task_response.text[:500]}"}
+                task_id = task_response.json().get("taskId")
+                if not task_id:
+                    return {"success": False, "error": "eBay did not return a Seller Hub feed task ID"}
+
+                upload_response = await client.post(
+                    f"{self.base_url}/sell/feed/v1/task/{task_id}/upload_file",
+                    files={"file": ("flipflop-seller-hub-draft.csv", csv_buffer.getvalue(), "text/csv")},
+                    headers={
+                        "Authorization": f"Bearer {self.access_token}",
+                        "Accept": "application/json",
+                        "X-EBAY-C-MARKETPLACE-ID": "EBAY_GB",
+                    },
+                )
+                if upload_response.status_code not in (200, 201, 202):
+                    return {"success": False, "error": f"eBay Seller Hub draft upload failed ({upload_response.status_code}): {upload_response.text[:500]}"}
+            return {
+                "success": True,
+                "draft_id": task_id,
+                "draft_url": "https://www.ebay.co.uk/sh/lst/drafts",
+                "status": "DRAFT",
+            }
+        except Exception as exc:
+            log.exception("ebay.seller_hub_draft_upload_failed")
+            return {"success": False, "error": f"eBay Seller Hub draft upload failed: {exc}"}
 
     async def create_listing(
         self,
