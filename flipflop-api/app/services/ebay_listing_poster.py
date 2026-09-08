@@ -24,6 +24,7 @@ import base64
 import csv
 import io
 import re
+import gzip
 from urllib.parse import urlparse
 from html import unescape
 from html.parser import HTMLParser
@@ -57,6 +58,25 @@ def _feed_task_id(response: httpx.Response) -> str | None:
     location = response.headers.get("location", "")
     match = re.search(r"/task/([^/?#]+)", location)
     return match.group(1) if match else None
+
+
+def _feed_task_status(payload: object) -> str:
+    """Read the task status across the Sell Feed response variants."""
+    if not isinstance(payload, dict):
+        return "UNKNOWN"
+    return str(payload.get("status") or payload.get("taskStatus") or "UNKNOWN").upper()
+
+
+def _feed_result_text(response: httpx.Response) -> str:
+    """Turn eBay's result-file response into a short actionable error."""
+    body = response.content
+    if response.headers.get("content-encoding", "").lower() == "gzip" or body[:2] == b"\x1f\x8b":
+        try:
+            body = gzip.decompress(body)
+        except OSError:
+            pass
+    text = body.decode("utf-8", errors="replace").strip()
+    return text[:1200] or "eBay returned an empty result file"
 
 
 def _normalise_ebay_image_urls(image_urls: list[str]) -> list[str]:
@@ -418,11 +438,72 @@ class EbayListingPoster:
                 )
                 if upload_response.status_code not in (200, 201, 202):
                     return {"success": False, "error": f"eBay Seller Hub draft upload failed ({upload_response.status_code}): {upload_response.text[:500]}"}
+
+                # Uploading a feed only queues it.  Do not report a draft as
+                # created until eBay has processed the task; otherwise a
+                # rejected CSV looks successful while Seller Hub stays empty.
+                task_headers = {
+                    "Authorization": f"Bearer {self.access_token}",
+                    "Accept": "application/json",
+                    "X-EBAY-C-MARKETPLACE-ID": "EBAY_GB",
+                }
+                terminal_status = None
+                task_payload: object = None
+                for delay in (0.5, 1.0, 2.0, 3.0, 5.0):
+                    await asyncio.sleep(delay)
+                    status_response = await client.get(
+                        f"{self.base_url}/sell/feed/v1/task/{task_id}",
+                        headers=task_headers,
+                    )
+                    if status_response.status_code != 200:
+                        log.warning(
+                            "ebay.seller_hub_feed_status_failed",
+                            task_id=task_id,
+                            status_code=status_response.status_code,
+                            response=status_response.text[:500],
+                        )
+                        continue
+                    try:
+                        task_payload = status_response.json()
+                    except ValueError:
+                        task_payload = None
+                    status = _feed_task_status(task_payload)
+                    log.info("ebay.seller_hub_feed_status", task_id=task_id, status=status)
+                    if status in {"COMPLETED", "COMPLETED_WITH_ERROR", "FAILED", "CANCELLED"}:
+                        terminal_status = status
+                        break
+
+                if terminal_status in {"COMPLETED_WITH_ERROR", "FAILED", "CANCELLED"}:
+                    result_response = await client.get(
+                        f"{self.base_url}/sell/feed/v1/task/{task_id}/download_result_file",
+                        headers=task_headers,
+                    )
+                    result_detail = (
+                        _feed_result_text(result_response)
+                        if result_response.status_code == 200
+                        else f"Unable to download eBay result file ({result_response.status_code})"
+                    )
+                    return {
+                        "success": False,
+                        "error": (
+                            f"eBay rejected the Seller Hub draft feed (task {task_id}, "
+                            f"{terminal_status}): {result_detail}"
+                        ),
+                    }
+
+                if terminal_status == "COMPLETED":
+                    return {
+                        "success": True,
+                        "draft_id": task_id,
+                        "draft_url": "https://www.ebay.co.uk/sh/lst/drafts",
+                        "status": "DRAFT",
+                    }
             return {
                 "success": True,
                 "draft_id": task_id,
                 "draft_url": "https://www.ebay.co.uk/sh/lst/drafts",
-                "status": "DRAFT",
+                "status": "PROCESSING",
+                "message": "eBay accepted the feed and is still processing it",
             }
         except Exception as exc:
             log.exception("ebay.seller_hub_draft_upload_failed")
