@@ -412,7 +412,12 @@ class EbayListingPoster:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 task_response = await client.post(
                     f"{self.base_url}/sell/feed/v1/task",
-                    json={"feedType": "FX_LISTING", "schemaVersion": "1.0"},
+                    # eBay's current production mapper accepts the Draft
+                    # action under the dedicated FX_DRAFT task type. Using
+                    # FX_LISTING creates the task but later fails with
+                    # BAF.Error.5: "Unable to find Task Action Id for task
+                    # Draft" before any Seller Hub row is created.
+                    json={"feedType": "FX_DRAFT", "schemaVersion": "1.0"},
                     headers=feed_headers,
                 )
                 if task_response.status_code not in (200, 201, 202):
