@@ -1854,6 +1854,48 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
     if build.fulfillment_policy_id:
         fulfillment_policy_id = build.fulfillment_policy_id
 
+    # Policy IDs are account- and marketplace-specific. A saved ID can become
+    # stale when the seller edits/deletes a policy, or when a build was copied
+    # from another eBay environment. Resolve it against the connected
+    # production account before sending the Inventory API request.
+    try:
+        available_fulfillment_policies = await list_fulfillment_policies(
+            listing_environment,
+            marketplace_id="EBAY_GB",
+            access_token=oauth_token,
+        )
+    except EbayFulfillmentPoliciesError as exc:
+        raise HTTPException(
+            exc.status_code or 502,
+            f"Could not verify the eBay shipping policy: {exc}",
+        ) from exc
+
+    valid_fulfillment_ids = {
+        policy.policy_id
+        for policy in available_fulfillment_policies
+        if not policy.marketplace_id or policy.marketplace_id == "EBAY_GB"
+    }
+    if fulfillment_policy_id not in valid_fulfillment_ids:
+        replacement_policy = next(
+            (policy.policy_id for policy in available_fulfillment_policies if policy.policy_id in valid_fulfillment_ids),
+            None,
+        )
+        if not replacement_policy:
+            raise HTTPException(
+                400,
+                "No valid EBAY_GB fulfillment policy exists in the connected eBay account. "
+                "Create a shipping policy in Seller Hub, then retry.",
+            )
+        log.warning(
+            "manual_builds.replacing_stale_fulfillment_policy",
+            build_id=build_id,
+            stale_policy_id=fulfillment_policy_id,
+            replacement_policy_id=replacement_policy,
+        )
+        fulfillment_policy_id = replacement_policy
+        build.fulfillment_policy_id = replacement_policy
+        build.updated_at = datetime.utcnow()
+
     try:
         # Use eBay's native item-draft endpoint for a draft. The Seller Hub
         # feed mapper currently accepts the upload but completes with an empty
