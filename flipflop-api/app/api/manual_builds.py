@@ -1727,8 +1727,9 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
     # A draft is a real eBay offer, so don't create a second offer for the
     # same build when the user clicks the draft button more than once. Live
     # listings are likewise protected from an accidental duplicate listing.
-    if not body.publish and (build.ebay_listing_id or build.ebay_offer_id):
-        raise HTTPException(400, "This build already has an eBay listing or draft offer. Publish the existing draft or end the listing first.")
+    # A stored Inventory offer/listing ID does not mean a Seller Hub draft
+    # exists. Seller Hub draft uploads are intentionally allowed here so an
+    # old API-only record cannot block creation of the requested draft.
 
     # Persist the seller's asking price as build configuration before making
     # the external eBay request. This keeps the value after reloads and also
