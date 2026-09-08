@@ -828,6 +828,20 @@ async def delete_build(build_id: int, db: AsyncSession = Depends(get_db)):
     await db.flush()
 
 
+@router.post("/{build_id}/restore", response_model=ManualBuildOut)
+async def restore_build(build_id: int, db: AsyncSession = Depends(get_db)):
+    """Restore an archived build to the normal Pre-Built list."""
+    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
+    build = result.scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+    build.is_archived = False
+    build.updated_at = datetime.utcnow()
+    await db.flush()
+    await db.refresh(build)
+    return build
+
+
 @router.post("/{build_id}/evaluate", response_model=EvaluationResult)
 async def evaluate_build(build_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
