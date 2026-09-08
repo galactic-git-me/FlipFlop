@@ -1,12 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const backendUrl = (process.env.BACKEND_URL ?? "http://localhost:4311").replace(/\/$/, "");
+const ebayOpsBackendUrl = (process.env.EBAY_OPS_BACKEND_URL ?? "").replace(/\/$/, "");
+
+function backendForPath(path: string[]): string {
+  if (!ebayOpsBackendUrl) return backendUrl;
+  const value = path.join("/");
+  // Keep local catalogue/build editing local. Only seller-authorized eBay
+  // operations use the deployed API, which owns the connected eBay token.
+  if (
+    value === "ebay/oauth/authorize-url" ||
+    value === "ebay/oauth/status" ||
+    value === "ebay/oauth/disconnect" ||
+    value === "manual-builds/ebay-fulfillment-policies" ||
+    /^manual-builds\/[^/]+\/(post-to-ebay|publish-ebay-draft|ebay-listing|sync-ebay-order)$/.test(value)
+  ) {
+    return ebayOpsBackendUrl;
+  }
+  return backendUrl;
+}
 
 // Same-origin REST proxy. middleware attaches Authorization from the
 // httpOnly admin_session cookie before this handler forwards to FastAPI.
 async function forward(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
   const { path } = await context.params;
-  const target = `${backendUrl}/api/${path.join("/")}${request.nextUrl.search}`;
+  const target = `${backendForPath(path)}/api/${path.join("/")}${request.nextUrl.search}`;
   const headers = new Headers();
 
   for (const name of ["authorization", "content-type", "accept", "range"]) {
