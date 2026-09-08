@@ -133,8 +133,6 @@ export default function BuildDetailPage() {
   const [markingBuilt, setMarkingBuilt] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [posting, setPosting] = useState(false);
-  const [publishingEbayDraft, setPublishingEbayDraft] = useState(false);
-  const [publishingEbayLive, setPublishingEbayLive] = useState(false);
   const [uploadingPhotos, setUploadingPhotos] = useState(false);
   const [uploading3dModel, setUploading3dModel] = useState(false);
   const [queueing3dModels, setQueueing3dModels] = useState(false);
@@ -647,47 +645,6 @@ export default function BuildDetailPage() {
     });
   };
 
-  const publishEbayDraft = async () => {
-    if (!build?.generated_title || !build?.generated_description) return;
-    const priceNum = parseFloat(price);
-    if (!priceNum || priceNum <= 0) {
-      toast.error("Enter an asking price before creating the eBay draft.");
-      return;
-    }
-    setPublishingEbayDraft(true);
-    try {
-      const result = await api.manualBuilds.postToEbay(buildId, { price: priceNum, condition, publish: false });
-      if (!result.success) throw new Error(result.error ?? "eBay rejected the draft");
-      const refreshed = await api.manualBuilds.get(buildId);
-      setBuild(refreshed);
-      toast.success("Seller Hub draft upload submitted. eBay may take a few minutes to show it in Drafts.");
-    } catch (error) {
-      toast.error(`Couldn't create the eBay draft: ${error instanceof Error ? error.message : "Unknown error"}`);
-    } finally {
-      setPublishingEbayDraft(false);
-    }
-  };
-
-  const publishEbayDraftLive = async () => {
-    if (build?.ebay_listing_status === "draft") {
-      window.open("https://www.ebay.co.uk/sh/lst/drafts", "_blank", "noopener,noreferrer");
-      return;
-    }
-    setPublishingEbayLive(true);
-    try {
-      const result = await api.manualBuilds.publishEbayDraft(buildId);
-      if (!result.success) throw new Error(result.error ?? "eBay rejected the publication");
-      const refreshed = await api.manualBuilds.get(buildId);
-      setBuild(refreshed);
-      toast.success("Listing published to eBay.");
-      if (result.url) setTimeout(() => window.open(result.url, "_blank"), 300);
-    } catch (error) {
-      toast.error(`Couldn't publish to eBay: ${error instanceof Error ? error.message : "Unknown error"}`);
-    } finally {
-      setPublishingEbayLive(false);
-    }
-  };
-
   const addTemporary3dPhotos = (event: React.ChangeEvent<HTMLInputElement>) => {
     const incoming = Array.from(event.target.files ?? []);
     const capacity = 4 - (selected3dPhotos.complete_build?.length ?? 0) - temporary3dPhotos.length;
@@ -854,16 +811,12 @@ export default function BuildDetailPage() {
             onGenerateTitle={() => generateListing(false)}
             onPreviewEbay={build.generated_title && build.generated_description ? () => setShowEbayPreview(true) : undefined}
             onPublishEbay={postToEbay}
-            onPublishEbayDraft={publishEbayDraft}
-            onPublishEbayLive={publishEbayDraftLive}
             onUpdateEbay={postToEbay}
             onDeleteEbay={() => setShowEndEbayConfirm(true)}
             onPublishStorefront={canPublish ? listOnStorefront : undefined}
-            isLoading={generating || posting || markingBuilt || publishingEbayDraft || publishingEbayLive}
+            isLoading={generating || posting || markingBuilt}
             isDeletingEbay={endingEbayListing}
             isPublishingStorefront={listingOnStorefront}
-            isPublishingEbayDraft={publishingEbayDraft}
-            isPublishingEbayLive={publishingEbayLive}
           />
         )}
 
