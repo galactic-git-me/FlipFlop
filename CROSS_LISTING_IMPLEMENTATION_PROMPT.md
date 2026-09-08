@@ -20,6 +20,8 @@ The user must be able to select one or many source listings, choose one or many 
 
 This is also a **sales-monitoring and inventory-synchronisation system**, not merely a listing copier. It must monitor sales across every connected selling channel and react quickly when a unique pre-built computer sells.
 
+For a confirmed sale, it must also start the fulfilment workflow: import the buyer/order details, create or match the customer in the admin app, create the order, associate it with the build’s customer portal, book insured delivery and book a collection from the configured home/dispatch address for the next business day where the selected courier supports that service.
+
 The feature must be honest about integration capability. Do not create fake “published” results, mock URLs, or pretend that a platform API exists. Before implementation, verify the current official seller/API capabilities and document any platform limitation. Where direct API publishing is unavailable or not permitted, provide a compliant manual-assist/export workflow with clear status such as `manual_action_required`.
 
 ## Repository context to preserve
@@ -157,11 +159,50 @@ For a unique pre-built computer, once a sale is confirmed on any channel:
 7. Prevent a second sale race by using a backend transaction/lock or equivalent idempotent state transition before attempting downstream delists.
 8. Record a complete audit event showing the triggering sale, inventory changes, delist attempts/results and any manual actions still required.
 
+### Customer, order and build-portal fulfilment
+
+After a sale is confirmed, import only the information needed to fulfil and support the order, including where supplied by the channel:
+
+- buyer/customer ID and channel username
+- full name
+- email address and telephone number
+- delivery address and billing address where required
+- price paid, currency, tax/shipping amount and discount information
+- channel order ID, transaction ID where necessary, listing ID and sale timestamp
+- delivery/service selection and any buyer notes
+
+Implement this as an idempotent workflow:
+
+1. Match an existing admin customer using verified channel identity and/or email according to a safe matching policy. Never merge customers solely on an unverified name or address.
+2. If no safe match exists, create a new customer in the admin app with the imported details and source-channel identity.
+3. Create the customer order and associate it with the canonical FlipFlop build/product, sale event, inventory allocation and channel listing.
+4. Prevent duplicate customers and duplicate orders when the same sale is received through a webhook, polling API and/or the `mac@theflipflop.shop` email monitor.
+5. Trigger or create the associated user portal for the build. Associate the new/existing customer with that portal and make the portal personalised for the customer, including customer name, build name/specification, order status, relevant photos, warranty/returns information, delivery status and safe support/contact options.
+6. Do not expose internal costs, seller notes, other customers’ data, private inventory metadata or provider credentials in the customer portal.
+7. Record consent, source, imported fields, changes and audit history for customer/order data. Make personal-data access and deletion/export considerations explicit.
+
+Use the existing order/customer/portal models and API conventions where they exist; inspect them before adding duplicate concepts. If a required backend model does not exist, add a migration and typed API rather than storing fulfilment state only in React/local storage.
+
+### Delivery insurance, booking and collection
+
+- Add a courier/shipping adapter layer with a consistent contract for rate/service lookup, insurance options, shipment/label creation, collection booking, cancellation, tracking lookup and delivery-event normalisation.
+- Use the customer’s imported delivery address as the shipment destination and the configured FlipFlop home/dispatch address as the collection address. Never infer the collection address from the customer record.
+- Book delivery with insurance appropriate to the confirmed sale value, show the insured amount and any excess/limitations, and require admin confirmation if the courier cannot insure the full value.
+- Book collection for the next business day by default, using the courier’s real available service/date and the correct parcel dimensions, weight, declared value and packaging requirements. If next-business-day collection is unavailable, show the earliest available date and require explicit confirmation or create a manual-action task.
+- Address the shipment to the newly created/matched customer and persist the recipient, service, collection date/window, insurance, tracking ID, courier, label URL and booking/reference ID.
+- Update the admin order with delivery tracking ID, courier, delivery service, insured value, collection date/window, fulfilment status and all relevant timestamps.
+- Notify the customer through the existing approved communication mechanism only after the booking is confirmed, and include tracking information appropriate for customer visibility.
+- Support booking failure, cancellation, rescheduling, label generation failure, address validation failure, courier outage and partial success without losing the order or sale record.
+- Never silently book a shipment, charge a delivery account or create an insurance commitment without an explicit user-approved fulfilment action unless the user has configured an account-level automation setting for that exact behaviour.
+- Make the delivery workflow auditable and idempotent. A retry must not create a second shipment or collection; use provider idempotency keys and stored booking references.
+- If no courier API/connector is available, create a manual fulfilment pack and a prominent admin task containing the exact customer address, parcel data, insured value, collection address, next-business-day target and order reference. Do not claim the delivery is booked.
+
 Do not end listings merely because a sale email is ambiguous. Require a confidently matched canonical product/build and a confirmed sale event, otherwise flag it for admin review.
 
 ### Admin sale notifications and confetti
 
 - Create a durable admin notification for every confirmed sale and important downstream result, including: platform sold on, product/build, sale price, inventory updated, listings ended, failures and manual actions required.
+- Also notify the admin app as fulfilment progresses: customer created/matched, order created, portal associated/personalised, delivery insurance selected, shipment booked, collection booked, tracking received, and any manual action or failure.
 - Notifications must survive page reloads and be stored server-side with `unread`, `read_at`, severity, type, related sale/job IDs and timestamps.
 - Show an in-app notification/toast immediately when the app is open, with a notification centre/badge and a detail view.
 - For a confirmed successful sale of a pre-built PC, trigger celebratory confetti across the admin screen. Confetti must continue or re-trigger at a controlled, accessible rate until the specific sale notification is marked as read, then stop immediately.
@@ -207,13 +248,23 @@ Adapt names to the existing backend/database conventions, but introduce equivale
 - `cross_listing_batches`
 - `cross_listing_jobs`
 - `cross_listing_job_events`
+- `customers` or the existing customer/user table
+- `customer_channel_identities`
+- `customer_orders` or the existing order table
+- `build_portal_associations`
+- `shipments`
+- `delivery_bookings`
+- `collection_bookings`
+- `admin_notifications`
 
 Important constraints:
 
 - unique `(canonical_product_id, channel, account_id)` where appropriate
 - unique provider listing IDs per channel/account
 - immutable audit events for publish, update, end, retry and manual completion
+- immutable audit events for customer import/match, order creation, portal personalisation, shipment/insurance booking and collection booking
 - encrypted credentials and redacted payload/error logging
+- encrypted or appropriately protected PII, least-privilege access, retention/deletion rules and no PII in ordinary logs
 - timestamps in UTC
 - optimistic locking or version checks to avoid stale overwrites
 
@@ -229,6 +280,14 @@ Use the existing Next.js proxy/backend architecture and authentication. Add type
 - run/poll email sales monitoring securely where configured
 - list unread notifications and mark a notification read
 - trigger/reconcile the sold-product cross-channel delist workflow
+- create/match a customer from a confirmed sale
+- create and retrieve the associated customer order
+- associate and personalise the build user portal
+- validate delivery address and parcel data
+- get delivery rates/insurance options
+- confirm/cancel/reschedule shipment and collection bookings
+- receive/poll courier delivery and collection events
+- update order tracking and fulfilment status
 - validate a cross-listing batch
 - save a cross-listing draft
 - preview destination payloads
@@ -252,6 +311,10 @@ Add tests proportionate to the feature:
 - sale-event normalisation and API/email deduplication tests
 - unique-PC sale transaction and component inventory tests
 - equivalent-listing automatic delist/manual-task tests
+- customer matching/creation and duplicate-order tests
+- build-portal association and personalisation tests
+- delivery insurance, tracking and courier/collection booking idempotency tests
+- next-business-day fallback and manual-fulfilment-pack tests
 - notification persistence, unread/read and reduced-motion confetti tests
 - API route authentication/authorisation tests
 - component tests for selection, filtering, validation, preview and batch progress
