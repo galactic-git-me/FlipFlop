@@ -2157,11 +2157,14 @@ async def upload_build_3d_model(
     if not build:
         raise HTTPException(404, "Build not found")
 
-    _MODELS_ROOT.mkdir(parents=True, exist_ok=True)
-    filename = f"build-{build_id}-3d-{uuid.uuid4().hex}.glb"
-    local_path = _MODELS_ROOT / filename
+    # Keep manually uploaded models beside the build's photos so the complete
+    # build asset set can be backed up and moved together.
+    build_dir = _UPLOADS_ROOT / str(build_id)
+    build_dir.mkdir(parents=True, exist_ok=True)
+    filename = f"model-3d-{uuid.uuid4().hex}.glb"
+    local_path = build_dir / filename
     local_path.write_bytes(model_bytes)
-    build.model_3d_url = f"{_PUBLIC_API_BASE}/uploads/models/{filename}"
+    build.model_3d_url = f"{_PUBLIC_API_BASE}/uploads/manual_builds/{build_id}/{filename}"
     build.updated_at = datetime.utcnow()
     await db.flush()
     await db.refresh(build)

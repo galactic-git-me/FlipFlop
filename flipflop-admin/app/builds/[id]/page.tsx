@@ -46,8 +46,13 @@ const STATUS_COLOR: Record<string, string> = {
 
 function displayMediaUrl(buildId: number, url: string): string {
   if (typeof window === "undefined" || window.location.hostname !== "localhost") return url;
-  const match = url.match(/^https?:\/\/(?:www\.)?theflipflop\.shop\/media\/([^/?#]+)$/);
-  return match ? `/proxy-api/uploads/manual_builds/${buildId}/${match[1]}` : url;
+  const photoMatch = url.match(/^https?:\/\/(?:www\.)?theflipflop\.shop\/media\/([^/?#]+)$/);
+  if (photoMatch) return `/proxy-api/uploads/manual_builds/${buildId}/${photoMatch[1]}`;
+  const buildUploadMatch = url.match(/^https?:\/\/(?:www\.)?theflipflop\.shop\/api\/uploads\/manual_builds\/([^/]+)\/(.+)$/);
+  if (buildUploadMatch) return `/proxy-api/uploads/manual_builds/${buildUploadMatch[1]}/${buildUploadMatch[2]}`;
+  const modelUploadMatch = url.match(/^https?:\/\/(?:www\.)?theflipflop\.shop\/api\/uploads\/models\/(.+)$/);
+  if (modelUploadMatch) return `/proxy-api/uploads/models/${modelUploadMatch[1]}`;
+  return url;
 }
 
 // eBay's Inventory API condition values actually accepted for the "PC
@@ -1395,7 +1400,7 @@ export default function BuildDetailPage() {
                 })}
               </div>
             )}
-            {build.model_3d_url && <Build3DViewer url={build.model_3d_url} />}
+            {build.model_3d_url && <Build3DViewer url={displayMediaUrl(build.id, build.model_3d_url)} />}
           </div>
 
           {/* Branded cards */}
@@ -1911,7 +1916,7 @@ export default function BuildDetailPage() {
           price={price ? Number(price) : undefined}
           condition={condition}
           shippingCost={build.shipping_cost}
-          heroPhotoUrl={build.hero_photo_url}
+          heroPhotoUrl={build.hero_photo_url ? displayMediaUrl(build.id, build.hero_photo_url) : null}
           onClose={() => setShowEbayPreview(false)}
           isModal={true}
         />
