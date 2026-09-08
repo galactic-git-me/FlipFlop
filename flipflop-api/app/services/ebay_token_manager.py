@@ -129,13 +129,15 @@ async def get_valid_ebay_access_token(
             data={
                 "grant_type": "refresh_token",
                 "refresh_token": creds.refresh_token,
-                # sell.inventory (create/manage listings) + sell.account
+                # sell.item.draft (Seller Hub-visible drafts) + sell.inventory
+                # (create/manage listings) + sell.account
                 # (read fulfillment/payment/return Business Policies) — a
                 # refresh can only re-grant scopes already present on the
                 # refresh token's original consent, so both must also be
                 # requested in the initial browser authorize URL's scope
                 # param, not just here.
                 "scope": (
+                    "https://api.ebay.com/oauth/api_scope/sell.item.draft "
                     "https://api.ebay.com/oauth/api_scope/sell.inventory "
                     "https://api.ebay.com/oauth/api_scope/sell.account"
                 ),
