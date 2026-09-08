@@ -1872,7 +1872,10 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
             if not draft_result.get("success"):
                 error = draft_result.get("error", "eBay rejected the Seller Hub draft")
                 if "403" in error or "401" in error:
-                    error += " Reconnect eBay so the item-draft permission is granted."
+                    error += (
+                        " The eBay application keyset must have the Item Draft API permission enabled; "
+                        "after enabling it in the eBay Developer Portal, reconnect eBay."
+                    )
                 return PostToEbayResult(success=False, error=error)
             build.ebay_draft_id = draft_result.get("draft_id")
             build.ebay_draft_url = draft_result.get("draft_url")
