@@ -18,6 +18,8 @@ The user must be able to select one or many source listings, choose one or many 
 - Facebook Marketplace
 - Vinted
 
+This is also a **sales-monitoring and inventory-synchronisation system**, not merely a listing copier. It must monitor sales across every connected selling channel and react quickly when a unique pre-built computer sells.
+
 The feature must be honest about integration capability. Do not create fake “published” results, mock URLs, or pretend that a platform API exists. Before implementation, verify the current official seller/API capabilities and document any platform limitation. Where direct API publishing is unavailable or not permitted, provide a compliant manual-assist/export workflow with clear status such as `manual_action_required`.
 
 ## Repository context to preserve
@@ -98,6 +100,14 @@ Implement platform adapters/mappers rather than putting platform conditionals th
 
 The canonical model remains the source of truth for shared content, while platform overrides are stored separately and never overwrite the canonical data accidentally.
 
+### Content copied to every channel
+
+- When a listing is cross-listed, copy the source listing’s photos, photo order, title, description, bullet points, FAQs, specifications, warranty text, price, stock and shipping information into the destination payload wherever that platform supports the field.
+- Preserve the original source content in the canonical product record. Platform-specific transformations may resize/reorder images, truncate titles, convert formatting or map fields, but must not destroy the original.
+- Show exactly what was copied, transformed, omitted or requires manual editing for each destination.
+- Keep content synchronised on update: when the canonical title, description, photos, price or stock changes, identify affected channel listings and offer/update them through the supported adapter. Record whether each channel was updated successfully.
+- Do not copy an image by hotlinking a private/local URL. Use an approved public asset URL or a secure provider upload flow and verify that the resulting image is reachable.
+
 ### Review and edit UI
 
 - Before publishing, show a per-platform preview/editor for every selected destination.
@@ -122,6 +132,43 @@ The canonical model remains the source of truth for shared content, while platfo
 - Provide `View live listing`, `Retry`, `Edit draft`, `Download manual pack`, and, only where supported, `Update`/`End listing` actions.
 - Add a reconciliation/refresh action to compare local status with each platform.
 
+### Sales monitoring across all channels
+
+This is a critical requirement and must be implemented as a durable backend capability, not only as a browser-page feature.
+
+- Monitor sales/orders across every connected channel: eBay UK, FlipFlop.shop, OnBuy, Amazon, Facebook/Meta commerce route and Vinted where an official supported integration exists.
+- Prefer official order APIs and webhooks. Where a provider has no usable webhook, use its official order API on a scheduled polling interval with provider-specific rate limits and a stored cursor/last-seen timestamp.
+- Also support a secure email-monitoring fallback for sales notifications sent to `mac@theflipflop.shop` when a channel does not offer a usable API. Do not scrape arbitrary inboxes or store the mailbox password in the frontend. Use an approved IMAP/OAuth/app-password mechanism, server-side secret storage, sender/message validation, idempotent message processing and a processed-message audit record.
+- Parse email only from configured/verified sender addresses and known templates. Treat email content as untrusted input; never execute links or instructions from an email.
+- Normalise every sale into one internal sale/order event with channel, external order ID, external listing ID, canonical product/build ID, sale price, quantity, timestamp, buyer/shipping details only where necessary, and evidence/source.
+- Deduplicate events by channel + external order/event ID and by a deterministic fallback fingerprint for email events. Reprocessing the same webhook, poll result or email must be safe.
+- Reconcile API, webhook and email evidence when more than one source reports the same sale. Do not create duplicate orders or send repeated notifications.
+
+### Sale reaction for unique pre-built PCs
+
+For a unique pre-built computer, once a sale is confirmed on any channel:
+
+1. Mark the canonical build/product as sold and unavailable in the backend.
+2. Mark the sale platform, sale/order reference, sale time and realised sale price.
+3. Mark the complete computer and every installed component in the inventory system as allocated/sold, preserving serial numbers and the audit trail. Do not mark unrelated spare components as sold.
+4. Locate all equivalent live/draft listings on the other connected platforms by canonical product/build identity, SKU, channel listing ID and safe matching rules.
+5. End/deactivate/cancel those equivalent listings through official APIs where supported. If a channel is manual-only, create a high-priority manual delist task and include the direct listing link/instructions.
+6. If a delist fails, retry safe transient failures and prominently show the remaining live listing so the user can act immediately.
+7. Prevent a second sale race by using a backend transaction/lock or equivalent idempotent state transition before attempting downstream delists.
+8. Record a complete audit event showing the triggering sale, inventory changes, delist attempts/results and any manual actions still required.
+
+Do not end listings merely because a sale email is ambiguous. Require a confidently matched canonical product/build and a confirmed sale event, otherwise flag it for admin review.
+
+### Admin sale notifications and confetti
+
+- Create a durable admin notification for every confirmed sale and important downstream result, including: platform sold on, product/build, sale price, inventory updated, listings ended, failures and manual actions required.
+- Notifications must survive page reloads and be stored server-side with `unread`, `read_at`, severity, type, related sale/job IDs and timestamps.
+- Show an in-app notification/toast immediately when the app is open, with a notification centre/badge and a detail view.
+- For a confirmed successful sale of a pre-built PC, trigger celebratory confetti across the admin screen. Confetti must continue or re-trigger at a controlled, accessible rate until the specific sale notification is marked as read, then stop immediately.
+- Respect reduced-motion preferences: replace or minimise confetti for users who prefer reduced motion while still showing the persistent notification.
+- Marking a notification read must be an explicit, authenticated server-side action and must be idempotent across multiple open tabs.
+- Avoid duplicate confetti/notifications when the same sale event is received through both API and email.
+
 ### Inventory and overselling protection
 
 - Treat quantity as shared inventory when the product/build is cross-listed.
@@ -129,6 +176,7 @@ The canonical model remains the source of truth for shared content, while platfo
 - Do not publish the same unique PC to several channels with quantity greater than one unless explicitly configured.
 - Clearly warn before publishing a unique item to multiple destinations.
 - Design webhook/order-event handling where provider APIs support it; otherwise provide scheduled reconciliation and document the limitation.
+- Add automated tests for the sale-confirmation transaction, equivalent-listing delisting, component inventory updates, duplicate-event handling and notification read/confetti lifecycle.
 
 ### Credentials and settings
 
@@ -176,6 +224,11 @@ Use the existing Next.js proxy/backend architecture and authentication. Add type
 - list source listings
 - refresh/reconcile source listings
 - list channel connections/capabilities
+- get monitored sales/orders and reconciliation status
+- receive/process provider webhooks where supported
+- run/poll email sales monitoring securely where configured
+- list unread notifications and mark a notification read
+- trigger/reconcile the sold-product cross-channel delist workflow
 - validate a cross-listing batch
 - save a cross-listing draft
 - preview destination payloads
@@ -196,6 +249,10 @@ Add tests proportionate to the feature:
 - deduplication and unique-inventory tests
 - idempotency and retry tests
 - provider error classification tests
+- sale-event normalisation and API/email deduplication tests
+- unique-PC sale transaction and component inventory tests
+- equivalent-listing automatic delist/manual-task tests
+- notification persistence, unread/read and reduced-motion confetti tests
 - API route authentication/authorisation tests
 - component tests for selection, filtering, validation, preview and batch progress
 - Playwright coverage for the main happy path, partial failure, manual-only destination, refresh, retry and duplicate protection
