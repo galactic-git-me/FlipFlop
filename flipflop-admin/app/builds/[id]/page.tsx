@@ -44,6 +44,12 @@ const STATUS_COLOR: Record<string, string> = {
   sold: "text-slate-400 border-slate-400/30 bg-slate-400/5",
 };
 
+function displayMediaUrl(buildId: number, url: string): string {
+  if (typeof window === "undefined" || window.location.hostname !== "localhost") return url;
+  const match = url.match(/^https?:\/\/(?:www\.)?theflipflop\.shop\/media\/([^/?#]+)$/);
+  return match ? `/proxy-api/uploads/manual_builds/${buildId}/${match[1]}` : url;
+}
+
 // eBay's Inventory API condition values actually accepted for the "PC
 // Desktops & All-in-Ones" category (179) — confirmed via the Metadata API's
 // item condition policy. This category doesn't support the graded
@@ -1203,7 +1209,7 @@ export default function BuildDetailPage() {
                     </div>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={p.url}
+                      src={displayMediaUrl(build.id, p.url)}
                       alt={`${build.name} photo ${photoIdx + 1}`}
                       className="w-full h-full object-cover pointer-events-none"
                       draggable={false}
@@ -1359,7 +1365,7 @@ export default function BuildDetailPage() {
                               className={`relative h-20 w-20 shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 ${isSelected ? "border-cyan-300" : "border-white/10 hover:border-white/30"}`}
                             >
                               {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img src={photo.url} alt="" className="h-full w-full object-cover" />
+                              <img src={displayMediaUrl(build.id, photo.url)} alt="" className="h-full w-full object-cover" />
                               <span className={`absolute right-1 top-1 grid h-5 w-5 place-items-center rounded-full text-[10px] font-black ${isSelected ? "bg-cyan-300 text-slate-950" : "bg-slate-950/80 text-slate-300"}`}>
                                 {isSelected ? selected.indexOf(photo.url) + 1 : index + 1}
                               </span>
@@ -1405,12 +1411,14 @@ export default function BuildDetailPage() {
                 <BrandedCardTile
                   label="Spec Card"
                   photo={specCard}
+                  buildId={build.id}
                   loading={generatingCard === "spec_card"}
                   onGenerate={() => generateBrandedCard("spec_card", build)}
                 />
                 <BrandedCardTile
                   label="Registration Plate"
                   photo={registrationPlate}
+                  buildId={build.id}
                   loading={generatingCard === "registration_plate"}
                   onGenerate={() => generateBrandedCard("registration_plate", build)}
                 />
@@ -1898,7 +1906,7 @@ export default function BuildDetailPage() {
         <EbayListingHTMLPreview
           title={build.generated_title}
           description={build.generated_description}
-          images={build.photos?.filter((p) => p.kind === "photo").map((p) => p.url) || []}
+          images={build.photos?.filter((p) => p.kind === "photo").map((p) => displayMediaUrl(build.id, p.url)) || []}
           aspects={build.generated_aspects}
           price={price ? Number(price) : undefined}
           condition={condition}
@@ -1992,11 +2000,13 @@ function ChannelBadge({
 function BrandedCardTile({
   label,
   photo,
+  buildId,
   loading,
   onGenerate,
 }: {
   label: string;
   photo?: { url: string; kind: string };
+  buildId: number;
   loading: boolean;
   onGenerate: () => void;
 }) {
@@ -2004,9 +2014,9 @@ function BrandedCardTile({
     <div className="flex flex-col gap-2">
       <div className="aspect-[3/2] rounded-lg overflow-hidden bg-slate-800 border border-white/[0.07] flex items-center justify-center">
         {photo ? (
-          <a href={photo.url} target="_blank" rel="noopener noreferrer" title="View full size">
+          <a href={displayMediaUrl(buildId, photo.url)} target="_blank" rel="noopener noreferrer" title="View full size">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={photo.url} alt={label} className="w-full h-full object-cover" />
+            <img src={displayMediaUrl(buildId, photo.url)} alt={label} className="w-full h-full object-cover" />
           </a>
         ) : (
           <IdCard className="w-6 h-6 text-slate-700" />
@@ -2023,7 +2033,7 @@ function BrandedCardTile({
         </button>
         {photo && (
           <a
-            href={photo.url}
+            href={displayMediaUrl(buildId, photo.url)}
             download={`${label.toLowerCase().replace(/\s+/g, "-")}.png`}
             title={`Download ${label}`}
             className="flex items-center justify-center px-2.5 border border-white/[0.1] hover:border-white/[0.25] text-slate-300 rounded-lg transition-colors"
