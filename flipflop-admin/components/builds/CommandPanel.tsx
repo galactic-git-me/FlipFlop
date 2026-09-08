@@ -135,7 +135,7 @@ export function CommandPanel({
       ) : (
         <>
           <RailButton
-            label="Publish draft to eBay"
+            label="Save eBay API draft"
             icon={FilePenLine}
             onClick={onPublishEbayDraft}
             disabled={isLoading || isPublishingEbayDraft || !onPublishEbayDraft || !!ebayStatus?.remoteStatus && ebayStatus.remoteStatus === "draft"}

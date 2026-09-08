@@ -649,7 +649,7 @@ export default function BuildDetailPage() {
       if (!result.success) throw new Error(result.error ?? "eBay rejected the draft");
       const refreshed = await api.manualBuilds.get(buildId);
       setBuild(refreshed);
-      toast.success("Draft created on eBay. Review it, then publish when ready.");
+      toast.success("eBay API draft saved. It is held in Inventory and will not appear in Seller Hub Drafts; publish it here when ready.");
     } catch (error) {
       toast.error(`Couldn't create the eBay draft: ${error instanceof Error ? error.message : "Unknown error"}`);
     } finally {
