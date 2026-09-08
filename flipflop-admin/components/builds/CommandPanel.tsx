@@ -143,7 +143,7 @@ export function CommandPanel({
             accent="amber"
           />
           <RailButton
-            label="Publish to eBay"
+            label="Open Seller Hub draft"
             icon={Send}
             onClick={onPublishEbayLive}
             disabled={isLoading || isPublishingEbayLive || !onPublishEbayLive || ebayStatus?.remoteStatus !== "draft"}

@@ -190,6 +190,8 @@ export interface ManualBuild {
     ebay_listing_id: string | null;
     ebay_listing_url: string | null;
     ebay_offer_id?: string | null;
+    ebay_draft_id?: string | null;
+    ebay_draft_url?: string | null;
     ebay_listing_status?: "never_listed" | "draft" | "active" | "sold" | "ended" | "missing" | "unknown";
     ebay_listing_status_checked_at?: string | null;
     ebay_listing_end_reason?: string | null;
@@ -761,7 +763,7 @@ export const api = {
         body: JSON.stringify(data),
       }),
     postToEbay: (id: number, data: { price: number; condition: string; publish?: boolean }) =>
-      request<{ success: boolean; listing_id?: string; url?: string; error?: string }>(
+      request<{ success: boolean; listing_id?: string; url?: string; error?: string; draft_id?: string; draft_url?: string }>(
         `/manual-builds/${id}/post-to-ebay`,
         { method: "POST", body: JSON.stringify(data) },
       ),

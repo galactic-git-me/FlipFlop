@@ -28,6 +28,9 @@ class ManualBuild(Base):
     # Unpublished eBay Inventory API offer retained between "draft" and
     # "publish" actions.
     ebay_offer_id: Mapped[str | None] = mapped_column(String(60))
+    # eBay-native Listing API draft shown in the seller's eBay listing UX.
+    ebay_draft_id: Mapped[str | None] = mapped_column(String(100))
+    ebay_draft_url: Mapped[str | None] = mapped_column(String(500))
     ebay_listing_url: Mapped[str | None] = mapped_column(String(300))
     # Remote lifecycle last confirmed with eBay. Kept separate from the
     # build workflow status so an ended listing is not confused with a build

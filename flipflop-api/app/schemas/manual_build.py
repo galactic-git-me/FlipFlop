@@ -59,6 +59,8 @@ class ManualBuildOut(BaseModel):
     generated_aspects: Optional[dict[str, list[str]]] = None
     ebay_listing_id: Optional[str]
     ebay_offer_id: Optional[str] = None
+    ebay_draft_id: Optional[str] = None
+    ebay_draft_url: Optional[str] = None
     ebay_listing_url: Optional[str]
     ebay_sku: Optional[str] = None
     ebay_listing_status: str = "never_listed"
@@ -187,6 +189,8 @@ class PostToEbayResult(BaseModel):
     error: Optional[str] = None
     action: Optional[str] = None  # "posted" or "updated"
     offer_id: Optional[str] = None
+    draft_id: Optional[str] = None
+    draft_url: Optional[str] = None
 
 
 class SetHeroPhotoRequest(BaseModel):

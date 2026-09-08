@@ -497,7 +497,7 @@ async def list_builds(include_archived: bool = False, db: AsyncSession = Depends
                 log.warning("manual_build.ebay_reconcile_on_list_failed", build_id=build.id, error=str(exc))
                 build.ebay_listing_status = "unknown"
         else:
-            build.ebay_listing_status = "draft" if build.ebay_offer_id else "never_listed"
+            build.ebay_listing_status = "draft" if (build.ebay_offer_id or build.ebay_draft_id) else "never_listed"
 
     storefront_product_ids = {build.storefront_product_id for build in builds if build.storefront_product_id}
     storefront_products: dict[int, Product] = {}
@@ -1727,7 +1727,7 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
     # A draft is a real eBay offer, so don't create a second offer for the
     # same build when the user clicks the draft button more than once. Live
     # listings are likewise protected from an accidental duplicate listing.
-    if not body.publish and (build.ebay_listing_id or build.ebay_offer_id):
+    if not body.publish and (build.ebay_listing_id or build.ebay_offer_id or build.ebay_draft_id):
         raise HTTPException(400, "This build already has an eBay listing or draft offer. Publish the existing draft or end the listing first.")
 
     # Persist the seller's asking price as build configuration before making
@@ -1839,6 +1839,40 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
         fulfillment_policy_id = build.fulfillment_policy_id
 
     try:
+        # Seller Hub drafts use eBay's Listing API, not an unpublished
+        # Inventory API offer. The latter is API-only and never appears in
+        # Seller Hub Drafts.
+        if not body.publish:
+            poster = EbayListingPoster(environment=listing_environment, access_token=oauth_token)
+            draft_result = await poster.create_item_draft(
+                title=build.generated_title,
+                description=build.generated_description,
+                price=body.price,
+                image_urls=image_urls,
+                condition=body.condition,
+                aspects=build.generated_aspects or {},
+            )
+            if not draft_result.get("success"):
+                error = draft_result.get("error", "eBay rejected the Seller Hub draft")
+                if "sell.item.draft" in error or "403" in error or "401" in error:
+                    error += " Reconnect eBay so the new sell.item.draft permission is granted."
+                return PostToEbayResult(success=False, error=error)
+            build.ebay_draft_id = draft_result.get("draft_id")
+            build.ebay_draft_url = draft_result.get("draft_url")
+            build.ebay_offer_id = None
+            build.ebay_sku = None
+            build.ebay_listing_status = "draft"
+            build.ebay_listing_status_checked_at = datetime.utcnow()
+            build.ebay_listing_end_reason = None
+            build.updated_at = datetime.utcnow()
+            await db.flush()
+            return PostToEbayResult(
+                success=True,
+                action="drafted",
+                draft_id=draft_result.get("draft_id"),
+                draft_url=draft_result.get("draft_url"),
+            )
+
         # Reconcile before choosing create vs revise. An ID by itself only
         # proves this build was listed historically; it does not prove that
         # the offer is still live.
@@ -1961,11 +1995,22 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
 
 @router.post("/{build_id}/publish-ebay-draft", response_model=PostToEbayResult)
 async def publish_ebay_draft(build_id: int, db: AsyncSession = Depends(get_db)):
-    """Publish the unpublished eBay Inventory API offer saved for a build."""
+    """Publish a legacy Inventory offer, if present.
+
+    eBay-native Seller Hub drafts are completed in eBay's listing experience;
+    their response contains the continuation URL and they do not expose the
+    Inventory API publishOffer lifecycle.
+    """
     result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
     build = result.scalar_one_or_none()
     if not build:
         raise HTTPException(404, "Build not found")
+    if build.ebay_draft_id:
+        raise HTTPException(
+            409,
+            "This is an eBay Seller Hub draft. Open the saved eBay draft URL to review and publish it there.",
+            headers={"X-EBAY-DRAFT-URL": build.ebay_draft_url or ""},
+        )
     if not build.ebay_offer_id:
         raise HTTPException(400, "Create an eBay draft before publishing it.")
 
@@ -1984,6 +2029,8 @@ async def publish_ebay_draft(build_id: int, db: AsyncSession = Depends(get_db)):
     build.ebay_listing_id = published["listing_id"]
     build.ebay_listing_url = published["url"]
     build.ebay_offer_id = None
+    build.ebay_draft_id = None
+    build.ebay_draft_url = None
     build.ebay_listing_status = "active"
     build.ebay_listing_status_checked_at = datetime.utcnow()
     build.ebay_listing_end_reason = None

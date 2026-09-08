@@ -277,6 +277,72 @@ class EbayListingPoster:
             token_data = token_resp.json()
             return token_data.get("access_token")
 
+    async def create_item_draft(
+        self,
+        title: str,
+        description: str,
+        price: float,
+        image_urls: list[str],
+        category_id: str = "179",
+        condition: str = "USED_EXCELLENT",
+        aspects: Optional[dict[str, list[str]]] = None,
+    ) -> dict:
+        """Create an eBay-native draft for the seller's eBay listing UX."""
+        try:
+            image_urls = _normalise_ebay_image_urls(image_urls)
+        except ValueError as exc:
+            return {"success": False, "error": str(exc)}
+
+        if not self.access_token:
+            return {"success": False, "error": "eBay user OAuth token required"}
+
+        product_aspects = [
+            {"name": name, "values": [str(value) for value in values]}
+            for name, values in (aspects or {}).items()
+            if values
+        ]
+        payload = {
+            "categoryId": str(category_id),
+            "condition": condition,
+            "format": "FIXED_PRICE",
+            "pricingSummary": {"price": {"currency": "GBP", "value": f"{price:.2f}"}},
+            "product": {
+                "title": title[:80],
+                "description": description,
+                "imageUrls": image_urls,
+                "aspects": product_aspects,
+            },
+        }
+        headers = {
+            "Authorization": f"Bearer {self.access_token}",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Content-Language": "en-GB",
+            "X-EBAY-C-MARKETPLACE-ID": "EBAY_GB",
+        }
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.post(
+                    f"{self.base_url}/sell/listing/v1_beta/item_draft",
+                    json=payload,
+                    headers=headers,
+                )
+            if response.status_code not in (200, 201):
+                return {
+                    "success": False,
+                    "error": f"eBay Seller Hub draft creation failed ({response.status_code}): {response.text[:500]}",
+                }
+            data = response.json()
+            return {
+                "success": True,
+                "draft_id": data.get("itemDraftId"),
+                "draft_url": data.get("sellFlowUrl") or data.get("sellFlowNativeUri"),
+                "status": "DRAFT",
+            }
+        except Exception as exc:
+            log.exception("ebay.item_draft_creation_failed")
+            return {"success": False, "error": f"eBay Seller Hub draft request failed: {exc}"}
+
     async def create_listing(
         self,
         title: str,
