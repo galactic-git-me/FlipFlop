@@ -1743,7 +1743,8 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
     # listings are likewise protected from an accidental duplicate listing.
     # A stored Inventory offer/listing ID does not mean a Seller Hub draft
     # exists. Seller Hub draft uploads are intentionally allowed here so an
-    # old API-only record cannot block creation of the requested draft.
+    # old API-only record cannot block creation of the requested draft. The
+    # production Seller Hub feed is the source of truth for this operation.
 
     # Persist the seller's asking price as build configuration before making
     # the external eBay request. This keeps the value after reloads and also
