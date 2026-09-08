@@ -19,6 +19,11 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.join(__dirname),
   },
+  // GLB uploads are proxied through the Next.js route handler before they
+  // reach FastAPI. Keep this in sync with the backend's 100 MB model limit.
+  experimental: {
+    proxyClientMaxBodySize: "100mb",
+  },
   transpilePackages: ["three", "postprocessing"],
   allowedDevOrigins: allowedOrigins,
   // Prevent Next.js stripping trailing slashes before proxying — FastAPI
