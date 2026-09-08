@@ -368,6 +368,14 @@ class EbayListingPoster:
                     headers=headers,
                 )
             if response.status_code not in (200, 201):
+                if response.status_code == 404:
+                    return {
+                        "success": False,
+                        "error": (
+                            "eBay Item Draft API is unavailable for this application keyset (404). "
+                            "Enable the Item Draft API permission for the eBay app, then reconnect eBay."
+                        ),
+                    }
                 return {
                     "success": False,
                     "error": f"eBay Seller Hub draft creation failed ({response.status_code}): {response.text[:500]}",
