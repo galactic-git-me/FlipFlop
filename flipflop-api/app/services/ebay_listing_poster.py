@@ -41,6 +41,24 @@ EBAY_LISTING_DESCRIPTION_MAX_LENGTH = 500_000
 EBAY_MAX_IMAGE_URLS = 24
 
 
+def _feed_task_id(response: httpx.Response) -> str | None:
+    """Extract a Sell Feed task ID from JSON or eBay's Location header.
+
+    eBay's create-task response is allowed to have an empty body; the
+    documented task URL is returned in ``Location`` instead.
+    """
+    try:
+        payload = response.json()
+    except ValueError:
+        payload = None
+    if isinstance(payload, dict) and payload.get("taskId"):
+        return str(payload["taskId"])
+
+    location = response.headers.get("location", "")
+    match = re.search(r"/task/([^/?#]+)", location)
+    return match.group(1) if match else None
+
+
 def _normalise_ebay_image_urls(image_urls: list[str]) -> list[str]:
     """Return the public HTTPS image URLs accepted by eBay's Inventory API.
 
@@ -379,9 +397,15 @@ class EbayListingPoster:
                 )
                 if task_response.status_code not in (200, 201, 202):
                     return {"success": False, "error": f"eBay Seller Hub feed task failed ({task_response.status_code}): {task_response.text[:500]}"}
-                task_id = task_response.json().get("taskId")
+                task_id = _feed_task_id(task_response)
                 if not task_id:
-                    return {"success": False, "error": "eBay did not return a Seller Hub feed task ID"}
+                    return {
+                        "success": False,
+                        "error": (
+                            "eBay did not return a Seller Hub feed task ID "
+                            f"(Location: {task_response.headers.get('location', 'missing')})"
+                        ),
+                    }
 
                 upload_response = await client.post(
                     f"{self.base_url}/sell/feed/v1/task/{task_id}/upload_file",
