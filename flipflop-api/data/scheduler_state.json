@@ -6,16 +6,16 @@
     "last_success_at": "2026-09-09T02:51:28.979780+00:00"
   },
   "deferred_publish": {
-    "last_success_at": "2026-09-09T02:51:28.996684+00:00"
+    "last_success_at": "2026-09-09T03:06:30.620340+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-09-09T02:57:29.129768+00:00"
+    "last_success_at": "2026-09-09T03:02:29.079287+00:00"
   },
   "ai_build_generator": {
     "last_success_at": "2026-09-09T02:16:28.653854+00:00"
   },
   "compliant_market_ingestion": {
-    "last_success_at": "2026-09-09T02:06:28.660123+00:00"
+    "last_success_at": "2026-09-09T03:06:28.992106+00:00"
   },
   "manual_build_recreate_cycle": {
     "last_success_at": "2026-09-09T02:06:29.477585+00:00"
@@ -36,7 +36,7 @@
     "last_success_at": "2026-09-09T02:06:29.993958+00:00"
   },
   "catalogue_pipeline": {
-    "last_success_at": "2026-09-09T02:06:30.035786+00:00"
+    "last_success_at": "2026-09-09T03:06:32.091952+00:00"
   },
   "message_poll": {
     "last_success_at": "2026-09-09T02:36:29.634421+00:00"
