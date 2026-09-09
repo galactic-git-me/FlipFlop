@@ -1,54 +1,54 @@
 {
   "ram_watcher": {
-    "last_success_at": "2026-09-09T07:51:28.827714+00:00"
+    "last_success_at": "2026-09-09T08:06:29.449791+00:00"
   },
   "manual_build_deferred_publish": {
-    "last_success_at": "2026-09-09T07:51:28.831527+00:00"
+    "last_success_at": "2026-09-09T08:06:29.466583+00:00"
   },
   "deferred_publish": {
-    "last_success_at": "2026-09-09T07:51:28.836894+00:00"
+    "last_success_at": "2026-09-09T08:06:29.473380+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-09-09T08:02:29.092357+00:00"
+    "last_success_at": "2026-09-09T08:07:29.096466+00:00"
   },
   "ai_build_generator": {
     "last_success_at": "2026-09-09T07:16:28.663525+00:00"
   },
   "compliant_market_ingestion": {
-    "last_success_at": "2026-09-09T07:06:28.655810+00:00"
+    "last_success_at": "2026-09-09T08:06:28.661550+00:00"
   },
   "manual_build_recreate_cycle": {
-    "last_success_at": "2026-09-09T07:06:29.785210+00:00"
+    "last_success_at": "2026-09-09T08:06:29.465851+00:00"
   },
   "offer_poll": {
-    "last_success_at": "2026-09-09T07:36:29.225268+00:00"
+    "last_success_at": "2026-09-09T08:06:29.464666+00:00"
   },
   "retrain_checkpoint_watchdog": {
-    "last_success_at": "2026-09-09T07:06:29.788065+00:00"
+    "last_success_at": "2026-09-09T08:06:29.467210+00:00"
   },
   "outcome_capture": {
-    "last_success_at": "2026-09-09T07:06:29.798426+00:00"
+    "last_success_at": "2026-09-09T08:06:29.477534+00:00"
   },
   "recreate_cycle": {
-    "last_success_at": "2026-09-09T07:06:29.795042+00:00"
+    "last_success_at": "2026-09-09T08:06:29.472592+00:00"
   },
   "playbook_evolution": {
-    "last_success_at": "2026-09-09T07:06:30.256790+00:00"
+    "last_success_at": "2026-09-09T08:06:29.936099+00:00"
   },
   "catalogue_pipeline": {
-    "last_success_at": "2026-09-09T07:06:30.286387+00:00"
+    "last_success_at": "2026-09-09T08:06:30.350218+00:00"
   },
   "message_poll": {
-    "last_success_at": "2026-09-09T07:36:29.706038+00:00"
+    "last_success_at": "2026-09-09T08:06:30.665810+00:00"
   },
   "manual_build_offer_poll": {
-    "last_success_at": "2026-09-09T07:36:29.603458+00:00"
+    "last_success_at": "2026-09-09T08:06:30.677470+00:00"
   },
   "case_content_sourcing": {
-    "last_success_at": "2026-09-09T07:36:49.724232+00:00"
+    "last_success_at": "2026-09-09T08:06:50.107391+00:00"
   },
   "ebay_sales_tracker": {
-    "last_success_at": "2026-09-09T07:38:32.288264+00:00"
+    "last_success_at": "2026-09-09T08:08:32.597777+00:00"
   },
   "external_demand": {
     "last_success_at": "2026-09-09T06:09:03.313513+00:00"
