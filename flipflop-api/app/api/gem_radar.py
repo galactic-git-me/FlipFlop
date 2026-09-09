@@ -2269,6 +2269,29 @@ async def _submit_scan_body(
     from app.gem_radar.cpk_pipeline import assign_cpk_and_accumulate_price
     from app.gem_radar.observations import find_existing_listing
 
+    # Search terms are configured by component category, but individual
+    # listing payloads do not carry that field.  Preserve the search-level
+    # hint for CPK extraction so the model does not have to infer "case" from
+    # noisy marketplace titles alone.
+    query_lower = payload.query.lower()
+    category_terms = (
+        ("motherboard", ("motherboard",)),
+        ("cooler", ("cooler", "heatsink")),
+        ("case", ("case", "chassis")),
+        ("psu", ("power supply", "psu")),
+        ("gpu", ("graphics card", "gpu")),
+        ("ssd", ("nvme", "ssd")),
+        ("ram", ("udimm", "memory", "ram")),
+        ("cpu", ("processor", "cpu")),
+    )
+    category_matches = [
+        (len(term), category)
+        for category, terms in category_terms
+        for term in terms
+        if term in query_lower
+    ]
+    category_hint = max(category_matches, default=(0, None))[1]
+
     excluded_auction_count = 0
     ingested_count = 0
     cpk_assigned_count = 0
@@ -2411,7 +2434,7 @@ async def _submit_scan_body(
                         task_db,
                         listing.listing_id,
                         listing.title,
-                        category=None,
+                        category=category_hint,
                         condition=listing.condition_normalised,
                         price=listing.current_delivered_price,
                         scan_price=listing.scan_price,

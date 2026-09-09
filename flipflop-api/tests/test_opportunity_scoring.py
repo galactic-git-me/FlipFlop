@@ -3,6 +3,7 @@ from app.gem_radar.opportunity_scoring import (
     identity_gates, liquidity_score, risk_safety_score, robust_sold_market,
     score_opportunity, sell_through_rate_pct,
 )
+from app.gem_radar.cpk_extractor import extract_case_identity
 
 
 def comps(values, subject="999"):
@@ -65,6 +66,13 @@ def test_case_parts_are_still_rejected():
     case = {"category": "case", "brand": "corsair", "model": "4000d"}
     assert "accessory_or_parts_listing" in identity_gates(
         "Corsair 4000D replacement panel only", case
+    )
+
+
+def test_case_identity_parser_handles_bundles_and_empty_chassis():
+    assert extract_case_identity("NZXT H1 PC Case Only with 650W PSU") == ("nzxt", "h1")
+    assert extract_case_identity("Fractal Design Define R5 Empty Chassis with Fans") == (
+        "fractal-design", "define-r5"
     )
 
 

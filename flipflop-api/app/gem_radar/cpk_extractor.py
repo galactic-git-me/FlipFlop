@@ -54,6 +54,38 @@ _PLACEHOLDER_ECHO_MARKERS = (
     "no spaces",
 )
 
+# Common chassis families are much easier to identify deterministically than
+# through a free-form model response.  This also handles used/empty cases and
+# case bundles, where the title often contains plenty of useful identity but
+# little prose the LLM can rely on.
+_CASE_FAMILY_PATTERNS = (
+    ("corsair", r"(?:3500x|4000d|5000d|6500d|7000d|2500x|2500d|frame\s+4000d)"),
+    ("nzxt", r"(?:h[1-9]\d?|f[1-9]\d?|h[2-9]\d{2}|f[2-9]\d{2})"),
+    ("fractal-design", r"(?:define\s+[rst]\d+|focus\s+g|meshify\s+[a-z]\d*|north(?:\s+xl)?)"),
+    ("cooler-master", r"(?:nr\d{3,4}p?(?:\s+max)?|masterbox\s+[a-z0-9-]+)"),
+    ("phanteks", r"(?:evolv(?:\s+x2?)?|nv\d{2,3}|g\d{2,3})"),
+    ("montech", r"(?:air\s*\d{2,3}|sky\s*(?:two|one)|hs\d{2,3})"),
+    ("kolink", r"(?:inspire\s+[a-z]\d+|observatory\s+[a-z]\d+)"),
+    ("lian-li", r"(?:o\d{2,3}|lancool\s+[a-z0-9-]+|dynamic\s+[a-z0-9-]+)"),
+    ("antec", r"(?:nx\d{3}|p\d{3}|df\d{2,3})"),
+    ("thermaltake", r"(?:core\s+[a-z0-9-]+|versa\s+[a-z0-9-]+)"),
+)
+
+
+def extract_case_identity(title: str) -> tuple[str, str] | None:
+    """Return a conservative (brand, model) for recognisable PC cases."""
+    lowered = title.lower()
+    if not re.search(r"\b(?:pc|computer)\s+(?:case|chassis)\b|\bchassis\b", lowered):
+        return None
+    for brand, model_pattern in _CASE_FAMILY_PATTERNS:
+        brand_pattern = re.escape(brand).replace(r"\-", r"\s+")
+        match = re.search(rf"\b{brand_pattern}\b", lowered)
+        if match:
+            model = re.search(model_pattern, lowered[match.end():])
+            if model:
+                return brand, _slug(model.group(0))
+    return None
+
 
 def _is_placeholder_echo(value: str) -> bool:
     lowered = value.lower()
@@ -127,6 +159,19 @@ async def extract_cpk(
     Returns:
         ExtractedProductData with CPK, or None if extraction fails/confidence too low
     """
+    case_identity = extract_case_identity(title)
+    if case_identity and (category is None or category == "case"):
+        brand, model = case_identity
+        cpk_input = f"case|{brand}|{model}"
+        return ExtractedProductData(
+            category="case",
+            brand=brand,
+            model=model,
+            specs={},
+            confidence=0.92,
+            cpk=hashlib.sha256(cpk_input.encode()).hexdigest()[:16],
+        )
+
     prompt = f"""You are a PC hardware product data extractor. Extract structured info from this listing title.
 
 TITLE: {title}
@@ -155,6 +200,12 @@ RULES:
 5. confidence: 1.0=perfect extraction, 0.5=partial/ambiguous, 0.0=unrecognizable
 6. Return empty/unmatched specs as null, not strings
 
+CASE GUIDANCE:
+   - A case-only or empty-chassis listing is still a valid case product
+   - A case bundled with a PSU or fans is still a valid case product
+   - Use the chassis brand/model as the identity; do not reject it because
+     other included items are mentioned
+
 EXAMPLES:
 Input: "AMD Ryzen 7 3800X 8-Core 16-Thread Socket AM4 Processor"
 Output: {{"category":"cpu","brand":"amd","model":"ryzen-7-3800x","specs":{{"cores":8,"threads":16,"socket":"am4"}},"confidence":0.95,"extraction_notes":"clear specs"}}
@@ -181,7 +232,9 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
     ):
         log.warning("cpk_extractor.no_model_endpoint")
         return None
-    max_attempts = 1
+    # Retry only plausibly transient failures. Low-confidence or malformed
+    # model output is a data-quality result and should remain rejected.
+    max_attempts = 2
     timeout = httpx.Timeout(20.0, connect=3.0)
 
     for attempt in range(max_attempts):
@@ -228,11 +281,16 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
                         json=request_body,
                     )
 
-                if resp.status_code == 500 and not use_openrouter:
-                    log.warning("cpk_extractor.ollama_error", status=resp.status_code, attempt=attempt)
-                    return None
-                elif resp.status_code != 200:
-                    log.warning("cpk_extractor.ollama_error", status=resp.status_code)
+                if resp.status_code != 200:
+                    transient_status = resp.status_code in {408, 429} or resp.status_code >= 500
+                    if transient_status and attempt + 1 < max_attempts:
+                        log.warning(
+                            "cpk_extractor.transient_error_retry",
+                            status=resp.status_code,
+                            attempt=attempt,
+                        )
+                        continue
+                    log.warning("cpk_extractor.model_error", status=resp.status_code, attempt=attempt)
                     return None
 
                 # Success, process response
@@ -315,6 +373,16 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
                     cpk=cpk,
                 )
 
+        except (httpx.TimeoutException, httpx.NetworkError) as exc:
+            if attempt + 1 < max_attempts:
+                log.warning(
+                    "cpk_extractor.transient_failure_retry",
+                    error=str(exc),
+                    attempt=attempt,
+                )
+                continue
+            log.warning("cpk_extractor.exception", error=str(exc), title=_safe_title(title))
+            return None
         except Exception as exc:
             log.warning("cpk_extractor.exception", error=str(exc), title=_safe_title(title))
             return None
