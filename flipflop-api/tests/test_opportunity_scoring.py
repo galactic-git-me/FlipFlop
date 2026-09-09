@@ -48,6 +48,26 @@ def test_full_system_and_value_variant_identity_gates():
     )
 
 
+def test_case_only_empty_chassis_and_case_bundles_remain_eligible():
+    case = {"category": "case", "brand": "nzxt", "model": "h1"}
+    assert "accessory_or_parts_listing" not in identity_gates(
+        "NZXT H1 PC Case Only Empty Chassis", case
+    )
+    assert "bundle_listing" not in identity_gates(
+        "NZXT H1 PC Case Bundle with PSU and Fans", case
+    )
+    assert "whole_system_misclassified_as_component" not in identity_gates(
+        "HP Desktop Computer Tower Empty PC Case Only", case
+    )
+
+
+def test_case_parts_are_still_rejected():
+    case = {"category": "case", "brand": "corsair", "model": "4000d"}
+    assert "accessory_or_parts_listing" in identity_gates(
+        "Corsair 4000D replacement panel only", case
+    )
+
+
 def test_super_gem_requires_profit_roi_confidence_liquidity_and_no_veto():
     policy = OpportunityPolicy()
     market = robust_sold_market(comps([590, 600, 610, 620, 630, 640]), subject_listing_id="999", policy=policy)

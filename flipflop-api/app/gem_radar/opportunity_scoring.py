@@ -333,7 +333,7 @@ def identity_gates(title: str, cpk_data: dict[str, Any] | None, strategy: str = 
     # boxes, where there is no single product identity to price.
     if any(term in lowered for term in BUNDLE_TERMS) and not looks_like_case:
         flags.append("bundle_listing")
-    if category in COMPONENT_CATEGORIES and any(term in lowered for term in ("mini pc", "laptop", "notebook", "desktop computer")):
+    if category in COMPONENT_CATEGORIES and category != "case" and any(term in lowered for term in ("mini pc", "laptop", "notebook", "desktop computer")):
         flags.append("whole_system_misclassified_as_component")
     if category in COMPONENT_CATEGORIES and category != "case" and re.search(
         r"\b(gaming desktop|optiplex|thinkcentre|elitedesk|prodesk)\b|"
