@@ -291,9 +291,20 @@ def identity_gates(title: str, cpk_data: dict[str, Any] | None, strategy: str = 
     category = (cpk_data or {}).get("category")
     brand = (cpk_data or {}).get("brand")
     model = (cpk_data or {}).get("model")
+    # A chassis is still a useful standalone resale item when the listing
+    # says "case only", "empty chassis", or includes a PSU/fans.  Those
+    # phrases describe what is included, not an accessory-only listing.  The
+    # case-specific rules below still reject genuinely separate case parts
+    # such as panels, feet, filters, and controllers.
+    looks_like_case = category == "case" or bool(re.search(
+        r"\b(?:pc|computer)\s+(?:case|chassis)\b|\bchassis\b|\b(?:pc|computer)\s+case\b",
+        lowered,
+    ))
     if not category or not brand or not model:
         flags.append("identity_incomplete")
-    if any(term in lowered for term in ACCESSORY_TERMS):
+    if any(term in lowered for term in ACCESSORY_TERMS) and not (
+        looks_like_case and any(term in lowered for term in ("case only", "empty case", "empty chassis"))
+    ):
         flags.append("accessory_or_parts_listing")
     # Compatibility/model text frequently names the component an accessory
     # fits (for example an i3-12100 stock cooler or an RTX-ready PSU).  Those
@@ -317,11 +328,14 @@ def identity_gates(title: str, cpk_data: dict[str, Any] | None, strategy: str = 
         lowered,
     ):
         flags.append("accessory_or_parts_listing")
-    if any(term in lowered for term in BUNDLE_TERMS):
+    # Bundled PSU/fans do not make the chassis unresellable.  Keep bundle
+    # protection for non-case components and for ambiguous case lots/mystery
+    # boxes, where there is no single product identity to price.
+    if any(term in lowered for term in BUNDLE_TERMS) and not looks_like_case:
         flags.append("bundle_listing")
     if category in COMPONENT_CATEGORIES and any(term in lowered for term in ("mini pc", "laptop", "notebook", "desktop computer")):
         flags.append("whole_system_misclassified_as_component")
-    if category in COMPONENT_CATEGORIES and re.search(
+    if category in COMPONENT_CATEGORIES and category != "case" and re.search(
         r"\b(gaming desktop|optiplex|thinkcentre|elitedesk|prodesk)\b|"
         r"\blegion\b.*\b(?:ram|ssd)\b|"
         r"\b(?:rtx|gtx)\s*\d{3,4}\b.*\b\d+gb\s+ram\b|"
