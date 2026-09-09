@@ -72,6 +72,8 @@ _SOURCE_ALIASES: dict[str, tuple[str, ...]] = {
     "ebay uk auctions": ("eBay UK Auctions",),
     "amazon": ("Amazon",),
     "amazon uk": ("Amazon",),
+    "ebuyer": ("eBuyer",),
+    "ebuyer uk": ("eBuyer",),
 }
 
 

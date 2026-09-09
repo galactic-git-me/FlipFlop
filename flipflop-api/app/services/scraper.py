@@ -1948,6 +1948,21 @@ async def fetch_listings(
             title_selector='h2 span, h2',
         )
 
+    if "ebuyer" in name:
+        # eBuyer is a normal retail catalogue, not an auction source. Its
+        # product cards are rendered after navigation, so use the shared
+        # Playwright catalogue scraper rather than the eBay API/HTML path.
+        return await _scrape_generic_marketplace_listings(
+            source_name="eBuyer",
+            search_terms=search_terms[:20],
+            min_price=min_price,
+            max_price=max_price,
+            build_url=lambda term: f"https://www.ebuyer.com/search?q={term.replace(' ', '+')}",
+            item_selector='article, li, [data-testid*="product"], [class*="product-card"], [class*="product-tile"]',
+            link_selector='a[href*="ebuyer.com/"], a[href*="/product"], a[href*="/p/"]',
+            title_selector='h2, h3, [class*="title"], [class*="name"]',
+        )
+
     if "temu" in name:
         http_rows = await _scrape_temu_http(
             search_terms=search_terms[:20],
