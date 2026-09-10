@@ -1,5 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const webServerCommand = process.platform === 'win32'
+  ? 'set NEXT_PUBLIC_API_URL=/api&& set ADMIN_JWT_SECRET=playwright-test-secret&& npm run build&& set NEXT_PUBLIC_API_URL=/api&& set ADMIN_JWT_SECRET=playwright-test-secret&& npm run start -- -p 4173 -H 127.0.0.1'
+  : 'NEXT_PUBLIC_API_URL=/api ADMIN_JWT_SECRET=playwright-test-secret npm run build && NEXT_PUBLIC_API_URL=/api ADMIN_JWT_SECRET=playwright-test-secret npm run start -- -p 4173 -H 127.0.0.1';
+
 export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
@@ -14,7 +18,7 @@ export default defineConfig({
     video: 'retain-on-failure',
   },
   webServer: {
-    command: 'NEXT_PUBLIC_API_URL=/api npm run build && NEXT_PUBLIC_API_URL=/api npm run start -- -p 4173 -H 127.0.0.1',
+    command: webServerCommand,
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: true,
     timeout: 180_000,
