@@ -519,6 +519,29 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return res.json();
 }
 
+async function requestGemRadar<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(`/api/gem-radar${path}`, {
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...init?.headers,
+    },
+    signal: AbortSignal.timeout(120_000),
+    redirect: "follow",
+    ...init,
+  });
+  if (!res.ok) {
+    const detail = await res
+      .clone()
+      .json()
+      .then((body) => body?.detail)
+      .catch(() => undefined);
+    throw new Error(detail ? String(detail) : `Gem Radar ${path} → ${res.status}`);
+  }
+  if (res.status === 204) return undefined as T;
+  return res.json();
+}
+
 function qs(params?: Record<string, string | undefined>): string {
   if (!params) return "";
   const p = Object.fromEntries(Object.entries(params).filter(([, v]) => v !== undefined)) as Record<string, string>;
@@ -542,16 +565,16 @@ export const api = {
   },
 
   gemRadar: {
-    scoredListings: () => request<unknown[]>("/gem-radar/scored-listings"),
-    listings: () => request<unknown[]>("/gem-radar/listings"),
-    currentGem: () => request<unknown>("/gem-radar/current-gem"),
+    scoredListings: () => requestGemRadar<unknown[]>("/scored-listings"),
+    listings: () => requestGemRadar<unknown[]>("/listings"),
+    currentGem: () => requestGemRadar<unknown>("/current-gem"),
     // Whole-DB market snapshot (all currently-active listings, not just the
     // latest scan run) — same shape as the Current Scan Run panel's stats.
-    marketSnapshot: () => request<MarketSnapshot>("/gem-radar/market-snapshot", { cache: "no-store" }),
+    marketSnapshot: () => requestGemRadar<MarketSnapshot>("/market-snapshot", { cache: "no-store" }),
     // Real scan cadence derived from actual observation activity, since
     // there's no backend-scheduled "next scan" job (scanning happens
     // client-side in the browser extension) — see the endpoint's docstring.
-    scanScheduleStatus: () => request<ScanScheduleStatus>("/gem-radar/scan-schedule-status"),
+    scanScheduleStatus: () => requestGemRadar<ScanScheduleStatus>("/scan-schedule-status"),
   },
 
   flips: {
