@@ -7,119 +7,30 @@
 # Test info
 
 - Name: cross-listing.spec.ts >> cross-listing loads canonical sources and supports search, status filtering, and review edits
-- Location: tests\e2e\cross-listing.spec.ts:121:5
+- Location: tests\e2e\cross-listing.spec.ts:122:5
 
 # Error details
 
 ```
 Error: expect(locator).toBeVisible() failed
 
-Locator: getByText('Atlas Gaming PC RTX 3060')
+Locator: getByRole('heading', { name: 'Cross-listing' })
 Expected: visible
 Timeout: 10000ms
 Error: element(s) not found
 
 Call log:
   - Expect "toBeVisible" with timeout 10000ms
-  - waiting for getByText('Atlas Gaming PC RTX 3060')
+  - waiting for getByRole('heading', { name: 'Cross-listing' })
 
 ```
 
 ```yaml
-- complementary:
-  - img "FlipFlop"
-  - navigation:
-    - link "Sourcing":
-      - /url: /sourcing
-    - link "Pre-Built":
-      - /url: /builds
-    - link "Custom Builds":
-      - /url: /configurator-config
-    - link "Curated Builds":
-      - /url: /pc-builder
-    - link "Inventory":
-      - /url: /inventory
-    - link "Demand":
-      - /url: /demand
-    - link "Cross-listing":
-      - /url: /cross-listing
-    - link "3D Assets":
-      - /url: /cases-3d-priority
-    - link "Problems":
-      - /url: /problems
-- banner:
-  - textbox "QUERY MARKET DATA..."
-  - img "FlipFlop"
-  - button "Source activity"
-  - button "Favourites"
-  - button "Notifications": 9+
-  - button "Price alerts (2 active)": "2"
-  - button "Settings"
-- main:
-  - text: Inventory synchronisation
-  - heading "Cross-listing" [level=1]
-  - paragraph: Review canonical build data, prepare channel payloads, and keep unique computers from selling twice.
-  - button "Refresh listings"
-  - text: eBay UK Not Connected
-  - paragraph: Connect the existing eBay seller account in Settings.
-  - text: FlipFlop.shop API
-  - paragraph: Reuses the canonical storefront product; duplicate products are not created here.
-  - text: OnBuy Manual
-  - paragraph: Seller API/feed onboarding is not configured in this app. Manual listing pack only.
-  - text: Amazon Requires Approval
-  - paragraph: SP-API requires seller authorization, Product Listing role, marketplace/category requirements and identifiers.
-  - text: Facebook catalog Manual
-  - paragraph: Catalog/feed route must be configured; personal Marketplace automation is not supported.
-  - text: Vinted Manual
-  - paragraph: No approved seller integration is configured. Manual-assist export only; no consumer-account automation.
-  - text: Failed to fetch
-  - button "Retry"
-  - textbox "Search listings":
-    - /placeholder: Search title, build ID or external ID…
-  - combobox "Source filter":
-    - option "All sources" [selected]
-    - option "eBay UK"
-    - option "FlipFlop.shop"
-  - combobox "Status filter":
-    - option "All statuses" [selected]
-    - option "Live"
-    - option "Draft"
-    - option "Sold"
-    - option "Ended"
-    - option "Unavailable"
-    - option "Failed"
-  - combobox "Sort listings":
-    - option "Recently updated" [selected]
-    - option "Highest price"
-    - option "Title"
-  - button "Select all filtered (0)"
-  - text: 0 selected · not refreshed
-  - table:
-    - rowgroup:
-      - row "Listing Source Price / stock Status Updated":
-        - columnheader
-        - columnheader "Listing"
-        - columnheader "Source"
-        - columnheader "Price / stock"
-        - columnheader "Status"
-        - columnheader "Updated"
-        - columnheader
-    - rowgroup
-  - paragraph: No source listings match this view.
-  - paragraph: Only listings returned by the connected eBay/storefront integrations are shown.
-  - text: Destination workflow
-  - button "○eBay UK"
-  - button "○FlipFlop.shop"
-  - button "○OnBuy"
-  - button "○Amazon"
-  - button "○Facebook catalog"
-  - button "○Vinted"
-  - text: 0 source listings × 0 destinations = 0 jobs. Manual-only destinations remain manual_action_required.
-  - button "Download manual packs" [disabled]
-  - button "Review & submit" [disabled]
-  - button "Hermes":
-    - img "Hermes"
-- alert
+- img
+- heading "This page couldn’t load" [level=1]
+- paragraph: Reload to try again, or go back.
+- button "Reload"
+- button "Back"
 ```
 
 # Test source
@@ -161,9 +72,9 @@ Call log:
   60  |     name: "Borealis Workstation",
   61  |     status: "built",
   62  |     updated_at: "2026-09-09T10:00:00Z",
-  63  |     ebay_listing_id: null,
+  63  |     ebay_listing_id: "EBAY-43-draft",
   64  |     ebay_listing_url: null,
-  65  |     ebay_listing_status: "never_listed",
+  65  |     ebay_listing_status: "draft",
   66  |     ebay_price: 699,
   67  |     ebay_condition: "Used",
   68  |     storefront_product_id: null,
@@ -190,106 +101,107 @@ Call log:
   89  |   await page.route("**/*", async (route) => {
   90  |     const request = route.request();
   91  |     const path = new URL(request.url()).pathname.replace(/\/+$/, "");
-  92  |     const method = request.method().toUpperCase();
-  93  |     if (!path.includes("/api")) return route.continue();
-  94  |     if (method === "OPTIONS") return json(route, 200, {});
-  95  |     if (path === "/api/manual-builds" && method === "GET") return json(route, 200, builds.map(summary));
-  96  |     const detail = path.match(/^\/api\/manual-builds\/(\d+)$/);
-  97  |     if (detail && method === "GET") {
-  98  |       const build = builds.find((item) => item.id === Number(detail[1]));
-  99  |       return build ? json(route, 200, build) : json(route, 404, { detail: "Not found" });
-  100 |     }
-  101 |     const ebayStatus = path === "/api/ebay/oauth/status" || path === "/api/ebay/oauth/status/";
-  102 |     if (ebayStatus && method === "GET") return json(route, 200, { connected: ebayConnected });
-  103 |     if (path.match(/^\/api\/manual-builds\/\d+\/post-to-ebay$/) && method === "POST") {
-  104 |       const id = Number(path.split("/")[3]);
-  105 |       const build = builds.find((item) => item.id === id)!;
-  106 |       build.ebay_listing_id = `EBAY-${id}-published`;
-  107 |       build.ebay_listing_status = "active";
-  108 |       return json(route, 200, { success: true, listing_id: build.ebay_listing_id, url: `https://www.ebay.co.uk/itm/${build.ebay_listing_id}` });
-  109 |     }
-  110 |     if (path.match(/^\/api\/manual-builds\/\d+\/list-on-storefront$/) && method === "POST") {
-  111 |       const id = Number(path.split("/")[3]);
-  112 |       const build = builds.find((item) => item.id === id)!;
-  113 |       build.storefront_product_id ??= id * 10;
-  114 |       build.storefront_live = true;
-  115 |       return json(route, 200, { product_id: build.storefront_product_id, build_id: id, storefront_url: `https://www.theflipflop.shop/builds/${id}` });
-  116 |     }
-  117 |     return json(route, 200, {});
-  118 |   });
-  119 | }
-  120 | 
-  121 | test("cross-listing loads canonical sources and supports search, status filtering, and review edits", async ({ page, context }) => {
-  122 |   await authenticate(context);
-  123 |   await installCrossListingMocks(page);
-  124 |   await page.goto("/cross-listing");
-  125 | 
-  126 |   await expect(page.getByRole("heading", { name: "Cross-listing" })).toBeVisible();
-> 127 |   await expect(page.getByText("Atlas Gaming PC RTX 3060")).toBeVisible();
-      |                                                            ^ Error: expect(locator).toBeVisible() failed
-  128 |   await expect(page.getByText("eBay UK", { exact: true }).first()).toBeVisible();
-  129 |   await expect(page.getByText("FlipFlop.shop", { exact: true }).first()).toBeVisible();
-  130 |   await expect(page.getByText("Select all filtered (2)")).toBeVisible();
-  131 | 
-  132 |   await page.getByLabel("Search listings").fill("Borealis");
-  133 |   await expect(page.getByText("Borealis Workstation")).toBeVisible();
-  134 |   await expect(page.getByText("Atlas Gaming PC RTX 3060")).toHaveCount(0);
-  135 |   await page.getByLabel("Search listings").fill("");
-  136 |   await page.getByLabel("Status filter").selectOption("live");
-  137 |   await expect(page.getByText("Atlas Gaming PC RTX 3060")).toBeVisible();
-  138 |   await expect(page.getByText("Borealis Workstation")).toHaveCount(0);
-  139 | 
-  140 |   const row = page.locator("tr", { hasText: "Atlas Gaming PC RTX 3060" });
-  141 |   await row.getByRole("button", { name: "Review" }).click();
-  142 |   await expect(page.getByRole("dialog")).toBeVisible();
-  143 |   await page.getByRole("dialog").locator("input").first().fill("Atlas Gaming PC - refreshed title");
-  144 |   await page.getByRole("dialog").getByRole("button", { name: "Save review edits" }).click();
-  145 |   await expect(page.getByText("Atlas Gaming PC - refreshed title")).toBeVisible();
-  146 | });
-  147 | 
-  148 | test("publishes a selected build to eBay and reports the accepted listing", async ({ page, context }) => {
-  149 |   await authenticate(context);
-  150 |   await installCrossListingMocks(page);
-  151 |   await page.goto("/cross-listing");
-  152 |   await page.getByRole("button", { name: "Select Atlas Gaming PC RTX 3060" }).click();
-  153 |   await page.getByRole("button", { name: "eBay UK" }).last().click();
-  154 |   page.on("dialog", (dialog) => void dialog.accept());
-  155 |   await page.getByRole("button", { name: "Review & submit" }).click();
-  156 | 
-  157 |   await expect(page.getByText("eBay accepted the publish request.")).toBeVisible();
-  158 |   await expect(page.getByText("Published", { exact: true }).last()).toBeVisible();
-  159 |   await expect(page.getByRole("link", { name: "View listing" })).toHaveAttribute("href", /EBAY-42-published/);
-  160 | });
-  161 | 
-  162 | test("keeps manual-only destinations manual and links storefront without duplicating its product", async ({ page, context }) => {
-  163 |   await authenticate(context);
-  164 |   await installCrossListingMocks(page);
-  165 |   await page.goto("/cross-listing");
-  166 |   await page.getByRole("button", { name: "Select Borealis Workstation" }).click();
-  167 |   await page.getByRole("button", { name: "FlipFlop.shop" }).last().click();
-  168 |   await page.getByRole("button", { name: "OnBuy" }).last().click();
-  169 |   await expect(page.getByText("1 source listing × 2 destinations = 2 jobs.")).toBeVisible();
-  170 |   page.on("dialog", (dialog) => void dialog.accept());
-  171 | 
-  172 |   const storefrontRequest = page.waitForRequest("**/api/manual-builds/43/list-on-storefront");
-  173 |   await page.getByRole("button", { name: "Review & submit" }).click();
-  174 |   await storefrontRequest;
-  175 |   await expect(page.getByText("Linked to the existing storefront product.")).toBeVisible();
-  176 |   await expect(page.getByText("Manual action required", { exact: true })).toBeVisible();
-  177 |   await expect(page.getByText("Seller API/feed onboarding is not configured in this app. Manual listing pack only.")).toBeVisible();
-  178 | });
-  179 | 
-  180 | test("does not offer an eBay API publish when the seller account is disconnected", async ({ page, context }) => {
-  181 |   await authenticate(context);
-  182 |   await installCrossListingMocks(page, false);
-  183 |   await page.goto("/cross-listing");
-  184 |   await expect(page.getByText("Connect the existing eBay seller account in Settings.")).toBeVisible();
-  185 |   await page.getByRole("button", { name: "Select Atlas Gaming PC RTX 3060" }).click();
-  186 |   await page.getByRole("button", { name: "eBay UK" }).last().click();
-  187 |   page.on("dialog", (dialog) => void dialog.accept());
-  188 |   await page.getByRole("button", { name: "Review & submit" }).click();
-  189 |   await expect(page.getByText("Manual action required", { exact: true })).toBeVisible();
-  190 |   await expect(page.getByText("Connect the existing eBay seller account in Settings.")).toHaveCount(2);
-  191 | });
-  192 | 
+  92  |     const apiPath = path.replace(/^\/proxy-api/, "");
+  93  |     const method = request.method().toUpperCase();
+  94  |     if (!path.includes("/api") && !path.startsWith("/proxy-api")) return route.continue();
+  95  |     if (method === "OPTIONS") return json(route, 200, {});
+  96  |     if (apiPath === "/manual-builds" && method === "GET") return json(route, 200, builds.map(summary));
+  97  |     const detail = apiPath.match(/^\/manual-builds\/(\d+)$/);
+  98  |     if (detail && method === "GET") {
+  99  |       const build = builds.find((item) => item.id === Number(detail[1]));
+  100 |       return build ? json(route, 200, build) : json(route, 404, { detail: "Not found" });
+  101 |     }
+  102 |     const ebayStatus = apiPath === "/ebay/oauth/status" || apiPath === "/ebay/oauth/status/";
+  103 |     if (ebayStatus && method === "GET") return json(route, 200, { connected: ebayConnected });
+  104 |     if (apiPath.match(/^\/manual-builds\/\d+\/post-to-ebay$/) && method === "POST") {
+  105 |       const id = Number(apiPath.split("/")[2]);
+  106 |       const build = builds.find((item) => item.id === id)!;
+  107 |       build.ebay_listing_id = `EBAY-${id}-published`;
+  108 |       build.ebay_listing_status = "active";
+  109 |       return json(route, 200, { success: true, listing_id: build.ebay_listing_id, url: `https://www.ebay.co.uk/itm/${build.ebay_listing_id}` });
+  110 |     }
+  111 |     if (apiPath.match(/^\/manual-builds\/\d+\/list-on-storefront$/) && method === "POST") {
+  112 |       const id = Number(apiPath.split("/")[2]);
+  113 |       const build = builds.find((item) => item.id === id)!;
+  114 |       build.storefront_product_id ??= id * 10;
+  115 |       build.storefront_live = true;
+  116 |       return json(route, 200, { product_id: build.storefront_product_id, build_id: id, storefront_url: `https://www.theflipflop.shop/builds/${id}` });
+  117 |     }
+  118 |     return json(route, 200, {});
+  119 |   });
+  120 | }
+  121 | 
+  122 | test("cross-listing loads canonical sources and supports search, status filtering, and review edits", async ({ page, context }) => {
+  123 |   await authenticate(context);
+  124 |   await installCrossListingMocks(page);
+  125 |   await page.goto("/cross-listing");
+  126 | 
+> 127 |   await expect(page.getByRole("heading", { name: "Cross-listing" })).toBeVisible();
+      |                                                                      ^ Error: expect(locator).toBeVisible() failed
+  128 |   await expect(page.getByText("Atlas Gaming PC RTX 3060")).toBeVisible();
+  129 |   await expect(page.getByText("eBay UK", { exact: true }).first()).toBeVisible();
+  130 |   await expect(page.getByText("FlipFlop.shop", { exact: true }).first()).toBeVisible();
+  131 |   await expect(page.getByText("Select all filtered (2)")).toBeVisible();
+  132 | 
+  133 |   await page.getByLabel("Search listings").fill("Borealis");
+  134 |   await expect(page.getByText("Borealis Workstation")).toBeVisible();
+  135 |   await expect(page.getByText("Atlas Gaming PC RTX 3060")).toHaveCount(0);
+  136 |   await page.getByLabel("Search listings").fill("");
+  137 |   await page.getByLabel("Status filter").selectOption("live");
+  138 |   await expect(page.getByText("Atlas Gaming PC RTX 3060")).toBeVisible();
+  139 |   await expect(page.getByText("Borealis Workstation")).toHaveCount(0);
+  140 | 
+  141 |   const row = page.locator("tr", { hasText: "Atlas Gaming PC RTX 3060" });
+  142 |   await row.getByRole("button", { name: "Review" }).click();
+  143 |   await expect(page.getByRole("dialog")).toBeVisible();
+  144 |   await page.getByRole("dialog").locator("input").first().fill("Atlas Gaming PC - refreshed title");
+  145 |   await page.getByRole("dialog").getByRole("button", { name: "Save review edits" }).click();
+  146 |   await expect(page.getByText("Atlas Gaming PC - refreshed title")).toBeVisible();
+  147 | });
+  148 | 
+  149 | test("publishes a selected build to eBay and reports the accepted listing", async ({ page, context }) => {
+  150 |   await authenticate(context);
+  151 |   await installCrossListingMocks(page);
+  152 |   await page.goto("/cross-listing");
+  153 |   await page.getByRole("button", { name: "Select Atlas Gaming PC RTX 3060" }).click();
+  154 |   await page.getByRole("button", { name: "eBay UK" }).last().click();
+  155 |   page.on("dialog", (dialog) => void dialog.accept());
+  156 |   await page.getByRole("button", { name: "Review & submit" }).click();
+  157 | 
+  158 |   await expect(page.getByText("eBay accepted the publish request.")).toBeVisible();
+  159 |   await expect(page.getByText("Published", { exact: true }).last()).toBeVisible();
+  160 |   await expect(page.getByRole("link", { name: "View listing" })).toHaveAttribute("href", /EBAY-42-published/);
+  161 | });
+  162 | 
+  163 | test("keeps manual-only destinations manual and links storefront without duplicating its product", async ({ page, context }) => {
+  164 |   await authenticate(context);
+  165 |   await installCrossListingMocks(page);
+  166 |   await page.goto("/cross-listing");
+  167 |   await page.getByRole("button", { name: "Select Borealis Workstation" }).click();
+  168 |   await page.getByRole("button", { name: "FlipFlop.shop" }).last().click();
+  169 |   await page.getByRole("button", { name: "OnBuy" }).last().click();
+  170 |   await expect(page.getByText("1 source listing × 2 destinations = 2 jobs.")).toBeVisible();
+  171 |   page.on("dialog", (dialog) => void dialog.accept());
+  172 | 
+  173 |   const storefrontRequest = page.waitForRequest("**/proxy-api/manual-builds/43/list-on-storefront");
+  174 |   await page.getByRole("button", { name: "Review & submit" }).click();
+  175 |   await storefrontRequest;
+  176 |   await expect(page.getByText("Linked to the existing storefront product.")).toBeVisible();
+  177 |   await expect(page.getByText("Manual action required", { exact: true })).toBeVisible();
+  178 |   await expect(page.getByText("Seller API/feed onboarding is not configured in this app. Manual listing pack only.")).toBeVisible();
+  179 | });
+  180 | 
+  181 | test("does not offer an eBay API publish when the seller account is disconnected", async ({ page, context }) => {
+  182 |   await authenticate(context);
+  183 |   await installCrossListingMocks(page, false);
+  184 |   await page.goto("/cross-listing");
+  185 |   await expect(page.getByText("Connect the existing eBay seller account in Settings.")).toBeVisible();
+  186 |   await page.getByRole("button", { name: "Select Atlas Gaming PC RTX 3060" }).click();
+  187 |   await page.getByRole("button", { name: "eBay UK" }).last().click();
+  188 |   page.on("dialog", (dialog) => void dialog.accept());
+  189 |   await page.getByRole("button", { name: "Review & submit" }).click();
+  190 |   await expect(page.getByText("Manual action required", { exact: true })).toBeVisible();
+  191 |   await expect(page.getByText("Connect the existing eBay seller account in Settings.")).toHaveCount(2);
+  192 | });
+  193 | 
 ```

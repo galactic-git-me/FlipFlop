@@ -60,9 +60,9 @@ const builds: Build[] = [
     name: "Borealis Workstation",
     status: "built",
     updated_at: "2026-09-09T10:00:00Z",
-    ebay_listing_id: null,
+    ebay_listing_id: "EBAY-43-draft",
     ebay_listing_url: null,
-    ebay_listing_status: "never_listed",
+    ebay_listing_status: "draft",
     ebay_price: 699,
     ebay_condition: "Used",
     storefront_product_id: null,
@@ -89,26 +89,28 @@ async function installCrossListingMocks(page: Page, ebayConnected = true) {
   await page.route("**/*", async (route) => {
     const request = route.request();
     const path = new URL(request.url()).pathname.replace(/\/+$/, "");
+    const apiPath = path.replace(/^\/proxy-api/, "");
     const method = request.method().toUpperCase();
-    if (!path.includes("/api")) return route.continue();
+    if (path.startsWith("/proxy-api")) console.log(`E2E API ${method} ${path}`);
+    if (!path.includes("/api") && !path.startsWith("/proxy-api")) return route.continue();
     if (method === "OPTIONS") return json(route, 200, {});
-    if (path === "/api/manual-builds" && method === "GET") return json(route, 200, builds.map(summary));
-    const detail = path.match(/^\/api\/manual-builds\/(\d+)$/);
+    if (apiPath === "/manual-builds" && method === "GET") return json(route, 200, builds.map(summary));
+    const detail = apiPath.match(/^\/manual-builds\/(\d+)$/);
     if (detail && method === "GET") {
       const build = builds.find((item) => item.id === Number(detail[1]));
       return build ? json(route, 200, build) : json(route, 404, { detail: "Not found" });
     }
-    const ebayStatus = path === "/api/ebay/oauth/status" || path === "/api/ebay/oauth/status/";
+    const ebayStatus = apiPath === "/ebay/oauth/status" || apiPath === "/ebay/oauth/status/";
     if (ebayStatus && method === "GET") return json(route, 200, { connected: ebayConnected });
-    if (path.match(/^\/api\/manual-builds\/\d+\/post-to-ebay$/) && method === "POST") {
-      const id = Number(path.split("/")[3]);
+    if (apiPath.match(/^\/manual-builds\/\d+\/post-to-ebay$/) && method === "POST") {
+      const id = Number(apiPath.split("/")[2]);
       const build = builds.find((item) => item.id === id)!;
       build.ebay_listing_id = `EBAY-${id}-published`;
       build.ebay_listing_status = "active";
       return json(route, 200, { success: true, listing_id: build.ebay_listing_id, url: `https://www.ebay.co.uk/itm/${build.ebay_listing_id}` });
     }
-    if (path.match(/^\/api\/manual-builds\/\d+\/list-on-storefront$/) && method === "POST") {
-      const id = Number(path.split("/")[3]);
+    if (apiPath.match(/^\/manual-builds\/\d+\/list-on-storefront$/) && method === "POST") {
+      const id = Number(apiPath.split("/")[2]);
       const build = builds.find((item) => item.id === id)!;
       build.storefront_product_id ??= id * 10;
       build.storefront_live = true;
@@ -169,7 +171,7 @@ test("keeps manual-only destinations manual and links storefront without duplica
   await expect(page.getByText("1 source listing × 2 destinations = 2 jobs.")).toBeVisible();
   page.on("dialog", (dialog) => void dialog.accept());
 
-  const storefrontRequest = page.waitForRequest("**/api/manual-builds/43/list-on-storefront");
+  const storefrontRequest = page.waitForRequest("**/proxy-api/manual-builds/43/list-on-storefront");
   await page.getByRole("button", { name: "Review & submit" }).click();
   await storefrontRequest;
   await expect(page.getByText("Linked to the existing storefront product.")).toBeVisible();
