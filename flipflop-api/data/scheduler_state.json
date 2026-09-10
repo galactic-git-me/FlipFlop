@@ -9,10 +9,10 @@
     "last_success_at": "2026-09-10T13:04:34.512943+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-09-10T13:10:33.974718+00:00"
+    "last_success_at": "2026-09-10T13:15:34.056054+00:00"
   },
   "ai_build_generator": {
-    "last_success_at": "2026-09-10T12:14:33.617845+00:00"
+    "last_success_at": "2026-09-10T13:14:33.608595+00:00"
   },
   "compliant_market_ingestion": {
     "last_success_at": "2026-09-10T13:04:33.614992+00:00"
