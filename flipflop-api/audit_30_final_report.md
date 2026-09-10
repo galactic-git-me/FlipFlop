@@ -139,7 +139,7 @@ NOW  - eBay shows £59.00 ✗ (scraper hasn't run since 06:18)
 
 1. **Real-time price monitoring** - Subscribe to eBay price change events (if available)
 2. **Multi-source pricing** - Cross-reference with Amazon, Gumtree, Facebook Marketplace
-3. **Machine learning confidence scores** - Rate each listing's data quality
+3. **Machine you rning confidence scores** - Rate each listing's data quality
 
 ---
 
