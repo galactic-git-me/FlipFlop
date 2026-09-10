@@ -126,20 +126,20 @@ test("cross-listing loads canonical sources and supports search, status filterin
   await page.goto("/cross-listing");
 
   await expect(page.getByRole("heading", { name: "Cross-listing" })).toBeVisible();
-  await expect(page.getByText("Atlas Gaming PC RTX 3060")).toBeVisible();
+  await expect(page.getByText("Atlas Gaming PC RTX 3060", { exact: true })).toHaveCount(2);
   await expect(page.getByText("eBay UK", { exact: true }).first()).toBeVisible();
   await expect(page.getByText("FlipFlop.shop", { exact: true }).first()).toBeVisible();
-  await expect(page.getByText("Select all filtered (2)")).toBeVisible();
+  await expect(page.getByText("Select all filtered (3)")).toBeVisible();
 
   await page.getByLabel("Search listings").fill("Borealis");
   await expect(page.getByText("Borealis Workstation")).toBeVisible();
   await expect(page.getByText("Atlas Gaming PC RTX 3060")).toHaveCount(0);
   await page.getByLabel("Search listings").fill("");
   await page.getByLabel("Status filter").selectOption("live");
-  await expect(page.getByText("Atlas Gaming PC RTX 3060")).toBeVisible();
+  await expect(page.getByText("Atlas Gaming PC RTX 3060", { exact: true })).toHaveCount(2);
   await expect(page.getByText("Borealis Workstation")).toHaveCount(0);
 
-  const row = page.locator("tr", { hasText: "Atlas Gaming PC RTX 3060" });
+  const row = page.locator("tr", { hasText: "EBAY-42" });
   await row.getByRole("button", { name: "Review" }).click();
   await expect(page.getByRole("dialog")).toBeVisible();
   await page.getByRole("dialog").locator("input").first().fill("Atlas Gaming PC - refreshed title");
@@ -151,7 +151,8 @@ test("publishes a selected build to eBay and reports the accepted listing", asyn
   await authenticate(context);
   await installCrossListingMocks(page);
   await page.goto("/cross-listing");
-  await page.getByRole("button", { name: "Select Atlas Gaming PC RTX 3060" }).click();
+  const ebayRow = page.locator("tr", { hasText: "EBAY-42" });
+  await ebayRow.getByRole("button", { name: "Select Atlas Gaming PC RTX 3060" }).click();
   await page.getByRole("button", { name: "eBay UK" }).last().click();
   page.on("dialog", (dialog) => void dialog.accept());
   await page.getByRole("button", { name: "Review & submit" }).click();
@@ -175,8 +176,8 @@ test("keeps manual-only destinations manual and links storefront without duplica
   await page.getByRole("button", { name: "Review & submit" }).click();
   await storefrontRequest;
   await expect(page.getByText("Linked to the existing storefront product.")).toBeVisible();
-  await expect(page.getByText("Manual action required", { exact: true })).toBeVisible();
-  await expect(page.getByText("Seller API/feed onboarding is not configured in this app. Manual listing pack only.")).toBeVisible();
+  await expect(page.getByText("Manual Action Required", { exact: true })).toBeVisible();
+  await expect(page.getByText("Seller API/feed onboarding is not configured in this app. Manual listing pack only.")).toHaveCount(2);
 });
 
 test("does not offer an eBay API publish when the seller account is disconnected", async ({ page, context }) => {
@@ -184,10 +185,11 @@ test("does not offer an eBay API publish when the seller account is disconnected
   await installCrossListingMocks(page, false);
   await page.goto("/cross-listing");
   await expect(page.getByText("Connect the existing eBay seller account in Settings.")).toBeVisible();
-  await page.getByRole("button", { name: "Select Atlas Gaming PC RTX 3060" }).click();
+  const ebayRow = page.locator("tr", { hasText: "EBAY-42" });
+  await ebayRow.getByRole("button", { name: "Select Atlas Gaming PC RTX 3060" }).click();
   await page.getByRole("button", { name: "eBay UK" }).last().click();
   page.on("dialog", (dialog) => void dialog.accept());
   await page.getByRole("button", { name: "Review & submit" }).click();
-  await expect(page.getByText("Manual action required", { exact: true })).toBeVisible();
+  await expect(page.getByText("Manual Action Required", { exact: true })).toBeVisible();
   await expect(page.getByText("Connect the existing eBay seller account in Settings.")).toHaveCount(2);
 });
