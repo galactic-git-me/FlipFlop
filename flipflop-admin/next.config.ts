@@ -14,6 +14,7 @@ const allowedOrigins = [
 // In local dev it falls back to localhost:4311.
 const backendUrl = process.env.BACKEND_URL ?? "http://localhost:4311";
 const gemradarUrl = process.env.GEMRADAR_URL ?? "http://localhost:18000";
+const ebayOpsBackendUrl = (process.env.EBAY_OPS_BACKEND_URL ?? backendUrl).replace(/\/$/, "");
 
 const nextConfig: NextConfig = {
   turbopack: {
@@ -41,6 +42,13 @@ const nextConfig: NextConfig = {
       {
         source: "/api/:path*",
         destination: `${backendUrl}/api/:path*`,
+      },
+      // eBay OAuth state is owned by the deployed operations API, even when
+      // the admin UI is running locally. Keep these ahead of the catch-all
+      // proxy rewrite below.
+      {
+        source: "/proxy-api/ebay/oauth/:path*",
+        destination: `${ebayOpsBackendUrl}/api/ebay/oauth/:path*`,
       },
       {
         source: "/proxy-api/:path*",

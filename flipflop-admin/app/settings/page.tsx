@@ -200,6 +200,26 @@ export default function SettingsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // eBay returns here with a result flag. Keep the user on the relevant tab
+  // and refresh the authoritative status from the eBay-operations backend.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const result = params.get("ebay_connected");
+    if (!result) return;
+
+    setTab("seller-policies");
+    void loadEbayStatus();
+
+    // The flag is only a one-time navigation result; removing it prevents a
+    // later refresh from looking like a new OAuth completion.
+    params.delete("ebay_connected");
+    params.delete("reason");
+    const query = params.toString();
+    window.history.replaceState({}, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     withTimeout(api.sourceSearchTerms.list(scope))
       .then(r => setTerms(r.items ?? []))
