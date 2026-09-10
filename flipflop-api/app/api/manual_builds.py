@@ -355,6 +355,7 @@ def _description_with_selected_faqs(description: str, build: ManualBuild) -> str
 _IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 _MAX_IMAGE_BYTES = 15 * 1024 * 1024  # 15 MB
 _UPLOADS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "manual_builds"
+_PUBLIC_MEDIA_ROOT = Path(__file__).resolve().parents[3].parent / "FlipFlop.shop" / "public" / "media"
 _MODELS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "models"
 # Served directly by this process (see app.mount("/api/uploads", ...) in
 # main.py) — files never leave this container, so no cross-host sync needed.
@@ -2177,12 +2178,9 @@ async def download_build_photos(build_id: int, db: AsyncSession = Depends(get_db
             if not filename:
                 continue
             build_root = (_UPLOADS_ROOT / str(build_id)).resolve()
-            source_path = (build_root / filename).resolve()
-            try:
-                source_path.relative_to(build_root)
-            except ValueError:
-                continue
-            if not source_path.is_file():
+            candidate_paths = [build_root / filename, _PUBLIC_MEDIA_ROOT / filename]
+            source_path = next((candidate.resolve() for candidate in candidate_paths if candidate.is_file()), None)
+            if source_path is None:
                 continue
 
             original_name = Path(str(photo.get("original_filename") or filename)).name

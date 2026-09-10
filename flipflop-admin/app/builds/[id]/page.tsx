@@ -46,7 +46,7 @@ const STATUS_COLOR: Record<string, string> = {
 
 function displayMediaUrl(buildId: number, url: string): string {
   const photoMatch = url.match(/^https?:\/\/(?:www\.)?theflipflop\.shop\/media\/([^/?#]+)$/);
-  if (photoMatch) return `/proxy-api/uploads/manual_builds/${buildId}/${photoMatch[1]}`;
+  if (photoMatch) return url;
   const buildUploadMatch = url.match(/^https?:\/\/(?:www\.)?theflipflop\.shop\/api\/uploads\/manual_builds\/([^/]+)\/(.+)$/);
   if (buildUploadMatch) return `/proxy-api/uploads/manual_builds/${buildUploadMatch[1]}/${buildUploadMatch[2]}`;
   if (url.startsWith("/api/uploads/manual_builds/")) return `/proxy-api${url}`;
