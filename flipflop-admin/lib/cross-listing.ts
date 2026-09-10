@@ -1,4 +1,4 @@
-import type { ManualBuild, ManualBuildSummary } from "@/lib/api";
+import type { ManualBuild } from "@/lib/api";
 
 export type CrossListingChannel =
   | "ebay_uk"
@@ -184,8 +184,4 @@ export function capabilities(ebayConnected: boolean): ChannelCapability[] {
     { channel: "facebook_catalog", label: "Facebook catalog", mode: "manual", connected: false, canPublish: false, canUpdate: false, canEnd: false, note: "Catalog/feed route must be configured; personal Marketplace automation is not supported.", officialReference: "https://www.facebook.com/business/help/" },
     { channel: "vinted", label: "Vinted", mode: "manual", connected: false, canPublish: false, canUpdate: false, canEnd: false, note: "No approved seller integration is configured. Manual-assist export only; no consumer-account automation.", officialReference: "https://www.vinted.co.uk/help" },
   ];
-}
-
-export function getBuildFromSummary(summary: ManualBuildSummary): ManualBuild {
-  return summary as ManualBuild;
 }

@@ -13,6 +13,7 @@ import {
   Box,
   Warehouse,
   ChartNoAxesCombined,
+  Repeat2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +24,7 @@ const PRIMARY_NAV = [
   { href: "/pc-builder", icon: Zap, label: "Curated Builds" },
   { href: "/inventory", icon: Warehouse, label: "Inventory" },
   { href: "/demand", icon: ChartNoAxesCombined, label: "Demand" },
+  { href: "/cross-listing", icon: Repeat2, label: "Cross-listing" },
   { href: "/cases-3d-priority", icon: Box, label: "3D Assets" },
   { href: "/problems", icon: AlertTriangle, label: "Problems" },
 ];
