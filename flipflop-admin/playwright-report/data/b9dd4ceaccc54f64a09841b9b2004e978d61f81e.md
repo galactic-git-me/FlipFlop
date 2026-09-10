@@ -6,8 +6,8 @@
 
 # Test info
 
-- Name: cross-listing.spec.ts >> publishes a selected build to eBay and reports the accepted listing
-- Location: tests\e2e\cross-listing.spec.ts:150:5
+- Name: cross-listing.spec.ts >> does not offer an eBay API publish when the seller account is disconnected
+- Location: tests\e2e\cross-listing.spec.ts:182:5
 
 # Error details
 
@@ -99,8 +99,8 @@ Call log:
           - generic [ref=e105]:
             - generic [ref=e106]:
               - generic [ref=e107]: eBay UK
-              - generic [ref=e108]: API
-            - paragraph [ref=e109]: Uses the existing seller OAuth and manual-build eBay operations.
+              - generic [ref=e108]: Not Connected
+            - paragraph [ref=e109]: Connect the existing eBay seller account in Settings.
           - generic [ref=e110]:
             - generic [ref=e111]:
               - generic [ref=e112]: FlipFlop.shop
@@ -238,39 +238,6 @@ Call log:
 # Test source
 
 ```ts
-  54  |     photos: [{ url: "https://cdn.example.test/atlas.jpg", kind: "photo" }],
-  55  |     hero_photo_url: null,
-  56  |     last_evaluation: { mid: 450 },
-  57  |   },
-  58  |   {
-  59  |     id: 43,
-  60  |     name: "Borealis Workstation",
-  61  |     status: "built",
-  62  |     updated_at: "2026-09-09T10:00:00Z",
-  63  |     ebay_listing_id: "EBAY-43-draft",
-  64  |     ebay_listing_url: null,
-  65  |     ebay_listing_status: "draft",
-  66  |     ebay_price: 699,
-  67  |     ebay_condition: "Used",
-  68  |     storefront_product_id: null,
-  69  |     storefront_live: null,
-  70  |     generated_title: "Borealis Workstation",
-  71  |     generated_description: "Quiet workstation, fully tested.",
-  72  |     generated_aspects: { Features: ["32GB RAM"] },
-  73  |     components: [{ slot: "cpu", name: "Ryzen 7" }],
-  74  |     photos: [],
-  75  |     hero_photo_url: null,
-  76  |     last_evaluation: { mid: 650 },
-  77  |   },
-  78  | ];
-  79  | 
-  80  | async function json(route: Route, status: number, payload: unknown) {
-  81  |   await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(payload) });
-  82  | }
-  83  | 
-  84  | function summary(build: Build) {
-  85  |   return { id: build.id, name: build.name, total_cost: 300, component_count: build.components.length, updated_at: build.updated_at };
-  86  | }
   87  | 
   88  | async function installCrossListingMocks(page: Page, ebayConnected = true) {
   89  |   await page.route("**/*", async (route) => {
@@ -338,8 +305,7 @@ Call log:
   151 |   await authenticate(context);
   152 |   await installCrossListingMocks(page);
   153 |   await page.goto("/cross-listing");
-> 154 |   await page.getByRole("button", { name: "Select Atlas Gaming PC RTX 3060" }).click();
-      |                                                                               ^ Error: locator.click: Error: strict mode violation: getByRole('button', { name: 'Select Atlas Gaming PC RTX 3060' }) resolved to 2 elements:
+  154 |   await page.getByRole("button", { name: "Select Atlas Gaming PC RTX 3060" }).click();
   155 |   await page.getByRole("button", { name: "eBay UK" }).last().click();
   156 |   page.on("dialog", (dialog) => void dialog.accept());
   157 |   await page.getByRole("button", { name: "Review & submit" }).click();
@@ -372,7 +338,8 @@ Call log:
   184 |   await installCrossListingMocks(page, false);
   185 |   await page.goto("/cross-listing");
   186 |   await expect(page.getByText("Connect the existing eBay seller account in Settings.")).toBeVisible();
-  187 |   await page.getByRole("button", { name: "Select Atlas Gaming PC RTX 3060" }).click();
+> 187 |   await page.getByRole("button", { name: "Select Atlas Gaming PC RTX 3060" }).click();
+      |                                                                               ^ Error: locator.click: Error: strict mode violation: getByRole('button', { name: 'Select Atlas Gaming PC RTX 3060' }) resolved to 2 elements:
   188 |   await page.getByRole("button", { name: "eBay UK" }).last().click();
   189 |   page.on("dialog", (dialog) => void dialog.accept());
   190 |   await page.getByRole("button", { name: "Review & submit" }).click();

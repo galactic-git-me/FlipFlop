@@ -91,9 +91,9 @@ async function installCrossListingMocks(page: Page, ebayConnected = true) {
     const path = new URL(request.url()).pathname.replace(/\/+$/, "");
     const apiPath = path.replace(/^\/proxy-api/, "");
     const method = request.method().toUpperCase();
-    if (path.startsWith("/proxy-api")) console.log(`E2E API ${method} ${path}`);
     if (!path.includes("/api") && !path.startsWith("/proxy-api")) return route.continue();
     if (method === "OPTIONS") return json(route, 200, {});
+    if (["/playbooks/proposals", "/alerts", "/price-alerts"].includes(apiPath) && method === "GET") return json(route, 200, []);
     if (apiPath === "/manual-builds" && method === "GET") return json(route, 200, builds.map(summary));
     const detail = apiPath.match(/^\/manual-builds\/(\d+)$/);
     if (detail && method === "GET") {

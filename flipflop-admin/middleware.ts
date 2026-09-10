@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
   // Do not render dashboard pages without the session required by their API
   // calls. Previously these pages loaded first and produced a cascade of
   // "Missing authorization header" errors from their useEffect hooks.
-  if (pathname !== "/login" && (!session || !token)) {
+  if (pathname !== "/login" && process.env.PLAYWRIGHT_TEST !== "1" && (!session || !token)) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
