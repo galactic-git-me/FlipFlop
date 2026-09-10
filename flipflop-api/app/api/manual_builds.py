@@ -4,10 +4,13 @@ import re
 import uuid
 import os
 import base64
+import io
+from zipfile import ZipFile, ZIP_DEFLATED
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
 import httpx
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, UploadFile, File, Form, Query
+from fastapi.responses import StreamingResponse
 from jose import jwt
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -2143,7 +2146,7 @@ async def upload_photos(
 
         # Served directly from this container via /api/uploads (see main.py)
         public_url = f"{_PUBLIC_API_BASE}/uploads/manual_builds/{build_id}/{filename}"
-        photos.append({"url": public_url, "kind": kind})
+        photos.append({"url": public_url, "kind": kind, "original_filename": Path(file.filename or "photo").name[:120]})
         uploaded_urls.append(public_url)
 
     build.photos = photos
@@ -2153,6 +2156,55 @@ async def upload_photos(
     await db.flush()
     await db.refresh(build)
     return build
+
+
+@router.get("/{build_id}/photos/download")
+async def download_build_photos(build_id: int, db: AsyncSession = Depends(get_db)):
+    """Download the original regular build photos as a ZIP archive."""
+    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
+    build = result.scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+
+    archive = io.BytesIO()
+    used_names: set[str] = set()
+    with ZipFile(archive, "w", ZIP_DEFLATED) as zip_file:
+        for photo in build.photos or []:
+            if not isinstance(photo, dict) or photo.get("kind") != "photo":
+                continue
+            url = str(photo.get("url") or "")
+            filename = Path(url.split("?", 1)[0].rsplit("/", 1)[-1]).name
+            if not filename:
+                continue
+            build_root = (_UPLOADS_ROOT / str(build_id)).resolve()
+            source_path = (build_root / filename).resolve()
+            try:
+                source_path.relative_to(build_root)
+            except ValueError:
+                continue
+            if not source_path.is_file():
+                continue
+
+            original_name = Path(str(photo.get("original_filename") or filename)).name
+            stem, suffix = Path(original_name).stem, Path(original_name).suffix
+            archive_name = original_name
+            duplicate_index = 2
+            while archive_name.lower() in used_names:
+                archive_name = f"{stem} ({duplicate_index}){suffix}"
+                duplicate_index += 1
+            used_names.add(archive_name.lower())
+            zip_file.write(source_path, archive_name)
+
+    if not used_names:
+        raise HTTPException(404, "No saved build photos found")
+
+    archive.seek(0)
+    safe_build_name = "".join(char if char.isalnum() or char in "-_" else "-" for char in build.name).strip("-") or f"build-{build_id}"
+    return StreamingResponse(
+        archive,
+        media_type="application/zip",
+        headers={"Content-Disposition": f'attachment; filename="{safe_build_name}-photos.zip"'},
+    )
 
 
 @router.post("/{build_id}/photos/branded", response_model=ManualBuildOut)

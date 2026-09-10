@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles, ExternalLink, Upload, Download, Eye, Star, Heart, Video, Search } from "lucide-react";
+import { Box, Check, AlertCircle, RefreshCw, LockKeyhole, Images, Plus, Sparkles, ExternalLink, Upload, Eye, Star, Heart, Video, Search } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
@@ -49,7 +49,6 @@ interface ReferenceCandidate {
   source: ReferenceSource;
   source_page?: string | null;
   label?: string | null;
-  original_filename?: string | null;
 }
 
 interface ReferenceCandidateResponse {
@@ -813,14 +812,6 @@ export default function Cases3DPriorityPage() {
                               }}
                             />
                           </label>
-                          <a
-                            href={`/api/cases/${caseItem.id}/3d-reference-candidates/download`}
-                            download
-                            aria-disabled={referenceBusy || !referenceData.candidates.some(candidate => candidate.source === "manual" && candidate.url.startsWith("https://theflipflop.shop/media/"))}
-                            className={`inline-flex items-center rounded-md border border-slate-600 px-3 py-2 text-xs font-medium text-slate-200 transition-colors hover:border-cyan-500/50 hover:bg-cyan-500/10 hover:text-cyan-100 ${referenceBusy || !referenceData.candidates.some(candidate => candidate.source === "manual" && candidate.url.startsWith("https://theflipflop.shop/media/")) ? "pointer-events-none cursor-not-allowed opacity-50" : "cursor-pointer"}`}
-                          >
-                            <Download className="mr-2 h-4 w-4" /> Download pictures
-                          </a>
                         </div>
                       </div>
                       <div className="mt-3 flex flex-wrap items-center gap-2">

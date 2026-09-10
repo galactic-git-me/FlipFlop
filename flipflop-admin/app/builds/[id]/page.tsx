@@ -45,11 +45,11 @@ const STATUS_COLOR: Record<string, string> = {
 };
 
 function displayMediaUrl(buildId: number, url: string): string {
-  if (typeof window === "undefined" || window.location.hostname !== "localhost") return url;
   const photoMatch = url.match(/^https?:\/\/(?:www\.)?theflipflop\.shop\/media\/([^/?#]+)$/);
   if (photoMatch) return `/proxy-api/uploads/manual_builds/${buildId}/${photoMatch[1]}`;
   const buildUploadMatch = url.match(/^https?:\/\/(?:www\.)?theflipflop\.shop\/api\/uploads\/manual_builds\/([^/]+)\/(.+)$/);
   if (buildUploadMatch) return `/proxy-api/uploads/manual_builds/${buildUploadMatch[1]}/${buildUploadMatch[2]}`;
+  if (url.startsWith("/api/uploads/manual_builds/")) return `/proxy-api${url}`;
   const modelUploadMatch = url.match(/^https?:\/\/(?:www\.)?theflipflop\.shop\/api\/uploads\/models\/(.+)$/);
   if (modelUploadMatch) return `/proxy-api/uploads/models/${modelUploadMatch[1]}`;
   return url;
@@ -1197,14 +1197,25 @@ export default function BuildDetailPage() {
             )}
 
             <input ref={fileInputRef} type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={handlePhotoUpload} className="hidden" />
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              disabled={uploadingPhotos}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold border border-dashed border-white/[0.15] hover:border-white/[0.3] text-slate-300 rounded-lg transition-colors disabled:opacity-60"
-            >
-              {uploadingPhotos ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImagePlus className="w-4 h-4" />}
-              Upload photos
-            </button>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingPhotos}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold border border-dashed border-white/[0.15] hover:border-white/[0.3] text-slate-300 rounded-lg transition-colors disabled:opacity-60"
+              >
+                {uploadingPhotos ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImagePlus className="w-4 h-4" />}
+                Upload photos
+              </button>
+              <a
+                href={`/proxy-api/manual-builds/${build.id}/photos/download`}
+                download
+                aria-disabled={regularPhotos.length === 0}
+                className={`flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold border border-cyan-500/30 hover:border-cyan-400/60 hover:bg-cyan-400/5 text-cyan-300 rounded-lg transition-colors ${regularPhotos.length === 0 ? "pointer-events-none cursor-not-allowed opacity-40" : "cursor-pointer"}`}
+              >
+                <Download className="w-4 h-4" />
+                Download photos
+              </a>
+            </div>
             {regularPhotos.length > 0 && !build.hero_photo_url && (
               <p className="text-[11px] text-amber-400 mt-2">Click the star on a photo to set it as the hero image.</p>
             )}
