@@ -1,9 +1,12 @@
 """PC Case sourcing and 3D model management endpoints."""
 from datetime import datetime
+import io
 import os
 from pathlib import Path
 from uuid import uuid4
+from zipfile import ZipFile, ZIP_DEFLATED
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
+from fastapi.responses import StreamingResponse
 import httpx
 from pydantic import BaseModel, Field, HttpUrl
 from sqlalchemy import select, and_, func, update
@@ -329,6 +332,7 @@ async def upload_3d_reference_candidates(
                 "source": "manual",
                 "source_page": None,
                 "label": f"Owner upload · {Path(upload.filename or 'picture').name[:120]}",
+                "original_filename": Path(upload.filename or "picture").name[:120],
             })
     except Exception:
         for path in created_paths:
@@ -354,6 +358,60 @@ async def upload_3d_reference_candidates(
     case.sourcing_3d_evidence = evidence
     await db.commit()
     return {"uploaded": uploaded}
+
+
+@router.get("/{case_id}/3d-reference-candidates/download")
+async def download_uploaded_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(get_db)):
+    """Download the original owner-uploaded reference pictures as one ZIP."""
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+
+    evidence = dict(case.sourcing_3d_evidence or {})
+    product_stage = dict((evidence.get("stages") or {}).get("product_images") or {})
+    uploaded_items = [
+        item for item in product_stage.get("candidate_images") or []
+        if isinstance(item, dict)
+        and item.get("source") == "manual"
+        and isinstance(item.get("url"), str)
+        and item["url"].startswith(f"{CASE_REFERENCE_PUBLIC_URL}/")
+    ]
+    if not uploaded_items:
+        raise HTTPException(status_code=404, detail="No uploaded pictures found")
+
+    archive = io.BytesIO()
+    used_names: set[str] = set()
+    with ZipFile(archive, "w", ZIP_DEFLATED) as zip_file:
+        for item in uploaded_items:
+            media_name = item["url"].rsplit("/", 1)[-1]
+            source_path = (CASE_REFERENCE_PUBLIC_ROOT / media_name).resolve()
+            try:
+                source_path.relative_to(CASE_REFERENCE_PUBLIC_ROOT.resolve())
+            except ValueError:
+                continue
+            if not source_path.is_file():
+                continue
+
+            original_name = Path(item.get("original_filename") or media_name).name
+            stem, suffix = Path(original_name).stem, Path(original_name).suffix
+            archive_name = original_name
+            duplicate_index = 2
+            while archive_name.lower() in used_names:
+                archive_name = f"{stem} ({duplicate_index}){suffix}"
+                duplicate_index += 1
+            used_names.add(archive_name.lower())
+            zip_file.write(source_path, archive_name)
+
+    if not used_names:
+        raise HTTPException(status_code=404, detail="Uploaded picture files are no longer available")
+
+    archive.seek(0)
+    safe_case_name = "".join(char if char.isalnum() or char in "-_" else "-" for char in case.name).strip("-") or f"case-{case_id}"
+    return StreamingResponse(
+        archive,
+        media_type="application/zip",
+        headers={"Content-Disposition": f'attachment; filename="{safe_case_name}-uploaded-pictures.zip"'},
+    )
 
 
 @router.post("/{case_id}/3d-reference-selection")
