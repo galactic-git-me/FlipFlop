@@ -52,6 +52,9 @@ function displayMediaUrl(buildId: number, url: string): string {
   if (url.startsWith("/api/uploads/manual_builds/")) return `/proxy-api${url}`;
   const modelUploadMatch = url.match(/^https?:\/\/(?:www\.)?theflipflop\.shop\/api\/uploads\/models\/(.+)$/);
   if (modelUploadMatch) return `/proxy-api/uploads/models/${modelUploadMatch[1]}`;
+  const buildAssetMatch = url.match(/^https?:\/\/(?:www\.)?theflipflop\.shop\/api\/builds\/(.+)$/);
+  if (buildAssetMatch) return `/proxy-api/builds/${buildAssetMatch[1]}`;
+  if (url.startsWith("/api/builds/")) return `/proxy-api${url}`;
   return url;
 }
 
