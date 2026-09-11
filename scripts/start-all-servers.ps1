@@ -404,7 +404,10 @@ $servers = @(
     },
     @{
         name     = "peer-sync"
-        cmdArgs  = @("/c", "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts\run-peer-sync.ps1 -Write")
+        # The watchdog owns the SSH tunnel and starts the sync runner after
+        # the tunnel is available. Starting run-peer-sync directly would
+        # repeatedly fail against 127.0.0.1:15432 when the tunnel is down.
+        cmdArgs  = @("/c", "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts\start-peer-sync-tunnel.ps1 -Write")
         port     = $null
         color    = "DarkCyan"
         skip     = $NoPeerSync
