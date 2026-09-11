@@ -4,6 +4,7 @@ import re
 import uuid
 import os
 import io
+import html
 from zipfile import ZipFile, ZIP_DEFLATED
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
@@ -99,6 +100,40 @@ class QueueBuild3DAssetsInput(BaseModel):
     assets: dict[str, list[str]]
 
 
+def _build_customer_hub_dir(build_id: int) -> Path:
+    """Return the canonical local output directory for a build's Customer Hub."""
+    return _BUILD_ASSETS_ROOT / str(build_id) / "Customer Hub"
+
+
+def _write_customer_hub_entrypoint(build_id: int, order_id: int, token: str, frontend_url: str) -> Path:
+    """Create a local entry point for the deployed customer hub.
+
+    The customer-facing application remains the deployed ``/my-builds`` route;
+    this local file gives operators a build-owned website artifact without
+    duplicating the storefront source into every build directory.
+    """
+    customer_hub_dir = _build_customer_hub_dir(build_id)
+    customer_hub_dir.mkdir(parents=True, exist_ok=True)
+    portal_url = (
+        f"{frontend_url.rstrip('/')}/my-builds/{order_id}"
+        f"?preview={quote(token)}"
+    )
+    escaped_url = html.escape(portal_url, quote=True)
+    entrypoint = customer_hub_dir / "index.html"
+    entrypoint.write_text(
+        "<!doctype html>\n"
+        "<html lang=\"en\"><head><meta charset=\"utf-8\">"
+        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+        "<title>FlipFlop Customer Hub</title></head><body>"
+        "<p>Opening your FlipFlop Customer Hub&hellip;</p>"
+        f"<p><a href=\"{escaped_url}\">Continue to Customer Hub</a></p>"
+        f"<script>window.location.replace({json.dumps(portal_url)});</script>"
+        "</body></html>\n",
+        encoding="utf-8",
+    )
+    return entrypoint
+
+
 @router.post("/{build_id}/portal-preview")
 async def create_build_portal_preview(
     build_id: int,
@@ -135,14 +170,22 @@ async def create_build_portal_preview(
         settings.secret_key,
         algorithm=settings.jwt_algorithm,
     )
+    order_id = product.sold_order_id if product and product.sold_order_id else build.id
+    customer_hub_entrypoint = _write_customer_hub_entrypoint(
+        build.id,
+        order_id,
+        token,
+        settings.frontend_url,
+    )
     return {
         # The storefront route historically calls this value order_id. Before
         # sale, the build id provides a stable route segment; the signed token
         # remains the authority for selecting portal data.
-        "order_id": product.sold_order_id if product and product.sold_order_id else build.id,
+        "order_id": order_id,
         "build_id": build.id,
         "token": token,
         "expires_at": (now + timedelta(minutes=15)).isoformat(),
+        "customer_hub_path": str(customer_hub_entrypoint),
     }
 
 
