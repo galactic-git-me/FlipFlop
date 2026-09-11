@@ -1264,7 +1264,7 @@ export default function BuildDetailPage() {
                   {uploading3dModel ? <Loader2 className="h-4 w-4 animate-spin" /> : <UploadCloud className="h-4 w-4" />}
                   {build.model_3d_url ? "Replace GLB" : "Upload GLB"}
                 </button>
-                {build.model_3d_url && <a href={build.model_3d_url} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-1 px-2 text-xs font-bold text-emerald-300 hover:text-emerald-200">3D model ready <ExternalLink className="h-3 w-3" /></a>}
+                  {build.model_3d_url && <a href={`/proxy-api/manual-builds/${build.id}/model-3d/download`} download className="inline-flex min-h-11 items-center gap-1 px-2 text-xs font-bold text-emerald-300 hover:text-emerald-200">Download GLB <Download className="h-3 w-3" /></a>}
               </div>
             </div>
 
@@ -1294,7 +1294,7 @@ export default function BuildDetailPage() {
                               "border-amber-400/25 bg-amber-400/10 text-amber-300"
                             }`}>{pending && <Loader2 className="mr-1 inline h-2.5 w-2.5 animate-spin" />}{existing.status}</span>
                           )}
-                          {existing?.glb_url && <a href={existing.glb_url} target="_blank" rel="noreferrer" className="text-[10px] font-bold text-cyan-300 hover:text-cyan-200">Open GLB</a>}
+                          {existing?.glb_url && <a href={`/proxy-api/manual-builds/${build.id}/model-3d/download`} download className="text-[10px] font-bold text-cyan-300 hover:text-cyan-200">Download GLB</a>}
                         </div>
                       </div>
                       {pending && (

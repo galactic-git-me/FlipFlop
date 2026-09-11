@@ -8,9 +8,11 @@ from zipfile import ZipFile, ZIP_DEFLATED
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
 from urllib.parse import quote
+from urllib.parse import urlparse
+import shutil
 import httpx
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, UploadFile, File, Form, Query
-from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from jose import jwt
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -358,6 +360,7 @@ _IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 _MAX_IMAGE_BYTES = 15 * 1024 * 1024  # 15 MB
 _UPLOADS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "manual_builds"
 _PUBLIC_MEDIA_ROOT = Path(__file__).resolve().parents[3].parent / "FlipFlop.shop" / "public" / "media"
+_MODELS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "models"
 _BUILD_ASSETS_ROOT = Path(__file__).resolve().parents[3] / "builds"
 _BUILD_3D_SUBDIR = "3D Build"
 # Served directly by this process (see app.mount("/api/uploads", ...) in
@@ -389,6 +392,19 @@ def _build_media_asset_path(build_id: int, filename: str) -> tuple[Path, str]:
     relative_dir = build_dir.relative_to(_BUILD_ASSETS_ROOT).as_posix()
     public_url = f"{_PUBLIC_API_BASE}/builds/{quote(relative_dir)}/Media/{quote(filename)}"
     return asset_dir / filename, public_url
+
+
+def _existing_build_model_path(build_id: int, filename: str) -> Path | None:
+    """Find a model in the current build-owned or legacy model locations."""
+    numeric_dir = _BUILD_ASSETS_ROOT / str(build_id)
+    padded_dir = _BUILD_ASSETS_ROOT / f"{build_id:03d}"
+    roots = [numeric_dir, padded_dir]
+    candidates = [root / folder / filename for root in roots for folder in ("3D Build", "3D Model")]
+    candidates.extend([
+        _UPLOADS_ROOT / str(build_id) / filename,
+        _MODELS_ROOT / filename,
+    ])
+    return next((candidate for candidate in candidates if candidate.is_file()), None)
 
 # HERO_IMAGE_URL is the one listing-template placeholder the LLM is
 # instructed NOT to fill in itself (see ebay_listing_system_prompt.md) — it
@@ -2296,6 +2312,36 @@ async def upload_build_3d_model(
     await db.flush()
     await db.refresh(build)
     return build
+
+
+@router.get("/{build_id}/model-3d/download")
+async def download_build_3d_model(build_id: int, db: AsyncSession = Depends(get_db)):
+    """Serve a downloadable copy from the build's dedicated 3D Model folder.
+
+    Browsers control the user's actual local Downloads location. This endpoint
+    controls the server-side default location and supplies an attachment name.
+    """
+    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
+    build = result.scalar_one_or_none()
+    if not build or not build.model_3d_url:
+        raise HTTPException(404, "No 3D model is saved for this build")
+
+    filename = Path(urlparse(build.model_3d_url).path).name
+    if not filename or not filename.lower().endswith(".glb"):
+        raise HTTPException(404, "The saved 3D model file is invalid")
+    source = _existing_build_model_path(build_id, filename)
+    if source is None:
+        raise HTTPException(404, "The saved 3D model file could not be found")
+
+    numeric_dir = _BUILD_ASSETS_ROOT / str(build_id)
+    padded_dir = _BUILD_ASSETS_ROOT / f"{build_id:03d}"
+    build_dir = numeric_dir if numeric_dir.exists() else padded_dir if padded_dir.exists() else numeric_dir
+    download_dir = build_dir / "3D Model"
+    download_dir.mkdir(parents=True, exist_ok=True)
+    download_path = download_dir / filename
+    if source.resolve() != download_path.resolve():
+        shutil.copy2(source, download_path)
+    return FileResponse(download_path, media_type="model/gltf-binary", filename=filename)
 
 
 @router.delete("/{build_id}/photos", response_model=ManualBuildOut)
