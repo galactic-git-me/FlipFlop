@@ -3,7 +3,6 @@ import asyncio
 import re
 import uuid
 import os
-import base64
 import io
 from zipfile import ZipFile, ZIP_DEFLATED
 from pathlib import Path
@@ -284,10 +283,10 @@ async def queue_build_3d_generation_with_uploads(
     files: list[UploadFile] = File(default=[]),
     db: AsyncSession = Depends(get_db),
 ):
-    """Queue a mixed saved-photo/temporary-upload Meshy generation.
+    """Queue a mixed saved-photo/uploaded-image Meshy generation.
 
-    Uploaded source images become in-memory data URIs and are never written to
-    disk or attached to the build. Only the finished GLB is persisted.
+    Uploaded source images are retained in the build's Media directory so the
+    complete source set can be backed up and reused for later model work.
     """
     build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
     if not build:
@@ -316,9 +315,12 @@ async def queue_build_3d_generation_with_uploads(
             raise HTTPException(status_code=400, detail=f"{file.filename or 'Uploaded picture'} is empty")
         if len(image_bytes) > _MAX_IMAGE_BYTES:
             raise HTTPException(status_code=413, detail="Each source picture must be 15 MB or smaller")
-        encoded = base64.b64encode(image_bytes).decode("ascii")
-        generation_inputs.append(f"data:{content_type};base64,{encoded}")
-        source_labels.append(f"temporary-upload:{file.filename or index}")
+        ext = {"image/jpeg": "jpg", "image/png": "png"}[content_type]
+        filename = f"meshy-source-{uuid.uuid4().hex}.{ext}"
+        local_path, public_url = _build_media_asset_path(build_id, filename)
+        local_path.write_bytes(image_bytes)
+        generation_inputs.append(public_url)
+        source_labels.append(public_url)
 
     requested = {"complete_build": generation_inputs}
     assets = dict(build.model_3d_assets or {})
@@ -374,6 +376,18 @@ def _build_3d_asset_path(build_id: int, filename: str) -> tuple[Path, str]:
     asset_dir.mkdir(parents=True, exist_ok=True)
     relative_dir = build_dir.relative_to(_BUILD_ASSETS_ROOT).as_posix()
     public_url = f"{_PUBLIC_API_BASE}/builds/{quote(relative_dir)}/{quote(_BUILD_3D_SUBDIR)}/{quote(filename)}"
+    return asset_dir / filename, public_url
+
+
+def _build_media_asset_path(build_id: int, filename: str) -> tuple[Path, str]:
+    """Return the on-disk path and public URL for a build image."""
+    numeric_dir = _BUILD_ASSETS_ROOT / str(build_id)
+    padded_dir = _BUILD_ASSETS_ROOT / f"{build_id:03d}"
+    build_dir = numeric_dir if numeric_dir.exists() else padded_dir if padded_dir.exists() else numeric_dir
+    asset_dir = build_dir / "Media"
+    asset_dir.mkdir(parents=True, exist_ok=True)
+    relative_dir = build_dir.relative_to(_BUILD_ASSETS_ROOT).as_posix()
+    public_url = f"{_PUBLIC_API_BASE}/builds/{quote(relative_dir)}/Media/{quote(filename)}"
     return asset_dir / filename, public_url
 
 # HERO_IMAGE_URL is the one listing-template placeholder the LLM is
@@ -2139,9 +2153,6 @@ async def upload_photos(
     if not build:
         raise HTTPException(404, "Build not found")
 
-    build_dir = _UPLOADS_ROOT / str(build_id)
-    build_dir.mkdir(parents=True, exist_ok=True)
-
     photos = list(build.photos or [])
 
     uploaded_urls = []
@@ -2156,10 +2167,10 @@ async def upload_photos(
         ext = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp"}[content_type]
         filename = f"{uuid.uuid4().hex}.{ext}"
 
-        (build_dir / filename).write_bytes(image_bytes)
+        local_path, public_url = _build_media_asset_path(build_id, filename)
+        local_path.write_bytes(image_bytes)
 
-        # Served directly from this container via /api/uploads (see main.py)
-        public_url = f"{_PUBLIC_API_BASE}/uploads/manual_builds/{build_id}/{filename}"
+        # Served directly from the build-owned Media directory.
         photos.append({"url": public_url, "kind": kind, "original_filename": Path(file.filename or "photo").name[:120]})
         uploaded_urls.append(public_url)
 
@@ -2190,8 +2201,15 @@ async def download_build_photos(build_id: int, db: AsyncSession = Depends(get_db
             filename = Path(url.split("?", 1)[0].rsplit("/", 1)[-1]).name
             if not filename:
                 continue
-            build_root = (_UPLOADS_ROOT / str(build_id)).resolve()
-            candidate_paths = [build_root / filename, _PUBLIC_MEDIA_ROOT / filename]
+            build_root = (_BUILD_ASSETS_ROOT / str(build_id)).resolve()
+            padded_root = (_BUILD_ASSETS_ROOT / f"{build_id:03d}").resolve()
+            legacy_root = (_UPLOADS_ROOT / str(build_id)).resolve()
+            candidate_paths = [
+                build_root / "Media" / filename,
+                padded_root / "Media" / filename,
+                legacy_root / filename,
+                _PUBLIC_MEDIA_ROOT / filename,
+            ]
             source_path = next((candidate.resolve() for candidate in candidate_paths if candidate.is_file()), None)
             if source_path is None:
                 continue
@@ -2233,14 +2251,13 @@ async def upload_branded_asset(
     if not build:
         raise HTTPException(404, "Build not found")
 
-    build_dir = _UPLOADS_ROOT / str(build_id)
-    build_dir.mkdir(parents=True, exist_ok=True)
     image_bytes = await file.read()
     filename = f"{kind}-{uuid.uuid4().hex}.png"
-    (build_dir / filename).write_bytes(image_bytes)
+    local_path, public_url = _build_media_asset_path(build_id, filename)
+    local_path.write_bytes(image_bytes)
 
     photos = [p for p in (build.photos or []) if p.get("kind") != kind]
-    photos.append({"url": f"{_PUBLIC_API_BASE}/uploads/manual_builds/{build_id}/{filename}", "kind": kind})
+    photos.append({"url": public_url, "kind": kind})
     build.photos = photos
     build.updated_at = datetime.utcnow()
     await db.flush()

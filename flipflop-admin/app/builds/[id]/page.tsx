@@ -1232,7 +1232,7 @@ export default function BuildDetailPage() {
                   <Sparkles className="h-4 w-4 text-cyan-300" /> Generate 3D assets from photos
                 </p>
                 <p className="mt-1 max-w-2xl text-[11px] leading-5 text-slate-400">
-                  Select or temporarily upload 1–4 clear photos of the finished PC. The first is the front view. Uploaded source pictures are sent directly to Meshy and are not saved.
+                  Select or upload 1–4 clear photos of the finished PC. The first is the front view. Uploaded source pictures are saved in this build's Media folder for reuse and backup.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
