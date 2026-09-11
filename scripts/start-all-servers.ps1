@@ -16,6 +16,7 @@ param(
     [switch]$NoGemRadar = $false,
     [switch]$NoAdmin = $false,
     [switch]$NoFrontend = $false,
+    [switch]$NoPeerSync = $false,
     [switch]$NoExtensionBuild = $false
 )
 
@@ -400,6 +401,13 @@ $servers = @(
         port     = 5173
         color    = "Cyan"
         skip     = $false
+    },
+    @{
+        name     = "peer-sync"
+        cmdArgs  = @("/c", "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts\run-peer-sync.ps1 -Write")
+        port     = $null
+        color    = "DarkCyan"
+        skip     = $NoPeerSync
     }
 )
 
@@ -488,7 +496,14 @@ try {
         # cmd/npm/python launchers can hand work to child processes and exit.
         # The listening port is the authoritative health signal for each server.
         foreach ($proc in $processes) {
-            $isRunning = [bool](Get-NetTCPConnection -LocalPort $proc.port -State Listen -ErrorAction SilentlyContinue)
+            # Network ports are authoritative for servers. Peer sync is a
+            # long-running worker without a listening port, so use its
+            # launcher process instead.
+            if ($null -eq $proc.port) {
+                $isRunning = -not $proc.process.HasExited
+            } else {
+                $isRunning = [bool](Get-NetTCPConnection -LocalPort $proc.port -State Listen -ErrorAction SilentlyContinue)
+            }
             if (-not $isRunning -and $lastKnownRunning[$proc.name]) {
                 Write-Host "[WARN] $($proc.name) has exited" -ForegroundColor Yellow
             } elseif ($isRunning -and -not $lastKnownRunning[$proc.name]) {
