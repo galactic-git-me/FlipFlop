@@ -1,13 +1,16 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy import func, select, and_, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta, date
 from app.database import get_db
-from app.models import Order, BuildCapacity, BuildCapacityOverride, CustomerProblem, CXDocument, Capture3DAsset, Capture3DStatus
+from app.models import Order, BuildCapacity, BuildCapacityOverride, CustomerProblem, CXDocument, Capture3DAsset, Capture3DStatus, Product, Build
 from app.models.manual_build import ManualBuild
 from app.models.customer import Customer
 from app.routes.auth import get_current_user
 from app.routes.admin_auth import get_current_admin
+from app.services.auth_service import get_customer_by_token
+from app.services.admin_auth_service import get_admin_by_token
+from app.services.product_faqs import selected_faqs
 from app.schemas.order import (
     CapacitySlotsOut,
     AdminOrderOut,
@@ -23,8 +26,34 @@ from app.config import get_settings
 
 router = APIRouter(prefix="/api/orders", tags=["orders"])
 
+async def _portal_actor(authorization: str | None, db: AsyncSession):
+    """Accept either the buyer JWT or the separate admin JWT.
+
+    The short-lived preview token identifies the build; it is deliberately
+    not itself a login credential.
+    """
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Sign in to access this customer portal")
+    parts = authorization.split()
+    if len(parts) != 2 or parts[0].lower() != "bearer":
+        raise HTTPException(status_code=401, detail="Invalid authorization header format")
+    token = parts[1]
+    customer = await get_customer_by_token(db, token)
+    if customer:
+        return "customer", customer
+    admin = await get_admin_by_token(db, token)
+    if admin:
+        return "admin", admin
+    raise HTTPException(status_code=401, detail="Invalid or expired login")
+
+
 @router.get("/portal-preview/{preview_token}")
-async def get_portal_preview(preview_token: str, db: AsyncSession = Depends(get_db)):
+async def get_portal_preview(
+    preview_token: str,
+    authorization: str | None = Header(None),
+    db: AsyncSession = Depends(get_db),
+):
+    actor_type, actor = await _portal_actor(authorization, db)
     try:
         claims = jwt.decode(preview_token, get_settings().secret_key, algorithms=[get_settings().jwt_algorithm])
     except JWTError:
@@ -34,15 +63,87 @@ async def get_portal_preview(preview_token: str, db: AsyncSession = Depends(get_
     order_id = int(claims.get("order_id") or 0)
     if order_id:
         order = (await db.execute(select(Order).where(Order.id == order_id))).scalar_one_or_none()
-        if order:
+        if order and (actor_type == "admin" or order.customer_id == actor.id):
             asset = (await db.execute(select(Capture3DAsset).where(Capture3DAsset.order_id == order.id))).scalar_one_or_none()
             return _order_to_my_order_out(order, asset)
+        if order:
+            raise HTTPException(status_code=404, detail="Build portal not found")
 
     build_id = int(claims.get("build_id") or 0)
     build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
     if not build or build.status not in {"built", "listed", "sold"} or not build.model_3d_url:
         raise HTTPException(status_code=404, detail="Build portal not found")
+    if actor_type != "admin":
+        # A buyer can access a manual build only through the storefront order
+        # that sold its linked product.  Unassigned/eBay-only builds remain
+        # admin-only until a customer account is linked to the sale.
+        buyer_order = (await db.execute(
+            select(Order).join(Product, Product.sold_order_id == Order.id)
+            .join(Build, Build.id == Product.build_id)
+            .where(Build.manual_build_id == build.id, Order.customer_id == actor.id)
+        )).scalar_one_or_none()
+        if not buyer_order:
+            raise HTTPException(status_code=404, detail="Build portal not found")
     return _manual_build_to_portal_out(build)
+
+
+def _manual_build_customer_hub(build: ManualBuild) -> dict:
+    evidence = dict(build.evidence_data or {})
+    performance = dict(evidence.get("performance_card") or {})
+    evaluation = dict(build.last_evaluation or {})
+    upgrades = evaluation.get("upgrade_plan") or evaluation.get("upgrades") or []
+    if isinstance(upgrades, dict):
+        upgrades = [upgrades]
+    return {
+        "build_name": build.generated_title or build.name,
+        "hero_photo_url": build.hero_photo_url,
+        "model": {"url": build.model_3d_url, "preview_image_url": build.hero_photo_url, "status": "published", "ar_ready": True},
+        "performance": {
+            "available": bool(performance),
+            "data": performance,
+            "message": "Measured results for this specific build." if performance else "Performance data will appear when benchmark results are published.",
+        },
+        "upgrade_plan": {
+            "title": "Upgrade path",
+            "intro": "Compatibility must be checked against the exact components in this build before any upgrade.",
+            "items": upgrades,
+        },
+        "getting_started": [
+            "Remove transit protection and check that all internal components are secure.",
+            "Connect the display to the graphics card where one is fitted.",
+            "Connect keyboard, mouse and network, then run Windows Update.",
+            "Keep the packaging until the machine has been checked and accepted.",
+        ],
+        "troubleshooting": [
+            {"title": "No display", "steps": ["Check power to the monitor and PC.", "Check the display cable is connected to the graphics card.", "Try the supplied cable and another monitor input."]},
+            {"title": "No power", "steps": ["Check the rear PSU switch and wall socket.", "Reseat the mains cable.", "Do not open the PSU; contact support if the issue remains."]},
+            {"title": "Network or audio issue", "steps": ["Run Windows Update and restart.", "Check the selected output device and network connection.", "Contact support with the exact symptom if it persists."]},
+        ],
+        "downloads": ([{"title": "Exact build 3D model (GLB)", "url": build.model_3d_url, "kind": "3d_model"}] if build.model_3d_url else []),
+        "driver_note": "No build-specific driver bundle has been published. Use the component manufacturer's support page for the exact part shown in the specification.",
+        "policies": {
+            "returns": f"Returns are handled under the published {build.return_days}-day return policy for this listing, subject to its terms.",
+            "warranty": "Your statutory consumer rights remain in force. Any additional warranty coverage is limited to what is stated in your order documents.",
+            "delivery": f"Delivery is normally expected within {build.delivery_min_days}-{build.delivery_max_days} days after dispatch, subject to courier conditions.",
+            "support": "Use the private support form in this portal and include the build ID and any error message.",
+        },
+        "faqs": selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides),
+    }
+
+
+def _order_customer_hub(model_url: str | None, preview_image_url: str | None = None) -> dict:
+    """Baseline hub for a normal customer order when no ManualBuild row is linked."""
+    return {
+        "model": {"url": model_url, "preview_image_url": preview_image_url, "status": "published" if model_url else "pending", "ar_ready": bool(model_url)},
+        "performance": {"available": False, "data": {}, "message": "Benchmark data will appear here when it has been published for this build."},
+        "upgrade_plan": {"title": "Upgrade path", "intro": "Compatibility must be checked against the exact components in this build before any upgrade.", "items": []},
+        "getting_started": ["Remove transit protection and check that all internal components are secure.", "Connect the display to the graphics card where one is fitted.", "Connect keyboard, mouse and network, then run Windows Update.", "Keep the packaging until the machine has been checked and accepted."],
+        "troubleshooting": [{"title": "No display", "steps": ["Check power to the monitor and PC.", "Check the display cable is connected to the graphics card.", "Contact support if the issue remains."]}],
+        "downloads": ([{"title": "Exact build 3D model (GLB)", "url": model_url, "kind": "3d_model"}] if model_url else []),
+        "driver_note": "No build-specific driver bundle has been published. Use the component manufacturer's support page for the exact part shown in the specification.",
+        "policies": {"returns": "Returns are handled under the published order policy and its terms.", "warranty": "Your statutory consumer rights remain in force. Additional coverage is limited to your order documents.", "delivery": "Delivery updates are shown in the order tracking section.", "support": "Use the private support form in this portal."},
+        "faqs": [],
+    }
 
 
 def _manual_build_to_portal_out(build: ManualBuild) -> MyOrderOut:
@@ -80,6 +181,7 @@ def _manual_build_to_portal_out(build: ManualBuild) -> MyOrderOut:
             "ar_ready": True,
         },
         model_3d_url=build.model_3d_url,
+        customer_hub=_manual_build_customer_hub(build),
         created_at=build.created_at,
     )
 
@@ -99,6 +201,11 @@ def _order_to_my_order_out(order: Order, capture_3d: Capture3DAsset | None = Non
     if order.tracking_number:
         template = carrier_urls.get(carrier.lower().replace(" ", "_"))
         tracking_url = template.format(order.tracking_number) if template else None
+    published_model_url = (
+        capture_3d.optimized_asset_ref
+        if capture_3d and capture_3d.status == Capture3DStatus.PUBLISHED and capture_3d.optimized_asset_ref
+        else None
+    )
     return MyOrderOut(
         id=order.id,
         order_id=order.order_id,
@@ -125,11 +232,8 @@ def _order_to_my_order_out(order: Order, capture_3d: Capture3DAsset | None = Non
              "ar_ready": bool(capture_3d.ar_ready)}
             if capture_3d and capture_3d.status == Capture3DStatus.PUBLISHED and capture_3d.optimized_asset_ref else None
         ),
-        model_3d_url=(
-            capture_3d.optimized_asset_ref
-            if capture_3d and capture_3d.status == Capture3DStatus.PUBLISHED and capture_3d.optimized_asset_ref
-            else None
-        ),
+        model_3d_url=published_model_url,
+        customer_hub=_order_customer_hub(published_model_url, capture_3d.preview_image_ref if capture_3d else None),
         created_at=order.created_at,
     )
 

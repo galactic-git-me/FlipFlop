@@ -111,6 +111,9 @@ class MyOrderOut(BaseModel):
     # capture metadata so storefront clients can render the viewer without
     # having to know the internal capture-asset field names.
     model_3d_url: Optional[str] = None
+    # Build-scoped customer portal content.  This is returned only after the
+    # order/build has passed the customer or admin access check.
+    customer_hub: Optional[Dict[str, Any]] = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=False)
