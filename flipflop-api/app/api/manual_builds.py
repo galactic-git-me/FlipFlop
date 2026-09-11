@@ -411,6 +411,16 @@ def _existing_build_model_path(build_id: int, filename: str) -> Path | None:
     ])
     return next((candidate for candidate in candidates if candidate.is_file()), None)
 
+
+def _build_model_download_dir(build_id: int) -> Path:
+    """Return the canonical local directory used for downloaded build models.
+
+    Keep this path unpadded even when older builds still live in a padded
+    directory such as ``builds/002``.  The download location is part of the
+    operator-facing contract: ``builds/<build_id>/3D Model``.
+    """
+    return _BUILD_ASSETS_ROOT / str(build_id) / "3D Model"
+
 # HERO_IMAGE_URL is the one listing-template placeholder the LLM is
 # instructed NOT to fill in itself (see ebay_listing_system_prompt.md) — it
 # varies per build, so only this backend can know the right value. Filled in
@@ -2357,10 +2367,7 @@ async def download_build_3d_model(build_id: int, db: AsyncSession = Depends(get_
     if source is None:
         raise HTTPException(404, "The saved 3D model file could not be found")
 
-    numeric_dir = _BUILD_ASSETS_ROOT / str(build_id)
-    padded_dir = _BUILD_ASSETS_ROOT / f"{build_id:03d}"
-    build_dir = numeric_dir if numeric_dir.exists() else padded_dir if padded_dir.exists() else numeric_dir
-    download_dir = build_dir / "3D Model"
+    download_dir = _build_model_download_dir(build_id)
     download_dir.mkdir(parents=True, exist_ok=True)
     download_path = download_dir / filename
     if source.resolve() != download_path.resolve():
