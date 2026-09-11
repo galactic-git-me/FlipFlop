@@ -180,7 +180,7 @@ export function PhotosTab({ flip, onFlipUpdated }: TabProps) {
         {images.length > 0 ? (
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
             {images.map((url, i) => (
-              // eslint-disable-next-line @next/next/no-img-element
+               
               <img key={i} src={url} alt={`Generated listing photo ${i + 1}`} className="rounded-lg border border-slate-800 aspect-square object-cover" />
             ))}
           </div>

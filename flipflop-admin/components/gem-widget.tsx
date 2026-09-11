@@ -12,7 +12,7 @@ interface GemData {
   image_url?: string | null;
 }
 
-// eslint-disable-next-line @next/next/no-img-element -- external eBay-hosted
+ 
 // thumbnails; next/image's domain allowlist isn't worth configuring for a
 // scraper whose image hosts vary listing to listing.
 function GemThumbnail({ src, alt }: { src?: string | null; alt: string }) {

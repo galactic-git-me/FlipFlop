@@ -368,7 +368,7 @@ function ComponentSelector({
       {selected && (
         <div className="mt-2 p-2 bg-slate-800/50 rounded text-xs space-y-1">
           {selected.image_url && (
-            // eslint-disable-next-line @next/next/no-img-element -- external eBay-hosted thumbnail
+             
             <img
               src={selected.image_url}
               alt={selected.title}

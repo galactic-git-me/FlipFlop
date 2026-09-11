@@ -12,7 +12,7 @@ export function SourceBadge({ sourceName, url, className }: Props) {
   const inner = (
     <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[#0a1119] border border-[#1e2d45] text-xs text-slate-400 font-medium hover:border-[#00dc82]/40 hover:text-slate-300 transition-colors ${className ?? ""}`}>
       {favicon && (
-        // eslint-disable-next-line @next/next/no-img-element
+         
         <img src={favicon} alt="" className="w-3 h-3 rounded-sm" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
       )}
       {sourceName}

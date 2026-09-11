@@ -458,7 +458,7 @@ function PartCard({
     >
       <div className="flex gap-2.5">
         {part.image_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
+           
           <img src={part.image_url} alt={part.name} className="w-12 h-12 object-contain rounded bg-[#070e1a] flex-shrink-0" />
         ) : (
           <div className="w-12 h-12 rounded bg-[#070e1a] flex items-center justify-center flex-shrink-0">
@@ -527,7 +527,7 @@ function ComponentSelector({
       setCases(caseList as CataloguePart[]);
       setCaseThemes(themes as string[]);
     }).finally(() => setLoading(false));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [build.id]);
 
   const filteredCases = caseTheme ? cases.filter((c) => c.theme === caseTheme) : cases;

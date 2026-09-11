@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable @next/next/no-img-element */
+ 
 
 import { Star, Zap, Shield, Cpu, TrendingUp, Play } from "lucide-react";
 

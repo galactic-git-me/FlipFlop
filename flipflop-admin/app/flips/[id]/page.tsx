@@ -117,7 +117,7 @@ function UpgradeSection({
       })
       .catch(console.error)
       .finally(() => setLoadingPbs(false));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);  
 
   const openPickerFor = useCallback(async (component: string) => {
     const cat = COMPONENT_TO_CATEGORY[component] ?? component.toLowerCase();

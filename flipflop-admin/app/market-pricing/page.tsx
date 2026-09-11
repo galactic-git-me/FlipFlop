@@ -251,7 +251,7 @@ export default function MarketPricingPage() {
         default: return a.name.localeCompare(b.name);
       }
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [parts, activeCat, query, sortBy, slicerSel, activeCatSlicers]);
 
   const withBoth  = displayed.filter(p => p.price_used != null && p.price_new != null);

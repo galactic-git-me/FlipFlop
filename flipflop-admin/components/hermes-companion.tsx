@@ -40,7 +40,7 @@ function InlineListingCard({
   return (
     <div className="bg-[#0d1120] border border-[#2a2d3e] rounded-xl p-3 flex flex-col gap-2">
       {card.image_url && (
-        /* eslint-disable-next-line @next/next/no-img-element */
+         
         <img src={card.image_url} alt="" className="w-full h-28 object-contain rounded-lg bg-[#080f1a]" />
       )}
       <p className="text-xs font-semibold text-slate-200 line-clamp-2 leading-snug">{card.title}</p>

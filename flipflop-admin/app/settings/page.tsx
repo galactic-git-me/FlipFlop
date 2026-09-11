@@ -197,7 +197,7 @@ export default function SettingsPage() {
       void loadEbayStatus();
     }, 0);
     return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   // eBay returns here with a result flag. Keep the user on the relevant tab
@@ -217,7 +217,7 @@ export default function SettingsPage() {
     params.delete("reason");
     const query = params.toString();
     window.history.replaceState({}, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   useEffect(() => {

@@ -24,7 +24,7 @@ export function VendorLogo({ vendor }: { vendor: string }) {
   }
 
   return (
-    // eslint-disable-next-line @next/next/no-img-element -- external favicon service
+     
     <img
       src={`https://www.google.com/s2/favicons?domain=${meta.domain}&sz=32`}
       alt={meta.label}

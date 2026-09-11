@@ -709,7 +709,7 @@ function MarketSnapshotPanel({ snapshot }: { snapshot: MarketSnapshot | null }) 
   );
 }
 
-// eslint-disable-next-line @next/next/no-img-element -- external eBay-hosted
+ 
 // thumbnails; next/image's domain allowlist isn't worth configuring for a
 // scraper whose image hosts vary listing to listing.
 function ListingThumbnail({ src, alt, size = 40 }: { src?: string | null; alt: string; size?: number }) {
@@ -1067,7 +1067,7 @@ function SourceBadge({ source }: { source: string }) {
   return (
     <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs font-semibold whitespace-nowrap ${SOURCE_COLORS[source] || "bg-slate-600 text-slate-200"}`}>
       {domain && (
-        // eslint-disable-next-line @next/next/no-img-element -- tiny external favicon, not worth next/image's domain allowlist
+         
         <img
           src={`https://www.google.com/s2/favicons?domain=${domain}&sz=32`}
           alt=""

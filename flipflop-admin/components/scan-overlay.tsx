@@ -173,7 +173,7 @@ function SourceCard({ site }: { site: ScanSite }) {
           transition: "opacity 0.5s ease",
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
+        { }
         <img
           src={logoUrl}
           alt=""

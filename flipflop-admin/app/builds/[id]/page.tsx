@@ -1165,7 +1165,7 @@ export default function BuildDetailPage() {
                     <div className="pointer-events-none absolute bottom-1 left-1 z-10 max-w-[calc(100%-8px)] truncate rounded-md bg-slate-950/85 px-2 py-1 text-[10px] font-semibold text-white shadow">
                       {photoIdx + 1}. {(["Cover / hero", "Colour-shift angle", "Interior detail", "Performance proof", "Gaming FPS", "Rear connectivity", "Components", "Condition detail", "Included items", "Packaging", "Windows proof", "Extra angle"])[photoIdx] || "Extra view"}
                     </div>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    { }
                     <img
                       src={displayMediaUrl(build.id, p.url)}
                       alt={`${build.name} photo ${photoIdx + 1}`}
@@ -1333,7 +1333,7 @@ export default function BuildDetailPage() {
                               aria-label={`${isSelected ? "Remove" : "Use"} photo ${index + 1} for ${target.label}`}
                               className={`relative h-20 w-20 shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 ${isSelected ? "border-cyan-300" : "border-white/10 hover:border-white/30"}`}
                             >
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              { }
                               <img src={displayMediaUrl(build.id, photo.url)} alt="" className="h-full w-full object-cover" />
                               <span className={`absolute right-1 top-1 grid h-5 w-5 place-items-center rounded-full text-[10px] font-black ${isSelected ? "bg-cyan-300 text-slate-950" : "bg-slate-950/80 text-slate-300"}`}>
                                 {isSelected ? selected.indexOf(photo.url) + 1 : index + 1}
@@ -1349,7 +1349,7 @@ export default function BuildDetailPage() {
                               aria-label={`Remove temporary picture ${index + 1}`}
                               className="relative h-20 w-20 shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 border-violet-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
                             >
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              { }
                               <img src={photo.preview} alt="" className="h-full w-full object-cover" />
                               <span className="absolute inset-x-0 bottom-0 bg-violet-950/90 px-1 py-0.5 text-[9px] font-bold text-violet-100">Temporary</span>
                               <span className="absolute right-1 top-1 grid h-5 w-5 place-items-center rounded-full bg-violet-300 text-[10px] font-black text-slate-950">
@@ -1984,7 +1984,7 @@ function BrandedCardTile({
       <div className="aspect-[3/2] rounded-lg overflow-hidden bg-slate-800 border border-white/[0.07] flex items-center justify-center">
         {photo ? (
           <a href={displayMediaUrl(buildId, photo.url)} target="_blank" rel="noopener noreferrer" title="View full size">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+            { }
             <img src={displayMediaUrl(buildId, photo.url)} alt={label} className="w-full h-full object-cover" />
           </a>
         ) : (

@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable @next/next/no-img-element */
+ 
 
 import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import {
@@ -695,7 +695,7 @@ function LiveComponentCard({ row }: { row: LivePriceRow }) {
 
       {/* Full-card background image */}
       {row.used_cheapest_image ? (
-        /* eslint-disable-next-line @next/next/no-img-element */
+         
         <img
           src={row.used_cheapest_image}
           alt={row.model}

@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable @next/next/no-img-element */
+ 
 
 import { AlertTriangle, CheckCircle2, ChevronLeft, ChevronRight, Heart, ListChecks, Monitor, Search, Smartphone, X } from "lucide-react";
 import { useState } from "react";

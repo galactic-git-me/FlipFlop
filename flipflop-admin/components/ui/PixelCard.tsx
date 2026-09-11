@@ -232,7 +232,7 @@ export default function PixelCard({ variant = "default", className = "", childre
       observer.disconnect();
       cancelAnimationFrame(animationRef.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [cfg.gap, cfg.speed, cfg.colors]);
 
   return (

@@ -146,7 +146,7 @@ export default function CaseCataloguePage() {
         {cases.map(c => (
           <div key={c.id} className={`border rounded-lg p-3 bg-card ${c.status === "hidden" ? "opacity-50" : ""}`}>
             {c.images[0] && (
-              // eslint-disable-next-line @next/next/no-img-element
+               
               <img src={c.images[0]} alt={c.name} className="w-full h-32 object-contain mb-2 rounded" />
             )}
             <p className="font-semibold text-sm truncate">{c.name}</p>

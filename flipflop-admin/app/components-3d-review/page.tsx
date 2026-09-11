@@ -950,7 +950,7 @@ export default function Components3DReviewPage() {
                         aria-label={`Open source picture ${index + 1} full size`}
                       >
                         {/* Source URLs can be temporary signed URLs, so Next Image optimisation cannot safely proxy them. */}
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        { }
                         <img
                           src={imageUrl}
                           alt={`Source reference ${index + 1} for ${selectedAsset.subject_name || selectedAsset.family_key}`}

@@ -771,7 +771,7 @@ export default function Cases3DPriorityPage() {
                               onClick={() => toggleReference(candidate)}
                               className={`group relative cursor-pointer overflow-hidden rounded-md border text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700 hover:border-slate-500"}`}
                             >
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              { }
                               <img src={candidate.url} alt="" className="h-36 w-full bg-white object-contain" />
                               {selectedIndex >= 0 && <span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{selectedIndex + 1}</span>}
                               <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-1 bg-slate-950/85 px-1.5 py-0.5 text-[9px] uppercase text-slate-200 opacity-0 backdrop-blur-sm transition group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
@@ -910,7 +910,7 @@ export default function Cases3DPriorityPage() {
                                 title={result.label || "Google Images result"}
                                 className={`relative cursor-pointer overflow-hidden rounded-md border bg-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700 hover:border-cyan-500/70"}`}
                               >
-                                {/* eslint-disable-next-line @next/next/no-img-element -- arbitrary Google result hosts cannot be safely allowlisted */}
+                                { }
                                 <img src={result.thumbnail_url || result.url} alt={result.label || "Google Images result"} className="h-28 w-full object-contain" loading="lazy" />
                                 {selectedIndex >= 0 && <span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{selectedIndex + 1}</span>}
                               </button>
@@ -933,7 +933,7 @@ export default function Cases3DPriorityPage() {
                             onClick={() => toggleReference(candidate)}
                             className={`relative cursor-pointer overflow-hidden rounded-md border bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700 hover:border-slate-500"}`}
                           >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            { }
                             <img src={candidate.url} alt={candidate.label || "Case reference"} className="h-44 w-full object-contain" />
                             {selectedIndex >= 0 && <span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{selectedIndex + 1}</span>}
                           </button>

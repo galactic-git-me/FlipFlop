@@ -350,7 +350,7 @@ export function PricingIntelligence({
 
   useEffect(() => {
     // Initial remote-data synchronisation for this client-only panel.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     void load(false);
   }, [load]);
 
