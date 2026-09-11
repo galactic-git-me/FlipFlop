@@ -775,6 +775,11 @@ export default function BuildDetailPage() {
   const hasRequiredAspects = [...EBAY_REQUIRED_ASPECTS].every((name) => !!build.generated_aspects?.[name]?.length);
   const canPublish = canSell && !!build.hero_photo_url && !!build.generated_title && !!build.generated_description && hasRequiredAspects;
   const regularPhotos = build.photos.filter((p) => p.kind === "photo");
+  // Every persisted build image is eligible for the listing: ordinary media,
+  // performance evidence, the registration plate, and the specification card.
+  const listingPhotos = build.photos.filter((p) =>
+    ["photo", "performance_card", "registration_plate", "spec_card"].includes(p.kind)
+  );
   const specCard = build.photos.find((p) => p.kind === "spec_card");
   const registrationPlate = build.photos.find((p) => p.kind === "registration_plate");
 
@@ -1879,7 +1884,7 @@ export default function BuildDetailPage() {
         <EbayListingHTMLPreview
           title={build.generated_title}
           description={build.generated_description}
-          images={build.photos?.filter((p) => p.kind === "photo").map((p) => displayMediaUrl(build.id, p.url)) || []}
+          images={listingPhotos.map((p) => displayMediaUrl(build.id, p.url))}
           aspects={build.generated_aspects}
           price={price ? Number(price) : undefined}
           condition={condition}

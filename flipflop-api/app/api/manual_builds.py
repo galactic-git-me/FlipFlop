@@ -363,7 +363,7 @@ _PUBLIC_MEDIA_ROOT = Path(__file__).resolve().parents[3].parent / "FlipFlop.shop
 _MODELS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "models"
 _BUILD_ASSETS_ROOT = Path(__file__).resolve().parents[3] / "builds"
 _BUILD_3D_SUBDIR = "3D Build"
-_BUILD_ASSET_SUBDIRS = {"Media", "Performance", "Registration"}
+_BUILD_ASSET_SUBDIRS = {"Media", "Performance", "Registration", "Specifications"}
 # Served directly by this process (see app.mount("/api/uploads", ...) in
 # main.py) — files never leave this container, so no cross-host sync needed.
 _PUBLIC_API_BASE = "https://www.theflipflop.shop/api"
@@ -2292,7 +2292,7 @@ async def upload_branded_asset(
 
     image_bytes = await file.read()
     filename = f"{kind}-{uuid.uuid4().hex}.png"
-    asset_dir = "Registration" if kind == "registration_plate" else "Media"
+    asset_dir = "Registration" if kind == "registration_plate" else "Specifications"
     local_path, public_url = _build_named_asset_path(build_id, filename, asset_dir)
     local_path.write_bytes(image_bytes)
 
