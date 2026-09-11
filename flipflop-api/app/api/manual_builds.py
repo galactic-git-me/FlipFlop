@@ -8,6 +8,7 @@ import io
 from zipfile import ZipFile, ZIP_DEFLATED
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
+from urllib.parse import quote
 import httpx
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, UploadFile, File, Form, Query
 from fastapi.responses import StreamingResponse
@@ -206,17 +207,16 @@ async def _run_build_3d_generation(
         else:
             try:
                 filename = f"build_{build_id}_{asset_type}_{uuid.uuid4().hex}.glb"
-                local_path = _MODELS_ROOT / filename
+                local_path, public_url = _build_3d_asset_path(build_id, filename)
                 async with httpx.AsyncClient(timeout=120, follow_redirects=True) as client:
                     response = await client.get(result.glb_url)
                     response.raise_for_status()
-                local_path.parent.mkdir(parents=True, exist_ok=True)
                 local_path.write_bytes(response.content)
                 entry.update(
                     status="succeeded",
                     progress=result.progress,
                     task_id=result.task_id,
-                    glb_url=f"{_PUBLIC_API_BASE}/uploads/models/{filename}",
+                    glb_url=public_url,
                     preview_url=result.thumbnail_url,
                     completed_at=datetime.utcnow().isoformat(),
                 )
@@ -356,12 +356,25 @@ _IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 _MAX_IMAGE_BYTES = 15 * 1024 * 1024  # 15 MB
 _UPLOADS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "manual_builds"
 _PUBLIC_MEDIA_ROOT = Path(__file__).resolve().parents[3].parent / "FlipFlop.shop" / "public" / "media"
-_MODELS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "models"
+_BUILD_ASSETS_ROOT = Path(__file__).resolve().parents[3] / "builds"
+_BUILD_3D_SUBDIR = "3D Build"
 # Served directly by this process (see app.mount("/api/uploads", ...) in
 # main.py) — files never leave this container, so no cross-host sync needed.
 _PUBLIC_API_BASE = "https://www.theflipflop.shop/api"
 _SELLING_PRINCIPLES_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "selling_principles.md"
 _EBAY_LISTING_SYSTEM_PROMPT_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "ebay_listing_system_prompt.md"
+
+
+def _build_3d_asset_path(build_id: int, filename: str) -> tuple[Path, str]:
+    """Return the on-disk path and public URL for a build-owned 3D asset."""
+    numeric_dir = _BUILD_ASSETS_ROOT / str(build_id)
+    padded_dir = _BUILD_ASSETS_ROOT / f"{build_id:03d}"
+    build_dir = numeric_dir if numeric_dir.exists() else padded_dir if padded_dir.exists() else numeric_dir
+    asset_dir = build_dir / _BUILD_3D_SUBDIR
+    asset_dir.mkdir(parents=True, exist_ok=True)
+    relative_dir = build_dir.relative_to(_BUILD_ASSETS_ROOT).as_posix()
+    public_url = f"{_PUBLIC_API_BASE}/builds/{quote(relative_dir)}/{quote(_BUILD_3D_SUBDIR)}/{quote(filename)}"
+    return asset_dir / filename, public_url
 
 # HERO_IMAGE_URL is the one listing-template placeholder the LLM is
 # instructed NOT to fill in itself (see ebay_listing_system_prompt.md) — it
@@ -2258,14 +2271,10 @@ async def upload_build_3d_model(
     if not build:
         raise HTTPException(404, "Build not found")
 
-    # Keep manually uploaded models beside the build's photos so the complete
-    # build asset set can be backed up and moved together.
-    build_dir = _UPLOADS_ROOT / str(build_id)
-    build_dir.mkdir(parents=True, exist_ok=True)
     filename = f"model-3d-{uuid.uuid4().hex}.glb"
-    local_path = build_dir / filename
+    local_path, public_url = _build_3d_asset_path(build_id, filename)
     local_path.write_bytes(model_bytes)
-    build.model_3d_url = f"{_PUBLIC_API_BASE}/uploads/manual_builds/{build_id}/{filename}"
+    build.model_3d_url = public_url
     build.updated_at = datetime.utcnow()
     await db.flush()
     await db.refresh(build)

@@ -740,6 +740,12 @@ app.include_router(guides_router)
 app.include_router(admin_router)
 app.include_router(gems_router)
 
+# Register after API routers so any future `/api/builds/...` API routes retain
+# precedence; model files are served from the non-overlapping build asset path.
+_builds_dir = _app_dir.parent / "builds"
+_builds_dir.mkdir(parents=True, exist_ok=True)
+app.mount("/api/builds", StaticFiles(directory=str(_builds_dir)), name="build-assets")
+
 
 _startup_time: datetime = datetime.now(timezone.utc)
 
