@@ -1428,6 +1428,7 @@ export default function BuildDetailPage() {
 
                       const formData = new FormData();
                       formData.append("file", file);
+                      formData.append("build_id", String(buildId));
 
                       const response = await fetch("/api/performance-card/render", {
                         method: "POST",
@@ -1455,7 +1456,7 @@ export default function BuildDetailPage() {
                           })
                         );
                         setPerformanceCardImageUrls(urls);
-                        setPerformanceCardZipUrl(URL.createObjectURL(zipBlob));
+                        setPerformanceCardZipUrl(`/proxy-api/manual-builds/${buildId}/performance/download`);
                         setPerformanceCardGenerated(true);
                       } else {
                         throw new Error(`Failed to render performance card: ${response.statusText}`);

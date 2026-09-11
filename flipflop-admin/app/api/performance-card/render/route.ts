@@ -35,10 +35,17 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
+    const buildId = String(formData.get("build_id") || "").trim();
 
     if (!file) {
       return NextResponse.json(
         { success: false, error: "No file provided" },
+        { status: 400 }
+      );
+    }
+    if (!/^\d+$/.test(buildId)) {
+      return NextResponse.json(
+        { success: false, error: "A valid build_id is required" },
         { status: 400 }
       );
     }
@@ -54,12 +61,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const targetDir = path.join(
-      process.cwd(),
-      "..",
-      "..",
-      "Personalised Website"
-    );
+    const buildsRoot = path.resolve(process.cwd(), "..", "builds");
+    const numericBuildDir = path.join(buildsRoot, buildId);
+    const paddedBuildDir = path.join(buildsRoot, buildId.padStart(3, "0"));
+    let buildDir = numericBuildDir;
+    try {
+      await fs.stat(numericBuildDir);
+    } catch {
+      try {
+        await fs.stat(paddedBuildDir);
+        buildDir = paddedBuildDir;
+      } catch {
+        // New builds use their numeric ID until a padded directory is created.
+      }
+    }
+    const targetDir = path.join(buildDir, "Performance");
 
     await fs.mkdir(targetDir, { recursive: true });
     const targetFile = path.join(targetDir, "performance-data.json");
@@ -122,12 +138,15 @@ export async function POST(request: NextRequest) {
           clip: { x: cardBox.x, y, width: cardBox.width, height },
           timeout: 10000,
         });
-        zip.file(`performance-card-part-${i + 1}.png`, screenshot);
+        const partName = `performance-card-part-${i + 1}.png`;
+        await fs.writeFile(path.join(targetDir, partName), screenshot);
+        zip.file(partName, screenshot);
       }
 
       await browser.close();
 
       const zipBuffer = await zip.generateAsync({ type: "nodebuffer" });
+      await fs.writeFile(path.join(targetDir, "performance-card-sections.zip"), zipBuffer);
       console.log(`[Performance Card] Zip built: ${zipBuffer.length} bytes`);
 
       return new NextResponse(new Blob([new Uint8Array(zipBuffer)]), {

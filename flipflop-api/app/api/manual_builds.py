@@ -363,6 +363,7 @@ _PUBLIC_MEDIA_ROOT = Path(__file__).resolve().parents[3].parent / "FlipFlop.shop
 _MODELS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "models"
 _BUILD_ASSETS_ROOT = Path(__file__).resolve().parents[3] / "builds"
 _BUILD_3D_SUBDIR = "3D Build"
+_BUILD_ASSET_SUBDIRS = {"Media", "Performance", "Registration"}
 # Served directly by this process (see app.mount("/api/uploads", ...) in
 # main.py) — files never leave this container, so no cross-host sync needed.
 _PUBLIC_API_BASE = "https://www.theflipflop.shop/api"
@@ -370,28 +371,32 @@ _SELLING_PRINCIPLES_PATH = Path(__file__).resolve().parent.parent.parent / "conf
 _EBAY_LISTING_SYSTEM_PROMPT_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "ebay_listing_system_prompt.md"
 
 
-def _build_3d_asset_path(build_id: int, filename: str) -> tuple[Path, str]:
-    """Return the on-disk path and public URL for a build-owned 3D asset."""
+def _build_asset_path(build_id: int, filename: str, subdir: str) -> tuple[Path, str]:
+    """Return the on-disk path and public URL for a build-owned asset."""
+    if subdir not in _BUILD_ASSET_SUBDIRS and subdir != _BUILD_3D_SUBDIR:
+        raise ValueError(f"Unsupported build asset directory: {subdir}")
     numeric_dir = _BUILD_ASSETS_ROOT / str(build_id)
     padded_dir = _BUILD_ASSETS_ROOT / f"{build_id:03d}"
     build_dir = numeric_dir if numeric_dir.exists() else padded_dir if padded_dir.exists() else numeric_dir
-    asset_dir = build_dir / _BUILD_3D_SUBDIR
+    asset_dir = build_dir / subdir
     asset_dir.mkdir(parents=True, exist_ok=True)
     relative_dir = build_dir.relative_to(_BUILD_ASSETS_ROOT).as_posix()
-    public_url = f"{_PUBLIC_API_BASE}/builds/{quote(relative_dir)}/{quote(_BUILD_3D_SUBDIR)}/{quote(filename)}"
+    public_url = f"{_PUBLIC_API_BASE}/builds/{quote(relative_dir)}/{quote(subdir)}/{quote(filename)}"
     return asset_dir / filename, public_url
+
+
+def _build_3d_asset_path(build_id: int, filename: str) -> tuple[Path, str]:
+    """Return the on-disk path and public URL for a build-owned 3D asset."""
+    return _build_asset_path(build_id, filename, _BUILD_3D_SUBDIR)
 
 
 def _build_media_asset_path(build_id: int, filename: str) -> tuple[Path, str]:
     """Return the on-disk path and public URL for a build image."""
-    numeric_dir = _BUILD_ASSETS_ROOT / str(build_id)
-    padded_dir = _BUILD_ASSETS_ROOT / f"{build_id:03d}"
-    build_dir = numeric_dir if numeric_dir.exists() else padded_dir if padded_dir.exists() else numeric_dir
-    asset_dir = build_dir / "Media"
-    asset_dir.mkdir(parents=True, exist_ok=True)
-    relative_dir = build_dir.relative_to(_BUILD_ASSETS_ROOT).as_posix()
-    public_url = f"{_PUBLIC_API_BASE}/builds/{quote(relative_dir)}/Media/{quote(filename)}"
-    return asset_dir / filename, public_url
+    return _build_asset_path(build_id, filename, "Media")
+
+
+def _build_named_asset_path(build_id: int, filename: str, subdir: str) -> tuple[Path, str]:
+    return _build_asset_path(build_id, filename, subdir)
 
 
 def _existing_build_model_path(build_id: int, filename: str) -> Path | None:
@@ -2183,7 +2188,8 @@ async def upload_photos(
         ext = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp"}[content_type]
         filename = f"{uuid.uuid4().hex}.{ext}"
 
-        local_path, public_url = _build_media_asset_path(build_id, filename)
+        asset_dir = "Performance" if kind == "performance_card" else "Media"
+        local_path, public_url = _build_named_asset_path(build_id, filename, asset_dir)
         local_path.write_bytes(image_bytes)
 
         # Served directly from the build-owned Media directory.
@@ -2252,6 +2258,23 @@ async def download_build_photos(build_id: int, db: AsyncSession = Depends(get_db
     )
 
 
+@router.get("/{build_id}/performance/download")
+async def download_performance_card(build_id: int, db: AsyncSession = Depends(get_db)):
+    """Download the saved performance-card ZIP for this build."""
+    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
+    build = result.scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+
+    roots = [_BUILD_ASSETS_ROOT / str(build_id), _BUILD_ASSETS_ROOT / f"{build_id:03d}"]
+    zip_path = next((root / "Performance" / "performance-card-sections.zip" for root in roots
+                     if (root / "Performance" / "performance-card-sections.zip").is_file()), None)
+    if zip_path is None:
+        raise HTTPException(404, "No saved performance card found")
+    safe_name = "".join(char if char.isalnum() or char in "-_" else "-" for char in build.name).strip("-") or f"build-{build_id}"
+    return FileResponse(zip_path, media_type="application/zip", filename=f"{safe_name}-performance-card.zip")
+
+
 @router.post("/{build_id}/photos/branded", response_model=ManualBuildOut)
 async def upload_branded_asset(
     build_id: int,
@@ -2269,7 +2292,8 @@ async def upload_branded_asset(
 
     image_bytes = await file.read()
     filename = f"{kind}-{uuid.uuid4().hex}.png"
-    local_path, public_url = _build_media_asset_path(build_id, filename)
+    asset_dir = "Registration" if kind == "registration_plate" else "Media"
+    local_path, public_url = _build_named_asset_path(build_id, filename, asset_dir)
     local_path.write_bytes(image_bytes)
 
     photos = [p for p in (build.photos or []) if p.get("kind") != kind]
