@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Header
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Header
 from sqlalchemy import func, select, and_, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta, date
@@ -11,6 +11,7 @@ from app.routes.admin_auth import get_current_admin
 from app.services.auth_service import get_customer_by_token
 from app.services.admin_auth_service import get_admin_by_token
 from app.services.product_faqs import selected_faqs
+from app.services.email_service import send_order_status_email
 from app.schemas.order import (
     CapacitySlotsOut,
     AdminOrderOut,
@@ -475,6 +476,7 @@ async def list_orders(
 async def update_order(
     order_id: int,
     update: AdminOrderUpdateIn,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
 ):
     """Update order status or notes"""
@@ -486,6 +488,7 @@ async def update_order(
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
 
+    old_status = order.status.value if hasattr(order.status, "value") else str(order.status)
     if update.status:
         order.status = update.status
     if update.note is not None:
@@ -493,6 +496,19 @@ async def update_order(
 
     order.updated_at = datetime.utcnow()
     await db.commit()
+
+    if update.status and update.status != old_status:
+        customer_result = await db.execute(select(Customer).where(Customer.id == order.customer_id))
+        customer = customer_result.scalar_one_or_none()
+        if customer:
+            background_tasks.add_task(
+                send_order_status_email,
+                customer.email,
+                customer.name,
+                order.order_id,
+                update.status,
+                order.id,
+            )
 
     return order
 

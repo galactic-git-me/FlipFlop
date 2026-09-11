@@ -328,7 +328,9 @@ async def update_order_status(
     db.commit()
     db.refresh(order)
 
-    if old_status != new_status and new_status in {OrderStatus.BUILDING, OrderStatus.QA, OrderStatus.COMPLETED} and order.customer:
+    # Every customer-visible lifecycle transition gets the same branded,
+    # centralised status email template.
+    if old_status != new_status and order.customer:
         background_tasks.add_task(send_order_status_email, order.customer.email, order.customer.name, order.order_id, new_status.value, order.id)
 
     return {
@@ -397,7 +399,11 @@ async def update_shipping(
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
 
-    first_shipment_update = order.shipped_at is None
+    shipping_changed = (
+        order.tracking_number != update.tracking_number
+        or order.carrier != update.carrier
+        or order.estimated_delivery != update.estimated_delivery
+    )
     order.tracking_number = update.tracking_number
     order.carrier = update.carrier
     order.estimated_delivery = update.estimated_delivery
@@ -406,7 +412,7 @@ async def update_shipping(
     db.commit()
     db.refresh(order)
 
-    if first_shipment_update and order.customer:
+    if shipping_changed and order.customer:
         carrier_urls = {"royal_mail": "https://www.royalmail.com/track-your-item#/tracking-results/{}", "parcelforce": "https://www.parcelforce.com/track-trace?trackNumber={}", "dpd": "https://track.dpd.co.uk/parcels/{}", "ups": "https://www.ups.com/track?loc=en_GB&tracknum={}", "dhl": "https://www.dhl.com/gb-en/home/tracking/tracking-express.html?submit=1&tracking-id={}"}
         template = carrier_urls.get((order.carrier or "").lower().replace(" ", "_"))
         tracking_url = template.format(order.tracking_number) if template and order.tracking_number else None
