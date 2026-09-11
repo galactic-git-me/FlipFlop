@@ -60,31 +60,30 @@ async def get_portal_preview(
         raise HTTPException(status_code=401, detail="Preview expired or invalid")
     if claims.get("typ") != "portal_preview" or claims.get("scope") != "read":
         raise HTTPException(status_code=403, detail="Invalid preview scope")
+    build_id = int(claims.get("build_id") or 0)
     order_id = int(claims.get("order_id") or 0)
+    if build_id:
+        build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
+        if not build or build.status not in {"built", "listed", "sold"} or not build.model_3d_url:
+            raise HTTPException(status_code=404, detail="Build portal not found")
+        if actor_type != "admin":
+            # A buyer can access a manual build only through the storefront
+            # order that sold its linked product.
+            buyer_order = (await db.execute(
+                select(Order).join(Product, Product.sold_order_id == Order.id)
+                .join(Build, Build.id == Product.build_id)
+                .where(Build.manual_build_id == build.id, Order.customer_id == actor.id)
+            )).scalar_one_or_none()
+            if not buyer_order:
+                raise HTTPException(status_code=404, detail="Build portal not found")
+        return _manual_build_to_portal_out(build)
+
     if order_id:
         order = (await db.execute(select(Order).where(Order.id == order_id))).scalar_one_or_none()
         if order and (actor_type == "admin" or order.customer_id == actor.id):
             asset = (await db.execute(select(Capture3DAsset).where(Capture3DAsset.order_id == order.id))).scalar_one_or_none()
             return _order_to_my_order_out(order, asset)
-        if order:
-            raise HTTPException(status_code=404, detail="Build portal not found")
-
-    build_id = int(claims.get("build_id") or 0)
-    build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
-    if not build or build.status not in {"built", "listed", "sold"} or not build.model_3d_url:
-        raise HTTPException(status_code=404, detail="Build portal not found")
-    if actor_type != "admin":
-        # A buyer can access a manual build only through the storefront order
-        # that sold its linked product.  Unassigned/eBay-only builds remain
-        # admin-only until a customer account is linked to the sale.
-        buyer_order = (await db.execute(
-            select(Order).join(Product, Product.sold_order_id == Order.id)
-            .join(Build, Build.id == Product.build_id)
-            .where(Build.manual_build_id == build.id, Order.customer_id == actor.id)
-        )).scalar_one_or_none()
-        if not buyer_order:
-            raise HTTPException(status_code=404, detail="Build portal not found")
-    return _manual_build_to_portal_out(build)
+    raise HTTPException(status_code=404, detail="Build portal not found")
 
 
 def _manual_build_customer_hub(build: ManualBuild) -> dict:
