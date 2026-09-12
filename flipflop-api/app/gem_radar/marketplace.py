@@ -18,6 +18,7 @@ from urllib.parse import urlparse
 # last-resort signal in fallback_listing_url, never to override a real,
 # already-known source.
 _ASIN_PATTERN = re.compile(r"^B0[A-Z0-9]{8}$")
+_AWD_PROMO_BADGE_TITLE = re.compile(r"^save\s+\d+(?:\.\d+)?\s*%$", re.IGNORECASE)
 
 _DOMAIN_TO_MARKETPLACE: dict[str, str] = {
     "ebay.co.uk": "ebay",
@@ -72,6 +73,20 @@ def infer_marketplace(url: str | None) -> str | None:
         if host == domain or host.endswith(f".{domain}"):
             return marketplace
     return None
+
+
+def is_malformed_awdit_listing(url: str | None, title: str | None) -> bool:
+    """Identify AWD cards where the scraper captured the discount badge.
+
+    AWD product cards expose a separate badge such as ``SAVE 6%``.  A selector
+    regression can put that badge into ``title`` and parse ``6`` as the price.
+    Such a row has no trustworthy product identity or price and must not enter
+    the scoring/price history tables.
+    """
+    return (
+        infer_marketplace(url) == "awd_it"
+        and bool(_AWD_PROMO_BADGE_TITLE.fullmatch((title or "").strip()))
+    )
 
 
 # Per-marketplace URL template, used only as a fallback for scored rows

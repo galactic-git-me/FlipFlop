@@ -24,7 +24,12 @@ from app.gem_radar.adapters.sold_comps import PlaywrightSoldCompsAdapter
 from app.gem_radar.evidence import update_latest_gems
 from app.gem_radar import identity as identity_mod
 from app.gem_radar.inventory_match import fetch_inventory_awareness
-from app.gem_radar.marketplace import fallback_listing_url, infer_marketplace, usable_listing_url
+from app.gem_radar.marketplace import (
+    fallback_listing_url,
+    infer_marketplace,
+    is_malformed_awdit_listing,
+    usable_listing_url,
+)
 from app.gem_radar.observations import (
     get_active_buy_it_now_listing_ids,
     get_active_listing_ids,
@@ -784,6 +789,18 @@ async def get_scored_listings(
     if unsupported_count:
         log.warning("gem_radar.scored_listings.unsupported_classifications", count=unsupported_count)
         scored = [row for row in scored if row.classification in _API_CLASSIFICATIONS]
+    malformed_awdit_count = sum(
+        1 for row in scored if is_malformed_awdit_listing(row.url, row.title)
+    )
+    if malformed_awdit_count:
+        log.warning(
+            "gem_radar.scored_listings.malformed_awdit_filtered",
+            count=malformed_awdit_count,
+        )
+        scored = [
+            row for row in scored
+            if not is_malformed_awdit_listing(row.url, row.title)
+        ]
     if not scored:
         return []
 
@@ -899,6 +916,10 @@ async def get_scored_listings_current(
         .order_by(GemRadarScoredListing.scored_at.desc())
     )
     scored = result.scalars().all()
+    scored = [
+        row for row in scored
+        if not is_malformed_awdit_listing(row.url, row.title)
+    ]
 
     # market_lower/median/upper_price and pct_offset were added via a raw
     # ALTER (see phase2_runner.py) rather than declared on the ORM model, so
@@ -1043,6 +1064,10 @@ async def get_scored_listings_latest_run(
         .order_by(GemRadarScoredListing.scored_at.desc())
     )
     scored = result.scalars().all()
+    scored = [
+        row for row in scored
+        if not is_malformed_awdit_listing(row.url, row.title)
+    ]
 
     cpk_price_fields = await _fetch_cpk_price_fields(db, [s.id for s in scored])
     observation_result = await db.execute(
@@ -2269,6 +2294,25 @@ async def _submit_scan_body(
     from app.gem_radar.cpk_pipeline import assign_cpk_and_accumulate_price
     from app.gem_radar.observations import find_existing_listing
 
+    malformed_awdit = [
+        listing for listing in payload.listings
+        if is_malformed_awdit_listing(listing.url, listing.title)
+    ]
+    if malformed_awdit:
+        log.warning(
+            "gem_radar.reject_malformed_awdit_listings",
+            count=len(malformed_awdit),
+            titles=[listing.title for listing in malformed_awdit[:5]],
+        )
+        payload = payload.model_copy(
+            update={
+                "listings": [
+                    listing for listing in payload.listings
+                    if not is_malformed_awdit_listing(listing.url, listing.title)
+                ]
+            }
+        )
+
     # Search terms are configured by component category, but individual
     # listing payloads do not carry that field.  Preserve the search-level
     # hint for CPK extraction so the model does not have to infer "case" from
@@ -2698,6 +2742,25 @@ async def ingest_listings(
     from app.models.gem_radar_observation import GemRadarListingObservation
 
     cutoff_date = datetime.utcnow() - timedelta(days=7)
+
+    malformed_awdit = [
+        listing for listing in payload.listings
+        if is_malformed_awdit_listing(listing.url, listing.title)
+    ]
+    if malformed_awdit:
+        log.warning(
+            "gem_radar.reject_malformed_awdit_listings",
+            count=len(malformed_awdit),
+            titles=[listing.title for listing in malformed_awdit[:5]],
+        )
+        payload = payload.model_copy(
+            update={
+                "listings": [
+                    listing for listing in payload.listings
+                    if not is_malformed_awdit_listing(listing.url, listing.title)
+                ]
+            }
+        )
 
     # Collect all listing IDs from recent observations (7-day window)
     existing_ids = set()
