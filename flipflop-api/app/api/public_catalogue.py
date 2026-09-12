@@ -329,7 +329,14 @@ async def public_list_cases(db: AsyncSession = Depends(get_db)):
         .order_by(CaseCatalogue.brand, CaseCatalogue.name)
     )
     cases = result.scalars().all()
-    live_cases = (await db.execute(select(Case).where(Case.status.in_(("active", "approved", "completed", "sourcing"))))).scalars().all()
+    # Amazon refreshes can leave newly observed rows in ``pending`` while they
+    # are being reviewed. Their rank is still production data and must be
+    # available for catalogue ordering, so include ranked rows regardless of
+    # review status alongside the normal sellable statuses.
+    live_cases = (await db.execute(select(Case).where(
+        (Case.status.in_(("active", "approved", "completed", "sourcing")))
+        | (Case.bestseller_rank.is_not(None))
+    ))).scalars().all()
     preferred_names = set((await db.execute(select(PreferredComponent.component_key).where(
         PreferredComponent.component_slot == "case", PreferredComponent.status == "preferred"
     ))).scalars().all())
