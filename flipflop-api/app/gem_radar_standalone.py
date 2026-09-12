@@ -27,9 +27,26 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.gem_radar import router as gem_radar_router
 from app.routes.cases import router as cases_router
 from app.database import Base, engine
+from app.config import get_settings
 from app.models import case as case_models
 from app.workers.queue_processor import process_submission_queue
 from app.workers.database_cleaner import run_database_cleaner
+from app.services.amazon_bestsellers import scrape_amazon_bestsellers
+
+
+async def _amazon_bestseller_loop() -> None:
+    """Keep production case popularity current when the web-only API disables cron."""
+    interval = max(1, get_settings().amazon_case_bestsellers_interval_hours) * 3600
+    await asyncio.sleep(120)
+    while True:
+        try:
+            await scrape_amazon_bestsellers()
+        except Exception:
+            # The scraper logs its own failure; keep the worker alive for the
+            # next daily attempt rather than turning a retailer outage into a
+            # process restart loop.
+            pass
+        await asyncio.sleep(interval)
 
 
 @asynccontextmanager
@@ -40,11 +57,17 @@ async def lifespan(app: FastAPI):
     # submissions never pile up as overlapping slow /scans requests — see
     # app/workers/queue_processor.py. Without this the queue table just
     # accumulates rows forever since nothing ever reads from it.
-    worker_task = asyncio.create_task(process_submission_queue())
-    cleaner_task = asyncio.create_task(run_database_cleaner())
+    worker_task = None
+    cleaner_task = None
+    bestseller_task = None
+    if not get_settings().web_only:
+        worker_task = asyncio.create_task(process_submission_queue())
+        cleaner_task = asyncio.create_task(run_database_cleaner())
+        bestseller_task = asyncio.create_task(_amazon_bestseller_loop())
     yield
-    worker_task.cancel()
-    cleaner_task.cancel()
+    for task in (worker_task, cleaner_task, bestseller_task):
+        if task is not None:
+            task.cancel()
     await engine.dispose()
 
 

@@ -16,7 +16,10 @@ from app.models.catalogue import CaseCatalogue, CatalogueVariant, PlaybookSlot
 from app.models.configurator import ConfiguratorCatalogueVisibility
 from app.models.listing import Listing
 from app.models.playbook import Playbook
+from app.models.case import Case
+from app.models.gem_radar_intelligence import PreferredComponent
 from app.services.playbook_pricing import LABOUR_COST, OVERHEAD_RATE
+from app.services.studio_fit import engineering_specs
 
 router = APIRouter(prefix="/public", tags=["public"])
 
@@ -207,7 +210,7 @@ async def public_list_playbooks(db: AsyncSession = Depends(get_db)):
 async def public_playbook_slots(playbook_id: int, db: AsyncSession = Depends(get_db)):
     """
     Customer-visible slots for a playbook, with active variants grouped by tier.
-    Each variant exposes only display_price, title, and gem_score.
+    Exposes display pricing, product media and whitelisted engineering data.
     """
     pb_result = await db.execute(
         select(Playbook).where(Playbook.id == playbook_id, Playbook.status == "active")
@@ -292,6 +295,17 @@ async def public_playbook_slots(playbook_id: int, db: AsyncSession = Depends(get
             "title": l.title,
             "display_price": v.display_price,
             "gem_score": l.gem_score,
+            "images": l.image_urls or [],
+            "customer_option": {
+                "capacity_gb": l.ram_gb if v.slot_id in {s.id for s in slots if s.slot_type == 'ram'} else l.storage_gb,
+                "memory_type": l.ram_type,
+                "interface": ('NVMe' if 'nvme' in (l.storage_type or '').lower() else 'SATA' if 'sata' in (l.storage_type or '').lower() and 'hdd' not in (l.storage_type or '').lower() else None),
+            },
+            "description": l.description,
+            "specifications": engineering_specs(l.raw_specs),
+            "price_updated_at": v.updated_at,
+            "last_seen_at": v.last_seen_at,
+            "availability": v.status,
         })
 
     output = []
@@ -315,12 +329,58 @@ async def public_list_cases(db: AsyncSession = Depends(get_db)):
         .order_by(CaseCatalogue.brand, CaseCatalogue.name)
     )
     cases = result.scalars().all()
+    live_cases = (await db.execute(select(Case).where(Case.status.in_(("active", "approved", "completed", "sourcing"))))).scalars().all()
+    preferred_names = set((await db.execute(select(PreferredComponent.component_key).where(
+        PreferredComponent.component_slot == "case", PreferredComponent.status == "preferred"
+    ))).scalars().all())
+
+    # Admin preferences are production data too. Promote a preferred case from
+    # the operational `cases` table when the catalogue seed missed it, so it
+    # is immediately available to the customer configurator.
+    existing_names = {"".join(ch.lower() for ch in (c.name or "") if ch.isalnum()) for c in cases}
+    for preferred_name in preferred_names:
+        preferred = next((row for row in live_cases if "".join(ch.lower() for ch in (preferred_name or "") if ch.isalnum()) in "".join(ch.lower() for ch in (row.name or "") if ch.isalnum())), None)
+        source_name = preferred.name if preferred else preferred_name
+        key = "".join(ch.lower() for ch in source_name if ch.isalnum())
+        if key in existing_names:
+            continue
+        promoted = CaseCatalogue(
+            name=source_name[:200], brand=((preferred.brand if preferred else source_name.split()[0]) or "Unknown")[:100],
+            form_factor=((preferred.form_factors if preferred else ["atx"])[0]).lower()[:10],
+            images=[preferred.image_url] if preferred and preferred.image_url else [],
+            rrp_gbp=float((preferred.price_new or preferred.price or preferred.rrp) if preferred else 0),
+            status="active", notes="Promoted from admin preferred case",
+        )
+        db.add(promoted)
+        await db.flush()
+        cases.append(promoted)
+        existing_names.add(key)
+
+    def norm(value: str) -> str:
+        return "".join(ch.lower() for ch in (value or "") if ch.isalnum())
+
+    def words(value: str) -> list[str]:
+        return [part.lower() for part in (value or "").replace("-", " ").replace("/", " ").split() if len(part) > 3]
+
+    by_name = {norm(c.name): c for c in live_cases}
+    # The operational cases table owns Amazon rank. Match exact names first,
+    # then token containment for Amazon titles that include extra marketing copy.
+    def live_for(catalogue_case):
+        exact = by_name.get(norm(catalogue_case.name))
+        if exact:
+            return exact
+        tokens = words(catalogue_case.name)
+        return next((row for row in live_cases if all(t in " ".join(words(row.name)) for t in tokens[-3:])), None)
+
     output = []
     for c in cases:
         supplier_offer = None
+        case_engineering = {}
         if c.notes:
             try:
-                supplier_offer = json.loads(c.notes).get("supplier_offer")
+                notes = json.loads(c.notes)
+                supplier_offer = notes.get("supplier_offer")
+                case_engineering = engineering_specs(notes)
             except (ValueError, TypeError, AttributeError):
                 pass
         # Supplier availability is deliberately short-lived; never sell from
@@ -332,6 +392,7 @@ async def public_list_cases(db: AsyncSession = Depends(get_db)):
                     continue
             except (KeyError, TypeError, ValueError):
                 continue
+        live = live_for(c)
         output.append({
             "id": c.id,
             "name": c.name,
@@ -339,7 +400,68 @@ async def public_list_cases(db: AsyncSession = Depends(get_db)):
             "form_factor": c.form_factor,
             "images": c.images,
             "rrp_gbp": c.rrp_gbp,
+            "bestseller_rank": live.bestseller_rank if live else None,
+            "is_preferred": any(norm(name) in norm(c.name) or norm(c.name) in norm(name) for name in preferred_names) or bool(live and any(norm(name) in norm(live.name) for name in preferred_names)),
             "is_transparent_panel": c.is_transparent_panel,
             "supplier_offer": supplier_offer,
+            "height_mm": c.height_mm,
+            "width_mm": c.width_mm,
+            "depth_mm": c.depth_mm,
+            "max_gpu_length_mm": c.max_gpu_length_mm,
+            "max_cooler_height_mm": c.max_cooler_height_mm,
+            "radiator_support": c.radiator_support,
+            "price_updated_at": c.updated_at,
+            "engineering": case_engineering if case_engineering.get("reviewed") is True else {},
         })
+    # Preferred cases must remain selectable even if they were never present in
+    # the curated catalogue seed. Their existing case_catalogue ID is required
+    # by pricing, so only emit records that already have a catalogue row.
+    output.sort(key=lambda row: row["bestseller_rank"] if row["bestseller_rank"] is not None else float("-inf"), reverse=True)
     return output
+
+
+@router.get('/playbooks/{playbook_id}/curated-slots')
+async def public_curated_slots(playbook_id: int, db: AsyncSession = Depends(get_db), build_id: str | None = None):
+    from app.services.curated_build_policy import curated_slots, definitions
+    definition = None
+    if build_id:
+        definition = next((b for b in definitions()['builds'] if b['id'] == build_id), None)
+        name = (await db.execute(select(Playbook.name).where(Playbook.id == playbook_id))).scalar_one_or_none()
+        if not definition or definition['segment'] != name:
+            raise HTTPException(404, 'Curated build not found for this user type')
+    return curated_slots(await public_playbook_slots(playbook_id, db), definition)
+
+
+@router.get('/curated-builds')
+async def public_curated_builds(db: AsyncSession = Depends(get_db)):
+    from app.services.curated_build_policy import definitions, curated_slots
+    playbooks = await public_list_playbooks(db)
+    cases = await public_list_cases(db)
+    by_name = {p['name']: p for p in playbooks}
+    catalogue = {p['id']: await public_playbook_slots(p['id'], db) for p in playbooks}
+    result = []
+    for definition in definitions()['builds']:
+        pb = by_name.get(definition['segment'])
+        slots = curated_slots(catalogue.get(pb['id'], []) if pb else [], definition)
+        chosen = [next((v for values in s['variants_by_tier'].values() for v in values if v['id'] == s['default_variant_id']), None) for s in slots]
+        missing = [s['slot_type'] for s, v in zip(slots, chosen) if v is None]
+        if not cases:
+            missing.append('case')
+        parts = sum(float(v['display_price']) for v in chosen if v) + (min(float(c['rrp_gbp']) for c in cases) if cases else 0)
+        result.append({**definition, 'playbook_id': pb['id'] if pb else None, 'missing_components': missing,
+                       'price_gbp': round((parts + LABOUR_COST) * (1 + OVERHEAD_RATE), 2) if not missing else None})
+    return result
+
+
+@router.get('/playbooks/{playbook_id}/custom-slots')
+async def public_custom_slots(playbook_id: int, db: AsyncSession = Depends(get_db)):
+    """Full selection from the same published component base as curated builds."""
+    base = await public_playbook_slots(playbook_id, db)
+    pool = {}
+    for pb in await public_list_playbooks(db):
+        for slot in await public_playbook_slots(pb['id'], db):
+            bucket = pool.setdefault(slot['slot_type'], {})
+            for values in slot['variants_by_tier'].values():
+                for variant in values:
+                    bucket[variant['id']] = variant
+    return [{**slot, 'variants_by_tier': {'budget': [], 'mid': list(pool.get(slot['slot_type'], {}).values()), 'high': []}} for slot in base]
