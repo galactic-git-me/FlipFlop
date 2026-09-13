@@ -256,6 +256,8 @@ async def _run_build_3d_generation(
                     response = await client.get(result.glb_url)
                     response.raise_for_status()
                 local_path.write_bytes(response.content)
+                if not local_path.is_file() or local_path.stat().st_size == 0:
+                    raise RuntimeError(f"Downloaded GLB was not persisted at {local_path}")
                 entry.update(
                     status="succeeded",
                     progress=result.progress,

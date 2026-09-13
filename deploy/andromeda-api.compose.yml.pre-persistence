@@ -3,7 +3,6 @@ services:
     image: postgres:18-alpine
     container_name: flipflop-production-postgres
     restart: unless-stopped
-    command: ["postgres", "-c", "wal_level=logical", "-c", "max_replication_slots=10", "-c", "max_wal_senders=10"]
     environment:
       POSTGRES_DB: pcflipper
       POSTGRES_USER: flipper
@@ -63,14 +62,6 @@ services:
       EBAY_PRODUCTION_FULFILLMENT_POLICY_ID: "260999549010"
     ports:
       - "127.0.0.1:4311:4311"
-    volumes:
-      - ../runtime/builds:/builds
-      - ../runtime/api-data:/app/data
-      - ../runtime/uploads:/app/data/uploads
-      - ../runtime/scrapes:/app/scrapes
-      - ../runtime/fb-profile:/app/.fb-profile
-      - ../runtime/fb_cookies.json:/app/fb_cookies.json
-      - ../runtime/public-media:/FlipFlop.shop/public/media
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4311/health"]
       interval: 10s
@@ -114,14 +105,6 @@ services:
       # a backlog spanned more than 2 distinct search terms).
       MAX_CONCURRENT_SEARCH_TERMS: "4"
     command: ["uvicorn", "app.gem_radar_standalone:app", "--host", "0.0.0.0", "--port", "8000"]
-    volumes:
-      - ../runtime/builds:/builds
-      - ../runtime/api-data:/app/data
-      - ../runtime/uploads:/app/data/uploads
-      - ../runtime/scrapes:/app/scrapes
-      - ../runtime/fb-profile:/app/.fb-profile
-      - ../runtime/fb_cookies.json:/app/fb_cookies.json
-      - ../runtime/public-media:/FlipFlop.shop/public/media
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/openapi.json"]
       interval: 30s
