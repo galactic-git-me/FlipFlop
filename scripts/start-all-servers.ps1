@@ -28,22 +28,15 @@ $env:CUDA_VISIBLE_DEVICES = "0"
 $env:OLLAMA_NUM_PARALLEL = "4"
 $env:OLLAMA_KEEP_ALIVE = "-1"
 
-function Update-RepositoryFromGitHub {
-    # Run before mode selection so LIVE OPERATOR and DEVELOPMENT both start
-    # from the same verified source revision. Fast-forward only: never reset,
-    # stash, rebase, or overwrite tracked local work automatically.
-    Write-Host "[*] Checking GitHub for the latest FlipFlop code..." -ForegroundColor Cyan
+function Check-RepositoryForMode([string]$mode) {
+    # LIVE OPERATOR follows GitHub and may fast-forward a clean checkout.
+    # DEVELOPMENT is intentionally local-first: never overwrite edits, and
+    # stop when the checkout is behind/diverged so the developer can merge.
+    Write-Host "[*] Checking local code against GitHub ($mode mode)..." -ForegroundColor Cyan
 
     $branch = (& git -C $projectRoot rev-parse --abbrev-ref HEAD 2>$null).Trim()
     if (-not $branch -or $branch -eq "HEAD") {
         throw "Cannot update FlipFlop automatically while in a detached HEAD state."
-    }
-
-    $trackedChanges = & git -C $projectRoot status --porcelain --untracked-files=no
-    if ($trackedChanges) {
-        Write-Host "[STOP] Tracked local changes are present; refusing to overwrite them." -ForegroundColor Red
-        Write-Host "       Commit or stash the changes, then run the startup script again." -ForegroundColor Yellow
-        throw "Tracked local changes prevent a safe GitHub update."
     }
 
     & git -C $projectRoot fetch --quiet origin $branch
@@ -53,25 +46,43 @@ function Update-RepositoryFromGitHub {
 
     $localCommit = (& git -C $projectRoot rev-parse HEAD).Trim()
     $remoteCommit = (& git -C $projectRoot rev-parse "origin/$branch").Trim()
+    $trackedChanges = & git -C $projectRoot status --porcelain --untracked-files=no
     if ($localCommit -eq $remoteCommit) {
-        Write-Host "[OK] Code is current: $($localCommit.Substring(0, 12))" -ForegroundColor Green
+        Write-Host "[OK] Local code matches GitHub: $($localCommit.Substring(0, 12))" -ForegroundColor Green
+        if ($mode -eq "development" -and $trackedChanges) {
+            Write-Host "[INFO] Development has uncommitted tracked changes; they will be preserved." -ForegroundColor Yellow
+        }
         return
     }
 
+    & git -C $projectRoot merge-base --is-ancestor "origin/$branch" HEAD
+    $localAhead = ($LASTEXITCODE -eq 0)
     & git -C $projectRoot merge-base --is-ancestor HEAD "origin/$branch"
-    if ($LASTEXITCODE -ne 0) {
-        throw "Local branch has commits that are not on origin/$branch; automatic update is unsafe."
+    $localBehind = ($LASTEXITCODE -eq 0)
+
+    if ($mode -eq "development") {
+        if ($localAhead) {
+            Write-Host "[OK] Development checkout is ahead of GitHub: $($localCommit.Substring(0, 12))" -ForegroundColor Green
+            return
+        }
+        if ($localBehind) {
+            throw "Development checkout is behind GitHub. Merge or rebase origin/$branch before starting."
+        }
+        throw "Development checkout has diverged from GitHub. Resolve the merge/rebase before starting."
     }
 
-    Write-Host "[*] Updating local code: $($localCommit.Substring(0, 12)) -> $($remoteCommit.Substring(0, 12))" -ForegroundColor Yellow
+    if ($trackedChanges) {
+        throw "Tracked local changes prevent the LIVE OPERATOR checkout from being updated safely. Commit or stash them first."
+    }
+    if (-not $localBehind) {
+        throw "Local branch has commits that are not on origin/$branch; automatic LIVE OPERATOR update is unsafe."
+    }
+
+    Write-Host "[*] Updating LIVE OPERATOR code: $($localCommit.Substring(0, 12)) -> $($remoteCommit.Substring(0, 12))" -ForegroundColor Yellow
     & git -C $projectRoot merge --ff-only "origin/$branch"
-    if ($LASTEXITCODE -ne 0) {
-        throw "Fast-forward update failed; no services were started."
-    }
-    Write-Host "[OK] Updated from GitHub before startup." -ForegroundColor Green
+    if ($LASTEXITCODE -ne 0) { throw "Fast-forward update failed; no services were started." }
+    Write-Host "[OK] LIVE OPERATOR checkout updated from GitHub." -ForegroundColor Green
 }
-
-Update-RepositoryFromGitHub
 
 function Select-RunMode {
     Write-Host ""
@@ -165,6 +176,7 @@ function Confirm-LocalDatabaseRefresh {
 }
 
 $runMode = Select-RunMode
+Check-RepositoryForMode $runMode
 if ($runMode -eq "live") {
     # Keep the operator UI local, but route operational requests to the VPS.
     # Do not start local API/database or database synchronisation.
