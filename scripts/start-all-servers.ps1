@@ -471,14 +471,14 @@ foreach ($port in $devPorts) {
 
 # A previous launcher can leave its cmd.exe wrapper behind after Ctrl+C (the
 # child Next process exits, but the wrapper still owns the redirected log
-# handle).  That stale wrapper has no listening port, so port cleanup above
-# cannot find it and the next launch fails with a file-lock error.  Remove
-# only wrappers that explicitly belong to this project's admin server.
+# handle). That stale wrapper has no listening port, so port cleanup above
+# cannot find it and the next launch fails with a file-lock error. Remove
+# only wrappers that explicitly belong to this project's Next servers.
 $staleAdminLaunchers = Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
     Where-Object {
         $_.Name -ieq "cmd.exe" -and
-        $_.CommandLine -match "flipflop-admin" -and
-        $_.CommandLine -match "next dev.*4312|npm run dev.*4312"
+        $_.CommandLine -match "flipflop-admin|FlipFlop\.shop" -and
+        $_.CommandLine -match "next dev.*4312|next dev.*4313|npm run dev.*4312|npm run dev.*4313"
     }
 foreach ($launcher in $staleAdminLaunchers) {
     Write-Host "  [*] Removing stale admin launcher (PID: $($launcher.ProcessId))" -ForegroundColor Gray
@@ -573,7 +573,9 @@ $servers = @(
     },
     @{
         name     = "frontend"
-        cmdArgs  = @("/c", "cd ..\FlipFlop.shop && set ""BACKEND_URL=$frontendApiUrl"" && set ""NEXT_PUBLIC_API_URL=$frontendApiUrl"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4313 -H 0.0.0.0")
+        # Webpack avoids the Turbopack native memory crash observed on the
+        # large customer bundle ("memory allocation ... failed").
+        cmdArgs  = @("/c", "cd ..\FlipFlop.shop && set ""BACKEND_URL=$frontendApiUrl"" && set ""NEXT_PUBLIC_API_URL=$frontendApiUrl"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- --webpack -p 4313 -H 0.0.0.0")
         port     = 4313
         color    = "Magenta"
         skip     = $NoFrontend
