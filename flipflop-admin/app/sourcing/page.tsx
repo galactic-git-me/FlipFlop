@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { memo, Suspense, useEffect, useId, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer, Info, X, History } from "lucide-react";
@@ -235,28 +235,42 @@ function coalesceScansBySearchId(scans: ScanProgress[]): ScanProgress[] {
 // Small circular gauge -- replaces the earlier linear progress bars per
 // request. `value`/`max` drive the sweep angle; the label underneath gives
 // the raw fraction since a gauge alone can't show absolute counts.
-function Gauge({ value, max, label, color }: { value: number; max: number; label: string; color: string }) {
-  const pct = max > 0 ? Math.min(100, (value / max) * 100) : 0;
+function Gauge({ value, max, failed = 0, label, color }: { value: number; max: number; failed?: number; label: string; color: string }) {
+  const patternId = `gauge-hatch-${useId().replace(/:/g, "")}`;
+  const safeMax = Math.max(max, 0);
+  const successful = Math.min(Math.max(value, 0), safeMax);
+  const failedCount = Math.min(Math.max(failed, 0), Math.max(safeMax - successful, 0));
+  const pct = safeMax > 0 ? (successful / safeMax) * 100 : 0;
   const radius = 24;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference * (1 - pct / 100);
+  const successfulLength = circumference * (successful / (safeMax || 1));
+  const failedLength = circumference * (failedCount / (safeMax || 1));
   return (
     <div className="flex flex-col items-center justify-center">
       <svg width={60} height={60} viewBox="0 0 60 60">
+        <defs>
+          <pattern id={patternId} width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="6" height="6" fill="#334155" opacity="0.55" />
+            <path d="M0 0V6" stroke={color} strokeWidth="2" opacity="0.8" />
+          </pattern>
+        </defs>
         <circle cx={30} cy={30} r={radius} stroke="#1e293b" strokeWidth={6} fill="none" />
-        <circle
-          cx={30}
-          cy={30}
-          r={radius}
-          stroke={color}
-          strokeWidth={6}
-          fill="none"
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          strokeLinecap="round"
-          transform="rotate(-90 30 30)"
-          className="transition-all duration-500"
-        />
+        {successfulLength > 0 && (
+          <circle
+            cx={30} cy={30} r={radius} stroke={color} strokeWidth={6} fill="none"
+            strokeDasharray={`${successfulLength} ${circumference - successfulLength}`}
+            strokeDashoffset={0} strokeLinecap="round" transform="rotate(-90 30 30)"
+            className="transition-all duration-500"
+          />
+        )}
+        {failedLength > 0 && (
+          <circle
+            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={6} fill="none"
+            strokeDasharray={`${failedLength} ${circumference - failedLength}`}
+            strokeDashoffset={-successfulLength} strokeLinecap="round" transform="rotate(-90 30 30)"
+            className="transition-all duration-500"
+          />
+        )}
         <text x={30} y={34} textAnchor="middle" className="fill-slate-100 text-[12px] font-semibold">
           {Math.round(pct)}%
         </text>
@@ -638,6 +652,20 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
               scan.activeSubmissions === 0 &&
               scan.ingestedCount > 0 &&
               scan.cpkAssignedCount >= scan.ingestedCount;
+            // Only mark deficits as failed after the scan reaches a terminal
+            // state. Before then, the same space represents work still in
+            // flight and remains an empty track segment.
+            const failedIngested = isComplete ? Math.max(searchTermTotal - scan.ingestedCount, 0) : 0;
+            const failedCpk = Math.min(
+              scan.cpkFailedCount ?? 0,
+              Math.max(searchTermTotal - scan.cpkAssignedCount, 0),
+            );
+            const failedMarketPrices = isComplete
+              ? Math.max(scan.cpkAssignedCount - scan.marketPricedCount, 0)
+              : 0;
+            const failedScores = isComplete
+              ? Math.max(scan.cpkAssignedCount - scan.classifiedCount, 0)
+              : 0;
 
             return (
               <PixelCard key={scan.searchId || scan.query} variant={isComplete ? "emerald" : "default"}>
@@ -681,10 +709,15 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                   </div>
 
                   <div className="flex justify-center gap-3">
-                    <Gauge value={scan.ingestedCount} max={searchTermTotal} label="Ingested" color="#8b5cf6" />
-                    <Gauge value={scan.cpkAssignedCount} max={Math.max(scan.ingestedCount, 1)} label="CPK" color="#10b981" />
-                    <Gauge value={scan.marketPricedCount} max={Math.max(scan.cpkAssignedCount, 1)} label="M Prices" color="#f59e0b" />
-                    <Gauge value={scan.classifiedCount} max={Math.max(scan.cpkAssignedCount, 1)} label="Scores" color="#ec4899" />
+                    {/* Keep one denominator across every stage so the raw
+                        fractions describe the same scan population. CPK,
+                        market pricing, and scoring are subsets of eligible
+                        listings; using the previous stage as max made a
+                        partially processed run look complete downstream. */}
+                    <Gauge value={scan.ingestedCount} max={searchTermTotal} failed={failedIngested} label="Ingested" color="#8b5cf6" />
+                    <Gauge value={scan.cpkAssignedCount} max={searchTermTotal} failed={failedCpk} label="CPK" color="#10b981" />
+                    <Gauge value={scan.marketPricedCount} max={searchTermTotal} failed={failedMarketPrices} label="M Prices" color="#f59e0b" />
+                    <Gauge value={scan.classifiedCount} max={searchTermTotal} failed={failedScores} label="Scores" color="#ec4899" />
                   </div>
 
                   {vendorEntries.length > 0 && (
