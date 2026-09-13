@@ -249,9 +249,9 @@ function Gauge({ value, max, failed = 0, label, color }: { value: number; max: n
     <div className="flex flex-col items-center justify-center">
       <svg width={60} height={60} viewBox="0 0 60 60">
         <defs>
-          <pattern id={patternId} width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-            <rect width="6" height="6" fill="#334155" opacity="0.55" />
-            <path d="M0 0V6" stroke={color} strokeWidth="2" opacity="0.8" />
+          <pattern id={patternId} width="4" height="4" patternUnits="userSpaceOnUse">
+            <rect width="4" height="4" fill="#334155" opacity="0.55" />
+            <circle cx="2" cy="2" r="0.7" fill={color} opacity="0.9" />
           </pattern>
         </defs>
         <circle cx={30} cy={30} r={radius} stroke="#1e293b" strokeWidth={6} fill="none" />
@@ -660,12 +660,20 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
               scan.cpkFailedCount ?? 0,
               Math.max(searchTermTotal - scan.cpkAssignedCount, 0),
             );
-            const failedMarketPrices = isComplete
-              ? Math.max(scan.cpkAssignedCount - scan.marketPricedCount, 0)
-              : 0;
-            const failedScores = isComplete
-              ? Math.max(scan.cpkAssignedCount - scan.classifiedCount, 0)
-              : 0;
+            // A CPK-assigned listing with no settled market price is already
+            // known to be unmatched. It may become priced later if another
+            // comparable listing settles the same CPK, so this dotted segment
+            // can legitimately shrink while the scan is still running.
+            const failedMarketPrices = Math.max(
+              scan.cpkAssignedCount - scan.marketPricedCount,
+              0,
+            );
+            // CPK failures have been processed but cannot reach the scoring
+            // phase, so they belong in the dotted (unsuccessful) segment too.
+            const failedScores = Math.min(
+              (scan.cpkFailedCount ?? 0) + Math.max(scan.cpkAssignedCount - scan.classifiedCount, 0),
+              Math.max(searchTermTotal - scan.classifiedCount, 0),
+            );
 
             return (
               <PixelCard key={scan.searchId || scan.query} variant={isComplete ? "emerald" : "default"}>
