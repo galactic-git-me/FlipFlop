@@ -217,10 +217,11 @@ export function TopCommandBar() {
         {isLocalEnvironment && (
           <Link
             href="http://localhost:4313"
-            className="rounded border border-amber-400/40 bg-amber-400/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-amber-200 hover:bg-amber-400/20"
+            className="inline-flex items-center gap-1.5 rounded-md border border-amber-300/70 bg-amber-400/20 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-amber-100 shadow-[0_0_14px_rgba(251,191,36,0.25)] transition hover:bg-amber-400/30"
             title="Open the local FlipFlop.shop storefront"
           >
-            Local storefront
+            <span className="h-2 w-2 animate-pulse rounded-full bg-amber-300 shadow-[0_0_8px_rgba(252,211,77,0.9)]" />
+            DEV · LOCAL
           </Link>
         )}
         <div className="node-live-chip">
