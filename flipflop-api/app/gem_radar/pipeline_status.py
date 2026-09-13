@@ -307,10 +307,25 @@ async def _vendor_breakdown_from_db(db, search_id_run_ids: list[tuple[str, set[s
     obs_rows = await db.execute(
         text(
             """
-            SELECT search_run_id, source, COUNT(DISTINCT listing_id)
-            FROM gem_radar_listing_observations
-            WHERE search_run_id = ANY(:run_ids)
-            GROUP BY search_run_id, source
+            SELECT search_run_id, inferred_source, COUNT(DISTINCT listing_id)
+            FROM (
+                SELECT search_run_id, listing_id,
+                   COALESCE(source, CASE
+                       WHEN listing_id LIKE 'google-shopping:%' THEN 'google_shopping'
+                       WHEN listing_id LIKE 'ebuyer:%' THEN 'ebuyer'
+                       WHEN listing_id LIKE 'amazon:%' THEN 'amazon'
+                       WHEN listing_id LIKE 'scan:%' THEN 'scan'
+                       WHEN listing_id LIKE 'awd_it:%' THEN 'awd_it'
+                       WHEN listing_id LIKE 'computer_orbit:%' THEN 'computer_orbit'
+                       WHEN listing_id LIKE 'bargain_hardware:%' THEN 'bargain_hardware'
+                       WHEN listing_id LIKE 'newegg_uk:%' THEN 'newegg_uk'
+                       WHEN listing_id LIKE 'overclockers:%' THEN 'overclockers'
+                       ELSE 'unknown'
+                   END) AS inferred_source
+                FROM gem_radar_listing_observations
+                WHERE search_run_id = ANY(:run_ids)
+            ) observations
+            GROUP BY search_run_id, inferred_source
             """
         ),
         {"run_ids": all_run_ids},
