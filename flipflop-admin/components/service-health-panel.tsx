@@ -50,7 +50,7 @@ export function ServiceHealthPanel() {
           const color = count == null ? "text-amber-300 animate-pulse" : count === 0 ? "text-emerald-400" : count === 1 ? "text-amber-300" : "text-rose-400";
           const Icon = service.icon;
           const state = count == null ? "checking" : count === 0 ? "online" : `${count} missed`;
-          return <div key={service.name} className="flex items-center justify-center gap-1 rounded border border-cyan-300/15 bg-slate-950/55 px-1 py-1 text-[9px] font-semibold text-slate-300" title={`${service.name}: ${state}`}><Icon className={`h-6 w-6 ${color}`} />{service.name}</div>;
+          return <div key={service.name} className="flex flex-col items-center justify-center gap-0.5 rounded border border-cyan-300/15 bg-slate-950/55 px-1 py-1 text-[9px] font-semibold text-slate-300" title={`${service.name}: ${state}`}><Icon className={`h-6 w-6 ${color}`} />{service.name}</div>;
         })}
       </div>
     </section>
