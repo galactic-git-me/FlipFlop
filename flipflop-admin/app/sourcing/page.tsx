@@ -619,7 +619,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             // data. Configured-but-empty marketplaces remain available to the
             // scan status counters, but do not occupy the vendor logo row.
             const vendorEntries = [...knownVendorEntries, ...extraVendorEntries]
-              .filter(([, count]) => count != null && count > 0);
+              .filter(([vendor, count]) => vendor !== "unknown" && count != null && count > 0);
             // Discovery is the user-facing search-term total. Processing
             // gauges use only eligible (non-auction) ads as their denominator.
             const discoveredTotal = Math.max(
