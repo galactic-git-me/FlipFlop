@@ -2,14 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { API_BASE_URL } from "@/lib/api";
-import { Database, Gauge, Globe, Radar } from "lucide-react";
+import { Database, Gauge, Gem, Globe } from "lucide-react";
 
 type Service = { name: string; path?: string; url?: string; icon: typeof Gauge };
 
 const BASE_SERVICES: Service[] = [
   { name: "API", path: "/settings", icon: Gauge },
   { name: "DB", path: "/settings", icon: Database },
-  { name: "Gem", path: "/gem-radar/health", icon: Radar },
+  { name: "Gem", path: "/gem-radar/health", icon: Gem },
   { name: "Shop", url: "http://localhost:4313", icon: Globe },
 ];
 
