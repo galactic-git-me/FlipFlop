@@ -23,7 +23,7 @@ export function ServiceHealthPanel() {
       const local = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
       const services: Service[] = [
         ...BASE_SERVICES.slice(0, 3),
-        { name: "Storefront", url: local ? "http://localhost:4313" : "https://www.theflipflop.shop" },
+        { name: "Shop", url: local ? "http://localhost:4313" : "https://www.theflipflop.shop", icon: Globe },
       ];
       const next: Record<string, number> = {};
       await Promise.all(services.map(async (service) => {
