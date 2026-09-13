@@ -15,12 +15,17 @@ const BASE_SERVICES: Service[] = [
 
 export function ServiceHealthPanel() {
   const [misses, setMisses] = useState<Record<string, number>>({});
+  // Keep the first render identical on the server and client. The browser
+  // hostname is only available after hydration, so resolve the local Shop URL
+  // in the existing effect and update the link afterwards.
+  const [isLocalhost, setIsLocalhost] = useState(false);
   const missesRef = useRef<Record<string, number>>({});
 
   useEffect(() => {
     let mounted = true;
     const check = async () => {
       const local = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+      setIsLocalhost(local);
       const services: Service[] = [
         ...BASE_SERVICES.slice(0, 3),
         { name: "Shop", url: local ? "http://localhost:4313" : "https://www.theflipflop.shop", icon: Globe },
@@ -60,7 +65,7 @@ export function ServiceHealthPanel() {
           const className = "flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[9px] font-semibold text-slate-300";
           const content = <><Icon className={`h-6 w-6 ${color}`} />{service.name}</>;
           return service.name === "Shop" ? (
-            <a key={service.name} href={typeof window !== "undefined" && ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname) ? "http://localhost:4313" : "https://www.theflipflop.shop"} target="_blank" rel="noreferrer" className={className} title={`${service.name}: ${state}`}>
+            <a key={service.name} href={isLocalhost ? "http://localhost:4313" : "https://www.theflipflop.shop"} target="_blank" rel="noreferrer" className={className} title={`${service.name}: ${state}`}>
               {content}
             </a>
           ) : (
