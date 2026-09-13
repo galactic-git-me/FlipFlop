@@ -64,6 +64,7 @@ services:
       API_URL: http://andromeda-ts:18000
       HOST: 0.0.0.0
       PORT: 8000
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
     networks:
       - flipflop-network
     extra_hosts:
@@ -90,6 +91,7 @@ services:
       - flipflop-network
     extra_hosts:
       - "andromeda-ts:host-gateway"
+      - "host.docker.internal:host-gateway"
 
   admin:
     build:

@@ -74,6 +74,16 @@ Production runs from the separate Andromeda checkout using Docker Compose:
 | Production PostgreSQL | Production-only Docker volume/database |
 | Production Redis | Production-only Docker volume |
 
+### Shared Ollama endpoint
+
+Both environments use Ollama on the Prometheus host at `localhost:11434`.
+The Andromeda host reaches that same daemon through the SSH tunnel that maps
+Andromeda's `localhost:11434` to Prometheus' `127.0.0.1:11434`. The production
+Compose services therefore use `http://host.docker.internal:11434`, which is
+the Docker host gateway; using `localhost` inside a container would point back
+to that container and silently send CPK/scoring requests to the wrong place.
+The tunnel must be running before restarting `gemradar-worker`.
+
 Port `4311` on Andromeda belongs to production. It is not a reason to start a production backend on the development machine.
 
 ## 4. Database separation and daily copy

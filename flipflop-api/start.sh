@@ -3,10 +3,10 @@
 set -e
 
 # Ensure OLLAMA is configured if available
-export OLLAMA_BASE_URL="${OLLAMA_BASE_URL:-http://localhost:11500}"
+export OLLAMA_BASE_URL="${OLLAMA_BASE_URL:-http://localhost:11434}"
 
 # Wait for Ollama to be ready (if configured)
-if [ -n "$OLLAMA_BASE_URL" ] && [ "$OLLAMA_BASE_URL" != "http://localhost:11500" ] || curl -s "$OLLAMA_BASE_URL/api/tags" > /dev/null 2>&1; then
+if [ -n "$OLLAMA_BASE_URL" ] && curl -s "$OLLAMA_BASE_URL/api/tags" > /dev/null 2>&1; then
   echo "✅ Ollama is ready at $OLLAMA_BASE_URL"
 else
   echo "⚠️  Ollama not ready at $OLLAMA_BASE_URL (will use OpenRouter fallback)"

@@ -49,8 +49,11 @@ services:
       DATABASE_URL: postgresql+asyncpg://flipper:flipper@postgres:5432/pcflipper
       SYNC_DATABASE_URL: postgresql://flipper:flipper@postgres:5432/pcflipper
       REDIS_URL: redis://redis:6379/0
-      OLLAMA_BASE_URL: ""
-      OLLAMA_MODEL: disabled-on-web-tier
+      # The SSH reverse tunnel exposes Prometheus' Ollama on Andromeda's host
+      # port 11434. Containers must use the host gateway rather than their own
+      # localhost namespace.
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      OLLAMA_MODEL: qwen2.5:7b-instruct
       FRONTEND_URL: https://www.theflipflop.shop
       # Live listings must never silently fall back to the eBay sandbox when
       # the host env file omits this optional setting.
@@ -63,6 +66,8 @@ services:
       EBAY_PRODUCTION_FULFILLMENT_POLICY_ID: "298928779014"
     ports:
       - "127.0.0.1:4311:4311"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ../runtime/builds:/builds
       - ../runtime/api-data:/app/data
@@ -104,8 +109,8 @@ services:
       DATABASE_URL: postgresql+asyncpg://flipper:flipper@postgres:5432/pcflipper
       SYNC_DATABASE_URL: postgresql://flipper:flipper@postgres:5432/pcflipper
       REDIS_URL: redis://redis:6379/0
-      OLLAMA_BASE_URL: ""
-      OLLAMA_MODEL: disabled-on-web-tier
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      OLLAMA_MODEL: qwen2.5:7b-instruct
       EBAY_LISTING_ENVIRONMENT: production
       # Was capped at 2 (config.py default) as an emergency throttle during a
       # past RAM-pressure incident. Confirmed 2026-09-07: 16GiB available,
@@ -114,6 +119,8 @@ services:
       # a backlog spanned more than 2 distinct search terms).
       MAX_CONCURRENT_SEARCH_TERMS: "4"
     command: ["uvicorn", "app.gem_radar_standalone:app", "--host", "0.0.0.0", "--port", "8000"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ../runtime/builds:/builds
       - ../runtime/api-data:/app/data
