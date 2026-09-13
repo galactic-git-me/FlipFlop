@@ -43,7 +43,7 @@ export function ServiceHealthPanel() {
   }, []);
 
   return (
-    <section className="mx-2 mt-auto" aria-label="Service health">
+    <section className="mx-2 mt-auto rounded border border-cyan-300/15 bg-slate-950/55 px-2 py-1.5" aria-label="Service health">
       <div className="grid grid-cols-4 gap-1">
         {BASE_SERVICES.map((service) => {
           const count = misses[service.name];
