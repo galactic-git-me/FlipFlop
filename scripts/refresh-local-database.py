@@ -59,7 +59,6 @@ def main():
               "status": "started", "backup_directory": str(BACKUP)}
     report_path = BACKUP / "report.json"
     stage = "pcflipper_stage_" + STAMP.lower()
-    previous = "pcflipper_before_" + STAMP.lower()
     env = dict(os.environ, PGPASSWORD=admin_password or "")
     pg_args = ["-h", url.host, "-p", str(url.port), "-U", admin_user]
     paused = False
@@ -110,16 +109,15 @@ print(json.dumps(d))
         print(f"Validated {len(counts)} tables. Pausing local database writers...", flush=True)
         run(["pwsh", "-NoProfile", "-File", str(ROOT / "scripts/local-refresh-services.ps1"), "-Action", "Stop"])
         paused = True
-        print("Backing up the existing local database...", flush=True)
-        run([str(PG / "pg_dump.exe"), *pg_args, "-d", url.database, "-Fc", "--no-owner", "--no-acl",
-             "-f", str(BACKUP / "local-before.dump")], env=env)
         env_path = API / ".env.local"
-        (BACKUP / ".env.local.before").write_bytes(env_path.read_bytes())
         cur.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname=%s AND pid<>pg_backend_pid()", (url.database,))
-        # Both renames commit together. The previous database is retained for rollback.
+        # DEV is disposable and is being replaced by the validated production
+        # snapshot. Do not create a second local dump/database during refresh.
+        # PostgreSQL requires DROP DATABASE to run outside a transaction.
+        admin.autocommit = True
+        cur.execute(sql.SQL("DROP DATABASE {}").format(sql.Identifier(url.database)))
         admin.autocommit = False
         try:
-            cur.execute(sql.SQL("ALTER DATABASE {} RENAME TO {}").format(sql.Identifier(url.database), sql.Identifier(previous)))
             cur.execute(sql.SQL("ALTER DATABASE {} RENAME TO {}").format(sql.Identifier(stage), sql.Identifier(url.database)))
             admin.commit()
         except Exception:
@@ -127,7 +125,6 @@ print(json.dumps(d))
             raise
         finally:
             admin.autocommit = True
-        report['previous_database'] = previous
         for key, value in ebay_config.items():
             set_key(str(env_path), key, value)
         # Prefer the copied seller connection rather than obsolete static tokens.
@@ -136,7 +133,7 @@ print(json.dumps(d))
         set_key(str(env_path), 'EBAY_LISTING_ENVIRONMENT', 'production')
         set_key(str(env_path), 'WEB_ONLY', 'true')
         report['status'] = 'complete'
-        print(f"Refresh complete. Backup and report: {BACKUP}", flush=True)
+        print(f"Refresh complete. Production snapshot and report: {BACKUP}", flush=True)
     except Exception as exc:
         report['status'] = 'failed'
         report['error_type'] = type(exc).__name__

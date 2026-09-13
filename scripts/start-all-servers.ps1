@@ -137,19 +137,54 @@ function Confirm-LocalDatabaseRefresh {
             Select-Object -First 1
     }
 
-    $lastText = "No successful local database refresh has been recorded."
+    $liveRows = "unknown"
+    $liveUpdated = "unknown"
+    # Query the live PostgreSQL database directly so the table reflects the
+    # current production state rather than depending on a prior local refresh.
+    $summaryScript = Join-Path $PSScriptRoot "local-database-summary.py"
+    if (Test-Path $summaryScript) {
+        try {
+            $remoteCode = Get-Content -LiteralPath $summaryScript -Raw
+            $remoteSummary = $remoteCode | ssh -o BatchMode=yes andromeda "docker exec -i flipflop-production-api python -" 2>$null | ConvertFrom-Json
+            if ($remoteSummary) {
+                $liveRows = ([long]$remoteSummary.total_rows).ToString("N0")
+                if ($remoteSummary.last_updated) { $liveUpdated = ([DateTime]$remoteSummary.last_updated).ToLocalTime().ToString('yyyy-MM-dd HH:mm:ss') }
+            }
+        } catch { }
+    }
     if ($lastReport) {
         $finished = [DateTime]$lastReport.finished_at
-        $ageHours = [Math]::Max(0, ([DateTime]::UtcNow - $finished.ToUniversalTime()).TotalHours)
-        $lastText = "Last refresh: $($finished.ToLocalTime().ToString('yyyy-MM-dd HH:mm:ss')) ($([Math]::Round($ageHours, 1)) hours ago)"
+        if ($liveRows -eq "unknown" -and $lastReport.table_counts) {
+            $liveRows = (($lastReport.table_counts.psobject.Properties | ForEach-Object { [long]$_.Value } | Measure-Object -Sum).Sum).ToString("N0")
+        }
+        if ($liveUpdated -eq "unknown") { $liveUpdated = $finished.ToLocalTime().ToString('yyyy-MM-dd HH:mm:ss') }
+    }
+
+    $devRows = "unavailable"
+    $devUpdated = "unavailable"
+    $python = Join-Path $projectRoot "flipflop-api\.venv\Scripts\python.exe"
+    if (Test-Path $python) {
+        try {
+            $env:PYTHONPATH = Join-Path $projectRoot "flipflop-api"
+            if (-not $env:OLLAMA_MODEL) { $env:OLLAMA_MODEL = "qwen2.5:7b-instruct" }
+            $summary = & $python $summaryScript 2>$null | ConvertFrom-Json
+            if ($summary) {
+                $devRows = ([long]$summary.total_rows).ToString("N0")
+                if ($summary.last_updated) { $devUpdated = ([DateTime]$summary.last_updated).ToLocalTime().ToString('yyyy-MM-dd HH:mm:ss') }
+            }
+        } catch { }
     }
 
     Write-Host ""
-    Write-Host "LOCAL DATABASE REFRESH" -ForegroundColor Yellow
-    Write-Host "  $lastText" -ForegroundColor Gray
-    Write-Host "  Refresh local data from production now? [y/N] " -NoNewline -ForegroundColor White
+    Write-Host "DATABASE ENVIRONMENT COMPARISON" -ForegroundColor Yellow
+    Write-Host "  Environment       Total rows       Last database update" -ForegroundColor Cyan
+    Write-Host ("  {0,-17} {1,14}       {2}" -f "LIVE (snapshot)", $liveRows, $liveUpdated) -ForegroundColor Green
+    Write-Host ("  {0,-17} {1,14}       {2}" -f "DEV (local)", $devRows, $devUpdated) -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "  Refresh DEV from LIVE now? [y/N] " -NoNewline -ForegroundColor White
 
-    $deadline = [DateTime]::UtcNow.AddSeconds(3)
+    # Give the operator a short window to read the comparison and answer.
+    $deadline = [DateTime]::UtcNow.AddSeconds(5)
     while ([DateTime]::UtcNow -lt $deadline) {
         $key = $null
         try {
@@ -172,7 +207,7 @@ function Confirm-LocalDatabaseRefresh {
         }
         Start-Sleep -Milliseconds 100
     }
-    Write-Host "N (timeout)" -ForegroundColor Gray
+    Write-Host "N (5-second timeout)" -ForegroundColor Gray
 }
 
 $runMode = Select-RunMode
