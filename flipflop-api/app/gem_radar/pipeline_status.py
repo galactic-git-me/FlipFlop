@@ -348,6 +348,15 @@ async def snapshot(db) -> dict:
 
     configured_vendors_by_search: dict[str, list[str]] = {}
 
+    # Vendor totals must come from every observation submitted in this run.
+    # The in-memory ``listing_ids`` list only contains rows that reached CPK,
+    # which made a vendor look unprocessed when identity extraction was still
+    # pending (or failed).  Keep this query scoped by search_run_id so a new
+    # snapshot can never inherit another run's observations.
+    vendor_breakdown_by_search = await _vendor_breakdown_from_db(
+        db, [(s.search_id, s.search_run_ids) for s in states]
+    )
+
     all_listing_ids = [lid for s in states for lid in s.listing_ids]
     priced_listing_ids: set[str] = set()
     classified_listing_ids: set[str] = set()
@@ -491,24 +500,7 @@ async def snapshot(db) -> dict:
         else:
             discovered_by_vendor = {}
 
-        if all_listing_ids and s.listing_ids:
-            # Count observations per vendor for only THIS search's listing_ids
-            vendor_obs_result = await db.execute(
-                text(
-                    """
-                    SELECT source, COUNT(DISTINCT listing_id) as cnt
-                    FROM gem_radar_listing_observations
-                    WHERE listing_id = ANY(:ids)
-                    GROUP BY source
-                    """
-                ),
-                {"ids": s.listing_ids},
-            )
-            by_vendor = {}
-            for source, cnt in vendor_obs_result.fetchall():
-                by_vendor[source or "unknown"] = cnt
-        else:
-            by_vendor = dict(s.by_vendor)
+        by_vendor = vendor_breakdown_by_search.get(s.search_id) or dict(s.by_vendor)
 
         # Processed: listings that completed full pipeline (ingested → CPK → market/classified)
         processed_count = sum(1 for lid in s.listing_ids if lid in priced_listing_ids or lid in classified_listing_ids)
@@ -553,6 +545,7 @@ async def snapshot(db) -> dict:
                 "ingestedCount": s.ingested_count,
                 "ingestedNewCount": s.ingested_new_count,
                 "cpkAssignedCount": s.cpk_assigned_count,
+                "cpkFailedCount": s.cpk_failed_count,
                 # DB-derived (classified_count local var, computed above from
                 # a live query against listing_ids) — not the raw in-memory
                 # counter, which only ever incremented for cross-run

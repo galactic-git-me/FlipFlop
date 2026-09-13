@@ -9,7 +9,7 @@ import { VendorLogo } from "../../components/VendorLogo";
 import { PriceHistorySparkline } from "../../components/listings/PriceHistorySparkline";
 import { api, MarketSnapshot } from "@/lib/api";
 import { fuzzyMatches } from "@/lib/fuzzy";
-import { VENDOR_ORDER, VENDOR_META } from "@/lib/vendors";
+import { VENDOR_ORDER, VENDOR_META, canonicalVendorKey } from "@/lib/vendors";
 import {
   ScatterChart,
   Scatter,
@@ -110,6 +110,7 @@ interface ScanProgress {
   ingestedCount: number;
   ingestedNewCount: number;
   cpkAssignedCount: number;
+  cpkFailedCount?: number;
   marketPricedCount: number; // Listings with non-null market price
   classifiedCount: number;   // Listings with classification (GEM, SUPER_GEM, etc)
   processedPercent: number;  // % through full pipeline
@@ -383,6 +384,18 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
           const activeScans = data.activeScans ?? [];
 
           if (activeScans.length > 0) {
+            // A search id is reused on each scheduled sweep. A lower elapsed
+            // time is therefore an unambiguous run boundary; discard all
+            // client-side accumulators before accepting the new counters.
+            const restarted = activeScans.some((scan: ScanProgress) => {
+              const previous = runScans.current.get(scan.searchId);
+              return previous && scan.elapsedSeconds + 5 < previous.elapsedSeconds;
+            });
+            if (restarted) {
+              runScans.current.clear();
+              runMaxima.current = { binPricesCount: 0, soldPricesCount: 0, gemCount: 0, superGemCount: 0, avgGemScore: 0, avgSuperGemScore: 0 };
+              lastLiveStatus.current = null;
+            }
             for (const scan of activeScans) {
               const previous = runScans.current.get(scan.searchId);
               if (!previous) {
@@ -472,6 +485,14 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             setStatus(lastLiveStatus.current);
           } else {
             setStatus(data);
+            // Once the API has reported an empty board beyond the hand-off
+            // grace period, make the next run start from a clean slate.
+            if (Date.now() - lastLiveAt.current >= 30000) {
+              runScans.current.clear();
+              runMaxima.current = { binPricesCount: 0, soldPricesCount: 0, gemCount: 0, superGemCount: 0, avgGemScore: 0, avgSuperGemScore: 0 };
+              lastLiveStatus.current = null;
+              setDisplayedScans([]);
+            }
           }
 
           if (activeScans.length === 0 && displayedScans.length > 0) {
@@ -576,7 +597,11 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             // yet added here) used to be silently dropped from the tile row
             // while still counting toward the gauges' denominator above,
             // making the displayed vendor sum quietly undercount the total.
-            const vendorCounts = scan.discoveredByVendor ?? scan.byVendor ?? {};
+            const vendorCounts = Object.entries(scan.byVendor ?? {}).reduce<Record<string, number>>((acc, [vendor, count]) => {
+              const key = canonicalVendorKey(vendor);
+              acc[key] = (acc[key] ?? 0) + Number(count);
+              return acc;
+            }, {});
             const knownVendorEntries = VENDOR_ORDER
               .filter((v) => !searchConfiguredVendors || searchConfiguredVendors.includes(v))
               .map((v): [string, number | null] => [
@@ -653,9 +678,9 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
 
                   <div className="flex justify-center gap-3">
                     <Gauge value={scan.ingestedCount} max={searchTermTotal} label="Ingested" color="#8b5cf6" />
-                    <Gauge value={scan.cpkAssignedCount} max={searchTermTotal} label="CPK" color="#10b981" />
-                    <Gauge value={scan.marketPricedCount} max={searchTermTotal} label="M Prices" color="#f59e0b" />
-                    <Gauge value={scan.classifiedCount} max={searchTermTotal} label="Scores" color="#ec4899" />
+                    <Gauge value={scan.cpkAssignedCount} max={Math.max(scan.ingestedCount, 1)} label="CPK" color="#10b981" />
+                    <Gauge value={scan.marketPricedCount} max={Math.max(scan.cpkAssignedCount, 1)} label="M Prices" color="#f59e0b" />
+                    <Gauge value={scan.classifiedCount} max={Math.max(scan.cpkAssignedCount, 1)} label="Scores" color="#ec4899" />
                   </div>
 
                   {vendorEntries.length > 0 && (

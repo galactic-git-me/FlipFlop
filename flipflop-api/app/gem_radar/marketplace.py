@@ -45,6 +45,10 @@ _DOMAIN_TO_MARKETPLACE: dict[str, str] = {
     "awd-it.co.uk": "awd_it",
     "computerorbit.com": "computer_orbit",
     "bargainhardware.co.uk": "bargain_hardware",
+    "newegg.com": "newegg_uk",
+    "ebuyer.com": "ebuyer",
+    "google.com": "google_shopping",
+    "google.co.uk": "google_shopping",
 }
 
 # Marketplaces excluded from contributing to price benchmarks. Temu: "new"
