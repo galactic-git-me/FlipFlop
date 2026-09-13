@@ -36,6 +36,8 @@ services:
     volumes:
       - /home/mac/.ssh/id_ed25519:/root/.ssh/id_ed25519:ro
       - /home/mac/.ssh/known_hosts:/root/.ssh/known_hosts:ro
+    extra_hosts:
+      - "prometheus-ts:100.84.151.109"
     networks:
       - flipflop-network
 
@@ -128,7 +130,7 @@ services:
       DATABASE_URL: postgresql+asyncpg://flipper:flipper@postgres:5432/pcflipper
       SYNC_DATABASE_URL: postgresql://flipper:flipper@postgres:5432/pcflipper
       REDIS_URL: redis://redis:6379/0
-      OLLAMA_BASE_URL: http://localhost:11434
+      OLLAMA_BASE_URL: http://ollama-tunnel:11434
       OLLAMA_MODEL: qwen2.5:7b-instruct
       EBAY_LISTING_ENVIRONMENT: production
       # Was capped at 2 (config.py default) as an emergency throttle during a
@@ -138,7 +140,8 @@ services:
       # a backlog spanned more than 2 distinct search terms).
       MAX_CONCURRENT_SEARCH_TERMS: "4"
     command: ["uvicorn", "app.gem_radar_standalone:app", "--host", "0.0.0.0", "--port", "8000"]
-    network_mode: service:ollama-tunnel
+    networks:
+      - flipflop-network
     volumes:
       - ../runtime/builds:/builds
       - ../runtime/api-data:/app/data
