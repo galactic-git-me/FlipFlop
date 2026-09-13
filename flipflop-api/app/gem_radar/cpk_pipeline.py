@@ -13,6 +13,8 @@ once, not duplicated between the live path and the CLI script.
 from __future__ import annotations
 
 import json
+import re
+import time
 
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -21,6 +23,45 @@ from app.gem_radar.cpk_extractor import extract_cpk
 from app.gem_radar.cpk_market import upsert_listing_price, upsert_scan_price
 from app.gem_radar.benchmarks import normalize_match_key
 from app.gem_radar.opportunity_scoring import identity_gates
+
+
+_ALIAS_CACHE: tuple[float, list[tuple[str, str, dict]]] | None = None
+
+
+async def _lookup_unique_catalog_alias(db: AsyncSession, title: str) -> tuple[str, dict] | None:
+    """Resolve a title from the existing CPK catalog without an LLM call.
+
+    Only the longest matching model/brand+model aliases are considered, and a
+    match is accepted only when all matching aliases point to one CPK. This
+    recovers clear products while refusing board-partner and generic-memory
+    collisions such as RX6800XT16GB or 16GBDDR4.
+    """
+    global _ALIAS_CACHE
+    now = time.monotonic()
+    if _ALIAS_CACHE is None or now - _ALIAS_CACHE[0] > 600:
+        rows = (await db.execute(text("""
+            SELECT DISTINCT cpk, cpk_data
+            FROM gem_radar_listing_cpk
+            WHERE cpk IS NOT NULL AND cpk_data IS NOT NULL
+        """))).fetchall()
+        aliases: list[tuple[str, str, dict]] = []
+        for cpk, data in rows:
+            data = data or {}
+            for value in (data.get("model"), f"{data.get('brand') or ''}{data.get('model') or ''}"):
+                alias = re.sub(r"[^A-Z0-9]", "", str(value or "").upper())
+                if len(alias) >= 8:
+                    aliases.append((alias, cpk, data))
+        _ALIAS_CACHE = (now, aliases)
+    title_key = re.sub(r"[^A-Z0-9]", "", title.upper())
+    matches = [(alias, cpk, data) for alias, cpk, data in _ALIAS_CACHE[1] if alias in title_key]
+    if not matches:
+        return None
+    longest = max(len(alias) for alias, _, _ in matches)
+    cpks = {cpk for alias, cpk, _ in matches if len(alias) == longest}
+    if len(cpks) != 1:
+        return None
+    cpk = next(iter(cpks))
+    return cpk, next(data for alias, candidate, data in matches if len(alias) == longest and candidate == cpk)
 
 
 def _identity_match_keys(brand: str | None, model: str | None) -> set[str]:
@@ -75,20 +116,34 @@ async def assign_cpk_and_accumulate_price(
             # tied to it are removed so it cannot contaminate another cohort.
             await db.execute(text("DELETE FROM gem_radar_cpk_listing_price WHERE listing_id = :listing_id"), {"listing_id": listing_id})
             await db.execute(text("DELETE FROM gem_radar_listing_cpk WHERE listing_id = :listing_id"), {"listing_id": listing_id})
-        preflight_flags = identity_gates(title, {"category": category, "brand": "pending", "model": "pending"})
-        if any(flag in {"accessory_or_parts_listing", "bundle_listing"} for flag in preflight_flags):
-            return None
-        extracted = await extract_cpk(title, category, condition)
-        if extracted is None:
-            return None
+        alias = await _lookup_unique_catalog_alias(db, title)
+        if alias is not None:
+            cpk, alias_data = alias
+            brand = alias_data.get("brand")
+            model = alias_data.get("model")
+            extracted_category = alias_data.get("category") or category
+            await db.execute(text("""
+                INSERT INTO gem_radar_listing_cpk (listing_id, cpk, cpk_data, cpk_confidence)
+                VALUES (:listing_id, :cpk, :cpk_data, :cpk_confidence)
+                ON CONFLICT (listing_id) DO UPDATE SET
+                    cpk = EXCLUDED.cpk, cpk_data = EXCLUDED.cpk_data,
+                    cpk_confidence = EXCLUDED.cpk_confidence, updated_at = CURRENT_TIMESTAMP
+            """), {"listing_id": listing_id, "cpk": cpk, "cpk_data": json.dumps(alias_data), "cpk_confidence": 0.9})
+        else:
+            preflight_flags = identity_gates(title, {"category": category, "brand": "pending", "model": "pending"})
+            if any(flag in {"accessory_or_parts_listing", "bundle_listing"} for flag in preflight_flags):
+                return None
+            extracted = await extract_cpk(title, category, condition)
+            if extracted is None:
+                return None
 
-        extracted_flags = identity_gates(title, extracted.to_dict())
-        if any(flag != "identity_incomplete" for flag in extracted_flags):
-            return None
+            extracted_flags = identity_gates(title, extracted.to_dict())
+            if any(flag != "identity_incomplete" for flag in extracted_flags):
+                return None
 
-        await db.execute(
-            text(
-                """
+            await db.execute(
+                text(
+                    """
                 INSERT INTO gem_radar_listing_cpk (listing_id, cpk, cpk_data, cpk_confidence)
                 VALUES (:listing_id, :cpk, :cpk_data, :cpk_confidence)
                 ON CONFLICT (listing_id) DO UPDATE SET
@@ -97,18 +152,18 @@ async def assign_cpk_and_accumulate_price(
                     cpk_confidence = EXCLUDED.cpk_confidence,
                     updated_at = CURRENT_TIMESTAMP
                 """
-            ),
-            {
-                "listing_id": listing_id,
-                "cpk": extracted.cpk,
-                "cpk_data": json.dumps(extracted.to_dict()),
-                "cpk_confidence": extracted.confidence,
-            },
-        )
-        cpk = extracted.cpk
-        brand = extracted.brand
-        model = extracted.model
-        extracted_category = extracted.category
+                ),
+                {
+                    "listing_id": listing_id,
+                    "cpk": extracted.cpk,
+                    "cpk_data": json.dumps(extracted.to_dict()),
+                    "cpk_confidence": extracted.confidence,
+                },
+            )
+            cpk = extracted.cpk
+            brand = extracted.brand
+            model = extracted.model
+            extracted_category = extracted.category
 
     match_key = normalize_match_key(title)
 

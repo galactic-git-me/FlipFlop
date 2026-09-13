@@ -151,6 +151,7 @@ The first implementation slice is now applied in code and the local database mig
 - migration `20260913_0002_identity_proposals` adds the durable reconciliation queue;
 - deterministic proposal generation and apply scripts are available, with a local 1,000-row preview producing 713 ambiguous and 287 unresolved proposals and zero automatic merges;
 - the safe unique-alias backfill ran locally and mapped 22 sold observations from one unambiguous normalized key; ambiguous keys such as RX6800XT16GB and RX9060XT remain untouched;
+- active listing identity now has the same conservative catalog-alias path: a local 5,000-row dry run found 2,064 unique matches, and that bounded batch was applied. Existing historical scan gauges remain unchanged until the next scan/rescore because those gauges count assignments in the current run;
 - scoring tests now match the loaded 8.5/7.5/6.5 classification boundaries and the three-comparable minimum policy.
 
 The implementation intentionally does not auto-merge the 27,514 ambiguous sold rows. Product-level alias proposals still require review or stronger identifiers (GTIN/MPN/catalog IDs) to avoid corrupting comparable cohorts.
