@@ -116,6 +116,14 @@ print(json.dumps(d))
         # PostgreSQL requires DROP DATABASE to run outside a transaction.
         admin.autocommit = True
         cur.execute(sql.SQL("DROP DATABASE {}").format(sql.Identifier(url.database)))
+        # pg_restore/validation clients should be closed by this point, but
+        # terminate any lingering staging connection before PostgreSQL renames
+        # the database. ALTER DATABASE ... RENAME refuses while it is in use.
+        cur.execute(
+            "SELECT pg_terminate_backend(pid) FROM pg_stat_activity "
+            "WHERE datname=%s AND pid<>pg_backend_pid()",
+            (stage,),
+        )
         admin.autocommit = False
         try:
             cur.execute(sql.SQL("ALTER DATABASE {} RENAME TO {}").format(sql.Identifier(stage), sql.Identifier(url.database)))
