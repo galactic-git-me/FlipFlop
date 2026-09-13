@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import { Bell, BellRing, Heart, Radio, Search, Settings } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -34,6 +35,7 @@ export function TopCommandBar() {
   const [priceAlertCount, setPriceAlertCount] = useState(0);
   const [toasts, setToasts] = useState<Array<{ id: string; text: string; linkUrl?: string | null; persistent?: boolean }>>([]);
   const [confettiPieces, setConfettiPieces] = useState<Array<{ id: string; left: number; delay: number; duration: number; size: number; color: string; drift: number }>>([]);
+  const [isLocalEnvironment, setIsLocalEnvironment] = useState(false);
   const seenProposalIdsRef = useRef<Set<number>>(new Set());
   const seenAlertIdsRef = useRef<Set<number>>(new Set());
 
@@ -51,6 +53,10 @@ export function TopCommandBar() {
     setConfettiPieces(pieces);
     setTimeout(() => setConfettiPieces([]), 5600);
   };
+
+  useEffect(() => {
+    setIsLocalEnvironment(["localhost", "127.0.0.1", "::1"].includes(window.location.hostname));
+  }, []);
 
   useEffect(() => {
     if (pathname === "/login") return;
@@ -208,6 +214,15 @@ export function TopCommandBar() {
       </div>
 
       <div className="node-topbar-right">
+        {isLocalEnvironment && (
+          <Link
+            href="http://localhost:4313"
+            className="rounded border border-amber-400/40 bg-amber-400/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-amber-200 hover:bg-amber-400/20"
+            title="Open the local FlipFlop.shop storefront"
+          >
+            Local storefront
+          </Link>
+        )}
         <div className="node-live-chip">
           <span className="node-live-dot" />
           <Image src="/pics/logo_simple_no_bg.png" alt="FlipFlop" width={240} height={120} className="h-[120px] w-auto object-contain" />
