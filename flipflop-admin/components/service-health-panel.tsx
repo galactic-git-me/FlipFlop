@@ -57,7 +57,17 @@ export function ServiceHealthPanel() {
           const color = count == null ? "text-slate-100" : count === 0 ? "text-emerald-400" : count === 1 ? "text-amber-300" : "text-rose-400";
           const Icon = service.icon;
           const state = count == null ? "checking" : count === 0 ? "online" : `${count} missed`;
-          return <div key={service.name} className="flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[9px] font-semibold text-slate-300" title={`${service.name}: ${state}`}><Icon className={`h-6 w-6 ${color}`} />{service.name}</div>;
+          const className = "flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[9px] font-semibold text-slate-300";
+          const content = <><Icon className={`h-6 w-6 ${color}`} />{service.name}</>;
+          return service.name === "Shop" ? (
+            <a key={service.name} href={typeof window !== "undefined" && ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname) ? "http://localhost:4313" : "https://www.theflipflop.shop"} target="_blank" rel="noreferrer" className={className} title={`${service.name}: ${state}`}>
+              {content}
+            </a>
+          ) : (
+            <div key={service.name} className={className} title={`${service.name}: ${state}`}>
+              {content}
+            </div>
+          );
         })}
       </div>
     </section>
