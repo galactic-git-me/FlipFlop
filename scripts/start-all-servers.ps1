@@ -202,8 +202,12 @@ function Confirm-LocalDatabaseRefresh {
                 if ($LASTEXITCODE -ne 0) { throw "Production-to-local database refresh failed" }
                 return
             }
-            Write-Host "N" -ForegroundColor Gray
-            return
+            if ($key -in @('n', 'N')) {
+                Write-Host "N" -ForegroundColor Gray
+                return
+            }
+            # Ignore a stray Enter or mode-selection key and keep the full
+            # decision window open.
         }
         Start-Sleep -Milliseconds 100
     }
