@@ -269,36 +269,32 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
           />
         )}
         {failedLength > 0 && (
-          <>
-            <circle
-              cx={30} cy={30} r={radius} stroke={color} strokeWidth={6} fill="none" opacity="0.75"
-              strokeDasharray={`${failedLength} ${circumference - failedLength}`}
-              strokeDashoffset={-successfulLength} strokeLinecap="round" transform="rotate(-90 30 30)"
-              className="transition-all duration-500"
-            />
-            <circle
-              cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={4} fill="none"
-              strokeDasharray={`${failedLength} ${circumference - failedLength}`}
-              strokeDashoffset={-successfulLength} strokeLinecap="round" transform="rotate(-90 30 30)"
-              className="transition-all duration-500"
-            />
-          </>
+          <circle
+            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={6} fill="none"
+            strokeDasharray={`${failedLength} ${circumference - failedLength}`}
+            strokeDashoffset={-successfulLength} strokeLinecap="round" transform="rotate(-90 30 30)"
+            className="transition-all duration-500"
+          />
         )}
         {skippedLength > 0 && (
-          <>
-            <circle
-              cx={30} cy={30} r={radius} stroke={color} strokeWidth={6} fill="none" opacity="0.75"
-              strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
-              strokeDashoffset={-(successfulLength + failedLength)} strokeLinecap="round" transform="rotate(-90 30 30)"
-              className="transition-all duration-500"
-            />
-            <circle
-              cx={30} cy={30} r={radius} stroke="#1e293b" strokeWidth={4} fill="none"
-              strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
-              strokeDashoffset={-(successfulLength + failedLength)} strokeLinecap="round" transform="rotate(-90 30 30)"
-              className="transition-all duration-500"
-            />
-          </>
+          <circle
+            cx={30} cy={30} r={radius} stroke={color} strokeWidth={2} fill="none" opacity="0.75"
+            strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
+            strokeDashoffset={-(successfulLength + failedLength)} strokeLinecap="round" transform="rotate(-90 30 30)"
+            className="transition-all duration-500"
+          />
+        )}
+        {failedLength > 0 && (
+          <line
+            x1={30} y1={2} x2={30} y2={10} stroke="#0f172a" strokeWidth={1.5}
+            transform={`rotate(${(successfulLength / circumference) * 360} 30 30)`}
+          />
+        )}
+        {skippedLength > 0 && (
+          <line
+            x1={30} y1={2} x2={30} y2={10} stroke="#0f172a" strokeWidth={1.5}
+            transform={`rotate(${((successfulLength + failedLength) / circumference) * 360} 30 30)`}
+          />
         )}
         <text x={30} y={34} textAnchor="middle" className="fill-slate-100 text-[12px] font-semibold">
           {Math.round(pct)}%
