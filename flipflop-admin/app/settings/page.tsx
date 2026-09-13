@@ -127,6 +127,8 @@ export default function SettingsPage() {
   const [ebayStatus, setEbayStatus] = useState<{
     connected: boolean;
     connected_at: string | null;
+    username: string | null;
+    email: string | null;
     scopes: string[];
     refresh_token_expires_at: string | null;
   } | null>(null);
@@ -397,6 +399,12 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between p-3 rounded-lg border border-emerald-500/30 bg-emerald-500/5">
                   <div>
                     <p className="text-sm text-emerald-400 font-semibold">Connected</p>
+                    {ebayStatus.username && (
+                      <p className="text-xs text-slate-300">eBay account: {ebayStatus.username}</p>
+                    )}
+                    {ebayStatus.email && (
+                      <p className="text-xs text-slate-400">{ebayStatus.email}</p>
+                    )}
                     <p className="text-xs text-slate-500">
                       Since {ebayStatus.connected_at ? new Date(ebayStatus.connected_at).toLocaleDateString() : "—"}
                       {ebayStatus.refresh_token_expires_at && (

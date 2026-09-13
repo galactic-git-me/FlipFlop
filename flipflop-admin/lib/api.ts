@@ -1405,6 +1405,8 @@ export const api = {
       request<{
         connected: boolean;
         connected_at: string | null;
+        username: string | null;
+        email: string | null;
         scopes: string[];
         refresh_token_expires_at: string | null;
       }>("/ebay/oauth/status"),

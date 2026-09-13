@@ -6,8 +6,8 @@ const ebayOpsBackendUrl = (process.env.EBAY_OPS_BACKEND_URL ?? "").replace(/\/$/
 function backendForPath(path: string[]): string {
   if (!ebayOpsBackendUrl) return backendUrl;
   const value = path.join("/");
-  // Keep local catalogue/build editing local. Only seller-authorized eBay
-  // operations use the deployed API, which owns the connected eBay token.
+  // Keep all local development operations on the configured local backend.
+  // A deployed operations backend is an explicit deployment override only.
   if (
     value === "ebay/oauth/authorize-url" ||
     value === "ebay/oauth/status" ||

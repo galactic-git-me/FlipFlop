@@ -43,9 +43,8 @@ const nextConfig: NextConfig = {
         source: "/api/:path*",
         destination: `${backendUrl}/api/:path*`,
       },
-      // eBay OAuth state is owned by the deployed operations API, even when
-      // the admin UI is running locally. Keep these ahead of the catch-all
-      // proxy rewrite below.
+      // eBay OAuth can be pointed at a dedicated operations API in a
+      // deployment; local development defaults to the local backend.
       {
         source: "/proxy-api/ebay/oauth/:path*",
         destination: `${ebayOpsBackendUrl}/api/ebay/oauth/:path*`,

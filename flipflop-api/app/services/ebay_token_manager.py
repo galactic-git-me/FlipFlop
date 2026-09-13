@@ -85,11 +85,17 @@ async def get_valid_ebay_access_token(
     ("sandbox" or "production"), refreshing it via the stored refresh token
     if the cached one is missing or near expiry.
 
-    Falls back to the database-backed seller OAuth connection (see
-    app.services.ebay_oauth, populated via /api/ebay/oauth/authorize-url)
-    for production when no env-var refresh/static token is on file — that
-    is the flow the admin "Connect eBay" sign-in actually completes.
+    For production requests with a database session, use the database-backed
+    seller OAuth connection first. This prevents an old deployment token or
+    disk cache from selecting a different seller after reconnecting eBay.
     """
+    if environment == "production" and db is not None:
+        from app.services.ebay_oauth import get_valid_access_token as get_valid_db_access_token
+
+        db_token = await get_valid_db_access_token(db)
+        if db_token:
+            return db_token
+
     if not force_refresh:
         cached = _load_cache(environment)
         if cached and cached.get("expires_at", 0) - _REFRESH_MARGIN_SECONDS > time.time():
@@ -102,12 +108,6 @@ async def get_valid_ebay_access_token(
         # (requires manual renewal every 2 hours until a refresh token is saved).
         if creds.static_token:
             return creds.static_token
-        if environment == "production" and db is not None:
-            from app.services.ebay_oauth import get_valid_access_token as get_valid_db_access_token
-
-            db_token = await get_valid_db_access_token(db)
-            if db_token:
-                return db_token
         raise ValueError(
             f"No eBay {environment} refresh token or access token configured. "
             "Complete the OAuth sign-in flow once via /api/ebay/oauth/authorize-url."

@@ -50,6 +50,7 @@ SCOPES = [
     "https://api.ebay.com/oauth/api_scope/sell.account",
     "https://api.ebay.com/oauth/api_scope/sell.marketing",
     "https://api.ebay.com/oauth/api_scope/sell.fulfillment",
+    "https://api.ebay.com/oauth/api_scope/commerce.identity.readonly",
 ]
 
 _AUTH_ROOT = {
@@ -262,8 +263,36 @@ async def get_connection_status(db: AsyncSession) -> dict:
         "connected": True,
         "connected_at": settings_row.ebay_seller_connected_at.isoformat() if settings_row.ebay_seller_connected_at else None,
         "scopes": settings_row.ebay_seller_scopes.split(" ") if settings_row.ebay_seller_scopes else [],
+        **(await get_connected_identity(db)),
         "refresh_token_expires_at": (
             settings_row.ebay_seller_refresh_token_expires_at.isoformat()
             if settings_row.ebay_seller_refresh_token_expires_at else None
         ),
     }
+
+
+async def get_connected_identity(db: AsyncSession) -> dict:
+    """Return safe account identifiers for the stored seller OAuth token."""
+    access_token = await get_valid_access_token(db)
+    if not access_token:
+        return {"username": None, "email": None}
+
+    try:
+        async with httpx.AsyncClient(timeout=20) as client:
+            response = await client.get(
+                f"{_ebay_api_root()}/commerce/identity/v1/user/",
+                headers={"Authorization": f"Bearer {access_token}"},
+            )
+        if response.status_code != 200:
+            log.warning("ebay_oauth.identity_lookup_failed", status=response.status_code)
+            return {"username": None, "email": None}
+        payload = response.json()
+        business = payload.get("businessAccount") or {}
+        individual = payload.get("individualAccount") or {}
+        return {
+            "username": payload.get("username") or payload.get("userId"),
+            "email": business.get("email") or individual.get("email"),
+        }
+    except (httpx.HTTPError, ValueError, TypeError) as exc:
+        log.warning("ebay_oauth.identity_lookup_error", error=str(exc))
+        return {"username": None, "email": None}

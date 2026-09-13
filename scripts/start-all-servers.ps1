@@ -5,9 +5,9 @@
 param(
     [switch]$Verbose = $false,
     [switch]$NoOllama = $false,
-    # The production API and PostgreSQL database run on Andromeda. These
-    # switches are only for explicitly testing the legacy local services.
-    [switch]$LocalBackend = $false,
+    # Start the local API/database by default so the admin uses the current
+    # workspace code and local OAuth/settings state.
+    [switch]$LocalBackend = $true,
     [switch]$LocalGemRadar = $false,
     # Start the customer site locally for development; use -NoFrontend when
     # only the admin tool is needed.
@@ -27,6 +27,119 @@ $projectRoot = Split-Path -Parent $PSScriptRoot
 $env:CUDA_VISIBLE_DEVICES = "0"
 $env:OLLAMA_NUM_PARALLEL = "4"
 $env:OLLAMA_KEEP_ALIVE = "-1"
+
+function Select-RunMode {
+    Write-Host ""
+    Write-Host "============================================================" -ForegroundColor Cyan
+    Write-Host "                 FLIPFLOP STARTUP MODE" -ForegroundColor Cyan
+    Write-Host "============================================================" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "  [1] LIVE OPERATOR" -ForegroundColor Green
+    Write-Host "      Local screens -> production VPS API/database/eBay" -ForegroundColor Gray
+    Write-Host ""
+    Write-Host "  [2] DEVELOPMENT" -ForegroundColor Yellow
+    Write-Host "      Local screens -> local API/database -> LIVE eBay" -ForegroundColor Gray
+    Write-Host "      Use this when changing frontend + backend code" -ForegroundColor Gray
+    Write-Host ""
+    Write-Host "  Select 1 or 2 (default: LIVE OPERATOR in 3 seconds): " -NoNewline -ForegroundColor White
+
+    $deadline = [DateTime]::UtcNow.AddSeconds(3)
+    while ([DateTime]::UtcNow -lt $deadline) {
+        try {
+            if ([Console]::KeyAvailable) {
+                $key = [Console]::ReadKey($true).KeyChar
+                if ($key -eq '2') {
+                    Write-Host "2" -ForegroundColor Yellow
+                    return "development"
+                }
+                if ($key -eq '1') {
+                    Write-Host "1" -ForegroundColor Green
+                    return "live"
+                }
+            }
+        } catch {
+            # Non-interactive invocation: retain the useful default.
+            break
+        }
+        Start-Sleep -Milliseconds 100
+    }
+
+    Write-Host "LIVE OPERATOR" -ForegroundColor Green
+    return "live"
+}
+
+function Confirm-LocalDatabaseRefresh {
+    $backupRoot = Join-Path $env:LOCALAPPDATA "FlipFlop\database-backups"
+    $lastReport = $null
+    if (Test-Path $backupRoot) {
+        $lastReport = Get-ChildItem -Path $backupRoot -Filter "report.json" -Recurse -File -ErrorAction SilentlyContinue |
+            ForEach-Object {
+                try { Get-Content -LiteralPath $_.FullName -Raw | ConvertFrom-Json } catch { $null }
+            } |
+            Where-Object { $_.status -eq "complete" -and $_.finished_at } |
+            Sort-Object { [DateTime]$_.finished_at } -Descending |
+            Select-Object -First 1
+    }
+
+    $lastText = "No successful local database refresh has been recorded."
+    if ($lastReport) {
+        $finished = [DateTime]$lastReport.finished_at
+        $ageHours = [Math]::Max(0, ([DateTime]::UtcNow - $finished.ToUniversalTime()).TotalHours)
+        $lastText = "Last refresh: $($finished.ToLocalTime().ToString('yyyy-MM-dd HH:mm:ss')) ($([Math]::Round($ageHours, 1)) hours ago)"
+    }
+
+    Write-Host ""
+    Write-Host "LOCAL DATABASE REFRESH" -ForegroundColor Yellow
+    Write-Host "  $lastText" -ForegroundColor Gray
+    Write-Host "  Refresh local data from production now? [y/N] " -NoNewline -ForegroundColor White
+
+    $deadline = [DateTime]::UtcNow.AddSeconds(3)
+    while ([DateTime]::UtcNow -lt $deadline) {
+        $key = $null
+        try {
+            if ([Console]::KeyAvailable) {
+                $key = [Console]::ReadKey($true).KeyChar
+            }
+        } catch {
+            return
+        }
+        if ($key) {
+            if ($key -in @('y', 'Y')) {
+                Write-Host "Y" -ForegroundColor Green
+                Write-Host "[*] Refreshing local database from production..." -ForegroundColor Yellow
+                & (Join-Path $PSScriptRoot "run-production-to-local-sync.ps1")
+                if ($LASTEXITCODE -ne 0) { throw "Production-to-local database refresh failed" }
+                return
+            }
+            Write-Host "N" -ForegroundColor Gray
+            return
+        }
+        Start-Sleep -Milliseconds 100
+    }
+    Write-Host "N (timeout)" -ForegroundColor Gray
+}
+
+$runMode = Select-RunMode
+if ($runMode -eq "live") {
+    # Keep the operator UI local, but route operational requests to the VPS.
+    # Do not start local API/database or database synchronisation.
+    $LocalBackend = $false
+    $LocalGemRadar = $false
+    $NoPeerSync = $true
+} else {
+    # Development mode is fully local and must not inherit production routing.
+    $LocalBackend = $true
+    $NoPeerSync = $true
+    Confirm-LocalDatabaseRefresh
+}
+
+Write-Host ""
+if ($runMode -eq "live") {
+    Write-Host "[MODE] LIVE OPERATOR - real production data and live eBay actions" -ForegroundColor Green
+} else {
+    Write-Host "[MODE] DEVELOPMENT - local API and local database" -ForegroundColor Yellow
+}
+Write-Host ""
 
 Write-Host "[*] FlipFlop Platform - Starting all servers" -ForegroundColor Cyan
 Write-Host "    Project root: $projectRoot" -ForegroundColor Gray
@@ -292,8 +405,8 @@ Write-Host "  [OK] Logs directory: $logsDir" -ForegroundColor Green
 Write-Host ""
 
 # Clean up lingering processes on the ports selected for this run.
-# The normal target setup only runs the admin tool locally; the API/database
-# and customer-facing website remain on Andromeda.
+# The normal target setup runs the admin tool and API locally; the customer-
+# facing website remains on Andromeda.
 Write-Host "[*] Cleaning up lingering processes on dev ports..." -ForegroundColor Cyan
 $devPorts = @(4312, 5173)
 if ($LocalBackend) { $devPorts += 4311 }
@@ -365,11 +478,36 @@ if (-not $NoExtensionBuild) {
     }
 }
 
+# Build the admin bundle before starting it so local startup always validates
+# the current frontend source. The dev server still serves source files, but
+# this catches stale/generated bundle and TypeScript issues up front.
+function Build-Admin {
+    if ($NoAdmin) { return }
+
+    Write-Host "[*] Building admin frontend..." -ForegroundColor Cyan
+    Push-Location (Join-Path $projectRoot "flipflop-admin")
+    try {
+        npm run build 2>&1 | ForEach-Object { Write-Host "  $_" -ForegroundColor Gray }
+        if ($LASTEXITCODE -ne 0) {
+            throw "Admin frontend build failed"
+        }
+        Write-Host "[OK] Admin frontend build succeeded" -ForegroundColor Green
+    } finally {
+        Pop-Location
+    }
+    Write-Host ""
+}
+
+Build-Admin
+
 # Server configuration
+$adminApiUrl = if ($LocalBackend) { "http://localhost:4311" } else { "https://www.theflipflop.shop" }
+$adminGemRadarUrl = if ($LocalGemRadar) { "http://localhost:18000" } elseif ($LocalBackend) { $adminApiUrl } else { "https://www.theflipflop.shop" }
+$frontendApiUrl = if ($LocalBackend) { "http://localhost:4311" } else { "https://www.theflipflop.shop" }
 $servers = @(
     @{
         name     = "backend"
-        cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4311")
+        cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set EBAY_ENVIRONMENT=production && set EBAY_LISTING_ENVIRONMENT=production && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4311")
         port     = 4311
         color    = "Yellow"
         skip     = $NoBackend -or (-not $LocalBackend)
@@ -383,14 +521,14 @@ $servers = @(
     },
     @{
         name     = "admin"
-        cmdArgs  = @("/c", "cd flipflop-admin && set ""BACKEND_URL=https://www.theflipflop.shop"" && set ""NEXT_PUBLIC_API_URL=https://www.theflipflop.shop"" && set ""GEMRADAR_URL=https://www.theflipflop.shop"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4312 -H 0.0.0.0")
+        cmdArgs  = @("/c", "cd flipflop-admin && set ""BACKEND_URL=$adminApiUrl"" && set ""NEXT_PUBLIC_API_URL=$adminApiUrl"" && set ""EBAY_OPS_BACKEND_URL=$adminApiUrl"" && set ""GEMRADAR_URL=$adminGemRadarUrl"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4312 -H 0.0.0.0")
         port     = 4312
         color    = "Green"
         skip     = $NoAdmin
     },
     @{
         name     = "frontend"
-        cmdArgs  = @("/c", "cd ..\FlipFlop.shop && set ""BACKEND_URL=https://www.theflipflop.shop"" && set ""NEXT_PUBLIC_API_URL=https://www.theflipflop.shop"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4313 -H 0.0.0.0")
+        cmdArgs  = @("/c", "cd ..\FlipFlop.shop && set ""BACKEND_URL=$frontendApiUrl"" && set ""NEXT_PUBLIC_API_URL=$frontendApiUrl"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4313 -H 0.0.0.0")
         port     = 4313
         color    = "Magenta"
         skip     = $NoFrontend
