@@ -91,13 +91,13 @@ function Select-RunMode {
     Write-Host "============================================================" -ForegroundColor Cyan
     Write-Host ""
     Write-Host "  [1] LIVE OPERATOR" -ForegroundColor Green
-    Write-Host "      Local screens -> production VPS API/database/eBay" -ForegroundColor Gray
+    Write-Host "      Remote services on Andromeda + local production extension" -ForegroundColor Gray
     Write-Host ""
     Write-Host "  [2] DEVELOPMENT" -ForegroundColor Yellow
     Write-Host "      Local screens -> local API/database -> LIVE eBay" -ForegroundColor Gray
     Write-Host "      Use this when changing frontend + backend code" -ForegroundColor Gray
     Write-Host ""
-    Write-Host "  Select 1 or 2 (default: LIVE OPERATOR in 3 seconds): " -NoNewline -ForegroundColor White
+    Write-Host "  Select 1 or 2 (default: DEVELOPMENT in 3 seconds): " -NoNewline -ForegroundColor White
 
     $deadline = [DateTime]::UtcNow.AddSeconds(3)
     while ([DateTime]::UtcNow -lt $deadline) {
@@ -114,14 +114,14 @@ function Select-RunMode {
                 }
             }
         } catch {
-            # Non-interactive invocation: retain the useful default.
+            # Non-interactive invocation: default to local development.
             break
         }
         Start-Sleep -Milliseconds 100
     }
 
-    Write-Host "LIVE OPERATOR" -ForegroundColor Green
-    return "live"
+    Write-Host "DEVELOPMENT" -ForegroundColor Yellow
+    return "development"
 }
 
 function Confirm-LocalDatabaseRefresh {
@@ -176,19 +176,26 @@ function Confirm-LocalDatabaseRefresh {
 }
 
 $runMode = Select-RunMode
-Check-RepositoryForMode $runMode
-if ($runMode -eq "live") {
-    # Keep the operator UI local, but route operational requests to the VPS.
-    # Do not start local API/database or database synchronisation.
-    $LocalBackend = $false
-    $LocalGemRadar = $false
-    $NoPeerSync = $true
+if ($runMode -eq "development") {
+    Check-RepositoryForMode $runMode
 } else {
-    # Development mode is fully local and must not inherit production routing.
-    $LocalBackend = $true
-    $NoPeerSync = $true
-    Confirm-LocalDatabaseRefresh
+    & (Join-Path $PSScriptRoot "start-production-remote.ps1")
 }
+# Prepare the matching extension before starting/restarting any services.
+if (-not $NoExtensionBuild) {
+    & (Join-Path $PSScriptRoot "prepare-extension.ps1") -Mode $runMode -ProjectRoot $projectRoot
+} else {
+    Write-Host "[EXTENSION] Preparation skipped (-NoExtensionBuild); installed browser extensions are unchanged." -ForegroundColor Yellow
+}
+if ($runMode -eq "live") {
+    Write-Host "[OK] Production services are running on Andromeda. Storefront: https://www.theflipflop.shop" -ForegroundColor Green
+    Write-Host "[INFO] No production admin service is currently configured on Andromeda." -ForegroundColor Yellow
+    return
+}
+# Only development reaches local service startup.
+$LocalBackend = $true
+$NoPeerSync = $true
+Confirm-LocalDatabaseRefresh
 
 Write-Host ""
 if ($runMode -eq "live") {
@@ -514,26 +521,6 @@ Write-Host ""
 # Ensure the eBay CDP browser is up and signed in (required for sold-comps experiment)
 Ensure-EbayCdpBrowser
 Write-Host ""
-
-# Extension build
-if (-not $NoExtensionBuild) {
-    $extensionRoot = Join-Path (Split-Path -Parent $projectRoot) "FlipFlopXtension"
-    if (Test-Path $extensionRoot) {
-        Write-Host "[*] Building Chrome extension..." -ForegroundColor Cyan
-        Push-Location $extensionRoot
-        try {
-            npm run build 2>&1 | ForEach-Object { Write-Host "  $_" -ForegroundColor Gray }
-            if ($LASTEXITCODE -eq 0) {
-                Write-Host "[OK] Extension build succeeded" -ForegroundColor Green
-            } else {
-                Write-Host "[ERROR] Extension build failed" -ForegroundColor Red
-            }
-        } finally {
-            Pop-Location
-        }
-        Write-Host ""
-    }
-}
 
 # Build the admin bundle before starting it so local startup always validates
 # the current frontend source. The dev server still serves source files, but
