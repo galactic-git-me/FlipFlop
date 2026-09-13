@@ -58,9 +58,9 @@ services:
       # OAuth is completed by the local admin UI in the operator's browser.
       ADMIN_FRONTEND_URL: http://localhost:4312
       EBAY_OAUTH_CALLBACK_URL: https://www.theflipflop.shop/api/ebay/oauth/callback
-      EBAY_PRODUCTION_PAYMENT_POLICY_ID: "260999533010"
-      EBAY_PRODUCTION_RETURN_POLICY_ID: "260999539010"
-      EBAY_PRODUCTION_FULFILLMENT_POLICY_ID: "260999549010"
+      EBAY_PRODUCTION_PAYMENT_POLICY_ID: "298501538014"
+      EBAY_PRODUCTION_RETURN_POLICY_ID: "298501571014"
+      EBAY_PRODUCTION_FULFILLMENT_POLICY_ID: "298928779014"
     ports:
       - "127.0.0.1:4311:4311"
     volumes:
