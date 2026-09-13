@@ -615,7 +615,11 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             const extraVendorEntries = Object.entries(vendorCounts)
               .filter(([v, count]) => count > 0 && !(VENDOR_ORDER as readonly string[]).includes(v))
               .sort((a, b) => b[1] - a[1]);
-            const vendorEntries = [...knownVendorEntries, ...extraVendorEntries];
+            // Keep each search card focused on vendors that actually returned
+            // data. Configured-but-empty marketplaces remain available to the
+            // scan status counters, but do not occupy the vendor logo row.
+            const vendorEntries = [...knownVendorEntries, ...extraVendorEntries]
+              .filter(([, count]) => count != null && count > 0);
             // Discovery is the user-facing search-term total. Processing
             // gauges use only eligible (non-auction) ads as their denominator.
             const discoveredTotal = Math.max(
