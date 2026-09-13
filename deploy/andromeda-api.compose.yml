@@ -10,6 +10,8 @@ services:
       POSTGRES_PASSWORD: flipper
     volumes:
       - flipflop_production_postgres:/var/lib/postgresql
+    networks:
+      - flipflop-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U flipper -d pcflipper"]
       interval: 5s
@@ -23,6 +25,19 @@ services:
     command: redis-server --appendonly yes
     volumes:
       - flipflop_production_redis:/data
+    networks:
+      - flipflop-network
+
+  ollama-tunnel:
+    image: alpine:3.20
+    container_name: flipflop-production-ollama-tunnel
+    restart: unless-stopped
+    command: ["/bin/sh", "-c", "apk add --no-cache openssh-client && exec ssh -N -T -g -o BatchMode=yes -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=yes -L 0.0.0.0:11434:127.0.0.1:11434 mclar@prometheus-ts"]
+    volumes:
+      - /home/mac/.ssh/id_ed25519:/root/.ssh/id_ed25519:ro
+      - /home/mac/.ssh/known_hosts:/root/.ssh/known_hosts:ro
+    networks:
+      - flipflop-network
 
   api:
     build:
@@ -52,8 +67,10 @@ services:
       # The SSH reverse tunnel exposes Prometheus' Ollama on Andromeda's host
       # port 11434. Containers must use the host gateway rather than their own
       # localhost namespace.
-      OLLAMA_BASE_URL: http://host.docker.internal:11434
-      OLLAMA_MODEL: qwen2.5:7b-instruct
+      # The web tier does not run CPK/scoring; Ollama is connected only to the
+      # GemRadar worker through the tunnel sidecar below.
+      OLLAMA_BASE_URL: ""
+      OLLAMA_MODEL: disabled-on-web-tier
       FRONTEND_URL: https://www.theflipflop.shop
       # Live listings must never silently fall back to the eBay sandbox when
       # the host env file omits this optional setting.
@@ -66,8 +83,8 @@ services:
       EBAY_PRODUCTION_FULFILLMENT_POLICY_ID: "298928779014"
     ports:
       - "127.0.0.1:4311:4311"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    networks:
+      - flipflop-network
     volumes:
       - ../runtime/builds:/builds
       - ../runtime/api-data:/app/data
@@ -98,6 +115,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+      ollama-tunnel:
+        condition: service_started
     env_file:
       - path: ../.env.local
         required: true
@@ -109,7 +128,7 @@ services:
       DATABASE_URL: postgresql+asyncpg://flipper:flipper@postgres:5432/pcflipper
       SYNC_DATABASE_URL: postgresql://flipper:flipper@postgres:5432/pcflipper
       REDIS_URL: redis://redis:6379/0
-      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      OLLAMA_BASE_URL: http://localhost:11434
       OLLAMA_MODEL: qwen2.5:7b-instruct
       EBAY_LISTING_ENVIRONMENT: production
       # Was capped at 2 (config.py default) as an emergency throttle during a
@@ -119,8 +138,7 @@ services:
       # a backlog spanned more than 2 distinct search terms).
       MAX_CONCURRENT_SEARCH_TERMS: "4"
     command: ["uvicorn", "app.gem_radar_standalone:app", "--host", "0.0.0.0", "--port", "8000"]
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    network_mode: service:ollama-tunnel
     volumes:
       - ../runtime/builds:/builds
       - ../runtime/api-data:/app/data
@@ -139,3 +157,7 @@ services:
 volumes:
   flipflop_production_postgres:
   flipflop_production_redis:
+
+networks:
+  flipflop-network:
+    driver: bridge
