@@ -44,16 +44,16 @@ export function ServiceHealthPanel() {
 
   return (
     <section className="mx-2 mt-auto rounded border border-cyan-300/15 bg-slate-950/55 px-2 py-1.5" aria-label="Service health">
-      <div className="mb-1.5 flex items-center justify-between text-[8px] font-bold uppercase tracking-[0.16em] text-cyan-200/80">
-        <span>System heartbeat</span><span className="animate-pulse text-cyan-300">●</span>
+      <div className="mb-1.5 text-[8px] font-bold uppercase tracking-[0.16em] text-cyan-200/80">
+        System heartbeat
       </div>
       <div className="grid grid-cols-4 gap-1">
         {BASE_SERVICES.map((service) => {
           const count = misses[service.name];
-          const color = count == null ? "bg-amber-300 animate-pulse" : count === 0 ? "bg-emerald-400" : count === 1 ? "bg-amber-300" : "bg-rose-400";
+          const color = count == null ? "text-amber-300 animate-pulse" : count === 0 ? "text-emerald-400" : count === 1 ? "text-amber-300" : "text-rose-400";
           const Icon = service.icon;
           const state = count == null ? "checking" : count === 0 ? "online" : `${count} missed`;
-          return <div key={service.name} className="flex items-center justify-center gap-1 text-[9px] font-semibold text-slate-300" title={`${service.name}: ${state}`}><Icon className="h-3 w-3 text-slate-400" /><span className={`h-1.5 w-1.5 rounded-full ${color}`} />{service.name}</div>;
+          return <div key={service.name} className="flex items-center justify-center gap-1 text-[9px] font-semibold text-slate-300" title={`${service.name}: ${state}`}><Icon className={`h-3 w-3 ${color}`} />{service.name}</div>;
         })}
       </div>
     </section>
