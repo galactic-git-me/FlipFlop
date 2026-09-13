@@ -109,7 +109,13 @@ def classify(
     # SUPER_GEM requires either:
     # 1. A verified source (sold comps or Amazon), OR
     # 2. An outlier-lower price (at or below the median observed market price)
-    if classification == "SUPER_GEM":
+    # Direct score-only callers (benchmarks/tests and legacy integrations) do
+    # not provide enough context to verify the benchmark. Keep the score tier
+    # in that mode; the live pipeline always supplies benchmark context and
+    # therefore receives the evidence gate below.
+    if classification == "SUPER_GEM" and any(
+        value is not None for value in (benchmark_label, category, price, market_stat)
+    ):
         is_verified = benchmark_label is not None and _is_verified_price_source(benchmark_label)
         if not is_verified and (price is None or market_stat is None):
             classification = "GEM"

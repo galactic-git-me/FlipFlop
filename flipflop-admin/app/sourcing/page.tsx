@@ -1146,7 +1146,7 @@ function findLatestRunId(listings: Listing[]): string | null {
   return latest?.search_run_id ?? null;
 }
 
-type GemFilter = "all" | "SUPER_GEM" | "GEM" | "EVIDENCE_LIMITED_DEAL" | "EMERGING_OPPORTUNITY" | "OK_DEAL" | "AVERAGE_DEAL" | "POOR_DEAL" | "INSUFFICIENT_DATA" | "INELIGIBLE";
+type GemFilter = "all" | "SUPER_GEM" | "GEM" | "EVIDENCE_LIMITED_DEAL" | "EMERGING_OPPORTUNITY" | "OK_DEAL" | "AVERAGE_DEAL" | "POOR_DEAL" | "INSUFFICIENT_DATA" | "IDENTITY_FAILED" | "IDENTITY_PENDING" | "INELIGIBLE";
 type StockLane = "all" | "new" | "open_box" | "used";
 
 const STOCK_LANES: { value: StockLane; label: string; description: string }[] = [
@@ -1176,12 +1176,14 @@ const CLASSIFICATION_RANK: Record<string, number> = {
   AVERAGE_DEAL: 1,
   POOR_DEAL: 0,
   INSUFFICIENT_DATA: -1,
+  IDENTITY_PENDING: -1.5,
+  IDENTITY_FAILED: -1.6,
   INELIGIBLE: -2,
 };
 
 // Best deal to worst — shared between the filter tags and the row badge so
 // the two stay visually consistent.
-const CLASSIFICATION_BADGE_ORDER: string[] = ["SUPER_GEM", "GEM", "EVIDENCE_LIMITED_DEAL", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "INELIGIBLE"];
+const CLASSIFICATION_BADGE_ORDER: string[] = ["SUPER_GEM", "GEM", "EVIDENCE_LIMITED_DEAL", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "IDENTITY_PENDING", "IDENTITY_FAILED", "INELIGIBLE"];
 const CLASSIFICATION_BADGE_COLORS: Record<string, string> = {
   SUPER_GEM: "bg-amber-600 text-white",
   GEM: "bg-blue-600 text-white",
@@ -1191,6 +1193,8 @@ const CLASSIFICATION_BADGE_COLORS: Record<string, string> = {
   AVERAGE_DEAL: "bg-slate-600 text-slate-100",
   POOR_DEAL: "bg-red-800 text-white",
   INSUFFICIENT_DATA: "bg-slate-700 text-slate-300",
+  IDENTITY_PENDING: "bg-purple-900 text-purple-200",
+  IDENTITY_FAILED: "bg-fuchsia-950 text-fuchsia-300",
   INELIGIBLE: "bg-rose-950 text-rose-300",
 };
 const CLASSIFICATION_TAG_INACTIVE: Record<string, string> = {
@@ -1202,6 +1206,8 @@ const CLASSIFICATION_TAG_INACTIVE: Record<string, string> = {
   AVERAGE_DEAL: "bg-slate-700/40 text-slate-300 border border-slate-600/40 hover:bg-slate-700/70",
   POOR_DEAL: "bg-red-900/20 text-red-300 border border-red-700/30 hover:bg-red-900/40",
   INSUFFICIENT_DATA: "bg-slate-900/30 text-slate-400 border border-slate-700/40 hover:bg-slate-800/50",
+  IDENTITY_PENDING: "bg-purple-900/20 text-purple-300 border border-purple-700/30 hover:bg-purple-900/40",
+  IDENTITY_FAILED: "bg-fuchsia-950/30 text-fuchsia-300 border border-fuchsia-900/50 hover:bg-fuchsia-950/50",
   INELIGIBLE: "bg-rose-950/30 text-rose-400 border border-rose-900/50 hover:bg-rose-950/50",
 };
 
@@ -1487,6 +1493,8 @@ const CLASSIFICATION_CHART_COLORS: Record<string, string> = {
   ACTIVE_ONLY: "#06b6d4",
   SPARSE_SOLD_EVIDENCE: "#14b8a6",
   CONDITION_UNCERTAIN: "#ec4899",
+  IDENTITY_FAILED: "#d946ef",
+  IDENTITY_PENDING: "#a855f7",
 };
 
 function evidenceStatusForChart(listing: Listing): string {

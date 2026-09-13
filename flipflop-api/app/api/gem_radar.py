@@ -7,6 +7,7 @@ ADMIN_API_KEY is unset) — no new auth mechanism introduced.
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import re
 from datetime import datetime, timedelta
 from typing import Literal
@@ -38,6 +39,7 @@ from app.gem_radar.observations import (
     record_observation,
     touch_observation,
 )
+from app.gem_radar.cpk_market import upsert_listing_price
 from app.gem_radar.pipeline import score_listing
 from app.gem_radar import pipeline_status
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
@@ -2123,7 +2125,8 @@ async def sold_comp_targets(
             FROM gem_radar_listing_observations o
             ORDER BY o.listing_id, o.observed_at DESC, o.id DESC
         ), sold_counts AS (
-            SELECT cpk, condition, COUNT(*) AS sold_count
+            SELECT cpk, condition,
+                   COUNT(DISTINCT COALESCE(NULLIF(source_url, ''), 'row:' || id::text)) AS sold_count
             FROM gem_radar_sold_observations
             WHERE cpk IS NOT NULL
               AND observed_at >= CURRENT_TIMESTAMP - INTERVAL '90 days'
@@ -2149,7 +2152,7 @@ async def sold_comp_targets(
                   WHEN LOWER(COALESCE(l.condition_normalised, '')) = 'new'
                   THEN 'new' ELSE 'used' END
             WHERE l.search_query = :query
-              AND s.classification = 'INSUFFICIENT_DATA'
+              AND s.classification IN ('INSUFFICIENT_DATA', 'EVIDENCE_LIMITED_DEAL')
               AND c.cpk_data->>'brand' IS NOT NULL
               AND c.cpk_data->>'model' IS NOT NULL
               AND (CAST(:category AS TEXT) IS NULL OR c.cpk_data->>'category' = :category)
@@ -2232,17 +2235,45 @@ async def submit_sold_comps(
             skipped += 1
             continue
         cpk = payload.target_cpk or await _get_cpk_for_match_key(db, match_key)
-        db.add(
-            GemRadarSoldObservation(
-                match_key=match_key,
-                cpk=cpk,
-                condition=condition,
-                price=comp.item_price,
-                postage=comp.postage_price,
-                source_url=comp.url,
-            )
-        )
-        inserted += 1
+        canonical_source = comp.url or comp.listing_id
+        canonical_item_id = (
+            canonical_source if len(canonical_source) <= 255
+            else f"{canonical_source[:190]}:{hashlib.sha256(canonical_source.encode()).hexdigest()[:64]}"
+        ) if canonical_source else None
+        # A sold-search page can return the same completed item on repeated
+        # collection runs. Keep one current observation per canonical URL so
+        # repeated sightings cannot inflate cohort size or suppress research.
+        existing = None
+        if canonical_item_id:
+            existing = (await db.execute(
+                select(GemRadarSoldObservation).where(
+                    GemRadarSoldObservation.canonical_item_id == canonical_item_id,
+                    GemRadarSoldObservation.condition == condition,
+                ).order_by(GemRadarSoldObservation.id.desc()).limit(1)
+            )).scalar_one_or_none()
+        if existing is not None:
+            existing.match_key = match_key
+            existing.cpk = cpk
+            existing.price = comp.item_price
+            existing.postage = comp.postage_price
+            existing.title = comp.title
+            existing.brand = identity.brand
+            existing.model = identity.model
+            existing.mpn = comp.mpn or comp.model_number
+            existing.gtin = comp.gtin
+            existing.identity_confidence = identity.exact_sku_confidence
+            existing.observed_at = datetime.utcnow()
+        else:
+            db.add(GemRadarSoldObservation(
+                match_key=match_key, cpk=cpk, condition=condition,
+                price=comp.item_price, postage=comp.postage_price,
+                source_url=comp.url, title=comp.title,
+                canonical_item_id=canonical_item_id,
+                brand=identity.brand, model=identity.model,
+                mpn=comp.mpn or comp.model_number, gtin=comp.gtin,
+                identity_confidence=identity.exact_sku_confidence,
+            ))
+            inserted += 1
 
     await db.commit()
     log.info(
@@ -2411,13 +2442,21 @@ async def _submit_scan_body(
             # for very old listings) should still count toward ingestion progress.
             pipeline_status.increment(payload.search_id, ingested_count=1)
 
-            # Check if existing listing already has CPK assigned
+            # Refresh the rolling active-price observation on every re-sighting.
+            # Observation freshness and identity extraction are independent:
+            # skipping extraction must not let a still-live price age out of
+            # the 14-day CPK market window.
             cpk_result = await db.execute(
-                select(1).select_from(GemRadarListingCpk).where(
+                select(GemRadarListingCpk.cpk).where(
                     GemRadarListingCpk.listing_id == listing.listing_id
                 ).limit(1)
             )
-            if cpk_result.scalar_one_or_none() is not None:
+            existing_cpk = cpk_result.scalar_one_or_none()
+            if existing_cpk is not None:
+                await upsert_listing_price(
+                    db, existing_cpk, listing.listing_id,
+                    float(listing.current_delivered_price),
+                )
                 cpk_assigned_count += 1
                 pipeline_status.increment(payload.search_id, cpk_assigned_count=1)
                 pipeline_status.track_listing(payload.search_id, listing.listing_id)

@@ -34,6 +34,16 @@ class GemRadarSoldObservation(Base):
     price: Mapped[float] = mapped_column(Float)
     postage: Mapped[float] = mapped_column(Float, default=0.0)
     source_url: Mapped[str | None] = mapped_column(String(1000), nullable=True)
+    # Identity captured with the sold observation. These fields make later
+    # reconciliation auditable instead of forcing us to infer a product from
+    # a lossy normalised match key.
+    title: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    canonical_item_id: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
+    brand: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    model: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    mpn: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    gtin: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    identity_confidence: Mapped[float | None] = mapped_column(Float, nullable=True)
     observed_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
     # Peer-sync conflict clock. cpk_pipeline.py's CPK-backfill path updates
     # this table with raw SQL, which bypasses SQLAlchemy's onupdate -- that

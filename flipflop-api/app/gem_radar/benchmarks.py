@@ -40,7 +40,10 @@ from app.gem_radar.schemas import BenchmarkStat, ExclusionReason, PriceBundle
 from app.models.gem_radar_sold_observation import GemRadarSoldObservation
 from app.models.gem_radar_amazon_observation import GemRadarAmazonObservation
 
-MIN_SAMPLE_FOR_MEDIAN = 2
+# Three independent comparables are the minimum accepted cohort throughout
+# the market policy. Two prices remain useful raw observations but must not be
+# labelled as a settled/usable benchmark.
+MIN_SAMPLE_FOR_MEDIAN = 3
 TRIM_FRACTION = 0.1
 _SOLD_LOOKBACK_DAYS = 14
 

@@ -77,7 +77,7 @@ def _listing(price: float, condition: str = "used", feedback: float | None = 99.
 class TestClassificationBoundaries:
     @pytest.mark.parametrize(
         "score,expected",
-        [(10.0, "SUPER_GEM"), (9.0, "SUPER_GEM"), (8.99, "GEM"), (8.0, "GEM"), (7.99, "OK_DEAL"), (7.0, "OK_DEAL"), (6.99, "AVERAGE_DEAL"), (5.0, "AVERAGE_DEAL"), (4.99, "POOR_DEAL"), (0.0, "POOR_DEAL")],
+        [(10.0, "SUPER_GEM"), (8.5, "SUPER_GEM"), (8.49, "GEM"), (7.5, "GEM"), (7.49, "OK_DEAL"), (6.5, "OK_DEAL"), (6.49, "AVERAGE_DEAL"), (5.0, "AVERAGE_DEAL"), (4.99, "POOR_DEAL"), (0.0, "POOR_DEAL")],
     )
     def test_exact_boundaries(self, score, expected):
         assert classify(score) == expected

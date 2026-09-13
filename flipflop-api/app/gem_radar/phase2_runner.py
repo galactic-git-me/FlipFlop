@@ -286,6 +286,16 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
                 eligible=False,
                 reasons=["Listing was processed, but no trustworthy canonical product identity is available."],
                 risk_flags=flags,
+                evidence_status="IDENTITY_UNCERTAIN",
+                evidence_reason="IDENTITY_UNCERTAIN",
+                evidence_confidence={
+                    "identity": 0.0,
+                    "comparable_quality": 0.0,
+                    "sold_evidence": 0.0,
+                    "condition": 0.5,
+                    "price_completeness": 0.0,
+                    "freshness": 0.0,
+                },
             )
         classification = opportunity.classification
         deal_score = opportunity.score / 10.0

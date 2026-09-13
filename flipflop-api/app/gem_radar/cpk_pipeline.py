@@ -134,28 +134,25 @@ async def assign_cpk_and_accumulate_price(
             model=model,
         )
 
-    # After CPK assignment, update any sold observations with the same
-    # match_key to reference this CPK so they contribute to market price
-    # aggregation. This handles the case where sold observations were
-    # recorded before a CPK existed for this match_key.
-    await db.execute(
-        text(
-            """
+    # Backfill old sold rows only when the normalised alias resolves to one
+    # canonical product. A broad text-key update can merge board partners,
+    # memory kits, or product families into one realised-price cohort.
+    identity_keys = _identity_match_keys(brand, model)
+    safe_keys = set()
+    for key in {match_key, *identity_keys}:
+        candidates = (await db.execute(text("""
+            SELECT DISTINCT cpk
+            FROM gem_radar_listing_cpk
+            WHERE regexp_replace(upper(coalesce(cpk_data->>'model', '')), '[^A-Z0-9]', '', 'g') = :key
+               OR regexp_replace(upper(coalesce(cpk_data->>'brand', '') || coalesce(cpk_data->>'model', '')), '[^A-Z0-9]', '', 'g') = :key
+        """), {"key": key})).scalars().all()
+        if len(set(candidates)) == 1 and candidates[0] == cpk:
+            safe_keys.add(key)
+    if safe_keys:
+        await db.execute(text("""
             UPDATE gem_radar_sold_observations
             SET cpk = :cpk, updated_at = now()
-            WHERE match_key = :match_key AND cpk IS NULL
-            """
-        ),
-        {"cpk": cpk, "match_key": match_key},
-    )
-    identity_keys = _identity_match_keys(brand, model)
-    if identity_keys:
-        await db.execute(
-            text("""
-                UPDATE gem_radar_sold_observations SET cpk = :cpk, updated_at = now()
-                WHERE match_key = ANY(:identity_keys) AND cpk IS NULL
-            """),
-            {"cpk": cpk, "identity_keys": list(identity_keys)},
-        )
+            WHERE match_key = ANY(:keys) AND cpk IS NULL
+        """), {"cpk": cpk, "keys": list(safe_keys)})
 
     return cpk
