@@ -16,6 +16,7 @@ import {
   Repeat2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ServiceHealthPanel } from "./service-health-panel";
 
 const PRIMARY_NAV = [
   { href: "/sourcing", icon: Search, label: "Sourcing" },
@@ -123,6 +124,7 @@ export function Sidebar() {
             );
           })}
         </nav>
+        <ServiceHealthPanel />
 
       </div>
 
