@@ -44,13 +44,13 @@ export function ServiceHealthPanel() {
 
   return (
     <section className="mx-2 mt-auto rounded border border-cyan-300/15 bg-slate-950/55 px-2 py-1.5" aria-label="Service health">
-      <div className="grid grid-cols-4 gap-1">
+      <div className="grid grid-cols-4 divide-x divide-cyan-300/15">
         {BASE_SERVICES.map((service) => {
           const count = misses[service.name];
           const color = count == null ? "text-amber-300 animate-pulse" : count === 0 ? "text-emerald-400" : count === 1 ? "text-amber-300" : "text-rose-400";
           const Icon = service.icon;
           const state = count == null ? "checking" : count === 0 ? "online" : `${count} missed`;
-          return <div key={service.name} className="flex flex-col items-center justify-center gap-0.5 rounded border border-cyan-300/15 bg-slate-950/55 px-1 py-1 text-[9px] font-semibold text-slate-300" title={`${service.name}: ${state}`}><Icon className={`h-6 w-6 ${color}`} />{service.name}</div>;
+          return <div key={service.name} className="flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[9px] font-semibold text-slate-300" title={`${service.name}: ${state}`}><Icon className={`h-6 w-6 ${color}`} />{service.name}</div>;
         })}
       </div>
     </section>
