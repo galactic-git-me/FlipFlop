@@ -1,0 +1,2584 @@
+{
+  "active_summary": [
+    {
+      "total": 5426,
+      "cpk": 2795,
+      "market": 294,
+      "insufficient": 2480
+    }
+  ],
+  "active_categories": [
+    {
+      "category": null,
+      "n": 2558,
+      "cpk": 0,
+      "market": 0
+    },
+    {
+      "category": "cpu",
+      "n": 868,
+      "cpk": 865,
+      "market": 173
+    },
+    {
+      "category": "ram",
+      "n": 764,
+      "cpk": 740,
+      "market": 64
+    },
+    {
+      "category": "motherboard",
+      "n": 719,
+      "cpk": 678,
+      "market": 29
+    },
+    {
+      "category": "cooler",
+      "n": 243,
+      "cpk": 240,
+      "market": 6
+    },
+    {
+      "category": "case",
+      "n": 120,
+      "cpk": 119,
+      "market": 1
+    },
+    {
+      "category": "gpu",
+      "n": 104,
+      "cpk": 104,
+      "market": 19
+    },
+    {
+      "category": "psu",
+      "n": 36,
+      "cpk": 36,
+      "market": 2
+    },
+    {
+      "category": "ssd",
+      "n": 7,
+      "cpk": 7,
+      "market": 0
+    },
+    {
+      "category": "fan",
+      "n": 7,
+      "cpk": 6,
+      "market": 0
+    }
+  ],
+  "active_classifications": [
+    {
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "NO_COMPARABLES",
+      "n": 2430
+    },
+    {
+      "classification": "IDENTITY_FAILED",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 2423
+    },
+    {
+      "classification": "INELIGIBLE",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 181
+    },
+    {
+      "classification": "POOR_DEAL",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 161
+    },
+    {
+      "classification": "INELIGIBLE",
+      "evidence_status": "NO_COMPARABLES",
+      "n": 62
+    },
+    {
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 32
+    },
+    {
+      "classification": "POOR_DEAL",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "n": 30
+    },
+    {
+      "classification": "IDENTITY_PENDING",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 28
+    },
+    {
+      "classification": "EVIDENCE_LIMITED_DEAL",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 23
+    },
+    {
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "SPARSE_SOLD_EVIDENCE",
+      "n": 18
+    },
+    {
+      "classification": "POOR_DEAL",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 13
+    },
+    {
+      "classification": "GEM",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 9
+    },
+    {
+      "classification": "OK_DEAL",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 8
+    },
+    {
+      "classification": "OK_DEAL",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 4
+    },
+    {
+      "classification": "SUPER_GEM",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 3
+    },
+    {
+      "classification": "SUPER_GEM",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "n": 1
+    }
+  ],
+  "sold_duplicates": [
+    {
+      "n": 119194,
+      "urls": 9441,
+      "missing_url": 0
+    }
+  ],
+  "active_price_health": [
+    {
+      "n": 35130,
+      "fresh": 2746,
+      "latest": "2026-09-13 18:56:36.284561"
+    }
+  ],
+  "identity_examples": [
+    {
+      "title": "Origin 1x8GB Ddr4 3200mhz Desktop Ram, Udimm, Non ECC, Read Details Please",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "GIGABYTE B760 DS3H DDR5 Motherboard",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "INTEL SR0T7 Core i5-3570 Quad Core 3.4GHz Socket 1155 Ivy Bridge Processor CPU",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Gigabyte B760M DS3H WIFI6E GEN5 DDR5 Micro ATX Intel 1700 Motherboard",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Corsair Vengeance LPX 32GB (2x16GB) DDR4-3200 DIMM RAM CMK32GX4M2E3200C16",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Intel Core i5 14400F SRN3R CPU Processor LGA 1700",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Intel Pentium III 866 mhz CPU Processor Socket PGA 370 SL4CB 256kb 133mhz FSB",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Gigabyte GA-Z170-HD3P LGA 1151 ATX Motherboard-Heroes of the Storm Limited Edit",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "AMD Ryzen Threadripper PRO 5955WX",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Intel Core i9-12900KS 3.40GHz (Alder Lake) Socket LGA1700 Processor - Retail",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "16GB RAM Memory HP-Compaq All-in-One",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Patriot Viper Elite 5 Ultra 64GB (2x32GB) DDR5 C28 6000MHz Dual Channel Kit",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Dell OptiPlex 7060 SFF Motherboard",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Intel i7-11700K CPU - Excellent Condition w/ Original Box",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Gigabyte GA-H81M-S2V Desktop Motherboard",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "V-Color RDIMM JEDEC 256GB (4x64GB) DDR5 C60 6400MHz Quad Channel Kit",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "AMD Ryzen 5 5500 processor 3.6 GHz 16 MB L3 Tray",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "CompareQuick viewOffer",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Gigabyte b860 aorus elite wifi7 ice Motherboard",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "AMD Athlon 64 X2 Dual Core 2.6GHz L2 Cache Socket A",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    }
+  ],
+  "fragmented_models": [],
+  "snapshot": [
+    {
+      "total": 64821,
+      "latest_score": "2026-09-12 22:54:04.236009",
+      "with_cpk": 27635,
+      "with_market": 2640
+    }
+  ],
+  "classification": [
+    {
+      "classification": "IDENTITY_FAILED",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 34630
+    },
+    {
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "NO_COMPARABLES",
+      "n": 23470
+    },
+    {
+      "classification": "POOR_DEAL",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 1766
+    },
+    {
+      "classification": "INELIGIBLE",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 1753
+    },
+    {
+      "classification": "INELIGIBLE",
+      "evidence_status": "NO_COMPARABLES",
+      "n": 1368
+    },
+    {
+      "classification": "IDENTITY_PENDING",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 823
+    },
+    {
+      "classification": "OK_DEAL",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 237
+    },
+    {
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 234
+    },
+    {
+      "classification": "POOR_DEAL",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "n": 194
+    },
+    {
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "SPARSE_SOLD_EVIDENCE",
+      "n": 72
+    },
+    {
+      "classification": "GEM",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 68
+    },
+    {
+      "classification": "SUPER_GEM",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 60
+    },
+    {
+      "classification": "EVIDENCE_LIMITED_DEAL",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 52
+    },
+    {
+      "classification": "POOR_DEAL",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 38
+    },
+    {
+      "classification": "OK_DEAL",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 21
+    },
+    {
+      "classification": "EVIDENCE_LIMITED_DEAL",
+      "evidence_status": "SPARSE_SOLD_EVIDENCE",
+      "n": 10
+    },
+    {
+      "classification": "OK_DEAL",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "n": 7
+    },
+    {
+      "classification": "SUPER_GEM",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "n": 5
+    },
+    {
+      "classification": "INELIGIBLE",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "n": 4
+    },
+    {
+      "classification": "POOR_DEAL",
+      "evidence_status": "SPARSE_SOLD_EVIDENCE",
+      "n": 4
+    },
+    {
+      "classification": "GEM",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "n": 3
+    },
+    {
+      "classification": "INELIGIBLE",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 2
+    }
+  ],
+  "categories": [
+    {
+      "category": null,
+      "n": 36048,
+      "cpk": 0,
+      "market": 0,
+      "insufficient": 0
+    },
+    {
+      "category": "motherboard",
+      "n": 6837,
+      "cpk": 6641,
+      "market": 380,
+      "insufficient": 6026
+    },
+    {
+      "category": "cpu",
+      "n": 5662,
+      "cpk": 5633,
+      "market": 1424,
+      "insufficient": 4033
+    },
+    {
+      "category": "ssd",
+      "n": 3382,
+      "cpk": 3205,
+      "market": 144,
+      "insufficient": 2842
+    },
+    {
+      "category": "gpu",
+      "n": 3230,
+      "cpk": 3219,
+      "market": 288,
+      "insufficient": 2822
+    },
+    {
+      "category": "cooler",
+      "n": 3067,
+      "cpk": 2937,
+      "market": 179,
+      "insufficient": 2731
+    },
+    {
+      "category": "ram",
+      "n": 2670,
+      "cpk": 2568,
+      "market": 142,
+      "insufficient": 2073
+    },
+    {
+      "category": "case",
+      "n": 2602,
+      "cpk": 2183,
+      "market": 15,
+      "insufficient": 2072
+    },
+    {
+      "category": "psu",
+      "n": 1132,
+      "cpk": 1098,
+      "market": 66,
+      "insufficient": 1029
+    },
+    {
+      "category": "fan",
+      "n": 191,
+      "cpk": 151,
+      "market": 2,
+      "insufficient": 148
+    }
+  ],
+  "sold": [
+    {
+      "n": 119194,
+      "mapped": 72152,
+      "cpks": 1511,
+      "keys": 2603,
+      "min": "2026-08-08 12:04:56.627668",
+      "max": "2026-09-13 16:30:20.673019",
+      "fresh": 119194
+    }
+  ],
+  "sold_keys": [
+    {
+      "match_key": "CORSAIR750WGOLD",
+      "condition": "used",
+      "n": 4390,
+      "mapped": 4390
+    },
+    {
+      "match_key": "AMDRYZEN77800X3D",
+      "condition": "new",
+      "n": 1121,
+      "mapped": 687
+    },
+    {
+      "match_key": "ARCB580",
+      "condition": "used",
+      "n": 1077,
+      "mapped": 1077
+    },
+    {
+      "match_key": "RX6800XT16GB",
+      "condition": "used",
+      "n": 1008,
+      "mapped": 0
+    },
+    {
+      "match_key": "AMDRYZEN53600",
+      "condition": "used",
+      "n": 906,
+      "mapped": 612
+    },
+    {
+      "match_key": "8GBDDR42666MHZ",
+      "condition": "used",
+      "n": 871,
+      "mapped": 698
+    },
+    {
+      "match_key": "16GBDDR55600MHZ",
+      "condition": "used",
+      "n": 811,
+      "mapped": 599
+    },
+    {
+      "match_key": "EVGA750WGOLD",
+      "condition": "used",
+      "n": 799,
+      "mapped": 799
+    },
+    {
+      "match_key": "AMDRYZEN55600X",
+      "condition": "used",
+      "n": 702,
+      "mapped": 386
+    },
+    {
+      "match_key": "MSI750WGOLD",
+      "condition": "used",
+      "n": 643,
+      "mapped": 643
+    },
+    {
+      "match_key": "CORSAIR750WGOLD",
+      "condition": "new",
+      "n": 636,
+      "mapped": 636
+    },
+    {
+      "match_key": "8GBDDR43200MHZ",
+      "condition": "used",
+      "n": 627,
+      "mapped": 549
+    },
+    {
+      "match_key": "GIGABYTE750WGOLD",
+      "condition": "used",
+      "n": 626,
+      "mapped": 626
+    },
+    {
+      "match_key": "8GBDDR42400MHZ",
+      "condition": "used",
+      "n": 596,
+      "mapped": 294
+    },
+    {
+      "match_key": "8GBDDR42133MHZ",
+      "condition": "used",
+      "n": 595,
+      "mapped": 249
+    },
+    {
+      "match_key": "MSI750WGOLD",
+      "condition": "new",
+      "n": 523,
+      "mapped": 523
+    },
+    {
+      "match_key": "16GBDDR43200MHZ",
+      "condition": "used",
+      "n": 513,
+      "mapped": 360
+    },
+    {
+      "match_key": "16GBDDR4",
+      "condition": "used",
+      "n": 511,
+      "mapped": 0
+    },
+    {
+      "match_key": "16GBDDR42666MHZ",
+      "condition": "used",
+      "n": 478,
+      "mapped": 360
+    },
+    {
+      "match_key": "RX6700XT12GB",
+      "condition": "used",
+      "n": 477,
+      "mapped": 477
+    },
+    {
+      "match_key": "16GB2X8GBDDR43200MHZ",
+      "condition": "used",
+      "n": 477,
+      "mapped": 391
+    },
+    {
+      "match_key": "RX7800XT16GB",
+      "condition": "used",
+      "n": 456,
+      "mapped": 265
+    },
+    {
+      "match_key": "RADEONR9",
+      "condition": "used",
+      "n": 443,
+      "mapped": 0
+    },
+    {
+      "match_key": "RX9060XT",
+      "condition": "used",
+      "n": 437,
+      "mapped": 0
+    },
+    {
+      "match_key": "8GBDDR5",
+      "condition": "used",
+      "n": 434,
+      "mapped": 0
+    },
+    {
+      "match_key": "RX5700XT8GB",
+      "condition": "used",
+      "n": 426,
+      "mapped": 426
+    },
+    {
+      "match_key": "GIGABYTE750WGOLD",
+      "condition": "new",
+      "n": 409,
+      "mapped": 409
+    },
+    {
+      "match_key": "O11DYNAMICEVO",
+      "condition": "used",
+      "n": 399,
+      "mapped": 399
+    },
+    {
+      "match_key": "16GBDDR54800MHZ",
+      "condition": "used",
+      "n": 390,
+      "mapped": 288
+    },
+    {
+      "match_key": "GTX1050TI4GB",
+      "condition": "used",
+      "n": 388,
+      "mapped": 334
+    },
+    {
+      "match_key": "AMDRYZEN73700X",
+      "condition": "used",
+      "n": 381,
+      "mapped": 235
+    },
+    {
+      "match_key": "8GBDDR4",
+      "condition": "used",
+      "n": 378,
+      "mapped": 378
+    },
+    {
+      "match_key": "COOLERMASTER750WGOLD",
+      "condition": "used",
+      "n": 371,
+      "mapped": 0
+    },
+    {
+      "match_key": "AMDRYZEN79800X3D",
+      "condition": "used",
+      "n": 370,
+      "mapped": 150
+    },
+    {
+      "match_key": "32GBDDR43200MHZ",
+      "condition": "used",
+      "n": 360,
+      "mapped": 307
+    }
+  ],
+  "flags": [
+    {
+      "flag": "identity_incomplete",
+      "n": 37186
+    },
+    {
+      "flag": "insufficient_same_condition_sold_comparables",
+      "n": 24995
+    },
+    {
+      "flag": "retro_platform_excluded",
+      "n": 1640
+    },
+    {
+      "flag": "whole_system_misclassified_as_component",
+      "n": 646
+    },
+    {
+      "flag": "multi_variant_listing",
+      "n": 441
+    },
+    {
+      "flag": "accessory_or_parts_listing",
+      "n": 404
+    },
+    {
+      "flag": "bundle_listing",
+      "n": 113
+    },
+    {
+      "flag": "category_identity_conflict",
+      "n": 19
+    },
+    {
+      "flag": "specialised_mining_hardware",
+      "n": 9
+    }
+  ],
+  "samples": [
+    {
+      "title": "INTEL Core i5 7400 3.0GHz Quad-Core Quad-Thread CPU Processor 6M 65W LGA 1151",
+      "category": "cpu",
+      "condition": "new",
+      "cpk": "adbf3321c3abe4a6",
+      "classification": "EVIDENCE_LIMITED_DEAL",
+      "evidence_status": "ACTIVE_ONLY",
+      "scoring_explanation": {
+        "classification": "EVIDENCE_LIMITED_DEAL",
+        "decision": "INVESTIGATE",
+        "score": 74.0,
+        "expected_profit": 97.42,
+        "roi_pct": 431.44,
+        "walk_away_price": 95.4,
+        "liquidity_score": null,
+        "desirability_score": 59.0,
+        "risk_score": 100.0,
+        "market": {
+          "lower": 120.0,
+          "median": 120.0,
+          "upper": 120.0,
+          "conservative_resale": 120.0,
+          "sample_size": 1,
+          "raw_sample_size": 1,
+          "source_diversity": 1,
+          "spread_pct": 0.0,
+          "confidence": 45.0,
+          "comparable_urls": [
+            "amazon://B01MSTDS3N"
+          ],
+          "basis": "FIXED_RETAIL_CONTEXT",
+          "realisation_factor": 1.0
+        },
+        "eligible": true,
+        "reasons": [
+          "Resale basis uses the median of 1 robust same-condition active market prices; lower quartile remains the downside case.",
+          "Expected net profit \u00a397.42; ROI 431.4%; liquidity unknown (no demand evidence).",
+          "Fixed-price retailer evidence receives no offer/negotiation haircut; sold evidence can still refine confidence.",
+          "Component economics exclude build-level fulfilment costs, which are charged once to the completed build.",
+          "CPU gates: GEM \u00a33/15% ROI; SUPER_GEM \u00a38/25% ROI.",
+          "Promising economics, but only 1 robust comparable: verify identity and price manually before buying."
+        ],
+        "risk_flags": [],
+        "cost_breakdown": {
+          "purchase": 21.98,
+          "delivery": 0.0,
+          "ebay_fee": 0.0,
+          "packaging": 0.0,
+          "testing_refurbishment": 0.0,
+          "returns_warranty_reserve": 0.6
+        },
+        "evidence_status": "ACTIVE_ONLY",
+        "evidence_reason": "ACTIVE_ONLY",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 0.33,
+          "sold_evidence": 0.0,
+          "condition": 1.0,
+          "price_completeness": 1.0,
+          "freshness": 1.0
+        }
+      }
+    },
+    {
+      "title": "Intel Xeon E3 1230 V2 1230V2 3.3GHz 4-Core LGA 1155 cpu processor",
+      "category": "cpu",
+      "condition": "new",
+      "cpk": "e8e33773d962e551",
+      "classification": "EVIDENCE_LIMITED_DEAL",
+      "evidence_status": "ACTIVE_ONLY",
+      "scoring_explanation": {
+        "classification": "EVIDENCE_LIMITED_DEAL",
+        "decision": "INVESTIGATE",
+        "score": 74.0,
+        "expected_profit": 256.97,
+        "roi_pct": 1221.92,
+        "walk_away_price": 221.01,
+        "liquidity_score": null,
+        "desirability_score": 59.0,
+        "risk_score": 100.0,
+        "market": {
+          "lower": 278.0,
+          "median": 278.0,
+          "upper": 278.0,
+          "conservative_resale": 278.0,
+          "sample_size": 1,
+          "raw_sample_size": 1,
+          "source_diversity": 1,
+          "spread_pct": 0.0,
+          "confidence": 45.0,
+          "comparable_urls": [
+            "amazon://B085Y2763B"
+          ],
+          "basis": "FIXED_RETAIL_CONTEXT",
+          "realisation_factor": 1.0
+        },
+        "eligible": true,
+        "reasons": [
+          "Resale basis uses the median of 1 robust same-condition active market prices; lower quartile remains the downside case.",
+          "Expected net profit \u00a3256.97; ROI 1221.9%; liquidity unknown (no demand evidence).",
+          "Fixed-price retailer evidence receives no offer/negotiation haircut; sold evidence can still refine confidence.",
+          "Component economics exclude build-level fulfilment costs, which are charged once to the completed build.",
+          "CPU gates: GEM \u00a33/15% ROI; SUPER_GEM \u00a38/25% ROI.",
+          "Promising economics, but only 1 robust comparable: verify identity and price manually before buying."
+        ],
+        "risk_flags": [],
+        "cost_breakdown": {
+          "purchase": 19.64,
+          "delivery": 0.0,
+          "ebay_fee": 0.0,
+          "packaging": 0.0,
+          "testing_refurbishment": 0.0,
+          "returns_warranty_reserve": 1.39
+        },
+        "evidence_status": "ACTIVE_ONLY",
+        "evidence_reason": "ACTIVE_ONLY",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 0.33,
+          "sold_evidence": 0.0,
+          "condition": 1.0,
+          "price_completeness": 1.0,
+          "freshness": 1.0
+        }
+      }
+    },
+    {
+      "title": "Intel Core i5 14400F 2.5GHz 10-Core 16-Thread CPU Processor 65W LGA 1700 No cooler",
+      "category": "cpu",
+      "condition": "new",
+      "cpk": "3ff0ded6bb1ba53c",
+      "classification": "EVIDENCE_LIMITED_DEAL",
+      "evidence_status": "ACTIVE_ONLY",
+      "scoring_explanation": {
+        "classification": "EVIDENCE_LIMITED_DEAL",
+        "decision": "INVESTIGATE",
+        "score": 74.0,
+        "expected_profit": 771.85,
+        "roi_pct": 507.33,
+        "walk_away_price": 734.57,
+        "liquidity_score": null,
+        "desirability_score": 59.0,
+        "risk_score": 100.0,
+        "market": {
+          "lower": 923.99,
+          "median": 923.99,
+          "upper": 923.99,
+          "conservative_resale": 923.99,
+          "sample_size": 1,
+          "raw_sample_size": 1,
+          "source_diversity": 1,
+          "spread_pct": 0.0,
+          "confidence": 45.0,
+          "comparable_urls": [
+            "awd_it://awd_it:awd-observatory-lite-mesh-3500x-six-core-4.1ghz-nvidia-rtx-3060ti-8gb-desktop-pc.html"
+          ],
+          "basis": "FIXED_RETAIL_CONTEXT",
+          "realisation_factor": 1.0
+        },
+        "eligible": true,
+        "reasons": [
+          "Resale basis uses the median of 1 robust same-condition active market prices; lower quartile remains the downside case.",
+          "Expected net profit \u00a3771.85; ROI 507.3%; liquidity unknown (no demand evidence).",
+          "Fixed-price retailer evidence receives no offer/negotiation haircut; sold evidence can still refine confidence.",
+          "Component economics exclude build-level fulfilment costs, which are charged once to the completed build.",
+          "CPU gates: GEM \u00a33/15% ROI; SUPER_GEM \u00a38/25% ROI.",
+          "Promising economics, but only 1 robust comparable: verify identity and price manually before buying."
+        ],
+        "risk_flags": [],
+        "cost_breakdown": {
+          "purchase": 147.52,
+          "delivery": 0.0,
+          "ebay_fee": 0.0,
+          "packaging": 0.0,
+          "testing_refurbishment": 0.0,
+          "returns_warranty_reserve": 4.62
+        },
+        "evidence_status": "ACTIVE_ONLY",
+        "evidence_reason": "ACTIVE_ONLY",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 0.33,
+          "sold_evidence": 0.0,
+          "condition": 1.0,
+          "price_completeness": 1.0,
+          "freshness": 1.0
+        }
+      }
+    },
+    {
+      "title": "Intel Core i5 14400F 2.5GHz 10-Core 16-Thread LGA 1700 processor without cooler",
+      "category": "cpu",
+      "condition": "new",
+      "cpk": "3ff0ded6bb1ba53c",
+      "classification": "EVIDENCE_LIMITED_DEAL",
+      "evidence_status": "ACTIVE_ONLY",
+      "scoring_explanation": {
+        "classification": "EVIDENCE_LIMITED_DEAL",
+        "decision": "INVESTIGATE",
+        "score": 74.0,
+        "expected_profit": 773.37,
+        "roi_pct": 513.46,
+        "walk_away_price": 734.57,
+        "liquidity_score": null,
+        "desirability_score": 59.0,
+        "risk_score": 100.0,
+        "market": {
+          "lower": 923.99,
+          "median": 923.99,
+          "upper": 923.99,
+          "conservative_resale": 923.99,
+          "sample_size": 1,
+          "raw_sample_size": 1,
+          "source_diversity": 1,
+          "spread_pct": 0.0,
+          "confidence": 45.0,
+          "comparable_urls": [
+            "awd_it://awd_it:awd-observatory-lite-mesh-3500x-six-core-4.1ghz-nvidia-rtx-3060ti-8gb-desktop-pc.html"
+          ],
+          "basis": "FIXED_RETAIL_CONTEXT",
+          "realisation_factor": 1.0
+        },
+        "eligible": true,
+        "reasons": [
+          "Resale basis uses the median of 1 robust same-condition active market prices; lower quartile remains the downside case.",
+          "Expected net profit \u00a3773.37; ROI 513.5%; liquidity unknown (no demand evidence).",
+          "Fixed-price retailer evidence receives no offer/negotiation haircut; sold evidence can still refine confidence.",
+          "Component economics exclude build-level fulfilment costs, which are charged once to the completed build.",
+          "CPU gates: GEM \u00a33/15% ROI; SUPER_GEM \u00a38/25% ROI.",
+          "Promising economics, but only 1 robust comparable: verify identity and price manually before buying."
+        ],
+        "risk_flags": [],
+        "cost_breakdown": {
+          "purchase": 146.0,
+          "delivery": 0.0,
+          "ebay_fee": 0.0,
+          "packaging": 0.0,
+          "testing_refurbishment": 0.0,
+          "returns_warranty_reserve": 4.62
+        },
+        "evidence_status": "ACTIVE_ONLY",
+        "evidence_reason": "ACTIVE_ONLY",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 0.33,
+          "sold_evidence": 0.0,
+          "condition": 1.0,
+          "price_completeness": 1.0,
+          "freshness": 1.0
+        }
+      }
+    },
+    {
+      "title": "AMD BC 250 Placa De V\u00eddeo 16GB GDDR6 256-bit  Graphics Card SINGLE CARD GPU Tarjeta Gr\u00e1fica for Desktops PC",
+      "category": "gpu",
+      "condition": "new",
+      "cpk": "e89116d351c10621",
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "ACTIVE_ONLY",
+      "scoring_explanation": {
+        "classification": "INSUFFICIENT_DATA",
+        "decision": "INVESTIGATE",
+        "score": 0.0,
+        "expected_profit": null,
+        "roi_pct": null,
+        "walk_away_price": null,
+        "liquidity_score": 0.0,
+        "desirability_score": 61.0,
+        "risk_score": 82.0,
+        "market": null,
+        "eligible": false,
+        "reasons": [
+          "Evidence status: ACTIVE_ONLY.",
+          "No robust same-condition sold cohort is available; active evidence or manual research is required."
+        ],
+        "risk_flags": [
+          "insufficient_same_condition_sold_comparables"
+        ],
+        "cost_breakdown": {},
+        "evidence_status": "ACTIVE_ONLY",
+        "evidence_reason": "ACTIVE_ONLY",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 0.0,
+          "sold_evidence": 0.0,
+          "condition": 1.0,
+          "price_completeness": 0.5,
+          "freshness": 0.0
+        }
+      }
+    },
+    {
+      "title": "LocalSanDisk SN850P 1 TB M.2 PCI Express 4.0 NVMeOpen in new tab.",
+      "category": null,
+      "condition": "new",
+      "cpk": null,
+      "classification": "IDENTITY_FAILED",
+      "evidence_status": "CLASSIFIABLE",
+      "scoring_explanation": {
+        "classification": "IDENTITY_FAILED",
+        "decision": "INVESTIGATE",
+        "score": 0.0,
+        "expected_profit": null,
+        "roi_pct": null,
+        "walk_away_price": null,
+        "liquidity_score": null,
+        "desirability_score": null,
+        "risk_score": 65.0,
+        "market": null,
+        "eligible": false,
+        "reasons": [
+          "Listing was processed, but no trustworthy canonical product identity is available."
+        ],
+        "risk_flags": [
+          "identity_incomplete"
+        ],
+        "cost_breakdown": {},
+        "evidence_status": "CLASSIFIABLE",
+        "evidence_reason": null,
+        "evidence_confidence": {}
+      }
+    },
+    {
+      "title": "Top pickLocalDell Latitude 5510 Laptop, 10Th Generation I5, 16GB RAM, 512GB SSD, 15.6 Inch FHD, Windows 11 ProOpen in new tab.",
+      "category": null,
+      "condition": "new",
+      "cpk": null,
+      "classification": "IDENTITY_FAILED",
+      "evidence_status": "CLASSIFIABLE",
+      "scoring_explanation": {
+        "classification": "IDENTITY_FAILED",
+        "decision": "INVESTIGATE",
+        "score": 0.0,
+        "expected_profit": null,
+        "roi_pct": null,
+        "walk_away_price": null,
+        "liquidity_score": null,
+        "desirability_score": null,
+        "risk_score": 65.0,
+        "market": null,
+        "eligible": false,
+        "reasons": [
+          "Listing was processed, but no trustworthy canonical product identity is available."
+        ],
+        "risk_flags": [
+          "identity_incomplete"
+        ],
+        "cost_breakdown": {},
+        "evidence_status": "CLASSIFIABLE",
+        "evidence_reason": null,
+        "evidence_confidence": {}
+      }
+    },
+    {
+      "title": "YUXI 1 Set Clear Protective Cover Case Shell Housing For GBA SP Game Console Crystal Cover Case HD Screen Protector Film",
+      "category": null,
+      "condition": "new",
+      "cpk": null,
+      "classification": "IDENTITY_FAILED",
+      "evidence_status": "CLASSIFIABLE",
+      "scoring_explanation": {
+        "classification": "IDENTITY_FAILED",
+        "decision": "INVESTIGATE",
+        "score": 0.0,
+        "expected_profit": null,
+        "roi_pct": null,
+        "walk_away_price": null,
+        "liquidity_score": null,
+        "desirability_score": null,
+        "risk_score": 65.0,
+        "market": null,
+        "eligible": false,
+        "reasons": [
+          "Listing was processed, but no trustworthy canonical product identity is available."
+        ],
+        "risk_flags": [
+          "identity_incomplete"
+        ],
+        "cost_breakdown": {},
+        "evidence_status": "CLASSIFIABLE",
+        "evidence_reason": null,
+        "evidence_confidence": {}
+      }
+    },
+    {
+      "title": "CONTACTS FAMILY 100% Nubuck Leather Phone Waist Case Bag Men Cellphone Loop Holster Belt Pouch for iPhone 16 15 14 Pro Max Mini",
+      "category": null,
+      "condition": "new",
+      "cpk": null,
+      "classification": "IDENTITY_FAILED",
+      "evidence_status": "CLASSIFIABLE",
+      "scoring_explanation": {
+        "classification": "IDENTITY_FAILED",
+        "decision": "INVESTIGATE",
+        "score": 0.0,
+        "expected_profit": null,
+        "roi_pct": null,
+        "walk_away_price": null,
+        "liquidity_score": null,
+        "desirability_score": null,
+        "risk_score": 65.0,
+        "market": null,
+        "eligible": false,
+        "reasons": [
+          "Listing was processed, but no trustworthy canonical product identity is available."
+        ],
+        "risk_flags": [
+          "identity_incomplete"
+        ],
+        "cost_breakdown": {},
+        "evidence_status": "CLASSIFIABLE",
+        "evidence_reason": null,
+        "evidence_confidence": {}
+      }
+    },
+    {
+      "title": "A1398 Motherboard For MacBook Pro Retina 15\" A1398 Logic Board i7 8GB 16GB 2012 2013 2014 2015 Year",
+      "category": null,
+      "condition": "new",
+      "cpk": null,
+      "classification": "IDENTITY_FAILED",
+      "evidence_status": "CLASSIFIABLE",
+      "scoring_explanation": {
+        "classification": "IDENTITY_FAILED",
+        "decision": "INVESTIGATE",
+        "score": 0.0,
+        "expected_profit": null,
+        "roi_pct": null,
+        "walk_away_price": null,
+        "liquidity_score": null,
+        "desirability_score": null,
+        "risk_score": 65.0,
+        "market": null,
+        "eligible": false,
+        "reasons": [
+          "Listing was processed, but no trustworthy canonical product identity is available."
+        ],
+        "risk_flags": [
+          "identity_incomplete"
+        ],
+        "cost_breakdown": {},
+        "evidence_status": "CLASSIFIABLE",
+        "evidence_reason": null,
+        "evidence_confidence": {}
+      }
+    },
+    {
+      "title": "Intel Core i5-10400T Processor 3.6GHz 6C/12T 35W CPU LGA1200 Socket",
+      "category": "cpu",
+      "condition": "unknown",
+      "cpk": "6bf0cb6c2d1dfd14",
+      "classification": "POOR_DEAL",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "scoring_explanation": {
+        "classification": "POOR_DEAL",
+        "decision": "IGNORE",
+        "score": 20.8,
+        "expected_profit": -71.1,
+        "roi_pct": -57.32,
+        "walk_away_price": 38.3,
+        "liquidity_score": 90.0,
+        "desirability_score": 59.0,
+        "risk_score": 100.0,
+        "market": {
+          "lower": 51.45,
+          "median": 52.95,
+          "upper": 55.48,
+          "conservative_resale": 51.45,
+          "sample_size": 3,
+          "raw_sample_size": 3,
+          "source_diversity": 3,
+          "spread_pct": 7.6,
+          "confidence": 65.2,
+          "comparable_urls": [
+            "https://www.ebay.co.uk/itm/188827246557?_skw=Intel+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=20092945453&itmmeta=01M2BTSDSVTF2FWJ282AETN64D&hash=item2bf6fb1fdd%3Ag%3AHdAAAeSwMcdqiFb2&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xD0tC06RoeiqKUsEXkkoASLcXhBhOkC5zdAgm2GAzLoF%2BHcztF%2FKPcjDOkpzlU7f8CszyGiywXpvH2HhvPoyWLH6pwCVQpC4Dunz2bulxZtw6yOw9qFZjaGnN5YHmU%2BaOYdKO3Mho9Q91ER0dLJ%2BtdaWqlgNhi5UbFVzy%2BcfGAYFIdi8xQXv8yuoWXDt1qm4jNCJvQwGvg69Dt%2F0MtgCiIGXCAi8cM39oeEmH0ujJbYbIrQFAMugegqwMxeLkk8pYU7I69tNYYVVg0uPeNJXPTQUSXDOmKAAAt7yqC9qQCMz8EwthP6KnTtyzYE5XRdFJI%2BQZIdkuAX9AMXKDoxAMmI3MIfa1%2BRlTvokt7G4ke9yOQynKN7Oeri3hFWptwC5xayuaOfredSxird1Z1xgkCQjDBlzQy4IKIrLv0a4xoDIYTK8D4aUiCckmSSY40SKgOW86TFXwrdXhYysz3IrsOW%7Ctkp%3ABk9SR5bd5fqSaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/206490003423?_skw=Intel+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&epid=18048088966&itmmeta=01M011DX3CFRD705G7XAWG9SA3&hash=item3013c367df%3Ag%3AM9oAAeSw9vlpBMEm&itmprp=enc%3AAQALAAABUGfYFPkwiKCW4ZNSs2u11xBKExEGr8%2FzhsBrGtC42xQAGaRbKq%2FK8bx%2Bc22dUATN8270vAxmO64m6UhOL6WEbjI%2BFjQksaeRxIqupH1apJTKJ0biREZ4ThTbk5CoA5eNACz51S4PKYrUGm3u9wXe2PGE5SrzuEKeRnpGMArKs78a9NtleBM7N3om%2BR21wphklXIxaqj5kvmTlCh%2FkEXs8jvi%2B9NFLRhnZxgo%2FLzL5fs3Hh1Qwk26jmUPBtTZUHIktM4PHvaVVImv1l4xMoVdM%2FfAgartVwpL86eQqmS%2FBYhXkSavIkQ6ZR3brnNoJHWS3tjmLw6XHjY2ERRGbyK44s1Kqh2jM1OdUh%2FqVMAfldir8loQ7qwPfkEdHTwQkYYG2dyNZGRG7o4ho9MwmkYT%2B9yRbeVtoiKkfBfBa7hQSk6tIywUeFj5VuZNC4snqSlyFA%3D%3D%7Ctkp%3ABk9SR_zRt6GAaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/366613297096?_skw=Intel+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=18048088966&itmmeta=01M0AC0NGTZ2E47K7MXPBARKJB&hash=item555bdaf7c8%3Ag%3AMVYAAeSwRqBqhEAZ&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xCzG%2BwfJZcMsgbwnM0QXPMqbfgYpPxjPsOHRtJsAmaO4fTIAsutYg0vrpL6hZEC6lJpxAtBwZM1XFJrrqG6xnIVlUqF0DHPLwUM5G1tW73yJyGbhEaTWsOKFMZVHbGgxiWbGn%2BmRHVZCf3dzL%2BI2Wj%2Ft%2BRJUSNtUBC1G03SY0GmyiYCDJbyoCFGBuLiGqrktHwI4fwGfxeBVxBG1MSt46R2cxbcDO23rbDQFHCBQ3UZu4WGITXntlMTLi9gHsnXvtviJjo%2F6dUM07dHGCl6MlbFlQVIOQxajN1fqST6hXG%2BM%2BeCjxWcpKrqNyqLxA7Gzgc2eg3jq7mv9IZJdNBHONR4UqTzlvfX6Xs70RqK2TRpJt5IiG0YdD8LEkUxEkldgPhAfvhsu3wLJWptvgBUpD4sFKi2h%2BFWkOJEHAk1KpMnUvG%2FBWKdwyNViUKkvLjZJxBq8J5iYOksLZQdK9Pr3N6z65soKM2blMgKzIpgzXgpIHPj01%2BoxaAtlYctM%2Ftq5V0%3D%7Ctkp%3ABk9SR9LZgsyCaA&LH_BIN=1"
+          ],
+          "basis": "SOLD_REFINED",
+          "realisation_factor": 1.0
+        },
+        "eligible": true,
+        "reasons": [
+          "Resale basis uses the median of 3 robust same-condition completed sales; lower quartile remains the downside case.",
+          "Expected net profit \u00a3-71.10; ROI -57.3%; liquidity 90/100.",
+          "Sampled 90-day sell-through is 100.0% (17 sold / 0 active matched listings).",
+          "Component economics exclude build-level fulfilment costs, which are charged once to the completed build.",
+          "CPU gates: GEM \u00a33/15% ROI; SUPER_GEM \u00a38/25% ROI."
+        ],
+        "risk_flags": [],
+        "cost_breakdown": {
+          "purchase": 119.99,
+          "delivery": 0.0,
+          "ebay_fee": 0.0,
+          "packaging": 0.0,
+          "testing_refurbishment": 3.0,
+          "returns_warranty_reserve": 1.06
+        },
+        "evidence_status": "CONDITION_UNCERTAIN",
+        "evidence_reason": "CONDITION_UNCERTAIN",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 1.0,
+          "sold_evidence": 1.0,
+          "condition": 0.5,
+          "price_completeness": 1.0,
+          "freshness": 1.0
+        }
+      }
+    },
+    {
+      "title": "Intel Core i3-10105 Processor 4.4GHz 4C/8T CPU LGA1200 Socket",
+      "category": "cpu",
+      "condition": "unknown",
+      "cpk": "d5f7975633a2e854",
+      "classification": "POOR_DEAL",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "scoring_explanation": {
+        "classification": "POOR_DEAL",
+        "decision": "IGNORE",
+        "score": 22.6,
+        "expected_profit": -48.71,
+        "roi_pct": -58.2,
+        "walk_away_price": 24.28,
+        "liquidity_score": 90.0,
+        "desirability_score": 59.0,
+        "risk_score": 100.0,
+        "market": {
+          "lower": 34.22,
+          "median": 34.98,
+          "upper": 36.58,
+          "conservative_resale": 34.22,
+          "sample_size": 6,
+          "raw_sample_size": 6,
+          "source_diversity": 6,
+          "spread_pct": 6.73,
+          "confidence": 89.6,
+          "comparable_urls": [
+            "https://www.ebay.co.uk/itm/188879803294?_skw=Intel+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&itmmeta=01M1MV3NE5EQ9PB1HPDSMA7974&hash=item2bfa1d139e%3Ag%3AteAAAeSwcztqmVQx&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xDYQjPxhqEMkhEJAHPF6uENFg1qhqzKoq0biU8JVdLRTDIRiEYb5fkk%2FzDgL43SosXPsac2uM%2B7szse6ZvT1io2mYTUXwvKyBCiX2VEeLCmwWouIqxhsb2n9vmhc26ar4gneiXuvVYEuV%2BB%2FBZ0%2FZWNgB7oNkr6B%2BUWMkHL5aFaKbW%2BX6MizBakZdGWbcU4LKbN2wGcfSJUPLLfjg1swg%2BZYUNFuRu42bDzFng9xpomot8daECpyNXxm3pUnI2Gvd6OaHRMN8Mto5kCVbBjH%2FU%2F9TtoEzYGPrUULQbLd8ygzYEGHcBz23LJQhxzfrJTArh73KTJeOMEt09Z%2Fu0Yu0Al9W1EYEFiysfBAUDjCZonJW6Cxi56ulFY6jS14I6NFnY6ibJ3TULvCjR%2BNZVMozjrx65DKmGm5XTK7fzvBWOVY7ens2z5QGeoJ5Z%2FgaaHgU%2BqoXknAFryhYHXE5zDiz8W%7Ctkp%3ABk9SR7DXjpuNaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/198555046956?_skw=Intel+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&itmmeta=01KZGM6NXE0TCM7TBP40MFMQ4Q&hash=item2e3acd942c%3Ag%3A9dIAAeSwyRFqdl54&itmprp=enc%3AAQALAAABUGfYFPkwiKCW4ZNSs2u11xAXMYWrsU1EDlXS2rUphPUD5xna3O%2BvgTCGELDEKxjAbI72rj4sYeFuLStJ%2BPGq9jNbkeyhMvpHu%2Bkd2Y4ZsQaRW0ExKvSA4lET0WTMi8KwZ5n8WaM5AriA7vJO1CkE%2FEofKd9qYBk5NmtVKA6g%2Fq6zEs3KcEmC9lzJBhgojvqo6T192EaCY9KL60A9n2K4RtcCp3iyVOygzg0d9Ck0n%2FZ%2FYqnrGKYbkG3TZC3jxMoPaGir5qRh2PrDmukTeJEoJb27Zwgp4SZAyiDKS8Jd8AzuPZnyAWRGZPk%2FOCTr0YzcsEqrIlrNy9OUcitKLeKyzZTIM7EuLuFUHMOKEvfgBzEwnNiO%2FyJJFEITsRYtyzuiG6lT1Mz%2F277kmGrC9oFLifKiKM0Ja6je29UrBZSJhDNYL6Tz%2B%2Bxzp8JnH4wmZSTlLA%3D%3D%7Ctkp%3ABk9SR_zempT8Zw&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/278271703455?_skw=Intel+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&itmmeta=01KZV43HTFNESXV0HH2ME3WRF5&hash=item40ca49399f%3Ag%3AgS8AAeSwBclqfAmr&itmprp=enc%3AAQALAAABMGfYFPkwiKCW4ZNSs2u11xDKtubDJoX8L%2FxmcF2XnHGFcjHbmu1x6FoS5IQMI0NLV2P1yloTVOq436IPBcKpdZiSHXrs9OF8XNZyFct--STr9YhGe5r0qNJ%2B3HwdbjFkPUi2Dx1kT5cTbZCmIdf9B1OCiqL%2FC6yOuav9t0i6F3aIcePtNY%2BBflJyJ5qjPbOAKqziA2qg19itNj16eGVEWf2FWUnSP0%2F7ZAfTMLuO6By2EhaN7uNRWGp%2F4J5cVSJ3kbMEnPhMl0bzqYoTXZNa7xz8UQ31Ym%2BvU4pFDPjjFO1ghvZaydBOYwseQPBjPIfeSGFX4%2B4kGA%2Ffkb9bLNfF9ED9%2Fdj1zuuiJ3gJp0BPvzaA2rUQvM0Tf5E%2Bv2xl%2BPr%2BIAsvlZdQQwLUJc88Hg8mknY%3D%7Ctkp%3ABk9SR8qdjuT-Zw&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/137612034225?_skw=Intel+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&itmmeta=01KZV43HTF6KKAQXJCZR1CBFVP&hash=item200a5100b1%3Ag%3A-6oAAeSwPZVqfCpw&itmprp=enc%3AAQALAAABUGfYFPkwiKCW4ZNSs2u11xDo8V8NiW2zAhP8n6PEkQBntq2t4bhnjov4y0pxMyIp9ng8p35XdTDRonGlXH%2Bh4qlCPeRdeaIKZJJmLCxTlU%2Bc7pa4Vu7UPLj1aa3dtLFe6%2FujRF05YafX%2Bcbnt%2BdyMqN7oMKiTKWMiiXbDkCqudEX4w42fCGmjLoWUx%2FC8TudzrB9KqUnUy5XqY%2B%2FQlPOizXBHYMmE5ekGjJAvooBRBAq2b0fazaMrQ5fumjtGJUybSsNGsMrgYvstW7jfRiHV6WXBvPpcFiagQYW7YWQo%2BYIVs1mVBFhKu5OiXdP0ew1SKNVCUOoVUY5M4EUiFQn3GyTZVHnAnVRg9fmgDBrZstZgd3r0ojZt6vRRQnjPrnYKb%2BqtBTPv%2Biw5k58g9KozJMgCo3YJEJpUNn1VQJEVDxfi1%2FcwnBHC85xK2keiakASw%3D%3D%7Ctkp%3ABk9SR8qdjuT-Zw&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/366613286523?_skw=Intel+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=6051034363&itmmeta=01M0AC0NGSBJ7S3NKZS8TD1Z6M&hash=item555bdace7b%3Ag%3Ao0MAAeSwGDJqhD5n&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xCldZpwkbNORY5nCJeL%2BYJpiF%2FXAeKdAM1rPlp0QVQ8WWF4zLDUb7VkTZN3rdVmbmcy5PuQzXlTg6KLRB3hD5P2to%2FEHEtAR6dBGzSXDXgYAL2Mgxtz9rwWMSbOyliKe12arXnXWBCe3y2NFAGTeeLlr969ZuPIpewNxapO1jyIhoCdzKc4Cfi%2FQ6e5p74CHyCu%2Bm1OoLs9ABnBFsik4PobubIp95%2FDnVkzZWdztPXzgPb6FX4pQ7GBpon0R2I9ClcpJ%2FlLbkG5rAvP24ib4jgzeRaIu05A3oPtXKzYpnm1IPzYBxmL4%2BscgL1Sqt%2BoUDLFqOTSZitfYf5A81VvhsquodKzr7WLqXKJaET8o4oSfO6P27G%2FaPSahacnj8Uh4O4USIfezS%2FYKeCzBr5vuWaqhYDCz3MPCfEADer%2F36ugnglmROa0bfHWkeRc5VnqRLT8bv1kpfp9uDDCvhbZlpsE%7Ctkp%3ABk9SR9DZgsyCaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/278302278683?_skw=Intel+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=6051034363&itmmeta=01M0S0HNBVKWGFMJ1RHJEBGHCH&hash=item40cc1bc41b%3Ag%3AGqwAAeSwEu1qiGh%7E&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xAYvQMa8gkHzGreUTEezuY%2FEfa65NIhVqYip4gP0HQUpvbkuBWd6zjO2hq6zOwXB%2BYHAS4OhUtHu8q%2B02ujViMeC2Fb4wZqlwUXydIJeJCr0jQvQ8Iu6wNYoza0eIfGd%2BPZjJFxKIZs53%2BsKSkWCl31Ahicl2Tg6nJz%2FvCUD7yiEo%2FuYakPljxeFP5xxJeq4nMxvKPBHHOgg%2B3UsmTbWvx1WETjk--qQV0HuGsLRYpP%2F5wdBmyruAcJN%2BsIR3UtsUq649%2FdMKFQEXvC%2B1EUzfdxf78uQRv94RcfUAIX8vCkXa1u86lf0RrZPrikvE4zrwf7raQQH7h%2BCSyoSvs2Sv%2FcAEpj3YxAykyzGS4AD5FgMRL2n43dUiL%2FzTWPM2Jv5psT9nYxjBrdQuzM6DKj3tslZT7GtBAFIN8zr3Yz6FZEZpIQIFl9XeR0O%2BHiAwfd1Vsl09dsjSjogVr5VkQ%2BHEXUVtxnCXwNJ%2BMsHuW%2BMXhTDUVVZelKy1D9ul2z%2BDJ8PYA%3D%7Ctkp%3ABk9SR6jWxqCGaA&LH_BIN=1"
+          ],
+          "basis": "SOLD_REFINED",
+          "realisation_factor": 1.0
+        },
+        "eligible": true,
+        "reasons": [
+          "Resale basis uses the median of 6 robust same-condition completed sales; lower quartile remains the downside case.",
+          "Expected net profit \u00a3-48.71; ROI -58.2%; liquidity 90/100.",
+          "Sampled 90-day sell-through is 100.0% (35 sold / 0 active matched listings).",
+          "Component economics exclude build-level fulfilment costs, which are charged once to the completed build.",
+          "CPU gates: GEM \u00a33/15% ROI; SUPER_GEM \u00a38/25% ROI."
+        ],
+        "risk_flags": [],
+        "cost_breakdown": {
+          "purchase": 79.99,
+          "delivery": 0.0,
+          "ebay_fee": 0.0,
+          "packaging": 0.0,
+          "testing_refurbishment": 3.0,
+          "returns_warranty_reserve": 0.7
+        },
+        "evidence_status": "CONDITION_UNCERTAIN",
+        "evidence_reason": "CONDITION_UNCERTAIN",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 1.0,
+          "sold_evidence": 1.0,
+          "condition": 0.5,
+          "price_completeness": 1.0,
+          "freshness": 1.0
+        }
+      }
+    },
+    {
+      "title": "ASUS TUF Gaming B650-Plus WiFi AMD Socket AM5 ATX Motherboard",
+      "category": "motherboard",
+      "condition": "unknown",
+      "cpk": "3726b873d424041a",
+      "classification": "POOR_DEAL",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "scoring_explanation": {
+        "classification": "POOR_DEAL",
+        "decision": "IGNORE",
+        "score": 22.2,
+        "expected_profit": -19.9,
+        "roi_pct": -17.32,
+        "walk_away_price": 71.1,
+        "liquidity_score": 90.0,
+        "desirability_score": 54.0,
+        "risk_score": 100.0,
+        "market": {
+          "lower": 78.89,
+          "median": 95.0,
+          "upper": 100.0,
+          "conservative_resale": 78.89,
+          "sample_size": 9,
+          "raw_sample_size": 9,
+          "source_diversity": 9,
+          "spread_pct": 22.22,
+          "confidence": 88.9,
+          "comparable_urls": [
+            "https://www.ebay.co.uk/itm/377472593795?_skw=ASUS+motherboard+-bundle+-combo+-laptop+-%22empty+box%22+-%22box+only%22+-sticker+-%22io+shield%22+-standoff+-backplate+-%22bios+chip%22+-%22power+cable%22+-%22adapter+card%22+-%22power+switch%22&itmmeta=01M26WKS42PV9SKDS2DDJ8ZJ64&hash=item57e31eaf83%3Ag%3AD0sAAeSwG9Fqm-c5&itmprp=enc%3AAQALAAABgGfYFPkwiKCW4ZNSs2u11xAnxcXupM7zZ5AMv96MbdbKvYvAp0GsJG6AB4%2FMnqCh4qRBG2vxnB%2BexUGH0R2XLfnThSCLZLmFNTlYdKSAQJuSCOvFr39e%2FuHTfqNgQvpowq7MjzeJCm7tw6CcQ8ZmB7mUuyB5kLLSenSzwI4PlF6ozspw9bOwsfAgUUhuuDU5bv7lMKPpxcHOIgGpO2KofSUkhVpP%2FBl%2FGnIuf8ASOZJNzuD91xv3KhQ6%2BLP4ZV4lTtZh7484nTwTumWT6%2B%2FrBugIg5dVltik1nyz08MrTM0EqcLZl4Lr93GTxTeaBcNER8x5mpeM2JgI851FRWDOIzw%2FZ0ymqLl41J%2BxADJ67mPw25tSXhgB3j6SJQQUPF03lvRqs6pBAtvzFk%2F%2B1C4Cyj44Tq2m6rq%2FGrb5QzFMYyeoIqFerK%2B871c4b7FhFeR9PPiR0pstWq1SLnEBkNamKxVU08BwxLy7VpRYFTCdjngS7TMOSHQr3MPklO0CMpsKzw%3D%3D%7Ctkp%3ABk9SR6aSz9yRaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/178374137044?_skw=ASUS+motherboard+-bundle+-combo+-laptop+-%22empty+box%22+-%22box+only%22+-sticker+-%22io+shield%22+-standoff+-backplate+-%22bios+chip%22+-%22power+cable%22+-%22adapter+card%22+-%22power+switch%22&itmmeta=01M26WKS437H678QGM08FXX9E7&hash=item2987ed54d4%3Ag%3AaW4AAeSwww5qcife&itmprp=enc%3AAQALAAABYGfYFPkwiKCW4ZNSs2u11xCUEZAB0wzX3pcMjs4Gj%2BXlhOEc1flLAc8KC%2FLGY4WIPoBfzPLHW2iIajogukHezozG4gG9WdRgwadRE8IfSHYSiXRO32uxtS8if4La1wU4AeibKuGubufPK%2FMs1bdemyoThGPPzhNcx%2FwN99Y7dNqujhJS5Z29SGqvb5lMhGcZmRFKkQhK4pK1ygm7i8kMMd8ELLueEm064co8rwI1Fza8rUSMJw413J2Lr3%2BK9hG04KEZtzUDw%2FvGP1pyBbt33C%2F46uss0jOT0FW9T1CDk1gS9CNxFUvXcgwFGLOZoYgR7ylLAqcJdK0wQe06Hz9UsYFbjts3fkTW6xobCrXQtJghMEjg95SShCduHqrpSJebK1O4OWCa1VV0mGYonMsMun68OsxNfE2oJ4uJbN5%2FsBi4OPVoaHGiZaZcClZmmGs0jiwjtze90nRX8S9kCH25%2BEw%3D%7Ctkp%3ABk9SR6iSz9yRaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/298592239816?_skw=ASUS+motherboard+-bundle+-combo+-laptop+-%22empty+box%22+-%22box+only%22+-sticker+-%22io+shield%22+-standoff+-backplate&epid=12057400425&itmmeta=01M09GXTRWEYX4VJ89SA218J4Q&hash=item45857c00c8%3Ag%3A5LoAAeSw9%7ExqgWMn&itmprp=enc%3AAQALAAABMGfYFPkwiKCW4ZNSs2u11xANEVc9SBvXclWY%2FrPuM0zdFH6NS4WSCUrOV6fbzKrIWw%2B7wBGRzRgWaYXr0xOBIQZ1s1gDOWpW3HTH46cVoz7kMCoruUYZP6%2FZAxD3jL5X0gRE8L2SkK0Jh5sNLUz060ZJaF%2FhLQ2T37jKBz9z7suoU6s%2F86HM%2BPk3gGwoSB3cLkDLSWbDCGq0Yus8fPrqxypHLNOsUu0fndFj5MM9Bep2j0GVBiQ%2B5KR32u2J2aOg1byGeRTez9DPwaMpNO%2BzvIz5TDPh8x2G48%2BnWuQkYPQ3nnBQE32mV1QEOztJ5c84auCnKCzCr0M36b3s0%2B4gp6Iz7iT62gJQ9aCujpklBSg8--9a38NJAH1ryeGp3qcaqzpXpu3WxYDucJXEfNEAE%2BY%3D%7Ctkp%3ABk9SR-is97CCaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/298403398619?_skw=ASUS+motherboard+-bundle+-combo+-laptop+-%22empty+box%22+-%22box+only%22+-sticker+-%22io+shield%22+-standoff+-backplate&itmmeta=01M03NJZWVJQ7ATG0AG89CQQNR&hash=item457a3a83db%3Ag%3A2sQAAeSwhANp2DKa&itmprp=enc%3AAQALAAABUGfYFPkwiKCW4ZNSs2u11xBj4j8%2FXKtfT41snOsFsPFUTd8rhOoBFsqpean%2BwTSkqQWqYVizjkmIe%2F1dqe03wYYIiksG1yofTScON91MP%2Bilker5iQUmL9UTlg6HBAFbTkSzSUsCmJayYy665l75q6Y61EiJMcwUzOnTmsF%2B9yUmyQaLWHkaazhC2lFJxY6tHOKKdp8bJ9rAnlGI%2FLnu81V0fmVgbSeWtPhwECqvhlUTaYQcXCphytqV6HoL%2FCWW3VDZYxGhhvUYWYM%2FEITEQ19rEXZQ7XsADlFb2DBDbvJOKZOh8hAknBkOOceR3VxEkcZqYWJtx5yH6%2BwO05%2Bc7n6x2R%2BOK75LUcWVxgcE6mROkm0XEgXyfCo%2FJfJsEK2w5XjzSZlgEfANvKXFe--fdUSUgxu1SAjS1euxfCnfRYP8wMJC9N5E0psKbMRzvN9U%2Bw%3D%3D%7Ctkp%3ABk9SR97-y_WAaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/318620452593?_skw=ASUS+motherboard+-bundle+-combo+-laptop+-%22empty+box%22+-%22box+only%22+-sticker+-%22io+shield%22+-standoff+-backplate&epid=12057400425&itmmeta=01KZRFQASTN28R5VH84ZS0J30V&hash=item4a2f4246f1%3Ag%3AgIkAAeSwENVqYPX0&itmprp=enc%3AAQALAAABUGfYFPkwiKCW4ZNSs2u11xDwns0gXd0g22AWn%2BOSesPbNsOOWYAo5n%2BWb%2BBfqmCxvoFzByDMafcP%2BKkekUY95R9fj%2BNW0Hr70HEwvKUPn6dkn5PEBMWjNAPvX%2Bet2GTeS1nkYarLcAWCVWEliKf8fYEku7%2FOYtN3TXMZwqTomrwSFII8zDhAdzNT0IBYmHhpGaAVptoeIv9tmRncapw3uI5SpofmNaPEvXr%2FbJKNygI6dTriiLxPr2CDfRYxzdDf%2FkAVNIJdGo5iMjnqHNtLzeXpJx7qHlDSLzRo9v%2BHF7fLC8CP44f65HKoIWDoBq7SfIJ71dgMEzDQBgljzjbeJRL9xdGskPaytEbPyn3YouzEL9LZfP1WVqjUiJSs8%2BJ2xb6u5972lV3aCdmmFbK1j51E6ds8MyIZFILKXYvMdmIx9SUucgYCLKB%2BAcE%2Bz8%2B6FQ%3D%3D%7Ctkp%3ABk9SR5qt3Y_-Zw&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/377393698573?_skw=ASUS+motherboard+-bundle+-combo+-laptop+-%22empty+box%22+-%22box+only%22+-sticker+-%22io+shield%22+-standoff+-backplate&epid=3057414384&itmmeta=01KZK7H9550E1WCVQZ5137WZQJ&hash=item57de6ad70d%3Ag%3AmKsAAeSwxUxqcdEo&itmprp=enc%3AAQALAAABUGfYFPkwiKCW4ZNSs2u11xBEcVBzo55abOrr4HhNp5TJTFgSWR%2B5fdTSW9klgG4T6QPKNqKOLEHEyJbyl7QrWLaOjMd%2FVt2C%2BPbP307uJhp8dt3c59kw6opzTyOiy7%2FZy9UGHzGoG%2Fh5qzIn2aL8iF%2FosOlzyqsVQyqugd%2B1uHJ%2FIQJfOAeQanZpRlRcnbRuBsrg6E66yi9km%2BRr7K1DU8LPhQx%2FuMks08ZZWVuTqMTglKsVyJIiCtS3kN9PfLX77tXF5cKk42XLtY%2FgiXg%2F7iro1%2B%2FBoF0FYwwr%2BGfRCjYHziLvIiyo0QkVFASCtsGcDs2nnrwp1sjp%2BFU3WkZMv3YkfRaII4xvgfyScXNS2oxZQqaY2njElIsCixLfe%2BJlr1fJM57YD68PsxXYb3TZag6XcJYmmCPhKf9mnzlcrSRV3aQxEDqElr%2BbRupENbXejw%3D%3D%7Ctkp%3ABk9SR_6Sxef8Zw&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/406074786713?_skw=ASUS+motherboard+-bundle+-combo+-laptop+-%22empty+box%22+-%22box+only%22+-sticker+-%22io+shield%22+-standoff+-backplate&epid=12057400425&itmmeta=01KZXYNY7M9M3PGZKP7GN215YN&hash=item5e8bf18399%3Ag%3ArSkAAeSwnVZogkHo&itmprp=enc%3AAQALAAABMGfYFPkwiKCW4ZNSs2u11xAHCEevHh89jOeM3ZRYqoTSl%2FWtQl%2BsN7W8ngze%2BWQTgtKCJZgxRnkNgJmmtxc6QNOqYdvdqiXcQKLhSp%2Bqb9ea67GeBFgxsmSPmlCcX8neWOigR%2BzsK7HVBzSCi5lediXPGPih0wPuFuhv4iYwqhXIbzb9gLheHHCxAryqCJxP6oUFr6iQIC1Mu%2F6L8YIGbx6Pmx2erLvWTWDOB6SHKUOS4c%2FLg2Lwhp0ZGYwOgIETe1RdB8YIH4W3gLgFfWH6DjAqIu6o87zy3%2FS6ao6PSOEy5H1MJj6KbYsxeip4MR9iish96RauRV8IcMcWkGGVI6U6humUvx%2FKDMyKbO8jYTLAaY2RaqWrsIV8BLCVGdnG7KBoqNZstjDOCmbXDKR5e5w%3D%7Ctkp%3ABk9SR5Dk177_Zw&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/377384981424?_skw=ASUS+motherboard+-bundle+-combo+-laptop+-%22empty+box%22+-%22box+only%22+-sticker+-%22io+shield%22+-standoff+-backplate+-%22bios+chip%22+-%22power+cable%22+-%22adapter+card%22+-%22power+switch%22&itmmeta=01M0CY9MFH9S04ZTZGZ88HDJXB&hash=item57dde5d3b0%3Ag%3AEfUAAeSwx71qbQaE&itmprp=enc%3AAQALAAABYGfYFPkwiKCW4ZNSs2u11xDBv4FrCIQCavq%2FIrJdTURp6Y%2Bmd9F0C%2BxAr8LVBXOYIwXrmgm58c4Bb9kULp3KxScMMbZC7dsN7v9RNjZD1dKt%2FMuo53NmwpuGsQUd7jLPC9GfThvg0E3RbNjDsBQGwVyr2YpHKeItAMCyxQ6M1XniA8Z2v7VIpnU8pQpwun7M6ZoFV1g8Icnaxrp70e3X49u2Ej0%2FL%2BbXTvYDxbGH364Hu4ojYoeBb2fY5fFEsrNTxcxiaGTp8PiH7GBh0rHcQz%2BD0G5j7PBy8bIx%2Bvou764NceXeF92CkT5%2BOD%2BmZpJljQAgAG5CZjqLpDqaCfTK5wdxFj%2BOFIl9TiaX8XIYrMJUnbnqZnXFRXc%2FTVajOj7lEdOwkj%2FzXCOXfhDJKUvQ%2FfB1z%2FnDh4D%2Fx1PvrJme7RoJd%2FAVhhbnVqdq70ecgYzS6T3bZ%2FXzXdvNz10h8kMZ%2Bq4%3D%7Ctkp%3ABk9SR6bIpp6DaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/237028793088?_skw=ASUS+motherboard+-bundle+-combo+-laptop+-%22empty+box%22+-%22box+only%22+-sticker+-%22io+shield%22+-standoff+-backplate+-%22bios+chip%22+-%22power+cable%22+-%22adapter+card%22+-%22power+switch%22&itmmeta=01M13RZ7Z98N8EVR0PQWA5KG3R&hash=item3730045b00%3Ag%3Arm0AAeSwFLNqjU0N&itmprp=enc%3AAQALAAABYGfYFPkwiKCW4ZNSs2u11xD6uESssqRseJRm9PFtcGfDykiPC7LBufXRB8u1%2BTCqIP8LZzzTWPdtN9WpW%2BXLXio1Wk7tK81P8hzYaMV22f90QO%2BH8DYfZM9bYZwF8%2FmqetopHyaUqzk8lR%2B90Potjyw7QmpsadfMGkCs61EBffLk011zOz5FZH3LYSH3mk6QVaYWowfgFVu9ZLNIPJKOIC3Hb1Q0wIFxquEdArcDgYQDyG5fy66PxJi%2BXtGkR4xkXh51jzsbLdIAKpm9IQmfBFBFNJeKgv0WRLQz%2FED9WZ%2FxiMUXGc5z3rYlEwQZyonj1fDXWGPT94PjLe%2FTnGMHOwcAp1jdBxBIya5L6j1QJlsAPtBcok7Bw3ks6oxAnDqhqhiWJbgOo1KLGVtBmmMqAmT8xscIi3d4jE3qn6ULjKCkhf%2FnCXhXLUaM4MMRC28Aj%2BfVisecbIMztPvvz6aZqpM%3D%7Ctkp%3ABk9SR_j__PiIaA&LH_BIN=1"
+          ],
+          "basis": "SOLD_REFINED",
+          "realisation_factor": 1.0
+        },
+        "eligible": true,
+        "reasons": [
+          "Resale basis uses the median of 9 robust same-condition completed sales; lower quartile remains the downside case.",
+          "Expected net profit \u00a3-19.90; ROI -17.3%; liquidity 90/100.",
+          "Sampled 90-day sell-through is 100.0% (85 sold / 0 active matched listings).",
+          "Component economics exclude build-level fulfilment costs, which are charged once to the completed build.",
+          "MOTHERBOARD gates: GEM \u00a36/16% ROI; SUPER_GEM \u00a315/22% ROI."
+        ],
+        "risk_flags": [],
+        "cost_breakdown": {
+          "purchase": 110.0,
+          "delivery": 0.0,
+          "ebay_fee": 0.0,
+          "packaging": 0.0,
+          "testing_refurbishment": 3.0,
+          "returns_warranty_reserve": 1.9
+        },
+        "evidence_status": "CONDITION_UNCERTAIN",
+        "evidence_reason": "CONDITION_UNCERTAIN",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 1.0,
+          "sold_evidence": 1.0,
+          "condition": 0.5,
+          "price_completeness": 1.0,
+          "freshness": 1.0
+        }
+      }
+    },
+    {
+      "title": "AMD Ryzen 5 3600 6 Core 12 Thread AM4 CPU Boxed Wraith Stealth Cooler Unused",
+      "category": "cpu",
+      "condition": "unknown",
+      "cpk": "0461ad2d8fcd028d",
+      "classification": "POOR_DEAL",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "scoring_explanation": {
+        "classification": "POOR_DEAL",
+        "decision": "IGNORE",
+        "score": 23.1,
+        "expected_profit": -17.61,
+        "roi_pct": -25.91,
+        "walk_away_price": 36.28,
+        "liquidity_score": 89.8,
+        "desirability_score": 65.0,
+        "risk_score": 100.0,
+        "market": {
+          "lower": 45.31,
+          "median": 50.36,
+          "upper": 54.83,
+          "conservative_resale": 45.31,
+          "sample_size": 52,
+          "raw_sample_size": 56,
+          "source_diversity": 52,
+          "spread_pct": 18.89,
+          "confidence": 90.6,
+          "comparable_urls": [
+            "https://www.ebay.co.uk/itm/820015463760?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&itmmeta=01M09FS6MVE5K7K10HX4GH3JMJ&hash=itembeecbafd50%3Ag%3ASZsAAeSw1INqg2nE&itmprp=enc%3AAQALAAABUGfYFPkwiKCW4ZNSs2u11xD3MZI8jhmJ6CO1zB62tGEeKwzc4ZtvSsWhnFHjrMvhGQBuu63TgGX5ljKgYwn8h6j8b0khkgrkJXkEwj3wInaAEHZhgw8zTqdbIDrnKND6sLIu3ucqjg--bw0SNBV4cFitGMZ%2FO1r8nJSfC741gV%2BxPQnR7Hz9yQfIO6zyzDuY8CxPjsHKNJLXCw8o9iooEnLM%2BQLsE7ciMlVkaRH4q2u9f%2BoQ%2BIqCecbKURkzoGWOcwebMk7wewRjLeLEklWkyJ4lzGEmwOAJ8qcmyrVgQYwYB4S%2BYqAHyquaOHqVUOKuLXdqfy7slwq%2FY3xIFf0%2BkIscTOoruR2V0%2FMDzeaaJfbGhpL5V5fG8zNUhn%2FjnIwZ7KPrY3ICGzESN8tA9d4qOuLnDP%2F7Ksq6KtSdUe3zEaXpXXUJdu%2FVkIxzFkTjsa0j%2Fw%3D%3D%7Ctkp%3ABk9SR-Lq5K-CaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/336747007403?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&itmmeta=01M09FS6MWJ89KH29RGMC0YB8K&hash=item4e67af8dab%3Ag%3AA8cAAeSwydZqa1E%7E&itmprp=enc%3AAQALAAABMGfYFPkwiKCW4ZNSs2u11xDQpGzTtsYKyw%2FSBHRouRGNlmGfF51DdAofnl42MU7ZanZPvOjeR6wCZBTvMj0PvCy1B1mpzf7S7wJiXWSjAx0ARnmy6h%2BZ7xeG0O4XoFk7NnmFkDaZbubpmfVFVFVV4sjE5AaKhuW4jEPF6TUBSp3QmcEbTuojVZhJWsc0MHDY8W5%2BGJkyJ53M6TXLa4cpuHWnmYHpkTrnE7oK%2FtLDseaEwZJuRtMhPFM1XizGhWf%2B2cWLqEXR27IUlOdQeFjciFCTtdug1dCcVtYiqhjT7QCPlCzRWc61J91KW0P6rLPy1S5ya%2BKcJEa7c77CH1uLp7f%2B7yqsWIqqIvYxHuCWMsCnaEaamMcan5a9jHZdg2pj3zOjJKbpZVLF5%2BH2flkFwgE%3D%7Ctkp%3ABk9SR-Lq5K-CaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/168620731609?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&epid=13052600496&itmmeta=01M09FS6MWS6CGGVFZ83CCCZ4F&hash=item2742942cd9%3Ag%3At9kAAeSwiipqgxVb&itmprp=enc%3AAQALAAABUGfYFPkwiKCW4ZNSs2u11xB%2FVdJ6gkdyJ2CYyU8VdBRWoy7oy4OYgc7Kad%2BbF7c1Inox2FNKuzScJWZ2dxgTKXSSWqCMpt%2BeDZrc5THVo%2FCVqpUdkPDulBDTxGU97RDCnNnI97fOod%2FO62QyV7sjgGZl%2Fur6l5P9T4ChC0YDH%2Fn1pTi5MQdxahwqhl7upMTmakCyvBgRuFDRz4ddUJirtkWeGKwrof%2FFcWzJDl3t88Z%2B4bz33PJ3oslaYLkL3lDvwJRPFr1sll4BkntyzdgMmAsaLtWXt%2FJePWssGGtN2RCHrguyAPE44BWS4eOYgaemLCgqdKu%2Fq3Ct2fR6x3Md2KpE%2FDj5%2Fr%2B%2Fog9nwQ%2FY2l9iADBD7%2Fv9I3fL5sHpOh%2F2RwAN1WbWmtNT0I1PNQ1Dz%2Ftbi2kBhom5vxJ%2F57BKA%2FubOfdUbNOrpiAj8doWPY5RYQ%3D%3D%7Ctkp%3ABk9SR-Tq5K-CaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/227479654221?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&epid=13052600496&itmmeta=01M09FS6MWGNDJZF456K5F64EG&hash=item34f6d80f4d%3Ag%3AJLQAAeSwGDJqgwsl&itmprp=enc%3AAQALAAABMGfYFPkwiKCW4ZNSs2u11xB5I4Jbk1Gs07VQZdCLVoeUWcn1ICAKS49pit6%2FcEa%2B8z%2BnE9V9HXWLwhsEhCPPgXcbPqZBc3f9Ql81EeAPwH%2BEU45OemLW80h8gimelhZS%2FqRXjYpYhR9OohlWb8ZbMMn6Eqzf39oUvz4cza02UqXW42HQV8elVIAKLdPlzqxi1ybk7bq%2FRszjrfHOW9LU1HMpuBMiE2Y0IRIClRD2rQsHy7jky7OeP71bReGnlV%2FFryqejQK0Xe5n4HmRSZWCt0JlsUzBpKjPYOwBPuDEbmvAxDOHFpp7JN2WzWWf17kKUTQrXjGnD92Cug4p2crhgCobcJQEtT%2BjrXrC9V2%2B4KwsMaiZonBkYxY41JpkeLeLQ9A2ohYbxgiq1ucVxqFWx2I%3D%7Ctkp%3ABk9SR-Tq5K-CaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/336746743217?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&itmmeta=01M09FS6MXX1F8NXC9DGDM2TNG&hash=item4e67ab85b1%3Ag%3AA8cAAeSwydZqa1E%7E&itmprp=enc%3AAQALAAABUGfYFPkwiKCW4ZNSs2u11xCLEKvgOC2oOsluJlZBWb4wvHZm9Hi%2Fehg2xjvxHJikKnM0zwsAcnPHRdEI5wEN3mDjCZMSzbMv3sjhWYakqhRTlvzex2IfewiODjSqK6WU8tQLeCokdSXUpcj8aERx0C1DZLqUUB5U4zRxX4VCGgFdzt7KE02MhcpAfgvFAomoXr7Xu%2FwWZmiLtjKzxa2YeMMu9oM%2BvooBXS4ErHap71ERVZvNFsgM9hJdY1zjsYVi2DJhua0jzJGNOXDWPaagkH6QLHtBk6VVcxH88Tza17jPJ%2B4%2F7avsR0FwJxucPeuCyPXjBN5hSziiADzE1sz0%2BYUCDG3bS3qkZCC8k92UF5iFinEGKZ8Jrwue7hRXkb8NxAr%2BqP2ILm2jkA98Ule7uIdf1U9d83tj2aQDBOh7FYRAHRSLSQPsdhe0wZ8Mp9dMdQ%3D%3D%7Ctkp%3ABk9SR-bq5K-CaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/336716801884?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&itmmeta=01M09FS6MXWNJ9ZXP8B895QV37&hash=item4e65e2a75c%3Ag%3AA8cAAeSwydZqa1E%7E&itmprp=enc%3AAQALAAABUGfYFPkwiKCW4ZNSs2u11xA4ynX4%2BXf7YAOsWCt2pDRSYsyWsLcyCWzc2cthA0L96%2F%2BiUIqT03n6Rw97kO8BsRJGpQ0XSLRw0%2BE2xep6lkCpTgcBbgee%2B5Z%2F4H3DRedUB2BIzLe5zGCNSN1Di2tCdGDMRyF6glqEbCYMV2Ye5MyLnItNA3pi3Ru8qbXHCNA1C6UViZ%2BryMCWCyFRMCkC4WjCswj4X0VogB7lfl44zeHVq2bWKUtTFbZ0atbbKKP%2BRqSO%2F63uW3KiycBvdr2Jg7YaTsRfxclXR5cIezM2G%2B8SQWDX%2BO6sGfEQ%2FYjaVL3aDUnL2JEwiyOvqdFS%2FrnTvmXiqcDXcpFpvsozjJY%2FcJ%2BSALgkue97RJefEac%2BuOUR2GNiTb7rXd4FSyS3HyJikEz74BP6rWRdtowcG%2FqaVAV02iBFQUWsoCXXqJjSmLid2g%3D%3D%7Ctkp%3ABk9SR-bq5K-CaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/318739581801?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&itmmeta=01M09FS6MXF5QK0BCAKCBYHSFQ&hash=item4a365c0b69%3Ag%3AcTcAAeSwOLpqgeyw&itmprp=enc%3AAQALAAABMGfYFPkwiKCW4ZNSs2u11xDsI4akF%2F4Ni6z1SKBwI3%2FkZ7rRrwGXeXTYopv%2BQu4jV2glfpo9FvDjTqFW78AdQN1Tzo5q9XdNjwCMrxWlEP23y4W3VvDsEWIZFQTm04ikPJqFEOYs1yDlNsLYjI%2BbkauZObPryiDWwg8HJMhOxHAIa8zxSHHcnryuzzqAWVDGFnQLK2zCCOROT8X5Z5uyUhrFQgi5xt3id1szmmiNUEhRCMtd3H4jo2vt3nmJtI4gf7inmHxEjAasgdd0EYnoU4Mt82V%2FUiqBdiBCoaJIQf10ta%2FX48Nr1arN8ObpyOO2pRM%2ByRpkxM7Iz%2FAJ3ZRVhOOIr4tKJm%2BsBpyzyXt%2Bl%2FWSkTqUqSkBWgTTwSVeFqEhBBcz%2FoGoMgyiV8EGX%2Bx6fSo%3D%7Ctkp%3ABk9SR-jq5K-CaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/237003301211?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&itmmeta=01M09QA9E0JR2TG2GN4GQ90Q7K&hash=item372e7f615b%3Ag%3AgekAAeSwVNpqfayJ&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xBfIc%2BbvSlVtPchIYhjTe8jqKDnvT1eEz65vyWAklWjLAJ1%2BKPrmGqUyABfFW3c81TShnXz%2BVUyAgpSXHGNaIUodeCdwUNYQCcBtmHQmzb70noH2rQeQfFXFrehEVW31G6xl6iNDlF8Vwt5UEZ5Wu2bzk5AKsC6%2BOQxbdKamT4l9dNiXirN6aLsqVK5zhSAjMrIjA7RtXarEoFkp0lMxT6z7HJDofmrLkAYicnKf87ech9FIZrhK%2B4Cryal3qYftjKRqxs5WlJbV%2Fb1L%2F5W6EJxrRqOJ2ZzzDM%2BeYAFtdlvLWuifTBghHLX1I8wfXKOa9cPnzjAg2G7ULTT1LlfP35X92XHn736uk7YD6CIdvd4YNoQScNLFOk75y0z33uSSwOf%2BqOT8Z9rn0kJox8vBQUXO554yoM2m%2BLjK%2BNVAkMkH3yyFLNqjz5DlZdRxAmcrhpjmZdvSt%2FCojWCQprWxcWjRo8X4u36sR1eLTQcuDN0Gmt9bSihNp1xzMkEZaA4620%3D%7Ctkp%3ABk9SR7iXqbeCaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/800517918082?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=10033823701&itmmeta=01M09QAEPR9MSTC9D9PJNB9E01&hash=itemba62960d82%3Ag%3AbtoAAeSw7DdqgbVc&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xDlwaQETn%2B6i8kMUr4a8uzMjp%2BARMuRz7hCCaJZWftczxRUONQAy3zHtDwWJ8lw7RxZYia0ggAAhrnbEmaWGouLjCD%2FhmXzDgP0CUSbo%2Fie3uMgt8GPIXTOcNpM9%2FIb9bExF8kkgyAfUZy02pzLitVFqG0xXPZWWu99apZMrbClmp%2BwKtyEfvgSaDcG81ljU6VC1ncnGoDrzAjvyc%2BWYgHB3DvGBnaB6gnSKFrWjgfSlRBbS1Klj0yZKYKQLNuhcGb2ysM4JQ2Vr5dqvDEk4yfjzde2PLqBt6deV7OjtKsK6b5CG4fDnfM2SP40ZsO7GvyP3tyQ%2BmRB4EI2tVSX2qe3tBqcnMyDuCLS%2BrIaL2xXGYDBF34SQUiPn63%2FCnE7K7YM0qW8EY49KlEMQGp%2FMHQcEl1F6NH26lVt3wNinzLHAINDXR6MnJJgAWPkWgYpYtgF7NpeSh5S%2BSH3URppoyRo%7Ctkp%3ABk9SR9zrqbeCaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/128026450293?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&itmmeta=01M09QAEPT5D1KX3JGK52E0HRC&hash=item1dcef89975%3Ag%3ARU8AAeSwDRtqfxhm&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xAFGuuVCqKv9mi6qQt38jt60yGFq%2BhftVBqcaCBc6fGIbuoxWxJ4%2BfnDTW8cjmUI%2FUJWKCz%2B6IwJBgLrIT4pkXlv7bwljKFouPGA45ItcXtE3BeDhnAmpcvY2OMmX08nGAx4c7LoTJfyJvWDogET4PN1jzvnmJk9xgLskKHEqYzpq9BjMnTQFEbpBNIaqB8K%2FjNfFof9%2BjzbewN7bS7WOYOLCEkSzN%2FCS4%2FLjPQG5OV%2FHOGmyKwNNw2V8XdRbTuWpRQ1jhrWOeocUzbEJ5ZnvzbG84B24242AlJqZA9ua4nujfNVUHSxyKhiHSUFPCghVp7jdPKVLyqrporZ3dmx8%2FPTejMfMq0OEce1CqYzt9rfoUYgA2zxal%2BLy84hZO5voJl5uqu7H1b60psdUddZZ5GiawvW8v7Pi0HmD4BnMwEWfSviRtG2gPj7nm5XFnFn7TFRjXuwgL2qhoR0xxAD9MW%7Ctkp%3ABk9SR-DrqbeCaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/377418669543?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&itmmeta=01M09QAEPTTZWXHE2PWT9ZNBRC&hash=item57dfe7dde7%3Ag%3AK1YAAeSwa2dqf1zn&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xC0kziT%2BrFUvQa%2B%2B6D%2BcnSw%2BR5%2BlW2a1jWQsfU5546Uzd4gWf3bVz259BpneB2tyKyX7xqUa112Nt5igrT2OEBzBrxax%2FOsW2X2ThoJ4Rk9BJz1sZ6rpZTuJg%2F0v%2BYF9qmqMmbjyoWrOJqbZEKFFxjIglHEapToOZ%2FdaP9cNwH2J7V6lulF%2Bna4l99%2BEObMv3nQ7j2c4tg1SlcXO6bI9Qu68NGgQc0ueAKetN%2FZwcZXo8E%2Fjyv%2Byi0SYsK2tvkvZUTstoQaL1uw%2BWKyMEXtOOSIXPBGt%2FtQtOethCNRpEmEx6KHwc7oxJGjDc%2FI7EuvffbJt0zJd%2FO55sTvUM4WnLi7obM87el7MClqn9iPRgaNFcGVs5aU9p2HfoHvln65mrln83fESi3PaLqrcFHWncZqZuD3UpfPb21jlMYjT1GzcnYp5QkWRlqVjQe9Yu5McZbiVXgu%2B6EgZ7oOuQjKYBL1%7Ctkp%3ABk9SR-LrqbeCaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/336741961522?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&itmmeta=01M09QAHRVGZBX4VCTVW4X75GF&hash=item4e67628f32%3Ag%3AA8cAAeSwydZqa1E%7E&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xA3LSx8dXLjm%2FMmAITWNs5vaDjFmjasD9fXaaw%2Bm0iDV8g%2FcMmIfbL%2BxOC7gOv7aAWUYRwNGfqBtp2P5tNWI9iHga10RTaJ1eiC%2BqNrWhJ9T8RD799LSk%2BKW5Ss9QxW%2FVsnl%2BiYTeQlvs0%2BdcuL3tSb6U07SscWLllqZv%2ByOd73rHXE12i3%2FHYorvxd0G4OVjG5dQ7KHdgy7IhonBj6qpOe%2BLNMgznnYb6u8k50tPvrtLzs1FkW5tVaA%2B9TqreHi4FcbI9SM1k18axNXrDqyQ%2Bt%2FRjjJuKxUM1n4wRAnNGLUGc%2F746I5dKQhLrKnJH%2FdH1n8PzgRtGAlKtCVAg05ZjVBAufl%2BsmaDsseKcgMixAY29EnC1%2FMxzn3xGXxbYxC%2FQywUFg3uJsIO8ON2BQgu8sphIiL%2FK28i6Rr1jcDqFn8UWkEL6sYVxvCqsWHT1PuZi9eabj%2Bz87oDY0gbzv1w1kgtWiFgNpJqHd%2F6%2ByLjxR5WCGT2%2BtHvriZgAPOd70Ipo%3D%7Ctkp%3ABk9SR9acqreCaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/358923033060?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=13052600496&itmmeta=01M09QAHRV6M0DK4YZDZMKC5GK&hash=item53917ad9e4%3Ag%3A3p4AAeSwmiFqfgzx&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xCfQqLlvS6r7%2F4t2US06ZO9mwPfXPbHfaHChimG%2BaEjxIldWQMex4sp37bvG2VMuzNhaoBcksD95nznZCk8hkV6HchJiilxL264XdznhkjA1IGrBr408grQBYm4y53%2FNP5oaTh4wida3mgc1rf4Gd%2B8KR%2B6d1e%2FezbynIk%2B5o%2BsAFkPW1CzkbtQKHMbupkC3ja9dTF%2Bp8Rw7F5rXFQQTr9uItpdaNKwVc7YwG6DRXOMDOPsyugsRiSsUisKobFwLt8NwIQgqrsxN%2Bl%2FjqymKj%2Ftw2P%2B%2FFZnyYxeJ933y8x%2Botvzj9JFw%2FQ3A7IacAvLFrWQWNYXan%2BKRZ%2Bc8ci1N08qNrzvPbHgvDkllXL2zoIgDxazrH49mJqi99%2BsAWx8tfxEWmEnS1RqN5Mo6P3nSh6gEkdEUS899xTjTLv8kJD0VzYgjnXpsyMeMmvTUl9bLXSxB%2BwUX%2FUGhPyRFZ33or3N%7Ctkp%3ABk9SR9icqreCaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/298582370982?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=13052600496&itmmeta=01M09QAHRX0F6Q75GEETSNGBTJ&hash=item4584e56aa6%3Ag%3AH7UAAeSwAuVqfKRF&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xCv%2BoLBgaiTZbXiGTwEL9mS2d1CNI2QL8xQbW27zd9VN1tLhgDU5Ll9l6nmbGG4DsNKBkeRuGZQKP0qYtrmDNgu%2BJxhMhkl8zqkMwIqyeqXle8pBPKzZeOtLBPr%2F8anWUuci1vCLsvjrByVUBO0sU2NMCbw6MNg6aZLmvSQsOF9ma95p4OwrvWOpItKRRUf4syKqSHxiJKXTrlOpPUmPG%2FqRAsiIzBdvOuwARKdgo69L46D3nSVLoEroEWzwbdbqwvwuPVJHd2qRltiAALIUHNzKcWk1EzM7D5pugxOhghyxag8YyDhzEKtqziKB92rzaHJClbbkD6Z%2Bzb02%2BV53k3itF%2FaMvurAPur5%2FKTdgOqWf%2F6ytLX5ElTLkauIUHQi%2B93n04cuDK2jio7UbaYO8YeB4FpA7NGW%2BCHItwqghSkwR5WuGvsB6g7D37tV9fj2muR3KGlPIi8j6154Ser%2FCab7C%2BofS63tO0JWKRcW%2F05yMMuRsxeOBD7qHcmUrDeJUI%3D%7Ctkp%3ABk9SR9qcqreCaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/407128567108?_skw=CPU+cooler+-bundle+-laptop+-%22mounting+kit+only%22&epid=23033165870&itmmeta=01KZPXFEVPADPS8QE5DDN07ASR&hash=item5ecac0ed44%3Ag%3AJcgAAeSwyShqdq8e&itmprp=enc%3AAQALAAAA8GfYFPkwiKCW4ZNSs2u11xCFVY3uexrXCgEEhZfWOKlD0qRylVc7Hom2lzbQwnH%2FYWb48eO7o3o7basvAaGVuxCAIClkFDtRYrt%2FQFHdwoC9Ak9IEZNTZYUcdvaVwJR%2BKLUPSndUoIgKvB4Lnm8WdJ6L67jAa6EUxzL%2FQoqg%2Fmd6DNRsOz0vR8y61VYj%2BQY7YwbNLumqSgs2XoI9ghXxsdBtrK1fcZxgUpr%2BBPJ7aYBJxKyktwwqy5EloXfOFSy1EZnXUNFK32tDsl8kVfVJxxVMQtBCcYxGBchj2Bw5tFqoy%2FAfMIeSeRr%2BM2Z04Qc6jw%3D%3D%7Ctkp%3ABk9SR6juvd39Zw&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/800513619320?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&itmmeta=01M03MPP2152DTMNGBEHYBKQ8T&hash=itemba62547578%3Ag%3Af4QAAeSwBidqgKbs&itmprp=enc%3AAQALAAABMGfYFPkwiKCW4ZNSs2u11xDpBElEDWY0M9J1PNJyyTQj12ZrWaSQwyOqLYKBNqZBFWCY5AWS%2Ft3QVgHQYRNPl9rpsVll6N%2BOpT8lecL8oWBd4rlzdnzE8GFPqilb519Oo2uTkvhVlPPb--TqdYASbwXUjrVZaXM6JalZhjsZFOsQEIYSME2bDGj%2Br2uhTyNL4im3PC%2B5Li9ih0T%2BGI9qFvYnmYTKGKFCygZeYBP3YEfqQXD%2BNnYT94b9u3KcNCNAV4vmq28DDiaYKEzix%2FvmVOVT7M2KOfFnElpjh3S%2BlzVAxVAzwcCXjCGE1YjhyWSRzDlTDjB7xt%2BBtW9aB9qMJjnXqsPl%2ByEdD5n0AyF65sbbVZNyZfhMR81lGwQGFnkvgVsDi58BGauzx30kosRbenk%3D%7Ctkp%3ABk9SR9rh2vSAaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/198555024039?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&epid=23033165870&itmmeta=01KZGM61PQ8TH48QH5YWPSFPVJ&hash=item2e3acd3aa7%3Ag%3AfYoAAeSwsJVqdlmV&itmprp=enc%3AAQALAAABMGfYFPkwiKCW4ZNSs2u11xD7Uz5oTd46UBm9kgiMa%2F7MirkOFsB58DtIhaMVVC5ls5YO7B3g9XRyluBAGsPO5GjNJsHvQmDX6346d7Oh8Ke%2FCy6VdlUL5vBAdIg4kmGf%2B4kF1LtOMQh1mweUEZthA862XFCaDo0uRNrjNYbnF6dH7BjMUfLR8%2FQ6s2fKRy%2Fz6a2DcYdecaIXXqYUNvi3qaHiEK%2F4WtAqirh%2FonOMUGEj3okY%2FVl%2BgtsULT%2FMoftIh53E7fPCGA50bnz60%2BXV3%2BO09RF1qy30CEHr5cYv%2Bj%2FDeT5X%2BvCd3kUZyCZl%2FWCFobtww2M%2Fq7oeXtmdB7LiNCBmpWpCaXU%2B40dmx5W26uw8nfEKUnIoRf%2Bc4E0HqXEeyvScG%2BSvY8tCrQAH746ZTaA%3D%7Ctkp%3ABk9SR-ybmJT8Zw&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/287512803807?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&epid=23033165870&itmmeta=01KZK77PMWD3XB4N5FR8Q0178B&hash=item42f11939df%3Ag%3AmiEAAeSwQOlqdy8F&itmprp=enc%3AAQALAAABUGfYFPkwiKCW4ZNSs2u11xAXJXiV3x8tfo%2BVhDvpaz1aYX8dGnzKF1oEXLermBCA9c1zsIQ4e7nmgmuvpZmlKMVsbQrJyoz4Q8FUVxfJJSKlzJhqzcJ7aWLEkjpgMt28GSv7EAU68XiQBv2I6jMgUZorn%2FUVEXCURbKYIcI0jAngqPNpgZhxtq3eyykih95VfW4AQgY2GtOxJ1Qq9xX7x2%2FeLUtVZxWO%2Fi5CHAVwBmqceKzNV%2BX7OwOuE7aqte2%2BH2fUwBn7Q4IrvT1c3Oi5oXMVCRC2fwYOei8lsG0nbcqV8NiZI42%2BAmF2VL0dyXVDl7bbC7VFGvg5C%2FbikRjBbx2D%2FYUSu%2BjW%2Byhzhh3CvRNI8yUhGY%2Bu9Sn1Snss1AncM1Xt1ZdOAZiJrjUhQYFk5htAXGfRlMhgSKhpitLkH9pXSlcbvc3MH5FBcJiLrSRYig%3D%3D%7Ctkp%3ABk9SR-Tqnuf8Zw&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/198556228163?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&epid=13052600496&itmmeta=01KZQ7154AN20K0WP5E49H1F3P&hash=item2e3adf9a43%3Ag%3AfWwAAeSwazxqdw8c&itmprp=enc%3AAQALAAABUGfYFPkwiKCW4ZNSs2u11xBMsoLxN45OMd%2BeX6AFsKTDuzB2Rjt%2BORBi%2B4AExckw34RzTmL2kimuFPtaVO2zKcAySZsXfgKFcN0eiNc45xhxg1dc5rvx2DY9z6DfTJZbwOcWzfv4E%2BApW3SVWPC3xQgmchttF68LWa85fqCTqWyrYeXz3Qg8WAA1jGQzwP1eWHATv0VMhQFxU7XJ38zxGfaGiYRCKGlLBnmso8j6HdYYWCTBDdNLAKIyn69gwtT%2FOqmTiKVecczcHeVoEFeF7LDgzY4Qyc4KM60NN79ir%2B2uFptvUcUFlIZL3sUJbcp%2FNHj%2BBCbG5vSpVovSLiArgFmxnt5%2F8LAG%2BgMGS5H8W0jp6XJMslD0NuvYFzCTVbpp9yzuLWOwH4V5Anr6uUwYhfDm336%2F9lc%2BOaQLRld6x7ljvXVZiLKCa0e6HGINSqZwaQ%3D%3D%7Ctkp%3ABk9SR7zShOf9Zw&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/287516894482?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&itmmeta=01KZQ7154BDP1GBFBN5ZRPPXKG&hash=item42f157a512%3Ag%3A8FAAAeSwdh5qefkN&itmprp=enc%3AAQALAAABMGfYFPkwiKCW4ZNSs2u11xDRbk6XEATak02%2B%2BNxw6I%2BoxC5QyjfVCnGIXsZLAuXz29CkEsnmmEgs%2BjjKv0zqK1KGXsX3%2BYHO7iOwKZDuTTP9L0CP1OhvNhXECO4cM8C0xkYnOHOgjepOPJss0BJGMTGnRxTLgZPsnEOZYJz5poLyZXphEQdY%2Bek%2Faz5RWPFKcV95hGT56xIbKQhRGGiacQ4uIYIEl7AtZB5D%2Fde34DEbkVFULBGz4XrYKxUQajaI3xwBx%2B4xY6V8yMu4OKRNGQsmw9%2F7NJ%2F073GazuUW2LqXJGKqfkE2FXf8VUVd4jlliPqxzJnVaUFAe5trfgg1rTeVkZ0nKyJXLK6mfa4XuhwVX0am2cU0cO1UUQtZgdUmg3%2Bc%2FIhV2THhB49T1F5ghA0%3D%7Ctkp%3ABk9SR7zShOf9Zw&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/800485798033?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&epid=13052600496&itmmeta=01KZQ7154BEPHEDS33SBH78ZP5&hash=itemba60abf091%3Ag%3Aoc0AAeSw5Vxqea99&itmprp=enc%3AAQALAAABMGfYFPkwiKCW4ZNSs2u11xDIGGyM4BKEd9zuQ2UVybwnLkBIRnjlajd72UyBbQM5v0l4p3W6kVd32pzGKU1dXcs5DCQL3h%2F21HoFeZOpsvN5ibNOONPQaRjVyRib0juZ%2B3o2voJKqwdIudTy0hzd69FuMyC6YuNvZMl5LK5BGNFwpvoBM8uwVw1R5UtXz5IrK6zOfAsukh8A0NSp%2F0g0zqp%2F6jp5FsMrP2K3CuwcM8RQ7PWBvkT%2Bp%2FOiFi53w01EnptKiaw%2BYvH2A6LnpPlOT8d%2FvooTCdnmvW1DFPk1%2FL48fvK5ZR7qZZJsxyHdb4rJ3OK%2BVDE9kCLeWjsIDqmRiE0os6ip3I5bv4wBC20xnjJexfsb96FNDseIuKjz1Xdy7LBF%2Ft7wBdL15IMAjRZo5xA%3D%7Ctkp%3ABk9SR77ShOf9Zw&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/398269466845?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&itmmeta=01KZQ7154CARN5WG3HYC8HF8FA&hash=item5cbab5c8dd%3Ag%3AQjgAAeSwinpqeYxt&itmprp=enc%3AAQALAAABMGfYFPkwiKCW4ZNSs2u11xDu6yKQDI6aIaAd0UYc%2BZN6Dt5RCuwOUp5j3BzQEL6W%2BJ8VMAWVK5pm7s%2FpykGBLaT5Bd748Tuuz5iP%2Fy2Ay8mEPWv%2BWbF%2BFKIA%2BFAxWiMrgs1mYAIyYU0nlatGbp9m9tw8OQDAyiGuQ1Hhpf7zfJCtsPr1yZJpym7ejhTF6QbqyOOU4PB2461T4YWjAhxwHmKSRH50NPqeOMCd6r701yOO5BYFdp2Hq4K5zsoE5aL9T5frqdLJI4XqFxq2%2BT0A3D9qEbKCdEYd4o6V1MnjuriUIn56jGXSfPgHSX2zeynVnKyi6aO3C15nJAyXJgLZD1giQInUCuQvKURUWmwt3Z2ppYcId4AixcgBrmwTofuTojMjvSOQDqweZN9iXxL3HQU%3D%7Ctkp%3ABk9SR8LShOf9Zw&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/236999579691?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&epid=13052600496&itmmeta=01KZT270AMBKRWVC1YD4HEKGV4&hash=item372e46982b%3Ag%3AZ1gAAeSwdh5qeyer&itmprp=enc%3AAQALAAABMGfYFPkwiKCW4ZNSs2u11xBgG9A8NF3ssZJ%2F8hwPRXjikukYI%2Bsiu6xzFqkPEx2T%2FcORO2A%2BNxTSe%2Foz3n2%2FEpnVZcIXNwG%2BDV2S2MVrDWMp2Su7W3Ft9QtG2UAd3sdkNE2IrHg%2BdvCI%2BCHQzFXBO%2FittZWnHXAY%2B2uKAC3MEuYVHi%2BvK%2BITeP9j933NGwILMze3X8NXHmDemn4iThdYV9IcqRK9v8%2BX1TlkkPSCxmUS1tAlJ8myYyji90SrFRx6PVYCS2hmkHSQuP5Q925PPcZu4PqGSPsGkwM03t40nik2jbISEQKpOXrcv4oXPMXgGMes9HoEXJXo7qoA3LB7lk0TN651alZ0aJ5P5JtIMxKzZNvO%2BNfGV6FWI0ZWREzEebl1z8scjrOh353uvfp3Myk%3D%7Ctkp%3ABk9SR86FnML-Zw&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/377410676028?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&itmmeta=01KZV42W427YNQPZS1ZRGJV7JH&hash=item57df6de53c%3Ag%3A5TYAAeSwO2lqe07-&itmprp=enc%3AAQALAAABUGfYFPkwiKCW4ZNSs2u11xAmT09jJrVqfAtTmUmYREUlPRZSLvEVS6hUnLJphITtbbu5Uh2ybOBUotJ44B%2BQFSkeadPxc%2BKBQaLlMqHlggSwJwCVrnxr9O2bi16gm6PrQ1GcfSlF%2FOsH6T3ixAQaWAHUXMiE8ZOhoCo%2FR2%2BtEbf3KmxcX83%2FZ3sEbJRx39FP%2BqCOSOPcZQpWeol22dEzBzkYZaBoLNcypP0NykY2P3CUO9O4N3r9tKWuGVrjQW1AhTb%2Fj1Kviio9cFzGuCFsSQU3RkL5wGHIRNabS8DwHe2q5FYsPFEaGvGpv1srwWk3i2DX9uZkADYb63yifvnwNOswbz%2B74lD25QIuBKHF%2BTbkm5fP3SBW5XMPX5weLAUEvdeNyxUfKZ2b5wtkIjLPu9M4mDFaV05gUrpYgsnaG15%2Fq0%2BtZYnR0dA86CvO%2BKECpg%3D%3D%7Ctkp%3ABk9SR6rCi-T-Zw&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/318742887389?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain&epid=10033823701&itmmeta=01M09FS6MXQSKFRBE7GACHMQAN&hash=item4a368e7bdd%3Ag%3ADEcAAeSw131qgsrM&itmprp=enc%3AAQALAAABUGfYFPkwiKCW4ZNSs2u11xBnJ%2BciPvyd%2F65Yn5MPsrYM2G43hLxh3%2BTJpSwk6G1cU3bVdrF%2FERnyLL3Yj59QMn%2FStpwKg1mL5zLQ40JQkqsjyB6pGcDq8qbDk%2FkorztThAnYyCWDW2txQxkVIjXAAuZhqMPpkAVh6Vviu2kC9g%2F6S8dZY40Jerl4wwJ9Z%2Fg5MMYt%2FK%2BoRdBhRUMpCGTlK9AT%2B3f2FpdzGLLhhP3gekR1YLiItaRAHCS1Xa0AdwQ9%2FLSKl6oDrLkpl4JpyHKIRpo3GVhS6pUmdsO5Hp0kYO9pOEW1WPTKWodcx7Uv9xhzegHzFOHOZ%2FKn0O%2BctMjjo0DjKZ9V%2FvuWHpiGzi%2FikLxHJlsARNOZZ0i6Z8DWP%2FXnrolHe%2FVEin9Vawvy9Ozjb2g4sW2r6CqLDe9bcavaftfkbkQkKtbkW5IxelCTcCIg2A%3D%3D%7Ctkp%3ABk9SR-bq5K-CaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/227481592990?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&itmmeta=01M0BQ98FF514NDCVF533GTF78&hash=item34f6f5a49e%3Ag%3Ah0cAAeSwjU9qhNHZ&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xAhZ%2BflQcfOHyY2sk09WQFk5sZmZgFju%2BW1ayjzXZ1OAp5pbh4Q1K7%2BbHMT%2FobhDhRuQUVoN7r8r2JsFGUrtD2VlQoncUB3p5eZC%2BKw%2BDsjW70QXDXvgdgRQxb4BPHSVxd7EDwYmeV2bYxlsbwlyjKq7%2B23awLNFAwcfH6FBTo7mGlJvgOpcw7E0TGGlSR1pG67ur1e2cef7DRVIDDiF8MVF4xI2e6QixqH%2Bu5tUTVkPJ8%2FHOUCZeq2p84BLjwXmnhMB%2B7Cb3AOCajHat%2FWasgrPFzfTLz%2FjbbLqFWyJwWtQ%2BuJDu78ixNaZm5cawkMsjcpG3ZfeWALsVc%2BntJj%2BEzZja6ZXZzQPo0RtyldyHXcFV9gsiGAMpjIEMS9iGNzSjqTrco34BgDLte%2FeVUeRbTRSjRJhV4DsttKeHWeBa7HdrUSdAc7e3JEjkJZxo8l6AIs4hoRoGuaBW%2BW%2F2QfLUdnjau5poMuNCPLvz2eQtBYh0HyliyCtRbMYo6sXXNGlvk%3D%7Ctkp%3ABk9SR_6HpfeCaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/147512943823?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=10033823701&itmmeta=01M0CNR1MK4V568808T0XP7YGF&hash=item225874e4cf%3Ag%3Af8kAAeSwk8ZqWO8c&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xAM9eS8QEhdb%2FGaqdQB9yNrSy%2Fmos46ko7HxG2pta7rIsWtqZyQ2zHUFzbQ40w1ngIJUpm%2B26TA%2Bu7j9zruyxwppftT5T%2FLQ%2FWRXO3lDotSweR3rK1P1d8HBW2mU4kg1oAq6uH94LAPvikKC1feliS2my0jj7iGuIQYdCd%2FYbfXVcVO%2F3blqiJw%2F9%2FbVIF%2BPB6SeZimn9ymnQB1p3AnaolsXoWfOdV%2BaUhmcCjKecyrgx%2BHDXdFMwMa9zfMwc%2FbPJyXJNIl4olSsc8dg%2FYxaRtns7ENMAqCcYWYnxF1Wsa%2BWMKTxUPa07fpd5sWIbkEcH9LwXbvdvAYqjz3LBwsA3gM%2BI79AloRLgFgBYO7Bn6aTGi4iFhzj4NxaEHofIQjNYZ0iEa9EU8zkUuQQxyDpbN9MaGLBG%2B0yE95dLGU9At5SKhoJXLkId2WN9KPVeKUKQa0NuNB1sZ861L%2FSDuKn8Nog9vZM3WJvVdjiyf%2F65NsKtTMaRx8K3lOtYuJMtuqfWY%3D%7Ctkp%3ABk9SR9ia4JWDaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/168624048206?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&itmmeta=01M0DAFWSCXD1DQJCYTJRBPCNX&hash=item2742c6c84e%3Ag%3AY3cAAeSwq2JqhOvo&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xBtQeN2OW3i%2Btmc6MPMHFixErIZWVXLEyyZOwumxFM9zIuloCi9Pyg81zzSrFs15C17HHgVT5Na6ulP0gwFYXx0qMQ%2FUG2IEKnVUTXv4r7lz%2Bpn6oCQ4YMNB4fZvstfFIPW6lhrhZeGsFwD4yaaDkcQp5H5HKbl0%2BWJ%2B9uXHvH1mcJCctXntYchQwScUPf%2FggireYYltPRUsBRC%2B81jVPiLtS5akioD04HWj5tgnOwFQvTJykI8Tjhv1Saay%2FvCD3U5lJ%2FFxCe9sTfNGld%2BjLrx1ZRNmdKmCqbV%2BgbssIw5f--v9mGzOXoSTxXWz8JaTX0or4ky9sfqvKXGFRQxVpJlpDqjmTJSyV5%2FEtWTkcWMUctA0j6QhtMt5oqk1eVMRg8sNOe6ug6cLec4BQ%2B2X9H2bOtTLtx%2FvUwpDwKoILjppwj6E9ANtgJI8j86NVAlf9egRSCWQUFJwDRxP%2F9Yh81TZbuIg1nBPLDoXGpVNh8FwgrkWfP8e9VR1fsNTnOGWZ0%3D%7Ctkp%3ABk9SR4DNv6qDaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/147515776730?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&itmmeta=01M0FJR6TMRNXVE5TSW76DNFAW&hash=item2258a01eda%3Ag%3AEhcAAeSwJ9tqhfVa&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xABRcx%2FWNlbrasAm0RroDkPu84aozRJ%2FNYB65MyFeIMRWq2EnD9kCgP3GEXpPc7JC5k6LsfACrjJ3KEIKfhztAaQYNB8qr8b2bHTvpuOjlHprcHHhWezL9z9mjfdlZwvwsH1S3fHv3QcHLJYpHTQmfh4oQxCicAgdTQ3yNuznJWW5BjVScJ4cO%2BpaVzUR5Uzi3UdXqOb4Qz7pWc%2FejAbh5iycS6f1T6kgGxfsI%2BzhrSNm%2BPFOhsn6SWpN4TjJ5p7Pf9pcfnVjwgyMpZqu0n9wcz%2BnUVnBFGtfzBxd8qJvo4fAOWfKE%2BDmjA0%2F3lrl688q%2BMBiRP0BuT%2FWuykFwn7tNAA4gO%2BEqXulu%2F9DddACL9D3oxbL71a7R9Gec3cR50hnM1eHAEICdEOMTYQ0j%2BSKgQrR2%2B0ajCak%2F7JsjtVAzlAU7f7jfiXtX71lQ7OiYl4GWlvl0iZXd73q3S2V3%2BhP3tqHFjV%2FFBD3RG70V5FcTLwSfm3Wwo%2Fdkej3uBIbye%2Fn8%3D%7Ctkp%3ABk9SR9rt4PKDaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/820038089869?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=13052600496&itmmeta=01M0W7HCGG7B408M85RRRVPHQA&hash=itembeee143c8d%3Ag%3AeMwAAeSwkhFqixqW&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xDHvMWs1QASnu6heWNWnQ9R3V0ZuFJFtbX4JG9HWjFJEgmS2Lfy%2BPBUnIuk5RoRXYqHcFGGFEf68ubwx6suqbJPSLlLMxVwwI%2BpH%2BXjcoKpjHYs8oYRbqnNaSNuWCo1uSk7W3rTdREHexmU%2Fk8KoBsMeonFL%2BCn8A18Bmu3tnTMrKcP7P9h7vz6ePFGApeBNQ3sWE%2BNvnFN0EZjc%2FIPX05ifnLZASaUc36FnjR6V%2Bny0x8lbrKUJYd3oaPfjRRFr2sbc9ppRdBr2z%2FuMPclGbUqoxYmvaLiJKv%2FmRMF3vaROLgi6Ud5PXLCVswLr26msmW4ilnXy9EyEIbtFuhsHQsCUxQzQoKzaKpDOxGqK1Bzm8GexKMdddTxSVxXgajvhXRMeuWUjD4pVfpDXj%2BBKxfmqag%2B5vkWJ6o0rwM67vIU4QO%2Fa8ZxiziZ6cgzH%2BoFtGknvIIGYEZC4%2FOYceRKxWKqNE94lyMVugiyTujY7YHvMTa824ZmmJGQqb7c5%2BPlSk0%3D%7Ctkp%3ABk9SR8rIxYeHaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/800530473594?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&itmmeta=01M0G82VV26TNXBV665Q2KAMAF&hash=itemba6355a27a%3Ag%3AQSYAAeSwbr9qhLoK&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xA2uYHeiUm5JvKMmx67QR2%2FT2nc1oFnIrVZpNnM7XDkSlMIPGJanqtf6bUz7yWJGquHa4TAo22MDKmNYRtd5jqS9Q8Dbn2qZpHyCf57jEbN647WSeTDSWmmD3uN5h3gHcMgsGKid%2FkgqEKfg06p4jGrkvBSxpbNfSnKHspnl5A6edQp2x76LpE8CAtJ8KWaa%2FHBA23mN1LmPq6ovQuC72f%2BFPLNfwHZwVzwZ5gVsLxt%2BBXMAdGzhUV13GBTkwokpnNukgveiLf3SCL7Sf%2BWRv9F8tOPvU%2FYGThwPD0%2Fbx4gU78PRoYQIO1X6oaP5sdhmv3WfyZdVCfkFws1pQIzcW%2FGeGJe3MDqOpLv2MG7TlgwXWpSlOYcdgeO4st2bDES94XHTZXzEvl0lpt764p3xD5vWf5mke9MM0vd90Nf3ZLU4BcKH3cRfe8MbM58A0j0%2FxqUQhwulBi5Bz8hCEWj712%2F%7Ctkp%3ABk9SR5K-i4iEaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/327316697166?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&itmmeta=01M0W7HFVCV0MRRCQTWE0RN5HE&hash=item4c3598704e%3Ag%3A9ZAAAeSw6RlqhNAF&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xAyoRLqibNVErT4q7H8lNHlIh%2BsZMafXVR3i9emuX8G2vTCXJP75iy2no9Y8%2Bclzc%2BrMq2oJKYMOaBeHpvGa8ozu8%2BGwyivEgii1Yf8YDjCR%2Bh3EIaJBHb%2BZSX6TDeq58VWL%2FEYCtzkoubRRoC%2BEYpZe0gFLjs3LV6%2BHLfsKbVQ%2By4gPZKQfGhX4ZYctF6t3%2BjzCpDZLFnxrpVuET7AYmstal4LuXI8yzmG%2Fp3TVg3scPTum2vA3u71qRUuXFw4X%2BENHdcvYXy9jLcI6gKIjqN9aFP6RKAZfSMbcdk1Edij0WnnJuepFYf6S%2Bx%2FmYaZ8ejskQoLg%2FBY3uEPsRPFeM3oTLK%2BcC%2FkvHys0MhT7BYSq0pELuXfy%2BGZNfDi4p7u%2F0qEIIx7cCbq%2BWjbTIgdQj9Qc78TmCc8TnjRwE1blLlEp2Y7AebKJ3qEQCbdb19x%2FH3EFmWlGgygiheH9dKRtIqNKvlejRBYh0Z5qBMIVL5U5zCn0He7ES%2BVhV6Tz5YvRC8%3D%7Ctkp%3ABk9SR4b-xYeHaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/178430473598?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=13052600496&itmmeta=01M0N3SHAAKXD2WN92J3QXG4EK&hash=item298b48f57e%3Ag%3AoioAAeSwWhdqiHu8&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xC%2BdVcDCf9gAOo%2FBmvzsggFkaq2quzx4Jkmroq7wlYdrRcMGl%2BBjipe0t1FamOnFCdZGirnUNaheOyM141aENUWvn9uQ0YcMKLtd6lrNrlAsBnWR%2FimgB0T24ChA7kl%2B4mcriwkZNxa5xile2WNS7%2BpubZWSM0f4cmU52C9%2FS2JBeivIY%2FoVqN24md2w48PzD%2BaEQ7Qdi2FIyxo0B%2BfZpPivF5wmKOslrUfairzRaB6M%2BsW29bMeC7%2FW%2BUBys%2FtEIJoLtijmBbSFCcy6AdMChb9v54Taa9l2ZU1qoKW4B8t24W8IzVH4jfFXD0k9zxWjuks5ZRdHZOdh%2BCGsHaYuAzD2Mk5vbuALGXhFny8u2OkNyy5xYeIeDvOCfPwZ%2BysG2LEOPesClfvHiHEYK%2FFecNE282NgnaV2UTzjyBC5GManHteN%2FQDLjpR9WDoSqdyEbPrYiVGEyRydAwDKK4H42Qc%7Ctkp%3ABk9SR76V5qOFaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/376850353576?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=23033165870&itmmeta=01M0NTM4W7DFDEZSAGWNN2B6P2&hash=item57be080da8%3Ag%3A-fEAAeSwWXhpYRL0&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xA%2FZ0s9ZLfyYQAdPTlFBEb1aGUhCraizh3cmZAiv2XFnsPXn%2FwuaRmV%2B7nqGOq7lhW2knMYOMdRTd8VMlbPzdRwMDoltDhWZDAapQpPaqD%2BXE3cpSy5KIV3rtyYl339UZuxeofYTL2rphrg8EIfbytuaE3y%2BSccDmwaCaA4jZuFA%2BZMTJHgXvV2omHKkfGy1VVc5I5yqH%2BZ0vT9sm78CK9HDJj5PnCYCkrB4vgtgWcysO%2BuKoZwOA2vlZuqIFvSc5ICFhvu%2B%2Bs2OSkN42OXuCZnSerbz9VoyrqVm%2B7SqgCOYWCYHFSqJWxjVn2eOP09rQyAhWWDBtgG3uh7v%2FPxge1qESHLcufsKCTcJ%2FOUtGspuAiPgDV7hK7JCxv9BjbFlCu4fEAbj0fGg3e0N17pHtlzE864XT99%2F20tdNQvECELz7SxeRKfipFb4fjaOVzc2ST1%2FVftQe0UqWJIh59bHCvG%7Ctkp%3ABk9SR6LO0LqFaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/327324160838?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=13052600496&itmmeta=01M0T9YXT9KF76PZ5KPSGYCJ2B&hash=item4c360a5346%3Ag%3Au04AAeSwXudqfcoy&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xCaUt3H%2Bts0Mk9LQ0clIm3o4A%2F1NCn6TuBOJvDJQFbzPKU1qAK%2FqN7bsvRi2AkWgnyMQ%2BDI546c5R9NwIszpx9ZSGBndFvhg5XS--4FUsN9QhcJ4XoRKbHG%2BPHFBYIlWOY3OP%2BJm32D7zgC63%2FH5QhTnT79z7Q3AhYUFRs6SbjE3OmfNo7vfJ%2FMTV3JRHynKWKxt3lwQSSCqqkgoNSiuSf5NQyFbvj6Ci5bXTT0tldY1yeiD6WWMjYYbdUc3yhoBSMzj%2BzgM90zDN28Y0znt%2FlLpzIWPQwXoTX1L3fk9V%2FuDNoH%2Fjzfin4CBaHZV2Qh4V49ULzu9KOZ7mqvu87egCQ0zgzF9x9hEFZh2FzTvIWpz9DBBBFE7pw%2FWrYC7lI3lURpY8I7B%2BtlPTL8ODJ65Uw7stVRcPCcZpoac0Btn%2Bv2lrzSmig%2BXDxWaKgduYJ5TDHN2M5fniEcRfqRlyzDJua%2F%7Ctkp%3ABk9SR8Ld-8mGaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/168615874429?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=13052600496&itmmeta=01M0T9YXT9TV8A4RTHVHAE0AW7&hash=item27424a0f7d%3Ag%3AVQEAAeSwNKlqVR-1&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xAnZOx2e9pcK1Zh%2FBpGXcdoveCwWYlGjLiBaPEfJXK0Lt99OTYYRN4tat3OJTSx3PH7SkwyhGw90AnMEcMQvC6jY68TP6b7joG1L7bSsj8fmRoGlRYeevv8h7ZMirNGXWtD%2FABQfThjPFMBV0Tn0PcZcXUiv%2F6nSCqMdb%2FK%2Fax1qBbW0FQOI%2B66NDD7ar2J%2B4JPkXjomWte49%2FHc6pSUVRfpA8eTZq0FVnD0iqmBV9RNiz8JUzZUILEj9evfUNOHMV8Jzg8gIHpxfxTnFgKYsPLi0JR9LZrvUnFBNDMq9yPhnazSmIkyvmW1L4MtG%2BenUrqve6jQvQgQYMYEc73UTW3DjgLYQAQLGzuBHq0FLzPae6%2FdfrVJkay1qCusSYdSwR9pa8L5li61%2FBueXkhw5%2Bdng5HEBLevl%2FCud%2F2LwLLzWIhi3kFNhf9KFo7BtZl%2FKGz%2Bkm5I3Uqh71Rd0SEht9%2F%7Ctkp%3ABk9SR8Ld-8mGaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/318773674993?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=13052600496&itmmeta=01M0WWBJEXWH9QK1901CB5EBX7&hash=item4a386443f1%3Ag%3AFp4AAeSwYtNqjIF7&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xDnRKIeRbjOrFx0B6lU432JTsQ3SUB3YEnxkslAr3%2FLwMhZRzneppDArULOgvtfeI1SVQYmbcCstQulpA8pmzsmUmeXvEv%2FlrZsBMrsMuj%2FwosQ41lm2lu%2FrYbqNyjY4nSBhGcCLH5DkSkWfwMztj4tOYvedwjAUXLv3dFYaNCqAJKyuvxPQ0T2Wd2qUeLkhQxKSw%2FyX8GNpNkmjyR0yryVK8MI8aY%2B%2B4ff2nX0PlxWdgCl3n2F%2Fwtl9oPokOOQ3qh6jolFG5q4XSiqllxsKHU4z7hmWMsiTCmNQtjBZlwCIXBXJGJ%2BJSJkCm56gvNAoWWBZbvg7Kq577rykAJAHsAPEiHRHQYn86uPa8zdmZVhlaeiCWJI5ECvYPnOIhvD%2FqO3JqLjslvlkNwCC6T1jtIBZQGNzfPZR6SuFAO%2BDVV8OeK8rHdUH1gMWWv%2FMw%2F5FKUxk18Uazwt%2FsbJu4N8ZCTuH0iJFdYXp92Nobamwq5z1wCwMKrpBoIYap4UpA999xk%3D%7Ctkp%3ABk9SR-CnrpyHaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/236979789135?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&itmmeta=01M0WTGSVK8FT8B0K4TVC3F7S6&hash=item372d189d4f%3Ag%3AnHMAAeSw459qb4Sl&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xAKRK1jPInt1bd4w8Z1NndouH9r5wklgV%2Bd5fMmGdghekWIPhcmki7ccnbrZBFz24kqBfPbciIO6wuXQcoEDjva3ZrvNxBIScWkCXCUaFB12ezAoXvIW6tk152RKav8RMbfJOOQ8slLjcaenBHtknaj95xY4cRCtTsHCkw2JQT0chR%2BbVkqUinxgty8YA0PQbcTX8muztts6wYhTmxeJtBTT0duLtrv4hR4rx%2BAqfQ6VY7J5XzZMWBfk4kMaFvyM%2FNpE8FRvu2%2FaMEuhbwPg0qMLbs1hsE7%2FSaeZaCCjuP3dMn%2BqjqYv5bcNNKulWbtArySNes%2F%2BlRbmIstcorTWQP6shpHe5lH6xZU4pzbD1uz29LhGrdsZHJK9IVZkj6lTWIJoaLvhWGsyqAr92CjJVG95FzL%2FD%2BNtCXwgF4GpNbSqK12FsNlQpO0SbZgoGYRLn0t5J9oqtH%2Bd%2BFZ67oMsKP2%7Ctkp%3ABk9SR8Cew5qHaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/307145784860?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=13052600496&itmmeta=01M0WWBJEVNK568HH5R8A46Q7B&hash=item478350be1c%3Ag%3ApOgAAeSwRqBqjb%7Eo&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xC3xSZMSMv%2FJequTDY3MxSU20O%2FKfcN4QShUhcxbJh5p00GPCVdDQCuUd6h4EtPHzHMcV7n%2BryS0kqZGbSuMyliHRLWd%2Ft8owzYngWLx7YFTvJAYkWGN5L6OSM3%2FyIKVvsS8J6kxNbkbjA1zG6LMcR6k4ULMNLOj%2FRze%2Bk97sRKl2YIQtx1HWLolNHUKcKcUCXR%2BfwxlDaj5Ze61AiBDGwUAOoq4FP%2FnF9hgmiWUqzBpw%2Fb60d8M6cOVS3Dbm%2BnLGoNCH9Xz%2FHvHgRrTxNnXpRVZxGEazBGl0m8NW2vqoAKGN0Z3EHkrqc%2FLMbTgg0T5X4oLzmfhk%2BPE8js%2BUq8DFHDpv56cA2brBnYpjVIYGOc5OwuhlWuyB9XhusxR0B4nCSLNcmYxjAFVj5D7W6BMVGOAr1y4eqxD9j35ydQp8lg29o14J7dD9NTDvx6wO2pyZlR2n%2BwU48GPbmxLI0mCqQLgUB7QQGxOIRu8EW3WYSSiz7U0Nkd2VJWYn634L3cS48%3D%7Ctkp%3ABk9SR96nrpyHaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/358842499061?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&itmmeta=01M0XHPF9Y1AJXK6TW380V12D3&hash=item538cadfff5%3Ag%3ANcsAAeSwYttqZL23&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xALI8EgBVwwgvWPlMuY0gsLpX80gsFnRget3cguEqGUSjowMN%2BAJjYsuSevmyu7nPbZpGDGcQHj29pyu0DtVaLrOLcWCpUOQ59eaZyK4cxIba93i0pJ%2Fs1j6axHip98qMzTfPLlaqM6UUfr37c58nD1Uby6CRmJddyI3HZ08IUg5Nvdk0B661JJAlNJj4suBGsyHu%2FIycac8kHJ4qs2I2HCkvkvRzXfel%2FRvjZlyzrv8yZSL3mkWB28AMVm0u--UQ5hoLO2CMxsgH8Cde8g6jyzpVFANCwhqkY5KpG17ssSgOYdcPxCHyNoDgkuMCT2PltSV0zm%2BWnOhua1UGGtGHLzcBhF4KoPHhWLJrFztZ%2BM6DvOPYrPh807HhGei%2BMnCNRbeX13WJl8wH77qiFR27wX9ScxoRXnhFVfGhyT5--VFGo5DiyzwfvWmBjpgYv3FiuV2YgsG%2FSAeDk7wUjJ4fzUPYU0LwFLo3j31Z7PbzdHliwsyCaGIcPHlltnqmn2Nh8%3D%7Ctkp%3ABk9SR6z12bGHaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/168639163503?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&itmmeta=01M0Z2XNVQQ9HWX0TXNS8S5RWY&hash=item2743ad6c6f%3Ag%3A088AAeSwBO5qjgqq&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xBC5nD88nZ3rhS0hZHohpd9rj7XnriyYdXhwZs9vpjWAItBs0Cl0Hnz2k79upsDbGvKrxdGHfQbrQ2XExr9DKbB3vtOz7e0KmZ%2Fc225n1%2FtU4%2B37CxJbCsCi3gcztm5Z3ctsa0z71rOJqH08XS3Gv3H4OUXm%2F%2BpW4OjsRBHzWquCevuyPIp3dcngg9Mp3btvfRZTQPhmvd8wfc6rbsR3YH0Wirq087C9MnWqCN9hz045xyVjyUQhibbcYGSC50r9VJm63799Y12%2F3999RjCuGgsLYVjueiqL8ehUdi4V8WsaYAIaOg0Dix25HRrEobLcD1OmkoPxXgzPKnpeJf3%2FRTJRZke48WUR8dsmehkHhFLHmY2qw%2BEnBcZ1Q6eCj45DYwlBI19DQ8Zreg4VD3W%2FRctS45JQPi5uo1E1yTzYxXgU80OXpXCeXAAHoAMFIvkUPPKshAaZ1FMYRGCMbUR0ICK%7Ctkp%3ABk9SR5De9uKHaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/168634299799?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&itmmeta=01M0ZZPHT0Q3W9TJWJHDZK8MKG&hash=item2743633597%3Ag%3ABHQAAeSwSUlqi2vB&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xD8uDL78lPBmL13wAzkQ26ZElJIJkYj9FhL0X6G7wd%2BbAFWw1D%2FjZFBvRwkwPTFhPhOOCVPRGXVCcEZ3Lhq1hbRmwI1%2BYiBy%2FpL6TDyzV9ugxzbre2I1dTwZaqCt7z3jNiPxdubkBr9FZDYyL60txcC551N7s9qKr%2Bttrr0gTZiWoatjzb63ONDD28aS03KOuggScK5xr2Qp4ZgdXxiBm8HLtbqihkXXhZYouqAaTDNWRolS3N3D27ubIS5NlaiuWuYkXXqFK2dWo%2B3VEGzd757S1o3PFfuKHJGiVrP1VXf7ginRXcFnFGkK11wJLwUbRoeZ8H8pZVjiCWC5UniaftiVwPocHQdcxucw6vUJ%2B2eZVIvhxQTrAFhzyxpfhuVz5YZ%2FdCfCgF%2BhHfkiu%2F0tLLOTZ%2BCt%2BTISCcz0nQquUMYQmrFr7riKfhDyBjszZgFL1IgYI3kRQ6690J0IAw94EMe%7Ctkp%3ABk9SR5ad2v-HaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/800566387467?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=13052600496&itmmeta=01M0ZZPHT0H6GN1V5510EQAARX&hash=itemba6579a30b%3Ag%3AlAMAAeSwGFpqjvr9&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xACeHxOnRXRuYihBK631mh4nZkFJZ6AvHPtpSHjRd%2BfhMZHx8NmWno7MUiFzESb6vr3oTfOlYOIMT7DPlx1Xbp9emQZTgCozsZn%2FBrmTyA7os7UDs%2BNYgn4VFYjJqtZrqqs98oT3zXc9yS545DrfCAkuiSP%2BwE%2FBgtgAm1qUEpRW%2FpFW6%2BSn7DmzJR9RBZgsxtO1amcQ0V%2FUXV8PSdpRsqQmmVS0iZNBr9AEUaFr%2FSYI7Q4hIIhHtf0AqmkD8HNLCoqZ4u1prc3jUYVfRxKHTcmOb%2Bit%2FL4jmxukIDQZ1NSsbXqhj1v3PmRq8r8cOqFMUeLBPPeZSFSmYaoTMh9NmM794q6VK364v9JeHUATjX7J8Lqqsler4BNQJBQAWiOfrrrg6eLBCytI1uEWa2wtlmxU%2FAcAW6JW10uucL5Tu0LeSHtJHANETo8Fxuu84vowckTnMnGRE2WNtW4Ywu1Kt5vYeN3CZMrHapo9YOBNSHsAJD4cy5seqVsXv8m7ugGRyo%3D%7Ctkp%3ABk9SR5id2v-HaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/287548368237?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&itmmeta=01M11E3W8B004E5N392S98M8T7&hash=item42f337e56d%3Ag%3AvMEAAeSwMf5qj9DK&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xAHsuz%2FTwP%2B4cR962YnhDwvirKuXs1ROJCGM%2BA01ogRBssAjBF38LGk91Tk5bpb7PNsYjODT1l0Ovr%2BqBgkujg1xlIqKXTbHDzDICM3YlBC1MzlJCkTm405tjuoFVbhKRr1hFnYrK00w2vfBn1jnP2YHJtHCk5OgYB7tyAwxerAbWjATCiiGYxXPC3R84ko7Q7%2BgCgWR5QlfIxZ%2FLMvhF75wrV73MaLw9fnW0yd2xzzNTP%2FuO2BAVrkUhddRWHlqWz6gbSqqKIzn48lSfChkuXVMSSIXAzV%2FUePX0hHa1U9aCSkvqQirNy209XWA%2FRilHLPTk6LDja1dcx0Hkd%2Bs2PNlMjNFqksAEIyBJmin1xrHGo9iP5qFV3YpiqHKqLAziwgPwPLVzeZfgEfosQ8dVc521nGUMguBzgwYhmZWau7aqIy3sugcLHaHf7M%2FeiV5sJHnR0Y29MS3zHSq09ZbZI1%7Ctkp%3ABk9SR_LEj66IaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/327327188774?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=13052600496&itmmeta=01M12HMGRC8X01268JQN2RCS5Q&hash=item4c36388726%3Ag%3A0k4AAeSwJmhqjsB4&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xCMhvIcxRQl64SGWpCLehKJK3L61gdaBi1OdvEn2YDIaybLNM2BhlDOFPDvZHLXO78zsD1UeexhSjx87LeX48j4nZ8Xy7HnB7m9tFbqQNxi%2B8NJb3Cle7XwyAc4cowNr%2F6kQPQptgPbnNoxQYAlXZkzX1El6SuSA23KvWQB4g6efwGPqrYcLkCp2mgsxIP8IVNpH57iSC4hw5aSovM21DBQJQaN%2B01aYrwM2ZJoMvKPddecqPfhPufy5%2F7b0uTeX8BUPetnq23%2BbOyysYNl%2FngF22XhEJWwZEuELPlZjFKwsJUNcY%2F7JC8jhaxPcu6FxB0jzpp5DPOmx5zu0gFNVYwaLdKNkDLnt3DjwjRr%2B8Akr9uWo8PIEkb3eJBUNDtuqXufMWlYB4Dxc9rslaEcUD1XuQm3ky%2F6mYdRtude4Pq5CV0CEWw9ymvWr5YE60I%2FyTUahsl%2BdPxaokr8df8N3YQ8%7Ctkp%3ABk9SR8KM0tGIaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/398333996770?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=13052600496&itmmeta=01M15A9TSM3K6WWCAR2R92XXXS&hash=item5cbe8e6ee2%3Ag%3AizcAAeSw5B5qkZ0n&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xA3m%2Fh4bsE9koZAU5NyTpQdBmKV6nSUzCK02XVvnT0Ob5ci4mpM90OJxjdjxfmcHQHIyI6zPBvtjt1A2E5ORa2WiEYcZgPlOkXIgH0uIzuG8nqv7816Nk9ltpiNtyEQhCQAueGDbjAfeGylpMskroKkecvDvfCJVqeo7sxa9BhxuF4u5o%2FVDIzsWb51wM%2BTaeJ9ln%2FSjoXCE48dBsbrkijsDnvhBh3rkvGJzQFpPCpFtONxQoab9%2FMsqj%2BQCCcrYC0v9%2BPmXpheOPm--wBNOIW3Hl84MYqKNQEm56J9ObkofKvpYnW8G%2BttBz1YoUnroc5em%2BA7oRu4vklvONP0Vg768OMprdT7hkY2MfdeEeXxxY91uVzllGo%2FXD8in0XmgGiMoE1qByEoS8Eyqh2V9Hzr0R2JpFglUziEVVu7NsVTs9qhONWzgQFF6eQ55NVpdtaq4JeEEgxTo3l351t9q28R%7Ctkp%3ABk9SR56tp6qJaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/188849346491?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&itmmeta=01M13RKPQ7F7VF7CA5PP2BM1GX&hash=item2bf84c57bb%3Ag%3A7KAAAeSwndxqkG66&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xDqyB3uGsrIFmovAfED%2FR%2BZbzJ0RCoT1mh7lX1RM2paBlMUNRekjd3oUafJQF47AX4%2BKD75NLjVd7%2F1MsAWcwraIkU0BwCnW3p4%2BZt0kP9U8P4eK5Yxcm4NlmPZp78u7xTBUufEMz%2BBwE%2BCZIzIbf99knpjr3S2sxaIvs%2F7oYfA4u38kvu6N90GyBsTjg1E7UwfIOQCRG382MwHRtJsJn2Bumyq6WAdz45el1bpNXOW08H7TtrjKzr65knhfIz1Y91gtpKtqj9IZ%2BbmOmYkUT1pLxsk8bHYdY16sxQeGwrSpWSKQ8gPjTHUeto8YQLlDFGsiIoE3ad6wrdDZy0UqGj635oOuCs3i48FgiSTIYa5ENCJS6VD9uqttbrj5gL9SkogaIxE5ChRNBuWE9zW3rEHWHNmvqoBPQF5apZDktlKGsKGu296jinESgurZ1cfBESQ7uoVM5SHR66Xyo8J%2FwRNiqrVTqVdOqTnqeyWD8wP3wF72PHpDZ9U2p8GWhRSqvg%3D%7Ctkp%3ABk9SR_DrzviIaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/168641630049?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=13052600496&itmmeta=01M14D8MR8Y49ZEZAJ8PB05BCN&hash=item2743d30f61%3Ag%3AprQAAeSwVzdqj09d&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xBF2Ek6xaTBz%2FrUFKida8blHJqFoGA22VkuM%2B7lZqa0B3OOGBSfxaSAqXpGftUmjO0a6XLbdrVBVun4ez0Sj4r7RbDdx0BJIY3h18JDMXYCczKcv68fDXrz6aT9ORZhGdx%2BS%2Fa2RyhZLHsK8vKrmSU9k15ogH0j9J1nxywy8ThOCz9S6NKVPDgpqqdzDyEadaDh2uT1pqPfaFFixfeJPhR6i7mJXaxffOJl3laLBVKOxi63BODxqBPtXIh32S030I1oXQoRN1K%2FcW64nZN4m8NNYFUKgOczEHpOayiPNRp8J%2FEMEV8nTF%2Bn%2FZJs5fB7rSFUDwAfXx23xHGiWvgcOVGaNDESYzv4eq1NIV3zA9anwvI5dncfO1IEwy%2B4dvibnGBUjCkm96qu%2B07gtnWiLEZO2VoNn1wf82GBTLDDGOqufn%2FoPSIJ%2BPRhOhgHqd5aFoQVOTWOxgLYj78P7oF6h%2BVN%7Ctkp%3ABk9SR7jMoo2JaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/168647795502?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=13052600496&itmmeta=01M16KHAY4N77AR22PXPSKWJY9&hash=item274431232e%3Ag%3AiKEAAeSwNuRqkqTw&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xBOIJzOdm%2BwS9AL6Di7xPTkQrEjoWYkMCPyYoMClpfFLv5739llxCWHnpifwP3BLhsSIHlKxHPrc3cxss3ylMgL5dKfBif5LgBUE2rpfD5XguVqFLX5Rf3Kazdmqkyu2UBvTRY8jp0IqBzhF82xoggzAkWgsMw24Ype1otAc6agWQEHLdsPjMRMpC2A1ubCj%2FTGhmVYcjZb7QH64sunKl9MXTrA19LfCkWHptDH4P8efDKfhI3wZyouK1iLRKc%2BrOVYC%2Fe0EdKYjagHXuHp6dJ0O2sSpx4uqDqrGSg4sQdbVQH2MleeRPMg1Cdu9kVDMRm7IvSTKlG96cGsRcx%2BGgej%2FWVrfCz58FGmIjT%2F5fJcG4NeAwTAmAy58Q4UsJHMMMegV97WHKIRRQn7ROpq66Eqvy6IEVEdy%2Fbsy%2FnKwDhqdkJEtQ8egT%2Fq%2BlE3VeGCMIVp7xkftU5vmSVBXUfnbBrz%7Ctkp%3ABk9SR6yvxdOJaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/188858433660?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=13052600496&itmmeta=01M17WR4HRA6QGYN05XPFFVJ63&hash=item2bf8d7007c%3Ag%3A9zAAAeSwMf5qkxiv&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xB%2B8PartMEvAhCxrWB%2FweXwS1AOLHwGHh4IpjJ%2Bd2YSTcpSjr6vaPi1z7OuJ9kATjqPHS50fncxlxep1aMIbVwoRsv3IAY80lQximHyH7W00S6x1a36QLt3qLGXbtxeMBbrn1AAMoTA7GMDyQHQQRPahR4nVg1dA7%2BubJ33izaVcfASphrZF76B8mJcn7rscI9OyjaDi%2BKAfZmYXD3Q6eX0ftemXIf9cVgf%2F40%2B7vn9eReXBGAyFHhOwW5B3%2FaPNWhsB%2F8kFPVk%2FLJUgphvd4OmgPxqvik91MZmOZQREd8NKyMgPDfG6JPw8NkKl5F1QXB%2FtkFvjFmdmbwUNjYlA3%2B7x1Iu72bOFCk0%2FSkmLJQdZnXYGk5%2FOrHhgc59Hec5rxtBeAh3yK8bfAtRdFu7SKd%2BuDhE63Ar98pKK%2BTxU6YYqbp3hW8N2k9Q%2Bbpu0IsxfoyPyPESqVM5owHJO6KApv0Q%7Ctkp%3ABk9SR6LJ4PyJaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/267769934406?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=23033165870&itmmeta=01M17WR4HR08JH7KGZM21XTNW6&hash=item3e5854f246%3Ag%3AV3wAAeSwyTVqkcHL&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xDD8Pq6oRVXb4EA2tUKDiEbK4IK5fCTvMz0W%2Fxf9byxUHl%2BgWRO4uT8UOVyGwOM8%2BTPLxvo14zDdqw7rJ1PfRcmEnIdge2XWa7VmaRxr%2FXj77t0yzui5YeTCVJrBiTgVYPDbKjii3IkwgTOfscmDrG2nTsAyQdLsXlnfJrtV4kF4CLqFMjEuhd3r%2BRFdr91JpDz4p6EAnOJy0MN3OR%2BN%2FrDe92Z6pT93ApsihdVK6%2FkewZMRwdd8MSw%2FMBaOgUtGG9trsh5S26XjhPMP%2F90Yw%2FmSt%2FKyPO04wCy5yq91GXU2N8xt1aYvQBF3Y59afS1JzUVkPMiYsvaUItrqFtLytmCXc%2Fgn%2FPztimW%2BasR7QUks6d%2BrNNcjF4e9nHlhU3HgS6ujM8u9RmGnHQddJurbXPX9xb6rgYHG0dGWVAfkNrHxhlusR6pj3pLolvxW5PbpuH0qQJEV%2F5VICojyNRj7vHA%7Ctkp%3ABk9SR6LJ4PyJaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/188858885968?_skw=AMD+CPU+-bundle+-combo+-laptop+-%22cooler+only%22+-%22box+only%22+-%22heatsink+only%22+-bracket+-mount+-sticker+-keychain+-%22cooling+fan%22+-%22replacement+fan%22+-%22motherboard+set%22+-%22processor+cooler%22&epid=13052600496&itmmeta=01M193JV6W2PQ1Z01K2V3NQY0G&hash=item2bf8dde750%3Ag%3AE7YAAeSwyTVqkz1f&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xBEkIbOUYQOsqcL22RD4Pm1mn%2FQnpNc%2BKDV1Vj%2F74v2v2E9h%2B3tV0BrvjKyRly5LAYOKALNl3S0kQpaVZULUFZ3%2F3YRB2YzFsXs3a9WfpeZxcVSUmJmBl5%2BPUM4OuiuCv5S2ILPs0rf7ukMrXjHgGT9suGwj2jIfh0XVXVLaBw%2Fzvawj%2Ff7P4dkcIxU%2B5s%2Bv6KeiW33m3bLYkZD3px%2Bgmd7lcqOmz%2BpJc7gZsVHfaWiIxVJFaPXBGF5RBvciLrut1Ph%2Be%2F2fE3Z3UAXtig9jQDJV8S%2FukXU1j49HGO7CJKbm39xmJduhuyel8iPA6ZobN%2FFDigBCXCv2X3RfBc3I310I%2FpRGNhRjT%2BQUFtzOkly4TPhUb0GKatKRRe5MRy%2FuphtyfskFaEWIYUDDffTloNK1qf0pCqYZEv5h8UQJBehzGYkF3%2Bq2yHEgcNqiTFF1OUQkPDupEIzPNXH61bokaCz%7Ctkp%3ABk9SR9qzy6OKaA&LH_BIN=1"
+          ],
+          "basis": "SOLD_REFINED",
+          "realisation_factor": 1.0
+        },
+        "eligible": true,
+        "reasons": [
+          "Resale basis uses the median of 52 robust same-condition completed sales; lower quartile remains the downside case.",
+          "Expected net profit \u00a3-17.61; ROI -25.9%; liquidity 90/100.",
+          "Sampled 90-day sell-through is 99.4% (639 sold / 4 active matched listings).",
+          "Component economics exclude build-level fulfilment costs, which are charged once to the completed build.",
+          "CPU gates: GEM \u00a33/15% ROI; SUPER_GEM \u00a38/25% ROI."
+        ],
+        "risk_flags": [],
+        "cost_breakdown": {
+          "purchase": 63.96,
+          "delivery": 0.0,
+          "ebay_fee": 0.0,
+          "packaging": 0.0,
+          "testing_refurbishment": 3.0,
+          "returns_warranty_reserve": 1.01
+        },
+        "evidence_status": "CONDITION_UNCERTAIN",
+        "evidence_reason": "CONDITION_UNCERTAIN",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 1.0,
+          "sold_evidence": 1.0,
+          "condition": 0.5,
+          "price_completeness": 1.0,
+          "freshness": 1.0
+        }
+      }
+    },
+    {
+      "title": "NVIDIA Quadro P2000 - 5GB GDDR5 PCIe-x16 FH GPU",
+      "category": "gpu",
+      "condition": "unknown",
+      "cpk": "213a740f9fb83353",
+      "classification": "POOR_DEAL",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "scoring_explanation": {
+        "classification": "POOR_DEAL",
+        "decision": "IGNORE",
+        "score": 24.2,
+        "expected_profit": -82.21,
+        "roi_pct": -57.81,
+        "walk_away_price": 43.79,
+        "liquidity_score": 90.0,
+        "desirability_score": 70.0,
+        "risk_score": 100.0,
+        "market": {
+          "lower": 59.99,
+          "median": 59.99,
+          "upper": 59.99,
+          "conservative_resale": 59.99,
+          "sample_size": 8,
+          "raw_sample_size": 13,
+          "source_diversity": 8,
+          "spread_pct": 0.0,
+          "confidence": 100.0,
+          "comparable_urls": [
+            "https://www.ebay.co.uk/itm/307003308090?_skw=NVIDIA+GPU+-bundle+-laptop+-backplate+-bracket+-shroud+-waterblock+-%22riser+cable%22+-%22extension+cable%22+-%22box+only%22+-sticker+-%22mining+frame%22+-poster+-%22cooling+fan%22+-%22replacement+fan%22&itmmeta=01M1HYXYB42NVC9BD5WVRF95AQ&hash=item477ad2b83a%3Ag%3AersAAeSwmWhqL7v6&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xACP2FLqgFNxi7wm211dIKUDjflZd51d44ROOQCHby99pIoloZHUcnMpAIn2ciVQxh36aZCAfwZ0Ul9aq8yDQCg8gHez15Fug5p8rxI7E5zzq5B4fZ599wFVF%2BN6UT%2BQvHJ1mgOent1o8QmkCJR4U9dkbANDdgQDMFlPnw1fT3ieDKqhRi7B1ypKAJpqi4Uq8r26WH5UxI0LkJUuF33aXzmziyBZnGNYl9mTXE8InsEn9Q4%2FjJTZEjM2XibWUsFhgjyT2uFET4jz18shHbfjft%2Bn7QqdQCrjz%2B5NAZcwT6C5ZNG%2Fbj2LBeaGFDNLXIugFQGOGxpTb6HgplpwljQ56rRLVb3qsHUyksp8rVM3DBIfDD56facu6LpXUvqlAVPzxkqdk8XUmemkKSDm5f8JzHJxdmaFtFXYg4KSScxy5FVfYVtHOCqc5hp4wM5hvof0xM1jkY49nd5daHQOmlqI2wA3iZcfdVtxiPK0bbJI24FGIGHwNxAN5%2Bez4XDWf9KOak%3D%7Ctkp%3ABk9SR-rl976MaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/298339701968?_skw=NVIDIA+GPU+-bundle+-laptop+-backplate+-bracket+-shroud+-waterblock+-%22riser+cable%22+-%22extension+cable%22+-%22box+only%22+-sticker+-%22mining+frame%22+-poster+-%22cooling+fan%22+-%22replacement+fan%22&itmmeta=01M1HYXYB49GS4HQZ763ZKA544&hash=item45766e94d0%3Ag%3AhY0AAeSwqz1pldsn&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xBQyKEZICsPjr4qH%2FGKDIGm7B%2BLOu%2BgU10Af3OHtFBN3ElOKPuhVhn1FbQpemKzshLORTPbC47Cwdq09GLFafnNBppXeE4SOEs%2BT052XBKfvMaEaHl4W3Ya4yQ15xKW8VTDwhbSPlU%2FLyMj1LrGp7fnWminUCcTph%2B%2FpA9CSJi6uAXNdbTkMabuFOUQDfXZvMfLNtBFp2W0RFTK%2FQlNULkt9TWHkpDMWL7KSBvKrxjKr6N%2FY6KX2w%2FcG9ZX3ffACuiqURk9G69qDXnrqdhf60xOnd9ExqOMcJTQQ2Y2195x4qezteHZmXxKVtnlK5iLBOsPRojHJBbndkaeQ4XjKKljK9pGJTh9ydFU1HyJSiPTZMo0lLq%2BvK0I5Kb4rq4LD%2FfJG%2FyvTy8GE7qrOsuOxmLERu%2FNhM1gpDFW75%2FyYNJ1X2FzNx3VoGIPs06le%2FFwLJI9MQdbl2Nkho0Ruk5xuRaGFpwTE%2B9xBnmwhZaM9sS7%2Btivw0%2BMl5Wq3OxHyMcMvyE%3D%7Ctkp%3ABk9SR-rl976MaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/306952992874?_skw=NVIDIA+GPU+-bundle+-laptop+-backplate+-bracket+-shroud+-waterblock+-%22riser+cable%22+-%22extension+cable%22+-%22box+only%22+-sticker+-%22mining+frame%22+-poster+-%22cooling+fan%22+-%22replacement+fan%22&epid=18008847948&itmmeta=01M1HYXYB45DFMSPF3RWQHMVDA&hash=item4777d2f86a%3Ag%3AhY0AAeSwqz1pldsn&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xB%2B1m7%2Bw4LPjH9Uv7pSzSp02net1f%2B3tFci27Z0t%2BmcURM70FcPjPjwkdJIi2yJk96cOYXKUmPHYxFWf64JNR%2BHfbJDi5DkC3E4DBOCp4ESIL2orxpEqT8ec060fReVFrc9%2Fp6zKzcZJ5JIOuvbHi5z4zayS79BFm2LU0JuWqvg9c6t12N00yp8eG3OsYUN0bIpPBgfUA6D4sSlGyLLxeyjyekTBd27jmdKabHsnPJfX9ANMEjKYw0cJFERsdr1karqxsjc1hh%2FdlJC5mv68DRVR3fQga2B21SQupgwMgSaT74j8JGM0vGYElhIWr%2B9%2BmxmDM8KmCzGYspUBqdwx6BQaLdk2YZNiiZWlaDhB%2FFzetBlh43BpdwFgEvzGuH%2FFe2aAxjkf8CUad%2Fe80HjEUrSjCvft8DkEuHcE6iMXSFzxH7arjaRogCTFTzMXmDJa27tbb3ceIMKb%2BkKIijNTK2l%7Ctkp%3ABk9SR-zl976MaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/158108979184?_skw=NVIDIA+GPU+-bundle+-laptop+-backplate+-bracket+-shroud+-waterblock+-%22riser+cable%22+-%22extension+cable%22+-%22box+only%22+-sticker+-%22mining+frame%22+-poster+-%22cooling+fan%22+-%22replacement+fan%22&itmmeta=01M1HYXYB56SMJ2PC5P2YMP0VW&hash=item24d0078ff0%3Ag%3A33AAAeSwMDlqYMef&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xD%2B5dXbtUQGKl8RYEZf3fZWoBQJgo8k17Lhw9dBkNn1t%2FmElIMTNX97xsHm74T1LgQjGePklaY4HAN0HjVwtgsv%2FDfmmP5I%2BBhAn45LD0Lyt2Sksf39cdEOGr4jmHVLQL%2BhjffLs2akpPL%2BSUMV2mCJpCgmbwZEwPkvvDHFaGQBunKN1ljdNneGEU5fkRLva6UYJ%2FiXodpfvDxOk7e0gS07JQm9Ktu2GHMwsiUCOWLrg35%2BfDCuD5GhqpGIh%2FgAFxyvUcTvdWRiPQ1qt5JnYWTQ3DUVSN9c06fZDynpeLPPGPP3iEtQXo4xYXmiNtc1m92%2BwtSLUN%2BojYcAXjGxUX7z6HSK1ynhEh1S6i%2B58qbtKUZlMsUZWQzkhdvw6sBf1OACYC%2F6YOp6SdWfq2G0T9IABn%2Bde3Z82MSwWMoitD5btIDFftBm0UEh689m9v6apYE9PmS9ztgDl8RnNTlxm3Pegq6%2FIKSby1A728MAXWdHWB7XclpJiA8IpOGfFfjgmLs%3D%7Ctkp%3ABk9SR-zl976MaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/298620473617?_skw=NVIDIA+GPU+-bundle+-laptop+-backplate+-bracket+-shroud+-waterblock+-%22riser+cable%22+-%22extension+cable%22+-%22box+only%22+-sticker+-%22mining+frame%22+-poster+-%22cooling+fan%22+-%22replacement+fan%22&epid=6054781605&itmmeta=01M1HYY0W2HE2RK18XW6J9YFN7&hash=item45872ad111%3Ag%3A01cAAeSwVsxqj%7Eeq&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xCFXXqYJsZ17pGqMIScq5T57vl4gU721GvwDeYnwBUS68gBD8qFzkLiek8NrJxI4x3KcZlWH7qFiZh6Oulmtk7zPypvteHVSAu1QM82G9pYcQ5OePdbgoPZY%2Bw4yF7xe6w94%2BmpCfgETaAEpKpP4knOYqdHZI89xuFCpraBx5nkXcoFNOmRO7dMwM%2BlMVe%2FN3zIgGNDQRfe3iZGw0lS3IqfOKvpyB2naOpMOhBw0nw80oPzh7A%2Bu33mbg0RAZsoj5%2B%2Fhzntpn02xmhx0StVZW1lxueTb88Qq8pZkKm8gdpDzM7M%2F%2BqhjyGttD8cUskSa%2BP1BN0WSzr%2F04H%2BaAjeJdjuV5OGYi47Rjo3xl4IoF13LL7A7BHAG1k09BmLR7AzRdR2h71Ev1h9CAB%2BE3Fpb582WcZwFUU%2FsBA8azd2WmLK4N35XiHP9j%2FLQgEKQOshzAq8Xt%2B9kQSAK%2FvP2Dja1dj%2B%7Ctkp%3ABk9SR6qO-L6MaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/267586226562?_skw=NVIDIA+GPU+-bundle+-laptop+-backplate+-bracket+-shroud+-waterblock+-%22riser+cable%22+-%22extension+cable%22+-%22box+only%22+-sticker+-%22mining+frame%22+-poster+-%22cooling+fan%22+-%22replacement+fan%22&itmmeta=01M0APHT6XFFXZTRP7PJQ4EBMG&hash=item3e4d61c982%3Ag%3AuHAAAeSwajtpdzsE&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xDN1sJmZ2Zw7wFawcG1%2BEwu9j6oQn8WpDIMqdUtj6rJBD21zYgoh2JtYi07uJvQu5SZqw92Jn5A95E8Da9LhEN3T4%2B8gT8w%2F%2BjOGLKnWACkIsNAgDTR8c%2Bcl2ORPF5x2%2FtjGzFdOFxmQb%2FrCr46XLAo2JSuosM9PMLcuZLrUW3MrPAo9jI%2F85fSwBrm8c%2BiHWvNT1gn%2FoxyWe51sjT6aW%2BvTSN84foiHmV098brw3RPMPQRYv8gEAbCFtvqK43kOKUZ012ihI8Ek76G3IDIXyFzUJyFBG57kUEhw%2FTyZwsjuSGHAPrh6Mp49pwQykgXvm2YCcqT0ii6dn%2BDqx6cA0tKp7%2FrLaf1LcROUiIKYXDwki0mX3%2F%2BTs4yrXh%2BjzqxpNuCso9f5XALQbOP4qvrt07sgRX0C%2FQ6pm7gWc7iFUrQr2tnFOuIOzrwB%2BHXCGtKNkhucNwXwLS1HLTBAo3CJKU6odgsgFte4hgygQFXjs4t2dQCUvzvoaB%2Fgv4g7bMxylM%3D%7Ctkp%3ABk9SR6ikx9aCaA&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/335831542360?_skw=NVIDIA+GPU+-bundle+-laptop+-backplate+-bracket+-shroud+-waterblock+-%22riser+cable%22+-%22extension+cable%22+-%22box+only%22+-sticker+-%22mining+frame%22+-poster&epid=20073604530&itmmeta=01KZGM78TTQ93A86BNPNKMNG1N&hash=item4e311eaa58%3Ag%3ABosAAOSwwz5nK1My&itmprp=enc%3AAQALAAABcGfYFPkwiKCW4ZNSs2u11xA5zLt9Thf1xz7w2Hh2%2F2dmng66kGCWZqz2GnHIJhOcg1p22PQfrbTLJE2%2BVXmmcs7ETgXgA8irbBaOl20m0pEhQj4bDlllrLA76oofWYdmtaBCm%2Brp7I5HODoYeF2XJ036NWmX2khchFRRaIqzqfWyqYocipp414p0Ln5hpDoyAZRk0l%2F7MDrhTQ3yVFsQPbk9MexYP7%2BClwNfFsO55C0YwDJrmRvBzhAw5PfT%2FHnynikzw4BPW9nLRcRinpplAPmMFzoh0jMNgeOA%2BObF1KLxTMdekpfnH2Rz%2FoOJOIwFJvG4nf1ZZ6%2BvU9KAIq0pGM47K%2BSnXVf%2F7uvv%2F9n2M3SxHnrgqKb5BQGEkv15YZxgeELFL%2BcwWy0kG9gkx7Lh4rg9RGfMNEG%2B%2BPJ4CkU980LyX00VfGDkzelU9o95pxUGrWo9zzDPfWYjzmzLedBEbKh3IyLemfOh9XmuGIWJjA1v%7Ctkp%3ABk9SR9iNnZT8Zw&LH_BIN=1",
+            "https://www.ebay.co.uk/itm/117181215675?_skw=NVIDIA+GPU+-bundle+-laptop+-backplate+-bracket+-shroud+-waterblock+-%22riser+cable%22+-%22extension+cable%22+-%22box+only%22+-sticker+-%22mining+frame%22+-poster+-%22cooling+fan%22+-%22replacement+fan%22&epid=6054781605&itmmeta=01M106TSD61CTXR716BG3PTMSM&hash=item1b488b73bb%3Ag%3AOvQAAeSwvSpp-zJj&itmprp=enc%3AAQALAAABkGfYFPkwiKCW4ZNSs2u11xDVneFN033onVmxD%2BTzbOLgkt0qBLCQ6%2BiOy3sSEO1BXIl8BjUqpZ59J1OXukQYUZBmSVf90%2BBLYXeb9ey1nVUMUtLX0jGUAHGsBCLJ8Y0awpTzucCQlsr7whz8Iw5pGk1WfBAQWRI2R8h1XChUJadXKuJjiVhLYdIbgPU0J9eVciFs0LQ%2BPWwfzf8efissPiEzYTbKTQtPGTYe29kf2YJk5GKfrkcAUVSMFB6QgbF93ecZ6PXPq303jjk%2FNqsz%2FoZ0xmyOzHBVU3NSJ5cd201BrhG%2FNnPR1%2FDFNkpAnl5VF5HffJAy4M14MtwVU6NZ8AFste%2B%2FLny6Yp68I5%2F8d2zERkiCIc7U8UCXzdm%2BNBILanv51dvP9xeKDqQQD%2BwDJIaXnGpKQhPlVsD7WcoUKhevuOH6%2F0KfyXAQrt1H3trZfSgYn%2FdRWHyzcmp4cjW6JUmLCXkTaQVSstlQJoYOv7ePEUsqrN2%2FZ1TdCOQTpQqPlmBnEyKdYL9jnNqwHZJgQ1o%3D%7Ctkp%3ABk9SR-6W64aIaA&LH_BIN=1"
+          ],
+          "basis": "SOLD_REFINED",
+          "realisation_factor": 1.0
+        },
+        "eligible": true,
+        "reasons": [
+          "Resale basis uses the median of 8 robust same-condition completed sales; lower quartile remains the downside case.",
+          "Expected net profit \u00a3-82.21; ROI -57.8%; liquidity 90/100.",
+          "Sampled 90-day sell-through is 100.0% (202 sold / 0 active matched listings).",
+          "Component economics exclude build-level fulfilment costs, which are charged once to the completed build.",
+          "GPU gates: GEM \u00a312/15% ROI; SUPER_GEM \u00a325/20% ROI."
+        ],
+        "risk_flags": [],
+        "cost_breakdown": {
+          "purchase": 138.0,
+          "delivery": 0.0,
+          "ebay_fee": 0.0,
+          "packaging": 0.0,
+          "testing_refurbishment": 3.0,
+          "returns_warranty_reserve": 1.2
+        },
+        "evidence_status": "CONDITION_UNCERTAIN",
+        "evidence_reason": "CONDITION_UNCERTAIN",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 1.0,
+          "sold_evidence": 1.0,
+          "condition": 0.5,
+          "price_completeness": 1.0,
+          "freshness": 1.0
+        }
+      }
+    },
+    {
+      "title": "Intel Xeon E5 2680 V4 2.4GHz 14-cores LGA 2011-3 cpu processor 2680V4",
+      "category": "cpu",
+      "condition": "new",
+      "cpk": "4c9ddb43910a8c01",
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "NO_COMPARABLES",
+      "scoring_explanation": {
+        "classification": "INSUFFICIENT_DATA",
+        "decision": "INVESTIGATE",
+        "score": 0.0,
+        "expected_profit": null,
+        "roi_pct": null,
+        "walk_away_price": null,
+        "liquidity_score": null,
+        "desirability_score": 59.0,
+        "risk_score": 82.0,
+        "market": null,
+        "eligible": false,
+        "reasons": [
+          "Evidence status: NO_COMPARABLES.",
+          "No robust same-condition sold cohort is available; active evidence or manual research is required."
+        ],
+        "risk_flags": [
+          "insufficient_same_condition_sold_comparables"
+        ],
+        "cost_breakdown": {},
+        "evidence_status": "NO_COMPARABLES",
+        "evidence_reason": "NO_COMPARABLES",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 0.0,
+          "sold_evidence": 0.0,
+          "condition": 1.0,
+          "price_completeness": 0.0,
+          "freshness": 0.0
+        }
+      }
+    },
+    {
+      "title": "INTEL Core i5 6600t 2.7GHz Quad-Core Quad-Thread CPU Processor 6M 35W LGA 1151",
+      "category": "cpu",
+      "condition": "new",
+      "cpk": "a38b711011105550",
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "NO_COMPARABLES",
+      "scoring_explanation": {
+        "classification": "INSUFFICIENT_DATA",
+        "decision": "INVESTIGATE",
+        "score": 0.0,
+        "expected_profit": null,
+        "roi_pct": null,
+        "walk_away_price": null,
+        "liquidity_score": null,
+        "desirability_score": 59.0,
+        "risk_score": 82.0,
+        "market": null,
+        "eligible": false,
+        "reasons": [
+          "Evidence status: NO_COMPARABLES.",
+          "No robust same-condition sold cohort is available; active evidence or manual research is required."
+        ],
+        "risk_flags": [
+          "insufficient_same_condition_sold_comparables"
+        ],
+        "cost_breakdown": {},
+        "evidence_status": "NO_COMPARABLES",
+        "evidence_reason": "NO_COMPARABLES",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 0.0,
+          "sold_evidence": 0.0,
+          "condition": 1.0,
+          "price_completeness": 0.0,
+          "freshness": 0.0
+        }
+      }
+    },
+    {
+      "title": "Intel Xeon E5 2680 V4 2680V4 CPU 2.4GHz 14 Cores 120W LGA 2011-3 Processor",
+      "category": "cpu",
+      "condition": "new",
+      "cpk": "4c9ddb43910a8c01",
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "NO_COMPARABLES",
+      "scoring_explanation": {
+        "classification": "INSUFFICIENT_DATA",
+        "decision": "INVESTIGATE",
+        "score": 0.0,
+        "expected_profit": null,
+        "roi_pct": null,
+        "walk_away_price": null,
+        "liquidity_score": null,
+        "desirability_score": 59.0,
+        "risk_score": 82.0,
+        "market": null,
+        "eligible": false,
+        "reasons": [
+          "Evidence status: NO_COMPARABLES.",
+          "No robust same-condition sold cohort is available; active evidence or manual research is required."
+        ],
+        "risk_flags": [
+          "insufficient_same_condition_sold_comparables"
+        ],
+        "cost_breakdown": {},
+        "evidence_status": "NO_COMPARABLES",
+        "evidence_reason": "NO_COMPARABLES",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 0.0,
+          "sold_evidence": 0.0,
+          "condition": 1.0,
+          "price_completeness": 0.0,
+          "freshness": 0.0
+        }
+      }
+    },
+    {
+      "title": "Intel Xeon E5 2670 v2 SR1A7 2.5GHz 10-CORES LGA 2011 Server CPU Processor",
+      "category": "cpu",
+      "condition": "new",
+      "cpk": "ef073c9eee46112d",
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "NO_COMPARABLES",
+      "scoring_explanation": {
+        "classification": "INSUFFICIENT_DATA",
+        "decision": "INVESTIGATE",
+        "score": 0.0,
+        "expected_profit": null,
+        "roi_pct": null,
+        "walk_away_price": null,
+        "liquidity_score": null,
+        "desirability_score": 59.0,
+        "risk_score": 82.0,
+        "market": null,
+        "eligible": false,
+        "reasons": [
+          "Evidence status: NO_COMPARABLES.",
+          "No robust same-condition sold cohort is available; active evidence or manual research is required."
+        ],
+        "risk_flags": [
+          "insufficient_same_condition_sold_comparables"
+        ],
+        "cost_breakdown": {},
+        "evidence_status": "NO_COMPARABLES",
+        "evidence_reason": "NO_COMPARABLES",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 0.0,
+          "sold_evidence": 0.0,
+          "condition": 1.0,
+          "price_completeness": 0.0,
+          "freshness": 0.0
+        }
+      }
+    },
+    {
+      "title": "AMD Athlon 5350 X4 5350 2.05 GHz Quad-Core Quad-Thread CPU AD5350JAH44HM Socket AM1 Sealed New and come with cooler",
+      "category": "cpu",
+      "condition": "new",
+      "cpk": "8ed8d4c4c34f79c3",
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "NO_COMPARABLES",
+      "scoring_explanation": {
+        "classification": "INSUFFICIENT_DATA",
+        "decision": "INVESTIGATE",
+        "score": 0.0,
+        "expected_profit": null,
+        "roi_pct": null,
+        "walk_away_price": null,
+        "liquidity_score": 90.0,
+        "desirability_score": 59.0,
+        "risk_score": 82.0,
+        "market": null,
+        "eligible": false,
+        "reasons": [
+          "Evidence status: NO_COMPARABLES.",
+          "No robust same-condition sold cohort is available; active evidence or manual research is required."
+        ],
+        "risk_flags": [
+          "insufficient_same_condition_sold_comparables"
+        ],
+        "cost_breakdown": {},
+        "evidence_status": "NO_COMPARABLES",
+        "evidence_reason": "NO_COMPARABLES",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 0.0,
+          "sold_evidence": 1.0,
+          "condition": 1.0,
+          "price_completeness": 0.0,
+          "freshness": 0.0
+        }
+      }
+    },
+    {
+      "title": "AMD Ryzen 9 5950X New Ryzen 9 5000 Series Vermeer (Zen 3) 16-Core 3.4 GHz Socket AM4 105W  Socket AM4 but without cooler",
+      "category": "cpu",
+      "condition": "new",
+      "cpk": "e5256279f91b6c9f",
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "SPARSE_SOLD_EVIDENCE",
+      "scoring_explanation": {
+        "classification": "INSUFFICIENT_DATA",
+        "decision": "INVESTIGATE",
+        "score": 75.3,
+        "expected_profit": 42.06,
+        "roi_pct": 15.94,
+        "walk_away_price": 243.27,
+        "liquidity_score": 44.0,
+        "desirability_score": 65.0,
+        "risk_score": 100.0,
+        "market": {
+          "lower": 306.0,
+          "median": 306.0,
+          "upper": 306.0,
+          "conservative_resale": 306.0,
+          "sample_size": 1,
+          "raw_sample_size": 1,
+          "source_diversity": 1,
+          "spread_pct": 0.0,
+          "confidence": 45.0,
+          "comparable_urls": [
+            "amazon://B08SKRMFSD"
+          ],
+          "basis": "FIXED_RETAIL_CONTEXT",
+          "realisation_factor": 1.0
+        },
+        "eligible": true,
+        "reasons": [
+          "Resale basis uses the median of 1 robust same-condition active market prices; lower quartile remains the downside case.",
+          "Expected net profit \u00a342.06; ROI 15.9%; liquidity 44/100.",
+          "Sampled 90-day sell-through is 100.0% (1 sold / 0 active matched listings).",
+          "Fixed-price retailer evidence receives no offer/negotiation haircut; sold evidence can still refine confidence.",
+          "Component economics exclude build-level fulfilment costs, which are charged once to the completed build.",
+          "CPU gates: GEM \u00a33/15% ROI; SUPER_GEM \u00a38/25% ROI.",
+          "The comparable cohort is below the minimum evidence requirement and the provisional opportunity gates were not all met."
+        ],
+        "risk_flags": [],
+        "cost_breakdown": {
+          "purchase": 262.41,
+          "delivery": 0.0,
+          "ebay_fee": 0.0,
+          "packaging": 0.0,
+          "testing_refurbishment": 0.0,
+          "returns_warranty_reserve": 1.53
+        },
+        "evidence_status": "SPARSE_SOLD_EVIDENCE",
+        "evidence_reason": "SPARSE_SOLD_EVIDENCE",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 0.33,
+          "sold_evidence": 0.33,
+          "condition": 1.0,
+          "price_completeness": 1.0,
+          "freshness": 1.0
+        }
+      }
+    },
+    {
+      "title": "Noctua NH-U9S Ultra-Quiet Slim CPU Cooler with NF-A9 fan",
+      "category": "cooler",
+      "condition": "used",
+      "cpk": "8146316590d73b9b",
+      "classification": "POOR_DEAL",
+      "evidence_status": "SPARSE_SOLD_EVIDENCE",
+      "scoring_explanation": {
+        "classification": "POOR_DEAL",
+        "decision": "IGNORE",
+        "score": 14.4,
+        "expected_profit": -30.09,
+        "roi_pct": -50.14,
+        "walk_away_price": 20.34,
+        "liquidity_score": 56.0,
+        "desirability_score": 47.0,
+        "risk_score": 100.0,
+        "market": {
+          "lower": 24.0,
+          "median": 29.92,
+          "upper": 38.8,
+          "conservative_resale": 24.0,
+          "sample_size": 4,
+          "raw_sample_size": 4,
+          "source_diversity": 4,
+          "spread_pct": 49.48,
+          "confidence": 37.3,
+          "comparable_urls": [
+            "ebay://128053372613",
+            "ebay://147536118646",
+            "ebay://336771167237",
+            "ebay://800583130411"
+          ],
+          "basis": "BIN_ESTIMATED",
+          "realisation_factor": 0.88
+        },
+        "eligible": true,
+        "reasons": [
+          "Resale basis uses the median of 4 robust same-condition active market prices; lower quartile remains the downside case.",
+          "Expected net profit \u00a3-30.09; ROI -50.1%; liquidity 56/100.",
+          "Sampled 90-day sell-through is 57.1% (4 sold / 3 active matched listings).",
+          "BIN estimate applies a 12% realisation haircut and lower confidence until sold evidence refines it.",
+          "Component economics exclude build-level fulfilment costs, which are charged once to the completed build.",
+          "COOLER gates: GEM \u00a33/15% ROI; SUPER_GEM \u00a38/25% ROI."
+        ],
+        "risk_flags": [],
+        "cost_breakdown": {
+          "purchase": 56.41,
+          "delivery": 0.0,
+          "ebay_fee": 0.0,
+          "packaging": 0.0,
+          "testing_refurbishment": 3.0,
+          "returns_warranty_reserve": 0.6
+        },
+        "evidence_status": "SPARSE_SOLD_EVIDENCE",
+        "evidence_reason": "SPARSE_SOLD_EVIDENCE",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 1.0,
+          "sold_evidence": 1.0,
+          "condition": 1.0,
+          "price_completeness": 1.0,
+          "freshness": 1.0
+        }
+      }
+    },
+    {
+      "title": "Intel Core i3-6100 SR2HG 3.70GHz 2-Core LGA1151/Socket H4 CPU",
+      "category": "cpu",
+      "condition": "used",
+      "cpk": "401285ff3525595f",
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "SPARSE_SOLD_EVIDENCE",
+      "scoring_explanation": {
+        "classification": "INSUFFICIENT_DATA",
+        "decision": "INVESTIGATE",
+        "score": 0.0,
+        "expected_profit": null,
+        "roi_pct": null,
+        "walk_away_price": null,
+        "liquidity_score": 88.47826086956522,
+        "desirability_score": 59.0,
+        "risk_score": 82.0,
+        "market": null,
+        "eligible": false,
+        "reasons": [
+          "Evidence status: SPARSE_SOLD_EVIDENCE.",
+          "No robust same-condition sold cohort is available; active evidence or manual research is required."
+        ],
+        "risk_flags": [
+          "insufficient_same_condition_sold_comparables"
+        ],
+        "cost_breakdown": {},
+        "evidence_status": "SPARSE_SOLD_EVIDENCE",
+        "evidence_reason": "SPARSE_SOLD_EVIDENCE",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 0.0,
+          "sold_evidence": 1.0,
+          "condition": 1.0,
+          "price_completeness": 0.5,
+          "freshness": 0.0
+        }
+      }
+    },
+    {
+      "title": "Noctua NH-U9S CPU cooler with one genuine Noctua NF-A9 PWM 92mm fan.",
+      "category": "cooler",
+      "condition": "used",
+      "cpk": "8146316590d73b9b",
+      "classification": "EVIDENCE_LIMITED_DEAL",
+      "evidence_status": "SPARSE_SOLD_EVIDENCE",
+      "scoring_explanation": {
+        "classification": "EVIDENCE_LIMITED_DEAL",
+        "decision": "INVESTIGATE",
+        "score": 73.6,
+        "expected_profit": 7.96,
+        "roi_pct": 29.21,
+        "walk_away_price": 24.45,
+        "liquidity_score": 56.0,
+        "desirability_score": 47.0,
+        "risk_score": 100.0,
+        "market": {
+          "lower": 28.64,
+          "median": 35.19,
+          "upper": 42.42,
+          "conservative_resale": 28.64,
+          "sample_size": 3,
+          "raw_sample_size": 3,
+          "source_diversity": 3,
+          "spread_pct": 39.15,
+          "confidence": 34.4,
+          "comparable_urls": [
+            "ebay://147536118646",
+            "ebay://336771167237",
+            "ebay://800583130411"
+          ],
+          "basis": "BIN_ESTIMATED",
+          "realisation_factor": 0.88
+        },
+        "eligible": true,
+        "reasons": [
+          "Resale basis uses the median of 3 robust same-condition active market prices; lower quartile remains the downside case.",
+          "Expected net profit \u00a37.96; ROI 29.2%; liquidity 56/100.",
+          "Sampled 90-day sell-through is 57.1% (4 sold / 3 active matched listings).",
+          "BIN estimate applies a 12% realisation haircut and lower confidence until sold evidence refines it.",
+          "Component economics exclude build-level fulfilment costs, which are charged once to the completed build.",
+          "COOLER gates: GEM \u00a33/15% ROI; SUPER_GEM \u00a38/25% ROI.",
+          "Economics pass the COOLER GEM gates, but market confidence is 34/100 (needs 50) and liquidity is 56/100 (needs 45/100)."
+        ],
+        "risk_flags": [],
+        "cost_breakdown": {
+          "purchase": 23.53,
+          "delivery": 0.0,
+          "ebay_fee": 0.0,
+          "packaging": 0.0,
+          "testing_refurbishment": 3.0,
+          "returns_warranty_reserve": 0.7
+        },
+        "evidence_status": "SPARSE_SOLD_EVIDENCE",
+        "evidence_reason": "SPARSE_SOLD_EVIDENCE",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 1.0,
+          "sold_evidence": 1.0,
+          "condition": 1.0,
+          "price_completeness": 1.0,
+          "freshness": 1.0
+        }
+      }
+    },
+    {
+      "title": "INTEL Core i3-6100 3.70GHz CPU Dual Core Socket FCLGA1151 Skylake Processor",
+      "category": "cpu",
+      "condition": "used",
+      "cpk": "401285ff3525595f",
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "SPARSE_SOLD_EVIDENCE",
+      "scoring_explanation": {
+        "classification": "INSUFFICIENT_DATA",
+        "decision": "INVESTIGATE",
+        "score": 0.0,
+        "expected_profit": null,
+        "roi_pct": null,
+        "walk_away_price": null,
+        "liquidity_score": 88.47826086956522,
+        "desirability_score": 59.0,
+        "risk_score": 82.0,
+        "market": null,
+        "eligible": false,
+        "reasons": [
+          "Evidence status: SPARSE_SOLD_EVIDENCE.",
+          "No robust same-condition sold cohort is available; active evidence or manual research is required."
+        ],
+        "risk_flags": [
+          "insufficient_same_condition_sold_comparables"
+        ],
+        "cost_breakdown": {},
+        "evidence_status": "SPARSE_SOLD_EVIDENCE",
+        "evidence_reason": "SPARSE_SOLD_EVIDENCE",
+        "evidence_confidence": {
+          "identity": 0.65,
+          "comparable_quality": 0.0,
+          "sold_evidence": 1.0,
+          "condition": 1.0,
+          "price_completeness": 0.5,
+          "freshness": 0.0
+        }
+      }
+    }
+  ],
+  "tables": [
+    {
+      "table_name": "cpk_pricing_index"
+    },
+    {
+      "table_name": "gem_radar_cpk_backup_20260817_184213"
+    },
+    {
+      "table_name": "gem_radar_cpk_backup_20260817_184226"
+    },
+    {
+      "table_name": "gem_radar_cpk_listing_price"
+    },
+    {
+      "table_name": "gem_radar_cpk_market_price"
+    },
+    {
+      "table_name": "gem_radar_cpk_price_backup_20260817_184213"
+    },
+    {
+      "table_name": "gem_radar_cpk_price_backup_20260817_184226"
+    },
+    {
+      "table_name": "gem_radar_listing_cpk"
+    },
+    {
+      "table_name": "gem_radar_listing_cpk_ai_backup_20260817_225455"
+    },
+    {
+      "table_name": "gem_radar_listing_cpk_ai_backup_20260817_225653"
+    },
+    {
+      "table_name": "gem_radar_listing_cpk_ai_backup_20260817_231500"
+    },
+    {
+      "table_name": "gem_radar_listing_cpk_ai_backup_20260817_232738"
+    },
+    {
+      "table_name": "gem_radar_listing_cpk_ai_backup_20260817_233820"
+    },
+    {
+      "table_name": "gem_radar_listing_cpk_ai_backup_20260818_003830"
+    },
+    {
+      "table_name": "gem_radar_listing_cpk_backup_20260817_224440"
+    },
+    {
+      "table_name": "gem_radar_listing_cpk_backup_20260817_225011"
+    },
+    {
+      "table_name": "gem_radar_listing_cpk_variant_backup_20260818_004409"
+    },
+    {
+      "table_name": "gem_radar_sold_observations_cpk_backup_20260817_192328"
+    },
+    {
+      "table_name": "gem_radar_sold_observations_cpk_backup_20260817_222901"
+    },
+    {
+      "table_name": "gem_radar_sold_observations_cpk_backup_20260817_224449"
+    },
+    {
+      "table_name": "gem_radar_sold_observations_cpk_backup_20260817_225012"
+    },
+    {
+      "table_name": "gem_radar_sold_observations_cpk_backup_20260818_004427"
+    },
+    {
+      "table_name": "gem_radar_sold_observations_cpk_backup_20260818_082456"
+    },
+    {
+      "table_name": "submission_queue"
+    },
+    {
+      "table_name": "made_to_order_queue"
+    }
+  ],
+  "policy": {
+    "super_profit": 50.0,
+    "super_roi_pct": 25.0,
+    "super_confidence": 80.0,
+    "super_liquidity": 60.0,
+    "super_score": 85.0,
+    "gem_profit": 30.0,
+    "gem_roi_pct": 18.0,
+    "gem_confidence": 70.0,
+    "gem_liquidity": 45.0,
+    "gem_score": 75.0,
+    "delivery_fallback": 15.0,
+    "ebay_fee_pct": 0.0,
+    "packaging_cost": 6.0,
+    "testing_refurbishment_cost": 10.0,
+    "returns_warranty_pct": 5.0,
+    "minimum_sold_comps": 3,
+    "minimum_source_diversity": 2,
+    "sold_lookback_days": 90,
+    "super_discount_pct": -20.0,
+    "gem_discount_pct": -15.0
+  },
+  "audit_context": {
+    "captured_at_utc": "2026-09-13T17:57:04.150034",
+    "database_host": "127.0.0.1",
+    "database_name": "pcflipper",
+    "active_definition": "observed within 24 hours"
+  },
+  "repair_simulation": {
+    "counts": {
+      "known_active": 3905,
+      "current_market": 857,
+      "refreshed_market": 1542,
+      "refreshed_plus_unique_alias_market": 1542,
+      "current_market_at_least_3": 635,
+      "refreshed_market_at_least_3": 1121
+    },
+    "active_stale_price_rows": 2534,
+    "active_missing_price_rows": 0,
+    "active_changed_price_rows": 992,
+    "unmapped_unique_alias_rows": 53,
+    "unmapped_ambiguous_rows": 27514,
+    "unmapped_no_alias_rows": 19475,
+    "examples": [
+      {
+        "title": "Gigabyte B760M H DDR4 Ultra Durable Intel 1700 Socket Motherboard, Micro-ATX, 2x",
+        "basis": "MIXED_ACTIVE_ESTIMATE",
+        "n": 3
+      },
+      {
+        "title": "Gigabyte B550 EAGLE AM4 ATX Motherboard \u2013 DDR4, Dual M.2, PCIe 4.0 & HDMI",
+        "basis": "MIXED_ACTIVE_ESTIMATE",
+        "n": 7
+      },
+      {
+        "title": "Unlocked AMD EPYC 7443 CPU 24 Core 2.85GHz 128MB Cache 200W - 100-000000340",
+        "basis": "MIXED_ACTIVE_ESTIMATE",
+        "n": 3
+      },
+      {
+        "title": "Gigabyte B760M D3HP DDR4 LGA1700 Micro-ATX Motherboard \u2013 Dual M.2 & PCIe 4.0",
+        "basis": "MIXED_ACTIVE_ESTIMATE",
+        "n": 6
+      },
+      {
+        "title": "AMD Ryzen Threadripper 3970X 32-Core sTRX4 3.7GHz CPU 100-000000011",
+        "basis": "BIN_ESTIMATED",
+        "n": 3
+      },
+      {
+        "title": "AMD Ryzen 3 Pro 2200G CPU Desktop Computer Processor 4 Core 3.5 GHz Clock Speed",
+        "basis": "BIN_ESTIMATED",
+        "n": 4
+      },
+      {
+        "title": "Gigabyte GA-G31M-ES2L REV: 2.0 Socket 775 (LGA775) Motherboard and Back Plate",
+        "basis": "BIN_ESTIMATED",
+        "n": 3
+      },
+      {
+        "title": "AMD EPYC 7402 2.80GHz 24-Core Socket SP3 180W 128MB CPU",
+        "basis": "MIXED_ACTIVE_ESTIMATE",
+        "n": 5
+      },
+      {
+        "title": "Intel Core i5-9500 (SRF4B) 6-Core 3.00GHz 65W 9MB Cache CPU",
+        "basis": "BIN_ESTIMATED",
+        "n": 3
+      },
+      {
+        "title": "Kingston FURY Beast 8GB (1 x 8GB) PC4-25600 (DDR4-3200) UDIMM Memory - Black...",
+        "basis": "FIXED_RETAIL_CONTEXT",
+        "n": 1
+      },
+      {
+        "title": "AMD A8 Series A8-9600 CPU 3.1GHZ AM4 4 Core Processor.",
+        "basis": "BIN_ESTIMATED",
+        "n": 7
+      },
+      {
+        "title": "Noctua NH-D15 chromax.black CPU Cooler, Intel/AMD, Dual NH-A15 Fans, 300-1500RPM",
+        "basis": "FIXED_RETAIL_CONTEXT",
+        "n": 1
+      }
+    ]
+  },
+  "ambiguous_alias_examples": [
+    {
+      "match_key": "RX6800XT16GB",
+      "unmapped_rows": 1008,
+      "identities": [
+        {
+          "cpk": "f809b3f67317d4be",
+          "data": {
+            "cpk": "f809b3f67317d4be",
+            "brand": "amd",
+            "model": "rx-6800-xt-16gb",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "3953237f492bf381",
+          "data": {
+            "cpk": "3953237f492bf381",
+            "brand": "xfx",
+            "model": "rx-6800-xt-16gb",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        }
+      ]
+    },
+    {
+      "match_key": "RX9070XT",
+      "unmapped_rows": 576,
+      "identities": [
+        {
+          "cpk": "1490671ec918cc90",
+          "data": {
+            "cpk": "1490671ec918cc90",
+            "brand": "gigabyte",
+            "model": "rx-9070-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "8112167259837be5",
+          "data": {
+            "cpk": "8112167259837be5",
+            "brand": "xfx",
+            "model": "rx-9070-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "86422ad1f25e0399",
+          "data": {
+            "cpk": "86422ad1f25e0399",
+            "brand": "asrock",
+            "model": "rx-9070-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        }
+      ]
+    },
+    {
+      "match_key": "16GBDDR4",
+      "unmapped_rows": 573,
+      "identities": [
+        {
+          "cpk": "cc6ec41ae0046828",
+          "data": {
+            "cpk": "0701f559be200502",
+            "brand": "lexar",
+            "model": "16-gb-ddr4",
+            "specs": {
+              "capacity_gb": 16
+            },
+            "category": "ram",
+            "confidence": 0.9
+          }
+        },
+        {
+          "cpk": "49a61d27f7c088b2",
+          "data": {
+            "cpk": "e0eafba496908480",
+            "brand": "viper-steel",
+            "model": "16gb-ddr4",
+            "specs": {
+              "capacity_gb": 16
+            },
+            "category": "ram",
+            "confidence": 1.0
+          }
+        },
+        {
+          "cpk": "81929462aadfbe73",
+          "data": {
+            "cpk": "f5c6ff05af96a997",
+            "brand": "netac",
+            "model": "16gb-ddr4",
+            "specs": {},
+            "category": "ram",
+            "confidence": 0.8
+          }
+        }
+      ]
+    },
+    {
+      "match_key": "AMDRYZEN77800X3D",
+      "unmapped_rows": 557,
+      "identities": [
+        {
+          "cpk": "f6b1c2b22900496e",
+          "data": {
+            "cpk": "f6b1c2b22900496e",
+            "brand": "amd",
+            "model": "ryzen-7-7800x3d",
+            "specs": {
+              "tdp": null,
+              "cores": 8,
+              "socket": "am5",
+              "threads": 16,
+              "clock_mhz": null
+            },
+            "category": "cpu",
+            "confidence": 0.95
+          }
+        },
+        {
+          "cpk": "f6b1c2b22900496e",
+          "data": {
+            "cpk": "f6b1c2b22900496e",
+            "brand": "amd",
+            "model": "ryzen-7-7800x3d",
+            "specs": {
+              "tdp": null,
+              "cores": 8,
+              "socket": "am5",
+              "clock_mhz": 5000
+            },
+            "category": "cpu",
+            "confidence": 0.95
+          }
+        },
+        {
+          "cpk": "f6b1c2b22900496e",
+          "data": {
+            "cpk": "f6b1c2b22900496e",
+            "brand": "amd",
+            "model": "ryzen-7-7800x3d",
+            "specs": {
+              "tdp": null,
+              "cores": 8,
+              "socket": "am5",
+              "threads": 16,
+              "clock_mhz": 5000
+            },
+            "category": "cpu",
+            "confidence": 0.95
+          }
+        },
+        {
+          "cpk": "f6b1c2b22900496e",
+          "data": {
+            "cpk": "a70fc2c54126b8bb",
+            "brand": "amd",
+            "model": "ryzen-7-7800x3d",
+            "specs": {
+              "tdp": null,
+              "cores": 8,
+              "socket": "am5",
+              "threads": 16,
+              "l3_cache": 96,
+              "clock_mhz": {
+                "base": 4200,
+                "turbo": 5000
+              }
+            },
+            "category": "cpu",
+            "confidence": 1.0
+          }
+        },
+        {
+          "cpk": "f6b1c2b22900496e",
+          "data": {
+            "cpk": "f6b1c2b22900496e",
+            "brand": "amd",
+            "model": "ryzen-7-7800x3d",
+            "specs": {
+              "type": "3d",
+              "cores": 8,
+              "clock_mhz": 5000
+            },
+            "category": "cpu",
+            "confidence": 0.95
+          }
+        },
+        {
+          "cpk": "f6b1c2b22900496e",
+          "data": {
+            "cpk": "f6b1c2b22900496e",
+            "brand": "amd",
+            "model": "ryzen-7-7800x3d",
+            "specs": {
+              "type": "3d",
+              "cores": 8,
+              "socket": "am5",
+              "clock_mhz": 4200
+            },
+            "category": "cpu",
+            "confidence": 0.95
+          }
+        },
+        {
+          "cpk": "f6b1c2b22900496e",
+          "data": {
+            "cpk": "f6b1c2b22900496e",
+            "brand": "amd",
+            "model": "ryzen-7-7800x3d",
+            "specs": {
+              "tdp": null,
+              "socket": "am5",
+              "clock_mhz": null
+            },
+            "category": "cpu",
+            "confidence": 0.9
+          }
+        },
+        {
+          "cpk": "f6b1c2b22900496e",
+          "data": {
+            "cpk": "f6b1c2b22900496e",
+            "brand": "amd",
+            "model": "ryzen-7-7800x3d",
+            "specs": {
+              "tdp": null,
+              "cores": null,
+              "socket": null,
+              "threads": null,
+              "clock_mhz": null
+            },
+            "category": "cpu",
+            "confidence": 0.9
+          }
+        }
+      ]
+    },
+    {
+      "match_key": "RADEONR9",
+      "unmapped_rows": 443,
+      "identities": [
+        {
+          "cpk": "e03b27f90c05ffe1",
+          "data": {
+            "cpk": "e03b27f90c05ffe1",
+            "brand": "asus",
+            "model": "radeon-r9",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "db853405548a30c4",
+          "data": {
+            "cpk": "db853405548a30c4",
+            "brand": "gigabyte",
+            "model": "radeon-r9",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        }
+      ]
+    },
+    {
+      "match_key": "RX9060XT",
+      "unmapped_rows": 437,
+      "identities": [
+        {
+          "cpk": "81b896bae5ef6ee9",
+          "data": {
+            "cpk": "81b896bae5ef6ee9",
+            "brand": "asus",
+            "model": "rx9060-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "8a151b5646e0314a",
+          "data": {
+            "cpk": "8a151b5646e0314a",
+            "brand": "gigabyte",
+            "model": "rx-9060-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "2e29054b5d450a49",
+          "data": {
+            "cpk": "2e29054b5d450a49",
+            "brand": "asus",
+            "model": "rx-9060-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "80b6257202d72f1e",
+          "data": {
+            "cpk": "80b6257202d72f1e",
+            "brand": "xfx",
+            "model": "rx-9060-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "8735b8d045ac4b2d",
+          "data": {
+            "cpk": "8735b8d045ac4b2d",
+            "brand": "sapphire",
+            "model": "rx-9060-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "028b31323f39ea35",
+          "data": {
+            "cpk": "028b31323f39ea35",
+            "brand": "asrock",
+            "model": "rx9060-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "7b92cdd0c1aa47cb",
+          "data": {
+            "cpk": "7b92cdd0c1aa47cb",
+            "brand": "asrock",
+            "model": "rx-9060-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        }
+      ]
+    }
+  ]
+}

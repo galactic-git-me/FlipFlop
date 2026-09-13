@@ -1,0 +1,20 @@
+
+> pc-flipper@0.1.0 dev
+> next dev -p 4312 -H 0.0.0.0
+
+▲ Next.js 16.3.1 (Turbopack)
+- Local:         http://localhost:4312
+- Network:       http://0.0.0.0:4312
+- Environments: .env.local
+✓ Ready in 467ms
+✓ Running next.config.ts took 28ms
+Creating turbopack project {
+  dir: 'C:\\Users\\mclar\\CODING\\FlipFlop\\flipflop-admin',
+  testMode: true
+}
+- Experiments (use with caution):
+  · proxyClientMaxBodySize: "100mb"
+
+ GET /sourcing 200 in 679ms (next.js: 422ms, proxy.ts: 54ms, application-code: 203ms)
+ GET /login 200 in 39ms (next.js: 12ms, proxy.ts: 1.6ms, application-code: 25ms)
+[?25h

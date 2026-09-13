@@ -1,0 +1,13 @@
+
+> pc-flipper-customer@0.1.0 dev
+> next dev --webpack -p 4313 -H 0.0.0.0
+
+▲ Next.js 16.2.9 (webpack)
+- Local:         http://localhost:4313
+- Network:       http://0.0.0.0:4313
+- Environments: .env.local
+✓ Ready in 454ms
+
+○ Compiling / ...
+ GET / 200 in 10.3s (next.js: 9.7s, application-code: 593ms)
+[?25h
