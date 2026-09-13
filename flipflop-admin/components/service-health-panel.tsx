@@ -25,8 +25,8 @@ export function ServiceHealthPanel() {
         ...BASE_SERVICES.slice(0, 3),
         { name: "Shop", url: local ? "http://localhost:4313" : "https://www.theflipflop.shop", icon: Globe },
       ];
-      const next: Record<string, number> = {};
       await Promise.all(services.map(async (service) => {
+        let status: number;
         try {
           const target = service.url ?? `${API_BASE_URL}${service.path}`;
           const response = await fetch(target, {
@@ -36,12 +36,13 @@ export function ServiceHealthPanel() {
           });
           // The storefront is cross-origin and may return an opaque response;
           // a completed network request still proves that it is reachable.
-          next[service.name] = response.ok || response.type === "opaque" ? 0 : (missesRef.current[service.name] ?? 0) + 1;
+          status = response.ok || response.type === "opaque" ? 0 : (missesRef.current[service.name] ?? 0) + 1;
         } catch {
-          next[service.name] = (missesRef.current[service.name] ?? 0) + 1;
+          status = (missesRef.current[service.name] ?? 0) + 1;
         }
+        missesRef.current[service.name] = status;
+        if (mounted) setMisses((current) => ({ ...current, [service.name]: status }));
       }));
-      if (mounted) { missesRef.current = next; setMisses(next); }
     };
     void check();
     const timer = setInterval(() => { void check(); }, 10000);
