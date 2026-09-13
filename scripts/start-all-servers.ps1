@@ -28,6 +28,51 @@ $env:CUDA_VISIBLE_DEVICES = "0"
 $env:OLLAMA_NUM_PARALLEL = "4"
 $env:OLLAMA_KEEP_ALIVE = "-1"
 
+function Update-RepositoryFromGitHub {
+    # Run before mode selection so LIVE OPERATOR and DEVELOPMENT both start
+    # from the same verified source revision. Fast-forward only: never reset,
+    # stash, rebase, or overwrite tracked local work automatically.
+    Write-Host "[*] Checking GitHub for the latest FlipFlop code..." -ForegroundColor Cyan
+
+    $branch = (& git -C $projectRoot rev-parse --abbrev-ref HEAD 2>$null).Trim()
+    if (-not $branch -or $branch -eq "HEAD") {
+        throw "Cannot update FlipFlop automatically while in a detached HEAD state."
+    }
+
+    $trackedChanges = & git -C $projectRoot status --porcelain --untracked-files=no
+    if ($trackedChanges) {
+        Write-Host "[STOP] Tracked local changes are present; refusing to overwrite them." -ForegroundColor Red
+        Write-Host "       Commit or stash the changes, then run the startup script again." -ForegroundColor Yellow
+        throw "Tracked local changes prevent a safe GitHub update."
+    }
+
+    & git -C $projectRoot fetch --quiet origin $branch
+    if ($LASTEXITCODE -ne 0) {
+        throw "Unable to fetch origin/$branch. Check network access and GitHub credentials."
+    }
+
+    $localCommit = (& git -C $projectRoot rev-parse HEAD).Trim()
+    $remoteCommit = (& git -C $projectRoot rev-parse "origin/$branch").Trim()
+    if ($localCommit -eq $remoteCommit) {
+        Write-Host "[OK] Code is current: $($localCommit.Substring(0, 12))" -ForegroundColor Green
+        return
+    }
+
+    & git -C $projectRoot merge-base --is-ancestor HEAD "origin/$branch"
+    if ($LASTEXITCODE -ne 0) {
+        throw "Local branch has commits that are not on origin/$branch; automatic update is unsafe."
+    }
+
+    Write-Host "[*] Updating local code: $($localCommit.Substring(0, 12)) -> $($remoteCommit.Substring(0, 12))" -ForegroundColor Yellow
+    & git -C $projectRoot merge --ff-only "origin/$branch"
+    if ($LASTEXITCODE -ne 0) {
+        throw "Fast-forward update failed; no services were started."
+    }
+    Write-Host "[OK] Updated from GitHub before startup." -ForegroundColor Green
+}
+
+Update-RepositoryFromGitHub
+
 function Select-RunMode {
     Write-Host ""
     Write-Host "============================================================" -ForegroundColor Cyan
