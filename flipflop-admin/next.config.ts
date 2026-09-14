@@ -45,14 +45,9 @@ const nextConfig: NextConfig = {
       },
       // eBay OAuth can be pointed at a dedicated operations API in a
       // deployment; local development defaults to the local backend.
-      {
-        source: "/proxy-api/ebay/oauth/:path*",
-        destination: `${ebayOpsBackendUrl}/api/ebay/oauth/:path*`,
-      },
-      {
-        source: "/proxy-api/:path*",
-        destination: `${backendUrl}/api/:path*`,
-      },
+      // `/proxy-api/*` is handled by app/proxy-api/[...path]/route.ts. Keep
+      // it as a route handler rather than a rewrite so it can attach the
+      // session token and retry transient upstream connection resets.
       {
         source: "/uploads/:path*",
         destination: `${backendUrl}/uploads/:path*`,

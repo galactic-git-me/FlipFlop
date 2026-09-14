@@ -53,7 +53,23 @@ async function forward(request: NextRequest, context: { params: Promise<{ path: 
     redirect: "manual" as const,
     signal: AbortSignal.timeout(120_000),
   };
-  let response = await fetch(target, fetchOptions);
+  // The public production endpoint sits behind Caddy and can occasionally
+  // reset an idle HTTP connection. Retry once so a transient reset does not
+  // surface to the browser as the opaque `TypeError: Failed to fetch`.
+  let response: Response;
+  try {
+    response = await fetch(target, fetchOptions);
+  } catch (error) {
+    try {
+      response = await fetch(target, fetchOptions);
+    } catch (retryError) {
+      console.error(`[proxy-api] upstream unavailable: ${target}`, retryError ?? error);
+      return NextResponse.json(
+        { detail: "Backend API is unavailable", upstream: target },
+        { status: 502 },
+      );
+    }
+  }
 
   // Preserve Authorization across backend canonical-host/trailing-slash
   // redirects. Native fetch can drop it when following to another origin.
