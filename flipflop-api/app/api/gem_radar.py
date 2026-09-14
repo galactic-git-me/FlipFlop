@@ -1981,7 +1981,6 @@ async def get_opportunity_policy_data(
                 & (GemRadarScoredListing.scored_at == latest_scored_at.c.scored_at),
             )
             .order_by(GemRadarScoredListing.scored_at.desc())
-            .limit(2000)
         )
     ).scalars().all()
 

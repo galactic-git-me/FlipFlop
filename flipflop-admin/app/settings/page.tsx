@@ -276,7 +276,7 @@ export default function SettingsPage() {
   };
 
   const opportunityAnalysis = useMemo(() => {
-    const order = ["SUPER_GEM", "GEM", "EVIDENCE_LIMITED_DEAL", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "INELIGIBLE"];
+    const baseOrder = ["SUPER_GEM", "GEM", "EVIDENCE_LIMITED_DEAL", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "INELIGIBLE"];
     const current: Record<string, number> = {};
     const preview: Record<string, number> = {};
     for (const item of opportunityItems) {
@@ -284,6 +284,10 @@ export default function SettingsPage() {
       const next = previewOpportunity(item, settings).classification;
       preview[next] = (preview[next] ?? 0) + 1;
     }
+    // Keep pipeline statuses visible too (for example IDENTITY_PENDING),
+    // otherwise the cards appear to add up to far fewer listings than the
+    // endpoint actually returned.
+    const order = [...baseOrder, ...Object.keys(current).filter(key => !baseOrder.includes(key)).sort()];
     const average = (key: keyof Pick<OpportunityPolicyItem, "market_confidence" | "liquidity_score" | "desirability_score" | "risk_score">) => {
       const values = opportunityItems.map(item => item[key]).filter((value): value is number => value != null);
       return values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0;
@@ -686,7 +690,10 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
   const resale = item.resale_price ?? 0;
   const purchase = item.listing_price ?? 0;
   if (!resale || !purchase || item.market_confidence == null || item.liquidity_score == null) {
-    return { classification: "INSUFFICIENT_DATA", profit: null, roi: null };
+    // Preserve the backend's current pipeline status when the read model does
+    // not contain enough facts to run a local threshold preview. Converting
+    // every such row to INSUFFICIENT_DATA made the preview look wildly wrong.
+    return { classification: item.classification || "INSUFFICIENT_DATA", profit: null, roi: null };
   }
   const component = COMPONENT_CATEGORIES.has((item.category ?? "").toLowerCase());
   const isNew = (item.condition ?? "").toLowerCase() === "new";

@@ -28,9 +28,11 @@ export const metadata: Metadata = {
   // starter favicon. FaviconAnimator may animate this after hydration, but
   // this is the correct server-rendered fallback for tabs and bookmarks.
   icons: {
-    icon: "/pics/logo_simple_no_bg.png",
-    shortcut: "/pics/logo_simple_no_bg.png",
-    apple: "/pics/logo_simple_no_bg.png",
+    // Use the tightly cropped tab icon. The full logo has a large transparent
+    // canvas around the cube and renders the mark tiny at browser-tab size.
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
   },
 };
 
