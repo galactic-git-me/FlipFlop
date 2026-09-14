@@ -16,7 +16,6 @@ import hashlib
 import re
 from dataclasses import dataclass
 from typing import Optional
-from urllib.parse import urlparse
 
 import httpx
 import structlog
@@ -222,14 +221,15 @@ Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.
     # four global extraction slots while the queue waits for retries.
     settings = get_settings()
     endpoint = (settings.ollama_base_url or "").strip().rstrip("/")
-    parsed_endpoint = urlparse(endpoint)
     # The production web tier must never silently try to use a model on its
     # own loopback interface. The database used to contain the default local
     # Ollama URL even though no Ollama service exists in that container.
-    use_openrouter = bool(settings.openrouter_api_key)
-    if not use_openrouter and (
-        not endpoint or parsed_endpoint.hostname in {"localhost", "127.0.0.1", "::1"}
-    ):
+    # Ollama is the local/dev provider and must win whenever it is configured.
+    # Previously the mere presence of an OpenRouter key forced every extraction
+    # request to the cloud, even when the dev API had a working local Ollama
+    # endpoint. That made a scan look busy while the local GPU remained idle.
+    use_openrouter = not bool(endpoint)
+    if use_openrouter and not settings.openrouter_api_key:
         log.warning("cpk_extractor.no_model_endpoint")
         return None
     # Retry only plausibly transient failures. Low-confidence or malformed
