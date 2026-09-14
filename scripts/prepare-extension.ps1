@@ -38,7 +38,20 @@ if ($Mode -eq "development") {
         Write-Host "[OK] Extension checkout revision matches GitHub." -ForegroundColor Green
     }
     Write-Host "[*] Updating LIVE extension from the successful GitHub release build..." -ForegroundColor Cyan
-    if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
+    $ghCommand = Get-Command gh -ErrorAction SilentlyContinue
+    if (-not $ghCommand) {
+        # Winget's per-user install may not be visible until a new shell is
+        # opened. Add the known user-scope install location for this process.
+        $wingetGhRoot = Join-Path $env:LOCALAPPDATA "Microsoft\WinGet\Packages"
+        $wingetGh = Get-ChildItem -LiteralPath $wingetGhRoot -Filter gh.exe -Recurse -ErrorAction SilentlyContinue |
+            Where-Object { $_.FullName -match '\\GitHub\.cli_[^\\]+\\bin\\gh\.exe$' } |
+            Select-Object -First 1
+        if ($wingetGh) {
+            $env:Path = "$($wingetGh.Directory.FullName);$env:Path"
+            $ghCommand = Get-Command gh -ErrorAction SilentlyContinue
+        }
+    }
+    if (-not $ghCommand) {
         throw "LIVE extension update needs GitHub CLI (gh) installed and authenticated with gh auth login. No local source will be built for LIVE."
     }
     & (Join-Path $extensionRoot "scripts/update-live.ps1")
