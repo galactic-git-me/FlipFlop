@@ -55,7 +55,7 @@ interface DataSource {
 }
 
 const SCORE_COMPONENTS = [
-  { label: "Economic return · 45%", description: "How attractive the resale economics are after purchase and selling costs.", calculation: "Normalises expected profit and ROI against the configured GEM and SUPER GEM floors. It contributes 45% of the final score." },
+  { label: "Economic return · 45%", description: "How attractive the resale economics are after purchase and selling costs.", calculation: "Compares the listing price with the median same-condition market price, subtracts delivery, fees, packaging, testing and reserve costs, then normalises expected profit and ROI against the configured GEM and SUPER GEM floors. It contributes 45% of the final score." },
   { label: "Desirability · 15%", description: "How strongly buyers are likely to want the identified product.", calculation: "Uses product and category demand signals, preferred-product fit and inventory fit. It contributes 15%." },
   { label: "Market confidence · 15%", description: "How trustworthy the market-price estimate is.", calculation: "Combines comparable sample size, source diversity and identity confidence. It contributes 15%." },
   { label: "Risk safety · 5%", description: "How few risks or warnings were found for the listing.", calculation: "Starts from a safe score and deducts for identity, condition, seller and evidence risks. It contributes 5%." },
@@ -366,9 +366,10 @@ export default function SettingsPage() {
           <Card>
             <CardHeader><CardTitle>How the final score is built</CardTitle></CardHeader>
             <CardContent className="grid grid-cols-2 md:grid-cols-5 gap-3 pt-0">
-              {["Economic return · 45%", "Desirability · 15%", "Market confidence · 15%", "Risk safety · 5%", "Liquidity · 20%"].map((label, index) => {
+              {SCORE_COMPONENTS.map((component, index) => {
                 const values = [100, opportunityAnalysis.average("desirability_score"), opportunityAnalysis.average("market_confidence"), opportunityAnalysis.average("risk_score"), opportunityAnalysis.average("liquidity_score")];
-                return <div key={label} className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3"><p className="text-xs font-semibold text-slate-300">{label}</p><p className="mt-2 text-lg font-bold text-slate-100">{values[index].toFixed(0)}<span className="text-xs font-semibold text-slate-300">/100 avg</span></p><div className="mt-2 h-1.5 rounded-full bg-slate-800"><div className="h-full rounded-full bg-[#00dc82]" style={{ width: `${Math.max(0, Math.min(100, values[index]))}%` }} /></div></div>;
+                const tooltipId = `score-component-${index}`;
+                return <div key={component.label} className="group relative rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3"><div tabIndex={0} aria-describedby={tooltipId} className="rounded outline-none focus-visible:ring-2 focus-visible:ring-[#00dc82]/70"><p className="text-xs font-semibold text-slate-300">{component.label} <span className="text-[#00dc82]" aria-hidden="true">ⓘ</span></p><p className="mt-2 text-lg font-bold text-slate-100">{values[index].toFixed(0)}<span className="text-xs font-semibold text-slate-300">/100 avg</span></p><div className="mt-2 h-1.5 rounded-full bg-slate-800"><div className="h-full rounded-full bg-[#00dc82]" style={{ width: `${Math.max(0, Math.min(100, values[index]))}%` }} /></div></div><div id={tooltipId} role="tooltip" className="pointer-events-none absolute left-2 right-2 top-full z-30 mt-2 rounded-lg border border-[#00dc82]/40 bg-[#07101a] p-3 text-xs text-slate-200 opacity-0 shadow-xl transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"><p className="font-bold text-[#00dc82]">{component.label}</p><p className="mt-1 font-semibold">{component.description}</p><p className="mt-1 text-slate-300">{component.calculation}</p></div></div>;
               })}
             </CardContent>
           </Card>
