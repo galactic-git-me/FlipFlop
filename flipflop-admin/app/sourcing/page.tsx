@@ -449,6 +449,17 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
               for (const [vendor, count] of Object.entries(scan.byVendor ?? {})) {
                 mergedVendors[vendor] = Math.max(mergedVendors[vendor] ?? 0, Number(count));
               }
+              // Discovery counts are cumulative per search term too. Keep the
+              // largest observed value for each vendor so a partial poll cannot
+              // replace the term total (or make the vendor row drift away from
+              // the card's discovered/eligible total).
+              const mergedDiscoveredVendors = { ...(previous.discoveredByVendor ?? {}) };
+              for (const [vendor, count] of Object.entries(scan.discoveredByVendor ?? {})) {
+                mergedDiscoveredVendors[vendor] = Math.max(
+                  mergedDiscoveredVendors[vendor] ?? 0,
+                  Number(count),
+                );
+              }
               runScans.current.set(scan.searchId, {
                 ...previous,
                 ...scan,
@@ -460,6 +471,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                 classifiedCount: Math.max(previous.classifiedCount ?? 0, scan.classifiedCount ?? 0),
                 processedPercent: Math.max(previous.processedPercent ?? 0, scan.processedPercent ?? 0),
                 byVendor: mergedVendors,
+                discoveredByVendor: mergedDiscoveredVendors,
                 isComplete: previous.isComplete && scan.isComplete,
               });
             }
@@ -611,7 +623,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
           </div>
           <div className="flex items-center gap-4">
             <QueueStatusBar queue={queueStatus} />
-            <MiniStat label="Listings" value={status?.totalsAcrossActive.ingestedCount ?? 0} color="#e2e8f0" />
+            <MiniStat label="Listings" value={status?.totalsAcrossActive.listings ?? 0} color="#e2e8f0" />
             <MiniStat label="SUPER GEMs" value={superGemCount} color="#fcd34d" />
             <MiniStat label="GEMs" value={gemCount} color="#93c5fd" />
             <MiniStat label="Avg Gem" value={avgGemScore.toFixed(1)} color="#93c5fd" />
@@ -630,13 +642,14 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             // absent, an unreported vendor gets null (rendered as an em dash),
             // not a fabricated zero.
             const searchConfiguredVendors = scan.configuredVendors;
-            // Render every vendor byVendor actually reports, not just the ones
+            // Render every vendor the discovery snapshot reports, not just the ones
             // in the hardcoded VENDOR_ORDER list -- a source key that isn't in
             // that list (e.g. "unknown", or a newly-scraped marketplace not
-            // yet added here) used to be silently dropped from the tile row
-            // while still counting toward the gauges' denominator above,
-            // making the displayed vendor sum quietly undercount the total.
-            const vendorCounts = Object.entries(scan.byVendor ?? {}).reduce<Record<string, number>>((acc, [vendor, count]) => {
+            // yet added here) used to be silently dropped from the tile row.
+            // The card total is the discovered/eligible population, so use the
+            // matching discovered-by-vendor snapshot here. The processed
+            // byVendor counts remain available to the gauges' numerators.
+            const vendorCounts = Object.entries(scan.discoveredByVendor ?? scan.byVendor ?? {}).reduce<Record<string, number>>((acc, [vendor, count]) => {
               const key = canonicalVendorKey(vendor);
               acc[key] = (acc[key] ?? 0) + Number(count);
               return acc;
@@ -658,7 +671,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             // data. Configured-but-empty marketplaces remain available to the
             // scan status counters, but do not occupy the vendor logo row.
             const vendorEntries = [...knownVendorEntries, ...extraVendorEntries]
-              .filter(([vendor, count]) => vendor !== "unknown" && count != null && count > 0);
+              .filter(([, count]) => count != null && count > 0);
             // Discovery is the user-facing search-term total. Processing
             // gauges use only eligible (non-auction) ads as their denominator.
             const discoveredTotal = Math.max(

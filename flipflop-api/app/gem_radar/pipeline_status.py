@@ -509,8 +509,12 @@ async def snapshot(db) -> dict:
         if s.discovered_by_vendor:
             # Discovery is populated when the submission enters the pipeline,
             # so it includes queued work rather than only ingested work.
+            # Keep the vendor sum on the same eligible population as
+            # ``actual_total_listings`` by removing auction keys that were
+            # excluded before ingestion.
             discovered_by_vendor = {
-                vendor: len(keys) for vendor, keys in s.discovered_by_vendor.items()
+                vendor: len(keys - s.excluded_discovered_keys)
+                for vendor, keys in s.discovered_by_vendor.items()
             }
         else:
             discovered_by_vendor = {}
