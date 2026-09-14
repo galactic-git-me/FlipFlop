@@ -28,12 +28,12 @@ export async function POST(request: NextRequest) {
   const maxAge = 60 * 60 * 12; // matches the 12h expiry set in admin_auth_service.py
   const secure = process.env.NODE_ENV === "production";
 
-  // Two cookies, same token: `admin_session` (httpOnly) is what middleware.ts
+  // Two cookies, same token: `admin_session` (httpOnly) is what proxy.ts
   // trusts for page-gating and for injecting the Authorization header on
   // proxied /api/* rewrites. `admin_token` (readable by client JS) exists only
   // because lib/api.ts calls the backend directly at an absolute origin
   // (NEXT_PUBLIC_API_URL) for some endpoints, which never passes through
-  // middleware — those calls need the token themselves to set the header.
+  // proxy — those calls need the token themselves to set the header.
   response.cookies.set(ADMIN_SESSION_COOKIE, access_token, {
     httpOnly: true,
     secure,

@@ -6,7 +6,7 @@ import { ADMIN_SESSION_COOKIE, verifyAdminToken } from "@/lib/admin-session";
 // a Bearer admin token on its admin routers (get_current_admin). The browser
 // only ever holds the token in this httpOnly cookie, so this is the one place
 // that can attach it to the outgoing request.
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
   const session = token ? await verifyAdminToken(token) : null;

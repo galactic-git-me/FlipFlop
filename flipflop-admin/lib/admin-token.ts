@@ -2,7 +2,7 @@
  * admin_session cookie at login — see app/api/session/login/route.ts). Only
  * needed for calls that bypass the Next.js rewrite proxy by hitting the
  * backend at an absolute origin (NEXT_PUBLIC_API_URL); proxied /api/* calls
- * get their Authorization header injected server-side by middleware.ts instead. */
+ * get their Authorization header injected server-side by proxy.ts instead. */
 export function getAdminToken(): string | null {
   if (typeof document === "undefined") return null;
   const match = document.cookie.match(/(?:^|;\s*)admin_token=([^;]+)/);

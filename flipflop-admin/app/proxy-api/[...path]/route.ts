@@ -20,7 +20,7 @@ function backendForPath(path: string[]): string {
   return backendUrl;
 }
 
-// Same-origin REST proxy. middleware attaches Authorization from the
+// Same-origin REST proxy. proxy attaches Authorization from the
 // httpOnly admin_session cookie before this handler forwards to FastAPI.
 async function forward(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
   const { path } = await context.params;
@@ -32,7 +32,7 @@ async function forward(request: NextRequest, context: { params: Promise<{ path: 
     if (value) headers.set(name, value);
   }
 
-  // Do not rely solely on middleware: in some Next/Turbopack deployments the
+  // Do not rely solely on proxy: in some Next/Turbopack deployments the
   // request header override is not preserved when entering an App Router
   // handler. Read the session cookie here as the authoritative fallback.
   if (!headers.has("authorization")) {
