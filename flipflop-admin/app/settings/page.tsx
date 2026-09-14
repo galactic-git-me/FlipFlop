@@ -5,7 +5,7 @@ import { Settings, Save, RefreshCw, Database, Plus, Trash2, Link2, Unlink, Termi
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { api, API_BASE_URL } from "@/lib/api";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 interface AppSettings {
   max_concurrent_flips: number;
@@ -64,6 +64,8 @@ const SCORE_COMPONENTS = [
   { label: "Risk safety · 5%", description: "How few risks or warnings were found for the listing.", calculation: "Starts from a safe score and deducts for identity, condition, seller and evidence risks. It contributes 5%." },
   { label: "Liquidity · 20%", description: "How likely the item is to sell within a reasonable time.", calculation: "Uses sold volume, active competition and available watch or bid velocity. It contributes 20%." },
 ] as const;
+
+const CLASSIFICATION_COLORS = ["#f97316", "#3b82f6", "#a78bfa", "#22c55e", "#eab308", "#ef4444", "#64748b", "#94a3b8"];
 
 const DEFAULTS: AppSettings = {
   max_concurrent_flips: 1,
@@ -417,15 +419,17 @@ export default function SettingsPage() {
               <div className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3">
                 <div className="mb-2 flex flex-wrap items-center justify-between gap-2"><div><p className="text-sm font-bold text-slate-200">Current vs preview split</p><p className="text-[11px] text-slate-500">Coloured segments show the classifications affected by scoring controls.</p></div><div className="flex flex-wrap gap-2"><span title="The listing could not be matched confidently to a specific product identity, so the scoring gates cannot be trusted yet." className="cursor-help rounded-full border border-slate-500/30 bg-slate-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-300">Identity failed · {opportunityAnalysis.identityFailedCount} unchanged <span aria-hidden="true">ⓘ</span></span><span title="The listing does not have enough comparable pricing or sold-evidence data to recalculate a reliable opportunity score." className="cursor-help rounded-full border border-slate-500/30 bg-slate-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-300">Insufficient data · {opportunityAnalysis.insufficientDataCount} unchanged <span aria-hidden="true">ⓘ</span></span></div></div>
                 <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={opportunityAnalysis.splitChart} margin={{ top: 8, right: 18, bottom: 8, left: 8 }} barCategoryGap="35%" reverseStackOrder={false}>
+                  <BarChart data={opportunityAnalysis.splitChart} layout="vertical" margin={{ top: 8, right: 18, bottom: 8, left: 8 }} barCategoryGap="35%" reverseStackOrder={false}>
                     <CartesianGrid stroke="#17304a" strokeDasharray="3 3" vertical={false} />
-                    <XAxis dataKey="name" tick={{ fill: "#cbd5e1", fontSize: 11, fontWeight: 700 }} />
-                    <YAxis allowDecimals={false} tick={{ fill: "#64748b", fontSize: 10 }} />
+                    <XAxis type="number" allowDecimals={false} tick={{ fill: "#64748b", fontSize: 10 }} />
+                    <YAxis type="category" dataKey="name" width={62} tick={{ fill: "#cbd5e1", fontSize: 11, fontWeight: 700 }} />
                     <Tooltip cursor={{ fill: "#17263a", opacity: 0.5 }} contentStyle={{ background: "#07101a", border: "1px solid #1e2d45", borderRadius: 8, color: "#e2e8f0", fontSize: 11 }} />
-                    <Legend wrapperStyle={{ color: "#cbd5e1", fontSize: 10 }} />
-                    {opportunityAnalysis.chartOrder.map((classification, index) => <Bar key={classification} dataKey={classification} name={classification.replaceAll("_", " ")} stackId="split" fill={["#f97316", "#3b82f6", "#a78bfa", "#22c55e", "#eab308", "#ef4444", "#64748b", "#94a3b8"][index % 8]} />)}
+                    {opportunityAnalysis.chartOrder.map((classification, index) => <Bar key={classification} dataKey={classification} name={classification.replaceAll("_", " ")} stackId="split" fill={CLASSIFICATION_COLORS[index % CLASSIFICATION_COLORS.length]} />)}
                   </BarChart>
                 </ResponsiveContainer>
+                <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[10px] font-semibold uppercase tracking-wide text-slate-300">
+                  {opportunityAnalysis.chartOrder.map((classification, index) => <span key={classification}><span className="mr-1" style={{ color: CLASSIFICATION_COLORS[index % CLASSIFICATION_COLORS.length] }}>■</span>{classification.replaceAll("_", " ")}</span>)}
+                </div>
               </div>
             </CardContent>
           </Card>
