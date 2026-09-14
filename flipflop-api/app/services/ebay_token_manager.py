@@ -95,6 +95,16 @@ async def get_valid_ebay_access_token(
         db_token = await get_valid_db_access_token(db)
         if db_token:
             return db_token
+        # A database session means this request is using the seller OAuth
+        # connection created from Settings. Do not silently fall through to
+        # deployment environment credentials here: production deployments
+        # intentionally do not carry a second refresh token, and the old
+        # fallback obscured an expired/invalid seller connection with the
+        # misleading "no refresh token configured" error.
+        raise ValueError(
+            "No valid eBay production seller OAuth connection is available. "
+            "Reconnect eBay in Settings via the OAuth sign-in flow."
+        )
 
     if not force_refresh:
         cached = _load_cache(environment)
