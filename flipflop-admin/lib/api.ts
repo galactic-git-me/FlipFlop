@@ -594,7 +594,10 @@ export const api = {
     scoredListings: () => requestGemRadar<unknown[]>("/scored-listings"),
     listings: () => requestGemRadar<unknown[]>("/listings"),
     currentGem: () => requestGemRadar<unknown>("/current-gem"),
-    opportunityPolicyData: () => requestGemRadar<{
+    // This read model belongs to the main API database. Use the main API
+    // proxy rather than the separately deployed Gem Radar worker, whose
+    // route set can lag behind during a rolling deployment.
+    opportunityPolicyData: () => request<{
       items: Array<{
         listing_id: string;
         title: string;
@@ -616,7 +619,7 @@ export const api = {
         sold_count: number | null;
         active_count: number | null;
       }>;
-    }>("/opportunity-policy-data", { cache: "no-store" }),
+    }>("/gem-radar/opportunity-policy-data", { cache: "no-store" }),
     // Whole-DB market snapshot (all currently-active listings, not just the
     // latest scan run) — same shape as the Current Scan Run panel's stats.
     marketSnapshot: () => requestGemRadar<MarketSnapshot>("/market-snapshot", { cache: "no-store" }),
