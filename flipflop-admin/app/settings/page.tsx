@@ -438,7 +438,7 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Buy-now gates</CardTitle>
-              <p className="text-xs font-semibold text-slate-300">A listing must meet every gate in its row. The below-market threshold compares the listing price with the same-condition market median.</p>
+              <p className="text-xs font-semibold text-slate-300">Profit, ROI and below-market price determine the deal tier. Confidence and liquidity remain scoring signals and rank urgency rather than vetoing a genuine bargain.</p>
             </CardHeader>
             <CardContent className="pt-0 overflow-x-auto">
               <div className="min-w-[760px]">
@@ -447,7 +447,7 @@ export default function SettingsPage() {
                 </div>
                 {[{ title: "SUPER GEM", prefix: "opportunity_super", tone: "text-amber-300", fields: [["profit_gbp", "£"], ["roi_pct", "%"], ["market_discount_pct", "%"], ["confidence", "/100"], ["liquidity", "/100"], ["score", "/100"]] }, { title: "GEM", prefix: "opportunity_gem", tone: "text-cyan-300", fields: [["profit_gbp", "£"], ["roi_pct", "%"], ["market_discount_pct", "%"], ["confidence", "/100"], ["liquidity", "/100"], ["score", "/100"]] }].map(group => (
                   <div key={group.prefix} className="grid grid-cols-[1.35fr_repeat(6,minmax(95px,1fr))] items-center gap-2 rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3 mb-2">
-                    <div><p className={`text-sm font-bold ${group.tone}`}>{group.title}</p><p className="text-[10px] text-slate-500">All gates required</p></div>
+                    <div><p className={`text-sm font-bold ${group.tone}`}>{group.title}</p><p className="text-[10px] text-slate-500">Economics + price gates</p></div>
                     {group.fields.map(([suffix, unit]) => { const key = `${group.prefix}_${suffix}` as keyof AppSettings; const fallback = DEFAULTS[key]; return <label key={key} className={`text-xs font-semibold ${suffix === "market_discount_pct" ? "text-[#00dc82]" : "text-slate-300"}`}><span className="sr-only">{group.title} {suffix}</span><div className="relative"><input type="number" min={0} step="0.1" aria-label={`${group.title} ${suffix}`} value={typeof settings[key] === "number" && Number.isFinite(settings[key] as number) ? settings[key] as number : typeof fallback === "number" ? fallback : 0} onChange={e => { setOpportunityPreviewDirty(true); setSettings(p => ({ ...p, [key]: Number(e.target.value) })); }} className="w-full px-2 py-2 pr-9 bg-[#07101a] border border-[#1e2d45] rounded-lg text-sm font-bold text-slate-100" /><span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-500">{unit}</span></div></label>; })}
                   </div>
                 ))}
@@ -777,6 +777,8 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
   const economics = policyEconomics(item, settings);
   const sample = item.market_sample_size ?? 0;
   const sold = item.sold_count ?? 0;
+  const confidenceFloorSuper = Math.max(55, settings.opportunity_super_confidence - 25);
+  const confidenceFloorGem = Math.max(50, settings.opportunity_gem_confidence - 20);
   if (!item.eligible) return { classification: "INELIGIBLE", profit, roi };
   if (sample < settings.opportunity_minimum_sold_comps || sold < settings.opportunity_minimum_sold_comps) {
     // A threshold what-if cannot recalculate a reliable tier without the
@@ -784,7 +786,7 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
     // making the listing disappear into a new preview bucket.
     return { classification: item.classification || "INSUFFICIENT_DATA", profit, roi };
   }
-  if (tierProfit >= economics.superProfit && tierRoi >= economics.superRoi && marketDiscount >= settings.opportunity_super_market_discount_pct) {
+  if (tierProfit >= economics.superProfit && tierRoi >= economics.superRoi && marketDiscount >= settings.opportunity_super_market_discount_pct && item.market_confidence >= confidenceFloorSuper && item.liquidity_score >= settings.opportunity_super_liquidity) {
     return { classification: "SUPER_GEM", profit, roi };
   }
   // A Super Gem threshold what-if must not demote an existing Gem merely
@@ -792,7 +794,7 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
   // are independent; preserve that tier unless the row actually qualifies for
   // the newly-previewed Super Gem tier.
   if (item.classification === "GEM") return { classification: "GEM", profit, roi };
-  if (tierProfit >= economics.gemProfit && tierRoi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct) {
+  if (tierProfit >= economics.gemProfit && tierRoi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct && item.market_confidence >= confidenceFloorGem && item.liquidity_score >= settings.opportunity_gem_liquidity) {
     return { classification: "GEM", profit, roi };
   }
   if (tierProfit >= economics.gemProfit && tierRoi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct) return { classification: "EVIDENCE_LIMITED_DEAL", profit, roi };
