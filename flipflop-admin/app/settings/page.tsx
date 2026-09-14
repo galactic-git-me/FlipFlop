@@ -129,6 +129,7 @@ export default function SettingsPage() {
     connected_at: string | null;
     username: string | null;
     email: string | null;
+    seller_eligible: boolean | null;
     scopes: string[];
     refresh_token_expires_at: string | null;
   } | null>(null);
@@ -415,6 +416,15 @@ export default function SettingsPage() {
                       <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-emerald-300">
                         Seller API access: {hasSellerApiAccess ? "Enabled" : "Limited"}
                       </span>
+                      {ebayStatus.seller_eligible !== null && (
+                        <span className={`rounded-full border px-2 py-0.5 ${
+                          ebayStatus.seller_eligible
+                            ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+                            : "border-amber-500/30 bg-amber-500/10 text-amber-300"
+                        }`}>
+                          Seller eligibility: {ebayStatus.seller_eligible ? "Enabled" : "Needs setup"}
+                        </span>
+                      )}
                       {ebayStatus.username === null && ebayStatus.email === null && (
                         <span className="text-amber-300/80">Account details unavailable from eBay</span>
                       )}

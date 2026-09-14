@@ -285,16 +285,33 @@ async def get_connected_identity(db: AsyncSession) -> dict:
                 f"{_ebay_api_root()}/commerce/identity/v1/user",
                 headers={"Authorization": f"Bearer {access_token}"},
             )
-        if response.status_code != 200:
+        if response.status_code == 200:
+            payload = response.json()
+            business = payload.get("businessAccount") or {}
+            individual = payload.get("individualAccount") or {}
+            identity = {
+                "username": payload.get("username") or payload.get("userId"),
+                "email": business.get("email") or individual.get("email"),
+                "seller_eligible": None,
+            }
+            if identity["username"] or identity["email"]:
+                return identity
+        else:
             log.warning("ebay_oauth.identity_lookup_failed", status=response.status_code)
-            return {"username": None, "email": None}
-        payload = response.json()
-        business = payload.get("businessAccount") or {}
-        individual = payload.get("individualAccount") or {}
+
+        # Some production tokens return 404 from the REST identity resource.
+        # Trading API GetUser accepts the same OAuth token and can still return
+        # the authenticated username and seller eligibility.
+        from app.services.ebay_trading_api import get_user_identity
+        fallback = await get_user_identity(access_token, get_settings().ebay_environment)
         return {
-            "username": payload.get("username") or payload.get("userId"),
-            "email": business.get("email") or individual.get("email"),
+            "username": fallback.get("username"),
+            "email": fallback.get("email"),
+            "seller_eligible": fallback.get("seller_eligible"),
         }
     except (httpx.HTTPError, ValueError, TypeError) as exc:
         log.warning("ebay_oauth.identity_lookup_error", error=str(exc))
-        return {"username": None, "email": None}
+        return {"username": None, "email": None, "seller_eligible": None}
+    except Exception as exc:
+        log.warning("ebay_oauth.trading_identity_lookup_failed", error=str(exc))
+        return {"username": None, "email": None, "seller_eligible": None}

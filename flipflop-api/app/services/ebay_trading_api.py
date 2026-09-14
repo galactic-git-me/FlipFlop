@@ -132,6 +132,29 @@ async def get_item_status(
     }
 
 
+async def get_user_identity(token: str, environment: str = "production") -> dict:
+    """Return the authenticated seller's username and selling eligibility."""
+    tree = await _call(
+        "GetUser",
+        "<DetailLevel>ReturnSummary</DetailLevel>"
+        "<IncludeFeatureEligibility>true</IncludeFeatureEligibility>",
+        token,
+        environment=environment,
+    )
+    user = tree.find(f".//{{{_NS}}}User")
+    if user is None:
+        return {"username": None, "email": None, "seller_eligible": None}
+    eligibility = user.find(f"{{{_NS}}}FeatureEligibility")
+    qualifies = user.findtext(f"{{{_NS}}}QualifiesForSelling")
+    if qualifies is None and eligibility is not None:
+        qualifies = eligibility.findtext(f"{{{_NS}}}QualifiesForSelling")
+    return {
+        "username": user.findtext(f"{{{_NS}}}UserID") or user.findtext(f"{{{_NS}}}EIASToken"),
+        "email": user.findtext(f"{{{_NS}}}RegistrationAddress/{{{_NS}}}Email"),
+        "seller_eligible": qualifies.lower() == "true" if qualifies else None,
+    }
+
+
 async def get_best_offers(item_id: str, token: str) -> list[dict]:
     """Poll for open Best Offers on a listing (rows 8/45's read side)."""
     body = f"""<ItemID>{item_id}</ItemID>
