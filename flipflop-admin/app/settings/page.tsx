@@ -123,6 +123,7 @@ export default function SettingsPage() {
   const [logsLoading, setLogsLoading] = useState(false);
   const [opportunityItems, setOpportunityItems] = useState<OpportunityPolicyItem[]>([]);
   const [opportunityLoading, setOpportunityLoading] = useState(false);
+  const [opportunityError, setOpportunityError] = useState<string | null>(null);
 
 
   const [ebayStatus, setEbayStatus] = useState<{
@@ -207,9 +208,13 @@ export default function SettingsPage() {
   useEffect(() => {
     if (tab === "opportunity") {
       setOpportunityLoading(true);
+      setOpportunityError(null);
       void api.gemRadar.opportunityPolicyData()
         .then(result => setOpportunityItems(result.items ?? []))
-        .catch(() => setOpportunityItems([]))
+        .catch((error) => {
+          setOpportunityItems([]);
+          setOpportunityError(error instanceof Error ? error.message : "Could not load scored listings.");
+        })
         .finally(() => setOpportunityLoading(false));
     }
     if (tab === "extension-logs") {
@@ -361,9 +366,13 @@ export default function SettingsPage() {
           </Card>
           <Card>
             <CardHeader><CardTitle>Current classifications and live preview</CardTitle><p className="text-xs text-slate-500">{opportunityLoading ? "Loading active scored listings…" : `${opportunityItems.length} active scored listings`}. Change a value below to see the estimated split before saving.</p></CardHeader>
-            <CardContent className="pt-0"><div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-2">
-              {opportunityAnalysis.order.map(classification => { const current = opportunityAnalysis.current[classification] ?? 0; const next = opportunityAnalysis.preview[classification] ?? 0; const delta = next - current; return <div key={classification} className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3"><p className="text-[10px] uppercase tracking-wide text-slate-500">{classification.replaceAll("_", " ")}</p><p className="mt-1 text-xl font-semibold text-slate-100">{current}</p><p className={`text-xs ${delta > 0 ? "text-emerald-400" : delta < 0 ? "text-rose-400" : "text-slate-500"}`}>Preview {next}{delta ? ` (${delta > 0 ? "+" : ""}${delta})` : ""}</p></div>; })}
-            </div></CardContent>
+            <CardContent className="pt-0 space-y-3">
+              {opportunityError && <p className="rounded-lg border border-rose-500/30 bg-rose-500/5 p-3 text-xs text-rose-300">Could not load the scored listings: {opportunityError}</p>}
+              {!opportunityLoading && !opportunityError && opportunityItems.length === 0 && <p className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-xs text-amber-300">No active scored listings are available for this environment yet. The preview is empty; the zero values are not a scoring result. Run a scan and wait for listings to be scored, then refresh this tab.</p>}
+              <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-2">
+                {opportunityAnalysis.order.map(classification => { const current = opportunityItems.length ? (opportunityAnalysis.current[classification] ?? 0) : null; const next = opportunityItems.length ? (opportunityAnalysis.preview[classification] ?? 0) : null; const delta = current !== null && next !== null ? next - current : 0; return <div key={classification} className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3"><p className="text-[10px] uppercase tracking-wide text-slate-500">{classification.replaceAll("_", " ")}</p><p className="mt-1 text-xl font-semibold text-slate-100">{current ?? "—"}</p><p className={`text-xs ${delta > 0 ? "text-emerald-400" : delta < 0 ? "text-rose-400" : "text-slate-500"}`}>{next === null ? "Preview unavailable" : `Preview ${next}${delta ? ` (${delta > 0 ? "+" : ""}${delta})` : ""}`}</p></div>; })}
+              </div>
+            </CardContent>
           </Card>
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             {[{ title: "SUPER_GEM + BUY_NOW", prefix: "opportunity_super", fields: [["profit_gbp", "Minimum profit (£)"], ["roi_pct", "Minimum ROI (%)"], ["confidence", "Market confidence floor"], ["liquidity", "Liquidity floor"], ["score", "Overall score target"]] }, { title: "GEM + BUY_NOW", prefix: "opportunity_gem", fields: [["profit_gbp", "Minimum profit (£)"], ["roi_pct", "Minimum ROI (%)"], ["confidence", "Market confidence floor"], ["liquidity", "Liquidity floor"], ["score", "Overall score target"]] }].map(group => (
