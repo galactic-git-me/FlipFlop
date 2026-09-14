@@ -533,6 +533,18 @@ export interface SoldScrapingItem {
   identity_confidence: number | null;
 }
 
+export interface PriceEvidenceProduct {
+  cpk: string;
+  label: string;
+  brand: string | null;
+  model: string | null;
+  category: string | null;
+  min_price: number | null;
+  median_price: number | null;
+  max_price: number | null;
+  listing_count: number;
+}
+
 async function requestGemRadar<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`/api/gem-radar${path}`, {
     credentials: "include",
@@ -1351,6 +1363,11 @@ export const api = {
   logs: {
     history: (tail = 300) => request<unknown[]>(`/logs/history?tail=${tail}`),
     soldScraping: (limit = 100) => request<{ items: SoldScrapingItem[]; stored_count: number; note: string }>(`/logs/sold-scraping?limit=${limit}`),
+  },
+
+  priceEvidence: {
+    products: (q = "", limit = 100) => request<{ items: PriceEvidenceProduct[] }>(`/price-evidence/products?q=${encodeURIComponent(q)}&limit=${limit}`),
+    product: (cpk: string) => request<{ product: PriceEvidenceProduct; observations: Array<{ kind: string; price: number; observed_at: string | null; source: string | null; source_url: string | null; title: string }> }>(`/price-evidence/products/${encodeURIComponent(cpk)}`),
   },
 
   inventory: {

@@ -1,7 +1,9 @@
 name: Deploy production to Andromeda
 
 on:
-  push:
+  # Production must be an explicit, reviewed action. The repository also has
+  # an autosync process that can push development commits, so a push trigger
+  # would allow those commits to deploy without an operator approving them.
   workflow_dispatch:
 
 concurrency:

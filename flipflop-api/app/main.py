@@ -35,7 +35,7 @@ from app.database import engine, Base
 from app import models as _models  # noqa: F401  Ensures all ORM models are registered before create_all
 from app.workers.scheduler import start_scheduler, stop_scheduler, run_startup_bootstrap
 from app.api import listings, flips, parts, sources, chat, config, swarms, inventory, inventory_allocations, inventory_intelligence
-from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms
+from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms, price_evidence
 from app.api import alerts, reselling, ebay_listings, favourites
 from app.api import price_alerts
 from app.api import cases_bulk_import
@@ -694,6 +694,7 @@ app.include_router(cases_router, prefix="/api")
 app.include_router(schedule.router, prefix="/api")
 app.include_router(search_telemetry.router, prefix="/api")
 app.include_router(source_search_terms.router, prefix="/api")
+app.include_router(price_evidence.router, prefix="/api")
 app.include_router(facebook_router, prefix="/api")
 app.include_router(build_wizard_router, prefix="/api")
 app.include_router(alerts.router, prefix="/api")

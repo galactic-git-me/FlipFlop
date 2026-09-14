@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Settings, Save, RefreshCw, Database, Plus, Trash2, Link2, Unlink, Terminal, Circle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { api } from "@/lib/api";
+import { api, API_BASE_URL } from "@/lib/api";
 
 interface AppSettings {
   max_concurrent_flips: number;
@@ -625,7 +625,7 @@ function ServerLogPanel() {
   const [lines, setLines] = useState<{ ts: string; level: string; msg: string; extra?: Record<string, string> }[]>([]);
   const [connected, setConnected] = useState(false);
   useEffect(() => {
-    const es = new EventSource(`${process.env.NEXT_PUBLIC_API_URL || "/proxy-api"}/logs/stream`);
+    const es = new EventSource(`${API_BASE_URL}/logs/stream`);
     es.onopen = () => setConnected(true); es.onerror = () => setConnected(false);
     es.onmessage = event => { try { setLines(prev => [...prev, JSON.parse(event.data)].slice(-500)); } catch {} };
     return () => es.close();
