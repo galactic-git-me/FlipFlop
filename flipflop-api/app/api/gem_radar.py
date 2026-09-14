@@ -2004,6 +2004,8 @@ async def get_opportunity_policy_data(
                 "eligible": row.eligible,
                 "listing_price": row.actual_listing_price,
                 "resale_price": row.conservative_resale_price,
+                "market_new_price": row.market_new_price,
+                "market_used_price": row.market_used_price,
                 "sold_count": row.sold_listing_count,
                 "active_count": row.active_listing_count,
             }

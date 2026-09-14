@@ -714,6 +714,8 @@ interface OpportunityPolicyItem {
   eligible: boolean;
   listing_price: number | null;
   resale_price: number | null;
+  market_new_price: number | null;
+  market_used_price: number | null;
   sold_count: number | null;
   active_count: number | null;
 }
@@ -758,7 +760,14 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
   const totalCost = purchase + shipping + fee + packaging + testing + resale * warrantyPct / 100;
   const profit = resale - totalCost;
   const roi = totalCost > 0 ? profit / totalCost * 100 : 0;
-  const marketDiscount = resale > 0 ? (resale - purchase) / resale * 100 : -Infinity;
+  // The below-market gate compares the listing with the same-condition market
+  // benchmark. Conservative resale is used for profit, but must not be used as
+  // the market-price denominator because it can include a separate haircut.
+  const condition = (item.condition ?? "").toLowerCase();
+  const marketPrice = condition.includes("new")
+    ? (item.market_new_price ?? item.market_used_price ?? resale)
+    : (item.market_used_price ?? item.market_new_price ?? resale);
+  const marketDiscount = marketPrice > 0 ? (marketPrice - purchase) / marketPrice * 100 : -Infinity;
   const economics = policyEconomics(item, settings);
   const sample = item.market_sample_size ?? 0;
   const sold = item.sold_count ?? 0;

@@ -619,6 +619,8 @@ export const api = {
         eligible: boolean;
         listing_price: number | null;
         resale_price: number | null;
+        market_new_price: number | null;
+        market_used_price: number | null;
         sold_count: number | null;
         active_count: number | null;
       }>;
