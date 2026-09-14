@@ -285,6 +285,7 @@ async def get_connected_identity(db: AsyncSession) -> dict:
                 f"{_ebay_api_root()}/commerce/identity/v1/user",
                 headers={"Authorization": f"Bearer {access_token}"},
             )
+        identity: dict[str, object] | None = None
         if response.status_code == 200:
             payload = response.json()
             business = payload.get("businessAccount") or {}
@@ -294,7 +295,7 @@ async def get_connected_identity(db: AsyncSession) -> dict:
                 "email": business.get("email") or individual.get("email"),
                 "seller_eligible": None,
             }
-            if identity["username"] or identity["email"]:
+            if identity["username"] and identity["email"]:
                 return identity
         else:
             log.warning("ebay_oauth.identity_lookup_failed", status=response.status_code)
@@ -303,11 +304,19 @@ async def get_connected_identity(db: AsyncSession) -> dict:
         # Trading API GetUser accepts the same OAuth token and can still return
         # the authenticated username and seller eligibility.
         from app.services.ebay_trading_api import get_user_identity
-        fallback = await get_user_identity(access_token, get_settings().ebay_environment)
+        try:
+            fallback = await get_user_identity(access_token, get_settings().ebay_environment)
+        except Exception as exc:
+            # Keep the REST identity when Trading API access is unavailable.
+            log.warning("ebay_oauth.trading_identity_fallback_failed", error=str(exc))
+            fallback = {}
+        # The REST identity response often includes the username but omits
+        # the registration email.  Preserve anything it did return and fill
+        # the missing fields from Trading API GetUser.
         return {
-            "username": fallback.get("username"),
-            "email": fallback.get("email"),
-            "seller_eligible": fallback.get("seller_eligible"),
+            "username": (identity or {}).get("username") or fallback.get("username"),
+            "email": (identity or {}).get("email") or fallback.get("email"),
+            "seller_eligible": (identity or {}).get("seller_eligible") if (identity or {}).get("seller_eligible") is not None else fallback.get("seller_eligible"),
         }
     except (httpx.HTTPError, ValueError, TypeError) as exc:
         log.warning("ebay_oauth.identity_lookup_error", error=str(exc))

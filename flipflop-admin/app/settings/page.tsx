@@ -387,10 +387,10 @@ export default function SettingsPage() {
                   <div>
                     <p className="text-sm text-emerald-400 font-semibold">Connected</p>
                     {ebayStatus.username && (
-                      <p className="text-xs text-slate-300">eBay account: {ebayStatus.username}</p>
+                      <p className="text-xs text-slate-300">eBay username: {ebayStatus.username}</p>
                     )}
                     {ebayStatus.email && (
-                      <p className="text-xs text-slate-400">{ebayStatus.email}</p>
+                      <p className="text-xs text-slate-400">eBay email: {ebayStatus.email}</p>
                     )}
                     <div className="mt-2 flex flex-wrap gap-2 text-[11px]">
                       <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-emerald-300">
