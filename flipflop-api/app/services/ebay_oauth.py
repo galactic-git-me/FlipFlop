@@ -280,7 +280,9 @@ async def get_connected_identity(db: AsyncSession) -> dict:
     try:
         async with httpx.AsyncClient(timeout=20) as client:
             response = await client.get(
-                f"{_ebay_api_root()}/commerce/identity/v1/user/",
+                # eBay's identity endpoint is singular and does not accept a
+                # trailing slash (it returns 404 when one is supplied).
+                f"{_ebay_api_root()}/commerce/identity/v1/user",
                 headers={"Authorization": f"Bearer {access_token}"},
             )
         if response.status_code != 200:

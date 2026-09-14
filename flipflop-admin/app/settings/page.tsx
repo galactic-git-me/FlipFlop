@@ -134,6 +134,12 @@ export default function SettingsPage() {
   } | null>(null);
   const [connectingEbay, setConnectingEbay] = useState(false);
 
+  const ebaySellerScopes = new Set(ebayStatus?.scopes ?? []);
+  const hasSellerApiAccess = [
+    "https://api.ebay.com/oauth/api_scope/sell.inventory",
+    "https://api.ebay.com/oauth/api_scope/sell.account",
+  ].every(scope => ebaySellerScopes.has(scope));
+
   async function loadEbayStatus() {
     try {
       setEbayStatus(await api.ebayOAuth.status());
@@ -405,6 +411,14 @@ export default function SettingsPage() {
                     {ebayStatus.email && (
                       <p className="text-xs text-slate-400">{ebayStatus.email}</p>
                     )}
+                    <div className="mt-2 flex flex-wrap gap-2 text-[11px]">
+                      <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-emerald-300">
+                        Seller API access: {hasSellerApiAccess ? "Enabled" : "Limited"}
+                      </span>
+                      {ebayStatus.username === null && ebayStatus.email === null && (
+                        <span className="text-amber-300/80">Account details unavailable from eBay</span>
+                      )}
+                    </div>
                     <p className="text-xs text-slate-500">
                       Since {ebayStatus.connected_at ? new Date(ebayStatus.connected_at).toLocaleDateString() : "—"}
                       {ebayStatus.refresh_token_expires_at && (
