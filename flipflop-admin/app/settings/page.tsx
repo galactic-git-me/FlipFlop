@@ -104,10 +104,10 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
   );
 }
 
-type TabKey = "general" | "opportunity" | "seller-policies" | "sources" | "extension-logs" | "sold-logs" | "server-logs" | "price-evidence";
+type TabKey = "opportunity" | "seller-policies" | "sources" | "extension-logs" | "sold-logs" | "server-logs" | "price-evidence";
 
 export default function SettingsPage() {
-  const [tab, setTab] = useState<TabKey>("general");
+  const [tab, setTab] = useState<TabKey>("opportunity");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -265,16 +265,41 @@ export default function SettingsPage() {
           variant="primary"
           size="sm"
           onClick={saveSettings}
-          disabled={saving || (tab !== "general" && tab !== "opportunity" && tab !== "seller-policies")}
+          disabled={saving || (tab !== "opportunity" && tab !== "seller-policies")}
         >
           <Save className="w-3.5 h-3.5" />
           {saving ? "Saving…" : saved ? "Saved ✓" : "Save"}
         </Button>
       </div>
 
+      {tab !== "seller-policies" && (
+        <Card>
+          <CardContent className="py-3 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className={`text-sm font-semibold ${ebayStatus?.connected ? "text-emerald-400" : "text-slate-400"}`}>
+                eBay {ebayStatus?.connected ? "Connected" : "Not connected"}
+              </p>
+              {ebayStatus?.connected && (
+                <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
+                  <span>Username: {ebayStatus.username ?? "Unavailable"}</span>
+                  <span>Email: {ebayStatus.email ?? "Unavailable"}</span>
+                  {ebayStatus.seller_eligible !== null && (
+                    <span>Seller eligibility: {ebayStatus.seller_eligible ? "Enabled" : "Needs setup"}</span>
+                  )}
+                </div>
+              )}
+            </div>
+            {ebayStatus?.connected && (
+              <button onClick={() => setTab("seller-policies")} className="text-xs text-sky-300 hover:text-sky-200">
+                Manage connection
+              </button>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
       <div className="flex gap-2">
         {[
-          { key: "general", label: "General" },
           { key: "opportunity", label: "Opportunity Scoring" },
           { key: "seller-policies", label: "Seller Policies" },
           { key: "sources", label: "Data Sources" },
@@ -294,45 +319,6 @@ export default function SettingsPage() {
           </button>
         ))}
       </div>
-
-      {tab === "general" && (
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader><CardTitle>General</CardTitle></CardHeader>
-            <CardContent className="space-y-3 pt-0">
-              <label className="text-xs text-slate-500 block">Max Concurrent Flips</label>
-              <input
-                type="range"
-                min={1}
-                max={10}
-                value={settings.max_concurrent_flips}
-                onChange={e => setSettings(p => ({ ...p, max_concurrent_flips: Number(e.target.value) }))}
-                className="w-full accent-[#00dc82]"
-              />
-              <label className="text-xs text-slate-500 block">Default Sell Platform</label>
-              <input
-                value={settings.default_sell_platform}
-                onChange={e => setSettings(p => ({ ...p, default_sell_platform: e.target.value }))}
-                className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm"
-              />
-              <div className="flex items-center justify-between p-2 bg-[#0a1119] rounded border border-[#1e2d45]">
-                <span className="text-sm text-slate-300">Auto Buy Autonomous</span>
-                <Toggle checked={settings.auto_buy_autonomous} onChange={() => setSettings(p => ({ ...p, auto_buy_autonomous: !p.auto_buy_autonomous }))} />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader><CardTitle>Model + eBay</CardTitle></CardHeader>
-            <CardContent className="space-y-3 pt-0">
-              <input value={settings.openrouter_primary_model} onChange={e => setSettings(p => ({ ...p, openrouter_primary_model: e.target.value }))} placeholder="OpenRouter primary model" className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
-              <input value={settings.ollama_base_url} onChange={e => setSettings(p => ({ ...p, ollama_base_url: e.target.value }))} placeholder="Ollama URL" className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
-              <input value={settings.ollama_model} onChange={e => setSettings(p => ({ ...p, ollama_model: e.target.value }))} placeholder="Ollama model" className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
-              <input value={settings.ebay_app_id} onChange={e => setSettings(p => ({ ...p, ebay_app_id: e.target.value }))} placeholder="eBay App ID" className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
-            </CardContent>
-          </Card>
-        </div>
-      )}
 
       {tab === "opportunity" && (
         <div className="space-y-6">
@@ -405,12 +391,8 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between p-3 rounded-lg border border-emerald-500/30 bg-emerald-500/5">
                   <div>
                     <p className="text-sm text-emerald-400 font-semibold">Connected</p>
-                    {ebayStatus.username && (
-                      <p className="text-xs text-slate-300">eBay username: {ebayStatus.username}</p>
-                    )}
-                    {ebayStatus.email && (
-                      <p className="text-xs text-slate-400">eBay email: {ebayStatus.email}</p>
-                    )}
+                    <p className="text-xs text-slate-300">eBay username: {ebayStatus.username ?? "Unavailable"}</p>
+                    <p className="text-xs text-slate-400">eBay email: {ebayStatus.email ?? "Unavailable"}</p>
                     <div className="mt-2 flex flex-wrap gap-2 text-[11px]">
                       <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-emerald-300">
                         Seller API access: {hasSellerApiAccess ? "Enabled" : "Limited"}

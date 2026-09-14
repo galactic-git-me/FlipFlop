@@ -9,7 +9,7 @@
     "last_success_at": "2026-09-14T16:00:02.573238+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-09-14T16:01:01.596924+00:00"
+    "last_success_at": "2026-09-14T16:06:01.758316+00:00"
   },
   "ai_build_generator": {
     "last_success_at": "2026-09-14T10:12:19.804332+00:00"
@@ -75,7 +75,7 @@
     "last_success_at": "2026-09-14T16:02:19.727878+00:00"
   },
   "price_refresh": {
-    "last_success_at": "2026-09-14T11:17:40.138829+00:00"
+    "last_success_at": "2026-09-14T16:05:03.957845+00:00"
   },
   "send_to_watchers": {
     "last_success_at": "2026-09-14T16:00:03.507513+00:00"
