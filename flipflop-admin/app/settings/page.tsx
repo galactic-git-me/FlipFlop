@@ -301,13 +301,16 @@ export default function SettingsPage() {
       current: current[classification] ?? 0,
       preview: preview[classification] ?? 0,
     }));
+    const identityFailedCount = current.IDENTITY_FAILED ?? 0;
+    const insufficientDataCount = current.INSUFFICIENT_DATA ?? 0;
+    const chartOrder = order.filter(classification => !["IDENTITY_FAILED", "INSUFFICIENT_DATA"].includes(classification));
     const splitChart = [
-      { name: "Current", ...current },
-      { name: "Preview", ...preview },
+      { name: "Current", ...Object.fromEntries(chartOrder.map(classification => [classification, current[classification] ?? 0])) },
+      { name: "Preview", ...Object.fromEntries(chartOrder.map(classification => [classification, preview[classification] ?? 0])) },
     ];
     const currentTotal = Object.values(current).reduce((sum, value) => sum + value, 0);
     const previewTotal = Object.values(preview).reduce((sum, value) => sum + value, 0);
-    return { order, current, preview, average, chart, splitChart, currentTotal, previewTotal };
+    return { order, chartOrder, current, preview, average, chart, splitChart, identityFailedCount, insufficientDataCount, currentTotal, previewTotal };
   }, [opportunityItems, settings, opportunityPreviewDirty]);
 
   if (loading) {
@@ -412,15 +415,15 @@ export default function SettingsPage() {
                 </div>
               </div>
               <div className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3">
-                <div className="mb-2"><p className="text-sm font-bold text-slate-200">Current vs preview split</p><p className="text-[11px] text-slate-500">Each bar is the full population; coloured segments show how its classifications are distributed.</p></div>
+                <div className="mb-2 flex flex-wrap items-center justify-between gap-2"><div><p className="text-sm font-bold text-slate-200">Current vs preview split</p><p className="text-[11px] text-slate-500">Coloured segments show the classifications affected by scoring controls.</p></div><div className="flex flex-wrap gap-2"><span title="The listing could not be matched confidently to a specific product identity, so the scoring gates cannot be trusted yet." className="cursor-help rounded-full border border-slate-500/30 bg-slate-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-300">Identity failed · {opportunityAnalysis.identityFailedCount} unchanged <span aria-hidden="true">ⓘ</span></span><span title="The listing does not have enough comparable pricing or sold-evidence data to recalculate a reliable opportunity score." className="cursor-help rounded-full border border-slate-500/30 bg-slate-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-300">Insufficient data · {opportunityAnalysis.insufficientDataCount} unchanged <span aria-hidden="true">ⓘ</span></span></div></div>
                 <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={opportunityAnalysis.splitChart} margin={{ top: 8, right: 18, bottom: 8, left: 8 }} barCategoryGap="35%">
+                  <BarChart data={opportunityAnalysis.splitChart} margin={{ top: 8, right: 18, bottom: 8, left: 8 }} barCategoryGap="35%" reverseStackOrder={false}>
                     <CartesianGrid stroke="#17304a" strokeDasharray="3 3" vertical={false} />
                     <XAxis dataKey="name" tick={{ fill: "#cbd5e1", fontSize: 11, fontWeight: 700 }} />
                     <YAxis allowDecimals={false} tick={{ fill: "#64748b", fontSize: 10 }} />
                     <Tooltip cursor={{ fill: "#17263a", opacity: 0.5 }} contentStyle={{ background: "#07101a", border: "1px solid #1e2d45", borderRadius: 8, color: "#e2e8f0", fontSize: 11 }} />
                     <Legend wrapperStyle={{ color: "#cbd5e1", fontSize: 10 }} />
-                    {opportunityAnalysis.order.map((classification, index) => <Bar key={classification} dataKey={classification} name={classification.replaceAll("_", " ")} stackId="split" fill={["#f97316", "#3b82f6", "#a78bfa", "#22c55e", "#eab308", "#ef4444", "#64748b", "#94a3b8", "#c026d3"][index % 9]} />)}
+                    {opportunityAnalysis.chartOrder.map((classification, index) => <Bar key={classification} dataKey={classification} name={classification.replaceAll("_", " ")} stackId="split" fill={["#f97316", "#3b82f6", "#a78bfa", "#22c55e", "#eab308", "#ef4444", "#64748b", "#94a3b8"][index % 8]} />)}
                   </BarChart>
                 </ResponsiveContainer>
               </div>
