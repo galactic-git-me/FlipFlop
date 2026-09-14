@@ -1,4 +1,4 @@
-FROM python:3.11-slim as backend
+FROM python:3.11-slim AS backend
 
 WORKDIR /app
 
@@ -22,7 +22,7 @@ HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=15s \
 
 CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "4311"]
 
-FROM backend as gemradar
+FROM backend AS gemradar
 
 EXPOSE 18000
 
