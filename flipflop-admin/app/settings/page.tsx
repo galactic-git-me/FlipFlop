@@ -382,7 +382,8 @@ export default function SettingsPage() {
       ...Object.entries(opportunityAnalysis.insufficientReasons).map(([reason, count]) => ({ category: "Insufficient data", reason, count, total: opportunityAnalysis.insufficientDataCount, meaning: insufficientMeanings[reason] ?? "Required pricing or sold-market evidence is missing.", impact: "Held out of opportunity gates until the missing evidence is available." })),
       ...Object.entries(opportunityAnalysis.evidenceLimitedReasons).map(([reason, count]) => ({ category: "Evidence limited deal", reason, count, total: Object.values(opportunityAnalysis.evidenceLimitedReasons).reduce((sum, value) => sum + value, 0), meaning: evidenceMeanings[reason] ?? "Manual verification is required before promotion to a Gem tier.", impact: "Investigation only; it cannot become Gem or Super Gem yet." })),
     ];
-    return rows.sort((a, b) => a.category.localeCompare(b.category) || b.count - a.count);
+    const categoryOrder = ["Identity failed", "Insufficient data", "Evidence limited deal"];
+    return rows.sort((a, b) => categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category) || b.count - a.count);
   }, [opportunityAnalysis]);
 
   if (loading) {
