@@ -775,8 +775,17 @@ function policyEconomics(item: OpportunityPolicyItem, settings: AppSettings) {
   };
 }
 
+function weightedOpportunityScore(item: OpportunityPolicyItem, settings: AppSettings, profit: number, roi: number, economics: ReturnType<typeof policyEconomics>) {
+  const economic = Math.max(0, Math.min(100, (roi / economics.superRoi) * 55 + (profit / economics.superProfit) * 45));
+  const values = [economic, item.desirability_score ?? 0, item.market_confidence ?? 0, item.risk_score ?? 0, item.liquidity_score];
+  const weights = [settings.opportunity_weight_economic_pct, settings.opportunity_weight_desirability_pct, settings.opportunity_weight_market_confidence_pct, settings.opportunity_weight_risk_safety_pct, settings.opportunity_weight_liquidity_pct];
+  const usable = values.map((value, index) => ({ value, weight: weights[index] })).filter(part => part.value != null && part.weight > 0) as Array<{ value: number; weight: number }>;
+  const totalWeight = usable.reduce((sum, part) => sum + part.weight, 0);
+  return totalWeight > 0 ? usable.reduce((sum, part) => sum + part.value * part.weight, 0) / totalWeight : 0;
+}
+
 function superGateDiagnostics(items: OpportunityPolicyItem[], settings: AppSettings) {
-  let eligible = 0, evidence = 0, economics = 0, market = 0, final = 0;
+  let eligible = 0, evidence = 0, economics = 0, market = 0, confidenceLiquidity = 0, final = 0;
   for (const item of items) {
     if (!item.eligible) continue;
     eligible++;
@@ -799,9 +808,12 @@ function superGateDiagnostics(items: OpportunityPolicyItem[], settings: AppSetti
     if (discount < settings.opportunity_super_market_discount_pct) continue;
     market++;
     const confidenceFloor = Math.max(55, settings.opportunity_super_confidence - 25);
-    if (confidence >= confidenceFloor && liquidity >= settings.opportunity_super_liquidity) final++;
+    if (confidence >= confidenceFloor && liquidity >= settings.opportunity_super_liquidity) {
+      confidenceLiquidity++;
+      if (weightedOpportunityScore(item, settings, profit, roi, economicsRule) >= settings.opportunity_super_score) final++;
+    }
   }
-  return { eligible, evidence, economics, market, final };
+  return { eligible, evidence, economics, market, confidenceLiquidity, final };
 }
 
 function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings): { classification: string; profit: number | null; roi: number | null } {
@@ -849,15 +861,11 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
     // making the listing disappear into a new preview bucket.
     return { classification: item.classification || "INSUFFICIENT_DATA", profit, roi };
   }
-  if (tierProfit >= economics.superProfit && tierRoi >= economics.superRoi && marketDiscount >= settings.opportunity_super_market_discount_pct && item.market_confidence >= confidenceFloorSuper && item.liquidity_score >= settings.opportunity_super_liquidity) {
+  const weightedScore = weightedOpportunityScore(item, settings, tierProfit, tierRoi, economics);
+  if (tierProfit >= economics.superProfit && tierRoi >= economics.superRoi && marketDiscount >= settings.opportunity_super_market_discount_pct && item.market_confidence >= confidenceFloorSuper && item.liquidity_score >= settings.opportunity_super_liquidity && weightedScore >= settings.opportunity_super_score) {
     return { classification: "SUPER_GEM", profit, roi };
   }
-  // A Super Gem threshold what-if must not demote an existing Gem merely
-  // because the row was scored with an older cost snapshot. The Gem controls
-  // are independent; preserve that tier unless the row actually qualifies for
-  // the newly-previewed Super Gem tier.
-  if (item.classification === "GEM") return { classification: "GEM", profit, roi };
-  if (tierProfit >= economics.gemProfit && tierRoi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct && item.market_confidence >= confidenceFloorGem && item.liquidity_score >= settings.opportunity_gem_liquidity) {
+  if (tierProfit >= economics.gemProfit && tierRoi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct && item.market_confidence >= confidenceFloorGem && item.liquidity_score >= settings.opportunity_gem_liquidity && weightedScore >= settings.opportunity_gem_score) {
     return { classification: "GEM", profit, roi };
   }
   if (tierProfit >= economics.gemProfit && tierRoi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct) return { classification: "EVIDENCE_LIMITED_DEAL", profit, roi };

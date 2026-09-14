@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-14T17:02:12.195116+00:00",
+  "generated_at": "2026-09-14T18:11:35.271158+00:00",
   "builds": [
     {
       "components": [
@@ -132,12 +132,12 @@
           "count": 49,
           "min_price": 419.24,
           "max_price": 3579.0,
-          "average_price": 2029.97
+          "average_price": 1981.9
         }
       },
-      "resale_estimate": 2029.97,
+      "resale_estimate": 1981.9,
       "resale_source": "bin_average",
-      "estimated_profit": 1941.69,
+      "estimated_profit": 1893.62,
       "rank": 1
     },
     {
@@ -263,7 +263,7 @@
         "sold": {
           "available": true,
           "count": 48,
-          "average_price": 994.76,
+          "average_price": 993.94,
           "unavailable_reason": null
         },
         "bin": {
@@ -271,12 +271,12 @@
           "count": 49,
           "min_price": 419.24,
           "max_price": 3579.0,
-          "average_price": 1977.9
+          "average_price": 2037.72
         }
       },
-      "resale_estimate": 994.76,
+      "resale_estimate": 993.94,
       "resale_source": "sold_average",
-      "estimated_profit": 903.48,
+      "estimated_profit": 902.66,
       "rank": 2
     },
     {
@@ -401,8 +401,8 @@
         "query": "gaming pc Ryzen 7 9800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 58,
-          "average_price": 944.98,
+          "count": 48,
+          "average_price": 994.76,
           "unavailable_reason": null
         },
         "bin": {
@@ -410,12 +410,12 @@
           "count": 49,
           "min_price": 419.24,
           "max_price": 3579.0,
-          "average_price": 2029.97
+          "average_price": 1979.7
         }
       },
-      "resale_estimate": 944.98,
+      "resale_estimate": 994.76,
       "resale_source": "sold_average",
-      "estimated_profit": 852.7,
+      "estimated_profit": 902.48,
       "rank": 3
     },
     {
@@ -539,22 +539,22 @@
       "market": {
         "query": "gaming pc AMD R7 5800X Desktop CPU Proce SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "No comparable sold listings found"
+          "available": true,
+          "count": 59,
+          "average_price": 562.95,
+          "unavailable_reason": null
         },
         "bin": {
           "available": true,
           "count": 48,
-          "min_price": 217.66,
+          "min_price": 121.86,
           "max_price": 2549.0,
-          "average_price": 840.68
+          "average_price": 832.68
         }
       },
-      "resale_estimate": 840.68,
-      "resale_source": "bin_average",
-      "estimated_profit": 750.03,
+      "resale_estimate": 562.95,
+      "resale_source": "sold_average",
+      "estimated_profit": 472.3,
       "rank": 4
     },
     {
@@ -685,15 +685,15 @@
         },
         "bin": {
           "available": true,
-          "count": 47,
+          "count": 48,
           "min_price": 121.76,
           "max_price": 1700.99,
-          "average_price": 491.17
+          "average_price": 488.55
         }
       },
-      "resale_estimate": 491.17,
+      "resale_estimate": 488.55,
       "resale_source": "bin_average",
-      "estimated_profit": 399.48,
+      "estimated_profit": 396.86,
       "rank": 5
     },
     {
@@ -818,8 +818,8 @@
         "query": "gaming pc SAVE 6% SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 60,
-          "average_price": 433.48,
+          "count": 50,
+          "average_price": 414.25,
           "unavailable_reason": null
         },
         "bin": {
@@ -827,12 +827,12 @@
           "count": 49,
           "min_price": 83.91,
           "max_price": 1700.99,
-          "average_price": 525.5
+          "average_price": 515.66
         }
       },
-      "resale_estimate": 433.48,
+      "resale_estimate": 414.25,
       "resale_source": "sold_average",
-      "estimated_profit": 342.78,
+      "estimated_profit": 323.55,
       "rank": 6
     }
   ],
