@@ -348,53 +348,31 @@ export default function SettingsPage() {
       {tab === "opportunity" && (
         <div className="space-y-6">
           <div className="rounded-lg border border-sky-500/20 bg-sky-500/5 p-4 text-sm text-slate-300">
-            Labels are earned only after identity and evidence gates pass. Price cannot compensate for an accessory,
-            bundle, retro-platform exclusion, or an inadequate same-condition sold cohort.
-          </div>
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-            {[
-              { title: "SUPER_GEM + BUY_NOW", prefix: "opportunity_super", fields: [["profit_gbp", "Minimum profit (£)"], ["roi_pct", "Minimum ROI (%)"], ["confidence", "Market confidence"], ["liquidity", "Liquidity score"], ["score", "Overall score"]] },
-              { title: "GEM + BUY_NOW", prefix: "opportunity_gem", fields: [["profit_gbp", "Minimum profit (£)"], ["roi_pct", "Minimum ROI (%)"], ["confidence", "Market confidence"], ["liquidity", "Liquidity score"], ["score", "Overall score"]] },
-            ].map(group => (
-              <Card key={group.prefix}>
-                <CardHeader><CardTitle>{group.title}</CardTitle></CardHeader>
-                <CardContent className="grid grid-cols-2 gap-3 pt-0">
-                  {group.fields.map(([suffix, label]) => {
-                    const key = `${group.prefix}_${suffix}` as keyof AppSettings;
-                    return <label key={key} className="text-xs text-slate-500">{label}
-                      <input type="number" min={0} step="0.1" value={settings[key] as number}
-                        onChange={e => setSettings(p => ({ ...p, [key]: Number(e.target.value) }))}
-                        className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-200" />
-                    </label>;
-                  })}
-                </CardContent>
-              </Card>
-            ))}
+            This view shows the actual inputs used by Gem Radar. Identity and evidence gates run first; eligible listings then combine economics, desirability, market confidence, risk and liquidity into the deal score.
           </div>
           <Card>
-            <CardHeader><CardTitle>Cost stack and evidence gates</CardTitle></CardHeader>
-            <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-0">
-              {[
-                ["opportunity_delivery_fallback_gbp", "Delivery fallback (£)"],
-                ["opportunity_ebay_fee_pct", "eBay fee (%)"],
-                ["opportunity_packaging_gbp", "Packaging (£)"],
-                ["opportunity_testing_refurbishment_gbp", "Testing/refurb (£)"],
-                ["opportunity_returns_warranty_pct", "Returns/warranty reserve (%)"],
-                ["opportunity_minimum_sold_comps", "Minimum sold comps"],
-                ["opportunity_minimum_source_diversity", "Minimum source diversity"],
-              ].map(([field, label]) => {
-                const key = field as keyof AppSettings;
-                return <label key={field} className="text-xs text-slate-500">{label}
-                  <input type="number" min={0} step="0.1" value={settings[key] as number}
-                    onChange={e => setSettings(p => ({ ...p, [key]: Number(e.target.value) }))}
-                    className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-200" />
-                </label>;
+            <CardHeader><CardTitle>How the final score is built</CardTitle></CardHeader>
+            <CardContent className="grid grid-cols-2 md:grid-cols-5 gap-3 pt-0">
+              {["Economic return · 45%", "Desirability · 15%", "Market confidence · 15%", "Risk safety · 5%", "Liquidity · 20%"].map((label, index) => {
+                const values = [100, opportunityAnalysis.average("desirability_score"), opportunityAnalysis.average("market_confidence"), opportunityAnalysis.average("risk_score"), opportunityAnalysis.average("liquidity_score")];
+                return <div key={label} className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3"><p className="text-xs text-slate-400">{label}</p><p className="mt-2 text-lg font-semibold text-slate-100">{values[index].toFixed(0)}<span className="text-xs text-slate-500">/100 avg</span></p><div className="mt-2 h-1.5 rounded-full bg-slate-800"><div className="h-full rounded-full bg-[#00dc82]" style={{ width: `${Math.max(0, Math.min(100, values[index]))}%` }} /></div></div>;
               })}
             </CardContent>
           </Card>
+          <Card>
+            <CardHeader><CardTitle>Current classifications and live preview</CardTitle><p className="text-xs text-slate-500">{opportunityLoading ? "Loading active scored listings…" : `${opportunityItems.length} active scored listings`}. Change a value below to see the estimated split before saving.</p></CardHeader>
+            <CardContent className="pt-0"><div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-2">
+              {opportunityAnalysis.order.map(classification => { const current = opportunityAnalysis.current[classification] ?? 0; const next = opportunityAnalysis.preview[classification] ?? 0; const delta = next - current; return <div key={classification} className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3"><p className="text-[10px] uppercase tracking-wide text-slate-500">{classification.replaceAll("_", " ")}</p><p className="mt-1 text-xl font-semibold text-slate-100">{current}</p><p className={`text-xs ${delta > 0 ? "text-emerald-400" : delta < 0 ? "text-rose-400" : "text-slate-500"}`}>Preview {next}{delta ? ` (${delta > 0 ? "+" : ""}${delta})` : ""}</p></div>; })}
+            </div></CardContent>
+          </Card>
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            {[{ title: "SUPER_GEM + BUY_NOW", prefix: "opportunity_super", fields: [["profit_gbp", "Minimum profit (£)"], ["roi_pct", "Minimum ROI (%)"], ["confidence", "Market confidence floor"], ["liquidity", "Liquidity floor"], ["score", "Overall score target"]] }, { title: "GEM + BUY_NOW", prefix: "opportunity_gem", fields: [["profit_gbp", "Minimum profit (£)"], ["roi_pct", "Minimum ROI (%)"], ["confidence", "Market confidence floor"], ["liquidity", "Liquidity floor"], ["score", "Overall score target"]] }].map(group => (
+              <Card key={group.prefix}><CardHeader><CardTitle>{group.title}</CardTitle></CardHeader><CardContent className="grid grid-cols-2 gap-3 pt-0">{group.fields.map(([suffix, label]) => { const key = `${group.prefix}_${suffix}` as keyof AppSettings; return <label key={key} className="text-xs text-slate-500">{label}<input type="number" min={0} step="0.1" value={settings[key] as number} onChange={e => setSettings(p => ({ ...p, [key]: Number(e.target.value) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-200" /></label>; })}</CardContent></Card>
+            ))}
+          </div>
+          <Card><CardHeader><CardTitle>Cost stack and evidence gates</CardTitle><p className="text-xs text-slate-500">These values recalculate estimated profit, ROI and evidence eligibility in the preview. Component items use their category rules.</p></CardHeader><CardContent className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-0">{[["opportunity_delivery_fallback_gbp", "Delivery fallback (£)"], ["opportunity_ebay_fee_pct", "eBay fee (%)"], ["opportunity_packaging_gbp", "Packaging (£)"], ["opportunity_testing_refurbishment_gbp", "Testing/refurb (£)"], ["opportunity_returns_warranty_pct", "Returns/warranty reserve (%)"], ["opportunity_minimum_sold_comps", "Minimum sold comps"], ["opportunity_minimum_source_diversity", "Minimum source diversity"]].map(([field, label]) => { const key = field as keyof AppSettings; return <label key={field} className="text-xs text-slate-500">{label}<input type="number" min={0} step="0.1" value={settings[key] as number} onChange={e => setSettings(p => ({ ...p, [key]: Number(e.target.value) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-200" /></label>; })}</CardContent></Card>
         </div>
       )}
-
       {tab === "seller-policies" && (
         <div className="space-y-6">
           <Card>
