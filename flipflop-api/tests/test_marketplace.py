@@ -1,4 +1,4 @@
-from app.gem_radar.marketplace import is_malformed_awdit_listing, usable_listing_url
+from app.gem_radar.marketplace import fallback_listing_url, is_malformed_awdit_listing, usable_listing_url
 
 
 def test_awdit_discount_badge_is_not_a_listing() -> None:
@@ -51,3 +51,20 @@ def test_search_url_is_preserved() -> None:
         "overclockers",
         "RTX 5060",
     ) == search_url
+
+
+def test_google_shopping_embedded_merchant_url_is_recovered() -> None:
+    listing_id = (
+        "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F318815016884"
+        "%3F_ul%3DGB%26rb_itemId%3D318815016884%26rb_pgeo%3DGB%26var%3D0"
+        "%26ff%3D11:GIGABYTE%20GeForce%203080:"
+        "a5d6d8b773db7b98394d07b0fb302abb1cdef6f1794c1d1afda4febde99a18e6"
+    )
+    merchant_url = "https://www.ebay.co.uk/itm/318815016884?_ul=GB&rb_itemId=318815016884&rb_pgeo=GB&var=0&ff=11"
+
+    assert fallback_listing_url(listing_id, "google_shopping") == merchant_url
+    assert usable_listing_url(
+        "https://www.ebay.co.uk/itm/" + listing_id,
+        "truncated-id",
+        "google_shopping",
+    ) == merchant_url

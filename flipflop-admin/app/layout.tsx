@@ -24,6 +24,14 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "FlipFlop",
   description: "AI-powered PC flipping intelligence platform",
+  // Use the same cube mark shown in the header instead of Next/Vercel's
+  // starter favicon. FaviconAnimator may animate this after hydration, but
+  // this is the correct server-rendered fallback for tabs and bookmarks.
+  icons: {
+    icon: "/pics/logo_simple_no_bg.png",
+    shortcut: "/pics/logo_simple_no_bg.png",
+    apple: "/pics/logo_simple_no_bg.png",
+  },
 };
 
 export default function RootLayout({
