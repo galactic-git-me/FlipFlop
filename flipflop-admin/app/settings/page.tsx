@@ -5,7 +5,7 @@ import { Settings, Save, RefreshCw, Database, Plus, Trash2, Link2, Unlink, Termi
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { api, API_BASE_URL } from "@/lib/api";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 interface AppSettings {
   max_concurrent_flips: number;
@@ -301,7 +301,13 @@ export default function SettingsPage() {
       current: current[classification] ?? 0,
       preview: preview[classification] ?? 0,
     }));
-    return { order, current, preview, average, chart };
+    const splitChart = [
+      { name: "Current", ...current },
+      { name: "Preview", ...preview },
+    ];
+    const currentTotal = Object.values(current).reduce((sum, value) => sum + value, 0);
+    const previewTotal = Object.values(preview).reduce((sum, value) => sum + value, 0);
+    return { order, current, preview, average, chart, splitChart, currentTotal, previewTotal };
   }, [opportunityItems, settings, opportunityPreviewDirty]);
 
   if (loading) {
@@ -396,25 +402,25 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
           <Card>
-            <CardHeader><CardTitle>Current classifications and live preview</CardTitle><p className="text-xs font-semibold text-slate-300">{opportunityLoading ? "Loading active scored listings…" : `Showing ${opportunityCounts.active} active scored listings${opportunityCounts.total > opportunityCounts.active ? ` · ${opportunityCounts.total} scored listings retained in the database (${opportunityCounts.historical} historical)` : ""}`}. Change a value below to see the estimated split before saving. Historical rows are retained for evidence and price history but are excluded from this current inventory preview. Below-market price is calculated as <strong className="text-slate-200">(market median − listing price) ÷ market median</strong>.</p></CardHeader>
+            <CardHeader><CardTitle>Current classifications and live preview</CardTitle><p className="text-xs font-semibold text-slate-300">{opportunityLoading ? "Loading active scored listings…" : `Showing ${opportunityCounts.active} active scored listings${opportunityCounts.total > opportunityCounts.active ? ` · ${opportunityCounts.total} scored listings retained in the database (${opportunityCounts.historical} historical)` : ""}`}. Current total: <strong className="text-orange-300">{opportunityAnalysis.currentTotal}</strong> · Preview total: <strong className="text-blue-300">{opportunityAnalysis.previewTotal}</strong>. Change a value below to see the estimated split before saving. Historical rows are retained for evidence and price history but are excluded from this current inventory preview. Below-market price is calculated as <strong className="text-slate-200">(market median − listing price) ÷ market median</strong>.</p></CardHeader>
             <CardContent className="pt-0 space-y-3">
               {opportunityError && <p className="rounded-lg border border-rose-500/30 bg-rose-500/5 p-3 text-xs text-rose-300">Could not load the scored listings: {opportunityError}</p>}
               {!opportunityLoading && !opportunityError && opportunityItems.length === 0 && <p className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-xs text-amber-300">No active scored listings are available for this environment yet. The preview is empty; the zero values are not a scoring result. Run a scan and wait for listings to be scored, then refresh this tab.</p>}
-              <div className="opportunity-classification-strip rounded-xl p-2 overflow-x-auto">
-                <div className="grid grid-flow-col auto-cols-[160px] gap-2 min-w-max">
-                  {opportunityAnalysis.order.map(classification => { const current = opportunityItems.length ? (opportunityAnalysis.current[classification] ?? 0) : null; const next = opportunityItems.length ? (opportunityAnalysis.preview[classification] ?? 0) : null; const delta = current !== null && next !== null ? next - current : 0; return <div key={classification} className="rounded-lg border border-[#1e2d45] bg-[#0a1119]/95 p-3"><p className="text-[10px] font-semibold uppercase tracking-wide text-slate-300">{classification.replaceAll("_", " ")}</p><p className="mt-1 text-xl font-bold text-slate-100">{current ?? "—"}</p><p className={`text-xs font-semibold ${delta > 0 ? "text-emerald-400" : delta < 0 ? "text-rose-400" : "text-slate-300"}`}>{next === null ? "Preview unavailable" : `Preview ${next}${delta ? ` (${delta > 0 ? "+" : ""}${delta})` : ""}`}</p></div>; })}
+              <div className="opportunity-classification-strip rounded-xl p-2">
+                <p className="mb-2 px-1 text-[10px] font-semibold text-slate-500">Cards resize to fit the available width and wrap only on smaller screens.</p><div className="grid grid-cols-[repeat(auto-fit,minmax(118px,1fr))] gap-2">
+                  {opportunityAnalysis.order.map(classification => { const current = opportunityItems.length ? (opportunityAnalysis.current[classification] ?? 0) : null; const next = opportunityItems.length ? (opportunityAnalysis.preview[classification] ?? 0) : null; const delta = current !== null && next !== null ? next - current : 0; return <div key={classification} className="min-w-0 rounded-lg border border-[#1e2d45] bg-[#0a1119]/95 p-2.5"><p className="break-words text-[9px] font-semibold uppercase leading-tight tracking-wide text-slate-300">{classification.replaceAll("_", " ")}</p><p className="mt-1 text-lg font-bold text-slate-100">{current ?? "—"}</p><p className={`text-[11px] font-semibold ${delta > 0 ? "text-emerald-400" : delta < 0 ? "text-rose-400" : "text-slate-300"}`}>{next === null ? "Preview unavailable" : `Preview ${next}${delta ? ` (${delta > 0 ? "+" : ""}${delta})` : ""}`}</p></div>; })}
                 </div>
               </div>
               <div className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3">
-                <div className="mb-2 flex flex-wrap items-center justify-between gap-2"><div><p className="text-sm font-bold text-slate-200">Current vs preview split</p><p className="text-[11px] text-slate-500">The preview bars update when you change a scoring input.</p></div><div className="flex gap-3 text-[10px] font-semibold uppercase tracking-wide"><span className="text-orange-400">■ Current</span><span className="text-blue-400">■ Preview</span></div></div>
-                <ResponsiveContainer width="100%" height={Math.max(260, opportunityAnalysis.chart.length * 30)}>
-                  <BarChart data={opportunityAnalysis.chart} layout="vertical" margin={{ top: 4, right: 18, bottom: 4, left: 8 }} barCategoryGap="22%">
-                    <CartesianGrid stroke="#17304a" strokeDasharray="3 3" horizontal={false} />
-                    <XAxis type="number" allowDecimals={false} tick={{ fill: "#64748b", fontSize: 10 }} />
-                    <YAxis type="category" dataKey="name" width={132} tick={{ fill: "#cbd5e1", fontSize: 10 }} />
+                <div className="mb-2"><p className="text-sm font-bold text-slate-200">Current vs preview split</p><p className="text-[11px] text-slate-500">Each bar is the full population; coloured segments show how its classifications are distributed.</p></div>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={opportunityAnalysis.splitChart} margin={{ top: 8, right: 18, bottom: 8, left: 8 }} barCategoryGap="35%">
+                    <CartesianGrid stroke="#17304a" strokeDasharray="3 3" vertical={false} />
+                    <XAxis dataKey="name" tick={{ fill: "#cbd5e1", fontSize: 11, fontWeight: 700 }} />
+                    <YAxis allowDecimals={false} tick={{ fill: "#64748b", fontSize: 10 }} />
                     <Tooltip cursor={{ fill: "#17263a", opacity: 0.5 }} contentStyle={{ background: "#07101a", border: "1px solid #1e2d45", borderRadius: 8, color: "#e2e8f0", fontSize: 11 }} />
-                    <Bar dataKey="current" name="Current" fill="#f97316" radius={[0, 3, 3, 0]} />
-                    <Bar dataKey="preview" name="Preview" fill="#3b82f6" radius={[0, 3, 3, 0]} />
+                    <Legend wrapperStyle={{ color: "#cbd5e1", fontSize: 10 }} />
+                    {opportunityAnalysis.order.map((classification, index) => <Bar key={classification} dataKey={classification} name={classification.replaceAll("_", " ")} stackId="split" fill={["#f97316", "#3b82f6", "#a78bfa", "#22c55e", "#eab308", "#ef4444", "#64748b", "#94a3b8", "#c026d3"][index % 9]} />)}
                   </BarChart>
                 </ResponsiveContainer>
               </div>
