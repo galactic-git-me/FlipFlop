@@ -7,8 +7,11 @@ import { Database, Gauge, Gem, Globe } from "lucide-react";
 type Service = { name: string; path?: string; url?: string; icon: typeof Gauge };
 
 const BASE_SERVICES: Service[] = [
-  { name: "API", path: "/settings", icon: Gauge },
-  { name: "DB", path: "/settings", icon: Database },
+  // Use unauthenticated health endpoints rather than /settings. The latter
+  // is an admin data route and can report a false outage when the session is
+  // still being established.
+  { name: "API", path: "/preflight/health", icon: Gauge },
+  { name: "DB", path: "/preflight/health", icon: Database },
   { name: "Gem", path: "/gem-radar/health", icon: Gem },
   { name: "Shop", url: "http://localhost:4313", icon: Globe },
 ];
