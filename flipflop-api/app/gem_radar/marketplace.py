@@ -10,7 +10,7 @@ present on every ExtractedListing.
 from __future__ import annotations
 
 import re
-from urllib.parse import urlparse
+from urllib.parse import quote_plus, unquote, urlparse
 
 # Amazon ASINs (B0 + 8 alphanumeric chars) are a recognisable shape even
 # when `source` was never recorded (e.g. pre-fix historical rows written
@@ -122,10 +122,37 @@ _FALLBACK_SEARCH_TEMPLATES: dict[str, str] = {
     "awd_it": "https://www.awd-it.co.uk/catalogsearch/result/?q={query}",
     "computer_orbit": "https://computerorbit.com/search?q={query}&type=product",
     "bargain_hardware": "https://www.bargainhardware.co.uk/catalogsearch/result/?q={query}",
+    "google_shopping": "https://www.google.com/search?tbm=shop&q={query}",
 }
 
 
+def _google_shopping_embedded_url(listing_id: str) -> str | None:
+    """Recover the merchant URL from Google Shopping's fallback identifier.
+
+    The scraper uses ``google-shopping:<merchant-url>:<digest>`` when a
+    Google result has no stable product ID. Treating that identifier as an
+    eBay ID produced links such as ``ebay.co.uk/itm/google-shopping:https...``.
+    """
+    for prefix in ("google-shopping:", "google_shopping:"):
+        if listing_id.startswith(prefix):
+            remainder = unquote(listing_id[len(prefix):])
+            # The scraper appends ``:<title>:<digest>`` after the merchant
+            # URL. The title may itself contain colons, so the first colon
+            # after the URL scheme is the reliable boundary for this format.
+            scheme_end = remainder.find("://")
+            if scheme_end >= 0:
+                boundary = remainder.find(":", scheme_end + 3)
+                if boundary > 0:
+                    remainder = remainder[:boundary]
+            if remainder.startswith(("https://", "http://")):
+                return remainder
+    return None
+
+
 def fallback_listing_url(listing_id: str, source: str | None, title: str | None = None) -> str:
+    embedded_url = _google_shopping_embedded_url(listing_id)
+    if embedded_url:
+        return embedded_url
     if source is None and _ASIN_PATTERN.match(listing_id):
         source = "amazon"
 
@@ -135,8 +162,6 @@ def fallback_listing_url(listing_id: str, source: str | None, title: str | None 
 
     search_template = _FALLBACK_SEARCH_TEMPLATES.get(source or "")
     if search_template and title:
-        from urllib.parse import quote_plus
-
         return search_template.format(query=quote_plus(title))
 
     # Last resort only: no known template for this source at all (or a
@@ -164,10 +189,20 @@ def usable_listing_url(
     if url:
         try:
             parsed = urlparse(url)
+            decoded_path = unquote(parsed.path)
+            is_corrupt_google_ebay_wrapper = (
+                parsed.hostname in {"ebay.co.uk", "www.ebay.co.uk", "ebay.com", "www.ebay.com"}
+                and decoded_path.lower().startswith(("/itm/google-shopping:", "/itm/google_shopping:"))
+            )
+            if is_corrupt_google_ebay_wrapper:
+                embedded_url = _google_shopping_embedded_url(decoded_path.split("/itm/", 1)[1])
+                if embedded_url:
+                    return embedded_url
             is_homepage = parsed.path.rstrip("/") == "" and not parsed.query and not parsed.fragment
         except ValueError:
             is_homepage = False
-        if not is_homepage:
+            is_corrupt_google_ebay_wrapper = False
+        if not is_homepage and not is_corrupt_google_ebay_wrapper:
             return url
 
     return fallback_listing_url(listing_id, source, title)

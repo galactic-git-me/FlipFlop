@@ -19,7 +19,7 @@ from app.gem_radar.favourite_matching import (
     filter_matches,
 )
 from app.schemas.favourite import ProductOption
-from app.gem_radar.marketplace import fallback_listing_url
+from app.gem_radar.marketplace import usable_listing_url
 from app.gem_radar.observations import get_active_listing_ids
 from app.models.favourite import Favourite
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
@@ -76,7 +76,7 @@ async def _active_scored_listings(db: AsyncSession) -> list[dict]:
         {
             "listing_id": s.listing_id,
             "source": s.source,
-            "url": s.url or fallback_listing_url(s.listing_id, s.source),
+            "url": usable_listing_url(s.url, s.listing_id, s.source, s.title),
             "category": s.category,
             "title": s.title,
             "delivered_price": s.delivered_price,
