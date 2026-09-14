@@ -42,6 +42,45 @@ EBAY_LISTING_DESCRIPTION_MAX_LENGTH = 500_000
 EBAY_MAX_IMAGE_URLS = 24
 
 
+def _publish_error_message(response: httpx.Response) -> str:
+    """Return eBay's actionable publish message without hiding specific errors.
+
+    Error 25002 is used for more than one condition. Only the explicit
+    SELLING_PRIVILEGE_REQUIRED marker means seller onboarding is incomplete;
+    limit errors must keep eBay's original message and link.
+    """
+    response_text = response.text
+    try:
+        payload = response.json()
+        error_details = payload.get("errors", [])
+        if not isinstance(error_details, list):
+            return response_text
+
+        onboarding_required = any(
+            any(
+                str(parameter.get("value")) == "SELLING_PRIVILEGE_REQUIRED"
+                for parameter in detail.get("parameters", [])
+            )
+            for detail in error_details
+            if isinstance(detail, dict)
+        )
+        if onboarding_required:
+            return (
+                "eBay seller account setup is incomplete. "
+                "Complete eBay seller registration and verification "
+                "(including payout details), then retry publishing."
+            )
+
+        for detail in error_details:
+            if isinstance(detail, dict):
+                message = detail.get("longMessage") or detail.get("message")
+                if message:
+                    return str(message)
+    except (ValueError, TypeError, AttributeError):
+        pass
+    return response_text
+
+
 def _feed_task_id(response: httpx.Response) -> str | None:
     """Extract a Sell Feed task ID from JSON or eBay's Location header.
 
@@ -835,33 +874,7 @@ class EbayListingPoster:
                 )
 
                 if publish_resp.status_code not in [200, 201]:
-                    error_msg = publish_resp.text
-                    # eBay returns a verbose JSON payload for accounts that
-                    # have not completed seller onboarding. Do not pass that
-                    # raw payload through to the UI (it can include a
-                    # user-specific onboarding URL); give the seller an
-                    # actionable message instead.
-                    try:
-                        error_json = publish_resp.json()
-                        error_details = error_json.get("errors", [])
-                        requires_seller_onboarding = any(
-                            str(detail.get("errorId")) == "25002"
-                            or any(
-                                str(parameter.get("value"))
-                                == "SELLING_PRIVILEGE_REQUIRED"
-                                for parameter in detail.get("parameters", [])
-                            )
-                            for detail in error_details
-                        )
-                        if requires_seller_onboarding:
-                            error_msg = (
-                                "eBay seller account setup is incomplete. "
-                                "Complete eBay seller registration and verification "
-                                "(including payout details), then retry publishing."
-                            )
-                    except Exception:
-                        # Keep the original response text for non-JSON errors.
-                        pass
+                    error_msg = _publish_error_message(publish_resp)
                     log.error(
                         "ebay.publish_failed",
                         status=publish_resp.status_code,

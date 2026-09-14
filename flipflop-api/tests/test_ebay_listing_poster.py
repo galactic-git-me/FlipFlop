@@ -3,9 +3,11 @@ from app.services.ebay_listing_poster import (
     EBAY_MAX_IMAGE_URLS,
     _inventory_product_description,
     _normalise_ebay_image_urls,
+    _publish_error_message,
     prepare_ebay_listing_description,
     post_flip_to_ebay,
 )
+import httpx
 from unittest.mock import AsyncMock, patch
 
 
@@ -79,6 +81,49 @@ def test_listing_description_inlines_visual_sales_layout():
     assert "min-height:130px" in result
     assert "background:#102a43" in result
     assert "border-top:3px solid #ff6700" in result
+
+
+def test_publish_limit_error_keeps_ebays_exact_message():
+    response = httpx.Response(
+        400,
+        json={
+            "errors": [
+                {
+                    "errorId": 25002,
+                    "message": (
+                        "A user error has occurred. This listing would cause you "
+                        "to exceed the amount you can list. You can list up to "
+                        "GBP 516.78 more in total sales this month."
+                    ),
+                    "parameters": [{"name": "0", "value": "LIMIT_REACHED"}],
+                }
+            ]
+        },
+    )
+
+    assert _publish_error_message(response) == response.json()["errors"][0]["message"]
+
+
+def test_publish_onboarding_error_stays_actionable():
+    response = httpx.Response(
+        400,
+        json={
+            "errors": [
+                {
+                    "errorId": 25002,
+                    "message": "generic error",
+                    "parameters": [
+                        {"name": "0", "value": "SELLING_PRIVILEGE_REQUIRED"}
+                    ],
+                }
+            ]
+        },
+    )
+
+    assert _publish_error_message(response) == (
+        "eBay seller account setup is incomplete. Complete eBay seller registration "
+        "and verification (including payout details), then retry publishing."
+    )
 
 
 async def test_existing_listing_uses_revise_instead_of_create():
