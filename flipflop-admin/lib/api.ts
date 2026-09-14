@@ -598,6 +598,9 @@ export const api = {
     // proxy rather than the separately deployed Gem Radar worker, whose
     // route set can lag behind during a rolling deployment.
     opportunityPolicyData: () => request<{
+      active_scored_count: number;
+      total_scored_count: number;
+      historical_scored_count: number;
       items: Array<{
         listing_id: string;
         title: string;

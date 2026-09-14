@@ -134,6 +134,7 @@ export default function SettingsPage() {
   const [soldLogNote, setSoldLogNote] = useState("");
   const [logsLoading, setLogsLoading] = useState(false);
   const [opportunityItems, setOpportunityItems] = useState<OpportunityPolicyItem[]>([]);
+  const [opportunityCounts, setOpportunityCounts] = useState({ active: 0, total: 0, historical: 0 });
   const [opportunityLoading, setOpportunityLoading] = useState(false);
   const [opportunityError, setOpportunityError] = useState<string | null>(null);
 
@@ -222,9 +223,13 @@ export default function SettingsPage() {
       setOpportunityLoading(true);
       setOpportunityError(null);
       void api.gemRadar.opportunityPolicyData()
-        .then(result => setOpportunityItems(result.items ?? []))
+        .then(result => {
+          setOpportunityItems(result.items ?? []);
+          setOpportunityCounts({ active: result.active_scored_count ?? result.items?.length ?? 0, total: result.total_scored_count ?? result.items?.length ?? 0, historical: result.historical_scored_count ?? 0 });
+        })
         .catch((error) => {
           setOpportunityItems([]);
+          setOpportunityCounts({ active: 0, total: 0, historical: 0 });
           setOpportunityError(error instanceof Error ? error.message : "Could not load scored listings.");
         })
         .finally(() => setOpportunityLoading(false));
@@ -378,7 +383,7 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
           <Card>
-            <CardHeader><CardTitle>Current classifications and live preview</CardTitle><p className="text-xs font-semibold text-slate-300">{opportunityLoading ? "Loading active scored listings…" : `${opportunityItems.length} active scored listings`}. Change a value below to see the estimated split before saving. Below-market price is calculated as <strong className="text-slate-200">(market median − listing price) ÷ market median</strong>.</p></CardHeader>
+            <CardHeader><CardTitle>Current classifications and live preview</CardTitle><p className="text-xs font-semibold text-slate-300">{opportunityLoading ? "Loading active scored listings…" : `Showing ${opportunityCounts.active} active scored listings${opportunityCounts.total > opportunityCounts.active ? ` · ${opportunityCounts.total} scored listings retained in the database (${opportunityCounts.historical} historical)` : ""}`}. Change a value below to see the estimated split before saving. Historical rows are retained for evidence and price history but are excluded from this current inventory preview. Below-market price is calculated as <strong className="text-slate-200">(market median − listing price) ÷ market median</strong>.</p></CardHeader>
             <CardContent className="pt-0 space-y-3">
               {opportunityError && <p className="rounded-lg border border-rose-500/30 bg-rose-500/5 p-3 text-xs text-rose-300">Could not load the scored listings: {opportunityError}</p>}
               {!opportunityLoading && !opportunityError && opportunityItems.length === 0 && <p className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-xs text-amber-300">No active scored listings are available for this environment yet. The preview is empty; the zero values are not a scoring result. Run a scan and wait for listings to be scored, then refresh this tab.</p>}
@@ -389,7 +394,7 @@ export default function SettingsPage() {
           </Card>
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             {[{ title: "SUPER_GEM + BUY_NOW", prefix: "opportunity_super", fields: [["profit_gbp", "Minimum profit (£)"], ["roi_pct", "Minimum ROI (%)"], ["market_discount_pct", "Minimum below-market price (%)"], ["confidence", "Market confidence floor"], ["liquidity", "Liquidity floor"], ["score", "Overall score target"]] }, { title: "GEM + BUY_NOW", prefix: "opportunity_gem", fields: [["profit_gbp", "Minimum profit (£)"], ["roi_pct", "Minimum ROI (%)"], ["market_discount_pct", "Minimum below-market price (%)"], ["confidence", "Market confidence floor"], ["liquidity", "Liquidity floor"], ["score", "Overall score target"]] }].map(group => (
-              <Card key={group.prefix}><CardHeader><CardTitle>{group.title}</CardTitle></CardHeader><CardContent className="grid grid-cols-2 gap-3 pt-0">{group.fields.map(([suffix, label]) => { const key = `${group.prefix}_${suffix}` as keyof AppSettings; return <label key={key} className="text-xs font-semibold text-slate-300">{label}<input type="number" min={0} step="0.1" value={settings[key] as number} onChange={e => setSettings(p => ({ ...p, [key]: Number(e.target.value) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-200" /></label>; })}</CardContent></Card>
+              <Card key={group.prefix}><CardHeader><CardTitle>{group.title}</CardTitle></CardHeader><CardContent className="grid grid-cols-2 gap-3 pt-0">{group.fields.map(([suffix, label]) => { const key = `${group.prefix}_${suffix}` as keyof AppSettings; const fallback = DEFAULTS[key]; return <label key={key} className="text-xs font-semibold text-slate-300">{label}<input type="number" min={0} step="0.1" value={typeof settings[key] === "number" && Number.isFinite(settings[key] as number) ? settings[key] as number : typeof fallback === "number" ? fallback : 0} onChange={e => setSettings(p => ({ ...p, [key]: Number(e.target.value) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-200" /></label>; })}</CardContent></Card>
             ))}
           </div>
           <Card><CardHeader><CardTitle>Cost stack and evidence gates</CardTitle><p className="text-xs font-semibold text-slate-300">These values recalculate estimated profit, ROI and evidence eligibility in the preview. Component items use their category rules.</p></CardHeader><CardContent className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-0">{[["opportunity_delivery_fallback_gbp", "Delivery fallback (£)"], ["opportunity_ebay_fee_pct", "eBay fee (%)"], ["opportunity_packaging_gbp", "Packaging (£)"], ["opportunity_testing_refurbishment_gbp", "Testing/refurb (£)"], ["opportunity_returns_warranty_pct", "Returns/warranty reserve (%)"], ["opportunity_minimum_sold_comps", "Minimum sold comps"], ["opportunity_minimum_source_diversity", "Minimum source diversity"]].map(([field, label]) => { const key = field as keyof AppSettings; return <label key={field} className="text-xs font-semibold text-slate-300">{label}<input type="number" min={0} step="0.1" value={settings[key] as number} onChange={e => setSettings(p => ({ ...p, [key]: Number(e.target.value) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-200" /></label>; })}</CardContent></Card>

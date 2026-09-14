@@ -1951,9 +1951,17 @@ async def get_opportunity_policy_data(
     """
     from sqlalchemy import select, func
 
+    total_scored_count = int(
+        await db.scalar(select(func.count(func.distinct(GemRadarScoredListing.listing_id)))) or 0
+    )
     active_ids = await get_active_buy_it_now_listing_ids(db)
     if not active_ids:
-        return {"items": []}
+        return {
+            "items": [],
+            "active_scored_count": 0,
+            "total_scored_count": total_scored_count,
+            "historical_scored_count": total_scored_count,
+        }
 
     latest_scored_at = (
         select(
@@ -2001,7 +2009,10 @@ async def get_opportunity_policy_data(
                 "active_count": row.active_listing_count,
             }
             for row in rows
-        ]
+        ],
+        "active_scored_count": len(rows),
+        "total_scored_count": total_scored_count,
+        "historical_scored_count": max(0, total_scored_count - len(rows)),
     }
 
 
