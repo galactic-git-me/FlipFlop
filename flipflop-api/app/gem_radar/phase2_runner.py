@@ -278,16 +278,20 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
             hard_vetoes = [flag for flag in flags if flag != "identity_incomplete"]
             classification = "INELIGIBLE" if hard_vetoes else ("IDENTITY_PENDING" if category else "IDENTITY_FAILED")
             decision = "IGNORE" if hard_vetoes else "INVESTIGATE"
+            identity_reason = (
+                hard_vetoes[0] if hard_vetoes else
+                ("missing_category" if not category else "missing_brand_or_model")
+            )
             opportunity = OpportunityResult(
                 classification=classification, decision=decision, score=0.0,
                 expected_profit=None, roi_pct=None, walk_away_price=None,
                 liquidity_score=None, desirability_score=None,
                 risk_score=risk_safety_score(flags), market=None,
                 eligible=False,
-                reasons=["Listing was processed, but no trustworthy canonical product identity is available."],
+                reasons=[f"Identity could not be resolved: {identity_reason.replace('_', ' ')}."],
                 risk_flags=flags,
                 evidence_status="IDENTITY_UNCERTAIN",
-                evidence_reason="IDENTITY_UNCERTAIN",
+                evidence_reason=identity_reason,
                 evidence_confidence={
                     "identity": 0.0,
                     "comparable_quality": 0.0,
