@@ -472,6 +472,22 @@ function Ensure-EbayCdpBrowser {
         $portOpen = $true
     } catch { $portOpen = $false }
 
+    # A stale Chrome process can keep the TCP port open while the DevTools
+    # endpoint is no longer responsive. Treat that as down so the dedicated
+    # eBay profile is restarted instead of reporting an undetermined login.
+    if ($portOpen) {
+        try {
+            Invoke-WebRequest -Uri "http://localhost:9222/json/version" -UseBasicParsing -TimeoutSec 3 | Out-Null
+        } catch {
+            $portOpen = $false
+            $staleListener = Get-NetTCPConnection -LocalPort 9222 -State Listen -ErrorAction SilentlyContinue
+            if ($staleListener) {
+                Stop-Process -Id $staleListener.OwningProcess -Force -ErrorAction SilentlyContinue
+                Start-Sleep -Milliseconds 500
+            }
+        }
+    }
+
     if (-not $portOpen) {
         Write-Host "[*] Launching eBay CDP browser (port 9222)..." -ForegroundColor Cyan
         Start-Process -FilePath $chromeExe -ArgumentList @(
