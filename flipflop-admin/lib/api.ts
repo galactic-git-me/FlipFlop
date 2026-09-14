@@ -623,6 +623,9 @@ export const api = {
         market_used_price: number | null;
         sold_count: number | null;
         active_count: number | null;
+        scoring_explanation: { risk_flags?: string[]; reasons?: string[] } | null;
+        evidence_status: string | null;
+        evidence_reason: string | null;
       }>;
     }>("/gem-radar/opportunity-policy-data", { cache: "no-store" }),
     // Whole-DB market snapshot (all currently-active listings, not just the

@@ -330,7 +330,14 @@ export default function SettingsPage() {
     const currentTotal = Object.values(current).reduce((sum, value) => sum + value, 0);
     const previewTotal = Object.values(preview).reduce((sum, value) => sum + value, 0);
     const diagnostics = superGateDiagnostics(opportunityItems, settings);
-    return { order, chartOrder, current, preview, average, chart, splitChart, identityFailedCount, identityFailedPreviewCount, insufficientDataCount, insufficientDataPreviewCount, currentTotal, previewTotal, diagnostics };
+    const identityReasons: Record<string, number> = {};
+    for (const item of opportunityItems) {
+      if (item.classification !== "IDENTITY_FAILED") continue;
+      const flags = item.scoring_explanation?.risk_flags ?? [];
+      const reason = flags.find(flag => flag !== "identity_incomplete") ?? item.evidence_reason ?? "IDENTITY_UNCERTAIN";
+      identityReasons[reason] = (identityReasons[reason] ?? 0) + 1;
+    }
+    return { order, chartOrder, current, preview, average, chart, splitChart, identityFailedCount, identityFailedPreviewCount, insufficientDataCount, insufficientDataPreviewCount, currentTotal, previewTotal, diagnostics, identityReasons };
   }, [opportunityItems, settings, opportunityPreviewDirty]);
 
   if (loading) {
@@ -447,9 +454,10 @@ export default function SettingsPage() {
                   <div><p className="text-sm font-bold text-slate-200">Why the Super Gem count changes</p><p className="text-[11px] font-semibold text-slate-400">These are cumulative gates over the active scored dataset. A threshold only changes rows that have already passed the gates before it.</p></div>
                   <span className="rounded-full border border-[#1e2d45] px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-400">{marketSnapshotCount == null ? "Market snapshot unavailable" : `Market snapshot: ${marketSnapshotCount.toLocaleString()} listings`}</span>
                 </div>
-                <div className="mt-3 grid grid-cols-2 gap-2 md:grid-cols-5">
-                  {[['Eligible', opportunityAnalysis.diagnostics.eligible], ['Evidence', opportunityAnalysis.diagnostics.evidence], ['Economics', opportunityAnalysis.diagnostics.economics], ['Market threshold', opportunityAnalysis.diagnostics.market], ['Confidence + liquidity', opportunityAnalysis.diagnostics.final]].map(([label, value]) => <div key={label as string} className="rounded border border-[#1e2d45] bg-[#0a1119] p-2"><p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">{label}</p><p className="mt-1 text-lg font-bold text-slate-100">{(value as number).toLocaleString()}</p></div>)}
+                <div className="mt-3 grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-6">
+                  {[['Eligible', opportunityAnalysis.diagnostics.eligible], ['Evidence', opportunityAnalysis.diagnostics.evidence], ['Economics', opportunityAnalysis.diagnostics.economics], ['Market threshold', opportunityAnalysis.diagnostics.market], ['Confidence + liquidity', opportunityAnalysis.diagnostics.confidenceLiquidity], ['Score gate', opportunityAnalysis.diagnostics.final]].map(([label, value]) => <div key={label as string} className="rounded border border-[#1e2d45] bg-[#0a1119] p-2"><p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">{label}</p><p className="mt-1 text-lg font-bold text-slate-100">{(value as number).toLocaleString()}</p></div>)}
                 </div>
+                {opportunityAnalysis.identityFailedCount > 0 && <div className="mt-3 rounded border border-amber-500/20 bg-amber-500/5 p-2"><p className="text-[10px] font-bold uppercase tracking-wide text-amber-300">Identity failed reasons</p><p className="mt-1 text-[11px] font-semibold text-slate-400">These are the recorded pipeline vetoes. Only clear identity failures should be recovered; accessories, bundles and category conflicts remain protected.</p><div className="mt-2 flex flex-wrap gap-2">{Object.entries(opportunityAnalysis.identityReasons).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([reason, count]) => <span key={reason} className="rounded-full border border-amber-500/20 px-2 py-1 text-[10px] font-semibold text-amber-200">{reason.replaceAll("_", " ")} · {count.toLocaleString()}</span>)}</div></div>}
                 <p className="mt-2 text-[11px] font-semibold text-slate-500">Identity failed ({opportunityAnalysis.identityFailedCount.toLocaleString()}) and insufficient data ({opportunityAnalysis.insufficientDataCount.toLocaleString()}) are excluded before these gates. Current scored rows: {opportunityAnalysis.currentTotal.toLocaleString()}; market snapshot rows: {marketSnapshotCount?.toLocaleString() ?? "—"}{marketSnapshotCount != null && marketSnapshotCount !== opportunityAnalysis.currentTotal ? ` · ${Math.abs(marketSnapshotCount - opportunityAnalysis.currentTotal).toLocaleString()} snapshot rows are outside the active buy-now scored dataset (for example auctions or rows not scored yet).` : ""}</p>
               </div>
               <div className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3">
@@ -752,6 +760,9 @@ interface OpportunityPolicyItem {
   market_used_price: number | null;
   sold_count: number | null;
   active_count: number | null;
+  scoring_explanation: { risk_flags?: string[]; reasons?: string[] } | null;
+  evidence_status: string | null;
+  evidence_reason: string | null;
 }
 
 const COMPONENT_CATEGORIES = new Set(["cpu", "gpu", "motherboard", "ram", "ssd", "psu", "case", "cooler", "fan"]);

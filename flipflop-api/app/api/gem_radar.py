@@ -2008,6 +2008,9 @@ async def get_opportunity_policy_data(
                 "market_used_price": row.market_used_price,
                 "sold_count": row.sold_listing_count,
                 "active_count": row.active_listing_count,
+                "scoring_explanation": row.scoring_explanation,
+                "evidence_status": row.evidence_status,
+                "evidence_reason": row.evidence_reason,
             }
             for row in rows
         ],
