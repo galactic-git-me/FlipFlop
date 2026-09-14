@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Settings, Save, RefreshCw, Database, Plus, Trash2, Link2, Unlink, Terminal, Circle, Search } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -121,6 +121,8 @@ export default function SettingsPage() {
   const [soldLogs, setSoldLogs] = useState<import("@/lib/api").SoldScrapingItem[]>([]);
   const [soldLogNote, setSoldLogNote] = useState("");
   const [logsLoading, setLogsLoading] = useState(false);
+  const [opportunityItems, setOpportunityItems] = useState<OpportunityPolicyItem[]>([]);
+  const [opportunityLoading, setOpportunityLoading] = useState(false);
 
 
   const [ebayStatus, setEbayStatus] = useState<{
@@ -203,6 +205,13 @@ export default function SettingsPage() {
   }, []);
 
   useEffect(() => {
+    if (tab === "opportunity") {
+      setOpportunityLoading(true);
+      void api.gemRadar.opportunityPolicyData()
+        .then(result => setOpportunityItems(result.items ?? []))
+        .catch(() => setOpportunityItems([]))
+        .finally(() => setOpportunityLoading(false));
+    }
     if (tab === "extension-logs") {
       setLogsLoading(true);
       void api.searchTelemetry.recent(200).then(result => setExtensionLogs(result.items ?? [])).catch(() => setExtensionLogs([])).finally(() => setLogsLoading(false));
@@ -243,6 +252,22 @@ export default function SettingsPage() {
       setSaving(false);
     }
   };
+
+  const opportunityAnalysis = useMemo(() => {
+    const order = ["SUPER_GEM", "GEM", "EVIDENCE_LIMITED_DEAL", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "INELIGIBLE"];
+    const current: Record<string, number> = {};
+    const preview: Record<string, number> = {};
+    for (const item of opportunityItems) {
+      current[item.classification] = (current[item.classification] ?? 0) + 1;
+      const next = previewOpportunity(item, settings).classification;
+      preview[next] = (preview[next] ?? 0) + 1;
+    }
+    const average = (key: keyof Pick<OpportunityPolicyItem, "market_confidence" | "liquidity_score" | "desirability_score" | "risk_score">) => {
+      const values = opportunityItems.map(item => item[key]).filter((value): value is number => value != null);
+      return values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0;
+    };
+    return { order, current, preview, average };
+  }, [opportunityItems, settings]);
 
   if (loading) {
     return (
@@ -604,6 +629,85 @@ export default function SettingsPage() {
 
     </div>
   );
+}
+
+interface OpportunityPolicyItem {
+  listing_id: string;
+  title: string;
+  category: string | null;
+  condition: string | null;
+  classification: string;
+  deal_score: number | null;
+  expected_profit: number | null;
+  roi_pct: number | null;
+  market_confidence: number | null;
+  market_sample_size: number | null;
+  market_source_diversity: number | null;
+  liquidity_score: number | null;
+  desirability_score: number | null;
+  risk_score: number | null;
+  eligible: boolean;
+  listing_price: number | null;
+  resale_price: number | null;
+  sold_count: number | null;
+  active_count: number | null;
+}
+
+const COMPONENT_CATEGORIES = new Set(["cpu", "gpu", "motherboard", "ram", "ssd", "psu", "case", "cooler", "fan"]);
+
+function policyEconomics(item: OpportunityPolicyItem, settings: AppSettings) {
+  const category = (item.category ?? "").toLowerCase();
+  if (category === "cpu" || category === "ram" || category === "ssd" || category === "cooler" || category === "fan") {
+    return { superProfit: 8, superRoi: 25, gemProfit: 3, gemRoi: 15 };
+  }
+  if (category === "motherboard" || category === "psu" || category === "case") {
+    return { superProfit: 15, superRoi: 22, gemProfit: 6, gemRoi: 16 };
+  }
+  if (category === "gpu") {
+    return { superProfit: 25, superRoi: 20, gemProfit: 12, gemRoi: 15 };
+  }
+  return {
+    superProfit: settings.opportunity_super_profit_gbp,
+    superRoi: settings.opportunity_super_roi_pct,
+    gemProfit: settings.opportunity_gem_profit_gbp,
+    gemRoi: settings.opportunity_gem_roi_pct,
+  };
+}
+
+function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings): { classification: string; profit: number | null; roi: number | null } {
+  const resale = item.resale_price ?? 0;
+  const purchase = item.listing_price ?? 0;
+  if (!resale || !purchase || item.market_confidence == null || item.liquidity_score == null) {
+    return { classification: "INSUFFICIENT_DATA", profit: null, roi: null };
+  }
+  const component = COMPONENT_CATEGORIES.has((item.category ?? "").toLowerCase());
+  const isNew = (item.condition ?? "").toLowerCase() === "new";
+  const shipping = component ? 0 : settings.opportunity_delivery_fallback_gbp;
+  const fee = component ? 0 : resale * settings.opportunity_ebay_fee_pct / 100;
+  const packaging = component ? 0 : settings.opportunity_packaging_gbp;
+  const testing = component ? (isNew ? 0 : 3) : settings.opportunity_testing_refurbishment_gbp;
+  const warrantyPct = component ? (isNew ? 0.5 : 2) : settings.opportunity_returns_warranty_pct;
+  const totalCost = purchase + shipping + fee + packaging + testing + resale * warrantyPct / 100;
+  const profit = resale - totalCost;
+  const roi = totalCost > 0 ? profit / totalCost * 100 : 0;
+  const economics = policyEconomics(item, settings);
+  const sample = item.market_sample_size ?? 0;
+  const sold = item.sold_count ?? 0;
+  const confidenceFloorSuper = Math.max(55, settings.opportunity_super_confidence - 25);
+  const confidenceFloorGem = Math.max(50, settings.opportunity_gem_confidence - 20);
+  if (!item.eligible) return { classification: "INELIGIBLE", profit, roi };
+  if (sample < settings.opportunity_minimum_sold_comps || sold < settings.opportunity_minimum_sold_comps) {
+    const emergingFloor = component ? Math.min(economics.gemProfit, 10) : economics.gemProfit;
+    return { classification: profit >= emergingFloor && roi >= 25 && item.market_confidence >= 40 ? "EVIDENCE_LIMITED_DEAL" : "INSUFFICIENT_DATA", profit, roi };
+  }
+  if (profit >= economics.superProfit && roi >= economics.superRoi && item.market_confidence >= confidenceFloorSuper && item.liquidity_score >= settings.opportunity_super_liquidity) {
+    return { classification: "SUPER_GEM", profit, roi };
+  }
+  if (profit >= economics.gemProfit && roi >= economics.gemRoi && item.market_confidence >= confidenceFloorGem && item.liquidity_score >= settings.opportunity_gem_liquidity) {
+    return { classification: "GEM", profit, roi };
+  }
+  if (profit >= economics.gemProfit && roi >= economics.gemRoi) return { classification: "EVIDENCE_LIMITED_DEAL", profit, roi };
+  return { classification: "POOR_DEAL", profit, roi };
 }
 
 function ServerLogPanel() {

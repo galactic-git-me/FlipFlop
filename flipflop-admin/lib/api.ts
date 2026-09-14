@@ -594,6 +594,29 @@ export const api = {
     scoredListings: () => requestGemRadar<unknown[]>("/scored-listings"),
     listings: () => requestGemRadar<unknown[]>("/listings"),
     currentGem: () => requestGemRadar<unknown>("/current-gem"),
+    opportunityPolicyData: () => requestGemRadar<{
+      items: Array<{
+        listing_id: string;
+        title: string;
+        category: string | null;
+        condition: string | null;
+        classification: string;
+        deal_score: number | null;
+        expected_profit: number | null;
+        roi_pct: number | null;
+        market_confidence: number | null;
+        market_sample_size: number | null;
+        market_source_diversity: number | null;
+        liquidity_score: number | null;
+        desirability_score: number | null;
+        risk_score: number | null;
+        eligible: boolean;
+        listing_price: number | null;
+        resale_price: number | null;
+        sold_count: number | null;
+        active_count: number | null;
+      }>;
+    }>("/opportunity-policy-data", { cache: "no-store" }),
     // Whole-DB market snapshot (all currently-active listings, not just the
     // latest scan run) — same shape as the Current Scan Run panel's stats.
     marketSnapshot: () => requestGemRadar<MarketSnapshot>("/market-snapshot", { cache: "no-store" }),

@@ -1938,6 +1938,73 @@ async def get_market_snapshot(db: AsyncSession = Depends(get_db), _: None = Depe
     }
 
 
+@router.get("/opportunity-policy-data")
+async def get_opportunity_policy_data(
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+) -> dict:
+    """Return the current scoring facts used by the Opportunity Scoring UI.
+
+    This is deliberately a compact read model.  It lets the admin explain the
+    score and run a local threshold/cost preview without rescoring listings or
+    making any marketplace calls.
+    """
+    from sqlalchemy import select, func
+
+    active_ids = await get_active_buy_it_now_listing_ids(db)
+    if not active_ids:
+        return {"items": []}
+
+    latest_scored_at = (
+        select(
+            GemRadarScoredListing.listing_id,
+            func.max(GemRadarScoredListing.scored_at).label("scored_at"),
+        )
+        .where(GemRadarScoredListing.listing_id.in_(active_ids))
+        .group_by(GemRadarScoredListing.listing_id)
+        .subquery()
+    )
+    rows = (
+        await db.execute(
+            select(GemRadarScoredListing)
+            .join(
+                latest_scored_at,
+                (GemRadarScoredListing.listing_id == latest_scored_at.c.listing_id)
+                & (GemRadarScoredListing.scored_at == latest_scored_at.c.scored_at),
+            )
+            .order_by(GemRadarScoredListing.scored_at.desc())
+            .limit(2000)
+        )
+    ).scalars().all()
+
+    return {
+        "items": [
+            {
+                "listing_id": row.listing_id,
+                "title": row.title,
+                "category": row.category,
+                "condition": row.condition,
+                "classification": row.classification,
+                "deal_score": row.deal_score,
+                "expected_profit": row.expected_profit,
+                "roi_pct": row.roi_pct,
+                "market_confidence": row.market_confidence,
+                "market_sample_size": row.market_sample_size,
+                "market_source_diversity": row.market_source_diversity,
+                "liquidity_score": row.liquidity_score,
+                "desirability_score": row.desirability_score,
+                "risk_score": row.risk_score,
+                "eligible": row.eligible,
+                "listing_price": row.actual_listing_price,
+                "resale_price": row.conservative_resale_price,
+                "sold_count": row.sold_listing_count,
+                "active_count": row.active_listing_count,
+            }
+            for row in rows
+        ]
+    }
+
+
 @router.get("/scan-schedule-status")
 async def get_scan_schedule_status(db: AsyncSession = Depends(get_db), _: None = Depends(require_operator)) -> dict:
     """Real scan cadence, derived from the start of the latest scan wave.
