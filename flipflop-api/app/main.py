@@ -1124,7 +1124,6 @@ async def _seed_default_data():
             ])
             log.info("seeded.sources")
 
-        from sqlalchemy import update as _update
         from pathlib import Path as _Path
 
         # ── Ensure new sources exist on all installs ──────────────────────────
@@ -1197,28 +1196,9 @@ async def _seed_default_data():
                 ))
                 log.info("seeded.auction_source", name=src_name)
 
-        # ── Ensure selected proven sources are enabled on existing installs ──────
-        # Gumtree is intentionally excluded — Reblaze WAF blocks all automation.
-        for _src_name in (
-            "eBay UK",
-            "eBay UK Auctions",
-            "Facebook Marketplace",
-            "Apex Auctions",
-            "Wilsons Auctions",
-            "i-bidder",
-            "Amazon",
-            "eBuyer",
-            "Temu",
-            "AliExpress",
-            "Alibaba",
-            "BargainHardware",
-            "CherryTree Inc",
-        ):
-            await db.execute(
-                _update(DataSource)
-                .where(DataSource.name == _src_name)
-                .values(enabled=True)
-            )
+        # Existing source settings are user-controlled. Do not re-enable
+        # sources during startup: the Settings > Data Sources toggles must
+        # persist across API restarts and deployments.
         fb_cookies = _Path(__file__).parent.parent / "fb_cookies.json"
         if fb_cookies.exists():
             log.info("facebook.cookies_found", hint="fb_cookies.json found — full Marketplace access enabled")
