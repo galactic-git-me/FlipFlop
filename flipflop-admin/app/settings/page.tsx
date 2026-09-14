@@ -135,6 +135,7 @@ export default function SettingsPage() {
   const [logsLoading, setLogsLoading] = useState(false);
   const [opportunityItems, setOpportunityItems] = useState<OpportunityPolicyItem[]>([]);
   const [opportunityCounts, setOpportunityCounts] = useState({ active: 0, total: 0, historical: 0 });
+  const [opportunityPreviewDirty, setOpportunityPreviewDirty] = useState(false);
   const [opportunityLoading, setOpportunityLoading] = useState(false);
   const [opportunityError, setOpportunityError] = useState<string | null>(null);
 
@@ -226,10 +227,12 @@ export default function SettingsPage() {
         .then(result => {
           setOpportunityItems(result.items ?? []);
           setOpportunityCounts({ active: result.active_scored_count ?? result.items?.length ?? 0, total: result.total_scored_count ?? result.items?.length ?? 0, historical: result.historical_scored_count ?? 0 });
+          setOpportunityPreviewDirty(false);
         })
         .catch((error) => {
           setOpportunityItems([]);
           setOpportunityCounts({ active: 0, total: 0, historical: 0 });
+          setOpportunityPreviewDirty(false);
           setOpportunityError(error instanceof Error ? error.message : "Could not load scored listings.");
         })
         .finally(() => setOpportunityLoading(false));
@@ -281,7 +284,7 @@ export default function SettingsPage() {
     const preview: Record<string, number> = {};
     for (const item of opportunityItems) {
       current[item.classification] = (current[item.classification] ?? 0) + 1;
-      const next = previewOpportunity(item, settings).classification;
+      const next = opportunityPreviewDirty ? previewOpportunity(item, settings).classification : item.classification;
       preview[next] = (preview[next] ?? 0) + 1;
     }
     // Keep pipeline statuses visible too (for example IDENTITY_PENDING),
@@ -293,7 +296,7 @@ export default function SettingsPage() {
       return values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0;
     };
     return { order, current, preview, average };
-  }, [opportunityItems, settings]);
+  }, [opportunityItems, settings, opportunityPreviewDirty]);
 
   if (loading) {
     return (
@@ -396,12 +399,26 @@ export default function SettingsPage() {
               </div>
             </CardContent>
           </Card>
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-            {[{ title: "SUPER_GEM + BUY_NOW", prefix: "opportunity_super", fields: [["profit_gbp", "Minimum profit (£)"], ["roi_pct", "Minimum ROI (%)"], ["market_discount_pct", "Minimum below-market price (%)"], ["confidence", "Market confidence floor"], ["liquidity", "Liquidity floor"], ["score", "Overall score target"]] }, { title: "GEM + BUY_NOW", prefix: "opportunity_gem", fields: [["profit_gbp", "Minimum profit (£)"], ["roi_pct", "Minimum ROI (%)"], ["market_discount_pct", "Minimum below-market price (%)"], ["confidence", "Market confidence floor"], ["liquidity", "Liquidity floor"], ["score", "Overall score target"]] }].map(group => (
-              <Card key={group.prefix}><CardHeader><CardTitle>{group.title}</CardTitle></CardHeader><CardContent className="grid grid-cols-2 gap-3 pt-0">{group.fields.map(([suffix, label]) => { const key = `${group.prefix}_${suffix}` as keyof AppSettings; const fallback = DEFAULTS[key]; return <label key={key} className="text-xs font-semibold text-slate-300">{label}<input type="number" min={0} step="0.1" value={typeof settings[key] === "number" && Number.isFinite(settings[key] as number) ? settings[key] as number : typeof fallback === "number" ? fallback : 0} onChange={e => setSettings(p => ({ ...p, [key]: Number(e.target.value) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-200" /></label>; })}</CardContent></Card>
-            ))}
-          </div>
-          <Card><CardHeader><CardTitle>Cost stack and evidence gates</CardTitle><p className="text-xs font-semibold text-slate-300">These values recalculate estimated profit, ROI and evidence eligibility in the preview. Component items use their category rules.</p></CardHeader><CardContent className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-0">{[["opportunity_delivery_fallback_gbp", "Delivery fallback (£)"], ["opportunity_ebay_fee_pct", "eBay fee (%)"], ["opportunity_packaging_gbp", "Packaging (£)"], ["opportunity_testing_refurbishment_gbp", "Testing/refurb (£)"], ["opportunity_returns_warranty_pct", "Returns/warranty reserve (%)"], ["opportunity_minimum_sold_comps", "Minimum sold comps"], ["opportunity_minimum_source_diversity", "Minimum source diversity"]].map(([field, label]) => { const key = field as keyof AppSettings; return <label key={field} className="text-xs font-semibold text-slate-300">{label}<input type="number" min={0} step="0.1" value={settings[key] as number} onChange={e => setSettings(p => ({ ...p, [key]: Number(e.target.value) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-200" /></label>; })}</CardContent></Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Buy-now gates</CardTitle>
+              <p className="text-xs font-semibold text-slate-300">A listing must meet every gate in its row. The below-market threshold compares the listing price with the same-condition market median.</p>
+            </CardHeader>
+            <CardContent className="pt-0 overflow-x-auto">
+              <div className="min-w-[760px]">
+                <div className="grid grid-cols-[1.35fr_repeat(6,minmax(95px,1fr))] gap-2 px-3 pb-2 text-[10px] font-bold uppercase tracking-wide text-slate-500">
+                  <span>Tier</span><span>Profit</span><span>ROI</span><span className="text-[#00dc82]">Below market</span><span>Confidence</span><span>Liquidity</span><span>Score</span>
+                </div>
+                {[{ title: "SUPER GEM", prefix: "opportunity_super", tone: "text-amber-300", fields: [["profit_gbp", "£"], ["roi_pct", "%"], ["market_discount_pct", "%"], ["confidence", "/100"], ["liquidity", "/100"], ["score", "/100"]] }, { title: "GEM", prefix: "opportunity_gem", tone: "text-cyan-300", fields: [["profit_gbp", "£"], ["roi_pct", "%"], ["market_discount_pct", "%"], ["confidence", "/100"], ["liquidity", "/100"], ["score", "/100"]] }].map(group => (
+                  <div key={group.prefix} className="grid grid-cols-[1.35fr_repeat(6,minmax(95px,1fr))] items-center gap-2 rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3 mb-2">
+                    <div><p className={`text-sm font-bold ${group.tone}`}>{group.title}</p><p className="text-[10px] text-slate-500">All gates required</p></div>
+                    {group.fields.map(([suffix, unit]) => { const key = `${group.prefix}_${suffix}` as keyof AppSettings; const fallback = DEFAULTS[key]; return <label key={key} className={`text-xs font-semibold ${suffix === "market_discount_pct" ? "text-[#00dc82]" : "text-slate-300"}`}><span className="sr-only">{group.title} {suffix}</span><div className="relative"><input type="number" min={0} step="0.1" aria-label={`${group.title} ${suffix}`} value={typeof settings[key] === "number" && Number.isFinite(settings[key] as number) ? settings[key] as number : typeof fallback === "number" ? fallback : 0} onChange={e => { setOpportunityPreviewDirty(true); setSettings(p => ({ ...p, [key]: Number(e.target.value) })); }} className="w-full px-2 py-2 pr-9 bg-[#07101a] border border-[#1e2d45] rounded-lg text-sm font-bold text-slate-100" /><span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-500">{unit}</span></div></label>; })}
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+          <Card><CardHeader><CardTitle>Cost stack and evidence gates</CardTitle><p className="text-xs font-semibold text-slate-300">These values recalculate estimated profit, ROI and evidence eligibility in the preview. Component items use their category rules.</p></CardHeader><CardContent className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-0">{[["opportunity_delivery_fallback_gbp", "Delivery fallback (£)"], ["opportunity_ebay_fee_pct", "eBay fee (%)"], ["opportunity_packaging_gbp", "Packaging (£)"], ["opportunity_testing_refurbishment_gbp", "Testing/refurb (£)"], ["opportunity_returns_warranty_pct", "Returns/warranty reserve (%)"], ["opportunity_minimum_sold_comps", "Minimum sold comps"], ["opportunity_minimum_source_diversity", "Minimum source diversity"]].map(([field, label]) => { const key = field as keyof AppSettings; return <label key={field} className="text-xs font-semibold text-slate-300">{label}<input type="number" min={0} step="0.1" value={settings[key] as number} onChange={e => { setOpportunityPreviewDirty(true); setSettings(p => ({ ...p, [key]: Number(e.target.value) })); }} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-200" /></label>; })}</CardContent></Card>
         </div>
       )}
       {tab === "seller-policies" && (
