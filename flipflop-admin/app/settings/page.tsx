@@ -147,7 +147,8 @@ export default function SettingsPage() {
   const [soldLogNote, setSoldLogNote] = useState("");
   const [logsLoading, setLogsLoading] = useState(false);
   const [opportunityItems, setOpportunityItems] = useState<OpportunityPolicyItem[]>([]);
-  const [opportunityCounts, setOpportunityCounts] = useState({ active: 0, total: 0, historical: 0 });`r`n  const [marketSnapshotCount, setMarketSnapshotCount] = useState<number | null>(null);
+  const [opportunityCounts, setOpportunityCounts] = useState({ active: 0, total: 0, historical: 0 });
+  const [marketSnapshotCount, setMarketSnapshotCount] = useState<number | null>(null);
   const [opportunityPreviewDirty, setOpportunityPreviewDirty] = useState(false);
   const [opportunityLoading, setOpportunityLoading] = useState(false);
   const [opportunityError, setOpportunityError] = useState<string | null>(null);
@@ -236,14 +237,20 @@ export default function SettingsPage() {
     if (tab === "opportunity") {
       setOpportunityLoading(true);
       setOpportunityError(null);
-      Promise.all([api.gemRadar.opportunityPolicyData(), api.gemRadar.marketSnapshot()])`r`n        .then(([result, snapshot]) => {
+      Promise.allSettled([api.gemRadar.opportunityPolicyData(), api.gemRadar.marketSnapshot()])
+        .then(([opportunityResult, snapshotResult]) => {
+          if (opportunityResult.status === "rejected") throw opportunityResult.reason;
+          const result = opportunityResult.value;
           setOpportunityItems(result.items ?? []);
-          setOpportunityCounts({ active: result.active_scored_count ?? result.items?.length ?? 0, total: result.total_scored_count ?? result.items?.length ?? 0, historical: result.historical_scored_count ?? 0 });`r`n          setMarketSnapshotCount(snapshot?.ingestedCount ?? null);
+          setOpportunityCounts({ active: result.active_scored_count ?? result.items?.length ?? 0, total: result.total_scored_count ?? result.items?.length ?? 0, historical: result.historical_scored_count ?? 0 });
+          setMarketSnapshotCount(snapshotResult.status === "fulfilled" ? snapshotResult.value?.ingestedCount ?? null : null);
           setOpportunityPreviewDirty(false);
         })
         .catch((error) => {
           setOpportunityItems([]);
-          setOpportunityCounts({ active: 0, total: 0, historical: 0 });`r`n          setMarketSnapshotCount(null);`r`n          setOpportunityPreviewDirty(false);
+          setOpportunityCounts({ active: 0, total: 0, historical: 0 });
+          setMarketSnapshotCount(null);
+          setOpportunityPreviewDirty(false);
           setOpportunityError(error instanceof Error ? error.message : "Could not load scored listings.");
         })
         .finally(() => setOpportunityLoading(false));
@@ -322,7 +329,8 @@ export default function SettingsPage() {
     ];
     const currentTotal = Object.values(current).reduce((sum, value) => sum + value, 0);
     const previewTotal = Object.values(preview).reduce((sum, value) => sum + value, 0);
-    return { order, chartOrder, current, preview, average, chart, splitChart, identityFailedCount, identityFailedPreviewCount, insufficientDataCount, insufficientDataPreviewCount, currentTotal, previewTotal };
+    const diagnostics = superGateDiagnostics(opportunityItems, settings);
+    return { order, chartOrder, current, preview, average, chart, splitChart, identityFailedCount, identityFailedPreviewCount, insufficientDataCount, insufficientDataPreviewCount, currentTotal, previewTotal, diagnostics };
   }, [opportunityItems, settings, opportunityPreviewDirty]);
 
   if (loading) {
@@ -433,6 +441,16 @@ export default function SettingsPage() {
                 <p className="mb-2 px-1 text-[10px] font-semibold text-slate-500">Cards resize to fit the available width and wrap only on smaller screens.</p><div className="grid grid-cols-[repeat(auto-fit,minmax(118px,1fr))] gap-2">
                   {opportunityAnalysis.order.map(classification => { const current = opportunityItems.length ? (opportunityAnalysis.current[classification] ?? 0) : null; const next = opportunityItems.length ? (opportunityAnalysis.preview[classification] ?? 0) : null; const delta = current !== null && next !== null ? next - current : 0; return <div key={classification} className="min-w-0 rounded-lg border border-[#1e2d45] bg-[#0a1119]/95 p-2.5"><p className="break-words text-[9px] font-semibold uppercase leading-tight tracking-wide text-slate-300">{classification.replaceAll("_", " ")}</p><p className="mt-1 text-lg font-bold text-slate-100">{current ?? "—"}</p><p className={`text-[11px] font-semibold ${delta > 0 ? "text-emerald-400" : delta < 0 ? "text-rose-400" : "text-slate-300"}`}>{next === null ? "Preview unavailable" : `Preview ${next}${delta ? ` (${delta > 0 ? "+" : ""}${delta})` : ""}`}</p></div>; })}
                 </div>
+              </div>
+              <div className="rounded-lg border border-[#1e2d45] bg-[#07101a] p-3">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div><p className="text-sm font-bold text-slate-200">Why the Super Gem count changes</p><p className="text-[11px] font-semibold text-slate-400">These are cumulative gates over the active scored dataset. A threshold only changes rows that have already passed the gates before it.</p></div>
+                  <span className="rounded-full border border-[#1e2d45] px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-400">{marketSnapshotCount == null ? "Market snapshot unavailable" : `Market snapshot: ${marketSnapshotCount.toLocaleString()} listings`}</span>
+                </div>
+                <div className="mt-3 grid grid-cols-2 gap-2 md:grid-cols-5">
+                  {[['Eligible', opportunityAnalysis.diagnostics.eligible], ['Evidence', opportunityAnalysis.diagnostics.evidence], ['Economics', opportunityAnalysis.diagnostics.economics], ['Market threshold', opportunityAnalysis.diagnostics.market], ['Confidence + liquidity', opportunityAnalysis.diagnostics.final]].map(([label, value]) => <div key={label as string} className="rounded border border-[#1e2d45] bg-[#0a1119] p-2"><p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">{label}</p><p className="mt-1 text-lg font-bold text-slate-100">{(value as number).toLocaleString()}</p></div>)}
+                </div>
+                <p className="mt-2 text-[11px] font-semibold text-slate-500">Identity failed ({opportunityAnalysis.identityFailedCount.toLocaleString()}) and insufficient data ({opportunityAnalysis.insufficientDataCount.toLocaleString()}) are excluded before these gates. Current scored rows: {opportunityAnalysis.currentTotal.toLocaleString()}; market snapshot rows: {marketSnapshotCount?.toLocaleString() ?? "—"}{marketSnapshotCount != null && marketSnapshotCount !== opportunityAnalysis.currentTotal ? ` · ${Math.abs(marketSnapshotCount - opportunityAnalysis.currentTotal).toLocaleString()} snapshot rows are outside the active buy-now scored dataset (for example auctions or rows not scored yet).` : ""}</p>
               </div>
               <div className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3">
                 <div className="mb-2 flex flex-wrap items-center justify-between gap-2"><div><p className="text-sm font-bold text-slate-200">Current vs preview split</p><p className="text-[11px] text-slate-500">Coloured segments show the classifications affected by scoring controls. Excluded statuses are shown as counts beside the chart.</p></div><div className="flex flex-wrap gap-2"><span title="The listing could not be matched confidently to a specific product identity, so the scoring gates cannot be trusted yet." className="cursor-help rounded-full border border-slate-500/30 bg-slate-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-300">Identity failed · {opportunityAnalysis.identityFailedCount} → {opportunityAnalysis.identityFailedPreviewCount} <span aria-hidden="true">ⓘ</span></span><span title="The listing does not have enough comparable pricing or sold-evidence data to recalculate a reliable opportunity score." className="cursor-help rounded-full border border-slate-500/30 bg-slate-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-300">Insufficient data · {opportunityAnalysis.insufficientDataCount} → {opportunityAnalysis.insufficientDataPreviewCount} <span aria-hidden="true">ⓘ</span></span></div></div>
@@ -755,6 +773,35 @@ function policyEconomics(item: OpportunityPolicyItem, settings: AppSettings) {
     gemProfit: settings.opportunity_gem_profit_gbp,
     gemRoi: settings.opportunity_gem_roi_pct,
   };
+}
+
+function superGateDiagnostics(items: OpportunityPolicyItem[], settings: AppSettings) {
+  let eligible = 0, evidence = 0, economics = 0, market = 0, final = 0;
+  for (const item of items) {
+    if (!item.eligible) continue;
+    eligible++;
+    const resale = item.resale_price ?? 0;
+    const purchase = item.listing_price ?? 0;
+    const confidence = item.market_confidence ?? 0;
+    const liquidity = item.liquidity_score ?? 0;
+    const sample = item.market_sample_size ?? 0;
+    const sold = item.sold_count ?? 0;
+    if (!resale || !purchase || sample < settings.opportunity_minimum_sold_comps || sold < settings.opportunity_minimum_sold_comps) continue;
+    evidence++;
+    const economicsRule = policyEconomics(item, settings);
+    const profit = item.expected_profit;
+    const roi = item.roi_pct;
+    if (profit == null || roi == null || profit < economicsRule.superProfit || roi < economicsRule.superRoi) continue;
+    economics++;
+    const condition = (item.condition ?? "").toLowerCase();
+    const marketPrice = condition.includes("new") ? (item.market_new_price ?? item.market_used_price ?? resale) : (item.market_used_price ?? item.market_new_price ?? resale);
+    const discount = marketPrice > 0 ? (marketPrice - purchase) / marketPrice * 100 : -Infinity;
+    if (discount < settings.opportunity_super_market_discount_pct) continue;
+    market++;
+    const confidenceFloor = Math.max(55, settings.opportunity_super_confidence - 25);
+    if (confidence >= confidenceFloor && liquidity >= settings.opportunity_super_liquidity) final++;
+  }
+  return { eligible, evidence, economics, market, final };
 }
 
 function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings): { classification: string; profit: number | null; roi: number | null } {
