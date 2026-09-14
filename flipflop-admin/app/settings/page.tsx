@@ -31,11 +31,13 @@ interface AppSettings {
   opportunity_super_confidence: number;
   opportunity_super_liquidity: number;
   opportunity_super_score: number;
+  opportunity_super_market_discount_pct: number;
   opportunity_gem_profit_gbp: number;
   opportunity_gem_roi_pct: number;
   opportunity_gem_confidence: number;
   opportunity_gem_liquidity: number;
   opportunity_gem_score: number;
+  opportunity_gem_market_discount_pct: number;
   opportunity_delivery_fallback_gbp: number;
   opportunity_ebay_fee_pct: number;
   opportunity_packaging_gbp: number;
@@ -85,11 +87,13 @@ const DEFAULTS: AppSettings = {
   opportunity_super_confidence: 80,
   opportunity_super_liquidity: 60,
   opportunity_super_score: 85,
+  opportunity_super_market_discount_pct: 35,
   opportunity_gem_profit_gbp: 30,
   opportunity_gem_roi_pct: 18,
   opportunity_gem_confidence: 70,
   opportunity_gem_liquidity: 45,
   opportunity_gem_score: 75,
+  opportunity_gem_market_discount_pct: 25,
   opportunity_delivery_fallback_gbp: 15,
   opportunity_ebay_fee_pct: 0,
   opportunity_packaging_gbp: 6,
@@ -374,7 +378,7 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
           <Card>
-            <CardHeader><CardTitle>Current classifications and live preview</CardTitle><p className="text-xs font-semibold text-slate-300">{opportunityLoading ? "Loading active scored listings…" : `${opportunityItems.length} active scored listings`}. Change a value below to see the estimated split before saving.</p></CardHeader>
+            <CardHeader><CardTitle>Current classifications and live preview</CardTitle><p className="text-xs font-semibold text-slate-300">{opportunityLoading ? "Loading active scored listings…" : `${opportunityItems.length} active scored listings`}. Change a value below to see the estimated split before saving. Below-market price is calculated as <strong className="text-slate-200">(market median − listing price) ÷ market median</strong>.</p></CardHeader>
             <CardContent className="pt-0 space-y-3">
               {opportunityError && <p className="rounded-lg border border-rose-500/30 bg-rose-500/5 p-3 text-xs text-rose-300">Could not load the scored listings: {opportunityError}</p>}
               {!opportunityLoading && !opportunityError && opportunityItems.length === 0 && <p className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-xs text-amber-300">No active scored listings are available for this environment yet. The preview is empty; the zero values are not a scoring result. Run a scan and wait for listings to be scored, then refresh this tab.</p>}
@@ -384,7 +388,7 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-            {[{ title: "SUPER_GEM + BUY_NOW", prefix: "opportunity_super", fields: [["profit_gbp", "Minimum profit (£)"], ["roi_pct", "Minimum ROI (%)"], ["confidence", "Market confidence floor"], ["liquidity", "Liquidity floor"], ["score", "Overall score target"]] }, { title: "GEM + BUY_NOW", prefix: "opportunity_gem", fields: [["profit_gbp", "Minimum profit (£)"], ["roi_pct", "Minimum ROI (%)"], ["confidence", "Market confidence floor"], ["liquidity", "Liquidity floor"], ["score", "Overall score target"]] }].map(group => (
+            {[{ title: "SUPER_GEM + BUY_NOW", prefix: "opportunity_super", fields: [["profit_gbp", "Minimum profit (£)"], ["roi_pct", "Minimum ROI (%)"], ["market_discount_pct", "Minimum below-market price (%)"], ["confidence", "Market confidence floor"], ["liquidity", "Liquidity floor"], ["score", "Overall score target"]] }, { title: "GEM + BUY_NOW", prefix: "opportunity_gem", fields: [["profit_gbp", "Minimum profit (£)"], ["roi_pct", "Minimum ROI (%)"], ["market_discount_pct", "Minimum below-market price (%)"], ["confidence", "Market confidence floor"], ["liquidity", "Liquidity floor"], ["score", "Overall score target"]] }].map(group => (
               <Card key={group.prefix}><CardHeader><CardTitle>{group.title}</CardTitle></CardHeader><CardContent className="grid grid-cols-2 gap-3 pt-0">{group.fields.map(([suffix, label]) => { const key = `${group.prefix}_${suffix}` as keyof AppSettings; return <label key={key} className="text-xs font-semibold text-slate-300">{label}<input type="number" min={0} step="0.1" value={settings[key] as number} onChange={e => setSettings(p => ({ ...p, [key]: Number(e.target.value) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-200" /></label>; })}</CardContent></Card>
             ))}
           </div>
@@ -689,6 +693,7 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
   const totalCost = purchase + shipping + fee + packaging + testing + resale * warrantyPct / 100;
   const profit = resale - totalCost;
   const roi = totalCost > 0 ? profit / totalCost * 100 : 0;
+  const marketDiscount = resale > 0 ? (resale - purchase) / resale * 100 : -Infinity;
   const economics = policyEconomics(item, settings);
   const sample = item.market_sample_size ?? 0;
   const sold = item.sold_count ?? 0;
@@ -699,10 +704,10 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
     const emergingFloor = component ? Math.min(economics.gemProfit, 10) : economics.gemProfit;
     return { classification: profit >= emergingFloor && roi >= 25 && item.market_confidence >= 40 ? "EVIDENCE_LIMITED_DEAL" : "INSUFFICIENT_DATA", profit, roi };
   }
-  if (profit >= economics.superProfit && roi >= economics.superRoi && item.market_confidence >= confidenceFloorSuper && item.liquidity_score >= settings.opportunity_super_liquidity) {
+  if (profit >= economics.superProfit && roi >= economics.superRoi && marketDiscount >= settings.opportunity_super_market_discount_pct && item.market_confidence >= confidenceFloorSuper && item.liquidity_score >= settings.opportunity_super_liquidity) {
     return { classification: "SUPER_GEM", profit, roi };
   }
-  if (profit >= economics.gemProfit && roi >= economics.gemRoi && item.market_confidence >= confidenceFloorGem && item.liquidity_score >= settings.opportunity_gem_liquidity) {
+  if (profit >= economics.gemProfit && roi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct && item.market_confidence >= confidenceFloorGem && item.liquidity_score >= settings.opportunity_gem_liquidity) {
     return { classification: "GEM", profit, roi };
   }
   if (profit >= economics.gemProfit && roi >= economics.gemRoi) return { classification: "EVIDENCE_LIMITED_DEAL", profit, roi };

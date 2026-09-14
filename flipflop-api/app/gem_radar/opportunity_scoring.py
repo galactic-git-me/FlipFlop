@@ -31,11 +31,15 @@ class OpportunityPolicy:
     super_confidence: float = 80.0
     super_liquidity: float = 60.0
     super_score: float = 85.0
+    # Positive percentage below the median market price. A zero value keeps
+    # the price-gap gate disabled for policies created before this setting.
+    super_market_discount_pct: float = 0.0
     gem_profit: float = 30.0
     gem_roi_pct: float = 18.0
     gem_confidence: float = 70.0
     gem_liquidity: float = 45.0
     gem_score: float = 75.0
+    gem_market_discount_pct: float = 0.0
     delivery_fallback: float = 15.0
     ebay_fee_pct: float = 0.0
     packaging_cost: float = 6.0
@@ -108,11 +112,13 @@ async def load_opportunity_policy(db) -> OpportunityPolicy:
         super_confidence=settings.opportunity_super_confidence,
         super_liquidity=settings.opportunity_super_liquidity,
         super_score=settings.opportunity_super_score,
+        super_market_discount_pct=settings.opportunity_super_market_discount_pct,
         gem_profit=settings.opportunity_gem_profit_gbp,
         gem_roi_pct=settings.opportunity_gem_roi_pct,
         gem_confidence=settings.opportunity_gem_confidence,
         gem_liquidity=settings.opportunity_gem_liquidity,
         gem_score=settings.opportunity_gem_score,
+        gem_market_discount_pct=settings.opportunity_gem_market_discount_pct,
         delivery_fallback=settings.opportunity_delivery_fallback_gbp,
         ebay_fee_pct=settings.opportunity_ebay_fee_pct,
         packaging_cost=settings.opportunity_packaging_gbp,
@@ -508,6 +514,7 @@ def score_opportunity(
     total_cost = sum(costs.values())
     profit = resale_value - total_cost
     roi = profit / total_cost * 100.0 if total_cost > 0 else 0.0
+    market_discount_pct = ((resale_value - listing_price) / resale_value * 100.0) if resale_value > 0 else -100.0
     non_purchase_cost = total_cost - listing_price
     walk_away = max(0.0, resale_value / 1.25 - non_purchase_cost)
     economic_score = max(0.0, min(100.0, (roi / economics.super_roi_pct) * 55.0 + (profit / economics.super_profit) * 45.0))
@@ -528,6 +535,9 @@ def score_opportunity(
         f"Resale basis uses the median of {market.sample_size} robust same-condition {evidence_label}; lower quartile remains the downside case.",
         f"Expected net profit £{profit:.2f}; ROI {roi:.1f}%; "
         + (f"liquidity {liquidity:.0f}/100." if liquidity is not None else "liquidity unknown (no demand evidence)."),
+        f"Listing is {market_discount_pct:.1f}% below the median market price; price-gap gates are "
+        f"{policy.gem_market_discount_pct:.0f}% for GEM and "
+        f"{policy.super_market_discount_pct:.0f}% for SUPER GEM.",
     ]
     sell_through = sell_through_rate_pct(sold_count_90d, active_count)
     if sell_through is not None:
@@ -569,9 +579,9 @@ def score_opportunity(
     elif evidence_limited:
         classification, decision = "INSUFFICIENT_DATA", "INVESTIGATE"
         reasons.append("The comparable cohort is below the minimum evidence requirement and the provisional opportunity gates were not all met.")
-    elif eligible and profit >= economics.super_profit and roi >= economics.super_roi_pct and market.confidence >= super_confidence_floor and liquidity is not None and liquidity >= policy.super_liquidity:
+    elif eligible and profit >= economics.super_profit and roi >= economics.super_roi_pct and market_discount_pct >= policy.super_market_discount_pct and market.confidence >= super_confidence_floor and liquidity is not None and liquidity >= policy.super_liquidity:
         classification, decision = "SUPER_GEM", "BUY_NOW"
-    elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market.confidence >= gem_confidence_floor and liquidity is not None and liquidity >= policy.gem_liquidity:
+    elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market_discount_pct >= policy.gem_market_discount_pct and market.confidence >= gem_confidence_floor and liquidity is not None and liquidity >= policy.gem_liquidity:
         classification, decision = "GEM", "BUY_NOW"
     elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct:
         classification, decision = "EVIDENCE_LIMITED_DEAL", "INVESTIGATE"

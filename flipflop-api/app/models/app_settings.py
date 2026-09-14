@@ -95,11 +95,15 @@ class AppSettings(Base):
     opportunity_super_confidence: Mapped[float] = mapped_column(Float, default=80.0)
     opportunity_super_liquidity: Mapped[float] = mapped_column(Float, default=60.0)
     opportunity_super_score: Mapped[float] = mapped_column(Float, default=85.0)
+    # Positive percentage of the market median that the listing must be below
+    # before it can enter the corresponding opportunity tier.
+    opportunity_super_market_discount_pct: Mapped[float] = mapped_column(Float, default=35.0)
     opportunity_gem_profit_gbp: Mapped[float] = mapped_column(Float, default=30.0)
     opportunity_gem_roi_pct: Mapped[float] = mapped_column(Float, default=18.0)
     opportunity_gem_confidence: Mapped[float] = mapped_column(Float, default=70.0)
     opportunity_gem_liquidity: Mapped[float] = mapped_column(Float, default=45.0)
     opportunity_gem_score: Mapped[float] = mapped_column(Float, default=75.0)
+    opportunity_gem_market_discount_pct: Mapped[float] = mapped_column(Float, default=25.0)
     opportunity_delivery_fallback_gbp: Mapped[float] = mapped_column(Float, default=15.0)
     opportunity_ebay_fee_pct: Mapped[float] = mapped_column(Float, default=0.0)
     opportunity_packaging_gbp: Mapped[float] = mapped_column(Float, default=6.0)
