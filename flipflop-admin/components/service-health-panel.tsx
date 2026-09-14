@@ -15,16 +15,19 @@ const BASE_SERVICES: Service[] = [
 
 export function ServiceHealthPanel() {
   const [misses, setMisses] = useState<Record<string, number>>({});
+  // LIVE runs the admin UI on localhost while it talks to production. Use the
+  // selected runtime mode rather than the browser hostname to choose links.
+  const liveOperator = process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live";
   // Keep the first render identical on the server and client. The browser
-  // hostname is only available after hydration, so resolve the local Shop URL
-  // in the existing effect and update the link afterwards.
-  const [isLocalhost, setIsLocalhost] = useState(false);
+  // hostname is only available after hydration, so resolve local links in the
+  // existing effect and update them afterwards.
+  const [isLocalhost, setIsLocalhost] = useState(process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "development");
   const missesRef = useRef<Record<string, number>>({});
 
   useEffect(() => {
     let mounted = true;
     const check = async () => {
-      const local = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+      const local = !liveOperator && ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
       setIsLocalhost(local);
       const services: Service[] = [
         ...BASE_SERVICES.slice(0, 3),

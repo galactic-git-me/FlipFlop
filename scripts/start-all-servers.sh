@@ -61,7 +61,7 @@ start_server() {
     if [ "$name" = "backend" ]; then
         python run_dev.py --host 0.0.0.0 --port 4311 > /tmp/flipflop-backend.log 2>&1 &
     elif [ "$name" = "admin" ]; then
-        NEXT_PUBLIC_API_URL=http://localhost:4311 npm run dev -- -p 4312 -H 0.0.0.0 > /tmp/flipflop-admin.log 2>&1 &
+        NEXT_PUBLIC_API_URL=http://localhost:4311 NEXT_PUBLIC_FLIPFLOP_ENV=development npm run dev -- -p 4312 -H 0.0.0.0 > /tmp/flipflop-admin.log 2>&1 &
     elif [ "$name" = "frontend" ]; then
         BACKEND_URL=http://localhost:4311 NEXT_PUBLIC_API_URL=http://localhost:4311 npm run dev -- -p 4313 -H 0.0.0.0 > /tmp/flipflop-frontend.log 2>&1 &
     fi

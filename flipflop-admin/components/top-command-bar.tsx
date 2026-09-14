@@ -35,7 +35,8 @@ export function TopCommandBar() {
   const [priceAlertCount, setPriceAlertCount] = useState(0);
   const [toasts, setToasts] = useState<Array<{ id: string; text: string; linkUrl?: string | null; persistent?: boolean }>>([]);
   const [confettiPieces, setConfettiPieces] = useState<Array<{ id: string; left: number; delay: number; duration: number; size: number; color: string; drift: number }>>([]);
-  const [isLocalEnvironment, setIsLocalEnvironment] = useState(false);
+  const [isLocalEnvironment, setIsLocalEnvironment] = useState(process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "development");
+  const liveOperator = process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live";
   const seenProposalIdsRef = useRef<Set<number>>(new Set());
   const seenAlertIdsRef = useRef<Set<number>>(new Set());
 
@@ -55,7 +56,7 @@ export function TopCommandBar() {
   };
 
   useEffect(() => {
-    setIsLocalEnvironment(["localhost", "127.0.0.1", "::1"].includes(window.location.hostname));
+    setIsLocalEnvironment(!liveOperator && ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname));
   }, []);
 
   useEffect(() => {
@@ -214,16 +215,14 @@ export function TopCommandBar() {
       </div>
 
       <div className="node-topbar-right">
-        {isLocalEnvironment && (
-          <Link
-            href="http://localhost:4313"
-            className="inline-flex animate-pulse items-center gap-1.5 rounded-md border border-amber-300/70 bg-amber-400/20 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-amber-100 shadow-[0_0_14px_rgba(251,191,36,0.25)] transition hover:bg-amber-400/30"
-            title="Open the local FlipFlop.shop storefront"
-          >
-            <span className="h-2 w-2 animate-pulse rounded-full bg-amber-300 shadow-[0_0_8px_rgba(252,211,77,0.9)]" />
-            DEV · LOCAL
-          </Link>
-        )}
+        <Link
+          href={isLocalEnvironment ? "http://localhost:4313" : "https://www.theflipflop.shop"}
+          className="inline-flex animate-pulse items-center gap-1.5 rounded-md border border-amber-300/70 bg-amber-400/20 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-amber-100 shadow-[0_0_14px_rgba(251,191,36,0.25)] transition hover:bg-amber-400/30"
+          title={isLocalEnvironment ? "Open the local FlipFlop.shop storefront" : "Open the production FlipFlop.shop storefront"}
+        >
+          <span className="h-2 w-2 animate-pulse rounded-full bg-amber-300 shadow-[0_0_8px_rgba(252,211,77,0.9)]" />
+          {isLocalEnvironment ? "DEV · LOCAL" : "LIVE · PRODUCTION"}
+        </Link>
         <div className="node-live-chip">
           <span className="node-live-dot" />
           <Image src="/pics/logo_simple_no_bg.png" alt="FlipFlop" width={240} height={120} className="h-[120px] w-auto object-contain" />
