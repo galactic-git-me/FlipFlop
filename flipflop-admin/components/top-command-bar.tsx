@@ -206,6 +206,13 @@ export function TopCommandBar() {
 
   if (pathname === "/login") return null;
 
+  const environmentBadgeClass = isLocalEnvironment
+    ? "border-amber-300/70 bg-amber-400/20 text-amber-100 shadow-[0_0_14px_rgba(251,191,36,0.25)] hover:bg-amber-400/30"
+    : "border-emerald-300/70 bg-emerald-400/20 text-emerald-100 shadow-[0_0_14px_rgba(52,211,153,0.3)] hover:bg-emerald-400/30";
+  const environmentDotClass = isLocalEnvironment
+    ? "bg-amber-300 shadow-[0_0_8px_rgba(252,211,77,0.9)]"
+    : "bg-emerald-300 shadow-[0_0_8px_rgba(110,231,183,0.95)]";
+
   return (
     <>
     <header className="node-topbar">
@@ -217,10 +224,10 @@ export function TopCommandBar() {
       <div className="node-topbar-right">
         <Link
           href={isLocalEnvironment ? "http://localhost:4313" : "https://www.theflipflop.shop"}
-          className="inline-flex animate-pulse items-center gap-1.5 rounded-md border border-amber-300/70 bg-amber-400/20 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-amber-100 shadow-[0_0_14px_rgba(251,191,36,0.25)] transition hover:bg-amber-400/30"
+          className={`inline-flex animate-pulse items-center gap-1.5 rounded-md border px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest transition ${environmentBadgeClass}`}
           title={isLocalEnvironment ? "Open the local FlipFlop.shop storefront" : "Open the production FlipFlop.shop storefront"}
         >
-          <span className="h-2 w-2 animate-pulse rounded-full bg-amber-300 shadow-[0_0_8px_rgba(252,211,77,0.9)]" />
+          <span className={`h-2 w-2 animate-pulse rounded-full ${environmentDotClass}`} />
           {isLocalEnvironment ? "DEV · LOCAL" : "LIVE · PRODUCTION"}
         </Link>
         <div className="node-live-chip">
