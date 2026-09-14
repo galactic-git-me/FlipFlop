@@ -47,6 +47,11 @@ class OpportunityPolicy:
     returns_warranty_pct: float = 5.0
     minimum_sold_comps: int = 3
     minimum_source_diversity: int = 2
+    weight_economic_pct: float = 45.0
+    weight_desirability_pct: float = 15.0
+    weight_market_confidence_pct: float = 15.0
+    weight_risk_safety_pct: float = 5.0
+    weight_liquidity_pct: float = 20.0
     sold_lookback_days: int = 90
     super_discount_pct: float = -30.0
     gem_discount_pct: float = -20.0
@@ -126,6 +131,11 @@ async def load_opportunity_policy(db) -> OpportunityPolicy:
         returns_warranty_pct=settings.opportunity_returns_warranty_pct,
         minimum_sold_comps=settings.opportunity_minimum_sold_comps,
         minimum_source_diversity=settings.opportunity_minimum_source_diversity,
+        weight_economic_pct=settings.opportunity_weight_economic_pct,
+        weight_desirability_pct=settings.opportunity_weight_desirability_pct,
+        weight_market_confidence_pct=settings.opportunity_weight_market_confidence_pct,
+        weight_risk_safety_pct=settings.opportunity_weight_risk_safety_pct,
+        weight_liquidity_pct=settings.opportunity_weight_liquidity_pct,
         super_discount_pct=settings.deal_super_gem_threshold_pct,
         gem_discount_pct=settings.deal_gem_threshold_pct,
     )
@@ -518,9 +528,12 @@ def score_opportunity(
     non_purchase_cost = total_cost - listing_price
     walk_away = max(0.0, resale_value / 1.25 - non_purchase_cost)
     economic_score = max(0.0, min(100.0, (roi / economics.super_roi_pct) * 55.0 + (profit / economics.super_profit) * 45.0))
-    score_parts = [(economic_score, .45), (desirability, .15), (market.confidence, .15), (risk, .05)]
+    weights = [policy.weight_economic_pct, policy.weight_desirability_pct, policy.weight_market_confidence_pct, policy.weight_risk_safety_pct, policy.weight_liquidity_pct]
+    if any(weight < 0 for weight in weights) or sum(weights) <= 0:
+        weights = [45.0, 15.0, 15.0, 5.0, 20.0]
+    score_parts = [(economic_score, weights[0]), (desirability, weights[1]), (market.confidence, weights[2]), (risk, weights[3])]
     if liquidity is not None:
-        score_parts.append((liquidity, .20))
+        score_parts.append((liquidity, weights[4]))
     total_score = sum(value * weight for value, weight in score_parts) / sum(weight for _, weight in score_parts)
     provisional_evidence = "preliminary_sold_cohort" in risk_flags
     evidence_limited = provisional_evidence or market.sample_size < policy.minimum_sold_comps

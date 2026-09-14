@@ -111,5 +111,10 @@ class AppSettings(Base):
     opportunity_returns_warranty_pct: Mapped[float] = mapped_column(Float, default=5.0)
     opportunity_minimum_sold_comps: Mapped[int] = mapped_column(Integer, default=3)
     opportunity_minimum_source_diversity: Mapped[int] = mapped_column(Integer, default=2)
+    opportunity_weight_economic_pct: Mapped[float] = mapped_column(Float, default=45.0)
+    opportunity_weight_desirability_pct: Mapped[float] = mapped_column(Float, default=15.0)
+    opportunity_weight_market_confidence_pct: Mapped[float] = mapped_column(Float, default=15.0)
+    opportunity_weight_risk_safety_pct: Mapped[float] = mapped_column(Float, default=5.0)
+    opportunity_weight_liquidity_pct: Mapped[float] = mapped_column(Float, default=20.0)
 
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

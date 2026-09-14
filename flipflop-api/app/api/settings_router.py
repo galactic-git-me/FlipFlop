@@ -55,6 +55,11 @@ class SettingsUpdate(BaseModel):
     opportunity_returns_warranty_pct: float | None = None
     opportunity_minimum_sold_comps: int | None = None
     opportunity_minimum_source_diversity: int | None = None
+    opportunity_weight_economic_pct: float | None = None
+    opportunity_weight_desirability_pct: float | None = None
+    opportunity_weight_market_confidence_pct: float | None = None
+    opportunity_weight_risk_safety_pct: float | None = None
+    opportunity_weight_liquidity_pct: float | None = None
 
 
 @router.get("/")
@@ -144,4 +149,9 @@ def _to_dict(s: AppSettings) -> dict:
         "opportunity_returns_warranty_pct": s.opportunity_returns_warranty_pct,
         "opportunity_minimum_sold_comps": s.opportunity_minimum_sold_comps,
         "opportunity_minimum_source_diversity": s.opportunity_minimum_source_diversity,
+        "opportunity_weight_economic_pct": s.opportunity_weight_economic_pct,
+        "opportunity_weight_desirability_pct": s.opportunity_weight_desirability_pct,
+        "opportunity_weight_market_confidence_pct": s.opportunity_weight_market_confidence_pct,
+        "opportunity_weight_risk_safety_pct": s.opportunity_weight_risk_safety_pct,
+        "opportunity_weight_liquidity_pct": s.opportunity_weight_liquidity_pct,
     }

@@ -46,6 +46,11 @@ interface AppSettings {
   opportunity_returns_warranty_pct: number;
   opportunity_minimum_sold_comps: number;
   opportunity_minimum_source_diversity: number;
+  opportunity_weight_economic_pct: number;
+  opportunity_weight_desirability_pct: number;
+  opportunity_weight_market_confidence_pct: number;
+  opportunity_weight_risk_safety_pct: number;
+  opportunity_weight_liquidity_pct: number;
 }
 
 interface DataSource {
@@ -104,6 +109,11 @@ const DEFAULTS: AppSettings = {
   opportunity_returns_warranty_pct: 5,
   opportunity_minimum_sold_comps: 3,
   opportunity_minimum_source_diversity: 2,
+  opportunity_weight_economic_pct: 45,
+  opportunity_weight_desirability_pct: 15,
+  opportunity_weight_market_confidence_pct: 15,
+  opportunity_weight_risk_safety_pct: 5,
+  opportunity_weight_liquidity_pct: 20,
 };
 
 function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void }) {
@@ -403,9 +413,17 @@ export default function SettingsPage() {
             <CardContent className="grid grid-cols-2 md:grid-cols-5 gap-3 pt-0">
               {SCORE_COMPONENTS.map((component, index) => {
                 const values = [100, opportunityAnalysis.average("desirability_score"), opportunityAnalysis.average("market_confidence"), opportunityAnalysis.average("risk_score"), opportunityAnalysis.average("liquidity_score")];
+                const weights = [settings.opportunity_weight_economic_pct, settings.opportunity_weight_desirability_pct, settings.opportunity_weight_market_confidence_pct, settings.opportunity_weight_risk_safety_pct, settings.opportunity_weight_liquidity_pct];
                 const tooltipId = `score-component-${index}`;
-                return <div key={component.label} className="group relative rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3"><div tabIndex={0} aria-describedby={tooltipId} className="rounded outline-none focus-visible:ring-2 focus-visible:ring-[#00dc82]/70"><p className="text-xs font-semibold text-slate-300">{component.label} <span className="text-[#00dc82]" aria-hidden="true">ⓘ</span></p><p className="mt-2 text-lg font-bold text-slate-100">{values[index].toFixed(0)}<span className="text-xs font-semibold text-slate-300">/100 avg</span></p><div className="mt-2 h-1.5 rounded-full bg-slate-800"><div className="h-full rounded-full bg-[#00dc82]" style={{ width: `${Math.max(0, Math.min(100, values[index]))}%` }} /></div></div><div id={tooltipId} role="tooltip" className="pointer-events-none absolute left-2 right-2 top-full z-30 mt-2 rounded-lg border border-[#00dc82]/40 bg-[#07101a] p-3 text-xs text-slate-200 opacity-0 shadow-xl transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"><p className="font-bold text-[#00dc82]">{component.label}</p><p className="mt-1 font-semibold">{component.description}</p><p className="mt-1 text-slate-300">{component.calculation}</p></div></div>;
+                return <div key={component.label} className="group relative rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3"><div tabIndex={0} aria-describedby={tooltipId} className="rounded outline-none focus-visible:ring-2 focus-visible:ring-[#00dc82]/70"><p className="text-xs font-semibold text-slate-300">{component.label.replace(/ · \d+%$/, "")} · {weights[index]}% <span className="text-[#00dc82]" aria-hidden="true">ⓘ</span></p><p className="mt-2 text-lg font-bold text-slate-100">{values[index].toFixed(0)}<span className="text-xs font-semibold text-slate-300">/100 avg</span></p><div className="mt-2 h-1.5 rounded-full bg-slate-800"><div className="h-full rounded-full bg-[#00dc82]" style={{ width: `${Math.max(0, Math.min(100, values[index]))}%` }} /></div></div><div id={tooltipId} role="tooltip" className="pointer-events-none absolute left-2 right-2 top-full z-30 mt-2 rounded-lg border border-[#00dc82]/40 bg-[#07101a] p-3 text-xs text-slate-200 opacity-0 shadow-xl transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"><p className="font-bold text-[#00dc82]">{component.label}</p><p className="mt-1 font-semibold">{component.description}</p><p className="mt-1 text-slate-300">{component.calculation}</p></div></div>;
               })}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader><CardTitle>Score component weights</CardTitle><p className="text-xs font-semibold text-slate-300">Choose how much each component contributes to the final score. Values are percentages; the scorer normalises them to their total. Set a component to 0 to remove its influence.</p></CardHeader>
+            <CardContent className="grid grid-cols-2 md:grid-cols-5 gap-3 pt-0">
+              {[["opportunity_weight_economic_pct", "Economic return"], ["opportunity_weight_desirability_pct", "Desirability"], ["opportunity_weight_market_confidence_pct", "Market confidence"], ["opportunity_weight_risk_safety_pct", "Risk safety"], ["opportunity_weight_liquidity_pct", "Liquidity"]].map(([field, label]) => { const key = field as keyof AppSettings; return <label key={field} className="text-xs font-semibold text-slate-300">{label}<div className="relative mt-1"><input type="number" min={0} max={100} step="1" aria-label={`${label} weight`} value={settings[key] as number} onChange={e => { setOpportunityPreviewDirty(true); setSettings(p => ({ ...p, [key]: Math.max(0, Math.min(100, Number(e.target.value))) })); }} className="w-full px-3 py-2 pr-8 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm font-bold text-slate-100" /><span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-500">%</span></div></label>; })}
+              <p className="col-span-full text-xs font-semibold text-slate-400">Total weight: <strong className={Math.abs(settings.opportunity_weight_economic_pct + settings.opportunity_weight_desirability_pct + settings.opportunity_weight_market_confidence_pct + settings.opportunity_weight_risk_safety_pct + settings.opportunity_weight_liquidity_pct - 100) < 0.01 ? "text-emerald-400" : "text-amber-300"}>{(settings.opportunity_weight_economic_pct + settings.opportunity_weight_desirability_pct + settings.opportunity_weight_market_confidence_pct + settings.opportunity_weight_risk_safety_pct + settings.opportunity_weight_liquidity_pct).toFixed(0)}%</strong> · the scorer normalises the total automatically.</p>
             </CardContent>
           </Card>
           <Card>
@@ -438,7 +456,7 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Buy-now gates</CardTitle>
-              <p className="text-xs font-semibold text-slate-300">Profit, ROI and below-market price determine the deal tier. Confidence and liquidity remain scoring signals and rank urgency rather than vetoing a genuine bargain.</p>
+              <p className="text-xs font-semibold text-slate-300">A listing must meet every gate in its row. The below-market threshold compares the listing price with the same-condition market median.</p>
             </CardHeader>
             <CardContent className="pt-0 overflow-x-auto">
               <div className="min-w-[760px]">
@@ -447,7 +465,7 @@ export default function SettingsPage() {
                 </div>
                 {[{ title: "SUPER GEM", prefix: "opportunity_super", tone: "text-amber-300", fields: [["profit_gbp", "£"], ["roi_pct", "%"], ["market_discount_pct", "%"], ["confidence", "/100"], ["liquidity", "/100"], ["score", "/100"]] }, { title: "GEM", prefix: "opportunity_gem", tone: "text-cyan-300", fields: [["profit_gbp", "£"], ["roi_pct", "%"], ["market_discount_pct", "%"], ["confidence", "/100"], ["liquidity", "/100"], ["score", "/100"]] }].map(group => (
                   <div key={group.prefix} className="grid grid-cols-[1.35fr_repeat(6,minmax(95px,1fr))] items-center gap-2 rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3 mb-2">
-                    <div><p className={`text-sm font-bold ${group.tone}`}>{group.title}</p><p className="text-[10px] text-slate-500">Economics + price gates</p></div>
+                    <div><p className={`text-sm font-bold ${group.tone}`}>{group.title}</p><p className="text-[10px] text-slate-500">All gates required</p></div>
                     {group.fields.map(([suffix, unit]) => { const key = `${group.prefix}_${suffix}` as keyof AppSettings; const fallback = DEFAULTS[key]; return <label key={key} className={`text-xs font-semibold ${suffix === "market_discount_pct" ? "text-[#00dc82]" : "text-slate-300"}`}><span className="sr-only">{group.title} {suffix}</span><div className="relative"><input type="number" min={0} step="0.1" aria-label={`${group.title} ${suffix}`} value={typeof settings[key] === "number" && Number.isFinite(settings[key] as number) ? settings[key] as number : typeof fallback === "number" ? fallback : 0} onChange={e => { setOpportunityPreviewDirty(true); setSettings(p => ({ ...p, [key]: Number(e.target.value) })); }} className="w-full px-2 py-2 pr-9 bg-[#07101a] border border-[#1e2d45] rounded-lg text-sm font-bold text-slate-100" /><span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-500">{unit}</span></div></label>; })}
                   </div>
                 ))}
