@@ -1610,6 +1610,24 @@ async def _seed_default_data():
             "bargain hardware": "BargainHardware",
         }
         rows = (await db.execute(select(SourceSearchTerm))).scalars().all()
+        # Keep the backend catalogue focused on PC hardware.  Older installs
+        # contain a large set of franchise/theme case queries (Star Wars,
+        # anime, superheroes, etc.).  They are not useful for computing
+        # sourcing and should stay disabled after every restart.
+        _off_topic_case_groups = {
+            "Anime Inspired", "Babylon 5", "Batman", "Battlestar Galactica / Cylon",
+            "Borg Aesthetic", "Cyberpunk / Sci-Fi Style", "Dragon Ball Inspired",
+            "Farscape", "Hulk", "Iron Man / Jarvis", "Marvel Inspired",
+            "Naruto Inspired", "Pokemon Inspired", "Spider-Man", "Star Trek Inspired",
+            "Star Wars Inspired", "Superman / Supergirl", "Transformers", "X-Men",
+        }
+        disabled_off_topic = 0
+        for row in rows:
+            if row.scope == "cases" and row.group_name in _off_topic_case_groups and row.enabled:
+                row.enabled = False
+                disabled_off_topic += 1
+        if disabled_off_topic:
+            log.info("migrated.source_search_terms.disabled_off_topic_cases", rows=disabled_off_topic)
         updated_rows = 0
         flip_allowed = {"eBay UK", "eBay UK Auctions", "BidSpotter", "Gumtree", "Amazon", "eBuyer", "Temu", "AliExpress", "Alibaba", "BargainHardware", "Vinted"}
         common_allowed = {"eBay", "Gumtree", "Amazon", "eBuyer", "Temu", "AliExpress", "Alibaba", "BargainHardware"}

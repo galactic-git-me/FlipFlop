@@ -16,6 +16,9 @@ class SourceSearchTerm(Base):
     attributes: Mapped[dict] = mapped_column(JSON, default=dict)
     notes: Mapped[str | None] = mapped_column(Text)
     enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    # Which market evidence this term targets.  "both" is useful for terms
+    # that feed both sourcing and resale-price research.
+    listing_mode: Mapped[str] = mapped_column(String(20), default="active", server_default="active")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     # Demand intelligence

@@ -11,6 +11,7 @@ class SourceSearchTermCreate(BaseModel):
     attributes: dict = Field(default_factory=dict)
     notes: Optional[str] = None
     enabled: bool = True
+    listing_mode: str = "active"
 
 
 class SourceSearchTermUpdate(BaseModel):
@@ -21,6 +22,7 @@ class SourceSearchTermUpdate(BaseModel):
     attributes: Optional[dict] = None
     notes: Optional[str] = None
     enabled: Optional[bool] = None
+    listing_mode: Optional[str] = None
     demand_score: Optional[float] = None
     is_baseline: Optional[bool] = None
     zero_results_streak: Optional[int] = None
@@ -35,6 +37,7 @@ class SourceSearchTermOut(BaseModel):
     attributes: dict
     notes: Optional[str]
     enabled: bool
+    listing_mode: str
     # New demand-driven fields
     demand_score: float
     is_baseline: bool

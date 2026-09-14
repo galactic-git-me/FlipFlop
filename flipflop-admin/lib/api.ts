@@ -479,6 +479,7 @@ export interface SourceSearchTerm {
   attributes: Record<string, unknown>;
   notes?: string | null;
   enabled: boolean;
+  listing_mode: "active" | "sold" | "both";
   created_at: string;
 }
 
