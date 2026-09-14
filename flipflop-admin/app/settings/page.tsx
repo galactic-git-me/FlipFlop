@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Settings, Save, RefreshCw, Database, Plus, Trash2, Link2, Unlink } from "lucide-react";
+import { Settings, Save, RefreshCw, Database, Plus, Trash2, Link2, Unlink, Terminal, Circle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
@@ -104,7 +104,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
   );
 }
 
-type TabKey = "general" | "opportunity" | "seller-policies" | "sources";
+type TabKey = "general" | "opportunity" | "seller-policies" | "sources" | "extension-logs" | "sold-logs" | "server-logs";
 
 export default function SettingsPage() {
   const [tab, setTab] = useState<TabKey>("general");
@@ -117,6 +117,10 @@ export default function SettingsPage() {
 
   const [newSourceName, setNewSourceName] = useState("");
   const [newSourceUrl, setNewSourceUrl] = useState("");
+  const [extensionLogs, setExtensionLogs] = useState<import("@/lib/api").SearchTelemetryItem[]>([]);
+  const [soldLogs, setSoldLogs] = useState<import("@/lib/api").SoldScrapingItem[]>([]);
+  const [soldLogNote, setSoldLogNote] = useState("");
+  const [logsLoading, setLogsLoading] = useState(false);
 
 
   const [ebayStatus, setEbayStatus] = useState<{
@@ -198,6 +202,17 @@ export default function SettingsPage() {
      
   }, []);
 
+  useEffect(() => {
+    if (tab === "extension-logs") {
+      setLogsLoading(true);
+      void api.searchTelemetry.recent(200).then(result => setExtensionLogs(result.items ?? [])).catch(() => setExtensionLogs([])).finally(() => setLogsLoading(false));
+    }
+    if (tab === "sold-logs") {
+      setLogsLoading(true);
+      void api.logs.soldScraping(200).then(result => { setSoldLogs(result.items ?? []); setSoldLogNote(result.note ?? ""); }).catch(() => { setSoldLogs([]); setSoldLogNote(""); }).finally(() => setLogsLoading(false));
+    }
+  }, [tab]);
+
   // eBay returns here with a result flag. Keep the user on the relevant tab
   // and refresh the authoritative status from the eBay-operations backend.
   useEffect(() => {
@@ -263,6 +278,9 @@ export default function SettingsPage() {
           { key: "opportunity", label: "Opportunity Scoring" },
           { key: "seller-policies", label: "Seller Policies" },
           { key: "sources", label: "Data Sources" },
+          { key: "extension-logs", label: "Extension Logs" },
+          { key: "sold-logs", label: "Sold Scraping" },
+          { key: "server-logs", label: "Server Logs" },
         ].map(t => (
           <button
             key={t.key}
@@ -561,6 +579,56 @@ export default function SettingsPage() {
         </Card>
       )}
 
+      {tab === "extension-logs" && (
+        <Card>
+          <CardHeader><CardTitle className="flex items-center gap-2"><Terminal className="w-4 h-4" /> Extension Logs</CardTitle></CardHeader>
+          <CardContent className="space-y-3 pt-0">
+            <p className="text-xs text-slate-500">Search-run telemetry from FlipFlopXtension. The detailed live progress grid remains in the extension; these durable rows show what reached the backend.</p>
+            {logsLoading ? <p className="text-sm text-slate-500">Loading…</p> : extensionLogs.length === 0 ? <p className="text-sm text-slate-600">No extension scan telemetry has arrived yet.</p> : (
+              <div className="max-h-[520px] overflow-auto rounded-lg border border-[#1e2d45]">
+                <table className="w-full text-xs"><thead className="sticky top-0 bg-[#0a1119] text-slate-500"><tr><th className="text-left p-2">Time</th><th className="text-left p-2">Source</th><th className="text-left p-2">Search term</th><th className="text-right p-2">Found</th><th className="text-right p-2">New</th><th className="text-left p-2">Result</th></tr></thead><tbody>
+                  {extensionLogs.map((row, i) => <tr key={`${row.ts}-${i}`} className="border-t border-[#1e2d45]"><td className="p-2 text-slate-500 whitespace-nowrap">{new Date(row.ts).toLocaleString()}</td><td className="p-2 text-slate-300">{row.source || "—"}</td><td className="p-2 text-slate-300">{row.term}</td><td className="p-2 text-right text-slate-300">{row.found}</td><td className="p-2 text-right text-emerald-300">{row.new}</td><td className={`p-2 ${row.error ? "text-red-300" : "text-emerald-300"}`}>{row.error || "completed"}</td></tr>)}
+                </tbody></table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {tab === "sold-logs" && (
+        <Card>
+          <CardHeader><CardTitle className="flex items-center gap-2"><Database className="w-4 h-4" /> Sold Scraping Logs</CardTitle></CardHeader>
+          <CardContent className="space-y-3 pt-0">
+            <p className="text-xs text-slate-500">Completed-sale observations persisted by the sold scraper. These are deduplicated and reused by price benchmarks and demand analysis.</p>
+            {soldLogNote && <p className="text-[11px] text-slate-600">{soldLogNote}</p>}
+            {logsLoading ? <p className="text-sm text-slate-500">Loading…</p> : soldLogs.length === 0 ? <p className="text-sm text-slate-600">No sold scraping results have been stored yet.</p> : (
+              <div className="max-h-[520px] overflow-auto rounded-lg border border-[#1e2d45]"><table className="w-full text-xs"><thead className="sticky top-0 bg-[#0a1119] text-slate-500"><tr><th className="text-left p-2">Observed</th><th className="text-left p-2">Item</th><th className="text-left p-2">Condition</th><th className="text-right p-2">Price</th><th className="text-left p-2">Identity</th></tr></thead><tbody>
+                {soldLogs.map(row => <tr key={row.id} className="border-t border-[#1e2d45]"><td className="p-2 text-slate-500 whitespace-nowrap">{row.observed_at ? new Date(row.observed_at).toLocaleString() : "—"}</td><td className="p-2 text-slate-300">{row.title}</td><td className="p-2 text-slate-400">{row.condition}</td><td className="p-2 text-right text-emerald-300">£{row.price.toFixed(2)}</td><td className="p-2 text-slate-500">{row.cpk || row.match_key}</td></tr>)}
+              </tbody></table></div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {tab === "server-logs" && (
+        <Card>
+          <CardHeader><CardTitle className="flex items-center gap-2"><Terminal className="w-4 h-4" /> Server Logs</CardTitle></CardHeader>
+          <CardContent className="pt-0"><ServerLogPanel /></CardContent>
+        </Card>
+      )}
+
     </div>
   );
+}
+
+function ServerLogPanel() {
+  const [lines, setLines] = useState<{ ts: string; level: string; msg: string; extra?: Record<string, string> }[]>([]);
+  const [connected, setConnected] = useState(false);
+  useEffect(() => {
+    const es = new EventSource(`${process.env.NEXT_PUBLIC_API_URL || "/proxy-api"}/logs/stream`);
+    es.onopen = () => setConnected(true); es.onerror = () => setConnected(false);
+    es.onmessage = event => { try { setLines(prev => [...prev, JSON.parse(event.data)].slice(-500)); } catch {} };
+    return () => es.close();
+  }, []);
+  return <div className="rounded-lg border border-[#1e2d45] bg-black p-3 font-mono text-[11px] max-h-[560px] overflow-auto"><div className="mb-2 text-slate-600"><Circle className={`inline w-2 h-2 mr-1 fill-current ${connected ? "text-emerald-500" : "text-red-500"}`} />{connected ? "LIVE" : "OFFLINE"}</div>{lines.length === 0 ? <span className="text-slate-700">$ waiting for server events…_</span> : lines.map((line, i) => <div key={i} className="leading-6"><span className="text-slate-600">{new Date(line.ts).toLocaleTimeString()}</span> <span className="text-emerald-400">[{line.level}]</span> <span className="text-slate-300">{line.msg}</span></div>)}</div>;
 }

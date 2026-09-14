@@ -520,6 +520,19 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return res.json();
 }
 
+export interface SoldScrapingItem {
+  id: number;
+  observed_at: string | null;
+  title: string;
+  match_key: string;
+  condition: string;
+  price: number;
+  postage: number;
+  source_url: string | null;
+  cpk: string | null;
+  identity_confidence: number | null;
+}
+
 async function requestGemRadar<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`/api/gem-radar${path}`, {
     credentials: "include",
@@ -1335,6 +1348,11 @@ export const api = {
       request<void>(`/inventory-allocations/manual-builds/${manualBuildId}/items/${inventoryItemId}`, { method: "DELETE" }),
   },
 
+  logs: {
+    history: (tail = 300) => request<unknown[]>(`/logs/history?tail=${tail}`),
+    soldScraping: (limit = 100) => request<{ items: SoldScrapingItem[]; stored_count: number; note: string }>(`/logs/sold-scraping?limit=${limit}`),
+  },
+
   inventory: {
     freeItems: (componentType?: string) => request<Array<{
       id: number; component_name: string; component_type: string; quantity_free: number;
@@ -1408,6 +1426,7 @@ export const api = {
         connected_at: string | null;
         username: string | null;
         email: string | null;
+        seller_eligible: boolean | null;
         scopes: string[];
         refresh_token_expires_at: string | null;
       }>("/ebay/oauth/status"),

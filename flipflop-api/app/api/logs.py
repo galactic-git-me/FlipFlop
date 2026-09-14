@@ -19,6 +19,9 @@ from zoneinfo import ZoneInfo
 import structlog
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
+from sqlalchemy import select
+from app.database import AsyncSessionLocal
+from app.models.gem_radar_sold_observation import GemRadarSoldObservation
 
 # ── Shared state ───────────────────────────────────────────────────────────────
 _LOG_BUFFER: deque[dict] = deque(maxlen=2000)
@@ -115,3 +118,35 @@ async def stream_logs():
             "X-Accel-Buffering": "no",
         },
     )
+
+
+@router.get("/sold-scraping")
+async def sold_scraping_log(limit: int = 100):
+    """Return the durable sold-comps observations collected by the extension.
+
+    The extension's progress table is intentionally ephemeral, but the actual
+    completed-sale rows are persisted and reused by pricing and demand.
+    """
+    limit = max(1, min(limit, 500))
+    async with AsyncSessionLocal() as db:
+        rows = list((await db.execute(
+            select(GemRadarSoldObservation)
+            .order_by(GemRadarSoldObservation.observed_at.desc())
+            .limit(limit)
+        )).scalars().all())
+    return {
+        "items": [{
+            "id": row.id,
+            "observed_at": row.observed_at.isoformat() if row.observed_at else None,
+            "title": row.title or row.model or row.match_key,
+            "match_key": row.match_key,
+            "condition": row.condition,
+            "price": row.price,
+            "postage": row.postage,
+            "source_url": row.source_url,
+            "cpk": row.cpk,
+            "identity_confidence": row.identity_confidence,
+        } for row in rows],
+        "stored_count": len(rows),
+        "note": "Rows are deduplicated by canonical item and reused by price benchmarks and demand analysis.",
+    }
