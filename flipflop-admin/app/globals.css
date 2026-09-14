@@ -394,3 +394,18 @@ body {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+
+.opportunity-classification-strip {
+  background: linear-gradient(110deg, #075985 0%, #123b67 28%, #3f352b 62%, #c2410c 100%);
+  background-size: 220% 100%;
+  animation: opportunity-brand-drift 18s ease-in-out infinite alternate;
+}
+
+@keyframes opportunity-brand-drift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opportunity-classification-strip { animation: none; }
+}
