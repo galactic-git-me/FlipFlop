@@ -20,11 +20,13 @@ export default function LoginPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
+        credentials: "same-origin",
+        cache: "no-store",
       });
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        setError(data.error ?? "Invalid email or password");
+        setError(data.error ?? data.detail ?? "Invalid email or password");
         return;
       }
 
@@ -84,6 +86,9 @@ export default function LoginPage() {
         >
           {loading ? "Signing in..." : "Sign in"}
         </button>
+        <p aria-live="polite" className="mt-3 min-h-5 text-center text-xs text-white/45">
+          {loading ? "Checking your account…" : error ? "Sign-in was not completed." : ""}
+        </p>
       </form>
     </div>
   );
