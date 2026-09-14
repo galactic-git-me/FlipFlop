@@ -214,10 +214,58 @@ function Confirm-LocalDatabaseRefresh {
     Write-Host "N (5-second timeout)" -ForegroundColor Gray
 }
 
+function Promote-DevelopmentToProduction {
+    # Production is changed only here, at an operator-controlled startup.
+    # Development pushes remain on dev and cannot trigger a production deploy.
+    $productionBranch = if ($env:FLIPFLOP_PRODUCTION_BRANCH) { $env:FLIPFLOP_PRODUCTION_BRANCH } else { "main" }
+    $developmentBranch = if ($env:FLIPFLOP_DEVELOPMENT_BRANCH) { $env:FLIPFLOP_DEVELOPMENT_BRANCH } else { "dev" }
+
+    Write-Host "[*] Checking for development commits awaiting production promotion..." -ForegroundColor Cyan
+    & git -C $projectRoot fetch --quiet origin $productionBranch $developmentBranch
+    if ($LASTEXITCODE -ne 0) {
+        throw "Unable to fetch origin/$productionBranch and origin/$developmentBranch. Check GitHub credentials."
+    }
+    $productionRef = & git -C $projectRoot rev-parse "origin/$productionBranch" 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        throw "origin/$productionBranch does not exist. Create the production branch before starting LIVE OPERATOR."
+    }
+    $developmentRef = & git -C $projectRoot rev-parse "origin/$developmentBranch" 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        throw "origin/$developmentBranch does not exist. Push the development branch before starting LIVE OPERATOR."
+    }
+    $pending = @(& git -C $projectRoot log --reverse --format="%H`t%h`t%s" "$productionRef..$developmentRef")
+    if (-not $pending -or $pending.Count -eq 0) {
+        Write-Host "[OK] Production is already at the latest promoted commit ($($productionRef.Substring(0, 12)))." -ForegroundColor Green
+        return
+    }
+
+    Write-Host ""; Write-Host "COMMITS AVAILABLE FOR PRODUCTION" -ForegroundColor Yellow
+    for ($i = 0; $i -lt $pending.Count; $i++) {
+        $parts = $pending[$i] -split "`t", 3
+        Write-Host ("  [{0}] {1} {2}" -f ($i + 1), $parts[1], $parts[2]) -ForegroundColor Gray
+    }
+    Write-Host "  [0] Leave production unchanged" -ForegroundColor DarkGray
+    Write-Host "Promote through which commit? [0] " -NoNewline -ForegroundColor White
+    $answer = Read-Host
+    if ([string]::IsNullOrWhiteSpace($answer) -or $answer -eq "0") {
+        Write-Host "[INFO] Production promotion skipped; existing production remains deployed." -ForegroundColor Yellow
+        return
+    }
+    $selection = 0
+    if (-not [int]::TryParse($answer, [ref]$selection) -or $selection -lt 1 -or $selection -gt $pending.Count) {
+        throw "Choose a number from 1 to $($pending.Count), or 0 to skip promotion."
+    }
+    $targetSha = (($pending[$selection - 1] -split "`t", 3)[0]).Trim()
+    & git -C $projectRoot push origin "$targetSha`:refs/heads/$productionBranch"
+    if ($LASTEXITCODE -ne 0) { throw "Production promotion failed; origin/$productionBranch was not changed." }
+    Write-Host "[OK] Promoted $targetSha to origin/$productionBranch. The remote startup will deploy this exact commit." -ForegroundColor Green
+}
+
 $runMode = Select-RunMode
 if ($runMode -eq "development") {
     Check-RepositoryForMode $runMode
 } else {
+    Promote-DevelopmentToProduction
     & (Join-Path $PSScriptRoot "start-production-remote.ps1")
 }
 # Prepare the matching extension before starting/restarting any services.

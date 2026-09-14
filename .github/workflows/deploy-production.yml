@@ -24,6 +24,11 @@ jobs:
         working-directory: flipflop-api
     steps:
       - uses: actions/checkout@v5
+      - name: Require production branch
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "Production deployment must be dispatched from main (received ${{ github.ref }})."
+          exit 1
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"

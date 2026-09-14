@@ -2,11 +2,13 @@
 set -Eeuo pipefail
 api=/home/mac/CODING/FlipFlop-production
 shop=/home/mac/CODING/flipflop-shop
+production_branch="${FLIPFLOP_PRODUCTION_BRANCH:-main}"
 deploy_if_needed() {
   local repo="$1"
   local deploy_script="$2"
-  branch=$(git -C "$repo" branch --show-current)
-  [[ -n "$branch" ]] || { echo "Detached checkout: $repo"; exit 1; }
+  branch="$production_branch"
+  current_branch=$(git -C "$repo" branch --show-current)
+  [[ "$current_branch" == "$branch" ]] || { echo "Production checkout $repo is on '$current_branch'; expected '$branch'. Refusing deployment."; exit 1; }
   [[ -z "$(git -C "$repo" status --porcelain)" ]] || { echo "Uncommitted production files: $repo"; exit 1; }
   git -C "$repo" fetch --quiet origin "$branch"
   local current_sha target_sha

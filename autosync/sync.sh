@@ -2,7 +2,9 @@
 set -euo pipefail
 
 REPO_DIR="${REPO_DIR:-/repo}"
-BRANCH="${BRANCH:-master}"
+# Autosync is for development only. Production is promoted explicitly from
+# the startup script and must never be updated by this loop.
+BRANCH="${BRANCH:-dev}"
 INTERVAL_SECONDS="${INTERVAL_SECONDS:-300}"
 COMMIT_MSG_PREFIX="${COMMIT_MSG_PREFIX:-chore: automated codebase synchronization}"
 TZ="${TZ:-UTC}"
@@ -16,6 +18,11 @@ if [[ ! -d "$REPO_DIR/.git" ]]; then
 fi
 
 cd "$REPO_DIR"
+
+if [[ "$BRANCH" == "main" || "$BRANCH" == "master" ]]; then
+  log "Refusing to autosync production branch '$BRANCH'. Set BRANCH=dev for development."
+  exit 1
+fi
 
 git config --global --add safe.directory "$REPO_DIR" || true
 git config --global credential.helper store || true

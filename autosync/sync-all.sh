@@ -5,6 +5,7 @@ CODING_DIR="${CODING_DIR:-/coding}"
 INTERVAL_SECONDS="${INTERVAL_SECONDS:-300}"
 COMMIT_MSG_PREFIX="${COMMIT_MSG_PREFIX:-chore: automated codebase synchronization}"
 PRIMARY_REPO="${PRIMARY_REPO:-FlipFlop}"
+DEVELOPMENT_BRANCH="${DEVELOPMENT_BRANCH:-dev}"
 TZ="${TZ:-UTC}"
 export TZ
 
@@ -42,7 +43,11 @@ sync_repo() {
   local branch
   branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo master)"
   if [[ -z "$branch" || "$branch" == "HEAD" ]]; then
-    branch="master"
+    branch="$DEVELOPMENT_BRANCH"
+  fi
+  if [[ "$branch" == "main" || "$branch" == "master" ]]; then
+    log "[$name] Refusing autosync on production branch '$branch'. Switch this checkout to '$DEVELOPMENT_BRANCH'."
+    return 0
   fi
 
   local fetch_rc=0 commit_rc=0 push_rc=0 rebase_rc=0 ahead=0 behind=0
