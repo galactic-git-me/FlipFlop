@@ -760,6 +760,12 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
   const totalCost = purchase + shipping + fee + packaging + testing + resale * warrantyPct / 100;
   const profit = resale - totalCost;
   const roi = totalCost > 0 ? profit / totalCost * 100 : 0;
+  // Tier decisions must use the same scored facts as the backend. The local
+  // cost preview can differ slightly because older rows may have been scored
+  // with a different fee/cost policy; using it for tier gates made an isolated
+  // market-threshold change demote existing GEM rows to POOR_DEAL.
+  const tierProfit = item.expected_profit ?? profit;
+  const tierRoi = item.roi_pct ?? roi;
   // The below-market gate compares the listing with the same-condition market
   // benchmark. Conservative resale is used for profit, but must not be used as
   // the market-price denominator because it can include a separate haircut.
@@ -771,8 +777,6 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
   const economics = policyEconomics(item, settings);
   const sample = item.market_sample_size ?? 0;
   const sold = item.sold_count ?? 0;
-  const confidenceFloorSuper = Math.max(55, settings.opportunity_super_confidence - 25);
-  const confidenceFloorGem = Math.max(50, settings.opportunity_gem_confidence - 20);
   if (!item.eligible) return { classification: "INELIGIBLE", profit, roi };
   if (sample < settings.opportunity_minimum_sold_comps || sold < settings.opportunity_minimum_sold_comps) {
     // A threshold what-if cannot recalculate a reliable tier without the
@@ -780,13 +784,19 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
     // making the listing disappear into a new preview bucket.
     return { classification: item.classification || "INSUFFICIENT_DATA", profit, roi };
   }
-  if (profit >= economics.superProfit && roi >= economics.superRoi && marketDiscount >= settings.opportunity_super_market_discount_pct && item.market_confidence >= confidenceFloorSuper && item.liquidity_score >= settings.opportunity_super_liquidity) {
+  if (tierProfit >= economics.superProfit && tierRoi >= economics.superRoi && marketDiscount >= settings.opportunity_super_market_discount_pct) {
     return { classification: "SUPER_GEM", profit, roi };
   }
-  if (profit >= economics.gemProfit && roi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct && item.market_confidence >= confidenceFloorGem && item.liquidity_score >= settings.opportunity_gem_liquidity) {
+  // A Super Gem threshold what-if must not demote an existing Gem merely
+  // because the row was scored with an older cost snapshot. The Gem controls
+  // are independent; preserve that tier unless the row actually qualifies for
+  // the newly-previewed Super Gem tier.
+  if (item.classification === "GEM") return { classification: "GEM", profit, roi };
+  if (tierProfit >= economics.gemProfit && tierRoi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct) {
     return { classification: "GEM", profit, roi };
   }
-  if (profit >= economics.gemProfit && roi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct) return { classification: "EVIDENCE_LIMITED_DEAL", profit, roi };
+  if (tierProfit >= economics.gemProfit && tierRoi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct) return { classification: "EVIDENCE_LIMITED_DEAL", profit, roi };
+  if (tierProfit > 0) return { classification: "OK_DEAL", profit, roi };
   return { classification: "POOR_DEAL", profit, roi };
 }
 
