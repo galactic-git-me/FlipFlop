@@ -503,7 +503,6 @@ export default function SettingsPage() {
                 <div className="mt-3 grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-6">
                   {[["Eligible", opportunityAnalysis.diagnostics.eligible, "Listings without a hard identity or policy veto. These rows are allowed to continue through the opportunity gates."], ["Evidence", opportunityAnalysis.diagnostics.evidence, "Eligible listings with enough same-condition market evidence and sold comparables to calculate a reliable deal."], ["Economics", opportunityAnalysis.diagnostics.economics, "Listings that meet the selected tier's minimum profit and ROI requirements."], ["Market threshold", opportunityAnalysis.diagnostics.market, "Listings that also meet the tier's required percentage below the same-condition market price."], ["Confidence + liquidity", opportunityAnalysis.diagnostics.confidenceLiquidity, "Listings that pass the minimum market-confidence and demand/liquidity requirements."], ["Score gate", opportunityAnalysis.diagnostics.final, "Listings whose weighted final score reaches the Super Gem score threshold. The preview's five weight controls affect this gate."]].map(([label, value, explanation]) => <div key={label as string} title={explanation as string} className="cursor-help rounded border border-[#1e2d45] bg-[#0a1119] p-2"><p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">{label}</p><p className="mt-1 text-lg font-bold text-slate-100">{(value as number).toLocaleString()}</p></div>)}
                 </div>
-                {breakdownRows.length > 0 && <div className="mt-3 rounded border border-slate-500/20 bg-[#0a1119] p-3"><p className="text-[10px] font-bold uppercase tracking-wide text-slate-200">Data quality and evidence breakdown</p><p className="mt-1 text-[11px] font-semibold text-slate-400">These are the reasons listings are held out of normal opportunity scoring. Counts are within each category; hover the category or reason for context.</p><div className="mt-2 overflow-x-auto"><table className="w-full min-w-[920px] text-left text-[11px]"><thead className="text-[10px] uppercase tracking-wide text-slate-500"><tr><th className="py-1 pr-3">Category</th><th className="py-1 pr-3">Recorded reason</th><th className="py-1 pr-3">Listings</th><th className="py-1 pr-3">Share</th><th className="py-1 pr-3">What it means</th><th className="py-1">Impact</th></tr></thead><tbody>{breakdownRows.map(row => <tr key={`${row.category}-${row.reason}`} className="border-t border-slate-500/10"><td className="py-1.5 pr-3 font-bold text-slate-200">{row.category}</td><td className="py-1.5 pr-3 font-semibold text-slate-300">{row.reason.replaceAll("_", " ")}</td><td className="py-1.5 pr-3 font-bold text-slate-100">{row.count.toLocaleString()}</td><td className="py-1.5 pr-3 text-slate-300">{row.total ? `${((row.count / row.total) * 100).toFixed(1)}%` : "—"}</td><td className="py-1.5 pr-3 text-slate-400">{row.meaning}</td><td className="py-1.5 text-slate-400">{row.impact}</td></tr>)}</tbody></table></div></div>}
                <p className="mt-2 text-[11px] font-semibold text-slate-500">Identity failed ({opportunityAnalysis.identityFailedCount.toLocaleString()}) and insufficient data ({opportunityAnalysis.insufficientDataCount.toLocaleString()}) are excluded before these gates. Current scored rows: {opportunityAnalysis.currentTotal.toLocaleString()}; market snapshot rows: {marketSnapshotCount?.toLocaleString() ?? "â€”"}{marketSnapshotCount != null && marketSnapshotCount !== opportunityAnalysis.currentTotal ? ` Â· ${Math.abs(marketSnapshotCount - opportunityAnalysis.currentTotal).toLocaleString()} snapshot rows are outside the active buy-now scored dataset (for example auctions or rows not scored yet).` : ""}</p>
               </div>
               <div className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3">
@@ -521,6 +520,7 @@ export default function SettingsPage() {
                   {opportunityAnalysis.chartOrder.map((classification, index) => <span key={classification}><span className="mr-1" style={{ color: CLASSIFICATION_COLORS[index % CLASSIFICATION_COLORS.length] }}>â– </span>{classification.replaceAll("_", " ")}</span>)}
                 </div>
               </div>
+                {breakdownRows.length > 0 && <div className="mt-3 rounded border border-slate-500/20 bg-[#0a1119] p-3"><p className="text-[10px] font-bold uppercase tracking-wide text-slate-200">Data quality and evidence breakdown</p><p className="mt-1 text-[11px] font-semibold text-slate-400">These are the reasons listings are held out of normal opportunity scoring. Counts are within each category; hover the category or reason for context.</p><div className="mt-2 overflow-x-auto"><table className="w-full min-w-[920px] text-left text-[11px]"><thead className="text-[10px] uppercase tracking-wide text-slate-500"><tr><th className="py-1 pr-3">Category</th><th className="py-1 pr-3">Recorded reason</th><th className="py-1 pr-3">Listings</th><th className="py-1 pr-3">Share</th><th className="py-1 pr-3">What it means</th><th className="py-1">Impact</th></tr></thead><tbody>{breakdownRows.map(row => <tr key={`${row.category}-${row.reason}`} className="border-t border-slate-500/10"><td className="py-1.5 pr-3 font-bold text-slate-200">{row.category}</td><td className="py-1.5 pr-3 font-semibold text-slate-300">{row.reason.replaceAll("_", " ")}</td><td className="py-1.5 pr-3 font-bold text-slate-100">{row.count.toLocaleString()}</td><td className="py-1.5 pr-3 text-slate-300">{row.total ? `${((row.count / row.total) * 100).toFixed(1)}%` : "—"}</td><td className="py-1.5 pr-3 text-slate-400">{row.meaning}</td><td className="py-1.5 text-slate-400">{row.impact}</td></tr>)}</tbody></table></div></div>}
             </CardContent>
           </Card>
           <Card>
@@ -859,8 +859,11 @@ function superGateDiagnostics(items: OpportunityPolicyItem[], settings: AppSetti
     const roi = item.roi_pct;
     if (profit == null || roi == null || profit < economicsRule.superProfit || roi < economicsRule.superRoi) continue;
     economics++;
-    const condition = (item.condition ?? "").toLowerCase();
-    const marketPrice = condition.includes("new") ? (item.market_new_price ?? item.market_used_price ?? resale) : (item.market_used_price ?? item.market_new_price ?? resale);
+    // Match the backend's market-discount denominator: resale_price is the
+    // conservative same-condition benchmark used when the row was scored.
+    // Re-selecting new/used evidence here made a threshold what-if demote
+    // existing Super Gems even when the threshold was lowered.
+    const marketPrice = resale;
     const discount = marketPrice > 0 ? (marketPrice - purchase) / marketPrice * 100 : -Infinity;
     if (discount < settings.opportunity_super_market_discount_pct) continue;
     market++;
@@ -901,10 +904,8 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
   // The below-market gate compares the listing with the same-condition market
   // benchmark. Conservative resale is used for profit, but must not be used as
   // the market-price denominator because it can include a separate haircut.
-  const condition = (item.condition ?? "").toLowerCase();
-  const marketPrice = condition.includes("new")
-    ? (item.market_new_price ?? item.market_used_price ?? resale)
-    : (item.market_used_price ?? item.market_new_price ?? resale);
+  // Keep the preview on the same benchmark as the backend scorer.
+  const marketPrice = resale;
   const marketDiscount = marketPrice > 0 ? (marketPrice - purchase) / marketPrice * 100 : -Infinity;
   const economics = policyEconomics(item, settings);
   const sample = item.market_sample_size ?? 0;
