@@ -305,6 +305,8 @@ export default function SettingsPage() {
     }));
     const identityFailedCount = current.IDENTITY_FAILED ?? 0;
     const insufficientDataCount = current.INSUFFICIENT_DATA ?? 0;
+    const identityFailedPreviewCount = preview.IDENTITY_FAILED ?? 0;
+    const insufficientDataPreviewCount = preview.INSUFFICIENT_DATA ?? 0;
     const chartOrder = order.filter(classification => !["IDENTITY_FAILED", "INSUFFICIENT_DATA"].includes(classification));
     const splitChart = [
       { name: "Current", ...Object.fromEntries(chartOrder.map(classification => [classification, current[classification] ?? 0])) },
@@ -312,7 +314,7 @@ export default function SettingsPage() {
     ];
     const currentTotal = Object.values(current).reduce((sum, value) => sum + value, 0);
     const previewTotal = Object.values(preview).reduce((sum, value) => sum + value, 0);
-    return { order, chartOrder, current, preview, average, chart, splitChart, identityFailedCount, insufficientDataCount, currentTotal, previewTotal };
+    return { order, chartOrder, current, preview, average, chart, splitChart, identityFailedCount, identityFailedPreviewCount, insufficientDataCount, insufficientDataPreviewCount, currentTotal, previewTotal };
   }, [opportunityItems, settings, opportunityPreviewDirty]);
 
   if (loading) {
@@ -417,7 +419,7 @@ export default function SettingsPage() {
                 </div>
               </div>
               <div className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3">
-                <div className="mb-2 flex flex-wrap items-center justify-between gap-2"><div><p className="text-sm font-bold text-slate-200">Current vs preview split</p><p className="text-[11px] text-slate-500">Coloured segments show the classifications affected by scoring controls.</p></div><div className="flex flex-wrap gap-2"><span title="The listing could not be matched confidently to a specific product identity, so the scoring gates cannot be trusted yet." className="cursor-help rounded-full border border-slate-500/30 bg-slate-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-300">Identity failed · {opportunityAnalysis.identityFailedCount} unchanged <span aria-hidden="true">ⓘ</span></span><span title="The listing does not have enough comparable pricing or sold-evidence data to recalculate a reliable opportunity score." className="cursor-help rounded-full border border-slate-500/30 bg-slate-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-300">Insufficient data · {opportunityAnalysis.insufficientDataCount} unchanged <span aria-hidden="true">ⓘ</span></span></div></div>
+                <div className="mb-2 flex flex-wrap items-center justify-between gap-2"><div><p className="text-sm font-bold text-slate-200">Current vs preview split</p><p className="text-[11px] text-slate-500">Coloured segments show the classifications affected by scoring controls. Excluded statuses are shown as counts beside the chart.</p></div><div className="flex flex-wrap gap-2"><span title="The listing could not be matched confidently to a specific product identity, so the scoring gates cannot be trusted yet." className="cursor-help rounded-full border border-slate-500/30 bg-slate-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-300">Identity failed · {opportunityAnalysis.identityFailedCount} → {opportunityAnalysis.identityFailedPreviewCount} <span aria-hidden="true">ⓘ</span></span><span title="The listing does not have enough comparable pricing or sold-evidence data to recalculate a reliable opportunity score." className="cursor-help rounded-full border border-slate-500/30 bg-slate-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-300">Insufficient data · {opportunityAnalysis.insufficientDataCount} → {opportunityAnalysis.insufficientDataPreviewCount} <span aria-hidden="true">ⓘ</span></span></div></div>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={opportunityAnalysis.splitChart} layout="vertical" margin={{ top: 8, right: 18, bottom: 8, left: 8 }} barCategoryGap="35%" reverseStackOrder={false}>
                     <CartesianGrid stroke="#17304a" strokeDasharray="3 3" vertical={false} />
@@ -764,8 +766,10 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
   const confidenceFloorGem = Math.max(50, settings.opportunity_gem_confidence - 20);
   if (!item.eligible) return { classification: "INELIGIBLE", profit, roi };
   if (sample < settings.opportunity_minimum_sold_comps || sold < settings.opportunity_minimum_sold_comps) {
-    const emergingFloor = component ? Math.min(economics.gemProfit, 10) : economics.gemProfit;
-    return { classification: profit >= emergingFloor && roi >= 25 && item.market_confidence >= 40 ? "EVIDENCE_LIMITED_DEAL" : "INSUFFICIENT_DATA", profit, roi };
+    // A threshold what-if cannot recalculate a reliable tier without the
+    // evidence gate. Keep the backend's current status visible rather than
+    // making the listing disappear into a new preview bucket.
+    return { classification: item.classification || "INSUFFICIENT_DATA", profit, roi };
   }
   if (profit >= economics.superProfit && roi >= economics.superRoi && marketDiscount >= settings.opportunity_super_market_discount_pct && item.market_confidence >= confidenceFloorSuper && item.liquidity_score >= settings.opportunity_super_liquidity) {
     return { classification: "SUPER_GEM", profit, roi };
@@ -773,7 +777,7 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
   if (profit >= economics.gemProfit && roi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct && item.market_confidence >= confidenceFloorGem && item.liquidity_score >= settings.opportunity_gem_liquidity) {
     return { classification: "GEM", profit, roi };
   }
-  if (profit >= economics.gemProfit && roi >= economics.gemRoi) return { classification: "EVIDENCE_LIMITED_DEAL", profit, roi };
+  if (profit >= economics.gemProfit && roi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct) return { classification: "EVIDENCE_LIMITED_DEAL", profit, roi };
   return { classification: "POOR_DEAL", profit, roi };
 }
 

@@ -583,7 +583,7 @@ def score_opportunity(
         classification, decision = "SUPER_GEM", "BUY_NOW"
     elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market_discount_pct >= policy.gem_market_discount_pct and market.confidence >= gem_confidence_floor and liquidity is not None and liquidity >= policy.gem_liquidity:
         classification, decision = "GEM", "BUY_NOW"
-    elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct:
+    elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market_discount_pct >= policy.gem_market_discount_pct:
         classification, decision = "EVIDENCE_LIMITED_DEAL", "INVESTIGATE"
         liquidity_text = "unknown" if liquidity is None else f"{liquidity:.0f}/100"
         reasons.append(
