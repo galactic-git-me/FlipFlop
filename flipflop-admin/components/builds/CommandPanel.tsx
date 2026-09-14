@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, Send, Trash2, RotateCcw, Loader2, Store, type LucideIcon } from "lucide-react";
+import { Eye, Send, Trash2, RotateCcw, Loader2, Store, ShoppingBag, type LucideIcon } from "lucide-react";
 
 interface ListingStatus {
   platform: string;
@@ -21,6 +21,7 @@ interface CommandPanelProps {
   onUpdateEbay?: () => void;
   onDeleteEbay?: () => void;
   onPublishStorefront?: () => void;
+  onListAsPrebuilt?: () => void;
   onCreateNew?: (platform: string) => void;
   isLoading?: boolean;
   isDeletingEbay?: boolean;
@@ -91,6 +92,7 @@ export function CommandPanel({
   onUpdateEbay,
   onDeleteEbay,
   onPublishStorefront,
+  onListAsPrebuilt,
   isLoading = false,
   isDeletingEbay = false,
   isPublishingStorefront = false,
@@ -118,6 +120,7 @@ export function CommandPanel({
       <RailButton label="Generate title" icon={RotateCcw} onClick={onGenerateTitle} disabled={isLoading} isLoading={isLoading} accent="blue" />
       <RailButton label="Generate description" icon={RotateCcw} onClick={onGenerateDescription} disabled={isLoading} isLoading={isLoading} accent="blue" />
       <RailButton label="Preview eBay listing" icon={Eye} onClick={onPreviewEbay} disabled={isLoading || !onPreviewEbay} accent="blue" />
+      <RailButton label="List as pre-built" icon={ShoppingBag} onClick={onListAsPrebuilt} disabled={isLoading || !onListAsPrebuilt} accent="green" />
 
       {ebayStatus?.isListed ? (
         <>

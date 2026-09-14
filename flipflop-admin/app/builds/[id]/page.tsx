@@ -23,6 +23,7 @@ import { DescriptionPreview } from "@/components/builds/DescriptionPreview";
 import { EbayListingHTMLPreview } from "@/components/builds/EbayListingHTMLPreview";
 import { PricingIntelligence } from "@/components/builds/PricingIntelligence";
 import { CommandPanel } from "@/components/builds/CommandPanel";
+import { PrebuiltChannelPicker, type PrebuiltChannel } from "@/components/builds/PrebuiltChannelPicker";
 import { Build3DViewer } from "@/components/builds/Build3DViewer";
 
 // eBay-required Item Specifics for "PC Desktops & All-in-Ones" — mirrors
@@ -147,6 +148,9 @@ export default function BuildDetailPage() {
   const [savingEbayConfig, setSavingEbayConfig] = useState(false);
   const [generatingCard, setGeneratingCard] = useState<"spec_card" | "registration_plate" | null>(null);
   const [listingOnStorefront, setListingOnStorefront] = useState(false);
+  const [showPrebuiltChannelPicker, setShowPrebuiltChannelPicker] = useState(false);
+  const [selectedPrebuiltChannels, setSelectedPrebuiltChannels] = useState<PrebuiltChannel[]>([]);
+  const [listingToChannels, setListingToChannels] = useState(false);
   const [openingPortal, setOpeningPortal] = useState(false);
   const [draggedUrl, setDraggedUrl] = useState<string | null>(null);
   const [dragOverUrl, setDragOverUrl] = useState<string | null>(null);
@@ -615,6 +619,52 @@ export default function BuildDetailPage() {
     }
   };
 
+  const togglePrebuiltChannel = (channel: PrebuiltChannel) => {
+    setSelectedPrebuiltChannels((current) => current.includes(channel) ? current.filter((item) => item !== channel) : [...current, channel]);
+  };
+
+  const downloadManualListingPack = (channel: PrebuiltChannel) => {
+    if (!build) return;
+    const label = channel === "facebook_marketplace" ? "Facebook Marketplace" : channel[0].toUpperCase() + channel.slice(1);
+    const text = [
+      "FLIPFLOP PRE-BUILT LISTING PACK", `Destination: ${label}`, `Build ID: ${build.id}`, "",
+      "TITLE", build.generated_title || build.name, "", "DESCRIPTION", build.generated_description || "",
+      "", "PRICE", `GBP ${price || build.ebay_price || "TBC"}`, "", "CONDITION", condition,
+      "", "SPECIFICATIONS", ...build.components.map((component) => `${component.slot}: ${component.name}`),
+      "", "IMAGES", ...build.photos.map((photo) => displayMediaUrl(build.id, photo.url)),
+      "", "MANUAL STEPS", `1. Open ${label}.`, "2. Create the listing using the fields above.", "3. Upload the images in the order shown.",
+    ].join("\n");
+    const url = URL.createObjectURL(new Blob([text], { type: "text/plain;charset=utf-8" }));
+    const anchor = document.createElement("a"); anchor.href = url; anchor.download = `flipflop-${build.id}-${channel}-listing-pack.txt`; anchor.click(); URL.revokeObjectURL(url);
+  };
+
+  const listAsPrebuilt = async () => {
+    if (!build || !selectedPrebuiltChannels.length) return;
+    const priceNum = parseFloat(price) || build.ebay_price || build.last_evaluation?.mid || 0;
+    if (!priceNum || priceNum <= 0) { toast.error("Enter an asking price before listing."); return; }
+    setListingToChannels(true);
+    const manualChannels = selectedPrebuiltChannels.filter((channel) => !["flipflop_shop", "ebay_uk"].includes(channel));
+    try {
+      if (selectedPrebuiltChannels.includes("ebay_uk") && !build.ebay_live) {
+        const result = await api.manualBuilds.postToEbay(buildId, { price: priceNum, condition });
+        if (!result.success) throw new Error(result.error || "eBay rejected the listing.");
+        toast.success("Listed on eBay UK");
+      }
+      if (selectedPrebuiltChannels.includes("flipflop_shop") && !build.storefront_live) {
+        await api.manualBuilds.listOnStorefront(buildId, priceNum);
+        toast.success("Listed on FlipFlop.shop");
+      }
+      manualChannels.forEach(downloadManualListingPack);
+      if (manualChannels.length) toast.success(`${manualChannels.length} manual listing pack${manualChannels.length === 1 ? "" : "s"} downloaded`);
+      if (selectedPrebuiltChannels.includes("amazon")) toast.info("Amazon still needs seller approval before it can be automated.");
+      setShowPrebuiltChannelPicker(false);
+      setSelectedPrebuiltChannels([]);
+      await refreshBuild();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not complete the selected listings");
+    } finally { setListingToChannels(false); }
+  };
+
   const handle3dModelUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -818,6 +868,7 @@ export default function BuildDetailPage() {
             onGenerateDescription={() => generateListing(false)}
             onGenerateTitle={() => generateListing(false)}
             onPreviewEbay={build.generated_title && build.generated_description ? () => setShowEbayPreview(true) : undefined}
+            onListAsPrebuilt={canPublish ? () => { setSelectedPrebuiltChannels([]); setShowPrebuiltChannelPicker(true); } : undefined}
             onPublishEbay={postToEbay}
             onUpdateEbay={postToEbay}
             onDeleteEbay={() => setShowEndEbayConfirm(true)}
@@ -1892,6 +1943,16 @@ export default function BuildDetailPage() {
           heroPhotoUrl={build.hero_photo_url ? displayMediaUrl(build.id, build.hero_photo_url) : null}
           onClose={() => setShowEbayPreview(false)}
           isModal={true}
+        />
+      )}
+
+      {showPrebuiltChannelPicker && (
+        <PrebuiltChannelPicker
+          selected={selectedPrebuiltChannels}
+          onChange={togglePrebuiltChannel}
+          onClose={() => setShowPrebuiltChannelPicker(false)}
+          onConfirm={() => void listAsPrebuilt()}
+          submitting={listingToChannels}
         />
       )}
 
