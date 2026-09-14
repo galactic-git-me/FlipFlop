@@ -3,10 +3,11 @@ set -Eeuo pipefail
 api=/home/mac/CODING/FlipFlop-production
 shop=/home/mac/CODING/flipflop-shop
 production_branch="${FLIPFLOP_PRODUCTION_BRANCH:-main}"
+shop_branch="${FLIPFLOP_SHOP_PRODUCTION_BRANCH:-master}"
 deploy_if_needed() {
   local repo="$1"
   local deploy_script="$2"
-  branch="$production_branch"
+  local branch="$3"
   current_branch=$(git -C "$repo" branch --show-current)
   [[ "$current_branch" == "$branch" ]] || { echo "Production checkout $repo is on '$current_branch'; expected '$branch'. Refusing deployment."; exit 1; }
   [[ -z "$(git -C "$repo" status --porcelain)" ]] || { echo "Uncommitted production files: $repo"; exit 1; }
@@ -24,8 +25,8 @@ deploy_if_needed() {
   echo "GitHub check passed: $repo ($branch)"
 }
 # Reconcile the deployed checkouts, not the similarly named development folders.
-deploy_if_needed "$api" "$api/deploy/deploy-andromeda.sh"
-deploy_if_needed "$shop" "$shop/scripts/deploy-production.sh"
+deploy_if_needed "$api" "$api/deploy/deploy-andromeda.sh" "$production_branch"
+deploy_if_needed "$shop" "$shop/scripts/deploy-production.sh" "$shop_branch"
 [[ "$(systemctl --user show flipflop-shop.service -p WorkingDirectory --value)" == "$shop" ]] || { echo 'Storefront service directory changed; inspect configuration'; exit 1; }
 # Existing released images only: never build local/unreleased source here.
 docker compose -f "$api/deploy/andromeda-api.compose.yml" up -d --no-build --wait --wait-timeout 120
