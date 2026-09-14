@@ -13,6 +13,7 @@ once, not duplicated between the live path and the CLI script.
 from __future__ import annotations
 
 import json
+import hashlib
 import re
 import time
 
@@ -23,9 +24,32 @@ from app.gem_radar.cpk_extractor import extract_cpk
 from app.gem_radar.cpk_market import upsert_listing_price, upsert_scan_price
 from app.gem_radar.benchmarks import normalize_match_key
 from app.gem_radar.opportunity_scoring import identity_gates
+from app.gem_radar.identity import resolve_identity
 
 
 _ALIAS_CACHE: tuple[float, list[tuple[str, str, dict]]] | None = None
+
+
+def _deterministic_identity(title: str, category: str | None, price: float | None) -> tuple[str, dict] | None:
+    """Build a conservative CPK when the title is unambiguous.
+
+    This is deliberately attempted before the LLM.  A model endpoint outage
+    must not turn every recognisable CPU/GPU/RAM/SSD title into
+    IDENTITY_FAILED; the resolver already has category-specific patterns and
+    the same hard identity vetoes are applied before accepting the result.
+    """
+    resolved = resolve_identity(title, delivered_price=price)
+    resolved_category = (resolved.category or category or "").lower()
+    brand = (resolved.brand or "").strip().lower()
+    model = re.sub(r"[^a-z0-9]+", "-", (resolved.model or "").lower()).strip("-")
+    if not resolved_category or not brand or not model:
+        return None
+    data = {"category": resolved_category, "brand": brand, "model": model, "specs": {}, "confidence": resolved.exact_sku_confidence}
+    if any(flag != "identity_incomplete" for flag in identity_gates(title, data)):
+        return None
+    cpk = hashlib.sha256(f"{resolved_category}|{brand}|{model}".encode()).hexdigest()[:16]
+    data["cpk"] = cpk
+    return cpk, data
 
 
 async def _lookup_unique_catalog_alias(db: AsyncSession, title: str) -> tuple[str, dict] | None:
@@ -133,37 +157,58 @@ async def assign_cpk_and_accumulate_price(
             preflight_flags = identity_gates(title, {"category": category, "brand": "pending", "model": "pending"})
             if any(flag in {"accessory_or_parts_listing", "bundle_listing"} for flag in preflight_flags):
                 return None
-            extracted = await extract_cpk(title, category, condition)
+            deterministic = _deterministic_identity(title, category, price)
+            if deterministic is not None:
+                cpk, deterministic_data = deterministic
+                brand = deterministic_data["brand"]
+                model = deterministic_data["model"]
+                extracted_category = deterministic_data["category"]
+                await db.execute(
+                    text(
+                        """
+                        INSERT INTO gem_radar_listing_cpk (listing_id, cpk, cpk_data, cpk_confidence)
+                        VALUES (:listing_id, :cpk, :cpk_data, :cpk_confidence)
+                        ON CONFLICT (listing_id) DO UPDATE SET
+                            cpk = EXCLUDED.cpk, cpk_data = EXCLUDED.cpk_data,
+                            cpk_confidence = EXCLUDED.cpk_confidence, updated_at = CURRENT_TIMESTAMP
+                        """
+                    ),
+                    {"listing_id": listing_id, "cpk": cpk, "cpk_data": json.dumps(deterministic_data), "cpk_confidence": deterministic_data["confidence"]},
+                )
+                extracted = None
+            else:
+                extracted = await extract_cpk(title, category, condition)
             if extracted is None:
-                return None
+                if deterministic is None:
+                    return None
+            else:
+                extracted_flags = identity_gates(title, extracted.to_dict())
+                if any(flag != "identity_incomplete" for flag in extracted_flags):
+                    return None
 
-            extracted_flags = identity_gates(title, extracted.to_dict())
-            if any(flag != "identity_incomplete" for flag in extracted_flags):
-                return None
-
-            await db.execute(
-                text(
+                await db.execute(
+                    text(
+                        """
+                    INSERT INTO gem_radar_listing_cpk (listing_id, cpk, cpk_data, cpk_confidence)
+                    VALUES (:listing_id, :cpk, :cpk_data, :cpk_confidence)
+                    ON CONFLICT (listing_id) DO UPDATE SET
+                        cpk = EXCLUDED.cpk,
+                        cpk_data = EXCLUDED.cpk_data,
+                        cpk_confidence = EXCLUDED.cpk_confidence,
+                        updated_at = CURRENT_TIMESTAMP
                     """
-                INSERT INTO gem_radar_listing_cpk (listing_id, cpk, cpk_data, cpk_confidence)
-                VALUES (:listing_id, :cpk, :cpk_data, :cpk_confidence)
-                ON CONFLICT (listing_id) DO UPDATE SET
-                    cpk = EXCLUDED.cpk,
-                    cpk_data = EXCLUDED.cpk_data,
-                    cpk_confidence = EXCLUDED.cpk_confidence,
-                    updated_at = CURRENT_TIMESTAMP
-                """
-                ),
-                {
-                    "listing_id": listing_id,
-                    "cpk": extracted.cpk,
-                    "cpk_data": json.dumps(extracted.to_dict()),
-                    "cpk_confidence": extracted.confidence,
-                },
-            )
-            cpk = extracted.cpk
-            brand = extracted.brand
-            model = extracted.model
-            extracted_category = extracted.category
+                    ),
+                    {
+                        "listing_id": listing_id,
+                        "cpk": extracted.cpk,
+                        "cpk_data": json.dumps(extracted.to_dict()),
+                        "cpk_confidence": extracted.confidence,
+                    },
+                )
+                cpk = extracted.cpk
+                brand = extracted.brand
+                model = extracted.model
+                extracted_category = extracted.category
 
     match_key = normalize_match_key(title)
 

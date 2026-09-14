@@ -592,9 +592,9 @@ def score_opportunity(
     elif evidence_limited:
         classification, decision = "INSUFFICIENT_DATA", "INVESTIGATE"
         reasons.append("The comparable cohort is below the minimum evidence requirement and the provisional opportunity gates were not all met.")
-    elif eligible and profit >= economics.super_profit and roi >= economics.super_roi_pct and market_discount_pct >= policy.super_market_discount_pct and market.confidence >= super_confidence_floor and liquidity is not None and liquidity >= policy.super_liquidity:
+    elif eligible and profit >= economics.super_profit and roi >= economics.super_roi_pct and market_discount_pct >= policy.super_market_discount_pct and market.confidence >= super_confidence_floor and liquidity is not None and liquidity >= policy.super_liquidity and total_score >= policy.super_score:
         classification, decision = "SUPER_GEM", "BUY_NOW"
-    elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market_discount_pct >= policy.gem_market_discount_pct and market.confidence >= gem_confidence_floor and liquidity is not None and liquidity >= policy.gem_liquidity:
+    elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market_discount_pct >= policy.gem_market_discount_pct and market.confidence >= gem_confidence_floor and liquidity is not None and liquidity >= policy.gem_liquidity and total_score >= policy.gem_score:
         classification, decision = "GEM", "BUY_NOW"
     elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market_discount_pct >= policy.gem_market_discount_pct:
         classification, decision = "EVIDENCE_LIMITED_DEAL", "INVESTIGATE"
