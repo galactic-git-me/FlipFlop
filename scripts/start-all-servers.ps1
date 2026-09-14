@@ -228,13 +228,26 @@ if (-not $NoExtensionBuild) {
 }
 if ($runMode -eq "live") {
     Write-Host "[OK] Production services are running on Andromeda. Storefront: https://www.theflipflop.shop" -ForegroundColor Green
-    Write-Host "[INFO] No production admin service is currently configured on Andromeda." -ForegroundColor Yellow
-    return
+    Write-Host "[MODE] LIVE OPERATOR - starting local admin against the production API" -ForegroundColor Green
+    # LIVE uses the remote API and storefront. Keep the operator dashboard
+    # local so it is available at localhost:4312 without adding an exposed
+    # production admin service to Andromeda.
+    $LocalBackend = $false
+    $LocalGemRadar = $false
+    $LocalFrontend = $false
+    $NoBackend = $true
+    $NoGemRadar = $true
+    $NoFrontend = $true
+    $NoPeerSync = $true
+    $NoOllama = $true
+} else {
+    # Only development uses the local API/database and local Ollama.
+    $LocalBackend = $true
+    $NoPeerSync = $true
 }
-# Only development reaches local service startup.
-$LocalBackend = $true
-$NoPeerSync = $true
-Confirm-LocalDatabaseRefresh
+if ($runMode -eq "development") {
+    Confirm-LocalDatabaseRefresh
+}
 
 Write-Host ""
 if ($runMode -eq "live") {
