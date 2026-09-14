@@ -130,6 +130,7 @@ async def run_upgrade_parts_swarm(mode: str = "main") -> dict:
                 sa_select(SourceSearchTerm).where(
                     SourceSearchTerm.scope == "upgrade_parts",
                     SourceSearchTerm.enabled == True,
+                    SourceSearchTerm.listing_mode.in_(("active", "both")),
                 )
             )
         ).scalars().all()

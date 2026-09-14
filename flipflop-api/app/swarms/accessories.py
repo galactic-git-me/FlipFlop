@@ -189,6 +189,7 @@ async def run_accessories_swarm(mode: str = "main") -> dict:
                 sa_select(SourceSearchTerm).where(
                     SourceSearchTerm.scope == "accessories",
                     SourceSearchTerm.enabled == True,
+                    SourceSearchTerm.listing_mode.in_(("active", "both")),
                 )
             )
         ).scalars().all()

@@ -241,6 +241,7 @@ async def run_cases_swarm(mode: str = "main") -> dict:
                 sa_select(SourceSearchTerm).where(
                     SourceSearchTerm.scope == "cases",
                     SourceSearchTerm.enabled == True,
+                    SourceSearchTerm.listing_mode.in_(("active", "both")),
                 )
             )
         ).scalars().all()
@@ -467,6 +468,7 @@ async def _dynamic_case_themes_from_db() -> tuple[list[dict], set[str]]:
                     sa_select(SourceSearchTerm).where(
                         SourceSearchTerm.scope == "cases",
                         SourceSearchTerm.enabled == True,
+                        SourceSearchTerm.listing_mode.in_(("active", "both")),
                     )
                 )
             ).scalars().all()

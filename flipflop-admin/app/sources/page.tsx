@@ -373,6 +373,7 @@ function TermsPanel({ terms, telemetry, scheduleJobs, tick }: {
             <tr className="border-b border-[#1e3a5f]">
               <th className="px-2 py-1 text-left text-cyan-500 w-[120px]">Catalogue</th>
               <th className="px-2 py-1 text-left text-yellow-500 w-[200px]">Search Term</th>
+              <th className="px-2 py-1 text-left text-slate-500 w-[72px]">Evidence</th>
               {vendorNames.map(v => {
                 const label = v.length > 10 ? v.slice(0, 9) + "…" : v;
                 const total = vendorTotals[v] ?? 0;
@@ -432,6 +433,7 @@ function TermsPanel({ terms, telemetry, scheduleJobs, tick }: {
                     ) : ""}
                   </td>
                   <td className="px-2 py-0.5 text-yellow-300 max-w-[200px] truncate">{term.term}</td>
+                  <td className="px-2 py-0.5 text-[10px] uppercase text-slate-500">{term.listing_mode}</td>
                   {vendorNames.map(v => (
                     <td key={v} className="px-2 py-0.5 text-center">{renderCell(scope, term, v)}</td>
                   ))}

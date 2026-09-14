@@ -144,6 +144,7 @@ async def run_flip_opportunities_swarm(mode: str = "main") -> dict:
                 select(SourceSearchTerm).where(
                     SourceSearchTerm.scope == "flip_opportunities",
                     SourceSearchTerm.enabled == True,
+                    SourceSearchTerm.listing_mode.in_(("active", "both")),
                 )
             )
         ).scalars().all()
