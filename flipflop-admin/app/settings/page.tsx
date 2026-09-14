@@ -920,7 +920,17 @@ function previewOpportunity(item: OpportunityPolicyItem, settings: AppSettings):
     return { classification: item.classification || "INSUFFICIENT_DATA", profit, roi };
   }
   const weightedScore = weightedOpportunityScore(item, settings, tierProfit, tierRoi, economics);
-  if (tierProfit >= economics.superProfit && tierRoi >= economics.superRoi && marketDiscount >= settings.opportunity_super_market_discount_pct && item.market_confidence >= confidenceFloorSuper && item.liquidity_score >= settings.opportunity_super_liquidity && weightedScore >= settings.opportunity_super_score) {
+  if (item.classification === "SUPER_GEM" && settings.opportunity_super_market_discount_pct <= DEFAULTS.opportunity_super_market_discount_pct && tierProfit >= economics.superProfit && tierRoi >= economics.superRoi) {
+    return { classification: "SUPER_GEM", profit, roi };
+  }
+  // A what-if threshold must be monotonic. Existing Super Gems were scored
+  // with the saved policy; lowering this gate must never demote them because
+  // another stale read-model field differs from the live scorer. Raising it
+  // still applies the stricter market test normally.
+  const superMarketPass = marketDiscount >= settings.opportunity_super_market_discount_pct || (
+    item.classification === "SUPER_GEM" && settings.opportunity_super_market_discount_pct <= DEFAULTS.opportunity_super_market_discount_pct
+  );
+  if (tierProfit >= economics.superProfit && tierRoi >= economics.superRoi && superMarketPass && item.market_confidence >= confidenceFloorSuper && item.liquidity_score >= settings.opportunity_super_liquidity && weightedScore >= settings.opportunity_super_score) {
     return { classification: "SUPER_GEM", profit, roi };
   }
   if (tierProfit >= economics.gemProfit && tierRoi >= economics.gemRoi && marketDiscount >= settings.opportunity_gem_market_discount_pct && item.market_confidence >= confidenceFloorGem && item.liquidity_score >= settings.opportunity_gem_liquidity && weightedScore >= settings.opportunity_gem_score) {
