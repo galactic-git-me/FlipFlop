@@ -420,8 +420,11 @@ export default function SettingsPage() {
                       )}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={connectEbay} disabled={connectingEbay}>
+                    <div className="flex items-center gap-2">
+                      <Button variant="outline" size="sm" onClick={loadEbayStatus}>
+                        Refresh details
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={connectEbay} disabled={connectingEbay}>
                       <Link2 className="w-3.5 h-3.5" /> {connectingEbay ? "Redirecting…" : "Reconnect"}
                     </Button>
                     <Button variant="outline" size="sm" onClick={disconnectEbay}>

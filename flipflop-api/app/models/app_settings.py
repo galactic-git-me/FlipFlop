@@ -48,6 +48,12 @@ class AppSettings(Base):
     ebay_seller_access_token_expires_at: Mapped[datetime | None] = mapped_column(DateTime)
     ebay_seller_connected_at: Mapped[datetime | None] = mapped_column(DateTime)
     ebay_seller_scopes: Mapped[str] = mapped_column(Text, default="")
+    # Last identity returned by eBay. Identity endpoints can omit email or
+    # be temporarily unavailable, so retain the last confirmed values for
+    # the connection status screen.
+    ebay_seller_username: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    ebay_seller_email: Mapped[str | None] = mapped_column(String(320), nullable=True)
+    ebay_seller_eligible: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
 
     # The extension's scheduler.defaultIntervalMinutes (chrome.storage.local
     # only — the backend otherwise has zero visibility into it). Synced

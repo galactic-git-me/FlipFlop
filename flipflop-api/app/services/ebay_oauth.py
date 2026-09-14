@@ -188,6 +188,11 @@ async def store_tokens_from_exchange(db: AsyncSession, payload: dict) -> None:
     )
     settings_row.ebay_seller_connected_at = now
     settings_row.ebay_seller_scopes = payload.get("scope", " ".join(SCOPES))
+    # A new consent may belong to a different eBay account; don't display the
+    # previous account while the new token's identity is being resolved.
+    settings_row.ebay_seller_username = None
+    settings_row.ebay_seller_email = None
+    settings_row.ebay_seller_eligible = None
     await db.flush()
 
 
@@ -248,6 +253,9 @@ async def disconnect(db: AsyncSession) -> None:
         settings_row.ebay_seller_refresh_token_expires_at = None
         settings_row.ebay_seller_connected_at = None
         settings_row.ebay_seller_scopes = ""
+        settings_row.ebay_seller_username = None
+        settings_row.ebay_seller_email = None
+        settings_row.ebay_seller_eligible = None
         await db.flush()
 
 
@@ -258,7 +266,15 @@ async def get_connection_status(db: AsyncSession) -> dict:
     result = await db.execute(select(AppSettings).where(AppSettings.name == "default"))
     settings_row = result.scalar_one_or_none()
     if not settings_row or not settings_row.ebay_seller_refresh_token:
-        return {"connected": False, "connected_at": None, "scopes": [], "refresh_token_expires_at": None}
+        return {
+            "connected": False,
+            "connected_at": None,
+            "username": None,
+            "email": None,
+            "seller_eligible": None,
+            "scopes": [],
+            "refresh_token_expires_at": None,
+        }
     return {
         "connected": True,
         "connected_at": settings_row.ebay_seller_connected_at.isoformat() if settings_row.ebay_seller_connected_at else None,
@@ -273,9 +289,32 @@ async def get_connection_status(db: AsyncSession) -> dict:
 
 async def get_connected_identity(db: AsyncSession) -> dict:
     """Return safe account identifiers for the stored seller OAuth token."""
+    from app.models.app_settings import AppSettings
+    from sqlalchemy import select
+
+    result = await db.execute(select(AppSettings).where(AppSettings.name == "default"))
+    settings_row = result.scalar_one_or_none()
+    cached = {
+        "username": settings_row.ebay_seller_username if settings_row else None,
+        "email": settings_row.ebay_seller_email if settings_row else None,
+        "seller_eligible": settings_row.ebay_seller_eligible if settings_row else None,
+    }
+
     access_token = await get_valid_access_token(db)
     if not access_token:
-        return {"username": None, "email": None}
+        return cached
+
+    async def persist(identity: dict) -> dict:
+        if settings_row is not None:
+            for field in ("username", "email", "seller_eligible"):
+                if identity.get(field) is not None:
+                    setattr(settings_row, f"ebay_seller_{field}", identity[field])
+            await db.flush()
+        return {
+            "username": identity.get("username") or cached["username"],
+            "email": identity.get("email") or cached["email"],
+            "seller_eligible": identity.get("seller_eligible") if identity.get("seller_eligible") is not None else cached["seller_eligible"],
+        }
 
     try:
         async with httpx.AsyncClient(timeout=20) as client:
@@ -296,7 +335,7 @@ async def get_connected_identity(db: AsyncSession) -> dict:
                 "seller_eligible": None,
             }
             if identity["username"] and identity["email"]:
-                return identity
+                return await persist(identity)
         else:
             log.warning("ebay_oauth.identity_lookup_failed", status=response.status_code)
 
@@ -313,14 +352,14 @@ async def get_connected_identity(db: AsyncSession) -> dict:
         # The REST identity response often includes the username but omits
         # the registration email.  Preserve anything it did return and fill
         # the missing fields from Trading API GetUser.
-        return {
+        return await persist({
             "username": (identity or {}).get("username") or fallback.get("username"),
             "email": (identity or {}).get("email") or fallback.get("email"),
             "seller_eligible": (identity or {}).get("seller_eligible") if (identity or {}).get("seller_eligible") is not None else fallback.get("seller_eligible"),
-        }
+        })
     except (httpx.HTTPError, ValueError, TypeError) as exc:
         log.warning("ebay_oauth.identity_lookup_error", error=str(exc))
-        return {"username": None, "email": None, "seller_eligible": None}
+        return cached
     except Exception as exc:
         log.warning("ebay_oauth.trading_identity_lookup_failed", error=str(exc))
-        return {"username": None, "email": None, "seller_eligible": None}
+        return cached
