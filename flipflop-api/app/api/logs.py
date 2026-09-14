@@ -12,6 +12,8 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
+from pathlib import Path
 from collections import deque
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -29,6 +31,22 @@ _WAITERS: list[asyncio.Queue] = []
 _LONDON_TZ = ZoneInfo("Europe/London")
 
 _INSTALLED = False
+
+_LOG_TARGETS = {
+    "api": {"label": "API server", "kind": "memory", "file": None},
+    "gemradar": {"label": "Gem Radar server", "kind": "file", "file": os.getenv("GEMRADAR_LOG_FILE", "logs/gemradar-api.out")},
+    "admin": {"label": "Admin server", "kind": "file", "file": os.getenv("ADMIN_LOG_FILE", "logs/admin-4312.out")},
+    "frontend": {"label": "Frontend server", "kind": "file", "file": os.getenv("FRONTEND_LOG_FILE", "logs/frontend.log")},
+    "worker": {"label": "Background worker", "kind": "file", "file": os.getenv("WORKER_LOG_FILE", "logs/backend-4311.out")},
+}
+
+
+def _target_file(target: str, mode: str) -> str | None:
+    config = _LOG_TARGETS.get(target)
+    if not config or config["kind"] != "file":
+        return None
+    env_key = f"{target.upper()}_LOG_FILE_{mode.upper()}"
+    return os.getenv(env_key, config["file"])
 
 
 def _push(entry: dict) -> None:
@@ -80,13 +98,37 @@ async def get_log_history(tail: int = 300):
     return list(_LOG_BUFFER)[-tail:]
 
 
+@router.get("/targets")
+async def get_log_targets():
+    return [{"id": key, "label": value["label"], "available": value["kind"] == "memory" or Path(value["file"]).exists()} for key, value in _LOG_TARGETS.items()]
+
+
 @router.get("/stream")
-async def stream_logs():
+async def stream_logs(target: str = "api", mode: str = "live"):
     """
     Server-Sent Events stream.  On connect the client receives the buffered
     history first, then live events as they arrive.  A keepalive comment is
     sent every 15 s so load balancers don't drop idle connections.
     """
+    config = _LOG_TARGETS.get(target, _LOG_TARGETS["api"])
+    if config["kind"] == "file":
+        path = Path(_target_file(target, mode) or config["file"])
+
+        async def file_generate():
+            position = 0
+            while True:
+                if path.exists():
+                    with path.open("r", encoding="utf-8", errors="replace") as handle:
+                        handle.seek(position)
+                        for raw in handle:
+                            line = raw.rstrip()
+                            if line:
+                                yield f"data: {json.dumps({'ts': datetime.now(_LONDON_TZ).isoformat(), 'level': 'info', 'msg': line, 'extra': {}, 'target': target})}\n\n"
+                        position = handle.tell()
+                await asyncio.sleep(1)
+
+        return StreamingResponse(file_generate(), media_type="text/event-stream", headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
     q: asyncio.Queue = asyncio.Queue(maxsize=500)
     _WAITERS.append(q)
 

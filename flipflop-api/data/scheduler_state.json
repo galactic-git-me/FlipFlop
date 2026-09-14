@@ -1,15 +1,15 @@
 {
   "ram_watcher": {
-    "last_success_at": "2026-09-14T11:12:37.850354+00:00"
+    "last_success_at": "2026-09-14T16:00:01.916251+00:00"
   },
   "manual_build_deferred_publish": {
-    "last_success_at": "2026-09-14T11:12:38.252499+00:00"
+    "last_success_at": "2026-09-14T16:00:02.387898+00:00"
   },
   "deferred_publish": {
-    "last_success_at": "2026-09-14T11:12:38.415302+00:00"
+    "last_success_at": "2026-09-14T16:00:02.573238+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-09-14T11:13:37.582823+00:00"
+    "last_success_at": "2026-09-14T16:01:01.596924+00:00"
   },
   "ai_build_generator": {
     "last_success_at": "2026-09-14T10:12:19.804332+00:00"
@@ -18,10 +18,10 @@
     "last_success_at": "2026-09-14T10:00:39.338913+00:00"
   },
   "manual_build_recreate_cycle": {
-    "last_success_at": "2026-09-14T11:12:38.237202+00:00"
+    "last_success_at": "2026-09-14T16:00:02.388475+00:00"
   },
   "offer_poll": {
-    "last_success_at": "2026-09-14T11:12:38.818776+00:00"
+    "last_success_at": "2026-09-14T16:00:03.573550+00:00"
   },
   "retrain_checkpoint_watchdog": {
     "last_success_at": "2026-09-14T10:00:40.359097+00:00"
@@ -30,7 +30,7 @@
     "last_success_at": "2026-09-14T10:00:40.373500+00:00"
   },
   "recreate_cycle": {
-    "last_success_at": "2026-09-14T11:12:38.424215+00:00"
+    "last_success_at": "2026-09-14T16:00:02.574392+00:00"
   },
   "playbook_evolution": {
     "last_success_at": "2026-09-14T10:00:40.424803+00:00"
@@ -45,10 +45,10 @@
     "last_success_at": "2026-09-13T20:50:29.765558+00:00"
   },
   "case_content_sourcing": {
-    "last_success_at": "2026-09-14T11:12:58.144564+00:00"
+    "last_success_at": "2026-09-14T16:00:22.404026+00:00"
   },
   "ebay_sales_tracker": {
-    "last_success_at": "2026-09-14T11:14:37.279346+00:00"
+    "last_success_at": "2026-09-14T16:02:01.265893+00:00"
   },
   "external_demand": {
     "last_success_at": "2026-09-14T10:02:04.409939+00:00"
@@ -72,12 +72,12 @@
     "last_success_at": "2026-09-13T20:50:29.766077+00:00"
   },
   "amazon_case_bestsellers": {
-    "last_success_at": "2026-09-14T11:14:55.465846+00:00"
+    "last_success_at": "2026-09-14T16:02:19.727878+00:00"
   },
   "price_refresh": {
     "last_success_at": "2026-09-14T11:17:40.138829+00:00"
   },
   "send_to_watchers": {
-    "last_success_at": "2026-09-14T11:12:38.905794+00:00"
+    "last_success_at": "2026-09-14T16:00:03.507513+00:00"
   }
 }

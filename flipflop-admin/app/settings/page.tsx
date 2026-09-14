@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Settings, Save, RefreshCw, Database, Plus, Trash2, Link2, Unlink, Terminal, Circle } from "lucide-react";
+import { Settings, Save, RefreshCw, Database, Plus, Trash2, Link2, Unlink, Terminal, Circle, Search } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { api, API_BASE_URL } from "@/lib/api";
@@ -104,7 +104,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
   );
 }
 
-type TabKey = "general" | "opportunity" | "seller-policies" | "sources" | "extension-logs" | "sold-logs" | "server-logs";
+type TabKey = "general" | "opportunity" | "seller-policies" | "sources" | "extension-logs" | "sold-logs" | "server-logs" | "price-evidence";
 
 export default function SettingsPage() {
   const [tab, setTab] = useState<TabKey>("general");
@@ -281,6 +281,7 @@ export default function SettingsPage() {
           { key: "extension-logs", label: "Extension Logs" },
           { key: "sold-logs", label: "Sold Scraping" },
           { key: "server-logs", label: "Server Logs" },
+          { key: "price-evidence", label: "Price Evidence" },
         ].map(t => (
           <button
             key={t.key}
@@ -617,6 +618,8 @@ export default function SettingsPage() {
         </Card>
       )}
 
+      {tab === "price-evidence" && <PriceEvidencePanel />}
+
     </div>
   );
 }
@@ -624,11 +627,43 @@ export default function SettingsPage() {
 function ServerLogPanel() {
   const [lines, setLines] = useState<{ ts: string; level: string; msg: string; extra?: Record<string, string> }[]>([]);
   const [connected, setConnected] = useState(false);
+  const [target, setTarget] = useState("api");
+  const [mode, setMode] = useState<"live" | "dev">((process.env.NEXT_PUBLIC_APP_MODE as "live" | "dev") || "dev");
+  const [targets, setTargets] = useState<Array<{ id: string; label: string; available: boolean }>>([]);
+  useEffect(() => { void api.logs.targets().then(setTargets).catch(() => setTargets([])); }, []);
   useEffect(() => {
-    const es = new EventSource(`${API_BASE_URL}/logs/stream`);
+    setLines([]); setConnected(false);
+    const es = new EventSource(`${API_BASE_URL}/logs/stream?target=${encodeURIComponent(target)}&mode=${mode}`);
     es.onopen = () => setConnected(true); es.onerror = () => setConnected(false);
     es.onmessage = event => { try { setLines(prev => [...prev, JSON.parse(event.data)].slice(-500)); } catch {} };
     return () => es.close();
-  }, []);
-  return <div className="rounded-lg border border-[#1e2d45] bg-black p-3 font-mono text-[11px] max-h-[560px] overflow-auto"><div className="mb-2 text-slate-600"><Circle className={`inline w-2 h-2 mr-1 fill-current ${connected ? "text-emerald-500" : "text-red-500"}`} />{connected ? "LIVE" : "OFFLINE"}</div>{lines.length === 0 ? <span className="text-slate-700">$ waiting for server events…_</span> : lines.map((line, i) => <div key={i} className="leading-6"><span className="text-slate-600">{new Date(line.ts).toLocaleTimeString()}</span> <span className="text-emerald-400">[{line.level}]</span> <span className="text-slate-300">{line.msg}</span></div>)}</div>;
+  }, [target, mode]);
+  return <div className="space-y-3"><div className="flex flex-wrap items-center gap-2"><label className="text-xs text-slate-500">Server<select value={target} onChange={e => setTarget(e.target.value)} className="ml-2 px-2 py-1 rounded bg-[#0a1119] border border-[#1e2d45] text-xs text-slate-200">{targets.length ? targets.map(item => <option key={item.id} value={item.id}>{item.label}{item.available ? "" : " (unavailable)"}</option>) : <option value="api">API server</option>}</select></label><label className="text-xs text-slate-500">Mode<select value={mode} onChange={e => setMode(e.target.value as "live" | "dev")} className="ml-2 px-2 py-1 rounded bg-[#0a1119] border border-[#1e2d45] text-xs text-slate-200"><option value="live">Live / production</option><option value="dev">Development</option></select></label><span className="text-[10px] text-slate-600">{targets.find(item => item.id === target)?.available === false ? "No log file is mounted for this service in the selected environment." : "Streaming selected service"}</span></div><div className="rounded-lg border border-[#1e2d45] bg-black p-3 font-mono text-[11px] max-h-[560px] overflow-auto"><div className="mb-2 text-slate-600"><Circle className={`inline w-2 h-2 mr-1 fill-current ${connected ? "text-emerald-500" : "text-red-500"}`} />{connected ? "LIVE" : "OFFLINE"} · {target} · {mode}</div>{lines.length === 0 ? <span className="text-slate-700">$ waiting for server events…_</span> : lines.map((line, i) => <div key={i} className="leading-6"><span className="text-slate-600">{new Date(line.ts).toLocaleTimeString()}</span> <span className="text-emerald-400">[{line.level}]</span> <span className="text-slate-300">{line.msg}</span></div>)}</div></div>;
+}
+
+function PriceEvidencePanel() {
+  const [query, setQuery] = useState("");
+  const [products, setProducts] = useState<import("@/lib/api").PriceEvidenceProduct[]>([]);
+  const [selected, setSelected] = useState<import("@/lib/api").PriceEvidenceProduct | null>(null);
+  const [observations, setObservations] = useState<Array<{ kind: string; price: number; observed_at: string | null; source: string | null; source_url: string | null; title: string }>>([]);
+  const [loading, setLoading] = useState(false);
+  const search = async (value = query) => {
+    setLoading(true);
+    try { setProducts((await api.priceEvidence.products(value, 200)).items ?? []); } catch { setProducts([]); } finally { setLoading(false); }
+  };
+  useEffect(() => { void search(""); }, []);
+  const choose = async (product: import("@/lib/api").PriceEvidenceProduct) => {
+    setSelected(product);
+    try { setObservations((await api.priceEvidence.product(product.cpk)).observations ?? []); } catch { setObservations([]); }
+  };
+  return <div className="space-y-4">
+    <Card><CardHeader><CardTitle className="flex items-center gap-2"><Search className="w-4 h-4" /> Product price evidence</CardTitle></CardHeader><CardContent className="space-y-3 pt-0">
+      <p className="text-xs text-slate-500">Search canonical products and inspect every active or sold observation contributing to the displayed market range.</p>
+      <form className="flex gap-2" onSubmit={e => { e.preventDefault(); void search(); }}><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search product, brand, model or CPK" className="flex-1 px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /><Button variant="primary" size="sm" type="submit"><Search className="w-3.5 h-3.5" /> Search</Button></form>
+      {loading ? <p className="text-sm text-slate-500">Loading products…</p> : <div className="grid grid-cols-1 lg:grid-cols-[minmax(220px,0.8fr)_minmax(0,2fr)] gap-4">
+        <div className="max-h-[560px] overflow-auto rounded-lg border border-[#1e2d45]">{products.length === 0 ? <p className="p-3 text-sm text-slate-600">No products found.</p> : products.map(product => <button key={product.cpk} onClick={() => void choose(product)} className={`w-full text-left p-3 border-b border-[#1e2d45] hover:bg-[#0a1119] ${selected?.cpk === product.cpk ? "bg-[#00dc82]/10" : ""}`}><div className="text-sm text-slate-200">{product.label}</div><div className="text-[10px] text-slate-500">{product.category || "uncategorised"} · {product.listing_count} active contributors</div><div className="text-xs text-emerald-300 mt-1">£{product.min_price?.toFixed(2) ?? "—"} – £{product.max_price?.toFixed(2) ?? "—"}</div></button>)}</div>
+        <div className="rounded-lg border border-[#1e2d45] overflow-auto">{!selected ? <p className="p-4 text-sm text-slate-600">Select a product to see its price evidence.</p> : <><div className="p-3 border-b border-[#1e2d45]"><div className="text-sm text-slate-200">{selected.label}</div><div className="text-xs text-slate-500">Market range £{selected.min_price?.toFixed(2) ?? "—"} – £{selected.max_price?.toFixed(2) ?? "—"} · median £{selected.median_price?.toFixed(2) ?? "—"}</div></div><table className="w-full text-xs"><thead className="text-slate-500 bg-[#0a1119]"><tr><th className="text-left p-2">Type</th><th className="text-left p-2">Price</th><th className="text-left p-2">Observed</th><th className="text-left p-2">Source</th><th className="text-left p-2">Item</th></tr></thead><tbody>{observations.map((row, i) => <tr key={`${row.kind}-${row.observed_at}-${i}`} className="border-t border-[#1e2d45]"><td className="p-2 text-slate-400">{row.kind}</td><td className="p-2 text-emerald-300">£{row.price.toFixed(2)}</td><td className="p-2 text-slate-400 whitespace-nowrap">{row.observed_at ? new Date(row.observed_at).toLocaleString() : "—"}</td><td className="p-2 text-slate-400 max-w-[220px] truncate" title={row.source_url || row.source || ""}>{row.source_url || row.source || "—"}</td><td className="p-2 text-slate-300">{row.title}</td></tr>)}</tbody></table></>}</div>
+      </div>}
+    </CardContent></Card>
+  </div>;
 }

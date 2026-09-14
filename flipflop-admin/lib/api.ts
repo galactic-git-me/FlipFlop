@@ -1362,6 +1362,7 @@ export const api = {
 
   logs: {
     history: (tail = 300) => request<unknown[]>(`/logs/history?tail=${tail}`),
+    targets: () => request<Array<{ id: string; label: string; available: boolean }>>("/logs/targets"),
     soldScraping: (limit = 100) => request<{ items: SoldScrapingItem[]; stored_count: number; note: string }>(`/logs/sold-scraping?limit=${limit}`),
   },
 
