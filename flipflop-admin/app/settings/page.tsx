@@ -147,7 +147,7 @@ export default function SettingsPage() {
   const [soldLogNote, setSoldLogNote] = useState("");
   const [logsLoading, setLogsLoading] = useState(false);
   const [opportunityItems, setOpportunityItems] = useState<OpportunityPolicyItem[]>([]);
-  const [opportunityCounts, setOpportunityCounts] = useState({ active: 0, total: 0, historical: 0 });
+  const [opportunityCounts, setOpportunityCounts] = useState({ active: 0, total: 0, historical: 0 });`r`n  const [marketSnapshotCount, setMarketSnapshotCount] = useState<number | null>(null);
   const [opportunityPreviewDirty, setOpportunityPreviewDirty] = useState(false);
   const [opportunityLoading, setOpportunityLoading] = useState(false);
   const [opportunityError, setOpportunityError] = useState<string | null>(null);
@@ -236,16 +236,14 @@ export default function SettingsPage() {
     if (tab === "opportunity") {
       setOpportunityLoading(true);
       setOpportunityError(null);
-      void api.gemRadar.opportunityPolicyData()
-        .then(result => {
+      Promise.all([api.gemRadar.opportunityPolicyData(), api.gemRadar.marketSnapshot()])`r`n        .then(([result, snapshot]) => {
           setOpportunityItems(result.items ?? []);
-          setOpportunityCounts({ active: result.active_scored_count ?? result.items?.length ?? 0, total: result.total_scored_count ?? result.items?.length ?? 0, historical: result.historical_scored_count ?? 0 });
+          setOpportunityCounts({ active: result.active_scored_count ?? result.items?.length ?? 0, total: result.total_scored_count ?? result.items?.length ?? 0, historical: result.historical_scored_count ?? 0 });`r`n          setMarketSnapshotCount(snapshot?.ingestedCount ?? null);
           setOpportunityPreviewDirty(false);
         })
         .catch((error) => {
           setOpportunityItems([]);
-          setOpportunityCounts({ active: 0, total: 0, historical: 0 });
-          setOpportunityPreviewDirty(false);
+          setOpportunityCounts({ active: 0, total: 0, historical: 0 });`r`n          setMarketSnapshotCount(null);`r`n          setOpportunityPreviewDirty(false);
           setOpportunityError(error instanceof Error ? error.message : "Could not load scored listings.");
         })
         .finally(() => setOpportunityLoading(false));
@@ -863,3 +861,4 @@ function PriceEvidencePanel() {
     </CardContent></Card>
   </div>;
 }
+
