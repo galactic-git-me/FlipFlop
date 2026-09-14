@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { Settings, Save, RefreshCw, Database, Search, Plus, Trash2, Link2, Unlink } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Settings, Save, RefreshCw, Database, Plus, Trash2, Link2, Unlink } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { api, SourceSearchTerm } from "@/lib/api";
+import { api } from "@/lib/api";
 
 interface AppSettings {
   max_concurrent_flips: number;
@@ -104,7 +104,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
   );
 }
 
-type TabKey = "general" | "opportunity" | "seller-policies" | "sources" | "terms";
+type TabKey = "general" | "opportunity" | "seller-policies" | "sources";
 
 export default function SettingsPage() {
   const [tab, setTab] = useState<TabKey>("general");
@@ -114,15 +114,10 @@ export default function SettingsPage() {
 
   const [settings, setSettings] = useState<AppSettings>(DEFAULTS);
   const [sources, setSources] = useState<DataSource[]>([]);
-  const [terms, setTerms] = useState<SourceSearchTerm[]>([]);
 
   const [newSourceName, setNewSourceName] = useState("");
   const [newSourceUrl, setNewSourceUrl] = useState("");
 
-  const [scope, setScope] = useState("cases");
-  const [newGroup, setNewGroup] = useState("Fish Tank / Panoramic Cases");
-  const [newTerm, setNewTerm] = useState("");
-  const [newTermSources, setNewTermSources] = useState<string[]>([]);
 
   const [ebayStatus, setEbayStatus] = useState<{
     connected: boolean;
@@ -176,10 +171,9 @@ export default function SettingsPage() {
   async function loadAll() {
     setLoading(true);
     try {
-      const [s, src, t] = await Promise.allSettled([
+      const [s, src] = await Promise.allSettled([
         withTimeout(api.settings.get()),
         withTimeout(api.sources.list() as Promise<DataSource[]>),
-        withTimeout(api.sourceSearchTerms.list(scope)),
       ]);
 
       if (s.status === "fulfilled" && s.value) {
@@ -189,11 +183,6 @@ export default function SettingsPage() {
         setSources(src.value ?? []);
       } else {
         setSources([]);
-      }
-      if (t.status === "fulfilled") {
-        setTerms(t.value.items ?? []);
-      } else {
-        setTerms([]);
       }
     } finally {
       setLoading(false);
@@ -228,14 +217,6 @@ export default function SettingsPage() {
     window.history.replaceState({}, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
      
   }, []);
-
-  useEffect(() => {
-    withTimeout(api.sourceSearchTerms.list(scope))
-      .then(r => setTerms(r.items ?? []))
-      .catch(() => setTerms([]));
-  }, [scope]);
-
-  const groups = useMemo(() => Array.from(new Set(terms.map(t => t.group_name))).sort(), [terms]);
 
   const saveSettings = async () => {
     setSaving(true);
@@ -282,7 +263,6 @@ export default function SettingsPage() {
           { key: "opportunity", label: "Opportunity Scoring" },
           { key: "seller-policies", label: "Seller Policies" },
           { key: "sources", label: "Data Sources" },
-          { key: "terms", label: "Search Terms" },
         ].map(t => (
           <button
             key={t.key}
@@ -581,115 +561,6 @@ export default function SettingsPage() {
         </Card>
       )}
 
-      {tab === "terms" && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2"><Search className="w-4 h-4" /> Search Terms</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 pt-0">
-            <div className="flex flex-wrap gap-2 items-center">
-              <select value={scope} onChange={e => setScope(e.target.value)} className="px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm">
-                <option value="cases">cases</option>
-                <option value="flip_opportunities">flip_opportunities</option>
-                <option value="accessories">accessories</option>
-                <option value="upgrade_parts">upgrade_parts</option>
-              </select>
-              <select value={newGroup} onChange={e => setNewGroup(e.target.value)} className="px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm">
-                {groups.map(g => <option key={g} value={g}>{g}</option>)}
-                <option value="Custom">Custom</option>
-              </select>
-              <input value={newTerm} onChange={e => setNewTerm(e.target.value)} placeholder="New search term" className="flex-1 min-w-[260px] px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" />
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={async () => {
-                  if (!newTerm.trim()) return;
-                  const groupName = newGroup === "Custom" ? "Custom" : newGroup;
-                  await api.sourceSearchTerms.create({
-                    scope,
-                    group_name: groupName,
-                    term: newTerm.trim(),
-                    source_names: newTermSources,
-                    attributes: { capture_fields: ["color", "material", "size", "form_factor", "theme", "style", "franchise"] },
-                    enabled: true,
-                  });
-                  setNewTerm("");
-                  setTerms((await api.sourceSearchTerms.list(scope)).items);
-                }}
-              >
-                <Plus className="w-3.5 h-3.5" /> Add Term
-              </Button>
-            </div>
-
-            <div className="p-3 bg-[#0a1119] border border-[#1e2d45] rounded-xl">
-              <div className="text-xs text-slate-500 mb-2">Assign new term to data sources</div>
-              <div className="flex flex-wrap gap-2">
-                {sources.map(s => {
-                  const picked = newTermSources.includes(s.name);
-                  return (
-                    <button
-                      key={s.id}
-                      onClick={() => setNewTermSources(prev => picked ? prev.filter(n => n !== s.name) : [...prev, s.name])}
-                      className={`px-2 py-1 rounded text-xs border ${picked ? "bg-[#00dc82]/15 border-[#00dc82]/40 text-[#00dc82]" : "border-[#1e2d45] text-slate-400"}`}
-                    >
-                      {s.name}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="space-y-2 max-h-[55vh] overflow-auto pr-1">
-              {terms.map(term => (
-                <div key={term.id} className="p-3 rounded-xl border border-[#1e2d45] bg-[#0a1119] space-y-2">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <div className="text-sm text-slate-200">{term.term}</div>
-                      <div className="text-xs text-slate-500">{term.group_name} · {term.scope}</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Toggle
-                        checked={term.enabled}
-                        onChange={async () => {
-                          const upd = await api.sourceSearchTerms.update(term.id, { enabled: !term.enabled });
-                          setTerms(prev => prev.map(t => t.id === term.id ? upd : t));
-                        }}
-                      />
-                      <button
-                        className="p-1.5 rounded border border-red-500/30 text-red-400"
-                        onClick={async () => {
-                          await api.sourceSearchTerms.delete(term.id);
-                          setTerms(prev => prev.filter(t => t.id !== term.id));
-                        }}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {sources.map(s => {
-                      const selected = term.source_names.includes(s.name);
-                      return (
-                        <button
-                          key={`${term.id}-${s.id}`}
-                          onClick={async () => {
-                            const next = selected ? term.source_names.filter(n => n !== s.name) : [...term.source_names, s.name];
-                            const upd = await api.sourceSearchTerms.update(term.id, { source_names: next });
-                            setTerms(prev => prev.map(t => t.id === term.id ? upd : t));
-                          }}
-                          className={`px-2 py-1 rounded text-xs border ${selected ? "bg-cyan-500/10 border-cyan-500/40 text-cyan-300" : "border-[#1e2d45] text-slate-500"}`}
-                        >
-                          {s.name}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }
