@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle, Check, CheckCircle2, ClipboardCopy, Download, ExternalLink,
   Filter, Link2, Loader2, PackageCheck, RefreshCw, Search, Send, ShieldCheck, X,
@@ -21,6 +21,71 @@ const statusStyles: Record<CrossListingSource["status"], string> = {
 };
 
 const labelForStatus = (value: string) => value.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+
+const vendorChannels: CrossListingChannel[] = ["ebay_uk", "flipflop_shop"];
+type GroupedListing = {
+  id: string;
+  buildId: number;
+  title: string;
+  imageUrl: string | null;
+  quantity: number;
+  condition: string;
+  updatedAt: string;
+  listing: CrossListingSource["listing"];
+  primary: CrossListingSource;
+  byChannel: Partial<Record<CrossListingChannel, CrossListingSource>>;
+};
+
+function groupListings(sources: CrossListingSource[]): GroupedListing[] {
+  const groups = new Map<string, GroupedListing>();
+  sources.forEach((source) => {
+    const key = source.canonicalProductId || String(source.buildId);
+    const existing = groups.get(key);
+    if (existing) {
+      existing.byChannel[source.source] = source;
+      if (source.updatedAt > existing.updatedAt) {
+        existing.updatedAt = source.updatedAt;
+        existing.primary = source;
+      }
+      return;
+    }
+    groups.set(key, {
+      id: `product:${key}`,
+      buildId: source.buildId,
+      title: source.title,
+      imageUrl: source.imageUrl,
+      quantity: source.quantity,
+      condition: source.condition,
+      updatedAt: source.updatedAt,
+      listing: source.listing,
+      primary: source,
+      byChannel: { [source.source]: source },
+    });
+  });
+  return [...groups.values()];
+}
+
+const statusPresentation: Record<CrossListingSource["status"], { emoji: string; label: string }> = {
+  live: { emoji: "🟢", label: "Listed" },
+  draft: { emoji: "📝", label: "Draft" },
+  sold: { emoji: "💰", label: "Sold" },
+  ended: { emoji: "⚫", label: "Unlisted" },
+  unavailable: { emoji: "⚪", label: "Not listed" },
+  failed: { emoji: "❓", label: "Unknown" },
+};
+
+function VendorLogo({ channel }: { channel: CrossListingChannel }) {
+  if (channel === "ebay_uk") {
+    return <span aria-label="eBay UK" className="text-base font-black tracking-[-0.08em]"><span className="text-[#e53238]">e</span><span className="text-[#0064d2]">b</span><span className="text-[#f5af02]">a</span><span className="text-[#86b817]">y</span></span>;
+  }
+  return <span className="inline-flex items-center gap-1.5"><img src="/pics/logo_mini.png" alt="" className="h-6 w-6 object-contain" /><span className="text-sm font-semibold text-white">FlipFlop.shop</span></span>;
+}
+
+function ChannelCell({ source, mode }: { source?: CrossListingSource; mode: "price" | "status" }) {
+  const status = statusPresentation[source?.status ?? "unavailable"];
+  if (mode === "price") return <div className="min-w-[76px] text-center font-medium text-slate-200">{source?.price == null ? "—" : `£${source.price.toFixed(2)}`}</div>;
+  return <div className="min-w-[76px] text-center text-xs text-slate-300" title={status.label}><span aria-hidden="true">{status.emoji}</span><span className="ml-1">{status.label}</span></div>;
+}
 
 function ManualPack({ source, channel }: { source: CrossListingSource; channel: ChannelCapability }) {
   const listing = source.listing;
@@ -99,11 +164,16 @@ export default function CrossListingPage() {
   const [results, setResults] = useState<Array<{ channel: string; status: string; message: string; url?: string; assist?: BrowserAssistJob }>>([]);
 
   const channelCapabilities = useMemo(() => capabilities(connected), [connected]);
-  const selectedItems = items.filter((item) => selected.has(item.id));
-  const filtered = useMemo(() => items.filter((item) => {
-    const matchesQuery = !query || `${item.title} ${item.externalId} ${item.buildId}`.toLowerCase().includes(query.toLowerCase());
-    return matchesQuery && (sourceFilter === "all" || item.source === sourceFilter) && (statusFilter === "all" || item.status === statusFilter);
-  }).sort((a, b) => sort === "title" ? a.title.localeCompare(b.title) : sort === "price" ? (b.price ?? 0) - (a.price ?? 0) : b.updatedAt.localeCompare(a.updatedAt)), [items, query, sourceFilter, statusFilter, sort]);
+  const grouped = useMemo(() => groupListings(items), [items]);
+  const selectedGroups = grouped.filter((item) => selected.has(item.id));
+  const selectedItems = selectedGroups.map((group) => group.primary);
+  const filtered = useMemo(() => grouped.filter((item) => {
+    const channelSources = vendorChannels.map((channel) => item.byChannel[channel]).filter(Boolean) as CrossListingSource[];
+    const matchesQuery = !query || `${item.title} ${item.buildId} ${channelSources.map((source) => source.externalId).join(" ")}`.toLowerCase().includes(query.toLowerCase());
+    const matchesSource = sourceFilter === "all" || Boolean(item.byChannel[sourceFilter]);
+    const matchesStatus = statusFilter === "all" || channelSources.some((source) => source.status === statusFilter);
+    return matchesQuery && matchesSource && matchesStatus;
+  }).sort((a, b) => sort === "title" ? a.title.localeCompare(b.title) : sort === "price" ? (b.primary.price ?? 0) - (a.primary.price ?? 0) : b.updatedAt.localeCompare(a.updatedAt)), [grouped, query, sourceFilter, statusFilter, sort]);
   const review = reviewId ? items.find((item) => item.id === reviewId) ?? null : null;
 
   const refresh = useCallback(async () => {
@@ -132,7 +202,7 @@ export default function CrossListingPage() {
   const toggleDestination = (channel: CrossListingChannel) => setDestinations((current) => current.includes(channel) ? current.filter((item) => item !== channel) : [...current, channel]);
 
   const openReview = (item: CrossListingSource) => { setReviewId(item.id); setDraftTitle(item.listing.title); setDraftDescription(item.listing.description); setDraftPrice(item.listing.price == null ? "" : String(item.listing.price)); };
-  const saveReview = () => { if (!review) return; setItems((current) => current.map((item) => item.id === review.id ? { ...item, listing: { ...item.listing, title: draftTitle, description: draftDescription, price: draftPrice ? Number(draftPrice) : null }, title: draftTitle, price: draftPrice ? Number(draftPrice) : null } : item)); setReviewId(null); };
+  const saveReview = () => { if (!review) return; setItems((current) => current.map((item) => item.buildId === review.buildId ? { ...item, listing: { ...item.listing, title: draftTitle, description: draftDescription, price: draftPrice ? Number(draftPrice) : null }, title: draftTitle, price: draftPrice ? Number(draftPrice) : null } : item)); setReviewId(null); };
 
   const downloadSelectedPacks = () => { if (!selectedItems.length || !destinations.length) return; selectedItems.forEach((item) => destinations.forEach((destination) => { const capability = channelCapabilities.find((entry) => entry.channel === destination); if (!capability || capability.mode === "api") return; const text = `${item.listing.title}\n${item.listing.description}\n${item.listing.images.map((image) => image.url).join("\n")}`; const url = URL.createObjectURL(new Blob([text], { type: "text/plain" })); const anchor = document.createElement("a"); anchor.href = url; anchor.download = `flipflop-${item.buildId}-${destination}.txt`; anchor.click(); URL.revokeObjectURL(url); })); };
 
@@ -172,7 +242,7 @@ export default function CrossListingPage() {
     <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 shadow-2xl shadow-black/10">
       <div className="flex flex-col gap-3 border-b border-slate-700/70 p-4 xl:flex-row xl:items-center"><div className="relative min-w-64 flex-1"><Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" /><input aria-label="Search listings" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search title, build ID or external ID…" className="w-full rounded-md border border-slate-700 bg-slate-900/80 py-2 pl-9 pr-3 text-sm text-white outline-none transition-colors focus:border-emerald-400/60" /></div><div className="flex flex-wrap gap-2"><select aria-label="Source filter" value={sourceFilter} onChange={(event) => setSourceFilter(event.target.value as typeof sourceFilter)} className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-200"><option value="all">All sources</option><option value="ebay_uk">eBay UK</option><option value="flipflop_shop">FlipFlop.shop</option></select><select aria-label="Status filter" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as typeof statusFilter)} className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-200"><option value="all">All statuses</option>{Object.keys(statusStyles).map((status) => <option key={status} value={status}>{labelForStatus(status)}</option>)}</select><select aria-label="Sort listings" value={sort} onChange={(event) => setSort(event.target.value as typeof sort)} className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-200"><option value="updated">Recently updated</option><option value="price">Highest price</option><option value="title">Title</option></select></div></div>
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 px-4 py-3 text-xs"><button onClick={toggleAll} className="inline-flex cursor-pointer items-center gap-2 text-slate-200 hover:text-emerald-300"><span className={`flex h-4 w-4 items-center justify-center rounded border ${filtered.length > 0 && filtered.every((item) => selected.has(item.id)) ? "border-emerald-400 bg-emerald-400 text-slate-950" : "border-slate-600"}`}>{filtered.length > 0 && filtered.every((item) => selected.has(item.id)) && <Check className="h-3 w-3" />}</span>Select all filtered ({filtered.length})</button><span className="text-slate-500">{selectedItems.length} selected · {refreshedAt ? `refreshed ${new Date(refreshedAt).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}` : "not refreshed"}</span></div>
-      <div className="overflow-x-auto"><table className="w-full min-w-[880px] text-left text-sm"><thead className="bg-slate-900/60 text-[11px] uppercase tracking-wider text-slate-500"><tr><th className="w-12 px-4 py-3" /><th className="px-4 py-3">Listing</th><th className="px-4 py-3">Source</th><th className="px-4 py-3">Price / stock</th><th className="px-4 py-3">Status</th><th className="px-4 py-3">Updated</th><th className="px-4 py-3" /></tr></thead><tbody className="divide-y divide-slate-800/80">{filtered.map((item) => <tr key={item.id} className={`transition-colors hover:bg-slate-800/30 ${selected.has(item.id) ? "bg-emerald-400/[0.04]" : ""}`}><td className="px-4 py-3"><button aria-label={`Select ${item.title}`} onClick={() => setSelected((current) => { const next = new Set(current); if (next.has(item.id)) next.delete(item.id); else next.add(item.id); return next; })} className={`flex h-4 w-4 cursor-pointer items-center justify-center rounded border ${selected.has(item.id) ? "border-emerald-400 bg-emerald-400 text-slate-950" : "border-slate-600"}`}>{selected.has(item.id) && <Check className="h-3 w-3" />}</button></td><td className="max-w-[370px] px-4 py-3"><div className="flex items-center gap-3"><div className="h-11 w-14 overflow-hidden rounded border border-slate-700 bg-slate-900">{item.imageUrl ? <img src={item.imageUrl} alt="" className="h-full w-full object-cover" /> : <PackageCheck className="m-3 h-5 w-5 text-slate-600" />}</div><div className="min-w-0"><div className="truncate font-medium text-slate-100">{item.title}</div><div className="mt-1 text-xs text-slate-500">Build {item.buildId} · {item.externalId}</div></div></div></td><td className="px-4 py-3 text-slate-300">{item.source === "ebay_uk" ? "eBay UK" : "FlipFlop.shop"}</td><td className="px-4 py-3 text-slate-200">{item.price == null ? "TBC" : `£${item.price.toFixed(2)}`}<div className="text-xs text-slate-500">Qty {item.quantity} · {item.condition}</div></td><td className="px-4 py-3"><span className={`rounded-full border px-2 py-1 text-[11px] ${statusStyles[item.status]}`}>{labelForStatus(item.status)}</span></td><td className="px-4 py-3 text-xs text-slate-500">{new Date(item.updatedAt).toLocaleDateString("en-GB")}</td><td className="px-4 py-3 text-right"><button onClick={() => openReview(item)} className="cursor-pointer rounded border border-slate-700 px-2.5 py-1.5 text-xs text-slate-300 transition-colors hover:border-emerald-400/50 hover:text-emerald-300">Review</button></td></tr>)}</tbody></table>{!refreshing && filtered.length === 0 && <div className="px-6 py-16 text-center"><Filter className="mx-auto h-7 w-7 text-slate-600" /><p className="mt-3 text-sm text-slate-300">No source listings match this view.</p><p className="mt-1 text-xs text-slate-500">Only listings returned by the connected eBay/storefront integrations are shown.</p></div>}{refreshing && <div className="flex items-center justify-center gap-2 px-6 py-16 text-sm text-slate-400"><Loader2 className="h-4 w-4 animate-spin" /> Loading source listings…</div>}</div>
+      <div className="overflow-x-auto"><table className="w-full min-w-[980px] text-left text-sm"><thead className="bg-slate-900/60 text-[11px] uppercase tracking-wider text-slate-500"><tr><th rowSpan={2} className="w-12 px-4 py-3" /><th rowSpan={2} className="px-4 py-3 align-middle">Listing</th>{vendorChannels.map((channel) => <th key={channel} colSpan={2} className="border-l border-slate-800 px-3 py-2 text-center"><VendorLogo channel={channel} /></th>)}<th rowSpan={2} className="border-l border-slate-800 px-4 py-3 align-middle">Updated</th><th rowSpan={2} className="px-4 py-3" /></tr><tr>{vendorChannels.map((channel) => <Fragment key={`${channel}-subhead`}><th className="border-l border-slate-800/60 px-3 pb-2 text-center text-[10px]">Price</th><th className="px-3 pb-2 text-center text-[10px]">Status</th></Fragment>)}</tr></thead><tbody className="divide-y divide-slate-800/80">{filtered.map((item) => <tr key={item.id} className={`transition-colors hover:bg-slate-800/30 ${selected.has(item.id) ? "bg-emerald-400/[0.04]" : ""}`}><td className="px-4 py-3"><button aria-label={`Select ${item.title}`} onClick={() => setSelected((current) => { const next = new Set(current); if (next.has(item.id)) next.delete(item.id); else next.add(item.id); return next; })} className={`flex h-4 w-4 cursor-pointer items-center justify-center rounded border ${selected.has(item.id) ? "border-emerald-400 bg-emerald-400 text-slate-950" : "border-slate-600"}`}>{selected.has(item.id) && <Check className="h-3 w-3" />}</button></td><td className="max-w-[370px] px-4 py-3"><div className="flex items-center gap-3"><div className="h-11 w-14 overflow-hidden rounded border border-slate-700 bg-slate-900">{item.imageUrl ? <img src={item.imageUrl} alt="" className="h-full w-full object-cover" /> : <PackageCheck className="m-3 h-5 w-5 text-slate-600" />}</div><div className="min-w-0"><div className="truncate font-medium text-slate-100">{item.title}</div><div className="mt-1 text-xs text-slate-500">Build {item.buildId} · {vendorChannels.map((channel) => item.byChannel[channel]?.externalId).filter(Boolean).join(" · ")}</div></div></div></td>{vendorChannels.map((channel) => <Fragment key={`${item.id}-${channel}`}><td className="border-l border-slate-800/60 px-3 py-3"><ChannelCell source={item.byChannel[channel]} mode="price" /></td><td className="px-3 py-3 text-center"><ChannelCell source={item.byChannel[channel]} mode="status" /></td></Fragment>)}<td className="border-l border-slate-800 px-4 py-3 text-xs text-slate-500">{new Date(item.updatedAt).toLocaleDateString("en-GB")}</td><td className="px-4 py-3 text-right"><button onClick={() => openReview(item.primary)} className="cursor-pointer rounded border border-slate-700 px-2.5 py-1.5 text-xs text-slate-300 transition-colors hover:border-emerald-400/50 hover:text-emerald-300">Review</button></td></tr>)}</tbody></table>{!refreshing && filtered.length === 0 && <div className="px-6 py-16 text-center"><Filter className="mx-auto h-7 w-7 text-slate-600" /><p className="mt-3 text-sm text-slate-300">No source listings match this view.</p><p className="mt-1 text-xs text-slate-500">Only listings returned by the connected eBay/storefront integrations are shown.</p></div>}{refreshing && <div className="flex items-center justify-center gap-2 px-6 py-16 text-sm text-slate-400"><Loader2 className="h-4 w-4 animate-spin" /> Loading source listings…</div>}</div>
     </section>
 
     <section className="sticky bottom-3 z-20 rounded-xl border border-emerald-400/20 bg-[#0b121d]/95 p-4 shadow-2xl shadow-black/30 backdrop-blur"><div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between"><div className="min-w-0 flex-1"><div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-wider text-slate-400"><ShieldCheck className="h-4 w-4 text-emerald-300" /> Destination workflow</div><div className="flex flex-wrap gap-2">{channelCapabilities.map((channel) => <button key={channel.channel} onClick={() => toggleDestination(channel.channel)} className={`cursor-pointer rounded-md border px-3 py-2 text-xs transition-colors ${destinations.includes(channel.channel) ? "border-emerald-400/60 bg-emerald-400/10 text-emerald-200" : "border-slate-700 text-slate-400 hover:border-slate-500"}`}><span className="mr-1.5">{destinations.includes(channel.channel) ? "✓" : "○"}</span>{channel.label}</button>)}</div><div className="mt-2 text-xs text-slate-500">{selectedItems.length} source listing{selectedItems.length === 1 ? "" : "s"} × {destinations.length} destination{destinations.length === 1 ? "" : "s"} = {selectedItems.length * destinations.length} job{selectedItems.length * destinations.length === 1 ? "" : "s"}. Manual-only destinations remain manual_action_required.</div></div><div className="flex flex-wrap gap-2"><button onClick={downloadSelectedPacks} disabled={!selectedItems.length || !destinations.length} className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-slate-600 px-3 py-2.5 text-xs text-slate-200 hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-40"><ClipboardCopy className="h-4 w-4" /> Download manual packs</button><button onClick={() => { if (selectedItems.length && destinations.length && window.confirm(`Confirm ${selectedItems.length * destinations.length} cross-listing job(s)? API destinations may create or update live listings.`)) void publish(); }} disabled={publishing || !selectedItems.length || !destinations.length} className="inline-flex cursor-pointer items-center gap-2 rounded-md bg-emerald-400 px-4 py-2.5 text-xs font-semibold text-slate-950 transition-colors hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-40">{publishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}{publishing ? "Submitting…" : "Review & submit"}</button></div></div></section>
