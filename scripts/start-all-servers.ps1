@@ -670,10 +670,11 @@ if ($runMode -eq "live") {
 $adminApiUrl = if ($LocalBackend) { "http://localhost:4311" } else { "https://www.theflipflop.shop" }
 $adminGemRadarUrl = if ($LocalGemRadar) { "http://localhost:18000" } elseif ($LocalBackend) { $adminApiUrl } else { "https://www.theflipflop.shop" }
 $frontendApiUrl = if ($LocalBackend) { "http://localhost:4311" } else { "https://www.theflipflop.shop" }
-# Development must never create or publish a real eBay listing. The live
-# operator path is the only path allowed to use the production marketplace.
-$ebayEnvironment = if ($runMode -eq "development") { "sandbox" } else { "production" }
+# Keep market-data/sourcing calls on production because eBay Sandbox does not
+# represent the real marketplace. Listing and publishing are isolated below.
+$ebayEnvironment = "production"
 $ebayListingEnvironment = if ($runMode -eq "development") { "sandbox" } else { "production" }
+Write-Host "[eBay] Sourcing environment: $ebayEnvironment"
 Write-Host "[eBay] Listing environment: $ebayListingEnvironment" -ForegroundColor $(if ($runMode -eq "development") { "Yellow" } else { "Green" })
 Write-Host ""
 $servers = @(
