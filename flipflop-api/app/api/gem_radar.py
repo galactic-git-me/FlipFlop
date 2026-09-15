@@ -2774,6 +2774,12 @@ def _scan_lock_response(environment: Literal["DEV", "LIVE"], acquired: bool) -> 
                             acquiredAt=lease["acquired_at"], expiresAt=lease["expires_at"])
 
 
+@router.get("/scan-lock", response_model=ScanLockResponse)
+async def scan_lock_status(_: None = Depends(require_operator)) -> ScanLockResponse:
+    async with _scan_lock_guard:
+        return _scan_lock_response("DEV", False)
+
+
 @router.post("/scan-lock/acquire", response_model=ScanLockResponse)
 async def scan_lock_acquire(payload: ScanLockRequest, _: None = Depends(require_operator)) -> ScanLockResponse:
     global _scan_lock

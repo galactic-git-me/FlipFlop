@@ -143,6 +143,11 @@ interface PipelineStatusResponse {
     marketPricedCount: number;
     classifiedCount: number;
   };
+  scanLock?: {
+    state: "idle" | "waiting" | "held";
+    holderEnvironment: "DEV" | "LIVE" | null;
+    expiresAt: string | null;
+  };
 }
 
 // Search terms are composed with a long tail of exclusion keywords (see
@@ -399,6 +404,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
   const [queueItems, setQueueItems] = useState<QueueItem[]>([]);
   const [clientElapsed, setClientElapsed] = useState(0);
   const [displayedScans, setDisplayedScans] = useState<ScanProgress[]>([]);
+  const [scanLock, setScanLock] = useState<PipelineStatusResponse["scanLock"]>(undefined);
   const lastLiveStatus = useRef<PipelineStatusResponse | null>(null);
   const lastLiveAt = useRef(0);
   const runScans = useRef(new Map<string, ScanProgress>());
@@ -414,12 +420,14 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
   useEffect(() => {
     const fetchStatus = async () => {
       try {
-        const [res, queueRes] = await Promise.all([
+        const [res, queueRes, lockRes] = await Promise.all([
           fetch("/api/gem-radar/pipeline-status", { cache: "no-store" }),
           fetch("/api/gem-radar/queue-items", { cache: "no-store" }),
+          fetch("/api/gem-radar/scan-lock", { cache: "no-store" }),
         ]);
         if (res.ok) {
           const data = await res.json();
+          setScanLock(data.scanLock);
           const activeScans = data.activeScans ?? [];
 
           if (activeScans.length > 0) {
@@ -570,6 +578,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
           const queueData = await queueRes.json();
           setQueueItems(queueData.items ?? []);
         }
+        if (lockRes.ok) setScanLock((await lockRes.json()) as PipelineStatusResponse["scanLock"]);
       } catch (error) {
         console.error("Error fetching pipeline status:", error);
       }
@@ -636,6 +645,12 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             <MiniStat label="Sold Prices" value={status?.soldPricesCount ?? 0} color="#f472b6" />
           </div>
         </div>
+
+        {scanLock?.state === "waiting" && (
+          <div className="rounded-md border border-amber-800/70 bg-amber-950/30 px-3 py-2 text-xs text-amber-200">
+            Scrapers are waiting for the {scanLock.holderEnvironment ?? "other"} scan to finish. No second browser workload will start.
+          </div>
+        )}
 
         {displayedScans.length === 0 ? (
           <p className="text-xs text-slate-500">No scans to display.</p>
