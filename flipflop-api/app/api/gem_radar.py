@@ -9,7 +9,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import re
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Literal
 
 import structlog
@@ -77,6 +77,13 @@ router = APIRouter(prefix="/gem-radar", tags=["gem-radar"])
 # the ScoredListing contract consumed by the extension dashboard.
 _API_CLASSIFICATIONS = frozenset({"SUPER_GEM", "GEM", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL"})
 log = structlog.get_logger(__name__)
+
+# DEV and LIVE are separate MV3 service workers, so their in-process guards
+# cannot coordinate. This short lease lives in the local API process and is
+# renewed by the holder; an abandoned worker is automatically released.
+SCAN_LOCK_TTL_SECONDS = 180
+_scan_lock: dict[str, object] | None = None
+_scan_lock_guard = asyncio.Lock()
 
 # Opportunity #4: Statistical outlier detection
 # Precomputed category pricing stats (mean, stdev) for outlier detection
@@ -2736,6 +2743,72 @@ async def queue_items(
 
 class SweepCompleteResponse(BaseModel):
     acknowledged: bool
+
+
+class ScanLockRequest(BaseModel):
+    owner: str
+    environment: Literal["DEV", "LIVE"]
+
+
+class ScanLockResponse(BaseModel):
+    acquired: bool
+    state: Literal["idle", "waiting", "held"]
+    environment: Literal["DEV", "LIVE"]
+    holderEnvironment: Literal["DEV", "LIVE"] | None
+    waitStartedAt: datetime | None
+    acquiredAt: datetime | None
+    expiresAt: datetime | None
+
+
+def _scan_lock_response(environment: Literal["DEV", "LIVE"], acquired: bool) -> ScanLockResponse:
+    now = datetime.now(timezone.utc)
+    lease = _scan_lock
+    if lease is None or lease["expires_at"] <= now:
+        return ScanLockResponse(acquired=acquired, state="idle", environment=environment,
+                                holderEnvironment=None, waitStartedAt=None,
+                                acquiredAt=None, expiresAt=None)
+    return ScanLockResponse(acquired=acquired, state="held" if acquired else "waiting",
+                            environment=environment,
+                            holderEnvironment=lease["environment"],
+                            waitStartedAt=None,
+                            acquiredAt=lease["acquired_at"], expiresAt=lease["expires_at"])
+
+
+@router.post("/scan-lock/acquire", response_model=ScanLockResponse)
+async def scan_lock_acquire(payload: ScanLockRequest, _: None = Depends(require_operator)) -> ScanLockResponse:
+    global _scan_lock
+    async with _scan_lock_guard:
+        now = datetime.now(timezone.utc)
+        if _scan_lock is not None and _scan_lock["expires_at"] <= now:
+            _scan_lock = None
+        if _scan_lock is None:
+            _scan_lock = {"owner": payload.owner, "environment": payload.environment,
+                          "acquired_at": now, "expires_at": now + timedelta(seconds=SCAN_LOCK_TTL_SECONDS)}
+            return _scan_lock_response(payload.environment, True)
+        if _scan_lock["owner"] == payload.owner:
+            _scan_lock["expires_at"] = now + timedelta(seconds=SCAN_LOCK_TTL_SECONDS)
+            return _scan_lock_response(payload.environment, True)
+        return _scan_lock_response(payload.environment, False)
+
+
+@router.post("/scan-lock/renew", response_model=ScanLockResponse)
+async def scan_lock_renew(payload: ScanLockRequest, _: None = Depends(require_operator)) -> ScanLockResponse:
+    global _scan_lock
+    async with _scan_lock_guard:
+        now = datetime.now(timezone.utc)
+        if _scan_lock is not None and _scan_lock["owner"] == payload.owner and _scan_lock["expires_at"] > now:
+            _scan_lock["expires_at"] = now + timedelta(seconds=SCAN_LOCK_TTL_SECONDS)
+            return _scan_lock_response(payload.environment, True)
+        return _scan_lock_response(payload.environment, False)
+
+
+@router.post("/scan-lock/release", response_model=ScanLockResponse)
+async def scan_lock_release(payload: ScanLockRequest, _: None = Depends(require_operator)) -> ScanLockResponse:
+    global _scan_lock
+    async with _scan_lock_guard:
+        if _scan_lock is not None and _scan_lock["owner"] == payload.owner:
+            _scan_lock = None
+        return _scan_lock_response(payload.environment, True)
 
 
 @router.post("/scan-sweep-complete", response_model=SweepCompleteResponse)
