@@ -24,6 +24,7 @@ import { EbayListingHTMLPreview } from "@/components/builds/EbayListingHTMLPrevi
 import { PricingIntelligence } from "@/components/builds/PricingIntelligence";
 import { CommandPanel } from "@/components/builds/CommandPanel";
 import { PrebuiltChannelPicker, type PrebuiltChannel } from "@/components/builds/PrebuiltChannelPicker";
+import { PrebuiltChannelsPanel } from "@/components/builds/PrebuiltChannelsPanel";
 import { Build3DViewer } from "@/components/builds/Build3DViewer";
 
 // eBay-required Item Specifics for "PC Desktops & All-in-Ones" — mirrors
@@ -150,6 +151,7 @@ export default function BuildDetailPage() {
   const [listingOnStorefront, setListingOnStorefront] = useState(false);
   const [showPrebuiltChannelPicker, setShowPrebuiltChannelPicker] = useState(false);
   const [selectedPrebuiltChannels, setSelectedPrebuiltChannels] = useState<PrebuiltChannel[]>([]);
+  const [enabledPrebuiltChannels, setEnabledPrebuiltChannels] = useState<PrebuiltChannel[]>([]);
   const [listingToChannels, setListingToChannels] = useState(false);
   const [openingPortal, setOpeningPortal] = useState(false);
   const [draggedUrl, setDraggedUrl] = useState<string | null>(null);
@@ -173,7 +175,7 @@ export default function BuildDetailPage() {
   const [performanceCardImageUrls, setPerformanceCardImageUrls] = useState<string[]>([]);
   const [performanceCardZipUrl, setPerformanceCardZipUrl] = useState<string | null>(null);
 
-  const [activeTab, setActiveTab] = useState<"build" | "pricing" | "listing" | "media" | "specifics" | "faqs" | "shipping" | "fulfillment">("build");
+  const [activeTab, setActiveTab] = useState<"build" | "pricing" | "listing" | "channels" | "media" | "specifics" | "faqs" | "shipping" | "fulfillment">("build");
 
   const openCustomerPortal = async () => {
     setOpeningPortal(true);
@@ -200,6 +202,13 @@ export default function BuildDetailPage() {
       .get(buildId)
       .then((b) => {
         setBuild(b);
+        try {
+          const savedChannels = window.localStorage.getItem(`flipflop:prebuilt-channels:${b.id}`);
+          if (savedChannels) {
+            const allowed: PrebuiltChannel[] = ["flipflop_shop", "ebay_uk", "amazon", "vinted", "facebook_marketplace"];
+            setEnabledPrebuiltChannels((JSON.parse(savedChannels) as unknown[]).filter((channel): channel is PrebuiltChannel => allowed.includes(channel as PrebuiltChannel)));
+          }
+        } catch { /* local preferences are optional */ }
         // The declared insurance value and publish price must be the actual
         // saved listing price. The market-evaluation midpoint is only a
         // fallback for a build that has never had a listing price set.
@@ -623,6 +632,14 @@ export default function BuildDetailPage() {
     setSelectedPrebuiltChannels((current) => current.includes(channel) ? current.filter((item) => item !== channel) : [...current, channel]);
   };
 
+  const toggleEnabledPrebuiltChannel = (channel: PrebuiltChannel) => {
+    setEnabledPrebuiltChannels((current) => {
+      const next = current.includes(channel) ? current.filter((item) => item !== channel) : [...current, channel];
+      window.localStorage.setItem(`flipflop:prebuilt-channels:${buildId}`, JSON.stringify(next));
+      return next;
+    });
+  };
+
   const downloadManualListingPack = (channel: PrebuiltChannel) => {
     if (!build) return;
     const label = channel === "facebook_marketplace" ? "Facebook Marketplace" : channel[0].toUpperCase() + channel.slice(1);
@@ -638,25 +655,25 @@ export default function BuildDetailPage() {
     const anchor = document.createElement("a"); anchor.href = url; anchor.download = `flipflop-${build.id}-${channel}-listing-pack.txt`; anchor.click(); URL.revokeObjectURL(url);
   };
 
-  const listAsPrebuilt = async () => {
-    if (!build || !selectedPrebuiltChannels.length) return;
+  const listAsPrebuilt = async (channels = selectedPrebuiltChannels) => {
+    if (!build || !channels.length) return;
     const priceNum = parseFloat(price) || build.ebay_price || build.last_evaluation?.mid || 0;
     if (!priceNum || priceNum <= 0) { toast.error("Enter an asking price before listing."); return; }
     setListingToChannels(true);
-    const manualChannels = selectedPrebuiltChannels.filter((channel) => !["flipflop_shop", "ebay_uk"].includes(channel));
+    const manualChannels = channels.filter((channel) => !["flipflop_shop", "ebay_uk"].includes(channel));
     try {
-      if (selectedPrebuiltChannels.includes("ebay_uk") && !build.ebay_live) {
+      if (channels.includes("ebay_uk") && !build.ebay_live) {
         const result = await api.manualBuilds.postToEbay(buildId, { price: priceNum, condition });
         if (!result.success) throw new Error(result.error || "eBay rejected the listing.");
         toast.success("Listed on eBay UK");
       }
-      if (selectedPrebuiltChannels.includes("flipflop_shop") && !build.storefront_live) {
+      if (channels.includes("flipflop_shop") && !build.storefront_live) {
         await api.manualBuilds.listOnStorefront(buildId, priceNum);
         toast.success("Listed on FlipFlop.shop");
       }
       manualChannels.forEach(downloadManualListingPack);
       if (manualChannels.length) toast.success(`${manualChannels.length} manual listing pack${manualChannels.length === 1 ? "" : "s"} downloaded`);
-      if (selectedPrebuiltChannels.includes("amazon")) toast.info("Amazon still needs seller approval before it can be automated.");
+      if (channels.includes("amazon")) toast.info("Amazon still needs seller approval before it can be automated.");
       setShowPrebuiltChannelPicker(false);
       setSelectedPrebuiltChannels([]);
       await refreshBuild();
@@ -952,7 +969,15 @@ export default function BuildDetailPage() {
           onClick={() => setActiveTab("listing")}
         />
         <TabButton
-          label="5. Media & Cards"
+          label="5. Channels"
+          icon={Shuffle}
+          active={activeTab === "channels"}
+          completed={enabledPrebuiltChannels.length > 0 && (build.ebay_live || build.storefront_live || enabledPrebuiltChannels.some((channel) => ["amazon", "vinted", "facebook_marketplace"].includes(channel)))}
+          disabled={!canSell}
+          onClick={() => setActiveTab("channels")}
+        />
+        <TabButton
+          label="6. Media & Cards"
           icon={ImagePlus}
           active={activeTab === "media"}
           completed={!!build.hero_photo_url && build.photos.some(p => p.kind === "spec_card") && build.photos.some(p => p.kind === "registration_plate")}
@@ -960,7 +985,7 @@ export default function BuildDetailPage() {
           onClick={() => setActiveTab("media")}
         />
         <TabButton
-          label="6. Item Specifics"
+          label="7. Item Specifics"
           icon={IdCard}
           active={activeTab === "specifics"}
           completed={hasRequiredAspects}
@@ -968,7 +993,7 @@ export default function BuildDetailPage() {
           onClick={() => setActiveTab("specifics")}
         />
         <TabButton
-          label="7. FAQs"
+          label="8. FAQs"
           icon={HelpCircle}
           active={activeTab === "faqs"}
           completed={selectedFaqIds.length > 0}
@@ -977,7 +1002,7 @@ export default function BuildDetailPage() {
         />
         {(build.status === "sold" || !!build.ebay_order_id) && (
           <TabButton
-            label="8. Fulfillment"
+            label="9. Fulfillment"
             icon={ShoppingBag}
             active={activeTab === "fulfillment"}
             completed={!!build.tracking_number}
@@ -985,6 +1010,19 @@ export default function BuildDetailPage() {
           />
         )}
       </div>
+
+      {canSell && activeTab === "channels" && (
+        <PrebuiltChannelsPanel
+          build={build}
+          enabled={enabledPrebuiltChannels}
+          onToggle={toggleEnabledPrebuiltChannel}
+          onListSelected={() => void listAsPrebuilt(enabledPrebuiltChannels)}
+          onDownloadPack={downloadManualListingPack}
+          submitting={listingToChannels}
+          canPublish={canPublish}
+          price={price}
+        />
+      )}
 
       {/* Tab 1: Build Checklist */}
       {activeTab === "build" && (
