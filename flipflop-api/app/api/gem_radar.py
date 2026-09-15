@@ -1878,63 +1878,59 @@ async def get_market_snapshot(db: AsyncSession = Depends(get_db), _: None = Depe
     is append-only, same reasoning as /scored-listings) so a re-scored
     listing isn't double-counted or counted under a stale classification.
     """
-    from sqlalchemy import select, func, text
+    # Keep the active set inside PostgreSQL. Materialising every active
+    # listing ID in Python and binding it to several ANY(:ids) predicates
+    # caused PostgreSQL OOM once the market grew into the hundreds of
+    # thousands of rows.
+    from sqlalchemy import text
 
-    active_ids = await get_active_listing_ids(db)
-    if not active_ids:
-        return {
-            "ingestedCount": 0, "superGemCount": 0, "gemCount": 0,
-            "avgSuperGemScore": 0.0, "avgGemScore": 0.0,
-            "binPricesCount": 0, "soldPricesCount": 0,
-        }
-
-    latest_scored_at = (
-        select(
-            GemRadarScoredListing.listing_id,
-            func.max(GemRadarScoredListing.scored_at).label("scored_at"),
-        )
-        .where(GemRadarScoredListing.listing_id.in_(active_ids))
-        .group_by(GemRadarScoredListing.listing_id)
-        .subquery()
-    )
-    class_rows = (
-        await db.execute(
-            select(GemRadarScoredListing.classification, GemRadarScoredListing.deal_score)
-            .join(
-                latest_scored_at,
-                (GemRadarScoredListing.listing_id == latest_scored_at.c.listing_id)
-                & (GemRadarScoredListing.scored_at == latest_scored_at.c.scored_at),
-            )
-        )
-    ).all()
-
-    super_gem_scores = [r.deal_score for r in class_rows if r.classification == "SUPER_GEM"]
-    gem_scores = [r.deal_score for r in class_rows if r.classification == "GEM"]
-
-    price_counts_row = (
+    row = (
         await db.execute(
             text(
                 """
+                WITH active_ids AS (
+                    SELECT DISTINCT listing_id
+                    FROM gem_radar_listing_observations
+                    WHERE observed_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
+                ),
+                latest_scored AS (
+                    SELECT DISTINCT ON (s.listing_id)
+                           s.listing_id, s.classification, s.deal_score
+                    FROM gem_radar_scored_listings s
+                    JOIN active_ids a ON a.listing_id = s.listing_id
+                    ORDER BY s.listing_id, s.scored_at DESC, s.id DESC
+                ),
+                active_cpks AS (
+                    SELECT DISTINCT c.cpk
+                    FROM gem_radar_listing_cpk c
+                    JOIN active_ids a ON a.listing_id = c.listing_id
+                    WHERE c.cpk IS NOT NULL
+                )
                 SELECT
-                    (SELECT COUNT(*) FROM gem_radar_cpk_listing_price WHERE listing_id = ANY(:ids)) AS bin_count,
-                    (
-                        SELECT COUNT(*) FROM gem_radar_sold_observations
-                        WHERE cpk IN (SELECT DISTINCT cpk FROM gem_radar_listing_cpk WHERE listing_id = ANY(:ids))
-                    ) AS sold_count
+                    (SELECT COUNT(*) FROM active_ids) AS ingested_count,
+                    (SELECT COUNT(*) FROM latest_scored WHERE classification = 'SUPER_GEM') AS super_gem_count,
+                    (SELECT COUNT(*) FROM latest_scored WHERE classification = 'GEM') AS gem_count,
+                    COALESCE((SELECT AVG(deal_score) FROM latest_scored WHERE classification = 'SUPER_GEM'), 0) AS avg_super_gem_score,
+                    COALESCE((SELECT AVG(deal_score) FROM latest_scored WHERE classification = 'GEM'), 0) AS avg_gem_score,
+                    (SELECT COUNT(*)
+                     FROM gem_radar_cpk_listing_price p
+                     JOIN active_ids a ON a.listing_id = p.listing_id) AS bin_prices_count,
+                    (SELECT COUNT(*)
+                     FROM gem_radar_sold_observations s
+                     JOIN active_cpks c ON c.cpk = s.cpk) AS sold_prices_count
                 """
-            ),
-            {"ids": list(active_ids)},
+            )
         )
-    ).fetchone()
+    ).mappings().one()
 
     return {
-        "ingestedCount": len(active_ids),
-        "superGemCount": len(super_gem_scores),
-        "gemCount": len(gem_scores),
-        "avgSuperGemScore": round(sum(super_gem_scores) / len(super_gem_scores), 1) if super_gem_scores else 0.0,
-        "avgGemScore": round(sum(gem_scores) / len(gem_scores), 1) if gem_scores else 0.0,
-        "binPricesCount": price_counts_row[0] if price_counts_row else 0,
-        "soldPricesCount": price_counts_row[1] if price_counts_row else 0,
+        "ingestedCount": int(row["ingested_count"] or 0),
+        "superGemCount": int(row["super_gem_count"] or 0),
+        "gemCount": int(row["gem_count"] or 0),
+        "avgSuperGemScore": round(float(row["avg_super_gem_score"] or 0), 1),
+        "avgGemScore": round(float(row["avg_gem_score"] or 0), 1),
+        "binPricesCount": int(row["bin_prices_count"] or 0),
+        "soldPricesCount": int(row["sold_prices_count"] or 0),
     }
 
 

@@ -472,7 +472,11 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                 processedPercent: Math.max(previous.processedPercent ?? 0, scan.processedPercent ?? 0),
                 byVendor: mergedVendors,
                 discoveredByVendor: mergedDiscoveredVendors,
-                isComplete: previous.isComplete && scan.isComplete,
+                // Completion is monotonic within a sweep. The previous AND
+                // current expression could leave every card spinning forever
+                // after its first incomplete poll, until the whole sweep was
+                // cleared by the backend.
+                isComplete: previous.isComplete || scan.isComplete,
               });
             }
             const accumulatedScans = Array.from(runScans.current.values());
@@ -2662,10 +2666,11 @@ function SourcingPageInner() {
   useEffect(() => {
     fetchScanSchedule();
     fetchMarketSnapshot();
-    // Re-poll every 30s (cheap enough, and catches a scan that just landed
-    // so the countdown snaps to the new estimate promptly).
+    // Keep lightweight schedule polling frequent enough for the countdown.
     const scheduleInterval = setInterval(fetchScanSchedule, 30000);
-    const snapshotInterval = setInterval(fetchMarketSnapshot, 30000);
+    // Market snapshot is a whole-database aggregation; it must not compete
+    // with the 1s pipeline progress polling or active queue work.
+    const snapshotInterval = setInterval(fetchMarketSnapshot, 120000);
     // Tick every second purely to re-render the countdown display.
     const tickInterval = setInterval(() => setNowTick(Date.now()), 1000);
 

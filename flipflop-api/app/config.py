@@ -157,7 +157,7 @@ class Settings(BaseSettings):
     amazon_case_bestsellers_interval_hours: int = 24
 
     max_concurrent_flips: int = 1
-    max_concurrent_search_terms: int = 2  # Limit concurrent gem_radar searches to ease RAM pressure (95% full)
+    max_concurrent_search_terms: int = 3  # Trial: increase throughput while monitoring RAM/DB pressure
     # A separate OS thread watches this timeout, so it still protects the
     # queue if the asyncio event loop itself stops scheduling work.
     queue_stall_watchdog_seconds: int = 960
