@@ -1,4 +1,10 @@
-@import "tailwindcss";
+/* Keep Tailwind's content scan limited to source code. This app stores large
+   Playwright reports and binary assets alongside the Next.js project; letting
+   Tailwind v4 auto-scan the whole directory can exhaust Node's heap in dev. */
+@import "tailwindcss" source(none);
+@source "../app";
+@source "../components";
+@source "../lib";
 
 /* Branded-card display font (registration plate / spec card build-name titles) */
 @font-face {
