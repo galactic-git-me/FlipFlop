@@ -1,3 +1,4 @@
+from pydantic import field_validator
 from pydantic_settings import BaseSettings
 from functools import lru_cache
 
@@ -229,6 +230,11 @@ class Settings(BaseSettings):
     class Config:
         env_file = (".env.local", ".env")
         extra = "ignore"
+
+    @field_validator("ebay_environment", "ebay_listing_environment", "parcel2go_environment", mode="before")
+    @classmethod
+    def normalize_environment(cls, value: object) -> object:
+        return value.strip().lower() if isinstance(value, str) else value
 
 
 @lru_cache
