@@ -70,8 +70,10 @@ function openBrowserAssist({ source, channel }: BrowserAssistJob) {
     <section><h2>Photos (${listing.images.length})</h2>${listing.images.map((image) => `<img src="${escapeHtml(image.url)}" alt="${escapeHtml(image.alt)}">`).join("")}</section>
     <script type="application/json" id="flipflop-listing-payload">${escapeHtml(JSON.stringify(payload))}</script>`;
   const handoffUrl = URL.createObjectURL(new Blob([assistantHtml], { type: "text/html;charset=utf-8" }));
-  window.open(sellerUrls[channel.channel] ?? channel.officialReference, "flipflop-codex-listing", "popup,width=1200,height=900");
+  // Open the payload first, then the seller page last so Chrome leaves the
+  // sign-in/listing window focused. Codex can take control of either tab.
   window.open(handoffUrl, "flipflop-codex-payload", "popup,width=1000,height=900");
+  window.open(sellerUrls[channel.channel] ?? channel.officialReference, "flipflop-codex-listing", "popup,width=1200,height=900");
   window.setTimeout(() => URL.revokeObjectURL(handoffUrl), 60_000);
 }
 
