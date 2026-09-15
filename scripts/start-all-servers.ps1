@@ -670,10 +670,16 @@ if ($runMode -eq "live") {
 $adminApiUrl = if ($LocalBackend) { "http://localhost:4311" } else { "https://www.theflipflop.shop" }
 $adminGemRadarUrl = if ($LocalGemRadar) { "http://localhost:18000" } elseif ($LocalBackend) { $adminApiUrl } else { "https://www.theflipflop.shop" }
 $frontendApiUrl = if ($LocalBackend) { "http://localhost:4311" } else { "https://www.theflipflop.shop" }
+# Development must never create or publish a real eBay listing. The live
+# operator path is the only path allowed to use the production marketplace.
+$ebayEnvironment = if ($runMode -eq "development") { "sandbox" } else { "production" }
+$ebayListingEnvironment = if ($runMode -eq "development") { "sandbox" } else { "production" }
+Write-Host "[eBay] Listing environment: $ebayListingEnvironment" -ForegroundColor $(if ($runMode -eq "development") { "Yellow" } else { "Green" })
+Write-Host ""
 $servers = @(
     @{
         name     = "backend"
-        cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set EBAY_ENVIRONMENT=production && set EBAY_LISTING_ENVIRONMENT=production && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4311")
+        cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set EBAY_ENVIRONMENT=$ebayEnvironment && set EBAY_LISTING_ENVIRONMENT=$ebayListingEnvironment && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4311")
         port     = 4311
         color    = "Yellow"
         skip     = $NoBackend -or (-not $LocalBackend)

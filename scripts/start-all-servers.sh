@@ -59,7 +59,7 @@ start_server() {
 
     # Start the server in background
     if [ "$name" = "backend" ]; then
-        python run_dev.py --host 0.0.0.0 --port 4311 > /tmp/flipflop-backend.log 2>&1 &
+        EBAY_ENVIRONMENT=sandbox EBAY_LISTING_ENVIRONMENT=sandbox python run_dev.py --host 0.0.0.0 --port 4311 > /tmp/flipflop-backend.log 2>&1 &
     elif [ "$name" = "admin" ]; then
         NODE_ENV=development NEXT_PUBLIC_API_URL=http://localhost:4311 NEXT_PUBLIC_FLIPFLOP_ENV=development npm run dev -- -p 4312 -H 0.0.0.0 > /tmp/flipflop-admin.log 2>&1 &
     elif [ "$name" = "frontend" ]; then
