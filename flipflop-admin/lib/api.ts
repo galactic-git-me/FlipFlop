@@ -492,6 +492,28 @@ export function apiUrl(path: string): string {
   return `${API_BASE_URL}${path}`;
 }
 
+function operationLabel(path: string): string {
+  if (path.includes("/post-to-ebay")) return "publish this eBay listing";
+  if (path.includes("/list-on-storefront")) return "add this build to FlipFlop.shop";
+  return "complete this request";
+}
+
+function apiErrorMessage(path: string, status: number, body: unknown, rawText: string): string {
+  const detail = body && typeof body === "object"
+    ? (body as Record<string, unknown>).detail ?? (body as Record<string, unknown>).error ?? (body as Record<string, unknown>).message
+    : undefined;
+  if (detail) {
+    const text = typeof detail === "string" ? detail : JSON.stringify(detail);
+    if (text && text !== "Internal Server Error") return text;
+  }
+  const rawSummary = rawText.trim().replace(/\s+/g, " ").slice(0, 240);
+  if (rawSummary && !/^Internal Server Error$/i.test(rawSummary)) return rawSummary;
+  if (status >= 500) {
+    return `Could not ${operationLabel(path)} because the server failed internally (HTTP ${status}). No successful listing response was received; check the backend log and retry.`;
+  }
+  return `Could not ${operationLabel(path)} (HTTP ${status}). Check the connection and try again.`;
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   // Add trailing slash to path only (not end of query string) — backend handles both
   // NOTE: the old regex /([^/])(\?|$)/ was corrupting query params like status=active → status=active/
@@ -509,12 +531,10 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     ...init,
   });
   if (!res.ok) {
-    const detail = await res
-      .clone()
-      .json()
-      .then((body) => body?.detail)
-      .catch(() => undefined);
-    throw new Error(detail ? String(detail) : `API ${path} → ${res.status}`);
+    const rawText = await res.text();
+    let body: unknown;
+    try { body = JSON.parse(rawText); } catch { body = undefined; }
+    throw new Error(apiErrorMessage(path, res.status, body, rawText));
   }
   if (res.status === 204) return undefined as T;
   return res.json();
