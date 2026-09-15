@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-15T00:20:55.192458+00:00",
+  "generated_at": "2026-09-15T02:07:21.884202+00:00",
   "builds": [
     {
       "components": [
@@ -123,8 +123,8 @@
         "query": "gaming pc Ryzen 7 9800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 48,
-          "average_price": 972.63,
+          "count": 58,
+          "average_price": 949.95,
           "unavailable_reason": null
         },
         "bin": {
@@ -132,12 +132,12 @@
           "count": 49,
           "min_price": 419.24,
           "max_price": 3579.0,
-          "average_price": 1910.48
+          "average_price": 1869.62
         }
       },
-      "resale_estimate": 972.63,
+      "resale_estimate": 949.95,
       "resale_source": "sold_average",
-      "estimated_profit": 884.24,
+      "estimated_profit": 861.56,
       "rank": 1
     },
     {
@@ -263,7 +263,7 @@
         "sold": {
           "available": true,
           "count": 58,
-          "average_price": 949.95,
+          "average_price": 923.64,
           "unavailable_reason": null
         },
         "bin": {
@@ -271,12 +271,12 @@
           "count": 49,
           "min_price": 419.24,
           "max_price": 3259.0,
-          "average_price": 1837.58
+          "average_price": 1849.61
         }
       },
-      "resale_estimate": 949.95,
+      "resale_estimate": 923.64,
       "resale_source": "sold_average",
-      "estimated_profit": 858.56,
+      "estimated_profit": 832.25,
       "rank": 2
     },
     {
@@ -410,7 +410,7 @@
           "count": 49,
           "min_price": 419.24,
           "max_price": 3259.0,
-          "average_price": 1837.56
+          "average_price": 1848.58
         }
       },
       "resale_estimate": 923.64,
@@ -541,7 +541,7 @@
         "sold": {
           "available": true,
           "count": 59,
-          "average_price": 582.86,
+          "average_price": 559.28,
           "unavailable_reason": null
         },
         "bin": {
@@ -549,12 +549,12 @@
           "count": 48,
           "min_price": 217.66,
           "max_price": 2549.0,
-          "average_price": 818.54
+          "average_price": 858.19
         }
       },
-      "resale_estimate": 582.86,
+      "resale_estimate": 559.28,
       "resale_source": "sold_average",
-      "estimated_profit": 492.1,
+      "estimated_profit": 468.52,
       "rank": 4
     },
     {
@@ -679,8 +679,8 @@
         "query": "gaming pc AMD R7 5800X Desktop CPU Proce SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 49,
-          "average_price": 550.56,
+          "count": 59,
+          "average_price": 559.28,
           "unavailable_reason": null
         },
         "bin": {
@@ -688,12 +688,12 @@
           "count": 48,
           "min_price": 217.66,
           "max_price": 2549.0,
-          "average_price": 818.54
+          "average_price": 844.77
         }
       },
-      "resale_estimate": 550.56,
+      "resale_estimate": 559.28,
       "resale_source": "sold_average",
-      "estimated_profit": 456.8,
+      "estimated_profit": 465.52,
       "rank": 5
     },
     {
@@ -818,8 +818,8 @@
         "query": "gaming pc AMD R7 5800X Desktop CPU Proce SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 49,
-          "average_price": 546.48,
+          "count": 59,
+          "average_price": 559.28,
           "unavailable_reason": null
         },
         "bin": {
@@ -827,12 +827,12 @@
           "count": 48,
           "min_price": 217.66,
           "max_price": 2549.0,
-          "average_price": 818.6
+          "average_price": 799.21
         }
       },
-      "resale_estimate": 546.48,
+      "resale_estimate": 559.28,
       "resale_source": "sold_average",
-      "estimated_profit": 451.72,
+      "estimated_profit": 464.52,
       "rank": 6
     }
   ],
