@@ -638,9 +638,10 @@ Write-Host ""
 Ensure-EbayCdpBrowser
 Write-Host ""
 
-# Build the admin bundle before starting it so local startup always validates
-# the current frontend source. The dev server still serves source files, but
-# this catches stale/generated bundle and TypeScript issues up front.
+# Do not run a production build before the development server. Next.js uses
+# the same .next directory for both modes, so a build here can make a local
+# dev session appear stale until it recompiles. Live operator startup keeps
+# the build validation.
 function Build-Admin {
     if ($NoAdmin) { return }
 
@@ -658,7 +659,12 @@ function Build-Admin {
     Write-Host ""
 }
 
-Build-Admin
+if ($runMode -eq "live") {
+    Build-Admin
+} else {
+    Write-Host "[MODE] DEVELOPMENT - skipping production admin build; Next.js will watch the workspace source." -ForegroundColor Yellow
+    Write-Host ""
+}
 
 # Server configuration
 $adminApiUrl = if ($LocalBackend) { "http://localhost:4311" } else { "https://www.theflipflop.shop" }
@@ -674,14 +680,14 @@ $servers = @(
     },
     @{
         name     = "gemradar-api"
-        cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set PYTHONUNBUFFERED=1 && .venv\Scripts\python.exe -m uvicorn app.gem_radar_standalone:app --host 0.0.0.0 --port 18000")
+        cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set PYTHONUNBUFFERED=1 && .venv\Scripts\python.exe -m uvicorn app.gem_radar_standalone:app --host 0.0.0.0 --port 18000" + $(if ($runMode -eq "development") { " --reload --reload-dir app" } else { "" }))
         port     = 18000
         color    = "Blue"
         skip     = $NoGemRadar -or (-not $LocalGemRadar)
     },
     @{
         name     = "admin"
-        cmdArgs  = @("/c", "cd flipflop-admin && set ""BACKEND_URL=$adminApiUrl"" && set ""NEXT_PUBLIC_API_URL=$adminApiUrl"" && set ""NEXT_PUBLIC_FLIPFLOP_ENV=$runMode"" && set ""EBAY_OPS_BACKEND_URL=$adminApiUrl"" && set ""GEMRADAR_URL=$adminGemRadarUrl"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4312 -H 0.0.0.0")
+        cmdArgs  = @("/c", "cd flipflop-admin && set ""NODE_ENV=development"" && set ""BACKEND_URL=$adminApiUrl"" && set ""NEXT_PUBLIC_API_URL=$adminApiUrl"" && set ""NEXT_PUBLIC_FLIPFLOP_ENV=$runMode"" && set ""EBAY_OPS_BACKEND_URL=$adminApiUrl"" && set ""GEMRADAR_URL=$adminGemRadarUrl"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4312 -H 0.0.0.0")
         port     = 4312
         color    = "Green"
         skip     = $NoAdmin
@@ -690,7 +696,7 @@ $servers = @(
         name     = "frontend"
         # Webpack avoids the Turbopack native memory crash observed on the
         # large customer bundle ("memory allocation ... failed").
-        cmdArgs  = @("/c", "cd ..\FlipFlop.shop && set ""BACKEND_URL=$frontendApiUrl"" && set ""NEXT_PUBLIC_API_URL=$frontendApiUrl"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- --webpack -p 4313 -H 0.0.0.0")
+        cmdArgs  = @("/c", "cd ..\FlipFlop.shop && set ""NODE_ENV=development"" && set ""BACKEND_URL=$frontendApiUrl"" && set ""NEXT_PUBLIC_API_URL=$frontendApiUrl"" && set ""NEXT_PUBLIC_FLIPFLOP_ENV=development"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- --webpack -p 4313 -H 0.0.0.0")
         port     = 4313
         color    = "Magenta"
         skip     = $NoFrontend
