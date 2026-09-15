@@ -37,6 +37,10 @@ export interface CanonicalListing {
   specifications: Record<string, string>;
   warranty: string;
   shipping: string;
+  /** Cross-listing safety policy. This must never allow collection/pickup. */
+  deliveryMode: "delivery_only";
+  collectionAllowed: false;
+  pickupAllowed: false;
   returnPolicy: string;
   sourceBuildId: number;
 }
@@ -126,6 +130,9 @@ export function canonicalFromBuild(build: ManualBuild): CanonicalListing {
     specifications: specifications(build),
     warranty: "See the saved build warranty and returns policy before publishing.",
     shipping: build.shipping_method || "Configure shipping before publishing.",
+    deliveryMode: "delivery_only",
+    collectionAllowed: false,
+    pickupAllowed: false,
     returnPolicy: `${build.return_days ?? 30} day returns`,
     sourceBuildId: build.id,
   };

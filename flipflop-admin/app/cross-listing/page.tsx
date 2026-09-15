@@ -29,7 +29,7 @@ function ManualPack({ source, channel }: { source: CrossListingSource; channel: 
     `Build ID: ${source.buildId}`, `SKU: ${listing.sku}`, ``, `TITLE`, listing.title, ``, `DESCRIPTION`, listing.description,
     ``, `BULLET POINTS`, ...listing.bulletPoints.map((bullet) => `- ${bullet}`), ``, `PRICE`, `${listing.currency} ${listing.price ?? "TBC"}`,
     ``, `CONDITION`, listing.condition, ``, `SPECIFICATIONS`, ...Object.entries(listing.specifications).map(([key, value]) => `${key}: ${value}`),
-    ``, `WARRANTY`, listing.warranty, ``, `SHIPPING`, listing.shipping, ``, `IMAGES`, ...listing.images.map((image) => image.url),
+    ``, `WARRANTY`, listing.warranty, ``, `SHIPPING`, `Delivery only — collection and pickup are not allowed.`, listing.shipping, ``, `IMAGES`, ...listing.images.map((image) => image.url),
     ``, `MANUAL STEPS`, `1. Open the seller dashboard for ${channel.label}.`, `2. Create or update the listing using the fields above.`,
     `3. Upload the images in the order shown.`, `4. Confirm the returned listing ID and URL in FlipFlop admin.`,
   ].join("\n");
@@ -38,6 +38,41 @@ function ManualPack({ source, channel }: { source: CrossListingSource; channel: 
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a"); anchor.href = url; anchor.download = `flipflop-${source.buildId}-${channel.channel}-manual-pack.txt`; anchor.click(); URL.revokeObjectURL(url);
   }}><Download className="h-3.5 w-3.5" /> Manual pack</button>;
+}
+
+type BrowserAssistJob = { source: CrossListingSource; channel: ChannelCapability };
+
+const sellerUrls: Partial<Record<CrossListingChannel, string>> = {
+  onbuy: "https://seller.onbuy.com/",
+  amazon: "https://sellercentral.amazon.co.uk/",
+  facebook_catalog: "https://www.facebook.com/commerce/manager/",
+  vinted: "https://www.vinted.co.uk/",
+};
+
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>\"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character] ?? character);
+}
+
+function openBrowserAssist({ source, channel }: BrowserAssistJob) {
+  const listing = {
+    ...source.listing,
+    shipping: "Delivery only — collection and pickup are not allowed.",
+    deliveryMode: "delivery_only" as const,
+    collectionAllowed: false as const,
+    pickupAllowed: false as const,
+  };
+  const payload = { schema: "flipflop.browser-assist.listing.v1", destination: channel.channel, buildId: source.buildId, listing };
+  const assistantHtml = `<!doctype html><meta charset="utf-8"><title>Codex listing handoff · ${escapeHtml(channel.label)}</title>
+    <style>body{font:14px system-ui;background:#0b121d;color:#e2e8f0;max-width:960px;margin:32px auto;padding:0 20px}h1{font-size:24px}section{border:1px solid #334155;border-radius:10px;padding:16px;margin:14px 0;background:#0f172a}dt{color:#94a3b8;margin-top:10px}dd{white-space:pre-wrap;margin:4px 0 0}img{width:120px;height:90px;object-fit:cover;margin:6px;border-radius:6px;border:1px solid #475569}.safe{color:#6ee7b7;font-weight:600}</style>
+    <h1>Codex browser-assist handoff</h1><p>Use this complete payload to create the ${escapeHtml(channel.label)} listing. The seller window is open separately.</p>
+    <p class="safe">Delivery only is enforced. Collection and pickup must remain disabled.</p>
+    <section><h2>${escapeHtml(listing.title)}</h2><dl><dt>Description</dt><dd>${escapeHtml(listing.description)}</dd><dt>Price</dt><dd>${escapeHtml(`${listing.currency} ${listing.price ?? "TBC"}`)}</dd><dt>Condition</dt><dd>${escapeHtml(listing.condition)}</dd><dt>Specifications</dt><dd>${escapeHtml(Object.entries(listing.specifications).map(([key, value]) => `${key}: ${value}`).join("\n"))}</dd><dt>Warranty</dt><dd>${escapeHtml(listing.warranty)}</dd><dt>Shipping</dt><dd class="safe">Delivery only — collection and pickup are not allowed.</dd></dl></section>
+    <section><h2>Photos (${listing.images.length})</h2>${listing.images.map((image) => `<img src="${escapeHtml(image.url)}" alt="${escapeHtml(image.alt)}">`).join("")}</section>
+    <script type="application/json" id="flipflop-listing-payload">${escapeHtml(JSON.stringify(payload))}</script>`;
+  const handoffUrl = URL.createObjectURL(new Blob([assistantHtml], { type: "text/html;charset=utf-8" }));
+  window.open(sellerUrls[channel.channel] ?? channel.officialReference, "flipflop-codex-listing", "popup,width=1200,height=900");
+  window.open(handoffUrl, "flipflop-codex-payload", "popup,width=1000,height=900");
+  window.setTimeout(() => URL.revokeObjectURL(handoffUrl), 60_000);
 }
 
 export default function CrossListingPage() {
@@ -59,7 +94,7 @@ export default function CrossListingPage() {
   const [draftDescription, setDraftDescription] = useState("");
   const [draftPrice, setDraftPrice] = useState("");
   const [publishing, setPublishing] = useState(false);
-  const [results, setResults] = useState<Array<{ channel: string; status: string; message: string; url?: string }>>([]);
+  const [results, setResults] = useState<Array<{ channel: string; status: string; message: string; url?: string; assist?: BrowserAssistJob }>>([]);
 
   const channelCapabilities = useMemo(() => capabilities(connected), [connected]);
   const selectedItems = items.filter((item) => selected.has(item.id));
@@ -102,11 +137,11 @@ export default function CrossListingPage() {
   const publish = async () => {
     if (!selectedItems.length || !destinations.length) return;
     setPublishing(true); setResults([]);
-    const nextResults: Array<{ channel: string; status: string; message: string; url?: string }> = [];
+    const nextResults: Array<{ channel: string; status: string; message: string; url?: string; assist?: BrowserAssistJob }> = [];
     for (const item of selectedItems) for (const destination of destinations) {
       const capability = channelCapabilities.find((entry) => entry.channel === destination);
       if (!capability) continue;
-      if (capability.mode !== "api") { nextResults.push({ channel: capability.label, status: "manual_action_required", message: capability.note }); continue; }
+      if (capability.mode !== "api") { nextResults.push({ channel: capability.label, status: "manual_action_required", message: `${capability.note} Use browser assist to have Codex create the listing with the complete payload and photos.`, assist: { source: item, channel: capability } }); continue; }
       const build = builds[item.buildId];
       try {
         if (destination === "ebay_uk") {
@@ -140,7 +175,7 @@ export default function CrossListingPage() {
 
     <section className="sticky bottom-3 z-20 rounded-xl border border-emerald-400/20 bg-[#0b121d]/95 p-4 shadow-2xl shadow-black/30 backdrop-blur"><div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between"><div className="min-w-0 flex-1"><div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-wider text-slate-400"><ShieldCheck className="h-4 w-4 text-emerald-300" /> Destination workflow</div><div className="flex flex-wrap gap-2">{channelCapabilities.map((channel) => <button key={channel.channel} onClick={() => toggleDestination(channel.channel)} className={`cursor-pointer rounded-md border px-3 py-2 text-xs transition-colors ${destinations.includes(channel.channel) ? "border-emerald-400/60 bg-emerald-400/10 text-emerald-200" : "border-slate-700 text-slate-400 hover:border-slate-500"}`}><span className="mr-1.5">{destinations.includes(channel.channel) ? "✓" : "○"}</span>{channel.label}</button>)}</div><div className="mt-2 text-xs text-slate-500">{selectedItems.length} source listing{selectedItems.length === 1 ? "" : "s"} × {destinations.length} destination{destinations.length === 1 ? "" : "s"} = {selectedItems.length * destinations.length} job{selectedItems.length * destinations.length === 1 ? "" : "s"}. Manual-only destinations remain manual_action_required.</div></div><div className="flex flex-wrap gap-2"><button onClick={downloadSelectedPacks} disabled={!selectedItems.length || !destinations.length} className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-slate-600 px-3 py-2.5 text-xs text-slate-200 hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-40"><ClipboardCopy className="h-4 w-4" /> Download manual packs</button><button onClick={() => { if (selectedItems.length && destinations.length && window.confirm(`Confirm ${selectedItems.length * destinations.length} cross-listing job(s)? API destinations may create or update live listings.`)) void publish(); }} disabled={publishing || !selectedItems.length || !destinations.length} className="inline-flex cursor-pointer items-center gap-2 rounded-md bg-emerald-400 px-4 py-2.5 text-xs font-semibold text-slate-950 transition-colors hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-40">{publishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}{publishing ? "Submitting…" : "Review & submit"}</button></div></div></section>
 
-    {results.length > 0 && <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4"><h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white"><CheckCircle2 className="h-4 w-4 text-emerald-300" /> Batch results</h2><div className="space-y-2">{results.map((result, index) => <div key={`${result.channel}-${index}`} className="flex flex-col gap-1 rounded border border-slate-800 bg-slate-900/50 p-3 text-xs md:flex-row md:items-center md:justify-between"><div><span className="font-medium text-slate-200">{result.channel}</span><span className={`ml-2 ${result.status === "failed" ? "text-red-300" : result.status === "manual_action_required" ? "text-yellow-300" : "text-emerald-300"}`}>{labelForStatus(result.status)}</span><div className="mt-1 text-slate-400">{result.message}</div></div>{result.url && <a href={result.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-emerald-300 hover:underline">View listing <ExternalLink className="h-3 w-3" /></a>}</div>)}</div></section>}
+    {results.length > 0 && <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4"><h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white"><CheckCircle2 className="h-4 w-4 text-emerald-300" /> Batch results</h2><div className="space-y-2">{results.map((result, index) => <div key={`${result.channel}-${index}`} className="flex flex-col gap-2 rounded border border-slate-800 bg-slate-900/50 p-3 text-xs md:flex-row md:items-center md:justify-between"><div><span className="font-medium text-slate-200">{result.channel}</span><span className={`ml-2 ${result.status === "failed" ? "text-red-300" : result.status === "manual_action_required" ? "text-yellow-300" : "text-emerald-300"}`}>{labelForStatus(result.status)}</span><div className="mt-1 text-slate-400">{result.message}</div></div><div className="flex shrink-0 flex-wrap gap-2">{result.assist && <button onClick={() => openBrowserAssist(result.assist!)} className="inline-flex items-center gap-1 rounded border border-emerald-400/40 px-2.5 py-1.5 font-medium text-emerald-300 hover:bg-emerald-400/10">Open Chrome + ask Codex to create listing <ExternalLink className="h-3 w-3" /></button>}{result.url && <a href={result.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-emerald-300 hover:underline">View listing <ExternalLink className="h-3 w-3" /></a>}</div></div>)}</div></section>}
 
     {review && <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/75 p-3 backdrop-blur-sm md:items-center"><div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-xl border border-slate-700 bg-[#0e1724] p-5 shadow-2xl"><div className="flex items-start justify-between gap-4"><div><div className="text-xs uppercase tracking-wider text-emerald-300">Payload review · {review.source === "ebay_uk" ? "eBay UK" : "FlipFlop.shop"}</div><h2 className="mt-1 text-xl font-semibold text-white">{review.title}</h2><p className="mt-1 text-xs text-slate-500">Canonical build {review.buildId} · edits are local to this review until saved.</p></div><button aria-label="Close review" onClick={() => setReviewId(null)} className="cursor-pointer rounded p-1 text-slate-400 hover:bg-slate-800 hover:text-white"><X className="h-5 w-5" /></button></div><div className="mt-5 grid gap-4 md:grid-cols-2"><label className="text-xs text-slate-400">Title<input value={draftTitle} onChange={(event) => setDraftTitle(event.target.value)} maxLength={80} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white outline-none focus:border-emerald-400/60" /><span className="mt-1 block text-right text-[10px] text-slate-500">{draftTitle.length}/80</span></label><label className="text-xs text-slate-400">Price (GBP)<input type="number" min="0" step="0.01" value={draftPrice} onChange={(event) => setDraftPrice(event.target.value)} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white outline-none focus:border-emerald-400/60" /></label></div><label className="mt-2 block text-xs text-slate-400">Description<textarea value={draftDescription} onChange={(event) => setDraftDescription(event.target.value)} rows={8} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm leading-6 text-slate-200 outline-none focus:border-emerald-400/60" /><span className="mt-1 block text-right text-[10px] text-slate-500">{draftDescription.length} characters</span></label><div className="mt-4 rounded-lg border border-slate-700/80 bg-slate-900/50 p-3"><div className="mb-2 text-xs uppercase tracking-wider text-slate-500">Copied and transformed</div><div className="grid gap-2 text-xs text-slate-300 md:grid-cols-2"><div>✓ {review.listing.images.length} public image URL{review.listing.images.length === 1 ? "" : "s"}</div><div>✓ {Object.keys(review.listing.specifications).length} specification fields</div><div>✓ Shared price, stock and condition</div><div>⚠ Platform category and item specifics require destination validation</div></div></div><div className="mt-5 flex flex-wrap justify-end gap-2"><ManualPack source={{ ...review, listing: { ...review.listing, title: draftTitle, description: draftDescription, price: draftPrice ? Number(draftPrice) : null } }} channel={channelCapabilities[0]} /><button onClick={() => setReviewId(null)} className="cursor-pointer rounded-md border border-slate-600 px-4 py-2 text-sm text-slate-200 hover:border-slate-400">Cancel</button><button onClick={saveReview} className="cursor-pointer rounded-md bg-emerald-400 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-emerald-300">Save review edits</button></div></div></div>}
   </div>;
