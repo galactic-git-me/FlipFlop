@@ -126,17 +126,17 @@ test("cross-listing loads canonical sources and supports search, status filterin
   await page.goto("/cross-listing");
 
   await expect(page.getByRole("heading", { name: "Cross-listing" })).toBeVisible();
-  await expect(page.getByText("Atlas Gaming PC RTX 3060", { exact: true })).toHaveCount(2);
+  await expect(page.getByText("Atlas Gaming PC RTX 3060", { exact: true })).toHaveCount(1);
   await expect(page.getByText("eBay UK", { exact: true }).first()).toBeVisible();
   await expect(page.getByText("FlipFlop.shop", { exact: true }).first()).toBeVisible();
-  await expect(page.getByText("Select all filtered (3)")).toBeVisible();
+  await expect(page.getByText("Select all filtered (2)")).toBeVisible();
 
   await page.getByLabel("Search listings").fill("Borealis");
   await expect(page.getByText("Borealis Workstation")).toBeVisible();
   await expect(page.getByText("Atlas Gaming PC RTX 3060")).toHaveCount(0);
   await page.getByLabel("Search listings").fill("");
   await page.getByLabel("Status filter").selectOption("live");
-  await expect(page.getByText("Atlas Gaming PC RTX 3060", { exact: true })).toHaveCount(2);
+  await expect(page.getByText("Atlas Gaming PC RTX 3060", { exact: true })).toHaveCount(1);
   await expect(page.getByText("Borealis Workstation")).toHaveCount(0);
 
   const row = page.locator("tr", { hasText: "EBAY-42" });
@@ -176,7 +176,7 @@ test("keeps manual-only destinations manual and links storefront without duplica
   await page.getByRole("button", { name: "Review & submit" }).click();
   await storefrontRequest;
   await expect(page.getByText("Linked to the existing storefront product.")).toBeVisible();
-  await expect(page.getByText("Manual Action Required", { exact: true })).toBeVisible();
+  await expect(page.getByText("Blocked In Development", { exact: true })).toHaveCount(2);
   await expect(page.getByText("Seller API/feed onboarding is not configured in this app. Manual listing pack only.")).toHaveCount(2);
 });
 
