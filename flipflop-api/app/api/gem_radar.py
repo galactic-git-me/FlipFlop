@@ -1083,20 +1083,10 @@ async def get_scored_listings_latest_run(
         text(
             """
             SELECT DISTINCT ON (listing_id)
-                   o.listing_id, o.watch_count, o.best_offer_enabled,
-                   COALESCE(NULLIF(BTRIM(o.image_url), ''), prior_image.image_url) AS image_url
-            FROM gem_radar_listing_observations AS o
-            LEFT JOIN LATERAL (
-                SELECT image_url
-                FROM gem_radar_listing_observations
-                WHERE listing_id = o.listing_id
-                  AND image_url IS NOT NULL
-                  AND BTRIM(image_url) <> ''
-                ORDER BY observed_at DESC
-                LIMIT 1
-            ) AS prior_image ON TRUE
-            WHERE o.listing_id = ANY(:listing_ids)
-            ORDER BY o.listing_id, o.observed_at DESC
+                   listing_id, watch_count, best_offer_enabled
+            FROM gem_radar_listing_observations
+            WHERE listing_id = ANY(:listing_ids)
+            ORDER BY listing_id, observed_at DESC
             """
         ),
         {"listing_ids": [s.listing_id for s in scored]},
@@ -1105,19 +1095,9 @@ async def get_scored_listings_latest_run(
         row.listing_id: {
             "watch_count": row.watch_count,
             "best_offer_enabled": bool(row.best_offer_enabled),
-            "image_url": row.image_url,
         }
         for row in observation_result
     }
-
-    # Actionable sourcing candidates must have a picture. Prefer the scored
-    # row's image, but recover one from the latest observation when a prior
-    # scoring pass stored a null value. Comparables/market evidence are not
-    # part of this active fixed-price feed and may remain image-less.
-    scored = [
-        row for row in scored
-        if row.image_url or observation_fields.get(row.listing_id, {}).get("image_url")
-    ]
 
     return [
         {
@@ -1129,7 +1109,7 @@ async def get_scored_listings_latest_run(
             "cpk": s.cpk,
             "title": s.title,
             "seller": s.seller_name,
-            "image_url": s.image_url or observation_fields.get(s.listing_id, {}).get("image_url"),
+            "image_url": s.image_url,
             "condition": s.condition,
             "actual_price": s.actual_listing_price,
             "delivered_price": s.delivered_price,
