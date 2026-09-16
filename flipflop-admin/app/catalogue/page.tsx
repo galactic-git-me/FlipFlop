@@ -21,6 +21,7 @@ type Variant = {
   cpk?: string | null; watch_count?: number | null; offer_count?: number | null; sold_count?: number | null;
   review_average_rating?: number | null; review_count?: number | null;
   url?: string | null; condition?: string | null; delivered_price?: number | null;
+  delivery_text?: string | null; delivery_postcode?: string | null;
   scored_market_lower_price?: number | null; scored_market_median_price?: number | null; scored_market_upper_price?: number | null;
   pct_offset?: number | null; classification?: string | null; decision?: string | null; confidence?: string | null; deal_score?: number | null;
   evidence_status?: string | null; evidence_reason?: string | null;
@@ -103,6 +104,7 @@ function SourcingDetails({ variant: v }: { variant: Variant }) {
     <div><p className="text-slate-500">Decision</p><p className="mt-0.5 font-semibold uppercase text-emerald-300">{v.decision?.replace(/_/g, " ") ?? "—"}</p></div>
     <div><p className="text-slate-500">Score</p><p className="mt-0.5 font-mono font-semibold text-white">{v.deal_score == null ? "—" : v.deal_score.toFixed(1)}</p></div>
     <div title={v.evidence_reason ?? undefined}><p className="text-slate-500">Evidence</p><p className="mt-0.5 font-semibold text-cyan-300">{v.evidence_status?.replace(/_/g, " ") ?? "Why?"}</p></div>
+    <div title={v.delivery_postcode ? `Delivery postcode: ${v.delivery_postcode}` : undefined}><p className="text-slate-500">Delivery</p><p className="mt-0.5 font-semibold text-cyan-200">{v.delivery_text ?? "Not captured"}</p></div>
   </div>;
 }
 
@@ -133,6 +135,7 @@ export default function CataloguePage() {
           scored_market_upper_price: (row.market_upper_price as number | null) ?? null, pct_offset: (row.pct_offset as number | null) ?? null,
           watch_count: (row.watch_count as number | null) ?? null, offer_count: null, sold_count: (row.sold_listing_count as number | null) ?? null,
           url: (row.url as string | null) ?? null, condition: (row.condition as string | null) ?? null, delivered_price: (row.delivered_price as number | null) ?? null,
+          delivery_text: (row.delivery_text as string | null) ?? null, delivery_postcode: (row.delivery_postcode as string | null) ?? null,
           classification: (row.classification as string | null) ?? null, decision: (row.decision as string | null) ?? null,
           confidence: (row.confidence as string | null) ?? null, deal_score: (row.deal_score as number | null) ?? null,
           evidence_status: (row.evidence_status as string | null) ?? null, evidence_reason: (row.evidence_reason as string | null) ?? null,

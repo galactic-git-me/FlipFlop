@@ -244,7 +244,8 @@ async def list_variants(
                    listing_id, url, condition, delivered_price,
                    market_lower_price, market_median_price, market_upper_price,
                    pct_offset, classification, decision, confidence_band,
-                   evidence_status, evidence_reason, deal_score
+                   evidence_status, evidence_reason, deal_score,
+                   delivery_text, delivery_postcode
             FROM gem_radar_scored_listings
             WHERE listing_id = ANY(:listing_ids)
             ORDER BY listing_id, scored_at DESC NULLS LAST, id DESC
@@ -311,6 +312,8 @@ async def list_variants(
             "url": (getattr(scored(l), "url", None) or l.url),
             "condition": (getattr(scored(l), "condition", None) or l.condition),
             "delivered_price": (getattr(scored(l), "delivered_price", None) or l.price),
+            "delivery_text": getattr(scored(l), "delivery_text", None),
+            "delivery_postcode": getattr(scored(l), "delivery_postcode", None),
             "scored_market_lower_price": getattr(scored(l), "market_lower_price", None) or l.resale_low,
             "scored_market_median_price": getattr(scored(l), "market_median_price", None) or l.estimated_resale,
             "scored_market_upper_price": getattr(scored(l), "market_upper_price", None) or l.resale_high,
