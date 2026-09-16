@@ -1583,3 +1583,899 @@ INFO:     127.0.0.1:49320 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
 2026-09-16 16:31:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Portable Toothpick Case Holder Travel Pocket Stora
 2026-09-16 16:31:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=144PC LARGE COTTER PIN FASTENERS SPLIT PINS ASSORT
 2026-09-16 16:31:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Peter Jackson\u2019s King Kong PC Game Limited Collecto
+2026-09-16 16:31:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=For Honor Magic V3 V2 VS3 VS2 Case Shockproof Luxu
+2026-09-16 16:31:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Portable Reader Slim Pen Reading Glasses with Pen
+2026-09-16 16:31:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=20Pc Oil Drain Sump Plug Key Set 3/8" Drive Hex Sq
+2026-09-16 16:31:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1-50 Pack Clear Plastic Trading Card Storage Box H
+2026-09-16 16:31:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=131Pc Thread Repair Kit HSS Drill Helicoil Heli Co
+2026-09-16 16:31:27 [info     ] queue_processor.processing_submission n_listings=38 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115205
+2026-09-16 16:31:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Pacifier Dummy Storage Box Travel Case Portable So
+2026-09-16 16:31:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1Pc Soap Holder Travel Soap Container Portable Soa
+2026-09-16 16:31:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1/5 Lanyard ID Badge Business Card Key Holder Ring
+2026-09-16 16:31:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=BCE MARK SELBY Metallic BLACK Simulated Graphite 2
+2026-09-16 16:31:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Greys Lance Fly Fishing Rod 4pc Single Hand Trout
+2026-09-16 16:31:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Automatic Dental Floss Storage Box Portable Pop Up
+2026-09-16 16:31:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Battery Cover Case for Xbox 360 Wireless Controlle
+2026-09-16 16:31:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=2PC For Alpine Renault Tricolour Key Case Cover Ho
+2026-09-16 16:31:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=131Pc Thread Repair Kit HSS Drill Helicoil Heli Co
+2026-09-16 16:31:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Ixos Crystal Case Cover,Ipod Nano 2nd Gen + scroll
+2026-09-16 16:31:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=R&G Engine Case Cover Kit (2pc) (RHS + LHS) Honda
+2026-09-16 16:31:42 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1PC Gift Box Necklace Jewelry Bracelet Box Pendant
+2026-09-16 16:31:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=COMBINATION SPANNER WRENCH SET METRIC AF IMPERIAL
+2026-09-16 16:31:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=230Pc Large Portable Sewing Kit Home Travel Case N
+2026-09-16 16:31:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lumberjack 300pc Drill Bit & Driver Set HSS Wood M
+2026-09-16 16:31:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Clip on Sunglasses Polarised Flip up Sunglasses  M
+2026-09-16 16:31:48 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=11PC SPANNER SET METRIC COMBINATION WRENCH IN CASE
+2026-09-16 16:31:48 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=be.ez PC case LA Robe Allure Estivale Edition, Mul
+2026-09-16 16:31:49 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=11 cross_run_dupes_price_updated=7 cross_run_dupes_unchanged_price=51 elapsed_s=57.9 excluded_auctions=0 new_listings=10
+2026-09-16 16:31:49 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=11 ingested=10 submission_id=115162
+2026-09-16 16:31:49 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 16:31:49 [info     ] queue_processor.processing_submission n_listings=49 query=AMD GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=amd-gpu submission_id=115212
+INFO:     127.0.0.1:53056 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53057 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 16:31:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Clear all
+2026-09-16 16:31:55 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=91 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=77 elapsed_s=56.4 excluded_auctions=0 new_listings=12
+2026-09-16 16:31:55 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=91 ingested=12 submission_id=115176
+2026-09-16 16:31:56 [debug    ] cpk_extractor.invalid_category category=mouse title=HyperX
+Pulsefire Core RGB Gaming Mouse
+2026-09-16 16:31:56 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:31:56 [info     ] queue_processor.processing_submission n_listings=44 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115177
+2026-09-16 16:31:57 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|motherboard|ram|ssd|psu|cooler|case|fan title=HP
+22 All In One PC Intel 8GB 256GB Win 11
+2026-09-16 16:31:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP
+22 All In One PC Intel i3 8GB 256GB Win11
+2026-09-16 16:31:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Clear all
+2026-09-16 16:32:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PCSpecialist
+Wraith 184 Gaming PC - Ryzen 7 7800X3
+2026-09-16 16:32:00 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=12 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=16 elapsed_s=44.9 excluded_auctions=0 new_listings=1
+2026-09-16 16:32:00 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=12 ingested=1 submission_id=115192
+2026-09-16 16:32:00 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:32:00 [info     ] queue_processor.processing_submission n_listings=35 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115194
+2026-09-16 16:32:01 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MAG401QR 40 Inch UWQHD 155Hz Gaming monitor
+2026-09-16 16:32:02 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MAG 244C 24 inch 180Hz Curved Gaming Monitor
+2026-09-16 16:32:02 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MSI MAG 321CQF E18 32 inch 180Hz WQHD Curved G
+2026-09-16 16:32:04 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MAG 325QF E18V 31.5 inch WQHD Gaming Monitor
+2026-09-16 16:32:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Microsoft
+NINJA GAIDEN 4 Deluxe Edition
+2026-09-16 16:32:06 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MAG 274QP QD-OLED X24 27 inch WQHD 240Hz Gamin
+2026-09-16 16:32:08 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PCSpecialist
+Wraith 185 Gaming PC - Ryzen 7 7800X3
+2026-09-16 16:32:09 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+ASUS ROG Strix OLED XG27AQDNG gaming monitor
+2026-09-16 16:32:09 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PCSpecialist
+Wraith 184 Gaming PC - Ryzen 7 7800X3
+2026-09-16 16:32:10 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MSI MAG 322UP QD-OLED E16 32 inch 165Hz 0.03ms
+2026-09-16 16:32:11 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MAG 275QF X32 27 inch WQHD 320Hz Gaming Monito
+2026-09-16 16:32:11 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=26 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=37 elapsed_s=44.0 excluded_auctions=0 new_listings=1
+2026-09-16 16:32:11 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=26 ingested=1 submission_id=115205
+2026-09-16 16:32:11 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:32:11 [info     ] queue_processor.processing_submission n_listings=40 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115207
+2026-09-16 16:32:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PCSpecialist
+Wraith 185 Gaming PC - Ryzen 7 7800X3
+2026-09-16 16:32:14 [debug    ] cpk_extractor.invalid_category category=mouse title=HyperX
+Pulsefire Core RGB Gaming Mouse
+2026-09-16 16:32:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PCSpecialist
+Wraith 184 Gaming PC - Ryzen 7 7800X3
+2026-09-16 16:32:16 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+ASUS ROG Strix OLED XG27AQDNG gaming monitor
+2026-09-16 16:32:16 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+ASUS ROG Strix OLED XG27ACDMS 27 inch QD-OLED
+2026-09-16 16:32:18 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MAG 325QF E18V 31.5 inch WQHD Gaming Monitor
+2026-09-16 16:32:18 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+ASUS ROG Strix XG27ACMS 27 inch 320Hz Gaming
+2026-09-16 16:32:19 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=LEGO
+Disney 43262 Villains Maleficent\u2019s and Cruell
+2026-09-16 16:32:21 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MSI MAG 322UP QD-OLED E16 32 inch 165Hz 0.03ms
+2026-09-16 16:32:21 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=41 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=49 elapsed_s=32.0 excluded_auctions=0 new_listings=0
+2026-09-16 16:32:21 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=41 ingested=0 submission_id=115212
+2026-09-16 16:32:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=GB Eye
+AVATAR MUG 320 ML GROUP
+2026-09-16 16:32:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CosCups
+Stranger Things Eleven CosCups
+2026-09-16 16:32:22 [info     ] queue_processor.submission_released search_id=amd-gpu
+2026-09-16 16:32:22 [info     ] queue_processor.processing_submission n_listings=23 query=AMD GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=amd-gpu submission_id=115214
+2026-09-16 16:32:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=GameMill
+Snoopy And The Great Mystery Club
+2026-09-16 16:32:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PCSpecialist
+Wraith 184 Gaming PC - Ryzen 7 7800X3
+2026-09-16 16:32:25 [debug    ] cpk_extractor.invalid_category category=mouse title=HyperX
+Pulsefire Core RGB Gaming Mouse
+2026-09-16 16:32:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Medion
+ERAZER Tank X15 Gaming PC - AMD Ryzen 7 780
+2026-09-16 16:32:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PCSpecialist
+Wraith 185 Gaming PC - Ryzen 7 7800X3
+2026-09-16 16:32:26 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=36 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=44 elapsed_s=30.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:32:26 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=36 ingested=0 submission_id=115177
+2026-09-16 16:32:26 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:32:26 [info     ] queue_processor.processing_submission n_listings=83 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115178
+2026-09-16 16:32:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:32:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:32:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:32:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:32:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:32:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:32:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:32:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:32:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:32:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:32:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:39 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=13 cross_run_dupes_price_updated=3 cross_run_dupes_unchanged_price=32 elapsed_s=38.9 excluded_auctions=0 new_listings=0
+2026-09-16 16:32:39 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=13 ingested=0 submission_id=115194
+2026-09-16 16:32:40 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:32:40 [info     ] queue_processor.processing_submission n_listings=10 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115198
+2026-09-16 16:32:42 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:43 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=38 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=31.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:32:43 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=38 ingested=0 submission_id=115207
+2026-09-16 16:32:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewSale
+2026-09-16 16:32:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewSale
+2026-09-16 16:32:43 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:32:43 [info     ] queue_processor.processing_submission n_listings=19 query=Intel GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=intel-gpu submission_id=115221
+2026-09-16 16:32:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewSale
+2026-09-16 16:32:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:45 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=18 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=23.5 excluded_auctions=0 new_listings=0
+2026-09-16 16:32:45 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=18 ingested=0 submission_id=115214
+2026-09-16 16:32:46 [info     ] queue_processor.submission_released search_id=amd-gpu
+2026-09-16 16:32:46 [info     ] queue_processor.processing_submission n_listings=40 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115222
+2026-09-16 16:32:46 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=13 cross_run_dupes_unchanged_price=27 elapsed_s=0.3 excluded_auctions=0 new_listings=0
+2026-09-16 16:32:46 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=115222
+2026-09-16 16:32:46 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:32:46 [info     ] queue_processor.processing_submission n_listings=39 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115226
+2026-09-16 16:32:46 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=39 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=38 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:32:46 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=39 ingested=0 submission_id=115226
+2026-09-16 16:32:46 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:32:46 [info     ] queue_processor.processing_submission n_listings=42 query=ASUS motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=asus-motherboard submission_id=115231
+2026-09-16 16:32:47 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AMD A10-8700 Series AD877BAGM44AB Processor CPU
+2026-09-16 16:32:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AMD AM5 CPU Tray Holder \u2013 Protective Storage Case
+2026-09-16 16:32:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Corsair PC Case AMD Ryzen 9 5950X CPU, 32GB RAM, 1
+2026-09-16 16:32:50 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=78 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=82 elapsed_s=23.1 excluded_auctions=0 new_listings=1
+2026-09-16 16:32:50 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=78 ingested=1 submission_id=115178
+2026-09-16 16:32:50 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:32:50 [info     ] queue_processor.processing_submission n_listings=33 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115179
+2026-09-16 16:32:50 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=33 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=33 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:32:50 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=33 ingested=0 submission_id=115179
+2026-09-16 16:32:50 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:32:50 [info     ] queue_processor.processing_submission n_listings=36 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115180
+2026-09-16 16:32:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP ProLiant DL360 Gen9 CPU Blank
+2026-09-16 16:32:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Intel Server System R2208 S2600WFT 2U Rack Server
+2026-09-16 16:32:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP ProLiant XL170r Gen10 Server Node
+2026-09-16 16:32:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QuantaPlex T42D-2U Node Server
+2026-09-16 16:32:53 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=6 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=12.8 excluded_auctions=0 new_listings=0
+2026-09-16 16:32:53 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=6 ingested=0 submission_id=115198
+2026-09-16 16:32:54 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:32:54 [info     ] queue_processor.processing_submission n_listings=40 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115209
+2026-09-16 16:32:54 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:32:54 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=115209
+2026-09-16 16:32:54 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:32:54 [info     ] queue_processor.processing_submission n_listings=39 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115210
+2026-09-16 16:32:54 [warning  ] gem_radar.reject_malformed_awdit_listings count=3 titles=['SAVE 8%', 'SAVE 6%', 'SAVE 14%']
+2026-09-16 16:32:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Clear all
+2026-09-16 16:32:56 [debug    ] cpk_extractor.invalid_category category=mouse title=HyperX
+Pulsefire Core RGB Gaming Mouse
+2026-09-16 16:32:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PCSpecialist
+Wraith 185 Gaming PC - Ryzen 7 7800X3
+2026-09-16 16:32:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PCSpecialist
+Wraith 184 Gaming PC - Ryzen 7 7800X3
+2026-09-16 16:32:58 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MSI MAG 322UP QD-OLED E16 32 inch 165Hz 0.03ms
+2026-09-16 16:32:58 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=14 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=18 elapsed_s=14.5 excluded_auctions=0 new_listings=1
+2026-09-16 16:32:58 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=14 ingested=1 submission_id=115221
+2026-09-16 16:32:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:32:58 [info     ] queue_processor.submission_released search_id=intel-gpu
+2026-09-16 16:32:58 [info     ] queue_processor.processing_submission n_listings=22 query=Intel GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=intel-gpu submission_id=115224
+2026-09-16 16:32:59 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:32:59 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:33:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:08 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:09 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:33:09 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:33:09 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=42 elapsed_s=23.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:33:09 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=115231
+2026-09-16 16:33:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:10 [info     ] queue_processor.submission_released search_id=asus-motherboard
+2026-09-16 16:33:10 [info     ] queue_processor.processing_submission n_listings=46 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115232
+2026-09-16 16:33:10 [warning  ] gem_radar.reject_malformed_awdit_listings count=3 titles=['SAVE 13%', 'SAVE 10%', 'SAVE 14%']
+2026-09-16 16:33:11 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:33:11 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:33:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:17 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:17 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:20 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:20 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:33:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:33:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:33:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:33:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:33:31 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=10 cross_run_dupes_unchanged_price=26 elapsed_s=40.4 excluded_auctions=0 new_listings=0
+2026-09-16 16:33:31 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115180
+2026-09-16 16:33:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:33:32 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:33:32 [info     ] queue_processor.processing_submission n_listings=40 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115181
+2026-09-16 16:33:32 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.6 excluded_auctions=0 new_listings=0
+2026-09-16 16:33:32 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=115181
+2026-09-16 16:33:32 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:33:32 [info     ] queue_processor.processing_submission n_listings=24 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115182
+2026-09-16 16:33:33 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=24 cross_run_dupes_price_updated=3 cross_run_dupes_unchanged_price=21 elapsed_s=0.3 excluded_auctions=0 new_listings=0
+2026-09-16 16:33:33 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=24 ingested=0 submission_id=115182
+2026-09-16 16:33:33 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:33:33 [info     ] queue_processor.processing_submission n_listings=46 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115185
+2026-09-16 16:33:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:33:33 [debug    ] cpk_extractor.invalid_category category=monitor title=GIGABYTE GO27Q24A 27" QD-OLED QHD Gaming Monitor -
+2026-09-16 16:33:33 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=35 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=36 elapsed_s=39.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:33:33 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=35 ingested=0 submission_id=115210
+2026-09-16 16:33:33 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:33:33 [info     ] queue_processor.processing_submission n_listings=10 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115213
+2026-09-16 16:33:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewSale
+2026-09-16 16:33:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:33:36 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=15 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=22 elapsed_s=37.8 excluded_auctions=0 new_listings=0
+2026-09-16 16:33:36 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=15 ingested=0 submission_id=115224
+2026-09-16 16:33:36 [info     ] queue_processor.submission_released search_id=intel-gpu
+2026-09-16 16:33:36 [info     ] queue_processor.processing_submission n_listings=59 query=ASUS motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=asus-motherboard submission_id=115233
+2026-09-16 16:33:39 [debug    ] cpk_extractor.invalid_category category=monitor title=GIGABYTE GO27Q24A 27" QD-OLED QHD Gaming Monitor -
+2026-09-16 16:33:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT Tower 600 Ryzen 5 9600X Nvidia RTX 5060 Lim
+2026-09-16 16:33:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT A31 BTF AMD Ryzen 9600X Nvidia Geforce RTX
+2026-09-16 16:33:41 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram title=AWD-IT 120A Mesh Ryzen 7 5700X 8 Core NVIDIA RTX 5
+2026-09-16 16:33:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision T7820 Workstation
+2026-09-16 16:33:43 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram title=AWD-IT 3D ARGB Ryzen 5600X 6 Core NVIDIA RTX 5070
+2026-09-16 16:33:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell PowerEdge FC640 Server Node
+2026-09-16 16:33:45 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram title=AWD-IT Fractal North Ryzen 5 9600X NVIDIA RTX 5070
+2026-09-16 16:33:45 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=37 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=43 elapsed_s=35.6 excluded_auctions=0 new_listings=0
+2026-09-16 16:33:45 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=37 ingested=0 submission_id=115232
+2026-09-16 16:33:46 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:33:46 [info     ] queue_processor.processing_submission n_listings=39 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115234
+2026-09-16 16:33:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lenovo ThinkStation P920 Workstation
+2026-09-16 16:33:46 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=7 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=13.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:33:46 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=7 ingested=0 submission_id=115213
+2026-09-16 16:33:47 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:33:47 [info     ] queue_processor.processing_submission n_listings=80 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115216
+2026-09-16 16:33:48 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=39 cross_run_dupes_price_updated=3 cross_run_dupes_unchanged_price=36 elapsed_s=1.6 excluded_auctions=0 new_listings=0
+2026-09-16 16:33:48 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=39 ingested=0 submission_id=115234
+2026-09-16 16:33:48 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:33:48 [info     ] queue_processor.processing_submission n_listings=4 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115240
+2026-09-16 16:33:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=ASUS
+ASUS ZenDrive U9M \u2013 Ultra-slim Portable 8X DV
+2026-09-16 16:33:50 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+ZenScreen MB166C 15.6 inch Portable USB-C Mon
+2026-09-16 16:33:50 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=43 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=45 elapsed_s=17.3 excluded_auctions=0 new_listings=0
+2026-09-16 16:33:50 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=43 ingested=0 submission_id=115185
+2026-09-16 16:33:51 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:33:51 [info     ] queue_processor.processing_submission n_listings=26 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115183
+2026-09-16 16:33:52 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+ZenScreen MB169CK 15.6 inch Portable USB FHD
+2026-09-16 16:33:53 [debug    ] cpk_extractor.invalid_category category=router title=ASUS
+ASUS RT-BE92U Tri-band WiFi 7 Router
+2026-09-16 16:33:54 [debug    ] cpk_extractor.invalid_category category=keyboard title=ASUS
+ASUS ROG Strix Scope II 96 Wireless Gaming Ke
+2026-09-16 16:33:54 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+ASUS ROG Strix OLED XG27AQDNG gaming monitor
+2026-09-16 16:33:56 [debug    ] cpk_extractor.invalid_category category=router title=ASUS
+ASUS GS-BE18000 Tri-band WiFi 7 Gaming Router
+2026-09-16 16:33:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=ASUS
+ASUS ROG Azoth -NX Red Wireless Gaming Keyboa
+2026-09-16 16:33:57 [debug    ] cpk_extractor.invalid_category category=keyboard title=ASUS
+ASUS ROG Strix Scope II X Gaming Keyboard
+2026-09-16 16:33:57 [debug    ] cpk_extractor.invalid_category category=mouse title=ASUS
+ASUS ROG Harpe Ace Aim Lab Edition Wireless M
+2026-09-16 16:33:59 [debug    ] cpk_extractor.invalid_category category=keyboard title=ASUS
+ROG Falchion Ace HFX Gaming Keyboard
+2026-09-16 16:34:01 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+ROG Strix XG32WCS 32 inch 180 Hz USB-C Curved
+2026-09-16 16:34:01 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+TUF Gaming Series 5 VG279QML5A 27 inch 240Hz
+2026-09-16 16:34:02 [debug    ] cpk_extractor.invalid_category category=headset title=ASUS
+ASUS ROG Delta II Wireless Headset
+2026-09-16 16:34:02 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+VA279HG 27 inch Full HD 1ms IPS Gaming Monito
+2026-09-16 16:34:05 [debug    ] cpk_extractor.invalid_category category=router title=ASUS
+ASUS RT-BE55 WiFi 7 AiMesh Extendable Router
+2026-09-16 16:34:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=ASUS
+ASUS RT-BE58 Go Travel Router 4G and 5G Mobil
+2026-09-16 16:34:06 [debug    ] cpk_extractor.invalid_category category=router title=ASUS
+ASUS ZenWiFi BD4 Dual-band WiFi 7 AiMesh Exte
+2026-09-16 16:34:06 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+ASUS ROG Strix XG27ACMS 27 inch 320Hz Gaming
+2026-09-16 16:34:08 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=ASUS
+ASUS ROG Pelta RGB Wireless Gaming Headset
+2026-09-16 16:34:09 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+VA249HG 23.8 inch Full HD 1ms IPS Gaming Moni
+2026-09-16 16:34:09 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+ProArt Display PA247CV 23.8 inch IPS Professi
+2026-09-16 16:34:10 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+ASUS ROG Strix OLED XG27ACDMS 27 inch QD-OLED
+2026-09-16 16:34:12 [debug    ] cpk_extractor.invalid_category category=headset title=ASUS
+ASUS TUF Gaming H3 Headset
+2026-09-16 16:34:12 [debug    ] cpk_extractor.invalid_category category=router title=ASUS
+ASUS RT-BE90U Tri-band WiFi 7 AiMesh Extendab
+2026-09-16 16:34:13 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+TUF Gaming VG249QE5A 23.8 inch 1ms IPS Full H
+2026-09-16 16:34:14 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+ProArt Display PA278CV 27 inch IPS WQHD Profe
+2026-09-16 16:34:17 [debug    ] cpk_extractor.invalid_category category=router title=ASUS
+ASUS ZenWiFi BD4 Dual-band WiFi 7 AiMesh Exte
+2026-09-16 16:34:17 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=31 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=59 elapsed_s=40.4 excluded_auctions=0 new_listings=0
+2026-09-16 16:34:17 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=31 ingested=0 submission_id=115233
+2026-09-16 16:34:17 [info     ] queue_processor.submission_released search_id=asus-motherboard
+2026-09-16 16:34:17 [info     ] queue_processor.processing_submission n_listings=10 query=ASUS motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=asus-motherboard submission_id=115239
+2026-09-16 16:34:17 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram title=AWD-IT FRAME 4000D RS RGB White Ryzen 9 5950X NVID
+2026-09-16 16:34:17 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=3 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=4 elapsed_s=29.4 excluded_auctions=0 new_listings=0
+2026-09-16 16:34:17 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=3 ingested=0 submission_id=115240
+2026-09-16 16:34:17 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:34:17 [info     ] queue_processor.processing_submission n_listings=40 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115242
+2026-09-16 16:34:17 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=3 cross_run_dupes_unchanged_price=37 elapsed_s=0.3 excluded_auctions=0 new_listings=0
+2026-09-16 16:34:17 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=115242
+2026-09-16 16:34:17 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:34:17 [info     ] queue_processor.processing_submission n_listings=28 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=115243
+2026-09-16 16:34:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Intel Core Ultra 225 Socket 1851 Core Ultra 100&20
+2026-09-16 16:34:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Intel 300 1700 Core LGA1700 Desktop CPU BX80715300
+2026-09-16 16:34:26 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=78 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=39.4 excluded_auctions=0 new_listings=40
+2026-09-16 16:34:26 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=78 ingested=40 submission_id=115216
+2026-09-16 16:34:27 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:34:27 [info     ] queue_processor.processing_submission n_listings=35 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115217
+2026-09-16 16:34:27 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=35 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=35 elapsed_s=0.3 excluded_auctions=0 new_listings=0
+2026-09-16 16:34:27 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=35 ingested=0 submission_id=115217
+2026-09-16 16:34:27 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:34:27 [info     ] queue_processor.processing_submission n_listings=4 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115218
+2026-09-16 16:34:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:34:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewSale
+2026-09-16 16:34:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewSale
+2026-09-16 16:34:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewSale
+2026-09-16 16:34:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:34:31 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=21 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=26 elapsed_s=39.9 excluded_auctions=0 new_listings=0
+2026-09-16 16:34:31 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=21 ingested=0 submission_id=115183
+2026-09-16 16:34:31 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:34:31 [info     ] queue_processor.processing_submission n_listings=38 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115184
+2026-09-16 16:34:31 [warning  ] gem_radar.reject_malformed_awdit_listings count=19 titles=['SAVE 11%', 'SAVE 21%', 'SAVE 5%', 'SAVE 9%', 'SAVE 9%']
+2026-09-16 16:34:31 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+ProArt Display PA248CRV 24 inch Professional
+2026-09-16 16:34:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:34:33 [debug    ] cpk_extractor.invalid_category category=router title=ASUS
+ASUS ZenWiFi BD4 Outdoor Dual-band WiFi 7 AiM
+2026-09-16 16:34:33 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=8 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=16.0 excluded_auctions=0 new_listings=0
+2026-09-16 16:34:33 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=8 ingested=0 submission_id=115239
+2026-09-16 16:34:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:34:34 [info     ] queue_processor.submission_released search_id=asus-motherboard
+2026-09-16 16:34:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:34:34 [info     ] queue_processor.processing_submission n_listings=39 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115250
+2026-09-16 16:34:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:34:35 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=39 cross_run_dupes_price_updated=4 cross_run_dupes_unchanged_price=35 elapsed_s=0.6 excluded_auctions=0 new_listings=0
+2026-09-16 16:34:35 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=39 ingested=0 submission_id=115250
+2026-09-16 16:34:35 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:34:35 [info     ] queue_processor.processing_submission n_listings=26 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115254
+2026-09-16 16:34:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:34:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:34:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:34:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:34:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:34:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:34:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:34:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:34:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:34:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:34:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:34:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:34:41 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=12 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=28 elapsed_s=23.7 excluded_auctions=0 new_listings=0
+2026-09-16 16:34:41 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=12 ingested=0 submission_id=115243
+2026-09-16 16:34:41 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 16:34:41 [info     ] queue_processor.processing_submission n_listings=38 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=115251
+INFO:     127.0.0.1:63725 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+2026-09-16 16:34:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:34:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:34:44 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|motherboard title=AWD-IT FRAME 4000D RS RGB White Ryzen 9 5950X NVID
+2026-09-16 16:34:44 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=3 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=4 elapsed_s=16.8 excluded_auctions=0 new_listings=0
+2026-09-16 16:34:44 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=3 ingested=0 submission_id=115218
+2026-09-16 16:34:44 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:34:44 [info     ] queue_processor.processing_submission n_listings=40 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115220
+2026-09-16 16:34:45 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.4 excluded_auctions=0 new_listings=0
+2026-09-16 16:34:45 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=115220
+2026-09-16 16:34:45 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:34:45 [info     ] queue_processor.processing_submission n_listings=26 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115225
+2026-09-16 16:34:45 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=26 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=26 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:34:45 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=26 ingested=0 submission_id=115225
+2026-09-16 16:34:45 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:34:45 [info     ] queue_processor.processing_submission n_listings=10 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115228
+2026-09-16 16:34:45 [debug    ] cpk_extractor.invalid_category category=monitor title=GIGABYTE GO27Q24A 27" QD-OLED QHD Gaming Monitor -
+2026-09-16 16:34:45 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=18 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=19 elapsed_s=14.3 excluded_auctions=0 new_listings=0
+2026-09-16 16:34:45 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=18 ingested=0 submission_id=115184
+2026-09-16 16:34:45 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:34:45 [info     ] queue_processor.processing_submission n_listings=77 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115186
+2026-09-16 16:34:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:34:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:34:46 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=22 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=26 elapsed_s=11.6 excluded_auctions=0 new_listings=0
+2026-09-16 16:34:46 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=22 ingested=0 submission_id=115254
+2026-09-16 16:34:46 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 16:34:46 [info     ] queue_processor.processing_submission n_listings=46 query=AMD GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=amd-gpu submission_id=115255
+2026-09-16 16:34:46 [warning  ] gem_radar.reject_malformed_awdit_listings count=4 titles=['SAVE 17%', 'SAVE 11%', 'SAVE 17%', 'SAVE 11%']
+2026-09-16 16:34:48 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MAG401QR 40 Inch UWQHD 155Hz Gaming monitor
+2026-09-16 16:34:49 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MAG 325QF E18V 31.5 inch WQHD Gaming Monitor
+2026-09-16 16:34:50 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MSI MAG 321CQF E18 32 inch 180Hz WQHD Curved G
+2026-09-16 16:34:50 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MSI MAG 322UP QD-OLED E16 32 inch 165Hz 0.03ms
+2026-09-16 16:34:52 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MAG 275QF X32 27 inch WQHD 320Hz Gaming Monito
+2026-09-16 16:34:54 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+PRO MP251 E14L 24 inch IPS 144Hz Monitor
+2026-09-16 16:34:54 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+PRO MP223 E2 21.45 inch FHD Monitor
+2026-09-16 16:34:54 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+Pro MP251W E2 24.5 inch 120Hz Full HD IPS Moni
+2026-09-16 16:34:55 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MSI MPG 272URX QD-OLED 27 inch 240Hz 0.03ms US
+2026-09-16 16:34:59 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=MSI
+MSI Claw 8 AI+ A2VM Glacier Blue Edition-232UK
+2026-09-16 16:34:59 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MAG 274QP QD-OLED X24 27 inch WQHD 240Hz Gamin
+2026-09-16 16:35:00 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MAG 244C 24 inch 180Hz Curved Gaming Monitor
+2026-09-16 16:35:00 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+PRO MP273QW E14 27 inch 144Hz IPS Monitor
+2026-09-16 16:35:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lenovo ThinkSystem D2 7X20 2U Node Server & 4x SD5
+2026-09-16 16:35:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell PowerEdge M640 Server Blade
+INFO:     127.0.0.1:49320 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+2026-09-16 16:35:04 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+PRO MP271 E14A 27 inch IPS 144Hz IPS Monitor
+2026-09-16 16:35:04 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+PRO MP273U 27 Inch 3840x2160 UHD 60Hz monitor
+2026-09-16 16:35:04 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=38 elapsed_s=22.8 excluded_auctions=0 new_listings=0
+2026-09-16 16:35:04 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=115251
+2026-09-16 16:35:04 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 16:35:04 [info     ] queue_processor.processing_submission n_listings=40 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115258
+2026-09-16 16:35:05 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=4 cross_run_dupes_unchanged_price=36 elapsed_s=0.4 excluded_auctions=0 new_listings=0
+2026-09-16 16:35:05 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=115258
+2026-09-16 16:35:05 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:35:05 [info     ] queue_processor.processing_submission n_listings=27 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115261
+2026-09-16 16:35:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell EMC PowerEdge MX740c Server Blade
+2026-09-16 16:35:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lenovo ThinkSystem SN550-7X16 Server Blade
+2026-09-16 16:35:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QuantaGrid D52BQ-2U Rack Server
+2026-09-16 16:35:07 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=5 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=22.7 excluded_auctions=0 new_listings=0
+2026-09-16 16:35:07 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=5 ingested=0 submission_id=115228
+2026-09-16 16:35:07 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:35:07 [info     ] queue_processor.processing_submission n_listings=21 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115230
+2026-09-16 16:35:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Amd Ryzen 9950x3d 9950x 9900x3d 9900x 9800x3d 9700
+2026-09-16 16:35:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AMD Ryzen R7 9800X3D 7800X3D 9700X 9600X New Loose
+2026-09-16 16:35:19 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=74 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=37 elapsed_s=33.4 excluded_auctions=0 new_listings=40
+2026-09-16 16:35:19 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=74 ingested=40 submission_id=115186
+2026-09-16 16:35:19 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:35:19 [info     ] queue_processor.processing_submission n_listings=31 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115187
+2026-09-16 16:35:19 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=31 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=31 elapsed_s=0.3 excluded_auctions=0 new_listings=0
+2026-09-16 16:35:19 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=31 ingested=0 submission_id=115187
+2026-09-16 16:35:19 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:35:19 [info     ] queue_processor.processing_submission n_listings=43 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115188
+2026-09-16 16:35:22 [debug    ] cpk_extractor.invalid_category category=monitor title=GIGABYTE GO27Q24A 27" QD-OLED QHD Gaming Monitor -
+2026-09-16 16:35:22 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT PROJECT ZERO AMD Ryzen 5 9600X RTX 5070 12G
+2026-09-16 16:35:24 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram title=AWD-IT Sneaker X AMD Ryzen 5 9600X RTX 5070 12GB D
+2026-09-16 16:35:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT AMD Ryzen 7800X3D RTX 5070 Ti 16GB Flight S
+2026-09-16 16:35:26 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram title=AWD-IT Evolv X2 White AMD Ryzen 5 9600X RTX 5080 1
+2026-09-16 16:35:27 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram title=AWD-IT Hyte X50 AMD Ryzen 5 9600X RTX 5070 12GB De
+2026-09-16 16:35:27 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram title=AWD-IT G400A AMD Ryzen 5 8400F Six Core RTX 5080 1
+2026-09-16 16:35:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Clear all
+2026-09-16 16:35:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT A31 BTF AMD Ryzen 9600X Nvidia Geforce RTX
+2026-09-16 16:35:31 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Level UP AMD Ryzen 8500G Six Core Radeon 74
+2026-09-16 16:35:32 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Level UP AMD Ryzen 5 4500 Six Core RTX 3050
+2026-09-16 16:35:32 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=31 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=42 elapsed_s=45.0 excluded_auctions=0 new_listings=0
+2026-09-16 16:35:32 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=31 ingested=0 submission_id=115255
+2026-09-16 16:35:32 [info     ] queue_processor.submission_released search_id=amd-gpu
+2026-09-16 16:35:32 [info     ] queue_processor.processing_submission n_listings=21 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115263
+2026-09-16 16:35:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=GMB
+GMB Large Gaming Mouse Desk Pad with RGB Light
+2026-09-16 16:35:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=GORILLA GAMING KILLER CORE GAMING PC
+2026-09-16 16:35:34 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=20 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=21 elapsed_s=26.8 excluded_auctions=0 new_listings=0
+2026-09-16 16:35:34 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=20 ingested=0 submission_id=115230
+2026-09-16 16:35:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Seagate
+Seagate Storage Expansion Card for Xbox Se
+2026-09-16 16:35:35 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=24 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=26 elapsed_s=29.6 excluded_auctions=0 new_listings=1
+2026-09-16 16:35:35 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=24 ingested=1 submission_id=115261
+2026-09-16 16:35:35 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:35:35 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 16:35:35 [info     ] queue_processor.processing_submission n_listings=98 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115235
+2026-09-16 16:35:35 [info     ] queue_processor.processing_submission n_listings=40 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115264
+2026-09-16 16:35:35 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=38 elapsed_s=0.4 excluded_auctions=0 new_listings=0
+2026-09-16 16:35:35 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=115264
+2026-09-16 16:35:35 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:35:35 [info     ] queue_processor.processing_submission n_listings=4 query=AMD GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=amd-gpu submission_id=115265
+2026-09-16 16:35:36 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=42 elapsed_s=16.8 excluded_auctions=0 new_listings=0
+2026-09-16 16:35:36 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=115188
+2026-09-16 16:35:37 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:35:37 [info     ] queue_processor.processing_submission n_listings=40 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115189
+2026-09-16 16:35:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:35:38 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=1.0 excluded_auctions=0 new_listings=0
+2026-09-16 16:35:38 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=115189
+2026-09-16 16:35:38 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:35:38 [info     ] queue_processor.processing_submission n_listings=4 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115190
+2026-09-16 16:35:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:35:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:35:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewRefurbished
+2026-09-16 16:35:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewRefurbished
+2026-09-16 16:35:40 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=16 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=21 elapsed_s=7.7 excluded_auctions=0 new_listings=0
+2026-09-16 16:35:40 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=16 ingested=0 submission_id=115263
+2026-09-16 16:35:40 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 16:35:40 [info     ] queue_processor.processing_submission n_listings=36 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115268
+2026-09-16 16:35:40 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=36 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=36 elapsed_s=0.5 excluded_auctions=0 new_listings=0
+2026-09-16 16:35:40 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=36 ingested=0 submission_id=115268
+2026-09-16 16:35:40 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:35:40 [info     ] queue_processor.processing_submission n_listings=91 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115269
+2026-09-16 16:35:42 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram title=AWD-IT FRAME 4000D RS RGB White Ryzen 9 5950X NVID
+2026-09-16 16:35:42 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=3 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=4 elapsed_s=6.4 excluded_auctions=0 new_listings=0
+2026-09-16 16:35:42 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=3 ingested=0 submission_id=115265
+2026-09-16 16:35:42 [info     ] queue_processor.submission_released search_id=amd-gpu
+2026-09-16 16:35:42 [info     ] queue_processor.processing_submission n_listings=22 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115271
+2026-09-16 16:35:44 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|motherboard title=AWD-IT FRAME 4000D RS RGB White Ryzen 9 5950X NVID
+2026-09-16 16:35:44 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=3 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=4 elapsed_s=6.0 excluded_auctions=0 new_listings=0
+2026-09-16 16:35:44 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=3 ingested=0 submission_id=115190
+2026-09-16 16:35:44 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:35:44 [info     ] queue_processor.processing_submission n_listings=36 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115191
+2026-09-16 16:35:47 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Western Digital
+WD 4TB External Hard Drive
+2026-09-16 16:35:47 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Western Digital
+WD 4TB Portable Gaming Hard Drive
+2026-09-16 16:35:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:35:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:35:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Western Digital
+18TB Elements Desktop External Har
+2026-09-16 16:35:53 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=17 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=21 elapsed_s=10.8 excluded_auctions=0 new_listings=1
+2026-09-16 16:35:53 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=17 ingested=1 submission_id=115271
+2026-09-16 16:35:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:35:53 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 16:35:53 [info     ] queue_processor.processing_submission n_listings=19 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=115275
+2026-09-16 16:35:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:35:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:35:55 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:35:55 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:35:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:35:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:35:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:35:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:35:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:35:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:35:59 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:36:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:36:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:08 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:09 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:09 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:09 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:11 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:11 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:36:12 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=3 cross_run_dupes_unchanged_price=33 elapsed_s=28.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:36:12 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115191
+2026-09-16 16:36:12 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:36:12 [info     ] queue_processor.processing_submission n_listings=21 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115193
+2026-09-16 16:36:13 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=21 cross_run_dupes_price_updated=3 cross_run_dupes_unchanged_price=18 elapsed_s=0.6 excluded_auctions=0 new_listings=0
+2026-09-16 16:36:13 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=21 ingested=0 submission_id=115193
+2026-09-16 16:36:13 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:36:13 [info     ] queue_processor.processing_submission n_listings=85 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115195
+2026-09-16 16:36:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Intel Processors Core i7 CPU 6th 7th 8th 9th 10th
+2026-09-16 16:36:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Intel i5 10th i5 11th i5 12th Gen i5 13th Gen i5 1
+2026-09-16 16:36:17 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=95 cross_run_dupes_price_updated=7 cross_run_dupes_unchanged_price=82 elapsed_s=42.0 excluded_auctions=0 new_listings=9
+2026-09-16 16:36:17 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=95 ingested=9 submission_id=115235
+2026-09-16 16:36:17 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:36:17 [info     ] queue_processor.processing_submission n_listings=7 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115238
+2026-09-16 16:36:17 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=7 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=7 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:36:17 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=7 ingested=0 submission_id=115238
+2026-09-16 16:36:17 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:36:17 [info     ] queue_processor.processing_submission n_listings=92 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115241
+2026-09-16 16:36:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=NVIDIA/AMD  Graphics card GPU repair service
+2026-09-16 16:36:20 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=89 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=85 elapsed_s=40.0 excluded_auctions=0 new_listings=6
+2026-09-16 16:36:20 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=89 ingested=6 submission_id=115269
+2026-09-16 16:36:20 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:36:20 [info     ] queue_processor.processing_submission n_listings=87 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115272
+2026-09-16 16:36:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:36:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:36:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:36:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:36:23 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=15 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=19 elapsed_s=29.9 excluded_auctions=0 new_listings=0
+2026-09-16 16:36:23 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=15 ingested=0 submission_id=115275
+2026-09-16 16:36:23 [info     ] queue_processor.submission_released search_id=ddr5-udimm-ram
+2026-09-16 16:36:23 [info     ] queue_processor.processing_submission n_listings=45 query=Intel GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=intel-gpu submission_id=115280
+2026-09-16 16:36:23 [warning  ] gem_radar.reject_malformed_awdit_listings count=8 titles=['SAVE 7%', 'SAVE 13%', 'SAVE 10%', 'SAVE 11%', 'SAVE 12%']
+2026-09-16 16:36:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Joblot Vintage Desktop CPU\u2019s (Intel/AMD)
+2026-09-16 16:36:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CPU Clamshell Case for AMD AM4 AM3 938 939 940 wit
+2026-09-16 16:36:28 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=81 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=83 elapsed_s=15.4 excluded_auctions=0 new_listings=1
+2026-09-16 16:36:28 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=81 ingested=1 submission_id=115195
+2026-09-16 16:36:29 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:36:29 [info     ] queue_processor.processing_submission n_listings=18 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115196
+2026-09-16 16:36:29 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=18 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=18 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:36:29 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=18 ingested=0 submission_id=115196
+2026-09-16 16:36:29 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:36:29 [info     ] queue_processor.processing_submission n_listings=40 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115197
+2026-09-16 16:36:29 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.3 excluded_auctions=0 new_listings=0
+2026-09-16 16:36:29 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=115197
+2026-09-16 16:36:29 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:36:29 [info     ] queue_processor.processing_submission n_listings=83 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115199
+2026-09-16 16:36:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1 CPU Case Tray Packaging Clamshell for Intel LGA1
+2026-09-16 16:36:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Intel Core i3 CPU 6th 7th 8th 9th Gen @ 4.2 GHz Du
+2026-09-16 16:36:35 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=88 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=88 elapsed_s=17.4 excluded_auctions=0 new_listings=2
+2026-09-16 16:36:35 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=88 ingested=2 submission_id=115241
+2026-09-16 16:36:35 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:36:35 [info     ] queue_processor.processing_submission n_listings=54 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115244
+2026-09-16 16:36:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Adjustable GPU Brace support - 3D PRINTED
+2026-09-16 16:36:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Pair of NVIDIA Graphics card GPU 300 and 315
+2026-09-16 16:36:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z2 G4 Tower i9-9900K  16GB, 240GB SSD, Win11 Pr
+2026-09-16 16:36:38 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=83 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=86 elapsed_s=17.6 excluded_auctions=0 new_listings=0
+2026-09-16 16:36:38 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=83 ingested=0 submission_id=115272
+2026-09-16 16:36:38 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:36:38 [info     ] queue_processor.processing_submission n_listings=25 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115273
+2026-09-16 16:36:39 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=25 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=25 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:36:39 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=25 ingested=0 submission_id=115273
+2026-09-16 16:36:39 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:36:39 [info     ] queue_processor.processing_submission n_listings=40 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115274
+2026-09-16 16:36:39 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=39 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:36:39 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=115274
+2026-09-16 16:36:39 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:36:39 [info     ] queue_processor.processing_submission n_listings=48 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115276
+2026-09-16 16:36:39 [debug    ] cpk_extractor.invalid_category category=monitor title=GIGABYTE GO27Q24A 27" QD-OLED QHD Gaming Monitor -
+2026-09-16 16:36:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT Elite 301 Ryzen 5 5500 Intel ARC B570 10GB
+2026-09-16 16:36:43 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Solar Intel Core i5 14400F 10 Core RTX 5070
+2026-09-16 16:36:44 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT HYTE Y60 Intel Core Ultra 5 245KF RTX 5070
+2026-09-16 16:36:45 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram title=AWD-IT Forge M120R ARGB Intel i5 14400F Six Core R
+2026-09-16 16:36:45 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=32 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=37 elapsed_s=21.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:36:45 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=32 ingested=0 submission_id=115280
+2026-09-16 16:36:45 [info     ] queue_processor.submission_released search_id=intel-gpu
+2026-09-16 16:36:45 [info     ] queue_processor.processing_submission n_listings=20 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=115281
+2026-09-16 16:36:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Clamshell for AMD 938 940 AM2 AM3 AM3 FM1 2 CPU Ho
+2026-09-16 16:36:47 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=3D printed Motherboard Socket CPU Protector Plasti
+2026-09-16 16:36:48 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AMD Ryzen 5 5600G Processor (4.4 GHz, 6 Cores, Soc
+2026-09-16 16:36:48 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=79 cross_run_dupes_price_updated=3 cross_run_dupes_unchanged_price=80 elapsed_s=18.8 excluded_auctions=0 new_listings=0
+2026-09-16 16:36:48 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=79 ingested=0 submission_id=115199
+2026-09-16 16:36:49 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:36:49 [info     ] queue_processor.processing_submission n_listings=78 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115200
+2026-09-16 16:36:50 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=52 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=52 elapsed_s=14.8 excluded_auctions=0 new_listings=2
+2026-09-16 16:36:50 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=52 ingested=2 submission_id=115244
+2026-09-16 16:36:50 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:36:50 [info     ] queue_processor.processing_submission n_listings=1 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115246
+2026-09-16 16:36:50 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=1 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=1 elapsed_s=0.0 excluded_auctions=0 new_listings=0
+2026-09-16 16:36:50 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=1 ingested=0 submission_id=115246
+2026-09-16 16:36:50 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:36:50 [info     ] queue_processor.processing_submission n_listings=10 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115248
+2026-09-16 16:36:51 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Clear all
+2026-09-16 16:36:51 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Optiplex 7760 AiO DDR4 Motherboard with Intel
+2026-09-16 16:36:51 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=47 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=47 elapsed_s=12.5 excluded_auctions=0 new_listings=0
+2026-09-16 16:36:51 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=47 ingested=0 submission_id=115276
+2026-09-16 16:36:51 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:36:51 [info     ] queue_processor.processing_submission n_listings=45 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115279
+2026-09-16 16:36:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Western Digital
+Elements 20TB USB-A Desktop Extern
+2026-09-16 16:36:54 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=17 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=19 elapsed_s=8.5 excluded_auctions=0 new_listings=1
+2026-09-16 16:36:54 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=17 ingested=1 submission_id=115281
+2026-09-16 16:36:54 [info     ] queue_processor.submission_released search_id=ddr5-udimm-ram
+2026-09-16 16:36:54 [info     ] queue_processor.processing_submission n_listings=33 query=M.2 NVMe SSD -"m.2 case" -"ssd case" -adapter -"heatsink only" -enclosure -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=115288
+2026-09-16 16:37:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Wholesale AM4 ocket CPU AMD processor desktop appl
+2026-09-16 16:37:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Wholesale used AMD CPU AMD processor desktop CPU,1
+2026-09-16 16:37:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Wholesale refurbished EPYC CPU AMD Epyc brand proc
+2026-09-16 16:37:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Wholesale AM4 ocket CPU new CPU processor AMD bran
+2026-09-16 16:37:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Various AMD CPUs, all from working systems & all p
+2026-09-16 16:37:09 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Wholesale AM4 ocket processor new AMD Ryzen proces
+2026-09-16 16:37:11 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Wholesale AM4 ocket CPU used CPU processor AMD bra
+2026-09-16 16:37:11 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=69 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=36 elapsed_s=22.2 excluded_auctions=0 new_listings=42
+2026-09-16 16:37:11 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=69 ingested=42 submission_id=115200
+2026-09-16 16:37:11 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:37:11 [info     ] queue_processor.processing_submission n_listings=36 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115201
+2026-09-16 16:37:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=NetApp SolidFire H610S-2 1U Rack Server
+2026-09-16 16:37:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QuantaGrid D52B-1U Rack Server
+2026-09-16 16:37:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HPE ProLiant XL230k Gen10 Server Blade
+2026-09-16 16:37:13 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=7 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=22.7 excluded_auctions=0 new_listings=0
+2026-09-16 16:37:13 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=7 ingested=0 submission_id=115248
+2026-09-16 16:37:13 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:37:13 [info     ] queue_processor.processing_submission n_listings=50 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115249
+2026-09-16 16:37:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Custom built Desktop PC NZXT Noctua ASUS Nvidia GP
+2026-09-16 16:37:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:37:16 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=42 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=45 elapsed_s=24.6 excluded_auctions=0 new_listings=0
+2026-09-16 16:37:16 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=42 ingested=0 submission_id=115279
+2026-09-16 16:37:16 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:37:16 [info     ] queue_processor.processing_submission n_listings=15 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115282
+2026-09-16 16:37:16 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=15 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=15 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:37:16 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=15 ingested=0 submission_id=115282
+2026-09-16 16:37:16 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:37:16 [info     ] queue_processor.processing_submission n_listings=40 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115283
+2026-09-16 16:37:17 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.3 excluded_auctions=0 new_listings=0
+2026-09-16 16:37:17 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=115283
+2026-09-16 16:37:17 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:37:17 [info     ] queue_processor.processing_submission n_listings=85 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115284
+2026-09-16 16:37:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:37:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:37:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:37:20 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 16:37:20 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:37:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 16:37:21 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=25 cross_run_dupes_price_updated=3 cross_run_dupes_unchanged_price=30 elapsed_s=27.0 excluded_auctions=0 new_listings=0
+2026-09-16 16:37:21 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=25 ingested=0 submission_id=115288
+2026-09-16 16:37:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:21 [info     ] queue_processor.submission_released search_id=m2-nvme-ssd
+2026-09-16 16:37:21 [info     ] queue_processor.processing_submission n_listings=4 query=Intel GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=intel-gpu submission_id=115291
+2026-09-16 16:37:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:37:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:37:41 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=36 elapsed_s=29.7 excluded_auctions=0 new_listings=0
+2026-09-16 16:37:41 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115201
+2026-09-16 16:37:41 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:37:41 [info     ] queue_processor.processing_submission n_listings=9 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115202
+2026-09-16 16:37:41 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=9 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=9 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:37:41 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=9 ingested=0 submission_id=115202
+2026-09-16 16:37:41 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:37:41 [info     ] queue_processor.processing_submission n_listings=15 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115203
+2026-09-16 16:37:41 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=15 cross_run_dupes_price_updated=3 cross_run_dupes_unchanged_price=12 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:37:41 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=15 ingested=0 submission_id=115203
+2026-09-16 16:37:41 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:37:41 [info     ] queue_processor.processing_submission n_listings=22 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115204
+2026-09-16 16:37:42 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=22 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=22 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:37:42 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=22 ingested=0 submission_id=115204
+2026-09-16 16:37:42 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:37:42 [info     ] queue_processor.processing_submission n_listings=84 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115206
+2026-09-16 16:37:44 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT FRAME 4000D RS RGB White Ryzen 9 5950X NVID
+2026-09-16 16:37:44 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z2 G4 Tower i7-8700K  8GB, 240GB SSD, Win11 Pro
+2026-09-16 16:37:44 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=3 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=4 elapsed_s=22.7 excluded_auctions=0 new_listings=0
+2026-09-16 16:37:44 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=3 ingested=0 submission_id=115291
+2026-09-16 16:37:44 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=83 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=85 elapsed_s=27.3 excluded_auctions=0 new_listings=0
+2026-09-16 16:37:44 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=83 ingested=0 submission_id=115284
+2026-09-16 16:37:45 [info     ] queue_processor.submission_released search_id=intel-gpu
+2026-09-16 16:37:45 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:37:45 [info     ] queue_processor.processing_submission n_listings=21 query=M.2 NVMe SSD -"m.2 case" -"ssd case" -adapter -"heatsink only" -enclosure -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=115293
+2026-09-16 16:37:45 [info     ] queue_processor.processing_submission n_listings=87 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115289
+2026-09-16 16:37:46 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=50 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=46 elapsed_s=32.4 excluded_auctions=0 new_listings=2
+2026-09-16 16:37:46 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=50 ingested=2 submission_id=115249
+2026-09-16 16:37:46 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:37:46 [info     ] queue_processor.processing_submission n_listings=88 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115252
+2026-09-16 16:37:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AMD A10-7800 A10-7850K A10-7860K A10-7870K A10-789
+2026-09-16 16:37:53 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AMD Ryzen 3 Pro 2200G CPU Vega 8 Gfx Desktop Compu
+2026-09-16 16:37:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Intel, AMD, Cyrix Vintage CPU Microprocessors  Loc
+2026-09-16 16:37:55 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=77 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=82 elapsed_s=13.5 excluded_auctions=0 new_listings=1
+2026-09-16 16:37:55 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=77 ingested=1 submission_id=115206
+2026-09-16 16:37:55 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:37:56 [info     ] queue_processor.processing_submission n_listings=36 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115208
+2026-09-16 16:37:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Computer - Dual Nvidia GPU - i7 - 32GB RAM - Windo
+2026-09-16 16:37:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Origin
+Origin Inception 1TB PCIE 4.0 NVMe M.2 3D T
+2026-09-16 16:37:58 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=20 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=21 elapsed_s=13.6 excluded_auctions=0 new_listings=0
+2026-09-16 16:37:58 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=20 ingested=0 submission_id=115293
+2026-09-16 16:37:58 [info     ] queue_processor.submission_released search_id=m2-nvme-ssd
+2026-09-16 16:37:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Custom Gaming Desktop Tower PC - NVIDIA GeForce RT
+2026-09-16 16:37:59 [info     ] queue_processor.processing_submission n_listings=44 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=115298
+2026-09-16 16:38:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lenovo ThinkStation P350 Workstation Mini PC Intel
+2026-09-16 16:38:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=NVIDIA GPU Graphics Card KCC-REM-NVA-P2012 180-120
+2026-09-16 16:38:01 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=83 cross_run_dupes_price_updated=3 cross_run_dupes_unchanged_price=84 elapsed_s=16.3 excluded_auctions=0 new_listings=0
+2026-09-16 16:38:01 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=83 ingested=0 submission_id=115289
+2026-09-16 16:38:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Perfect replacement CPU cooler for Intel LGA1200 b
+2026-09-16 16:38:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:38:02 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=87 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=87 elapsed_s=15.4 excluded_auctions=0 new_listings=1
+2026-09-16 16:38:02 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=87 ingested=1 submission_id=115252
+2026-09-16 16:38:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:38:02 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:38:03 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:38:03 [info     ] queue_processor.processing_submission n_listings=4 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115290
+2026-09-16 16:38:03 [info     ] queue_processor.processing_submission n_listings=97 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115257
+2026-09-16 16:38:03 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=4 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=4 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:38:03 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=4 ingested=0 submission_id=115290
+2026-09-16 16:38:03 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:38:03 [info     ] queue_processor.processing_submission n_listings=40 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115292
+2026-09-16 16:38:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:38:04 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=39 elapsed_s=1.0 excluded_auctions=0 new_listings=0
+2026-09-16 16:38:04 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=115292
+2026-09-16 16:38:04 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:38:04 [info     ] queue_processor.processing_submission n_listings=78 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115294
+2026-09-16 16:38:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:38:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:38:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:38:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:38:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:38:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:38:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:38:08 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:38:08 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW

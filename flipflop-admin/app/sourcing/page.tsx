@@ -253,6 +253,8 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
     Math.max(skipped, 0),
     Math.max(safeMax - successful - failedCount, 0),
   );
+  // Percentage is successful output only. Failed/unavailable work is shown
+  // separately as patterned segments; empty track space remains pending.
   const pct = safeMax > 0 ? (successful / safeMax) * 100 : 0;
   const radius = 24;
   const circumference = 2 * Math.PI * radius;
@@ -287,7 +289,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
         )}
         {skippedLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={color} strokeWidth={2} fill="none" opacity="0.75"
+            cx={30} cy={30} r={radius} stroke={color} strokeWidth={4} fill="none" opacity="0.9"
             strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
             strokeDashoffset={-(successfulLength + failedLength)} strokeLinecap="round" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
@@ -431,7 +433,6 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
         ]);
         if (res.ok) {
           const data = await res.json();
-          setScanLock(data.scanLock);
           const activeScans = data.activeScans ?? [];
           const queueIsRunning = Boolean(
             queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0),
@@ -655,7 +656,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
 
         {scanLock?.state === "waiting" && (
           <div className="rounded-md border border-amber-800/70 bg-amber-950/30 px-3 py-2 text-xs text-amber-200">
-            Scrapers are waiting for the {scanLock.holderEnvironment ?? "other"} scan to finish. No second browser workload will start.
+            Scrapers are waiting for {scanLock.holderEnvironment === "DEV" ? "another DEV browser workload" : scanLock.holderEnvironment === "LIVE" ? "the LIVE browser workload" : "another browser workload"} to finish. No second browser workload will start.
           </div>
         )}
 
@@ -718,13 +719,6 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
               1,
             );
             const { isComplete } = scan;
-            // Once the API has marked this search complete, ingestion has
-            // finished and its own observed total is the authoritative
-            // denominator. This avoids a stale discovery/eligible snapshot
-            // leaving a completed ingestion gauge below 100%.
-            const ingestedGaugeMax = isComplete
-              ? Math.max(scan.ingestedCount, 1)
-              : searchTermTotal;
             const awaitingFinalScoring =
               !isComplete &&
               scan.activeSubmissions === 0 &&
@@ -736,35 +730,33 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             const failedIngested = isComplete ? Math.max(searchTermTotal - scan.ingestedCount, 0) : 0;
             const failedCpk = Math.min(
               scan.cpkFailedCount ?? 0,
-              Math.max(scan.ingestedCount - scan.cpkAssignedCount, 0),
+              Math.max(searchTermTotal - scan.cpkAssignedCount, 0),
             );
             // A CPK-assigned listing with no settled market price is already
             // known to be unmatched. It may become priced later if another
             // comparable listing settles the same CPK, so this dotted segment
             // can legitimately shrink while the scan is still running.
-            const failedMarketPrices = Math.max(
-              scan.cpkAssignedCount - scan.marketPricedCount,
-              0,
-            );
+            const failedMarketPrices = isComplete
+              ? Math.max(scan.cpkAssignedCount - scan.marketPricedCount, 0)
+              : 0;
             // There is no separate scoring-failure counter yet. A missing
             // classification therefore stays blank (pending) until the API
             // can distinguish a failed scoring attempt from phase-two work
             // that has not run.
-            // Scoring applies to CPK-assigned listings. CPK failures are
-            // already represented by the CPK gauge and must not inflate the
-            // score denominator or prevent a completed score pass reaching
-            // 100%.
-            const failedScores = isComplete
-              ? Math.max(scan.cpkAssignedCount - scan.classifiedCount, 0)
-              : 0;
+            // Keep upstream failures as the outlined/skipped segment at the
+            // next stage; they were never eligible for that stage. The
+            // current stage's own terminal failures use the patterned
+            // segment. Anything else remains an empty pending gap.
+            const failedScores = 0;
             const skippedCpk = failedIngested;
             const skippedMarketPrices = Math.min(
               failedIngested + failedCpk,
-              Math.max(scan.cpkAssignedCount - scan.marketPricedCount - failedMarketPrices, 0),
+              Math.max(searchTermTotal - scan.marketPricedCount - failedMarketPrices, 0),
             );
-            // The score denominator excludes listings that failed CPK, so
-            // there is no separate score-level skipped population here.
-            const skippedScores = 0;
+            const skippedScores = Math.min(
+              failedIngested + failedCpk,
+              Math.max(searchTermTotal - scan.classifiedCount, 0),
+            );
 
             return (
               <PixelCard key={scan.searchId || scan.query} variant={isComplete ? "emerald" : "default"}>
@@ -812,10 +804,10 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                         actually process. This preserves meaningful progress
                         and lets a finished stage reach 100% without hiding
                         upstream failures. */}
-                    <Gauge value={scan.ingestedCount} max={ingestedGaugeMax} failed={failedIngested} label="Ingested" color="#8b5cf6" />
-                    <Gauge value={scan.cpkAssignedCount} max={Math.max(scan.ingestedCount, 1)} failed={failedCpk} skipped={skippedCpk} label="CPK" color="#10b981" />
-                    <Gauge value={scan.marketPricedCount} max={Math.max(scan.cpkAssignedCount, 1)} failed={failedMarketPrices} skipped={skippedMarketPrices} label="M Prices" color="#f59e0b" />
-                    <Gauge value={scan.classifiedCount} max={Math.max(scan.cpkAssignedCount, 1)} failed={failedScores} skipped={skippedScores} label="Scores" color="#ec4899" />
+                    <Gauge value={scan.ingestedCount} max={searchTermTotal} failed={failedIngested} label="Ingested" color="#8b5cf6" />
+                    <Gauge value={scan.cpkAssignedCount} max={searchTermTotal} failed={failedCpk} skipped={skippedCpk} label="CPK" color="#10b981" />
+                    <Gauge value={scan.marketPricedCount} max={searchTermTotal} failed={failedMarketPrices} skipped={skippedMarketPrices} label="M Prices" color="#f59e0b" />
+                    <Gauge value={scan.classifiedCount} max={searchTermTotal} failed={failedScores} skipped={skippedScores} label="Scores" color="#ec4899" />
                   </div>
 
                   {vendorEntries.length > 0 && (

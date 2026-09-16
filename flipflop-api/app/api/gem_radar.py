@@ -2776,7 +2776,14 @@ def _scan_lock_response(environment: Literal["DEV", "LIVE"], acquired: bool) -> 
 
 @router.get("/scan-lock", response_model=ScanLockResponse)
 async def scan_lock_status(_: None = Depends(require_operator)) -> ScanLockResponse:
+    global _scan_lock
     async with _scan_lock_guard:
+        # Expired locks must be cleared during status reads as well as during
+        # acquisition. Otherwise a crashed/closed DEV scan leaves a stale
+        # warning visible forever and makes later dashboard polls flicker
+        # between an old waiting state and live pipeline data.
+        if _scan_lock is not None and _scan_lock["expires_at"] <= datetime.now(timezone.utc):
+            _scan_lock = None
         return _scan_lock_response("DEV", False)
 
 
