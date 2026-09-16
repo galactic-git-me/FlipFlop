@@ -1053,39 +1053,37 @@ async def get_scored_listings_latest_run(
     """
     from sqlalchemy import select, func, text
 
-    actionable_ids = await get_active_buy_it_now_listing_ids(db)
-    if not actionable_ids:
-        return []
-
-    # Run IDs are environment-tagged by the extension (dev-/live-). This is
-    # essential when DEV was restored from a LIVE database snapshot.
     run_environment = environment or _runtime_environment()
     run_id_prefix = _run_id_prefix(run_environment)
 
-    # Get the most recent search_run_id for this environment only.
-    latest_run_query = (
-        select(GemRadarScoredListing.search_run_id)
-        .where(
-            GemRadarScoredListing.search_run_id.is_not(None),
-            GemRadarScoredListing.search_run_id.like(run_id_prefix),
-        )
-        .order_by(GemRadarScoredListing.scored_at.desc())
-        .limit(1)
+    # The Phase 2 CPK classifier deliberately writes one stable internal
+    # search_run_id (``cpk-phase2-classify``), so scored rows no longer carry
+    # the DEV/LIVE scan prefix.  Scope the live snapshot from observations,
+    # where the extension's environment-tagged run_id is preserved, then join
+    # to the newest scored row for those exact listing IDs.
+    active_observations = await db.execute(
+        text("""
+            SELECT DISTINCT listing_id
+            FROM gem_radar_listing_observations
+            WHERE observed_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
+              AND listing_type = 'buy_it_now'
+              AND search_run_id LIKE :run_id_prefix
+        """),
+        {"run_id_prefix": run_id_prefix},
     )
-    result = await db.execute(latest_run_query)
-    latest_run_id = result.scalar_one_or_none()
-
-    if not latest_run_id:
+    actionable_ids = {row.listing_id for row in active_observations}
+    if not actionable_ids:
         return []
 
-    # Get the latest scored row for each listing_id in this run
+    # Get the latest scored row for each listing in this environment's active
+    # observation snapshot.  This remains isolated even when DEV and LIVE
+    # rows share the same database after a refresh.
     latest_scored_at = (
         select(
             GemRadarScoredListing.listing_id,
             func.max(GemRadarScoredListing.scored_at).label("scored_at"),
         )
         .where(
-            GemRadarScoredListing.search_run_id == latest_run_id,
             GemRadarScoredListing.listing_id.in_(actionable_ids),
         )
         .group_by(GemRadarScoredListing.listing_id)
