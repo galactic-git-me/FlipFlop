@@ -172,6 +172,13 @@ def start_submission(
     behind the "processed" gauge capping out well short of 100%. Callers
     that don't have a submission_id (the unqueued /scans path) fall back to
     the old always-add behaviour."""
+    # A new in-memory run begins with the first submission, including queued
+    # submissions. This is the boundary the dashboard uses to discard values
+    # from the previous sweep.
+    global _active_run_id
+    if not _active:
+        _active_run_id = uuid.uuid4().hex
+
     state = _active.get(search_id)
     if state is None:
         state = SearchRunState(search_id=search_id, query=query)
@@ -196,17 +203,6 @@ def start_submission(
 
 
 def exclude_discovered(search_id: str, discovered_key: str) -> None:
-    global _active_run_id
-    if not _active:
-        _active_run_id = uuid.uuid4().hex
-    # A new in-memory run begins with the first submission, including queued
-    # submissions.  This must live here (rather than in one of the later
-    # counters) because the dashboard uses runId to discard values from the
-    # previous sweep as soon as the first page of the new sweep arrives.
-    global _active_run_id
-    if not _active:
-        _active_run_id = uuid.uuid4().hex
-
     state = _active.get(search_id)
     if state is not None:
         state.excluded_discovered_keys.add(discovered_key)
