@@ -612,6 +612,7 @@ export const api = {
 
   gemRadar: {
     scoredListings: () => requestGemRadar<unknown[]>("/scored-listings"),
+    scoredListingsLatestRun: (environment?: "DEV" | "LIVE") => requestGemRadar<unknown[]>(`/scored-listings-latest-run${environment ? `?environment=${environment}` : ""}`),
     listings: () => requestGemRadar<unknown[]>("/listings"),
     currentGem: () => requestGemRadar<unknown>("/current-gem"),
     // This read model belongs to the main API database. Use the main API

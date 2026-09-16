@@ -11,8 +11,9 @@ import { PriceHistorySparkline } from "../../components/listings/PriceHistorySpa
 import { VendorLogo } from "../../components/VendorLogo";
 
 type ViewMode = "table" | "listings" | "grid";
+type CatalogueScope = "all" | "curated";
 type Variant = {
-  id: number; listing_id?: number; listing_title: string; image_url?: string | null; slot_type: string;
+  id: number; listing_id?: number | string; listing_title: string; image_url?: string | null; slot_type: string;
   playbook_id: number; status: string; tier: string; display_price: number;
   gem_score: number; consecutive_misses: number; last_seen_at: string;
   source_name?: string | null; channel_sources?: string[];
@@ -108,17 +109,42 @@ function SourcingDetails({ variant: v }: { variant: Variant }) {
 export default function CataloguePage() {
   const [variants, setVariants] = useState<Variant[]>([]);
   const [view, setView] = useState<ViewMode>("listings");
+  const [scope, setScope] = useState<CatalogueScope>("all");
   const [category, setCategory] = useState("All components");
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(50);
 
   const load = useCallback(async () => {
     setLoading(true);
-    try { setVariants((await api.catalogue.variants(status === "all" ? {} : { status })) as Variant[]); }
+    try {
+      if (scope === "all") {
+        const raw = await api.gemRadar.scoredListingsLatestRun(process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV") as Array<Record<string, unknown>>;
+        setVariants(raw.map((row, index) => ({
+          id: Number(row.id ?? index), listing_id: String(row.listing_id ?? row.id ?? index),
+          listing_title: String(row.title ?? "Untitled listing"), image_url: (row.image_url as string | null) ?? null,
+          slot_type: String(row.category ?? "other"), playbook_id: 0, status: "active", tier: String(row.classification ?? "unclassified"),
+          display_price: Number(row.actual_price ?? row.delivered_price ?? 0), gem_score: Number(row.deal_score ?? 0) * 10,
+          consecutive_misses: 0, last_seen_at: String(row.listing_observed_at ?? ""), source_name: (row.source as string | null) ?? "unknown",
+          channel_sources: row.source ? [String(row.source)] : [], price_history_listing_id: String(row.listing_id ?? row.id ?? index),
+          scored_market_lower_price: (row.market_lower_price as number | null) ?? null, scored_market_median_price: (row.market_median_price as number | null) ?? null,
+          scored_market_upper_price: (row.market_upper_price as number | null) ?? null, pct_offset: (row.pct_offset as number | null) ?? null,
+          watch_count: (row.watch_count as number | null) ?? null, offer_count: null, sold_count: (row.sold_listing_count as number | null) ?? null,
+          url: (row.url as string | null) ?? null, condition: (row.condition as string | null) ?? null, delivered_price: (row.delivered_price as number | null) ?? null,
+          classification: (row.classification as string | null) ?? null, decision: (row.decision as string | null) ?? null,
+          confidence: (row.confidence as string | null) ?? null, deal_score: (row.deal_score as number | null) ?? null,
+          evidence_status: (row.evidence_status as string | null) ?? null, evidence_reason: (row.evidence_reason as string | null) ?? null,
+        })));
+      } else {
+        setVariants((await api.catalogue.variants(status === "all" ? {} : { status })) as Variant[]);
+      }
+      setPage(1);
+    }
     catch { setVariants(fallback); }
     finally { setLoading(false); }
-  }, [status]);
+  }, [scope, status]);
   useEffect(() => { void load(); }, [load]);
 
   const visible = useMemo(() => variants.filter(v => {
@@ -126,6 +152,8 @@ export default function CataloguePage() {
     const matchesCategory = category === "All components" || v.slot_type.toLowerCase() === category.toLowerCase().replace(" ", "_");
     return matchesQuery && matchesCategory;
   }), [variants, query, category]);
+  const pageCount = Math.max(1, Math.ceil(visible.length / pageSize));
+  const pagedVisible = visible.slice((page - 1) * pageSize, page * pageSize);
 
   return <div className="min-h-full bg-[#05080d] p-4 text-slate-100 sm:p-6">
     <div className="mx-auto max-w-[1500px]">
@@ -144,6 +172,7 @@ export default function CataloguePage() {
 
         <div className="min-w-0">
           <section className="sticky top-4 z-20 -mx-1 mb-3 min-w-0 rounded-lg bg-[#05080d]/95 px-1 pb-1 pt-1 backdrop-blur-md">
+            <div className="mb-2 flex items-center gap-2"><span className="text-xs font-semibold text-slate-400">Scope</span>{([['all','All listings'],['curated','Curated catalogue']] as const).map(([value,label]) => <button key={value} onClick={() => { setScope(value); setPage(1); }} className={`rounded-full border px-3 py-1 text-[10px] transition ${scope === value ? "border-cyan-400/50 bg-cyan-400/10 text-cyan-300" : "border-white/10 text-slate-500 hover:text-white"}`}>{label}</button>)}<span className="text-[10px] text-slate-600">{scope === "all" ? "Current DEV scan results" : "GEM/SUPER_GEM products mapped to build slots"}</span></div>
             <div className="flex flex-col gap-3 rounded-lg border border-white/10 bg-[#0b1119] p-3 shadow-xl shadow-black/20 md:flex-row md:items-center">
             <label className="flex min-w-0 flex-1 items-center gap-2 rounded-md border border-white/10 bg-black/20 px-3 text-slate-500 focus-within:border-cyan-400/60"><Search className="h-4 w-4 shrink-0" /><span className="sr-only">Search catalogue</span><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search components, models or titles" className="h-9 min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-600" /></label>
             <div className="flex items-center gap-2"><select value={status} onChange={e => setStatus(e.target.value)} className="h-9 rounded-md border border-white/10 bg-[#111923] px-2 text-xs text-slate-300 outline-none"><option value="all">All statuses</option><option value="active">Active</option><option value="pending_review">Needs review</option><option value="hidden">Hidden</option></select><button className="inline-flex h-9 items-center gap-2 rounded-md border border-white/10 px-3 text-xs text-slate-300 hover:border-cyan-400/40"><Filter className="h-3.5 w-3.5" /> Filters</button></div>
@@ -151,11 +180,11 @@ export default function CataloguePage() {
             <div className="mt-3 flex flex-wrap items-center gap-2"><span className="mr-1 text-xs text-slate-500">Popular:</span>{["CPU", "GPU", "DDR4", "NVMe", "AM4"].map(chip => <button key={chip} onClick={() => setQuery(chip)} className="cursor-pointer rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] text-slate-300 transition hover:border-cyan-400/50 hover:text-cyan-300">{chip}</button>)}</div>
           </section>
 
-          <div className="mb-3 flex flex-col gap-3 border-b border-white/10 pb-3 sm:flex-row sm:items-center sm:justify-between"><div><span className="text-sm font-semibold text-white">{visible.length.toLocaleString()} results</span><span className="ml-2 text-xs text-slate-500">Sorted by gem score</span></div><div className="flex items-center gap-3"><span className="text-xs text-slate-500">View</span><div className="flex overflow-hidden rounded-md border border-white/10 bg-[#0b1119]">{([["table", Table2, "Table"], ["listings", List, "Listings"], ["grid", LayoutGrid, "Grid"]] as const).map(([value, Icon, label]) => <button key={value} onClick={() => setView(value)} aria-pressed={view === value} className={`inline-flex cursor-pointer items-center gap-1.5 px-3 py-2 text-[11px] transition ${view === value ? "bg-cyan-400 text-slate-950" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}><Icon className="h-3.5 w-3.5" />{label}</button>)}</div></div></div>
+          <div className="mb-3 flex flex-col gap-3 border-b border-white/10 pb-3 sm:flex-row sm:items-center sm:justify-between"><div><span className="text-sm font-semibold text-white">{visible.length.toLocaleString()} results</span><span className="ml-2 text-xs text-slate-500">Sorted by gem score · showing {pagedVisible.length.toLocaleString()}</span></div><div className="flex items-center gap-3"><span className="text-xs text-slate-500">View</span><div className="flex overflow-hidden rounded-md border border-white/10 bg-[#0b1119]">{([["table", Table2, "Table"], ["listings", List, "Listings"], ["grid", LayoutGrid, "Grid"]] as const).map(([value, Icon, label]) => <button key={value} onClick={() => setView(value)} aria-pressed={view === value} className={`inline-flex cursor-pointer items-center gap-1.5 px-3 py-2 text-[11px] transition ${view === value ? "bg-cyan-400 text-slate-950" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}><Icon className="h-3.5 w-3.5" />{label}</button>)}</div></div></div>
 
-          {view === "table" ? <TableView variants={visible} /> : <div className={view === "grid" ? "grid gap-3 sm:grid-cols-2 xl:grid-cols-3" : "space-y-3"}>{visible.map((v, index) => <ListingCard key={v.id} variant={v} index={index} compact={view === "listings"} />)}</div>}
+          {view === "table" ? <TableView variants={pagedVisible} /> : <div className={view === "grid" ? "grid gap-3 sm:grid-cols-2 xl:grid-cols-3" : "space-y-3"}>{pagedVisible.map((v, index) => <ListingCard key={v.id} variant={v} index={index} compact={view === "listings"} />)}</div>}
           {!loading && visible.length === 0 && <div className="rounded-lg border border-dashed border-white/10 py-16 text-center text-sm text-slate-500">No catalogue matches. Try clearing the search or filters.</div>}
-          <div className="mt-6 flex items-center justify-between text-xs text-slate-500"><span>Showing {visible.length} of {variants.length} catalogue opportunities</span><div className="flex items-center gap-1"><button aria-label="Previous catalogue page" className="cursor-pointer rounded border border-white/10 p-1.5 hover:text-white"><ChevronLeft className="h-3.5 w-3.5" /></button><span className="px-2 text-slate-300">1</span><button aria-label="Next catalogue page" className="cursor-pointer rounded border border-white/10 p-1.5 hover:text-white"><ChevronRight className="h-3.5 w-3.5" /></button></div></div>
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500"><span>Showing {visible.length ? ((page - 1) * pageSize + 1).toLocaleString() : 0}–{Math.min(page * pageSize, visible.length).toLocaleString()} of {visible.length.toLocaleString()} listings</span><div className="flex items-center gap-2"><label className="flex items-center gap-1.5">Per page<select aria-label="Listings per page" value={pageSize} onChange={e => { setPageSize(Number(e.target.value)); setPage(1); }} className="rounded border border-white/10 bg-[#111923] px-2 py-1 text-xs text-slate-300 outline-none"><option value={50}>50</option><option value={100}>100</option><option value={200}>200</option></select></label><div className="flex items-center gap-1"><button aria-label="Previous catalogue page" disabled={page <= 1} onClick={() => setPage(p => Math.max(1, p - 1))} className="cursor-pointer rounded border border-white/10 p-1.5 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"><ChevronLeft className="h-3.5 w-3.5" /></button><span className="px-2 text-slate-300">{page} / {pageCount}</span><button aria-label="Next catalogue page" disabled={page >= pageCount} onClick={() => setPage(p => Math.min(pageCount, p + 1))} className="cursor-pointer rounded border border-white/10 p-1.5 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"><ChevronRight className="h-3.5 w-3.5" /></button></div></div></div>
         </div>
       </div>
     </div>
