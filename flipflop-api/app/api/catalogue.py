@@ -243,6 +243,22 @@ async def list_variants(
     ) if listing_keys else []
     scored_by_item = {row.listing_id: row for row in scored_result}
 
+    # Older Listing rows may have lost their denormalised image array during
+    # a refresh, while the scraper still retained the image on its sighting
+    # ledger.  Use the latest non-empty captured image as a read-time repair;
+    # never substitute a shared category image.
+    observation_images = await db.execute(
+        text("""
+            SELECT DISTINCT ON (listing_id) listing_id, image_url
+            FROM gem_radar_listing_observations
+            WHERE listing_id = ANY(:listing_ids)
+              AND image_url IS NOT NULL AND image_url <> ''
+            ORDER BY listing_id, observed_at DESC, id DESC
+        """),
+        {"listing_ids": list(listing_keys)},
+    ) if listing_keys else []
+    observation_image_by_item = {row.listing_id: row.image_url for row in observation_images}
+
     def item_key(listing: Listing) -> str:
         return (
             listing.external_id.split("|")[1]
@@ -265,7 +281,11 @@ async def list_variants(
             "id": v.id,
             "listing_id": v.listing_id,
             "listing_title": l.title,
-            "image_url": (l.image_urls[0] if l.image_urls else None),
+            "image_url": (
+                (l.image_urls[0] if l.image_urls else None)
+                or getattr(scored(l), "image_url", None)
+                or observation_image_by_item.get(item_key(l))
+            ),
             "source_name": l.source_name,
             "channel_sources": channels_by_fingerprint.get(l.spec_fingerprint, [l.source_name]),
             "price_history_listing_id": l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id,
