@@ -2199,6 +2199,12 @@ interface ScatterPoint {
   classification: string;
 }
 
+function ClassificationLegend({ classifications }: { classifications: string[] }) {
+  return <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-slate-400">
+    {classifications.map((classification) => <div key={classification} className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: CLASSIFICATION_COLORS[classification] }} />{classification}</div>)}
+  </div>;
+}
+
 // Only plot economics produced by the scoring model. Falling back to the
 // listing's own delivered price manufactured a 0% ROI for every unscored
 // listing and flattened the useful 1,500-point distribution into one line.
@@ -2226,14 +2232,14 @@ function computeRoiDomain(values: number[]): [number, number] {
   return [Math.floor(lower - padding), Math.ceil(upper + padding)];
 }
 
-function ScatterTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: ScatterPoint }> }) {
+function ScatterTooltip({ active, payload, metricLabel = "Model ROI" }: { active?: boolean; payload?: Array<{ payload: ScatterPoint }>; metricLabel?: string }) {
   if (!active || !payload || payload.length === 0) return null;
   const p = payload[0].payload;
   return (
     <div className="bg-slate-900 border border-slate-600 rounded p-3 text-xs max-w-xs">
       <div className="text-slate-100 font-semibold mb-1 truncate">{p.title}</div>
       <div className="text-slate-300">Deal Score: {p.dealScore.toFixed(1)}</div>
-      <div className="text-slate-300">Model ROI: {p.roiPercent.toFixed(1)}%</div>
+      <div className="text-slate-300">{metricLabel}: {p.roiPercent.toFixed(1)}%</div>
       <div className="text-slate-300">Est. Profit: £{p.profit.toFixed(2)}</div>
     </div>
   );
@@ -2304,16 +2310,43 @@ const DealScoreRoiChart = memo(function DealScoreRoiChart({ listings }: { listin
           ))}
         </ScatterChart>
       </ResponsiveContainer>
-      <div className="flex gap-4 mt-2 flex-wrap">
-        {byClassification.map(({ classification }) => (
-          <div key={classification} className="flex items-center gap-1.5 text-xs text-slate-400">
-            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: CLASSIFICATION_COLORS[classification] }} />
-            {classification}
-          </div>
-        ))}
-      </div>
     </div>
   );
+});
+
+function buildVariancePoints(listings: Listing[]): ScatterPoint[] {
+  return listings
+    .filter((l) => Number.isFinite(l.deal_score) && Number.isFinite(l.delivered_price) && l.delivered_price > 0 && Number.isFinite(l.market_median_price) && l.market_median_price! > 0)
+    .map((l) => ({
+      title: l.title,
+      dealScore: l.deal_score,
+      roiPercent: ((l.market_median_price! - l.delivered_price) / l.delivered_price) * 100,
+      roiPlotted: ((l.market_median_price! - l.delivered_price) / l.delivered_price) * 100,
+      profit: l.expected_profit ?? 0,
+      absProfit: Math.abs(l.expected_profit ?? 0),
+      classification: l.classification,
+    }));
+}
+
+const DealScorePriceVarianceChart = memo(function DealScorePriceVarianceChart({ listings }: { listings: Listing[] }) {
+  const points = useMemo(() => buildVariancePoints(listings), [listings]);
+  const yDomain = useMemo(() => computeRoiDomain(points.map((p) => p.roiPercent)), [points]);
+  const plottedPoints = useMemo(() => points.map((point) => ({ ...point, roiPlotted: Math.max(yDomain[0], Math.min(yDomain[1], point.roiPercent)) })), [points, yDomain]);
+  const byClassification = useMemo(() => CLASSIFICATION_ORDER.map((c) => ({ classification: c, data: plottedPoints.filter((p) => p.classification === c) })).filter((g) => g.data.length > 0), [plottedPoints]);
+  const pinnedCount = points.filter((point) => point.roiPercent < yDomain[0] || point.roiPercent > yDomain[1]).length;
+
+  return <div className="p-4 bg-slate-800 rounded-lg border border-slate-700">
+    <div className="mb-3"><div className="text-sm text-slate-300">Deal Score vs Price Variance</div><div className="mt-0.5 text-xs text-slate-500">{points.length.toLocaleString()} listings with a settled market median. Positive values mean the market median is above the listing price{pinnedCount > 0 ? `; ${pinnedCount} extreme values are pinned to the chart edges.` : "."}</div></div>
+    {points.length === 0 ? <div className="flex h-[360px] items-center justify-center text-sm text-slate-400">No listings with market-median evidence yet.</div> : <ResponsiveContainer width="100%" height={360}>
+      <ScatterChart margin={{ top: 10, right: 20, bottom: 10, left: 0 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+        <XAxis type="number" dataKey="dealScore" name="Deal Score" stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 12 }} label={{ value: "Deal Score", position: "insideBottom", offset: -5, fill: "#94a3b8" }} />
+        <YAxis type="number" dataKey="roiPlotted" name="Price variance" unit="%" domain={yDomain} stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 12 }} label={{ value: "% vs Market Median", angle: -90, position: "insideLeft", fill: "#94a3b8" }} />
+        <Tooltip content={<ScatterTooltip metricLabel="Price variance" />} cursor={{ strokeDasharray: "3 3" }} />
+        {byClassification.map(({ classification, data }) => <Scatter key={classification} name={classification} data={data} fill={CLASSIFICATION_COLORS[classification]} fillOpacity={0.7} isAnimationActive={false} />)}
+      </ScatterChart>
+    </ResponsiveContainer>}
+  </div>;
 });
 
 interface ScanRunHistory {
@@ -2542,7 +2575,11 @@ const AnalyticsTab = memo(function AnalyticsTab({ listings }: { listings: Listin
   return (
     <div className="space-y-6">
       <ScanRunsOverTimeChart />
-      <DealScoreRoiChart listings={listings} />
+      <div className="grid items-stretch gap-4 xl:grid-cols-2">
+        <DealScoreRoiChart listings={listings} />
+        <DealScorePriceVarianceChart listings={listings} />
+      </div>
+      <ClassificationLegend classifications={[...CLASSIFICATION_ORDER]} />
 
       <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700/30">
         <p className="text-blue-200">

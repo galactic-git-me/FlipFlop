@@ -20,7 +20,7 @@ type Variant = {
   review_average_rating?: number | null; review_count?: number | null;
   url?: string | null; condition?: string | null; delivered_price?: number | null;
   scored_market_lower_price?: number | null; scored_market_median_price?: number | null; scored_market_upper_price?: number | null;
-  pct_offset?: number | null; classification?: string | null; decision?: string | null; confidence?: string | null;
+  pct_offset?: number | null; classification?: string | null; decision?: string | null; confidence?: string | null; deal_score?: number | null;
   evidence_status?: string | null; evidence_reason?: string | null;
 };
 
@@ -90,7 +90,7 @@ function ReviewSummary({ variant: v }: { variant: Variant }) {
 function SourcingDetails({ variant: v }: { variant: Variant }) {
   const money = (value?: number | null) => value == null ? "—" : `£${value.toFixed(2)}`;
   const variance = v.pct_offset == null ? "—" : `${v.pct_offset >= 0 ? "+" : "−"}${Math.abs(v.pct_offset).toFixed(0)}%`;
-  return <div className="grid grid-cols-2 gap-x-4 gap-y-2 rounded-md border border-white/10 bg-black/20 px-3 py-2 text-[10px] sm:grid-cols-4 xl:grid-cols-8">
+  return <div className="grid grid-cols-2 gap-x-4 gap-y-2 rounded-md border border-white/10 bg-black/20 px-3 py-2 text-[10px] sm:grid-cols-4 xl:grid-cols-9">
     <div><p className="text-slate-500">Condition</p><p className="mt-0.5 font-semibold text-white">{v.condition ?? "—"}</p></div>
     <div><p className="text-slate-500">Low</p><p className="mt-0.5 font-mono text-slate-200">{money(v.scored_market_lower_price ?? v.market_lower_price)}</p></div>
     <div><p className="text-slate-500">Median</p><p className="mt-0.5 font-mono text-orange-200">{money(v.scored_market_median_price ?? v.market_median_price)}</p></div>
@@ -98,6 +98,7 @@ function SourcingDetails({ variant: v }: { variant: Variant }) {
     <div><p className="text-slate-500">Vs median</p><p className={`mt-0.5 font-mono font-semibold ${v.pct_offset != null && v.pct_offset < 0 ? "text-emerald-300" : "text-slate-200"}`}>{variance}</p></div>
     <div><p className="text-slate-500">Class</p><p className="mt-0.5 font-semibold uppercase text-amber-200">{v.classification?.replace(/_/g, " ") ?? "—"}</p></div>
     <div><p className="text-slate-500">Decision</p><p className="mt-0.5 font-semibold uppercase text-emerald-300">{v.decision?.replace(/_/g, " ") ?? "—"}</p></div>
+    <div><p className="text-slate-500">Score</p><p className="mt-0.5 font-mono font-semibold text-white">{v.deal_score == null ? "—" : v.deal_score.toFixed(1)}</p></div>
     <div title={v.evidence_reason ?? undefined}><p className="text-slate-500">Evidence</p><p className="mt-0.5 font-semibold text-cyan-300">{v.evidence_status?.replace(/_/g, " ") ?? "Why?"}</p></div>
   </div>;
 }
@@ -165,7 +166,7 @@ function ListingCard({ variant: v, index, compact }: { variant: Variant; index: 
     <div className={compact ? "w-full shrink-0 sm:w-52" : ""}><ProductArt index={index} title={v.slot_type} imageUrl={v.image_url} /></div>
     <div className="min-w-0 flex-1 p-3">
       <div className="mb-2 flex items-start justify-between gap-3"><div className="min-w-0"><p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-400">{v.tier} tier · {v.slot_type}</p><h2 className="line-clamp-2 text-sm font-semibold leading-snug text-white">{v.listing_title}</h2></div><Status value={v.status} /></div>
-      <div className="mt-3 flex flex-wrap items-end gap-x-6 gap-y-2"><div><p className="text-xl font-bold text-white">£{(v.delivered_price ?? v.display_price).toFixed(2)}</p><p className="text-[10px] text-slate-500">Listing price</p></div><MarketPrice variant={v} /><div><p className="font-mono text-sm font-bold text-emerald-300">{v.gem_score.toFixed(0)}<span className="text-[10px] font-normal text-slate-500"> / 100</span></p><p className="text-[10px] text-slate-500">Gem score</p></div><div><ReviewSummary variant={v} /><p className="text-[10px] text-slate-500">Reviews</p></div></div>
+      <div className="mt-3 flex flex-wrap items-end gap-x-6 gap-y-2"><div><p className="text-xl font-bold text-white">£{(v.delivered_price ?? v.display_price).toFixed(2)}</p><p className="text-[10px] text-slate-500">Listing price</p></div><MarketPrice variant={v} /><div><p className="font-mono text-sm font-bold text-emerald-300">{v.deal_score == null ? v.gem_score.toFixed(0) : v.deal_score.toFixed(1)}<span className="text-[10px] font-normal text-slate-500"> / {v.deal_score == null ? "100" : "10"}</span></p><p className="text-[10px] text-slate-500">Score</p></div><div><ReviewSummary variant={v} /><p className="text-[10px] text-slate-500">Reviews</p></div></div>
       <div className="mt-3"><SourcingDetails variant={v} /></div>
       <div className="mt-3 flex items-center gap-3 rounded-md border border-blue-400/10 bg-blue-400/[0.03] px-3 py-2"><PriceHistorySparkline listingId={v.price_history_listing_id ?? String(v.listing_id ?? v.id)} listingTitle={v.listing_title} /><span className="text-[10px] text-slate-500">Blue: listing · orange: CPK market · click for details</span></div>
       <div className="mt-3 grid grid-cols-3 gap-2 rounded-md border border-cyan-400/10 bg-cyan-400/[0.03] px-3 py-2"><div><p className="font-mono text-sm font-semibold text-cyan-200">{metric(v.watch_count)}</p><p className="text-[10px] text-slate-500">Watches</p></div><div title="Number of matched listings with Best Offer enabled"><p className="font-mono text-sm font-semibold text-amber-200">{metric(v.offer_count)}</p><p className="text-[10px] text-slate-500">Offers enabled</p></div><div title="Distinct matched sold comps observed in the last 90 days"><p className="font-mono text-sm font-semibold text-emerald-200">{metric(v.sold_count)}</p><p className="text-[10px] text-slate-500">Sold · 90d</p></div></div>

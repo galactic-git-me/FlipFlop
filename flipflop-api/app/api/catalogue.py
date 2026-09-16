@@ -258,6 +258,7 @@ async def list_variants(
             "classification": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "classification", None),
             "decision": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "decision", None),
             "confidence": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "confidence_band", None),
+            "deal_score": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "deal_score", None),
             "evidence_status": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "evidence_status", None),
             "evidence_reason": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "evidence_reason", None),
             "slot_type": s.slot_type,
