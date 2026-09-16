@@ -1,5 +1,5 @@
-INFO:     Started server process [67392]
+INFO:     Started server process [64580]
 INFO:     Waiting for application startup.
-Recovered 3 stuck 'processing' submissions: [114765, 114830, 114823]
+Recovered 15 stuck 'processing' submissions: [114887, 114889, 114900, 114903, 114907, 114899, 114897, 114908, 114909, 114894, 114893, 114885, 114890, 114902, 114905]
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:18000 (Press CTRL+C to quit)

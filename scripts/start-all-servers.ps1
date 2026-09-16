@@ -687,7 +687,11 @@ $servers = @(
     },
     @{
         name     = "gemradar-api"
-        cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set PYTHONUNBUFFERED=1 && .venv\Scripts\python.exe -m uvicorn app.gem_radar_standalone:app --host 0.0.0.0 --port 18000" + $(if ($runMode -eq "development") { " --reload --reload-dir app" } else { "" }))
+        # Gem Radar owns a long-running queue. Disable Uvicorn auto-reload so
+        # source changes cannot restart the queue while a sweep is running.
+        # Windows virtual environments still show a launcher plus interpreter
+        # process; that pair is expected and is not two API workers.
+        cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set PYTHONUNBUFFERED=1 && .venv\Scripts\python.exe -m uvicorn app.gem_radar_standalone:app --host 0.0.0.0 --port 18000")
         port     = 18000
         color    = "Blue"
         skip     = $NoGemRadar -or (-not $LocalGemRadar)
