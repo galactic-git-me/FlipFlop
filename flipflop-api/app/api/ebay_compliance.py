@@ -30,6 +30,26 @@ def _ebay_api_root() -> str:
     return "https://api.sandbox.ebay.com" if env == "sandbox" else "https://api.ebay.com"
 
 
+def _ebay_app_credentials() -> tuple[str, str]:
+    """Return credentials for the configured API environment.
+
+    Sandbox must never fall back to the production app credentials: eBay may
+    accept the request far enough to make an environment mix-up difficult to
+    diagnose, and production credentials must not be used by DEV services.
+    """
+    settings = get_settings()
+    env = (settings.ebay_environment or "production").strip().lower()
+    if env == "sandbox":
+        return (
+            (settings.ebay_sandbox_app_id or "").strip(),
+            (settings.ebay_sandbox_client_secret or "").strip(),
+        )
+    return (
+        (settings.ebay_app_id or "").strip(),
+        (settings.ebay_client_secret or "").strip(),
+    )
+
+
 def _b64_decode_any(value: str) -> bytes:
     v = value.strip()
     # Add missing padding if needed.
@@ -46,10 +66,12 @@ async def _get_app_token() -> str | None:
     if tok and time.time() < exp - 60:
         return tok
 
-    settings = get_settings()
-    app_id = (settings.ebay_app_id or "").strip()
-    client_secret = (settings.ebay_client_secret or "").strip()
+    app_id, client_secret = _ebay_app_credentials()
     if not app_id or not client_secret:
+        log.error(
+            "ebay.compliance.credentials_missing",
+            environment=(get_settings().ebay_environment or "production").strip().lower(),
+        )
         return None
 
     creds = f"{app_id}:{client_secret}".encode("utf-8")

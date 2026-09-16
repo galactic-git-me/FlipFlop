@@ -23,7 +23,7 @@ if ($Action -eq 'Stop') {
     $env:ENVIRONMENT='development'
     # These are local DEV services. Never let the post-refresh restart send
     # listing writes to the production eBay account.
-    $env:EBAY_ENVIRONMENT='production'
+    $env:EBAY_ENVIRONMENT='sandbox'
     $env:EBAY_LISTING_ENVIRONMENT='sandbox'
     $env:PARCEL2GO_ENVIRONMENT='sandbox'
     $env:WEB_ONLY='true'
