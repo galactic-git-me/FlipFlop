@@ -361,11 +361,18 @@ async def _phase2_trigger_loop() -> None:
                     if stats["pending"] == 0 and stats["processing"] == 0:
                         logger.info("phase2_trigger.queue_drained_running_phase2")
                         phase2_result = await run_phase2_classification(db)
+                        # Phase 2 is the authoritative hand-off from the
+                        # extension's current scrape ledger to the catalogue.
+                        # Keep this in the same drain boundary so the
+                        # catalogue cannot publish a partial sweep.
+                        from app.services.catalogue_service import run_catalogue_pipeline
+                        catalogue_result = await run_catalogue_pipeline(db)
                         logger.info(
                             "phase2_trigger.phase2_complete",
                             total_cpk_tagged=phase2_result.total_cpk_tagged,
                             classified=phase2_result.classified_count,
                             unsettled=phase2_result.unsettled_count,
+                            catalogue=catalogue_result,
                         )
                         signal.pending = False
                         await db.commit()

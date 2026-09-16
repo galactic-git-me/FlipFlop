@@ -10,9 +10,10 @@ from __future__ import annotations
 
 import math
 import logging
+import os
 from datetime import datetime, timedelta
 
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.catalogue import PlaybookSlot, CatalogueVariant
@@ -35,6 +36,102 @@ FRESH_WINDOW_HOURS = 2
 MIN_GEM_SCORE = 40
 
 
+async def sync_gem_radar_catalogue_listings(db: AsyncSession) -> int:
+    """Materialise current Gem Radar gems into the legacy Listing catalogue.
+
+    Gem Radar deliberately keeps its current scrape/scoring surface in the
+    observation and scored-listing tables.  The original catalogue service,
+    however, was written against ``listings`` and therefore silently stopped
+    seeing extension-produced opportunities.  Keep the catalogue schema and
+    its approval workflow intact, but synchronise the current runtime
+    environment's actionable component rows into the table it already uses.
+
+    This is intentionally scoped to current buy-it-now observations and GEM /
+    SUPER_GEM classifications.  Raw sourcing results remain in the sourcing
+    feed; the catalogue is a curated product subset, not a copy of every
+    scraped listing.
+    """
+    environment = os.getenv("FLIPFLOP_RUNTIME_ENV", "development").strip().lower()
+    run_prefix = "live-%" if environment in {"live", "production"} else "dev-%"
+    result = await db.execute(
+        text(
+            """
+            WITH current_ids AS (
+                SELECT DISTINCT o.listing_id
+                FROM gem_radar_listing_observations o
+                WHERE o.observed_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
+                  AND o.listing_type = 'buy_it_now'
+                  AND o.search_run_id LIKE :run_prefix
+            )
+            SELECT DISTINCT ON (s.listing_id)
+                   s.listing_id, s.source, s.url, s.title, s.seller_name,
+                   s.image_url, s.condition, s.actual_listing_price,
+                   s.delivered_price, s.category, s.classification,
+                   s.deal_score, s.expected_profit, s.market_lower_price,
+                   s.market_median_price, s.market_upper_price,
+                   s.listing_observed_at
+            FROM gem_radar_scored_listings s
+            JOIN current_ids i ON i.listing_id = s.listing_id
+            WHERE s.classification IN ('GEM', 'SUPER_GEM')
+              AND s.category IN ('cpu', 'gpu', 'ram', 'ssd', 'storage')
+              AND (s.condition IS NULL OR lower(s.condition) <> 'for_parts')
+            ORDER BY s.listing_id, s.scored_at DESC NULLS LAST, s.id DESC
+            """
+        ),
+        {"run_prefix": run_prefix},
+    )
+    rows = result.mappings().all()
+    if not rows:
+        return 0
+
+    external_ids = [str(row["listing_id"]) for row in rows]
+    existing_result = await db.execute(
+        select(Listing).where(Listing.external_id.in_(external_ids))
+    )
+    existing = {listing.external_id: listing for listing in existing_result.scalars().all()}
+    now = datetime.utcnow()
+
+    for row in rows:
+        external_id = str(row["listing_id"])
+        listing = existing.get(external_id)
+        image_urls = [row["image_url"]] if row["image_url"] else []
+        price = float(row["actual_listing_price"] or row["delivered_price"] or 0)
+        values = {
+            "source_id": 0,
+            "source_name": row["source"] or "eBay",
+            "source_confidence": "browser_verified",
+            "title": row["title"] or external_id,
+            "url": row["url"] or "",
+            "image_urls": image_urls,
+            "price": price,
+            "condition": row["condition"],
+            "gem_score": float(row["deal_score"] or 0) * 10,
+            "classification": Classification.gem if row["classification"] == "GEM" else Classification.amazing_gem,
+            "estimated_profit": row["expected_profit"],
+            "resale_low": row["market_lower_price"],
+            "estimated_resale": row["market_median_price"],
+            "resale_high": row["market_upper_price"],
+            "listing_type": "buy_it_now",
+            "status": ListingStatus.active,
+            "raw_specs": {"gem_radar_category": row["category"]},
+            "last_seen_at": row["listing_observed_at"] or now,
+        }
+        if listing is None:
+            listing = Listing(
+                external_id=external_id,
+                first_seen_at=row["listing_observed_at"] or now,
+                **values,
+            )
+            db.add(listing)
+            existing[external_id] = listing
+        else:
+            for key, value in values.items():
+                setattr(listing, key, value)
+
+    await db.flush()
+    return len(rows)
+
+
 def compute_display_price(scrape_price: float) -> float:
     """Return scrape_price × 1.15 rounded up to the nearest £5."""
     return math.ceil(scrape_price * 1.15 / 5) * 5
@@ -49,12 +146,14 @@ def determine_tier(gem_score: float, slot: PlaybookSlot) -> str:
     return "budget"
 
 
-def infer_slot_type(title: str) -> str | None:
+def infer_slot_type(title: str, category: str | None = None) -> str | None:
     """
     Derive catalogue slot_type from listing title using the existing classifier.
     Returns None for complete PCs, PSUs, motherboards, accessories.
     """
-    raw = detect_component_category(title)
+    # Gem Radar's resolved identity category is authoritative.  Fall back to
+    # the legacy title classifier only for manually-created Listing rows.
+    raw = category or detect_component_category(title)
     return _CATEGORY_TO_SLOT.get(raw) if raw else None
 
 
@@ -91,7 +190,10 @@ async def auto_publish_gems(db: AsyncSession) -> int:
     now = datetime.utcnow().isoformat()
 
     for listing in gem_listings:
-        slot_type = infer_slot_type(listing.title)
+        slot_type = infer_slot_type(
+            listing.title,
+            (listing.raw_specs or {}).get("gem_radar_category") if isinstance(listing.raw_specs, dict) else None,
+        )
         if not slot_type:
             continue
         for slot in slots_by_type.get(slot_type, []):
@@ -251,10 +353,11 @@ async def reject_variant(
 
 async def run_catalogue_pipeline(db: AsyncSession) -> dict:
     """Runs Steps A+B+C in sequence. Called hourly by scheduler."""
+    synced = await sync_gem_radar_catalogue_listings(db)
     created = await auto_publish_gems(db)
     hidden = await check_freshness(db)
     updated = await update_prices(db)
-    return {"variants_created": created, "variants_hidden": hidden, "prices_updated": updated}
+    return {"listings_synced": synced, "variants_created": created, "variants_hidden": hidden, "prices_updated": updated}
 
 
 async def run_catalogue_pipeline_job() -> dict:
