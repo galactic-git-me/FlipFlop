@@ -488,8 +488,17 @@ async def snapshot(db) -> dict:
     scores_by_class: dict[str, list[float]] = {}
     for s in states:
         for classification, deal_score in s.resolved_classification.values():
-            classification_counts[classification] = classification_counts.get(classification, 0) + 1
-            scores_by_class.setdefault(classification, []).append(deal_score)
+            # Older rows and a few enrichment paths have emitted casing or
+            # surrounding whitespace inconsistently.  The dashboard counters
+            # are tier counters, so normalise at the boundary rather than
+            # silently turning valid GEM/SUPER_GEM rows into zeros.
+            normalised_classification = str(classification or "").strip().upper()
+            if not normalised_classification:
+                continue
+            classification_counts[normalised_classification] = (
+                classification_counts.get(normalised_classification, 0) + 1
+            )
+            scores_by_class.setdefault(normalised_classification, []).append(deal_score)
     classification_avg_score = {
         cls: round(sum(scores) / len(scores), 1) for cls, scores in scores_by_class.items()
     }

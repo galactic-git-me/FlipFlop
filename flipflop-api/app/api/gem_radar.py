@@ -403,9 +403,10 @@ async def pipeline_status_endpoint(
             gem_scores: list[float] = []
             super_gem_scores: list[float] = []
             for _listing_id, classification, deal_score in latest_score_rows:
-                if classification == "GEM":
+                normalised_classification = str(classification or "").strip().upper()
+                if normalised_classification == "GEM":
                     gem_scores.append(float(deal_score))
-                elif classification == "SUPER_GEM":
+                elif normalised_classification == "SUPER_GEM":
                     super_gem_scores.append(float(deal_score))
 
             snapshot["gemCount"] = len(gem_scores)

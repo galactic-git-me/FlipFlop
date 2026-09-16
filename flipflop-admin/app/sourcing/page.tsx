@@ -271,7 +271,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
             <circle cx="2" cy="2" r="0.7" fill={color} opacity="0.9" />
           </pattern>
         </defs>
-        <circle cx={30} cy={30} r={radius} stroke="#1e293b" strokeWidth={3} fill="none" />
+        <circle cx={30} cy={30} r={radius} stroke="#334155" strokeWidth={3} fill="none" />
         {successfulLength > 0 && (
           <circle
             cx={30} cy={30} r={radius} stroke={color} strokeWidth={5} fill="none"
@@ -339,7 +339,7 @@ function GaugeWithBreakdown({
   return (
     <div className="flex flex-col items-center justify-center">
       <svg width={60} height={60} viewBox="0 0 60 60" className="drop-shadow-[1px_2px_1px_rgba(2,6,23,0.9)]">
-        <circle cx={30} cy={30} r={radius} stroke="#1e293b" strokeWidth={3} fill="none" />
+        <circle cx={30} cy={30} r={radius} stroke="#334155" strokeWidth={3} fill="none" />
         <circle
           cx={30}
           cy={30}
@@ -795,36 +795,32 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                         {stripNegations(scan.query)}
                       </div>
                       <div className="text-[11px] text-slate-400 truncate">
-                        {isComplete
-                          ? "Phase 1 complete — final scoring follows queue drain"
-                          : awaitingFinalScoring
-                            ? "Waiting for the sweep to finish before final scoring"
-                            : `${scan.activeSubmissions} page${scan.activeSubmissions !== 1 ? "s" : ""} in flight`}{" "}
+                        {awaitingFinalScoring
+                          ? "Waiting for the sweep to finish before final scoring"
+                          : `${scan.activeSubmissions} page${scan.activeSubmissions !== 1 ? "s" : ""} in flight`} {" "}
                         • {scan.elapsedSeconds}s
                         {scan.excludedAuctionCount > 0 && <> • {scan.excludedAuctionCount} auctions excl.</>}
                       </div>
-                      <div
-                        className="text-[11px] font-medium text-green-400"
-                        title="New listings ingested this run (not a dupe of a previous run)"
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span
+                        className="text-base font-bold text-green-400 leading-none"
+                        title="New listings ingested this run (not a duplicate of a previous run)"
                       >
                         +{scan.ingestedNewCount}
-                      </div>
-                      <div className="text-[11px] text-slate-400">
-                        {discoveredTotal.toLocaleString()} discovered · {searchTermTotal.toLocaleString()} eligible
-                      </div>
+                      </span>
+                      <span
+                        title={isComplete ? "Complete" : scan.ingestedCount === 0 ? "Not started" : "Processing"}
+                      >
+                        {isComplete ? (
+                          <CheckCircle2 size={15} className="text-emerald-400" />
+                        ) : scan.ingestedCount === 0 ? (
+                          <MinusCircle size={15} className="text-slate-500" />
+                        ) : (
+                          <Loader2 size={15} className="text-blue-400 animate-spin" />
+                        )}
+                      </span>
                     </div>
-                    <span
-                      className="shrink-0"
-                      title={isComplete ? "Complete" : scan.ingestedCount === 0 ? "Not started" : "Processing"}
-                    >
-                      {isComplete ? (
-                        <CheckCircle2 size={15} className="text-emerald-400" />
-                      ) : scan.ingestedCount === 0 ? (
-                        <MinusCircle size={15} className="text-slate-500" />
-                      ) : (
-                        <Loader2 size={15} className="text-blue-400 animate-spin" />
-                      )}
-                    </span>
                   </div>
 
                   <div className="flex justify-center gap-3">
@@ -845,9 +841,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                         return (
                           <div key={vendor} className="flex flex-col items-center gap-1">
                             <VendorCounter value={count} />
-                            <span className="rounded-md border border-white/15 bg-slate-950/70 p-1 shadow-[inset_1px_1px_0_rgba(255,255,255,0.2),inset_-2px_-2px_3px_rgba(2,6,23,0.8),0_2px_3px_rgba(2,6,23,0.65)]">
-                              <VendorLogo vendor={vendor} />
-                            </span>
+                            <VendorLogo vendor={vendor} />
                           </div>
                         );
                       })}
