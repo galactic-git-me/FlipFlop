@@ -674,12 +674,11 @@ if ($runMode -eq "live") {
 $adminApiUrl = if ($LocalBackend) { "http://localhost:4311" } else { "https://www.theflipflop.shop" }
 $adminGemRadarUrl = if ($LocalGemRadar) { "http://localhost:18000" } elseif ($LocalBackend) { $adminApiUrl } else { "https://www.theflipflop.shop" }
 $frontendApiUrl = if ($LocalBackend) { "http://localhost:4311" } else { "https://www.theflipflop.shop" }
-# The eBay mode is deliberately atomic: sourcing and listing credentials must
-# never come from different eBay environments. DEV is sandbox-only; LIVE is
-# production-only. This prevents a DEV run from mixing account/token/policy
-# domains even though the source adapter itself may scrape public marketplaces.
-$ebayEnvironment = if ($runMode -eq "development") { "sandbox" } else { "production" }
-$ebayListingEnvironment = $ebayEnvironment
+# DEV reads the real eBay marketplace so sourcing has real inventory. Listing
+# writes remain sandbox-only in DEV; LIVE uses production for both. Keep these
+# settings explicit because the read and write APIs use different credentials.
+$ebayEnvironment = "production"
+$ebayListingEnvironment = if ($runMode -eq "development") { "sandbox" } else { "production" }
 Write-Host "[eBay] Sourcing environment: $ebayEnvironment"
 Write-Host "[eBay] Listing environment: $ebayListingEnvironment" -ForegroundColor $(if ($runMode -eq "development") { "Yellow" } else { "Green" })
 Write-Host ""

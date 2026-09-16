@@ -1,0 +1,574 @@
+2026-09-16 18:26:45 [info     ] browser_pool.sigchld_reaper_skipped (Windows or no SIGCHLD support)
+2026-09-16 18:26:45 [info     ] app.startup                    app_env=development event_loop_type=ProactorEventLoop
+2026-09-16 18:26:45 [info     ] config.loaded_from_db          has_openrouter_key=False model=google/gemma-4-31b-it:free
+2026-09-16 18:26:45 [info     ] listing_ingest_queue.started   max_queue=25000 workers=16
+2026-09-16 18:26:45 [info     ] claude_eval_queue.started      workers=6
+2026-09-16 18:26:45 [info     ] part_gem_eval_queue.started    workers=2
+2026-09-16 18:26:45 [info     ] scheduler.started              jobs=30
+2026-09-16 18:26:45 [info     ] sold_comps_cache.disabled
+2026-09-16 18:26:45 [info     ] app.ready                      note=full pipeline enabled - ingest/eval/build workers + scheduler + queue processor + margin verifier + sold comps cache running
+2026-09-16 18:26:45 [debug    ] listing_ingest_queue.worker_ready worker=0
+2026-09-16 18:26:45 [debug    ] listing_ingest_queue.worker_ready worker=1
+2026-09-16 18:26:45 [debug    ] listing_ingest_queue.worker_ready worker=2
+2026-09-16 18:26:45 [debug    ] listing_ingest_queue.worker_ready worker=3
+2026-09-16 18:26:45 [debug    ] listing_ingest_queue.worker_ready worker=4
+2026-09-16 18:26:45 [debug    ] listing_ingest_queue.worker_ready worker=5
+2026-09-16 18:26:45 [debug    ] listing_ingest_queue.worker_ready worker=6
+2026-09-16 18:26:45 [debug    ] listing_ingest_queue.worker_ready worker=7
+2026-09-16 18:26:45 [debug    ] listing_ingest_queue.worker_ready worker=8
+2026-09-16 18:26:45 [debug    ] listing_ingest_queue.worker_ready worker=9
+2026-09-16 18:26:45 [debug    ] listing_ingest_queue.worker_ready worker=10
+2026-09-16 18:26:45 [debug    ] listing_ingest_queue.worker_ready worker=11
+2026-09-16 18:26:45 [debug    ] listing_ingest_queue.worker_ready worker=12
+2026-09-16 18:26:45 [debug    ] listing_ingest_queue.worker_ready worker=13
+2026-09-16 18:26:45 [debug    ] listing_ingest_queue.worker_ready worker=14
+2026-09-16 18:26:45 [debug    ] listing_ingest_queue.worker_ready worker=15
+2026-09-16 18:26:45 [debug    ] claude_eval_queue.worker_ready worker=0
+2026-09-16 18:26:45 [debug    ] part_gem_eval_queue.worker_ready worker=0
+2026-09-16 18:26:45 [info     ] runtime.preflight.antibot.disabled
+2026-09-16 18:26:45 [info     ] queue_processor.started        workers=4
+2026-09-16 18:26:45 [info     ] margin_verifier.worker_started
+2026-09-16 18:26:46 [warning  ] ram_watcher.fetch_failed       reason=no_oauth_or_error subreddit=buildapcsales
+2026-09-16 18:26:46 [warning  ] ram_watcher.fetch_failed       reason=no_oauth_or_error subreddit=buildapcuk
+2026-09-16 18:26:46 [info     ] ram_watcher.done               checked=0 deals=0
+2026-09-16 18:26:46 [warning  ] queue_processor.recovered_stuck_submissions count=4
+2026-09-16 18:26:46 [info     ] opp4.startup                   stats_count=9
+2026-09-16 18:26:46 [info     ] queue_processor.processing_submission n_listings=33 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116683
+2026-09-16 18:26:46 [info     ] queue_processor.processing_submission n_listings=10 query=ASUS motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=asus-motherboard submission_id=116714
+2026-09-16 18:26:46 [info     ] database_cleaner.completed     deleted={'gem_radar_decision_events': 0, 'gem_radar_listing_demand_history': 0, 'submission_queue': 0, 'gem_radar_listing_observations': 0, 'gem_radar_scored_listings': 0}
+2026-09-16 18:26:46 [info     ] queue_processor.processing_submission n_listings=38 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=116723
+2026-09-16 18:26:46 [info     ] queue_processor.processing_submission n_listings=46 query=AMD GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=amd-gpu submission_id=116725
+2026-09-16 18:26:46 [warning  ] gem_radar.reject_malformed_awdit_listings count=4 titles=['SAVE 17%', 'SAVE 11%', 'SAVE 17%', 'SAVE 11%']
+2026-09-16 18:26:46 [warning  ] message_poll.fetch_failed      error=eBay Trading API GetMemberMessages failed: IAF token supplied is invalid.
+INFO:     127.0.0.1:61491 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+2026-09-16 18:26:48 [info     ] ebay_search.searching          limit=2 offset=0 page=1 query=DDR4 memory
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:26:50 [info     ] ebay_search.success            count=2 page=1 query=DDR4 memory
+INFO:     127.0.0.1:61492 - "GET /api/gem-radar/ebay-search?query=DDR4%20memory&page=1&limit=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+2026-09-16 18:26:50 [debug    ] cpk_extractor.invalid_category category=monitor title=ASUS
+ProArt Display PA248CRV 24 inch Professional
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:26:50 [debug    ] claude_eval_queue.worker_ready worker=1
+2026-09-16 18:26:51 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MAG401QR 40 Inch UWQHD 155Hz Gaming monitor
+2026-09-16 18:26:51 [debug    ] cpk_extractor.invalid_category category=router title=ASUS
+ASUS ZenWiFi BD4 Outdoor Dual-band WiFi 7 AiM
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+2026-09-16 18:26:51 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=8 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=4.7 excluded_auctions=0 new_listings=0
+2026-09-16 18:26:51 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=8 ingested=0 submission_id=116714
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:26:51 [info     ] queue_processor.submission_released search_id=asus-motherboard
+2026-09-16 18:26:51 [info     ] queue_processor.processing_submission n_listings=42 query=ASUS motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=asus-motherboard submission_id=116717
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:26:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Acer Nitro 85N85-100-UR37 Desktop, AMD Ryzen 9 990
+2026-09-16 18:26:52 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=32 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=33 elapsed_s=5.8 excluded_auctions=0 new_listings=0
+2026-09-16 18:26:52 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=32 ingested=0 submission_id=116683
+2026-09-16 18:26:52 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:26:52 [info     ] queue_processor.processing_submission n_listings=22 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116685
+2026-09-16 18:26:52 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=22 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=22 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:26:52 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=22 ingested=0 submission_id=116685
+2026-09-16 18:26:52 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:26:52 [info     ] queue_processor.processing_submission n_listings=9 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116686
+2026-09-16 18:26:52 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=9 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=9 elapsed_s=0.0 excluded_auctions=0 new_listings=0
+2026-09-16 18:26:52 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=9 ingested=0 submission_id=116686
+2026-09-16 18:26:52 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:26:52 [info     ] queue_processor.processing_submission n_listings=16 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116687
+2026-09-16 18:26:52 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=16 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=16 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:26:52 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=16 ingested=0 submission_id=116687
+2026-09-16 18:26:52 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:26:52 [info     ] queue_processor.processing_submission n_listings=10 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116688
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:26:53 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MSI MAG 322UP QD-OLED E16 32 inch 165Hz 0.03ms
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:26:54 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MAG 325QF E18V 31.5 inch WQHD Gaming Monitor
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61752 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61755 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61756 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61767 - "GET /api/public/reviews HTTP/1.1" 200 OK
+2026-09-16 18:26:55 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MSI MAG 321CQF E18 32 inch 180Hz WQHD Curved G
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61766 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61765 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+2026-09-16 18:26:55 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MAG 275QF X32 27 inch WQHD 320Hz Gaming Monito
+2026-09-16 18:26:55 [debug    ] claude_eval_queue.worker_ready worker=2
+2026-09-16 18:26:55 [debug    ] part_gem_eval_queue.worker_ready worker=1
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:26:57 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+PRO MP251 E14L 24 inch IPS 144Hz Monitor
+2026-09-16 18:26:57 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+Pro MP251W E2 24.5 inch 120Hz Full HD IPS Moni
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:26:58 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+PRO MP223 E2 21.45 inch FHD Monitor
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:26:59 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MSI MPG 272URX QD-OLED 27 inch 240Hz 0.03ms US
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:27:00 [debug    ] claude_eval_queue.worker_ready worker=3
+2026-09-16 18:27:01 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MAG 244C 24 inch 180Hz Curved Gaming Monitor
+2026-09-16 18:27:01 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+MAG 274QP QD-OLED X24 27 inch WQHD 240Hz Gamin
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:27:02 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+PRO MP273QW E14 27 inch 144Hz IPS Monitor
+2026-09-16 18:27:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=MSI
+MSI Claw 8 AI+ A2VM Glacier Blue Edition-232UK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:27:04 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+PRO MP271 E14A 27 inch IPS 144Hz IPS Monitor
+2026-09-16 18:27:04 [debug    ] cpk_extractor.invalid_category category=monitor title=MSI
+PRO MP273U 27 Inch 3840x2160 UHD 60Hz monitor
+2026-09-16 18:27:04 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=38 elapsed_s=17.8 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:04 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=116723
+2026-09-16 18:27:04 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 18:27:04 [info     ] queue_processor.processing_submission n_listings=28 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=116724
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52306 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52307 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52308 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52314 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52313 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52312 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52307 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52306 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52308 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:27:05 [debug    ] claude_eval_queue.worker_ready worker=4
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:27:06 [debug    ] cpk_extractor.invalid_category category=gpu|ram title=AWD-IT Sneaker X AMD Ryzen 5 9600X RTX 5070 12GB D
+2026-09-16 18:27:06 [debug    ] cpk_extractor.invalid_category category=monitor title=GIGABYTE GO27Q24A 27" QD-OLED QHD Gaming Monitor -
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:27:07 [info     ] case_content_sourcing.complete failed=0 failures=[] ok=True processed=1 queued=30
+2026-09-16 18:27:08 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT PROJECT ZERO AMD Ryzen 5 9600X RTX 5070 12G
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:27:10 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram title=AWD-IT Evolv X2 White AMD Ryzen 5 9600X RTX 5080 1
+2026-09-16 18:27:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT AMD Ryzen 7800X3D RTX 5070 Ti 16GB Flight S
+2026-09-16 18:27:10 [debug    ] claude_eval_queue.worker_ready worker=5
+2026-09-16 18:27:10 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT G400A AMD Ryzen 5 8400F Six Core RTX 5080 1
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:27:12 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram title=AWD-IT Hyte X50 AMD Ryzen 5 9600X RTX 5070 12GB De
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:27:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 18:27:13 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Level UP AMD Ryzen 8500G Six Core Radeon 74
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:27:14 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT A31 BTF AMD Ryzen 9600X Nvidia Geforce RTX
+2026-09-16 18:27:14 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Level UP AMD Ryzen 5 4500 Six Core RTX 3050
+2026-09-16 18:27:14 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=31 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=42 elapsed_s=28.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:14 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=31 ingested=0 submission_id=116725
+2026-09-16 18:27:14 [info     ] queue_processor.submission_released search_id=amd-gpu
+2026-09-16 18:27:14 [info     ] queue_processor.processing_submission n_listings=40 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=116726
+2026-09-16 18:27:14 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:15 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=116726
+2026-09-16 18:27:15 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 18:27:15 [info     ] queue_processor.processing_submission n_listings=27 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=116729
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64542 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64545 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64546 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64553 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64542 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64545 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64552 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64551 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:27:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:27:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:17 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:27:17 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:17 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:27:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:27:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 18:27:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:27:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 18:27:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 18:27:23 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=42 elapsed_s=31.8 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:23 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=116717
+2026-09-16 18:27:23 [info     ] queue_processor.submission_released search_id=asus-motherboard
+2026-09-16 18:27:23 [info     ] queue_processor.processing_submission n_listings=30 query=AMD GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=amd-gpu submission_id=116730
+2026-09-16 18:27:23 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=30 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=30 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:23 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=30 ingested=0 submission_id=116730
+2026-09-16 18:27:23 [info     ] queue_processor.submission_released search_id=amd-gpu
+2026-09-16 18:27:23 [info     ] queue_processor.processing_submission n_listings=39 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=116732
+2026-09-16 18:27:24 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=39 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=39 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:24 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=39 ingested=0 submission_id=116732
+2026-09-16 18:27:24 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 18:27:24 [info     ] queue_processor.processing_submission n_listings=40 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=116736
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:27:24 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:24 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=116736
+2026-09-16 18:27:24 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 18:27:24 [info     ] queue_processor.processing_submission n_listings=40 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=116737
+2026-09-16 18:27:24 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:24 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=116737
+2026-09-16 18:27:24 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 18:27:24 [info     ] queue_processor.processing_submission n_listings=22 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=116738
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60608 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60609 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60610 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60616 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60615 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60614 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+2026-09-16 18:27:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 18:27:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 18:27:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell PowerEdge R6515 1U Rack Server
+2026-09-16 18:27:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lenovo ThinkSystem SR645 1U Rack Server
+2026-09-16 18:27:25 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=8 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=9 elapsed_s=32.7 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:25 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=8 ingested=0 submission_id=116688
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:27:26 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:27:26 [info     ] queue_processor.processing_submission n_listings=35 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116691
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:27:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 18:27:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 18:27:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:27:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 18:27:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62138 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62143 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62144 - "GET /api/price-alerts HTTP/1.1" 200 OK
+2026-09-16 18:27:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 18:27:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:27:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:27:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:33 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=12 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=28 elapsed_s=28.8 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:33 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=12 ingested=0 submission_id=116724
+2026-09-16 18:27:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Clear all
+2026-09-16 18:27:33 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 18:27:33 [info     ] queue_processor.processing_submission n_listings=36 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=116739
+2026-09-16 18:27:33 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=36 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=36 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:33 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=36 ingested=0 submission_id=116739
+2026-09-16 18:27:33 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 18:27:33 [info     ] queue_processor.processing_submission n_listings=27 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=116741
+2026-09-16 18:27:34 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=27 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=27 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:34 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=27 ingested=0 submission_id=116741
+2026-09-16 18:27:34 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 18:27:34 [info     ] queue_processor.processing_submission n_listings=40 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=116744
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:27:34 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:34 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=116744
+2026-09-16 18:27:34 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 18:27:34 [info     ] queue_processor.processing_submission n_listings=45 query=Intel GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=intel-gpu submission_id=116745
+2026-09-16 18:27:34 [warning  ] gem_radar.reject_malformed_awdit_listings count=8 titles=['SAVE 7%', 'SAVE 13%', 'SAVE 10%', 'SAVE 11%', 'SAVE 12%']
+2026-09-16 18:27:34 [debug    ] cpk_extractor.low_confidence   confidence=0.0 title=GMB
+GMB Large Gaming Mouse Desk Pad with RGB Light
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58893 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58892 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58891 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58897 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58898 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58900 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:27:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Clear all
+2026-09-16 18:27:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Seagate
+Seagate Storage Expansion Card for Xbox Se
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+2026-09-16 18:27:36 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=24 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=26 elapsed_s=21.3 excluded_auctions=0 new_listings=1
+2026-09-16 18:27:36 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=24 ingested=1 submission_id=116729
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:27:36 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 18:27:36 [info     ] queue_processor.processing_submission n_listings=25 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=116733
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:27:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Western Digital
+WD 4TB External Hard Drive
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:27:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Western Digital
+WD 4TB Portable Gaming Hard Drive
+2026-09-16 18:27:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Western Digital
+18TB Elements Desktop External Har
+2026-09-16 18:27:38 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=17 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=21 elapsed_s=14.5 excluded_auctions=0 new_listings=1
+2026-09-16 18:27:38 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=17 ingested=1 submission_id=116738
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:27:39 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:27:39 [info     ] queue_processor.processing_submission n_listings=21 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=116740
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:27:42 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=iBUYPOWER Y40 Gaming PC Desktop Computer AMD Ryzen
+2026-09-16 18:27:42 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=32 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=35 elapsed_s=16.0 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:42 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=32 ingested=0 submission_id=116691
+2026-09-16 18:27:42 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:27:42 [info     ] queue_processor.processing_submission n_listings=21 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116695
+2026-09-16 18:27:42 [debug    ] cpk_extractor.invalid_category category=monitor title=GIGABYTE GO27Q24A 27" QD-OLED QHD Gaming Monitor -
+2026-09-16 18:27:42 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=21 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=21 elapsed_s=0.4 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:42 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=21 ingested=0 submission_id=116695
+2026-09-16 18:27:42 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:27:42 [info     ] queue_processor.processing_submission n_listings=10 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116696
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/market-snapshot HTTP/1.1" 200 OK
+2026-09-16 18:27:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AWD-IT Elite 301 Ryzen 5 5500 Intel ARC B570 10GB
+2026-09-16 18:27:46 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|ram title=AWD-IT Forge M120R ARGB Intel i5 14400F Six Core R
+2026-09-16 18:27:46 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT Solar Intel Core i5 14400F 10 Core RTX 5070
+2026-09-16 18:27:46 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=AWD-IT HYTE Y60 Intel Core Ultra 5 245KF RTX 5070
+2026-09-16 18:27:46 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=32 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=37 elapsed_s=12.0 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:46 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=32 ingested=0 submission_id=116745
+2026-09-16 18:27:47 [info     ] queue_processor.submission_released search_id=intel-gpu
+2026-09-16 18:27:47 [info     ] queue_processor.processing_submission n_listings=31 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=116746
+2026-09-16 18:27:47 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=31 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=31 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:47 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=31 ingested=0 submission_id=116746
+2026-09-16 18:27:47 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 18:27:47 [info     ] queue_processor.processing_submission n_listings=20 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=116748
+2026-09-16 18:27:47 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 18:27:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 18:27:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:27:50 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=21 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=25 elapsed_s=13.6 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:50 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=21 ingested=0 submission_id=116733
+2026-09-16 18:27:50 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 18:27:50 [info     ] queue_processor.processing_submission n_listings=15 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=116749
+2026-09-16 18:27:50 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=15 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=15 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:50 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=15 ingested=0 submission_id=116749
+2026-09-16 18:27:50 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 18:27:50 [info     ] queue_processor.processing_submission n_listings=40 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=116750
+2026-09-16 18:27:50 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:50 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=116750
+2026-09-16 18:27:50 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 18:27:50 [info     ] queue_processor.processing_submission n_listings=30 query=Intel GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=intel-gpu submission_id=116752
+2026-09-16 18:27:50 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=30 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=30 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:50 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=30 ingested=0 submission_id=116752
+2026-09-16 18:27:50 [info     ] queue_processor.submission_released search_id=intel-gpu
+2026-09-16 18:27:50 [info     ] queue_processor.processing_submission n_listings=4 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=116754
+2026-09-16 18:27:50 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=4 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=4 elapsed_s=0.0 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:50 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=4 ingested=0 submission_id=116754
+2026-09-16 18:27:50 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 18:27:50 [info     ] queue_processor.processing_submission n_listings=33 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=116755
+2026-09-16 18:27:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 18:27:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 18:27:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewRefurbished
+2026-09-16 18:27:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewRefurbished
+2026-09-16 18:27:52 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=16 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=21 elapsed_s=13.7 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:52 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=16 ingested=0 submission_id=116740
+2026-09-16 18:27:53 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 18:27:53 [info     ] queue_processor.processing_submission n_listings=40 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=116756
+2026-09-16 18:27:53 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:53 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=116756
+2026-09-16 18:27:53 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 18:27:53 [info     ] queue_processor.processing_submission n_listings=21 query=M.2 NVMe SSD -"m.2 case" -"ssd case" -adapter -"heatsink only" -enclosure -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=116757
+2026-09-16 18:27:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Clear all
+2026-09-16 18:27:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z2 G9 Pre-Configured Workstation
+2026-09-16 18:27:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP ProLiant DL360 Gen9 CPU Blank
+2026-09-16 18:27:54 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=8 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=11.8 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:54 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=8 ingested=0 submission_id=116696
+2026-09-16 18:27:55 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:27:55 [info     ] queue_processor.processing_submission n_listings=36 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116698
+2026-09-16 18:27:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Western Digital
+Elements 20TB USB-A Desktop Extern
+2026-09-16 18:27:57 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=17 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=19 elapsed_s=10.1 excluded_auctions=0 new_listings=1
+2026-09-16 18:27:57 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=17 ingested=1 submission_id=116748
+2026-09-16 18:27:57 [info     ] queue_processor.submission_released search_id=ddr5-udimm-ram
+2026-09-16 18:27:57 [info     ] queue_processor.processing_submission n_listings=19 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=116751
+2026-09-16 18:27:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Origin
+Origin Inception 1TB PCIE 4.0 NVMe M.2 3D T
+2026-09-16 18:27:58 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=20 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=21 elapsed_s=5.3 excluded_auctions=0 new_listings=0
+2026-09-16 18:27:58 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=20 ingested=0 submission_id=116757
+2026-09-16 18:27:58 [info     ] queue_processor.submission_released search_id=m2-nvme-ssd
+2026-09-16 18:27:59 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=CyberPowerPC Gamer Supreme Liquid Cool GML70390 -
+2026-09-16 18:28:00 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|motherboard title=CyberPowerPC Gamer Supreme Liquid Cool GXL70330 -
+2026-09-16 18:28:00 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=32 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=33 elapsed_s=9.9 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:00 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=32 ingested=0 submission_id=116755
+2026-09-16 18:28:01 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 18:28:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:28:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CyberPowerPC Gamer Supreme Liquid Cool GML70370 -
+2026-09-16 18:28:02 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=33 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=36 elapsed_s=7.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:02 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=33 ingested=0 submission_id=116698
+2026-09-16 18:28:02 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:28:02 [info     ] queue_processor.processing_submission n_listings=21 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116703
+2026-09-16 18:28:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 18:28:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewNew
+2026-09-16 18:28:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CompareQuick viewOffer
+2026-09-16 18:28:03 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=15 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=19 elapsed_s=5.6 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:03 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=15 ingested=0 submission_id=116751
+2026-09-16 18:28:03 [info     ] queue_processor.submission_released search_id=ddr5-udimm-ram
+2026-09-16 18:28:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Processors
+2026-09-16 18:28:04 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=20 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=21 elapsed_s=1.8 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:04 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=20 ingested=0 submission_id=116703
+2026-09-16 18:28:04 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:28:04 [info     ] queue_processor.processing_submission n_listings=10 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116705
+2026-09-16 18:28:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision 3630 Workstation
+2026-09-16 18:28:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision T3620 Workstation
+2026-09-16 18:28:06 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=8 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=2.2 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:06 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=8 ingested=0 submission_id=116705
+2026-09-16 18:28:06 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:28:06 [info     ] queue_processor.processing_submission n_listings=35 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116706
