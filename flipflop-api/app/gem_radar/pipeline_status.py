@@ -26,6 +26,7 @@ real threading.
 from __future__ import annotations
 
 import time
+import uuid
 from collections import deque
 from dataclasses import dataclass, field
 from collections.abc import Iterable
@@ -139,6 +140,7 @@ class SearchRunState:
 # Search terms with at least one submission processed since the last
 # reset_run(), keyed by search_id.
 _active: dict[str, SearchRunState] = {}
+_active_run_id: str | None = None
 
 # Search terms archived by the last reset_run() — gives the dashboard a
 # sense of the previous run's throughput even though nothing here is
@@ -194,6 +196,9 @@ def start_submission(
 
 
 def exclude_discovered(search_id: str, discovered_key: str) -> None:
+    global _active_run_id
+    if not _active:
+        _active_run_id = uuid.uuid4().hex
     state = _active.get(search_id)
     if state is not None:
         state.excluded_discovered_keys.add(discovered_key)
@@ -258,6 +263,7 @@ def reset_run() -> None:
     queue_processor.py's _phase2_trigger_loop), marking the natural end of
     a run so the next sweep's progress starts from zero instead of visually
     blending with leftover totals from the previous one."""
+    global _active_run_id
     for state in _active.values():
         _history.appendleft(
             {
@@ -270,6 +276,7 @@ def reset_run() -> None:
             }
         )
     _active.clear()
+    _active_run_id = None
 
 
 async def _vendor_breakdown_from_db(db, search_id_run_ids: list[tuple[str, set[str]]]) -> dict[str, dict[str, int]]:
@@ -608,6 +615,7 @@ async def snapshot(db) -> dict:
         )
 
     return {
+        "runId": _active_run_id,
         "activeScans": active_scans,
         "recentHistory": list(_history),
         "binPricesCount": bin_prices_count,

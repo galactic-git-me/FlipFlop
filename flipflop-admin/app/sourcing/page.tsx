@@ -132,6 +132,7 @@ interface ScanProgress {
 }
 
 interface PipelineStatusResponse {
+  runId?: string | null;
   activeScans: ScanProgress[];
   recentHistory: Array<{ query: string; total_listings: number; ingested_count: number; elapsed_s: number; failed: boolean }>;
   binPricesCount: number;
@@ -414,6 +415,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
   const lastLiveStatus = useRef<PipelineStatusResponse | null>(null);
   const lastLiveAt = useRef(0);
   const runScans = useRef(new Map<string, ScanProgress>());
+  const displayedRunId = useRef<string | null>(null);
   const runMaxima = useRef({
     binPricesCount: 0,
     soldPricesCount: 0,
@@ -439,6 +441,19 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
           );
 
           if (activeScans.length > 0) {
+            // Search IDs are reused between sweeps. Clear the client-side
+            // monotonic accumulator only at the explicit backend sweep
+            // boundary; otherwise old Scores/Prices can exceed the new
+            // sweep's CPK count.
+            if (data.runId && (
+              (displayedRunId.current && data.runId !== displayedRunId.current) ||
+              (!displayedRunId.current && runScans.current.size > 0)
+            )) {
+              runScans.current.clear();
+              runMaxima.current = { binPricesCount: 0, soldPricesCount: 0, gemCount: 0, superGemCount: 0, avgGemScore: 0, avgSuperGemScore: 0 };
+              lastLiveStatus.current = null;
+            }
+            if (data.runId) displayedRunId.current = data.runId;
             // Search IDs are reused and pipeline status can be served by a
             // different API worker after a restart. A lower elapsed value is
             // therefore not enough evidence of a new sweep: clearing here
