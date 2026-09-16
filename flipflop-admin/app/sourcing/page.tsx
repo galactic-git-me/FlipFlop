@@ -266,6 +266,12 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
     <div className="flex flex-col items-center justify-center">
       <svg width={60} height={60} viewBox="0 0 60 60" className="drop-shadow-[1px_2px_1px_rgba(2,6,23,0.9)]">
         <defs>
+          <linearGradient id={`${patternId}-gradient`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={color} stopOpacity="0.72" />
+            <stop offset="38%" stopColor="#ffffff" stopOpacity="0.58" />
+            <stop offset="62%" stopColor={color} stopOpacity="1" />
+            <stop offset="100%" stopColor="#020617" stopOpacity="0.38" />
+          </linearGradient>
           <pattern id={patternId} width="4" height="4" patternUnits="userSpaceOnUse">
             <rect width="4" height="4" fill="#334155" opacity="0.55" />
             <circle cx="2" cy="2" r="0.7" fill={color} opacity="0.9" />
@@ -274,7 +280,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
         <circle cx={30} cy={30} r={radius} stroke="#334155" strokeWidth={3} fill="none" />
         {successfulLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={color} strokeWidth={5} fill="none"
+            cx={30} cy={30} r={radius} stroke={`url(#${patternId}-gradient)`} strokeWidth={7.5} fill="none"
             strokeDasharray={`${successfulLength} ${circumference - successfulLength}`}
             strokeDashoffset={0} strokeLinecap="round" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
@@ -290,7 +296,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
         )}
         {skippedLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={color} strokeWidth={2} fill="none" opacity="0.9"
+            cx={30} cy={30} r={radius} stroke={`url(#${patternId}-gradient)`} strokeWidth={2} fill="none" opacity="0.9"
             strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
             strokeDashoffset={-(successfulLength + failedLength)} strokeLinecap="round" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
@@ -336,16 +342,25 @@ function GaugeWithBreakdown({
   const radius = 24;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference * (1 - pct / 100);
+  const gradientId = `gauge-gradient-${useId().replace(/:/g, "")}`;
   return (
     <div className="flex flex-col items-center justify-center">
       <svg width={60} height={60} viewBox="0 0 60 60" className="drop-shadow-[1px_2px_1px_rgba(2,6,23,0.9)]">
+        <defs>
+          <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={color} stopOpacity="0.72" />
+            <stop offset="38%" stopColor="#ffffff" stopOpacity="0.58" />
+            <stop offset="62%" stopColor={color} stopOpacity="1" />
+            <stop offset="100%" stopColor="#020617" stopOpacity="0.38" />
+          </linearGradient>
+        </defs>
         <circle cx={30} cy={30} r={radius} stroke="#334155" strokeWidth={3} fill="none" />
         <circle
           cx={30}
           cy={30}
           r={radius}
-          stroke={color}
-          strokeWidth={5}
+          stroke={`url(#${gradientId})`}
+          strokeWidth={7.5}
           fill="none"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
@@ -387,10 +402,14 @@ function VendorCounter({ value }: { value: number | null }) {
 // -- now lives on the same header row as "Current Scan Run" and the queue
 // status bar instead of its own section further down the page.
 function MiniStat({ label, value, color }: { label: string; value: string | number; color: string }) {
+  const numericValue = typeof value === "number" ? value : Number(value);
+  const formattedValue = Number.isFinite(numericValue)
+    ? numericValue.toLocaleString("en-GB", { maximumFractionDigits: 1 })
+    : value;
   return (
     <div className="text-center leading-tight">
       <div className="text-xl font-bold" style={{ color }}>
-        {value}
+        {formattedValue}
       </div>
       <div className="text-xs text-slate-400 whitespace-nowrap">{label}</div>
     </div>
@@ -664,9 +683,9 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             <QueueStatusBar queue={queueStatus} />
             <MiniStat label="Listings processed" value={status?.totalsAcrossActive.ingestedCount ?? 0} color="#e2e8f0" />
             <MiniStat label="SUPER GEMs" value={superGemCount} color="#fcd34d" />
+            <MiniStat label="Avg Super Gem" value={avgSuperGemScore.toFixed(1)} color="#fcd34d" />
             <MiniStat label="GEMs" value={gemCount} color="#93c5fd" />
             <MiniStat label="Avg Gem" value={avgGemScore.toFixed(1)} color="#93c5fd" />
-            <MiniStat label="Avg Super Gem" value={avgSuperGemScore.toFixed(1)} color="#fcd34d" />
             <MiniStat label="BIN Prices" value={status?.binPricesCount ?? 0} color="#34d399" />
             <MiniStat label="Sold Prices" value={status?.soldPricesCount ?? 0} color="#f472b6" />
           </div>
@@ -874,9 +893,9 @@ function MarketSnapshotPanel({ snapshot }: { snapshot: MarketSnapshot | null }) 
         <div className="flex items-center gap-4">
           <MiniStat label="Listings" value={snapshot?.ingestedCount ?? 0} color="#e2e8f0" />
           <MiniStat label="SUPER GEMs" value={snapshot?.superGemCount ?? 0} color="#fcd34d" />
+          <MiniStat label="Avg Super Gem" value={(snapshot?.avgSuperGemScore ?? 0).toFixed(1)} color="#fcd34d" />
           <MiniStat label="GEMs" value={snapshot?.gemCount ?? 0} color="#93c5fd" />
           <MiniStat label="Avg Gem" value={(snapshot?.avgGemScore ?? 0).toFixed(1)} color="#93c5fd" />
-          <MiniStat label="Avg Super Gem" value={(snapshot?.avgSuperGemScore ?? 0).toFixed(1)} color="#fcd34d" />
           <MiniStat label="BIN Prices" value={snapshot?.binPricesCount ?? 0} color="#34d399" />
           <MiniStat label="Sold Prices" value={snapshot?.soldPricesCount ?? 0} color="#f472b6" />
         </div>
