@@ -433,6 +433,9 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
           const data = await res.json();
           setScanLock(data.scanLock);
           const activeScans = data.activeScans ?? [];
+          const queueIsRunning = Boolean(
+            queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0),
+          );
 
           if (activeScans.length > 0) {
             // Search IDs are reused and pipeline status can be served by a
@@ -531,6 +534,12 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             setStatus(accumulatedStatus);
             setClientElapsed(activeScans[0].elapsedSeconds ?? 0);
             setDisplayedScans(accumulatedScans);
+          } else if (queueIsRunning) {
+            // The queue is the durable source of truth for whether this run
+            // is still alive. A transient empty in-memory snapshot must not
+            // clear the header counters or vendor cards while submissions are
+            // still pending/processing.
+            if (lastLiveStatus.current) setStatus(lastLiveStatus.current);
           } else if (
             lastLiveStatus.current &&
             // The queue can briefly be idle between submissions, and Phase 2
@@ -556,7 +565,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             }
           }
 
-          if (activeScans.length === 0 && displayedScans.length > 0) {
+          if (activeScans.length === 0 && displayedScans.length > 0 && !queueIsRunning) {
             // Backend's activeScans went empty -- it already called reset_run()
             // and archived this run into recentHistory (see pipeline_status.py).
             // Keep the cards visible until the next run starts, but flip them to
@@ -634,7 +643,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
           </div>
           <div className="flex items-center gap-4">
             <QueueStatusBar queue={queueStatus} />
-            <MiniStat label="Listings" value={status?.totalsAcrossActive.listings ?? 0} color="#e2e8f0" />
+            <MiniStat label="Listings processed" value={status?.totalsAcrossActive.ingestedCount ?? 0} color="#e2e8f0" />
             <MiniStat label="SUPER GEMs" value={superGemCount} color="#fcd34d" />
             <MiniStat label="GEMs" value={gemCount} color="#93c5fd" />
             <MiniStat label="Avg Gem" value={avgGemScore.toFixed(1)} color="#93c5fd" />
