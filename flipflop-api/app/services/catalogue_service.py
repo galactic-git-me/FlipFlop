@@ -75,7 +75,12 @@ async def sync_gem_radar_catalogue_listings(db: AsyncSession) -> int:
             JOIN current_ids i ON i.listing_id = s.listing_id
             WHERE s.classification IN ('GEM', 'SUPER_GEM')
               AND s.category IN ('cpu', 'gpu', 'ram', 'ssd', 'storage', 'case')
-              AND (s.condition IS NULL OR lower(s.condition) <> 'for_parts')
+              AND (s.condition IS NULL OR lower(s.condition) NOT IN ('for_parts', 'parts_only', 'untested'))
+              AND lower(s.title) NOT LIKE '%for parts%'
+              AND lower(s.title) NOT LIKE '%parts only%'
+              AND lower(s.title) NOT LIKE '%not working%'
+              AND lower(s.title) NOT LIKE '%spares or repair%'
+              AND s.listing_id NOT LIKE '%206450130546%'
             ORDER BY s.listing_id, s.scored_at DESC NULLS LAST, s.id DESC
             """
         ),
@@ -170,7 +175,12 @@ async def auto_publish_gems(db: AsyncSession) -> int:
             Listing.classification.in_(gem_classifications),
             Listing.gem_score >= MIN_GEM_SCORE,
             Listing.status == ListingStatus.active,
-            Listing.condition != "for_parts",
+            Listing.condition.notin_(("for_parts", "parts_only", "untested")),
+            ~Listing.title.ilike("%for parts%"),
+            ~Listing.title.ilike("%parts only%"),
+            ~Listing.title.ilike("%not working%"),
+            ~Listing.title.ilike("%spares or repair%"),
+            ~Listing.external_id.ilike("%206450130546%"),
         )
     )
     gem_listings = result.scalars().all()

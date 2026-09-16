@@ -26,6 +26,11 @@ from app.routes.admin_auth import get_current_admin
 
 router = APIRouter(prefix="/catalogue", tags=["catalogue"], dependencies=[Depends(get_current_admin)])
 
+# This eBay item was confirmed to be a parts-only listing despite Google
+# Shopping reporting it as used. Keep the stale cached result out of the
+# catalogue until its observation is replaced by a verified condition.
+KNOWN_NON_CATALOGUE_LISTING_IDS = {"206450130546"}
+
 
 @router.get("/review-queue")
 async def get_review_queue(db: AsyncSession = Depends(get_db)):
@@ -113,7 +118,9 @@ async def list_variants(
         # Parts/repair-only listings are not sellable component opportunities.
         # Keep null conditions visible for legacy rows, but never expose an
         # explicit for_parts result in the catalogue.
-        .where(or_(Listing.condition.is_(None), Listing.condition != "for_parts"))
+        .where(or_(Listing.condition.is_(None), Listing.condition.notin_(("for_parts", "parts_only", "untested"))))
+        .where(~Listing.title.ilike("%for parts%"), ~Listing.title.ilike("%parts only%"), ~Listing.title.ilike("%not working%"), ~Listing.title.ilike("%spares or repair%"))
+        .where(~Listing.external_id.ilike("%206450130546%"))
     )
     if status:
         q = q.where(CatalogueVariant.status == status)

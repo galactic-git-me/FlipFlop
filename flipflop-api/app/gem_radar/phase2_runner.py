@@ -184,6 +184,13 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
         ) = row
 
         title_condition = (title or "").lower()
+        if (condition or "").lower() in {"parts_only", "for_parts", "untested"} or re.search(
+            r"\b(?:for\s*parts|parts\s*only|not\s*working|spares?\s*(?:or|/)\s*repair)\b",
+            title_condition,
+        ):
+            # Parts-only/untested listings are not valid resale candidates and
+            # must never be normalised into the ordinary used cohort.
+            continue
         title_marks_non_new = any(term in title_condition for term in ("b grade", "b-grade", "open box", "open-box", "refurbished", "renewed"))
         normalised_condition = "new" if (condition or "").lower() == "new" and not title_marks_non_new else "used"
         category = (cpk_data or {}).get("category") or observed_category
