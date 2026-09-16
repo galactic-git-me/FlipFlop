@@ -151,6 +151,10 @@ export default function CataloguePage() {
     const matchesQuery = !query || v.listing_title.toLowerCase().includes(query.toLowerCase());
     const matchesCategory = category === "All components" || v.slot_type.toLowerCase() === category.toLowerCase().replace(" ", "_");
     return matchesQuery && matchesCategory;
+  }).sort((a, b) => {
+    const scoreA = a.deal_score ?? a.gem_score / 10;
+    const scoreB = b.deal_score ?? b.gem_score / 10;
+    return scoreB - scoreA || a.listing_title.localeCompare(b.listing_title);
   }), [variants, query, category]);
   const pageCount = Math.max(1, Math.ceil(visible.length / pageSize));
   const pagedVisible = visible.slice((page - 1) * pageSize, page * pageSize);

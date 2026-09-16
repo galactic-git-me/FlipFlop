@@ -333,6 +333,8 @@ async def record_observation(
         seller_feedback_percent=listing.seller_feedback_percent,
         seller_feedback_count=listing.seller_feedback_count,
         scan_price=listing.scan_price,
+        delivery_text=listing.delivery_text,
+        delivery_postcode=listing.delivery_postcode,
     )
     db.add(row)
     await db.commit()

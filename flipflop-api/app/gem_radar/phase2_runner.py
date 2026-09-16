@@ -81,7 +81,8 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
                 lo.condition_normalised AS condition, lo.item_price, lo.postage_price,
                 lo.delivered_price, lo.source, lo.observed_at,
                 cpk.cpk, cpk.cpk_data, lo.category AS observed_category, lo.bid_count, lo.watch_count,
-                lo.epid, lo.seller_feedback_percent, lo.seller_feedback_count
+                lo.epid, lo.seller_feedback_percent, lo.seller_feedback_count,
+                lo.delivery_text, lo.delivery_postcode
             FROM gem_radar_listing_observations lo
             LEFT JOIN gem_radar_listing_cpk cpk ON lo.listing_id = cpk.listing_id
             ORDER BY lo.listing_id, lo.observed_at DESC, lo.id DESC
@@ -179,6 +180,7 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
             item_price, postage_price, delivered_price, source, observed_at,
             cpk, cpk_data, observed_category, bid_count, watch_count,
             epid, seller_feedback_percent, seller_feedback_count,
+            delivery_text, delivery_postcode,
         ) = row
 
         title_condition = (title or "").lower()
@@ -344,6 +346,8 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
             actual_listing_price=item_price,
             postage_price=postage_price,
             delivered_price=delivered_price,
+            delivery_text=delivery_text,
+            delivery_postcode=delivery_postcode,
             bid_count=bid_count,
             watch_count=watch_count,
             classification=classification,

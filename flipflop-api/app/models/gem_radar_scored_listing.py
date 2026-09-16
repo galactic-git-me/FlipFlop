@@ -73,6 +73,9 @@ class GemRadarScoredListing(Base):
     actual_listing_price: Mapped[float] = mapped_column(Float)
     postage_price: Mapped[float] = mapped_column(Float)
     delivered_price: Mapped[float] = mapped_column(Float)
+    # Delivery promise/location carried through from the latest observation.
+    delivery_text: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    delivery_postcode: Mapped[str | None] = mapped_column(String(20), nullable=True)
 
     # Market prices (from eBay Browse API)
     market_new_price: Mapped[float | None] = mapped_column(Float, nullable=True)  # Today's new BIN

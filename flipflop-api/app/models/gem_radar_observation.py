@@ -81,6 +81,9 @@ class GemRadarListingObservation(Base):
     # price aggregation alongside marketplace listings. Only populated for new
     # condition items where scan provides a solid retail reference.
     scan_price: Mapped[float | None] = mapped_column(Float, nullable=True)
+    # Delivery promise/location captured from the marketplace card.
+    delivery_text: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    delivery_postcode: Mapped[str | None] = mapped_column(String(20), nullable=True)
 
     # Cross-search dedup / cost-control cache (PRD §24 "researched once,
     # referenced twice", §31 caching). Stores the full ScoredListing JSON so
