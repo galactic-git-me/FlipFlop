@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import os
 import re
 from datetime import datetime, timedelta, timezone
 from typing import Literal
@@ -77,6 +78,20 @@ router = APIRouter(prefix="/gem-radar", tags=["gem-radar"])
 # the ScoredListing contract consumed by the extension dashboard.
 _API_CLASSIFICATIONS = frozenset({"SUPER_GEM", "GEM", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL"})
 log = structlog.get_logger(__name__)
+
+
+def _runtime_environment() -> Literal["DEV", "LIVE"]:
+    """Return the environment owned by this API instance.
+
+    The launcher sets FLIPFLOP_RUNTIME_ENV explicitly. DEV is the safe
+    default for an unset local process; production deployments must set LIVE.
+    """
+    value = os.getenv("FLIPFLOP_RUNTIME_ENV", "development").strip().lower()
+    return "LIVE" if value in {"live", "production"} else "DEV"
+
+
+def _run_id_prefix(environment: Literal["DEV", "LIVE"]) -> str:
+    return f"{environment.lower()}-%"
 
 # DEV and LIVE are separate MV3 service workers, so their in-process guards
 # cannot coordinate. This short lease lives in the local API process and is
@@ -288,6 +303,7 @@ async def pipeline_status_endpoint(
     Sourcing Dashboard's pipeline diagram. Ephemeral, in-memory (see
     app/gem_radar/pipeline_status.py); resets on API restart."""
     snapshot = await pipeline_status.snapshot(db)
+    environment = _runtime_environment()
     # The queue worker runs in a separate process, so it cannot update the
     # API process's ephemeral pipeline_status object.  Keep the original
     # response shape/card rendering, but hydrate activeScans from the shared
@@ -297,7 +313,9 @@ async def pipeline_status_endpoint(
         from app.gem_radar.cpk_market import MIN_LISTINGS_FOR_SETTLED_PRICE
         from datetime import datetime
 
-        live_items = await SubmissionQueueService.get_live_items(db, limit=500)
+        live_items = await SubmissionQueueService.get_live_items(
+            db, limit=500, search_run_id_prefix=_run_id_prefix(environment)
+        )
         # search_id is the configured search-term identity. One extension
         # sweep can submit pages with query text that differs only in generated
         # exclusions, so grouping by (search_id, query) created duplicate
@@ -1024,6 +1042,7 @@ async def _fetch_cpk_price_fields(db: AsyncSession, ids: list[int]) -> dict[int,
 
 @router.get("/scored-listings-latest-run")
 async def get_scored_listings_latest_run(
+    environment: Literal["DEV", "LIVE"] | None = Query(default=None),
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
 ) -> list[dict]:
@@ -1038,10 +1057,18 @@ async def get_scored_listings_latest_run(
     if not actionable_ids:
         return []
 
-    # Get the most recent search_run_id
+    # Run IDs are environment-tagged by the extension (dev-/live-). This is
+    # essential when DEV was restored from a LIVE database snapshot.
+    run_environment = environment or _runtime_environment()
+    run_id_prefix = _run_id_prefix(run_environment)
+
+    # Get the most recent search_run_id for this environment only.
     latest_run_query = (
         select(GemRadarScoredListing.search_run_id)
-        .where(GemRadarScoredListing.search_run_id.is_not(None))
+        .where(
+            GemRadarScoredListing.search_run_id.is_not(None),
+            GemRadarScoredListing.search_run_id.like(run_id_prefix),
+        )
         .order_by(GemRadarScoredListing.scored_at.desc())
         .limit(1)
     )
@@ -2726,7 +2753,10 @@ async def queue_status(
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
 ) -> QueueStatusResponse:
-    stats = await SubmissionQueueService.get_queue_stats(db)
+    environment = _runtime_environment()
+    stats = await SubmissionQueueService.get_queue_stats(
+        db, search_run_id_prefix=_run_id_prefix(environment)
+    )
     return QueueStatusResponse(**stats)
 
 @router.get("/queue-items", response_model=QueueItemsResponse)
@@ -2734,7 +2764,10 @@ async def queue_items(
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
 ) -> QueueItemsResponse:
-    rows = await SubmissionQueueService.get_live_items(db)
+    environment = _runtime_environment()
+    rows = await SubmissionQueueService.get_live_items(
+        db, search_run_id_prefix=_run_id_prefix(environment)
+    )
     return QueueItemsResponse(items=[QueueItemResponse(
         id=row.id, search_run_id=row.search_run_id, search_id=row.search_id,
         query=row.query, status=row.status, listings_count=len(row.listings_json or []),
@@ -3222,7 +3255,6 @@ async def ebay_search(
     from app.services.ebay_browse import search_active_listings
     from datetime import datetime, timezone
 
-    log = structlog.get_logger()
     try:
         offset = (page - 1) * limit
         log.info("ebay_search.searching", query=query, page=page, offset=offset, limit=limit)

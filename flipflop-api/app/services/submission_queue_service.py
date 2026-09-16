@@ -248,7 +248,10 @@ class SubmissionQueueService:
         return len(recovered_ids)
 
     @staticmethod
-    async def get_queue_stats(db: AsyncSession) -> dict:
+    async def get_queue_stats(
+        db: AsyncSession,
+        search_run_id_prefix: str | None = None,
+    ) -> dict:
         """Get queue statistics.
 
         Counts only (via SQL COUNT, not fetching+materializing full rows) —
@@ -257,9 +260,10 @@ class SubmissionQueueService:
         including pulling each row's full listings_json blob over the wire
         for no reason.
         """
-        result = await db.execute(
-            select(SubmissionQueue.status, func.count()).group_by(SubmissionQueue.status)
-        )
+        stmt = select(SubmissionQueue.status, func.count())
+        if search_run_id_prefix:
+            stmt = stmt.where(SubmissionQueue.search_run_id.like(search_run_id_prefix))
+        result = await db.execute(stmt.group_by(SubmissionQueue.status))
         counts = dict(result.all())
         return {
             "pending": counts.get("pending", 0),
@@ -269,12 +273,19 @@ class SubmissionQueueService:
         }
 
     @staticmethod
-    async def get_live_items(db: AsyncSession, limit: int = 100) -> list[SubmissionQueue]:
+    async def get_live_items(
+        db: AsyncSession,
+        limit: int = 100,
+        search_run_id_prefix: str | None = None,
+    ) -> list[SubmissionQueue]:
         """Return lightweight metadata for work still visible to operators."""
-        result = await db.execute(
+        stmt = (
             select(SubmissionQueue)
             .where(SubmissionQueue.status.in_(("pending", "processing")))
             .order_by(SubmissionQueue.status.desc(), SubmissionQueue.last_attempt_at)
             .limit(limit)
         )
+        if search_run_id_prefix:
+            stmt = stmt.where(SubmissionQueue.search_run_id.like(search_run_id_prefix))
+        result = await db.execute(stmt)
         return list(result.scalars().all())

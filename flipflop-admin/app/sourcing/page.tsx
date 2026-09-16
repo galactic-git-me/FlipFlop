@@ -2828,7 +2828,7 @@ function SourcingPageInner() {
       // the next scheduled refresh can recover normally.
       const signal = AbortSignal.timeout(15_000);
       const [listingsRes, componentRes, queueRes] = await Promise.all([
-        fetch(`/api/gem-radar/scored-listings-latest-run`, { cache: "no-store", signal }),
+        fetch(`/api/gem-radar/scored-listings-latest-run?environment=${process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV"}`, { cache: "no-store", signal }),
         fetch(`/api/gem-radar/gem-by-component`, { cache: "no-store", signal }),
         fetch(`/api/gem-radar/queue-status`, { cache: "no-store", signal }),
       ]);

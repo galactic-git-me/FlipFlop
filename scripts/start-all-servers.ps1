@@ -94,7 +94,7 @@ function Select-RunMode {
     Write-Host "      Remote services on Andromeda + local production extension" -ForegroundColor Gray
     Write-Host ""
     Write-Host "  [2] DEVELOPMENT" -ForegroundColor Yellow
-    Write-Host "      Local screens -> local API/database -> LIVE eBay" -ForegroundColor Gray
+    Write-Host "      Local screens -> local API/database -> DEV extension -> eBay sandbox" -ForegroundColor Gray
     Write-Host "      Use this when changing frontend + backend code" -ForegroundColor Gray
     Write-Host ""
     Write-Host "  Select 1 or 2 (default: DEVELOPMENT in 3 seconds): " -NoNewline -ForegroundColor White
@@ -686,7 +686,7 @@ Write-Host ""
 $servers = @(
     @{
         name     = "backend"
-        cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set EBAY_ENVIRONMENT=$ebayEnvironment && set EBAY_LISTING_ENVIRONMENT=$ebayListingEnvironment && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4311")
+        cmdArgs  = @("/c", "cd flipflop-api && set FLIPFLOP_RUNTIME_ENV=$runMode && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set EBAY_ENVIRONMENT=$ebayEnvironment && set EBAY_LISTING_ENVIRONMENT=$ebayListingEnvironment && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4311")
         port     = 4311
         color    = "Yellow"
         skip     = $NoBackend -or (-not $LocalBackend)
