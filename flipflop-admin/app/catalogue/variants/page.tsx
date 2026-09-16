@@ -100,7 +100,7 @@ export default function CatalogueVariantsPage() {
                 <td className={`px-3 py-2.5 text-xs font-medium ${STATUS_COLOURS[v.status] ?? ""}`}>
                   {v.status}
                 </td>
-                <td className="px-3 py-2.5 text-right">£{v.display_price}</td>
+                <td className="px-3 py-2.5 text-right">£{v.display_price.toFixed(0)}</td>
                 <td className="px-3 py-2.5 text-right text-emerald-400 font-bold">
                   {v.gem_score.toFixed(0)}
                 </td>

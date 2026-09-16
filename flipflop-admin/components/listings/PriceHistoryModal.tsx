@@ -145,18 +145,18 @@ export function PriceHistoryModal({
                 <div className="rounded-xl border border-blue-400/30 bg-blue-500/10 p-4">
                   <div className="text-xs text-slate-400">This Listing</div>
                   <div className="text-lg font-semibold text-blue-300 mb-1">
-                    £{currentListingPrice.toFixed(2)}
+                    £{currentListingPrice.toFixed(0)}
                   </div>
-                  <div className="text-xs text-slate-400">Average £{avgListingPrice.toFixed(2)} · Range £{minListingPrice.toFixed(2)}–£{maxListingPrice.toFixed(2)}</div>
+                  <div className="text-xs text-slate-400">Average £{avgListingPrice.toFixed(0)} · Range £{minListingPrice.toFixed(0)}–£{maxListingPrice.toFixed(0)}</div>
                 </div>
                 {cpkPrices && cpkPrices.length > 0 && (
                   <div className="rounded-xl border border-orange-400/30 bg-orange-500/10 p-4">
                     <div className="text-xs text-slate-400">Market CPK Average</div>
                     <div className="text-lg font-semibold text-orange-300 mb-1">
-                      £{currentCpkPrice.toFixed(2)}
+                      £{currentCpkPrice.toFixed(0)}
                     </div>
                     <div className="text-xs text-slate-400">
-                      Avg: £{avgCpkPrice.toFixed(2)}
+                      Avg: £{avgCpkPrice.toFixed(0)}
                     </div>
                   </div>
                 )}
@@ -170,7 +170,7 @@ export function PriceHistoryModal({
                     <span className={`text-sm font-semibold ${
                       priceVsMarket < 0 ? "text-green-400" : "text-red-400"
                     }`}>
-                      {priceVsMarket < 0 ? <TrendingDown className="inline h-4 w-4" /> : <TrendingUp className="inline h-4 w-4" />} £{Math.abs(priceVsMarket).toFixed(2)}
+                      {priceVsMarket < 0 ? <TrendingDown className="inline h-4 w-4" /> : <TrendingUp className="inline h-4 w-4" />} £{Math.abs(priceVsMarket).toFixed(0)}
                     </span>
                     <span className={`text-xs ${
                       priceVsMarket < 0 ? "text-green-400" : "text-red-400"
@@ -187,7 +187,7 @@ export function PriceHistoryModal({
                 <div className="flex items-baseline gap-2">
                   <span className="text-sm font-semibold text-slate-100">
                     {listingPriceChange < 0 ? "↓" : listingPriceChange > 0 ? "↑" : "→"}{" "}
-                    £{Math.abs(listingPriceChange).toFixed(2)}
+                    £{Math.abs(listingPriceChange).toFixed(0)}
                   </span>
                   <span
                     className={`text-xs ${
@@ -232,7 +232,7 @@ export function PriceHistoryModal({
                         borderRadius: "6px",
                       }}
                       labelStyle={{ color: "#e2e8f0" }}
-                      formatter={(value) => [`£${Number(value).toFixed(2)}`]}
+                      formatter={(value) => [`£${Number(value).toFixed(0)}`]}
                       labelFormatter={(label) => label}
                     />
                     <Line
@@ -253,7 +253,7 @@ export function PriceHistoryModal({
                         strokeDasharray="5 4"
                         strokeWidth={2}
                         label={{
-                          value: `This listing £${currentListingPrice.toFixed(2)} · 1 observation`,
+                          value: `This listing £${currentListingPrice.toFixed(0)} · 1 observation`,
                           fill: "#93c5fd",
                           fontSize: 12,
                           position: "insideTopRight",
