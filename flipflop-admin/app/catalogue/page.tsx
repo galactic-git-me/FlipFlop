@@ -164,14 +164,14 @@ export default function CataloguePage() {
   const pageCount = Math.max(1, Math.ceil(visible.length / pageSize));
   const pagedVisible = visible.slice((page - 1) * pageSize, page * pageSize);
 
-  return <div className="min-h-full bg-[#05080d] p-4 text-slate-100 sm:p-6">
+  return <div className="catalogue-page min-h-full overflow-x-hidden bg-[#05080d] p-4 text-slate-100 sm:p-6">
     <div className="mx-auto max-w-[1500px]">
       <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
         <div><p className="mb-1 font-mono text-[10px] uppercase tracking-[0.24em] text-cyan-400">FlipFlop / Inventory intelligence</p><h1 className="text-2xl font-bold tracking-tight text-white">Catalogue</h1><p className="mt-1 text-sm text-slate-400">Browse, compare and manage your retained component opportunities.</p></div>
         <div className="flex flex-wrap items-center gap-2"><button onClick={() => void load()} className="inline-flex h-9 items-center gap-2 rounded-md border border-white/10 bg-white/5 px-3 text-xs text-slate-300 transition hover:border-cyan-400/40 hover:text-white"><RefreshCw className={loading ? "h-3.5 w-3.5 animate-spin" : "h-3.5 w-3.5"} /> Refresh</button><button className="inline-flex h-9 items-center gap-2 rounded-md bg-cyan-400 px-3 text-xs font-bold text-slate-950 transition hover:bg-cyan-300"><SlidersHorizontal className="h-3.5 w-3.5" /> Manage filters</button></div>
       </div>
 
-      <div className="grid items-start gap-3 lg:grid-cols-[220px_minmax(0,1fr)]">
+      <div className="grid items-start gap-3 lg:grid-cols-[110px_minmax(0,1fr)]">
         <aside className="rounded-lg border border-white/10 bg-[#0b1119] p-3 lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto">
           <div className="mb-3 flex items-center justify-between"><span className="text-xs font-bold uppercase tracking-wider text-white">Category</span><ChevronDown className="h-3.5 w-3.5 text-slate-500" /></div>
           <div className="space-y-1">{categories.map(item => <button key={item} onClick={() => setCategory(item)} className={`flex w-full items-center justify-between rounded px-2 py-2 text-left text-xs transition ${category === item ? "bg-cyan-400/10 font-semibold text-cyan-300" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}><span>{item}</span>{item === "All components" && <span className="text-[10px] text-slate-600">{variants.length}</span>}</button>)}</div>

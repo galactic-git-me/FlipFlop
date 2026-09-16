@@ -401,6 +401,28 @@ body {
   100% { transform: translateX(-50%); }
 }
 
+/* The catalogue table is intentionally information-dense, but must stay
+   inside the viewport. Let columns and long marketplace text wrap instead of
+   creating a second horizontal page scroll. */
+.catalogue-page .overflow-x-auto {
+  overflow-x: hidden;
+}
+.catalogue-page table {
+  width: 100%;
+  min-width: 0 !important;
+  table-layout: fixed;
+}
+.catalogue-page th,
+.catalogue-page td {
+  max-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.catalogue-page td > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
 .opportunity-classification-strip {
   background: linear-gradient(110deg, #075985 0%, #123b67 28%, #3f352b 62%, #c2410c 100%);
   background-size: 220% 100%;
