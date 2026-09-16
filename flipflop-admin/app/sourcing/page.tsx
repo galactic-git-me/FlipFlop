@@ -264,7 +264,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
   const skippedLength = circumference * (skippedCount / (safeMax || 1));
   return (
     <div className="flex flex-col items-center justify-center">
-      <svg width={60} height={60} viewBox="0 0 60 60">
+      <svg width={60} height={60} viewBox="0 0 60 60" className="drop-shadow-[1px_2px_1px_rgba(2,6,23,0.9)]">
         <defs>
           <pattern id={patternId} width="4" height="4" patternUnits="userSpaceOnUse">
             <rect width="4" height="4" fill="#334155" opacity="0.55" />
@@ -282,7 +282,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
         )}
         {failedLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={3} fill="none"
+            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={5} fill="none"
             strokeDasharray={`${failedLength} ${circumference - failedLength}`}
             strokeDashoffset={-successfulLength} strokeLinecap="round" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
@@ -338,7 +338,7 @@ function GaugeWithBreakdown({
   const offset = circumference * (1 - pct / 100);
   return (
     <div className="flex flex-col items-center justify-center">
-      <svg width={60} height={60} viewBox="0 0 60 60">
+      <svg width={60} height={60} viewBox="0 0 60 60" className="drop-shadow-[1px_2px_1px_rgba(2,6,23,0.9)]">
         <circle cx={30} cy={30} r={radius} stroke="#1e293b" strokeWidth={3} fill="none" />
         <circle
           cx={30}
@@ -845,7 +845,9 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                         return (
                           <div key={vendor} className="flex flex-col items-center gap-1">
                             <VendorCounter value={count} />
-                            <VendorLogo vendor={vendor} />
+                            <span className="rounded-md border border-white/15 bg-slate-950/70 p-1 shadow-[inset_1px_1px_0_rgba(255,255,255,0.2),inset_-2px_-2px_3px_rgba(2,6,23,0.8),0_2px_3px_rgba(2,6,23,0.65)]">
+                              <VendorLogo vendor={vendor} />
+                            </span>
                           </div>
                         );
                       })}
