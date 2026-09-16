@@ -259,9 +259,9 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
   const pct = safeMax > 0 ? (successful / safeMax) * 100 : 0;
   const radius = 24;
   const circumference = 2 * Math.PI * radius;
-  // Every state uses the same stroke width. The pattern/segment state already
-  // communicates unavailable work; changing its width makes one ring appear
-  // to have multiple scales and makes the percentages visually misleading.
+  // Successful output and current-stage failures share the full gauge width.
+  // Upstream-blocked work is intentionally a separate, skinny solid line so
+  // it cannot be confused with a failure of the current stage.
   const gaugeStrokeWidth = 7.5;
   const successfulLength = circumference * (successful / (safeMax || 1));
   const failedLength = circumference * (failedCount / (safeMax || 1));
@@ -300,7 +300,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
         )}
         {skippedLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={gaugeStrokeWidth} fill="none" opacity="0.9"
+            cx={30} cy={30} r={radius} stroke={color} strokeWidth={3} fill="none" opacity="0.9"
             strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
             strokeDashoffset={-(successfulLength + failedLength)} strokeLinecap="butt" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
@@ -308,13 +308,13 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
         )}
         {failedLength > 0 && (
           <line
-            x1={30} y1={2} x2={30} y2={10} stroke="#0f172a" strokeWidth={1.5}
+            x1={30} y1={1.5} x2={30} y2={11.5} stroke="#020617" strokeWidth={1}
             transform={`rotate(${(successfulLength / circumference) * 360} 30 30)`}
           />
         )}
         {skippedLength > 0 && (
           <line
-            x1={30} y1={2} x2={30} y2={10} stroke="#0f172a" strokeWidth={1.5}
+            x1={30} y1={1.5} x2={30} y2={11.5} stroke="#020617" strokeWidth={1}
             transform={`rotate(${((successfulLength + failedLength) / circumference) * 360} 30 30)`}
           />
         )}
