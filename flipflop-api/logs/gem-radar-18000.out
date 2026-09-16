@@ -5120,3 +5120,298 @@ Watch video
 2026-09-16 17:03:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
 2026-09-16 17:03:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
 2026-09-16 17:03:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 17:03:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 17:03:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 17:03:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 17:03:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 17:03:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 17:03:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 17:03:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 17:03:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 17:03:56 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=34 elapsed_s=38.6 excluded_auctions=0 new_listings=0
+2026-09-16 17:03:56 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115629
+2026-09-16 17:03:57 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 17:03:57 [info     ] queue_processor.processing_submission n_listings=10 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115660
+2026-09-16 17:03:59 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=.product-image-container-208752 {
+    width: 300px
+2026-09-16 17:04:00 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=7 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=38.6 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:00 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=7 ingested=0 submission_id=115643
+2026-09-16 17:04:00 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 17:04:00 [info     ] queue_processor.processing_submission n_listings=24 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=115648
+2026-09-16 17:04:00 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=24 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=24 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:00 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=24 ingested=0 submission_id=115648
+2026-09-16 17:04:00 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 17:04:00 [info     ] queue_processor.processing_submission n_listings=23 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=115651
+2026-09-16 17:04:00 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:00 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=115651
+2026-09-16 17:04:00 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 17:04:00 [info     ] queue_processor.processing_submission n_listings=10 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=115653
+2026-09-16 17:04:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Ssupd Meshlicious Mesh Side Panel - Black
+2026-09-16 17:04:09 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Raspberry Pi Short Crust Plus B+ Compatible Case -
+2026-09-16 17:04:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HiFiBerry Case for Amp+ \u2013 Black
+2026-09-16 17:04:10 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=29 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=44.5 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:10 [info     ] queue_processor.submission_completed catalogue_cases_upserted=25 cpk_assigned=29 ingested=0 submission_id=115638
+2026-09-16 17:04:10 [info     ] queue_processor.submission_released search_id=lian-li-pc-case
+2026-09-16 17:04:10 [info     ] queue_processor.processing_submission n_listings=40 query=Lian Li case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=lian-li-pc-case submission_id=115646
+2026-09-16 17:04:10 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.4 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:10 [info     ] queue_processor.submission_completed catalogue_cases_upserted=35 cpk_assigned=40 ingested=0 submission_id=115646
+2026-09-16 17:04:10 [info     ] queue_processor.submission_released search_id=lian-li-pc-case
+2026-09-16 17:04:10 [info     ] queue_processor.processing_submission n_listings=40 query=Lian Li case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=lian-li-pc-case submission_id=115650
+2026-09-16 17:04:10 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:10 [info     ] queue_processor.submission_completed catalogue_cases_upserted=28 cpk_assigned=40 ingested=0 submission_id=115650
+2026-09-16 17:04:10 [info     ] queue_processor.submission_released search_id=lian-li-pc-case
+2026-09-16 17:04:10 [info     ] queue_processor.processing_submission n_listings=40 query=Lian Li case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=lian-li-pc-case submission_id=115654
+2026-09-16 17:04:11 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.4 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:11 [info     ] queue_processor.submission_completed catalogue_cases_upserted=32 cpk_assigned=40 ingested=0 submission_id=115654
+2026-09-16 17:04:11 [info     ] queue_processor.submission_released search_id=lian-li-pc-case
+2026-09-16 17:04:11 [info     ] queue_processor.processing_submission n_listings=52 query=Intel GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=intel-gpu submission_id=115664
+2026-09-16 17:04:24 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=19 elapsed_s=57.7 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:24 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115645
+2026-09-16 17:04:24 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 17:04:24 [info     ] queue_processor.processing_submission n_listings=23 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115652
+2026-09-16 17:04:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Beginner: Davinci Resolve 19 Pre-Configured Workst
+2026-09-16 17:04:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell (8T6YN) PowerEdge R520 Mini-SAS (SFF-8087) to
+2026-09-16 17:04:26 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=10 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=9 elapsed_s=29.3 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:26 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=10 ingested=0 submission_id=115660
+2026-09-16 17:04:26 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 17:04:26 [info     ] queue_processor.processing_submission n_listings=10 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115667
+2026-09-16 17:04:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z2 G9 Pre-Configured Workstation
+2026-09-16 17:04:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z4 G4 Workstation
+2026-09-16 17:04:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell PowerEdge R320, R420 Optical Cable 21"
+2026-09-16 17:04:29 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=5 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=28.9 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:29 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=5 ingested=0 submission_id=115653
+2026-09-16 17:04:30 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 17:04:30 [info     ] queue_processor.processing_submission n_listings=22 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=115658
+2026-09-16 17:04:30 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=22 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=22 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:30 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=22 ingested=0 submission_id=115658
+2026-09-16 17:04:30 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 17:04:30 [info     ] queue_processor.processing_submission n_listings=22 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=115661
+2026-09-16 17:04:30 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=22 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=22 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:30 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=22 ingested=0 submission_id=115661
+2026-09-16 17:04:30 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 17:04:30 [info     ] queue_processor.processing_submission n_listings=22 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=115666
+2026-09-16 17:04:30 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=22 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=22 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:30 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=22 ingested=0 submission_id=115666
+2026-09-16 17:04:30 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 17:04:30 [info     ] queue_processor.processing_submission n_listings=23 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=115669
+2026-09-16 17:04:30 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:30 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=115669
+2026-09-16 17:04:30 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 17:04:30 [info     ] queue_processor.processing_submission n_listings=20 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=115672
+2026-09-16 17:04:30 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=20 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=20 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:30 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=20 ingested=0 submission_id=115672
+2026-09-16 17:04:30 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 17:04:30 [info     ] queue_processor.processing_submission n_listings=3 query=Lian Li case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=lian-li-pc-case submission_id=115674
+2026-09-16 17:04:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP P09230-001
+2026-09-16 17:04:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Nvidia Graphics Cards (assorted Box)
+2026-09-16 17:04:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Nvidia Dual X/ Slightly-Used
+2026-09-16 17:04:36 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=47 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=34 elapsed_s=25.3 excluded_auctions=0 new_listings=16
+2026-09-16 17:04:36 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=47 ingested=16 submission_id=115664
+2026-09-16 17:04:36 [info     ] queue_processor.submission_released search_id=intel-gpu
+2026-09-16 17:04:36 [info     ] queue_processor.processing_submission n_listings=10 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115684
+2026-09-16 17:04:52 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=28.2 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:52 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115652
+2026-09-16 17:04:52 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 17:04:52 [info     ] queue_processor.processing_submission n_listings=10 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115657
+2026-09-16 17:04:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=.product-image-container-206577 {
+    width: 300px
+2026-09-16 17:04:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=.product-image-container-23304 {
+    width: 300px;
+2026-09-16 17:04:53 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=8 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=26.9 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:53 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=8 ingested=0 submission_id=115667
+2026-09-16 17:04:53 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 17:04:53 [info     ] queue_processor.processing_submission n_listings=10 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115675
+2026-09-16 17:04:53 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=10 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:53 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=10 ingested=0 submission_id=115675
+2026-09-16 17:04:53 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 17:04:53 [info     ] queue_processor.processing_submission n_listings=10 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115676
+2026-09-16 17:04:56 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=3 elapsed_s=25.7 excluded_auctions=0 new_listings=0
+2026-09-16 17:04:56 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115674
+2026-09-16 17:04:56 [info     ] queue_processor.submission_released search_id=lian-li-pc-case
+2026-09-16 17:04:56 [info     ] queue_processor.processing_submission n_listings=58 query=ASUS motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=asus-motherboard submission_id=115703
+2026-09-16 17:04:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=DDR4/DDR3 10x DIMM / 20x DDR4 SO-DIMM Tray & Lid R
+2026-09-16 17:05:04 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=4 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=27.6 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:04 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=4 ingested=0 submission_id=115684
+2026-09-16 17:05:04 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 17:05:04 [info     ] queue_processor.processing_submission n_listings=10 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115687
+2026-09-16 17:05:08 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=9 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=14.5 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:08 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=9 ingested=0 submission_id=115676
+2026-09-16 17:05:08 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 17:05:08 [info     ] queue_processor.processing_submission n_listings=24 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115677
+2026-09-16 17:05:08 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=24 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=24 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:08 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=24 ingested=0 submission_id=115677
+2026-09-16 17:05:08 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 17:05:08 [info     ] queue_processor.processing_submission n_listings=10 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115678
+2026-09-16 17:05:08 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=10 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=0.0 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:08 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=10 ingested=0 submission_id=115678
+2026-09-16 17:05:08 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 17:05:08 [info     ] queue_processor.processing_submission n_listings=10 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115679
+2026-09-16 17:05:12 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=19.6 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:12 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115657
+2026-09-16 17:05:12 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 17:05:12 [info     ] queue_processor.processing_submission n_listings=28 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115659
+2026-09-16 17:05:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=ASUS Motherboard
+2026-09-16 17:05:16 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=57 cross_run_dupes_price_updated=4 cross_run_dupes_unchanged_price=26 elapsed_s=20.0 excluded_auctions=0 new_listings=28
+2026-09-16 17:05:16 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=57 ingested=28 submission_id=115703
+2026-09-16 17:05:16 [info     ] queue_processor.submission_released search_id=asus-motherboard
+2026-09-16 17:05:16 [info     ] queue_processor.processing_submission n_listings=10 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=115705
+2026-09-16 17:05:19 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=8 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=15.0 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:19 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=8 ingested=0 submission_id=115687
+2026-09-16 17:05:19 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 17:05:19 [info     ] queue_processor.processing_submission n_listings=10 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115689
+2026-09-16 17:05:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=.product-image-container-208752 {
+    width: 300px
+2026-09-16 17:05:22 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=7 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=14.2 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:22 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=7 ingested=0 submission_id=115679
+2026-09-16 17:05:22 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 17:05:22 [info     ] queue_processor.processing_submission n_listings=23 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115680
+2026-09-16 17:05:23 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.3 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:23 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=115680
+2026-09-16 17:05:23 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 17:05:23 [info     ] queue_processor.processing_submission n_listings=10 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115681
+2026-09-16 17:05:38 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=28 elapsed_s=26.4 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:38 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115659
+2026-09-16 17:05:39 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 17:05:39 [info     ] queue_processor.processing_submission n_listings=30 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115665
+2026-09-16 17:05:40 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=9 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=23.6 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:40 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=9 ingested=0 submission_id=115705
+2026-09-16 17:05:40 [info     ] queue_processor.submission_released search_id=ddr5-udimm-ram
+2026-09-16 17:05:40 [info     ] queue_processor.processing_submission n_listings=10 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=115708
+2026-09-16 17:05:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QCT EBS2S002010 DDR4 Memory Module RAM Blank
+2026-09-16 17:05:46 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=5 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=26.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:46 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=5 ingested=0 submission_id=115689
+2026-09-16 17:05:46 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 17:05:46 [info     ] queue_processor.processing_submission n_listings=10 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115692
+2026-09-16 17:05:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell R410, R510 - Hxxx to Motherboard LED Cable 12
+2026-09-16 17:05:46 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=9 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=23.2 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:46 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=9 ingested=0 submission_id=115681
+2026-09-16 17:05:46 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 17:05:46 [info     ] queue_processor.processing_submission n_listings=22 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115688
+2026-09-16 17:05:46 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=10 cross_run_dupes_price_updated=5 cross_run_dupes_unchanged_price=5 elapsed_s=0.3 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:46 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=10 ingested=0 submission_id=115692
+2026-09-16 17:05:46 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 17:05:46 [info     ] queue_processor.processing_submission n_listings=10 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115694
+2026-09-16 17:05:46 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=10 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:46 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=10 ingested=0 submission_id=115694
+2026-09-16 17:05:46 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 17:05:46 [info     ] queue_processor.processing_submission n_listings=10 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115696
+2026-09-16 17:05:46 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=10 cross_run_dupes_price_updated=4 cross_run_dupes_unchanged_price=6 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:46 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=10 ingested=0 submission_id=115696
+2026-09-16 17:05:46 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=22 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=22 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:46 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=22 ingested=0 submission_id=115688
+2026-09-16 17:05:46 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 17:05:46 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 17:05:46 [info     ] queue_processor.processing_submission n_listings=10 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115698
+2026-09-16 17:05:46 [info     ] queue_processor.processing_submission n_listings=22 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115690
+2026-09-16 17:05:46 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=10 cross_run_dupes_price_updated=4 cross_run_dupes_unchanged_price=6 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:46 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=10 ingested=0 submission_id=115698
+2026-09-16 17:05:46 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 17:05:46 [info     ] queue_processor.processing_submission n_listings=10 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115699
+2026-09-16 17:05:47 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=22 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=22 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:47 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=22 ingested=0 submission_id=115690
+2026-09-16 17:05:47 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 17:05:47 [info     ] queue_processor.processing_submission n_listings=23 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115693
+2026-09-16 17:05:47 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:47 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=115693
+2026-09-16 17:05:47 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 17:05:47 [info     ] queue_processor.processing_submission n_listings=23 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115695
+2026-09-16 17:05:47 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:47 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=115695
+2026-09-16 17:05:47 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 17:05:47 [info     ] queue_processor.processing_submission n_listings=20 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115697
+2026-09-16 17:05:47 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=20 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=20 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:05:47 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=20 ingested=0 submission_id=115697
+2026-09-16 17:05:47 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 17:05:47 [info     ] queue_processor.processing_submission n_listings=79 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=115719
+2026-09-16 17:06:10 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=30 elapsed_s=31.0 excluded_auctions=0 new_listings=0
+2026-09-16 17:06:10 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115665
+2026-09-16 17:06:10 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 17:06:10 [info     ] queue_processor.processing_submission n_listings=29 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115668
+2026-09-16 17:06:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=50x DIMM DDR DDR2 DDR3 DDR4 DDR5 RAM Memory Antist
+2026-09-16 17:06:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=New DIMM DDR3 DDR4 DDR5 RAM Memory Antistatic Box
+2026-09-16 17:06:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Beginner: SolidWorks Pre-Configured Workstation
+2026-09-16 17:06:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z2 G9 Pre-Configured Workstation
+2026-09-16 17:06:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision 7960 Workstation
+2026-09-16 17:06:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lenovo ThinkStation P360 Workstation
+2026-09-16 17:06:18 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=3 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=38.0 excluded_auctions=0 new_listings=0
+2026-09-16 17:06:18 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=3 ingested=0 submission_id=115708
+2026-09-16 17:06:18 [info     ] queue_processor.submission_released search_id=ddr5-udimm-ram
+2026-09-16 17:06:18 [info     ] queue_processor.processing_submission n_listings=10 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=115711
+2026-09-16 17:06:19 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=9 cross_run_dupes_price_updated=5 cross_run_dupes_unchanged_price=5 elapsed_s=32.3 excluded_auctions=0 new_listings=0
+2026-09-16 17:06:19 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=9 ingested=0 submission_id=115699
+2026-09-16 17:06:19 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 17:06:19 [info     ] queue_processor.processing_submission n_listings=23 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115700
+2026-09-16 17:06:19 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=5 cross_run_dupes_unchanged_price=18 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:06:19 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=115700
+2026-09-16 17:06:19 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 17:06:19 [info     ] queue_processor.processing_submission n_listings=10 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115701
+2026-09-16 17:06:19 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=10 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=8 elapsed_s=0.0 excluded_auctions=0 new_listings=0
+2026-09-16 17:06:19 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=10 ingested=0 submission_id=115701
+2026-09-16 17:06:19 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 17:06:19 [info     ] queue_processor.processing_submission n_listings=19 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115702
+2026-09-16 17:06:26 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=78 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=26 elapsed_s=38.8 excluded_auctions=0 new_listings=52
+2026-09-16 17:06:26 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=78 ingested=52 submission_id=115719
+2026-09-16 17:06:26 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 17:06:26 [info     ] queue_processor.processing_submission n_listings=10 query=M.2 NVMe SSD -"m.2 case" -"ssd case" -adapter -"heatsink only" -enclosure -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=115721
+2026-09-16 17:06:41 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=29 elapsed_s=31.2 excluded_auctions=0 new_listings=0
+2026-09-16 17:06:41 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115668
+2026-09-16 17:06:41 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 17:06:41 [info     ] queue_processor.processing_submission n_listings=50 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=115733
+2026-09-16 17:06:42 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell PowerEdge R770 2U Rack Server
+2026-09-16 17:06:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lenovo ThinkSystem SR645 V3 1U Rack Server
+2026-09-16 17:06:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision T3620 Workstation
+2026-09-16 17:06:44 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell PowerEdge R760 2U Rack Server
+2026-09-16 17:06:44 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=6 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=26.0 excluded_auctions=0 new_listings=0
+2026-09-16 17:06:44 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=6 ingested=0 submission_id=115711
+2026-09-16 17:06:44 [info     ] queue_processor.submission_released search_id=ddr5-udimm-ram
+2026-09-16 17:06:44 [info     ] queue_processor.processing_submission n_listings=10 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=115713
+2026-09-16 17:06:48 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HPE ProLiant m750 Server Blade
+2026-09-16 17:06:48 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=18 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=18 elapsed_s=29.2 excluded_auctions=0 new_listings=0
+2026-09-16 17:06:48 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=18 ingested=0 submission_id=115702
+2026-09-16 17:06:48 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 17:06:48 [info     ] queue_processor.processing_submission n_listings=19 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115704
+2026-09-16 17:06:48 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=19 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=17 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:06:48 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=19 ingested=0 submission_id=115704
+2026-09-16 17:06:48 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 17:06:48 [info     ] queue_processor.processing_submission n_listings=15 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115707
+2026-09-16 17:06:48 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HPE ProLiant m710x Server Blade
+2026-09-16 17:06:48 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=7 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=22.0 excluded_auctions=0 new_listings=0
+2026-09-16 17:06:48 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=7 ingested=0 submission_id=115721
+2026-09-16 17:06:48 [info     ] queue_processor.submission_released search_id=m2-nvme-ssd
+2026-09-16 17:06:48 [info     ] queue_processor.processing_submission n_listings=10 query=M.2 NVMe SSD -"m.2 case" -"ssd case" -adapter -"heatsink only" -enclosure -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=115724
+2026-09-16 17:06:51 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=50 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=28 elapsed_s=9.7 excluded_auctions=0 new_listings=22
+2026-09-16 17:06:51 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=50 ingested=22 submission_id=115733
+2026-09-16 17:06:51 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 17:06:51 [info     ] queue_processor.processing_submission n_listings=10 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=115736
+2026-09-16 17:06:55 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=8 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=9 elapsed_s=10.5 excluded_auctions=0 new_listings=0
+2026-09-16 17:06:55 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=8 ingested=0 submission_id=115713
+2026-09-16 17:06:55 [info     ] queue_processor.submission_released search_id=ddr5-udimm-ram
+2026-09-16 17:06:55 [info     ] queue_processor.processing_submission n_listings=10 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=115717
+2026-09-16 17:06:55 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision T5820 Workstation
+2026-09-16 17:06:55 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision T5810 Workstation
+2026-09-16 17:06:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HPE ProLiant BL460c Gen10 Server Blade
+2026-09-16 17:06:58 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=15 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=13 elapsed_s=9.3 excluded_auctions=0 new_listings=0
+2026-09-16 17:06:58 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=15 ingested=0 submission_id=115707
+2026-09-16 17:06:58 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 17:06:58 [info     ] queue_processor.processing_submission n_listings=9 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115712
+2026-09-16 17:06:58 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=9 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=7 elapsed_s=0.0 excluded_auctions=0 new_listings=0
+2026-09-16 17:06:58 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=9 ingested=0 submission_id=115712
+2026-09-16 17:06:58 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 17:06:58 [info     ] queue_processor.processing_submission n_listings=20 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115714
+2026-09-16 17:06:59 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z240 Workstation
+2026-09-16 17:06:59 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z2 Mini G3 Workstation
+2026-09-16 17:07:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision T7820 Workstation
+2026-09-16 17:07:00 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=4 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=11.4 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:00 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=4 ingested=0 submission_id=115724
+2026-09-16 17:07:00 [info     ] queue_processor.submission_released search_id=m2-nvme-ssd
+2026-09-16 17:07:00 [info     ] queue_processor.processing_submission n_listings=10 query=M.2 NVMe SSD -"m.2 case" -"ssd case" -adapter -"heatsink only" -enclosure -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=115730
+2026-09-16 17:07:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Arista DCS-7500R2AM-36CQ-LC 36xQSFP 100G Modular S
+2026-09-16 17:07:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell BCM5720 Dual Port RJ-45 1G Modular LOM NIC
+2026-09-16 17:07:03 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=8 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=11.2 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:03 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=8 ingested=0 submission_id=115736
+2026-09-16 17:07:03 [info     ] queue_processor.submission_released search_id=psu-gold-750w-modular
+2026-09-16 17:07:03 [info     ] queue_processor.processing_submission n_listings=10 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=115740
