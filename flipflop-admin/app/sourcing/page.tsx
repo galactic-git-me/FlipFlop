@@ -274,7 +274,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
         <circle cx={30} cy={30} r={radius} stroke="#1e293b" strokeWidth={3} fill="none" />
         {successfulLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={color} strokeWidth={3} fill="none"
+            cx={30} cy={30} r={radius} stroke={color} strokeWidth={5} fill="none"
             strokeDasharray={`${successfulLength} ${circumference - successfulLength}`}
             strokeDashoffset={0} strokeLinecap="round" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
@@ -345,7 +345,7 @@ function GaugeWithBreakdown({
           cy={30}
           r={radius}
           stroke={color}
-          strokeWidth={3}
+          strokeWidth={5}
           fill="none"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
@@ -489,9 +489,12 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                 ...previous,
                 ...scan,
                 totalListings: Math.max(previous.totalListings ?? 0, scan.totalListings ?? 0),
+                discoveredCount: Math.max(previous.discoveredCount ?? 0, scan.discoveredCount ?? 0),
+                eligibleCount: Math.max(previous.eligibleCount ?? 0, scan.eligibleCount ?? 0),
                 ingestedCount: Math.max(previous.ingestedCount ?? 0, scan.ingestedCount ?? 0),
                 ingestedNewCount: Math.max(previous.ingestedNewCount ?? 0, scan.ingestedNewCount ?? 0),
                 cpkAssignedCount: Math.max(previous.cpkAssignedCount ?? 0, scan.cpkAssignedCount ?? 0),
+                cpkFailedCount: Math.max(previous.cpkFailedCount ?? 0, scan.cpkFailedCount ?? 0),
                 marketPricedCount: Math.max(previous.marketPricedCount ?? 0, scan.marketPricedCount ?? 0),
                 classifiedCount: Math.max(previous.classifiedCount ?? 0, scan.classifiedCount ?? 0),
                 processedPercent: Math.max(previous.processedPercent ?? 0, scan.processedPercent ?? 0),
