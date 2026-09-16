@@ -14,12 +14,14 @@ import {
   Warehouse,
   ChartNoAxesCombined,
   Repeat2,
+  Library,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ServiceHealthPanel } from "./service-health-panel";
 
 const PRIMARY_NAV = [
   { href: "/sourcing", icon: Search, label: "Sourcing" },
+  { href: "/catalogue", icon: Library, label: "Catalogue" },
   { href: "/builds", icon: Package, label: "Pre-Built" },
   { href: "/configurator-config", icon: Settings2, label: "Custom Builds" },
   { href: "/pc-builder", icon: Zap, label: "Curated Builds" },

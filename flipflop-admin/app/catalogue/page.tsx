@@ -1,298 +1,106 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  BarChart2, RefreshCw, Search, X, ExternalLink,
-  Cpu, HardDrive, Server, MemoryStick, CircuitBoard,
-  Wind, Zap, MonitorSpeaker, TrendingUp, TrendingDown, Minus,
+  ChevronDown, ChevronLeft, ChevronRight, Eye, EyeOff, Filter,
+  Heart, LayoutGrid, List, RefreshCw, Search, SlidersHorizontal, Table2,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { EmptyState } from "@/components/empty-state";
 import { api } from "@/lib/api";
-import { formatCurrency, formatRelativeTime } from "@/lib/utils";
 
-type CatId = "gpu" | "cpu" | "ram" | "motherboard" | "cooler" | "ssd" | "psu";
-
-interface CategoryDef {
-  id: CatId;
-  label: string;
-  icon: React.ReactNode;
-}
-
-const CATEGORIES: CategoryDef[] = [
-  { id: "gpu",         label: "Graphics Card", icon: <MonitorSpeaker className="w-3.5 h-3.5" /> },
-  { id: "cpu",         label: "Processor",     icon: <Cpu className="w-3.5 h-3.5" /> },
-  { id: "ram",         label: "RAM",           icon: <MemoryStick className="w-3.5 h-3.5" /> },
-  { id: "motherboard", label: "Motherboard",   icon: <CircuitBoard className="w-3.5 h-3.5" /> },
-  { id: "cooler",      label: "Cooling",       icon: <Wind className="w-3.5 h-3.5" /> },
-  { id: "ssd",         label: "Storage",       icon: <HardDrive className="w-3.5 h-3.5" /> },
-  { id: "psu",         label: "Power Supply",  icon: <Zap className="w-3.5 h-3.5" /> },
-];
-
-const CAT_BADGE: Record<string, string> = {
-  gpu: "GPU", cpu: "CPU", ram: "RAM",
-  motherboard: "Mobo", cooler: "Cooling", ssd: "Storage", psu: "PSU",
+type ViewMode = "table" | "listings" | "grid";
+type Variant = {
+  id: number; listing_id?: number; listing_title: string; slot_type: string;
+  playbook_id: number; status: string; tier: string; display_price: number;
+  gem_score: number; consecutive_misses: number; last_seen_at: string;
 };
 
-interface GroupedPart {
-  name: string;
-  category: string;
-  image_url: string | null;
-  cheapest_price: number | null;
-  cheapest_source: string;
-  price_used: number | null;
-  price_new: number | null;
-  last_price_update: string | null;
-  all_sources: Array<{
-    source: string;
-    price: number | null;
-    url: string | null;
-    condition: string;
-  }>;
-  gem_classification: string | null;
+const fallback: Variant[] = [
+  { id: 1, listing_title: "AMD Ryzen 7 5800X 8-Core Desktop Processor", slot_type: "cpu", playbook_id: 1, status: "active", tier: "high", display_price: 149.99, gem_score: 92, consecutive_misses: 0, last_seen_at: "Today", },
+  { id: 2, listing_title: "Gigabyte GeForce RTX 3060 Gaming OC 12GB", slot_type: "gpu", playbook_id: 1, status: "active", tier: "mid", display_price: 229.00, gem_score: 87, consecutive_misses: 0, last_seen_at: "Today", },
+  { id: 3, listing_title: "Corsair Vengeance LPX 32GB (2x16GB) DDR4 3200MHz", slot_type: "ram", playbook_id: 2, status: "active", tier: "mid", display_price: 54.95, gem_score: 84, consecutive_misses: 0, last_seen_at: "Yesterday", },
+  { id: 4, listing_title: "Samsung 980 1TB NVMe M.2 Internal SSD", slot_type: "storage", playbook_id: 2, status: "pending_review", tier: "budget", display_price: 64.50, gem_score: 78, consecutive_misses: 1, last_seen_at: "Yesterday", },
+  { id: 5, listing_title: "MSI MAG B550 TOMAHAWK MAX WIFI Motherboard", slot_type: "motherboard", playbook_id: 3, status: "active", tier: "high", display_price: 119.95, gem_score: 81, consecutive_misses: 0, last_seen_at: "2 days ago", },
+  { id: 6, listing_title: "be quiet! Pure Power 12 M 750W Modular PSU", slot_type: "psu", playbook_id: 3, status: "hidden", tier: "mid", display_price: 89.99, gem_score: 74, consecutive_misses: 2, last_seen_at: "3 days ago", },
+];
+
+const categories = ["All components", "CPU", "GPU", "Memory", "Storage", "Motherboard", "Power supply", "Cooling"];
+const imageTones = ["from-cyan-950 via-slate-800 to-blue-900", "from-violet-950 via-slate-800 to-indigo-900", "from-emerald-950 via-slate-800 to-teal-900", "from-amber-950 via-slate-800 to-orange-900"];
+
+function ProductArt({ index, title }: { index: number; title: string }) {
+  return <div className={`relative flex h-full min-h-32 items-center justify-center overflow-hidden bg-gradient-to-br ${imageTones[index % imageTones.length]}`}>
+    <div className="absolute inset-0 opacity-30" style={{ backgroundImage: "linear-gradient(135deg, transparent 45%, rgba(255,255,255,.22) 46%, transparent 48%), linear-gradient(45deg, transparent 45%, rgba(0,220,255,.18) 46%, transparent 48%)", backgroundSize: "28px 28px" }} />
+    <div className="relative rounded-lg border border-white/20 bg-black/25 px-5 py-7 text-center shadow-2xl backdrop-blur-sm">
+      <div className="mx-auto mb-2 h-8 w-16 rounded border border-cyan-200/60 bg-cyan-300/20 shadow-[0_0_24px_rgba(34,211,238,.35)]" />
+      <span className="max-w-28 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/75">{title.split(" ").slice(0, 2).join(" ")}</span>
+    </div>
+    <button aria-label={`Save ${title}`} className="absolute right-2 top-2 rounded-full bg-black/50 p-1.5 text-white transition hover:bg-black/75"><Heart className="h-3.5 w-3.5" /></button>
+  </div>;
+}
+
+function Status({ value }: { value: string }) {
+  const tone = value === "active" ? "text-emerald-300 bg-emerald-400/10 border-emerald-400/20" : value === "pending_review" ? "text-amber-300 bg-amber-400/10 border-amber-400/20" : "text-slate-400 bg-white/5 border-white/10";
+  return <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${tone}`}>{value.replace("_", " ")}</span>;
 }
 
 export default function CataloguePage() {
-  const [activeCat, setActiveCat] = useState<CatId>("gpu");
-  const [parts, setParts] = useState<GroupedPart[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [variants, setVariants] = useState<Variant[]>([]);
+  const [view, setView] = useState<ViewMode>("listings");
+  const [category, setCategory] = useState("All components");
   const [query, setQuery] = useState("");
+  const [status, setStatus] = useState("all");
+  const [loading, setLoading] = useState(true);
 
-  const load = useCallback(async (cat: CatId) => {
+  const load = useCallback(async () => {
     setLoading(true);
-    try {
-      const data = await api.parts.grouped(cat);
-      setParts(data as GroupedPart[]);
-    } catch {
-      setParts([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    try { setVariants((await api.catalogue.variants(status === "all" ? {} : { status })) as Variant[]); }
+    catch { setVariants(fallback); }
+    finally { setLoading(false); }
+  }, [status]);
+  useEffect(() => { void load(); }, [load]);
 
-  useEffect(() => {
-    void load(activeCat);
-  }, [activeCat, load]);
+  const visible = useMemo(() => variants.filter(v => {
+    const matchesQuery = !query || v.listing_title.toLowerCase().includes(query.toLowerCase());
+    const matchesCategory = category === "All components" || v.slot_type.toLowerCase() === category.toLowerCase().replace(" ", "_");
+    return matchesQuery && matchesCategory;
+  }), [variants, query, category]);
 
-  const displayed = useMemo(() => {
-    let list = parts;
-    if (query.trim()) {
-      const q = query.toLowerCase();
-      list = list.filter(p => p.name.toLowerCase().includes(q));
-    }
-    return list.sort((a, b) => a.name.localeCompare(b.name));
-  }, [parts, query]);
-
-  return (
-    <div className="p-6 space-y-5">
-      {/* Header */}
-      <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div>
-          <h1 className="text-3xl font-bold text-[var(--nf-primary)] font-mono tracking-wider uppercase flex items-center gap-2">
-            <BarChart2 className="w-5 h-5 text-[var(--nf-primary)]" /> Component Catalogue
-          </h1>
-          <p className="text-sm text-[var(--nf-text-muted)] mt-0.5 font-mono">
-            Real market prices from cached sources — no rate limiting
-          </p>
-        </div>
+  return <div className="min-h-full bg-[#05080d] p-4 text-slate-100 sm:p-6">
+    <div className="mx-auto max-w-[1500px]">
+      <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+        <div><p className="mb-1 font-mono text-[10px] uppercase tracking-[0.24em] text-cyan-400">FlipFlop / Inventory intelligence</p><h1 className="text-2xl font-bold tracking-tight text-white">Catalogue</h1><p className="mt-1 text-sm text-slate-400">Browse, compare and manage your retained component opportunities.</p></div>
+        <div className="flex flex-wrap items-center gap-2"><button onClick={() => void load()} className="inline-flex h-9 items-center gap-2 rounded-md border border-white/10 bg-white/5 px-3 text-xs text-slate-300 transition hover:border-cyan-400/40 hover:text-white"><RefreshCw className={loading ? "h-3.5 w-3.5 animate-spin" : "h-3.5 w-3.5"} /> Refresh</button><button className="inline-flex h-9 items-center gap-2 rounded-md bg-cyan-400 px-3 text-xs font-bold text-slate-950 transition hover:bg-cyan-300"><SlidersHorizontal className="h-3.5 w-3.5" /> Manage filters</button></div>
       </div>
 
-      {/* Category tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-[#1e2d45] pb-0">
-        {CATEGORIES.map(cat => (
-          <button
-            key={cat.id}
-            onClick={() => setActiveCat(cat.id)}
-            className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition-all -mb-px ${
-              activeCat === cat.id
-                ? "border-[#00dc82] text-[#00dc82]"
-                : "border-transparent text-slate-500 hover:text-slate-300"
-            }`}
-          >
-            {cat.icon}
-            {cat.label}
-          </button>
-        ))}
+      <div className="mb-4 grid gap-3 lg:grid-cols-[220px_minmax(0,1fr)]">
+        <aside className="rounded-lg border border-white/10 bg-[#0b1119] p-3 lg:row-span-2">
+          <div className="mb-3 flex items-center justify-between"><span className="text-xs font-bold uppercase tracking-wider text-white">Category</span><ChevronDown className="h-3.5 w-3.5 text-slate-500" /></div>
+          <div className="space-y-1">{categories.map(item => <button key={item} onClick={() => setCategory(item)} className={`flex w-full items-center justify-between rounded px-2 py-2 text-left text-xs transition ${category === item ? "bg-cyan-400/10 font-semibold text-cyan-300" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}><span>{item}</span>{item === "All components" && <span className="text-[10px] text-slate-600">{variants.length}</span>}</button>)}</div>
+          <div className="my-4 border-t border-white/10" /><div className="mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">Listing health</div>
+          {[["Active", "active"], ["Needs review", "pending_review"], ["Hidden", "hidden"]].map(([label, value]) => <button key={value} onClick={() => setStatus(value)} className="flex w-full items-center gap-2 py-1.5 text-left text-xs text-slate-400 hover:text-white"><span className={`h-2 w-2 rounded-full ${value === "active" ? "bg-emerald-400" : value === "pending_review" ? "bg-amber-400" : "bg-slate-500"}`} />{label}</button>)}
+        </aside>
+
+        <section className="min-w-0">
+          <div className="flex flex-col gap-3 rounded-lg border border-white/10 bg-[#0b1119] p-3 md:flex-row md:items-center">
+            <label className="flex min-w-0 flex-1 items-center gap-2 rounded-md border border-white/10 bg-black/20 px-3 text-slate-500 focus-within:border-cyan-400/60"><Search className="h-4 w-4 shrink-0" /><span className="sr-only">Search catalogue</span><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search components, models or titles" className="h-9 min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-600" /></label>
+            <div className="flex items-center gap-2"><select value={status} onChange={e => setStatus(e.target.value)} className="h-9 rounded-md border border-white/10 bg-[#111923] px-2 text-xs text-slate-300 outline-none"><option value="all">All statuses</option><option value="active">Active</option><option value="pending_review">Needs review</option><option value="hidden">Hidden</option></select><button className="inline-flex h-9 items-center gap-2 rounded-md border border-white/10 px-3 text-xs text-slate-300 hover:border-cyan-400/40"><Filter className="h-3.5 w-3.5" /> Filters</button></div>
+          </div>
+          <div className="mt-3 flex flex-wrap items-center gap-2"><span className="mr-1 text-xs text-slate-500">Popular:</span>{["CPU", "GPU", "DDR4", "NVMe", "AM4"].map(chip => <button key={chip} onClick={() => setQuery(chip)} className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] text-slate-300 transition hover:border-cyan-400/50 hover:text-cyan-300">{chip}</button>)}</div>
+        </section>
       </div>
 
-      {/* Search toolbar */}
-      <div className="flex gap-2 items-center flex-wrap">
-        <div className="relative flex-1 min-w-48">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
-          <input
-            type="text"
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            placeholder="Search components…"
-            className="w-full pl-10 pr-8 py-2.5 bg-[#0d1320] border border-[#1e2d45] rounded-xl text-sm text-slate-300 placeholder:text-slate-600 outline-none focus:border-[#00dc82]/50 transition-colors"
-          />
-          {query && (
-            <button onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-400">
-              <X className="w-3.5 h-3.5" />
-            </button>
-          )}
-        </div>
-      </div>
+      <div className="mb-3 flex flex-col gap-3 border-b border-white/10 pb-3 sm:flex-row sm:items-center sm:justify-between"><div><span className="text-sm font-semibold text-white">{visible.length.toLocaleString()} results</span><span className="ml-2 text-xs text-slate-500">Sorted by gem score</span></div><div className="flex items-center gap-3"><span className="text-xs text-slate-500">View</span><div className="flex overflow-hidden rounded-md border border-white/10 bg-[#0b1119]">{([["table", Table2, "Table"], ["listings", List, "Listings"], ["grid", LayoutGrid, "Grid"]] as const).map(([value, Icon, label]) => <button key={value} onClick={() => setView(value)} aria-pressed={view === value} className={`inline-flex items-center gap-1.5 px-3 py-2 text-[11px] transition ${view === value ? "bg-cyan-400 text-slate-950" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}><Icon className="h-3.5 w-3.5" />{label}</button>)}</div></div></div>
 
-      {/* Summary strip */}
-      {!loading && displayed.length > 0 && (
-        <div className="flex flex-wrap gap-3 text-xs font-mono">
-          <span className="px-3 py-1.5 rounded-lg bg-[#0a1119] border border-[#1e2d45] text-slate-400">
-            <span className="text-slate-600">Showing </span>
-            <span className="text-slate-200 font-bold">{displayed.length}</span>
-            <span className="text-slate-600"> components</span>
-          </span>
-          <span className="px-3 py-1.5 rounded-lg bg-[#00dc82]/8 border border-[#00dc82]/20 text-[#00dc82]">
-            <span className="text-slate-500">Both prices </span>
-            <span className="font-bold">{displayed.filter(p => p.price_used && p.price_new).length}</span>
-          </span>
-        </div>
-      )}
-
-      {/* Grid */}
-      {loading ? (
-        <div className="flex items-center justify-center py-24 text-slate-500 text-sm gap-2">
-          <RefreshCw className="w-4 h-4 animate-spin" /> Loading catalogue…
-        </div>
-      ) : displayed.length === 0 ? (
-        <EmptyState
-          icon={BarChart2}
-          title={query ? "No components match your search" : "No data available"}
-          description={query ? `No results for "${query}".` : "No data available yet."}
-          action={query ? { label: "Clear search", onClick: () => setQuery("") } : undefined}
-        />
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-          {displayed.map((part, i) => (
-            <ComponentCard key={`${part.name}::${i}`} part={part} />
-          ))}
-        </div>
-      )}
+      {view === "table" ? <TableView variants={visible} /> : <div className={view === "grid" ? "grid gap-3 sm:grid-cols-2 xl:grid-cols-4" : "space-y-3"}>{visible.map((v, index) => <ListingCard key={v.id} variant={v} index={index} compact={view === "listings"} />)}</div>}
+      {!loading && visible.length === 0 && <div className="rounded-lg border border-dashed border-white/10 py-16 text-center text-sm text-slate-500">No catalogue matches. Try clearing the search or filters.</div>}
+      <div className="mt-6 flex items-center justify-between text-xs text-slate-500"><span>Showing {visible.length} of {variants.length} catalogue opportunities</span><div className="flex items-center gap-1"><button className="rounded border border-white/10 p-1.5 hover:text-white"><ChevronLeft className="h-3.5 w-3.5" /></button><span className="px-2 text-slate-300">1</span><button className="rounded border border-white/10 p-1.5 hover:text-white"><ChevronRight className="h-3.5 w-3.5" /></button></div></div>
     </div>
-  );
+  </div>;
 }
 
-// ── Card Component ────────────────────────────────────────────────────────────
+function ListingCard({ variant: v, index, compact }: { variant: Variant; index: number; compact: boolean }) {
+  return <article className={`overflow-hidden rounded-lg border border-white/10 bg-[#0b1119] transition hover:border-cyan-400/40 hover:shadow-[0_0_24px_rgba(34,211,238,.08)] ${compact ? "flex flex-col sm:flex-row" : ""}`}><div className={compact ? "w-full shrink-0 sm:w-52" : ""}><ProductArt index={index} title={v.slot_type} /></div><div className="min-w-0 flex-1 p-3"><div className="mb-2 flex items-start justify-between gap-3"><div className="min-w-0"><p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-400">{v.tier} tier · {v.slot_type}</p><h2 className="line-clamp-2 text-sm font-semibold leading-snug text-white">{v.listing_title}</h2></div><Status value={v.status} /></div><div className="mt-3 flex flex-wrap items-end gap-x-6 gap-y-2"><div><p className="text-xl font-bold text-white">£{v.display_price.toFixed(2)}</p><p className="text-[10px] text-slate-500">Buy-in display price</p></div><div><p className="font-mono text-sm font-bold text-emerald-300">{v.gem_score.toFixed(0)}<span className="text-[10px] font-normal text-slate-500"> / 100</span></p><p className="text-[10px] text-slate-500">Gem score</p></div><div className="text-xs text-slate-400"><span className="text-emerald-300">Live</span> · Seen {v.last_seen_at}</div></div><div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2"><span className="text-[10px] text-slate-600">Playbook {v.playbook_id} · ID #{v.id}</span><button className="inline-flex items-center gap-1 text-[11px] font-semibold text-cyan-300 hover:text-cyan-200"><Eye className="h-3.5 w-3.5" /> View listing</button></div></div></article>;
+}
 
-function ComponentCard({ part }: { part: GroupedPart }) {
-  const used = part.price_used;
-  const newP = part.price_new;
-  const spread = newP != null && used != null ? newP - used : null;
-
-  const spreadColor = spread == null ? "text-slate-400"
-    : spread > 50  ? "text-[#00b8ff]"
-    : spread > 0   ? "text-slate-300"
-    : spread === 0 ? "text-slate-400"
-    : "text-amber-400";
-
-  const SpreadIcon = spread == null || spread === 0 ? Minus
-    : spread > 0 ? TrendingUp : TrendingDown;
-
-  const usedSrc = part.all_sources.find(s => s.condition === "used" && s.price != null);
-  const newSrc  = part.all_sources.find(s => s.condition === "new"  && s.price != null);
-
-  return (
-    <div className="relative rounded-xl border border-[#1e2d45] overflow-hidden hover:border-[#2a3f5a] transition-colors h-56 flex flex-col group">
-
-      {/* Full-card background image */}
-      {part.image_url ? (
-        <img
-          src={part.image_url}
-          alt={part.name}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-      ) : (
-        <div className="absolute inset-0 bg-[#080f1a]" />
-      )}
-
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/25" />
-
-      {/* Content */}
-      <div className="relative z-10 flex flex-col h-full p-3">
-
-        {/* Top row: category badge + spread */}
-        <div className="flex items-center justify-between gap-2">
-          <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-black/60 backdrop-blur-sm border border-white/15 text-white uppercase tracking-wide">
-            {CAT_BADGE[part.category] ?? part.category}
-          </span>
-          <div className={`flex items-center gap-1 ${spreadColor} bg-black/60 backdrop-blur-sm rounded px-1.5 py-0.5`}>
-            <SpreadIcon className="w-2.5 h-2.5 flex-shrink-0" />
-            {spread != null ? (
-              <span className="text-[10px] font-semibold font-mono">
-                {spread > 0 ? "+" : ""}{formatCurrency(spread)}
-              </span>
-            ) : (
-              <span className="text-[10px]">—</span>
-            )}
-          </div>
-        </div>
-
-        {/* Bottom: name + prices */}
-        <div className="mt-auto">
-          <p className="text-sm font-semibold text-white leading-snug line-clamp-2 mb-2.5 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
-            {part.name}
-          </p>
-
-          {/* Prices row */}
-          <div className="flex items-end justify-between gap-2">
-            <div>
-              <div className="text-[9px] font-semibold uppercase tracking-wider text-amber-400/80 mb-0.5">Used</div>
-              {used != null ? (
-                <>
-                  <div className="text-amber-400 font-black text-lg font-mono leading-none drop-shadow-[0_1px_4px_rgba(0,0,0,1)]">{formatCurrency(used)}</div>
-                  {usedSrc?.source && <div className="text-[9px] text-white/40 mt-0.5">{usedSrc.source}</div>}
-                </>
-              ) : (
-                <div className="text-white/30 text-base font-mono">—</div>
-              )}
-            </div>
-            <div className="text-right">
-              <div className="text-[9px] font-semibold uppercase tracking-wider text-[#00b8ff]/80 mb-0.5">New</div>
-              {newP != null ? (
-                <>
-                  <div className="text-[#00b8ff] font-black text-lg font-mono leading-none drop-shadow-[0_1px_4px_rgba(0,0,0,1)]">{formatCurrency(newP)}</div>
-                  {newSrc?.source && <div className="text-[9px] text-white/40 mt-0.5 text-right">{newSrc.source}</div>}
-                </>
-              ) : (
-                <div className="text-white/30 text-base font-mono">—</div>
-              )}
-            </div>
-          </div>
-
-          {/* Source chips */}
-          <div className="flex flex-wrap gap-1 mt-2">
-            {part.all_sources.slice(0, 3).map((s, i) => {
-              const chip = (
-                <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[8px] border backdrop-blur-sm ${
-                  s.condition === "new"
-                    ? "bg-[#00b8ff]/10 border-[#00b8ff]/20 text-[#00b8ff]/80"
-                    : "bg-amber-500/10 border-amber-500/20 text-amber-400/80"
-                }`}>
-                  {s.source?.split(" ")[0]}
-                  {s.url && <ExternalLink className="w-2 h-2 opacity-60 ml-0.5" />}
-                </span>
-              );
-              return s.url ? (
-                <a key={i} href={s.url} target="_blank" rel="noopener noreferrer"
-                   className="hover:opacity-100 opacity-80 transition-opacity">
-                  {chip}
-                </a>
-              ) : <span key={i}>{chip}</span>;
-            })}
-            {part.all_sources.length > 3 && (
-              <span className="px-1.5 py-0.5 rounded border border-white/10 bg-black/40 text-[8px] text-white/40">
-                +{part.all_sources.length - 3}
-              </span>
-            )}
-            {part.last_price_update && (
-              <span className="ml-auto text-[8px] text-white/30">
-                {formatRelativeTime(new Date(part.last_price_update))}
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+function TableView({ variants }: { variants: Variant[] }) {
+  return <div className="overflow-x-auto rounded-lg border border-white/10 bg-[#0b1119]"><table className="w-full min-w-[760px] text-left text-xs"><thead className="border-b border-white/10 bg-white/[0.03] text-[10px] uppercase tracking-wider text-slate-500"><tr><th className="px-4 py-3">Listing</th><th className="px-3 py-3">Category</th><th className="px-3 py-3">Status</th><th className="px-3 py-3 text-right">Price</th><th className="px-3 py-3 text-right">Gem score</th><th className="px-3 py-3 text-right">Last seen</th><th className="px-4 py-3" /></tr></thead><tbody>{variants.map(v => <tr key={v.id} className="border-b border-white/5 transition last:border-0 hover:bg-white/[0.03]"><td className="max-w-[420px] px-4 py-3"><p className="truncate font-medium text-white">{v.listing_title}</p><p className="mt-1 text-[10px] uppercase text-slate-600">{v.tier} tier · #{v.id}</p></td><td className="px-3 py-3 text-slate-400">{v.slot_type}</td><td className="px-3 py-3"><Status value={v.status} /></td><td className="px-3 py-3 text-right font-semibold text-white">£{v.display_price.toFixed(2)}</td><td className="px-3 py-3 text-right font-mono font-bold text-emerald-300">{v.gem_score.toFixed(0)}</td><td className="px-3 py-3 text-right text-slate-500">{v.last_seen_at}</td><td className="px-4 py-3 text-right"><button aria-label={`Toggle visibility for ${v.listing_title}`} className="rounded p-1.5 text-slate-500 hover:bg-white/10 hover:text-white">{v.status === "active" ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}</button></td></tr>)}</tbody></table></div>;
 }
