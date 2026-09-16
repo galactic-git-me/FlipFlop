@@ -199,6 +199,14 @@ def exclude_discovered(search_id: str, discovered_key: str) -> None:
     global _active_run_id
     if not _active:
         _active_run_id = uuid.uuid4().hex
+    # A new in-memory run begins with the first submission, including queued
+    # submissions.  This must live here (rather than in one of the later
+    # counters) because the dashboard uses runId to discard values from the
+    # previous sweep as soon as the first page of the new sweep arrives.
+    global _active_run_id
+    if not _active:
+        _active_run_id = uuid.uuid4().hex
+
     state = _active.get(search_id)
     if state is not None:
         state.excluded_discovered_keys.add(discovered_key)
