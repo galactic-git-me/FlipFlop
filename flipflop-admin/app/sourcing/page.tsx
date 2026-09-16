@@ -117,6 +117,8 @@ interface ScanProgress {
   cpkFailedCount?: number;
   marketPricedCount: number; // Listings with non-null market price
   classifiedCount: number;   // Listings with classification (GEM, SUPER_GEM, etc)
+  gemCount?: number;
+  superGemCount?: number;
   processedPercent: number;  // % through full pipeline
   excludedAuctionCount: number;
   byVendor: Record<string, number>;
@@ -231,6 +233,8 @@ function coalesceScansBySearchId(scans: ScanProgress[]): ScanProgress[] {
     existing.cpkAssignedCount += scan.cpkAssignedCount;
     existing.marketPricedCount += scan.marketPricedCount;
     existing.classifiedCount += scan.classifiedCount;
+    existing.gemCount = (existing.gemCount ?? 0) + (scan.gemCount ?? 0);
+    existing.superGemCount = (existing.superGemCount ?? 0) + (scan.superGemCount ?? 0);
     existing.excludedAuctionCount += scan.excludedAuctionCount;
     existing.isComplete = existing.isComplete && scan.isComplete;
     const configuredVendors = Array.from(new Set([
@@ -245,7 +249,7 @@ function coalesceScansBySearchId(scans: ScanProgress[]): ScanProgress[] {
 // Small circular gauge -- replaces the earlier linear progress bars per
 // request. `value`/`max` drive the sweep angle; the label underneath gives
 // the raw fraction since a gauge alone can't show absolute counts.
-function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: number; max: number; failed?: number; skipped?: number; label: string; color: string }) {
+function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, label, color }: { value: number; max: number; failed?: number; skipped?: number; skippedStart?: number; label: string; color: string }) {
   const patternId = `gauge-hatch-${useId().replace(/:/g, "")}`;
   const safeMax = Math.max(max, 0);
   const successful = Math.min(Math.max(value, 0), safeMax);
@@ -266,6 +270,10 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
   const successfulLength = circumference * (successful / (safeMax || 1));
   const failedLength = circumference * (failedCount / (safeMax || 1));
   const skippedLength = circumference * (skippedCount / (safeMax || 1));
+  // Upstream failures must use the preceding stage's failure position. When
+  // omitted, the segment follows this gauge's successful output as before.
+  const skippedStartCount = Math.min(Math.max(skippedStart ?? successful, 0), safeMax);
+  const skippedStartLength = circumference * (skippedStartCount / (safeMax || 1));
   return (
     <div className="flex flex-col items-center justify-center">
       <svg width={60} height={60} viewBox="0 0 60 60" className="drop-shadow-[1px_2px_1px_rgba(2,6,23,0.9)]">
@@ -296,7 +304,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
           <circle
             cx={30} cy={30} r={radius} stroke={color} strokeWidth={3} fill="none" opacity="0.9"
             strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
-            strokeDashoffset={-successfulLength} strokeLinecap="butt" transform="rotate(-90 30 30)"
+            strokeDashoffset={-skippedStartLength} strokeLinecap="butt" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
           />
         )}
@@ -317,14 +325,14 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
         {skippedLength > 0 && (
           <line
             x1={30} y1={1.5} x2={30} y2={11.5} stroke="#020617" strokeWidth={1}
-            transform={`rotate(${(successfulLength / circumference) * 360} 30 30)`}
+            transform={`rotate(${(skippedStartLength / circumference) * 360} 30 30)`}
           />
         )}
         <text x={30} y={34} textAnchor="middle" className="fill-slate-100 text-[12px] font-semibold">
           {Math.round(pct)}%
         </text>
       </svg>
-      <div className="text-[11px] text-slate-400 -mt-1 text-center">{label}</div>
+      <div className="text-[11px] text-white mt-1 text-center">{label}</div>
       <div className="text-[11px] text-slate-300 text-center">{value}/{max}</div>
     </div>
   );
@@ -696,7 +704,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
           </div>
           <div className="flex items-center gap-4">
             <QueueStatusBar queue={queueStatus} />
-            <MiniStat label="Listings processed" value={status?.totalsAcrossActive.ingestedCount ?? 0} color="#e2e8f0" />
+            <MiniStat label="Listings" value={status?.totalsAcrossActive.ingestedCount ?? 0} color="#e2e8f0" />
             <MiniStat label="SUPER GEMs" value={superGemCount} color="#fcd34d" />
             <MiniStat label="Avg Super Gem" value={avgSuperGemScore.toFixed(1)} color="#fcd34d" />
             <MiniStat label="GEMs" value={gemCount} color="#93c5fd" />
@@ -781,11 +789,6 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             // Discovery is the user-facing search-term total. Processing
             // gauges use only eligible (non-auction) ads as their denominator.
             const { isComplete } = scan;
-            const awaitingFinalScoring =
-              !isComplete &&
-              scan.activeSubmissions === 0 &&
-              scan.ingestedCount > 0 &&
-              scan.cpkAssignedCount >= scan.ingestedCount;
             // Only mark deficits as failed after the scan reaches a terminal
             // state. Before then, the same space represents work still in
             // flight and remains an empty track segment.
@@ -836,13 +839,6 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                       <div className="text-sm font-semibold text-slate-100 truncate" title={scan.query}>
                         {stripNegations(scan.query)}
                       </div>
-                      <div className="text-[11px] text-slate-400 truncate">
-                        {awaitingFinalScoring
-                          ? "Waiting for the sweep to finish before final scoring"
-                          : `${scan.activeSubmissions} page${scan.activeSubmissions !== 1 ? "s" : ""} in flight`} {" "}
-                        • {scan.elapsedSeconds}s
-                        {scan.excludedAuctionCount > 0 && <> • {scan.excludedAuctionCount} auctions excl.</>}
-                      </div>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       <span
@@ -850,6 +846,12 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                         title="New listings ingested this run (not a duplicate of a previous run)"
                       >
                         +{scan.ingestedNewCount}
+                      </span>
+                      <span className="text-xs font-bold text-amber-300 leading-none" title="Super Gems">
+                        SG {scan.superGemCount ?? 0}
+                      </span>
+                      <span className="text-xs font-bold text-blue-300 leading-none" title="Gems">
+                        G {scan.gemCount ?? 0}
                       </span>
                       <span
                         title={isComplete ? "Complete" : scan.ingestedCount === 0 ? "Not started" : "Processing"}
@@ -871,9 +873,9 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                         and lets a finished stage reach 100% without hiding
                         upstream failures. */}
                     <Gauge value={scan.ingestedCount} max={searchTermTotal} failed={failedIngested} label="Ingested" color="#8b5cf6" />
-                    <Gauge value={scan.cpkAssignedCount} max={searchTermTotal} failed={failedCpk} skipped={skippedCpk} label="CPK" color="#10b981" />
-                    <Gauge value={scan.marketPricedCount} max={searchTermTotal} failed={failedMarketPrices} skipped={skippedMarketPrices} label="M Prices" color="#f59e0b" />
-                    <Gauge value={scan.classifiedCount} max={searchTermTotal} failed={failedScores} skipped={skippedScores} label="Scores" color="#ec4899" />
+                    <Gauge value={scan.cpkAssignedCount} max={searchTermTotal} failed={failedCpk} skipped={skippedCpk} skippedStart={scan.ingestedCount} label="CPK" color="#10b981" />
+                    <Gauge value={scan.marketPricedCount} max={searchTermTotal} failed={failedMarketPrices} skipped={skippedMarketPrices} skippedStart={scan.cpkAssignedCount} label="M Prices" color="#f59e0b" />
+                    <Gauge value={scan.classifiedCount} max={searchTermTotal} failed={failedScores} skipped={skippedScores} skippedStart={scan.marketPricedCount} label="Scores" color="#ec4899" />
                   </div>
 
                   {vendorEntries.length > 0 && (

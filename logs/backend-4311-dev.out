@@ -8129,3 +8129,1240 @@ INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
 2026-09-16 18:11:51 [info     ] queue_processor.submission_released search_id=msi-motherboard
 INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
 INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:11:53 [info     ] submission_queued              search_run_id=c34bedae-4e6b-425b-804d-be3503236622 submission_id=116583
+INFO:     127.0.0.1:63433 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-09-16 18:11:54 [info     ] queue_processor.processing_submission n_listings=35 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=116583
+2026-09-16 18:11:54 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=35 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=35 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:11:54 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=35 ingested=0 submission_id=116583
+2026-09-16 18:11:54 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:11:58 [info     ] submission_queued              search_run_id=7838e720-b808-46e8-8b40-4a46d09a49f9 submission_id=116584
+INFO:     127.0.0.1:63433 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-09-16 18:11:58 [info     ] queue_processor.processing_submission n_listings=23 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=116584
+2026-09-16 18:11:58 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:11:58 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=116584
+2026-09-16 18:11:58 [info     ] queue_processor.submission_released search_id=msi-motherboard
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57343 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57344 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57345 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57347 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:57343 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57357 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57356 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57355 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/market-snapshot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:12:01 [info     ] submission_queued              search_run_id=c34bedae-4e6b-425b-804d-be3503236622 submission_id=116585
+INFO:     127.0.0.1:63433 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-09-16 18:12:01 [info     ] queue_processor.processing_submission n_listings=36 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=116585
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:12:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=StarTech.com Replacement PC Mounting Screws Long S
+2026-09-16 18:12:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=StarTech.com PCSCREWKIT Assortment of screws, nuts
+2026-09-16 18:12:04 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=34 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=36 elapsed_s=2.5 excluded_auctions=0 new_listings=0
+2026-09-16 18:12:04 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=34 ingested=0 submission_id=116585
+2026-09-16 18:12:04 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59772 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59774 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59773 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:12:06 [info     ] submission_queued              search_run_id=7838e720-b808-46e8-8b40-4a46d09a49f9 submission_id=116586
+INFO:     127.0.0.1:63433 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:12:08 [info     ] queue_processor.processing_submission n_listings=24 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=116586
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:12:08 [info     ] submission_queued              search_run_id=c34bedae-4e6b-425b-804d-be3503236622 submission_id=116587
+INFO:     127.0.0.1:63433 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:12:09 [info     ] queue_processor.processing_submission n_listings=35 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=116587
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59408 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59409 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59410 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59417 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59416 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59415 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:12:12 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=24 elapsed_s=3.7 excluded_auctions=0 new_listings=0
+2026-09-16 18:12:12 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=116586
+2026-09-16 18:12:12 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 18:12:12 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=33 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=35 elapsed_s=3.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:12:12 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=33 ingested=0 submission_id=116587
+2026-09-16 18:12:12 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:12:14 [info     ] submission_queued              search_run_id=7838e720-b808-46e8-8b40-4a46d09a49f9 submission_id=116588
+INFO:     127.0.0.1:65032 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:12:16 [info     ] submission_queued              search_run_id=c34bedae-4e6b-425b-804d-be3503236622 submission_id=116589
+INFO:     127.0.0.1:65032 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:65032 - "POST /api/gem-radar/scan-run-history HTTP/1.1" 201 Created
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:12:17 [info     ] queue_processor.processing_submission n_listings=23 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=116588
+2026-09-16 18:12:17 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:12:17 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=116588
+2026-09-16 18:12:17 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 18:12:17 [info     ] queue_processor.processing_submission n_listings=36 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=116589
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65052 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65053 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65054 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65060 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65059 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65058 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65032 - "POST /api/gem-radar/scan-lock/renew HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:12:21 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=35 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=36 elapsed_s=3.8 excluded_auctions=0 new_listings=0
+2026-09-16 18:12:21 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=35 ingested=0 submission_id=116589
+2026-09-16 18:12:21 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:12:22 [info     ] submission_queued              search_run_id=23578766-99d4-4cdd-8888-8dfc262eae8c submission_id=116590
+INFO:     127.0.0.1:65032 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:12:23 [info     ] submission_queued              search_run_id=7838e720-b808-46e8-8b40-4a46d09a49f9 submission_id=116591
+INFO:     127.0.0.1:65032 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-09-16 18:12:23 [info     ] queue_processor.processing_submission n_listings=36 query=Lian Li case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=lian-li-pc-case submission_id=116590
+2026-09-16 18:12:23 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=35 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=36 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 18:12:23 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=35 ingested=0 submission_id=116590
+2026-09-16 18:12:23 [info     ] queue_processor.submission_released search_id=lian-li-pc-case
+2026-09-16 18:12:23 [info     ] queue_processor.processing_submission n_listings=22 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=116591
+2026-09-16 18:12:24 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=22 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=22 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:12:24 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=22 ingested=0 submission_id=116591
+2026-09-16 18:12:24 [info     ] queue_processor.submission_released search_id=msi-motherboard
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:12:28 [info     ] submission_queued              search_run_id=23578766-99d4-4cdd-8888-8dfc262eae8c submission_id=116592
+INFO:     127.0.0.1:56407 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:56407 - "POST /api/gem-radar/scan-run-history HTTP/1.1" 201 Created
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:12:29 [info     ] queue_processor.processing_submission n_listings=3 query=Lian Li case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=lian-li-pc-case submission_id=116592
+2026-09-16 18:12:29 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=3 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=3 elapsed_s=0.0 excluded_auctions=0 new_listings=0
+2026-09-16 18:12:29 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=3 ingested=0 submission_id=116592
+2026-09-16 18:12:29 [info     ] queue_processor.submission_released search_id=lian-li-pc-case
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59948 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59948 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59951 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59952 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59948 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59951 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59958 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59957 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59956 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59948 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59951 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:12:32 [info     ] submission_queued              search_run_id=7838e720-b808-46e8-8b40-4a46d09a49f9 submission_id=116593
+INFO:     127.0.0.1:56407 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:12:32 [info     ] queue_processor.processing_submission n_listings=23 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=116593
+2026-09-16 18:12:32 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:12:32 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=116593
+2026-09-16 18:12:32 [info     ] queue_processor.submission_released search_id=msi-motherboard
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:12:34 [info     ] submission_queued              search_run_id=0a92aa25-1f86-4385-b6a6-0ec2f34a99a8 submission_id=116594
+INFO:     127.0.0.1:56407 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:56407 - "POST /api/gem-radar/scan-run-history HTTP/1.1" 201 Created
+2026-09-16 18:12:34 [info     ] queue_processor.processing_submission n_listings=52 query=Intel GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=intel-gpu submission_id=116594
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:12:39 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=52 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=38 elapsed_s=4.4 excluded_auctions=0 new_listings=13
+2026-09-16 18:12:39 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=52 ingested=13 submission_id=116594
+2026-09-16 18:12:39 [info     ] queue_processor.submission_released search_id=intel-gpu
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63678 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63681 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63682 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63688 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63687 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63686 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:12:40 [info     ] submission_queued              search_run_id=7838e720-b808-46e8-8b40-4a46d09a49f9 submission_id=116595
+INFO:     127.0.0.1:61147 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:12:41 [info     ] queue_processor.processing_submission n_listings=23 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=116595
+2026-09-16 18:12:41 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:12:41 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=116595
+2026-09-16 18:12:41 [info     ] queue_processor.submission_released search_id=msi-motherboard
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:12:48 [info     ] submission_queued              search_run_id=7838e720-b808-46e8-8b40-4a46d09a49f9 submission_id=116596
+INFO:     127.0.0.1:53360 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-09-16 18:12:49 [info     ] queue_processor.processing_submission n_listings=20 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=116596
+2026-09-16 18:12:49 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=20 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=20 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:12:49 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=20 ingested=0 submission_id=116596
+2026-09-16 18:12:49 [info     ] queue_processor.submission_released search_id=msi-motherboard
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59805 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59808 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59809 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59815 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59814 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59813 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53360 - "POST /api/gem-radar/scan-lock/renew HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49635 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49633 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49632 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55107 - "POST /api/gem-radar/scan-run-history HTTP/1.1" 201 Created
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62300 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62301 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62303 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62304 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:62300 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62317 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62316 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62315 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:13:05 [info     ] submission_queued              search_run_id=9d406057-9279-4127-999a-1318048fa2fc submission_id=116597
+INFO:     127.0.0.1:49152 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:13:06 [info     ] queue_processor.processing_submission n_listings=24 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=116597
+2026-09-16 18:13:06 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=24 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=24 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:13:06 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=24 ingested=0 submission_id=116597
+2026-09-16 18:13:06 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60213 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60214 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60215 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60221 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60220 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60219 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:13:13 [info     ] submission_queued              search_run_id=9d406057-9279-4127-999a-1318048fa2fc submission_id=116598
+INFO:     127.0.0.1:63921 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:13:14 [info     ] queue_processor.processing_submission n_listings=23 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=116598
+2026-09-16 18:13:14 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:13:14 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=116598
+2026-09-16 18:13:14 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61861 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61865 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61866 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61878 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61877 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61867 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61871 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61876 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61870 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50624 - "POST /api/gem-radar/scan-lock/renew HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:13:21 [info     ] submission_queued              search_run_id=9d406057-9279-4127-999a-1318048fa2fc submission_id=116599
+INFO:     127.0.0.1:50624 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-09-16 18:13:21 [info     ] queue_processor.processing_submission n_listings=23 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=116599
+2026-09-16 18:13:21 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:13:21 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=116599
+2026-09-16 18:13:21 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:13:29 [info     ] submission_queued              search_run_id=9d406057-9279-4127-999a-1318048fa2fc submission_id=116600
+INFO:     127.0.0.1:64025 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-09-16 18:13:29 [info     ] queue_processor.processing_submission n_listings=23 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=116600
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:13:29 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:13:29 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=116600
+2026-09-16 18:13:29 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58168 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58171 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58172 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58174 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58168 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58180 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58178 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58179 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:13:35 [debug    ] margin_verifier.worker_idle
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:13:35 [info     ] submission_queued              search_run_id=9d406057-9279-4127-999a-1318048fa2fc submission_id=116601
+INFO:     127.0.0.1:54173 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:13:36 [info     ] queue_processor.processing_submission n_listings=24 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=116601
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58173 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58175 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58176 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58191 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58190 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58189 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+2026-09-16 18:13:40 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=24 elapsed_s=3.3 excluded_auctions=0 new_listings=0
+2026-09-16 18:13:40 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=116601
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:13:40 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:13:44 [info     ] submission_queued              search_run_id=9d406057-9279-4127-999a-1318048fa2fc submission_id=116602
+INFO:     127.0.0.1:63238 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-09-16 18:13:44 [info     ] queue_processor.processing_submission n_listings=23 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=116602
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:13:44 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.3 excluded_auctions=0 new_listings=0
+2026-09-16 18:13:44 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=116602
+2026-09-16 18:13:44 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+INFO:     127.0.0.1:62913 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62914 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62912 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60572 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60573 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60574 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60581 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60580 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60579 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52989 - "POST /api/gem-radar/scan-lock/renew HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:13:52 [info     ] submission_queued              search_run_id=9d406057-9279-4127-999a-1318048fa2fc submission_id=116603
+INFO:     127.0.0.1:52989 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:13:52 [info     ] queue_processor.processing_submission n_listings=22 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=116603
+2026-09-16 18:13:52 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=22 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=22 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:13:52 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=22 ingested=0 submission_id=116603
+2026-09-16 18:13:52 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:13:54 [info     ] submission_queued              search_run_id=10a1cb68-0082-4ed9-9b01-1efe8888f5bb submission_id=116604
+INFO:     127.0.0.1:52989 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:52989 - "POST /api/gem-radar/scan-run-history HTTP/1.1" 201 Created
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:13:56 [info     ] queue_processor.processing_submission n_listings=40 query=Intel GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=intel-gpu submission_id=116604
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57339 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57346 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57348 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57350 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:14:00 [info     ] submission_queued              search_run_id=9d406057-9279-4127-999a-1318048fa2fc submission_id=116605
+INFO:     127.0.0.1:52989 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-09-16 18:14:00 [info     ] queue_processor.processing_submission n_listings=23 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=116605
+INFO:     127.0.0.1:57338 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57337 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57346 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:57348 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/market-snapshot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:14:02 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=1.2 excluded_auctions=0 new_listings=0
+2026-09-16 18:14:02 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=116605
+2026-09-16 18:14:02 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:14:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP P09230-001
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:14:04 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=36 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=8.5 excluded_auctions=0 new_listings=0
+2026-09-16 18:14:04 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=36 ingested=0 submission_id=116604
+2026-09-16 18:14:04 [info     ] queue_processor.submission_released search_id=intel-gpu
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:14:08 [info     ] submission_queued              search_run_id=9d406057-9279-4127-999a-1318048fa2fc submission_id=116606
+INFO:     127.0.0.1:51761 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:14:09 [info     ] queue_processor.processing_submission n_listings=23 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=116606
+2026-09-16 18:14:09 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:14:09 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=116606
+2026-09-16 18:14:09 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+INFO:     127.0.0.1:49801 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49805 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49806 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49817 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49810 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49811 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49815 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49807 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49816 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:14:16 [info     ] submission_queued              search_run_id=9d406057-9279-4127-999a-1318048fa2fc submission_id=116607
+INFO:     127.0.0.1:60081 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:14:17 [info     ] queue_processor.processing_submission n_listings=20 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=116607
+2026-09-16 18:14:17 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=20 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=20 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:14:17 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=20 ingested=0 submission_id=116607
+2026-09-16 18:14:17 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51947 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51948 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51949 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51955 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51954 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51953 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60081 - "POST /api/gem-radar/scan-lock/renew HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60081 - "POST /api/gem-radar/scan-run-history HTTP/1.1" 201 Created
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52142 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52146 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52147 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52148 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52150 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52146 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52141 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52140 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:14:33 [info     ] submission_queued              search_run_id=a1ff460e-23ba-4363-a3e9-85edaea9b141 submission_id=116608
+INFO:     127.0.0.1:53551 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:14:34 [info     ] queue_processor.processing_submission n_listings=23 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=116608
+2026-09-16 18:14:34 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=4 cross_run_dupes_unchanged_price=19 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:14:34 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=116608
+2026-09-16 18:14:34 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+INFO:     127.0.0.1:58192 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58187 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58186 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56412 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56413 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56414 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56420 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56419 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56418 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:14:42 [info     ] submission_queued              search_run_id=a1ff460e-23ba-4363-a3e9-85edaea9b141 submission_id=116609
+INFO:     127.0.0.1:51837 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+2026-09-16 18:14:42 [info     ] queue_processor.processing_submission n_listings=19 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=116609
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+2026-09-16 18:14:45 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=18 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=19 elapsed_s=2.8 excluded_auctions=0 new_listings=0
+2026-09-16 18:14:45 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=18 ingested=0 submission_id=116609
+2026-09-16 18:14:45 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49579 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49580 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49581 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49587 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49586 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49585 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55437 - "POST /api/gem-radar/scan-lock/renew HTTP/1.1" 200 OK
+2026-09-16 18:14:50 [info     ] submission_queued              search_run_id=a1ff460e-23ba-4363-a3e9-85edaea9b141 submission_id=116610
+INFO:     127.0.0.1:51756 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-09-16 18:14:51 [info     ] queue_processor.processing_submission n_listings=18 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=116610
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:14:51 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=18 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=18 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:14:51 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=18 ingested=0 submission_id=116610
+2026-09-16 18:14:51 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:14:59 [info     ] submission_queued              search_run_id=a1ff460e-23ba-4363-a3e9-85edaea9b141 submission_id=116611
+INFO:     127.0.0.1:50969 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59990 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59991 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59995 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59996 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59997 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60003 - "GET /api/public/reviews HTTP/1.1" 200 OK
+2026-09-16 18:14:59 [info     ] queue_processor.processing_submission n_listings=17 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=116611
+INFO:     127.0.0.1:60002 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60001 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59991 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59990 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59995 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:15:00 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=17 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=17 elapsed_s=0.5 excluded_auctions=0 new_listings=0
+2026-09-16 18:15:00 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=17 ingested=0 submission_id=116611
+2026-09-16 18:15:00 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:15:08 [info     ] submission_queued              search_run_id=a1ff460e-23ba-4363-a3e9-85edaea9b141 submission_id=116612
+INFO:     127.0.0.1:63720 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:15:08 [info     ] queue_processor.processing_submission n_listings=15 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=116612
+2026-09-16 18:15:08 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=15 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=14 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:15:08 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=15 ingested=0 submission_id=116612
+2026-09-16 18:15:08 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53302 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53303 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53304 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53310 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53309 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53308 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:15:16 [info     ] submission_queued              search_run_id=a1ff460e-23ba-4363-a3e9-85edaea9b141 submission_id=116613
+INFO:     127.0.0.1:64633 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:15:17 [info     ] submission_queued              search_run_id=c7b2a9c3-b32f-4861-ba50-d82809a6799a submission_id=116614
+INFO:     127.0.0.1:64633 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:64633 - "POST /api/gem-radar/scan-run-history HTTP/1.1" 201 Created
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:15:18 [info     ] queue_processor.processing_submission n_listings=13 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=116613
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52493 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52494 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52495 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52501 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52500 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52499 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64633 - "POST /api/gem-radar/scan-lock/renew HTTP/1.1" 200 OK
+2026-09-16 18:15:21 [info     ] queue_processor.processing_submission n_listings=68 query=ASUS motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=asus-motherboard submission_id=116614
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:15:22 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=12 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=13 elapsed_s=3.7 excluded_auctions=0 new_listings=0
+2026-09-16 18:15:22 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=12 ingested=0 submission_id=116613
+2026-09-16 18:15:22 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50815 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50820 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50819 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:15:25 [info     ] submission_queued              search_run_id=a1ff460e-23ba-4363-a3e9-85edaea9b141 submission_id=116615
+INFO:     127.0.0.1:64633 - "POST /api/gem-radar/scans-queued HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:15:26 [info     ] queue_processor.processing_submission n_listings=10 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=116615
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:15:27 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=68 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=6.7 excluded_auctions=0 new_listings=28
+2026-09-16 18:15:27 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=68 ingested=28 submission_id=116614
+2026-09-16 18:15:27 [info     ] queue_processor.submission_released search_id=asus-motherboard
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54678 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54680 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63326 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63328 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:54678 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63334 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63333 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63332 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK

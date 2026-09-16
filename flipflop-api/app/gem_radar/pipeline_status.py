@@ -531,6 +531,14 @@ async def snapshot(db) -> dict:
     for s in states:
         priced_count = sum(1 for lid in s.listing_ids if lid in priced_listing_ids)
         classified_count = sum(1 for lid in s.listing_ids if lid in classified_listing_ids)
+        scan_gem_count = sum(
+            1 for classification, _ in s.resolved_classification.values()
+            if str(classification or "").strip().upper() == "GEM"
+        )
+        scan_super_gem_count = sum(
+            1 for classification, _ in s.resolved_classification.values()
+            if str(classification or "").strip().upper() == "SUPER_GEM"
+        )
 
         # ``listing_ids`` only fills after CPK assignment. It is therefore a
         # progress numerator, never a valid denominator: using it here made the
@@ -617,6 +625,8 @@ async def snapshot(db) -> dict:
                 # It never reflected listings Phase 2 scores as a result of
                 # THIS run, so it permanently undercounted.
                 "classifiedCount": classified_count,
+                "gemCount": scan_gem_count,
+                "superGemCount": scan_super_gem_count,
                 "marketPricedCount": priced_count,
                 "processedPercent": processed_pct,
                 "excludedAuctionCount": s.excluded_auction_count,
