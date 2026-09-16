@@ -52,6 +52,7 @@ _job_history: dict[str, deque[dict]] = {
     "cases": deque(maxlen=50),
     "case_content_sourcing": deque(maxlen=50),
     "amazon_case_bestsellers": deque(maxlen=50),
+    "amazon_component_bestsellers": deque(maxlen=50),
     "external_demand": deque(maxlen=50),
     "playbook_evolution": deque(maxlen=50),
     "autonomous": deque(maxlen=50),
@@ -709,7 +710,7 @@ async def trigger_swarm(swarm_id: str) -> dict:
         return await _run_job_with_history("cases", partial(run_cases_swarm, "main"))
     if swarm_id == "case_content_sourcing":
         return await _run_job_with_history("case_content_sourcing", run_case_content_sourcing)
-    if swarm_id == "amazon_case_bestsellers":
+    if swarm_id in ("amazon_case_bestsellers", "amazon_component_bestsellers"):
         return await _run_job_with_history("amazon_component_bestsellers", scrape_amazon_component_bestsellers)
     if swarm_id == "external_demand":
         return await _run_job_with_history("external_demand", ingest_external_demand_signals)

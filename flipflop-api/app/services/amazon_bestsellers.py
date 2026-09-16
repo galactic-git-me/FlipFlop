@@ -212,14 +212,12 @@ async def scrape_amazon_bestsellers() -> dict:
 
             async with AsyncSessionLocal() as db:
                 case_rows = (await db.execute(select(Case))).scalars().all()
-                part_rows = (
-                    await db.execute(
-                        select(Part).where(
-                            Part.category == PartCategory.case,
-                            Part.source_site == "Amazon",
-                        )
-                    )
-                ).scalars().all()
+                # Do not load the legacy Part ORM model here.  Some deployed
+                # databases predate the optional `parts.rrp` column, and an
+                # ORM SELECT expands to every model column before the rank
+                # update can run.  The component rank path uses the scored
+                # CPK table and no longer depends on this legacy case table.
+                part_rows = []
 
                 await db.execute(update(Case).values(bestseller_rank=None))
                 await db.execute(
@@ -228,13 +226,6 @@ async def scrape_amazon_bestsellers() -> dict:
                     .where(~Case.sales_velocity.ilike("%bought%"))
                     .values(sales_velocity=None)
                 )
-                if part_rows:
-                    await db.execute(
-                        update(Part)
-                        .where(Part.category == PartCategory.case)
-                        .values(bestseller_rank=None)
-                    )
-
                 for item in items:
                     matching_case = match_row_by_bestseller(item, case_rows)
                     matching_part = match_row_by_bestseller(item, part_rows)
