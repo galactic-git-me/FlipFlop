@@ -396,6 +396,13 @@ async def touch_observation(
     row.search_run_id = search_run_id
     if search_query is not None:
         row.search_query = search_query
+    if row.source is None:
+        # Deduped listings do not carry the full ExtractedListing payload, so
+        # recover synthetic aggregator origins from the qualified listing ID.
+        # This prevents a pre-fix Google Shopping/eBuyer row from remaining
+        # source-less forever just because subsequent sightings take the
+        # lightweight touch path.
+        row.source = infer_listing_source(None, listing_id)
     await db.commit()
     return True
 
