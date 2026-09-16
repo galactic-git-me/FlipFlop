@@ -1643,6 +1643,46 @@ function evidenceStatusForChart(listing: Listing): string {
   return "INSUFFICIENT_DATA";
 }
 
+type PriceColumn = "listing" | "low" | "median" | "high";
+
+function priceValueForColumn(listing: Listing, column: PriceColumn): number | null {
+  if (column === "listing") return listing.delivered_price > 0 ? listing.delivered_price : null;
+  if (column === "low") return listing.market_lower_price ?? null;
+  if (column === "median") return listing.market_median_price ?? listing.conservative_resale_price ?? null;
+  return listing.market_upper_price ?? null;
+}
+
+function rowPricePercentages(listing: Listing): Record<PriceColumn, number | null> {
+  const columns: PriceColumn[] = ["listing", "low", "median", "high"];
+  const values = columns.map((column) => priceValueForColumn(listing, column));
+  const total = values.reduce((sum, value) => sum + (value ?? 0), 0);
+  if (total <= 0) return { listing: null, low: null, median: null, high: null };
+
+  const percentages: Record<PriceColumn, number | null> = { listing: null, low: null, median: null, high: null };
+  const present = columns.filter((_, index) => values[index] != null);
+  let roundedTotal = 0;
+  present.forEach((column, index) => {
+    if (index === present.length - 1) {
+      percentages[column] = Math.round((100 - roundedTotal) * 10) / 10;
+      return;
+    }
+    const value = priceValueForColumn(listing, column) ?? 0;
+    const rounded = Math.round((value / total) * 1000) / 10;
+    percentages[column] = rounded;
+    roundedTotal += rounded;
+  });
+  return percentages;
+}
+
+function formatPriceColumn(listing: Listing, column: PriceColumn, asPercent: boolean): string {
+  if (asPercent) {
+    const value = rowPricePercentages(listing)[column];
+    return value == null ? "—" : `${value.toFixed(1)}%`;
+  }
+  const value = priceValueForColumn(listing, column);
+  return value == null ? "—" : `£${value.toFixed(2)}`;
+}
+
 function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
   const sources = [...new Set(listings.map((l) => l.source))].sort(
     (a, b) => listings.filter((l) => l.source === b).length - listings.filter((l) => l.source === a).length
@@ -1753,6 +1793,7 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [titleQuery, setTitleQuery] = useState("");
   const [explanationListing, setExplanationListing] = useState<Listing | null>(null);
+  const [showRowPercentages, setShowRowPercentages] = useState(false);
   const [page, setPage] = useState(1);
 
   // Jump straight to a specific listing when arriving from a favourite-match
@@ -1897,6 +1938,21 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
         </div>
       </div>
 
+      <div className="mb-2 flex items-center justify-end gap-2 text-xs">
+        <span className="text-slate-500" title="In percentage mode, the Price, Low, Median and High cells in each row are normalized to total 100%.">Pricing display</span>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={showRowPercentages}
+          onClick={() => setShowRowPercentages((value) => !value)}
+          className={`inline-flex cursor-pointer items-center gap-2 rounded-md border px-2.5 py-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 ${showRowPercentages ? "border-blue-400/60 bg-blue-500/20 text-blue-200" : "border-slate-600 bg-slate-700 text-slate-300 hover:border-slate-500"}`}
+          title="Switch pricing columns between pounds and row-normalized percentages"
+        >
+          <span className={`h-2 w-2 rounded-full ${showRowPercentages ? "bg-blue-300" : "bg-slate-500"}`} />
+          {showRowPercentages ? "Row % · totals 100%" : "Absolute £"}
+        </button>
+      </div>
+
       <div className="flex-1 overflow-y-auto bg-slate-800 rounded-lg border border-slate-700">
         {filtered.length === 0 ? (
           <div className="flex items-center justify-center h-full text-slate-400">
@@ -1928,11 +1984,11 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                   />
                 </th>
                 <SortHeader label="Condition" sortKey="condition" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} widthClassName="w-20" />
-                <SortHeader label="Price" sortKey="delivered_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
+                <SortHeader label={showRowPercentages ? "Price %" : "Price"} sortKey="delivered_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
                 <th className="text-left text-slate-200 font-semibold w-28">History</th>
-                <SortHeader label="Low" sortKey="market_lower_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
-                <SortHeader label="Median" sortKey="market_median_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
-                <SortHeader label="High" sortKey="market_upper_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
+                <SortHeader label={showRowPercentages ? "Low %" : "Low"} sortKey="market_lower_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
+                <SortHeader label={showRowPercentages ? "Median %" : "Median"} sortKey="market_median_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
+                <SortHeader label={showRowPercentages ? "High %" : "High"} sortKey="market_upper_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
                 <SortHeader label="Vs Median" sortKey="price_variance" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-24" />
                 <SortHeader label="Class" sortKey="classification" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} widthClassName="w-24" />
                 <SortHeader label="Decision" sortKey="decision" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} widthClassName="w-20" />
@@ -1994,22 +2050,22 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                     <td className="p-3">
                       <ConditionBadge condition={listing.condition} />
                     </td>
-                    <td className="p-3 text-right text-slate-100 font-semibold">£{listing.delivered_price.toFixed(2)}</td>
+                    <td className="p-3 text-right text-slate-100 font-semibold">{formatPriceColumn(listing, "listing", showRowPercentages)}</td>
                     <td className="p-3">
                       <PriceHistorySparkline listingId={listing.listing_id} listingTitle={listing.title} />
                     </td>
                     <td className="p-3 text-right text-slate-100">
-                      {listing.market_lower_price == null ? "—" : `£${listing.market_lower_price.toFixed(2)}`}
+                      {formatPriceColumn(listing, "low", showRowPercentages)}
                     </td>
                     <td className="p-3 text-right text-slate-100">
                       {(listing.market_median_price ?? listing.conservative_resale_price) != null ? (
                         <span title="Median of the robust, same-condition comparable cohort used by classification.">
-                          £{(listing.market_median_price ?? listing.conservative_resale_price)!.toFixed(2)}
+                          {formatPriceColumn(listing, "median", showRowPercentages)}
                         </span>
-                      ) : "—"}
+                      ) : formatPriceColumn(listing, "median", showRowPercentages)}
                     </td>
                     <td className="p-3 text-right text-slate-100">
-                      {listing.market_upper_price == null ? "—" : `£${listing.market_upper_price.toFixed(2)}`}
+                      {formatPriceColumn(listing, "high", showRowPercentages)}
                     </td>
                     <td className="p-3 text-right">
                       <PriceVarianceCell listing={listing} />
