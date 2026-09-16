@@ -175,3 +175,513 @@ INFO:     127.0.0.1:64939 - "GET /api/preflight/health HTTP/1.1" 200 OK
 INFO:     127.0.0.1:64945 - "GET /api/public/reviews HTTP/1.1" 200 OK
 INFO:     127.0.0.1:64944 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
 INFO:     127.0.0.1:64943 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59837 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59839 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59838 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50468 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50470 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50471 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50477 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50475 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50476 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+2026-09-16 20:54:12 [debug    ] browser_pool.acquired          cap=1 engine=playwright
+2026-09-16 20:54:12 [info     ] ebay_sales_tracker.poll_complete found=0 matched=0 updated=0
+2026-09-16 20:54:13 [info     ] bestsellers.scraping           page=1 url=https://www.amazon.co.uk/Best-Sellers-Computers-Accessories-Computer-Cases/zgbs/computers/430498031/
+2026-09-16 20:54:17 [info     ] bestsellers.extracted          count=30 page=1
+2026-09-16 20:54:17 [info     ] bestsellers.scraping           page=2 url=https://www.amazon.co.uk/Best-Sellers-Computers-Accessories-Computer-Cases/zgbs/computers/430498031/?pg=2
+INFO:     127.0.0.1:53298 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53299 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53300 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53298 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53299 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53306 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53305 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53304 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/307122400334/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/307122400334/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/307122400334/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/307122400334/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/307122400334/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/307122400334/price-history HTTP/1.1" 200 OK
+2026-09-16 20:54:21 [info     ] bestsellers.extracted          count=30 page=2
+2026-09-16 20:54:21 [error    ] bestsellers.error              error=(sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column parts.rrp does not exist
+[SQL: SELECT parts.id, parts.name, parts.brand, parts.model, parts.category, parts.specs, parts.source_site, parts.source_url, parts.condition, parts.price, parts.price_new, parts.price_used, parts.price_refurb, parts.rrp, parts.image_url, parts.theme, parts.form_factors, parts.keywords, parts.selection_count, parts.rating, parts.review_count, parts.sales_velocity, parts.bestseller_rank, parts.has_3d_model, parts.resale_value_add, parts.is_active, parts.last_price_update, parts.created_at, parts.claude_verdict, parts.claude_reasoning, parts.claude_confidence, parts.claude_judged_at 
+FROM parts 
+WHERE parts.category = $1::partcategory AND parts.source_site = $2::VARCHAR]
+[parameters: ('case', 'Amazon')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-09-16 20:54:21 [debug    ] browser_pool.released
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/307122400334/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/307122400334/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/307122400334/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/307122400334/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/307122400334/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/307122400334/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/307122400334/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/307122400334/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49653 - "GET /api/catalogue/variants HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63828 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63833 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63834 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63843 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63842 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63837 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63841 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63835 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63836 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398266455972/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/407134284151/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63846 - "GET /api/catalogue/variants HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52635 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52636 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52637 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52645 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52643 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52642 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52590 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52592 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52593 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52595 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52601 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52590 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52599 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52600 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52607 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52608 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52609 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56412 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56413 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56414 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56420 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56419 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56418 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53219 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53222 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53223 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53229 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53228 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53227 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65298 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65301 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65310 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65305 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65309 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65307 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65312 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65313 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65298 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65301 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:65298 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65183 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65186 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65187 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65194 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65192 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65191 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/398274563173/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298577037015/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57334 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57333 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57332 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57338 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57339 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57340 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/358904849789/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/298570815892/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57348 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57350 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57349 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318705528658/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318705528658/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318712501990/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/287517281663/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318705528658/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318705528658/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318705528658/price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/listings/318705528658/cpk-price-history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61630 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61631 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61632 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61633 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61630 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61639 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61638 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61637 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61642 - "GET /api/catalogue/variants HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53006 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53007 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53008 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53014 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53013 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53012 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53789 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53790 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53795 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53804 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53796 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53798 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53803 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53802 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53797 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58851 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58854 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58855 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58857 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58851 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58863 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58862 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58861 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56673 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56674 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56676 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56682 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56681 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56680 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54757 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54755 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54756 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51851 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51852 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51853 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51859 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51858 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51857 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60542 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60546 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60547 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60548 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:60542 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60554 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60553 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60552 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61875 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61876 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61878 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61890 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61882 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61884 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61888 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61883 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61889 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52280 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52283 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52284 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52290 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52289 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52288 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+2026-09-16 20:57:12 [info     ] price_refresh.start
+2026-09-16 20:57:13 [debug    ] margin_verifier.worker_idle
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_ram_64gb_ddr4 query=64gb ddr4 desktop ram kit 3200
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_case_mini_itx query=mini itx gaming case rgb
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_gpu_rtx3060 query=rtx 3060 12gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_case_rgb_atx query=rgb gaming pc case atx mid tower
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_ram_32gb_ddr5 query=32gb ddr5 desktop ram kit 5600
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_mouse_gaming query=gaming mouse rgb
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_ram_32gb_ddr4 query=32gb ddr4 desktop ram kit 3200
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_mobo_am5_b650 query=am5 b650 motherboard
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_ssd_1tb_nvme query=1tb nvme m.2 ssd 2280
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_cpu_cooler_air query=cpu air cooler tower 120mm
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_mobo_am4_b550 query=am4 b550 motherboard
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_gtx1070 query=gtx 1070 8gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_gtx1660ti query=gtx 1660 ti graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_headset_gaming query=gaming headset usb rgb
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_gpu_rx6700xt query=rx 6700 xt graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_gtx1060_6gb query=gtx 1060 6gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_ssd_2tb_nvme query=2tb nvme m.2 ssd 2280
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_gpu_rtx4060 query=rtx 4060 8gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_ram_64gb_ddr5 query=64gb ddr5 desktop ram kit 5600
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rtx3060ti query=rtx 3060 ti graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_monitor_1440p query=27 inch 1440p gaming monitor 144hz
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rtx4060 query=rtx 4060 8gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rx580 query=rx 580 8gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rtx2070 query=rtx 2070 8gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_ram_32gb_ddr4 query=32gb ddr4 desktop ram kit used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_monitor_1080p query=24 inch 1080p 144hz gaming monitor used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_i7_8 query=gaming pc i7 8700 desktop tower
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_i5_12 query=gaming pc i5 12400 desktop tower
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rx7800xt query=rx 7800 xt graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_i7_12 query=gaming pc i7 12700 desktop tower
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rtx2060 query=rtx 2060 6gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_i7_10 query=gaming pc i7 10700 desktop tower
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rtx4070 query=rtx 4070 12gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rx5700xt query=rx 5700 xt graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_i7_14 query=gaming pc i7 14700 desktop tower
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rtx4080 query=rtx 4080 16gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rtx3090 query=rtx 3090 24gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_i5_8 query=gaming pc i5 8400 desktop tower
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_ram_64gb_ddr5 query=64gb ddr5 desktop ram kit used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_r9_3900 query=gaming pc ryzen 9 3900x desktop
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_case_mesh_argb query=mesh argb gaming case used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rtx3060 query=rtx 3060 12gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_i5_10 query=gaming pc i5 10400 desktop tower
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_r9_7950 query=gaming pc ryzen 9 7950x desktop
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rx6600 query=rx 6600 8gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_wifi_card_pcie query=pcie wifi 6 card desktop
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rx6800 query=rx 6800 16gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_i9_9 query=gaming pc i9 9900 desktop tower
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_cpu_cooler_120mm query=120mm aio liquid cooler
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_case_mini_itx query=mini itx gaming case used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_psu_650w query=650w 80 plus bronze psu modular
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_i5_14 query=gaming pc i5 14600 desktop tower
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_headset_gaming query=gaming headset used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_monitor_1440p query=27 inch 1440p 144hz gaming monitor used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_r5_7600 query=gaming pc ryzen 5 7600 desktop
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rx6900xt query=rx 6900 xt graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_mouse_gaming query=gaming mouse used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rx6700xt query=rx 6700 xt graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_gtx1080 query=gtx 1080 8gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_case_rgb_mesh query=mesh gaming pc case argb mid tower
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_case_atx_rgb query=rgb gaming pc case atx used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_gtx1660super query=gtx 1660 super graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_mobo_am5_b650 query=am5 b650 motherboard used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_ram_64gb_ddr4 query=64gb ddr4 desktop ram kit used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_i7_13 query=gaming pc i7 13700 desktop tower
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_r9_7900 query=gaming pc ryzen 9 7900x desktop
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_psu_750w query=750w 80 plus gold psu modular
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rx7600 query=rx 7600 8gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rx7900xt query=rx 7900 xt graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_keyboard_rgb query=rgb gaming keyboard mechanical used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_mobo_am4_b550 query=am4 b550 motherboard used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_gtx1080ti query=gtx 1080 ti graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rtx4060ti query=rtx 4060 ti graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_r7_5800 query=gaming pc ryzen 7 5800x desktop
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_aio_240mm query=240mm aio liquid cpu cooler used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_mobo_am4_x570 query=am4 x570 motherboard used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_aio_120mm query=120mm aio liquid cpu cooler used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_i5_9 query=gaming pc i5 9600 desktop tower
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_r5_5600 query=gaming pc ryzen 5 5600 desktop
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rx6750xt query=rx 6750 xt graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_r7_3700 query=gaming pc ryzen 7 3700x desktop
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_r5_3600 query=gaming pc ryzen 5 3600 desktop
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rtx3080 query=rtx 3080 10gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_mobo_am4_x570 query=am4 x570 motherboard
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rx6600xt query=rx 6600 xt graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rtx2080 query=rtx 2080 8gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_r7_9700 query=gaming pc ryzen 7 9700x desktop
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_r7_7700 query=gaming pc ryzen 7 7700x desktop
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_mobo_am5_x670 query=am5 x670 motherboard used
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_r5_9600 query=gaming pc ryzen 5 9600x desktop
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_r9_5900 query=gaming pc ryzen 9 5900x desktop
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rx7700xt query=rx 7700 xt graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rx7900xtx query=rx 7900 xtx graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rtx3070 query=rtx 3070 8gb graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=gpu_rtx4070super query=rtx 4070 super graphics card
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=sys_i5_13 query=gaming pc i5 13600 desktop tower
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=cost_keyboard_rgb query=rgb gaming keyboard mechanical
+2026-09-16 20:57:13 [warning  ] price_refresh.no_comps         key=resale_ram_32gb_ddr5 query=32gb ddr5 desktop ram kit used
+2026-09-16 20:57:14 [warning  ] price_refresh.no_comps         key=sys_i7_9 query=gaming pc i7 9700 desktop tower
+2026-09-16 20:57:14 [warning  ] price_refresh.no_comps         key=gpu_rx6800xt query=rx 6800 xt graphics card
+2026-09-16 20:57:14 [warning  ] price_refresh.no_comps         key=cost_mobo_am5_x670 query=am5 x670 motherboard
+2026-09-16 20:57:14 [warning  ] price_refresh.no_comps         key=cost_monitor_1080p query=24 inch 1080p gaming monitor 144hz
