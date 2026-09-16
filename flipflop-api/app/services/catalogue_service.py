@@ -30,6 +30,7 @@ _CATEGORY_TO_SLOT: dict[str, str] = {
     "gpu": "gpu",
     "ram": "ram",
     "ssd": "storage",
+    "case": "case",
 }
 
 FRESH_WINDOW_HOURS = 2
@@ -73,7 +74,7 @@ async def sync_gem_radar_catalogue_listings(db: AsyncSession) -> int:
             FROM gem_radar_scored_listings s
             JOIN current_ids i ON i.listing_id = s.listing_id
             WHERE s.classification IN ('GEM', 'SUPER_GEM')
-              AND s.category IN ('cpu', 'gpu', 'ram', 'ssd', 'storage')
+              AND s.category IN ('cpu', 'gpu', 'ram', 'ssd', 'storage', 'case')
               AND (s.condition IS NULL OR lower(s.condition) <> 'for_parts')
             ORDER BY s.listing_id, s.scored_at DESC NULLS LAST, s.id DESC
             """

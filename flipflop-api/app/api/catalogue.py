@@ -106,6 +106,10 @@ async def list_variants(
         # mirror of the raw listings table.  Legacy variants can outlive a
         # listing's classification, so enforce the contract at read time.
         .where(Listing.classification.in_((Classification.gem, Classification.amazing_gem)))
+        # The catalogue is a fixed-price sourcing surface. Auctions and
+        # classified listings remain available to their own evidence views,
+        # but must never appear here, including legacy rows.
+        .where(Listing.listing_type == "buy_it_now")
         # Parts/repair-only listings are not sellable component opportunities.
         # Keep null conditions visible for legacy rows, but never expose an
         # explicit for_parts result in the catalogue.

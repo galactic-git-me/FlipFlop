@@ -36,7 +36,7 @@ const fallback: Variant[] = [
   { id: 6, listing_title: "be quiet! Pure Power 12 M 750W Modular PSU", slot_type: "psu", playbook_id: 3, status: "hidden", tier: "mid", display_price: 89.99, gem_score: 74, consecutive_misses: 2, last_seen_at: "3 days ago", },
 ];
 
-const categories = ["All components", "CPU", "GPU", "Memory", "Storage", "Motherboard", "Power supply", "Cooling"];
+const categories = ["All components", "CPU", "GPU", "Memory", "Storage", "PC Cases", "Motherboard", "Power supply", "Cooling"];
 const imageTones = ["from-cyan-950 via-slate-800 to-blue-900", "from-violet-950 via-slate-800 to-indigo-900", "from-emerald-950 via-slate-800 to-teal-900", "from-amber-950 via-slate-800 to-orange-900"];
 
 function ProductArt({ index, title, imageUrl }: { index: number; title: string; imageUrl?: string | null }) {
@@ -152,7 +152,8 @@ export default function CataloguePage() {
 
   const visible = useMemo(() => variants.filter(v => {
     const matchesQuery = !query || v.listing_title.toLowerCase().includes(query.toLowerCase());
-    const matchesCategory = category === "All components" || v.slot_type.toLowerCase() === category.toLowerCase().replace(" ", "_");
+    const categoryKey = category === "PC Cases" ? "case" : category.toLowerCase().replace(" ", "_");
+    const matchesCategory = category === "All components" || v.slot_type.toLowerCase() === categoryKey;
     return matchesQuery && matchesCategory;
   }).sort((a, b) => {
     const scoreA = a.deal_score ?? a.gem_score / 10;
@@ -203,7 +204,7 @@ function ListingCard({ variant: v, index, compact }: { variant: Variant; index: 
   return <article className={`overflow-hidden rounded-lg border border-white/10 bg-[#0b1119] transition hover:border-cyan-400/40 hover:shadow-[0_0_24px_rgba(34,211,238,.08)] ${compact ? "flex flex-col sm:flex-row" : ""}`}>
     <div className={compact ? "w-full shrink-0 sm:w-52" : ""}><ProductArt index={index} title={v.slot_type} imageUrl={v.image_url} /></div>
     <div className="min-w-0 flex-1 p-3">
-      <div className="mb-2 flex items-start justify-between gap-3"><div className="min-w-0"><p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-400">{v.tier} tier · {v.slot_type}</p><h2 className="line-clamp-2 text-sm font-semibold leading-snug text-white">{v.listing_title}</h2></div><Status value={v.status} /></div>
+      <div className="mb-2 flex items-start justify-between gap-3"><div className="min-w-0"><p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-400">{v.tier} tier · {v.slot_type}</p>{v.url ? <a href={v.url} target="_blank" rel="noopener noreferrer" className="line-clamp-2 text-sm font-semibold leading-snug text-white hover:text-cyan-300 hover:underline">{v.listing_title}</a> : <h2 className="line-clamp-2 text-sm font-semibold leading-snug text-white">{v.listing_title}</h2>}</div><Status value={v.status} /></div>
       <div className="mt-3 flex flex-wrap items-end gap-x-6 gap-y-2"><div><p className="text-xl font-bold text-white">£{(v.delivered_price ?? v.display_price).toFixed(2)}</p><p className="text-[10px] text-slate-500">Listing price</p></div><MarketPrice variant={v} /><div><p className="font-mono text-sm font-bold text-emerald-300">{v.deal_score == null ? v.gem_score.toFixed(0) : v.deal_score.toFixed(1)}<span className="text-[10px] font-normal text-slate-500"> / {v.deal_score == null ? "100" : "10"}</span></p><p className="text-[10px] text-slate-500">Score</p></div><div><ReviewSummary variant={v} /><p className="text-[10px] text-slate-500">Reviews</p></div></div>
       <div className="mt-3"><SourcingDetails variant={v} /></div>
       <div className="mt-3 flex items-center gap-3 rounded-md border border-blue-400/10 bg-blue-400/[0.03] px-3 py-2"><PriceHistorySparkline listingId={v.price_history_listing_id ?? String(v.listing_id ?? v.id)} listingTitle={v.listing_title} /><span className="text-[10px] text-slate-500">Blue: listing · orange: CPK market · click for details</span></div>
