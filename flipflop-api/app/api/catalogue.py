@@ -182,15 +182,23 @@ async def list_variants(
                     WHERE cpk IS NOT NULL
                       AND observed_at >= CURRENT_TIMESTAMP - INTERVAL '90 days'
                     GROUP BY cpk
+                ), active_counts AS (
+                    SELECT cpk, COUNT(DISTINCT listing_id) AS active_count
+                    FROM gem_radar_cpk_listing_price
+                    WHERE updated_at >= CURRENT_TIMESTAMP - INTERVAL '14 days'
+                      AND price > 0
+                    GROUP BY cpk
                 )
                 SELECT c.cpk,
                        CASE WHEN COUNT(o.watch_count) > 0
                             THEN SUM(o.watch_count) ELSE NULL END AS watch_count,
                        COUNT(*) FILTER (WHERE o.best_offer_enabled) AS offer_count,
-                       COALESCE(MAX(sc.sold_count), 0) AS sold_count
+                       COALESCE(MAX(sc.sold_count), 0) AS sold_count,
+                       COALESCE(MAX(ac.active_count), 0) AS active_count
                 FROM gem_radar_listing_cpk c
                 JOIN latest_observations o ON o.listing_id = c.listing_id
                 LEFT JOIN sold_counts sc ON sc.cpk = c.cpk
+                LEFT JOIN active_counts ac ON ac.cpk = c.cpk
                 WHERE c.listing_id = ANY(:listing_ids)
                 GROUP BY c.cpk
             """),
@@ -201,6 +209,7 @@ async def list_variants(
                 "watch_count": row.watch_count,
                 "offer_count": row.offer_count,
                 "sold_count": row.sold_count,
+                "active_count": row.active_count,
             }
             for row in metrics
         }
@@ -328,6 +337,16 @@ async def list_variants(
             select(GemRadarCpkMarketPrice).where(GemRadarCpkMarketPrice.cpk.in_(cpk_ids))
         )
         market_prices_by_cpk = {row.cpk: row for row in market_result.scalars().all()}
+
+    def cpk_metrics_for(listing: Listing) -> dict:
+        return cpk_metrics.get(cpk_by_item.get(item_key(listing)), {})
+
+    def sell_through_rate(sold_count: int | None, active_count: int | None) -> float | None:
+        sold = max(0, sold_count or 0)
+        active = max(0, active_count or 0)
+        total = sold + active
+        return None if total == 0 else round(sold / total * 100, 1)
+
     return [
         {
             "id": v.id,
@@ -375,6 +394,8 @@ async def list_variants(
             "watch_count": cpk_metrics.get(cpk_by_item.get(l.external_id.split("|")[1]), {}).get("watch_count") if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
             "offer_count": cpk_metrics.get(cpk_by_item.get(l.external_id.split("|")[1]), {}).get("offer_count") if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
             "sold_count": cpk_metrics.get(cpk_by_item.get(l.external_id.split("|")[1]), {}).get("sold_count") if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
+            "active_count": cpk_metrics_for(l).get("active_count"),
+            "sell_through_rate": sell_through_rate(cpk_metrics_for(l).get("sold_count"), cpk_metrics_for(l).get("active_count")),
             "review_average_rating": (reviews_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "")) or (reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_average_rating"), reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_count")))[0],
             "review_count": (reviews_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "")) or (reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_average_rating"), reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_count")))[1],
             "consecutive_misses": v.consecutive_misses,
