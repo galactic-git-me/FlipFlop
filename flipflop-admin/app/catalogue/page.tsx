@@ -39,7 +39,7 @@ const fallback: Variant[] = [
 const categories = ["All components", "CPU", "GPU", "Memory", "Storage", "PC Cases", "Motherboard", "Power supply", "Cooling"];
 const imageTones = ["from-cyan-950 via-slate-800 to-blue-900", "from-violet-950 via-slate-800 to-indigo-900", "from-emerald-950 via-slate-800 to-teal-900", "from-amber-950 via-slate-800 to-orange-900"];
 
-function ProductArt({ index, title, imageUrl }: { index: number; title: string; imageUrl?: string | null }) {
+function ProductArt({ index, title, imageUrl, channelSources, currentSource }: { index: number; title: string; imageUrl?: string | null; channelSources?: string[]; currentSource?: string | null }) {
   return <div className={`relative flex h-full min-h-32 items-center justify-center overflow-hidden bg-gradient-to-br ${imageTones[index % imageTones.length]}`}>
     {imageUrl && <img src={imageUrl} alt="" className="absolute inset-0 h-full w-full object-contain mix-blend-screen" />}
     <div className="absolute inset-0 opacity-30" style={{ backgroundImage: "linear-gradient(135deg, transparent 45%, rgba(255,255,255,.22) 46%, transparent 48%), linear-gradient(45deg, transparent 45%, rgba(0,220,255,.18) 46%, transparent 48%)", backgroundSize: "28px 28px" }} />
@@ -49,12 +49,20 @@ function ProductArt({ index, title, imageUrl }: { index: number; title: string; 
         <span className="mt-2 block text-[9px] uppercase tracking-wider text-white/45">No image captured</span>
       </div>}
     <button aria-label={`Save ${title}`} className="absolute right-2 top-2 rounded-full bg-black/50 p-1.5 text-white transition hover:bg-black/75"><Heart className="h-3.5 w-3.5" /></button>
+    <div className="absolute bottom-2 right-2 rounded-md border border-white/15 bg-slate-950/80 p-1.5 shadow-lg backdrop-blur-sm"><ChannelLogos sources={channelSources} current={currentSource} /></div>
   </div>;
 }
 
 function Status({ value }: { value: string }) {
   const tone = value === "active" ? "text-emerald-300 bg-emerald-400/10 border-emerald-400/20" : value === "pending_review" ? "text-amber-300 bg-amber-400/10 border-amber-400/20" : "text-slate-400 bg-white/5 border-white/10";
   return <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${tone}`}>{value.replace("_", " ")}</span>;
+}
+
+function classificationLabel(value?: string | null) {
+  const normalized = value?.toUpperCase();
+  if (normalized === "SUPER_GEM") return "SG";
+  if (normalized === "GEM") return "G";
+  return value?.replace(/_/g, " ") ?? "—";
 }
 
 function ChannelLogo({ source }: { source: string }) {
@@ -96,14 +104,16 @@ function ReviewSummary({ variant: v }: { variant: Variant }) {
 
 function SourcingDetails({ variant: v }: { variant: Variant }) {
   const money = (value?: number | null) => value == null ? "—" : `£${value.toFixed(0)}`;
+  const lower = v.scored_market_lower_price ?? v.market_lower_price;
+  const upper = v.scored_market_upper_price ?? v.market_upper_price;
+  const range = lower == null || upper == null ? "—" : `${money(lower)}–${money(upper)}`;
   const variance = v.pct_offset == null ? "—" : `${v.pct_offset >= 0 ? "+" : "−"}${Math.abs(v.pct_offset).toFixed(0)}%`;
   return <div className="grid min-w-0 grid-cols-2 gap-x-3 gap-y-2 rounded-md border border-white/10 bg-black/20 px-3 py-2 text-[10px] sm:grid-cols-4 xl:grid-cols-8">
     <div className="min-w-0"><p className="text-slate-500">Condition</p><p className="mt-0.5 break-words font-semibold text-white">{v.condition ?? "—"}</p></div>
-    <div className="min-w-0"><p className="text-slate-500">Low</p><p className="mt-0.5 break-words font-mono text-slate-200">{money(v.scored_market_lower_price ?? v.market_lower_price)}</p></div>
+    <div className="min-w-0"><p className="text-slate-500">Range</p><p className="mt-0.5 break-words font-mono text-slate-200">{range}</p></div>
     <div className="min-w-0"><p className="text-slate-500">Median</p><p className="mt-0.5 break-words font-mono text-orange-200">{money(v.scored_market_median_price ?? v.market_median_price)}</p></div>
-    <div className="min-w-0"><p className="text-slate-500">High</p><p className="mt-0.5 break-words font-mono text-slate-200">{money(v.scored_market_upper_price ?? v.market_upper_price)}</p></div>
-    <div className="min-w-0"><p className="text-slate-500">Vs median</p><p className={`mt-0.5 break-words font-mono font-semibold ${v.pct_offset != null && v.pct_offset < 0 ? "text-emerald-300" : "text-slate-200"}`}>{variance}</p></div>
-    <div className="min-w-0"><p className="text-slate-500">Class</p><p className="mt-0.5 break-words font-semibold uppercase text-amber-200">{v.classification?.replace(/_/g, " ") ?? "—"}</p></div>
+    <div className="min-w-0"><p className="text-slate-500">Vs med</p><p className={`mt-0.5 break-words font-mono font-semibold ${v.pct_offset != null && v.pct_offset < 0 ? "text-emerald-300" : "text-slate-200"}`}>{variance}</p></div>
+    <div className="min-w-0"><p className="text-slate-500">Class</p><p className="mt-0.5 break-words font-semibold uppercase text-amber-200">{classificationLabel(v.classification)}</p></div>
     <div className="min-w-0"><p className="text-slate-500">Decision</p><p className="mt-0.5 break-words font-semibold uppercase text-emerald-300">{v.decision?.replace(/_/g, " ") ?? "—"}</p></div>
     <div className="min-w-0"><p className="text-slate-500">Score</p><p className="mt-0.5 font-mono font-semibold text-white">{v.deal_score == null ? "—" : v.deal_score.toFixed(1)}</p></div>
   </div>;
@@ -138,12 +148,13 @@ export default function CataloguePage() {
           review_average_rating: (row.review_average_rating as number | null) ?? null, review_count: (row.review_count as number | null) ?? null,
           url: (row.url as string | null) ?? null, condition: (row.condition as string | null) ?? null, delivered_price: (row.delivered_price as number | null) ?? null,
           delivery_text: (row.delivery_text as string | null) ?? null, delivery_postcode: (row.delivery_postcode as string | null) ?? null,
-          classification: (row.classification as string | null) ?? null, decision: (row.decision as string | null) ?? null,
+          classification: classificationLabel((row.classification as string | null) ?? null), decision: (row.decision as string | null) ?? null,
           confidence: (row.confidence as string | null) ?? null, deal_score: (row.deal_score as number | null) ?? null,
           evidence_status: (row.evidence_status as string | null) ?? null, evidence_reason: (row.evidence_reason as string | null) ?? null,
         })));
       } else {
-        setVariants((await api.catalogue.variants(status === "all" ? {} : { status })) as Variant[]);
+        const curated = await api.catalogue.variants(status === "all" ? {} : { status }) as Variant[];
+        setVariants(curated.map(v => ({ ...v, classification: classificationLabel(v.classification) })));
       }
       setPage(1);
     }
@@ -204,13 +215,13 @@ export default function CataloguePage() {
 function ListingCard({ variant: v, index, compact }: { variant: Variant; index: number; compact: boolean }) {
   const metric = (value: number | null | undefined) => value == null ? "—" : value.toLocaleString();
   return <article className={`overflow-hidden rounded-lg border border-white/10 bg-[#0b1119] transition hover:border-cyan-400/40 hover:shadow-[0_0_24px_rgba(34,211,238,.08)] ${compact ? "flex flex-col sm:flex-row" : ""}`}>
-    <div className={compact ? "w-full shrink-0 sm:w-52" : ""}><ProductArt index={index} title={v.slot_type} imageUrl={v.image_url} /></div>
+    <div className={compact ? "w-full shrink-0 sm:w-52" : ""}><ProductArt index={index} title={v.slot_type} imageUrl={v.image_url} channelSources={v.channel_sources} currentSource={v.source_name} /></div>
     <div className="min-w-0 flex-1 p-3">
       <div className="mb-2 flex items-start justify-between gap-3"><div className="min-w-0"><p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-400">{v.tier} tier · {v.slot_type}</p>{v.url ? <a href={v.url} target="_blank" rel="noopener noreferrer" className="line-clamp-2 text-sm font-semibold leading-snug text-white hover:text-cyan-300 hover:underline">{v.listing_title}</a> : <h2 className="line-clamp-2 text-sm font-semibold leading-snug text-white">{v.listing_title}</h2>}</div><Status value={v.status} /></div>
       <div className="mt-3 flex flex-wrap items-end gap-x-6 gap-y-2"><div><p className="text-xl font-bold text-white">£{(v.delivered_price ?? v.display_price).toFixed(0)}</p><p className="text-[10px] text-slate-500">Listing price</p></div><MarketPrice variant={v} /><div><p className="font-mono text-sm font-bold text-emerald-300">{v.deal_score == null ? v.gem_score.toFixed(0) : v.deal_score.toFixed(1)}<span className="text-[10px] font-normal text-slate-500"> / {v.deal_score == null ? "100" : "10"}</span></p><p className="text-[10px] text-slate-500">Score</p></div><div><ReviewSummary variant={v} /><p className="text-[10px] text-slate-500">Reviews</p></div></div>
       <div className="mt-3"><SourcingDetails variant={v} /></div>
       <div className="mt-3 flex min-w-0 flex-wrap items-center gap-4 rounded-md border border-blue-400/10 bg-blue-400/[0.03] px-3 py-2"><PriceHistorySparkline listingId={v.price_history_listing_id ?? String(v.listing_id ?? v.id)} listingTitle={v.listing_title} /><div className="grid min-w-[150px] flex-1 grid-cols-2 gap-3"><div title="Distinct matched sold comps observed in the last 90 days"><p className="font-mono text-sm font-semibold text-emerald-200">{metric(v.sold_count)}</p><p className="text-[10px] text-slate-500">Sold · 90d</p></div><div title="Sold divided by sold plus active comparable listings"><p className="font-mono text-sm font-semibold text-cyan-200">{v.sell_through_rate == null ? "—" : `${v.sell_through_rate.toFixed(1)}%`}</p><p className="text-[10px] text-slate-500">Sell-through</p></div></div></div>
-      <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2"><ChannelLogos sources={v.channel_sources} current={v.source_name} />{v.url ? <a href={v.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[11px] font-semibold text-cyan-300 hover:text-cyan-200"><Eye className="h-3.5 w-3.5" /> View listing</a> : null}</div>
+      <div className="mt-3 flex items-center justify-end border-t border-white/10 pt-2">{v.url ? <a href={v.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[11px] font-semibold text-cyan-300 hover:text-cyan-200"><Eye className="h-3.5 w-3.5" /> View listing</a> : null}</div>
     </div>
   </article>;
 }
