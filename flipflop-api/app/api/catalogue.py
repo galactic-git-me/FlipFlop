@@ -13,6 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.catalogue import CaseCatalogue, CatalogueVariant, PlaybookSlot
 from app.models.listing import Listing
+from app.models.gem_radar_cpk_market_price import GemRadarCpkMarketPrice
 from app.schemas.catalogue import (
     CaseCatalogueCreate,
     CaseCatalogueOut,
@@ -185,6 +186,13 @@ async def list_variants(
         {"listing_ids": list(ebay_item_ids)},
     ) if ebay_item_ids else []
     cpk_by_item = {row.listing_id: row.cpk for row in listing_cpks}
+    market_prices_by_cpk = {}
+    cpk_ids = {cpk for cpk in cpk_by_item.values() if cpk}
+    if cpk_ids:
+        market_result = await db.execute(
+            select(GemRadarCpkMarketPrice).where(GemRadarCpkMarketPrice.cpk.in_(cpk_ids))
+        )
+        market_prices_by_cpk = {row.cpk: row for row in market_result.scalars().all()}
     return [
         {
             "id": v.id,
@@ -193,6 +201,10 @@ async def list_variants(
             "image_url": (l.image_urls[0] if l.image_urls else None),
             "source_name": l.source_name,
             "channel_sources": channels_by_fingerprint.get(l.spec_fingerprint, [l.source_name]),
+            "price_history_listing_id": l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id,
+            "market_lower_price": getattr(market_prices_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1]) if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None), "min_price", None),
+            "market_median_price": getattr(market_prices_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1]) if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None), "median_price", None),
+            "market_upper_price": getattr(market_prices_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1]) if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None), "max_price", None),
             "slot_type": s.slot_type,
             "playbook_id": s.playbook_id,
             "status": v.status,
