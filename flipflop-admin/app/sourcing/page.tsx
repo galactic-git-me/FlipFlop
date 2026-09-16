@@ -290,32 +290,34 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
             className="transition-all duration-500"
           />
         )}
-        {failedLength > 0 && (
+        {skippedLength > 0 && (
+          // Upstream failures occupy the same angular segment as the
+          // patterned failure segment in the preceding stage.
           <circle
-            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={gaugeStrokeWidth} fill="none"
-            strokeDasharray={`${failedLength} ${circumference - failedLength}`}
+            cx={30} cy={30} r={radius} stroke={color} strokeWidth={3} fill="none" opacity="0.9"
+            strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
             strokeDashoffset={-successfulLength} strokeLinecap="butt" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
           />
         )}
-        {skippedLength > 0 && (
+        {failedLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={color} strokeWidth={3} fill="none" opacity="0.9"
-            strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
-            strokeDashoffset={-(successfulLength + failedLength)} strokeLinecap="butt" transform="rotate(-90 30 30)"
+            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={gaugeStrokeWidth} fill="none"
+            strokeDasharray={`${failedLength} ${circumference - failedLength}`}
+            strokeDashoffset={-(successfulLength + skippedLength)} strokeLinecap="butt" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
           />
         )}
         {failedLength > 0 && (
           <line
             x1={30} y1={1.5} x2={30} y2={11.5} stroke="#020617" strokeWidth={1}
-            transform={`rotate(${(successfulLength / circumference) * 360} 30 30)`}
+            transform={`rotate(${((successfulLength + skippedLength) / circumference) * 360} 30 30)`}
           />
         )}
         {skippedLength > 0 && (
           <line
             x1={30} y1={1.5} x2={30} y2={11.5} stroke="#020617" strokeWidth={1}
-            transform={`rotate(${((successfulLength + failedLength) / circumference) * 360} 30 30)`}
+            transform={`rotate(${(successfulLength / circumference) * 360} 30 30)`}
           />
         )}
         <text x={30} y={34} textAnchor="middle" className="fill-slate-100 text-[12px] font-semibold">
