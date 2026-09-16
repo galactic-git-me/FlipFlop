@@ -46,6 +46,12 @@ export function PriceSparkline({
   const min = Math.min(...allValues);
   const max = Math.max(...allValues);
   const range = max - min || 1;
+  const medianValues = sortedCpk.length > 0
+    ? sortedCpk.map((p) => p.delivered_price).sort((a, b) => a - b)
+    : sortedListing.map((p) => p.delivered_price).sort((a, b) => a - b);
+  const median = medianValues.length % 2 === 1
+    ? medianValues[Math.floor(medianValues.length / 2)]
+    : (medianValues[medianValues.length / 2 - 1] + medianValues[medianValues.length / 2]) / 2;
 
   // Generate SVG path points for listing prices (blue)
   const listingPoints = (sortedListing.length === 1 ? [sortedListing[0], sortedListing[0]] : sortedListing)
@@ -83,6 +89,7 @@ export function PriceSparkline({
     >
       <div className="flex h-full flex-col justify-between text-[8px] leading-none text-slate-500" aria-hidden="true">
         <span>{formatAxisValue(max)}</span>
+        <span>{formatAxisValue(median)}</span>
         <span>{formatAxisValue(min)}</span>
       </div>
       <svg
