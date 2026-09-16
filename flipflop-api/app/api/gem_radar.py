@@ -1146,6 +1146,8 @@ async def get_scored_listings_latest_run(
             **cpk_price_fields.get(s.id, {}),
             "watch_count": observation_fields.get(s.listing_id, {}).get("watch_count", s.watch_count),
             "best_offer_enabled": observation_fields.get(s.listing_id, {}).get("best_offer_enabled", False),
+            "review_average_rating": s.review_average_rating,
+            "review_count": s.review_count,
             "classification": s.classification,
             "deal_score": s.deal_score,
             "confidence": s.confidence_band,
