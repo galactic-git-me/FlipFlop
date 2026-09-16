@@ -311,6 +311,24 @@ async def list_variants(
         elif count:
             reviews_by_cpk[cpk] = (old_rating, (old_count or 0) + count)
 
+    bestseller_result = await db.execute(
+        text("""
+            SELECT DISTINCT ON (cpk)
+                   cpk, category, list_name, rank, captured_at
+            FROM amazon_bestseller_observations
+            WHERE cpk IS NOT NULL
+            ORDER BY cpk, captured_at DESC, id DESC
+        """)
+    )
+    bestseller_by_cpk = {
+        row.cpk: {
+            "amazon_bestseller_rank": row.rank,
+            "amazon_bestseller_list": row.list_name,
+            "amazon_bestseller_captured_at": row.captured_at.isoformat() if row.captured_at else None,
+        }
+        for row in bestseller_result
+    }
+
     # Older Listing rows may have lost their denormalised image array during
     # a refresh, while the scraper still retained the image on its sighting
     # ledger.  Use the latest non-empty captured image as a read-time repair;
@@ -405,6 +423,11 @@ async def list_variants(
             "sell_through_rate": sell_through_rate(cpk_metrics_for(l).get("sold_count"), cpk_metrics_for(l).get("active_count")),
             "review_average_rating": (reviews_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "")) or (reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_average_rating"), reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_count")))[0],
             "review_count": (reviews_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "")) or (reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_average_rating"), reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_count")))[1],
+            **bestseller_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else ""), {
+                "amazon_bestseller_rank": None,
+                "amazon_bestseller_list": None,
+                "amazon_bestseller_captured_at": None,
+            }),
             "consecutive_misses": v.consecutive_misses,
             "last_seen_at": v.last_seen_at,
             "auto_published_at": v.auto_published_at,
