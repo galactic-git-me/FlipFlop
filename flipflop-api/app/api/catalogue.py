@@ -186,6 +186,25 @@ async def list_variants(
         {"listing_ids": list(ebay_item_ids)},
     ) if ebay_item_ids else []
     cpk_by_item = {row.listing_id: row.cpk for row in listing_cpks}
+
+    review_result = await db.execute(
+        text("""
+            SELECT DISTINCT ON (listing_id)
+                   listing_id, review_average_rating, review_count
+            FROM gem_radar_scored_listings
+            WHERE listing_id = ANY(:listing_ids)
+            ORDER BY listing_id, scored_at DESC NULLS LAST, id DESC
+        """),
+        {"listing_ids": list(ebay_item_ids)},
+    ) if ebay_item_ids else []
+    reviews_by_item = {
+        row.listing_id: {
+            "review_average_rating": row.review_average_rating,
+            "review_count": row.review_count,
+        }
+        for row in review_result
+    }
+
     market_prices_by_cpk = {}
     cpk_ids = {cpk for cpk in cpk_by_item.values() if cpk}
     if cpk_ids:
@@ -215,6 +234,8 @@ async def list_variants(
             "watch_count": cpk_metrics.get(cpk_by_item.get(l.external_id.split("|")[1]), {}).get("watch_count") if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
             "offer_count": cpk_metrics.get(cpk_by_item.get(l.external_id.split("|")[1]), {}).get("offer_count") if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
             "sold_count": cpk_metrics.get(cpk_by_item.get(l.external_id.split("|")[1]), {}).get("sold_count") if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
+            "review_average_rating": reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_average_rating"),
+            "review_count": reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_count"),
             "consecutive_misses": v.consecutive_misses,
             "last_seen_at": v.last_seen_at,
             "auto_published_at": v.auto_published_at,
