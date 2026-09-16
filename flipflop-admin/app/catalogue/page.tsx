@@ -74,15 +74,18 @@ function ChannelLogos({ sources, current }: { sources?: string[]; current?: stri
 
 function MarketPrice({ variant: v }: { variant: Variant }) {
   const median = v.scored_market_median_price ?? v.market_median_price;
+  const lower = v.scored_market_lower_price ?? v.market_lower_price;
+  const upper = v.scored_market_upper_price ?? v.market_upper_price;
   return <div className="min-w-0" title="Market range from the matched CPK comparable listings">
-    <p className="font-mono text-sm font-semibold text-orange-200">{median == null ? "—" : `£${median.toFixed(2)}`}</p>
-    <p className="text-[10px] text-slate-500" title="Market median">M/M{(v.scored_market_lower_price ?? v.market_lower_price) != null && (v.scored_market_upper_price ?? v.market_upper_price) != null ? ` · £${(v.scored_market_lower_price ?? v.market_lower_price)!.toFixed(0)}–£${(v.scored_market_upper_price ?? v.market_upper_price)!.toFixed(0)}` : ""}</p>
+    <p className="font-mono text-[10px] text-slate-500">{lower == null ? "—" : `£${lower.toFixed(2)}`}</p>
+    <p className="font-mono text-sm font-semibold text-orange-200" title="Market median">{median == null ? "—" : `£${median.toFixed(2)}`}</p>
+    <p className="font-mono text-[10px] text-slate-500">{upper == null ? "—" : `£${upper.toFixed(2)}`}</p>
   </div>;
 }
 
 function ReviewSummary({ variant: v }: { variant: Variant }) {
   if (v.review_average_rating == null && v.review_count == null) {
-    return <div className="text-[10px] text-slate-600">No review data</div>;
+    return <div className="text-[10px] text-slate-600">—</div>;
   }
   return <div className="flex items-center gap-1.5 text-xs" title="Product review rating and review count">
     <Star className="h-3.5 w-3.5 fill-amber-300 text-amber-300" />
