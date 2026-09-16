@@ -259,11 +259,10 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
   const pct = safeMax > 0 ? (successful / safeMax) * 100 : 0;
   const radius = 24;
   const circumference = 2 * Math.PI * radius;
-  // Keep the successful output as one uniform-width bar. Unavailable work is
-  // deliberately represented by a thinner patterned line so it cannot be
-  // mistaken for completed output.
-  const successfulStrokeWidth = 7.5;
-  const unavailableStrokeWidth = 3;
+  // Every state uses the same stroke width. The pattern/segment state already
+  // communicates unavailable work; changing its width makes one ring appear
+  // to have multiple scales and makes the percentages visually misleading.
+  const gaugeStrokeWidth = 7.5;
   const successfulLength = circumference * (successful / (safeMax || 1));
   const failedLength = circumference * (failedCount / (safeMax || 1));
   const skippedLength = circumference * (skippedCount / (safeMax || 1));
@@ -285,7 +284,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
         <circle cx={30} cy={30} r={radius} stroke="#334155" strokeWidth={3} fill="none" />
         {successfulLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={`url(#${patternId}-gradient)`} strokeWidth={successfulStrokeWidth} fill="none"
+            cx={30} cy={30} r={radius} stroke={`url(#${patternId}-gradient)`} strokeWidth={gaugeStrokeWidth} fill="none"
             strokeDasharray={`${successfulLength} ${circumference - successfulLength}`}
             strokeDashoffset={0} strokeLinecap="butt" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
@@ -293,7 +292,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
         )}
         {failedLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={unavailableStrokeWidth} fill="none"
+            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={gaugeStrokeWidth} fill="none"
             strokeDasharray={`${failedLength} ${circumference - failedLength}`}
             strokeDashoffset={-successfulLength} strokeLinecap="butt" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
@@ -301,7 +300,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
         )}
         {skippedLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={unavailableStrokeWidth} fill="none" opacity="0.9"
+            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={gaugeStrokeWidth} fill="none" opacity="0.9"
             strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
             strokeDashoffset={-(successfulLength + failedLength)} strokeLinecap="butt" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
@@ -780,10 +779,18 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             // state. Before then, the same space represents work still in
             // flight and remains an empty track segment.
             const failedIngested = isComplete ? Math.max(searchTermTotal - scan.ingestedCount, 0) : 0;
-            const failedCpk = Math.min(
-              scan.cpkFailedCount ?? 0,
-              Math.max(searchTermTotal - scan.cpkAssignedCount, 0),
-            );
+            // At completion, every eligible item absent from the successful
+            // CPK total is a terminal CPK failure. Relying on the explicit
+            // failure counter alone leaves a false blank gap in the ring.
+            const failedCpk = isComplete
+              ? Math.min(
+                Math.max(scan.cpkFailedCount ?? 0, searchTermTotal - scan.cpkAssignedCount),
+                Math.max(searchTermTotal - scan.cpkAssignedCount, 0),
+              )
+              : Math.min(
+                scan.cpkFailedCount ?? 0,
+                Math.max(searchTermTotal - scan.cpkAssignedCount, 0),
+              );
             // A CPK-assigned listing with no settled market price is already
             // known to be unmatched. It may become priced later if another
             // comparable listing settles the same CPK, so this dotted segment
@@ -806,7 +813,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
               Math.max(searchTermTotal - scan.marketPricedCount - failedMarketPrices, 0),
             );
             const skippedScores = Math.min(
-              failedIngested + failedCpk,
+              failedIngested + failedCpk + failedMarketPrices,
               Math.max(searchTermTotal - scan.classifiedCount, 0),
             );
 
@@ -1720,7 +1727,7 @@ function priceValueForColumn(listing: Listing, column: PriceColumn): number | nu
 function rowPricePercentages(listing: Listing): Record<PriceColumn, number | null> {
   const columns: PriceColumn[] = ["listing", "low", "median", "high"];
   const values = columns.map((column) => priceValueForColumn(listing, column));
-  const total = values.reduce((sum, value) => sum + (value ?? 0), 0);
+  const total = values.reduce<number>((sum, value) => sum + (value ?? 0), 0);
   if (total <= 0) return { listing: null, low: null, median: null, high: null };
 
   const percentages: Record<PriceColumn, number | null> = { listing: null, low: null, median: null, high: null };
