@@ -44,11 +44,6 @@ _SUBMISSION_TIMEOUT_S = 900.0
 _WORKER_COUNT = 15
 _EMPTY_QUEUE_POLL_SECONDS = 5
 
-# Track actively-processing search_ids to enforce concurrent search term limit
-_active_search_ids: set[str] = set()
-_active_search_lock = asyncio.Lock()
-
-
 _STALL_WATCHDOG_MAX_RETRIES = 5
 
 
@@ -380,8 +375,7 @@ async def _phase2_trigger_loop() -> None:
 
 async def _worker_loop(worker_id: int, poll_interval_seconds: int) -> None:
     """One persistent worker: claim a submission, process it, repeat.
-    Sleeps briefly only when the queue is empty or concurrent search limit reached."""
-    settings = get_settings()
+    Sleeps briefly only when the queue is empty."""
     while True:
         try:
             # Check-and-reserve the concurrent search term slot atomically
@@ -397,22 +391,10 @@ async def _worker_loop(worker_id: int, poll_interval_seconds: int) -> None:
             # the claim serializes claiming across workers (fast: one row,
             # SKIP LOCKED) but leaves the actual heavy processing below fully
             # concurrent, since the lock is released before that starts.
-            submission = None
-            async with _active_search_lock:
-                if len(_active_search_ids) < settings.max_concurrent_search_terms:
-                    async with AsyncSessionLocal() as db:
-                        # Only one page/vendor submission for a search term may
-                        # score at once. Previously seven workers could all claim
-                        # submissions for the same two active search IDs; the set
-                        # still had length two, so the configured limit appeared
-                        # satisfied while expensive CPK/pricing work contended
-                        # seven ways and the queue stopped completing anything.
-                        submission = await SubmissionQueueService.claim_next_pending(
-                            db,
-                            excluded_search_ids=set(_active_search_ids),
-                        )
-                    if submission is not None:
-                        _active_search_ids.add(submission.search_id)
+            # The database claim is atomic (FOR UPDATE SKIP LOCKED), so all
+            # workers can safely process every search term concurrently.
+            async with AsyncSessionLocal() as db:
+                submission = await SubmissionQueueService.claim_next_pending(db)
 
             if submission is None:
                 await asyncio.sleep(poll_interval_seconds)
@@ -446,7 +428,6 @@ async def _process_single_submission(submission):
         search_id=submission.search_id,
         query=submission.query,
         n_listings=len(submission.listings_json),
-        active_searches=len(_active_search_ids),
     )
 
     try:
@@ -508,12 +489,8 @@ async def _process_single_submission(submission):
                 await db.rollback()
                 await SubmissionQueueService.mark_failed(db, submission.id, str(e), max_retries=5)
     finally:
-        # Remove from active set once submission fully completes (success/fail/timeout)
-        async with _active_search_lock:
-            _active_search_ids.discard(submission.search_id)
         logger.info(
-            "queue_processor.search_term_released",
+            "queue_processor.submission_released",
             search_id=submission.search_id,
-            active_searches_remaining=len(_active_search_ids),
         )
         pipeline_status.finish_submission(submission.search_id, submission_id=submission.id)
