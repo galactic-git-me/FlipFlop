@@ -462,8 +462,15 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
           const queueIsRunning = Boolean(
             queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0),
           );
+          const completedRunIsIdle =
+            activeScans.length > 0 &&
+            !queueIsRunning &&
+            (
+              activeScans.every((scan: ScanProgress) => scan.isComplete && scan.activeSubmissions === 0) ||
+              (displayedScans.length > 0 && displayedScans.every((scan) => scan.isComplete && scan.activeSubmissions === 0))
+            );
 
-          if (activeScans.length > 0) {
+          if (activeScans.length > 0 && !completedRunIsIdle) {
             // Search IDs are reused between sweeps. Clear the client-side
             // monotonic accumulator only at the explicit backend sweep
             // boundary; otherwise old Scores/Prices can exceed the new
@@ -576,6 +583,11 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             setStatus(accumulatedStatus);
             setClientElapsed(activeScans[0].elapsedSeconds ?? 0);
             setDisplayedScans(accumulatedScans);
+          } else if (completedRunIsIdle) {
+            // Do not keep folding late/stale snapshots into a run after all
+            // cards are complete and the durable queue is idle. The previous
+            // accumulated snapshot is the final result for this run.
+            if (lastLiveStatus.current) setStatus(lastLiveStatus.current);
           } else if (queueIsRunning) {
             // The queue is the durable source of truth for whether this run
             // is still alive. A transient empty in-memory snapshot must not
@@ -654,16 +666,6 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
 
   const isRunning = queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0);
 
-  // The lock status endpoint identifies only the environment that holds the
-  // lease, not its owner. A DEV run can therefore look like it is waiting on
-  // "another DEV" workload while this same dashboard is displaying that run.
-  // The cards remain visible through the phase-two hand-off, so their presence
-  // is the reliable signal that the operator already has a current run open.
-  const scanIsProgressing =
-    displayedScans.length > 0 ||
-    queueItems.some((item) => item.status === "pending" || item.status === "processing") ||
-    Boolean(queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0));
-
   // Sourced from pipeline-status, scoped to THIS run's listing_ids -- NOT
   // derived from the whole-DB `listings` array (see pipeline_status.py's
   // snapshot() docstring for why that was wrong: Phase 2 re-classifies the
@@ -705,7 +707,10 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
           </div>
         </div>
 
-        {scanLock?.state === "waiting" && !scanIsProgressing && (
+        {scanLock?.state === "waiting" &&
+          displayedScans.length === 0 &&
+          (queueItems.some((item) => item.status === "pending" || item.status === "processing") ||
+            Boolean(queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0))) && (
           <div className="rounded-md border border-amber-800/70 bg-amber-950/30 px-3 py-2 text-xs text-amber-200">
             A browser workload currently holds the {scanLock.holderEnvironment ?? "shared"} scan lock. A new workload will start when that lease is released.
           </div>
