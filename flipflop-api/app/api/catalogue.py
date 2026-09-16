@@ -7,7 +7,7 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -112,6 +112,65 @@ async def list_variants(
         q = q.where(CatalogueVariant.tier == tier)
     result = await db.execute(q.order_by(CatalogueVariant.auto_published_at.desc()))
     rows = result.all()
+
+    # The legacy catalogue listings use an external-id format such as
+    # ``ebay_v1|123456789|...`` while CPK records use the bare eBay item ID.
+    # Aggregate the latest demand observation per matched item so the admin
+    # catalogue can show CPK evidence without double-counting historical
+    # observations.
+    ebay_item_ids = {
+        l.external_id.split("|")[1]
+        for _, l, _ in rows
+        if l.external_id.startswith("ebay_v1|") and "|" in l.external_id
+    }
+    cpk_metrics: dict[str, dict] = {}
+    if ebay_item_ids:
+        metrics = await db.execute(
+            text("""
+                WITH latest_observations AS (
+                    SELECT DISTINCT ON (listing_id)
+                        listing_id, watch_count, best_offer_enabled
+                    FROM gem_radar_listing_observations
+                    ORDER BY listing_id, observed_at DESC, id DESC
+                ), sold_counts AS (
+                    SELECT cpk,
+                           COUNT(DISTINCT COALESCE(NULLIF(source_url, ''), 'row:' || id::text)) AS sold_count
+                    FROM gem_radar_sold_observations
+                    WHERE cpk IS NOT NULL
+                      AND observed_at >= CURRENT_TIMESTAMP - INTERVAL '90 days'
+                    GROUP BY cpk
+                )
+                SELECT c.cpk,
+                       CASE WHEN COUNT(o.watch_count) > 0
+                            THEN SUM(o.watch_count) ELSE NULL END AS watch_count,
+                       COUNT(*) FILTER (WHERE o.best_offer_enabled) AS offer_count,
+                       COALESCE(MAX(sc.sold_count), 0) AS sold_count
+                FROM gem_radar_listing_cpk c
+                JOIN latest_observations o ON o.listing_id = c.listing_id
+                LEFT JOIN sold_counts sc ON sc.cpk = c.cpk
+                WHERE c.listing_id = ANY(:listing_ids)
+                GROUP BY c.cpk
+            """),
+            {"listing_ids": list(ebay_item_ids)},
+        )
+        cpk_metrics = {
+            row.cpk: {
+                "watch_count": row.watch_count,
+                "offer_count": row.offer_count,
+                "sold_count": row.sold_count,
+            }
+            for row in metrics
+        }
+
+    listing_cpks = await db.execute(
+        text("""
+            SELECT listing_id, cpk
+            FROM gem_radar_listing_cpk
+            WHERE listing_id = ANY(:listing_ids)
+        """),
+        {"listing_ids": list(ebay_item_ids)},
+    ) if ebay_item_ids else []
+    cpk_by_item = {row.listing_id: row.cpk for row in listing_cpks}
     return [
         {
             "id": v.id,
@@ -124,13 +183,17 @@ async def list_variants(
             "tier": v.tier,
             "display_price": v.display_price,
             "gem_score": l.gem_score,
+            "cpk": cpk_by_item.get(l.external_id.split("|")[1]) if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
+            "watch_count": cpk_metrics.get(cpk_by_item.get(l.external_id.split("|")[1]), {}).get("watch_count") if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
+            "offer_count": cpk_metrics.get(cpk_by_item.get(l.external_id.split("|")[1]), {}).get("offer_count") if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
+            "sold_count": cpk_metrics.get(cpk_by_item.get(l.external_id.split("|")[1]), {}).get("sold_count") if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
             "consecutive_misses": v.consecutive_misses,
             "last_seen_at": v.last_seen_at,
             "auto_published_at": v.auto_published_at,
             "reviewed_at": v.reviewed_at,
             "reject_reason": v.reject_reason,
         }
-        for v, l, s in rows
+        for v, l, s in sorted(rows, key=lambda row: (row[1].gem_score or 0), reverse=True)
     ]
 
 
