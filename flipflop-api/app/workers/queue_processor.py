@@ -41,8 +41,16 @@ _SUBMISSION_TIMEOUT_S = 900.0
 # doesn't increase outbound request pressure on eBay/Claude, it just means
 # more submissions can be IN FLIGHT (most of them waiting on that shared
 # semaphore) instead of queued behind a fixed-size batch.
-_WORKER_COUNT = 15
+_WORKER_COUNT = 4
 _EMPTY_QUEUE_POLL_SECONDS = 5
+
+# Fairness guard: a search term can have many queued pages/vendors, but only
+# one of them may occupy a worker at a time. This lets the four workers make
+# progress on four different search terms instead of one term monopolising
+# the queue. The DB claim and this reservation share one lock so workers
+# cannot select the same search term concurrently.
+_active_search_ids: set[str] = set()
+_active_search_lock = asyncio.Lock()
 
 _STALL_WATCHDOG_MAX_RETRIES = 5
 
@@ -375,26 +383,21 @@ async def _phase2_trigger_loop() -> None:
 
 async def _worker_loop(worker_id: int, poll_interval_seconds: int) -> None:
     """One persistent worker: claim a submission, process it, repeat.
-    Sleeps briefly only when the queue is empty."""
+    Sleeps briefly only when the queue is empty or every pending row belongs
+    to a search term already being processed by another worker."""
     while True:
         try:
-            # Check-and-reserve the concurrent search term slot atomically
-            # under ONE lock hold, spanning the DB claim itself. Previously
-            # the length check released the lock before claim_next_pending's
-            # DB round-trip, and only re-acquired it afterward (inside
-            # _process_single_submission) to add the claimed search_id. That
-            # gap let multiple workers all see "under the limit" in the same
-            # instant, each claim a DIFFERENT search_id, and each add
-            # itself -- overshooting max_concurrent_search_terms (confirmed
-            # in practice: 4 distinct search_ids completing submissions
-            # concurrently with the limit set to 2). Holding the lock across
-            # the claim serializes claiming across workers (fast: one row,
-            # SKIP LOCKED) but leaves the actual heavy processing below fully
-            # concurrent, since the lock is released before that starts.
-            # The database claim is atomic (FOR UPDATE SKIP LOCKED), so all
-            # workers can safely process every search term concurrently.
-            async with AsyncSessionLocal() as db:
-                submission = await SubmissionQueueService.claim_next_pending(db)
+            # Reserve one search term and claim its next page atomically from
+            # the workers' point of view. The lock is held only over the
+            # short DB claim; expensive processing runs fully concurrently.
+            async with _active_search_lock:
+                async with AsyncSessionLocal() as db:
+                    submission = await SubmissionQueueService.claim_next_pending(
+                        db,
+                        excluded_search_ids=_active_search_ids,
+                    )
+                if submission is not None:
+                    _active_search_ids.add(submission.search_id)
 
             if submission is None:
                 await asyncio.sleep(poll_interval_seconds)
@@ -415,9 +418,9 @@ async def _process_single_submission(submission):
     and this runs concurrently with whatever sibling submissions the other
     workers in the pool are independently processing.
 
-    The caller (_worker_loop) has already reserved this search_id in
-    _active_search_ids atomically alongside the DB claim -- this function
-    only owns releasing that reservation in its finally block."""
+    The caller (_worker_loop) has already reserved this search_id atomically
+    alongside the DB claim; this function owns releasing that reservation in
+    its finally block."""
     from app.api.gem_radar import _submit_scan_body
     from app.gem_radar import pipeline_status
     import time as _time
@@ -494,3 +497,5 @@ async def _process_single_submission(submission):
             search_id=submission.search_id,
         )
         pipeline_status.finish_submission(submission.search_id, submission_id=submission.id)
+        async with _active_search_lock:
+            _active_search_ids.discard(submission.search_id)

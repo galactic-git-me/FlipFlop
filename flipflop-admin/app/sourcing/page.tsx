@@ -675,7 +675,14 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             // The card total is the discovered/eligible population, so use the
             // matching discovered-by-vendor snapshot here. The processed
             // byVendor counts remain available to the gauges' numerators.
-            const vendorCounts = Object.entries(scan.discoveredByVendor ?? scan.byVendor ?? {}).reduce<Record<string, number>>((acc, [vendor, count]) => {
+            // Prefer the run-scoped discovery snapshot, but fall back to the
+            // processed vendor totals when that snapshot is present but
+            // temporarily empty during the hand-off between submissions.
+            const discoveredVendorCounts = scan.discoveredByVendor ?? {};
+            const vendorSource = Object.keys(discoveredVendorCounts).length > 0
+              ? discoveredVendorCounts
+              : (scan.byVendor ?? {});
+            const vendorCounts = Object.entries(vendorSource).reduce<Record<string, number>>((acc, [vendor, count]) => {
               const key = canonicalVendorKey(vendor);
               acc[key] = (acc[key] ?? 0) + Number(count);
               return acc;
