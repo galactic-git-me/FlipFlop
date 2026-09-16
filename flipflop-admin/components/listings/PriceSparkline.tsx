@@ -74,11 +74,17 @@ export function PriceSparkline({
     listingChange > 0.01 ? '#3b82f6' : // Blue (stable or up, still this listing)
     '#3b82f6'; // Blue (this listing)
 
+  const formatAxisValue = (value: number) => `£${value.toFixed(0)}`;
+
   return (
     <div
-      className={`flex items-center justify-center ${className}`}
+      className={`flex items-stretch justify-center gap-1 ${className}`}
       title="Blue: this listing | Orange: market average"
     >
+      <div className="flex h-full flex-col justify-between text-[8px] leading-none text-slate-500" aria-hidden="true">
+        <span>{formatAxisValue(max)}</span>
+        <span>{formatAxisValue(min)}</span>
+      </div>
       <svg
         width={width}
         height={height}
