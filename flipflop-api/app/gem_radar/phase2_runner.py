@@ -319,7 +319,22 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
         # cached, see services/ebay_catalog.py) — only worth paying for on
         # the tier the user actually acts on. OK_DEAL/AVERAGE_DEAL/POOR_DEAL
         # listings never fetch it.
-        review_average_rating, review_count = existing_reviews.get(listing_id, (None, None))
+        # Preserve review data extracted from the source listing.  The
+        # product-review API is an optional enrichment (and is only queried
+        # for GEM/SUPER_GEM eBay items), so using only existing_reviews here
+        # silently discarded Amazon/Google Shopping/etc. review values before
+        # they could be aggregated at CPK level.
+        existing_average, existing_count = existing_reviews.get(listing_id, (None, None))
+        review_average_rating = (
+            existing_average
+            if existing_average is not None
+            else listing.review_average_rating
+        )
+        review_count = (
+            existing_count
+            if existing_count is not None
+            else listing.review_count
+        )
         if enrich_product_reviews and classification in ("GEM", "SUPER_GEM") and epid:
             reviews = await get_product_reviews(epid)
             review_average_rating = reviews.average_rating
