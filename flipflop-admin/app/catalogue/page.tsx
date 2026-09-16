@@ -136,7 +136,7 @@ export default function CataloguePage() {
           channel_sources: row.source ? [String(row.source)] : [], price_history_listing_id: String(row.listing_id ?? row.id ?? index),
           scored_market_lower_price: (row.market_lower_price as number | null) ?? null, scored_market_median_price: (row.market_median_price as number | null) ?? null,
           scored_market_upper_price: (row.market_upper_price as number | null) ?? null, pct_offset: (row.pct_offset as number | null) ?? null,
-          watch_count: (row.watch_count as number | null) ?? null, offer_count: null, sold_count: (row.sold_listing_count as number | null) ?? null, active_count: (row.active_count as number | null) ?? null, sell_through_rate: (row.sell_through_rate as number | null) ?? null,
+          watch_count: (row.watch_count as number | null) ?? null, offer_count: null, sold_count: (row.sold_listing_count as number | null) ?? null, active_count: (row.active_count as number | null) ?? null, sell_through_rate: (row.sell_through_rate as number | null) ?? (row.sell_through_rate_pct as number | null) ?? null,
           review_average_rating: (row.review_average_rating as number | null) ?? null, review_count: (row.review_count as number | null) ?? null,
           url: (row.url as string | null) ?? null, condition: (row.condition as string | null) ?? null, delivered_price: (row.delivered_price as number | null) ?? null,
           delivery_text: (row.delivery_text as string | null) ?? null, delivery_postcode: (row.delivery_postcode as string | null) ?? null,
