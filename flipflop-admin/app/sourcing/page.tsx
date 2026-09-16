@@ -435,18 +435,12 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
           const activeScans = data.activeScans ?? [];
 
           if (activeScans.length > 0) {
-            // A search id is reused on each scheduled sweep. A lower elapsed
-            // time is therefore an unambiguous run boundary; discard all
-            // client-side accumulators before accepting the new counters.
-            const restarted = activeScans.some((scan: ScanProgress) => {
-              const previous = runScans.current.get(scan.searchId);
-              return previous && scan.elapsedSeconds + 5 < previous.elapsedSeconds;
-            });
-            if (restarted) {
-              runScans.current.clear();
-              runMaxima.current = { binPricesCount: 0, soldPricesCount: 0, gemCount: 0, superGemCount: 0, avgGemScore: 0, avgSuperGemScore: 0 };
-              lastLiveStatus.current = null;
-            }
+            // Search IDs are reused and pipeline status can be served by a
+            // different API worker after a restart. A lower elapsed value is
+            // therefore not enough evidence of a new sweep: clearing here
+            // caused the header and vendor rows to flash back to zero while
+            // the same queue run was still active. The backend's explicit
+            // phase-two completion/reset is the authoritative run boundary.
             for (const scan of activeScans) {
               const previous = runScans.current.get(scan.searchId);
               if (!previous) {
