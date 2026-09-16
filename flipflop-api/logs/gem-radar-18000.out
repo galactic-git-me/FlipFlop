@@ -1301,3 +1301,285 @@ Watch video
 2026-09-16 16:25:42 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=81 ingested=4 submission_id=115134
 2026-09-16 16:25:43 [info     ] queue_processor.submission_released search_id=cpu-cooler
 2026-09-16 16:25:43 [info     ] queue_processor.processing_submission n_listings=38 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115136
+2026-09-16 16:25:54 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=20 cross_run_dupes_unchanged_price=10 elapsed_s=18.9 excluded_auctions=0 new_listings=0
+2026-09-16 16:25:54 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115148
+2026-09-16 16:25:54 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 16:25:54 [info     ] queue_processor.processing_submission n_listings=29 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115150
+2026-09-16 16:25:56 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=37 cross_run_dupes_price_updated=4 cross_run_dupes_unchanged_price=34 elapsed_s=12.8 excluded_auctions=0 new_listings=0
+2026-09-16 16:25:56 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=37 ingested=0 submission_id=115136
+2026-09-16 16:25:56 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 16:25:56 [info     ] queue_processor.processing_submission n_listings=41 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115137
+2026-09-16 16:26:08 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=22 cross_run_dupes_unchanged_price=7 elapsed_s=13.5 excluded_auctions=0 new_listings=0
+2026-09-16 16:26:08 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115150
+2026-09-16 16:26:08 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 16:26:08 [info     ] queue_processor.processing_submission n_listings=91 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115151
+2026-09-16 16:26:10 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=41 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=38 elapsed_s=13.8 excluded_auctions=0 new_listings=2
+2026-09-16 16:26:10 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=41 ingested=2 submission_id=115137
+2026-09-16 16:26:10 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 16:26:10 [info     ] queue_processor.processing_submission n_listings=68 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115139
+2026-09-16 16:26:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=120PC ROLL PIN ASSORTED SPRING TENSION C SPLIT BAR
+2026-09-16 16:26:17 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=9PC Forged Steel Roll Pin Punch Set Roll Up Pouch
+2026-09-16 16:26:20 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=French Boules Set 8pc Stainless Steel Petanque Bal
+2026-09-16 16:26:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1pc Portable Waterproof Soap Dish Black Soap Box B
+2026-09-16 16:26:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=120pc Roll Pin Assortment in Case Metal Joining Wo
+2026-09-16 16:26:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=9PC Forged Steel Roll Pin Punch Set Roll Up Pouch
+2026-09-16 16:26:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Tempered Glass & PC Case For Garmin Vivoactive 6 S
+2026-09-16 16:26:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Toolzone 29pc Large Compression Spring Assortment
+2026-09-16 16:26:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=8pc Mini Precision Pliers Set + Case Jewellery Mak
+2026-09-16 16:26:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1/2x Protective Holder For Apple Air Tags AirTag C
+2026-09-16 16:26:44 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=5pc Mini Soft Grip Plier Set + Case Crafts Jewelle
+2026-09-16 16:26:44 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=131Pc Thread Repair Kit HSS Drill Helicoil Metric
+2026-09-16 16:26:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=2 or 4 x Pillow Case Luxury Cases Poly Cotton Hous
+2026-09-16 16:26:47 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=TERRA SILVER SFF PC CASE
+2026-09-16 16:26:48 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PC Case & Silicone Strap For Xiaomi Smart Band 9 A
+2026-09-16 16:26:48 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=47 cross_run_dupes_price_updated=11 cross_run_dupes_unchanged_price=72 elapsed_s=39.7 excluded_auctions=0 new_listings=8
+2026-09-16 16:26:48 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=47 ingested=8 submission_id=115151
+2026-09-16 16:26:48 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 16:26:48 [info     ] queue_processor.processing_submission n_listings=67 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115154
+2026-09-16 16:26:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CPU Radiator Cooler
+2026-09-16 16:26:52 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=65 cross_run_dupes_price_updated=3 cross_run_dupes_unchanged_price=63 elapsed_s=41.6 excluded_auctions=0 new_listings=2
+2026-09-16 16:26:52 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=65 ingested=2 submission_id=115139
+2026-09-16 16:26:52 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 16:26:52 [info     ] queue_processor.processing_submission n_listings=76 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115141
+2026-09-16 16:26:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Bosch GBH221D 240v SDS Plus Rotary Hammer Drill +
+2026-09-16 16:26:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=5pc Stainless Steel Nail Clippers Set Precision Pe
+2026-09-16 16:26:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=25PC COMBINATION SPANNER WRENCH SET METRIC AF IMPE
+2026-09-16 16:26:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Toolzone 114pc Compression Spring Assortment Rust
+2026-09-16 16:26:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Sealing Washer Set Rubber & Fiber Washer Assorted
+2026-09-16 16:27:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Catch Latch Case Trunk Chest Boxes Suitcase Clip C
+2026-09-16 16:27:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=New 1pc Finger Pulse Oximeter Storage Case Heart R
+2026-09-16 16:27:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=120PC ROLL PIN ASSORTED SPRING TENSION C SPLIT BAR
+2026-09-16 16:27:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=7pc Shoe Cleaning Care Kit Set, Brown Black Leathe
+2026-09-16 16:27:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=LED gaming  desktop pc Light case display box 3pin
+2026-09-16 16:27:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PC Case Model BLK AER21029 AER
+2026-09-16 16:27:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=9PC Forged Steel Roll Pin Punch Set Roll Up Pouch
+2026-09-16 16:27:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Banana Protector Case Outdoor Lunch Fruit Box Stor
+2026-09-16 16:27:09 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Hard PC Slim Back Case Matte Cover With Magnet For
+2026-09-16 16:27:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Glow Plug Removal Thread Repair Tool Kit 16pc M8 M
+2026-09-16 16:27:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=High Quality Glasses Case For Men Women Linen Clot
+2026-09-16 16:27:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=131Pc Thread Repair Kit HSS Drill Helicoil Metric
+2026-09-16 16:27:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=NEW Hard Glasses Case Fashion Stylish Cool Spectac
+2026-09-16 16:27:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=For Google Pixel 11 Pro Fold, Luxury Magnetic Skin
+2026-09-16 16:27:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Pill Holder Keyring Portable Waterproof Small Case
+2026-09-16 16:27:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1pc Portable Travel Organizer Stethoscope Hard Sto
+2026-09-16 16:27:17 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1/2 INCH DRIVE METRIC BLACK SOCKETS RATCHET WRENCH
+2026-09-16 16:27:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=NGT XPR Wireless Bite Alarm Set 3+1 Carp Fishing C
+2026-09-16 16:27:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AirTag Case For Apple Air Tag Cover Tracker Silico
+2026-09-16 16:27:20 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=36pc 3mm Letter & Number Stamp Set In Case - Metal
+2026-09-16 16:27:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Silicone Shockproof Case For AirPods 1 2 3 Pro 2nd
+2026-09-16 16:27:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=300PC NUTS AND BOLTS WASHERS MIXED ASSORTED METRIC
+2026-09-16 16:27:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=11PC SPANNER SET METRIC COMBINATION WRENCH IN CASE
+2026-09-16 16:27:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1-4Pc Pocket Reading Glasses Slim Mini Metal Reade
+2026-09-16 16:27:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Portable Insulin Cooler Travel Case Diabetic Medic
+2026-09-16 16:27:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Bobbin Case and Metal Bobbins for Brother Singer H
+2026-09-16 16:27:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=NEW Hard Glasses Case Fashion Stylish Cool Spectac
+2026-09-16 16:27:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=FOLDING READING GLASSES With Case Mens Womens +1.0
+2026-09-16 16:27:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1000pc Rivet Set With Storage Case for Hand / Air
+2026-09-16 16:27:31 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=16 cross_run_dupes_price_updated=10 cross_run_dupes_unchanged_price=55 elapsed_s=43.1 excluded_auctions=0 new_listings=2
+2026-09-16 16:27:31 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=16 ingested=2 submission_id=115154
+2026-09-16 16:27:31 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 16:27:31 [info     ] queue_processor.processing_submission n_listings=42 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115155
+2026-09-16 16:27:32 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=76 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=73 elapsed_s=40.4 excluded_auctions=0 new_listings=2
+2026-09-16 16:27:32 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=76 ingested=2 submission_id=115141
+2026-09-16 16:27:33 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 16:27:33 [info     ] queue_processor.processing_submission n_listings=71 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115142
+2026-09-16 16:27:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=4 Pack 700W Cold Spark Firework Machine DMX Stage
+2026-09-16 16:27:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1200/1000 Thread Count All Bedding Items Egyptian
+2026-09-16 16:27:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Silverline Aluminium Bearing Race & Seal Drivers 4
+2026-09-16 16:27:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1pc Cot Pillowcase / Box Pillow Cover Plain Dyed H
+2026-09-16 16:27:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Amtech Heavy Duty Deep Impact Socket Wrench Set 1/
+2026-09-16 16:27:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Demo - Router Bit Set + Case 1/2 Tct 30PC Silverli
+2026-09-16 16:27:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Silverline Valve Spring Compressor Tool Set 10pc +
+2026-09-16 16:27:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=24pc Imperial Tap and Die Set Alloy Steel With Sto
+2026-09-16 16:27:44 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1 Pc 18x18in Cartoon Cat Pillow Cover 3 Cats Print
+2026-09-16 16:27:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=SDS Plus Drill & Chisel Set 17pc Masonry Bits Tung
+2026-09-16 16:27:47 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Universal Sewing Machine Bobbin Case Holder for Me
+2026-09-16 16:27:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=FIRE TV STICK REMOTE CONTROL CASE SILICONE REMOTE
+2026-09-16 16:27:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Milwaukee Sawzall Reciprocating Demolition Blades
+2026-09-16 16:27:51 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=For Garmin Forerunner 265 265S PC Case Screen Prot
+2026-09-16 16:27:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1pc Car Seat Belt Buckle Covers Interior Protectiv
+2026-09-16 16:27:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PC Case & Silicone Strap For Xiaomi Smart Band 9 A
+2026-09-16 16:27:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=201Pc Large Portable Sewing Kit Home Travel Case N
+2026-09-16 16:27:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AirTag Case For Apple Air Tag Cover Tracker Silico
+2026-09-16 16:27:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=with Pen Clip Tube Case Readers Slim Reading Glass
+2026-09-16 16:27:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Rubber O Ring Oring Seal Plumbing Garage Set Kit 3
+2026-09-16 16:27:59 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Flat & Spring Washers 790pc Assorted Sizes Rust Re
+2026-09-16 16:27:59 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=8 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=39 elapsed_s=27.8 excluded_auctions=0 new_listings=3
+2026-09-16 16:27:59 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=8 ingested=3 submission_id=115155
+2026-09-16 16:27:59 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 16:27:59 [info     ] queue_processor.processing_submission n_listings=36 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115157
+2026-09-16 16:28:02 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=69 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=67 elapsed_s=29.3 excluded_auctions=0 new_listings=2
+2026-09-16 16:28:02 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=69 ingested=2 submission_id=115142
+2026-09-16 16:28:02 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 16:28:02 [info     ] queue_processor.processing_submission n_listings=79 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115145
+2026-09-16 16:28:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Fits Case IH Puma Tractor Floor Mats Fully Tailore
+2026-09-16 16:28:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=300pc Drill Bit Driver Set Wood Metal Masonry HSS
+2026-09-16 16:28:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HSS Drill Bit Set 99/130Pc Titanium Metal Wood Mas
+2026-09-16 16:28:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Fasteners Tuck Lock Clasp Closure Catch for Leathe
+2026-09-16 16:28:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=145pc Artists Aluminium Art Case Colouring Pencils
+2026-09-16 16:28:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=18650 Battery Holder Case 1 3 or 5 PCS Plastic Box
+2026-09-16 16:28:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Removable Wallet Case Leather Card Cover For Motor
+2026-09-16 16:28:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=US PRO 53PC MASTER BUSH BEARING SEAL DRIVER SET PU
+2026-09-16 16:28:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Pleated Ruffles Pillow Case Cover Soft Pillowcase
+2026-09-16 16:28:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=2Pc Shoe Storage Bag Drawstring Travel Organizer S
+2026-09-16 16:28:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1PC LED PIR Motion Sensor Lights Wireless 6led Nig
+2026-09-16 16:28:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Battery Cover Case for Xbox 360 Wireless Controlle
+2026-09-16 16:28:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1/2/4PCS Floral Cushion Cover Pillow Case Square S
+2026-09-16 16:28:17 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=9PC BOX SPANNER SET METRIC DEEP TUBULAR BACK NUT T
+2026-09-16 16:28:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1500PC CARPET TACKS NAIL ASSORTMENT NAILS THUMBTAC
+2026-09-16 16:28:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Empty Graded Card Slab | PSA Case Alternative | St
+2026-09-16 16:28:20 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Iron Tuck Lock Closure Catch Clasp Fasteners for L
+2026-09-16 16:28:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1pc Pen Collector Pen Organizer Box Storage Case P
+2026-09-16 16:28:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1-4Pc Pocket Reading Glasses Slim Mini Metal Reade
+2026-09-16 16:28:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=For Apple AirTag Cat Dog Collar Reflective Cat Col
+2026-09-16 16:28:28 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=5 cross_run_dupes_price_updated=4 cross_run_dupes_unchanged_price=28 elapsed_s=29.2 excluded_auctions=0 new_listings=4
+2026-09-16 16:28:28 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=5 ingested=4 submission_id=115157
+2026-09-16 16:28:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Blaihild PC CPU Cooler 2 Copper Pipe Silent Fan Fo
+2026-09-16 16:28:28 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 16:28:28 [info     ] queue_processor.processing_submission n_listings=75 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115159
+2026-09-16 16:28:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AMAZON FIRE TV STICK REMOTE CONTROL CASE SILICONE
+2026-09-16 16:28:33 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=76 cross_run_dupes_price_updated=7 cross_run_dupes_unchanged_price=65 elapsed_s=30.8 excluded_auctions=0 new_listings=7
+2026-09-16 16:28:33 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=76 ingested=7 submission_id=115145
+2026-09-16 16:28:33 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 16:28:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1PC Macrame Pillow Cover Home Decor Knitted Pillow
+2026-09-16 16:28:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=6 pc Wax Carving Tool Set Spatulas Art Crafts Hobb
+2026-09-16 16:28:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=14PC Travel Sewing Kit Small Sewing Set Case Needl
+2026-09-16 16:28:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=4Pc Duvet Cover Set With Fitted Sheet & Pillow Cas
+2026-09-16 16:28:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=NEW 720PC ASSORTED WASHERS STAINLESS STEEL SET IN
+2026-09-16 16:28:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=BCE Christophe Lambert Black Mamba Cue and Case Se
+2026-09-16 16:28:44 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Midget Spanner Set 6pc Precision Open Ended Midget
+2026-09-16 16:28:47 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=For Garmin Forerunner 265 265S PC Case Screen Prot
+2026-09-16 16:28:47 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1Pc Insulin Cooling Bag Insulin Carry Case Medicin
+2026-09-16 16:28:48 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Easy Care Percale Polycotton Duck Egg Bedding Set
+2026-09-16 16:28:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PC Test Open Chassis Rack Bench Open Frame DIY Gam
+2026-09-16 16:28:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Fibre Sealing Washer Set 600pc Sump Plug Gasket Se
+2026-09-16 16:28:51 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dewalt DT70727 14 Pc Black Gold HSS Speed Tip Dril
+2026-09-16 16:28:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=25PC SPANNER SET METRIC DROP FORGED COMBINATION WR
+2026-09-16 16:28:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=225PC ASSORTED O RING SET BLACK RUBBER SEALS SINK
+2026-09-16 16:28:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Amtech 12pc Double-Ended Wax Carving Set: Spatulas
+2026-09-16 16:28:55 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=French Boules Set 8pc Stainless Steel Petanque Bal
+2026-09-16 16:28:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HSS Drill Bit Set for Metal, Wood, Plastic With Ca
+2026-09-16 16:28:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=FOLDING READING GLASSES With Case Mens Womens +1.0
+2026-09-16 16:28:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Brake Pipe Flaring Tool Kit 10pc Metric Copper Alu
+2026-09-16 16:28:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Travel Wet wipe Bag Dispenser Baby Care Wipes Tiss
+2026-09-16 16:29:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Fitted Bed Sheet Percale T180 Thread Count Single
+2026-09-16 16:29:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1PC 2 IN 1 Glasses Case Sunglasses Protective Case
+2026-09-16 16:29:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=25PC COMBINATION SPANNER WRENCH SET METRIC AF IMPE
+2026-09-16 16:29:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=10/4/2Pcs Travel Toothbrush Head Covers Protector
+2026-09-16 16:29:08 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=UNF (AF) Fine UNC Coarse Tap Die 24pc Set Imperial
+2026-09-16 16:29:09 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=14PC E Torx Socket Set Female Start Bit External H
+2026-09-16 16:29:09 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=230Pc Large Portable Sewing Kit Home Travel Case N
+2026-09-16 16:29:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=14pc Metric Drop Forged Large Combination Spanner
+2026-09-16 16:29:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=60pc Mini Rotary Hobby Drill Grinder Power Tool Ac
+2026-09-16 16:29:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=13pc Dual-End Inner Tie Rod Kit  1/2" Drive w/Case
+2026-09-16 16:29:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=110pc Assorted Copper Washers Set Drain Sump Plug
+2026-09-16 16:29:15 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=19 cross_run_dupes_price_updated=4 cross_run_dupes_unchanged_price=64 elapsed_s=46.4 excluded_auctions=0 new_listings=7
+2026-09-16 16:29:15 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=19 ingested=7 submission_id=115159
+2026-09-16 16:29:15 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 16:29:15 [info     ] queue_processor.processing_submission n_listings=74 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115160
+2026-09-16 16:29:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1pc Portable Hanging Glasses Pouch 600D Nylon Eyeg
+2026-09-16 16:29:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Reusable Baby Wet Wipe Bag Box Tissue Case Wipes H
+2026-09-16 16:29:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Luxury Frameless Magnetic Glossy Hard Back PC Case
+2026-09-16 16:29:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=NEW Large Zipper Eye Glasses Sunglasses Hard Case
+2026-09-16 16:29:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=MW PC case Memory foam Basics Life model, Blue / P
+2026-09-16 16:29:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=5 x Toothbrush Case Travel Cover ~ Plastic Holder,
+2026-09-16 16:29:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=For Garmin Forerunner 965 Screen Protector Protect
+2026-09-16 16:29:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=4pc + 1case Jack Pad Adaptor Tool Jacking Point Fo
+2026-09-16 16:29:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1pc Portable Compact Presbyopic Glasses Reading Gl
+2026-09-16 16:29:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=For Macbook Air M5 13" 15" Pro 14 16 inch M5 Pro M
+2026-09-16 16:29:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=9PC BOX SPANNER SET METRIC LONG TUBULAR BACK NUT T
+2026-09-16 16:29:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1pc 3ml Vail Essential Oil Bag Storage Case Portab
+2026-09-16 16:29:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Jonny 8 Ball GREEN 4pc Hardwood Adjustable Pool Sn
+2026-09-16 16:29:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=100PC Colorful Box Liner Cup Baking Case Cupcake R
+2026-09-16 16:29:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Cryptic Killers Unsolved Murder Mystery Game Marin
+2026-09-16 16:29:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=38pc Letter & Number Stamping Tool Kit Stamp Set +
+2026-09-16 16:29:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Zinc Alloy Key Fob Case Cover for Chery Omoda 9 C5
+2026-09-16 16:29:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=DIY Power Functions Parts Servo Motor IR Remote Re
+2026-09-16 16:29:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=229pc Large Portable Sewing Kit Needles Thread Sci
+2026-09-16 16:29:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=790pc Flat & Spring Washers Assorted Sizes Rust Re
+2026-09-16 16:29:42 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=9 PIECE MEAT BREAD AND CHEESE PUNCH SET IN CASE CA
+2026-09-16 16:29:42 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=120pc ROLL PIN ASSORTMENT SET AMTECH PINS SPRING T
+2026-09-16 16:29:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Neilsen 7pc Countersink Carpentry Woodworking Dril
+2026-09-16 16:29:44 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=BCE Red Birds Eye 57 Inch 2 Piece Snooker Pool Cue
+2026-09-16 16:29:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Battery Cover Case for Xbox 360 Wireless Controlle
+2026-09-16 16:29:47 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=VonHaus Universal 99pc Titanium Coated HSS Drill B
+2026-09-16 16:29:48 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=38pc Letter & Number Stamping Tool Set Stamp Kit +
+2026-09-16 16:29:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1/6X Travel Electric Toothbrush Head Protective Co
+2026-09-16 16:29:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=25PC COMBINATION SPANNER WRENCH SET METRIC AF IMPE
+2026-09-16 16:29:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=6 LED Motion Sensor Lights PIR Wireless Night Ligh
+2026-09-16 16:29:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=14PC E Torx Socket Set Female Start Bit External H
+2026-09-16 16:29:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=NGT 3 Piece Cook Set Carp Fishing Cooking Kettle,
+2026-09-16 16:29:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1pc Eye Glasses Sunglasses Hard Case Box Protector
+2026-09-16 16:29:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=PC+Tempered Glass Screen Full Protector Case Cover
+2026-09-16 16:29:55 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Kitchen Cooking Playset 26pc Kids Boys Girls Role
+2026-09-16 16:29:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=130w Rotary Mini Drill Multi Tool + Bits  + Case D
+2026-09-16 16:29:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=5-12-24pcs Sewing Machine Bobbins Spools Metal Bob
+2026-09-16 16:29:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1/2/3 Pack Banana Case Banana Saver BFA-Free Banan
+2026-09-16 16:29:59 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=4Pc Duvet Cover Set With Fitted Sheet & Pillow Cas
+2026-09-16 16:29:59 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Glass+Case For Amazfit BIP Max Screen Protector Fi
+2026-09-16 16:29:59 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dispenser Travel Wet Wipe Bag Pouch Baby Care Port
+2026-09-16 16:30:00 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=18 cross_run_dupes_price_updated=12 cross_run_dupes_unchanged_price=55 elapsed_s=45.6 excluded_auctions=0 new_listings=7
+2026-09-16 16:30:00 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=18 ingested=7 submission_id=115160
+2026-09-16 16:30:00 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 16:30:00 [info     ] queue_processor.processing_submission n_listings=78 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115161
+INFO:     127.0.0.1:56715 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 16:30:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Desk Tidy Mesh Pen Pot Holder Pencil Stationery Of
+2026-09-16 16:30:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Portable Travel Razor Protector Case Shaver Storag
+2026-09-16 16:30:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=2, 4 X PILLOW CASE LUXURY CASES COTTON-BLEND HOUSE
+INFO:     127.0.0.1:59784 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 16:30:08 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Router Bit Set 35pc 1/4" Shank Professional Woodwo
+2026-09-16 16:30:08 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1pc Leather Car Key Fob Cover Wallet Organizer Zip
+2026-09-16 16:30:09 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Bit Socket Set 42pc Torx Star Spline Hex Long Shor
+2026-09-16 16:30:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=300pc Poker Set Aluminium Carry Case Casino Chips
+2026-09-16 16:30:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Toolzone 240pc Carbon Steel Penny Washer Set M2, M
+2026-09-16 16:30:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=For Garmin Forerunner 570 42mm/47mm Case PC Hard C
+2026-09-16 16:30:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=NGT 3 Rod Pod and Wireless Alarm Set Receiver Carp
+2026-09-16 16:30:17 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Portable Sanitary Napkin Storage Bag Waterproof Ta
+2026-09-16 16:30:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=11PC SPANNER SET METRIC COMBINATION WRENCH IN CASE
+2026-09-16 16:30:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=6pc Needle File Set Comes With Case Mini Precision
+2026-09-16 16:30:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=ProCase Hard Case for Fanttik Slim V8 Apex/V8 Mate
+2026-09-16 16:30:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Fitted Valance Bed Sheet Polycotton Easy Care Bedd
+2026-09-16 16:30:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Miroshine Sonic Electric Toothbrush, 2 Brush Heads
+2026-09-16 16:30:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=for Xbox One S & X Consoles Bottom Case - 4pc Rubb
+2026-09-16 16:30:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lumberjack 46Pc Drill & Bit Set inc HSS Masonry Br
+2026-09-16 16:30:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Sealey Letter & Number Punch Set 36pc 8mm Stamp Ma
+2026-09-16 16:30:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Comprehensive 10PC Valve Spring Compressor Tool -
+2026-09-16 16:30:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1/4" Drive Sockets Set 46pc CRV Steel Torx Star Po
+2026-09-16 16:30:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Universal Bobbins Case Holder Industrial Sewing Ma
+2026-09-16 16:30:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=14pc Wood Drill Bit Set Spade Flat Hex Shank 6-25m
+2026-09-16 16:30:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=5 x Toothbrush Case Travel Cover ~ Plastic Holder,
+2026-09-16 16:30:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=20 PCS Pci Slot Cover Vented Computer Chassis Bloc
+2026-09-16 16:30:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Mini Rotary Drill Multi Tool Kit + 40pc Accessorie
+2026-09-16 16:30:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1Pc Silicone Protective Remote Control Cover For R
+2026-09-16 16:30:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HEAVY DUTY 15PC 1/4" AIR DIE ANGLE GRINDER POLISHE
+2026-09-16 16:30:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1PC Double Sided Fishing Tackle Box Lure Hook Bait
+2026-09-16 16:30:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Fishing Tackle Box 14 Compartments Double-Sided Lu
+2026-09-16 16:30:44 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1Pc Metal Desktop Tissue Box Paper Storage Case Ta
+2026-09-16 16:30:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lotus 240pc Nuts Bolts Set Metric Hex Fasteners Bl
+INFO:     127.0.0.1:51492 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 16:30:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1PC Real Leather Car Remote Key Fob Cover Case For
+2026-09-16 16:30:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=131Pc Thread Repair Kit HSS Drill Helicoil Metric
+2026-09-16 16:30:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=1pc Leather Car Key Fob Cover Wallet Organizer Zip
+2026-09-16 16:30:51 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=17 cross_run_dupes_price_updated=8 cross_run_dupes_unchanged_price=58 elapsed_s=50.4 excluded_auctions=0 new_listings=12
+2026-09-16 16:30:51 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=17 ingested=12 submission_id=115161
+2026-09-16 16:30:51 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 16:30:51 [info     ] queue_processor.processing_submission n_listings=68 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115162
+2026-09-16 16:30:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=MW PC case Memory foam Basics Life model, Green
+2026-09-16 16:30:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Host Tower Carrying Bag Black Pc Travel Case Padde
+2026-09-16 16:30:59 [info     ] queue_processor.processing_submission n_listings=91 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115176
+2026-09-16 16:31:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=be.ez PC case LA Edition Sunset Dress with Zipper,
+2026-09-16 16:31:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Router Bit Set 12pc TCT 1/4" Shank Aluminium Case
+2026-09-16 16:31:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=10 Piece Manicure Pedicure Nail Care Set Cutter Cl
+2026-09-16 16:31:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=131Pc Thread Repair Kit HSS Drill Helicoil Heli Co
+2026-09-16 16:31:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=4Pc Duvet Cover Set With Fitted Sheet & Pillow Cas
+2026-09-16 16:31:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CR2032 Battery Holder Case 3V Button Coin Cell Box
+2026-09-16 16:31:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Orthodontic Retainer Box Denture Case Teeth Mouth
+2026-09-16 16:31:11 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=555 PC Assorted Split Pin Cotter Pins Popular Size
+2026-09-16 16:31:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=131Pc Thread Repair Kit HSS Drill Helicoil Metric
+2026-09-16 16:31:15 [info     ] queue_processor.processing_submission n_listings=17 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115192
+INFO:     127.0.0.1:49319 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49320 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 16:31:17 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=TEPE Interdental Brush Travel Case (1pc) Compact H
+2026-09-16 16:31:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Portable Toothpick Case Holder Travel Pocket Stora
+2026-09-16 16:31:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=144PC LARGE COTTER PIN FASTENERS SPLIT PINS ASSORT
+2026-09-16 16:31:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Peter Jackson\u2019s King Kong PC Game Limited Collecto

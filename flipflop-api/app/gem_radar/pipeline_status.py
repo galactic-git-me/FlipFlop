@@ -372,6 +372,30 @@ async def snapshot(db) -> dict:
         db, [(s.search_id, s.search_run_ids) for s in states]
     )
 
+    # The queue worker runs outside this process, so the in-memory
+    # ``active_submissions`` counter can briefly be zero while a submission
+    # is still durable in ``submission_queue`` (or after an API restart).
+    # Completion must use the queue as the source of truth, otherwise cards
+    # can remain in processing indefinitely or complete too early.
+    live_queue_by_search: dict[str, int] = {}
+    all_search_run_ids = [run_id for s in states for run_id in s.search_run_ids]
+    if all_search_run_ids:
+        queue_result = await db.execute(
+            text(
+                """
+                SELECT search_id, COUNT(*)
+                FROM submission_queue
+                WHERE search_run_id = ANY(:run_ids)
+                  AND status IN ('pending', 'processing')
+                GROUP BY search_id
+                """
+            ),
+            {"run_ids": all_search_run_ids},
+        )
+        live_queue_by_search = {
+            search_id: int(count) for search_id, count in queue_result.fetchall()
+        }
+
     all_listing_ids = [lid for s in states for lid in s.listing_ids]
     priced_listing_ids: set[str] = set()
     classified_listing_ids: set[str] = set()
@@ -545,6 +569,7 @@ async def snapshot(db) -> dict:
         # two tables left otherwise-finished cards spinning at 99.x%.
         is_complete = (
             s.active_submissions == 0
+            and live_queue_by_search.get(s.search_id, 0) == 0
             and s.ingested_count > 0
             and (s.cpk_assigned_count + s.cpk_failed_count) >= s.ingested_count
         )
