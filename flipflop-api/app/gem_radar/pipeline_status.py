@@ -352,7 +352,7 @@ async def _vendor_breakdown_from_db(db, search_id_run_ids: list[tuple[str, set[s
     return breakdown
 
 
-async def snapshot(db) -> dict:
+async def snapshot(db, environment: str = "DEV") -> dict:
     """Everything the dashboard's "Current Scan Run" panel needs in one call.
     Takes a DB session to look up which CPK-assigned listings now have a
     settled market price and classification — that can only be answered by the DB.
@@ -370,7 +370,17 @@ async def snapshot(db) -> dict:
     from sqlalchemy import text
     from app.gem_radar.cpk_market import MIN_LISTINGS_FOR_SETTLED_PRICE
 
-    states = sorted(_active.values(), key=lambda s: s.started_at)
+    run_id_prefix = f"{environment.lower()}-"
+    # DEV and LIVE can share the same API process. A single in-memory
+    # registry must therefore be filtered before any totals are calculated;
+    # otherwise real work from the other environment leaks into this run.
+    states = sorted(
+        (
+            state for state in _active.values()
+            if any(str(run_id).lower().startswith(run_id_prefix) for run_id in state.search_run_ids)
+        ),
+        key=lambda s: s.started_at,
+    )
 
     configured_vendors_by_search: dict[str, list[str]] = {}
 

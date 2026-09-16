@@ -302,8 +302,8 @@ async def pipeline_status_endpoint(
     """Live snapshot of what /scans is doing right now — powers the
     Sourcing Dashboard's pipeline diagram. Ephemeral, in-memory (see
     app/gem_radar/pipeline_status.py); resets on API restart."""
-    snapshot = await pipeline_status.snapshot(db)
     environment = _runtime_environment()
+    snapshot = await pipeline_status.snapshot(db, environment=environment)
     # The queue worker runs in a separate process, so it cannot update the
     # API process's ephemeral pipeline_status object.  Keep the original
     # response shape/card rendering, but hydrate activeScans from the shared
