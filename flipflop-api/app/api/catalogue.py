@@ -12,7 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.models.catalogue import CaseCatalogue, CatalogueVariant, PlaybookSlot
-from app.models.listing import Listing
+from app.models.listing import Classification, Listing
 from app.models.gem_radar_cpk_market_price import GemRadarCpkMarketPrice
 from app.schemas.catalogue import (
     CaseCatalogueCreate,
@@ -102,6 +102,10 @@ async def list_variants(
         select(CatalogueVariant, Listing, PlaybookSlot)
         .join(Listing, CatalogueVariant.listing_id == Listing.id)
         .join(PlaybookSlot, CatalogueVariant.slot_id == PlaybookSlot.id)
+        # Catalogue membership is a curated output of gem detection, not a
+        # mirror of the raw listings table.  Legacy variants can outlive a
+        # listing's classification, so enforce the contract at read time.
+        .where(Listing.classification.in_((Classification.gem, Classification.amazing_gem)))
         # Parts/repair-only listings are not sellable component opportunities.
         # Keep null conditions visible for legacy rows, but never expose an
         # explicit for_parts result in the catalogue.

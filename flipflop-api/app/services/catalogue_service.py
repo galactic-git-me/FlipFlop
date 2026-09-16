@@ -16,7 +16,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.catalogue import PlaybookSlot, CatalogueVariant
-from app.models.listing import Listing, Classification
+from app.models.listing import Listing, Classification, ListingStatus
 from app.services.classifier import detect_component_category
 from app.services.alerts import emit_alert
 
@@ -69,6 +69,7 @@ async def auto_publish_gems(db: AsyncSession) -> int:
         select(Listing).where(
             Listing.classification.in_(gem_classifications),
             Listing.gem_score >= MIN_GEM_SCORE,
+            Listing.status == ListingStatus.active,
             Listing.condition != "for_parts",
         )
     )
