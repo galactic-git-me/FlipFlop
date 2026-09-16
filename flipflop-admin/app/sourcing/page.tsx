@@ -718,6 +718,13 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
               1,
             );
             const { isComplete } = scan;
+            // Once the API has marked this search complete, ingestion has
+            // finished and its own observed total is the authoritative
+            // denominator. This avoids a stale discovery/eligible snapshot
+            // leaving a completed ingestion gauge below 100%.
+            const ingestedGaugeMax = isComplete
+              ? Math.max(scan.ingestedCount, 1)
+              : searchTermTotal;
             const awaitingFinalScoring =
               !isComplete &&
               scan.activeSubmissions === 0 &&
@@ -805,7 +812,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                         actually process. This preserves meaningful progress
                         and lets a finished stage reach 100% without hiding
                         upstream failures. */}
-                    <Gauge value={scan.ingestedCount} max={searchTermTotal} failed={failedIngested} label="Ingested" color="#8b5cf6" />
+                    <Gauge value={scan.ingestedCount} max={ingestedGaugeMax} failed={failedIngested} label="Ingested" color="#8b5cf6" />
                     <Gauge value={scan.cpkAssignedCount} max={Math.max(scan.ingestedCount, 1)} failed={failedCpk} skipped={skippedCpk} label="CPK" color="#10b981" />
                     <Gauge value={scan.marketPricedCount} max={Math.max(scan.cpkAssignedCount, 1)} failed={failedMarketPrices} skipped={skippedMarketPrices} label="M Prices" color="#f59e0b" />
                     <Gauge value={scan.classifiedCount} max={Math.max(scan.cpkAssignedCount, 1)} failed={failedScores} skipped={skippedScores} label="Scores" color="#ec4899" />

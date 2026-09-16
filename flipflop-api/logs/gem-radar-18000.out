@@ -1061,3 +1061,243 @@ Watch video
 2026-09-16 16:23:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
 Watch video
 2026-09-16 16:23:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:23:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:24 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=4 cross_run_dupes_unchanged_price=32 elapsed_s=37.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:23:24 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115117
+2026-09-16 16:23:25 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 16:23:25 [info     ] queue_processor.processing_submission n_listings=36 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115119
+2026-09-16 16:23:35 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=9 cross_run_dupes_unchanged_price=15 elapsed_s=35.9 excluded_auctions=0 new_listings=0
+2026-09-16 16:23:35 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115131
+2026-09-16 16:23:35 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 16:23:35 [info     ] queue_processor.processing_submission n_listings=30 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115135
+2026-09-16 16:23:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=M.2 NVMe SSD to PCIE Expansion Card Support PCIEX4
+2026-09-16 16:23:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Corsair Lian Li SilverStone PC Case Parts HDD Cadd
+2026-09-16 16:23:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lian Li white case fans Great condition
+2026-09-16 16:23:43 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=72 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=73 elapsed_s=36.1 excluded_auctions=0 new_listings=2
+2026-09-16 16:23:43 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=72 ingested=2 submission_id=115110
+2026-09-16 16:23:43 [info     ] queue_processor.submission_released search_id=m2-nvme-ssd
+2026-09-16 16:23:43 [info     ] queue_processor.processing_submission n_listings=77 query=M.2 NVMe SSD -"m.2 case" -"ssd case" -adapter -"heatsink only" -enclosure -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=115112
+2026-09-16 16:23:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:23:44 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=88 cross_run_dupes_price_updated=5 cross_run_dupes_unchanged_price=82 elapsed_s=37.1 excluded_auctions=0 new_listings=3
+2026-09-16 16:23:44 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=88 ingested=3 submission_id=115164
+2026-09-16 16:23:44 [info     ] queue_processor.submission_released search_id=lian-li-pc-case
+2026-09-16 16:23:44 [info     ] queue_processor.processing_submission n_listings=91 query=Lian Li case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=lian-li-pc-case submission_id=115165
+2026-09-16 16:23:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:47 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:23:47 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:48 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:23:48 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:51 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:51 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:51 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:55 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:55 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:23:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:23:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:00 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=5 cross_run_dupes_unchanged_price=31 elapsed_s=34.4 excluded_auctions=0 new_listings=0
+2026-09-16 16:24:00 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115119
+2026-09-16 16:24:00 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 16:24:00 [info     ] queue_processor.processing_submission n_listings=36 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115122
+2026-09-16 16:24:12 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=9 cross_run_dupes_unchanged_price=21 elapsed_s=37.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:24:12 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115135
+2026-09-16 16:24:12 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 16:24:12 [info     ] queue_processor.processing_submission n_listings=11 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115140
+2026-09-16 16:24:16 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=74 cross_run_dupes_price_updated=4 cross_run_dupes_unchanged_price=70 elapsed_s=33.3 excluded_auctions=0 new_listings=3
+2026-09-16 16:24:16 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=74 ingested=3 submission_id=115112
+2026-09-16 16:24:17 [info     ] queue_processor.submission_released search_id=m2-nvme-ssd
+2026-09-16 16:24:17 [info     ] queue_processor.processing_submission n_listings=81 query=M.2 NVMe SSD -"m.2 case" -"ssd case" -adapter -"heatsink only" -enclosure -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=115114
+2026-09-16 16:24:17 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=90 cross_run_dupes_price_updated=11 cross_run_dupes_unchanged_price=79 elapsed_s=33.0 excluded_auctions=0 new_listings=1
+2026-09-16 16:24:17 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=90 ingested=1 submission_id=115165
+2026-09-16 16:24:17 [info     ] queue_processor.submission_released search_id=lian-li-pc-case
+2026-09-16 16:24:17 [info     ] queue_processor.processing_submission n_listings=23 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115166
+2026-09-16 16:24:17 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:24:17 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=115166
+2026-09-16 16:24:17 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 16:24:17 [info     ] queue_processor.processing_submission n_listings=56 query=Lian Li case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=lian-li-pc-case submission_id=115167
+2026-09-16 16:24:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:20 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:20 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:20 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:24:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:24:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:24:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:24:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:24:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:24:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:34 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=9 cross_run_dupes_unchanged_price=27 elapsed_s=33.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:24:34 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115122
+2026-09-16 16:24:34 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 16:24:34 [info     ] queue_processor.processing_submission n_listings=27 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115124
+2026-09-16 16:24:39 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=5 cross_run_dupes_unchanged_price=6 elapsed_s=26.9 excluded_auctions=0 new_listings=0
+2026-09-16 16:24:39 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115140
+2026-09-16 16:24:39 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 16:24:39 [info     ] queue_processor.processing_submission n_listings=28 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115144
+2026-09-16 16:24:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=128GB 256GB 480GB 512GB M.2 SATA NVME SSD \u2013 Samsun
+2026-09-16 16:24:47 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Custom Gaming PC, 3060 TI, Ryzen 7, Lian Li Case,
+2026-09-16 16:24:47 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=77 cross_run_dupes_price_updated=4 cross_run_dupes_unchanged_price=71 elapsed_s=30.7 excluded_auctions=0 new_listings=6
+2026-09-16 16:24:47 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=77 ingested=6 submission_id=115114
+2026-09-16 16:24:47 [info     ] queue_processor.submission_released search_id=m2-nvme-ssd
+2026-09-16 16:24:47 [info     ] queue_processor.processing_submission n_listings=24 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115168
+2026-09-16 16:24:48 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=24 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=24 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:24:48 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=24 ingested=0 submission_id=115168
+2026-09-16 16:24:48 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 16:24:48 [info     ] queue_processor.processing_submission n_listings=23 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115169
+2026-09-16 16:24:48 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:24:48 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=115169
+2026-09-16 16:24:48 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 16:24:48 [info     ] queue_processor.processing_submission n_listings=22 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115170
+2026-09-16 16:24:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Custom Gaming PC i9 12900k, RTX 3080, DDR4 32GB, L
+2026-09-16 16:24:50 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=52 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=52 elapsed_s=32.6 excluded_auctions=0 new_listings=2
+2026-09-16 16:24:50 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=52 ingested=2 submission_id=115167
+2026-09-16 16:24:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:51 [info     ] queue_processor.submission_released search_id=lian-li-pc-case
+2026-09-16 16:24:51 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:24:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:24:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:24:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:55 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:55 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:24:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:24:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:24:59 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:25:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:25:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:25:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+INFO:     127.0.0.1:64049 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 16:25:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:25:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:25:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:25:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:25:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:25:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:25:04 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=9 cross_run_dupes_unchanged_price=18 elapsed_s=29.9 excluded_auctions=0 new_listings=0
+2026-09-16 16:25:04 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115124
+2026-09-16 16:25:04 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 16:25:04 [info     ] queue_processor.processing_submission n_listings=81 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115133
+2026-09-16 16:25:16 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=12 cross_run_dupes_unchanged_price=16 elapsed_s=36.7 excluded_auctions=0 new_listings=0
+2026-09-16 16:25:16 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115144
+2026-09-16 16:25:16 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 16:25:16 [info     ] queue_processor.processing_submission n_listings=30 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115146
+2026-09-16 16:25:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CPU Cooler Liquid
+2026-09-16 16:25:19 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=21 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=22 elapsed_s=31.3 excluded_auctions=0 new_listings=0
+2026-09-16 16:25:19 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=21 ingested=0 submission_id=115170
+2026-09-16 16:25:19 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 16:25:19 [info     ] queue_processor.processing_submission n_listings=23 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115171
+2026-09-16 16:25:19 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=23 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:25:19 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=115171
+2026-09-16 16:25:19 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 16:25:19 [info     ] queue_processor.processing_submission n_listings=22 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115172
+2026-09-16 16:25:19 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=22 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=22 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:25:19 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=22 ingested=0 submission_id=115172
+2026-09-16 16:25:19 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 16:25:19 [info     ] queue_processor.processing_submission n_listings=24 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115173
+2026-09-16 16:25:20 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=24 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=24 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:25:20 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=24 ingested=0 submission_id=115173
+2026-09-16 16:25:20 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 16:25:20 [info     ] queue_processor.processing_submission n_listings=22 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115174
+2026-09-16 16:25:20 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=22 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=22 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:25:20 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=22 ingested=0 submission_id=115174
+2026-09-16 16:25:20 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 16:25:20 [info     ] queue_processor.processing_submission n_listings=20 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115175
+2026-09-16 16:25:20 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=20 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=20 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:25:20 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=20 ingested=0 submission_id=115175
+2026-09-16 16:25:20 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 16:25:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Cooler Master CPU Tower Cooler.
+2026-09-16 16:25:23 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=75 cross_run_dupes_price_updated=7 cross_run_dupes_unchanged_price=72 elapsed_s=18.8 excluded_auctions=0 new_listings=2
+2026-09-16 16:25:23 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=75 ingested=2 submission_id=115133
+2026-09-16 16:25:23 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 16:25:23 [info     ] queue_processor.processing_submission n_listings=85 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115134
+2026-09-16 16:25:35 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=17 cross_run_dupes_unchanged_price=13 elapsed_s=19.4 excluded_auctions=0 new_listings=0
+2026-09-16 16:25:35 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115146
+2026-09-16 16:25:35 [info     ] queue_processor.submission_released search_id=pc-case-chassis
+2026-09-16 16:25:35 [info     ] queue_processor.processing_submission n_listings=30 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115148
+2026-09-16 16:25:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CPU Cooler + cpu cooler base cover
+2026-09-16 16:25:42 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=81 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=80 elapsed_s=19.2 excluded_auctions=0 new_listings=4
+2026-09-16 16:25:42 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=81 ingested=4 submission_id=115134
+2026-09-16 16:25:43 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 16:25:43 [info     ] queue_processor.processing_submission n_listings=38 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115136
