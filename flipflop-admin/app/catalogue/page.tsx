@@ -6,12 +6,14 @@ import {
   Heart, LayoutGrid, List, RefreshCw, Search, SlidersHorizontal, Table2,
 } from "lucide-react";
 import { api } from "@/lib/api";
+import { canonicalVendorKey, VENDOR_META } from "@/lib/vendors";
 
 type ViewMode = "table" | "listings" | "grid";
 type Variant = {
   id: number; listing_id?: number; listing_title: string; image_url?: string | null; slot_type: string;
   playbook_id: number; status: string; tier: string; display_price: number;
   gem_score: number; consecutive_misses: number; last_seen_at: string;
+  source_name?: string | null; channel_sources?: string[];
   cpk?: string | null; watch_count?: number | null; offer_count?: number | null; sold_count?: number | null;
 };
 
@@ -43,6 +45,20 @@ function ProductArt({ index, title, imageUrl }: { index: number; title: string; 
 function Status({ value }: { value: string }) {
   const tone = value === "active" ? "text-emerald-300 bg-emerald-400/10 border-emerald-400/20" : value === "pending_review" ? "text-amber-300 bg-amber-400/10 border-amber-400/20" : "text-slate-400 bg-white/5 border-white/10";
   return <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${tone}`}>{value.replace("_", " ")}</span>;
+}
+
+function ChannelLogo({ source }: { source: string }) {
+  const canonical = canonicalVendorKey(source);
+  const key = canonical.startsWith("ebay_") || canonical === "ebay" ? "ebay" : canonical.includes("flipflop") ? "flipflop_shop" : canonical;
+  const meta = VENDOR_META[key] ?? (key === "flipflop_shop" ? { label: "FlipFlop.shop", mark: "FF", color: "#22d3ee" } : { label: source, mark: source.slice(0, 2).toUpperCase(), color: "#64748b" });
+  return <span title={meta.label} aria-label={meta.label} className="inline-flex h-6 min-w-6 items-center justify-center rounded border border-white/10 bg-black/30 px-1.5 font-mono text-[9px] font-bold uppercase tracking-tight" style={{ color: meta.color }}>{meta.mark}</span>;
+}
+
+function ChannelLogos({ sources, current }: { sources?: string[]; current?: string | null }) {
+  const channels = [...new Set([...(sources ?? []), ...(current ? [current] : [])])];
+  return <div className="flex items-center gap-1" aria-label={`Available on ${channels.join(", ") || "no channel recorded"}`}>
+    {channels.length ? channels.map(source => <ChannelLogo key={source} source={source} />) : <span className="text-[10px] text-slate-600">No channels</span>}
+  </div>;
 }
 
 export default function CataloguePage() {
@@ -104,7 +120,7 @@ export default function CataloguePage() {
 
 function ListingCard({ variant: v, index, compact }: { variant: Variant; index: number; compact: boolean }) {
   const metric = (value: number | null | undefined) => value == null ? "—" : value.toLocaleString();
-  return <article className={`overflow-hidden rounded-lg border border-white/10 bg-[#0b1119] transition hover:border-cyan-400/40 hover:shadow-[0_0_24px_rgba(34,211,238,.08)] ${compact ? "flex flex-col sm:flex-row" : ""}`}><div className={compact ? "w-full shrink-0 sm:w-52" : ""}><ProductArt index={index} title={v.slot_type} imageUrl={v.image_url} /></div><div className="min-w-0 flex-1 p-3"><div className="mb-2 flex items-start justify-between gap-3"><div className="min-w-0"><p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-400">{v.tier} tier · {v.slot_type}</p><h2 className="line-clamp-2 text-sm font-semibold leading-snug text-white">{v.listing_title}</h2></div><Status value={v.status} /></div><div className="mt-3 flex flex-wrap items-end gap-x-6 gap-y-2"><div><p className="text-xl font-bold text-white">£{v.display_price.toFixed(2)}</p><p className="text-[10px] text-slate-500">Buy-in display price</p></div><div><p className="font-mono text-sm font-bold text-emerald-300">{v.gem_score.toFixed(0)}<span className="text-[10px] font-normal text-slate-500"> / 100</span></p><p className="text-[10px] text-slate-500">Gem score</p></div><div className="text-xs text-slate-400"><span className="text-emerald-300">Live</span> · Seen {v.last_seen_at}</div></div><div className="mt-3 grid grid-cols-3 gap-2 rounded-md border border-cyan-400/10 bg-cyan-400/[0.03] px-3 py-2"><div><p className="font-mono text-sm font-semibold text-cyan-200">{metric(v.watch_count)}</p><p className="text-[10px] text-slate-500">Watches</p></div><div title="Number of matched listings with Best Offer enabled"><p className="font-mono text-sm font-semibold text-amber-200">{metric(v.offer_count)}</p><p className="text-[10px] text-slate-500">Offers enabled</p></div><div title="Distinct matched sold comps observed in the last 90 days"><p className="font-mono text-sm font-semibold text-emerald-200">{metric(v.sold_count)}</p><p className="text-[10px] text-slate-500">Sold · 90d</p></div></div><div className="mt-1 text-[10px] text-slate-600">{v.cpk ? `CPK ${v.cpk}` : "No CPK evidence matched"}</div><div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2"><span className="text-[10px] text-slate-600">Playbook {v.playbook_id} · ID #{v.id}</span><button className="inline-flex items-center gap-1 text-[11px] font-semibold text-cyan-300 hover:text-cyan-200"><Eye className="h-3.5 w-3.5" /> View listing</button></div></div></article>;
+  return <article className={`overflow-hidden rounded-lg border border-white/10 bg-[#0b1119] transition hover:border-cyan-400/40 hover:shadow-[0_0_24px_rgba(34,211,238,.08)] ${compact ? "flex flex-col sm:flex-row" : ""}`}><div className={compact ? "w-full shrink-0 sm:w-52" : ""}><ProductArt index={index} title={v.slot_type} imageUrl={v.image_url} /></div><div className="min-w-0 flex-1 p-3"><div className="mb-2 flex items-start justify-between gap-3"><div className="min-w-0"><p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-400">{v.tier} tier · {v.slot_type}</p><h2 className="line-clamp-2 text-sm font-semibold leading-snug text-white">{v.listing_title}</h2></div><Status value={v.status} /></div><div className="mt-3 flex flex-wrap items-end gap-x-6 gap-y-2"><div><p className="text-xl font-bold text-white">£{v.display_price.toFixed(2)}</p><p className="text-[10px] text-slate-500">Buy-in display price</p></div><div><p className="font-mono text-sm font-bold text-emerald-300">{v.gem_score.toFixed(0)}<span className="text-[10px] font-normal text-slate-500"> / 100</span></p><p className="text-[10px] text-slate-500">Gem score</p></div><div className="text-xs text-slate-400"><span className="text-emerald-300">Live</span> · Seen {v.last_seen_at}</div></div><div className="mt-3 grid grid-cols-3 gap-2 rounded-md border border-cyan-400/10 bg-cyan-400/[0.03] px-3 py-2"><div><p className="font-mono text-sm font-semibold text-cyan-200">{metric(v.watch_count)}</p><p className="text-[10px] text-slate-500">Watches</p></div><div title="Number of matched listings with Best Offer enabled"><p className="font-mono text-sm font-semibold text-amber-200">{metric(v.offer_count)}</p><p className="text-[10px] text-slate-500">Offers enabled</p></div><div title="Distinct matched sold comps observed in the last 90 days"><p className="font-mono text-sm font-semibold text-emerald-200">{metric(v.sold_count)}</p><p className="text-[10px] text-slate-500">Sold · 90d</p></div></div><div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2"><ChannelLogos sources={v.channel_sources} current={v.source_name} /><button className="inline-flex items-center gap-1 text-[11px] font-semibold text-cyan-300 hover:text-cyan-200"><Eye className="h-3.5 w-3.5" /> View listing</button></div></div></article>;
 }
 
 function TableView({ variants }: { variants: Variant[] }) {

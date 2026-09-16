@@ -113,6 +113,20 @@ async def list_variants(
     result = await db.execute(q.order_by(CatalogueVariant.auto_published_at.desc()))
     rows = result.all()
 
+    # Surface the marketplaces/vendors carrying the same hardware fingerprint
+    # so the catalogue can show compact cross-channel badges on each card.
+    fingerprints = {l.spec_fingerprint for _, l, _ in rows if l.spec_fingerprint}
+    channels_by_fingerprint: dict[str, list[str]] = {}
+    if fingerprints:
+        channel_rows = await db.execute(
+            select(Listing.spec_fingerprint, Listing.source_name)
+            .where(Listing.spec_fingerprint.in_(fingerprints))
+            .distinct()
+        )
+        for fingerprint, source_name in channel_rows:
+            if fingerprint and source_name:
+                channels_by_fingerprint.setdefault(fingerprint, []).append(source_name)
+
     # The legacy catalogue listings use an external-id format such as
     # ``ebay_v1|123456789|...`` while CPK records use the bare eBay item ID.
     # Aggregate the latest demand observation per matched item so the admin
@@ -177,6 +191,8 @@ async def list_variants(
             "listing_id": v.listing_id,
             "listing_title": l.title,
             "image_url": (l.image_urls[0] if l.image_urls else None),
+            "source_name": l.source_name,
+            "channel_sources": channels_by_fingerprint.get(l.spec_fingerprint, [l.source_name]),
             "slot_type": s.slot_type,
             "playbook_id": s.playbook_id,
             "status": v.status,
