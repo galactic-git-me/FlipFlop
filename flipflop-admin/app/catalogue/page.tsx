@@ -40,11 +40,11 @@ function ProductArt({ index, title, imageUrl }: { index: number; title: string; 
   return <div className={`relative flex h-full min-h-32 items-center justify-center overflow-hidden bg-gradient-to-br ${imageTones[index % imageTones.length]}`}>
     {imageUrl && <img src={imageUrl} alt="" className="absolute inset-0 h-full w-full object-contain mix-blend-screen" />}
     <div className="absolute inset-0 opacity-30" style={{ backgroundImage: "linear-gradient(135deg, transparent 45%, rgba(255,255,255,.22) 46%, transparent 48%), linear-gradient(45deg, transparent 45%, rgba(0,220,255,.18) 46%, transparent 48%)", backgroundSize: "28px 28px" }} />
-    <div className="relative rounded-lg border border-white/20 bg-black/25 px-5 py-7 text-center shadow-2xl backdrop-blur-sm">
-      <div className="mx-auto mb-2 h-8 w-16 rounded border border-cyan-200/60 bg-cyan-300/20 shadow-[0_0_24px_rgba(34,211,238,.35)]" />
-      <span className="max-w-28 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/75">{title.split(" ").slice(0, 2).join(" ")}</span>
-      {!imageUrl && <span className="mt-2 block text-[9px] uppercase tracking-wider text-white/45">No image captured</span>}
-    </div>
+      {!imageUrl && <div className="relative rounded-lg border border-white/20 bg-black/25 px-5 py-7 text-center shadow-2xl backdrop-blur-sm">
+        <div className="mx-auto mb-2 h-8 w-16 rounded border border-cyan-200/60 bg-cyan-300/20 shadow-[0_0_24px_rgba(34,211,238,.35)]" />
+        <span className="max-w-28 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/75">{title.split(" ").slice(0, 2).join(" ")}</span>
+        <span className="mt-2 block text-[9px] uppercase tracking-wider text-white/45">No image captured</span>
+      </div>}
     <button aria-label={`Save ${title}`} className="absolute right-2 top-2 rounded-full bg-black/50 p-1.5 text-white transition hover:bg-black/75"><Heart className="h-3.5 w-3.5" /></button>
   </div>;
 }

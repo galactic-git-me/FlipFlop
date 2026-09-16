@@ -7,7 +7,7 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import select, text
+from sqlalchemy import or_, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -102,6 +102,10 @@ async def list_variants(
         select(CatalogueVariant, Listing, PlaybookSlot)
         .join(Listing, CatalogueVariant.listing_id == Listing.id)
         .join(PlaybookSlot, CatalogueVariant.slot_id == PlaybookSlot.id)
+        # Parts/repair-only listings are not sellable component opportunities.
+        # Keep null conditions visible for legacy rows, but never expose an
+        # explicit for_parts result in the catalogue.
+        .where(or_(Listing.condition.is_(None), Listing.condition != "for_parts"))
     )
     if status:
         q = q.where(CatalogueVariant.status == status)
@@ -113,6 +117,16 @@ async def list_variants(
         q = q.where(CatalogueVariant.tier == tier)
     result = await db.execute(q.order_by(CatalogueVariant.auto_published_at.desc()))
     rows = result.all()
+
+    # A listing can be attached to one slot in each playbook.  That is useful
+    # for playbook management, but the admin catalogue is a listing catalogue:
+    # render each physical listing once.  The query is already newest-first,
+    # so retaining the first row gives us the freshest catalogue variant.
+    unique_rows: dict[int, tuple[CatalogueVariant, Listing, PlaybookSlot]] = {}
+    for row in rows:
+        listing = row[1]
+        unique_rows.setdefault(listing.id, row)
+    rows = list(unique_rows.values())
 
     # Surface the marketplaces/vendors carrying the same hardware fingerprint
     # so the catalogue can show compact cross-channel badges on each card.
@@ -229,6 +243,16 @@ async def list_variants(
     ) if listing_keys else []
     scored_by_item = {row.listing_id: row for row in scored_result}
 
+    def item_key(listing: Listing) -> str:
+        return (
+            listing.external_id.split("|")[1]
+            if listing.external_id.startswith("ebay_v1|") and "|" in listing.external_id
+            else listing.external_id
+        )
+
+    def scored(listing: Listing):
+        return scored_by_item.get(item_key(listing))
+
     market_prices_by_cpk = {}
     cpk_ids = {cpk for cpk in cpk_by_item.values() if cpk}
     if cpk_ids:
@@ -245,25 +269,28 @@ async def list_variants(
             "source_name": l.source_name,
             "channel_sources": channels_by_fingerprint.get(l.spec_fingerprint, [l.source_name]),
             "price_history_listing_id": l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id,
-            "market_lower_price": getattr(market_prices_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1]) if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None), "min_price", None),
-            "market_median_price": getattr(market_prices_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1]) if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None), "median_price", None),
-            "market_upper_price": getattr(market_prices_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1]) if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None), "max_price", None),
+            # Fall back to the listing's retained resale band when its scored
+            # row has been archived.  These values are already computed from
+            # the market evidence captured for the listing.
+            "market_lower_price": getattr(market_prices_by_cpk.get(cpk_by_item.get(item_key(l))), "min_price", None) or l.resale_low,
+            "market_median_price": getattr(market_prices_by_cpk.get(cpk_by_item.get(item_key(l))), "median_price", None) or l.estimated_resale,
+            "market_upper_price": getattr(market_prices_by_cpk.get(cpk_by_item.get(item_key(l))), "max_price", None) or l.resale_high,
             # A catalogue variant can exist before its first scored row (or
             # after the scored row has been archived). Do not fail the entire
             # catalogue response when that optional enrichment is absent.
-            "url": (getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "url", None) or l.url),
-            "condition": (scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id).condition if scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id) else l.condition),
-            "delivered_price": (scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id).delivered_price if scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id) else l.price),
-            "scored_market_lower_price": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "market_lower_price", None),
-            "scored_market_median_price": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "market_median_price", None),
-            "scored_market_upper_price": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "market_upper_price", None),
-            "pct_offset": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "pct_offset", None),
-            "classification": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "classification", None),
-            "decision": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "decision", None),
-            "confidence": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "confidence_band", None),
-            "deal_score": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "deal_score", None),
-            "evidence_status": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "evidence_status", None),
-            "evidence_reason": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "evidence_reason", None),
+            "url": (getattr(scored(l), "url", None) or l.url),
+            "condition": (getattr(scored(l), "condition", None) or l.condition),
+            "delivered_price": (getattr(scored(l), "delivered_price", None) or l.price),
+            "scored_market_lower_price": getattr(scored(l), "market_lower_price", None) or l.resale_low,
+            "scored_market_median_price": getattr(scored(l), "market_median_price", None) or l.estimated_resale,
+            "scored_market_upper_price": getattr(scored(l), "market_upper_price", None) or l.resale_high,
+            "pct_offset": getattr(scored(l), "pct_offset", None),
+            "classification": getattr(scored(l), "classification", None) or str(l.classification.value if hasattr(l.classification, "value") else l.classification).upper(),
+            "decision": getattr(scored(l), "decision", None),
+            "confidence": getattr(scored(l), "confidence_band", None),
+            "deal_score": getattr(scored(l), "deal_score", None),
+            "evidence_status": getattr(scored(l), "evidence_status", None),
+            "evidence_reason": getattr(scored(l), "evidence_reason", None),
             "slot_type": s.slot_type,
             "playbook_id": s.playbook_id,
             "status": v.status,

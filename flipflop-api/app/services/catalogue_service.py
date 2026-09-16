@@ -69,6 +69,7 @@ async def auto_publish_gems(db: AsyncSession) -> int:
         select(Listing).where(
             Listing.classification.in_(gem_classifications),
             Listing.gem_score >= MIN_GEM_SCORE,
+            Listing.condition != "for_parts",
         )
     )
     gem_listings = result.scalars().all()
