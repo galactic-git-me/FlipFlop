@@ -1127,6 +1127,32 @@ async def get_scored_listings_latest_run(
         for row in observation_result
     }
 
+    # Reviews describe the matched product, not the marketplace listing.
+    # Prefer a non-eBay retailer's product review when available, then share
+    # that value with every listing carrying the same CPK.
+    product_reviews_by_vendor: dict[tuple[str, str], tuple[float | None, int | None]] = {}
+    for row in scored:
+        if not row.cpk or (row.review_average_rating is None and row.review_count is None):
+            continue
+        vendor_key = (row.cpk, (row.source or "unknown").lower())
+        current = product_reviews_by_vendor.get(vendor_key)
+        if current is None or (row.review_count or 0) > (current[1] or 0):
+            product_reviews_by_vendor[vendor_key] = (row.review_average_rating, row.review_count)
+    product_reviews: dict[str, tuple[float | None, int | None]] = {}
+    for (cpk, _vendor), (rating, count) in product_reviews_by_vendor.items():
+        total = product_reviews.get(cpk)
+        if total is None:
+            product_reviews[cpk] = (rating, count)
+            continue
+        old_rating, old_count = total
+        if rating is not None and count:
+            if old_rating is not None and old_count:
+                product_reviews[cpk] = ((old_rating * old_count + rating * count) / (old_count + count), old_count + count)
+            else:
+                product_reviews[cpk] = (rating, (old_count or 0) + count)
+        elif count:
+            product_reviews[cpk] = (old_rating, (old_count or 0) + count)
+
     return [
         {
             "id": s.id,
@@ -1146,8 +1172,8 @@ async def get_scored_listings_latest_run(
             **cpk_price_fields.get(s.id, {}),
             "watch_count": observation_fields.get(s.listing_id, {}).get("watch_count", s.watch_count),
             "best_offer_enabled": observation_fields.get(s.listing_id, {}).get("best_offer_enabled", False),
-            "review_average_rating": s.review_average_rating,
-            "review_count": s.review_count,
+            "review_average_rating": (product_reviews.get(s.cpk) or (s.review_average_rating, s.review_count))[0],
+            "review_count": (product_reviews.get(s.cpk) or (s.review_average_rating, s.review_count))[1],
             "classification": s.classification,
             "deal_score": s.deal_score,
             "confidence": s.confidence_band,

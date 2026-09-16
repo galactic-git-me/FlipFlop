@@ -245,7 +245,7 @@ async def list_variants(
     scored_result = await db.execute(
         text("""
             SELECT DISTINCT ON (listing_id)
-                   listing_id, url, condition, delivered_price,
+                   listing_id, cpk, url, condition, delivered_price,
                    market_lower_price, market_median_price, market_upper_price,
                    pct_offset, classification, decision, confidence_band,
                    evidence_status, evidence_reason, deal_score,
@@ -257,6 +257,43 @@ async def list_variants(
         {"listing_ids": list(listing_keys)},
     ) if listing_keys else []
     scored_by_item = {row.listing_id: row for row in scored_result}
+    # The CPK bridge is not limited to legacy eBay external IDs; use the
+    # scored row as a fallback so Amazon/Vinted/other marketplace listings can
+    # inherit the same product-level review evidence too.
+    for listing_id, scored_row in scored_by_item.items():
+        if scored_row.cpk:
+            cpk_by_item.setdefault(listing_id, scored_row.cpk)
+
+    # Product reviews are shared across equivalent marketplace listings when
+    # they resolve to the same CPK. Prefer a non-eBay retailer's review as it
+    # is independent of the source listing being displayed.
+    cpk_review_result = await db.execute(
+        text("""
+            SELECT DISTINCT ON (listing_id)
+                   listing_id, cpk, source, review_average_rating, review_count,
+                   scored_at, id
+            FROM gem_radar_scored_listings
+            WHERE cpk IS NOT NULL
+              AND (review_average_rating IS NOT NULL OR review_count IS NOT NULL)
+            ORDER BY listing_id, scored_at DESC NULLS LAST, id DESC
+        """)
+    )
+    reviews_by_vendor: dict[tuple[str, str], tuple[float | None, int | None]] = {}
+    for row in cpk_review_result:
+        key = (row.cpk, (row.source or "unknown").lower())
+        current = reviews_by_vendor.get(key)
+        if current is None or (row.review_count or 0) > (current[1] or 0):
+            reviews_by_vendor[key] = (row.review_average_rating, row.review_count)
+    reviews_by_cpk: dict[str, tuple[float | None, int | None]] = {}
+    for (cpk, _vendor), (rating, count) in reviews_by_vendor.items():
+        old_rating, old_count = reviews_by_cpk.get(cpk, (None, None))
+        if rating is not None and count:
+            if old_rating is not None and old_count:
+                reviews_by_cpk[cpk] = ((old_rating * old_count + rating * count) / (old_count + count), old_count + count)
+            else:
+                reviews_by_cpk[cpk] = (rating, (old_count or 0) + count)
+        elif count:
+            reviews_by_cpk[cpk] = (old_rating, (old_count or 0) + count)
 
     # Older Listing rows may have lost their denormalised image array during
     # a refresh, while the scraper still retained the image on its sighting
@@ -338,8 +375,8 @@ async def list_variants(
             "watch_count": cpk_metrics.get(cpk_by_item.get(l.external_id.split("|")[1]), {}).get("watch_count") if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
             "offer_count": cpk_metrics.get(cpk_by_item.get(l.external_id.split("|")[1]), {}).get("offer_count") if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
             "sold_count": cpk_metrics.get(cpk_by_item.get(l.external_id.split("|")[1]), {}).get("sold_count") if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
-            "review_average_rating": reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_average_rating"),
-            "review_count": reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_count"),
+            "review_average_rating": (reviews_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "")) or (reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_average_rating"), reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_count")))[0],
+            "review_count": (reviews_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "")) or (reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_average_rating"), reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_count")))[1],
             "consecutive_misses": v.consecutive_misses,
             "last_seen_at": v.last_seen_at,
             "auto_published_at": v.auto_published_at,
