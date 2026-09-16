@@ -259,6 +259,11 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
   const pct = safeMax > 0 ? (successful / safeMax) * 100 : 0;
   const radius = 24;
   const circumference = 2 * Math.PI * radius;
+  // Keep the successful output as one uniform-width bar. Unavailable work is
+  // deliberately represented by a thinner patterned line so it cannot be
+  // mistaken for completed output.
+  const successfulStrokeWidth = 7.5;
+  const unavailableStrokeWidth = 3;
   const successfulLength = circumference * (successful / (safeMax || 1));
   const failedLength = circumference * (failedCount / (safeMax || 1));
   const skippedLength = circumference * (skippedCount / (safeMax || 1));
@@ -280,25 +285,25 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
         <circle cx={30} cy={30} r={radius} stroke="#334155" strokeWidth={3} fill="none" />
         {successfulLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={`url(#${patternId}-gradient)`} strokeWidth={7.5} fill="none"
+            cx={30} cy={30} r={radius} stroke={`url(#${patternId}-gradient)`} strokeWidth={successfulStrokeWidth} fill="none"
             strokeDasharray={`${successfulLength} ${circumference - successfulLength}`}
-            strokeDashoffset={0} strokeLinecap="round" transform="rotate(-90 30 30)"
+            strokeDashoffset={0} strokeLinecap="butt" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
           />
         )}
         {failedLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={7.5} fill="none"
+            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={unavailableStrokeWidth} fill="none"
             strokeDasharray={`${failedLength} ${circumference - failedLength}`}
-            strokeDashoffset={-successfulLength} strokeLinecap="round" transform="rotate(-90 30 30)"
+            strokeDashoffset={-successfulLength} strokeLinecap="butt" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
           />
         )}
         {skippedLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={`url(#${patternId}-gradient)`} strokeWidth={7.5} fill="none" opacity="0.9"
+            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={unavailableStrokeWidth} fill="none" opacity="0.9"
             strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
-            strokeDashoffset={-(successfulLength + failedLength)} strokeLinecap="round" transform="rotate(-90 30 30)"
+            strokeDashoffset={-(successfulLength + failedLength)} strokeLinecap="butt" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
           />
         )}
