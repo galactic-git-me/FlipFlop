@@ -729,7 +729,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             const failedIngested = isComplete ? Math.max(searchTermTotal - scan.ingestedCount, 0) : 0;
             const failedCpk = Math.min(
               scan.cpkFailedCount ?? 0,
-              Math.max(searchTermTotal - scan.cpkAssignedCount, 0),
+              Math.max(scan.ingestedCount - scan.cpkAssignedCount, 0),
             );
             // A CPK-assigned listing with no settled market price is already
             // known to be unmatched. It may become priced later if another
@@ -743,16 +743,21 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             // classification therefore stays blank (pending) until the API
             // can distinguish a failed scoring attempt from phase-two work
             // that has not run.
-            const failedScores = 0;
+            // Scoring applies to CPK-assigned listings. CPK failures are
+            // already represented by the CPK gauge and must not inflate the
+            // score denominator or prevent a completed score pass reaching
+            // 100%.
+            const failedScores = isComplete
+              ? Math.max(scan.cpkAssignedCount - scan.classifiedCount, 0)
+              : 0;
             const skippedCpk = failedIngested;
             const skippedMarketPrices = Math.min(
               failedIngested + failedCpk,
-              Math.max(searchTermTotal - scan.marketPricedCount - failedMarketPrices, 0),
+              Math.max(scan.cpkAssignedCount - scan.marketPricedCount - failedMarketPrices, 0),
             );
-            const skippedScores = Math.min(
-              failedIngested + failedCpk,
-              Math.max(searchTermTotal - scan.classifiedCount - failedScores, 0),
-            );
+            // The score denominator excludes listings that failed CPK, so
+            // there is no separate score-level skipped population here.
+            const skippedScores = 0;
 
             return (
               <PixelCard key={scan.searchId || scan.query} variant={isComplete ? "emerald" : "default"}>
@@ -796,15 +801,14 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                   </div>
 
                   <div className="flex justify-center gap-3">
-                    {/* Keep one denominator across every stage so the raw
-                        fractions describe the same scan population. CPK,
-                        market pricing, and scoring are subsets of eligible
-                        listings; using the previous stage as max made a
-                        partially processed run look complete downstream. */}
+                    {/* Each stage is measured against the population it can
+                        actually process. This preserves meaningful progress
+                        and lets a finished stage reach 100% without hiding
+                        upstream failures. */}
                     <Gauge value={scan.ingestedCount} max={searchTermTotal} failed={failedIngested} label="Ingested" color="#8b5cf6" />
-                    <Gauge value={scan.cpkAssignedCount} max={searchTermTotal} failed={failedCpk} skipped={skippedCpk} label="CPK" color="#10b981" />
-                    <Gauge value={scan.marketPricedCount} max={searchTermTotal} failed={failedMarketPrices} skipped={skippedMarketPrices} label="M Prices" color="#f59e0b" />
-                    <Gauge value={scan.classifiedCount} max={searchTermTotal} failed={failedScores} skipped={skippedScores} label="Scores" color="#ec4899" />
+                    <Gauge value={scan.cpkAssignedCount} max={Math.max(scan.ingestedCount, 1)} failed={failedCpk} skipped={skippedCpk} label="CPK" color="#10b981" />
+                    <Gauge value={scan.marketPricedCount} max={Math.max(scan.cpkAssignedCount, 1)} failed={failedMarketPrices} skipped={skippedMarketPrices} label="M Prices" color="#f59e0b" />
+                    <Gauge value={scan.classifiedCount} max={Math.max(scan.cpkAssignedCount, 1)} failed={failedScores} skipped={skippedScores} label="Scores" color="#ec4899" />
                   </div>
 
                   {vendorEntries.length > 0 && (
