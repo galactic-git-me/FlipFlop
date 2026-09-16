@@ -423,6 +423,11 @@ body {
   max-width: 100%;
 }
 
+.catalogue-page table th:nth-child(12),
+.catalogue-page table td:nth-child(12) {
+  display: none;
+}
+
 .opportunity-classification-strip {
   background: linear-gradient(110deg, #075985 0%, #123b67 28%, #3f352b 62%, #c2410c 100%);
   background-size: 220% 100%;
