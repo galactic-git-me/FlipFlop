@@ -271,10 +271,10 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
             <circle cx="2" cy="2" r="0.7" fill={color} opacity="0.9" />
           </pattern>
         </defs>
-        <circle cx={30} cy={30} r={radius} stroke="#1e293b" strokeWidth={4} fill="none" />
+        <circle cx={30} cy={30} r={radius} stroke="#1e293b" strokeWidth={3} fill="none" />
         {successfulLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={color} strokeWidth={4} fill="none"
+            cx={30} cy={30} r={radius} stroke={color} strokeWidth={3} fill="none"
             strokeDasharray={`${successfulLength} ${circumference - successfulLength}`}
             strokeDashoffset={0} strokeLinecap="round" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
@@ -282,7 +282,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
         )}
         {failedLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={4} fill="none"
+            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={3} fill="none"
             strokeDasharray={`${failedLength} ${circumference - failedLength}`}
             strokeDashoffset={-successfulLength} strokeLinecap="round" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
@@ -290,7 +290,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
         )}
         {skippedLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={color} strokeWidth={3} fill="none" opacity="0.9"
+            cx={30} cy={30} r={radius} stroke={color} strokeWidth={2} fill="none" opacity="0.9"
             strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
             strokeDashoffset={-(successfulLength + failedLength)} strokeLinecap="round" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
@@ -339,13 +339,13 @@ function GaugeWithBreakdown({
   return (
     <div className="flex flex-col items-center justify-center">
       <svg width={60} height={60} viewBox="0 0 60 60">
-        <circle cx={30} cy={30} r={radius} stroke="#1e293b" strokeWidth={4} fill="none" />
+        <circle cx={30} cy={30} r={radius} stroke="#1e293b" strokeWidth={3} fill="none" />
         <circle
           cx={30}
           cy={30}
           r={radius}
           stroke={color}
-          strokeWidth={4}
+          strokeWidth={3}
           fill="none"
           strokeDasharray={circumference}
           strokeDashoffset={offset}

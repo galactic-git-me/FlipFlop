@@ -5415,3 +5415,164 @@ Watch video
 2026-09-16 17:07:03 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=8 ingested=0 submission_id=115736
 2026-09-16 17:07:03 [info     ] queue_processor.submission_released search_id=psu-gold-750w-modular
 2026-09-16 17:07:03 [info     ] queue_processor.processing_submission n_listings=10 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=115740
+2026-09-16 17:07:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision 5860 Workstation
+2026-09-16 17:07:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision 7875 Workstation
+2026-09-16 17:07:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z4 G5 Workstation
+2026-09-16 17:07:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HPE ProLiant DL385 Gen11 2U Rack Server
+2026-09-16 17:07:10 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=5 cross_run_dupes_price_updated=3 cross_run_dupes_unchanged_price=7 elapsed_s=14.4 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:10 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=5 ingested=0 submission_id=115717
+2026-09-16 17:07:10 [info     ] queue_processor.submission_released search_id=ddr5-udimm-ram
+2026-09-16 17:07:10 [info     ] queue_processor.processing_submission n_listings=19 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=115723
+2026-09-16 17:07:10 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=19 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=19 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:10 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=19 ingested=0 submission_id=115723
+2026-09-16 17:07:10 [info     ] queue_processor.submission_released search_id=ddr5-udimm-ram
+2026-09-16 17:07:10 [info     ] queue_processor.processing_submission n_listings=15 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=115725
+2026-09-16 17:07:10 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=15 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=15 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:10 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=15 ingested=0 submission_id=115725
+2026-09-16 17:07:10 [info     ] queue_processor.submission_released search_id=ddr5-udimm-ram
+2026-09-16 17:07:10 [info     ] queue_processor.processing_submission n_listings=14 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=115726
+2026-09-16 17:07:10 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=14 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=14 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:10 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=14 ingested=0 submission_id=115726
+2026-09-16 17:07:10 [info     ] queue_processor.submission_released search_id=ddr5-udimm-ram
+2026-09-16 17:07:10 [info     ] queue_processor.processing_submission n_listings=15 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=115728
+2026-09-16 17:07:14 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=17 cross_run_dupes_price_updated=3 cross_run_dupes_unchanged_price=17 elapsed_s=16.7 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:14 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=17 ingested=0 submission_id=115714
+2026-09-16 17:07:15 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 17:07:15 [info     ] queue_processor.processing_submission n_listings=17 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115718
+2026-09-16 17:07:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HPE ProLiant XL230k Gen10 Server Blade
+2026-09-16 17:07:20 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z440 Workstation
+2026-09-16 17:07:20 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision 3630 Workstation
+2026-09-16 17:07:20 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=6 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=9 elapsed_s=20.4 excluded_auctions=0 new_listings=1
+2026-09-16 17:07:20 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=6 ingested=1 submission_id=115730
+2026-09-16 17:07:20 [info     ] queue_processor.submission_released search_id=m2-nvme-ssd
+2026-09-16 17:07:20 [info     ] queue_processor.processing_submission n_listings=12 query=M.2 NVMe SSD -"m.2 case" -"ssd case" -adapter -"heatsink only" -enclosure -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=115744
+2026-09-16 17:07:21 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=17 cross_run_dupes_price_updated=7 cross_run_dupes_unchanged_price=9 elapsed_s=6.2 excluded_auctions=0 new_listings=1
+2026-09-16 17:07:21 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=17 ingested=1 submission_id=115718
+2026-09-16 17:07:21 [info     ] queue_processor.submission_released search_id=ddr4-udimm-ram
+2026-09-16 17:07:21 [info     ] queue_processor.processing_submission n_listings=10 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115758
+2026-09-16 17:07:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z4 G4 Workstation
+2026-09-16 17:07:21 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=9 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=18.3 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:21 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=9 ingested=0 submission_id=115740
+2026-09-16 17:07:21 [info     ] queue_processor.submission_released search_id=psu-gold-750w-modular
+2026-09-16 17:07:21 [info     ] queue_processor.processing_submission n_listings=10 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=115745
+2026-09-16 17:07:26 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=11 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=11 elapsed_s=5.4 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:26 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=11 ingested=0 submission_id=115744
+2026-09-16 17:07:26 [info     ] queue_processor.submission_released search_id=m2-nvme-ssd
+2026-09-16 17:07:26 [info     ] queue_processor.processing_submission n_listings=18 query=M.2 NVMe SSD -"m.2 case" -"ssd case" -adapter -"heatsink only" -enclosure -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=115747
+2026-09-16 17:07:27 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=13 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=15 elapsed_s=16.6 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:27 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=13 ingested=0 submission_id=115728
+2026-09-16 17:07:27 [info     ] queue_processor.submission_released search_id=ddr5-udimm-ram
+2026-09-16 17:07:27 [info     ] queue_processor.processing_submission n_listings=18 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=115732
+2026-09-16 17:07:30 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=9 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=8.7 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:30 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=9 ingested=0 submission_id=115758
+2026-09-16 17:07:30 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 17:07:30 [info     ] queue_processor.processing_submission n_listings=10 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115760
+2026-09-16 17:07:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell PowerEdge M640 Server Blade
+2026-09-16 17:07:30 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=9 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=8.8 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:30 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=9 ingested=0 submission_id=115745
+2026-09-16 17:07:30 [info     ] queue_processor.submission_released search_id=psu-gold-750w-modular
+2026-09-16 17:07:30 [info     ] queue_processor.processing_submission n_listings=10 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=115752
+2026-09-16 17:07:33 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=17 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=18 elapsed_s=5.8 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:33 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=17 ingested=0 submission_id=115732
+2026-09-16 17:07:33 [info     ] queue_processor.submission_released search_id=ddr5-udimm-ram
+2026-09-16 17:07:33 [info     ] queue_processor.processing_submission n_listings=17 query=DDR5 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr5-udimm-ram submission_id=115734
+2026-09-16 17:07:33 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=17 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=17 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:33 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=17 ingested=0 submission_id=115734
+2026-09-16 17:07:33 [info     ] queue_processor.submission_released search_id=ddr5-udimm-ram
+2026-09-16 17:07:33 [info     ] queue_processor.processing_submission n_listings=50 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115765
+2026-09-16 17:07:33 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=17 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=17 elapsed_s=7.2 excluded_auctions=0 new_listings=1
+2026-09-16 17:07:33 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=17 ingested=1 submission_id=115747
+2026-09-16 17:07:33 [info     ] queue_processor.submission_released search_id=m2-nvme-ssd
+2026-09-16 17:07:34 [info     ] queue_processor.processing_submission n_listings=19 query=M.2 NVMe SSD -"m.2 case" -"ssd case" -adapter -"heatsink only" -enclosure -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=115750
+2026-09-16 17:07:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell T3600, T5600, T7600, T7610 CPU 2 Heatsink
+2026-09-16 17:07:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP ProLiant BL460c Gen8 CPU 2 Heatsink
+2026-09-16 17:07:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP ProLiant BL460c Gen8 Katar Wide CPU 2 Heatsink
+2026-09-16 17:07:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP ProLiant XL170R Gen9 CPU 1 Heatsink
+2026-09-16 17:07:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP ProLiant XL170R Gen9 CPU 2 Heatsink
+2026-09-16 17:07:36 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=5 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=6.5 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:36 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=5 ingested=0 submission_id=115760
+2026-09-16 17:07:37 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 17:07:37 [info     ] queue_processor.processing_submission n_listings=10 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115763
+2026-09-16 17:07:37 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=10 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:37 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=10 ingested=0 submission_id=115763
+2026-09-16 17:07:37 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 17:07:37 [info     ] queue_processor.processing_submission n_listings=10 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115767
+2026-09-16 17:07:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision T7820 Workstation
+2026-09-16 17:07:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell PowerProtect DD9400 2U Rack Server
+2026-09-16 17:07:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell EMC PowerEdge MX740c Server Blade
+2026-09-16 17:07:42 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lenovo ThinkSystem SN550-7X16 Server Blade
+2026-09-16 17:07:42 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=6 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=11.0 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:42 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=6 ingested=0 submission_id=115752
+2026-09-16 17:07:42 [info     ] queue_processor.submission_released search_id=psu-gold-750w-modular
+2026-09-16 17:07:42 [info     ] queue_processor.processing_submission n_listings=10 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=115754
+2026-09-16 17:07:47 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=17 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=19 elapsed_s=13.0 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:47 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=17 ingested=0 submission_id=115750
+2026-09-16 17:07:47 [info     ] queue_processor.submission_released search_id=m2-nvme-ssd
+2026-09-16 17:07:47 [info     ] queue_processor.processing_submission n_listings=20 query=M.2 NVMe SSD -"m.2 case" -"ssd case" -adapter -"heatsink only" -enclosure -external -portable -"hard drive case" search_id=m2-nvme-ssd submission_id=115753
+2026-09-16 17:07:52 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=48 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=17 elapsed_s=18.6 excluded_auctions=0 new_listings=33
+2026-09-16 17:07:52 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=48 ingested=33 submission_id=115765
+2026-09-16 17:07:52 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 17:07:52 [info     ] queue_processor.processing_submission n_listings=10 query=PC case -laptop -phone -iphone -samsung -tablet -"pencil case" -sleeve -guitar -camera -toy -cosmetic -watch -sticker -"decorative panel" -"dust filter" -"carrying case" search_id=pc-case-chassis submission_id=115780
+2026-09-16 17:07:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell PowerEdge FC640 Server Node
+2026-09-16 17:07:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Socket G34 CPU Dust Cover
+2026-09-16 17:07:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell PowerEdge R710 CPU Blank
+2026-09-16 17:07:59 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=5 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=22.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:07:59 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=5 ingested=0 submission_id=115767
+2026-09-16 17:07:59 [info     ] queue_processor.submission_released search_id=cpu-cooler
+2026-09-16 17:07:59 [info     ] queue_processor.processing_submission n_listings=10 query=CPU cooler -bundle -laptop -"mounting kit only" -"replacement fan" -"thermal pad" -"fan controller" search_id=cpu-cooler submission_id=115771
+2026-09-16 17:08:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=.product-image-container-28825 {
+    width: 300px;
+2026-09-16 17:08:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=.product-image-container-214397 {
+    width: 300px
+2026-09-16 17:08:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=.product-image-container-213992 {
+    width: 300px
+2026-09-16 17:08:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=.product-image-container-213732 {
+    width: 300px
+2026-09-16 17:08:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=.product-image-container-213032 {
+    width: 300px
+2026-09-16 17:08:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=.product-image-container-209307 {
+    width: 300px
+2026-09-16 17:08:09 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=.product-image-container-38325 {
+    width: 300px;
+2026-09-16 17:08:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=.product-image-container-38613 {
+    width: 300px;
+2026-09-16 17:08:10 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=2 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=28.9 excluded_auctions=0 new_listings=0
+2026-09-16 17:08:10 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=2 ingested=0 submission_id=115754
+2026-09-16 17:08:11 [info     ] queue_processor.submission_released search_id=psu-gold-750w-modular
+2026-09-16 17:08:11 [info     ] queue_processor.processing_submission n_listings=21 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=115756
+2026-09-16 17:08:11 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=21 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=20 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:08:11 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=21 ingested=0 submission_id=115756
+2026-09-16 17:08:11 [info     ] queue_processor.submission_released search_id=psu-gold-750w-modular
+2026-09-16 17:08:11 [info     ] queue_processor.processing_submission n_listings=20 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=115757
+2026-09-16 17:08:11 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=20 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=19 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:08:11 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=20 ingested=0 submission_id=115757
+2026-09-16 17:08:11 [info     ] queue_processor.submission_released search_id=psu-gold-750w-modular
+2026-09-16 17:08:11 [info     ] queue_processor.processing_submission n_listings=19 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=115759
+2026-09-16 17:08:11 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=19 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=17 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:08:11 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=19 ingested=0 submission_id=115759
+2026-09-16 17:08:11 [info     ] queue_processor.submission_released search_id=psu-gold-750w-modular
+2026-09-16 17:08:11 [info     ] queue_processor.processing_submission n_listings=23 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=115762
+2026-09-16 17:08:11 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=4 cross_run_dupes_unchanged_price=19 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:08:11 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=115762
+2026-09-16 17:08:11 [info     ] queue_processor.submission_released search_id=psu-gold-750w-modular
+2026-09-16 17:08:11 [info     ] queue_processor.processing_submission n_listings=23 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=115764
+2026-09-16 17:08:11 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=22 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:08:11 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=115764
+2026-09-16 17:08:11 [info     ] queue_processor.submission_released search_id=psu-gold-750w-modular
+2026-09-16 17:08:11 [info     ] queue_processor.processing_submission n_listings=23 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=115766
+2026-09-16 17:08:11 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=23 cross_run_dupes_price_updated=6 cross_run_dupes_unchanged_price=17 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:08:11 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=23 ingested=0 submission_id=115766
+2026-09-16 17:08:11 [info     ] queue_processor.submission_released search_id=psu-gold-750w-modular
+2026-09-16 17:08:11 [info     ] queue_processor.processing_submission n_listings=21 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=115768
+2026-09-16 17:08:11 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=21 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=20 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 17:08:11 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=21 ingested=0 submission_id=115768
+2026-09-16 17:08:11 [info     ] queue_processor.submission_released search_id=psu-gold-750w-modular
+2026-09-16 17:08:11 [info     ] queue_processor.processing_submission n_listings=13 query=750W Gold modular power supply -bundle -laptop -"laptop psu" -external -"power cable" -adapter -charger -"switching power supply" -industrial search_id=psu-gold-750w-modular submission_id=115770
+2026-09-16 17:08:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=8GB PC3L-12800U (DDR3 Low-Power-1600Mhz, 2RX8) Des
+2026-09-16 17:08:14 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=20 cross_run_dupes_price_updated=5 cross_run_dupes_unchanged_price=14 elapsed_s=27.1 excluded_auctions=0 new_listings=1
+2026-09-16 17:08:14 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=20 ingested=1 submission_id=115753
+2026-09-16 17:08:14 [info     ] queue_processor.submission_released search_id=m2-nvme-ssd
+2026-09-16 17:08:14 [info     ] queue_processor.processing_submission n_listings=78 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115798
+2026-09-16 17:08:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lenovo ThinkStation P900/P910/P520/P920 5.25in Opt
+2026-09-16 17:08:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Large PC Workstation Shipping Box Heavy Duty Cardb
+2026-09-16 17:08:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=100 PCS ESD Anti-Static Electronics Large Bag 470m

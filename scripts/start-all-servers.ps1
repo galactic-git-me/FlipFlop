@@ -590,7 +590,11 @@ Write-Host ""
 Write-Host "[*] Cleaning up lingering processes on dev ports..." -ForegroundColor Cyan
 $devPorts = @(4312, 5173)
 if ($LocalBackend) { $devPorts += 4311 }
-if ($LocalGemRadar) { $devPorts += 18000 }
+# 18000 is a second queue-owning Gem Radar service. When it is not selected
+# for this run it must still be cleaned up; otherwise an orphaned instance
+# can consume the same submission_queue alongside the main API and double
+# the effective concurrency.
+$devPorts += 18000
 if ($LocalFrontend) { $devPorts += 4313 }
 foreach ($port in $devPorts) {
     $processes = Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue | Where-Object { $_.State -eq "Listen" }
