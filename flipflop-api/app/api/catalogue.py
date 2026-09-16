@@ -248,7 +248,10 @@ async def list_variants(
             "market_lower_price": getattr(market_prices_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1]) if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None), "min_price", None),
             "market_median_price": getattr(market_prices_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1]) if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None), "median_price", None),
             "market_upper_price": getattr(market_prices_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1]) if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None), "max_price", None),
-            "url": (scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id).url or l.url),
+            # A catalogue variant can exist before its first scored row (or
+            # after the scored row has been archived). Do not fail the entire
+            # catalogue response when that optional enrichment is absent.
+            "url": (getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "url", None) or l.url),
             "condition": (scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id).condition if scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id) else l.condition),
             "delivered_price": (scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id).delivered_price if scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id) else l.price),
             "scored_market_lower_price": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "market_lower_price", None),
