@@ -9,7 +9,7 @@ import { api } from "@/lib/api";
 
 type ViewMode = "table" | "listings" | "grid";
 type Variant = {
-  id: number; listing_id?: number; listing_title: string; slot_type: string;
+  id: number; listing_id?: number; listing_title: string; image_url?: string | null; slot_type: string;
   playbook_id: number; status: string; tier: string; display_price: number;
   gem_score: number; consecutive_misses: number; last_seen_at: string;
 };
@@ -26,8 +26,9 @@ const fallback: Variant[] = [
 const categories = ["All components", "CPU", "GPU", "Memory", "Storage", "Motherboard", "Power supply", "Cooling"];
 const imageTones = ["from-cyan-950 via-slate-800 to-blue-900", "from-violet-950 via-slate-800 to-indigo-900", "from-emerald-950 via-slate-800 to-teal-900", "from-amber-950 via-slate-800 to-orange-900"];
 
-function ProductArt({ index, title }: { index: number; title: string }) {
+function ProductArt({ index, title, imageUrl }: { index: number; title: string; imageUrl?: string | null }) {
   return <div className={`relative flex h-full min-h-32 items-center justify-center overflow-hidden bg-gradient-to-br ${imageTones[index % imageTones.length]}`}>
+    {imageUrl && <img src={imageUrl} alt="" className="absolute inset-0 h-full w-full object-contain mix-blend-screen" />}
     <div className="absolute inset-0 opacity-30" style={{ backgroundImage: "linear-gradient(135deg, transparent 45%, rgba(255,255,255,.22) 46%, transparent 48%), linear-gradient(45deg, transparent 45%, rgba(0,220,255,.18) 46%, transparent 48%)", backgroundSize: "28px 28px" }} />
     <div className="relative rounded-lg border border-white/20 bg-black/25 px-5 py-7 text-center shadow-2xl backdrop-blur-sm">
       <div className="mx-auto mb-2 h-8 w-16 rounded border border-cyan-200/60 bg-cyan-300/20 shadow-[0_0_24px_rgba(34,211,238,.35)]" />
@@ -98,7 +99,7 @@ export default function CataloguePage() {
 }
 
 function ListingCard({ variant: v, index, compact }: { variant: Variant; index: number; compact: boolean }) {
-  return <article className={`overflow-hidden rounded-lg border border-white/10 bg-[#0b1119] transition hover:border-cyan-400/40 hover:shadow-[0_0_24px_rgba(34,211,238,.08)] ${compact ? "flex flex-col sm:flex-row" : ""}`}><div className={compact ? "w-full shrink-0 sm:w-52" : ""}><ProductArt index={index} title={v.slot_type} /></div><div className="min-w-0 flex-1 p-3"><div className="mb-2 flex items-start justify-between gap-3"><div className="min-w-0"><p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-400">{v.tier} tier · {v.slot_type}</p><h2 className="line-clamp-2 text-sm font-semibold leading-snug text-white">{v.listing_title}</h2></div><Status value={v.status} /></div><div className="mt-3 flex flex-wrap items-end gap-x-6 gap-y-2"><div><p className="text-xl font-bold text-white">£{v.display_price.toFixed(2)}</p><p className="text-[10px] text-slate-500">Buy-in display price</p></div><div><p className="font-mono text-sm font-bold text-emerald-300">{v.gem_score.toFixed(0)}<span className="text-[10px] font-normal text-slate-500"> / 100</span></p><p className="text-[10px] text-slate-500">Gem score</p></div><div className="text-xs text-slate-400"><span className="text-emerald-300">Live</span> · Seen {v.last_seen_at}</div></div><div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2"><span className="text-[10px] text-slate-600">Playbook {v.playbook_id} · ID #{v.id}</span><button className="inline-flex items-center gap-1 text-[11px] font-semibold text-cyan-300 hover:text-cyan-200"><Eye className="h-3.5 w-3.5" /> View listing</button></div></div></article>;
+  return <article className={`overflow-hidden rounded-lg border border-white/10 bg-[#0b1119] transition hover:border-cyan-400/40 hover:shadow-[0_0_24px_rgba(34,211,238,.08)] ${compact ? "flex flex-col sm:flex-row" : ""}`}><div className={compact ? "w-full shrink-0 sm:w-52" : ""}><ProductArt index={index} title={v.slot_type} imageUrl={v.image_url} /></div><div className="min-w-0 flex-1 p-3"><div className="mb-2 flex items-start justify-between gap-3"><div className="min-w-0"><p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-400">{v.tier} tier · {v.slot_type}</p><h2 className="line-clamp-2 text-sm font-semibold leading-snug text-white">{v.listing_title}</h2></div><Status value={v.status} /></div><div className="mt-3 flex flex-wrap items-end gap-x-6 gap-y-2"><div><p className="text-xl font-bold text-white">£{v.display_price.toFixed(2)}</p><p className="text-[10px] text-slate-500">Buy-in display price</p></div><div><p className="font-mono text-sm font-bold text-emerald-300">{v.gem_score.toFixed(0)}<span className="text-[10px] font-normal text-slate-500"> / 100</span></p><p className="text-[10px] text-slate-500">Gem score</p></div><div className="text-xs text-slate-400"><span className="text-emerald-300">Live</span> · Seen {v.last_seen_at}</div></div><div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2"><span className="text-[10px] text-slate-600">Playbook {v.playbook_id} · ID #{v.id}</span><button className="inline-flex items-center gap-1 text-[11px] font-semibold text-cyan-300 hover:text-cyan-200"><Eye className="h-3.5 w-3.5" /> View listing</button></div></div></article>;
 }
 
 function TableView({ variants }: { variants: Variant[] }) {
