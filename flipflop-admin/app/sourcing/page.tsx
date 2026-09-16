@@ -654,6 +654,15 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
 
   const isRunning = queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0);
 
+  // The lock status endpoint identifies only the environment that holds the
+  // lease, not its owner. A DEV run can therefore look like it is waiting on
+  // "another DEV" workload while this same dashboard is receiving fresh
+  // progress from that run. Live pipeline activity is the stronger signal.
+  const scanIsProgressing =
+    displayedScans.some((scan) => !scan.isComplete || scan.activeSubmissions > 0) ||
+    queueItems.some((item) => item.status === "pending" || item.status === "processing") ||
+    Boolean(queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0));
+
   // Sourced from pipeline-status, scoped to THIS run's listing_ids -- NOT
   // derived from the whole-DB `listings` array (see pipeline_status.py's
   // snapshot() docstring for why that was wrong: Phase 2 re-classifies the
@@ -695,9 +704,9 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
           </div>
         </div>
 
-        {scanLock?.state === "waiting" && (
+        {scanLock?.state === "waiting" && !scanIsProgressing && (
           <div className="rounded-md border border-amber-800/70 bg-amber-950/30 px-3 py-2 text-xs text-amber-200">
-            Scrapers are waiting for {scanLock.holderEnvironment === "DEV" ? "another DEV browser workload" : scanLock.holderEnvironment === "LIVE" ? "the LIVE browser workload" : "another browser workload"} to finish. No second browser workload will start.
+            A browser workload currently holds the {scanLock.holderEnvironment ?? "shared"} scan lock. A new workload will start when that lease is released.
           </div>
         )}
 

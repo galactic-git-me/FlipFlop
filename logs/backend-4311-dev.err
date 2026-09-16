@@ -4,3 +4,16 @@ INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:4311 (Press CTRL+C to quit)
 INFO:     ('127.0.0.1', 64232) - "WebSocket /api/public/social-proof/ws" [accepted]
 INFO:     connection open
+INFO:     connection closed
+INFO:     ('127.0.0.1', 63445) - "WebSocket /api/public/social-proof/ws" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     ('127.0.0.1', 50910) - "WebSocket /api/public/social-proof/ws" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     ('127.0.0.1', 55332) - "WebSocket /api/public/social-proof/ws" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     ('127.0.0.1', 58238) - "WebSocket /api/public/social-proof/ws" [accepted]
+INFO:     connection open
+INFO:     connection closed
