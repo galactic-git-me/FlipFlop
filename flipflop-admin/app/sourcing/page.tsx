@@ -669,6 +669,21 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
             // absent, an unreported vendor gets null (rendered as an em dash),
             // not a fabricated zero.
             const searchConfiguredVendors = scan.configuredVendors;
+            // Keep the vendor row on the same population as the card totals.
+            // A queue hand-off can temporarily provide vendor observations for
+            // only the listings already persisted, while discovered/eligible
+            // includes the complete run population. Never present that partial
+            // vendor sum as if it were the full card total.
+            const discoveredTotal = Math.max(
+              scan.discoveredCount ?? scan.totalListings,
+              scan.ingestedCount,
+              0,
+            );
+            const searchTermTotal = Math.max(
+              scan.eligibleCount ?? scan.totalListings,
+              scan.ingestedCount,
+              1,
+            );
             // Render every vendor the discovery snapshot reports, not just the ones
             // in the hardcoded VENDOR_ORDER list -- a source key that isn't in
             // that list (e.g. "unknown", or a newly-scraped marketplace not
@@ -688,6 +703,11 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
               acc[key] = (acc[key] ?? 0) + Number(count);
               return acc;
             }, {});
+            const reportedVendorTotal = Object.values(vendorCounts).reduce((sum, count) => sum + count, 0);
+            const unattributedVendorCount = Math.max(discoveredTotal - reportedVendorTotal, 0);
+            if (unattributedVendorCount > 0) {
+              vendorCounts.unknown = (vendorCounts.unknown ?? 0) + unattributedVendorCount;
+            }
             const knownVendorEntries = VENDOR_ORDER
               .filter((v) => !searchConfiguredVendors || searchConfiguredVendors.includes(v))
               .map((v): [string, number | null] => [
@@ -708,16 +728,6 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
               .filter(([, count]) => count != null && count > 0);
             // Discovery is the user-facing search-term total. Processing
             // gauges use only eligible (non-auction) ads as their denominator.
-            const discoveredTotal = Math.max(
-              scan.discoveredCount ?? scan.totalListings,
-              scan.ingestedCount,
-              0,
-            );
-            const searchTermTotal = Math.max(
-              scan.eligibleCount ?? scan.totalListings,
-              scan.ingestedCount,
-              1,
-            );
             const { isComplete } = scan;
             const awaitingFinalScoring =
               !isComplete &&

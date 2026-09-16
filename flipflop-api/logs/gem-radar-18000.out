@@ -2852,3 +2852,357 @@ Watch video
 2026-09-16 16:42:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
 2026-09-16 16:42:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
 2026-09-16 16:42:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:08 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:08 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:08 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:11 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:11 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:11 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:17 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:17 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:19 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=36 elapsed_s=61.0 excluded_auctions=0 new_listings=0
+2026-09-16 16:42:19 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115285
+2026-09-16 16:42:19 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:42:19 [info     ] queue_processor.processing_submission n_listings=24 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115286
+2026-09-16 16:42:20 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:20 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:20 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=24 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=24 elapsed_s=1.0 excluded_auctions=0 new_listings=0
+2026-09-16 16:42:20 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=24 ingested=0 submission_id=115286
+2026-09-16 16:42:20 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:42:20 [info     ] queue_processor.processing_submission n_listings=10 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115287
+2026-09-16 16:42:20 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=10 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:42:20 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=10 ingested=0 submission_id=115287
+2026-09-16 16:42:20 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:42:20 [info     ] queue_processor.processing_submission n_listings=36 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115295
+2026-09-16 16:42:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:42:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:42:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:44 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:47 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:42:47 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=6 cross_run_dupes_unchanged_price=30 elapsed_s=60.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:42:47 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115245
+2026-09-16 16:42:48 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:42:48 [info     ] queue_processor.processing_submission n_listings=21 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115247
+2026-09-16 16:42:48 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=21 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=21 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:42:48 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=21 ingested=0 submission_id=115247
+2026-09-16 16:42:48 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:42:48 [info     ] queue_processor.processing_submission n_listings=36 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=115253
+2026-09-16 16:42:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Acer Nitro 5 (1TB, AMD Ryzen 5, 15.6in, Win10 - Pr
+2026-09-16 16:42:50 [debug    ] cpk_extractor.invalid_category category=monitor title=GIGABYTE GO27Q24A 27" QD-OLED QHD Gaming Monitor -
+2026-09-16 16:42:50 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=28 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=29 elapsed_s=55.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:42:50 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=28 ingested=0 submission_id=115336
+2026-09-16 16:42:50 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 16:42:50 [info     ] queue_processor.processing_submission n_listings=40 query=ASUS motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=asus-motherboard submission_id=115337
+2026-09-16 16:42:50 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:42:50 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=115337
+2026-09-16 16:42:50 [info     ] queue_processor.submission_released search_id=asus-motherboard
+2026-09-16 16:42:50 [info     ] queue_processor.processing_submission n_listings=36 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115338
+2026-09-16 16:42:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Gaming HP ProDesk 400 G3 SFF Intel i3 6th 8GB AMD
+2026-09-16 16:42:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Gaming HP ProDesk 400 G3 SFF Intel i3 6th 8GB AMD
+2026-09-16 16:42:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Gaming HP ProDesk 400 G3 SFF Intel i3 6th 8GB AMD
+2026-09-16 16:42:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Genuine AMD 218-0755046 BGA GPU Graphics Chip with
+2026-09-16 16:42:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Genuine AMD 216-0841018 BGA GPU Graphics Chip with
+2026-09-16 16:42:58 [debug    ] cpk_extractor.low_confidence   confidence=0.6 title=Genuine AMD Video Card GPU 218-0755113 BGA Chipset
+2026-09-16 16:43:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Genuine AMD 216-0810084 BGA GPU Chip Graphics IC C
+2026-09-16 16:43:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Genuine AMD CPU Processor EME300GBB22GV BGA GPU Ch
+2026-09-16 16:43:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=CHEAP FAST Windows 11 SFF  PC CORE i7 6TH AMD R7 G
+2026-09-16 16:43:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Gaming HP ProDesk 400 G3 SFF Intel i3 6th 8GB AMD
+2026-09-16 16:43:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Gaming HP ProDesk 400 G3 SFF Intel i3 6th 8GB AMD
+2026-09-16 16:43:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Gaming HP ProDesk 400 G3 SFF Intel i3 6th 8GB AMD
+2026-09-16 16:43:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=AI Workstation Lenovo Windows 11 Core i7 9TH 64GB
+2026-09-16 16:43:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lenovo Windows 11 Desktop PC CORE 8TH 9TH GEN i5 i
+2026-09-16 16:43:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Desktop PC Gaming High-Performance Nvidia GPU AMD
+2026-09-16 16:43:11 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Custom Built Gaming PC By Me, FUTURE PROOF. Contai
+2026-09-16 16:43:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Custom built Gaming  Desktop PC AMD Radeon Dedicat
+2026-09-16 16:43:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:13 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Gaming pc used Desktop AMD GPU and CPU
+2026-09-16 16:43:13 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=63 cross_run_dupes_price_updated=3 cross_run_dupes_unchanged_price=80 elapsed_s=78.7 excluded_auctions=0 new_listings=0
+2026-09-16 16:43:13 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=63 ingested=0 submission_id=115327
+2026-09-16 16:43:14 [info     ] queue_processor.submission_released search_id=amd-gpu
+2026-09-16 16:43:14 [info     ] queue_processor.processing_submission n_listings=7 query=AMD GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=amd-gpu submission_id=115328
+2026-09-16 16:43:14 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=7 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=7 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:43:14 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=7 ingested=0 submission_id=115328
+2026-09-16 16:43:14 [info     ] queue_processor.submission_released search_id=amd-gpu
+2026-09-16 16:43:14 [info     ] queue_processor.processing_submission n_listings=35 query=AMD GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=amd-gpu submission_id=115332
+2026-09-16 16:43:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:20 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:43:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:38 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=4 cross_run_dupes_unchanged_price=32 elapsed_s=77.5 excluded_auctions=0 new_listings=0
+2026-09-16 16:43:38 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115295
+2026-09-16 16:43:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:39 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:43:39 [info     ] queue_processor.processing_submission n_listings=10 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115301
+2026-09-16 16:43:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:42 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:44 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:48 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:51 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:43:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:57 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:43:59 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:02 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:07 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:08 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:08 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=35 elapsed_s=80.6 excluded_auctions=0 new_listings=0
+2026-09-16 16:44:08 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115253
+2026-09-16 16:44:09 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 16:44:09 [info     ] queue_processor.processing_submission n_listings=40 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=115348
+2026-09-16 16:44:09 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:09 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.4 excluded_auctions=0 new_listings=0
+2026-09-16 16:44:09 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=115348
+2026-09-16 16:44:09 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 16:44:09 [info     ] queue_processor.processing_submission n_listings=44 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115349
+2026-09-16 16:44:09 [warning  ] gem_radar.reject_malformed_awdit_listings count=5 titles=['SAVE 11%', 'SAVE 5%', 'SAVE 9%', 'SAVE 9%', 'SAVE 12%']
+2026-09-16 16:44:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:11 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:17 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:44:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:44:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:44:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:41 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=7 cross_run_dupes_unchanged_price=29 elapsed_s=111.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:44:41 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115338
+2026-09-16 16:44:41 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:44:41 [info     ] queue_processor.processing_submission n_listings=36 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115343
+2026-09-16 16:44:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell PowerProtect DD9400 2U Rack Server
+2026-09-16 16:44:45 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=9 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=66.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:44:45 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=9 ingested=0 submission_id=115301
+2026-09-16 16:44:45 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:44:45 [info     ] queue_processor.processing_submission n_listings=36 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115322
+2026-09-16 16:44:45 [debug    ] cpk_extractor.low_confidence   confidence=None title=3XS Deep Learning Workstation | 4 x 3090 Nvidia GP
+2026-09-16 16:44:45 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=34 cross_run_dupes_price_updated=3 cross_run_dupes_unchanged_price=32 elapsed_s=91.5 excluded_auctions=0 new_listings=0
+2026-09-16 16:44:45 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=34 ingested=0 submission_id=115332
+2026-09-16 16:44:45 [info     ] queue_processor.submission_released search_id=amd-gpu
+2026-09-16 16:44:45 [info     ] queue_processor.processing_submission n_listings=73 query=Intel GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=intel-gpu submission_id=115351
+2026-09-16 16:44:46 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:47 [debug    ] cpk_extractor.invalid_category category=monitor title=GIGABYTE GO27Q24A 27" QD-OLED QHD Gaming Monitor -
+2026-09-16 16:44:47 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=38 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=39 elapsed_s=38.2 excluded_auctions=0 new_listings=0
+2026-09-16 16:44:47 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=38 ingested=0 submission_id=115349
+2026-09-16 16:44:48 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 16:44:48 [info     ] queue_processor.processing_submission n_listings=18 query=MSI motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=msi-motherboard submission_id=115357
+2026-09-16 16:44:48 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=18 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=18 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 16:44:48 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=18 ingested=0 submission_id=115357
+2026-09-16 16:44:48 [info     ] queue_processor.submission_released search_id=msi-motherboard
+2026-09-16 16:44:48 [info     ] queue_processor.processing_submission n_listings=40 query=Gigabyte motherboard -bundle -combo -laptop -"empty box" -"box only" -sticker -"io shield" -standoff -backplate -"bios chip" -"power cable" -"adapter card" -"power switch" search_id=gigabyte-motherboard submission_id=115364
+2026-09-16 16:44:48 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=40 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=0.3 excluded_auctions=0 new_listings=0
+2026-09-16 16:44:48 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=40 ingested=0 submission_id=115364
+2026-09-16 16:44:48 [info     ] queue_processor.submission_released search_id=gigabyte-motherboard
+2026-09-16 16:44:48 [info     ] queue_processor.processing_submission n_listings=14 query=DDR4 UDIMM -sodimm -laptop -"heatsink only" -sticker -"empty box" -"tray only" search_id=ddr4-udimm-ram submission_id=115365
+2026-09-16 16:44:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:52 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:54 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:55 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:58 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:44:59 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:00 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:01 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:03 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:04 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:05 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:06 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:08 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:12 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:15 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:16 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:18 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:19 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:23 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:24 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=4 cross_run_dupes_unchanged_price=32 elapsed_s=42.9 excluded_auctions=0 new_listings=0
+2026-09-16 16:45:24 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115343
+2026-09-16 16:45:25 [info     ] queue_processor.submission_released search_id=nvidia-gpu
+2026-09-16 16:45:25 [info     ] queue_processor.processing_submission n_listings=36 query=NVIDIA GPU -bundle -laptop -backplate -bracket -shroud -waterblock -"riser cable" -"extension cable" -"box only" -sticker -"mining frame" -poster -"cooling fan" -"replacement fan" search_id=nvidia-gpu submission_id=115350
+2026-09-16 16:45:25 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:27 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:28 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:29 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:30 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:31 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:32 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:34 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:36 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:37 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:38 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:39 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:45:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:45:41 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:42 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:42 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:43 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:45:44 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:45:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:45 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:47 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:45:47 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:48 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:49 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+Watch video
+2026-09-16 16:45:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:51 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:53 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=QUICK VIEW
+2026-09-16 16:45:53 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=0 cross_run_dupes_price_updated=12 cross_run_dupes_unchanged_price=24 elapsed_s=68.0 excluded_auctions=0 new_listings=0
+2026-09-16 16:45:53 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=0 ingested=0 submission_id=115322
+2026-09-16 16:45:53 [info     ] queue_processor.submission_released search_id=intel-cpu
+2026-09-16 16:45:53 [info     ] queue_processor.processing_submission n_listings=20 query=Intel CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=intel-cpu submission_id=115330
+2026-09-16 16:45:55 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Gaming Mini PC Intel i9-10885H GTX1650 GPU Windows
+2026-09-16 16:45:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=New Intel Hades Canyon NUC NUC8i7HVK NUC8i7HNK CPU
+2026-09-16 16:45:56 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=FAST WINDOWS 11 AIO 23IN SCREEN 1TB SSD 16GB RAM I
