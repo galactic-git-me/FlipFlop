@@ -572,3 +572,1418 @@ Origin Inception 1TB PCIE 4.0 NVMe M.2 3D T
 2026-09-16 18:28:06 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=8 ingested=0 submission_id=116705
 2026-09-16 18:28:06 [info     ] queue_processor.submission_released search_id=amd-cpu
 2026-09-16 18:28:06 [info     ] queue_processor.processing_submission n_listings=35 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116706
+2026-09-16 18:28:10 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=iBUYPOWER Trace Gaming PC Desktop Computer AMD Ryz
+2026-09-16 18:28:11 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=iBUYPOWER Element Gaming PC Desktop Computer AMD R
+2026-09-16 18:28:11 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=iBUYPOWER Trace Gaming PC Desktop Computer AMD Ryz
+2026-09-16 18:28:13 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|motherboard title=CyberPowerPC Gamer Supreme Liquid Cool GML70430 -
+2026-09-16 18:28:13 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=30 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=35 elapsed_s=6.8 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:13 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=30 ingested=0 submission_id=116706
+2026-09-16 18:28:13 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:28:13 [info     ] queue_processor.processing_submission n_listings=20 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116712
+2026-09-16 18:28:14 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Processors
+2026-09-16 18:28:14 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=19 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=19 elapsed_s=1.4 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:14 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=19 ingested=0 submission_id=116712
+2026-09-16 18:28:14 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:28:14 [info     ] queue_processor.processing_submission n_listings=35 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116713
+2026-09-16 18:28:17 [debug    ] cpk_extractor.invalid_category category=cpu|gpu title=Zotac GAMING MEK AI-Enhanced Gaming PC Desktop Com
+2026-09-16 18:28:17 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=34 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=35 elapsed_s=3.3 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:17 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=34 ingested=0 submission_id=116713
+2026-09-16 18:28:17 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:28:17 [info     ] queue_processor.processing_submission n_listings=10 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116718
+2026-09-16 18:28:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z600 Workstation
+2026-09-16 18:28:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z800 Workstation
+2026-09-16 18:28:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision T5810 Workstation
+2026-09-16 18:28:21 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision T7810 Workstation
+2026-09-16 18:28:22 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=.product-image-container-210441 {
+    width: 300px
+2026-09-16 18:28:22 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=5 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=4.8 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:22 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=5 ingested=0 submission_id=116718
+2026-09-16 18:28:22 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:28:22 [info     ] queue_processor.processing_submission n_listings=22 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116720
+2026-09-16 18:28:24 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=ARCTIC MX-7 (8 g) - Ultimate Performance Thermal P
+2026-09-16 18:28:24 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=21 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=22 elapsed_s=1.8 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:24 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=21 ingested=0 submission_id=116720
+2026-09-16 18:28:24 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:28:24 [info     ] queue_processor.processing_submission n_listings=36 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116721
+2026-09-16 18:28:26 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=ASRock DeskMeet X600 Series Barebone mini PC
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+2026-09-16 18:28:28 [debug    ] cpk_extractor.invalid_category category=cpu|gpu|motherboard title=GIGABYTE AORUS PRIME 5 Gaming Desktop PC, AMD Ryze
+2026-09-16 18:28:28 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=34 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=36 elapsed_s=3.7 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:28 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=34 ingested=0 submission_id=116721
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59050 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59052 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59055 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59056 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59058 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+2026-09-16 18:28:28 [info     ] queue_processor.submission_released search_id=amd-cpu
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59052 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59055 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59049 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59056 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59048 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+2026-09-16 18:28:28 [info     ] queue_processor.processing_submission n_listings=36 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116727
+INFO:     127.0.0.1:59052 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:28:29 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=36 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=35 elapsed_s=0.9 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:29 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=36 ingested=0 submission_id=116727
+2026-09-16 18:28:29 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:28:29 [info     ] queue_processor.processing_submission n_listings=21 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116728
+2026-09-16 18:28:29 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=21 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=21 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:29 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=21 ingested=0 submission_id=116728
+2026-09-16 18:28:29 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:28:29 [info     ] queue_processor.processing_submission n_listings=10 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116731
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:28:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z440 Workstation
+2026-09-16 18:28:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z240 Workstation
+2026-09-16 18:28:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP Z840 Workstation
+2026-09-16 18:28:33 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision T7820 Workstation
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:28:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell Precision 7865 Workstation
+2026-09-16 18:28:35 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lenovo ThinkStation P360 Workstation
+2026-09-16 18:28:35 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=4 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=10 elapsed_s=5.5 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:35 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=4 ingested=0 submission_id=116731
+2026-09-16 18:28:35 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:28:35 [info     ] queue_processor.processing_submission n_listings=35 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116734
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59788 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59789 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59790 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59796 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59795 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59794 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:28:39 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=34 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=35 elapsed_s=4.0 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:39 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=34 ingested=0 submission_id=116734
+2026-09-16 18:28:39 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:28:39 [info     ] queue_processor.processing_submission n_listings=19 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116735
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:28:39 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=19 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=19 elapsed_s=0.1 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:39 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=19 ingested=0 submission_id=116735
+2026-09-16 18:28:39 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:28:39 [info     ] queue_processor.processing_submission n_listings=19 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116742
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+2026-09-16 18:28:40 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Processors
+2026-09-16 18:28:40 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=18 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=19 elapsed_s=1.2 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:40 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=18 ingested=0 submission_id=116742
+2026-09-16 18:28:40 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:28:40 [info     ] queue_processor.processing_submission n_listings=10 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116743
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:28:42 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Lenovo ThinkStation P920 Workstation
+2026-09-16 18:28:42 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=9 cross_run_dupes_price_updated=2 cross_run_dupes_unchanged_price=8 elapsed_s=1.7 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:42 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=9 ingested=0 submission_id=116743
+2026-09-16 18:28:42 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:28:42 [info     ] queue_processor.processing_submission n_listings=40 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116747
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58176 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58175 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58174 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58180 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58181 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58182 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58180 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58182 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58181 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58184 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58180 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+2026-09-16 18:28:45 [debug    ] browser_pool.acquired          cap=1 engine=playwright
+2026-09-16 18:28:46 [info     ] ebay_sales_tracker.poll_complete found=0 matched=0 updated=0
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:28:46 [info     ] bestsellers.scraping           page=1 url=https://www.amazon.co.uk/Best-Sellers-Computers-Accessories-Computer-Cases/zgbs/computers/430498031/
+2026-09-16 18:28:46 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=38 cross_run_dupes_price_updated=0 cross_run_dupes_unchanged_price=40 elapsed_s=4.6 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:46 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=38 ingested=0 submission_id=116747
+2026-09-16 18:28:46 [info     ] queue_processor.submission_released search_id=amd-cpu
+2026-09-16 18:28:46 [info     ] queue_processor.processing_submission n_listings=10 query=AMD CPU -bundle -combo -laptop -"cooler only" -"box only" -"heatsink only" -bracket -mount -sticker -keychain -"cooling fan" -"replacement fan" -"motherboard set" -"processor cooler" search_id=amd-cpu submission_id=116753
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:28:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=.product-image-container-215295 {
+    width: 300px
+2026-09-16 18:28:50 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=Dell PowerEdge R7425 2U Rack Server
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:28:51 [info     ] bestsellers.extracted          count=30 page=1
+2026-09-16 18:28:51 [info     ] bestsellers.scraping           page=2 url=https://www.amazon.co.uk/Best-Sellers-Computers-Accessories-Computer-Cases/zgbs/computers/430498031/?pg=2
+2026-09-16 18:28:51 [debug    ] cpk_extractor.low_confidence   confidence=0.5 title=HP EliteOne/ProOne 600 G2 AIO/705 G2 AIO/800 G2 AI
+2026-09-16 18:28:51 [info     ] diag.scan.phase1_ingest_done   cpk_assigned=7 cross_run_dupes_price_updated=1 cross_run_dupes_unchanged_price=9 elapsed_s=4.6 excluded_auctions=0 new_listings=0
+2026-09-16 18:28:51 [info     ] queue_processor.submission_completed catalogue_cases_upserted=0 cpk_assigned=7 ingested=0 submission_id=116753
+2026-09-16 18:28:51 [info     ] queue_processor.submission_released search_id=amd-cpu
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:28:53 [info     ] phase2_trigger.queue_drained_running_phase2
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:28:54 [info     ] bestsellers.extracted          count=30 page=2
+INFO:     127.0.0.1:61654 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61655 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61656 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61662 - "GET /api/public/reviews HTTP/1.1" 200 OK
+2026-09-16 18:28:55 [error    ] bestsellers.error              error=(sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column parts.rrp does not exist
+[SQL: SELECT parts.id, parts.name, parts.brand, parts.model, parts.category, parts.specs, parts.source_site, parts.source_url, parts.condition, parts.price, parts.price_new, parts.price_used, parts.price_refurb, parts.rrp, parts.image_url, parts.theme, parts.form_factors, parts.keywords, parts.selection_count, parts.rating, parts.review_count, parts.sales_velocity, parts.bestseller_rank, parts.has_3d_model, parts.resale_value_add, parts.is_active, parts.last_price_update, parts.created_at, parts.claude_verdict, parts.claude_reasoning, parts.claude_confidence, parts.claude_judged_at 
+FROM parts 
+WHERE parts.category = $1::partcategory AND parts.source_site = $2::VARCHAR]
+[parameters: ('case', 'Amazon')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61660 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61661 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:28:55 [debug    ] browser_pool.released
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55851 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55850 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55849 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55855 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55856 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55857 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:29:09 [warning  ] ebay_catalog_cache.redis_url_not_configured
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:29:09 [warning  ] ebay_catalog.get_product_failed epid=1423241924 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55867 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55871 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:29:14 [warning  ] ebay_catalog.get_product_failed epid=27012667008 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64914 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64915 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64916 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64922 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64920 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64921 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64914 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64915 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:29:19 [warning  ] ebay_catalog.get_product_failed epid=2256039113 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:29:20 [warning  ] ebay_catalog.get_product_failed epid=23063751086 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:29:22 [warning  ] ebay_catalog.get_product_failed epid=22032588447 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:29:24 [warning  ] ebay_catalog.get_product_failed epid=22060653182 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58170 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58177 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58178 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58188 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58186 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58187 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:29:28 [warning  ] ebay_catalog.get_product_failed epid=2255284266 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+2026-09-16 18:29:30 [warning  ] ebay_catalog.get_product_failed epid=2256039113 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:29:33 [warning  ] ebay_catalog.get_product_failed epid=2133201568 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63707 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63708 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63709 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63715 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63714 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63713 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63707 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63708 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63709 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:29:42 [warning  ] ebay_catalog.get_product_failed epid=24011217776 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:29:43 [warning  ] ebay_catalog.get_product_failed epid=2256039113 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49327 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49328 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49329 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49331 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49327 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49338 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49337 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49335 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/market-snapshot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:29:49 [warning  ] ebay_catalog.get_product_failed epid=25037107771 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:29:52 [warning  ] ebay_catalog.get_product_failed epid=14097616404 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:29:53 [warning  ] ebay_catalog.get_product_failed epid=22060653182 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56606 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56608 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56609 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56617 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56616 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56615 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:29:55 [warning  ] ebay_catalog.get_product_failed epid=8018637797 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:29:57 [warning  ] ebay_catalog.get_product_failed epid=2256233271 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:29:58 [warning  ] ebay_catalog.get_product_failed epid=27012667008 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56625 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56626 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56625 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:30:02 [warning  ] ebay_catalog.get_product_failed epid=24065140734 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:30:03 [warning  ] ebay_catalog.get_product_failed epid=17067645721 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53295 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53297 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53298 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53304 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53303 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53302 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:30:09 [warning  ] ebay_catalog.get_product_failed epid=8051117924 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:30:14 [warning  ] ebay_catalog.get_product_failed epid=25037107771 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54686 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54685 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54684 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54692 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54690 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54691 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54690 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54691 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:30:17 [warning  ] ebay_catalog.get_product_failed epid=24031977695 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:30:18 [warning  ] ebay_catalog.get_product_failed epid=2256039113 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:30:23 [warning  ] ebay_catalog.get_product_failed epid=2256039113 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:30:23 [warning  ] ebay_catalog.get_product_failed epid=17059029488 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62459 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62460 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62461 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62469 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62468 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62463 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62467 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62459 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62460 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:30:25 [warning  ] ebay_catalog.get_product_failed epid=1239574122 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:30:26 [warning  ] ebay_catalog.get_product_failed epid=2256039113 status=403
+2026-09-16 18:30:27 [warning  ] ebay_catalog.get_product_failed epid=22066464028 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:30:28 [warning  ] ebay_catalog.get_product_failed epid=27012667008 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:30:29 [warning  ] ebay_catalog.get_product_failed epid=22066464028 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:30:30 [warning  ] ebay_catalog.get_product_failed epid=11064392108 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:30:33 [warning  ] ebay_catalog.get_product_failed epid=2315158212 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:30:34 [warning  ] ebay_catalog.get_product_failed epid=22060653182 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58657 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58658 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58659 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58666 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58665 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58664 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:30:37 [warning  ] ebay_catalog.get_product_failed epid=26052471756 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:30:39 [warning  ] ebay_catalog.get_product_failed epid=19059970950 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51765 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51766 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51767 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51773 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51771 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51765 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:51772 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51766 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51790 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51789 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51786 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:30:51 [warning  ] ebay_catalog.get_product_failed epid=17091132811 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50791 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50792 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50793 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50799 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50798 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50797 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:31:03 [warning  ] ebay_catalog.get_product_failed epid=875709669 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:31:04 [warning  ] ebay_catalog.get_product_failed epid=8088217145 status=403
+INFO:     127.0.0.1:56412 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56413 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56414 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56420 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56419 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56418 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:31:05 [warning  ] ebay_catalog.get_product_failed epid=14057273295 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:31:07 [warning  ] ebay_catalog.get_product_failed epid=24011217776 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:31:09 [warning  ] ebay_catalog.get_product_failed epid=15034196392 status=403
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53332 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53333 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53334 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53340 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53338 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53339 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53332 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53333 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53332 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53333 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53332 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62711 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62712 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62714 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62720 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62719 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62718 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52275 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52276 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52277 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52283 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52282 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52281 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62909 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62911 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62909 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61682 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61683 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61684 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61690 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61689 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61688 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61682 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61683 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/market-snapshot HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+2026-09-16 18:31:45 [debug    ] margin_verifier.worker_idle
+2026-09-16 18:31:45 [info     ] price_refresh.start
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rtx4060ti query=rtx 4060 ti graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rtx2060 query=rtx 2060 6gb graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_ram_32gb_ddr5 query=32gb ddr5 desktop ram kit 5600
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_case_rgb_atx query=rgb gaming pc case atx mid tower
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rx580 query=rx 580 8gb graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_wifi_card_pcie query=pcie wifi 6 card desktop
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_mobo_am5_x670 query=am5 x670 motherboard
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_ram_64gb_ddr4 query=64gb ddr4 desktop ram kit 3200
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rtx4070 query=rtx 4070 12gb graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_ssd_1tb_nvme query=1tb nvme m.2 ssd 2280
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=sys_i7_8 query=gaming pc i7 8700 desktop tower
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_cpu_cooler_air query=cpu air cooler tower 120mm
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_mobo_am4_x570 query=am4 x570 motherboard
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_psu_750w query=750w 80 plus gold psu modular
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_case_mini_itx query=mini itx gaming case rgb
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_ram_64gb_ddr5 query=64gb ddr5 desktop ram kit 5600
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_gpu_rtx3060 query=rtx 3060 12gb graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_keyboard_rgb query=rgb gaming keyboard mechanical
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rtx4080 query=rtx 4080 16gb graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rtx2070 query=rtx 2070 8gb graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_mouse_gaming query=gaming mouse rgb
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=resale_keyboard_rgb query=rgb gaming keyboard mechanical used
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_cpu_cooler_120mm query=120mm aio liquid cooler
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=resale_case_mini_itx query=mini itx gaming case used
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=sys_i5_8 query=gaming pc i5 8400 desktop tower
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=resale_monitor_1080p query=24 inch 1080p 144hz gaming monitor used
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=resale_ram_32gb_ddr4 query=32gb ddr4 desktop ram kit used
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rx7900xtx query=rx 7900 xtx graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rx6600xt query=rx 6600 xt graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=sys_i7_10 query=gaming pc i7 10700 desktop tower
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rtx3060ti query=rtx 3060 ti graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_gtx1660super query=gtx 1660 super graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_case_rgb_mesh query=mesh gaming pc case argb mid tower
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rtx3080 query=rtx 3080 10gb graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=sys_i9_9 query=gaming pc i9 9900 desktop tower
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=sys_i7_14 query=gaming pc i7 14700 desktop tower
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=sys_i5_9 query=gaming pc i5 9600 desktop tower
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_gtx1060_6gb query=gtx 1060 6gb graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rtx3090 query=rtx 3090 24gb graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=sys_i7_13 query=gaming pc i7 13700 desktop tower
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=resale_mobo_am5_x670 query=am5 x670 motherboard used
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=sys_r9_3900 query=gaming pc ryzen 9 3900x desktop
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_gtx1070 query=gtx 1070 8gb graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_monitor_1080p query=24 inch 1080p gaming monitor 144hz
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=sys_r9_7900 query=gaming pc ryzen 9 7900x desktop
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rx5700xt query=rx 5700 xt graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_mobo_am5_b650 query=am5 b650 motherboard
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=sys_r5_5600 query=gaming pc ryzen 5 5600 desktop
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_psu_650w query=650w 80 plus bronze psu modular
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=sys_i5_12 query=gaming pc i5 12400 desktop tower
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_gtx1660ti query=gtx 1660 ti graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=resale_mobo_am5_b650 query=am5 b650 motherboard used
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=resale_ram_64gb_ddr5 query=64gb ddr5 desktop ram kit used
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rx7700xt query=rx 7700 xt graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_gpu_rx6700xt query=rx 6700 xt graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=sys_r7_3700 query=gaming pc ryzen 7 3700x desktop
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=resale_case_mesh_argb query=mesh argb gaming case used
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=sys_r5_9600 query=gaming pc ryzen 5 9600x desktop
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rx6600 query=rx 6600 8gb graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=sys_r7_5800 query=gaming pc ryzen 7 5800x desktop
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=resale_monitor_1440p query=27 inch 1440p 144hz gaming monitor used
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=sys_r9_5900 query=gaming pc ryzen 9 5900x desktop
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rx7900xt query=rx 7900 xt graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rx6700xt query=rx 6700 xt graphics card
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=cost_ssd_2tb_nvme query=2tb nvme m.2 ssd 2280
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=resale_mobo_am4_x570 query=am4 x570 motherboard used
+2026-09-16 18:31:46 [warning  ] price_refresh.no_comps         key=gpu_rtx2080 query=rtx 2080 8gb graphics card
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=sys_i7_12 query=gaming pc i7 12700 desktop tower
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=cost_gpu_rtx4060 query=rtx 4060 8gb graphics card
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=cost_headset_gaming query=gaming headset usb rgb
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=gpu_gtx1080ti query=gtx 1080 ti graphics card
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=gpu_rx7800xt query=rx 7800 xt graphics card
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=sys_r5_3600 query=gaming pc ryzen 5 3600 desktop
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=gpu_rtx3060 query=rtx 3060 12gb graphics card
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=sys_i5_14 query=gaming pc i5 14600 desktop tower
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=sys_r7_9700 query=gaming pc ryzen 7 9700x desktop
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=sys_r7_7700 query=gaming pc ryzen 7 7700x desktop
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=cost_ram_32gb_ddr4 query=32gb ddr4 desktop ram kit 3200
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=resale_ram_32gb_ddr5 query=32gb ddr5 desktop ram kit used
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=gpu_rx6800 query=rx 6800 16gb graphics card
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=gpu_gtx1080 query=gtx 1080 8gb graphics card
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=gpu_rtx4070super query=rtx 4070 super graphics card
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=gpu_rx6750xt query=rx 6750 xt graphics card
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=sys_i7_9 query=gaming pc i7 9700 desktop tower
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=resale_aio_120mm query=120mm aio liquid cpu cooler used
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=gpu_rx7600 query=rx 7600 8gb graphics card
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=gpu_rx6900xt query=rx 6900 xt graphics card
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=resale_headset_gaming query=gaming headset used
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=gpu_rtx4060 query=rtx 4060 8gb graphics card
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=sys_r5_7600 query=gaming pc ryzen 5 7600 desktop
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=resale_aio_240mm query=240mm aio liquid cpu cooler used
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=gpu_rtx3070 query=rtx 3070 8gb graphics card
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=resale_ram_64gb_ddr4 query=64gb ddr4 desktop ram kit used
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=cost_mobo_am4_b550 query=am4 b550 motherboard
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=gpu_rx6800xt query=rx 6800 xt graphics card
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=cost_monitor_1440p query=27 inch 1440p gaming monitor 144hz
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=resale_case_atx_rgb query=rgb gaming pc case atx used
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=resale_mobo_am4_b550 query=am4 b550 motherboard used
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=sys_i5_10 query=gaming pc i5 10400 desktop tower
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=sys_i5_13 query=gaming pc i5 13600 desktop tower
+2026-09-16 18:31:47 [warning  ] price_refresh.no_comps         key=resale_mouse_gaming query=gaming mouse used
+2026-09-16 18:31:48 [warning  ] price_refresh.no_comps         key=sys_r9_7950 query=gaming pc ryzen 9 7950x desktop
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64594 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64595 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64596 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64602 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64601 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64600 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49830 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49831 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49832 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49838 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49837 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49836 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49831 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49830 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49832 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59898 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59899 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59900 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59906 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59905 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59898 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:59904 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59899 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57334 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57335 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57336 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57342 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57341 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57340 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63926 - "GET /api/playbooks/proposals?status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63932 - "GET /api/price-alerts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63931 - "GET /api/alerts?limit=100&include_acked=false HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49297 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49298 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49299 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49305 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49304 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49303 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62920 - "GET /api/public/reviews HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62918 - "GET /api/public/playbooks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62924 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62925 - "GET /api/preflight/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62926 - "GET /api/gem-radar/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62919 - "GET /api/public/showcase-builds HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62924 - "GET /api/settings HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-schedule-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62925 - "GET /api/settings/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scored-listings-latest-run?environment=DEV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/gem-by-component HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/scan-lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/pipeline-status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:0 - "GET /api/gem-radar/queue-items HTTP/1.1" 200 OK
