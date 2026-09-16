@@ -205,6 +205,30 @@ async def list_variants(
         for row in review_result
     }
 
+    # Reuse the sourcing dashboard's latest scored decision surface so the
+    # catalogue shows the same condition, economics, class, decision and
+    # evidence for each retained listing.
+    listing_keys = {
+        l.external_id.split("|")[1]
+        if l.external_id.startswith("ebay_v1|") and "|" in l.external_id
+        else l.external_id
+        for _, l, _ in rows
+    }
+    scored_result = await db.execute(
+        text("""
+            SELECT DISTINCT ON (listing_id)
+                   listing_id, url, condition, delivered_price,
+                   market_lower_price, market_median_price, market_upper_price,
+                   pct_offset, classification, decision, confidence_band,
+                   evidence_status, evidence_reason, deal_score
+            FROM gem_radar_scored_listings
+            WHERE listing_id = ANY(:listing_ids)
+            ORDER BY listing_id, scored_at DESC NULLS LAST, id DESC
+        """),
+        {"listing_ids": list(listing_keys)},
+    ) if listing_keys else []
+    scored_by_item = {row.listing_id: row for row in scored_result}
+
     market_prices_by_cpk = {}
     cpk_ids = {cpk for cpk in cpk_by_item.values() if cpk}
     if cpk_ids:
@@ -224,6 +248,18 @@ async def list_variants(
             "market_lower_price": getattr(market_prices_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1]) if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None), "min_price", None),
             "market_median_price": getattr(market_prices_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1]) if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None), "median_price", None),
             "market_upper_price": getattr(market_prices_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1]) if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None), "max_price", None),
+            "url": (scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id).url or l.url),
+            "condition": (scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id).condition if scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id) else l.condition),
+            "delivered_price": (scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id).delivered_price if scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id) else l.price),
+            "scored_market_lower_price": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "market_lower_price", None),
+            "scored_market_median_price": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "market_median_price", None),
+            "scored_market_upper_price": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "market_upper_price", None),
+            "pct_offset": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "pct_offset", None),
+            "classification": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "classification", None),
+            "decision": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "decision", None),
+            "confidence": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "confidence_band", None),
+            "evidence_status": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "evidence_status", None),
+            "evidence_reason": getattr(scored_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else l.external_id), "evidence_reason", None),
             "slot_type": s.slot_type,
             "playbook_id": s.playbook_id,
             "status": v.status,
