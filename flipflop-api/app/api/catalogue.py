@@ -113,6 +113,12 @@ async def list_variants(
     )
     if status:
         q = q.where(CatalogueVariant.status == status)
+    else:
+        # "All statuses" on the admin page means all current catalogue
+        # opportunities. Hidden rows are retained for audit/history and are
+        # available through the explicit Hidden filter, but must not inflate
+        # the headline product count or reintroduce stale legacy products.
+        q = q.where(CatalogueVariant.status != "hidden")
     if playbook_id:
         q = q.where(PlaybookSlot.playbook_id == playbook_id)
     if slot_type:
