@@ -21,7 +21,10 @@ if ($Action -eq 'Stop') {
     $running = @(Get-Content -LiteralPath $statePath -Raw | ConvertFrom-Json)
     $env:APP_ENV='development'
     $env:ENVIRONMENT='development'
-    $env:EBAY_LISTING_ENVIRONMENT='production'
+    # These are local DEV services. Never let the post-refresh restart send
+    # listing writes to the production eBay account.
+    $env:EBAY_ENVIRONMENT='production'
+    $env:EBAY_LISTING_ENVIRONMENT='sandbox'
     $env:PARCEL2GO_ENVIRONMENT='sandbox'
     $env:WEB_ONLY='true'
     foreach ($proc in $running) {

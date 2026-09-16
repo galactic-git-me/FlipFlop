@@ -138,7 +138,10 @@ print(json.dumps(d))
         # Prefer the copied seller connection rather than obsolete static tokens.
         for key in ['EBAY_PRODUCTION_REFRESH_TOKEN', 'EBAY_PRODUCTION_OAUTH_USER_TOKEN']:
             set_key(str(env_path), key, '')
-        set_key(str(env_path), 'EBAY_LISTING_ENVIRONMENT', 'production')
+        # This script only refreshes the disposable local DEV database.
+        # Keep market-data sourcing on production, but ensure every local
+        # listing/publish path uses the sandbox credentials and policies.
+        set_key(str(env_path), 'EBAY_LISTING_ENVIRONMENT', 'sandbox')
         set_key(str(env_path), 'WEB_ONLY', 'true')
         report['status'] = 'complete'
         print(f"Refresh complete. Production snapshot and report: {BACKUP}", flush=True)
