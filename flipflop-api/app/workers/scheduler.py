@@ -37,7 +37,7 @@ from app.workers.manual_build_lifecycle import (
 )
 from app.workers.message_poll import run_message_poll_job
 from app.workers.case_content_sourcing import run_case_content_sourcing
-from app.services.amazon_bestsellers import scrape_amazon_bestsellers
+from app.services.amazon_bestsellers import scrape_amazon_component_bestsellers
 from app.services.ai_build_generator import generate_ai_builds
 from app.services.email_monitor import EmailMonitor
 from app.services.ebay_sales_tracker import get_tracker as get_ebay_sales_tracker
@@ -318,9 +318,9 @@ def start_scheduler():
     scheduler.add_job(
         _run_job_with_history,
         trigger=IntervalTrigger(hours=settings.amazon_case_bestsellers_interval_hours),
-        id="amazon_case_bestsellers",
-        name="Amazon Case Best Sellers",
-        kwargs={"job_id": "amazon_case_bestsellers", "fn": scrape_amazon_bestsellers},
+        id="amazon_component_bestsellers",
+        name="Amazon Component Best Sellers",
+        kwargs={"job_id": "amazon_component_bestsellers", "fn": scrape_amazon_component_bestsellers},
         replace_existing=True,
         max_instances=1,
         next_run_time=now + timedelta(minutes=2),
@@ -710,7 +710,7 @@ async def trigger_swarm(swarm_id: str) -> dict:
     if swarm_id == "case_content_sourcing":
         return await _run_job_with_history("case_content_sourcing", run_case_content_sourcing)
     if swarm_id == "amazon_case_bestsellers":
-        return await _run_job_with_history("amazon_case_bestsellers", scrape_amazon_bestsellers)
+        return await _run_job_with_history("amazon_component_bestsellers", scrape_amazon_component_bestsellers)
     if swarm_id == "external_demand":
         return await _run_job_with_history("external_demand", ingest_external_demand_signals)
     if swarm_id == "playbook_evolution":

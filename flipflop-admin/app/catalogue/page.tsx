@@ -20,6 +20,7 @@ type Variant = {
   price_history_listing_id?: string | null; market_lower_price?: number | null; market_median_price?: number | null; market_upper_price?: number | null;
   cpk?: string | null; watch_count?: number | null; offer_count?: number | null; sold_count?: number | null; active_count?: number | null; sell_through_rate?: number | null;
   review_average_rating?: number | null; review_count?: number | null;
+  amazon_bestseller_rank?: number | null; amazon_bestseller_list?: string | null; amazon_bestseller_captured_at?: string | null;
   url?: string | null; condition?: string | null; delivered_price?: number | null;
   delivery_text?: string | null; delivery_postcode?: string | null;
   scored_market_lower_price?: number | null; scored_market_median_price?: number | null; scored_market_upper_price?: number | null;
@@ -146,6 +147,7 @@ export default function CataloguePage() {
           scored_market_upper_price: (row.market_upper_price as number | null) ?? null, pct_offset: (row.pct_offset as number | null) ?? null,
           watch_count: (row.watch_count as number | null) ?? null, offer_count: null, sold_count: (row.sold_listing_count as number | null) ?? null, active_count: (row.active_count as number | null) ?? null, sell_through_rate: (row.sell_through_rate as number | null) ?? (row.sell_through_rate_pct as number | null) ?? null,
           review_average_rating: (row.review_average_rating as number | null) ?? null, review_count: (row.review_count as number | null) ?? null,
+          amazon_bestseller_rank: (row.amazon_bestseller_rank as number | null) ?? null, amazon_bestseller_list: (row.amazon_bestseller_list as string | null) ?? null, amazon_bestseller_captured_at: (row.amazon_bestseller_captured_at as string | null) ?? null,
           url: (row.url as string | null) ?? null, condition: (row.condition as string | null) ?? null, delivered_price: (row.delivered_price as number | null) ?? null,
           delivery_text: (row.delivery_text as string | null) ?? null, delivery_postcode: (row.delivery_postcode as string | null) ?? null,
           classification: classificationLabel((row.classification as string | null) ?? null), decision: (row.decision as string | null) ?? null,

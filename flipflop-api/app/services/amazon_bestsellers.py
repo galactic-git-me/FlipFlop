@@ -18,6 +18,8 @@ import structlog
 from app.database import AsyncSessionLocal
 from app.models.case import Case
 from app.models.part import Part, PartCategory
+from app.models.amazon_bestseller_observation import AmazonBestsellerObservation
+from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.services.browser_pool import managed_playwright
 from app.swarms.cases import RawCase, _make_pw_context, _upsert_case, _upsert_case_new
 
@@ -27,6 +29,18 @@ BESTSELLER_URL = (
     "https://www.amazon.co.uk/Best-Sellers-Computers-Accessories-Computer-Cases/"
     "zgbs/computers/430498031/"
 )
+# Amazon's component bestseller pages.  The list name is stored with every
+# daily observation so the UI can explain exactly what a rank means.
+COMPONENT_BESTSELLER_LISTS = {
+    "cpu": ("CPUs", "https://www.amazon.co.uk/Best-Sellers-Computers-CPUs/zgbs/computers/229189/"),
+    "gpu": ("Graphics Cards", "https://www.amazon.co.uk/Best-Sellers-Computers-Graphics-Cards/zgbs/computers/284822/"),
+    "ram": ("Computer Memory", "https://www.amazon.co.uk/Best-Sellers-Computers-Computer-Memory/zgbs/computers/172500/"),
+    "storage": ("Internal Solid State Drives", "https://www.amazon.co.uk/Best-Sellers-Computers-Internal-Solid-State-Drives/zgbs/computers/430507031/"),
+    "motherboard": ("Motherboards", "https://www.amazon.co.uk/Best-Sellers-Computers-Motherboards/zgbs/computers/430500031/"),
+    "psu": ("Computer Power Supplies", "https://www.amazon.co.uk/Best-Sellers-Computers-Computer-Power-Supplies/zgbs/computers/1161760/"),
+    "cooler": ("Computer CPU Cooling Fans", "https://www.amazon.co.uk/Best-Sellers-Computers-CPU-Cooling-Fans/zgbs/computers/491286/"),
+    "case": ("Computer Cases", BESTSELLER_URL),
+}
 ASIN_RE = re.compile(r"/dp/([A-Z0-9]{10})", re.I)
 
 _EXTRACT_JS = """() => {
@@ -292,4 +306,112 @@ async def scrape_amazon_bestsellers() -> dict:
             await context.close()
             await browser.close()
 
+    return results
+
+
+def _best_scored_match(item: dict, rows: list[dict], category: str) -> dict | None:
+    """Match an Amazon product to the strongest current CPK row."""
+    candidates = [row for row in rows if (row["category"] or "").lower() == category]
+    asin = (item.get("asin") or "").upper()
+    for row in candidates:
+        if asin and asin in (row["url"] or "").upper():
+            return row
+    best = None
+    best_similarity = 0.66
+    for row in candidates:
+        similarity = name_similarity(item.get("title") or "", row["title"] or "")
+        if similarity > best_similarity:
+            best_similarity = similarity
+            best = row
+    return best
+
+
+async def scrape_amazon_component_bestsellers() -> dict:
+    """Capture daily Amazon bestseller ranks for all supported PC components.
+
+    Ranks are historical observations.  A current scored listing is matched
+    to an Amazon item by ASIN where possible, then conservatively by title and
+    category.  The CPK is stored on the observation, allowing every
+    marketplace listing for that product to inherit the same rank in the
+    catalogue.
+    """
+    results = {"scraped": 0, "matched": 0, "categories": 0, "errors": 0}
+    async with managed_playwright() as p:
+        browser, context = await _make_pw_context(p)
+        page = await context.new_page()
+        try:
+            async with AsyncSessionLocal() as db:
+                scored_rows = (await db.execute(
+                    select(
+                        GemRadarScoredListing.listing_id,
+                        GemRadarScoredListing.category,
+                        GemRadarScoredListing.cpk,
+                        GemRadarScoredListing.title,
+                        GemRadarScoredListing.url,
+                    ).where(GemRadarScoredListing.cpk.is_not(None))
+                )).mappings().all()
+                scored = [dict(row) for row in scored_rows]
+
+                for category, (list_name, base_url) in COMPONENT_BESTSELLER_LISTS.items():
+                    try:
+                        items: list[dict] = []
+                        for page_num in (1, 2):
+                            url = base_url if page_num == 1 else f"{base_url}?pg={page_num}"
+                            await page.goto(url, wait_until="domcontentloaded", timeout=45000)
+                            try:
+                                await page.wait_for_selector(
+                                    "#gridItemRoot, .zg-grid-general-faceout, div[data-asin]",
+                                    timeout=15000,
+                                )
+                            except Exception:
+                                pass
+                            await asyncio.sleep(2)
+                            items.extend(await page.evaluate(_EXTRACT_JS))
+
+                        unique: dict[str, dict] = {}
+                        for item in items:
+                            asin = (item.get("asin") or "").upper()
+                            if asin and (asin not in unique or item["rank"] < unique[asin]["rank"]):
+                                item["asin"] = asin
+                                unique[asin] = item
+
+                        for item in sorted(unique.values(), key=lambda value: value["rank"]):
+                            match = _best_scored_match(item, scored, category)
+                            db.add(AmazonBestsellerObservation(
+                                category=category,
+                                list_name=list_name,
+                                asin=item["asin"],
+                                title=item["title"],
+                                url=item.get("url"),
+                                image_url=item.get("image_url"),
+                                rank=int(item["rank"]),
+                                cpk=match["cpk"] if match else None,
+                                rating=item.get("rating"),
+                                review_count=item.get("review_count"),
+                            ))
+                            results["scraped"] += 1
+                            if match:
+                                results["matched"] += 1
+                                if item.get("rating") is not None or item.get("review_count") is not None:
+                                    # This also backfills the currently-held
+                                    # scored row, so the catalogue updates as
+                                    # soon as the daily bestseller job runs.
+                                    await db.execute(
+                                        update(GemRadarScoredListing)
+                                        .where(GemRadarScoredListing.cpk == match["cpk"])
+                                        .values(
+                                            review_average_rating=item.get("rating"),
+                                            review_count=item.get("review_count"),
+                                        )
+                                    )
+                        results["categories"] += 1
+                    except Exception as exc:
+                        log.warning("bestsellers.category_error", category=category, error=str(exc))
+                        results["errors"] += 1
+                await db.commit()
+        finally:
+            await page.close()
+            await context.close()
+            await browser.close()
+    log.info("bestsellers.components_complete", **results)
     return results

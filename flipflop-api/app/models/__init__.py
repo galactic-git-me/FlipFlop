@@ -35,6 +35,7 @@ from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.models.gem_radar_seller_profile import GemRadarSellerProfile
 from app.models.gem_radar_sold_observation import GemRadarSoldObservation
 from app.models.gem_radar_amazon_observation import GemRadarAmazonObservation
+from app.models.amazon_bestseller_observation import AmazonBestsellerObservation
 from app.models.gem_radar_scan_observation import GemRadarScanObservation
 from app.models.gem_radar_scan_run import GemRadarScanRun
 from app.models.gem_radar_listing_cpk import GemRadarListingCpk
@@ -99,6 +100,7 @@ __all__ = [
     "GemRadarSellerProfile",
     "GemRadarSoldObservation",
     "GemRadarAmazonObservation",
+    "AmazonBestsellerObservation",
     "GemRadarScanObservation",
     "GemRadarScanRun",
     "GemRadarListingCpk",

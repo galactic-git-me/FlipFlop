@@ -31,7 +31,7 @@ from app.config import get_settings
 from app.models import case as case_models
 from app.workers.queue_processor import process_submission_queue
 from app.workers.database_cleaner import run_database_cleaner
-from app.services.amazon_bestsellers import scrape_amazon_bestsellers
+from app.services.amazon_bestsellers import scrape_amazon_component_bestsellers
 
 
 async def _amazon_bestseller_loop() -> None:
@@ -40,7 +40,7 @@ async def _amazon_bestseller_loop() -> None:
     await asyncio.sleep(120)
     while True:
         try:
-            await scrape_amazon_bestsellers()
+            await scrape_amazon_component_bestsellers()
         except Exception:
             # The scraper logs its own failure; keep the worker alive for the
             # next daily attempt rather than turning a retailer outage into a

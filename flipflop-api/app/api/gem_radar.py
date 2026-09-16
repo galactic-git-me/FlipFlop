@@ -44,6 +44,7 @@ from app.gem_radar.cpk_market import upsert_listing_price
 from app.gem_radar.pipeline import score_listing
 from app.gem_radar import pipeline_status
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
+from app.models.amazon_bestseller_observation import AmazonBestsellerObservation
 from app.models.gem_radar_listing_cpk import GemRadarListingCpk
 from app.models.submission_queue import SubmissionQueue
 from app.gem_radar.purchases import create_provisional_purchase
@@ -1151,7 +1152,29 @@ async def get_scored_listings_latest_run(
             else:
                 product_reviews[cpk] = (rating, (old_count or 0) + count)
         elif count:
-            product_reviews[cpk] = (old_rating, (old_count or 0) + count)
+                product_reviews[cpk] = (old_rating, (old_count or 0) + count)
+
+    # Amazon bestseller rank is a product signal, not a marketplace-listing
+    # signal. Share the most recent rank for each CPK with every listing that
+    # carries that CPK, while retaining the exact list name for the tooltip.
+    bestseller_result = await db.execute(
+        text("""
+            SELECT DISTINCT ON (cpk)
+                   cpk, category, list_name, rank, captured_at
+            FROM amazon_bestseller_observations
+            WHERE cpk IS NOT NULL
+            ORDER BY cpk, captured_at DESC, id DESC
+        """)
+    )
+    bestseller_by_cpk = {
+        row.cpk: {
+            "amazon_bestseller_rank": row.rank,
+            "amazon_bestseller_list": row.list_name,
+            "amazon_bestseller_category": row.category,
+            "amazon_bestseller_captured_at": row.captured_at.isoformat() if row.captured_at else None,
+        }
+        for row in bestseller_result
+    }
 
     return [
         {
@@ -1174,6 +1197,12 @@ async def get_scored_listings_latest_run(
             "best_offer_enabled": observation_fields.get(s.listing_id, {}).get("best_offer_enabled", False),
             "review_average_rating": (product_reviews.get(s.cpk) or (s.review_average_rating, s.review_count))[0],
             "review_count": (product_reviews.get(s.cpk) or (s.review_average_rating, s.review_count))[1],
+            **bestseller_by_cpk.get(s.cpk, {
+                "amazon_bestseller_rank": None,
+                "amazon_bestseller_list": None,
+                "amazon_bestseller_category": None,
+                "amazon_bestseller_captured_at": None,
+            }),
             "classification": s.classification,
             "deal_score": s.deal_score,
             "confidence": s.confidence_band,
