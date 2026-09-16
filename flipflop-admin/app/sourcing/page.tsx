@@ -298,28 +298,18 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, label, color
             className="transition-all duration-500"
           />
         )}
-        {skippedLength > 0 && (
-          // Upstream failures occupy the same angular segment as the
-          // patterned failure segment in the preceding stage.
-          <circle
-            cx={30} cy={30} r={radius} stroke={color} strokeWidth={3} fill="none" opacity="0.9"
-            strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
-            strokeDashoffset={-skippedStartLength} strokeLinecap="butt" transform="rotate(-90 30 30)"
-            className="transition-all duration-500"
-          />
-        )}
         {failedLength > 0 && (
           <circle
             cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={gaugeStrokeWidth} fill="none"
             strokeDasharray={`${failedLength} ${circumference - failedLength}`}
-            strokeDashoffset={-(successfulLength + skippedLength)} strokeLinecap="butt" transform="rotate(-90 30 30)"
+            strokeDashoffset={-successfulLength} strokeLinecap="butt" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
           />
         )}
         {failedLength > 0 && (
           <line
             x1={30} y1={1.5} x2={30} y2={11.5} stroke="#020617" strokeWidth={1}
-            transform={`rotate(${((successfulLength + skippedLength) / circumference) * 360} 30 30)`}
+            transform={`rotate(${(successfulLength / circumference) * 360} 30 30)`}
           />
         )}
         {skippedLength > 0 && (
@@ -666,10 +656,11 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
 
   // The lock status endpoint identifies only the environment that holds the
   // lease, not its owner. A DEV run can therefore look like it is waiting on
-  // "another DEV" workload while this same dashboard is receiving fresh
-  // progress from that run. Live pipeline activity is the stronger signal.
+  // "another DEV" workload while this same dashboard is displaying that run.
+  // The cards remain visible through the phase-two hand-off, so their presence
+  // is the reliable signal that the operator already has a current run open.
   const scanIsProgressing =
-    displayedScans.some((scan) => !scan.isComplete || scan.activeSubmissions > 0) ||
+    displayedScans.length > 0 ||
     queueItems.some((item) => item.status === "pending" || item.status === "processing") ||
     Boolean(queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0));
 
@@ -841,27 +832,31 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
                       </div>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
+                      {(scan.superGemCount ?? 0) > 0 && (
+                        <span className="text-base font-bold text-amber-300 leading-none" title="Super Gems">
+                          SG {scan.superGemCount}
+                        </span>
+                      )}
+                      {(scan.gemCount ?? 0) > 0 && (
+                        <span className="text-base font-bold text-blue-300 leading-none" title="Gems">
+                          G {scan.gemCount}
+                        </span>
+                      )}
                       <span
                         className="text-base font-bold text-green-400 leading-none"
                         title="New listings ingested this run (not a duplicate of a previous run)"
                       >
                         +{scan.ingestedNewCount}
                       </span>
-                      <span className="text-xs font-bold text-amber-300 leading-none" title="Super Gems">
-                        SG {scan.superGemCount ?? 0}
-                      </span>
-                      <span className="text-xs font-bold text-blue-300 leading-none" title="Gems">
-                        G {scan.gemCount ?? 0}
-                      </span>
                       <span
                         title={isComplete ? "Complete" : scan.ingestedCount === 0 ? "Not started" : "Processing"}
                       >
                         {isComplete ? (
-                          <CheckCircle2 size={15} className="text-emerald-400" />
+                          <CheckCircle2 size={18} className="text-emerald-400" />
                         ) : scan.ingestedCount === 0 ? (
-                          <MinusCircle size={15} className="text-slate-500" />
+                          <MinusCircle size={18} className="text-slate-500" />
                         ) : (
-                          <Loader2 size={15} className="text-blue-400 animate-spin" />
+                          <Loader2 size={18} className="text-blue-400 animate-spin" />
                         )}
                       </span>
                     </div>
