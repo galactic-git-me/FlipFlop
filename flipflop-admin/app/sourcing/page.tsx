@@ -19,6 +19,7 @@ import {
   YAxis,
   ZAxis,
   CartesianGrid,
+  ReferenceLine,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
@@ -58,6 +59,9 @@ interface Listing {
   conservative_resale_price?: number | null;
   market_confidence?: number | null;
   market_sample_size?: number | null;
+  active_listing_count?: number | null;
+  sold_listing_count?: number | null;
+  sell_through_rate_pct?: number | null;
   market_source_diversity?: number | null;
   market_spread_pct?: number | null;
   liquidity_score?: number | null;
@@ -2314,38 +2318,83 @@ const DealScoreRoiChart = memo(function DealScoreRoiChart({ listings }: { listin
   );
 });
 
-function buildVariancePoints(listings: Listing[]): ScatterPoint[] {
-  return listings
-    .filter((l) => Number.isFinite(l.deal_score) && Number.isFinite(l.delivered_price) && l.delivered_price > 0 && Number.isFinite(l.market_median_price) && l.market_median_price! > 0)
-    .map((l) => ({
-      title: l.title,
-      dealScore: l.deal_score,
-      roiPercent: ((l.market_median_price! - l.delivered_price) / l.delivered_price) * 100,
-      roiPlotted: ((l.market_median_price! - l.delivered_price) / l.delivered_price) * 100,
-      profit: l.expected_profit ?? 0,
-      absProfit: Math.abs(l.expected_profit ?? 0),
-      classification: l.classification,
-    }));
+interface InsightPoint {
+  title: string;
+  x: number;
+  y: number;
+  bubble: number;
+  classification: string;
+  xLabel: string;
+  yLabel: string;
+  bubbleLabel: string;
+  xUnit?: string;
+  yUnit?: string;
+  bubbleUnit?: string;
 }
 
-const DealScorePriceVarianceChart = memo(function DealScorePriceVarianceChart({ listings }: { listings: Listing[] }) {
-  const points = useMemo(() => buildVariancePoints(listings), [listings]);
-  const yDomain = useMemo(() => computeRoiDomain(points.map((p) => p.roiPercent)), [points]);
-  const plottedPoints = useMemo(() => points.map((point) => ({ ...point, roiPlotted: Math.max(yDomain[0], Math.min(yDomain[1], point.roiPercent)) })), [points, yDomain]);
-  const byClassification = useMemo(() => CLASSIFICATION_ORDER.map((c) => ({ classification: c, data: plottedPoints.filter((p) => p.classification === c) })).filter((g) => g.data.length > 0), [plottedPoints]);
-  const pinnedCount = points.filter((point) => point.roiPercent < yDomain[0] || point.roiPercent > yDomain[1]).length;
+function priceVariancePercent(listing: Listing): number | null {
+  if (!Number.isFinite(listing.delivered_price) || listing.delivered_price <= 0 || !Number.isFinite(listing.market_median_price) || listing.market_median_price! <= 0) return null;
+  return ((listing.market_median_price! - listing.delivered_price) / listing.delivered_price) * 100;
+}
 
-  return <div className="p-4 bg-slate-800 rounded-lg border border-slate-700">
-    <div className="mb-3"><div className="text-sm text-slate-300">Deal Score vs Price Variance</div><div className="mt-0.5 text-xs text-slate-500">{points.length.toLocaleString()} listings with a settled market median. Positive values mean the market median is above the listing price{pinnedCount > 0 ? `; ${pinnedCount} extreme values are pinned to the chart edges.` : "."}</div></div>
-    {points.length === 0 ? <div className="flex h-[360px] items-center justify-center text-sm text-slate-400">No listings with market-median evidence yet.</div> : <ResponsiveContainer width="100%" height={360}>
-      <ScatterChart margin={{ top: 10, right: 20, bottom: 10, left: 0 }}>
+function buildInsightPoints(listings: Listing[], kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "watchesVariance" | "priceMedian"): InsightPoint[] {
+  return listings.flatMap((listing) => {
+    const variance = priceVariancePercent(listing);
+    const base = { title: listing.title, classification: listing.classification };
+    if (kind === "sellThrough" && variance !== null && Number.isFinite(listing.sell_through_rate_pct) && Number.isFinite(listing.sold_listing_count)) return [{ ...base, x: variance, y: listing.sell_through_rate_pct!, bubble: listing.sold_listing_count!, xLabel: "Price variance", yLabel: "Sell-through", bubbleLabel: "Sold comps", xUnit: "%", yUnit: "%" }];
+    if (kind === "profitRoi" && Number.isFinite(listing.expected_profit) && Number.isFinite(listing.roi_pct)) return [{ ...base, x: listing.expected_profit!, y: listing.roi_pct!, bubble: Math.max(0, listing.delivered_price), xLabel: "Expected profit", yLabel: "Model ROI", bubbleLabel: "Listing price", xUnit: "£", yUnit: "%", bubbleUnit: "£" }];
+    if (kind === "confidenceVariance" && variance !== null && Number.isFinite(listing.market_confidence)) return [{ ...base, x: listing.market_confidence!, y: variance, bubble: Math.max(0, listing.market_sample_size ?? 0), xLabel: "Market confidence", yLabel: "Price variance", bubbleLabel: "Comparable sample", xUnit: "/100", yUnit: "%" }];
+    if (kind === "watchesVariance" && variance !== null && Number.isFinite(listing.watch_count)) return [{ ...base, x: listing.watch_count!, y: variance, bubble: listing.best_offer_enabled ? 1 : 0, xLabel: "Watchers", yLabel: "Price variance", bubbleLabel: "Best offer", xUnit: "", yUnit: "%" }];
+    if (kind === "priceMedian" && Number.isFinite(listing.delivered_price) && listing.delivered_price > 0 && Number.isFinite(listing.market_median_price) && listing.market_median_price! > 0) return [{ ...base, x: listing.delivered_price, y: listing.market_median_price!, bubble: Math.max(0, listing.expected_profit ?? 0), xLabel: "Listing price", yLabel: "Market median", bubbleLabel: "Expected profit", xUnit: "£", yUnit: "£", bubbleUnit: "£" }];
+    return [];
+  });
+}
+
+function insightDomain(values: number[], includeZero = true): [number, number] {
+  if (values.length === 0) return [0, 10];
+  const domain = computeRoiDomain(values);
+  return includeZero ? [Math.min(0, domain[0]), domain[1]] : domain;
+}
+
+function formatInsightValue(value: number, unit = "") {
+  const absoluteValue = Math.abs(value);
+  const formatted = absoluteValue >= 1000 ? absoluteValue.toLocaleString(undefined, { maximumFractionDigits: 0 }) : absoluteValue.toFixed(1);
+  return `${value < 0 ? "-" : ""}${unit === "£" ? "£" : ""}${formatted}${unit === "%" ? "%" : unit === "/100" ? "/100" : ""}`;
+}
+
+function InsightTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: InsightPoint }> }) {
+  if (!active || !payload?.length) return null;
+  const p = payload[0].payload;
+  return <div className="max-w-xs rounded border border-slate-600 bg-slate-900 p-3 text-xs">
+    <div className="mb-1 truncate font-semibold text-slate-100">{p.title}</div>
+    <div className="text-slate-300">{p.xLabel}: {formatInsightValue(p.x, p.xUnit)}</div>
+    <div className="text-slate-300">{p.yLabel}: {formatInsightValue(p.y, p.yUnit)}</div>
+    <div className="text-slate-300">{p.bubbleLabel}: {p.bubbleUnit === "£" ? formatInsightValue(p.bubble, "£") : p.bubbleLabel === "Best offer" ? (p.bubble ? "Enabled" : "Off") : p.bubble.toLocaleString()}</div>
+    <div className="mt-1 text-slate-500">{p.classification}</div>
+  </div>;
+}
+
+const InsightScatterChart = memo(function InsightScatterChart({ listings, kind, title, description, insight, diagonal = false }: { listings: Listing[]; kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "watchesVariance" | "priceMedian"; title: string; description: string; insight: string; diagonal?: boolean }) {
+  const points = useMemo(() => buildInsightPoints(listings, kind), [listings, kind]);
+  const xDomain = useMemo(() => insightDomain(points.map((point) => point.x)), [points]);
+  const yDomain = useMemo(() => diagonal ? xDomain : insightDomain(points.map((point) => point.y)), [diagonal, points, xDomain]);
+  const plottedPoints = useMemo(() => points.map((point) => ({ ...point, x: Math.max(xDomain[0], Math.min(xDomain[1], point.x)), y: Math.max(yDomain[0], Math.min(yDomain[1], point.y)) })), [points, xDomain, yDomain]);
+  const byClassification = useMemo(() => CLASSIFICATION_ORDER.map((classification) => ({ classification, data: plottedPoints.filter((point) => point.classification === classification) })).filter((group) => group.data.length > 0), [plottedPoints]);
+
+  return <div className="rounded-lg border border-slate-700 bg-slate-800 p-4">
+    <div className="mb-2"><div className="text-sm text-slate-300">{title}</div><div className="mt-0.5 text-xs text-slate-500">{description}</div></div>
+    {points.length === 0 ? <div className="flex h-[300px] items-center justify-center text-sm text-slate-400">Not enough data for this view yet.</div> : <ResponsiveContainer width="100%" height={300}>
+      <ScatterChart margin={{ top: 10, right: 18, bottom: 12, left: 0 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-        <XAxis type="number" dataKey="dealScore" name="Deal Score" stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 12 }} label={{ value: "Deal Score", position: "insideBottom", offset: -5, fill: "#94a3b8" }} />
-        <YAxis type="number" dataKey="roiPlotted" name="Price variance" unit="%" domain={yDomain} stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 12 }} label={{ value: "% vs Market Median", angle: -90, position: "insideLeft", fill: "#94a3b8" }} />
-        <Tooltip content={<ScatterTooltip metricLabel="Price variance" />} cursor={{ strokeDasharray: "3 3" }} />
+        <XAxis type="number" dataKey="x" domain={xDomain} name={points[0].xLabel} stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 11 }} label={{ value: points[0].xLabel, position: "insideBottom", offset: -5, fill: "#94a3b8" }} />
+        <YAxis type="number" dataKey="y" domain={yDomain} name={points[0].yLabel} stroke="#94a3b8" tick={{ fill: "#94a3b8", fontSize: 11 }} label={{ value: points[0].yLabel, angle: -90, position: "insideLeft", fill: "#94a3b8" }} />
+        {diagonal && <ReferenceLine segment={[{ x: xDomain[0], y: xDomain[0] }, { x: xDomain[1], y: xDomain[1] }]} stroke="#94a3b8" strokeDasharray="5 5" />}
+        <ZAxis type="number" dataKey="bubble" range={[35, 360]} name={points[0].bubbleLabel} />
+        <Tooltip content={<InsightTooltip />} cursor={{ strokeDasharray: "3 3" }} />
         {byClassification.map(({ classification, data }) => <Scatter key={classification} name={classification} data={data} fill={CLASSIFICATION_COLORS[classification]} fillOpacity={0.7} isAnimationActive={false} />)}
       </ScatterChart>
     </ResponsiveContainer>}
+    <div className="mt-2 border-t border-slate-700/70 pt-2 text-xs text-slate-400"><span className="font-semibold text-cyan-300">What to look for:</span> {insight}</div>
   </div>;
 });
 
@@ -2575,9 +2624,13 @@ const AnalyticsTab = memo(function AnalyticsTab({ listings }: { listings: Listin
   return (
     <div className="space-y-6">
       <ScanRunsOverTimeChart />
-      <div className="grid items-stretch gap-4 xl:grid-cols-2">
+      <div className="grid items-stretch gap-4 xl:grid-cols-2 2xl:grid-cols-3">
         <DealScoreRoiChart listings={listings} />
-        <DealScorePriceVarianceChart listings={listings} />
+        <InsightScatterChart listings={listings} kind="sellThrough" title="Price Variance vs Sell-through" description="Discount opportunity against observed market liquidity; bubble size is sold comparable count." insight="Upper-right points combine a meaningful discount with proven demand. A large discount with weak sell-through is a warning, not automatically a bargain." />
+        <InsightScatterChart listings={listings} kind="profitRoi" title="Expected Profit vs Model ROI" description="Absolute return against percentage return; bubble size is the listing price." insight="Top-right points are strongest on both measures. High ROI with tiny profit is a small-ticket opportunity; high profit with low ROI ties up more capital." />
+        <InsightScatterChart listings={listings} kind="confidenceVariance" title="Market Confidence vs Price Variance" description="How much the market supports the price gap; bubble size is comparable sample size." insight="Look for positive variance with high confidence. Large gaps supported by small samples or low confidence are the most likely false gems." />
+        <InsightScatterChart listings={listings} kind="watchesVariance" title="Watchers vs Price Variance" description="Buyer interest against the gap to market; bubble size indicates whether best offer is enabled." insight="A positive gap with many watchers is a demand-backed opportunity. High variance with no watchers suggests the price advantage may not convert." />
+        <InsightScatterChart listings={listings} kind="priceMedian" title="Listing Price vs Market Median" description="Direct price positioning; the dashed diagonal marks parity with the market median." insight="Points above the diagonal have a listing price below market. The farther above, the larger the discount; use classification colour and bubble profit to judge quality." diagonal />
       </div>
       <ClassificationLegend classifications={[...CLASSIFICATION_ORDER]} />
 
