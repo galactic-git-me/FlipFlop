@@ -106,11 +106,11 @@ function SourcingDetails({ variant: v }: { variant: Variant }) {
   const money = (value?: number | null) => value == null ? "—" : `£${value.toFixed(0)}`;
   const lower = v.scored_market_lower_price ?? v.market_lower_price;
   const upper = v.scored_market_upper_price ?? v.market_upper_price;
-  const range = lower == null || upper == null ? "—" : `${money(lower)}–${money(upper)}`;
+  const range = lower == null || upper == null ? "—" : `£${lower.toFixed(0)}–${upper.toFixed(0)}`;
   const variance = v.pct_offset == null ? "—" : `${v.pct_offset >= 0 ? "+" : "−"}${Math.abs(v.pct_offset).toFixed(0)}%`;
   return <div className="grid min-w-0 grid-cols-2 gap-x-3 gap-y-2 rounded-md border border-white/10 bg-black/20 px-3 py-2 text-[10px] sm:grid-cols-4 xl:grid-cols-8">
     <div className="min-w-0"><p className="text-slate-500">Condition</p><p className="mt-0.5 break-words font-semibold text-white">{v.condition ?? "—"}</p></div>
-    <div className="min-w-0"><p className="text-slate-500">Range</p><p className="mt-0.5 break-words font-mono text-slate-200">{range}</p></div>
+    <div className="min-w-0 xl:col-span-2"><p className="text-slate-500">Range</p><p className="mt-0.5 whitespace-nowrap font-mono text-slate-200">{range}</p></div>
     <div className="min-w-0"><p className="text-slate-500">Median</p><p className="mt-0.5 break-words font-mono text-orange-200">{money(v.scored_market_median_price ?? v.market_median_price)}</p></div>
     <div className="min-w-0"><p className="text-slate-500">vMed</p><p className={`mt-0.5 break-words font-mono font-semibold ${v.pct_offset != null && v.pct_offset < 0 ? "text-emerald-300" : "text-slate-200"}`}>{variance}</p></div>
     <div className="min-w-0"><p className="text-slate-500">Class</p><p className="mt-0.5 break-words font-semibold uppercase text-amber-200">{classificationLabel(v.classification)}</p></div>
