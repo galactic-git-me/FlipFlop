@@ -79,6 +79,26 @@ def infer_marketplace(url: str | None) -> str | None:
     return None
 
 
+def infer_listing_source(url: str | None, listing_id: str | None = None) -> str | None:
+    """Infer the source, including synthetic IDs used by aggregator cards.
+
+    Google Shopping results link to the merchant page rather than a Google
+    URL, so URL-only inference incorrectly classified them as unknown. The
+    extension's stable synthetic ID preserves that origin. A small number of
+    eBuyer cards can likewise have ``void(0)`` as their URL, while the
+    vendor-qualified ID still identifies the source.
+    """
+    source = infer_marketplace(url)
+    if source is not None:
+        return source
+    value = (listing_id or "").lower()
+    if value.startswith(("google-shopping:", "google_shopping:")):
+        return "google_shopping"
+    if value.startswith("ebuyer:"):
+        return "ebuyer"
+    return None
+
+
 def is_malformed_awdit_listing(url: str | None, title: str | None) -> bool:
     """Identify AWD cards where the scraper captured the discount badge.
 

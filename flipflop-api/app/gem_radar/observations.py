@@ -22,7 +22,7 @@ from sqlalchemy import func
 from app.models.gem_radar_observation import GemRadarListingObservation
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.models.app_settings import AppSettings
-from app.gem_radar.marketplace import infer_marketplace
+from app.gem_radar.marketplace import infer_listing_source
 from app.gem_radar.schemas import ExtractedListing, Identity, PriceBundle, PriceObservation, WatchSignals
 
 # Fallbacks used only if the app_settings row doesn't exist yet (fresh
@@ -325,7 +325,7 @@ async def record_observation(
         observed_at=listing.extracted_at.replace(tzinfo=None) if listing.extracted_at.tzinfo else listing.extracted_at,
         search_run_id=search_run_id,
         search_query=search_query,
-        source=infer_marketplace(listing.url),
+        source=infer_listing_source(listing.url, listing.listing_id),
         epid=listing.epid,
         gtin=listing.gtin,
         mpn=listing.mpn,

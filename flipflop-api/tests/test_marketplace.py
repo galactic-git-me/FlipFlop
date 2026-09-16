@@ -1,4 +1,20 @@
-from app.gem_radar.marketplace import fallback_listing_url, is_malformed_awdit_listing, usable_listing_url
+from app.gem_radar.marketplace import (
+    fallback_listing_url,
+    infer_listing_source,
+    is_malformed_awdit_listing,
+    usable_listing_url,
+)
+
+
+def test_infer_listing_source_uses_synthetic_aggregator_id_when_url_is_merchant_page():
+    assert infer_listing_source(
+        "https://box.co.uk/product/example",
+        "google-shopping:https%3A%2F%2Fbox.co.uk%2Fproduct%2Fexample:abc123",
+    ) == "google_shopping"
+
+
+def test_infer_listing_source_recovers_ebuyer_from_void_url_id():
+    assert infer_listing_source("javascript:void(0)", "ebuyer:void(0)") == "ebuyer"
 
 
 def test_awdit_discount_badge_is_not_a_listing() -> None:
