@@ -288,7 +288,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
         )}
         {failedLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={5} fill="none"
+            cx={30} cy={30} r={radius} stroke={`url(#${patternId})`} strokeWidth={7.5} fill="none"
             strokeDasharray={`${failedLength} ${circumference - failedLength}`}
             strokeDashoffset={-successfulLength} strokeLinecap="round" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
@@ -296,7 +296,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, label, color }: { value: n
         )}
         {skippedLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke={`url(#${patternId}-gradient)`} strokeWidth={2} fill="none" opacity="0.9"
+            cx={30} cy={30} r={radius} stroke={`url(#${patternId}-gradient)`} strokeWidth={7.5} fill="none" opacity="0.9"
             strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
             strokeDashoffset={-(successfulLength + failedLength)} strokeLinecap="round" transform="rotate(-90 30 30)"
             className="transition-all duration-500"
