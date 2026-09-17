@@ -149,6 +149,9 @@ function ManualPack({ source, channel }: { source: CrossListingSource; channel: 
 }
 
 type BrowserAssistJob = { source: CrossListingSource; channel: ChannelCapability };
+type ListingResult = { channel: string; status: string; message: string; url?: string; assist?: BrowserAssistJob };
+type BatchRun = { completedAt: string; results: ListingResult[] };
+const BATCH_HISTORY_KEY = "flipflop-cross-listing-batch-history";
 
 const sellerUrls: Partial<Record<CrossListingChannel, string>> = {
   onbuy: "https://seller.onbuy.com/",
@@ -206,13 +209,15 @@ export default function CrossListingPage() {
   const [draftDescription, setDraftDescription] = useState("");
   const [draftPrice, setDraftPrice] = useState("");
   const [publishing, setPublishing] = useState(false);
-  const [results, setResults] = useState<Array<{ channel: string; status: string; message: string; url?: string; assist?: BrowserAssistJob }>>([]);
+  const [results, setResults] = useState<ListingResult[]>([]);
+  const [batchHistory, setBatchHistory] = useState<BatchRun[]>([]);
   const [actions, setActions] = useState<Awaited<ReturnType<typeof api.crossListing.actions>>>([]);
 
   const channelCapabilities = useMemo(() => capabilities(connected, amazonConnected, amazonMessage), [connected, amazonConnected, amazonMessage]);
   const grouped = useMemo(() => groupListings(items), [items]);
   const selectedGroups = grouped.filter((item) => selected.has(item.id));
   const selectedItems = selectedGroups.map((group) => group.primary);
+  const focusedGroup = selectedGroups.length === 1 ? selectedGroups[0] : null;
   const filtered = useMemo(() => grouped.filter((item) => {
     const channelSources = destinations.map((channel) => item.byChannel[channel]).filter(Boolean) as CrossListingSource[];
     const matchesQuery = !query || `${item.title} ${item.buildId} ${channelSources.map((source) => source.externalId).join(" ")}`.toLowerCase().includes(query.toLowerCase());
@@ -245,6 +250,20 @@ export default function CrossListingPage() {
 
   useEffect(() => { void refresh(); }, [refresh]);
 
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(BATCH_HISTORY_KEY);
+      if (!stored) return;
+      const history = JSON.parse(stored) as BatchRun[];
+      if (Array.isArray(history) && history.length > 0) {
+        setBatchHistory(history);
+        setResults(history[0].results);
+      }
+    } catch {
+      // Ignore unavailable or invalid browser storage; the live session still works.
+    }
+  }, []);
+
   const openScheduledHandoff = (action: Awaited<ReturnType<typeof api.crossListing.actions>>[number]) => {
     const group = grouped.find((item) => item.buildId === action.build_id);
     if (!group) { setError(`Build ${action.build_id} is not available in the current listing view.`); return; }
@@ -263,6 +282,23 @@ export default function CrossListingPage() {
     filtered.forEach((item) => allSelected ? next.delete(item.id) : next.add(item.id)); return next;
   });
   const toggleDestination = (channel: CrossListingChannel) => setDestinations((current) => current.includes(channel) ? current.filter((item) => item !== channel) : [...current, channel]);
+  const selectListing = (item: GroupedListing) => {
+    const wasSelected = selected.has(item.id);
+    setSelected((current) => {
+      const next = new Set(current);
+      if (wasSelected) next.delete(item.id); else next.add(item.id);
+      return next;
+    });
+    if (!wasSelected) {
+      const needsListing = channelCapabilities
+        .filter((channel) => {
+          const status = item.byChannel[channel.channel]?.status ?? "unavailable";
+          return status === "unavailable" || status === "failed";
+        })
+        .map((channel) => channel.channel);
+      setDestinations(needsListing);
+    }
+  };
 
   const openReview = (item: CrossListingSource) => { setReviewId(item.id); setDraftTitle(item.listing.title); setDraftDescription(item.listing.description); setDraftPrice(item.listing.price == null ? "" : String(item.listing.price)); };
   const saveReview = () => { if (!review) return; setItems((current) => current.map((item) => item.buildId === review.buildId ? { ...item, listing: { ...item.listing, title: draftTitle, description: draftDescription, price: draftPrice ? Number(draftPrice) : null }, title: draftTitle, price: draftPrice ? Number(draftPrice) : null } : item)); setReviewId(null); };
@@ -272,7 +308,7 @@ export default function CrossListingPage() {
   const publish = async () => {
     if (!selectedItems.length || !destinations.length) return;
     setPublishing(true); setResults([]);
-    const nextResults: Array<{ channel: string; status: string; message: string; url?: string; assist?: BrowserAssistJob }> = [];
+    const nextResults: ListingResult[] = [];
     for (const item of selectedItems) for (const destination of destinations) {
       const capability = channelCapabilities.find((entry) => entry.channel === destination);
       if (!capability) continue;
@@ -309,7 +345,14 @@ export default function CrossListingPage() {
         }
       } catch (cause) { nextResults.push({ channel: capability.label, status: "failed", message: cause instanceof Error ? cause.message : "Provider request failed." }); }
     }
-    setResults(nextResults); setPublishing(false); await refresh();
+    const completedBatch: BatchRun = { completedAt: new Date().toISOString(), results: nextResults };
+    setResults(nextResults);
+    setBatchHistory((current) => {
+      const next = [completedBatch, ...current].slice(0, 20);
+      try { window.localStorage.setItem(BATCH_HISTORY_KEY, JSON.stringify(next)); } catch { /* best effort */ }
+      return next;
+    });
+    setPublishing(false); await refresh();
   };
 
   return <div className="mx-auto min-h-full max-w-[1500px] space-y-5 p-4 md:p-6 lg:p-8">
@@ -333,7 +376,8 @@ export default function CrossListingPage() {
 
     <section className="sticky bottom-3 z-20 rounded-xl border border-emerald-400/20 bg-[#0b121d]/95 p-4 shadow-2xl shadow-black/30 backdrop-blur"><div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between"><div className="min-w-0 flex-1"><div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-wider text-slate-400"><ShieldCheck className="h-4 w-4 text-emerald-300" /> Destination workflow</div><div className="flex flex-wrap gap-2">{channelCapabilities.map((channel) => <button key={channel.channel} onClick={() => toggleDestination(channel.channel)} className={`cursor-pointer rounded-md border px-3 py-2 text-xs transition-colors ${destinations.includes(channel.channel) ? "border-emerald-400/60 bg-emerald-400/10 text-emerald-200" : "border-slate-700 text-slate-400 hover:border-slate-500"}`}><span className="mr-1.5">{destinations.includes(channel.channel) ? "✓" : "○"}</span>{channel.label}</button>)}</div><div className="mt-2 text-xs text-slate-500">{selectedItems.length} source listing{selectedItems.length === 1 ? "" : "s"} × {destinations.length} destination{destinations.length === 1 ? "" : "s"} = {selectedItems.length * destinations.length} job{selectedItems.length * destinations.length === 1 ? "" : "s"}. Manual-only destinations remain manual_action_required.</div></div><div className="flex flex-wrap gap-2"><button onClick={downloadSelectedPacks} disabled={!selectedItems.length || !destinations.length} className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-slate-600 px-3 py-2.5 text-xs text-slate-200 hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-40"><ClipboardCopy className="h-4 w-4" /> Download manual packs</button><button onClick={() => { if (selectedItems.length && destinations.length && window.confirm(`Confirm ${selectedItems.length * destinations.length} cross-listing job(s)? API destinations may create or update live listings.`)) void publish(); }} disabled={publishing || !selectedItems.length || !destinations.length} className="inline-flex cursor-pointer items-center gap-2 rounded-md bg-emerald-400 px-4 py-2.5 text-xs font-semibold text-slate-950 transition-colors hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-40">{publishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}{publishing ? "Submitting…" : "Review & submit"}</button></div></div></section>
 
-    {results.length > 0 && <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4"><h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white"><CheckCircle2 className="h-4 w-4 text-emerald-300" /> Batch results</h2><div className="space-y-2">{results.map((result, index) => <div key={`${result.channel}-${index}`} className="flex flex-col gap-2 rounded border border-slate-800 bg-slate-900/50 p-3 text-xs md:flex-row md:items-center md:justify-between"><div><span className="font-medium text-slate-200">{result.channel}</span><span className={`ml-2 ${result.status === "failed" ? "text-red-300" : result.status === "manual_action_required" || result.status === "blocked_in_development" ? "text-yellow-300" : "text-emerald-300"}`}>{labelForStatus(result.status)}</span><div className="mt-1 text-slate-400">{result.message}</div></div><div className="flex shrink-0 flex-wrap gap-2">{result.assist && <button onClick={() => openBrowserAssist(result.assist!)} className="inline-flex items-center gap-1 rounded border border-emerald-400/40 px-2.5 py-1.5 font-medium text-emerald-300 hover:bg-emerald-400/10">Open Chrome + ask Codex to create listing <ExternalLink className="h-3 w-3" /></button>}{result.url && <a href={result.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-emerald-300 hover:underline">View listing <ExternalLink className="h-3 w-3" /></a>}</div></div>)}</div></section>}
+    {results.length > 0 && <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4"><h2 className="mb-1 flex items-center gap-2 text-sm font-semibold text-white"><CheckCircle2 className="h-4 w-4 text-emerald-300" /> Batch results</h2><p className="mb-3 text-[11px] text-slate-500">Saved locally so this report remains available when you return to Cross-listing.</p><div className="space-y-2">{results.map((result, index) => <div key={`${result.channel}-${index}`} className="flex flex-col gap-2 rounded border border-slate-800 bg-slate-900/50 p-3 text-xs md:flex-row md:items-center md:justify-between"><div><span className="font-medium text-slate-200">{result.channel}</span><span className={`ml-2 ${result.status === "failed" ? "text-red-300" : result.status === "manual_action_required" || result.status === "blocked_in_development" ? "text-yellow-300" : "text-emerald-300"}`}>{labelForStatus(result.status)}</span><div className="mt-1 text-slate-400">{result.message}</div></div><div className="flex shrink-0 flex-wrap gap-2">{result.assist && <button onClick={() => openBrowserAssist(result.assist!)} className="inline-flex items-center gap-1 rounded border border-emerald-400/40 px-2.5 py-1.5 font-medium text-emerald-300 hover:bg-emerald-400/10">Open Chrome + ask Codex to create listing <ExternalLink className="h-3 w-3" /></button>}{result.url && <a href={result.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-emerald-300 hover:underline">View listing <ExternalLink className="h-3 w-3" /></a>}</div></div>)}</div></section>}
+    {batchHistory.length > 1 && <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4"><h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white"><History className="h-4 w-4 text-emerald-300" /> Previous batch runs</h2><div className="space-y-2">{batchHistory.slice(1).map((batch) => <details key={batch.completedAt} className="rounded border border-slate-800 bg-slate-900/50 p-3 text-xs"><summary className="cursor-pointer text-slate-300">{new Date(batch.completedAt).toLocaleString("en-GB")} · {batch.results.filter((result) => result.status === "failed").length} failed / {batch.results.length} total</summary><div className="mt-3 space-y-1.5">{batch.results.map((result, index) => <div key={`${result.channel}-${index}`}><span className="text-slate-200">{result.channel}</span><span className={`ml-2 ${result.status === "failed" ? "text-red-300" : result.status === "manual_action_required" ? "text-yellow-300" : "text-emerald-300"}`}>{labelForStatus(result.status)}</span><span className="ml-2 text-slate-500">{result.message}</span></div>)}</div></details>)}</div></section>}
 
     {review && <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/75 p-3 backdrop-blur-sm md:items-center"><div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-xl border border-slate-700 bg-[#0e1724] p-5 shadow-2xl"><div className="flex items-start justify-between gap-4"><div><div className="text-xs uppercase tracking-wider text-emerald-300">Payload review · {review.source === "ebay_uk" ? "eBay UK" : "FlipFlop.shop"}</div><h2 className="mt-1 text-xl font-semibold text-white">{review.title}</h2><p className="mt-1 text-xs text-slate-500">Canonical build {review.buildId} · edits are local to this review until saved.</p></div><button aria-label="Close review" onClick={() => setReviewId(null)} className="cursor-pointer rounded p-1 text-slate-400 hover:bg-slate-800 hover:text-white"><X className="h-5 w-5" /></button></div><div className="mt-5 grid gap-4 md:grid-cols-2"><label className="text-xs text-slate-400">Title<input value={draftTitle} onChange={(event) => setDraftTitle(event.target.value)} maxLength={80} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white outline-none focus:border-emerald-400/60" /><span className="mt-1 block text-right text-[10px] text-slate-500">{draftTitle.length}/80</span></label><label className="text-xs text-slate-400">Price (GBP)<input type="number" min="0" step="0.01" value={draftPrice} onChange={(event) => setDraftPrice(event.target.value)} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white outline-none focus:border-emerald-400/60" /></label></div><label className="mt-2 block text-xs text-slate-400">Description<textarea value={draftDescription} onChange={(event) => setDraftDescription(event.target.value)} rows={8} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm leading-6 text-slate-200 outline-none focus:border-emerald-400/60" /><span className="mt-1 block text-right text-[10px] text-slate-500">{draftDescription.length} characters</span></label><div className="mt-4 rounded-lg border border-slate-700/80 bg-slate-900/50 p-3"><div className="mb-2 text-xs uppercase tracking-wider text-slate-500">Copied and transformed</div><div className="grid gap-2 text-xs text-slate-300 md:grid-cols-2"><div>✓ {review.listing.images.length} public image URL{review.listing.images.length === 1 ? "" : "s"}</div><div>✓ {Object.keys(review.listing.specifications).length} specification fields</div><div>✓ Shared price, stock and condition</div><div>⚠ Platform category and item specifics require destination validation</div></div></div><div className="mt-5 flex flex-wrap justify-end gap-2"><ManualPack source={{ ...review, listing: { ...review.listing, title: draftTitle, description: draftDescription, price: draftPrice ? Number(draftPrice) : null } }} channel={channelCapabilities[0]} /><button onClick={() => setReviewId(null)} className="cursor-pointer rounded-md border border-slate-600 px-4 py-2 text-sm text-slate-200 hover:border-slate-400">Cancel</button><button onClick={saveReview} className="cursor-pointer rounded-md bg-emerald-400 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-emerald-300">Save review edits</button></div></div></div>}
   </div>;
