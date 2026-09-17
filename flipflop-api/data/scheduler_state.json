@@ -9,7 +9,7 @@
     "last_success_at": "2026-09-17T10:33:13.774250+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-09-17T10:34:13.363871+00:00"
+    "last_success_at": "2026-09-17T10:39:13.464250+00:00"
   },
   "ai_build_generator": {
     "last_success_at": "2026-09-17T09:45:47.590171+00:00"
@@ -81,10 +81,10 @@
     "last_success_at": "2026-09-17T05:13:30.347764+00:00"
   },
   "cross_listing_recreate": {
-    "last_success_at": "2026-09-17T10:33:42.970561+00:00"
+    "last_success_at": "2026-09-17T10:38:42.963899+00:00"
   },
   "delivery_followup": {
-    "last_success_at": "2026-09-17T10:33:58.274450+00:00"
+    "last_success_at": "2026-09-17T10:38:58.011280+00:00"
   },
   "amazon_component_bestsellers": {
     "last_success_at": "2026-09-17T08:40:53.529196+00:00"
