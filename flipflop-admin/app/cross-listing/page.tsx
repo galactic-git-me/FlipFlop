@@ -214,17 +214,20 @@ type ChannelSchedule = Awaited<
 >[number];
 
 function normalizeScheduleChannel(channel: string): CrossListingChannel | null {
+  const normalized = channel.trim().toLowerCase().replace(/[\s.-]+/g, "_");
   const aliases: Record<string, CrossListingChannel> = {
     ebay: "ebay_uk",
     ebay_uk: "ebay_uk",
     storefront: "flipflop_shop",
     flipflop_shop: "flipflop_shop",
+    flipflop: "flipflop_shop",
     onbuy: "onbuy",
     amazon: "amazon",
     facebook_catalog: "facebook_catalog",
+    facebook: "facebook_catalog",
     vinted: "vinted",
   };
-  return aliases[channel.toLowerCase()] ?? null;
+  return aliases[normalized] ?? null;
 }
 
 function scheduleStatus(status: string): CrossListingSource["status"] {
@@ -243,6 +246,29 @@ function scheduleStatus(status: string): CrossListingSource["status"] {
     return "draft";
   if (status === "failed") return "failed";
   if (["withdrawn", "cancelled", "ended"].includes(status)) return "ended";
+  return "unavailable";
+}
+
+function batchResultStatus(status: string): CrossListingSource["status"] {
+  if (["published", "active", "updated", "success"].includes(status)) {
+    return "live";
+  }
+  if (
+    [
+      "draft",
+      "scheduled",
+      "manual_action_required",
+      "blocked_in_development",
+      "queued",
+      "publishing",
+    ].includes(status)
+  ) {
+    return "draft";
+  }
+  if (status === "failed") return "failed";
+  if (["withdrawn", "cancelled", "ended", "sold"].includes(status)) {
+    return status === "sold" ? "sold" : "ended";
+  }
   return "unavailable";
 }
 
@@ -795,7 +821,45 @@ export default function CrossListingPage() {
     [connected, amazonConnected, amazonMessage]
   );
   const tableChannels = channelCapabilities.map((channel) => channel.channel);
-  const grouped = useMemo(() => groupListings(items), [items]);
+  const displayItems = useMemo(() => {
+    if (!results.length) return items;
+
+    const next = [...items];
+    for (const result of results) {
+      if (result.buildId == null) continue;
+      const channel = normalizeScheduleChannel(result.channel);
+      if (!channel) continue;
+
+      const existingIndex = next.findIndex(
+        (source) => source.buildId === result.buildId && (source.channel ?? source.source) === channel
+      );
+      const existing = existingIndex >= 0 ? next[existingIndex] : undefined;
+      const base =
+        existing ??
+        next.find((source) => source.buildId === result.buildId) ??
+        null;
+      if (!base) continue;
+
+      const source: CrossListingSource = {
+        ...base,
+        id: existing?.id ?? `${channel}:${result.buildId}`,
+        channel,
+        source: channel === "ebay_uk" ? "ebay_uk" : "flipflop_shop",
+        externalId: existing?.externalId ?? "not-created",
+        status: batchResultStatus(result.status),
+        url: result.url ?? existing?.url ?? null,
+        error:
+          result.status === "failed"
+            ? result.message || "The vendor rejected the listing without returning an error message."
+            : null,
+      };
+
+      if (existingIndex >= 0) next[existingIndex] = source;
+      else next.push(source);
+    }
+    return next;
+  }, [items, results]);
+  const grouped = useMemo(() => groupListings(displayItems), [displayItems]);
   const selectedGroups = grouped.filter((item) => selected.has(item.id));
   const selectedItems = selectedGroups.map((group) => group.primary);
   const focusedGroup = selectedGroups.length === 1 ? selectedGroups[0] : null;
