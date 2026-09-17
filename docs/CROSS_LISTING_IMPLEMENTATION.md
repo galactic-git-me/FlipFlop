@@ -2,7 +2,7 @@
 
 ## Current capability boundary
 
-The admin cross-listing screen is intentionally backed by the existing `manual-builds` API. A build is the canonical product record; eBay listing IDs/status and storefront product IDs are channel identities. The screen never invents an external listing ID or URL.
+The pre-built workflow first submits a canonical listing and marks the `ManualBuild` as built. It persists the shared asking price/condition, then the build becomes available in Cross-listing. The Cross-listing screen is the only workflow for creating or preparing direct/indirect channel listings. A build is the canonical product record; eBay listing IDs/status and storefront product IDs are channel identities. The screen never invents an external listing ID or URL.
 
 | Channel | Current behaviour | Why |
 | --- | --- | --- |
@@ -23,6 +23,8 @@ Official references used for these capability decisions:
 ## What is implemented
 
 - Sidebar navigation and `/cross-listing` admin page.
+- Pre-built build submission creates the canonical listing state only; it does not publish to a marketplace.
+- Built canonical records with no channel listing yet are visible in `/cross-listing` as `not-created`.
 - Source refresh from existing build records, eBay listing state and storefront product state.
 - Search, source/status filters, sorting, current-filter select-all and multi-select.
 - Canonical listing normalisation with platform-safe channel capability adapters.

@@ -160,11 +160,14 @@ export function sourcesFromBuild(build: ManualBuild): CrossListingSource[] {
       listing,
     });
   }
-  if (build.storefront_product_id) {
+  // A built canonical listing must be visible in Cross-listing even before it
+  // has a first channel listing. Represent that pending storefront identity
+  // without inventing a product ID or URL.
+  if (build.storefront_product_id || ["built", "listed", "sold"].includes(build.status)) {
     items.push({
       id: `flipflop_shop:${build.id}`,
       source: "flipflop_shop",
-      externalId: String(build.storefront_product_id),
+      externalId: build.storefront_product_id ? String(build.storefront_product_id) : "not-created",
       canonicalProductId: String(build.id),
       buildId: build.id,
       title: listing.title,

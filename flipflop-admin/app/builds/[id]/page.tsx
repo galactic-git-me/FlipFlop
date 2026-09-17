@@ -23,7 +23,6 @@ import { DescriptionPreview } from "@/components/builds/DescriptionPreview";
 import { EbayListingHTMLPreview } from "@/components/builds/EbayListingHTMLPreview";
 import { PricingIntelligence } from "@/components/builds/PricingIntelligence";
 import { CommandPanel } from "@/components/builds/CommandPanel";
-import { PrebuiltChannelPicker, type ChannelPlan, type ChannelActionState, type PrebuiltChannel } from "@/components/builds/PrebuiltChannelPicker";
 import { PrebuiltChannelsPanel } from "@/components/builds/PrebuiltChannelsPanel";
 import { Build3DViewer } from "@/components/builds/Build3DViewer";
 
@@ -149,11 +148,6 @@ export default function BuildDetailPage() {
   const [savingEbayConfig, setSavingEbayConfig] = useState(false);
   const [generatingCard, setGeneratingCard] = useState<"spec_card" | "registration_plate" | null>(null);
   const [listingOnStorefront, setListingOnStorefront] = useState(false);
-  const [showPrebuiltChannelPicker, setShowPrebuiltChannelPicker] = useState(false);
-  const [selectedPrebuiltChannels, setSelectedPrebuiltChannels] = useState<PrebuiltChannel[]>([]);
-  const [enabledPrebuiltChannels, setEnabledPrebuiltChannels] = useState<PrebuiltChannel[]>([]);
-  const [listingToChannels, setListingToChannels] = useState(false);
-  const [channelPlans, setChannelPlans] = useState<Partial<Record<PrebuiltChannel, ChannelPlan>>>({});
   const [openingPortal, setOpeningPortal] = useState(false);
   const [draggedUrl, setDraggedUrl] = useState<string | null>(null);
   const [dragOverUrl, setDragOverUrl] = useState<string | null>(null);
@@ -203,13 +197,6 @@ export default function BuildDetailPage() {
       .get(buildId)
       .then((b) => {
         setBuild(b);
-        try {
-          const savedChannels = window.localStorage.getItem(`flipflop:prebuilt-channels:${b.id}`);
-          if (savedChannels) {
-            const allowed: PrebuiltChannel[] = ["flipflop_shop", "ebay_uk", "amazon", "vinted", "facebook_marketplace"];
-            setEnabledPrebuiltChannels((JSON.parse(savedChannels) as unknown[]).filter((channel): channel is PrebuiltChannel => allowed.includes(channel as PrebuiltChannel)));
-          }
-        } catch { /* local preferences are optional */ }
         // The declared insurance value and publish price must be the actual
         // saved listing price. The market-evaluation midpoint is only a
         // fallback for a build that has never had a listing price set.
@@ -629,63 +616,34 @@ export default function BuildDetailPage() {
     }
   };
 
-  const togglePrebuiltChannel = (channel: PrebuiltChannel) => {
-    setSelectedPrebuiltChannels((current) => current.includes(channel) ? current.filter((item) => item !== channel) : [...current, channel]);
-  };
-
-  const toggleEnabledPrebuiltChannel = (channel: PrebuiltChannel) => {
-    setEnabledPrebuiltChannels((current) => {
-      const next = current.includes(channel) ? current.filter((item) => item !== channel) : [...current, channel];
-      window.localStorage.setItem(`flipflop:prebuilt-channels:${buildId}`, JSON.stringify(next));
-      return next;
-    });
-  };
-
-  const downloadManualListingPack = (channel: PrebuiltChannel) => {
+  const submitCanonicalListing = async () => {
     if (!build) return;
-    const label = channel === "facebook_marketplace" ? "Facebook Marketplace" : channel[0].toUpperCase() + channel.slice(1);
-    const text = [
-      "FLIPFLOP PRE-BUILT LISTING PACK", `Destination: ${label}`, `Build ID: ${build.id}`, "",
-      "TITLE", build.generated_title || build.name, "", "DESCRIPTION", build.generated_description || "",
-      "", "PRICE", `GBP ${price || build.ebay_price || "TBC"}`, "", "CONDITION", condition,
-      "", "SPECIFICATIONS", ...build.components.map((component) => `${component.slot}: ${component.name}`),
-      "", "IMAGES", ...build.photos.map((photo) => displayMediaUrl(build.id, photo.url)),
-      "", "MANUAL STEPS", `1. Open ${label}.`, "2. Create the listing using the fields above.", "3. Upload the images in the order shown.",
-    ].join("\n");
-    const url = URL.createObjectURL(new Blob([text], { type: "text/plain;charset=utf-8" }));
-    const anchor = document.createElement("a"); anchor.href = url; anchor.download = `flipflop-${build.id}-${channel}-listing-pack.txt`; anchor.click(); URL.revokeObjectURL(url);
-  };
-
-  const listAsPrebuilt = async (channels = selectedPrebuiltChannels) => {
-    if (!build || !channels.length) return;
     const priceNum = parseFloat(price) || build.ebay_price || build.last_evaluation?.mid || 0;
-    if (!priceNum || priceNum <= 0) { toast.error("Enter an asking price before listing."); return; }
-    setListingToChannels(true);
-    const initialPlans: Partial<Record<PrebuiltChannel, ChannelPlan>> = Object.fromEntries(channels.map((channel) => [channel, {
-      action: channel === "amazon" ? "Prepare listing pack; seller approval required" : ["facebook_marketplace", "vinted"].includes(channel) ? "Prepare manual listing pack" : (["ebay_uk", "flipflop_shop"].includes(channel) && (channel === "ebay_uk" ? build.ebay_live : build.storefront_live)) ? "Update existing listing" : "Create new listing",
-      state: "queued" as ChannelActionState,
-    }])) as Partial<Record<PrebuiltChannel, ChannelPlan>>;
-    setChannelPlans(initialPlans);
-    const updatePlan = (channel: PrebuiltChannel, state: ChannelActionState, detail?: string) => setChannelPlans((current) => ({ ...current, [channel]: { ...current[channel]!, state, detail } }));
-    const runChannel = async (channel: PrebuiltChannel) => {
-      updatePlan(channel, "working");
-      try {
-        if (channel === "ebay_uk") {
-          const result = await api.manualBuilds.postToEbay(buildId, { price: priceNum, condition });
-          if (!result.success) throw new Error(result.error || "eBay rejected the listing.");
-        } else if (channel === "flipflop_shop") {
-          await api.manualBuilds.listOnStorefront(buildId, priceNum);
-        } else {
-          downloadManualListingPack(channel);
-        }
-        updatePlan(channel, "complete");
-      } catch (error) {
-        updatePlan(channel, "failed", error instanceof Error ? error.message : "Action failed");
-      }
-    };
-    await Promise.all(channels.map(runChannel));
-    await refreshBuild();
-    setListingToChannels(false);
+    if (!priceNum || priceNum <= 0) {
+      toast.error("Enter an asking price before submitting the canonical listing.");
+      return;
+    }
+    if (!build.hero_photo_url || !build.generated_title || !build.generated_description || !hasRequiredAspects) {
+      toast.error("Finish the listing content, hero photo and required specifics first.");
+      return;
+    }
+    setMarkingBuilt(true);
+    try {
+      // Persist the canonical asking price/condition before changing the
+      // lifecycle state. Channel adapters will read this shared record later.
+      await api.manualBuilds.updateEbayConfig(buildId, {
+        ebay_price: priceNum,
+        ebay_condition: condition,
+      });
+      const saved = await api.manualBuilds.markBuilt(buildId);
+      setBuild(saved);
+      setActiveTab("channels");
+      toast.success("Canonical listing submitted. This build is now available in Cross-listing.");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not submit the canonical listing.");
+    } finally {
+      setMarkingBuilt(false);
+    }
   };
 
   const handle3dModelUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -891,7 +849,7 @@ export default function BuildDetailPage() {
             onGenerateDescription={() => generateListing(false)}
             onGenerateTitle={() => generateListing(false)}
             onPreviewDraft={build.generated_title && build.generated_description ? () => setShowEbayPreview(true) : undefined}
-            onPublishChannels={canPublish ? () => { setSelectedPrebuiltChannels([]); setChannelPlans({}); setShowPrebuiltChannelPicker(true); } : undefined}
+            onPublishChannels={canPublish ? () => void submitCanonicalListing() : undefined}
             onDeleteEbay={() => setShowEndEbayConfirm(true)}
             isLoading={generating || posting || markingBuilt}
             isDeletingEbay={endingEbayListing}
@@ -974,7 +932,7 @@ export default function BuildDetailPage() {
           label="5. Channels"
           icon={Shuffle}
           active={activeTab === "channels"}
-          completed={enabledPrebuiltChannels.length > 0 && (build.ebay_live || build.storefront_live || enabledPrebuiltChannels.some((channel) => ["amazon", "vinted", "facebook_marketplace"].includes(channel)))}
+          completed={build.status !== "in_progress"}
           disabled={!canSell}
           onClick={() => setActiveTab("channels")}
         />
@@ -1016,13 +974,7 @@ export default function BuildDetailPage() {
       {canSell && activeTab === "channels" && (
         <PrebuiltChannelsPanel
           build={build}
-          enabled={enabledPrebuiltChannels}
-          onToggle={toggleEnabledPrebuiltChannel}
-          onListSelected={() => void listAsPrebuilt(enabledPrebuiltChannels)}
-          onDownloadPack={downloadManualListingPack}
-          submitting={listingToChannels}
-          canPublish={canPublish}
-          price={price}
+          onOpenCrossListing={() => router.push("/cross-listing")}
         />
       )}
 
@@ -1979,17 +1931,6 @@ export default function BuildDetailPage() {
           previewChannel="storefront"
           onClose={() => setShowEbayPreview(false)}
           isModal={true}
-        />
-      )}
-
-      {showPrebuiltChannelPicker && (
-        <PrebuiltChannelPicker
-          selected={selectedPrebuiltChannels}
-          onChange={togglePrebuiltChannel}
-          onClose={() => setShowPrebuiltChannelPicker(false)}
-          onConfirm={() => void listAsPrebuilt()}
-          submitting={listingToChannels}
-          plans={channelPlans}
         />
       )}
 

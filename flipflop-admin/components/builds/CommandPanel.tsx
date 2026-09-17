@@ -111,7 +111,7 @@ export function CommandPanel({
       <RailButton label="Generate title" icon={RotateCcw} onClick={onGenerateTitle} disabled={isLoading} isLoading={isLoading} accent="blue" />
       <RailButton label="Generate description" icon={RotateCcw} onClick={onGenerateDescription} disabled={isLoading} isLoading={isLoading} accent="blue" />
       <RailButton label="Preview draft" icon={Eye} onClick={onPreviewDraft} disabled={isLoading || !onPreviewDraft} accent="blue" />
-      <RailButton label="Publish to channels" icon={Send} onClick={onPublishChannels} disabled={isLoading || !onPublishChannels} accent="green" />
+      <RailButton label="Submit canonical listing" icon={Send} onClick={onPublishChannels} disabled={isLoading || !onPublishChannels} accent="green" />
 
       {ebayStatus?.isListed ? (
         <RailButton label="End eBay listing" icon={Trash2} onClick={onDeleteEbay} disabled={isLoading || isDeletingEbay} isLoading={isDeletingEbay} accent="red" />

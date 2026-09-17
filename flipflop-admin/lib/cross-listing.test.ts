@@ -35,4 +35,13 @@ describe("cross-listing normalisation", () => {
     expect(matrix.find((item) => item.channel === "onbuy")?.mode).toBe("manual");
     expect(matrix.find((item) => item.channel === "vinted")?.canPublish).toBe(false);
   });
+
+  it("exposes a submitted canonical build before any channel listing exists", () => {
+    const canonicalOnly = { ...build, status: "built", ebay_listing_id: null, ebay_listing_status: "never_listed", storefront_product_id: null } as unknown as ManualBuild;
+    const sources = sourcesFromBuild(canonicalOnly);
+    expect(sources).toHaveLength(1);
+    expect(sources[0]?.source).toBe("flipflop_shop");
+    expect(sources[0]?.externalId).toBe("not-created");
+    expect(sources[0]?.status).toBe("unavailable");
+  });
 });
