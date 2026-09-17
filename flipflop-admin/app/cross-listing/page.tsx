@@ -5,7 +5,6 @@ import JSZip from "jszip";
 import {
   AlertTriangle,
   Check,
-  CheckCircle2,
   ClipboardCopy,
   Download,
   ExternalLink,
@@ -183,7 +182,7 @@ function ChannelCell({ source }: { source?: CrossListingSource }) {
       } ${statusClass}`}
       aria-label={statusLabel}
     >
-      ✓
+      {isFailed ? <X className="h-4 w-4" strokeWidth={3} /> : "✓"}
     </span>
   );
   const url = listingUrlFor(source);
@@ -810,7 +809,6 @@ export default function CrossListingPage() {
   const [publishing, setPublishing] = useState(false);
   const [progressJobs, setProgressJobs] = useState<ProgressJob[]>([]);
   const [results, setResults] = useState<ListingResult[]>([]);
-  const [batchHistory, setBatchHistory] = useState<BatchRun[]>([]);
   const [actions, setActions] = useState<
     Awaited<ReturnType<typeof api.crossListing.actions>>
   >([]);
@@ -853,10 +851,14 @@ export default function CrossListingPage() {
         externalId: existing?.externalId ?? "not-created",
         status: batchResultStatus(result.status),
         url: result.url ?? existing?.url ?? null,
+        // Keep the provider's response on the table cell so it is available
+        // as the tooltip for the status indicator, regardless of outcome.
         error:
-          result.status === "failed"
-            ? result.message || "The vendor rejected the listing without returning an error message."
-            : null,
+          result.message ||
+          existing?.error ||
+          (result.status === "failed"
+            ? "The vendor rejected the listing without returning an error message."
+            : null),
       };
 
       if (existingIndex >= 0) next[existingIndex] = source;
@@ -1064,7 +1066,6 @@ export default function CrossListingPage() {
       if (!stored) return;
       const history = JSON.parse(stored) as BatchRun[];
       if (Array.isArray(history) && history.length > 0) {
-        setBatchHistory(history);
         setResults(history[0].results);
       }
     } catch {
@@ -1381,15 +1382,14 @@ export default function CrossListingPage() {
       results: nextResults,
     };
     setResults(nextResults);
-    setBatchHistory((current) => {
-      const next = [completedBatch, ...current].slice(0, 20);
-      try {
-        window.localStorage.setItem(BATCH_HISTORY_KEY, JSON.stringify(next));
-      } catch {
-        /* best effort */
-      }
-      return next;
-    });
+    try {
+      const stored = window.localStorage.getItem(BATCH_HISTORY_KEY);
+      const current = stored ? (JSON.parse(stored) as BatchRun[]) : [];
+      const next = [completedBatch, ...(Array.isArray(current) ? current : [])].slice(0, 20);
+      window.localStorage.setItem(BATCH_HISTORY_KEY, JSON.stringify(next));
+    } catch {
+      /* best effort */
+    }
     setPublishing(false);
     await refresh();
   };
@@ -1989,111 +1989,6 @@ export default function CrossListingPage() {
                 {publishing ? "Submitting…" : "Review & submit"}
               </button>
             </div>
-          </div>
-        </section>
-      )}
-
-      {results.length > 0 && (
-        <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4">
-          <h2 className="mb-1 flex items-center gap-2 text-sm font-semibold text-white">
-            <CheckCircle2 className="h-4 w-4 text-emerald-300" /> Batch results
-          </h2>
-          <p className="mb-3 text-[11px] text-slate-500">
-            Saved locally so this report remains available when you return to
-            Cross-listing.
-          </p>
-          <div className="space-y-2">
-            {results.map((result, index) => (
-              <div
-                key={`${result.channel}-${index}`}
-                className="flex flex-col gap-2 rounded border border-slate-800 bg-slate-900/50 p-3 text-xs md:flex-row md:items-center md:justify-between"
-              >
-                <div>
-                  <span className="font-medium text-slate-200">
-                    {result.channel}
-                  </span>
-                  <span
-                    className={`ml-2 ${
-                      result.status === "failed"
-                        ? "text-red-300"
-                        : result.status === "manual_action_required" ||
-                          result.status === "blocked_in_development"
-                        ? "text-yellow-300"
-                        : "text-emerald-300"
-                    }`}
-                  >
-                    {labelForStatus(result.status)}
-                  </span>
-                  <div className="mt-1 text-slate-400">{result.message}</div>
-                </div>
-                <div className="flex shrink-0 flex-wrap gap-2">
-                  {result.assist && (
-                    <button
-                      onClick={() => openBrowserAssist(result.assist!)}
-                      className="inline-flex items-center gap-1 rounded border border-emerald-400/40 px-2.5 py-1.5 font-medium text-emerald-300 hover:bg-emerald-400/10"
-                    >
-                      Open Chrome + ask Codex to create listing{" "}
-                      <ExternalLink className="h-3 w-3" />
-                    </button>
-                  )}
-                  {result.url && (
-                    <a
-                      href={result.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1 text-emerald-300 hover:underline"
-                    >
-                      View listing <ExternalLink className="h-3 w-3" />
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-      {batchHistory.length > 1 && (
-        <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4">
-          <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
-            <History className="h-4 w-4 text-emerald-300" /> Previous batch runs
-          </h2>
-          <div className="space-y-2">
-            {batchHistory.slice(1).map((batch) => (
-              <details
-                key={batch.completedAt}
-                className="rounded border border-slate-800 bg-slate-900/50 p-3 text-xs"
-              >
-                <summary className="cursor-pointer text-slate-300">
-                  {new Date(batch.completedAt).toLocaleString("en-GB")} ·{" "}
-                  {
-                    batch.results.filter((result) => result.status === "failed")
-                      .length
-                  }{" "}
-                  failed / {batch.results.length} total
-                </summary>
-                <div className="mt-3 space-y-1.5">
-                  {batch.results.map((result, index) => (
-                    <div key={`${result.channel}-${index}`}>
-                      <span className="text-slate-200">{result.channel}</span>
-                      <span
-                        className={`ml-2 ${
-                          result.status === "failed"
-                            ? "text-red-300"
-                            : result.status === "manual_action_required"
-                            ? "text-yellow-300"
-                            : "text-emerald-300"
-                        }`}
-                      >
-                        {labelForStatus(result.status)}
-                      </span>
-                      <span className="ml-2 text-slate-500">
-                        {result.message}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </details>
-            ))}
           </div>
         </section>
       )}
