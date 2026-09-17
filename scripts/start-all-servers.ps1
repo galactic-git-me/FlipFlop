@@ -233,9 +233,16 @@ function Promote-DevelopmentToProduction {
     if ($LASTEXITCODE -ne 0) {
         throw "origin/$developmentBranch does not exist. Push the development branch before starting LIVE OPERATOR."
     }
-    $pending = @(& git -C $projectRoot log --reverse --format="%H`t%h`t%s" "$productionRef..$developmentRef")
+    $allPending = @(& git -C $projectRoot log --reverse --format="%H`t%h`t%s" "$productionRef..$developmentRef")
+    # Automated runtime-state snapshots are useful in development but are not
+    # production promotions. Keep them out of the operator's commit menu.
+    $pending = @($allPending | Where-Object { $_ -notmatch "`tchore: sync$" })
     if (-not $pending -or $pending.Count -eq 0) {
-        Write-Host "[OK] Production is already at the latest promoted commit ($($productionRef.Substring(0, 12)))." -ForegroundColor Green
+        if ($allPending.Count -gt 0) {
+            Write-Host "[OK] Only generated 'chore: sync' commits are pending; production remains at $($productionRef.Substring(0, 12))." -ForegroundColor Green
+        } else {
+            Write-Host "[OK] Production is already at the latest promoted commit ($($productionRef.Substring(0, 12)))." -ForegroundColor Green
+        }
         return
     }
 
