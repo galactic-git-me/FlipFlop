@@ -11,6 +11,12 @@ from app.services.alerts import emit_alert
 
 log = structlog.get_logger(__name__)
 
+# These destinations do not have a server-side publishing adapter. They are
+# deliberately routed to the Codex browser-assist handoff instead of being
+# reported as successfully automated.
+MANUAL_CODEX_CHANNELS = {"onbuy", "amazon", "facebook_catalog", "vinted"}
+INTERNAL_CHANNEL_NAMES = {"ebay_uk": "ebay", "flipflop_shop": "storefront"}
+
 
 async def run_cross_listing_recreate_job() -> dict:
     now = datetime.utcnow()
@@ -30,9 +36,34 @@ async def run_cross_listing_recreate_job() -> dict:
                 row.last_recreate_message = "Paused because the build is unavailable or sold."
                 continue
             try:
-                await LivePublisher.withdraw_from_channel(db, build.id, row.channel)
+                if row.channel in MANUAL_CODEX_CHANNELS:
+                    row.last_recreate_at = now
+                    row.recreate_count += 1
+                    row.last_recreate_status = "awaiting_codex"
+                    row.last_recreate_message = "Codex handoff required: end the current listing and create a brand-new listing from the listing pack."
+                    # Do not repeatedly create the same task every five
+                    # minutes. The operator can reschedule after completion.
+                    row.next_recreate_at = None
+                    db.add(ListingPublishEvent(
+                        channel_listing_id=row.id,
+                        event_type="recreate_handoff_required",
+                        message=row.last_recreate_message,
+                        event_metadata={"build_id": build.id, "channel": row.channel, "requires_browser_assist": True, "at": now.isoformat()},
+                    ))
+                    await db.commit()
+                    await emit_alert(
+                        code="cross_listing_codex_handoff",
+                        source=row.channel,
+                        severity="warning",
+                        message=f"Codex handoff required for Build {build.id} on {row.channel}: end the current listing and create a new one.",
+                        link_url="/cross-listing",
+                    )
+                    continue
+
+                internal_channel = INTERNAL_CHANNEL_NAMES.get(row.channel, row.channel)
+                await LivePublisher.withdraw_from_channel(db, build.id, internal_channel)
                 db.add(ListingPublishEvent(channel_listing_id=row.id, event_type="recreate_ended", message=f"Ended {row.channel} before scheduled recreation.", event_metadata={"build_id": build.id, "channel": row.channel, "at": now.isoformat()}))
-                result = await LivePublisher.publish_to_channel(db, build.id, row.channel)
+                result = await LivePublisher.publish_to_channel(db, build.id, internal_channel)
                 row.last_recreate_at = now
                 row.recreate_count += 1
                 row.last_recreate_status = "success" if result.success else "failed"

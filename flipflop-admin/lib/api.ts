@@ -606,7 +606,8 @@ export const api = {
   crossListing: {
     schedules: (buildId?: number) => request<Array<{ id: number; build_id: number; channel: string; status: string; recreate_enabled: boolean; interval_days?: number | null; next_recreate_at?: string | null; last_recreate_at?: string | null; recreate_count: number; last_recreate_status?: string | null; last_recreate_message?: string | null }>>(`/cross-listing/schedules${buildId ? `?build_id=${buildId}` : ""}`),
     saveSchedule: (data: { build_id: number; channel: string; interval_days: number; enabled: boolean }) => request<unknown>("/cross-listing/schedules", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }),
-    actions: (buildId?: number) => request<Array<{ id: number; build_id: number; channel: string; event_type: string; message?: string | null; created_at?: string | null }>>(`/cross-listing/actions${buildId ? `?build_id=${buildId}` : ""}`),
+    recordCodexResult: (eventId: number, data: { success: boolean; message: string; external_listing_id?: string; listing_url?: string }) => request<unknown>(`/cross-listing/actions/${eventId}/codex-result`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }),
+    actions: (buildId?: number) => request<Array<{ id: number; build_id: number; channel: string; event_type: string; message?: string | null; metadata?: Record<string, unknown> | null; created_at?: string | null }>>(`/cross-listing/actions${buildId ? `?build_id=${buildId}` : ""}`),
   },
   priceAlerts: {
     list: () => request<PriceAlertList>("/price-alerts"),

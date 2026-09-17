@@ -7,6 +7,7 @@ from app.api.deps import require_operator
 from app.database import get_db
 from app.models.channel_listing import ChannelListing
 from app.models.listing_publish_event import ListingPublishEvent
+from app.services.alerts import emit_alert
 
 router = APIRouter(prefix="/cross-listing", tags=["cross-listing"], dependencies=[Depends(require_operator)])
 
@@ -16,6 +17,13 @@ class RecreateScheduleIn(BaseModel):
     channel: str = Field(min_length=2, max_length=30)
     interval_days: int = Field(ge=1, le=365)
     enabled: bool = True
+
+
+class CodexHandoffResultIn(BaseModel):
+    success: bool
+    message: str = Field(min_length=1, max_length=500)
+    external_listing_id: str | None = Field(default=None, max_length=120)
+    listing_url: str | None = Field(default=None, max_length=500)
 
 
 @router.get("/schedules")
@@ -50,6 +58,43 @@ async def list_actions(build_id: int | None = Query(None), limit: int = Query(10
         query = query.where(ChannelListing.manual_build_id == build_id)
     rows = (await db.execute(query)).all()
     return [{"id": event.id, "build_id": row_build_id, "channel": channel, "event_type": event.event_type, "message": event.message, "metadata": event.event_metadata, "created_at": event.created_at.isoformat() if event.created_at else None} for event, channel, row_build_id in rows]
+
+
+@router.post("/actions/{event_id}/codex-result")
+async def record_codex_result(event_id: int, body: CodexHandoffResultIn, db: AsyncSession = Depends(get_db)):
+    event = await db.get(ListingPublishEvent, event_id)
+    if not event or event.event_type != "recreate_handoff_required":
+        raise HTTPException(status_code=404, detail="Codex relisting handoff not found")
+    row = await db.get(ChannelListing, event.channel_listing_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Channel listing not found")
+    now = datetime.utcnow()
+    row.last_recreate_at = now
+    row.last_recreate_status = "success" if body.success else "failed"
+    row.last_recreate_message = body.message
+    row.status = "published" if body.success else "withdrawn"
+    if body.success:
+        row.external_listing_id = body.external_listing_id
+        row.published_at = now
+        row.withdrawn_at = None
+        row.next_recreate_at = now + timedelta(days=row.recreate_interval_days or 7) if row.recreate_enabled else None
+    else:
+        row.next_recreate_at = None
+    db.add(ListingPublishEvent(
+        channel_listing_id=row.id,
+        event_type="recreate_created" if body.success else "recreate_failed",
+        message=body.message,
+        event_metadata={"build_id": row.manual_build_id, "channel": row.channel, "external_id": body.external_listing_id, "listing_url": body.listing_url, "via": "codex_browser_assist", "at": now.isoformat()},
+    ))
+    await db.commit()
+    await emit_alert(
+        code="cross_listing_recreated" if body.success else "cross_listing_recreate_failed",
+        source=row.channel,
+        severity="info" if body.success else "critical",
+        message=f"Codex relisting {'completed' if body.success else 'failed'} for Build {row.manual_build_id} on {row.channel}: {body.message}",
+        link_url="/cross-listing",
+    )
+    return {"ok": True, "schedule": _schedule(row)}
 
 
 def _schedule(row: ChannelListing) -> dict:
