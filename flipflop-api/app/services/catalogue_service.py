@@ -54,6 +54,46 @@ async def sync_gem_radar_catalogue_listings(db: AsyncSession) -> int:
     """
     environment = os.getenv("FLIPFLOP_RUNTIME_ENV", "development").strip().lower()
     run_prefix = "live-%" if environment in {"live", "production"} else "dev-%"
+    # Remove stale catalogue materialisation when a previously scored GEM is
+    # later identified as an implausibly cheap CPK outlier.  Without this
+    # cleanup, correcting the score would still leave the old Listing and its
+    # CatalogueVariant visible until a separate freshness expiry.
+    await db.execute(
+        text(
+            """
+            WITH outliers AS (
+                SELECT DISTINCT s.listing_id
+                FROM gem_radar_scored_listings s
+                JOIN gem_radar_listing_observations o ON o.listing_id = s.listing_id
+                WHERE o.observed_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
+                  AND o.listing_type = 'buy_it_now'
+                  AND o.search_run_id LIKE :run_prefix
+                  AND s.category IN ('cpu', 'gpu', 'ram', 'ssd', 'storage', 'motherboard', 'psu', 'cooler', 'case')
+                  AND s.market_median_price > 0
+                  AND s.delivered_price > 0
+                  AND s.delivered_price <= s.market_median_price * 0.25
+                  AND (s.market_median_price - s.delivered_price) >= 25
+            )
+            UPDATE listings l
+               SET classification = 'unclassified', status = 'removed'
+             WHERE l.external_id IN (SELECT listing_id FROM outliers)
+            """
+        ),
+        {"run_prefix": run_prefix},
+    )
+    await db.execute(
+        text(
+            """
+            UPDATE catalogue_variants v
+               SET status = 'hidden', reject_reason = 'Removed: extreme CPK-relative price outlier'
+             FROM listings l
+             WHERE v.listing_id = l.id
+               AND l.status = 'removed'
+               AND l.classification = 'unclassified'
+               AND (v.status = 'active' OR v.status = 'pending_review')
+            """
+        )
+    )
     result = await db.execute(
         text(
             """
@@ -80,6 +120,12 @@ async def sync_gem_radar_catalogue_listings(db: AsyncSession) -> int:
               AND lower(s.title) NOT LIKE '%parts only%'
               AND lower(s.title) NOT LIKE '%not working%'
               AND lower(s.title) NOT LIKE '%spares or repair%'
+              AND NOT (
+                  s.market_median_price > 0
+                  AND s.delivered_price > 0
+                  AND s.delivered_price <= s.market_median_price * 0.25
+                  AND (s.market_median_price - s.delivered_price) >= 25
+              )
               AND s.listing_id NOT LIKE '%206450130546%'
             ORDER BY s.listing_id, s.scored_at DESC NULLS LAST, s.id DESC
             """

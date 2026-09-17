@@ -1,7 +1,8 @@
 """Phase 2 of the CPK-driven market-price system: classify every CPK-tagged
 listing purely from its % offset against a settled CPK market price (see
 app/gem_radar/cpk_market.py and deal_classification.py) — no LLM, no
-external benchmarks, no outlier filtering.
+external benchmarks. Candidate prices are also checked for conservative,
+CPK-relative extraction outliers before deal classification.
 
 Run automatically by the queue processor once a scan sweep signals
 completion (see app/api/gem_radar.py's /scan-sweep-complete endpoint and

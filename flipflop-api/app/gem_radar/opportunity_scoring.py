@@ -23,6 +23,39 @@ BUNDLE_TERMS = {"job lot", "bundle of", "mystery box", "assorted parts"}
 RETRO_PLATFORM_TERMS = {"am3", "am3+", "ddr3", "ddr2", "socket 775"}
 COMPONENT_CATEGORIES = {"cpu", "gpu", "motherboard", "ram", "ssd", "psu", "case", "cooler", "fan"}
 
+# A candidate price this far below a settled same-condition CPK market is
+# generally an extraction/variant/condition error rather than a real bargain.
+# Keep this deliberately conservative: it requires both a strong relative gap
+# and a meaningful absolute gap so inexpensive components are not rejected for
+# normal second-hand variation.
+EXTREME_PRICE_OUTLIER_RATIO = 0.25
+EXTREME_PRICE_OUTLIER_MIN_GAP_GBP = 25.0
+
+
+def is_extreme_price_outlier(
+    listing_price: float,
+    market: "RobustMarket | None",
+    *,
+    category: str | None,
+) -> bool:
+    """Return whether a component's landed price is implausibly low.
+
+    The market must already be a robust, same-condition CPK market.  This is
+    intentionally applied to the candidate only; comparable-cohort outlier
+    filtering remains the responsibility of the market builders.
+    """
+    normalised_category = (category or "").strip().lower()
+    if normalised_category not in COMPONENT_CATEGORIES or market is None:
+        return False
+    price = float(listing_price or 0)
+    median_price = float(market.median or 0)
+    return (
+        price > 0
+        and median_price > 0
+        and price <= median_price * EXTREME_PRICE_OUTLIER_RATIO
+        and (median_price - price) >= EXTREME_PRICE_OUTLIER_MIN_GAP_GBP
+    )
+
 
 @dataclass(frozen=True)
 class OpportunityPolicy:
@@ -467,6 +500,9 @@ def score_opportunity(
     listing_condition: str | None = None,
 ) -> OpportunityResult:
     risk_flags = identity_gates(title, cpk_data, strategy) + list(extra_risk_flags)
+    category = str((cpk_data or {}).get("category") or "").lower()
+    if is_extreme_price_outlier(listing_price, market, category=category):
+        risk_flags.append("extreme_price_outlier")
     evidence_status, evidence_reason, evidence_confidence = assess_evidence(
         title=title, cpk_data=cpk_data, market=market, sold_count=sold_count_90d,
         active_count=active_count, policy=policy, listing_condition=listing_condition,
@@ -498,7 +534,6 @@ def score_opportunity(
             evidence_confidence=evidence_confidence,
         )
 
-    category = str((cpk_data or {}).get("category") or "").lower()
     is_component = category in COMPONENT_CATEGORIES
     economics = category_economics(category, policy)
     is_new = (listing_condition or "").lower() == "new"
@@ -539,7 +574,8 @@ def score_opportunity(
     evidence_limited = provisional_evidence or market.sample_size < policy.minimum_sold_comps
     hard_identity_vetoes = {
         "identity_incomplete", "accessory_or_parts_listing", "category_identity_conflict",
-        "whole_system_misclassified_as_component", "bundle_listing", "specialised_mining_hardware"
+        "whole_system_misclassified_as_component", "bundle_listing", "specialised_mining_hardware",
+        "extreme_price_outlier",
     }
     blocking_flags = [flag for flag in risk_flags if flag in hard_identity_vetoes]
     eligible = not blocking_flags
@@ -583,6 +619,11 @@ def score_opportunity(
     if blocking_flags:
         classification, decision = "INELIGIBLE", "IGNORE"
         reasons.append("A hard identity or market-quality veto prevents deal classification.")
+        if "extreme_price_outlier" in blocking_flags:
+            reasons.append(
+                f"Candidate price £{listing_price:.2f} is an extreme outlier versus the "
+                f"£{market.median:.2f} same-condition CPK median and has been excluded."
+            )
     elif evidence_limited and profit >= emerging_profit_floor and roi >= 25 and market.confidence >= 40:
         classification, decision = "EVIDENCE_LIMITED_DEAL", "INVESTIGATE"
         reasons.append(

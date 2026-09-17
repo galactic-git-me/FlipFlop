@@ -1,7 +1,7 @@
 from app.gem_radar.opportunity_scoring import (
     OpportunityPolicy, SoldComparable, category_economics, desirability_score,
     identity_gates, liquidity_score, risk_safety_score, robust_sold_market,
-    score_opportunity, sell_through_rate_pct,
+    score_opportunity, sell_through_rate_pct, is_extreme_price_outlier,
 )
 from app.gem_radar.cpk_extractor import extract_case_identity
 
@@ -27,6 +27,31 @@ def test_same_subject_cannot_contribute_to_own_market():
     policy = OpportunityPolicy(minimum_sold_comps=5)
     market = robust_sold_market(comps([100, 101, 102, 103]), subject_listing_id="999", policy=policy)
     assert market is None
+
+
+def test_extreme_candidate_price_is_rejected_against_cpk_market():
+    policy = OpportunityPolicy()
+    market = robust_sold_market(
+        comps([94, 100, 105, 110, 115]), subject_listing_id="999", policy=policy
+    )
+    assert market is not None
+    assert is_extreme_price_outlier(2.56, market, category="cpu")
+    assert not is_extreme_price_outlier(75, market, category="cpu")
+    result = score_opportunity(
+        listing_price=2.56,
+        title="AMD Ryzen 5 5600X 6 Core 12 Thread",
+        cpk_data={"category": "cpu", "brand": "amd", "model": "5600x"},
+        market=market,
+        sold_count_90d=10,
+        active_count=2,
+        watch_velocity=1,
+        bid_velocity=1,
+        policy=policy,
+    )
+    assert result.classification == "INELIGIBLE"
+    assert result.decision == "IGNORE"
+    assert not result.eligible
+    assert "extreme_price_outlier" in result.risk_flags
 
 
 def test_accessory_and_retro_platform_are_hard_gates():
