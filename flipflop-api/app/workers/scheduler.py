@@ -36,6 +36,7 @@ from app.workers.manual_build_lifecycle import (
     run_manual_build_recreate_cycle_job,
 )
 from app.workers.cross_listing_recreate import run_cross_listing_recreate_job
+from app.workers.delivery_followup import run_delivery_followup_job
 from app.workers.message_poll import run_message_poll_job
 from app.workers.case_content_sourcing import run_case_content_sourcing
 from app.services.amazon_bestsellers import scrape_amazon_component_bestsellers
@@ -546,6 +547,16 @@ def start_scheduler():
         replace_existing=True,
         max_instances=1,
         next_run_time=now + timedelta(seconds=30),
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=5),
+        id="delivery_followup",
+        name="Post-delivery Customer Follow-up",
+        kwargs={"job_id": "delivery_followup", "fn": run_delivery_followup_job},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(seconds=45),
     )
     scheduler.add_job(
         _run_job_with_history,

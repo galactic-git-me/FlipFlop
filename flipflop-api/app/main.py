@@ -495,6 +495,8 @@ async def lifespan(app: FastAPI):
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS collection_date TIMESTAMP",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS delivered_at TIMESTAMP",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS warranty_started_at TIMESTAMP",
+            "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS customer_id INTEGER",
+            "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS delivery_followup_sent_at TIMESTAMP",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_enabled BOOLEAN DEFAULT FALSE",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_interval_days INTEGER",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS next_recreate_at TIMESTAMP",

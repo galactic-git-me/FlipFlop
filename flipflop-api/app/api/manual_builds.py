@@ -27,6 +27,7 @@ from app.models.inventory import InventoryItem
 from app.models.inventory_allocation import InventoryAllocation
 from app.models.price_alert import PriceAlert
 from app.models.admin_user import AdminUser
+from app.models.customer import Customer
 from app.schemas.manual_build import (
     ManualBuildCreate, ManualBuildPatch, ManualBuildOut, ManualBuildSummary,
     EvaluationResult, EvaluationSuggestion, GenerateListingResult,
@@ -1546,6 +1547,11 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
     # ever needed alongside the address, to push tracking back in
     # book_shipment below.
     build.buyer_address_json = {**order.buyer_address.to_dict(), "line_item_id": order.line_item_id}
+    if build.customer_id:
+        customer = await db.get(Customer, build.customer_id)
+        if customer:
+            customer.address = json.dumps(build.buyer_address_json)
+            customer.phone = build.buyer_address_json.get("phone")
     build.sale_price_actual = order.sale_price
     build.status = "sold"
     from app.services.inventory_lifecycle import record_sale

@@ -5,6 +5,8 @@ from email.header import decode_header
 from datetime import datetime
 from typing import Optional
 import re
+import secrets
+from email.utils import parseaddr
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.config import get_settings
@@ -14,7 +16,11 @@ from app.models.product import Product
 from app.models.email_event import EmailEvent
 from app.models.manual_build import ManualBuild
 from app.models.channel_listing import ChannelListing
+from app.models.customer_review import CustomerReview
+from app.models.customer import Customer
 from app.services.alerts import emit_alert
+from app.services.auth_service import hash_password
+from app.services.email_service import send_email_async
 import logging
 
 log = logging.getLogger(__name__)
@@ -363,6 +369,9 @@ class EmailMonitor:
             for detector in [self.detect_ebay_sale, self.detect_vinted_sale, self.detect_generic_marketplace_sale]:
                 sale = detector(body)
                 if sale:
+                    sender_name, sender_email = parseaddr(msg.get("sender", ""))
+                    sale["customer_name"] = sender_name or "FlipFlop customer"
+                    sale["customer_email"] = sender_email.lower() or None
                     await self.process_sale_detection(sale, db)
                     build = await self._match_manual_build_sale(sale, db)
                     if build:
@@ -389,7 +398,49 @@ class EmailMonitor:
             else:
                 event.summary = "Delivery confirmation received; no tracking number matched a build."
 
+        review = self.detect_customer_review(msg["subject"], msg.get("sender", ""), body)
+        if review and review["rating"] >= 4:
+            customer_email = parseaddr(msg.get("sender", ""))[1].lower() or None
+            existing = None
+            if customer_email:
+                existing = (await db.execute(select(CustomerReview).where(CustomerReview.customer_email == customer_email, CustomerReview.review_text == review["text"]))).scalars().first()
+            if not existing:
+                customer = None
+                if customer_email:
+                    customer = (await db.execute(select(Customer).where(Customer.email == customer_email))).scalars().first()
+                db.add(CustomerReview(
+                    manual_build_id=event.manual_build_id,
+                    customer_id=customer.id if customer else None,
+                    author_name=parseaddr(msg.get("sender", ""))[0] or "Verified customer",
+                    customer_email=customer_email,
+                    rating=review["rating"], review_text=review["text"],
+                    source=review["source"], source_url=review.get("source_url"),
+                    approved=True, is_public=True,
+                ))
+                event.summary = f"Positive {review['rating']}/5 customer review captured and published."
+                await emit_alert(code="customer_review_published", source=review["source"], severity="info", message=event.summary, link_url="/reviews")
+
         await db.commit()
+
+    @staticmethod
+    def detect_customer_review(subject: str, sender: str, body: str) -> Optional[dict]:
+        text = f"{subject} {sender} {body}".lower()
+        if not any(term in text for term in ("review", "feedback", "rating", "stars")):
+            return None
+        rating_match = re.search(r"([1-5](?:\.\d)?)\s*(?:/\s*5|out of 5|stars?)", text, re.I)
+        if not rating_match:
+            words = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5}
+            word_match = re.search(r"\b(one|two|three|four|five)\s+stars?\b", text, re.I)
+            if not word_match:
+                return None
+            rating = float(words[word_match.group(1).lower()])
+        else:
+            rating = float(rating_match.group(1))
+        quote_match = re.search(r"(?:review|feedback|comment)\s*[:\-]\s*(.{20,2000})", body, re.I | re.S)
+        quote = (quote_match.group(1) if quote_match else body).strip()
+        quote = re.sub(r"\s+", " ", quote)[:2000]
+        url_match = re.search(r"https?://[^\s<>]+", body)
+        return {"rating": rating, "text": quote, "source": EmailMonitor._marketplace_for_email(subject, sender, body) or "email", "source_url": url_match.group(0) if url_match else None}
 
     async def _match_manual_build_sale(self, sale: dict, db: AsyncSession) -> ManualBuild | None:
         title = (sale.get("title") or "").strip()
@@ -404,6 +455,19 @@ class EmailMonitor:
         build.dispatch_status = "awaiting_dispatch"
         build.sale_price_actual = sale.get("price") or build.ebay_price
         build.updated_at = datetime.utcnow()
+        if sale.get("customer_email"):
+            customer = (await db.execute(select(Customer).where(Customer.email == sale["customer_email"]))).scalars().first()
+            temporary_password = None
+            if not customer:
+                temporary_password = secrets.token_urlsafe(12)
+                customer = Customer(email=sale["customer_email"], name=sale.get("customer_name") or "FlipFlop customer", password_hash=hash_password(temporary_password))
+                db.add(customer)
+                await db.flush()
+            build.customer_id = customer.id
+            build.customer_email = customer.email
+            build.buyer_name = build.buyer_name or customer.name
+            if temporary_password:
+                await send_email_async(customer.email, "Your FlipFlop customer account", f"<p>Hello {customer.name},</p><p>We created your secure FlipFlop customer account for Build {build.id}.</p><p>Email: <strong>{customer.email}</strong><br>Temporary password: <strong>{temporary_password}</strong></p><p>Please sign in and change this password at <a href=\"https://theflipflop.shop/my-builds/{build.id}\">your My Builds page</a>.</p>", f"customer-account-build-{build.id}")
         # Mark every local cross-listing withdrawn immediately. Provider API
         # withdrawal is channel-specific and is retried/handled by its adapter.
         listings = (await db.execute(select(ChannelListing).where(ChannelListing.manual_build_id == build.id, ChannelListing.status.in_(["published", "scheduled"])))) .scalars().all()

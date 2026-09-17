@@ -56,6 +56,7 @@ from app.models.listing_publish_event import ListingPublishEvent
 from app.models.demand_metrics_snapshot import DemandMetricsSnapshot
 from app.models.demand_alert import DemandAlert
 from app.models.demand_export_audit import DemandExportAudit
+from app.models.customer_review import CustomerReview
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -115,7 +116,7 @@ __all__ = [
     "SubmissionQueue",
     "PriceAlert",
     "PriceAlertEvent",
-    "ChannelListing",
+    "ChannelListing", "CustomerReview",
     "InventoryReservation",
     "InventoryEvent",
     "InventoryUnit",

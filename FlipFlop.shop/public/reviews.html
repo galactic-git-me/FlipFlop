@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Customer reviews · FlipFlop.shop</title>
+  <style>
+    :root{color-scheme:dark;font-family:Inter,system-ui,sans-serif;background:#020617;color:#e2e8f0}body{max-width:1100px;margin:0 auto;padding:48px 22px;background:radial-gradient(circle at 15% 0,#0e749040,transparent 35%),#020617}a{color:#67e8f9}.eyebrow{color:#67e8f9;letter-spacing:.22em;font-size:12px;text-transform:uppercase}.hero{display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:end;margin:35px 0 48px}h1{font-size:clamp(36px,6vw,72px);line-height:.95;margin:14px 0}p{color:#94a3b8;line-height:1.7}.summary{border:1px solid #164e63;background:#0f172acc;border-radius:18px;padding:26px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.card{border:1px solid #1e293b;background:#0f172a;border-radius:16px;padding:22px}.stars{color:#fbbf24;letter-spacing:.12em}.meta{font-size:12px;color:#64748b;margin-top:16px}.empty{text-align:center;border:1px dashed #334155;border-radius:16px;padding:42px}@media(max-width:700px){.hero{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="eyebrow">FlipFlop.shop · verified customers</div>
+  <section class="hero"><div><h1>Built for real life.</h1><p>Honest feedback from customers who have received their FlipFlop build. Every review shown here is linked to a delivered customer build and is four stars or higher.</p></div><div class="summary"><div class="stars">★★★★★</div><strong>Customer experiences</strong><p>New reviews appear after our email scanner verifies the original feedback.</p></div></section>
+  <main id="reviews" class="grid"><div class="empty">Loading verified reviews…</div></main>
+  <script>
+    const api = (window.FLIPFLOP_API_BASE || '').replace(/\/$/,'');
+    fetch(api + '/api/public/reviews').then(r=>r.ok?r.json():[]).then(rows=>{
+      const root=document.getElementById('reviews');
+      if(!rows.length){root.innerHTML='<div class="empty">Reviews are being collected from our first delivered builds.</div>';return;}
+      root.innerHTML=rows.map(r=>`<article class="card"><div class="stars">${'★'.repeat(Math.round(r.stars))}${'☆'.repeat(5-Math.round(r.stars))}</div><p>“${String(r.quote).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}”</p><strong>${String(r.author).replace(/[&<>]/g,'')}</strong><div class="meta">Verified customer · ${r.source}</div></article>`).join('');
+    }).catch(()=>{document.getElementById('reviews').innerHTML='<div class="empty">Reviews are temporarily unavailable. Please try again shortly.</div>';});
+  </script>
+</body>
+</html>

@@ -1,14 +1,9 @@
-"""
-Public reviews endpoint — no auth required.
-
-No review/testimonial model exists in this codebase yet (verified: no
-Review/Testimonial table, no Trustpilot/Google integration). This endpoint
-is real infrastructure for when that lands — it returns an empty list today
-rather than fabricated quotes. The storefront reviews marquee must render an
-honest "reviews coming soon" state on an empty response, never placeholder
-testimonials.
-"""
-from fastapi import APIRouter
+"""Public, verified customer reviews for the direct storefront."""
+from fastapi import APIRouter, Depends
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.database import get_db
+from app.models.customer_review import CustomerReview
 
 router = APIRouter(prefix="/public", tags=["public-reviews"])
 
@@ -29,6 +24,6 @@ _SAMPLE_REVIEWS = [
 
 
 @router.get("/reviews")
-async def public_list_reviews():
-    """Return the review showcase records used by the public storefront."""
-    return _SAMPLE_REVIEWS
+async def public_list_reviews(db: AsyncSession = Depends(get_db)):
+    rows = (await db.execute(select(CustomerReview).where(CustomerReview.approved.is_(True), CustomerReview.is_public.is_(True), CustomerReview.rating >= 4).order_by(CustomerReview.created_at.desc()))).scalars().all()
+    return [{"id": row.id, "author": row.author_name, "quote": row.review_text, "stars": row.rating, "source": row.source, "source_url": row.source_url, "is_verified": True} for row in rows]

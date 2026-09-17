@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import String, Integer, Float, DateTime, JSON
+from sqlalchemy import String, Integer, Float, DateTime, JSON, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
@@ -119,10 +119,12 @@ class ManualBuild(Base):
     refund_amount: Mapped[float | None] = mapped_column(Float)
     warranty_claim_cost: Mapped[float | None] = mapped_column(Float)
     customer_email: Mapped[str | None] = mapped_column(String(320))
+    customer_id: Mapped[int | None] = mapped_column(ForeignKey("customers.id"), index=True)
     dispatch_status: Mapped[str] = mapped_column(String(30), default="awaiting_dispatch")
     collection_date: Mapped[datetime | None] = mapped_column(DateTime)
     delivered_at: Mapped[datetime | None] = mapped_column(DateTime)
     warranty_started_at: Mapped[datetime | None] = mapped_column(DateTime)
+    delivery_followup_sent_at: Mapped[datetime | None] = mapped_column(DateTime)
     # ── Pricing engine (playbook rows 10, 19, 20, 21, 22, 23, 33, 49) —
     # ported from the retired Flip system, adapted to ManualBuild's fields
     # (ebay_price is this system's listing-price anchor, auto_reject_below_price

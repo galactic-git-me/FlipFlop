@@ -153,6 +153,24 @@ async def send_build_status_email(
 async def send_order_status_email(customer_email: str, customer_name: str, order_reference: str, status: str, order_id: int | None = None) -> bool:
     return await send_build_status_email(customer_email, customer_name, order_reference, status, order_id)
 
+
+async def send_delivery_followup_email(customer_email: str, customer_name: str, build_id: int, *, review_url: str, feedback_url: str | None = None) -> bool:
+    """Send the post-delivery onboarding, support and review request."""
+    if not smtp_is_configured():
+        return False
+    portal_base = settings.frontend_url.rstrip("/")
+    portal = f"{portal_base}/my-builds/{build_id}"
+    guide = f"{portal_base}/getting-started"
+    support = f"{portal_base}/support"
+    feedback = feedback_url or review_url
+    html = f"""<!doctype html><html><body style=\"margin:0;background:#f3f6fb;font-family:Arial,sans-serif;color:#152238\"><div style=\"max-width:640px;margin:32px auto;background:#fff;border:1px solid #dce5f0;border-radius:18px;overflow:hidden\"><div style=\"padding:26px 32px;background:#07152d;color:#fff\"><div style=\"font-size:12px;letter-spacing:3px;color:#68d7ff\">FLIPFLOP</div><h1>Your build has arrived</h1></div><div style=\"padding:30px 32px;line-height:1.6\"><p>Hello {escape(customer_name or 'there')},</p><p>We hope your FlipFlop build arrived safely. Your 12-month warranty starts from the delivery date.</p><p><a href=\"{escape(portal, quote=True)}\">Open your private My Builds page</a></p><p><a href=\"{escape(guide, quote=True)}\">Read the getting started guide</a> · <a href=\"{escape(support, quote=True)}\">Get help</a></p><p>If you are happy with your build, we would really appreciate a review: <a href=\"{escape(feedback, quote=True)}\">leave feedback</a>.</p><p style=\"font-size:12px;color:#66758a\">If you bought through a marketplace, the feedback link takes you to that marketplace. Direct FlipFlop purchases use our review page.</p></div></div></body></html>"""
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = "Your FlipFlop build has arrived — setup and feedback"
+    msg["From"] = settings.smtp_from or "noreply@flipflop.co.uk"
+    msg["To"] = customer_email
+    msg.attach(MIMEText(html, "html"))
+    return _send(msg, f"delivery-followup-build-{build_id}")
+
 async def send_email_async(to: str, subject: str, body: str, reference: str = "generic") -> bool:
     """Generic async email sender for transactional emails."""
     if not smtp_is_configured():
