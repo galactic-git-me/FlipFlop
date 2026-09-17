@@ -27,6 +27,11 @@ from app.config import get_settings
 
 router = APIRouter(prefix="/api/orders", tags=["orders"])
 
+# The customer storefront is deployed separately from this API. Keep the
+# public destination in the portal contract so the storefront can render a
+# review CTA without duplicating deployment-specific routing logic.
+PUBLIC_REVIEWS_URL = "https://theflipflop.shop/reviews.html"
+
 async def _portal_actor(authorization: str | None, db: AsyncSession):
     """Accept either the buyer JWT or the separate admin JWT.
 
@@ -127,11 +132,16 @@ def _manual_build_customer_hub(build: ManualBuild) -> dict:
             "delivery": f"Delivery is normally expected within {build.delivery_min_days}-{build.delivery_max_days} days after dispatch, subject to courier conditions.",
             "support": "Use the private support form in this portal and include the build ID and any error message.",
         },
+        "reviews": {
+            "url": f"{PUBLIC_REVIEWS_URL}?build={build.id}",
+            "label": "Leave a review",
+            "description": "Tell us how your FlipFlop build is performing.",
+        },
         "faqs": selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides),
     }
 
 
-def _order_customer_hub(model_url: str | None, preview_image_url: str | None = None) -> dict:
+def _order_customer_hub(model_url: str | None, preview_image_url: str | None = None, order_id: int | str | None = None) -> dict:
     """Baseline hub for a normal customer order when no ManualBuild row is linked."""
     return {
         "model": {"url": model_url, "preview_image_url": preview_image_url, "status": "published" if model_url else "pending", "ar_ready": bool(model_url)},
@@ -142,6 +152,11 @@ def _order_customer_hub(model_url: str | None, preview_image_url: str | None = N
         "downloads": ([{"title": "Exact build 3D model (GLB)", "url": model_url, "kind": "3d_model"}] if model_url else []),
         "driver_note": "No build-specific driver bundle has been published. Use the component manufacturer's support page for the exact part shown in the specification.",
         "policies": {"returns": "Returns are handled under the published order policy and its terms.", "warranty": "Your statutory consumer rights remain in force. Additional coverage is limited to your order documents.", "delivery": "Delivery updates are shown in the order tracking section.", "support": "Use the private support form in this portal."},
+        "reviews": {
+            "url": f"{PUBLIC_REVIEWS_URL}?order={order_id}" if order_id else PUBLIC_REVIEWS_URL,
+            "label": "Leave a review",
+            "description": "Tell us how your FlipFlop build is performing.",
+        },
         "faqs": [],
     }
 
@@ -182,6 +197,7 @@ def _manual_build_to_portal_out(build: ManualBuild) -> MyOrderOut:
         },
         model_3d_url=build.model_3d_url,
         customer_hub=_manual_build_customer_hub(build),
+        review_url=f"{PUBLIC_REVIEWS_URL}?build={build.id}",
         created_at=build.created_at,
     )
 
@@ -233,7 +249,8 @@ def _order_to_my_order_out(order: Order, capture_3d: Capture3DAsset | None = Non
             if capture_3d and capture_3d.status == Capture3DStatus.PUBLISHED and capture_3d.optimized_asset_ref else None
         ),
         model_3d_url=published_model_url,
-        customer_hub=_order_customer_hub(published_model_url, capture_3d.preview_image_ref if capture_3d else None),
+        customer_hub=_order_customer_hub(published_model_url, capture_3d.preview_image_ref if capture_3d else None, order.id),
+        review_url=f"{PUBLIC_REVIEWS_URL}?order={order.id}",
         created_at=order.created_at,
     )
 
