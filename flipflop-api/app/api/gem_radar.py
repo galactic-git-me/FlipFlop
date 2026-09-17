@@ -1056,23 +1056,18 @@ async def get_scored_listings_latest_run(
     """
     from sqlalchemy import select, func, text
 
-    run_environment = environment or _runtime_environment()
-    run_id_prefix = _run_id_prefix(run_environment)
-
-    # The Phase 2 CPK classifier deliberately writes one stable internal
-    # search_run_id (``cpk-phase2-classify``), so scored rows no longer carry
-    # the DEV/LIVE scan prefix.  Scope the live snapshot from observations,
-    # where the extension's environment-tagged run_id is preserved, then join
-    # to the newest scored row for those exact listing IDs.
+    # The API/database instance is already environment-specific: the live API
+    # points at the production database and the local API points at the DEV
+    # database. Observation search_run_id values are UUIDs (and some older
+    # rows use internal pipeline IDs), so they must not be filtered by a
+    # fabricated DEV/LIVE prefix here.
     active_observations = await db.execute(
         text("""
             SELECT DISTINCT listing_id
             FROM gem_radar_listing_observations
             WHERE observed_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
               AND listing_type = 'buy_it_now'
-              AND search_run_id LIKE :run_id_prefix
         """),
-        {"run_id_prefix": run_id_prefix},
     )
     actionable_ids = {row.listing_id for row in active_observations}
     if not actionable_ids:
