@@ -20,6 +20,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, text
 from app.database import AsyncSessionLocal, get_db
 from app.models.manual_build import ManualBuild
+from app.models.app_settings import AppSettings
 from app.models.gem_radar_intelligence import ComponentRatingEvent, PreferredComponent
 from app.models.build import Build, BuildType, BuildStatus
 from app.models.product import Product, ProductType, ProductStatus
@@ -2197,8 +2198,16 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
                 # got it there (manual "List on eBay" here, or the deferred
                 # scheduler in manual_build_scheduler.py).
                 build.listed_at = datetime.utcnow()
-                build.next_recreate_at = jittered_recreate_slot(
-                    build.traffic_band or DEFAULT_BAND, datetime.utcnow(),
+                policy = (
+                    await db.execute(
+                        select(AppSettings).where(AppSettings.name == "default")
+                    )
+                ).scalar_one_or_none()
+                interval_days = policy.relist_interval_days if policy else 7
+                build.next_recreate_at = (
+                    build.listed_at + timedelta(days=interval_days or 7)
+                    if build.relist_enabled
+                    else None
                 )
 
             # Row 40: promote automatically if opted in — a failure here

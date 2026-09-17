@@ -116,6 +116,16 @@ async def publish_amazon(build_id: int, body: AmazonPublishIn, db: AsyncSession 
         channel_listing.status = "published" if accepted else "failed"
         channel_listing.external_listing_id = sku
         channel_listing.published_at = datetime.utcnow() if accepted else None
+        if accepted:
+            settings = await _app_settings(db)
+            channel_listing.recreate_enabled = settings.relist_enabled_default
+            channel_listing.recreate_interval_days = settings.relist_interval_days or 7
+            channel_listing.next_recreate_at = (
+                channel_listing.published_at
+                + timedelta(days=channel_listing.recreate_interval_days)
+                if channel_listing.recreate_enabled
+                else None
+            )
         message = "Amazon accepted the listing submission." if accepted else "Amazon returned listing requirements or validation issues."
         db.add(ListingPublishEvent(channel_listing_id=channel_listing.id, event_type="published" if accepted else "publish_failed", message=message, event_metadata={"sku": sku, "response": result}))
         await db.commit()
@@ -154,19 +164,32 @@ async def list_schedules(build_id: int | None = Query(None), db: AsyncSession = 
 
 @router.put("/schedules")
 async def save_schedule(body: RecreateScheduleIn, db: AsyncSession = Depends(get_db)):
-    interval_days = body.interval_days
-    if body.channel in INDIRECT_CHANNELS:
-        settings = await _app_settings(db)
-        interval_days = settings.indirect_channel_recreate_interval_days or 7
+    settings = await _app_settings(db)
+    interval_days = settings.relist_interval_days or body.interval_days or 7
+    build = await db.get(ManualBuild, body.build_id)
+    if not build:
+        raise HTTPException(status_code=404, detail="Build not found")
     row = (await db.execute(select(ChannelListing).where(ChannelListing.manual_build_id == body.build_id, ChannelListing.channel == body.channel).order_by(ChannelListing.created_at.desc()))).scalars().first()
     if not row:
-        row = ChannelListing(manual_build_id=body.build_id, channel=body.channel, status="published")
+        row = ChannelListing(
+            manual_build_id=body.build_id,
+            channel=body.channel,
+            status="published",
+            published_at=build.listed_at or datetime.utcnow(),
+        )
         db.add(row)
     row.recreate_enabled = body.enabled
     row.recreate_interval_days = interval_days
-    row.next_recreate_at = datetime.utcnow() + timedelta(days=interval_days) if body.enabled else None
+    if row.published_at is None:
+        row.published_at = build.listed_at or datetime.utcnow()
+    row.next_recreate_at = (
+        row.published_at + timedelta(days=interval_days) if body.enabled else None
+    )
     row.last_recreate_status = "scheduled" if body.enabled else "paused"
     row.last_recreate_message = f"Recreate every {interval_days} day(s)."
+    if body.channel in {"ebay", "ebay_uk"}:
+        build.relist_enabled = body.enabled
+        build.next_recreate_at = row.next_recreate_at
     await db.commit()
     await db.refresh(row)
     return _schedule(row)

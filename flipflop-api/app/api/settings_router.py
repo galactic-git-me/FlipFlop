@@ -5,6 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.database import get_db
 from app.models.app_settings import AppSettings
+from app.models.channel_listing import ChannelListing
+from app.models.manual_build import ManualBuild
+from datetime import datetime, timedelta
 
 router = APIRouter(prefix="/settings", tags=["settings"])
 
@@ -75,6 +78,30 @@ async def update_settings(body: SettingsUpdate, db: AsyncSession = Depends(get_d
     settings = await _get_or_create(db)
     for field, value in body.model_dump(exclude_none=True).items():
         setattr(settings, field, value)
+    if body.relist_interval_days is not None:
+        interval = max(1, body.relist_interval_days)
+        now = datetime.utcnow()
+        schedules = (
+            await db.execute(
+                select(ChannelListing).where(ChannelListing.recreate_enabled.is_(True))
+            )
+        ).scalars().all()
+        for schedule in schedules:
+            schedule.recreate_interval_days = interval
+            if schedule.published_at:
+                schedule.next_recreate_at = schedule.published_at + timedelta(days=interval)
+            else:
+                schedule.next_recreate_at = now + timedelta(days=interval)
+        builds = (
+            await db.execute(
+                select(ManualBuild).where(
+                    ManualBuild.relist_enabled.is_(True),
+                    ManualBuild.listed_at.isnot(None),
+                )
+            )
+        ).scalars().all()
+        for build in builds:
+            build.next_recreate_at = build.listed_at + timedelta(days=interval)
     await db.flush()
     await db.refresh(settings)
 

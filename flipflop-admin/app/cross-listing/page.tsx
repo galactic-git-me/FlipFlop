@@ -815,6 +815,11 @@ export default function CrossListingPage() {
     Awaited<ReturnType<typeof api.crossListing.actions>>
   >([]);
   const [schedules, setSchedules] = useState<ChannelSchedule[]>([]);
+  const [relistPolicy, setRelistPolicy] = useState({
+    intervalDays: 7,
+    enabledDefault: true,
+  });
+  const [relistSaving, setRelistSaving] = useState<number | null>(null);
 
   const channelCapabilities = useMemo(
     () => capabilities(connected, amazonConnected, amazonMessage),
@@ -901,25 +906,58 @@ export default function CrossListingPage() {
     : null;
   const relistAtByBuild = useMemo(() => {
     const next = new Map<number, string>();
+    const scheduleBuilds = new Set<number>();
     for (const schedule of schedules) {
-      if (!schedule.recreate_enabled || !schedule.next_recreate_at) continue;
+      scheduleBuilds.add(schedule.build_id);
+      if (!schedule.recreate_enabled) continue;
+      const target =
+        schedule.next_recreate_at ??
+        (schedule.published_at
+          ? new Date(
+              new Date(schedule.published_at).getTime() +
+                relistPolicy.intervalDays * 86_400_000
+            ).toISOString()
+          : null);
+      if (!target) continue;
       const current = next.get(schedule.build_id);
       if (
         !current ||
-        new Date(schedule.next_recreate_at).getTime() <
+        new Date(target).getTime() <
           new Date(current).getTime()
       ) {
-        next.set(schedule.build_id, schedule.next_recreate_at);
+        next.set(schedule.build_id, target);
       }
     }
+    for (const build of Object.values(builds)) {
+      if (scheduleBuilds.has(build.id) || !relistPolicy.enabledDefault) continue;
+      const listedAt = build.listed_at;
+      if (!listedAt) continue;
+      next.set(
+        build.id,
+        new Date(
+          new Date(listedAt).getTime() + relistPolicy.intervalDays * 86_400_000
+        ).toISOString()
+      );
+    }
     return next;
-  }, [schedules]);
+  }, [builds, relistPolicy, schedules]);
+
+  const relistEnabledByBuild = useMemo(() => {
+    const state = new Map<number, boolean>();
+    for (const schedule of schedules) {
+      state.set(schedule.build_id, (state.get(schedule.build_id) ?? false) || schedule.recreate_enabled);
+    }
+    for (const build of Object.values(builds)) {
+      if (!state.has(build.id)) state.set(build.id, relistPolicy.enabledDefault);
+    }
+    return state;
+  }, [builds, relistPolicy, schedules]);
 
   const refresh = useCallback(async () => {
     setRefreshing(true);
     setError(null);
     try {
-      const [summary, ebay, amazon, scheduleRows, actionRows] =
+      const [summary, ebay, amazon, scheduleRows, actionRows, settings] =
         await Promise.all([
           api.manualBuilds.list(),
           api.ebayOAuth.status().catch(() => ({ connected: false })),
@@ -929,7 +967,16 @@ export default function CrossListingPage() {
           })),
           api.crossListing.schedules(),
           api.crossListing.actions(),
+          api.settings.get().catch(() => ({})),
         ]);
+      const policy = settings as {
+        relist_interval_days?: number;
+        relist_enabled_default?: boolean;
+      };
+      setRelistPolicy({
+        intervalDays: Math.max(1, policy.relist_interval_days ?? 7),
+        enabledDefault: policy.relist_enabled_default ?? true,
+      });
       const detailResults = await Promise.allSettled(
         summary.map((build) => api.manualBuilds.get(build.id))
       );
@@ -1154,6 +1201,41 @@ export default function CrossListingPage() {
       )
     )
       void publish();
+  };
+
+  const toggleRelist = async (item: GroupedListing) => {
+    const enabled = !(relistEnabledByBuild.get(item.buildId) ?? relistPolicy.enabledDefault);
+    const channels = tableChannels.filter((channel) => {
+      const source = item.byChannel[channel];
+      return (
+        Boolean(
+          schedules.find(
+            (schedule) =>
+              schedule.build_id === item.buildId &&
+              normalizeScheduleChannel(schedule.channel) === channel
+          )
+        ) || source?.status === "live" || source?.status === "draft"
+      );
+    });
+    if (!channels.length) return;
+    setRelistSaving(item.buildId);
+    try {
+      await Promise.all(
+        channels.map((channel) =>
+          api.crossListing.saveSchedule({
+            build_id: item.buildId,
+            channel,
+            interval_days: relistPolicy.intervalDays,
+            enabled,
+          })
+        )
+      );
+      await refresh();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Could not update relist policy.");
+    } finally {
+      setRelistSaving(null);
+    }
   };
 
   const publish = async () => {
@@ -1779,12 +1861,30 @@ export default function CrossListingPage() {
                     {new Date(item.updatedAt).toLocaleDateString("en-GB")}
                   </td>
                   <td className="border-l border-slate-800 px-4 py-3 text-center text-xs">
-                    <RelistCountdown
-                      target={
-                        relistAtByBuild.get(item.buildId) ??
-                        builds[item.buildId]?.next_recreate_at
-                      }
-                    />
+                    <div className="flex flex-col items-center gap-1.5">
+                      <RelistCountdown target={relistAtByBuild.get(item.buildId)} />
+                      <button
+                        type="button"
+                        onClick={() => void toggleRelist(item)}
+                        disabled={relistSaving === item.buildId}
+                        className={`rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wider transition-colors disabled:opacity-50 ${
+                          relistEnabledByBuild.get(item.buildId)
+                            ? "border-emerald-400/40 text-emerald-300 hover:bg-emerald-400/10"
+                            : "border-slate-600 text-slate-500 hover:border-slate-400 hover:text-slate-300"
+                        }`}
+                        title={
+                          relistEnabledByBuild.get(item.buildId)
+                            ? "Disable relisting for this listing"
+                            : "Enable relisting for this listing"
+                        }
+                      >
+                        {relistSaving === item.buildId
+                          ? "Saving…"
+                          : relistEnabledByBuild.get(item.buildId)
+                          ? "On"
+                          : "Off"}
+                      </button>
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-right">
                     <button

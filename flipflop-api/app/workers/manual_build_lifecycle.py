@@ -9,7 +9,7 @@ All registered on the APScheduler instance in app/workers/scheduler.py.
 """
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import structlog
 from sqlalchemy import select
@@ -17,14 +17,9 @@ from sqlalchemy import select
 from app.config import get_settings
 from app.services import ebay_trading_api, ebay_negotiation, offer_engine, pricing_engine
 from app.services.ebay_token_manager import get_valid_ebay_access_token
-from app.services.traffic_bands import jittered_recreate_slot, DEFAULT_BAND
 from app.workers.manual_build_scheduler import post_build_to_ebay
 
 log = structlog.get_logger(__name__)
-
-RECREATE_INTERVAL_DAYS = 7
-RECREATE_JITTER_DAYS = 1
-
 
 async def _get_token() -> str | None:
     settings = get_settings()
@@ -161,6 +156,7 @@ async def run_manual_build_recreate_cycle_job() -> dict:
         result = await db.execute(
             select(ManualBuild).where(
                 ManualBuild.status == "listed",
+                ManualBuild.relist_enabled.is_(True),
                 ManualBuild.listed_at.isnot(None),
                 ManualBuild.next_recreate_at.isnot(None),
                 ManualBuild.next_recreate_at <= now,
@@ -222,13 +218,13 @@ async def _recreate_manual_build(build, db) -> None:
     # internally consistent, and gets applied on the next successful publish.
     await post_build_to_ebay(build)
 
-    last_hour = build.next_recreate_at.hour if build.next_recreate_at else None
     build.last_recreate_at = datetime.utcnow()
     build.recreate_cycle_count += 1
-    build.next_recreate_at = jittered_recreate_slot(
-        build.traffic_band or DEFAULT_BAND,
-        datetime.utcnow(),
-        interval_days=RECREATE_INTERVAL_DAYS,
-        jitter_days=RECREATE_JITTER_DAYS,
-        avoid_hour=last_hour,
-    )
+    from app.models.app_settings import AppSettings
+    policy = (
+        await db.execute(
+            select(AppSettings).where(AppSettings.name == "default")
+        )
+    ).scalar_one_or_none()
+    interval_days = policy.relist_interval_days if policy else 7
+    build.next_recreate_at = build.last_recreate_at + timedelta(days=interval_days or 7)
