@@ -451,7 +451,11 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
         pb = by_name.get(definition['segment'])
         slots = curated_slots(catalogue.get(pb['id'], []) if pb else [], definition)
         chosen = [next((v for values in s['variants_by_tier'].values() for v in values if v['id'] == s['default_variant_id']), None) for s in slots]
-        missing = [s['slot_type'] for s, v in zip(slots, chosen) if v is None]
+        # Cases are resolved from case_catalogue below, not from component
+        # variants. The playbook slot is retained for the configurator shape,
+        # but an empty case variant list must not make every curated build
+        # appear incomplete.
+        missing = [s['slot_type'] for s, v in zip(slots, chosen) if v is None and s['slot_type'] != 'case']
         if not cases:
             missing.append('case')
         parts = sum(float(v['display_price']) for v in chosen if v) + (min(float(c['rrp_gbp']) for c in cases) if cases else 0)
