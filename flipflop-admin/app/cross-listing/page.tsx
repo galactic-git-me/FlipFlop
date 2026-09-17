@@ -198,15 +198,19 @@ async function downloadManualListingPack(source: CrossListingSource, channel: Ch
     "# FlipFlop Manual Listing Pack", "", `- Destination: ${channel.label}`, `- Source: ${source.source === "ebay_uk" ? "eBay UK" : "FlipFlop.shop"}`,
     `- Build ID: ${source.buildId}`, `- SKU: ${listing.sku}`, "", "## Title", listing.title, "", "## Description", listing.description,
     "", "## Bullet points", ...listing.bulletPoints.map((bullet) => `- ${bullet}`), "", "## Price", `${listing.currency} ${listing.price ?? "TBC"}`,
-    "", "## Condition", listing.condition, "", "## Specifications", ...Object.entries(listing.specifications).map(([key, value]) => `- **${key}:** ${value}`),
+    "", "## Condition", listing.condition, "", "## Item specifics", ...Object.entries(listing.specifications).map(([key, value]) => `- **${key}:** ${value}`),
     "", "## Warranty", listing.warranty, "", "## Shipping", "Delivery only — collection and pickup are not allowed.", listing.shipping,
     "", "## Included media", ...(mediaFiles.length ? mediaFiles.map((file) => `- ${file}`) : ["- No downloadable media was available"]),
     "", "## Manual steps", `1. Open the seller dashboard for ${channel.label}.`, "2. Create or update the listing using the fields above.", "3. Upload the files from the Media and 3D Model folders.", "4. Confirm the returned listing ID and URL in FlipFlop admin.",
   ].join("\n");
   zip.file("listing.md", markdown);
-  // Preserve the canonical generated listing body while making its logos and
-  // other inline assets work when the ZIP is opened outside FlipFlop.
-  zip.file("listing-body.html", canonicalBodyHtml);
+  const itemSpecificsHtml = Object.entries(listing.specifications)
+    .map(([key, value]) => `<dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd>`)
+    .join("");
+  // Preserve the canonical generated listing body while adding the title and
+  // item specifics required by marketplace listing editors. Logos and other
+  // inline assets have already been rewritten to local ZIP paths above.
+  zip.file("listing-body.html", `<h1>${escapeHtml(listing.title)}</h1><section><h2>Item specifics</h2><dl>${itemSpecificsHtml}</dl></section>${canonicalBodyHtml}`);
 
   const blob = await zip.generateAsync({ type: "blob" });
   const url = URL.createObjectURL(blob);
