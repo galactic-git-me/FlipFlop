@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeft, CheckCircle2, Circle, Hammer, Sparkles, ExternalLink,
-  Loader2, ShoppingBag, ImagePlus, Star, X, IdCard, BadgeCheck, Store, Download, Zap,
+  Loader2, ShoppingBag, ImagePlus, Star, X, IdCard, BadgeCheck, Download, Zap,
   CalendarClock, Truck, AlertTriangle, PoundSterling, UploadCloud,
   HelpCircle, Shuffle,
   Warehouse, Undo2,
@@ -870,15 +870,8 @@ export default function BuildDetailPage() {
         </div>
       </div>
 
-      {/* Channel status — where this build is actually purchasable right now */}
+      {/* Marketplace destinations are managed in Cross Listing. */}
       <div className="flex items-center gap-2 mb-6">
-        <ChannelBadge label="eBay" icon={ShoppingBag} live={!!build.ebay_live} />
-        {build.ebay_listing_status && build.ebay_listing_status !== "never_listed" && (
-          <span className="rounded-md border border-white/10 bg-white/[0.03] px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-slate-400">
-            {build.ebay_listing_status.replaceAll("_", " ")}
-          </span>
-        )}
-        <ChannelBadge label="FlipFlop.shop" icon={Store} live={!!build.storefront_live} />
         {build.status !== "in_progress" && build.model_3d_url && (
           <button
             type="button"
@@ -1982,35 +1975,6 @@ export default function BuildDetailPage() {
         </div>
       )}
     </>
-  );
-}
-
-function ChannelBadge({
-  label,
-  icon: Icon,
-  live,
-}: {
-  label: string;
-  icon: typeof ShoppingBag;
-  live: boolean;
-}) {
-  return (
-    <div
-      className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-semibold ${
-        live
-          ? "border-emerald-700/40 bg-emerald-950/30 text-emerald-300"
-          : "border-white/[0.07] bg-white/[0.02] text-slate-500"
-      }`}
-      title={live ? `Live on ${label}` : `Not currently published to ${label}`}
-    >
-      <Icon className="w-3.5 h-3.5" />
-      {label}
-      {live ? (
-        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-      ) : (
-        <X className="w-3.5 h-3.5 text-slate-600" />
-      )}
-    </div>
   );
 }
 

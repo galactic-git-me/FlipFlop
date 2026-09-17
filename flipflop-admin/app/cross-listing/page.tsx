@@ -184,6 +184,20 @@ async function downloadManualListingPack(source: CrossListingSource, channel: Ch
     }
   }
 
+  let faqs: Array<{ question: string; answer: string }> = [];
+  if (build) {
+    const faqResponse = await fetch(`/proxy-api/manual-builds/${source.buildId}/faqs`);
+    if (faqResponse.ok) {
+      const faqData = await faqResponse.json() as { bank?: Array<{ id: string; question: string; answer: string }>; selected_ids?: string[]; answer_overrides?: Record<string, string> };
+      const bank = faqData.bank ?? [];
+      const overrides = faqData.answer_overrides ?? {};
+      faqs = (faqData.selected_ids ?? []).map((id) => {
+        const faq = bank.find((entry) => entry.id === id);
+        return faq ? { question: faq.question, answer: overrides[id] || faq.answer } : null;
+      }).filter((faq): faq is { question: string; answer: string } => faq !== null);
+    }
+  }
+
   // The canonical body contains branded logos and other inline imagery that
   // is not necessarily present in the build photo list. Copy each referenced
   // asset and rewrite the HTML to a relative ZIP path for offline use.
@@ -200,6 +214,7 @@ async function downloadManualListingPack(source: CrossListingSource, channel: Ch
     "", "## Bullet points", ...listing.bulletPoints.map((bullet) => `- ${bullet}`), "", "## Price", `${listing.currency} ${listing.price ?? "TBC"}`,
     "", "## Condition", listing.condition, "", "## Item specifics", ...Object.entries(listing.specifications).map(([key, value]) => `- **${key}:** ${value}`),
     "", "## Warranty", listing.warranty, "", "## Shipping", "Delivery only — collection and pickup are not allowed.", listing.shipping,
+    "", "## FAQs", ...(faqs.length ? faqs.flatMap((faq) => [`### ${faq.question}`, faq.answer, ""]) : ["No saved FAQs were available."]),
     "", "## Included media", ...(mediaFiles.length ? mediaFiles.map((file) => `- ${file}`) : ["- No downloadable media was available"]),
     "", "## Manual steps", `1. Open the seller dashboard for ${channel.label}.`, "2. Create or update the listing using the fields above.", "3. Upload the files from the Media and 3D Model folders.", "4. Confirm the returned listing ID and URL in FlipFlop admin.",
   ].join("\n");
@@ -207,10 +222,13 @@ async function downloadManualListingPack(source: CrossListingSource, channel: Ch
   const itemSpecificsHtml = Object.entries(listing.specifications)
     .map(([key, value]) => `<dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd>`)
     .join("");
+  const faqsHtml = faqs.length
+    ? `<section><h2>Frequently asked questions</h2>${faqs.map((faq) => `<h3>${escapeHtml(faq.question)}</h3><p>${escapeHtml(faq.answer)}</p>`).join("")}</section>`
+    : "";
   // Preserve the canonical generated listing body while adding the title and
   // item specifics required by marketplace listing editors. Logos and other
   // inline assets have already been rewritten to local ZIP paths above.
-  zip.file("listing-body.html", `<h1>${escapeHtml(listing.title)}</h1><section><h2>Item specifics</h2><dl>${itemSpecificsHtml}</dl></section>${canonicalBodyHtml}`);
+  zip.file("listing-body.html", `<h1>${escapeHtml(listing.title)}</h1><section><h2>Item specifics</h2><dl>${itemSpecificsHtml}</dl></section>${faqsHtml}${canonicalBodyHtml}`);
 
   const blob = await zip.generateAsync({ type: "blob" });
   const url = URL.createObjectURL(blob);
