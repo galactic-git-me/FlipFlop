@@ -98,6 +98,7 @@ const sourceStatus = (build: ManualBuild, source: SourcePlatform): CrossListingS
     if (build.ebay_listing_status === "ended") return "ended";
     return "unavailable";
   }
+  if (build.status === "in_progress" && !build.storefront_product_id) return "draft";
   return build.storefront_product_id ? (build.storefront_live === false ? "ended" : "live") : "unavailable";
 };
 
@@ -163,7 +164,10 @@ export function sourcesFromBuild(build: ManualBuild): CrossListingSource[] {
   // A built canonical listing must be visible in Cross-listing even before it
   // has a first channel listing. Represent that pending storefront identity
   // without inventing a product ID or URL.
-  if (build.storefront_product_id || ["built", "listed", "sold"].includes(build.status)) {
+  // Keep newly-created builds visible so they can be reviewed/prepared before
+  // they are marked built. The publish endpoints still enforce the lifecycle
+  // requirement that a build must be built before it can go live.
+  if (build.storefront_product_id || ["in_progress", "built", "listed", "sold"].includes(build.status)) {
     items.push({
       id: `flipflop_shop:${build.id}`,
       source: "flipflop_shop",

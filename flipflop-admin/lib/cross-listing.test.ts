@@ -44,4 +44,12 @@ describe("cross-listing normalisation", () => {
     expect(sources[0]?.externalId).toBe("not-created");
     expect(sources[0]?.status).toBe("unavailable");
   });
+
+  it("shows a newly-created build as a draft before it is marked built", () => {
+    const inProgress = { ...build, status: "in_progress", ebay_listing_id: null, ebay_listing_status: "never_listed", storefront_product_id: null } as unknown as ManualBuild;
+    const sources = sourcesFromBuild(inProgress);
+    expect(sources).toHaveLength(1);
+    expect(sources[0]?.source).toBe("flipflop_shop");
+    expect(sources[0]?.status).toBe("draft");
+  });
 });
