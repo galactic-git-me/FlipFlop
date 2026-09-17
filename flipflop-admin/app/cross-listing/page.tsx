@@ -451,13 +451,6 @@ export default function CrossListingPage() {
       const capability = channelCapabilities.find((entry) => entry.channel === destination);
       if (!capability) continue;
       setProgressJobs((current) => current.map((job) => job.buildId === item.buildId && job.channel === capability.label ? { ...job, status: "running" } : job));
-      // The local storefront on port 4313 is the development destination.
-      // Do not call the production-facing list-on-storefront API from dev;
-      // that endpoint creates or updates a public Product row.
-      if (destination === "flipflop_shop" && isDevelopmentMode()) {
-        addResult({ buildId: item.buildId, channel: capability.label, status: "published", message: "Development preview opened. No public storefront product was created or updated.", url: devStorefrontUrl(item.buildId) });
-        continue;
-      }
       if (capability.mode !== "api") {
         if (destination === "amazon") {
           addResult({ buildId: item.buildId, channel: capability.label, status: "failed", message: capability.note });
@@ -487,7 +480,7 @@ export default function CrossListingPage() {
           addResult({ buildId: item.buildId, channel: capability.label, status: result.success ? "published" : "failed", message: result.message, url: result.listing_url ?? undefined });
         } else if (destination === "flipflop_shop" && build) {
           const result = await api.manualBuilds.listOnStorefront(item.buildId, item.listing.price ?? 0);
-          addResult({ buildId: item.buildId, channel: capability.label, status: "published", message: isDevelopmentMode() ? "Linked to the dev storefront product." : "Linked to the existing storefront product.", url: isDevelopmentMode() ? devStorefrontUrl(item.buildId) : result.storefront_url });
+          addResult({ buildId: item.buildId, channel: capability.label, status: "published", message: isDevelopmentMode() ? "Listed on the local development storefront. The public storefront was not contacted." : "Linked to the existing storefront product.", url: isDevelopmentMode() ? devStorefrontUrl(item.buildId) : result.storefront_url });
         }
       } catch (cause) { addResult({ buildId: item.buildId, channel: capability.label, status: "failed", message: cause instanceof Error ? cause.message : "Provider request failed." }); }
     }
