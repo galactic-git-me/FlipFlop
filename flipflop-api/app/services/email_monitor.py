@@ -370,8 +370,9 @@ class EmailMonitor:
                 sale = detector(body)
                 if sale:
                     sender_name, sender_email = parseaddr(msg.get("sender", ""))
+                    buyer_match = re.search(r"(?:buyer|customer|ship to|deliver to).*?([\w.+-]+@[\w.-]+\.[A-Za-z]{2,})", body, re.I | re.S)
                     sale["customer_name"] = sender_name or "FlipFlop customer"
-                    sale["customer_email"] = sender_email.lower() or None
+                    sale["customer_email"] = buyer_match.group(1).lower() if buyer_match else None
                     await self.process_sale_detection(sale, db)
                     build = await self._match_manual_build_sale(sale, db)
                     if build:
