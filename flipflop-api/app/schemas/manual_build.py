@@ -137,6 +137,7 @@ class ManualBuildOut(BaseModel):
     recreate_price_step_pct: float = 0.03
     traffic_band: Optional[str] = None
     listed_at: Optional[datetime] = None
+    relist_enabled: bool = True
     promoted_ad_rate_pct: Optional[float] = None
     marketplace_fees_actual: Optional[float] = None
     promotion_cost_actual: Optional[float] = None
