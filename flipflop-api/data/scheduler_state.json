@@ -3,22 +3,22 @@
     "last_success_at": "2026-09-17T01:12:39.683708+00:00"
   },
   "manual_build_deferred_publish": {
-    "last_success_at": "2026-09-17T01:12:39.689445+00:00"
+    "last_success_at": "2026-09-17T01:27:40.618554+00:00"
   },
   "deferred_publish": {
-    "last_success_at": "2026-09-17T01:12:39.690986+00:00"
+    "last_success_at": "2026-09-17T01:27:40.642907+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-09-17T01:23:39.985298+00:00"
+    "last_success_at": "2026-09-17T01:28:39.898457+00:00"
   },
   "ai_build_generator": {
     "last_success_at": "2026-09-16T23:39:48.610788+00:00"
   },
   "compliant_market_ingestion": {
-    "last_success_at": "2026-09-17T00:27:39.478635+00:00"
+    "last_success_at": "2026-09-17T01:27:39.791979+00:00"
   },
   "manual_build_recreate_cycle": {
-    "last_success_at": "2026-09-17T00:27:39.818285+00:00"
+    "last_success_at": "2026-09-17T01:27:40.622521+00:00"
   },
   "offer_poll": {
     "last_success_at": "2026-09-17T00:57:40.504129+00:00"
@@ -36,22 +36,22 @@
     "last_success_at": "2026-09-17T00:27:40.440457+00:00"
   },
   "catalogue_pipeline": {
-    "last_success_at": "2026-09-17T00:27:40.564921+00:00"
+    "last_success_at": "2026-09-17T01:27:47.401215+00:00"
   },
   "message_poll": {
-    "last_success_at": "2026-09-17T00:57:39.565703+00:00"
+    "last_success_at": "2026-09-17T01:27:40.444536+00:00"
   },
   "manual_build_offer_poll": {
-    "last_success_at": "2026-09-17T00:57:39.771755+00:00"
+    "last_success_at": "2026-09-17T01:27:40.519077+00:00"
   },
   "case_content_sourcing": {
-    "last_success_at": "2026-09-17T00:58:01.030224+00:00"
+    "last_success_at": "2026-09-17T01:28:00.679401+00:00"
   },
   "ebay_sales_tracker": {
-    "last_success_at": "2026-09-17T00:59:39.482570+00:00"
+    "last_success_at": "2026-09-17T01:29:39.489501+00:00"
   },
   "external_demand": {
-    "last_success_at": "2026-09-17T00:28:48.367861+00:00"
+    "last_success_at": "2026-09-17T01:28:22.727124+00:00"
   },
   "benchmark_refresh_daily": {
     "last_success_at": "2026-09-16T22:27:45.810292+00:00"
