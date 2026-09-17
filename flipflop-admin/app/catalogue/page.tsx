@@ -135,7 +135,12 @@ export default function CataloguePage() {
     setLoading(true);
     try {
       if (scope === "all") {
-        const raw = await api.gemRadar.scoredListingsLatestRun(process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV") as Array<Record<string, unknown>>;
+        // Let the API select its own runtime environment. The admin can be
+        // served locally while pointing at either the DEV API or the live
+        // production API, so a browser-side env flag can be stale or belong
+        // to a different process. The backend already resolves DEV/LIVE from
+        // FLIPFLOP_RUNTIME_ENV at the point where the data is queried.
+        const raw = await api.gemRadar.scoredListingsLatestRun() as Array<Record<string, unknown>>;
         setVariants(raw.map((row, index) => ({
           id: Number(row.id ?? index), listing_id: String(row.listing_id ?? row.id ?? index),
           listing_title: String(row.title ?? "Untitled listing"), image_url: (row.image_url as string | null) ?? null,
@@ -195,7 +200,7 @@ export default function CataloguePage() {
 
         <div className="min-w-0">
           <section className="sticky top-4 z-20 -mx-1 mb-3 min-w-0 rounded-lg bg-[#05080d]/95 px-1 pb-1 pt-1 backdrop-blur-md">
-            <div className="mb-2 flex items-center gap-2"><span className="text-xs font-semibold text-slate-400">Scope</span>{([['all','All listings'],['curated','Curated catalogue']] as const).map(([value,label]) => <button key={value} onClick={() => { setScope(value); setPage(1); }} className={`rounded-full border px-3 py-1 text-[10px] transition ${scope === value ? "border-cyan-400/50 bg-cyan-400/10 text-cyan-300" : "border-white/10 text-slate-500 hover:text-white"}`}>{label}</button>)}<span className="text-[10px] text-slate-600">{scope === "all" ? "Current DEV scan results" : "GEM/SUPER_GEM products mapped to build slots"}</span></div>
+            <div className="mb-2 flex items-center gap-2"><span className="text-xs font-semibold text-slate-400">Scope</span>{([['all','All listings'],['curated','Curated catalogue']] as const).map(([value,label]) => <button key={value} onClick={() => { setScope(value); setPage(1); }} className={`rounded-full border px-3 py-1 text-[10px] transition ${scope === value ? "border-cyan-400/50 bg-cyan-400/10 text-cyan-300" : "border-white/10 text-slate-500 hover:text-white"}`}>{label}</button>)}<span className="text-[10px] text-slate-600">{scope === "all" ? "Current active market listings" : "GEM/SUPER_GEM products mapped to build slots"}</span></div>
             <div className="flex flex-col gap-3 rounded-lg border border-white/10 bg-[#0b1119] p-3 shadow-xl shadow-black/20 md:flex-row md:items-center">
             <label className="flex min-w-0 flex-1 items-center gap-2 rounded-md border border-white/10 bg-black/20 px-3 text-slate-500 focus-within:border-cyan-400/60"><Search className="h-4 w-4 shrink-0" /><span className="sr-only">Search catalogue</span><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search components, models or titles" className="h-9 min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-600" /></label>
             <div className="flex items-center gap-2"><select value={status} onChange={e => setStatus(e.target.value)} className="h-9 rounded-md border border-white/10 bg-[#111923] px-2 text-xs text-slate-300 outline-none"><option value="all">All statuses</option><option value="active">Active</option><option value="pending_review">Needs review</option><option value="hidden">Hidden</option></select><button className="inline-flex h-9 items-center gap-2 rounded-md border border-white/10 px-3 text-xs text-slate-300 hover:border-cyan-400/40"><Filter className="h-3.5 w-3.5" /> Filters</button></div>
