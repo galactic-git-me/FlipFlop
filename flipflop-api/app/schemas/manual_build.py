@@ -44,7 +44,7 @@ class EvaluationResult(BaseModel):
 
 class BuildPhoto(BaseModel):
     url: str
-    kind: str = "photo"  # "photo" | "spec_card" | "registration_plate"
+    kind: str = "photo"  # "photo" | "video" | "spec_card" | "registration_plate" | "performance_card"
 
 
 class ManualBuildOut(BaseModel):
