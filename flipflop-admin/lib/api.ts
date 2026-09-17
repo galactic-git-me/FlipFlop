@@ -251,6 +251,9 @@ export interface ManualBuild {
   package_width_cm?: number | null;
   package_height_cm?: number | null;
   deferred_publish_at?: string | null;
+  // Existing manual-build relist/recreate clock. Per-channel schedules take
+  // precedence in the cross-listing view when one is configured.
+  next_recreate_at?: string | null;
   // Real post-sale order/shipment data (see /manual-builds/{id}/sync-ebay-order
   // and /manual-builds/{id}/book-shipment) — null until the build actually sells.
   ebay_order_id?: string | null;

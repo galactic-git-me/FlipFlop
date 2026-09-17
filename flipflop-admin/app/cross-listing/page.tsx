@@ -1780,7 +1780,10 @@ export default function CrossListingPage() {
                   </td>
                   <td className="border-l border-slate-800 px-4 py-3 text-center text-xs">
                     <RelistCountdown
-                      target={relistAtByBuild.get(item.buildId)}
+                      target={
+                        relistAtByBuild.get(item.buildId) ??
+                        builds[item.buildId]?.next_recreate_at
+                      }
                     />
                   </td>
                   <td className="px-4 py-3 text-right">
