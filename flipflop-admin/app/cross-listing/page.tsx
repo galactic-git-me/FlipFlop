@@ -150,7 +150,24 @@ function archiveFilename(rawUrl: string, fallback: string): string {
   }
 }
 
-async function downloadManualListingPack(source: CrossListingSource, channel: ChannelCapability, build?: ManualBuild) {
+type ManualPackResource = {
+  source: CrossListingSource;
+  build?: ManualBuild;
+  media: Array<{ kind: string; url: string; alt?: string }>;
+  model3dUrl?: string | null;
+};
+
+function createManualPackResource(source: CrossListingSource, build?: ManualBuild): ManualPackResource {
+  return {
+    source,
+    build,
+    media: (build?.photos ?? []).filter((photo) => photo.url).map((photo) => ({ kind: photo.kind, url: photo.url })),
+    model3dUrl: build?.model_3d_url,
+  };
+}
+
+async function downloadManualListingPack(resource: ManualPackResource) {
+  const { source, build } = resource;
   const listing = source.listing;
   const zip = new JSZip();
   const mediaFiles: string[] = [];
@@ -170,15 +187,14 @@ async function downloadManualListingPack(source: CrossListingSource, channel: Ch
     return archivePath;
   };
 
-  for (const [index, photo] of (build?.photos ?? []).entries()) {
-    if (!photo?.url) continue;
+  for (const [index, photo] of resource.media.entries()) {
     await addMedia(photo.url, photo.kind === "video" ? "Video" : "Image", `build-media-${index + 1}`);
   }
 
-  if (build?.model_3d_url) {
+  if (resource.model3dUrl) {
     const response = await fetch(`/proxy-api/manual-builds/${source.buildId}/model-3d/download`);
     if (response.ok) {
-      const filename = archiveFilename(build.model_3d_url, `build-${source.buildId}.glb`);
+      const filename = archiveFilename(resource.model3dUrl, `build-${source.buildId}.glb`);
       zip.file(`3D Model/${filename}`, await response.blob());
       mediaFiles.push(`3D model: 3D Model/${filename}`);
     }
@@ -209,14 +225,14 @@ async function downloadManualListingPack(source: CrossListingSource, channel: Ch
   }
 
   const markdown = [
-    "# FlipFlop Manual Listing Pack", "", `- Destination: ${channel.label}`, `- Source: ${source.source === "ebay_uk" ? "eBay UK" : "FlipFlop.shop"}`,
+    "# FlipFlop Manual Listing Pack", "", "- Reusable canonical pack for all listing channels", `- Source: ${source.source === "ebay_uk" ? "eBay UK" : "FlipFlop.shop"}`,
     `- Build ID: ${source.buildId}`, `- SKU: ${listing.sku}`, "", "## Title", listing.title, "", "## Description", listing.description,
     "", "## Bullet points", ...listing.bulletPoints.map((bullet) => `- ${bullet}`), "", "## Price", `${listing.currency} ${listing.price ?? "TBC"}`,
     "", "## Condition", listing.condition, "", "## Item specifics", ...Object.entries(listing.specifications).map(([key, value]) => `- **${key}:** ${value}`),
     "", "## Warranty", listing.warranty, "", "## Shipping", "Delivery only — collection and pickup are not allowed.", listing.shipping,
     "", "## FAQs", ...(faqs.length ? faqs.flatMap((faq) => [`### ${faq.question}`, faq.answer, ""]) : ["No saved FAQs were available."]),
     "", "## Included media", ...(mediaFiles.length ? mediaFiles.map((file) => `- ${file}`) : ["- No downloadable media was available"]),
-    "", "## Manual steps", `1. Open the seller dashboard for ${channel.label}.`, "2. Create or update the listing using the fields above.", "3. Upload the files from the Media and 3D Model folders.", "4. Confirm the returned listing ID and URL in FlipFlop admin.",
+    "", "## Manual steps", "1. Open the seller dashboard for the chosen channel.", "2. Create or update the listing using the fields above.", "3. Upload the files from the Media and 3D Model folders.", "4. Confirm the returned listing ID and URL in FlipFlop admin.",
   ].join("\n");
   zip.file("listing.md", markdown);
   const itemSpecificsHtml = Object.entries(listing.specifications)
@@ -232,13 +248,13 @@ async function downloadManualListingPack(source: CrossListingSource, channel: Ch
 
   const blob = await zip.generateAsync({ type: "blob" });
   const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a"); anchor.href = url; anchor.download = `flipflop-${source.buildId}-${channel.channel}-manual-pack.zip`; anchor.click();
+  const anchor = document.createElement("a"); anchor.href = url; anchor.download = `flipflop-${source.buildId}-manual-pack.zip`; anchor.click();
   URL.revokeObjectURL(url);
 }
 
-function ManualPack({ source, channel, build }: { source: CrossListingSource; channel: ChannelCapability; build?: ManualBuild }) {
+function ManualPack({ source, build }: { source: CrossListingSource; build?: ManualBuild }) {
   return <button className="inline-flex cursor-pointer items-center gap-1.5 rounded border border-slate-600 px-2.5 py-1.5 text-xs text-slate-200 transition-colors hover:border-emerald-400/50 hover:text-emerald-300" onClick={() => {
-    void downloadManualListingPack(source, channel, build);
+    void downloadManualListingPack(createManualPackResource(source, build));
   }}><Download className="h-3.5 w-3.5" /> Manual pack</button>;
 }
 
@@ -415,11 +431,8 @@ export default function CrossListingPage() {
 
   const downloadSelectedPacks = async () => {
     if (!selectedItems.length || !destinations.length) return;
-    for (const item of selectedItems) for (const destination of destinations) {
-      const capability = channelCapabilities.find((entry) => entry.channel === destination);
-      if (!capability) continue;
-
-      await downloadManualListingPack(item, capability, builds[item.buildId]);
+    for (const item of selectedItems) {
+      await downloadManualListingPack(createManualPackResource(item, builds[item.buildId]));
     }
   };
 
@@ -506,6 +519,6 @@ export default function CrossListingPage() {
     {results.length > 0 && <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4"><h2 className="mb-1 flex items-center gap-2 text-sm font-semibold text-white"><CheckCircle2 className="h-4 w-4 text-emerald-300" /> Batch results</h2><p className="mb-3 text-[11px] text-slate-500">Saved locally so this report remains available when you return to Cross-listing.</p><div className="space-y-2">{results.map((result, index) => <div key={`${result.channel}-${index}`} className="flex flex-col gap-2 rounded border border-slate-800 bg-slate-900/50 p-3 text-xs md:flex-row md:items-center md:justify-between"><div><span className="font-medium text-slate-200">{result.channel}</span><span className={`ml-2 ${result.status === "failed" ? "text-red-300" : result.status === "manual_action_required" || result.status === "blocked_in_development" ? "text-yellow-300" : "text-emerald-300"}`}>{labelForStatus(result.status)}</span><div className="mt-1 text-slate-400">{result.message}</div></div><div className="flex shrink-0 flex-wrap gap-2">{result.assist && <button onClick={() => openBrowserAssist(result.assist!)} className="inline-flex items-center gap-1 rounded border border-emerald-400/40 px-2.5 py-1.5 font-medium text-emerald-300 hover:bg-emerald-400/10">Open Chrome + ask Codex to create listing <ExternalLink className="h-3 w-3" /></button>}{result.url && <a href={result.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-emerald-300 hover:underline">View listing <ExternalLink className="h-3 w-3" /></a>}</div></div>)}</div></section>}
     {batchHistory.length > 1 && <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4"><h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white"><History className="h-4 w-4 text-emerald-300" /> Previous batch runs</h2><div className="space-y-2">{batchHistory.slice(1).map((batch) => <details key={batch.completedAt} className="rounded border border-slate-800 bg-slate-900/50 p-3 text-xs"><summary className="cursor-pointer text-slate-300">{new Date(batch.completedAt).toLocaleString("en-GB")} · {batch.results.filter((result) => result.status === "failed").length} failed / {batch.results.length} total</summary><div className="mt-3 space-y-1.5">{batch.results.map((result, index) => <div key={`${result.channel}-${index}`}><span className="text-slate-200">{result.channel}</span><span className={`ml-2 ${result.status === "failed" ? "text-red-300" : result.status === "manual_action_required" ? "text-yellow-300" : "text-emerald-300"}`}>{labelForStatus(result.status)}</span><span className="ml-2 text-slate-500">{result.message}</span></div>)}</div></details>)}</div></section>}
 
-    {review && <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/75 p-3 backdrop-blur-sm md:items-center"><div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-xl border border-slate-700 bg-[#0e1724] p-5 shadow-2xl"><div className="flex items-start justify-between gap-4"><div><div className="text-xs uppercase tracking-wider text-emerald-300">Payload review · {review.source === "ebay_uk" ? "eBay UK" : "FlipFlop.shop"}</div><h2 className="mt-1 text-xl font-semibold text-white">{review.title}</h2><p className="mt-1 text-xs text-slate-500">Canonical build {review.buildId} · edits are local to this review until saved.</p></div><button aria-label="Close review" onClick={() => setReviewId(null)} className="cursor-pointer rounded p-1 text-slate-400 hover:bg-slate-800 hover:text-white"><X className="h-5 w-5" /></button></div><div className="mt-5 grid gap-4 md:grid-cols-2"><label className="text-xs text-slate-400">Title<input value={draftTitle} onChange={(event) => setDraftTitle(event.target.value)} maxLength={80} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white outline-none focus:border-emerald-400/60" /><span className="mt-1 block text-right text-[10px] text-slate-500">{draftTitle.length}/80</span></label><label className="text-xs text-slate-400">Price (GBP)<input type="number" min="0" step="0.01" value={draftPrice} onChange={(event) => setDraftPrice(event.target.value)} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white outline-none focus:border-emerald-400/60" /></label></div><label className="mt-2 block text-xs text-slate-400">Description<textarea value={draftDescription} onChange={(event) => setDraftDescription(event.target.value)} rows={8} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm leading-6 text-slate-200 outline-none focus:border-emerald-400/60" /><span className="mt-1 block text-right text-[10px] text-slate-500">{draftDescription.length} characters</span></label><div className="mt-4 rounded-lg border border-slate-700/80 bg-white p-4 text-sm text-slate-900"><div className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Rendered listing HTML</div><div dangerouslySetInnerHTML={{ __html: `<h1>${escapeHtml(draftTitle)}</h1>${draftDescription}` }} /></div><div className="mt-4 rounded-lg border border-slate-700/80 bg-slate-900/50 p-3"><div className="mb-2 text-xs uppercase tracking-wider text-slate-500">Copied and transformed</div><div className="grid gap-2 text-xs text-slate-300 md:grid-cols-2"><div>✓ {review.listing.images.length} public image URL{review.listing.images.length === 1 ? "" : "s"}</div><div>✓ {Object.keys(review.listing.specifications).length} specification fields</div><div>✓ Shared price, stock and condition</div><div>⚠ Platform category and item specifics require destination validation</div></div></div><div className="mt-5 flex flex-wrap justify-end gap-2">{channelCapabilities.map((channel) => <ManualPack key={channel.channel} source={{ ...review, listing: { ...review.listing, title: draftTitle, description: draftDescription, price: draftPrice ? Number(draftPrice) : null } }} channel={channel} build={builds[review.buildId]} />)}<button onClick={() => setReviewId(null)} className="cursor-pointer rounded-md border border-slate-600 px-4 py-2 text-sm text-slate-200 hover:border-slate-400">Cancel</button><button onClick={saveReview} className="cursor-pointer rounded-md bg-emerald-400 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-emerald-300">Save review edits</button></div></div></div>}
+    {review && <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/75 p-3 backdrop-blur-sm md:items-center"><div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-xl border border-slate-700 bg-[#0e1724] p-5 shadow-2xl"><div className="flex items-start justify-between gap-4"><div><div className="text-xs uppercase tracking-wider text-emerald-300">Payload review · {review.source === "ebay_uk" ? "eBay UK" : "FlipFlop.shop"}</div><h2 className="mt-1 text-xl font-semibold text-white">{review.title}</h2><p className="mt-1 text-xs text-slate-500">Canonical build {review.buildId} · edits are local to this review until saved.</p></div><button aria-label="Close review" onClick={() => setReviewId(null)} className="cursor-pointer rounded p-1 text-slate-400 hover:bg-slate-800 hover:text-white"><X className="h-5 w-5" /></button></div><div className="mt-5 grid gap-4 md:grid-cols-2"><label className="text-xs text-slate-400">Title<input value={draftTitle} onChange={(event) => setDraftTitle(event.target.value)} maxLength={80} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white outline-none focus:border-emerald-400/60" /><span className="mt-1 block text-right text-[10px] text-slate-500">{draftTitle.length}/80</span></label><label className="text-xs text-slate-400">Price (GBP)<input type="number" min="0" step="0.01" value={draftPrice} onChange={(event) => setDraftPrice(event.target.value)} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-white outline-none focus:border-emerald-400/60" /></label></div><label className="mt-2 block text-xs text-slate-400">Description<textarea value={draftDescription} onChange={(event) => setDraftDescription(event.target.value)} rows={8} className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm leading-6 text-slate-200 outline-none focus:border-emerald-400/60" /><span className="mt-1 block text-right text-[10px] text-slate-500">{draftDescription.length} characters</span></label><div className="mt-4 rounded-lg border border-slate-700/80 bg-white p-4 text-sm text-slate-900"><div className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Rendered listing HTML</div><div dangerouslySetInnerHTML={{ __html: `<h1>${escapeHtml(draftTitle)}</h1>${draftDescription}` }} /></div><div className="mt-4 rounded-lg border border-slate-700/80 bg-slate-900/50 p-3"><div className="mb-2 text-xs uppercase tracking-wider text-slate-500">Copied and transformed</div><div className="grid gap-2 text-xs text-slate-300 md:grid-cols-2"><div>✓ {review.listing.images.length} public image URL{review.listing.images.length === 1 ? "" : "s"}</div><div>✓ {Object.keys(review.listing.specifications).length} specification fields</div><div>✓ Shared price, stock and condition</div><div>⚠ Platform category and item specifics require destination validation</div></div></div><div className="mt-5 flex flex-wrap justify-end gap-2"><ManualPack source={{ ...review, listing: { ...review.listing, title: draftTitle, description: draftDescription, price: draftPrice ? Number(draftPrice) : null } }} build={builds[review.buildId]} /><button onClick={() => setReviewId(null)} className="cursor-pointer rounded-md border border-slate-600 px-4 py-2 text-sm text-slate-200 hover:border-slate-400">Cancel</button><button onClick={saveReview} className="cursor-pointer rounded-md bg-emerald-400 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-emerald-300">Save review edits</button></div></div></div>}
   </div>;
 }
