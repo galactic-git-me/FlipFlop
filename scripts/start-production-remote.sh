@@ -4,6 +4,10 @@ api=/home/mac/CODING/FlipFlop-production
 shop=/home/mac/CODING/flipflop-shop
 production_branch="${FLIPFLOP_PRODUCTION_BRANCH:-main}"
 shop_branch="${FLIPFLOP_SHOP_PRODUCTION_BRANCH:-master}"
+# Keep the deployment helper on the same promotion branch as the checkout.
+# This prevents a stale remote FLIPFLOP_DEPLOY_BRANCH value from selecting
+# master when production is promoted from main.
+export FLIPFLOP_DEPLOY_BRANCH="$production_branch"
 deploy_if_needed() {
   local repo="$1"
   local deploy_script="$2"
