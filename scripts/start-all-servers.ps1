@@ -38,6 +38,14 @@ function Check-RepositoryForMode([string]$mode) {
     if (-not $branch -or $branch -eq "HEAD") {
         throw "Cannot update FlipFlop automatically while in a detached HEAD state."
     }
+    $expectedBranch = if ($mode -eq "development") {
+        if ($env:FLIPFLOP_DEVELOPMENT_BRANCH) { $env:FLIPFLOP_DEVELOPMENT_BRANCH } else { "dev" }
+    } else {
+        if ($env:FLIPFLOP_PRODUCTION_BRANCH) { $env:FLIPFLOP_PRODUCTION_BRANCH } else { "main" }
+    }
+    if ($branch -ne $expectedBranch) {
+        throw "$mode mode requires the '$expectedBranch' branch; this checkout is on '$branch'. No code was changed or deployed."
+    }
 
     & git -C $projectRoot fetch --quiet origin $branch
     if ($LASTEXITCODE -ne 0) {
@@ -215,6 +223,7 @@ function Confirm-LocalDatabaseRefresh {
 }
 
 function Promote-DevelopmentToProduction {
+    throw "Automatic DEV-to-main promotion is disabled. Merge to main explicitly before selecting LIVE OPERATOR."
     # Production is changed only here, at an operator-controlled startup.
     # Development pushes remain on dev and cannot trigger a production deploy.
     $productionBranch = if ($env:FLIPFLOP_PRODUCTION_BRANCH) { $env:FLIPFLOP_PRODUCTION_BRANCH } else { "main" }
@@ -270,6 +279,7 @@ function Promote-DevelopmentToProduction {
 
 $runMode = Select-RunMode
 if ($runMode -eq "live") {
+    Check-RepositoryForMode $runMode
     Write-Host "[*] Syncing production eBay account settings to Andromeda..." -ForegroundColor Cyan
     & (Join-Path $PSScriptRoot "sync-production-ebay-env.ps1")
     if ($LASTEXITCODE -ne 0) { throw "Production eBay environment sync failed" }
@@ -277,7 +287,6 @@ if ($runMode -eq "live") {
 if ($runMode -eq "development") {
     Check-RepositoryForMode $runMode
 } else {
-    Promote-DevelopmentToProduction
     & (Join-Path $PSScriptRoot "start-production-remote.ps1")
 }
 # Prepare the matching extension before starting/restarting any services.
