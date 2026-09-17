@@ -16,6 +16,7 @@ import {
   RefreshCw,
   Search,
   Send,
+  ShieldCheck,
   X,
   Clock3,
   History,
@@ -245,7 +246,10 @@ function scheduleStatus(status: string): CrossListingSource["status"] {
   return "unavailable";
 }
 
-function formatRelistCountdown(target: string | null | undefined, now: number): string {
+function formatRelistCountdown(
+  target: string | null | undefined,
+  now: number
+): string {
   if (!target) return "—";
   const remaining = new Date(target).getTime() - now;
   if (remaining <= 0) return "Due now";
@@ -263,7 +267,11 @@ function RelistCountdown({ target }: { target?: string | null }) {
     const timer = window.setInterval(() => setNow(Date.now()), 30_000);
     return () => window.clearInterval(timer);
   }, [target]);
-  return <span className={target ? "font-mono text-amber-200" : "text-slate-600"}>{formatRelistCountdown(target, now)}</span>;
+  return (
+    <span className={target ? "font-mono text-amber-200" : "text-slate-600"}>
+      {formatRelistCountdown(target, now)}
+    </span>
+  );
 }
 
 function mediaFetchUrl(rawUrl: string): string {
@@ -665,6 +673,90 @@ function openBrowserAssist({
   window.setTimeout(() => URL.revokeObjectURL(handoffUrl), 60_000);
 }
 
+type RecreateAction = Awaited<
+  ReturnType<typeof api.crossListing.actions>
+>[number];
+
+function RecreateActionLog({
+  actions,
+  onOpenHandoff,
+  onResult,
+}: {
+  actions: RecreateAction[];
+  onOpenHandoff: (action: RecreateAction) => void;
+  onResult: (id: number, success: boolean) => void;
+}) {
+  return (
+    <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4">
+      <h2 className="flex items-center gap-2 text-sm font-semibold text-white">
+        <History className="h-4 w-4 text-emerald-300" /> Recreate action log
+      </h2>
+      <p className="mt-1 text-xs text-slate-500">
+        End and recreate attempts are recorded per channel and also emitted as
+        admin notifications.
+      </p>
+      <div className="mt-3 space-y-2">
+        {actions.slice(0, 20).map((action) => (
+          <div
+            key={action.id}
+            className="flex flex-wrap items-center gap-2 rounded border border-slate-800 px-3 py-2 text-xs"
+          >
+            <span
+              className={
+                action.event_type.includes("failed")
+                  ? "text-red-300"
+                  : action.event_type.includes("created")
+                  ? "text-emerald-300"
+                  : action.event_type.includes("handoff")
+                  ? "text-yellow-300"
+                  : "text-slate-300"
+              }
+            >
+              {labelForStatus(action.event_type)}
+            </span>
+            <span className="text-cyan-200">{action.channel}</span>
+            <span className="text-slate-400">Build {action.build_id}</span>
+            <span className="text-slate-500">{action.message}</span>
+            {action.event_type === "recreate_handoff_required" && (
+              <>
+                <button
+                  onClick={() => onOpenHandoff(action)}
+                  className="inline-flex cursor-pointer items-center gap-1 rounded border border-yellow-400/40 px-2 py-1 text-[10px] text-yellow-200 hover:bg-yellow-400/10"
+                >
+                  <ExternalLink className="h-3 w-3" /> Open pack + seller page
+                  for Codex
+                </button>
+                <button
+                  onClick={() => onResult(action.id, true)}
+                  className="cursor-pointer rounded border border-emerald-400/40 px-2 py-1 text-[10px] text-emerald-200 hover:bg-emerald-400/10"
+                >
+                  Mark successful
+                </button>
+                <button
+                  onClick={() => onResult(action.id, false)}
+                  className="cursor-pointer rounded border border-red-400/40 px-2 py-1 text-[10px] text-red-200 hover:bg-red-400/10"
+                >
+                  Mark failed
+                </button>
+              </>
+            )}
+            <span className="ml-auto text-[10px] text-slate-600">
+              {action.created_at
+                ? new Date(action.created_at).toLocaleString("en-GB")
+                : ""}
+            </span>
+          </div>
+        ))}
+        {actions.length === 0 && (
+          <p className="py-4 text-center text-xs text-slate-500">
+            No recreate actions recorded yet.
+          </p>
+        )}
+      </div>
+    </section>
+  );
+}
+
 export default function CrossListingPage() {
   const [items, setItems] = useState<CrossListingSource[]>([]);
   const [builds, setBuilds] = useState<Record<number, ManualBuild>>({});
@@ -748,7 +840,11 @@ export default function CrossListingPage() {
     for (const schedule of schedules) {
       if (!schedule.recreate_enabled || !schedule.next_recreate_at) continue;
       const current = next.get(schedule.build_id);
-      if (!current || new Date(schedule.next_recreate_at).getTime() < new Date(current).getTime()) {
+      if (
+        !current ||
+        new Date(schedule.next_recreate_at).getTime() <
+          new Date(current).getTime()
+      ) {
         next.set(schedule.build_id, schedule.next_recreate_at);
       }
     }
@@ -763,12 +859,10 @@ export default function CrossListingPage() {
         await Promise.all([
           api.manualBuilds.list(),
           api.ebayOAuth.status().catch(() => ({ connected: false })),
-          api.crossListing
-            .amazonStatus()
-            .catch(() => ({
-              connected: false,
-              message: "Amazon connection could not be checked.",
-            })),
+          api.crossListing.amazonStatus().catch(() => ({
+            connected: false,
+            message: "Amazon connection could not be checked.",
+          })),
           api.crossListing.schedules(),
           api.crossListing.actions(),
         ]);
@@ -903,16 +997,25 @@ export default function CrossListingPage() {
     await refresh();
   };
 
-  const toggleAll = () =>
+  const toggleAll = () => {
+    const allSelected = filtered.length > 0 && filtered.every((item) => selected.has(item.id));
     setSelected((current) => {
       const next = new Set(current);
-      const allSelected =
-        filtered.length > 0 && filtered.every((item) => next.has(item.id));
-      filtered.forEach((item) =>
-        allSelected ? next.delete(item.id) : next.add(item.id)
-      );
+      filtered.forEach((item) => allSelected ? next.delete(item.id) : next.add(item.id));
       return next;
     });
+    if (allSelected) {
+      setDestinations([]);
+    } else {
+      const needsListing = [...new Set(filtered.flatMap((item) => channelCapabilities
+        .filter((channel) => {
+          const status = item.byChannel[channel.channel]?.status ?? "unavailable";
+          return status === "unavailable" || status === "failed";
+        })
+        .map((channel) => channel.channel)))];
+      setDestinations(needsListing);
+    }
+  };
   const toggleDestination = (channel: CrossListingChannel) =>
     setDestinations((current) =>
       current.includes(channel)
@@ -968,12 +1071,25 @@ export default function CrossListingPage() {
   };
 
   const downloadSelectedPacks = async () => {
-    if (!selectedItems.length || !destinations.length) return;
+    if (!selectedItems.length) return;
     for (const item of selectedItems) {
       await downloadManualListingPack(
         createManualPackResource(item, builds[item.buildId])
       );
     }
+  };
+
+  const submitSelected = () => {
+    if (
+      selectedItems.length &&
+      destinations.length &&
+      window.confirm(
+        `Confirm ${
+          selectedItems.length * destinations.length
+        } cross-listing job(s)? API destinations may create or update live listings.`
+      )
+    )
+      void publish();
   };
 
   const publish = async () => {
@@ -1236,142 +1352,175 @@ export default function CrossListingPage() {
         </button>
       </header>
 
-      <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
-        {channelCapabilities.map((channel) => {
-          const active = destinations.includes(channel.channel);
-          const listingStatus =
-            focusedGroup?.byChannel[channel.channel]?.status ??
-            (focusedGroup ? "unavailable" : null);
-          return (
-            <button
-              type="button"
-              aria-pressed={active}
-              key={channel.channel}
-              onClick={() => toggleDestination(channel.channel)}
-              className={`cursor-pointer rounded-lg border p-3 text-left transition-colors ${
-                active
-                  ? "border-emerald-400/60 bg-emerald-400/[0.07] shadow-[0_0_18px_rgba(52,211,153,0.08)]"
-                  : "border-slate-700/80 bg-[#0d1521]/90 opacity-60 hover:border-slate-500 hover:opacity-90"
-              }`}
-            >
-              <div className="flex items-start gap-3">
-                <div className="min-w-0 flex-1">
-                  <div className="flex min-h-6 items-start justify-between gap-2">
-                    <span className="text-sm font-medium leading-6 text-white">
-                      {channel.label}
-                    </span>
-                    <span
-                      className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wide ${
-                        channel.mode === "api"
-                          ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300"
-                          : channel.mode === "requires_approval"
-                          ? "border-yellow-400/30 bg-yellow-400/10 text-yellow-300"
-                          : "border-slate-600 bg-slate-800 text-slate-300"
-                      }`}
-                    >
-                      {channel.mode === "api"
-                        ? "API"
-                        : labelForStatus(channel.mode)}
-                    </span>
-                  </div>
-                  {listingStatus && (
-                    <div
-                      className={`mt-2 text-xs font-medium ${
-                        listingStatus === "live"
-                          ? "text-emerald-300"
-                          : listingStatus === "failed"
-                          ? "text-red-300"
-                          : "text-yellow-200"
-                      }`}
-                    >
-                      {listingStatus === "live" ? "✓ " : ""}
-                      {labelForStatus(listingStatus)} for selected listing
-                    </div>
-                  )}
-                  <p className="mt-2 min-h-[60px] text-xs leading-5 text-slate-400">
-                    {channel.note}
-                  </p>
-                </div>
-                <span
-                  className={`shrink-0 text-lg leading-6 ${
-                    active ? "text-emerald-300" : "text-slate-600"
+      <div className="fixed right-4 top-1/3 z-50 flex flex-col items-center gap-2">
+        <div
+          title="Cross-listing actions"
+          className="mb-1 flex w-11 flex-col items-center gap-1 rounded-xl border border-slate-600/50 bg-slate-800/60 px-1 py-2 backdrop-blur-sm"
+        >
+          <span className="max-h-16 [writing-mode:vertical-rl] text-[10px] font-mono text-slate-400">
+            ACTIONS
+          </span>
+        </div>
+        <RailButton
+          label="Download listing pack"
+          icon={ClipboardCopy}
+          onClick={() => void downloadSelectedPacks()}
+          disabled={!selectedItems.length}
+          accent="blue"
+        />
+        <RailButton
+          label="Review & submit"
+          icon={Send}
+          onClick={submitSelected}
+          disabled={publishing || !selectedItems.length || !destinations.length}
+          isLoading={publishing}
+          accent="green"
+        />
+      </div>
+
+      {false && (
+        <>
+          <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
+            {channelCapabilities.map((channel) => {
+              const active = destinations.includes(channel.channel);
+              const listingStatus =
+                focusedGroup?.byChannel[channel.channel]?.status ??
+                (focusedGroup ? "unavailable" : null);
+              return (
+                <button
+                  type="button"
+                  aria-pressed={active}
+                  key={channel.channel}
+                  onClick={() => toggleDestination(channel.channel)}
+                  className={`cursor-pointer rounded-lg border p-3 text-left transition-colors ${
+                    active
+                      ? "border-emerald-400/60 bg-emerald-400/[0.07] shadow-[0_0_18px_rgba(52,211,153,0.08)]"
+                      : "border-slate-700/80 bg-[#0d1521]/90 opacity-60 hover:border-slate-500 hover:opacity-90"
                   }`}
                 >
-                  {active ? "✓" : "○"}
-                </span>
-              </div>
-            </button>
-          );
-        })}
-      </section>
+                  <div className="flex items-start gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex min-h-6 items-start justify-between gap-2">
+                        <span className="text-sm font-medium leading-6 text-white">
+                          {channel.label}
+                        </span>
+                        <span
+                          className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wide ${
+                            channel.mode === "api"
+                              ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300"
+                              : channel.mode === "requires_approval"
+                              ? "border-yellow-400/30 bg-yellow-400/10 text-yellow-300"
+                              : "border-slate-600 bg-slate-800 text-slate-300"
+                          }`}
+                        >
+                          {channel.mode === "api"
+                            ? "API"
+                            : labelForStatus(channel.mode)}
+                        </span>
+                      </div>
+                      {listingStatus && (
+                        <div
+                          className={`mt-2 text-xs font-medium ${
+                            listingStatus === "live"
+                              ? "text-emerald-300"
+                              : listingStatus === "failed"
+                              ? "text-red-300"
+                              : "text-yellow-200"
+                          }`}
+                        >
+                          {listingStatus === "live" ? "✓ " : ""}
+                          {labelForStatus(listingStatus)} for selected listing
+                        </div>
+                      )}
+                      <p className="mt-2 min-h-[60px] text-xs leading-5 text-slate-400">
+                        {channel.note}
+                      </p>
+                    </div>
+                    <span
+                      className={`shrink-0 text-lg leading-6 ${
+                        active ? "text-emerald-300" : "text-slate-600"
+                      }`}
+                    >
+                      {active ? "✓" : "○"}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </section>
 
-      <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4">
-        <h2 className="flex items-center gap-2 text-sm font-semibold text-white">
-          <History className="h-4 w-4 text-emerald-300" /> Recreate action log
-        </h2>
-        <p className="mt-1 text-xs text-slate-500">
-          End and recreate attempts are recorded per channel and also emitted as
-          admin notifications.
-        </p>
-        <div className="mt-3 space-y-2">
-          {actions.slice(0, 20).map((action) => (
-            <div
-              key={action.id}
-              className="flex flex-wrap items-center gap-2 rounded border border-slate-800 px-3 py-2 text-xs"
-            >
-              <span
-                className={
-                  action.event_type.includes("failed")
-                    ? "text-red-300"
-                    : action.event_type.includes("created")
-                    ? "text-emerald-300"
-                    : action.event_type.includes("handoff")
-                    ? "text-yellow-300"
-                    : "text-slate-300"
-                }
-              >
-                {labelForStatus(action.event_type)}
-              </span>
-              <span className="text-cyan-200">{action.channel}</span>
-              <span className="text-slate-400">Build {action.build_id}</span>
-              <span className="text-slate-500">{action.message}</span>
-              {action.event_type === "recreate_handoff_required" && (
-                <>
-                  <button
-                    onClick={() => openScheduledHandoff(action)}
-                    className="inline-flex cursor-pointer items-center gap-1 rounded border border-yellow-400/40 px-2 py-1 text-[10px] text-yellow-200 hover:bg-yellow-400/10"
-                  >
-                    <ExternalLink className="h-3 w-3" /> Open pack + seller page
-                    for Codex
-                  </button>
-                  <button
-                    onClick={() => void recordCodexResult(action.id, true)}
-                    className="cursor-pointer rounded border border-emerald-400/40 px-2 py-1 text-[10px] text-emerald-200 hover:bg-emerald-400/10"
-                  >
-                    Mark successful
-                  </button>
-                  <button
-                    onClick={() => void recordCodexResult(action.id, false)}
-                    className="cursor-pointer rounded border border-red-400/40 px-2 py-1 text-[10px] text-red-200 hover:bg-red-400/10"
-                  >
-                    Mark failed
-                  </button>
-                </>
-              )}
-              <span className="ml-auto text-[10px] text-slate-600">
-                {action.created_at
-                  ? new Date(action.created_at).toLocaleString("en-GB")
-                  : ""}
-              </span>
-            </div>
-          ))}
-          {actions.length === 0 && (
-            <p className="py-4 text-center text-xs text-slate-500">
-              No recreate actions recorded yet.
+          <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4">
+            <h2 className="flex items-center gap-2 text-sm font-semibold text-white">
+              <History className="h-4 w-4 text-emerald-300" /> Recreate action
+              log
+            </h2>
+            <p className="mt-1 text-xs text-slate-500">
+              End and recreate attempts are recorded per channel and also
+              emitted as admin notifications.
             </p>
-          )}
-        </div>
-      </section>
+            <div className="mt-3 space-y-2">
+              {actions.slice(0, 20).map((action) => (
+                <div
+                  key={action.id}
+                  className="flex flex-wrap items-center gap-2 rounded border border-slate-800 px-3 py-2 text-xs"
+                >
+                  <span
+                    className={
+                      action.event_type.includes("failed")
+                        ? "text-red-300"
+                        : action.event_type.includes("created")
+                        ? "text-emerald-300"
+                        : action.event_type.includes("handoff")
+                        ? "text-yellow-300"
+                        : "text-slate-300"
+                    }
+                  >
+                    {labelForStatus(action.event_type)}
+                  </span>
+                  <span className="text-cyan-200">{action.channel}</span>
+                  <span className="text-slate-400">
+                    Build {action.build_id}
+                  </span>
+                  <span className="text-slate-500">{action.message}</span>
+                  {action.event_type === "recreate_handoff_required" && (
+                    <>
+                      <button
+                        onClick={() => openScheduledHandoff(action)}
+                        className="inline-flex cursor-pointer items-center gap-1 rounded border border-yellow-400/40 px-2 py-1 text-[10px] text-yellow-200 hover:bg-yellow-400/10"
+                      >
+                        <ExternalLink className="h-3 w-3" /> Open pack + seller
+                        page for Codex
+                      </button>
+                      <button
+                        onClick={() => void recordCodexResult(action.id, true)}
+                        className="cursor-pointer rounded border border-emerald-400/40 px-2 py-1 text-[10px] text-emerald-200 hover:bg-emerald-400/10"
+                      >
+                        Mark successful
+                      </button>
+                      <button
+                        onClick={() => void recordCodexResult(action.id, false)}
+                        className="cursor-pointer rounded border border-red-400/40 px-2 py-1 text-[10px] text-red-200 hover:bg-red-400/10"
+                      >
+                        Mark failed
+                      </button>
+                    </>
+                  )}
+                  <span className="ml-auto text-[10px] text-slate-600">
+                    {action.created_at
+                      ? new Date(action.created_at).toLocaleString("en-GB")
+                      : ""}
+                  </span>
+                </div>
+              ))}
+              {actions.length === 0 && (
+                <p className="py-4 text-center text-xs text-slate-500">
+                  No recreate actions recorded yet.
+                </p>
+              )}
+            </div>
+          </section>
+        </>
+      )}
 
       {warnings.length > 0 && (
         <div className="flex items-start gap-3 rounded-lg border border-yellow-400/30 bg-yellow-400/10 p-3 text-sm text-yellow-100">
@@ -1498,6 +1647,9 @@ export default function CrossListingPage() {
                   </th>
                 ))}
                 <th className="border-l border-slate-800 px-4 py-3">Updated</th>
+                <th className="border-l border-slate-800 px-4 py-3">
+                  Relist in
+                </th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
@@ -1512,14 +1664,7 @@ export default function CrossListingPage() {
                   <td className="px-4 py-3">
                     <button
                       aria-label={`Select ${item.title}`}
-                      onClick={() =>
-                        setSelected((current) => {
-                          const next = new Set(current);
-                          if (next.has(item.id)) next.delete(item.id);
-                          else next.add(item.id);
-                          return next;
-                        })
-                      }
+                      onClick={() => selectListing(item)}
                       className={`flex h-4 w-4 cursor-pointer items-center justify-center rounded border ${
                         selected.has(item.id)
                           ? "border-emerald-400 bg-emerald-400 text-slate-950"
@@ -1569,6 +1714,11 @@ export default function CrossListingPage() {
                   <td className="border-l border-slate-800 px-4 py-3 text-xs text-slate-500">
                     {new Date(item.updatedAt).toLocaleDateString("en-GB")}
                   </td>
+                  <td className="border-l border-slate-800 px-4 py-3 text-center text-xs">
+                    <RelistCountdown
+                      target={relistAtByBuild.get(item.buildId)}
+                    />
+                  </td>
                   <td className="px-4 py-3 text-right">
                     <button
                       onClick={() => openReview(item.primary)}
@@ -1602,77 +1752,79 @@ export default function CrossListingPage() {
         </div>
       </section>
 
-      <section className="sticky bottom-3 z-20 rounded-xl border border-emerald-400/20 bg-[#0b121d]/95 p-4 shadow-2xl shadow-black/30 backdrop-blur">
-        <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-          <div className="min-w-0 flex-1">
-            <div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-wider text-slate-400">
-              <ShieldCheck className="h-4 w-4 text-emerald-300" /> Destination
-              workflow
+      {false && (
+        <section className="sticky bottom-3 z-20 rounded-xl border border-emerald-400/20 bg-[#0b121d]/95 p-4 shadow-2xl shadow-black/30 backdrop-blur">
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+            <div className="min-w-0 flex-1">
+              <div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-wider text-slate-400">
+                <ShieldCheck className="h-4 w-4 text-emerald-300" /> Destination
+                workflow
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {channelCapabilities.map((channel) => (
+                  <button
+                    key={channel.channel}
+                    onClick={() => toggleDestination(channel.channel)}
+                    className={`cursor-pointer rounded-md border px-3 py-2 text-xs transition-colors ${
+                      destinations.includes(channel.channel)
+                        ? "border-emerald-400/60 bg-emerald-400/10 text-emerald-200"
+                        : "border-slate-700 text-slate-400 hover:border-slate-500"
+                    }`}
+                  >
+                    <span className="mr-1.5">
+                      {destinations.includes(channel.channel) ? "✓" : "○"}
+                    </span>
+                    {channel.label}
+                  </button>
+                ))}
+              </div>
+              <div className="mt-2 text-xs text-slate-500">
+                {selectedItems.length} source listing
+                {selectedItems.length === 1 ? "" : "s"} × {destinations.length}{" "}
+                destination{destinations.length === 1 ? "" : "s"} ={" "}
+                {selectedItems.length * destinations.length} job
+                {selectedItems.length * destinations.length === 1 ? "" : "s"}.
+                Manual-only destinations remain manual_action_required.
+              </div>
+              <ManualPackContents />
             </div>
             <div className="flex flex-wrap gap-2">
-              {channelCapabilities.map((channel) => (
-                <button
-                  key={channel.channel}
-                  onClick={() => toggleDestination(channel.channel)}
-                  className={`cursor-pointer rounded-md border px-3 py-2 text-xs transition-colors ${
-                    destinations.includes(channel.channel)
-                      ? "border-emerald-400/60 bg-emerald-400/10 text-emerald-200"
-                      : "border-slate-700 text-slate-400 hover:border-slate-500"
-                  }`}
-                >
-                  <span className="mr-1.5">
-                    {destinations.includes(channel.channel) ? "✓" : "○"}
-                  </span>
-                  {channel.label}
-                </button>
-              ))}
-            </div>
-            <div className="mt-2 text-xs text-slate-500">
-              {selectedItems.length} source listing
-              {selectedItems.length === 1 ? "" : "s"} × {destinations.length}{" "}
-              destination{destinations.length === 1 ? "" : "s"} ={" "}
-              {selectedItems.length * destinations.length} job
-              {selectedItems.length * destinations.length === 1 ? "" : "s"}.
-              Manual-only destinations remain manual_action_required.
-            </div>
-            <ManualPackContents />
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={downloadSelectedPacks}
-              disabled={!selectedItems.length || !destinations.length}
-              className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-slate-600 px-3 py-2.5 text-xs text-slate-200 hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              <ClipboardCopy className="h-4 w-4" /> Download manual packs
-            </button>
-            <button
-              onClick={() => {
-                if (
-                  selectedItems.length &&
-                  destinations.length &&
-                  window.confirm(
-                    `Confirm ${
-                      selectedItems.length * destinations.length
-                    } cross-listing job(s)? API destinations may create or update live listings.`
+              <button
+                onClick={downloadSelectedPacks}
+                disabled={!selectedItems.length || !destinations.length}
+                className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-slate-600 px-3 py-2.5 text-xs text-slate-200 hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <ClipboardCopy className="h-4 w-4" /> Download manual packs
+              </button>
+              <button
+                onClick={() => {
+                  if (
+                    selectedItems.length &&
+                    destinations.length &&
+                    window.confirm(
+                      `Confirm ${
+                        selectedItems.length * destinations.length
+                      } cross-listing job(s)? API destinations may create or update live listings.`
+                    )
                   )
-                )
-                  void publish();
-              }}
-              disabled={
-                publishing || !selectedItems.length || !destinations.length
-              }
-              className="inline-flex cursor-pointer items-center gap-2 rounded-md bg-emerald-400 px-4 py-2.5 text-xs font-semibold text-slate-950 transition-colors hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              {publishing ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Send className="h-4 w-4" />
-              )}
-              {publishing ? "Submitting…" : "Review & submit"}
-            </button>
+                    void publish();
+                }}
+                disabled={
+                  publishing || !selectedItems.length || !destinations.length
+                }
+                className="inline-flex cursor-pointer items-center gap-2 rounded-md bg-emerald-400 px-4 py-2.5 text-xs font-semibold text-slate-950 transition-colors hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                {publishing ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Send className="h-4 w-4" />
+                )}
+                {publishing ? "Submitting…" : "Review & submit"}
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {results.length > 0 && (
         <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4">
@@ -1778,6 +1930,12 @@ export default function CrossListingPage() {
           </div>
         </section>
       )}
+
+      <RecreateActionLog
+        actions={actions}
+        onOpenHandoff={openScheduledHandoff}
+        onResult={(id, success) => void recordCodexResult(id, success)}
+      />
 
       {review && (
         <div
