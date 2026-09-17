@@ -178,7 +178,7 @@ export default function CataloguePage() {
   const pageCount = Math.max(1, Math.ceil(visible.length / pageSize));
   const pagedVisible = visible.slice((page - 1) * pageSize, page * pageSize);
 
-  return <div className="catalogue-page min-h-full overflow-x-hidden bg-[#05080d] p-4 text-slate-100 sm:p-6">
+  return <div className="catalogue-page min-h-full overflow-x-clip bg-[#05080d] p-4 text-slate-100 sm:p-6">
     <div className="mx-auto max-w-[1500px]">
       <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
         <div><p className="mb-1 font-mono text-[10px] uppercase tracking-[0.24em] text-cyan-400">FlipFlop / Inventory intelligence</p><h1 className="text-2xl font-bold tracking-tight text-white">Catalogue</h1><p className="mt-1 text-sm text-slate-400">Browse, compare and manage your retained component opportunities.</p></div>
