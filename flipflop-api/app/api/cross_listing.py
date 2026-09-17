@@ -220,6 +220,10 @@ async def record_codex_result(event_id: int, body: CodexHandoffResultIn, db: Asy
 
 def _schedule(row: ChannelListing) -> dict:
     return {"id": row.id, "build_id": row.manual_build_id, "channel": row.channel, "status": row.status,
+            "external_listing_id": row.external_listing_id,
+            "published_at": row.published_at.isoformat() if row.published_at else None,
+            "withdrawn_at": row.withdrawn_at.isoformat() if row.withdrawn_at else None,
+            "updated_at": row.updated_at.isoformat() if row.updated_at else None,
             "recreate_enabled": row.recreate_enabled, "interval_days": row.recreate_interval_days,
             "next_recreate_at": row.next_recreate_at.isoformat() if row.next_recreate_at else None,
             "last_recreate_at": row.last_recreate_at.isoformat() if row.last_recreate_at else None,

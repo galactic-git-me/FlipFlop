@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import JSZip from "jszip";
 import {
   AlertTriangle, Check, CheckCircle2, ClipboardCopy, Download, ExternalLink,
@@ -40,9 +40,10 @@ function groupListings(sources: CrossListingSource[]): GroupedListing[] {
   const groups = new Map<string, GroupedListing>();
   sources.forEach((source) => {
     const key = source.canonicalProductId || String(source.buildId);
+    const channel = source.channel ?? source.source;
     const existing = groups.get(key);
     if (existing) {
-      existing.byChannel[source.source] = source;
+      existing.byChannel[channel] = source;
       if (source.updatedAt > existing.updatedAt) {
         existing.updatedAt = source.updatedAt;
         existing.primary = source;
@@ -59,20 +60,11 @@ function groupListings(sources: CrossListingSource[]): GroupedListing[] {
       updatedAt: source.updatedAt,
       listing: source.listing,
       primary: source,
-      byChannel: { [source.source]: source },
+      byChannel: { [channel]: source },
     });
   });
   return [...groups.values()];
 }
-
-const statusPresentation: Record<CrossListingSource["status"], { emoji: string; label: string }> = {
-  live: { emoji: "🟢", label: "Listed" },
-  draft: { emoji: "📝", label: "Draft" },
-  sold: { emoji: "💰", label: "Sold" },
-  ended: { emoji: "⚫", label: "Unlisted" },
-  unavailable: { emoji: "⚪", label: "Not listed" },
-  failed: { emoji: "❓", label: "Unknown" },
-};
 
 function VendorLogo({ channel }: { channel: CrossListingChannel }) {
   const labels: Record<CrossListingChannel, string> = {
@@ -123,12 +115,42 @@ function listingUrlFor(source?: CrossListingSource) {
   return source.url;
 }
 
-function ChannelCell({ source, mode }: { source?: CrossListingSource; mode: "price" | "status" }) {
-  const status = statusPresentation[source?.status ?? "unavailable"];
-  if (mode === "price") return <div className="min-w-[76px] text-center font-medium text-slate-200">{source?.price == null ? "—" : `£${source.price.toFixed(2)}`}</div>;
-  const statusContent = <><span aria-hidden="true">{status.emoji}</span><span className="ml-1">{status.label}</span></>;
+function ChannelCell({ source }: { source?: CrossListingSource }) {
+  if (!source || source.status === "unavailable" || source.status === "ended" || source.status === "sold") {
+    return <div className="flex min-h-8 min-w-[76px] items-center justify-center" aria-label="Not listed" />;
+  }
+  const isLive = source.status === "live";
+  const isFailed = source.status === "failed";
+  const statusLabel = isFailed ? "Listing failed" : isLive ? "Listed live" : "Listed as draft";
+  const statusClass = isFailed ? "text-red-400" : isLive ? "text-emerald-400" : "text-amber-300";
+  const statusContent = <span className={`inline-flex h-7 w-7 items-center justify-center rounded-full border text-base font-bold ${isFailed ? "border-red-400/40 bg-red-400/10" : isLive ? "border-emerald-400/40 bg-emerald-400/10" : "border-amber-300/40 bg-amber-300/10"} ${statusClass}`} aria-label={statusLabel}>✓</span>;
   const url = listingUrlFor(source);
-  return <div className="min-w-[76px] text-center text-xs text-slate-300" title={status.label}>{url ? <a href={url} target="_blank" rel="noreferrer" className="rounded-sm transition-colors hover:text-emerald-300 hover:underline focus:outline-none focus:ring-1 focus:ring-emerald-400">{statusContent}</a> : statusContent}</div>;
+  const cell = <div className="flex min-h-8 min-w-[76px] items-center justify-center" title={source.error || undefined}>{url ? <a href={url} target="_blank" rel="noreferrer" className="rounded-full transition-transform hover:scale-110 focus:outline-none focus:ring-1 focus:ring-emerald-400">{statusContent}</a> : statusContent}</div>;
+  return cell;
+}
+
+type ChannelSchedule = Awaited<ReturnType<typeof api.crossListing.schedules>>[number];
+
+function normalizeScheduleChannel(channel: string): CrossListingChannel | null {
+  const aliases: Record<string, CrossListingChannel> = {
+    ebay: "ebay_uk",
+    ebay_uk: "ebay_uk",
+    storefront: "flipflop_shop",
+    flipflop_shop: "flipflop_shop",
+    onbuy: "onbuy",
+    amazon: "amazon",
+    facebook_catalog: "facebook_catalog",
+    vinted: "vinted",
+  };
+  return aliases[channel.toLowerCase()] ?? null;
+}
+
+function scheduleStatus(status: string): CrossListingSource["status"] {
+  if (["published", "active", "updated"].includes(status)) return "live";
+  if (["draft", "scheduled", "publishing", "queued", "validating", "ready", "manual_action_required"].includes(status)) return "draft";
+  if (status === "failed") return "failed";
+  if (["withdrawn", "cancelled", "ended"].includes(status)) return "ended";
+  return "unavailable";
 }
 
 function mediaFetchUrl(rawUrl: string): string {
@@ -340,12 +362,13 @@ export default function CrossListingPage() {
   const [actions, setActions] = useState<Awaited<ReturnType<typeof api.crossListing.actions>>>([]);
 
   const channelCapabilities = useMemo(() => capabilities(connected, amazonConnected, amazonMessage), [connected, amazonConnected, amazonMessage]);
+  const tableChannels = channelCapabilities.map((channel) => channel.channel);
   const grouped = useMemo(() => groupListings(items), [items]);
   const selectedGroups = grouped.filter((item) => selected.has(item.id));
   const selectedItems = selectedGroups.map((group) => group.primary);
   const focusedGroup = selectedGroups.length === 1 ? selectedGroups[0] : null;
   const filtered = useMemo(() => grouped.filter((item) => {
-    const channelSources = destinations.map((channel) => item.byChannel[channel]).filter(Boolean) as CrossListingSource[];
+    const channelSources = tableChannels.map((channel) => item.byChannel[channel]).filter(Boolean) as CrossListingSource[];
     const matchesQuery = !query || `${item.title} ${item.buildId} ${channelSources.map((source) => source.externalId).join(" ")}`.toLowerCase().includes(query.toLowerCase());
     // The table is grouped by the canonical product. Indirect channels do not
     // have a source listing yet, so filtering by one of them should still show
@@ -353,13 +376,13 @@ export default function CrossListingPage() {
     const matchesSource = sourceFilter === "all" || Boolean(item.byChannel[sourceFilter]);
     const matchesStatus = statusFilter === "all" || channelSources.some((source) => source.status === statusFilter);
     return matchesQuery && matchesSource && matchesStatus;
-  }).sort((a, b) => sort === "title" ? a.title.localeCompare(b.title) : sort === "price" ? (b.primary.price ?? 0) - (a.primary.price ?? 0) : b.updatedAt.localeCompare(a.updatedAt)), [grouped, destinations, query, sourceFilter, statusFilter, sort]);
+  }).sort((a, b) => sort === "title" ? a.title.localeCompare(b.title) : sort === "price" ? (b.primary.price ?? 0) - (a.primary.price ?? 0) : b.updatedAt.localeCompare(a.updatedAt)), [grouped, tableChannels, query, sourceFilter, statusFilter, sort]);
   const review = reviewId ? items.find((item) => item.id === reviewId) ?? null : null;
 
   const refresh = useCallback(async () => {
     setRefreshing(true); setError(null);
     try {
-      const [summary, ebay, amazon, actionRows] = await Promise.all([api.manualBuilds.list(), api.ebayOAuth.status().catch(() => ({ connected: false })), api.crossListing.amazonStatus().catch(() => ({ connected: false, message: "Amazon connection could not be checked." })), api.crossListing.actions()]);
+      const [summary, ebay, amazon, scheduleRows, actionRows] = await Promise.all([api.manualBuilds.list(), api.ebayOAuth.status().catch(() => ({ connected: false })), api.crossListing.amazonStatus().catch(() => ({ connected: false, message: "Amazon connection could not be checked." })), api.crossListing.schedules(), api.crossListing.actions()]);
       const detailResults = await Promise.allSettled(summary.map((build) => api.manualBuilds.get(build.id)));
       const nextBuilds: Record<number, ManualBuild> = {};
       const nextItems: CrossListingSource[] = [];
@@ -368,6 +391,32 @@ export default function CrossListingPage() {
         if (result.status === "fulfilled") { nextBuilds[result.value.id] = result.value; nextItems.push(...sourcesFromBuild(result.value)); }
         else nextWarnings.push(`Build ${summary[index]?.id ?? "unknown"} could not be refreshed.`);
       });
+      const failedActionMessages = new Map<string, string>();
+      for (const action of actionRows) {
+        if (!action.message || !action.event_type.includes("failed")) continue;
+        const key = `${action.build_id}:${normalizeScheduleChannel(action.channel) ?? action.channel}`;
+        if (!failedActionMessages.has(key)) failedActionMessages.set(key, action.message);
+      }
+      const canonicalByBuild = new Map<number, CrossListingSource>();
+      for (const source of nextItems) if (!canonicalByBuild.has(source.buildId)) canonicalByBuild.set(source.buildId, source);
+      for (const schedule of scheduleRows) {
+        const channel = normalizeScheduleChannel(schedule.channel);
+        const base = canonicalByBuild.get(schedule.build_id);
+        if (!channel || !base || channel === "ebay_uk" || channel === "flipflop_shop") continue;
+        const status = scheduleStatus(schedule.status);
+        const key = `${schedule.build_id}:${channel}`;
+        nextItems.push({
+          ...base,
+          id: `${channel}:${schedule.build_id}`,
+          channel,
+          source: "flipflop_shop",
+          externalId: schedule.external_listing_id || "not-created",
+          status,
+          url: null,
+          updatedAt: schedule.updated_at || base.updatedAt,
+          error: status === "failed" ? schedule.last_recreate_message || failedActionMessages.get(key) || "The vendor rejected the listing without returning an error message." : null,
+        });
+      }
       setBuilds(nextBuilds); setItems(nextItems); setWarnings(nextWarnings); setConnected(ebay.connected); setAmazonConnected(amazon.connected); setAmazonMessage(amazon.message); setRefreshedAt(new Date().toISOString());
       setActions(actionRows);
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not load source listings."); }
@@ -511,7 +560,7 @@ export default function CrossListingPage() {
     <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 shadow-2xl shadow-black/10">
       <div className="flex flex-col gap-3 border-b border-slate-700/70 p-4 xl:flex-row xl:items-center"><div className="relative min-w-64 flex-1"><Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" /><input aria-label="Search listings" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search title, build ID or external ID…" className="w-full rounded-md border border-slate-700 bg-slate-900/80 py-2 pl-9 pr-3 text-sm text-white outline-none transition-colors focus:border-emerald-400/60" /></div><div className="flex flex-wrap gap-2"><select aria-label="Channel filter" value={sourceFilter} onChange={(event) => setSourceFilter(event.target.value as typeof sourceFilter)} className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-200"><option value="all">All channels</option>{channelCapabilities.map((channel) => <option key={channel.channel} value={channel.channel}>{channel.label}</option>)}</select><select aria-label="Status filter" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as typeof statusFilter)} className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-200"><option value="all">All statuses</option>{Object.keys(statusStyles).map((status) => <option key={status} value={status}>{labelForStatus(status)}</option>)}</select><select aria-label="Sort listings" value={sort} onChange={(event) => setSort(event.target.value as typeof sort)} className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-200"><option value="updated">Recently updated</option><option value="price">Highest price</option><option value="title">Title</option></select></div></div>
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 px-4 py-3 text-xs"><button onClick={toggleAll} className="inline-flex cursor-pointer items-center gap-2 text-slate-200 hover:text-emerald-300"><span className={`flex h-4 w-4 items-center justify-center rounded border ${filtered.length > 0 && filtered.every((item) => selected.has(item.id)) ? "border-emerald-400 bg-emerald-400 text-slate-950" : "border-slate-600"}`}>{filtered.length > 0 && filtered.every((item) => selected.has(item.id)) && <Check className="h-3 w-3" />}</span>Select all filtered ({filtered.length})</button><span className="text-slate-500">{selectedItems.length} selected · {refreshedAt ? `refreshed ${new Date(refreshedAt).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}` : "not refreshed"}</span></div>
-      <div className="overflow-x-auto"><table className="w-full min-w-[980px] text-left text-sm"><thead className="bg-slate-900/60 text-[11px] uppercase tracking-wider text-slate-500"><tr><th rowSpan={2} className="w-12 px-4 py-3" /><th rowSpan={2} className="px-4 py-3 align-middle">Listing</th>{destinations.map((channel) => <th key={channel} colSpan={2} className="border-l border-slate-800 px-3 py-2 text-center"><VendorLogo channel={channel} /></th>)}<th rowSpan={2} className="border-l border-slate-800 px-4 py-3 align-middle">Updated</th><th rowSpan={2} className="px-4 py-3" /></tr><tr>{destinations.map((channel) => <Fragment key={`${channel}-subhead`}><th className="border-l border-slate-800/60 px-3 pb-2 text-center text-[10px]">Price</th><th className="px-3 pb-2 text-center text-[10px]">Status</th></Fragment>)}</tr></thead><tbody className="divide-y divide-slate-800/80">{filtered.map((item) => <tr key={item.id} className={`transition-colors hover:bg-slate-800/30 ${selected.has(item.id) ? "bg-emerald-400/[0.04]" : ""}`}><td className="px-4 py-3"><button aria-label={`Select ${item.title}`} onClick={() => setSelected((current) => { const next = new Set(current); if (next.has(item.id)) next.delete(item.id); else next.add(item.id); return next; })} className={`flex h-4 w-4 cursor-pointer items-center justify-center rounded border ${selected.has(item.id) ? "border-emerald-400 bg-emerald-400 text-slate-950" : "border-slate-600"}`}>{selected.has(item.id) && <Check className="h-3 w-3" />}</button></td><td className="max-w-[370px] px-4 py-3"><div className="flex items-center gap-3"><div className="h-11 w-14 overflow-hidden rounded border border-slate-700 bg-slate-900">{item.imageUrl ? <img src={item.imageUrl} alt="" className="h-full w-full object-cover" /> : <PackageCheck className="m-3 h-5 w-5 text-slate-600" />}</div><div className="min-w-0"><div className="truncate font-medium text-slate-100">{item.title}</div><div className="mt-1 text-xs text-slate-500">Build {item.buildId} · {destinations.map((channel) => item.byChannel[channel]?.externalId).filter(Boolean).join(" · ")}</div></div></div></td>{destinations.map((channel) => <Fragment key={`${item.id}-${channel}`}><td className="border-l border-slate-800/60 px-3 py-3"><ChannelCell source={item.byChannel[channel]} mode="price" /></td><td className="px-3 py-3 text-center"><ChannelCell source={item.byChannel[channel]} mode="status" /></td></Fragment>)}<td className="border-l border-slate-800 px-4 py-3 text-xs text-slate-500">{new Date(item.updatedAt).toLocaleDateString("en-GB")}</td><td className="px-4 py-3 text-right"><button onClick={() => openReview(item.primary)} className="cursor-pointer rounded border border-slate-700 px-2.5 py-1.5 text-xs text-slate-300 transition-colors hover:border-emerald-400/50 hover:text-emerald-300">Review</button></td></tr>)}</tbody></table>{!refreshing && filtered.length === 0 && <div className="px-6 py-16 text-center"><Filter className="mx-auto h-7 w-7 text-slate-600" /><p className="mt-3 text-sm text-slate-300">No source listings match this view.</p><p className="mt-1 text-xs text-slate-500">Only listings returned by the connected eBay/storefront integrations are shown.</p></div>}{refreshing && <div className="flex items-center justify-center gap-2 px-6 py-16 text-sm text-slate-400"><Loader2 className="h-4 w-4 animate-spin" /> Loading source listings…</div>}</div>
+      <div className="overflow-x-auto"><table className="w-full min-w-[980px] text-left text-sm"><thead className="bg-slate-900/60 text-[11px] uppercase tracking-wider text-slate-500"><tr><th className="w-12 px-4 py-3" /><th className="px-4 py-3">Listing</th>{tableChannels.map((channel) => <th key={channel} className="border-l border-slate-800 px-3 py-3 text-center"><VendorLogo channel={channel} /></th>)}<th className="border-l border-slate-800 px-4 py-3">Updated</th><th className="px-4 py-3" /></tr></thead><tbody className="divide-y divide-slate-800/80">{filtered.map((item) => <tr key={item.id} className={`transition-colors hover:bg-slate-800/30 ${selected.has(item.id) ? "bg-emerald-400/[0.04]" : ""}`}><td className="px-4 py-3"><button aria-label={`Select ${item.title}`} onClick={() => setSelected((current) => { const next = new Set(current); if (next.has(item.id)) next.delete(item.id); else next.add(item.id); return next; })} className={`flex h-4 w-4 cursor-pointer items-center justify-center rounded border ${selected.has(item.id) ? "border-emerald-400 bg-emerald-400 text-slate-950" : "border-slate-600"}`}>{selected.has(item.id) && <Check className="h-3 w-3" />}</button></td><td className="max-w-[370px] px-4 py-3"><div className="flex items-center gap-3"><div className="h-11 w-14 overflow-hidden rounded border border-slate-700 bg-slate-900">{item.imageUrl ? <img src={item.imageUrl} alt="" className="h-full w-full object-cover" /> : <PackageCheck className="m-3 h-5 w-5 text-slate-600" />}</div><div className="min-w-0"><div className="truncate font-medium text-slate-100">{item.title}</div><div className="mt-1 text-xs text-slate-500">Build {item.buildId} · {tableChannels.map((channel) => item.byChannel[channel]?.externalId).filter(Boolean).join(" · ")}</div></div></div></td>{tableChannels.map((channel) => <td key={`${item.id}-${channel}`} className="border-l border-slate-800/60 px-3 py-3"><ChannelCell source={item.byChannel[channel]} /></td>)}<td className="border-l border-slate-800 px-4 py-3 text-xs text-slate-500">{new Date(item.updatedAt).toLocaleDateString("en-GB")}</td><td className="px-4 py-3 text-right"><button onClick={() => openReview(item.primary)} className="cursor-pointer rounded border border-slate-700 px-2.5 py-1.5 text-xs text-slate-300 transition-colors hover:border-emerald-400/50 hover:text-emerald-300">Review</button></td></tr>)}</tbody></table>{!refreshing && filtered.length === 0 && <div className="px-6 py-16 text-center"><Filter className="mx-auto h-7 w-7 text-slate-600" /><p className="mt-3 text-sm text-slate-300">No source listings match this view.</p><p className="mt-1 text-xs text-slate-500">Only listings returned by the connected eBay/storefront integrations are shown.</p></div>}{refreshing && <div className="flex items-center justify-center gap-2 px-6 py-16 text-sm text-slate-400"><Loader2 className="h-4 w-4 animate-spin" /> Loading source listings…</div>}</div>
     </section>
 
     <section className="sticky bottom-3 z-20 rounded-xl border border-emerald-400/20 bg-[#0b121d]/95 p-4 shadow-2xl shadow-black/30 backdrop-blur"><div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between"><div className="min-w-0 flex-1"><div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-wider text-slate-400"><ShieldCheck className="h-4 w-4 text-emerald-300" /> Destination workflow</div><div className="flex flex-wrap gap-2">{channelCapabilities.map((channel) => <button key={channel.channel} onClick={() => toggleDestination(channel.channel)} className={`cursor-pointer rounded-md border px-3 py-2 text-xs transition-colors ${destinations.includes(channel.channel) ? "border-emerald-400/60 bg-emerald-400/10 text-emerald-200" : "border-slate-700 text-slate-400 hover:border-slate-500"}`}><span className="mr-1.5">{destinations.includes(channel.channel) ? "✓" : "○"}</span>{channel.label}</button>)}</div><div className="mt-2 text-xs text-slate-500">{selectedItems.length} source listing{selectedItems.length === 1 ? "" : "s"} × {destinations.length} destination{destinations.length === 1 ? "" : "s"} = {selectedItems.length * destinations.length} job{selectedItems.length * destinations.length === 1 ? "" : "s"}. Manual-only destinations remain manual_action_required.</div><ManualPackContents /></div><div className="flex flex-wrap gap-2"><button onClick={downloadSelectedPacks} disabled={!selectedItems.length || !destinations.length} className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-slate-600 px-3 py-2.5 text-xs text-slate-200 hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-40"><ClipboardCopy className="h-4 w-4" /> Download manual packs</button><button onClick={() => { if (selectedItems.length && destinations.length && window.confirm(`Confirm ${selectedItems.length * destinations.length} cross-listing job(s)? API destinations may create or update live listings.`)) void publish(); }} disabled={publishing || !selectedItems.length || !destinations.length} className="inline-flex cursor-pointer items-center gap-2 rounded-md bg-emerald-400 px-4 py-2.5 text-xs font-semibold text-slate-950 transition-colors hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-40">{publishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}{publishing ? "Submitting…" : "Review & submit"}</button></div></div></section>

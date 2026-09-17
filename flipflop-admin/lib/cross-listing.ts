@@ -48,6 +48,8 @@ export interface CanonicalListing {
 export interface CrossListingSource {
   id: string;
   source: SourcePlatform;
+  /** Destination channel for synthetic rows backed by channel_listings. */
+  channel?: CrossListingChannel;
   externalId: string;
   canonicalProductId: string;
   buildId: number;
@@ -60,6 +62,7 @@ export interface CrossListingSource {
   status: "live" | "draft" | "sold" | "ended" | "unavailable" | "failed";
   url: string | null;
   updatedAt: string;
+  error?: string | null;
   listing: CanonicalListing;
 }
 
