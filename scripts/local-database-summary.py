@@ -3,11 +3,25 @@ from __future__ import annotations
 
 import asyncio
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import text
 
 from app.database import engine
+
+
+def _as_utc(value: object) -> datetime | None:
+    """Make database timestamps comparable regardless of Postgres TZ metadata."""
+    if isinstance(value, str):
+        try:
+            value = datetime.fromisoformat(value)
+        except ValueError:
+            return None
+    if not isinstance(value, datetime):
+        return None
+    if value.tzinfo is None:
+        return value.replace(tzinfo=timezone.utc)
+    return value.astimezone(timezone.utc)
 
 
 async def main() -> None:
@@ -38,13 +52,9 @@ async def main() -> None:
             ).scalars().all()
             for column in columns:
                 value = (await connection.execute(text(f"SELECT max(\"{column}\") FROM {qualified}"))).scalar_one_or_none()
-                if isinstance(value, str):
-                    try:
-                        value = datetime.fromisoformat(value)
-                    except ValueError:
-                        continue
-                if value is not None and (latest is None or value > latest):
-                    latest = value
+                comparable = _as_utc(value)
+                if comparable is not None and (latest is None or comparable > latest):
+                    latest = comparable
     print(json.dumps({"total_rows": total, "last_updated": latest.isoformat() if latest else None}))
     await engine.dispose()
 
