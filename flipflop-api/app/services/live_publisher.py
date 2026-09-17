@@ -155,7 +155,7 @@ class LivePublisher:
                 channel_listing_id=listing.id,
                 event_type="published",
                 message=f"Listed to {channel}",
-                metadata={
+                event_metadata={
                     "build_id": build_id,
                     "channel": channel,
                     "external_id": external_id,
@@ -275,7 +275,7 @@ class LivePublisher:
                 channel_listing_id=listing.id,
                 event_type="withdrawn",
                 message=f"Withdrawn from {channel}",
-                metadata={
+                event_metadata={
                     "build_id": build_id,
                     "channel": channel,
                     "withdrawn_at": datetime.utcnow().isoformat(),

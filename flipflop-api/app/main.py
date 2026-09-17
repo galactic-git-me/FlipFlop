@@ -495,6 +495,13 @@ async def lifespan(app: FastAPI):
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS collection_date TIMESTAMP",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS delivered_at TIMESTAMP",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS warranty_started_at TIMESTAMP",
+            "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_enabled BOOLEAN DEFAULT FALSE",
+            "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_interval_days INTEGER",
+            "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS next_recreate_at TIMESTAMP",
+            "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS last_recreate_at TIMESTAMP",
+            "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_count INTEGER DEFAULT 0",
+            "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS last_recreate_status VARCHAR(30)",
+            "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS last_recreate_message VARCHAR(500)",
         ):
             await conn.exec_driver_sql(statement)
         await _install_manual_build_delete_guard(conn)

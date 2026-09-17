@@ -3,7 +3,7 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle, Check, CheckCircle2, ClipboardCopy, Download, ExternalLink,
-  Filter, Link2, Loader2, PackageCheck, RefreshCw, Search, Send, ShieldCheck, X,
+  Filter, Link2, Loader2, PackageCheck, RefreshCw, Search, Send, ShieldCheck, X, Clock3, History,
 } from "lucide-react";
 import { api, type ManualBuild } from "@/lib/api";
 import {
@@ -176,6 +176,9 @@ export default function CrossListingPage() {
   const [draftPrice, setDraftPrice] = useState("");
   const [publishing, setPublishing] = useState(false);
   const [results, setResults] = useState<Array<{ channel: string; status: string; message: string; url?: string; assist?: BrowserAssistJob }>>([]);
+  const [schedules, setSchedules] = useState<Awaited<ReturnType<typeof api.crossListing.schedules>>>([]);
+  const [actions, setActions] = useState<Awaited<ReturnType<typeof api.crossListing.actions>>>([]);
+  const [scheduleDrafts, setScheduleDrafts] = useState<Record<string, string>>({});
 
   const channelCapabilities = useMemo(() => capabilities(connected), [connected]);
   const grouped = useMemo(() => groupListings(items), [items]);
@@ -193,7 +196,7 @@ export default function CrossListingPage() {
   const refresh = useCallback(async () => {
     setRefreshing(true); setError(null);
     try {
-      const [summary, ebay] = await Promise.all([api.manualBuilds.list(), api.ebayOAuth.status().catch(() => ({ connected: false }))]);
+      const [summary, ebay, scheduleRows, actionRows] = await Promise.all([api.manualBuilds.list(), api.ebayOAuth.status().catch(() => ({ connected: false })), api.crossListing.schedules(), api.crossListing.actions( )]);
       const detailResults = await Promise.allSettled(summary.map((build) => api.manualBuilds.get(build.id)));
       const nextBuilds: Record<number, ManualBuild> = {};
       const nextItems: CrossListingSource[] = [];
@@ -203,11 +206,20 @@ export default function CrossListingPage() {
         else nextWarnings.push(`Build ${summary[index]?.id ?? "unknown"} could not be refreshed.`);
       });
       setBuilds(nextBuilds); setItems(nextItems); setWarnings(nextWarnings); setConnected(ebay.connected); setRefreshedAt(new Date().toISOString());
+      setSchedules(scheduleRows); setActions(actionRows);
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not load source listings."); }
     finally { setRefreshing(false); }
   }, []);
 
   useEffect(() => { void refresh(); }, [refresh]);
+
+  const saveRecreateSchedule = async (buildId: number, channel: ChannelCapability) => {
+    const key = `${buildId}:${channel.channel}`;
+    const days = Number(scheduleDrafts[key] || 7);
+    if (!Number.isInteger(days) || days < 1 || days > 365) { setError("Recreate interval must be a whole number from 1 to 365 days."); return; }
+    await api.crossListing.saveSchedule({ build_id: buildId, channel: channel.channel, interval_days: days, enabled: true });
+    await refresh();
+  };
 
   const toggleAll = () => setSelected((current) => {
     const next = new Set(current); const allSelected = filtered.length > 0 && filtered.every((item) => next.has(item.id));
@@ -256,6 +268,14 @@ export default function CrossListingPage() {
     </header>
 
     <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">{channelCapabilities.map((channel) => <div key={channel.channel} className="rounded-lg border border-slate-700/80 bg-[#0d1521]/90 p-3"><div className="flex items-center justify-between gap-2"><span className="text-sm font-medium text-white">{channel.label}</span><span className={`rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wide ${channel.mode === "api" ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300" : channel.mode === "requires_approval" ? "border-yellow-400/30 bg-yellow-400/10 text-yellow-300" : "border-slate-600 bg-slate-800 text-slate-300"}`}>{channel.mode === "api" ? "API" : labelForStatus(channel.mode)}</span></div><p className="mt-2 text-xs leading-5 text-slate-400">{channel.note}</p></div>)}</section>
+
+    <section className="rounded-xl border border-cyan-400/20 bg-[#0b121d]/90 p-4 shadow-xl shadow-black/10">
+      <div className="flex flex-wrap items-start justify-between gap-3"><div><h2 className="flex items-center gap-2 text-sm font-semibold text-white"><Clock3 className="h-4 w-4 text-cyan-300" /> Automatic end &amp; recreate</h2><p className="mt-1 text-xs text-slate-400">Set a separate cadence for each API-connected channel. The server scheduler checks every five minutes and uses the persisted next-run time, so schedules survive reboots.</p></div><span className="text-[10px] uppercase tracking-wider text-slate-500">{schedules.filter((row) => row.recreate_enabled).length} active schedules</span></div>
+      <div className="mt-4 space-y-3">{grouped.map((item) => <div key={`schedule-${item.id}`} className="rounded-lg border border-slate-800 bg-slate-950/30 p-3"><div className="mb-3 text-xs font-medium text-slate-200">Build {item.buildId} · {item.title}</div><div className="grid gap-2 md:grid-cols-2 xl:grid-cols-3">{channelCapabilities.map((channel) => { const row = schedules.find((candidate) => candidate.build_id === item.buildId && candidate.channel === channel.channel); const key = `${item.buildId}:${channel.channel}`; return <div key={key} className="rounded border border-slate-800 p-2.5"><div className="flex items-center justify-between gap-2"><span className="text-xs text-slate-300">{channel.label}</span>{row?.recreate_enabled && <span className="text-[10px] text-emerald-300">Every {row.interval_days}d</span>}</div><div className="mt-2 flex items-center gap-2"><input aria-label={`${channel.label} recreate days for build ${item.buildId}`} disabled={channel.mode !== "api"} value={scheduleDrafts[key] ?? String(row?.interval_days ?? 7)} onChange={(event) => setScheduleDrafts((current) => ({ ...current, [key]: event.target.value }))} type="number" min={1} max={365} className="w-20 rounded border border-slate-700 bg-slate-900 px-2 py-1.5 text-xs text-white disabled:opacity-40" /><span className="text-[10px] text-slate-500">days</span><button disabled={channel.mode !== "api"} onClick={() => void saveRecreateSchedule(item.buildId, channel)} className="ml-auto cursor-pointer rounded border border-cyan-400/40 px-2 py-1.5 text-[10px] text-cyan-200 hover:bg-cyan-400/10 disabled:cursor-not-allowed disabled:opacity-40">{row?.recreate_enabled ? "Reschedule" : "Enable"}</button></div>{row?.next_recreate_at && <div className="mt-2 text-[10px] text-slate-500">Next: {new Date(row.next_recreate_at).toLocaleString("en-GB")}</div>}{channel.mode !== "api" && <div className="mt-2 text-[10px] text-yellow-300/80">Manual channel — scheduler will not pretend to automate it.</div>}</div>; })}</div></div>)}</div>
+      {grouped.length === 0 && <p className="mt-4 text-xs text-slate-500">Submit a canonical build first to configure its channel cadence.</p>}
+    </section>
+
+    <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4"><h2 className="flex items-center gap-2 text-sm font-semibold text-white"><History className="h-4 w-4 text-emerald-300" /> Recreate action log</h2><p className="mt-1 text-xs text-slate-500">End and recreate attempts are recorded per channel and also emitted as admin notifications.</p><div className="mt-3 space-y-2">{actions.slice(0, 20).map((action) => <div key={action.id} className="flex flex-wrap items-center gap-2 rounded border border-slate-800 px-3 py-2 text-xs"><span className={action.event_type.includes("failed") ? "text-red-300" : action.event_type.includes("created") ? "text-emerald-300" : "text-slate-300"}>{labelForStatus(action.event_type)}</span><span className="text-cyan-200">{action.channel}</span><span className="text-slate-400">Build {action.build_id}</span><span className="text-slate-500">{action.message}</span><span className="ml-auto text-[10px] text-slate-600">{action.created_at ? new Date(action.created_at).toLocaleString("en-GB") : ""}</span></div>)}{actions.length === 0 && <p className="py-4 text-center text-xs text-slate-500">No recreate actions recorded yet.</p>}</div></section>
 
     {warnings.length > 0 && <div className="flex items-start gap-3 rounded-lg border border-yellow-400/30 bg-yellow-400/10 p-3 text-sm text-yellow-100"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-yellow-300" /><div><div className="font-medium">Partial refresh</div>{warnings.map((warning) => <div key={warning} className="text-xs text-yellow-200/80">{warning}</div>)}</div></div>}
     {error && <div className="flex items-center justify-between gap-3 rounded-lg border border-red-400/30 bg-red-400/10 p-3 text-sm text-red-100"><span>{error}</span><button onClick={() => void refresh()} className="cursor-pointer underline">Retry</button></div>}

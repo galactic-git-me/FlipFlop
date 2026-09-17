@@ -35,6 +35,7 @@ from app.workers.manual_build_lifecycle import (
     run_manual_build_send_to_watchers_job,
     run_manual_build_recreate_cycle_job,
 )
+from app.workers.cross_listing_recreate import run_cross_listing_recreate_job
 from app.workers.message_poll import run_message_poll_job
 from app.workers.case_content_sourcing import run_case_content_sourcing
 from app.services.amazon_bestsellers import scrape_amazon_component_bestsellers
@@ -535,6 +536,16 @@ def start_scheduler():
         replace_existing=True,
         max_instances=1,
         next_run_time=now,
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=5),
+        id="cross_listing_recreate",
+        name="Cross-listing End & Recreate",
+        kwargs={"job_id": "cross_listing_recreate", "fn": run_cross_listing_recreate_job},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(seconds=30),
     )
     scheduler.add_job(
         _run_job_with_history,

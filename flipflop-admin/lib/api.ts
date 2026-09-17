@@ -603,6 +603,11 @@ export const api = {
     list: () => request<Array<{ id: number; name: string; dispatch_status: string; sale_price?: number | null; buyer_name?: string | null; customer_email?: string | null; buyer_address?: Record<string, string> | null; collection_date?: string | null; tracking_number?: string | null; shipping_label_url?: string | null }>>("/manual-builds/dispatch-zone"),
     setCollectionDate: (id: number, collection_date: string) => request<{ ok: boolean; collection_date: string; dispatch_status: string }>(`/manual-builds/${id}/collection-date`, { method: "PATCH", body: JSON.stringify({ collection_date }) }),
   },
+  crossListing: {
+    schedules: (buildId?: number) => request<Array<{ id: number; build_id: number; channel: string; status: string; recreate_enabled: boolean; interval_days?: number | null; next_recreate_at?: string | null; last_recreate_at?: string | null; recreate_count: number; last_recreate_status?: string | null; last_recreate_message?: string | null }>>(`/cross-listing/schedules${buildId ? `?build_id=${buildId}` : ""}`),
+    saveSchedule: (data: { build_id: number; channel: string; interval_days: number; enabled: boolean }) => request<unknown>("/cross-listing/schedules", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }),
+    actions: (buildId?: number) => request<Array<{ id: number; build_id: number; channel: string; event_type: string; message?: string | null; created_at?: string | null }>>(`/cross-listing/actions${buildId ? `?build_id=${buildId}` : ""}`),
+  },
   priceAlerts: {
     list: () => request<PriceAlertList>("/price-alerts"),
     create: (data: { manual_build_id: number; user_email: string; target_price_gbp: number }) =>
