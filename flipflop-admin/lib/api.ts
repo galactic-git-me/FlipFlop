@@ -124,7 +124,12 @@ export type ManualBuildStatus = "in_progress" | "built" | "listed" | "sold";
 
 export interface BuildPhoto {
   url: string;
-  kind: "photo" | "video" | "spec_card" | "registration_plate" | "performance_card";
+  kind:
+    | "photo"
+    | "video"
+    | "spec_card"
+    | "registration_plate"
+    | "performance_card";
 }
 
 export interface ComponentRating {
@@ -157,10 +162,19 @@ export interface PriceAlert {
   component_key: string | null;
   component_slot: string | null;
   market_reference_price_gbp: number | null;
-  reference_basis: "build_valuation" | "market_median" | "fixed_retailer" | null;
+  reference_basis:
+    | "build_valuation"
+    | "market_median"
+    | "fixed_retailer"
+    | null;
   cpk: string | null;
   condition_cohort: "new" | "used" | null;
-  monitoring_status: "pending_identity" | "pending_evidence" | "armed" | "triggered" | "dismissed";
+  monitoring_status:
+    | "pending_identity"
+    | "pending_evidence"
+    | "armed"
+    | "triggered"
+    | "dismissed";
   reference_evidence: Record<string, unknown> | null;
   triggered_evidence: Record<string, unknown> | null;
   last_evaluated_at: string | null;
@@ -187,14 +201,21 @@ export interface ManualBuild {
   generated_title: string | null;
   generated_description: string | null;
   generated_aspects: Record<string, string[]> | null;
-    ebay_listing_id: string | null;
-    ebay_listing_url: string | null;
-    ebay_offer_id?: string | null;
-    ebay_draft_id?: string | null;
-    ebay_draft_url?: string | null;
-    ebay_listing_status?: "never_listed" | "draft" | "active" | "sold" | "ended" | "missing" | "unknown";
-    ebay_listing_status_checked_at?: string | null;
-    ebay_listing_end_reason?: string | null;
+  ebay_listing_id: string | null;
+  ebay_listing_url: string | null;
+  ebay_offer_id?: string | null;
+  ebay_draft_id?: string | null;
+  ebay_draft_url?: string | null;
+  ebay_listing_status?:
+    | "never_listed"
+    | "draft"
+    | "active"
+    | "sold"
+    | "ended"
+    | "missing"
+    | "unknown";
+  ebay_listing_status_checked_at?: string | null;
+  ebay_listing_end_reason?: string | null;
   photos: BuildPhoto[];
   // Structured factual data behind the rendered spec card / registration
   // plate / performance card — this is what's actually sent to the LLM for
@@ -494,24 +515,38 @@ export function apiUrl(path: string): string {
 
 function operationLabel(path: string): string {
   if (path.includes("/post-to-ebay")) return "publish this eBay listing";
-  if (path.includes("/list-on-storefront")) return "add this build to FlipFlop.shop";
+  if (path.includes("/list-on-storefront"))
+    return "add this build to FlipFlop.shop";
   return "complete this request";
 }
 
-function apiErrorMessage(path: string, status: number, body: unknown, rawText: string): string {
-  const detail = body && typeof body === "object"
-    ? (body as Record<string, unknown>).detail ?? (body as Record<string, unknown>).error ?? (body as Record<string, unknown>).message
-    : undefined;
+function apiErrorMessage(
+  path: string,
+  status: number,
+  body: unknown,
+  rawText: string
+): string {
+  const detail =
+    body && typeof body === "object"
+      ? (body as Record<string, unknown>).detail ??
+        (body as Record<string, unknown>).error ??
+        (body as Record<string, unknown>).message
+      : undefined;
   if (detail) {
     const text = typeof detail === "string" ? detail : JSON.stringify(detail);
     if (text && text !== "Internal Server Error") return text;
   }
   const rawSummary = rawText.trim().replace(/\s+/g, " ").slice(0, 240);
-  if (rawSummary && !/^Internal Server Error$/i.test(rawSummary)) return rawSummary;
+  if (rawSummary && !/^Internal Server Error$/i.test(rawSummary))
+    return rawSummary;
   if (status >= 500) {
-    return `Could not ${operationLabel(path)} because the server failed internally (HTTP ${status}). No successful listing response was received; check the backend log and retry.`;
+    return `Could not ${operationLabel(
+      path
+    )} because the server failed internally (HTTP ${status}). No successful listing response was received; check the backend log and retry.`;
   }
-  return `Could not ${operationLabel(path)} (HTTP ${status}). Check the connection and try again.`;
+  return `Could not ${operationLabel(
+    path
+  )} (HTTP ${status}). Check the connection and try again.`;
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -533,7 +568,11 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   if (!res.ok) {
     const rawText = await res.text();
     let body: unknown;
-    try { body = JSON.parse(rawText); } catch { body = undefined; }
+    try {
+      body = JSON.parse(rawText);
+    } catch {
+      body = undefined;
+    }
     throw new Error(apiErrorMessage(path, res.status, body, rawText));
   }
   if (res.status === 204) return undefined as T;
@@ -565,7 +604,10 @@ export interface PriceEvidenceProduct {
   listing_count: number;
 }
 
-async function requestGemRadar<T>(path: string, init?: RequestInit): Promise<T> {
+async function requestGemRadar<T>(
+  path: string,
+  init?: RequestInit
+): Promise<T> {
   const res = await fetch(`/api/gem-radar${path}`, {
     credentials: "include",
     headers: {
@@ -582,7 +624,9 @@ async function requestGemRadar<T>(path: string, init?: RequestInit): Promise<T> 
       .json()
       .then((body) => body?.detail)
       .catch(() => undefined);
-    throw new Error(detail ? String(detail) : `Gem Radar ${path} → ${res.status}`);
+    throw new Error(
+      detail ? String(detail) : `Gem Radar ${path} → ${res.status}`
+    );
   }
   if (res.status === 204) return undefined as T;
   return res.json();
@@ -590,103 +634,300 @@ async function requestGemRadar<T>(path: string, init?: RequestInit): Promise<T> 
 
 function qs(params?: Record<string, string | undefined>): string {
   if (!params) return "";
-  const p = Object.fromEntries(Object.entries(params).filter(([, v]) => v !== undefined)) as Record<string, string>;
+  const p = Object.fromEntries(
+    Object.entries(params).filter(([, v]) => v !== undefined)
+  ) as Record<string, string>;
   return Object.keys(p).length ? "?" + new URLSearchParams(p).toString() : "";
 }
 
 export const api = {
   emailEvents: {
-    list: () => request<Array<{ id: number; subject: string; sender: string; summary: string; event_type: string; marketplace?: string | null; received_at?: string | null; link_url: string }>>("/email-events"),
-    get: (id: number) => request<{ id: number; subject: string; sender: string; body: string; summary: string; event_type: string; marketplace?: string | null; received_at?: string | null }>(`/email-events/${id}`),
+    list: () =>
+      request<
+        Array<{
+          id: number;
+          subject: string;
+          sender: string;
+          summary: string;
+          event_type: string;
+          marketplace?: string | null;
+          received_at?: string | null;
+          link_url: string;
+        }>
+      >("/email-events"),
+    get: (id: number) =>
+      request<{
+        id: number;
+        subject: string;
+        sender: string;
+        body: string;
+        summary: string;
+        event_type: string;
+        marketplace?: string | null;
+        received_at?: string | null;
+      }>(`/email-events/${id}`),
   },
   dispatch: {
-    list: () => request<Array<{ id: number; name: string; dispatch_status: string; sale_price?: number | null; buyer_name?: string | null; customer_email?: string | null; buyer_address?: Record<string, string> | null; collection_date?: string | null; tracking_number?: string | null; shipping_label_url?: string | null }>>("/manual-builds/dispatch-zone"),
-    setCollectionDate: (id: number, collection_date: string) => request<{ ok: boolean; collection_date: string; dispatch_status: string }>(`/manual-builds/${id}/collection-date`, { method: "PATCH", body: JSON.stringify({ collection_date }) }),
+    list: () =>
+      request<
+        Array<{
+          id: number;
+          name: string;
+          dispatch_status: string;
+          sale_price?: number | null;
+          buyer_name?: string | null;
+          customer_email?: string | null;
+          buyer_address?: Record<string, string> | null;
+          collection_date?: string | null;
+          tracking_number?: string | null;
+          shipping_label_url?: string | null;
+        }>
+      >("/manual-builds/dispatch-zone"),
+    setCollectionDate: (id: number, collection_date: string) =>
+      request<{
+        ok: boolean;
+        collection_date: string;
+        dispatch_status: string;
+      }>(`/manual-builds/${id}/collection-date`, {
+        method: "PATCH",
+        body: JSON.stringify({ collection_date }),
+      }),
   },
   crossListing: {
-    amazonStatus: () => request<{ connected: boolean; configured?: boolean; marketplace_found?: boolean; message?: string; environment?: string; marketplace_id?: string }>("/cross-listing/amazon/status"),
-    publishAmazon: (buildId: number, data: { title: string; description: string; bullet_points: string[]; price: number; quantity: number; condition: string; images: string[]; sku?: string }) => request<{ success: boolean; status: string; sku: string; listing_url?: string | null; response?: unknown; message: string }>(`/cross-listing/amazon/publish/${buildId}`, { method: "POST", body: JSON.stringify(data) }),
-    settings: () => request<{ indirect_channel_recreate_interval_days: number }>("/cross-listing/settings"),
-    saveSettings: (data: { interval_days: number }) => request<{ indirect_channel_recreate_interval_days: number }>("/cross-listing/settings", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }),
-    schedules: (buildId?: number) => request<Array<{ id: number; build_id: number; channel: string; status: string; external_listing_id?: string | null; published_at?: string | null; withdrawn_at?: string | null; updated_at?: string | null; recreate_enabled: boolean; interval_days?: number | null; next_recreate_at?: string | null; last_recreate_at?: string | null; recreate_count: number; last_recreate_status?: string | null; last_recreate_message?: string | null }>>(`/cross-listing/schedules${buildId ? `?build_id=${buildId}` : ""}`),
-    saveSchedule: (data: { build_id: number; channel: string; interval_days: number; enabled: boolean }) => request<unknown>("/cross-listing/schedules", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }),
-    recordCodexResult: (eventId: number, data: { success: boolean; message: string; external_listing_id?: string; listing_url?: string }) => request<unknown>(`/cross-listing/actions/${eventId}/codex-result`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }),
-    actions: (buildId?: number) => request<Array<{ id: number; build_id: number; channel: string; event_type: string; message?: string | null; metadata?: Record<string, unknown> | null; created_at?: string | null }>>(`/cross-listing/actions${buildId ? `?build_id=${buildId}` : ""}`),
+    amazonStatus: () =>
+      request<{
+        connected: boolean;
+        configured?: boolean;
+        marketplace_found?: boolean;
+        message?: string;
+        environment?: string;
+        marketplace_id?: string;
+      }>("/cross-listing/amazon/status"),
+    publishAmazon: (
+      buildId: number,
+      data: {
+        title: string;
+        description: string;
+        bullet_points: string[];
+        price: number;
+        quantity: number;
+        condition: string;
+        images: string[];
+        sku?: string;
+      }
+    ) =>
+      request<{
+        success: boolean;
+        status: string;
+        sku: string;
+        listing_url?: string | null;
+        response?: unknown;
+        message: string;
+      }>(`/cross-listing/amazon/publish/${buildId}`, {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+    settings: () =>
+      request<{ indirect_channel_recreate_interval_days: number }>(
+        "/cross-listing/settings"
+      ),
+    saveSettings: (data: { interval_days: number }) =>
+      request<{ indirect_channel_recreate_interval_days: number }>(
+        "/cross-listing/settings",
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      ),
+    schedules: (buildId?: number) =>
+      request<
+        Array<{
+          id: number;
+          build_id: number;
+          channel: string;
+          status: string;
+          external_listing_id?: string | null;
+          published_at?: string | null;
+          withdrawn_at?: string | null;
+          updated_at?: string | null;
+          recreate_enabled: boolean;
+          interval_days?: number | null;
+          next_recreate_at?: string | null;
+          last_recreate_at?: string | null;
+          recreate_count: number;
+          last_recreate_status?: string | null;
+          last_recreate_message?: string | null;
+        }>
+      >(`/cross-listing/schedules${buildId ? `?build_id=${buildId}` : ""}`),
+    saveSchedule: (data: {
+      build_id: number;
+      channel: string;
+      interval_days: number;
+      enabled: boolean;
+    }) =>
+      request<unknown>("/cross-listing/schedules", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }),
+    recordCodexResult: (
+      eventId: number,
+      data: {
+        success: boolean;
+        message: string;
+        external_listing_id?: string;
+        listing_url?: string;
+      }
+    ) =>
+      request<unknown>(`/cross-listing/actions/${eventId}/codex-result`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }),
+    actions: (buildId?: number) =>
+      request<
+        Array<{
+          id: number;
+          build_id: number;
+          channel: string;
+          event_type: string;
+          message?: string | null;
+          metadata?: Record<string, unknown> | null;
+          created_at?: string | null;
+        }>
+      >(`/cross-listing/actions${buildId ? `?build_id=${buildId}` : ""}`),
   },
   priceAlerts: {
     list: () => request<PriceAlertList>("/price-alerts"),
-    create: (data: { manual_build_id: number; user_email: string; target_price_gbp: number }) =>
-      request<PriceAlert>("/price-alerts", { method: "POST", body: JSON.stringify(data) }),
-    dismiss: (id: number) => request<{ ok: boolean }>(`/price-alerts/${id}/dismiss`, { method: "POST" }),
-    rearm: (id: number) => request<{ ok: boolean }>(`/price-alerts/${id}/re-arm`, { method: "POST" }),
-    history: (id: number) => request<{ items: Array<{ id: number; event_type: string; price_gbp: number | null; notes: string | null; created_at: string }> }>(`/price-alerts/${id}/history`),
+    create: (data: {
+      manual_build_id: number;
+      user_email: string;
+      target_price_gbp: number;
+    }) =>
+      request<PriceAlert>("/price-alerts", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+    dismiss: (id: number) =>
+      request<{ ok: boolean }>(`/price-alerts/${id}/dismiss`, {
+        method: "POST",
+      }),
+    rearm: (id: number) =>
+      request<{ ok: boolean }>(`/price-alerts/${id}/re-arm`, {
+        method: "POST",
+      }),
+    history: (id: number) =>
+      request<{
+        items: Array<{
+          id: number;
+          event_type: string;
+          price_gbp: number | null;
+          notes: string | null;
+          created_at: string;
+        }>;
+      }>(`/price-alerts/${id}/history`),
   },
   listings: {
     // DEPRECATED: Use gemRadar.scoredListings instead
-    list: (params?: Record<string, string>) => request<unknown[]>(`/listings/${qs(params)}`),
-    stats: () => request<{ total_listings: number; gems_count: number; avg_profit: number }>("/listings/stats"),
+    list: (params?: Record<string, string>) =>
+      request<unknown[]>(`/listings/${qs(params)}`),
+    stats: () =>
+      request<{
+        total_listings: number;
+        gems_count: number;
+        avg_profit: number;
+      }>("/listings/stats"),
     get: (id: number) => request<unknown>(`/listings/${id}`),
   },
 
   gemRadar: {
     scoredListings: () => requestGemRadar<unknown[]>("/scored-listings"),
-    scoredListingsLatestRun: (environment?: "DEV" | "LIVE") => requestGemRadar<unknown[]>(`/scored-listings-latest-run${environment ? `?environment=${environment}` : ""}`),
+    scoredListingsLatestRun: (environment?: "DEV" | "LIVE") =>
+      requestGemRadar<unknown[]>(
+        `/scored-listings-latest-run${
+          environment ? `?environment=${environment}` : ""
+        }`
+      ),
     listings: () => requestGemRadar<unknown[]>("/listings"),
     currentGem: () => requestGemRadar<unknown>("/current-gem"),
     // This read model belongs to the main API database. Use the main API
     // proxy rather than the separately deployed Gem Radar worker, whose
     // route set can lag behind during a rolling deployment.
-    opportunityPolicyData: () => request<{
-      active_scored_count: number;
-      total_scored_count: number;
-      historical_scored_count: number;
-      items: Array<{
-        listing_id: string;
-        title: string;
-        category: string | null;
-        condition: string | null;
-        classification: string;
-        deal_score: number | null;
-        expected_profit: number | null;
-        roi_pct: number | null;
-        market_confidence: number | null;
-        market_sample_size: number | null;
-        market_source_diversity: number | null;
-        liquidity_score: number | null;
-        desirability_score: number | null;
-        risk_score: number | null;
-        eligible: boolean;
-        listing_price: number | null;
-        resale_price: number | null;
-        market_new_price: number | null;
-        market_used_price: number | null;
-        sold_count: number | null;
-        active_count: number | null;
-        scoring_explanation: { risk_flags?: string[]; reasons?: string[] } | null;
-        evidence_status: string | null;
-        evidence_reason: string | null;
-      }>;
-    }>("/gem-radar/opportunity-policy-data", { cache: "no-store" }),
+    opportunityPolicyData: () =>
+      request<{
+        active_scored_count: number;
+        total_scored_count: number;
+        historical_scored_count: number;
+        items: Array<{
+          listing_id: string;
+          title: string;
+          category: string | null;
+          condition: string | null;
+          classification: string;
+          deal_score: number | null;
+          expected_profit: number | null;
+          roi_pct: number | null;
+          market_confidence: number | null;
+          market_sample_size: number | null;
+          market_source_diversity: number | null;
+          liquidity_score: number | null;
+          desirability_score: number | null;
+          risk_score: number | null;
+          eligible: boolean;
+          listing_price: number | null;
+          resale_price: number | null;
+          market_new_price: number | null;
+          market_used_price: number | null;
+          sold_count: number | null;
+          active_count: number | null;
+          scoring_explanation: {
+            risk_flags?: string[];
+            reasons?: string[];
+          } | null;
+          evidence_status: string | null;
+          evidence_reason: string | null;
+        }>;
+      }>("/gem-radar/opportunity-policy-data", { cache: "no-store" }),
     // Whole-DB market snapshot (all currently-active listings, not just the
     // latest scan run) — same shape as the Current Scan Run panel's stats.
-    marketSnapshot: () => requestGemRadar<MarketSnapshot>("/market-snapshot", { cache: "no-store" }),
+    marketSnapshot: () =>
+      requestGemRadar<MarketSnapshot>("/market-snapshot", {
+        cache: "no-store",
+      }),
     // Real scan cadence derived from actual observation activity, since
     // there's no backend-scheduled "next scan" job (scanning happens
     // client-side in the browser extension) — see the endpoint's docstring.
-    scanScheduleStatus: () => requestGemRadar<ScanScheduleStatus>("/scan-schedule-status"),
+    scanScheduleStatus: () =>
+      requestGemRadar<ScanScheduleStatus>("/scan-schedule-status"),
   },
 
   flips: {
     list: () => request<unknown[]>("/flips"),
     get: (id: number) => request<unknown>(`/flips/${id}`),
     create: (data: Record<string, unknown>) =>
-      request<unknown>("/flips", { method: "POST", body: JSON.stringify(data) }),
+      request<unknown>("/flips", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
     patch: (id: number, data: Record<string, unknown>) =>
-      request<unknown>(`/flips/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
+      request<unknown>(`/flips/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      }),
     update: (id: number, data: Record<string, unknown>) =>
-      request<unknown>(`/flips/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
-    markSold: (id: number, data: { actual_sale_price: number; sale_platform: string }) =>
-      request<unknown>(`/flips/${id}/sold`, { method: "POST", body: JSON.stringify(data) }),
+      request<unknown>(`/flips/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      }),
+    markSold: (
+      id: number,
+      data: { actual_sale_price: number; sale_platform: string }
+    ) =>
+      request<unknown>(`/flips/${id}/sold`, {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
     purchasePlan: (id: number) =>
       request<{
         flip_id: number;
@@ -712,15 +953,26 @@ export const api = {
         model_used: string;
       }>(`/flips/${id}/compatibility-check`, { method: "POST" }),
     generateListing: (id: number) =>
-      request<{ titles: string[]; description: string }>(`/flips/${id}/generate-listing`, { method: "POST" }),
+      request<{ titles: string[]; description: string }>(
+        `/flips/${id}/generate-listing`,
+        { method: "POST" }
+      ),
     generateImages: (id: number) =>
-      request<{ images: string[] }>(`/flips/${id}/generate-images`, { method: "POST" }),
+      request<{ images: string[] }>(`/flips/${id}/generate-images`, {
+        method: "POST",
+      }),
     uploadVideo: async (id: number, file: File) => {
       const form = new FormData();
       form.append("file", file);
-      const res = await fetch(`${API_BASE_URL}/flips/${id}/upload-video`, { method: "POST", body: form });
+      const res = await fetch(`${API_BASE_URL}/flips/${id}/upload-video`, {
+        method: "POST",
+        body: form,
+      });
       if (!res.ok) throw new Error(`Video upload failed: ${res.status}`);
-      return res.json() as Promise<{ video_url: string; video_ebay_status: string }>;
+      return res.json() as Promise<{
+        video_url: string;
+        video_ebay_status: string;
+      }>;
     },
     demandCheck: (id: number) =>
       request<{
@@ -744,19 +996,32 @@ export const api = {
         { method: "POST", body: JSON.stringify({ buyer_offer }) }
       ),
     publishNow: (id: number) =>
-      request<{ published: boolean; reason?: string; ebay_listing_url?: string }>(
-        `/flips/${id}/publish-now`,
-        { method: "POST" }
-      ),
+      request<{
+        published: boolean;
+        reason?: string;
+        ebay_listing_url?: string;
+      }>(`/flips/${id}/publish-now`, { method: "POST" }),
     pricingSuggestions: (id: number) =>
       request<{
-        shipping: { estimated_weight_kg: number; estimated_shipping_cost: number; shipping_inclusive_price: number };
-        promoted_listings: { suggested_ad_rate_pct: number; too_thin_to_promote: boolean; max_ad_spend: number; reason: string };
+        shipping: {
+          estimated_weight_kg: number;
+          estimated_shipping_cost: number;
+          shipping_inclusive_price: number;
+        };
+        promoted_listings: {
+          suggested_ad_rate_pct: number;
+          too_thin_to_promote: boolean;
+          max_ad_spend: number;
+          reason: string;
+        };
       }>(`/flips/${id}/pricing-suggestions`),
     watcherOfferPlan: (id: number) =>
-      request<{ should_send: boolean; discount_pct: number; offer_price: number | null; reason: string }>(
-        `/flips/${id}/watcher-offer-plan`
-      ),
+      request<{
+        should_send: boolean;
+        discount_pct: number;
+        offer_price: number | null;
+        reason: string;
+      }>(`/flips/${id}/watcher-offer-plan`),
     profitBreakdown: (id: number) =>
       request<{
         flip_id: number;
@@ -776,29 +1041,48 @@ export const api = {
   },
 
   parts: {
-    list: (category?: string) => request<unknown[]>(`/parts${category ? `?category=${category}` : ""}`),
-    grouped: (category?: string) => request<unknown[]>(`/parts/grouped${category ? `?category=${category}` : ""}`),
-    cases: (params?: Record<string, string>) => request<unknown[]>(`/parts/cases${qs(params)}`),
+    list: (category?: string) =>
+      request<unknown[]>(`/parts${category ? `?category=${category}` : ""}`),
+    grouped: (category?: string) =>
+      request<unknown[]>(
+        `/parts/grouped${category ? `?category=${category}` : ""}`
+      ),
+    cases: (params?: Record<string, string>) =>
+      request<unknown[]>(`/parts/cases${qs(params)}`),
     themes: () => request<string[]>("/parts/themes"),
   },
 
   manualBuilds: {
     list: () => request<ManualBuildSummary[]>("/manual-builds/"),
     get: (id: number) => request<ManualBuild>(`/manual-builds/${id}`),
-    getFaqs: (id: number) => request<BuildFaqSelection>(`/manual-builds/${id}/faqs`),
-    updateFaqs: (id: number, selectedIds: string[], answerOverrides: Record<string, string>) =>
-      request<{ selected_ids: string[]; selected_faqs: ProductFaq[] }>(`/manual-builds/${id}/faqs`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ selected_ids: selectedIds, answer_overrides: answerOverrides }),
-      }),
+    getFaqs: (id: number) =>
+      request<BuildFaqSelection>(`/manual-builds/${id}/faqs`),
+    updateFaqs: (
+      id: number,
+      selectedIds: string[],
+      answerOverrides: Record<string, string>
+    ) =>
+      request<{ selected_ids: string[]; selected_faqs: ProductFaq[] }>(
+        `/manual-builds/${id}/faqs`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            selected_ids: selectedIds,
+            answer_overrides: answerOverrides,
+          }),
+        }
+      ),
     create: (name: string) =>
       request<ManualBuild>("/manual-builds/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name }),
       }),
-    patch: (id: number, data: { name?: string; components?: BuildComponent[] }) =>
+    patch: (
+      id: number,
+      data: { name?: string; components?: BuildComponent[] }
+    ) =>
       request<ManualBuild>(`/manual-builds/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -811,31 +1095,47 @@ export const api = {
         method: "POST",
       }),
     markBuilt: (id: number) =>
-      request<ManualBuild>(`/manual-builds/${id}/mark-built`, { method: "POST" }),
-    purchaseComponent: (id: number, slot: string, data: { price_paid?: number; source?: string }) =>
-      request<ManualBuild>(`/manual-builds/${id}/components/${encodeURIComponent(slot)}/purchase`, {
+      request<ManualBuild>(`/manual-builds/${id}/mark-built`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
       }),
+    purchaseComponent: (
+      id: number,
+      slot: string,
+      data: { price_paid?: number; source?: string }
+    ) =>
+      request<ManualBuild>(
+        `/manual-builds/${id}/components/${encodeURIComponent(slot)}/purchase`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      ),
     getComponentRatings: (id: number) =>
       request<ComponentRating[]>(`/manual-builds/${id}/component-ratings`),
     saveComponentRatings: (id: number, ratings: ComponentRating[]) =>
-      request<{ saved: number; preferred_added: number; alerts_created: number; alerts_updated: number }>(`/manual-builds/${id}/component-ratings`, {
+      request<{
+        saved: number;
+        preferred_added: number;
+        alerts_created: number;
+        alerts_updated: number;
+      }>(`/manual-builds/${id}/component-ratings`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ratings }),
       }),
     generateListing: (id: number) =>
-      request<{ titles: string[]; description: string; aspects: Record<string, string[]> }>(
-        `/manual-builds/${id}/generate-listing`,
-        { method: "POST" },
-      ),
+      request<{
+        titles: string[];
+        description: string;
+        aspects: Record<string, string[]>;
+      }>(`/manual-builds/${id}/generate-listing`, { method: "POST" }),
     generateSpecifics: (id: number) =>
-      request<{ titles: string[]; description: string; aspects: Record<string, string[]> }>(
-        `/manual-builds/${id}/generate-specifics`,
-        { method: "POST" },
-      ),
+      request<{
+        titles: string[];
+        description: string;
+        aspects: Record<string, string[]>;
+      }>(`/manual-builds/${id}/generate-specifics`, { method: "POST" }),
     updateListingTitle: (id: number, title: string) =>
       request<ManualBuild>(`/manual-builds/${id}/listing-title`, {
         method: "PATCH",
@@ -855,15 +1155,36 @@ export const api = {
     // but were declared non-nullable here), which is what caused build/[id]/
     // page.tsx's updateEbayConfig(build as Partial<ManualBuild>) call to fail
     // type-checking.
-    updateEbayConfig: (id: number, config: Partial<Pick<ManualBuild,
-      | "ebay_condition" | "ebay_price" | "allow_offers" | "auto_reject_below_price"
-      | "auction_start_price" | "return_days" | "shipping_method" | "shipping_cost"
-      | "marketplace_fees_actual" | "promotion_cost_actual" | "refund_amount" | "warranty_claim_cost"
-      | "handling_time_days" | "ships_to_countries" | "domestic_only"
-      | "shipping_damage_cover_confirmed"
-      | "fulfillment_policy_id" | "package_weight_kg" | "package_length_cm"
-      | "package_width_cm" | "package_height_cm" | "deferred_publish_at"
-    >>) =>
+    updateEbayConfig: (
+      id: number,
+      config: Partial<
+        Pick<
+          ManualBuild,
+          | "ebay_condition"
+          | "ebay_price"
+          | "allow_offers"
+          | "auto_reject_below_price"
+          | "auction_start_price"
+          | "return_days"
+          | "shipping_method"
+          | "shipping_cost"
+          | "marketplace_fees_actual"
+          | "promotion_cost_actual"
+          | "refund_amount"
+          | "warranty_claim_cost"
+          | "handling_time_days"
+          | "ships_to_countries"
+          | "domestic_only"
+          | "shipping_damage_cover_confirmed"
+          | "fulfillment_policy_id"
+          | "package_weight_kg"
+          | "package_length_cm"
+          | "package_width_cm"
+          | "package_height_cm"
+          | "deferred_publish_at"
+        >
+      >
+    ) =>
       request<ManualBuild>(`/manual-builds/${id}/ebay-config`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -875,39 +1196,66 @@ export const api = {
     // buyer address's country (see sync-ebay-order) instead of forcing GBR.
     getCourierQuote: (id: number, deliveryCountry?: string) =>
       request<CourierQuote[]>(
-        `/manual-builds/${id}/courier-quote${deliveryCountry ? `?delivery_country=${deliveryCountry}` : ""}`,
-        { method: "POST" },
+        `/manual-builds/${id}/courier-quote${
+          deliveryCountry ? `?delivery_country=${deliveryCountry}` : ""
+        }`,
+        { method: "POST" }
       ),
     // Fetches the build's real eBay order — buyer name, actual delivery
     // address, actual sale price — only possible once it's actually sold.
     syncEbayOrder: (id: number) =>
-      request<SyncEbayOrderResult>(`/manual-builds/${id}/sync-ebay-order`, { method: "POST" }),
+      request<SyncEbayOrderResult>(`/manual-builds/${id}/sync-ebay-order`, {
+        method: "POST",
+      }),
     // Books and pays for a real Parcel2Go shipment, then pushes tracking to
     // eBay. Spends real money — only call from an explicit user confirmation.
-    bookShipment: (id: number, data: { service_slug: string; price_gbp: number }) =>
+    bookShipment: (
+      id: number,
+      data: { service_slug: string; price_gbp: number }
+    ) =>
       request<BookShipmentResult>(`/manual-builds/${id}/book-shipment`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       }),
-    postToEbay: (id: number, data: { price: number; condition: string; publish?: boolean }) =>
-      request<{ success: boolean; listing_id?: string; url?: string; error?: string; draft_id?: string; draft_url?: string }>(
-        `/manual-builds/${id}/post-to-ebay`,
-        { method: "POST", body: JSON.stringify(data) },
-      ),
+    postToEbay: (
+      id: number,
+      data: { price: number; condition: string; publish?: boolean }
+    ) =>
+      request<{
+        success: boolean;
+        listing_id?: string;
+        url?: string;
+        error?: string;
+        draft_id?: string;
+        draft_url?: string;
+      }>(`/manual-builds/${id}/post-to-ebay`, {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
     publishEbayDraft: (id: number) =>
-      request<{ success: boolean; listing_id?: string; url?: string; error?: string }>(
-        `/manual-builds/${id}/publish-ebay-draft`,
-        { method: "POST" },
-      ),
+      request<{
+        success: boolean;
+        listing_id?: string;
+        url?: string;
+        error?: string;
+      }>(`/manual-builds/${id}/publish-ebay-draft`, { method: "POST" }),
     getInsuranceQuote: (id: number, listingValueGbp: number) =>
       request<InsuranceQuote>(
-        `/manual-builds/${id}/insurance-quote?listing_value_gbp=${encodeURIComponent(listingValueGbp)}`,
-        { method: "POST" },
+        `/manual-builds/${id}/insurance-quote?listing_value_gbp=${encodeURIComponent(
+          listingValueGbp
+        )}`,
+        { method: "POST" }
       ),
     endEbayListing: (id: number) =>
-      request<ManualBuild>(`/manual-builds/${id}/ebay-listing`, { method: "DELETE" }),
-    uploadPhotos: async (id: number, files: File[], kind: "photo" | "performance_card" = "photo"): Promise<ManualBuild> => {
+      request<ManualBuild>(`/manual-builds/${id}/ebay-listing`, {
+        method: "DELETE",
+      }),
+    uploadPhotos: async (
+      id: number,
+      files: File[],
+      kind: "photo" | "performance_card" = "photo"
+    ): Promise<ManualBuild> => {
       const formData = new FormData();
       for (const f of files) formData.append("files", f);
       formData.append("kind", kind);
@@ -921,18 +1269,32 @@ export const api = {
       if (!res.ok) throw new Error(`API upload photos → ${res.status}`);
       return res.json();
     },
-    updateEvidenceData: (id: number, kind: "spec_card" | "registration_plate" | "performance_card", data: Record<string, unknown>) =>
-      request<ManualBuild>(`/manual-builds/${id}/evidence-data`, { method: "PUT", body: JSON.stringify({ kind, data }) }),
-    uploadBrandedAsset: async (id: number, kind: "spec_card" | "registration_plate", blob: Blob): Promise<ManualBuild> => {
+    updateEvidenceData: (
+      id: number,
+      kind: "spec_card" | "registration_plate" | "performance_card",
+      data: Record<string, unknown>
+    ) =>
+      request<ManualBuild>(`/manual-builds/${id}/evidence-data`, {
+        method: "PUT",
+        body: JSON.stringify({ kind, data }),
+      }),
+    uploadBrandedAsset: async (
+      id: number,
+      kind: "spec_card" | "registration_plate",
+      blob: Blob
+    ): Promise<ManualBuild> => {
       const formData = new FormData();
       formData.append("file", blob, `${kind}.png`);
       const token = getAdminToken();
-      const res = await fetch(`${API_BASE_URL}/manual-builds/${id}/photos/branded?kind=${kind}`, {
-        method: "POST",
-        body: formData,
-        credentials: "include",
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-      });
+      const res = await fetch(
+        `${API_BASE_URL}/manual-builds/${id}/photos/branded?kind=${kind}`,
+        {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        }
+      );
       if (!res.ok) throw new Error(`API upload branded asset → ${res.status}`);
       return res.json();
     },
@@ -947,87 +1309,159 @@ export const api = {
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
       if (!res.ok) {
-        const detail = await res.json().then((body) => body?.detail).catch(() => undefined);
-        throw new Error(detail ? String(detail) : `3D model upload failed (${res.status})`);
+        const detail = await res
+          .json()
+          .then((body) => body?.detail)
+          .catch(() => undefined);
+        throw new Error(
+          detail ? String(detail) : `3D model upload failed (${res.status})`
+        );
       }
       return res.json();
     },
     generate3dAssets: (id: number, assets: Record<string, string[]>) =>
-      request<{ queued: string[]; assets: Record<string, Build3DAsset> }>(`/manual-builds/${id}/model-3d/generate`, {
-        method: "POST",
-        body: JSON.stringify({ assets }),
-      }),
-    generate3dAssetsWithUploads: async (id: number, selectedUrls: string[], files: File[]) => {
+      request<{ queued: string[]; assets: Record<string, Build3DAsset> }>(
+        `/manual-builds/${id}/model-3d/generate`,
+        {
+          method: "POST",
+          body: JSON.stringify({ assets }),
+        }
+      ),
+    generate3dAssetsWithUploads: async (
+      id: number,
+      selectedUrls: string[],
+      files: File[]
+    ) => {
       const formData = new FormData();
       formData.append("selected_urls", JSON.stringify(selectedUrls));
       for (const file of files) formData.append("files", file);
       const token = getAdminToken();
-      const res = await fetch(`${API_BASE_URL}/manual-builds/${id}/model-3d/generate-upload`, {
-        method: "POST",
-        body: formData,
-        credentials: "include",
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-      });
+      const res = await fetch(
+        `${API_BASE_URL}/manual-builds/${id}/model-3d/generate-upload`,
+        {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        }
+      );
       if (!res.ok) {
-        const detail = await res.json().then((body) => body?.detail).catch(() => undefined);
-        throw new Error(detail ? String(detail) : `3D generation upload failed (${res.status})`);
+        const detail = await res
+          .json()
+          .then((body) => body?.detail)
+          .catch(() => undefined);
+        throw new Error(
+          detail
+            ? String(detail)
+            : `3D generation upload failed (${res.status})`
+        );
       }
-      return res.json() as Promise<{ queued: string[]; assets: Record<string, Build3DAsset> }>;
+      return res.json() as Promise<{
+        queued: string[];
+        assets: Record<string, Build3DAsset>;
+      }>;
     },
     removePhoto: (id: number, url: string) =>
-      request<ManualBuild>(`/manual-builds/${id}/photos`, { method: "DELETE", body: JSON.stringify({ url }) }),
+      request<ManualBuild>(`/manual-builds/${id}/photos`, {
+        method: "DELETE",
+        body: JSON.stringify({ url }),
+      }),
     reorderPhotos: (id: number, urls: string[]) =>
-      request<ManualBuild>(`/manual-builds/${id}/photos/order`, { method: "PUT", body: JSON.stringify({ urls }) }),
+      request<ManualBuild>(`/manual-builds/${id}/photos/order`, {
+        method: "PUT",
+        body: JSON.stringify({ urls }),
+      }),
     setHeroPhoto: (id: number, url: string) =>
-      request<ManualBuild>(`/manual-builds/${id}/photos/hero`, { method: "POST", body: JSON.stringify({ url }) }),
+      request<ManualBuild>(`/manual-builds/${id}/photos/hero`, {
+        method: "POST",
+        body: JSON.stringify({ url }),
+      }),
     listOnStorefront: (id: number, price: number) =>
-      request<{ product_id: number; build_id: number; storefront_url?: string }>(
-        `/manual-builds/${id}/list-on-storefront`,
-        { method: "POST", body: JSON.stringify({ price }) },
-      ),
+      request<{
+        product_id: number;
+        build_id: number;
+        storefront_url?: string;
+      }>(`/manual-builds/${id}/list-on-storefront`, {
+        method: "POST",
+        body: JSON.stringify({ price }),
+      }),
   },
 
   sources: {
     list: () => request<unknown[]>("/sources"),
-    health: () => request<{ avg_health_score: number; items: unknown[] }>("/sources/health"),
+    health: () =>
+      request<{ avg_health_score: number; items: unknown[] }>(
+        "/sources/health"
+      ),
     create: (data: Record<string, unknown>) =>
-      request<unknown>("/sources", { method: "POST", body: JSON.stringify(data) }),
+      request<unknown>("/sources", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
     update: (id: number, data: Record<string, unknown>) =>
-      request<unknown>(`/sources/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
-    delete: (id: number) => request<void>(`/sources/${id}`, { method: "DELETE" }),
-    trigger: (id: number) => request<unknown>(`/sources/${id}/scrape`, { method: "POST" }),
+      request<unknown>(`/sources/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      }),
+    delete: (id: number) =>
+      request<void>(`/sources/${id}`, { method: "DELETE" }),
+    trigger: (id: number) =>
+      request<unknown>(`/sources/${id}/scrape`, { method: "POST" }),
   },
 
   searchTelemetry: {
-    recent: (limit?: number) => request<{ items: SearchTelemetryItem[] }>(`/search-telemetry/recent${limit ? `?limit=${limit}` : ""}`),
-    bySource: (limit?: number) =>
-      request<{ summary: Record<string, SearchTelemetrySourceSummary>; items: Record<string, SearchTelemetryItem[]> }>(
-        `/search-telemetry/by-source${limit ? `?limit=${limit}` : ""}`,
+    recent: (limit?: number) =>
+      request<{ items: SearchTelemetryItem[] }>(
+        `/search-telemetry/recent${limit ? `?limit=${limit}` : ""}`
       ),
+    bySource: (limit?: number) =>
+      request<{
+        summary: Record<string, SearchTelemetrySourceSummary>;
+        items: Record<string, SearchTelemetryItem[]>;
+      }>(`/search-telemetry/by-source${limit ? `?limit=${limit}` : ""}`),
   },
 
   config: {
     get: () => request<unknown>("/config/search"),
     update: (data: Record<string, unknown>) =>
-      request<unknown>("/config/search", { method: "PUT", body: JSON.stringify(data) }),
+      request<unknown>("/config/search", {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }),
   },
 
   settings: {
     get: () => request<unknown>("/settings"),
     update: (data: Record<string, unknown>) =>
-      request<unknown>("/settings", { method: "PUT", body: JSON.stringify(data) }),
+      request<unknown>("/settings", {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }),
   },
 
   sourceSearchTerms: {
     list: (scope?: string) =>
-      request<{ items: SourceSearchTerm[]; groups: string[]; scopes: string[] }>(
-        `/source-search-terms${scope ? `?scope=${encodeURIComponent(scope)}` : ""}`,
+      request<{
+        items: SourceSearchTerm[];
+        groups: string[];
+        scopes: string[];
+      }>(
+        `/source-search-terms${
+          scope ? `?scope=${encodeURIComponent(scope)}` : ""
+        }`
       ),
     create: (data: Record<string, unknown>) =>
-      request<SourceSearchTerm>("/source-search-terms", { method: "POST", body: JSON.stringify(data) }),
+      request<SourceSearchTerm>("/source-search-terms", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
     update: (id: number, data: Record<string, unknown>) =>
-      request<SourceSearchTerm>(`/source-search-terms/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
-    delete: (id: number) => request<void>(`/source-search-terms/${id}`, { method: "DELETE" }),
+      request<SourceSearchTerm>(`/source-search-terms/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      }),
+    delete: (id: number) =>
+      request<void>(`/source-search-terms/${id}`, { method: "DELETE" }),
   },
 
   intel: {
@@ -1041,11 +1475,29 @@ export const api = {
         best_source: string | null;
         best_cpu_tier: string | null;
       }>("/intel/summary"),
-    bySource: () => request<{ source: string; count: number; avg_profit: number; total_profit: number }[]>("/intel/by-source"),
-    byCpuTier: () => request<{ cpu_tier: string; count: number; avg_profit: number }[]>("/intel/by-cpu"),
-    byPlatform: () => request<{ platform: string; count: number; avg_profit: number }[]>("/intel/by-platform"),
-    history: (params?: Record<string, string>) => request<unknown[]>(`/intel/history${qs(params)}`),
-    recommendations: () => request<{ insight: string; action: string; confidence: number }[]>("/intel/recommendations"),
+    bySource: () =>
+      request<
+        {
+          source: string;
+          count: number;
+          avg_profit: number;
+          total_profit: number;
+        }[]
+      >("/intel/by-source"),
+    byCpuTier: () =>
+      request<{ cpu_tier: string; count: number; avg_profit: number }[]>(
+        "/intel/by-cpu"
+      ),
+    byPlatform: () =>
+      request<{ platform: string; count: number; avg_profit: number }[]>(
+        "/intel/by-platform"
+      ),
+    history: (params?: Record<string, string>) =>
+      request<unknown[]>(`/intel/history${qs(params)}`),
+    recommendations: () =>
+      request<{ insight: string; action: string; confidence: number }[]>(
+        "/intel/recommendations"
+      ),
     retrainStatus: () =>
       request<{
         checkpoint: string;
@@ -1054,12 +1506,18 @@ export const api = {
         last_flip_id: number;
         updated_at: string | null;
       }>("/intel/retrain-status"),
-    modelVersions: (limit = 20) => request<{ items: unknown[] }>(`/intel/models/versions?limit=${limit}`),
-    modelRuns: (limit = 30) => request<{ items: unknown[] }>(`/intel/models/runs?limit=${limit}`),
+    modelVersions: (limit = 20) =>
+      request<{ items: unknown[] }>(`/intel/models/versions?limit=${limit}`),
+    modelRuns: (limit = 30) =>
+      request<{ items: unknown[] }>(`/intel/models/runs?limit=${limit}`),
   },
 
   chat: {
-    send: (message: string, history: { role: string; content: string }[], listing_id?: number) =>
+    send: (
+      message: string,
+      history: { role: string; content: string }[],
+      listing_id?: number
+    ) =>
       request<{ response: string; model_used: string }>("/chat", {
         method: "POST",
         body: JSON.stringify({ message, history, listing_id }),
@@ -1068,37 +1526,70 @@ export const api = {
 
   swarms: {
     list: () => request<unknown[]>("/swarms"),
-    trigger: (id: string) => request<unknown>(`/swarms/${id}/trigger`, { method: "POST" }),
+    trigger: (id: string) =>
+      request<unknown>(`/swarms/${id}/trigger`, { method: "POST" }),
     scanStatus: () => request<ScanStatus>("/swarms/scan/status"),
   },
 
   schedule: {
     list: () => request<ScheduleJob[]>("/schedule"),
-    toggle: (id: string) => request<{ ok: boolean; enabled: boolean }>(`/schedule/${id}/toggle`, { method: "POST" }),
-    run: (id: string) => request<{ ok: boolean; status: "success" | "failed"; duration_ms: number }>(`/schedule/${id}/run`, { method: "POST" }),
+    toggle: (id: string) =>
+      request<{ ok: boolean; enabled: boolean }>(`/schedule/${id}/toggle`, {
+        method: "POST",
+      }),
+    run: (id: string) =>
+      request<{
+        ok: boolean;
+        status: "success" | "failed";
+        duration_ms: number;
+      }>(`/schedule/${id}/run`, { method: "POST" }),
     runs: (id: string) => request<ScheduleRun[]>(`/schedule/${id}/runs`),
   },
 
   alerts: {
-    list: (limit = 100, includeAcked = false) => request<unknown[]>(`/alerts?limit=${limit}&include_acked=${includeAcked ? "true" : "false"}`),
-    ack: (id: number) => request<{ ok: boolean }>(`/alerts/${id}/ack`, { method: "POST" }),
+    list: (limit = 100, includeAcked = false) =>
+      request<unknown[]>(
+        `/alerts?limit=${limit}&include_acked=${
+          includeAcked ? "true" : "false"
+        }`
+      ),
+    ack: (id: number) =>
+      request<{ ok: boolean }>(`/alerts/${id}/ack`, { method: "POST" }),
   },
 
   favourites: {
-    list: () => request<{ items: import("./types").Favourite[]; groups: string[] }>("/favourites"),
-    search: (q: string) => request<import("./types").FavouriteMatrixRow>(`/favourites/search?q=${encodeURIComponent(q)}`),
-    matrix: () => request<Record<number, import("./types").FavouriteMatrixRow>>("/favourites/matrix"),
-    create: (term?: string | null, category?: string | null, cpk?: string | null) =>
+    list: () =>
+      request<{ items: import("./types").Favourite[]; groups: string[] }>(
+        "/favourites"
+      ),
+    search: (q: string) =>
+      request<import("./types").FavouriteMatrixRow>(
+        `/favourites/search?q=${encodeURIComponent(q)}`
+      ),
+    matrix: () =>
+      request<Record<number, import("./types").FavouriteMatrixRow>>(
+        "/favourites/matrix"
+      ),
+    create: (
+      term?: string | null,
+      category?: string | null,
+      cpk?: string | null
+    ) =>
       request<import("./types").Favourite>("/favourites", {
         method: "POST",
-        body: JSON.stringify({ term: term ?? null, category: category ?? null, cpk: cpk ?? null }),
+        body: JSON.stringify({
+          term: term ?? null,
+          category: category ?? null,
+          cpk: cpk ?? null,
+        }),
       }),
     update: (id: number, category: string) =>
       request<import("./types").Favourite>(`/favourites/${id}`, {
         method: "PATCH",
         body: JSON.stringify({ category }),
       }),
-    remove: (id: number) => request<void>(`/favourites/${id}`, { method: "DELETE" }),
+    remove: (id: number) =>
+      request<void>(`/favourites/${id}`, { method: "DELETE" }),
   },
 
   manual: {
@@ -1114,42 +1605,96 @@ export const api = {
       if (price != null) form.append("price", String(price));
       // Don't set Content-Type — browser sets multipart boundary automatically
       const url = apiUrl("/manual-submit/image/");
-      return fetch(url, { method: "POST", body: form, signal: AbortSignal.timeout(45_000) })
-        .then(r => { if (!r.ok) return r.json().then(d => { throw new Error(d.detail || `HTTP ${r.status}`); }); return r.json(); }) as Promise<import("./types").Listing>;
+      return fetch(url, {
+        method: "POST",
+        body: form,
+        signal: AbortSignal.timeout(45_000),
+      }).then((r) => {
+        if (!r.ok)
+          return r.json().then((d) => {
+            throw new Error(d.detail || `HTTP ${r.status}`);
+          });
+        return r.json();
+      }) as Promise<import("./types").Listing>;
     },
   },
 
   demand: {
-    categories: () => request<import("./types").DemandCategory[]>("/demand/categories"),
-    auctionIntel: (limit?: number) => request<import("./types").AuctionIntelItem[]>(`/demand/auction-intel${limit ? `?limit=${limit}` : ""}`),
-    summary: () => request<import("./types").DemandSummary>("/demand/summary"),
-    soldMarket: (days = 90) => request<import("./types").SoldMarketDemand>(`/demand/sold-market?days=${days}`),
-    soldMarketListings: (category: import("./types").SoldComponentCategory, days = 90, limit = 250) =>
-      request<import("./types").SoldMarketListing[]>(`/demand/sold-market/listings?category=${category}&days=${days}&limit=${limit}`),
-    soldMarketInsights: (days = 90, refresh = false) =>
-      request<import("./types").SoldMarketInsight>(`/demand/sold-market/insights?days=${days}&refresh=${refresh}`),
-    externalSignals: (limit_per_source?: number) =>
-      request<{ summary: Record<string, { count: number; avg_score: number; avg_confidence: number }>; items: Record<string, unknown[]> }>(
-        `/demand/external-signals${limit_per_source ? `?limit_per_source=${limit_per_source}` : ""}`,
+    categories: () =>
+      request<import("./types").DemandCategory[]>("/demand/categories"),
+    auctionIntel: (limit?: number) =>
+      request<import("./types").AuctionIntelItem[]>(
+        `/demand/auction-intel${limit ? `?limit=${limit}` : ""}`
       ),
-    refreshExternalSignals: () => request<{ ok: boolean; inserted: number; topics: number; signals: number }>("/demand/external-signals/refresh", { method: "POST" }),
-    richSignals: () => request<{
-      google_trends: {
-        queries: string[];
-        timeseries: Record<string, { date: string; value: number }[]>;
-        geo: Record<string, { region: string; code: string | null; value: number }[]>;
-      };
-      reddit: {
-        posts: {
-          reddit_id: string; query: string; topic: string; title: string;
-          subreddit: string; score: number; comments: number;
-          url: string | null; created_utc: string | null;
-        }[];
-      };
-      steam: {
-        stats: { category: string; name: string; percentage: number; change: number | null; collected_at: string | null }[];
-      };
-    }>("/demand/rich-signals"),
+    summary: () => request<import("./types").DemandSummary>("/demand/summary"),
+    soldMarket: (days = 90) =>
+      request<import("./types").SoldMarketDemand>(
+        `/demand/sold-market?days=${days}`
+      ),
+    soldMarketListings: (
+      category: import("./types").SoldComponentCategory,
+      days = 90,
+      limit = 250
+    ) =>
+      request<import("./types").SoldMarketListing[]>(
+        `/demand/sold-market/listings?category=${category}&days=${days}&limit=${limit}`
+      ),
+    soldMarketInsights: (days = 90, refresh = false) =>
+      request<import("./types").SoldMarketInsight>(
+        `/demand/sold-market/insights?days=${days}&refresh=${refresh}`
+      ),
+    externalSignals: (limit_per_source?: number) =>
+      request<{
+        summary: Record<
+          string,
+          { count: number; avg_score: number; avg_confidence: number }
+        >;
+        items: Record<string, unknown[]>;
+      }>(
+        `/demand/external-signals${
+          limit_per_source ? `?limit_per_source=${limit_per_source}` : ""
+        }`
+      ),
+    refreshExternalSignals: () =>
+      request<{
+        ok: boolean;
+        inserted: number;
+        topics: number;
+        signals: number;
+      }>("/demand/external-signals/refresh", { method: "POST" }),
+    richSignals: () =>
+      request<{
+        google_trends: {
+          queries: string[];
+          timeseries: Record<string, { date: string; value: number }[]>;
+          geo: Record<
+            string,
+            { region: string; code: string | null; value: number }[]
+          >;
+        };
+        reddit: {
+          posts: {
+            reddit_id: string;
+            query: string;
+            topic: string;
+            title: string;
+            subreddit: string;
+            score: number;
+            comments: number;
+            url: string | null;
+            created_utc: string | null;
+          }[];
+        };
+        steam: {
+          stats: {
+            category: string;
+            name: string;
+            percentage: number;
+            change: number | null;
+            collected_at: string | null;
+          }[];
+        };
+      }>("/demand/rich-signals"),
     pricingMultipliers: () =>
       request<{
         window_days: number;
@@ -1161,49 +1706,69 @@ export const api = {
   },
 
   facebook: {
-    status: () => request<{exists: boolean; valid: boolean; expired: boolean; expiry_warning: boolean; message: string; days_remaining?: number}>("/facebook/status"),
-    updateCookies: (cookies_json: string) => request<{ok: boolean; message: string}>("/facebook/cookies", {
-      method: "PUT",
-      body: JSON.stringify({ cookies_json }),
-    }),
+    status: () =>
+      request<{
+        exists: boolean;
+        valid: boolean;
+        expired: boolean;
+        expiry_warning: boolean;
+        message: string;
+        days_remaining?: number;
+      }>("/facebook/status"),
+    updateCookies: (cookies_json: string) =>
+      request<{ ok: boolean; message: string }>("/facebook/cookies", {
+        method: "PUT",
+        body: JSON.stringify({ cookies_json }),
+      }),
   },
   preflight: {
     antibotStatus: () => request<AntiBotPreflightStatus>("/preflight/antibot"),
-    triggerAntibot: () => request<{ ok: boolean; started: boolean; reason?: string }>("/preflight/antibot/trigger", {
-      method: "POST",
-    }),
+    triggerAntibot: () =>
+      request<{ ok: boolean; started: boolean; reason?: string }>(
+        "/preflight/antibot/trigger",
+        {
+          method: "POST",
+        }
+      ),
   },
 
   buildWizard: {
-    componentCandidates: () => request<{
-      generated_at: string | null;
-      unavailable_reason?: string;
-      builds: Array<{
-        rank: number;
-        build_cost: number;
-        estimated_profit: number;
-        compatibility_confidence: "matched" | "unknown";
-        super_gem_count: number;
-        components: Array<{
-          id: number;
-          listing_id: string;
-          category: string;
-          title: string;
-          seller: string | null;
-          image_url: string | null;
-          delivered_price: number;
-          classification: string;
-          url: string;
+    componentCandidates: () =>
+      request<{
+        generated_at: string | null;
+        unavailable_reason?: string;
+        builds: Array<{
+          rank: number;
+          build_cost: number;
+          estimated_profit: number;
+          compatibility_confidence: "matched" | "unknown";
+          super_gem_count: number;
+          components: Array<{
+            id: number;
+            listing_id: string;
+            category: string;
+            title: string;
+            seller: string | null;
+            image_url: string | null;
+            delivered_price: number;
+            classification: string;
+            url: string;
+          }>;
         }>;
-      }>;
-    }>("/pc-builder/ai-generated-builds"),
+      }>("/pc-builder/ai-generated-builds"),
     playbooks: () => request<WizardPlaybook[]>("/build-wizard/playbooks"),
     generate: (body: GenerateRequest) =>
       request<GenerateResult>("/build-wizard/generate", {
         method: "POST",
         body: JSON.stringify(body),
       }),
-    generateGemMatrix: (body: Omit<GenerateRequest, "playbook_id"> & { gem_limit?: number; playbook_limit?: number; listing_id?: number }) =>
+    generateGemMatrix: (
+      body: Omit<GenerateRequest, "playbook_id"> & {
+        gem_limit?: number;
+        playbook_limit?: number;
+        listing_id?: number;
+      }
+    ) =>
       request<GenerateResult>("/build-wizard/generate-gem-matrix", {
         method: "POST",
         body: JSON.stringify(body),
@@ -1216,143 +1781,216 @@ export const api = {
   },
 
   playbooks: {
-    list: (status?: string) => request<import("./types").Playbook[]>(`/playbooks${status ? `?status=${status}` : ""}`),
+    list: (status?: string) =>
+      request<import("./types").Playbook[]>(
+        `/playbooks${status ? `?status=${status}` : ""}`
+      ),
     ranked: () => request<import("./types").Playbook[]>("/playbooks/ranked"),
-    seed: () => request<{ ok: boolean; created: number }>("/playbooks/seed", { method: "POST" }),
-    get: (id: number) => request<import("./types").Playbook>(`/playbooks/${id}`),
+    seed: () =>
+      request<{ ok: boolean; created: number }>("/playbooks/seed", {
+        method: "POST",
+      }),
+    get: (id: number) =>
+      request<import("./types").Playbook>(`/playbooks/${id}`),
     create: (data: Record<string, unknown>) =>
-      request<import("./types").Playbook>("/playbooks", { method: "POST", body: JSON.stringify(data) }),
+      request<import("./types").Playbook>("/playbooks", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
     update: (id: number, data: Record<string, unknown>) =>
-      request<import("./types").Playbook>(`/playbooks/${id}`, { method: "PUT", body: JSON.stringify(data) }),
-    delete: (id: number) => request<void>(`/playbooks/${id}`, { method: "DELETE" }),
+      request<import("./types").Playbook>(`/playbooks/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }),
+    delete: (id: number) =>
+      request<void>(`/playbooks/${id}`, { method: "DELETE" }),
     activeKeywords: () => request<string[]>("/playbooks/active-keywords"),
     proposals: {
       list: (status?: string) =>
-        request<import("./types").PlaybookProposal[]>(`/playbooks/proposals${status ? `?status=${status}` : ""}`),
+        request<import("./types").PlaybookProposal[]>(
+          `/playbooks/proposals${status ? `?status=${status}` : ""}`
+        ),
       create: (data: Record<string, unknown>) =>
-        request<import("./types").PlaybookProposal>("/playbooks/proposals", { method: "POST", body: JSON.stringify(data) }),
+        request<import("./types").PlaybookProposal>("/playbooks/proposals", {
+          method: "POST",
+          body: JSON.stringify(data),
+        }),
       approve: (id: number, resolved_by?: string) =>
-        request<import("./types").Playbook>(`/playbooks/proposals/${id}/approve`, {
-          method: "POST",
-          body: JSON.stringify({ approved: true, resolved_by: resolved_by ?? "user" }),
-        }),
+        request<import("./types").Playbook>(
+          `/playbooks/proposals/${id}/approve`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              approved: true,
+              resolved_by: resolved_by ?? "user",
+            }),
+          }
+        ),
       reject: (id: number, reason?: string) =>
-        request<import("./types").PlaybookProposal>(`/playbooks/proposals/${id}/reject`, {
-          method: "POST",
-          body: JSON.stringify({ approved: false, rejection_reason: reason }),
-        }),
+        request<import("./types").PlaybookProposal>(
+          `/playbooks/proposals/${id}/reject`,
+          {
+            method: "POST",
+            body: JSON.stringify({ approved: false, rejection_reason: reason }),
+          }
+        ),
     },
     rollbackLastUpdate: (id: number) =>
-      request<import("./types").PlaybookProposal>(`/playbooks/${id}/rollback-last-update`, { method: "POST" }),
-    experimentSummary: () => request<{ variants: Record<string, { total: number; pending: number; approved: number; rejected: number; approval_rate: number }> }>("/playbooks/experiments/summary"),
+      request<import("./types").PlaybookProposal>(
+        `/playbooks/${id}/rollback-last-update`,
+        { method: "POST" }
+      ),
+    experimentSummary: () =>
+      request<{
+        variants: Record<
+          string,
+          {
+            total: number;
+            pending: number;
+            approved: number;
+            rejected: number;
+            approval_rate: number;
+          }
+        >;
+      }>("/playbooks/experiments/summary"),
     experimentAttribution: (window_days?: number) =>
-      request<{ window_days: number; variants: Record<string, { proposal_windows: number; attributed_flips: number; avg_profit: number; avg_roi_pct: number; sample_quality: "low" | "medium" | "high" }> }>(
-        `/playbooks/experiments/attribution${window_days ? `?window_days=${window_days}` : ""}`,
+      request<{
+        window_days: number;
+        variants: Record<
+          string,
+          {
+            proposal_windows: number;
+            attributed_flips: number;
+            avg_profit: number;
+            avg_roi_pct: number;
+            sample_quality: "low" | "medium" | "high";
+          }
+        >;
+      }>(
+        `/playbooks/experiments/attribution${
+          window_days ? `?window_days=${window_days}` : ""
+        }`
       ),
   },
 
   benchmarks: {
-    status: () => request<{
-      total_benchmarks: number;
-      cpu_count: number;
-      gpu_count: number;
-      storage_count: number;
-      last_run: {
-        run_type: string | null;
-        status: string | null;
-        started_at: string | null;
-        completed_at: string | null;
-        components_checked: number;
-        components_updated: number;
-        components_failed: number;
-      } | null;
-    }>("/benchmarks/status"),
+    status: () =>
+      request<{
+        total_benchmarks: number;
+        cpu_count: number;
+        gpu_count: number;
+        storage_count: number;
+        last_run: {
+          run_type: string | null;
+          status: string | null;
+          started_at: string | null;
+          completed_at: string | null;
+          components_checked: number;
+          components_updated: number;
+          components_failed: number;
+        } | null;
+      }>("/benchmarks/status"),
     top: (component_type = "cpu", limit = 20) =>
-      request<Array<{
-        model: string;
-        normalized_model: string;
-        overall_score: number;
-        gaming_score: number | null;
-        last_refreshed_at: string | null;
-        confidence_score: number;
-      }>>(`/benchmarks/top?component_type=${component_type}&limit=${limit}`),
+      request<
+        Array<{
+          model: string;
+          normalized_model: string;
+          overall_score: number;
+          gaming_score: number | null;
+          last_refreshed_at: string | null;
+          confidence_score: number;
+        }>
+      >(`/benchmarks/top?component_type=${component_type}&limit=${limit}`),
     refreshRuns: (limit = 10) =>
-      request<Array<{
-        id: number;
-        run_type: string;
-        status: string;
-        started_at: string;
-        completed_at: string | null;
-        components_checked: number;
-        components_updated: number;
-        components_failed: number;
-        error_log: string | null;
-      }>>(`/benchmarks/refresh-runs?limit=${limit}`),
+      request<
+        Array<{
+          id: number;
+          run_type: string;
+          status: string;
+          started_at: string;
+          completed_at: string | null;
+          components_checked: number;
+          components_updated: number;
+          components_failed: number;
+          error_log: string | null;
+        }>
+      >(`/benchmarks/refresh-runs?limit=${limit}`),
     triggerRefresh: async (run_type = "manual") => {
       const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
       const token = getAdminToken();
-      const resp = await fetch(`${base}/api/benchmarks/refresh?run_type=${run_type}`, {
-        method: "POST",
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-      });
+      const resp = await fetch(
+        `${base}/api/benchmarks/refresh?run_type=${run_type}`,
+        {
+          method: "POST",
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        }
+      );
       return resp.json();
     },
   },
 
   reselling: {
-    getSellerFees: () => request<{
-      insertion_fee: number;
-      final_value_fee_pct: number;
-      category: string;
-      seller_tier: string;
-      last_updated: string;
-      expires_at: number;
-    }>("/reselling/seller-fees"),
-
-    analyzePricing: (flipId: number) => request<{
-      flip_id: number;
-      total_cost: number;
-      estimated_resale: number;
-      seller_fees: {
+    getSellerFees: () =>
+      request<{
         insertion_fee: number;
         final_value_fee_pct: number;
+        category: string;
         seller_tier: string;
         last_updated: string;
-      };
-      pricing_tiers: {
+        expires_at: number;
+      }>("/reselling/seller-fees"),
+
+    analyzePricing: (flipId: number) =>
+      request<{
+        flip_id: number;
+        total_cost: number;
+        estimated_resale: number;
+        seller_fees: {
+          insertion_fee: number;
+          final_value_fee_pct: number;
+          seller_tier: string;
+          last_updated: string;
+        };
+        pricing_tiers: {
+          walk_away_price: number;
+          total_cost_position: number;
+          optimal_listing_price: number;
+          estimated_profit_at_optimal: number;
+          breakeven_price: number;
+          margin_pct: number;
+          insertion_fee: number;
+          final_value_fee_pct: number;
+          final_value_fee_at_optimal: number;
+          net_proceeds_at_optimal: number;
+        };
+        analysis_timestamp: string;
+      }>(`/reselling/flips/${flipId}/pricing-analysis`, { method: "POST" }),
+
+    getPricingSummary: (flipId: number) =>
+      request<{
+        flip_id: number;
+        total_cost: number;
+        estimated_resale: number;
         walk_away_price: number;
-        total_cost_position: number;
         optimal_listing_price: number;
-        estimated_profit_at_optimal: number;
-        breakeven_price: number;
+        estimated_profit: number;
         margin_pct: number;
-        insertion_fee: number;
-        final_value_fee_pct: number;
-        final_value_fee_at_optimal: number;
-        net_proceeds_at_optimal: number;
-      };
-      analysis_timestamp: string;
-    }>(`/reselling/flips/${flipId}/pricing-analysis`, { method: "POST" }),
+      }>(`/reselling/flips/${flipId}/pricing-summary`),
 
-    getPricingSummary: (flipId: number) => request<{
-      flip_id: number;
-      total_cost: number;
-      estimated_resale: number;
-      walk_away_price: number;
-      optimal_listing_price: number;
-      estimated_profit: number;
-      margin_pct: number;
-    }>(`/reselling/flips/${flipId}/pricing-summary`),
+    generateListing: (flipId: number) =>
+      request<{
+        flip_id: number;
+        title_options: string[];
+        description: string;
+        recommended_title: string;
+        specs: string;
+      }>(`/reselling/flips/${flipId}/generate-listing`, { method: "POST" }),
 
-    generateListing: (flipId: number) => request<{
-      flip_id: number;
-      title_options: string[];
-      description: string;
-      recommended_title: string;
-      specs: string;
-    }>(`/reselling/flips/${flipId}/generate-listing`, { method: "POST" }),
-
-    processImages: (flipId: number, imageUrls: string[], addWatermark: boolean = true) =>
+    processImages: (
+      flipId: number,
+      imageUrls: string[],
+      addWatermark: boolean = true
+    ) =>
       request<{
         flip_id: number;
         images: Array<{
@@ -1364,25 +2002,29 @@ export const api = {
         error_urls: string[];
       }>(`/reselling/flips/${flipId}/process-images`, {
         method: "POST",
-        body: JSON.stringify({ image_urls: imageUrls, add_watermark: addWatermark }),
+        body: JSON.stringify({
+          image_urls: imageUrls,
+          add_watermark: addWatermark,
+        }),
       }),
 
-    getListingPreview: (flipId: number) => request<{
-      flip_id: number;
-      title: string;
-      description: string;
-      listing_source: "saved" | "generated";
-      pricing: {
-        listing_price: number;
-        walk_away_price: number;
-        estimated_profit: number;
-        margin_pct: number;
-        insertion_fee: number;
-        final_value_fee_pct: number;
-      };
-      images_available: boolean;
-      ready_to_post: boolean;
-    }>(`/reselling/flips/${flipId}/listing-preview`),
+    getListingPreview: (flipId: number) =>
+      request<{
+        flip_id: number;
+        title: string;
+        description: string;
+        listing_source: "saved" | "generated";
+        pricing: {
+          listing_price: number;
+          walk_away_price: number;
+          estimated_profit: number;
+          margin_pct: number;
+          insertion_fee: number;
+          final_value_fee_pct: number;
+        };
+        images_available: boolean;
+        ready_to_post: boolean;
+      }>(`/reselling/flips/${flipId}/listing-preview`),
   },
 
   catalogue: {
@@ -1397,18 +2039,33 @@ export const api = {
     approveAll: () =>
       request<unknown>("/catalogue/variants/approve-all", { method: "POST" }),
     variants: (params?: Record<string, string>) =>
-      request<unknown[]>(`/catalogue/variants${params ? "?" + new URLSearchParams(params) : ""}`),
+      request<unknown[]>(
+        `/catalogue/variants${params ? "?" + new URLSearchParams(params) : ""}`
+      ),
     toggleVariantStatus: (id: number) =>
-      request<unknown>(`/catalogue/variants/${id}/toggle-status`, { method: "PATCH" }),
+      request<unknown>(`/catalogue/variants/${id}/toggle-status`, {
+        method: "PATCH",
+      }),
     cases: () => request<unknown[]>("/catalogue/cases"),
     createCase: (data: Record<string, unknown>) =>
-      request<unknown>("/catalogue/cases", { method: "POST", body: JSON.stringify(data) }),
+      request<unknown>("/catalogue/cases", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
     updateCase: (id: number, data: Record<string, unknown>) =>
-      request<unknown>(`/catalogue/cases/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
+      request<unknown>(`/catalogue/cases/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      }),
     slots: (playbookId?: number) =>
-      request<unknown[]>(`/catalogue/slots${playbookId ? `?playbook_id=${playbookId}` : ""}`),
+      request<unknown[]>(
+        `/catalogue/slots${playbookId ? `?playbook_id=${playbookId}` : ""}`
+      ),
     updateSlot: (id: number, data: Record<string, unknown>) =>
-      request<unknown>(`/catalogue/slots/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
+      request<unknown>(`/catalogue/slots/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      }),
   },
 
   inventoryAllocations: {
@@ -1417,97 +2074,245 @@ export const api = {
         `/inventory-allocations${flipId ? `?flip_id=${flipId}` : ""}`
       ),
     create: (data: Record<string, unknown>) =>
-      request<unknown>(
-        "/inventory-allocations",
-        { method: "POST", body: JSON.stringify(data) }
-      ),
-    get: (id: number) =>
-      request<unknown>(`/inventory-allocations/${id}`),
+      request<unknown>("/inventory-allocations", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+    get: (id: number) => request<unknown>(`/inventory-allocations/${id}`),
     update: (id: number, data: Record<string, unknown>) =>
-      request<unknown>(
-        `/inventory-allocations/${id}`,
-        { method: "PATCH", body: JSON.stringify(data) }
-      ),
+      request<unknown>(`/inventory-allocations/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      }),
     delete: (id: number) =>
       request<void>(`/inventory-allocations/${id}`, { method: "DELETE" }),
     assignToManualBuild: (manualBuildId: number, inventoryItemIds: number[]) =>
       request<{ created: number; units_assigned: number; build_name: string }>(
         `/inventory-allocations/manual-builds/${manualBuildId}/bulk`,
-        { method: "POST", body: JSON.stringify({ inventory_item_ids: inventoryItemIds }) },
+        {
+          method: "POST",
+          body: JSON.stringify({ inventory_item_ids: inventoryItemIds }),
+        }
       ),
     releaseFromManualBuild: (manualBuildId: number, inventoryItemId: number) =>
-      request<void>(`/inventory-allocations/manual-builds/${manualBuildId}/items/${inventoryItemId}`, { method: "DELETE" }),
+      request<void>(
+        `/inventory-allocations/manual-builds/${manualBuildId}/items/${inventoryItemId}`,
+        { method: "DELETE" }
+      ),
   },
 
   logs: {
     history: (tail = 300) => request<unknown[]>(`/logs/history?tail=${tail}`),
-    targets: () => request<Array<{ id: string; label: string; available: boolean }>>("/logs/targets"),
-    soldScraping: (limit = 100) => request<{ items: SoldScrapingItem[]; stored_count: number; note: string }>(`/logs/sold-scraping?limit=${limit}`),
+    targets: () =>
+      request<Array<{ id: string; label: string; available: boolean }>>(
+        "/logs/targets"
+      ),
+    soldScraping: (limit = 100) =>
+      request<{
+        items: SoldScrapingItem[];
+        stored_count: number;
+        note: string;
+      }>(`/logs/sold-scraping?limit=${limit}`),
   },
 
   priceEvidence: {
-    products: (q = "", limit = 100) => request<{ items: PriceEvidenceProduct[] }>(`/price-evidence/products?q=${encodeURIComponent(q)}&limit=${limit}`),
-    product: (cpk: string) => request<{ product: PriceEvidenceProduct; observations: Array<{ kind: string; price: number; observed_at: string | null; source: string | null; source_url: string | null; title: string }> }>(`/price-evidence/products/${encodeURIComponent(cpk)}`),
+    products: (q = "", limit = 100) =>
+      request<{ items: PriceEvidenceProduct[] }>(
+        `/price-evidence/products?q=${encodeURIComponent(q)}&limit=${limit}`
+      ),
+    product: (cpk: string) =>
+      request<{
+        product: PriceEvidenceProduct;
+        observations: Array<{
+          kind: string;
+          price: number;
+          observed_at: string | null;
+          source: string | null;
+          source_url: string | null;
+          title: string;
+        }>;
+      }>(`/price-evidence/products/${encodeURIComponent(cpk)}`),
   },
 
   inventory: {
-    freeItems: (componentType?: string) => request<Array<{
-      id: number; component_name: string; component_type: string; quantity_free: number;
-      actual_cost: number; source: string | null; listing_url: string | null; purchase_date: string;
-    }>>(`/inventory/free-items${componentType ? `?component_type=${encodeURIComponent(componentType)}` : ""}`),
-    health: () => request<{
-      free_units: number; reserved_units: number; consumed_units: number;
-      free_value: number; reserved_value: number; consumed_value: number; expected_profit: number;
-      stale_items: Array<{ id: number; name: string; days: number; value: number }>;
-      excess_stock: Array<{ component_type: string; free_units: number }>;
-      build_blockers: Array<{ build_id: number; build_name: string; missing: string[] }>;
-    }>("/inventory/summary/health"),
-    events: (inventoryItemId: number) => request<Array<{
-      id: number; event_type: string; quantity: number; manual_build_id: number | null;
-      build_name: string | null; detail: Record<string, unknown>; created_at: string;
-    }>>(`/inventory-allocations/inventory/${inventoryItemId}/events`),
-    units: (inventoryItemId: number) => request<Array<{
-      id: number; inventory_item_id: number; unit_number: number; serial_number: string | null;
-      condition_grade: string; status: string; storage_location: string | null;
-      warranty_expires_at: string | null; test_results: Record<string, unknown>; photos: string[];
-      exception_reason: string | null; writeoff_amount: number | null; received_at: string | null;
-      inspected_at: string | null; created_at: string; updated_at: string;
-    }>>(`/inventory-intelligence/items/${inventoryItemId}/units`),
-    updateUnit: (unitId: number, data: Record<string, unknown>) => request<Record<string, unknown>>(
-      `/inventory-intelligence/units/${unitId}`, { method: "PATCH", body: JSON.stringify(data) },
-    ),
-    unitLabel: (unitId: number) => request<{
-      unit_id: number; sku: string; component_name: string; serial_number: string | null;
-      location: string | null; qr_payload: string;
-    }>(`/inventory-intelligence/units/${unitId}/label`),
-    buildCandidates: (manualBuildId: number) => request<Array<{
-      id: number; component_name: string; component_type: string; slot: string; quantity_free: number;
-      actual_cost: number; source: string | null; compatible: boolean; confidence: string;
-      reasons: string[]; warnings: string[];
-    }>>(`/inventory-intelligence/builds/${manualBuildId}/candidates`),
-    forecast: (days = 30) => request<{
-      horizon_days: number; capital_required: number; rows: Array<{
-        component_type: string; free_now: number; monthly_usage: number; projected_free: number;
-        recommendation: "buy" | "hold" | "liquidate"; units: number; estimated_capital: number;
-      }>;
-    }>(`/inventory-intelligence/forecast?days=${days}`),
-    sourcingAdjustments: () => request<Array<{
-      component_type: string; free_now: number; recommendation: string; units: number;
-      deal_score_adjustment: number; reason: string;
-    }>>("/inventory-intelligence/sourcing-adjustments"),
-    buildOpportunities: () => request<Array<{
-      name: string; completion_pct: number; ready: boolean; missing: string[]; owned_cost: number;
-      additional_spend_estimate: number; components: Array<{ inventory_item_id: number; component_type: string; name: string; cost: number }>;
-      warnings: string[];
-    }>>("/inventory-intelligence/build-opportunities"),
-    reorderRules: () => request<Array<{
-      id: number; component_type: string; minimum_free: number; maximum_free: number; target_free: number; notes: string | null;
-    }>>("/inventory-intelligence/reorder-rules"),
-    saveReorderRule: (componentType: string, data: { minimum_free: number; maximum_free: number; target_free: number; notes?: string }) =>
-      request<Record<string, unknown>>(`/inventory-intelligence/reorder-rules/${encodeURIComponent(componentType)}`, {
-        method: "PUT", body: JSON.stringify({ component_type: componentType, ...data }),
-      }),
-    accountingExportUrl: () => `${API_BASE_URL}/inventory-intelligence/accounting-export.csv`,
+    freeItems: (componentType?: string) =>
+      request<
+        Array<{
+          id: number;
+          component_name: string;
+          component_type: string;
+          quantity_free: number;
+          actual_cost: number;
+          source: string | null;
+          listing_url: string | null;
+          purchase_date: string;
+        }>
+      >(
+        `/inventory/free-items${
+          componentType
+            ? `?component_type=${encodeURIComponent(componentType)}`
+            : ""
+        }`
+      ),
+    health: () =>
+      request<{
+        free_units: number;
+        reserved_units: number;
+        consumed_units: number;
+        free_value: number;
+        reserved_value: number;
+        consumed_value: number;
+        expected_profit: number;
+        stale_items: Array<{
+          id: number;
+          name: string;
+          days: number;
+          value: number;
+        }>;
+        excess_stock: Array<{ component_type: string; free_units: number }>;
+        build_blockers: Array<{
+          build_id: number;
+          build_name: string;
+          missing: string[];
+        }>;
+      }>("/inventory/summary/health"),
+    events: (inventoryItemId: number) =>
+      request<
+        Array<{
+          id: number;
+          event_type: string;
+          quantity: number;
+          manual_build_id: number | null;
+          build_name: string | null;
+          detail: Record<string, unknown>;
+          created_at: string;
+        }>
+      >(`/inventory-allocations/inventory/${inventoryItemId}/events`),
+    units: (inventoryItemId: number) =>
+      request<
+        Array<{
+          id: number;
+          inventory_item_id: number;
+          unit_number: number;
+          serial_number: string | null;
+          condition_grade: string;
+          status: string;
+          storage_location: string | null;
+          warranty_expires_at: string | null;
+          test_results: Record<string, unknown>;
+          photos: string[];
+          exception_reason: string | null;
+          writeoff_amount: number | null;
+          received_at: string | null;
+          inspected_at: string | null;
+          created_at: string;
+          updated_at: string;
+        }>
+      >(`/inventory-intelligence/items/${inventoryItemId}/units`),
+    updateUnit: (unitId: number, data: Record<string, unknown>) =>
+      request<Record<string, unknown>>(
+        `/inventory-intelligence/units/${unitId}`,
+        { method: "PATCH", body: JSON.stringify(data) }
+      ),
+    unitLabel: (unitId: number) =>
+      request<{
+        unit_id: number;
+        sku: string;
+        component_name: string;
+        serial_number: string | null;
+        location: string | null;
+        qr_payload: string;
+      }>(`/inventory-intelligence/units/${unitId}/label`),
+    buildCandidates: (manualBuildId: number) =>
+      request<
+        Array<{
+          id: number;
+          component_name: string;
+          component_type: string;
+          slot: string;
+          quantity_free: number;
+          actual_cost: number;
+          source: string | null;
+          compatible: boolean;
+          confidence: string;
+          reasons: string[];
+          warnings: string[];
+        }>
+      >(`/inventory-intelligence/builds/${manualBuildId}/candidates`),
+    forecast: (days = 30) =>
+      request<{
+        horizon_days: number;
+        capital_required: number;
+        rows: Array<{
+          component_type: string;
+          free_now: number;
+          monthly_usage: number;
+          projected_free: number;
+          recommendation: "buy" | "hold" | "liquidate";
+          units: number;
+          estimated_capital: number;
+        }>;
+      }>(`/inventory-intelligence/forecast?days=${days}`),
+    sourcingAdjustments: () =>
+      request<
+        Array<{
+          component_type: string;
+          free_now: number;
+          recommendation: string;
+          units: number;
+          deal_score_adjustment: number;
+          reason: string;
+        }>
+      >("/inventory-intelligence/sourcing-adjustments"),
+    buildOpportunities: () =>
+      request<
+        Array<{
+          name: string;
+          completion_pct: number;
+          ready: boolean;
+          missing: string[];
+          owned_cost: number;
+          additional_spend_estimate: number;
+          components: Array<{
+            inventory_item_id: number;
+            component_type: string;
+            name: string;
+            cost: number;
+          }>;
+          warnings: string[];
+        }>
+      >("/inventory-intelligence/build-opportunities"),
+    reorderRules: () =>
+      request<
+        Array<{
+          id: number;
+          component_type: string;
+          minimum_free: number;
+          maximum_free: number;
+          target_free: number;
+          notes: string | null;
+        }>
+      >("/inventory-intelligence/reorder-rules"),
+    saveReorderRule: (
+      componentType: string,
+      data: {
+        minimum_free: number;
+        maximum_free: number;
+        target_free: number;
+        notes?: string;
+      }
+    ) =>
+      request<Record<string, unknown>>(
+        `/inventory-intelligence/reorder-rules/${encodeURIComponent(
+          componentType
+        )}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({ component_type: componentType, ...data }),
+        }
+      ),
+    accountingExportUrl: () =>
+      `${API_BASE_URL}/inventory-intelligence/accounting-export.csv`,
   },
 
   flipProfitBreakdown: {
@@ -1527,7 +2332,10 @@ export const api = {
         scopes: string[];
         refresh_token_expires_at: string | null;
       }>("/ebay/oauth/status"),
-    disconnect: () => request<{ connected: boolean }>("/ebay/oauth/disconnect", { method: "POST" }),
+    disconnect: () =>
+      request<{ connected: boolean }>("/ebay/oauth/disconnect", {
+        method: "POST",
+      }),
   },
 
   adminPerformance: {
@@ -1552,7 +2360,9 @@ export const api = {
         sample_titles: string[];
         frequent_tokens: [string, number][];
         note: string;
-      }>(`/admin/performance/keyword-research?query=${encodeURIComponent(query)}`),
+      }>(
+        `/admin/performance/keyword-research?query=${encodeURIComponent(query)}`
+      ),
   },
 };
 
@@ -1575,7 +2385,7 @@ export async function streamCompanion(
   history: CompanionMessage[],
   pageContext: string,
   onEvent: (event: CompanionSSEEvent) => void,
-  signal?: AbortSignal,
+  signal?: AbortSignal
 ): Promise<void> {
   const res = await fetch(apiUrl("/companion/stream"), {
     method: "POST",
@@ -1583,7 +2393,8 @@ export async function streamCompanion(
     body: JSON.stringify({ message, history, page_context: pageContext }),
     signal,
   });
-  if (!res.ok || !res.body) throw new Error(`Companion stream failed: ${res.status}`);
+  if (!res.ok || !res.body)
+    throw new Error(`Companion stream failed: ${res.status}`);
 
   const reader = res.body.getReader();
   const decoder = new TextDecoder();

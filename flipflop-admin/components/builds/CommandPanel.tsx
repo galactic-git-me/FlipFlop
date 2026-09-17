@@ -1,6 +1,13 @@
 "use client";
 
-import { Eye, Send, Trash2, RotateCcw, Loader2, type LucideIcon } from "lucide-react";
+import {
+  Eye,
+  Send,
+  Trash2,
+  RotateCcw,
+  Loader2,
+  type LucideIcon,
+} from "lucide-react";
 
 interface ListingStatus {
   platform: string;
@@ -36,7 +43,7 @@ const ACCENT_HOVER_CLASSES: Record<ActionAccent, string> = {
 // One icon button in the vertical rail, with its label as a tooltip that
 // pops out to the left (the rail itself is pinned to the right edge, so a
 // label appearing on the right would run off-screen).
-function RailButton({
+export function RailButton({
   label,
   icon: Icon,
   onClick,
@@ -59,7 +66,11 @@ function RailButton({
         title={label}
         className={`flex h-11 w-11 items-center justify-center rounded-xl border border-slate-600/50 bg-slate-800/60 backdrop-blur-sm text-slate-300 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${ACCENT_HOVER_CLASSES[accent]}`}
       >
-        {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Icon size={18} />}
+        {isLoading ? (
+          <Loader2 size={18} className="animate-spin" />
+        ) : (
+          <Icon size={18} />
+        )}
       </button>
       <span
         role="tooltip"
@@ -102,19 +113,61 @@ export function CommandPanel({
         </span>
         {ebayStatus && (
           <span
-            className={`h-2 w-2 rounded-full ${ebayStatus.isListed ? "bg-green-400" : "bg-slate-500"}`}
-            title={ebayStatus.isListed ? "Active on eBay" : `eBay: ${(ebayStatus.remoteStatus || "not listed").replaceAll("_", " ")}`}
+            className={`h-2 w-2 rounded-full ${
+              ebayStatus.isListed ? "bg-green-400" : "bg-slate-500"
+            }`}
+            title={
+              ebayStatus.isListed
+                ? "Active on eBay"
+                : `eBay: ${(ebayStatus.remoteStatus || "not listed").replaceAll(
+                    "_",
+                    " "
+                  )}`
+            }
           />
         )}
       </div>
 
-      <RailButton label="Generate title" icon={RotateCcw} onClick={onGenerateTitle} disabled={isLoading} isLoading={isLoading} accent="blue" />
-      <RailButton label="Generate description" icon={RotateCcw} onClick={onGenerateDescription} disabled={isLoading} isLoading={isLoading} accent="blue" />
-      <RailButton label="Preview draft" icon={Eye} onClick={onPreviewDraft} disabled={isLoading || !onPreviewDraft} accent="blue" />
-      <RailButton label="Submit canonical listing" icon={Send} onClick={onPublishChannels} disabled={isLoading || !onPublishChannels} accent="green" />
+      <RailButton
+        label="Generate title"
+        icon={RotateCcw}
+        onClick={onGenerateTitle}
+        disabled={isLoading}
+        isLoading={isLoading}
+        accent="blue"
+      />
+      <RailButton
+        label="Generate description"
+        icon={RotateCcw}
+        onClick={onGenerateDescription}
+        disabled={isLoading}
+        isLoading={isLoading}
+        accent="blue"
+      />
+      <RailButton
+        label="Preview draft"
+        icon={Eye}
+        onClick={onPreviewDraft}
+        disabled={isLoading || !onPreviewDraft}
+        accent="blue"
+      />
+      <RailButton
+        label="Submit canonical listing"
+        icon={Send}
+        onClick={onPublishChannels}
+        disabled={isLoading || !onPublishChannels}
+        accent="green"
+      />
 
       {ebayStatus?.isListed ? (
-        <RailButton label="End eBay listing" icon={Trash2} onClick={onDeleteEbay} disabled={isLoading || isDeletingEbay} isLoading={isDeletingEbay} accent="red" />
+        <RailButton
+          label="End eBay listing"
+          icon={Trash2}
+          onClick={onDeleteEbay}
+          disabled={isLoading || isDeletingEbay}
+          isLoading={isDeletingEbay}
+          accent="red"
+        />
       ) : null}
     </div>
   );
