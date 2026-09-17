@@ -262,6 +262,11 @@ function Promote-DevelopmentToProduction {
 }
 
 $runMode = Select-RunMode
+if ($runMode -eq "live") {
+    Write-Host "[*] Syncing production eBay account settings to Andromeda..." -ForegroundColor Cyan
+    & (Join-Path $PSScriptRoot "sync-production-ebay-env.ps1")
+    if ($LASTEXITCODE -ne 0) { throw "Production eBay environment sync failed" }
+}
 if ($runMode -eq "development") {
     Check-RepositoryForMode $runMode
 } else {
