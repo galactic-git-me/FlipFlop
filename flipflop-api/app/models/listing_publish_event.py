@@ -16,5 +16,8 @@ class ListingPublishEvent(Base):
     channel_listing_id: Mapped[int] = mapped_column(Integer, ForeignKey("channel_listings.id"), nullable=False)
     event_type: Mapped[str] = mapped_column(String(50), nullable=False)  # published, withdrawn, recreate_ended, recreate_created, recreate_failed
     message: Mapped[str | None] = mapped_column(String(500))
-    event_metadata: Mapped[dict | None] = mapped_column(JSON)
+    # The original migration created this column as `metadata`; keep the
+    # clearer Python attribute name without asking PostgreSQL for a different
+    # column that does not exist.
+    event_metadata: Mapped[dict | None] = mapped_column("metadata", JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
