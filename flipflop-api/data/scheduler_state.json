@@ -9,7 +9,7 @@
     "last_success_at": "2026-09-17T11:18:37.584800+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-09-17T11:19:37.194449+00:00"
+    "last_success_at": "2026-09-17T11:24:37.172592+00:00"
   },
   "ai_build_generator": {
     "last_success_at": "2026-09-17T10:45:37.254434+00:00"
@@ -87,6 +87,6 @@
     "last_success_at": "2026-09-17T11:19:21.779798+00:00"
   },
   "amazon_component_bestsellers": {
-    "last_success_at": "2026-09-17T08:40:53.529196+00:00"
+    "last_success_at": "2026-09-17T11:25:56.903423+00:00"
   }
 }
