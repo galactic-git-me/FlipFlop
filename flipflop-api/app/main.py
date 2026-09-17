@@ -37,6 +37,7 @@ from app.workers.scheduler import start_scheduler, stop_scheduler, run_startup_b
 from app.api import listings, flips, parts, sources, chat, config, swarms, inventory, inventory_allocations, inventory_intelligence
 from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms, price_evidence
 from app.api import alerts, reselling, ebay_listings, favourites
+from app.api import email_events
 from app.api import price_alerts
 from app.api import cases_bulk_import
 from app.routes.cases import router as cases_router
@@ -698,6 +699,7 @@ app.include_router(price_evidence.router, prefix="/api")
 app.include_router(facebook_router, prefix="/api")
 app.include_router(build_wizard_router, prefix="/api")
 app.include_router(alerts.router, prefix="/api")
+app.include_router(email_events.router, prefix="/api")
 app.include_router(price_alerts.router, prefix="/api")
 app.include_router(favourites.router, prefix="/api")
 app.include_router(reselling.router, prefix="/api")
@@ -929,6 +931,11 @@ async def _migrate_add_columns():
         ("manual_builds", "promoted_ad_rate_pct", "FLOAT"),
         ("manual_builds", "promoted_enabled", "BOOLEAN DEFAULT FALSE"),
         ("manual_builds", "markdown_event_opt_in", "BOOLEAN DEFAULT FALSE"),
+        ("manual_builds", "customer_email", "VARCHAR(320)"),
+        ("manual_builds", "dispatch_status", "VARCHAR(30) DEFAULT 'awaiting_dispatch'"),
+        ("manual_builds", "collection_date", "TIMESTAMP"),
+        ("manual_builds", "delivered_at", "TIMESTAMP"),
+        ("manual_builds", "warranty_started_at", "TIMESTAMP"),
     ]
     async with engine.begin() as conn:
         log.info("migration.start", total_columns=len(new_cols))

@@ -1,0 +1,5 @@
+"use client";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { api } from "@/lib/api";
+export default function EmailEventPage() { const params = useParams<{ id: string }>(); const [event, setEvent] = useState<Awaited<ReturnType<typeof api.emailEvents.get>> | null>(null); useEffect(() => { if (params.id) void api.emailEvents.get(Number(params.id)).then(setEvent); }, [params.id]); if (!event) return <p className="text-slate-400">Loading email…</p>; return <div className="space-y-5"><div><h1 className="text-2xl font-semibold text-white">{event.subject || "Email event"}</h1><p className="mt-1 text-sm text-slate-400">From {event.sender} · {event.received_at ? new Date(event.received_at).toLocaleString("en-GB") : ""}</p></div><div className="rounded-xl border border-emerald-400/20 bg-emerald-400/5 p-4 text-sm text-emerald-100">{event.summary}</div><pre className="whitespace-pre-wrap rounded-xl border border-slate-700 bg-[#0b121d] p-5 text-xs leading-6 text-slate-300">{event.body}</pre></div>; }

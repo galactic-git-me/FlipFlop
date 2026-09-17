@@ -61,6 +61,7 @@ from app.services.cross_channel_guard import withdraw_storefront_for_sold_build
 from app.services.meshy_generation import generate_multi_image_asset
 from app.services.product_faqs import FAQ_BANK, FAQ_BY_ID, selected_faqs, render_ebay_faq_html
 from app.services import pricing_engine
+from app.services.email_service import send_shipment_update_email
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -98,6 +99,10 @@ class FaqSelectionInput(BaseModel):
 
 class QueueBuild3DAssetsInput(BaseModel):
     assets: dict[str, list[str]]
+
+
+class CollectionDateInput(BaseModel):
+    collection_date: datetime
 
 
 def _build_customer_hub_dir(build_id: int) -> Path:
@@ -1359,6 +1364,36 @@ async def generate_specifics(build_id: int, db: AsyncSession = Depends(get_db)):
     )
 
 
+@router.get("/dispatch-zone")
+async def dispatch_zone(db: AsyncSession = Depends(get_db)):
+    """Builds sold by any channel and not yet paid/booked for dispatch."""
+    rows = (await db.execute(
+        select(ManualBuild).where(
+            ManualBuild.status == "sold",
+            ManualBuild.is_archived == False,  # noqa: E712
+        ).order_by(ManualBuild.updated_at.desc())
+    )).scalars().all()
+    return [{"id": b.id, "name": b.name, "status": b.status,
+             "dispatch_status": b.dispatch_status, "sale_price": b.sale_price_actual or b.ebay_price,
+             "buyer_name": b.buyer_name, "customer_email": b.customer_email,
+             "buyer_address": b.buyer_address_json, "collection_date": b.collection_date.isoformat() if b.collection_date else None,
+             "tracking_number": b.tracking_number, "shipping_label_url": b.shipping_label_url,
+             "shipment_booked_at": b.shipment_booked_at.isoformat() if b.shipment_booked_at else None,
+             "warranty_started_at": b.warranty_started_at.isoformat() if b.warranty_started_at else None} for b in rows]
+
+
+@router.patch("/{build_id}/collection-date")
+async def set_collection_date(build_id: int, body: CollectionDateInput, db: AsyncSession = Depends(get_db)):
+    build = await db.get(ManualBuild, build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    build.collection_date = body.collection_date
+    build.dispatch_status = "collection_scheduled"
+    build.updated_at = datetime.utcnow()
+    await db.commit()
+    return {"ok": True, "collection_date": body.collection_date.isoformat(), "dispatch_status": build.dispatch_status}
+
+
 @router.post("/{build_id}/courier-quote", response_model=list[CourierQuoteOut])
 async def get_courier_quote(
     build_id: int, delivery_country: str | None = None, db: AsyncSession = Depends(get_db)
@@ -1553,8 +1588,8 @@ async def book_shipment(build_id: int, body: BookShipmentRequest, db: AsyncSessi
     if not build:
         raise HTTPException(404, "Build not found")
 
-    if not build.buyer_address_json or not build.ebay_order_id:
-        raise HTTPException(400, "Sync the real eBay order first (sync-ebay-order) before booking a shipment.")
+    if not build.buyer_address_json:
+        raise HTTPException(400, "Add the buyer's delivery address before booking a shipment.")
     if not build.shipping_damage_cover_confirmed:
         raise HTTPException(
             409,
@@ -1605,8 +1640,15 @@ async def book_shipment(build_id: int, body: BookShipmentRequest, db: AsyncSessi
     build.tracking_number = booked.tracking_number
     build.shipping_label_url = booked.label_url
     build.shipment_booked_at = datetime.utcnow()
+    build.dispatch_status = "dispatched"
     build.updated_at = datetime.utcnow()
     await db.flush()
+
+    if build.customer_email:
+        await send_shipment_update_email(
+            build.customer_email, build.buyer_name or "there", f"BUILD-{build.id}",
+            body.service_slug.split("-")[0], booked.tracking_number, None, None,
+        )
 
     if not booked.tracking_number:
         return BookShipmentResult(
@@ -1628,13 +1670,14 @@ async def book_shipment(build_id: int, body: BookShipmentRequest, db: AsyncSessi
         # a best-effort split — good enough for eBay's carrier code mapping,
         # which already falls back to "OTHER" on anything unrecognized.
         courier_name = body.service_slug.split("-")[0]
-        await mark_order_shipped(
-            order_id=build.ebay_order_id,
-            line_item_id=build.buyer_address_json.get("line_item_id", ""),
-            tracking_number=booked.tracking_number,
-            courier_name=courier_name,
-            environment=settings.ebay_listing_environment,
-        )
+        if build.ebay_order_id:
+            await mark_order_shipped(
+                order_id=build.ebay_order_id,
+                line_item_id=build.buyer_address_json.get("line_item_id", ""),
+                tracking_number=booked.tracking_number,
+                courier_name=courier_name,
+                environment=settings.ebay_listing_environment,
+            )
     except EbayShippingFulfillmentError as e:
         return BookShipmentResult(
             success=True,

@@ -595,6 +595,14 @@ function qs(params?: Record<string, string | undefined>): string {
 }
 
 export const api = {
+  emailEvents: {
+    list: () => request<Array<{ id: number; subject: string; sender: string; summary: string; event_type: string; marketplace?: string | null; received_at?: string | null; link_url: string }>>("/email-events"),
+    get: (id: number) => request<{ id: number; subject: string; sender: string; body: string; summary: string; event_type: string; marketplace?: string | null; received_at?: string | null }>(`/email-events/${id}`),
+  },
+  dispatch: {
+    list: () => request<Array<{ id: number; name: string; dispatch_status: string; sale_price?: number | null; buyer_name?: string | null; customer_email?: string | null; buyer_address?: Record<string, string> | null; collection_date?: string | null; tracking_number?: string | null; shipping_label_url?: string | null }>>("/manual-builds/dispatch-zone"),
+    setCollectionDate: (id: number, collection_date: string) => request<{ ok: boolean; collection_date: string; dispatch_status: string }>(`/manual-builds/${id}/collection-date`, { method: "PATCH", body: JSON.stringify({ collection_date }) }),
+  },
   priceAlerts: {
     list: () => request<PriceAlertList>("/price-alerts"),
     create: (data: { manual_build_id: number; user_email: string; target_price_gbp: number }) =>

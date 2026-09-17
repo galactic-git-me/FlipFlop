@@ -18,6 +18,7 @@ from app.models.demand_rich import (
 from app.models.outcome_event import OutcomeEvent, RetrainCheckpoint
 from app.models.model_registry import ModelVersion, TrainingRun
 from app.models.alert_event import AlertEvent
+from app.models.email_event import EmailEvent
 from app.models.market_ingestion import SourceRun, ListingRaw, ListingNormalized
 from app.models.source_search_term import SourceSearchTerm
 from app.models.listing_archive import ListingArchive
@@ -76,7 +77,7 @@ __all__ = [
     "RetrainCheckpoint",
     "ModelVersion",
     "TrainingRun",
-    "AlertEvent",
+    "AlertEvent", "EmailEvent",
     "SourceRun",
     "ListingRaw",
     "ListingNormalized",

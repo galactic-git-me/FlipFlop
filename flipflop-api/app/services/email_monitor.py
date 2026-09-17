@@ -11,6 +11,10 @@ from app.config import get_settings
 from app.models.inventory import InventoryItem
 from app.models.build import Build
 from app.models.product import Product
+from app.models.email_event import EmailEvent
+from app.models.manual_build import ManualBuild
+from app.models.channel_listing import ChannelListing
+from app.services.alerts import emit_alert
 import logging
 
 log = logging.getLogger(__name__)
@@ -316,6 +320,28 @@ class EmailMonitor:
 
         body = msg["body"]
 
+        # Keep a durable operator-readable copy of every marketplace email.
+        # This makes the notification link useful even when the provider has
+        # no webmail deep-link format we can safely infer from IMAP.
+        existing = (await db.execute(select(EmailEvent).where(EmailEvent.message_id == str(msg["msg_id"])))) .scalar_one_or_none()
+        if existing:
+            return
+        marketplace = self._marketplace_for_email(msg["subject"], msg.get("sender", ""), body)
+        event = EmailEvent(
+            message_id=str(msg["msg_id"]), subject=msg["subject"], sender=msg.get("sender", ""),
+            body=body[:200000], marketplace=marketplace,
+            summary=self._email_summary(msg["subject"], body),
+        )
+        db.add(event)
+        await db.flush()
+        await emit_alert(
+            code="listing_email_received",
+            source=marketplace or "email_monitor",
+            severity="info",
+            message=f"Listing update: {event.summary}",
+            link_url=f"/email-events/{event.id}",
+        )
+
         # Try to parse as purchase receipt
         receipt = None
         for parser in [
@@ -338,7 +364,75 @@ class EmailMonitor:
                 sale = detector(body)
                 if sale:
                     await self.process_sale_detection(sale, db)
+                    build = await self._match_manual_build_sale(sale, db)
+                    if build:
+                        event.event_type = "sold"
+                        event.manual_build_id = build.id
+                        event.marketplace = sale.get("marketplace") or event.marketplace
+                        event.summary = f"Sold on {sale.get('marketplace', 'marketplace')}: {build.name} for £{sale.get('price', 0):.2f}. Other channel listings were withdrawn locally."
                     break
+
+        # Delivery confirmations are deliberately handled after sale parsing;
+        # this is idempotent and becomes Day 1 of the warranty clock.
+        if self._is_delivery_confirmation(msg["subject"], body):
+            event.event_type = "delivered"
+            # Match by a known tracking number when possible. The operator can
+            # still review unmatched confirmations from the email event page.
+            builds = (await db.execute(select(ManualBuild).where(ManualBuild.tracking_number.is_not(None)))).scalars().all()
+            matched = next((b for b in builds if b.tracking_number and b.tracking_number.lower() in body.lower()), None)
+            if matched:
+                matched.delivered_at = datetime.utcnow()
+                matched.warranty_started_at = matched.delivered_at
+                matched.dispatch_status = "delivered"
+                event.manual_build_id = matched.id
+                event.summary = f"Delivered: {matched.name}. Warranty Day 1 starts {matched.warranty_started_at.date().isoformat()}."
+            else:
+                event.summary = "Delivery confirmation received; no tracking number matched a build."
+
+        await db.commit()
+
+    async def _match_manual_build_sale(self, sale: dict, db: AsyncSession) -> ManualBuild | None:
+        title = (sale.get("title") or "").strip()
+        if not title:
+            return None
+        result = await db.execute(select(ManualBuild).where(ManualBuild.status != "sold"))
+        candidates = result.scalars().all()
+        build = next((b for b in candidates if title.lower() in (b.generated_title or b.name or "").lower() or (b.generated_title or b.name or "").lower() in title.lower()), None)
+        if not build:
+            return None
+        build.status = "sold"
+        build.dispatch_status = "awaiting_dispatch"
+        build.sale_price_actual = sale.get("price") or build.ebay_price
+        build.updated_at = datetime.utcnow()
+        # Mark every local cross-listing withdrawn immediately. Provider API
+        # withdrawal is channel-specific and is retried/handled by its adapter.
+        listings = (await db.execute(select(ChannelListing).where(ChannelListing.manual_build_id == build.id, ChannelListing.status.in_(["published", "scheduled"])))) .scalars().all()
+        for listing in listings:
+            listing.status = "withdrawn"
+            listing.withdrawn_at = datetime.utcnow()
+        if sale.get("marketplace") != "ebay" and build.ebay_sku:
+            from app.config import get_settings
+            from app.services.cross_channel_guard import withdraw_ebay_for_sold_build
+            await withdraw_ebay_for_sold_build(build, get_settings().ebay_listing_environment)
+        return build
+
+    @staticmethod
+    def _marketplace_for_email(subject: str, sender: str, body: str) -> str | None:
+        text = f"{subject} {sender} {body[:4000]}".lower()
+        for key, names in {"ebay": ("ebay",), "vinted": ("vinted",), "facebook": ("facebook", "marketplace"), "flipflop_shop": ("flipflop", "theflipflop.shop")}.items():
+            if any(name in text for name in names):
+                return key
+        return None
+
+    @staticmethod
+    def _email_summary(subject: str, body: str) -> str:
+        clean = re.sub(r"\\s+", " ", body).strip()
+        return (subject.strip() + " — " + clean[:240]).strip(" —")
+
+    @staticmethod
+    def _is_delivery_confirmation(subject: str, body: str) -> bool:
+        text = f"{subject} {body}".lower()
+        return any(term in text for term in ("delivered", "delivery confirmed", "has been delivered", "parcel delivered"))
 
     async def process_purchase_receipt(self, receipt: dict, db: AsyncSession):
         """Process a purchase receipt and create/update inventory items."""
