@@ -122,7 +122,7 @@ function SourcingDetails({ variant: v }: { variant: Variant }) {
 
 export default function CataloguePage() {
   const [variants, setVariants] = useState<Variant[]>([]);
-  const [view, setView] = useState<ViewMode>("listings");
+  const [view, setView] = useState<ViewMode>("grid");
   const [scope, setScope] = useState<CatalogueScope>("all");
   const [category, setCategory] = useState("All components");
   const [query, setQuery] = useState("");
