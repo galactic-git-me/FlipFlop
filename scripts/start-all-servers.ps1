@@ -679,6 +679,12 @@ $frontendApiUrl = if ($LocalBackend) { "http://localhost:4311" } else { "https:/
 # settings explicit because the read and write APIs use different credentials.
 $ebayEnvironment = "production"
 $ebayListingEnvironment = if ($runMode -eq "development") { "sandbox" } else { "production" }
+# The startup mode is the source of truth for listing writes. Set this in the
+# launcher process as well as on the backend command so every child process
+# sees the same safety boundary. Do not read this from .env.local.
+$env:FLIPFLOP_RUNTIME_ENV = $runMode
+$env:EBAY_ENVIRONMENT = $ebayEnvironment
+$env:EBAY_LISTING_ENVIRONMENT = $ebayListingEnvironment
 Write-Host "[eBay] Sourcing environment: $ebayEnvironment"
 Write-Host "[eBay] Listing environment: $ebayListingEnvironment" -ForegroundColor $(if ($runMode -eq "development") { "Yellow" } else { "Green" })
 Write-Host ""
