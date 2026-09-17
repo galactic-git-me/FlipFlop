@@ -38,6 +38,7 @@ from app.api import listings, flips, parts, sources, chat, config, swarms, inven
 from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms, price_evidence
 from app.api import alerts, reselling, ebay_listings, favourites
 from app.api import email_events
+from app.api import cross_listing
 from app.api import price_alerts
 from app.api import cases_bulk_import
 from app.routes.cases import router as cases_router
@@ -485,6 +486,17 @@ async def lifespan(app: FastAPI):
     log.info("app.startup", event_loop_type=type(loop).__name__, app_env=settings.app_env)
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        # Small additive lifecycle columns used by Email Events/Dispatch
+        # Zone. Keep this separate from the legacy broad migration because
+        # that migration is intentionally disabled in production startup.
+        for statement in (
+            "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS customer_email VARCHAR(320)",
+            "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS dispatch_status VARCHAR(30) DEFAULT 'awaiting_dispatch'",
+            "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS collection_date TIMESTAMP",
+            "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS delivered_at TIMESTAMP",
+            "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS warranty_started_at TIMESTAMP",
+        ):
+            await conn.exec_driver_sql(statement)
         await _install_manual_build_delete_guard(conn)
     # DISABLED: migrations deadlock on ALTER TABLE (PostgreSQL constraint acquisition)
     # Safe to skip because all migrations use IF NOT EXISTS and are idempotent
@@ -700,6 +712,7 @@ app.include_router(facebook_router, prefix="/api")
 app.include_router(build_wizard_router, prefix="/api")
 app.include_router(alerts.router, prefix="/api")
 app.include_router(email_events.router, prefix="/api")
+app.include_router(cross_listing.router, prefix="/api")
 app.include_router(price_alerts.router, prefix="/api")
 app.include_router(favourites.router, prefix="/api")
 app.include_router(reselling.router, prefix="/api")

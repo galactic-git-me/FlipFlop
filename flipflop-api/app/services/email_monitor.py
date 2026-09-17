@@ -360,7 +360,7 @@ class EmailMonitor:
         # If not a receipt, try sale detection
         if not receipt:
             sale = None
-            for detector in [self.detect_ebay_sale, self.detect_vinted_sale]:
+            for detector in [self.detect_ebay_sale, self.detect_vinted_sale, self.detect_generic_marketplace_sale]:
                 sale = detector(body)
                 if sale:
                     await self.process_sale_detection(sale, db)
@@ -426,13 +426,25 @@ class EmailMonitor:
 
     @staticmethod
     def _email_summary(subject: str, body: str) -> str:
-        clean = re.sub(r"\\s+", " ", body).strip()
+        clean = re.sub(r"\s+", " ", body).strip()
         return (subject.strip() + " — " + clean[:240]).strip(" —")
 
     @staticmethod
     def _is_delivery_confirmation(subject: str, body: str) -> bool:
         text = f"{subject} {body}".lower()
         return any(term in text for term in ("delivered", "delivery confirmed", "has been delivered", "parcel delivered"))
+
+    def detect_generic_marketplace_sale(self, body: str) -> Optional[dict]:
+        """Conservative fallback for Facebook/other channel sale emails."""
+        lower = body.lower()
+        marketplace = self._marketplace_for_email("", "", body)
+        if not marketplace or marketplace in {"ebay", "vinted", "flipflop_shop"}:
+            return None
+        if not any(term in lower for term in ("you've sold", "you have sold", "item sold", "sold your")):
+            return None
+        title_match = re.search(r"(?:item|listing|product)\s*[:\-]\s*(.+?)(?:\n|£|$)", body, re.I)
+        price_match = re.search(r"£\s*([\d,]+(?:\.\d{1,2})?)", body)
+        return {"marketplace": marketplace, "title": (title_match.group(1).strip() if title_match else ""), "price": float(price_match.group(1).replace(",", "")) if price_match else 0.0}
 
     async def process_purchase_receipt(self, receipt: dict, db: AsyncSession):
         """Process a purchase receipt and create/update inventory items."""

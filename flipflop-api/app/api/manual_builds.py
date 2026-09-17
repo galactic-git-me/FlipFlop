@@ -762,6 +762,19 @@ async def update_build_faqs(
     return {"selected_ids": body.selected_ids, "answer_overrides": cleaned_overrides, "selected_faqs": selected_faqs(build.id, body.selected_ids, cleaned_overrides)}
 
 
+@router.get("/dispatch-zone")
+async def dispatch_zone(db: AsyncSession = Depends(get_db)):
+    """Builds sold by any channel and not yet paid/booked for dispatch."""
+    rows = (await db.execute(select(ManualBuild).where(ManualBuild.status == "sold", ManualBuild.is_archived == False,).order_by(ManualBuild.updated_at.desc()))).scalars().all()  # noqa: E712
+    return [{"id": b.id, "name": b.name, "status": b.status, "dispatch_status": b.dispatch_status,
+             "sale_price": b.sale_price_actual or b.ebay_price, "buyer_name": b.buyer_name,
+             "customer_email": b.customer_email, "buyer_address": b.buyer_address_json,
+             "collection_date": b.collection_date.isoformat() if b.collection_date else None,
+             "tracking_number": b.tracking_number, "shipping_label_url": b.shipping_label_url,
+             "shipment_booked_at": b.shipment_booked_at.isoformat() if b.shipment_booked_at else None,
+             "warranty_started_at": b.warranty_started_at.isoformat() if b.warranty_started_at else None} for b in rows]
+
+
 @router.get("/{build_id}", response_model=ManualBuildOut)
 async def get_build(build_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
@@ -1362,24 +1375,6 @@ async def generate_specifics(build_id: int, db: AsyncSession = Depends(get_db)):
         description=build.generated_description or "",
         aspects=aspects
     )
-
-
-@router.get("/dispatch-zone")
-async def dispatch_zone(db: AsyncSession = Depends(get_db)):
-    """Builds sold by any channel and not yet paid/booked for dispatch."""
-    rows = (await db.execute(
-        select(ManualBuild).where(
-            ManualBuild.status == "sold",
-            ManualBuild.is_archived == False,  # noqa: E712
-        ).order_by(ManualBuild.updated_at.desc())
-    )).scalars().all()
-    return [{"id": b.id, "name": b.name, "status": b.status,
-             "dispatch_status": b.dispatch_status, "sale_price": b.sale_price_actual or b.ebay_price,
-             "buyer_name": b.buyer_name, "customer_email": b.customer_email,
-             "buyer_address": b.buyer_address_json, "collection_date": b.collection_date.isoformat() if b.collection_date else None,
-             "tracking_number": b.tracking_number, "shipping_label_url": b.shipping_label_url,
-             "shipment_booked_at": b.shipment_booked_at.isoformat() if b.shipment_booked_at else None,
-             "warranty_started_at": b.warranty_started_at.isoformat() if b.warranty_started_at else None} for b in rows]
 
 
 @router.patch("/{build_id}/collection-date")
