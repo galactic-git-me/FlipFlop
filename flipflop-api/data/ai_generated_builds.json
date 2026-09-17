@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-17T06:25:46.187984+00:00",
+  "generated_at": "2026-09-17T08:44:32.344305+00:00",
   "builds": [
     {
       "components": [
@@ -123,8 +123,8 @@
         "query": "gaming pc AMD Ryzen 7 9800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 59,
-          "average_price": 998.34,
+          "count": 49,
+          "average_price": 988.1,
           "unavailable_reason": null
         },
         "bin": {
@@ -132,12 +132,12 @@
           "count": 48,
           "min_price": 419.24,
           "max_price": 4900.33,
-          "average_price": 2061.14
+          "average_price": 1986.77
         }
       },
-      "resale_estimate": 998.34,
+      "resale_estimate": 988.1,
       "resale_source": "sold_average",
-      "estimated_profit": 915.88,
+      "estimated_profit": 905.64,
       "rank": 1
     },
     {
@@ -262,8 +262,8 @@
         "query": "gaming pc AMD Ryzen 7 9800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 59,
-          "average_price": 971.44,
+          "count": 49,
+          "average_price": 964.73,
           "unavailable_reason": null
         },
         "bin": {
@@ -271,12 +271,12 @@
           "count": 48,
           "min_price": 419.24,
           "max_price": 4900.33,
-          "average_price": 2016.19
+          "average_price": 1986.77
         }
       },
-      "resale_estimate": 971.44,
+      "resale_estimate": 964.73,
       "resale_source": "sold_average",
-      "estimated_profit": 889.92,
+      "estimated_profit": 883.21,
       "rank": 2
     },
     {
@@ -402,7 +402,7 @@
         "sold": {
           "available": true,
           "count": 59,
-          "average_price": 927.78,
+          "average_price": 952.21,
           "unavailable_reason": null
         },
         "bin": {
@@ -410,12 +410,12 @@
           "count": 49,
           "min_price": 419.24,
           "max_price": 3149.0,
-          "average_price": 1819.95
+          "average_price": 1799.98
         }
       },
-      "resale_estimate": 927.78,
+      "resale_estimate": 952.21,
       "resale_source": "sold_average",
-      "estimated_profit": 847.3,
+      "estimated_profit": 871.73,
       "rank": 3
     },
     {
@@ -548,8 +548,8 @@
           "available": true,
           "count": 50,
           "min_price": 675.58,
-          "max_price": 7129.0,
-          "average_price": 1821.09
+          "max_price": 7279.0,
+          "average_price": 1671.84
         }
       },
       "resale_estimate": 768.93,
@@ -688,7 +688,7 @@
           "count": 50,
           "min_price": 675.58,
           "max_price": 7129.0,
-          "average_price": 1810.51
+          "average_price": 1817.29
         }
       },
       "resale_estimate": 768.93,
@@ -819,7 +819,7 @@
         "sold": {
           "available": true,
           "count": 60,
-          "average_price": 762.05,
+          "average_price": 756.72,
           "unavailable_reason": null
         },
         "bin": {
@@ -827,12 +827,12 @@
           "count": 48,
           "min_price": 399.95,
           "max_price": 2444.95,
-          "average_price": 889.62
+          "average_price": 930.11
         }
       },
-      "resale_estimate": 762.05,
+      "resale_estimate": 756.72,
       "resale_source": "sold_average",
-      "estimated_profit": 682.42,
+      "estimated_profit": 677.09,
       "rank": 6
     }
   ],
