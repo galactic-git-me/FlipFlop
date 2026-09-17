@@ -691,7 +691,7 @@ Write-Host ""
 $servers = @(
     @{
         name     = "backend"
-        cmdArgs  = @("/c", "cd flipflop-api && set FLIPFLOP_RUNTIME_ENV=$runMode && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set EBAY_ENVIRONMENT=$ebayEnvironment && set EBAY_LISTING_ENVIRONMENT=$ebayListingEnvironment && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4311")
+        cmdArgs  = @("/c", "cd flipflop-api && set FLIPFLOP_RUNTIME_ENV=$runMode && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set EBAY_ENVIRONMENT=$ebayEnvironment && set EBAY_LISTING_ENVIRONMENT=$ebayListingEnvironment && set ADMIN_FRONTEND_URL=http://localhost:4312 && set FRONTEND_URL=http://localhost:4313 && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4311")
         port     = 4311
         color    = "Yellow"
         skip     = $NoBackend -or (-not $LocalBackend)
