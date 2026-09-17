@@ -604,6 +604,8 @@ export const api = {
     setCollectionDate: (id: number, collection_date: string) => request<{ ok: boolean; collection_date: string; dispatch_status: string }>(`/manual-builds/${id}/collection-date`, { method: "PATCH", body: JSON.stringify({ collection_date }) }),
   },
   crossListing: {
+    amazonStatus: () => request<{ connected: boolean; configured?: boolean; marketplace_found?: boolean; message?: string; environment?: string; marketplace_id?: string }>("/cross-listing/amazon/status"),
+    publishAmazon: (buildId: number, data: { title: string; description: string; bullet_points: string[]; price: number; quantity: number; condition: string; images: string[]; sku?: string }) => request<{ success: boolean; status: string; sku: string; listing_url?: string | null; response?: unknown; message: string }>(`/cross-listing/amazon/publish/${buildId}`, { method: "POST", body: JSON.stringify(data) }),
     settings: () => request<{ indirect_channel_recreate_interval_days: number }>("/cross-listing/settings"),
     saveSettings: (data: { interval_days: number }) => request<{ indirect_channel_recreate_interval_days: number }>("/cross-listing/settings", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }),
     schedules: (buildId?: number) => request<Array<{ id: number; build_id: number; channel: string; status: string; recreate_enabled: boolean; interval_days?: number | null; next_recreate_at?: string | null; last_recreate_at?: string | null; recreate_count: number; last_recreate_status?: string | null; last_recreate_message?: string | null }>>(`/cross-listing/schedules${buildId ? `?build_id=${buildId}` : ""}`),

@@ -81,6 +81,17 @@ class Settings(BaseSettings):
     # gain encryption without introducing another unmanaged production secret.
     ebay_token_encryption_key: str = ""
     ebay_reselling_enabled: bool = True
+    # Amazon Selling Partner API. These values must live in the API service's
+    # environment, never in NEXT_PUBLIC_* variables or browser code.
+    amazon_sp_api_client_id: str = ""
+    amazon_sp_api_client_secret: str = ""
+    amazon_sp_api_refresh_token: str = ""
+    amazon_sp_api_seller_id: str = ""
+    amazon_sp_api_marketplace_id: str = "A1F83G8C2ARO7P"  # Amazon UK
+    amazon_sp_api_environment: str = "production"
+    amazon_sp_api_endpoint: str = "https://sellingpartnerapi-eu.amazon.com"
+    amazon_sp_api_sandbox_endpoint: str = "https://sandbox.sellingpartnerapi-eu.amazon.com"
+    amazon_sp_api_product_type: str = "COMPUTER"
     ebay_message_poll_interval_seconds: int = 300
     ebay_sales_poll_interval_seconds: int = 1800
     ebay_walkaway_margin_pct: float = 0.15

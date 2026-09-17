@@ -192,12 +192,12 @@ export function sourcesFromBuild(build: ManualBuild): CrossListingSource[] {
   return items;
 }
 
-export function capabilities(ebayConnected: boolean): ChannelCapability[] {
+export function capabilities(ebayConnected: boolean, amazonConnected = false, amazonMessage?: string): ChannelCapability[] {
   return [
     { channel: "ebay_uk", label: "eBay UK", mode: ebayConnected ? "api" : "not_connected", connected: ebayConnected, canPublish: ebayConnected, canUpdate: ebayConnected, canEnd: ebayConnected, note: ebayConnected ? "Uses the existing seller OAuth and manual-build eBay operations." : "Connect the existing eBay seller account in Settings.", officialReference: "https://developer.ebay.com/api-docs/sell/inventory/overview.html" },
     { channel: "flipflop_shop", label: "FlipFlop.shop", mode: "api", connected: true, canPublish: true, canUpdate: true, canEnd: false, note: "Reuses the canonical storefront product; duplicate products are not created here.", officialReference: "Internal storefront API" },
     { channel: "onbuy", label: "OnBuy", mode: "manual", connected: false, canPublish: false, canUpdate: false, canEnd: false, note: "Seller API/feed onboarding is not configured in this app. Manual listing pack only.", officialReference: "https://www.onbuy.com/gb/sell/" },
-    { channel: "amazon", label: "Amazon", mode: "requires_approval", connected: false, canPublish: false, canUpdate: false, canEnd: false, note: "SP-API requires seller authorization, Product Listing role, marketplace/category requirements and identifiers.", officialReference: "https://developer-docs.amazon.com/sp-api/docs/manage-product-listings-guide" },
+    { channel: "amazon", label: "Amazon", mode: amazonConnected ? "api" : "requires_approval", connected: amazonConnected, canPublish: amazonConnected, canUpdate: amazonConnected, canEnd: false, note: amazonConnected ? "Seller-authorized SP-API connection. Amazon may still return category, GTIN or product-type requirements for review." : amazonMessage || "Add the Amazon SP-API variables to the API service and authorize the seller account.", officialReference: "https://developer-docs.amazon.com/sp-api/docs/manage-product-listings-guide" },
     { channel: "facebook_catalog", label: "Facebook catalog", mode: "manual", connected: false, canPublish: false, canUpdate: false, canEnd: false, note: "Catalog/feed route must be configured; personal Marketplace automation is not supported.", officialReference: "https://www.facebook.com/business/help/" },
     { channel: "vinted", label: "Vinted", mode: "manual", connected: false, canPublish: false, canUpdate: false, canEnd: false, note: "No approved seller integration is configured. Manual-assist export only; no consumer-account automation.", officialReference: "https://www.vinted.co.uk/help" },
   ];

@@ -9,6 +9,8 @@ from app.models.channel_listing import ChannelListing
 from app.models.listing_publish_event import ListingPublishEvent
 from app.models.app_settings import AppSettings
 from app.services.alerts import emit_alert
+from app.services.amazon_sp_api import AmazonSPAPI, AmazonSPAPIError
+from app.models.manual_build import ManualBuild
 
 router = APIRouter(prefix="/cross-listing", tags=["cross-listing"], dependencies=[Depends(require_operator)])
 INDIRECT_CHANNELS = {"onbuy", "amazon", "facebook_catalog", "vinted"}
@@ -32,6 +34,17 @@ class IndirectChannelSettingsIn(BaseModel):
     interval_days: int = Field(ge=1, le=365)
 
 
+class AmazonPublishIn(BaseModel):
+    title: str = Field(min_length=1, max_length=200)
+    description: str = Field(min_length=1, max_length=4000)
+    bullet_points: list[str] = Field(default_factory=list, max_length=8)
+    price: float = Field(gt=0)
+    quantity: int = Field(ge=0, le=999)
+    condition: str = Field(min_length=1, max_length=60)
+    images: list[str] = Field(min_length=1, max_length=12)
+    sku: str | None = Field(default=None, max_length=80)
+
+
 async def _app_settings(db: AsyncSession) -> AppSettings:
     settings = (await db.execute(select(AppSettings).where(AppSettings.name == "default"))).scalar_one_or_none()
     if not settings:
@@ -45,6 +58,75 @@ async def _app_settings(db: AsyncSession) -> AppSettings:
 async def get_cross_listing_settings(db: AsyncSession = Depends(get_db)):
     settings = await _app_settings(db)
     return {"indirect_channel_recreate_interval_days": settings.indirect_channel_recreate_interval_days or 7}
+
+
+@router.get("/amazon/status")
+async def amazon_status():
+    """Check the seller-authorized SP-API connection without exposing secrets."""
+    client = AmazonSPAPI()
+    if not client.configured:
+        return {"connected": False, "configured": False, "message": "Amazon credentials are not configured on the API service."}
+    try:
+        result = await client.status()
+        result["configured"] = True
+        if not result["marketplace_found"]:
+            result["connected"] = False
+            result["message"] = "The seller is authorized, but the configured marketplace is not enabled for this account."
+        return result
+    except AmazonSPAPIError as exc:
+        return {"connected": False, "configured": True, "message": str(exc), "status_code": exc.status_code}
+
+
+@router.post("/amazon/publish/{build_id}")
+async def publish_amazon(build_id: int, body: AmazonPublishIn, db: AsyncSession = Depends(get_db)):
+    """Create/update the Amazon listing for a reviewed canonical build."""
+    build = await db.get(ManualBuild, build_id)
+    if not build:
+        raise HTTPException(status_code=404, detail="Build not found")
+    if build.status == "sold" or body.quantity == 0:
+        raise HTTPException(status_code=409, detail="Sold or zero-quantity builds cannot be listed on Amazon")
+
+    sku = body.sku or f"FF-BUILD-{build_id}"
+    client = AmazonSPAPI()
+    if not client.configured:
+        raise HTTPException(status_code=503, detail="Amazon SP-API is not configured on the API service")
+    channel_listing = (await db.execute(
+        select(ChannelListing)
+        .where(ChannelListing.manual_build_id == build_id, ChannelListing.channel == "amazon")
+        .order_by(ChannelListing.created_at.desc())
+    )).scalars().first()
+    if not channel_listing:
+        channel_listing = ChannelListing(manual_build_id=build_id, channel="amazon", status="publishing")
+        db.add(channel_listing)
+        await db.flush()
+
+    try:
+        result = await client.upsert_listing(
+            sku=sku,
+            title=body.title,
+            description=body.description,
+            bullet_points=body.bullet_points,
+            price=body.price,
+            quantity=body.quantity,
+            condition=body.condition,
+            images=body.images,
+        )
+        issues = result.get("issues") or []
+        accepted = str(result.get("status", "")).upper() in {"ACCEPTED", "VALID"} and not issues
+        channel_listing.status = "published" if accepted else "failed"
+        channel_listing.external_listing_id = sku
+        channel_listing.published_at = datetime.utcnow() if accepted else None
+        message = "Amazon accepted the listing submission." if accepted else "Amazon returned listing requirements or validation issues."
+        db.add(ListingPublishEvent(channel_listing_id=channel_listing.id, event_type="published" if accepted else "publish_failed", message=message, event_metadata={"sku": sku, "response": result}))
+        await db.commit()
+        return {"success": accepted, "status": channel_listing.status, "sku": sku, "listing_url": None, "response": result, "message": message}
+    except AmazonSPAPIError as exc:
+        channel_listing.status = "failed"
+        channel_listing.last_recreate_status = "failed"
+        channel_listing.last_recreate_message = str(exc)[:500]
+        db.add(ListingPublishEvent(channel_listing_id=channel_listing.id, event_type="publish_failed", message=str(exc)[:500], event_metadata={"sku": sku, "details": exc.details}))
+        await db.commit()
+        raise HTTPException(status_code=502, detail={"message": str(exc), "details": exc.details})
 
 
 @router.put("/settings")

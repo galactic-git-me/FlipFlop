@@ -185,6 +185,8 @@ export default function CrossListingPage() {
   const [items, setItems] = useState<CrossListingSource[]>([]);
   const [builds, setBuilds] = useState<Record<number, ManualBuild>>({});
   const [connected, setConnected] = useState(false);
+  const [amazonConnected, setAmazonConnected] = useState(false);
+  const [amazonMessage, setAmazonMessage] = useState<string | undefined>();
   const [warnings, setWarnings] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -203,7 +205,7 @@ export default function CrossListingPage() {
   const [results, setResults] = useState<Array<{ channel: string; status: string; message: string; url?: string; assist?: BrowserAssistJob }>>([]);
   const [actions, setActions] = useState<Awaited<ReturnType<typeof api.crossListing.actions>>>([]);
 
-  const channelCapabilities = useMemo(() => capabilities(connected), [connected]);
+  const channelCapabilities = useMemo(() => capabilities(connected, amazonConnected, amazonMessage), [connected, amazonConnected, amazonMessage]);
   const grouped = useMemo(() => groupListings(items), [items]);
   const selectedGroups = grouped.filter((item) => selected.has(item.id));
   const selectedItems = selectedGroups.map((group) => group.primary);
@@ -222,7 +224,7 @@ export default function CrossListingPage() {
   const refresh = useCallback(async () => {
     setRefreshing(true); setError(null);
     try {
-      const [summary, ebay, actionRows] = await Promise.all([api.manualBuilds.list(), api.ebayOAuth.status().catch(() => ({ connected: false })), api.crossListing.actions()]);
+      const [summary, ebay, amazon, actionRows] = await Promise.all([api.manualBuilds.list(), api.ebayOAuth.status().catch(() => ({ connected: false })), api.crossListing.amazonStatus().catch(() => ({ connected: false, message: "Amazon connection could not be checked." })), api.crossListing.actions()]);
       const detailResults = await Promise.allSettled(summary.map((build) => api.manualBuilds.get(build.id)));
       const nextBuilds: Record<number, ManualBuild> = {};
       const nextItems: CrossListingSource[] = [];
@@ -231,7 +233,7 @@ export default function CrossListingPage() {
         if (result.status === "fulfilled") { nextBuilds[result.value.id] = result.value; nextItems.push(...sourcesFromBuild(result.value)); }
         else nextWarnings.push(`Build ${summary[index]?.id ?? "unknown"} could not be refreshed.`);
       });
-      setBuilds(nextBuilds); setItems(nextItems); setWarnings(nextWarnings); setConnected(ebay.connected); setRefreshedAt(new Date().toISOString());
+      setBuilds(nextBuilds); setItems(nextItems); setWarnings(nextWarnings); setConnected(ebay.connected); setAmazonConnected(amazon.connected); setAmazonMessage(amazon.message); setRefreshedAt(new Date().toISOString());
       setActions(actionRows);
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not load source listings."); }
     finally { setRefreshing(false); }
@@ -271,7 +273,9 @@ export default function CrossListingPage() {
       const capability = channelCapabilities.find((entry) => entry.channel === destination);
       if (!capability) continue;
       if (capability.mode !== "api") {
-        if (isDevelopmentMode()) {
+        if (destination === "amazon") {
+          nextResults.push({ channel: capability.label, status: "failed", message: capability.note });
+        } else if (isDevelopmentMode()) {
           nextResults.push({ channel: capability.label, status: "published", message: `${capability.label} fake listing created for development. No external marketplace was contacted.`, url: devListingUrl(item, capability) });
         } else {
           nextResults.push({ channel: capability.label, status: "manual_action_required", message: `${capability.note} Use browser assist to have Codex create the listing with the complete payload and photos.`, assist: { source: item, channel: capability } });
@@ -283,6 +287,18 @@ export default function CrossListingPage() {
         if (destination === "ebay_uk") {
           const result = await api.manualBuilds.postToEbay(item.buildId, { price: item.listing.price ?? 0, condition: item.listing.condition, publish: true });
           nextResults.push({ channel: capability.label, status: result.success ? "published" : "failed", message: result.success ? "eBay Sandbox accepted the publish request." : result.error ?? "eBay did not publish the listing.", url: result.url });
+        } else if (destination === "amazon") {
+          const result = await api.crossListing.publishAmazon(item.buildId, {
+            title: item.listing.title,
+            description: item.listing.description,
+            bullet_points: item.listing.bulletPoints,
+            price: item.listing.price ?? 0,
+            quantity: item.listing.quantity,
+            condition: item.listing.condition,
+            images: item.listing.images.map((image) => image.url),
+            sku: item.listing.sku,
+          });
+          nextResults.push({ channel: capability.label, status: result.success ? "published" : "failed", message: result.message, url: result.listing_url ?? undefined });
         } else if (destination === "flipflop_shop" && build) {
           const result = await api.manualBuilds.listOnStorefront(item.buildId, item.listing.price ?? 0);
           nextResults.push({ channel: capability.label, status: "published", message: isDevelopmentMode() ? "Linked to the dev storefront product." : "Linked to the existing storefront product.", url: isDevelopmentMode() ? devStorefrontUrl(item.buildId) : result.storefront_url });
