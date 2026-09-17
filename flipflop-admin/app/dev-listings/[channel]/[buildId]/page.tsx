@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { ExternalLink, ShieldCheck, Store } from "lucide-react";
 
 const labels: Record<string, string> = {
@@ -14,12 +15,20 @@ export default function DevListingPage() {
   const params = useParams<{ channel: string; buildId: string }>();
   const search = useSearchParams();
   const channel = labels[params.channel] ?? params.channel;
-  const title = search.get("title") || "FlipFlop PC build";
-  const description = search.get("description") || "Development listing preview.";
-  const image = search.get("image");
-  const price = search.get("price");
-  const condition = search.get("condition") || "Used";
-  const sku = search.get("sku") || `FF-BUILD-${params.buildId}`;
+  const [preview, setPreview] = useState<Record<string, string> | null>(null);
+  useEffect(() => {
+    const stored = window.localStorage.getItem(`flipflop-dev-listing:${params.channel}:${params.buildId}`);
+    if (stored) {
+      try { setPreview(JSON.parse(stored) as Record<string, string>); } catch { /* use defaults */ }
+    }
+  }, [params.channel, params.buildId]);
+  // Query params remain a backwards-compatible fallback for old result links.
+  const title = preview?.title || search.get("title") || "FlipFlop PC build";
+  const description = preview?.description || search.get("description") || "Development listing preview.";
+  const image = preview?.image || search.get("image");
+  const price = preview?.price || search.get("price");
+  const condition = preview?.condition || search.get("condition") || "Used";
+  const sku = preview?.sku || search.get("sku") || `FF-BUILD-${params.buildId}`;
 
   return (
     <main className="min-h-screen bg-[#020617] px-4 py-8 text-slate-100 md:px-8">

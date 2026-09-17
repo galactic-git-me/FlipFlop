@@ -94,15 +94,19 @@ function isDevelopmentMode() {
 }
 
 function devListingUrl(source: CrossListingSource, channel: ChannelCapability) {
-  const params = new URLSearchParams({
-    title: source.listing.title,
-    description: source.listing.description,
-    price: source.listing.price == null ? "" : String(source.listing.price),
-    condition: source.listing.condition,
-    sku: source.listing.sku,
-    image: source.imageUrl ?? "",
-  });
-  return `/dev-listings/${channel.channel}/${source.buildId}?${params.toString()}`;
+  // Keep the navigation URL small. Listing descriptions and image URLs can
+  // exceed the proxy/browser request-line limit and result in HTTP 431.
+  if (typeof window !== "undefined") {
+    window.localStorage.setItem(`flipflop-dev-listing:${channel.channel}:${source.buildId}`, JSON.stringify({
+      title: source.listing.title,
+      description: source.listing.description,
+      price: source.listing.price == null ? "" : String(source.listing.price),
+      condition: source.listing.condition,
+      sku: source.listing.sku,
+      image: source.imageUrl ?? "",
+    }));
+  }
+  return `/dev-listings/${channel.channel}/${source.buildId}`;
 }
 
 function devStorefrontUrl(buildId: number) {
