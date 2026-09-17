@@ -70,6 +70,7 @@ from app.gem_radar.schemas import (
     SoldCompTarget,
 )
 from app.services.submission_queue_service import SubmissionQueueService
+from app.services.hardware_performance import enrich_listing_performance, load_benchmark_context
 
 router = APIRouter(prefix="/gem-radar", tags=["gem-radar"])
 
@@ -1171,6 +1172,23 @@ async def get_scored_listings_latest_run(
         for row in bestseller_result
     }
 
+    benchmark_index, peer_scores = await load_benchmark_context(db)
+    performance_by_cpk: dict[str, dict] = {}
+    for row in scored:
+        if not row.cpk:
+            continue
+        performance = enrich_listing_performance(
+            category=row.category,
+            title=row.title,
+            canonical_model_id=row.canonical_model_id,
+            release_year=row.release_year,
+            delivered_price=row.delivered_price,
+            benchmark_index=benchmark_index,
+            peer_scores=peer_scores,
+        )
+        if performance.get("performance_status") == "MATCHED":
+            performance_by_cpk.setdefault(row.cpk, performance)
+
     return [
         {
             "id": s.id,
@@ -1227,6 +1245,15 @@ async def get_scored_listings_latest_run(
             "scored_at": s.scored_at.isoformat() if s.scored_at else None,
             "listing_observed_at": s.listing_observed_at.isoformat() if s.listing_observed_at else None,
             "search_run_id": s.search_run_id,
+            **(performance_by_cpk.get(s.cpk) or enrich_listing_performance(
+                category=s.category,
+                title=s.title,
+                canonical_model_id=s.canonical_model_id,
+                release_year=s.release_year,
+                delivered_price=s.delivered_price,
+                benchmark_index=benchmark_index,
+                peer_scores=peer_scores,
+            )),
         }
         for s in scored
     ]

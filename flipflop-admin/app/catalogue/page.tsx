@@ -21,6 +21,8 @@ type Variant = {
   cpk?: string | null; watch_count?: number | null; offer_count?: number | null; sold_count?: number | null; active_count?: number | null; sell_through_rate?: number | null;
   review_average_rating?: number | null; review_count?: number | null;
   amazon_bestseller_rank?: number | null; amazon_bestseller_list?: string | null; amazon_bestseller_captured_at?: string | null;
+  performance_status?: string | null; performance_model?: string | null; performance_score?: number | null;
+  performance_rank?: number | null; performance_peer_count?: number | null; performance_percentile?: number | null;
   url?: string | null; condition?: string | null; delivered_price?: number | null;
   delivery_text?: string | null; delivery_postcode?: string | null;
   scored_market_lower_price?: number | null; scored_market_median_price?: number | null; scored_market_upper_price?: number | null;
@@ -103,6 +105,13 @@ function ReviewSummary({ variant: v }: { variant: Variant }) {
   </div>;
 }
 
+function RankSummary({ variant: v }: { variant: Variant }) {
+  return <div className="flex flex-wrap gap-x-3 gap-y-1 text-[10px]" title="Ranks are product/CPK-level and shared across marketplace listings">
+    <span className="text-amber-300">Amazon <b className="font-mono">{v.amazon_bestseller_rank == null ? "—" : `#${v.amazon_bestseller_rank.toLocaleString()}`}</b></span>
+    <span className="text-violet-300">Performance <b className="font-mono">{v.performance_rank == null ? "—" : `#${v.performance_rank.toLocaleString()}`}</b></span>
+  </div>;
+}
+
 function SourcingDetails({ variant: v }: { variant: Variant }) {
   const money = (value?: number | null) => value == null ? "—" : `£${value.toFixed(0)}`;
   const lower = v.scored_market_lower_price ?? v.market_lower_price;
@@ -153,6 +162,9 @@ export default function CataloguePage() {
           watch_count: (row.watch_count as number | null) ?? null, offer_count: null, sold_count: (row.sold_listing_count as number | null) ?? null, active_count: (row.active_count as number | null) ?? null, sell_through_rate: (row.sell_through_rate as number | null) ?? (row.sell_through_rate_pct as number | null) ?? null,
           review_average_rating: (row.review_average_rating as number | null) ?? null, review_count: (row.review_count as number | null) ?? null,
           amazon_bestseller_rank: (row.amazon_bestseller_rank as number | null) ?? null, amazon_bestseller_list: (row.amazon_bestseller_list as string | null) ?? null, amazon_bestseller_captured_at: (row.amazon_bestseller_captured_at as string | null) ?? null,
+          performance_status: (row.performance_status as string | null) ?? null, performance_model: (row.performance_model as string | null) ?? null,
+          performance_score: (row.performance_score as number | null) ?? null, performance_rank: (row.performance_rank as number | null) ?? null,
+          performance_peer_count: (row.performance_peer_count as number | null) ?? null, performance_percentile: (row.performance_percentile as number | null) ?? null,
           url: (row.url as string | null) ?? null, condition: (row.condition as string | null) ?? null, delivered_price: (row.delivered_price as number | null) ?? null,
           delivery_text: (row.delivery_text as string | null) ?? null, delivery_postcode: (row.delivery_postcode as string | null) ?? null,
           classification: classificationLabel((row.classification as string | null) ?? null), decision: (row.decision as string | null) ?? null,

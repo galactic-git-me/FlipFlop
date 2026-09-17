@@ -22,6 +22,7 @@ from app.schemas.catalogue import (
     RejectBody,
 )
 from app.services.catalogue_service import approve_variant, reject_variant
+from app.services.hardware_performance import enrich_listing_performance, load_benchmark_context
 from app.routes.admin_auth import get_current_admin
 
 router = APIRouter(prefix="/catalogue", tags=["catalogue"], dependencies=[Depends(get_current_admin)])
@@ -372,6 +373,23 @@ async def list_variants(
         total = sold + active
         return None if total == 0 else round(sold / total * 100, 1)
 
+    benchmark_index, peer_scores = await load_benchmark_context(db)
+    performance_by_cpk: dict[str, dict] = {}
+    for scored_row in scored_by_item.values():
+        if not scored_row.cpk:
+            continue
+        performance = enrich_listing_performance(
+            category=scored_row.category,
+            title=scored_row.title,
+            canonical_model_id=scored_row.canonical_model_id,
+            release_year=scored_row.release_year,
+            delivered_price=scored_row.delivered_price,
+            benchmark_index=benchmark_index,
+            peer_scores=peer_scores,
+        )
+        if performance.get("performance_status") == "MATCHED":
+            performance_by_cpk.setdefault(scored_row.cpk, performance)
+
     return [
         {
             "id": v.id,
@@ -428,6 +446,15 @@ async def list_variants(
                 "amazon_bestseller_list": None,
                 "amazon_bestseller_captured_at": None,
             }),
+            **(performance_by_cpk.get(cpk_by_item.get(item_key(l))) or enrich_listing_performance(
+                category=getattr(scored(l), "category", None) or s.slot_type,
+                title=l.title,
+                canonical_model_id=getattr(scored(l), "canonical_model_id", None),
+                release_year=getattr(scored(l), "release_year", None),
+                delivered_price=getattr(scored(l), "delivered_price", None) or l.price,
+                benchmark_index=benchmark_index,
+                peer_scores=peer_scores,
+            )),
             "consecutive_misses": v.consecutive_misses,
             "last_seen_at": v.last_seen_at,
             "auto_published_at": v.auto_published_at,

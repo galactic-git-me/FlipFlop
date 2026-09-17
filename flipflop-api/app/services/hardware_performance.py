@@ -9,8 +9,25 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Iterable
 
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.models.benchmark import HardwareBenchmark
 from app.services.benchmark_normaliser import normalise_cpu, normalise_gpu
+
+
+async def load_benchmark_context(db: AsyncSession) -> tuple[dict[tuple[str, str], HardwareBenchmark], dict[str, list[float]]]:
+    """Load the current benchmark index and peer score lists for catalogue enrichment."""
+    result = await db.execute(
+        select(HardwareBenchmark).where(HardwareBenchmark.overall_score.is_not(None))
+    )
+    rows = result.scalars().all()
+    index = index_benchmarks(rows)
+    peer_scores: dict[str, list[float]] = {}
+    for row in rows:
+        if row.overall_score is not None:
+            peer_scores.setdefault(row.component_type, []).append(row.overall_score)
+    return index, peer_scores
 
 
 def _normalise_for_category(category: str | None, value: str | None) -> str | None:
