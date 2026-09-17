@@ -22,7 +22,6 @@ const statusStyles: Record<CrossListingSource["status"], string> = {
 
 const labelForStatus = (value: string) => value.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 
-const allChannels: CrossListingChannel[] = ["ebay_uk", "flipflop_shop", "onbuy", "amazon", "facebook_catalog", "vinted"];
 type GroupedListing = {
   id: string;
   buildId: number;
@@ -75,16 +74,15 @@ const statusPresentation: Record<CrossListingSource["status"], { emoji: string; 
 };
 
 function VendorLogo({ channel }: { channel: CrossListingChannel }) {
-  if (channel === "ebay_uk") {
-    return <span aria-label="eBay UK" className="text-base font-black tracking-[-0.08em]"><span className="text-[#e53238]">e</span><span className="text-[#0064d2]">b</span><span className="text-[#f5af02]">a</span><span className="text-[#86b817]">y</span></span>;
-  }
-  if (channel === "flipflop_shop") return <span className="inline-flex items-center gap-1.5"><img src="/pics/logo_simple_no_bg.png" alt="FlipFlop.shop logo" className="h-7 w-7 rounded-full object-contain" /><span className="text-sm font-semibold text-white">FlipFlop.shop</span></span>;
-  const marks: Record<string, string> = { onbuy: "onbuy", amazon: "a", facebook_catalog: "f", vinted: "V" };
-  return <span aria-label={`${channel} logo`} className={`inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-black ${channel === "onbuy" ? "bg-[#ff5a1f] text-white" : channel === "amazon" ? "bg-[#ff9900] text-slate-950" : channel === "facebook_catalog" ? "bg-[#1877f2] text-white" : "bg-[#007782] text-white"}`}>{marks[channel]}</span>;
-}
-
-function ChannelCardLogo({ channel }: { channel: CrossListingChannel }) {
-  return <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-700 bg-slate-950/70"><VendorLogo channel={channel} /></div>;
+  const labels: Record<CrossListingChannel, string> = {
+    ebay_uk: "eBay UK",
+    flipflop_shop: "FlipFlop.shop",
+    onbuy: "OnBuy",
+    amazon: "Amazon",
+    facebook_catalog: "Facebook catalog",
+    vinted: "Vinted",
+  };
+  return <span>{labels[channel]}</span>;
 }
 
 function isLocalDevelopment() {
@@ -171,7 +169,7 @@ export default function CrossListingPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [refreshedAt, setRefreshedAt] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [destinations, setDestinations] = useState<CrossListingChannel[]>(allChannels);
+  const [destinations, setDestinations] = useState<CrossListingChannel[]>([]);
   const [query, setQuery] = useState("");
   const [sourceFilter, setSourceFilter] = useState<"all" | CrossListingChannel>("all");
   const [statusFilter, setStatusFilter] = useState<"all" | CrossListingSource["status"]>("all");
@@ -279,7 +277,7 @@ export default function CrossListingPage() {
       <button onClick={() => void refresh()} disabled={refreshing} className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-md border border-slate-600 bg-slate-900/70 px-4 py-2.5 text-sm text-slate-100 transition-colors hover:border-emerald-400/60 hover:text-emerald-300 disabled:cursor-not-allowed disabled:opacity-60"><RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} /> {refreshing ? "Refreshing…" : "Refresh listings"}</button>
     </header>
 
-    <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">{channelCapabilities.map((channel) => { const active = destinations.includes(channel.channel); return <button type="button" aria-pressed={active} key={channel.channel} onClick={() => toggleDestination(channel.channel)} className={`cursor-pointer rounded-lg border p-3 text-left transition-colors ${active ? "border-emerald-400/60 bg-emerald-400/[0.07] shadow-[0_0_18px_rgba(52,211,153,0.08)]" : "border-slate-700/80 bg-[#0d1521]/90 opacity-60 hover:border-slate-500 hover:opacity-90"}`}><div className="flex items-center gap-3"><ChannelCardLogo channel={channel.channel} /><div className="min-w-0 flex-1"><div className="flex items-center justify-between gap-2"><span className="text-sm font-medium text-white">{channel.label}</span><span className={`rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wide ${channel.mode === "api" ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300" : channel.mode === "requires_approval" ? "border-yellow-400/30 bg-yellow-400/10 text-yellow-300" : "border-slate-600 bg-slate-800 text-slate-300"}`}>{channel.mode === "api" ? "API" : labelForStatus(channel.mode)}</span></div><p className="mt-2 text-xs leading-5 text-slate-400">{channel.note}</p></div><span className={`text-lg ${active ? "text-emerald-300" : "text-slate-600"}`}>{active ? "✓" : "○"}</span></div></button>; })}</section>
+    <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">{channelCapabilities.map((channel) => { const active = destinations.includes(channel.channel); return <button type="button" aria-pressed={active} key={channel.channel} onClick={() => toggleDestination(channel.channel)} className={`cursor-pointer rounded-lg border p-3 text-left transition-colors ${active ? "border-emerald-400/60 bg-emerald-400/[0.07] shadow-[0_0_18px_rgba(52,211,153,0.08)]" : "border-slate-700/80 bg-[#0d1521]/90 opacity-60 hover:border-slate-500 hover:opacity-90"}`}><div className="flex items-start gap-3"><div className="min-w-0 flex-1"><div className="flex min-h-6 items-start justify-between gap-2"><span className="text-sm font-medium leading-6 text-white">{channel.label}</span><span className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wide ${channel.mode === "api" ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300" : channel.mode === "requires_approval" ? "border-yellow-400/30 bg-yellow-400/10 text-yellow-300" : "border-slate-600 bg-slate-800 text-slate-300"}`}>{channel.mode === "api" ? "API" : labelForStatus(channel.mode)}</span></div><p className="mt-2 min-h-[60px] text-xs leading-5 text-slate-400">{channel.note}</p></div><span className={`shrink-0 text-lg leading-6 ${active ? "text-emerald-300" : "text-slate-600"}`}>{active ? "✓" : "○"}</span></div></button>; })}</section>
 
     <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4"><h2 className="flex items-center gap-2 text-sm font-semibold text-white"><History className="h-4 w-4 text-emerald-300" /> Recreate action log</h2><p className="mt-1 text-xs text-slate-500">End and recreate attempts are recorded per channel and also emitted as admin notifications.</p><div className="mt-3 space-y-2">{actions.slice(0, 20).map((action) => <div key={action.id} className="flex flex-wrap items-center gap-2 rounded border border-slate-800 px-3 py-2 text-xs"><span className={action.event_type.includes("failed") ? "text-red-300" : action.event_type.includes("created") ? "text-emerald-300" : action.event_type.includes("handoff") ? "text-yellow-300" : "text-slate-300"}>{labelForStatus(action.event_type)}</span><span className="text-cyan-200">{action.channel}</span><span className="text-slate-400">Build {action.build_id}</span><span className="text-slate-500">{action.message}</span>{action.event_type === "recreate_handoff_required" && <><button onClick={() => openScheduledHandoff(action)} className="inline-flex cursor-pointer items-center gap-1 rounded border border-yellow-400/40 px-2 py-1 text-[10px] text-yellow-200 hover:bg-yellow-400/10"><ExternalLink className="h-3 w-3" /> Open pack + seller page for Codex</button><button onClick={() => void recordCodexResult(action.id, true)} className="cursor-pointer rounded border border-emerald-400/40 px-2 py-1 text-[10px] text-emerald-200 hover:bg-emerald-400/10">Mark successful</button><button onClick={() => void recordCodexResult(action.id, false)} className="cursor-pointer rounded border border-red-400/40 px-2 py-1 text-[10px] text-red-200 hover:bg-red-400/10">Mark failed</button></>}<span className="ml-auto text-[10px] text-slate-600">{action.created_at ? new Date(action.created_at).toLocaleString("en-GB") : ""}</span></div>)}{actions.length === 0 && <p className="py-4 text-center text-xs text-slate-500">No recreate actions recorded yet.</p>}</div></section>
 
