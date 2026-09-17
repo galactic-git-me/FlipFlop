@@ -23,6 +23,7 @@ const statusStyles: Record<CrossListingSource["status"], string> = {
 const labelForStatus = (value: string) => value.replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 
 const vendorChannels: CrossListingChannel[] = ["ebay_uk", "flipflop_shop"];
+const indirectChannels = new Set<CrossListingChannel>(["onbuy", "amazon", "facebook_catalog", "vinted"]);
 type GroupedListing = {
   id: string;
   buildId: number;
@@ -179,6 +180,7 @@ export default function CrossListingPage() {
   const [schedules, setSchedules] = useState<Awaited<ReturnType<typeof api.crossListing.schedules>>>([]);
   const [actions, setActions] = useState<Awaited<ReturnType<typeof api.crossListing.actions>>>([]);
   const [scheduleDrafts, setScheduleDrafts] = useState<Record<string, string>>({});
+  const [indirectCadenceDays, setIndirectCadenceDays] = useState("7");
 
   const channelCapabilities = useMemo(() => capabilities(connected), [connected]);
   const grouped = useMemo(() => groupListings(items), [items]);
@@ -196,7 +198,7 @@ export default function CrossListingPage() {
   const refresh = useCallback(async () => {
     setRefreshing(true); setError(null);
     try {
-      const [summary, ebay, scheduleRows, actionRows] = await Promise.all([api.manualBuilds.list(), api.ebayOAuth.status().catch(() => ({ connected: false })), api.crossListing.schedules(), api.crossListing.actions()]);
+      const [summary, ebay, scheduleRows, actionRows, crossListingSettings] = await Promise.all([api.manualBuilds.list(), api.ebayOAuth.status().catch(() => ({ connected: false })), api.crossListing.schedules(), api.crossListing.actions(), api.crossListing.settings()]);
       const detailResults = await Promise.allSettled(summary.map((build) => api.manualBuilds.get(build.id)));
       const nextBuilds: Record<number, ManualBuild> = {};
       const nextItems: CrossListingSource[] = [];
@@ -206,7 +208,7 @@ export default function CrossListingPage() {
         else nextWarnings.push(`Build ${summary[index]?.id ?? "unknown"} could not be refreshed.`);
       });
       setBuilds(nextBuilds); setItems(nextItems); setWarnings(nextWarnings); setConnected(ebay.connected); setRefreshedAt(new Date().toISOString());
-      setSchedules(scheduleRows); setActions(actionRows);
+      setSchedules(scheduleRows); setActions(actionRows); setIndirectCadenceDays(String(crossListingSettings.indirect_channel_recreate_interval_days));
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Could not load source listings."); }
     finally { setRefreshing(false); }
   }, []);
@@ -215,9 +217,16 @@ export default function CrossListingPage() {
 
   const saveRecreateSchedule = async (buildId: number, channel: ChannelCapability) => {
     const key = `${buildId}:${channel.channel}`;
-    const days = Number(scheduleDrafts[key] || 7);
+    const days = Number(indirectChannels.has(channel.channel) ? indirectCadenceDays : scheduleDrafts[key] || 7);
     if (!Number.isInteger(days) || days < 1 || days > 365) { setError("Recreate interval must be a whole number from 1 to 365 days."); return; }
     await api.crossListing.saveSchedule({ build_id: buildId, channel: channel.channel, interval_days: days, enabled: true });
+    await refresh();
+  };
+
+  const saveIndirectCadence = async () => {
+    const days = Number(indirectCadenceDays);
+    if (!Number.isInteger(days) || days < 1 || days > 365) { setError("Indirect channel cadence must be a whole number from 1 to 365 days."); return; }
+    await api.crossListing.saveSettings({ interval_days: days });
     await refresh();
   };
 
@@ -283,7 +292,8 @@ export default function CrossListingPage() {
     <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">{channelCapabilities.map((channel) => <div key={channel.channel} className="rounded-lg border border-slate-700/80 bg-[#0d1521]/90 p-3"><div className="flex items-center justify-between gap-2"><span className="text-sm font-medium text-white">{channel.label}</span><span className={`rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wide ${channel.mode === "api" ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300" : channel.mode === "requires_approval" ? "border-yellow-400/30 bg-yellow-400/10 text-yellow-300" : "border-slate-600 bg-slate-800 text-slate-300"}`}>{channel.mode === "api" ? "API" : labelForStatus(channel.mode)}</span></div><p className="mt-2 text-xs leading-5 text-slate-400">{channel.note}</p></div>)}</section>
 
     <section className="rounded-xl border border-cyan-400/20 bg-[#0b121d]/90 p-4 shadow-xl shadow-black/10">
-      <div className="mt-4 space-y-3">{grouped.map((item) => <div key={`schedule-${item.id}`} className="rounded-lg border border-slate-800 bg-slate-950/30 p-3"><div className="mb-3 text-xs font-medium text-slate-200">Build {item.buildId} · {item.title}</div><div className="grid gap-2 md:grid-cols-2 xl:grid-cols-3">{channelCapabilities.map((channel) => { const row = schedules.find((candidate) => candidate.build_id === item.buildId && candidate.channel === channel.channel); const key = `${item.buildId}:${channel.channel}`; return <div key={key} className="rounded border border-slate-800 p-2.5"><div className="flex items-center justify-between gap-2"><span className="text-xs text-slate-300">{channel.label}</span>{row?.recreate_enabled && <span className="text-[10px] text-emerald-300">Every {row.interval_days}d</span>}</div><div className="mt-2 flex items-center gap-2"><input aria-label={`${channel.label} recreate days for build ${item.buildId}`} value={scheduleDrafts[key] ?? String(row?.interval_days ?? 7)} onChange={(event) => setScheduleDrafts((current) => ({ ...current, [key]: event.target.value }))} type="number" min={1} max={365} className="w-20 rounded border border-slate-700 bg-slate-900 px-2 py-1.5 text-xs text-white" /><span className="text-[10px] text-slate-500">days</span><button onClick={() => void saveRecreateSchedule(item.buildId, channel)} className="ml-auto cursor-pointer rounded border border-cyan-400/40 px-2 py-1.5 text-[10px] text-cyan-200 hover:bg-cyan-400/10">{row?.recreate_enabled ? "Reschedule" : "Enable"}</button></div>{row?.next_recreate_at && <div className="mt-2 text-[10px] text-slate-500">Next: {new Date(row.next_recreate_at).toLocaleString("en-GB")}</div>}{channel.mode !== "api" && <div className="mt-2 text-[10px] text-yellow-300/80">Manual/approval channel — when due, the scheduler creates a Codex handoff to end the old listing and create a new one.</div>}</div>; })}</div></div>)}</div>
+      <div className="mt-4 rounded-lg border border-cyan-400/20 bg-cyan-400/5 p-3"><div className="flex flex-wrap items-end justify-between gap-3"><div><div className="text-sm font-medium text-white">Indirect channels</div><p className="mt-1 text-xs text-slate-400">One recreate cadence applies to OnBuy, Amazon, Facebook catalog, and Vinted across every build.</p></div><div className="flex items-center gap-2"><label className="text-xs text-slate-400" htmlFor="indirect-cadence">Recreate every</label><input id="indirect-cadence" aria-label="Indirect channel recreate days" value={indirectCadenceDays} onChange={(event) => setIndirectCadenceDays(event.target.value)} type="number" min={1} max={365} className="w-20 rounded border border-slate-700 bg-slate-900 px-2 py-1.5 text-xs text-white" /><span className="text-[10px] text-slate-500">days</span><button onClick={() => void saveIndirectCadence()} className="cursor-pointer rounded border border-cyan-400/40 px-2 py-1.5 text-[10px] text-cyan-200 hover:bg-cyan-400/10">Save</button></div></div></div>
+      <div className="mt-3 space-y-3">{grouped.map((item) => <div key={`schedule-${item.id}`} className="rounded-lg border border-slate-800 bg-slate-950/30 p-3"><div className="mb-3 text-xs font-medium text-slate-200">Build {item.buildId} · {item.title}</div><div className="grid gap-2 md:grid-cols-2 xl:grid-cols-3">{channelCapabilities.map((channel) => { const row = schedules.find((candidate) => candidate.build_id === item.buildId && candidate.channel === channel.channel); const key = `${item.buildId}:${channel.channel}`; const isIndirect = indirectChannels.has(channel.channel); return <div key={key} className="rounded border border-slate-800 p-2.5"><div className="flex items-center justify-between gap-2"><span className="text-xs text-slate-300">{channel.label}</span>{row?.recreate_enabled && <span className="text-[10px] text-emerald-300">Every {row.interval_days}d</span>}</div>{isIndirect ? <div className="mt-2 flex items-center justify-between gap-2"><span className="text-[10px] text-slate-500">Uses global {indirectCadenceDays}d cadence</span><button onClick={() => void saveRecreateSchedule(item.buildId, channel)} className="cursor-pointer rounded border border-cyan-400/40 px-2 py-1.5 text-[10px] text-cyan-200 hover:bg-cyan-400/10">{row?.recreate_enabled ? "Reschedule" : "Enable"}</button></div> : <div className="mt-2 flex items-center gap-2"><input aria-label={`${channel.label} recreate days for build ${item.buildId}`} value={scheduleDrafts[key] ?? String(row?.interval_days ?? 7)} onChange={(event) => setScheduleDrafts((current) => ({ ...current, [key]: event.target.value }))} type="number" min={1} max={365} className="w-20 rounded border border-slate-700 bg-slate-900 px-2 py-1.5 text-xs text-white" /><span className="text-[10px] text-slate-500">days</span><button onClick={() => void saveRecreateSchedule(item.buildId, channel)} className="ml-auto cursor-pointer rounded border border-cyan-400/40 px-2 py-1.5 text-[10px] text-cyan-200 hover:bg-cyan-400/10">{row?.recreate_enabled ? "Reschedule" : "Enable"}</button></div>}{row?.next_recreate_at && <div className="mt-2 text-[10px] text-slate-500">Next: {new Date(row.next_recreate_at).toLocaleString("en-GB")}</div>}{channel.mode !== "api" && <div className="mt-2 text-[10px] text-yellow-300/80">Manual/approval channel — when due, the scheduler creates a Codex handoff to end the old listing and create a new one.</div>}</div>; })}</div></div>)}</div>
       {grouped.length === 0 && <p className="mt-4 text-xs text-slate-500">Submit a canonical build first to configure its channel cadence.</p>}
     </section>
 

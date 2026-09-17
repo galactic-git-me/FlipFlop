@@ -36,6 +36,9 @@ class AppSettings(Base):
     local_pickup_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     listing_type_default: Mapped[str] = mapped_column(String(20), default="FixedPrice")
 
+    # One cadence shared by all indirect/manual cross-listing channels.
+    indirect_channel_recreate_interval_days: Mapped[int] = mapped_column(Integer, default=7)
+
     # ── eBay seller OAuth (3-legged) — unblocks every live eBay write
     # (posting, end/republish, Business Policies push, Promoted Listings).
     # access token is short-lived (~2h) and cached here; refresh_token is

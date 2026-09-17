@@ -840,6 +840,7 @@ async def _migrate_add_columns():
         ("app_settings", "gem_radar_consecutive_misses_before_inactive", "INTEGER DEFAULT 2"),
         ("app_settings", "gem_radar_scrape_artifacts_hours", "INTEGER DEFAULT 24"),
         ("app_settings", "gem_radar_preserve_watched_evidence", "BOOLEAN DEFAULT TRUE"),
+        ("app_settings", "indirect_channel_recreate_interval_days", "INTEGER DEFAULT 7"),
         # Playbook + demand fit (added with playbook system)
         ("listings", "playbook_match",        "VARCHAR(200)"),
         ("listings", "demand_fit",            "VARCHAR(20)"),

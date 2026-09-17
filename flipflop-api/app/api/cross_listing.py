@@ -7,9 +7,11 @@ from app.api.deps import require_operator
 from app.database import get_db
 from app.models.channel_listing import ChannelListing
 from app.models.listing_publish_event import ListingPublishEvent
+from app.models.app_settings import AppSettings
 from app.services.alerts import emit_alert
 
 router = APIRouter(prefix="/cross-listing", tags=["cross-listing"], dependencies=[Depends(require_operator)])
+INDIRECT_CHANNELS = {"onbuy", "amazon", "facebook_catalog", "vinted"}
 
 
 class RecreateScheduleIn(BaseModel):
@@ -26,6 +28,39 @@ class CodexHandoffResultIn(BaseModel):
     listing_url: str | None = Field(default=None, max_length=500)
 
 
+class IndirectChannelSettingsIn(BaseModel):
+    interval_days: int = Field(ge=1, le=365)
+
+
+async def _app_settings(db: AsyncSession) -> AppSettings:
+    settings = (await db.execute(select(AppSettings).where(AppSettings.name == "default"))).scalar_one_or_none()
+    if not settings:
+        settings = AppSettings(name="default")
+        db.add(settings)
+        await db.flush()
+    return settings
+
+
+@router.get("/settings")
+async def get_cross_listing_settings(db: AsyncSession = Depends(get_db)):
+    settings = await _app_settings(db)
+    return {"indirect_channel_recreate_interval_days": settings.indirect_channel_recreate_interval_days or 7}
+
+
+@router.put("/settings")
+async def save_cross_listing_settings(body: IndirectChannelSettingsIn, db: AsyncSession = Depends(get_db)):
+    settings = await _app_settings(db)
+    settings.indirect_channel_recreate_interval_days = body.interval_days
+    rows = (await db.execute(select(ChannelListing).where(ChannelListing.channel.in_(INDIRECT_CHANNELS)))).scalars().all()
+    now = datetime.utcnow()
+    for row in rows:
+        row.recreate_interval_days = body.interval_days
+        if row.recreate_enabled:
+            row.next_recreate_at = now + timedelta(days=body.interval_days)
+    await db.commit()
+    return {"indirect_channel_recreate_interval_days": body.interval_days}
+
+
 @router.get("/schedules")
 async def list_schedules(build_id: int | None = Query(None), db: AsyncSession = Depends(get_db)):
     query = select(ChannelListing).order_by(ChannelListing.channel)
@@ -37,15 +72,19 @@ async def list_schedules(build_id: int | None = Query(None), db: AsyncSession = 
 
 @router.put("/schedules")
 async def save_schedule(body: RecreateScheduleIn, db: AsyncSession = Depends(get_db)):
+    interval_days = body.interval_days
+    if body.channel in INDIRECT_CHANNELS:
+        settings = await _app_settings(db)
+        interval_days = settings.indirect_channel_recreate_interval_days or 7
     row = (await db.execute(select(ChannelListing).where(ChannelListing.manual_build_id == body.build_id, ChannelListing.channel == body.channel).order_by(ChannelListing.created_at.desc()))).scalars().first()
     if not row:
         row = ChannelListing(manual_build_id=body.build_id, channel=body.channel, status="published")
         db.add(row)
     row.recreate_enabled = body.enabled
-    row.recreate_interval_days = body.interval_days
-    row.next_recreate_at = datetime.utcnow() + timedelta(days=body.interval_days) if body.enabled else None
+    row.recreate_interval_days = interval_days
+    row.next_recreate_at = datetime.utcnow() + timedelta(days=interval_days) if body.enabled else None
     row.last_recreate_status = "scheduled" if body.enabled else "paused"
-    row.last_recreate_message = f"Recreate every {body.interval_days} day(s)."
+    row.last_recreate_message = f"Recreate every {interval_days} day(s)."
     await db.commit()
     await db.refresh(row)
     return _schedule(row)

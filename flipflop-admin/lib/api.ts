@@ -604,6 +604,8 @@ export const api = {
     setCollectionDate: (id: number, collection_date: string) => request<{ ok: boolean; collection_date: string; dispatch_status: string }>(`/manual-builds/${id}/collection-date`, { method: "PATCH", body: JSON.stringify({ collection_date }) }),
   },
   crossListing: {
+    settings: () => request<{ indirect_channel_recreate_interval_days: number }>("/cross-listing/settings"),
+    saveSettings: (data: { interval_days: number }) => request<{ indirect_channel_recreate_interval_days: number }>("/cross-listing/settings", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }),
     schedules: (buildId?: number) => request<Array<{ id: number; build_id: number; channel: string; status: string; recreate_enabled: boolean; interval_days?: number | null; next_recreate_at?: string | null; last_recreate_at?: string | null; recreate_count: number; last_recreate_status?: string | null; last_recreate_message?: string | null }>>(`/cross-listing/schedules${buildId ? `?build_id=${buildId}` : ""}`),
     saveSchedule: (data: { build_id: number; channel: string; interval_days: number; enabled: boolean }) => request<unknown>("/cross-listing/schedules", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }),
     recordCodexResult: (eventId: number, data: { success: boolean; message: string; external_listing_id?: string; listing_url?: string }) => request<unknown>(`/cross-listing/actions/${eventId}/codex-result`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }),
