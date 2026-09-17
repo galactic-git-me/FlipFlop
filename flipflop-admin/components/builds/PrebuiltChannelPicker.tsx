@@ -24,19 +24,28 @@ const MODE_LABEL: Record<typeof CHANNELS[number]["mode"], string> = {
   approval: "Needs approval",
 };
 
+export type ChannelActionState = "ready" | "queued" | "working" | "complete" | "failed";
+export type ChannelPlan = { action: string; state: ChannelActionState; detail?: string };
+
 export function PrebuiltChannelPicker({
   selected,
   onChange,
   onClose,
   onConfirm,
   submitting,
+  plans = {},
 }: {
   selected: PrebuiltChannel[];
   onChange: (channel: PrebuiltChannel) => void;
   onClose: () => void;
   onConfirm: () => void;
   submitting: boolean;
+  plans?: Partial<Record<PrebuiltChannel, ChannelPlan>>;
 }) {
+  const hasFinishedRun = selected.length > 0 && selected.every((channel) => {
+    const state = plans[channel]?.state;
+    return state === "complete" || state === "failed";
+  });
   return (
     <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/75 px-4 backdrop-blur-sm" onMouseDown={(event) => {
       if (event.target === event.currentTarget && !submitting) onClose();
@@ -45,8 +54,8 @@ export function PrebuiltChannelPicker({
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-300">Pre-built listing</p>
-            <h2 id="prebuilt-channel-title" className="mt-1 text-xl font-bold text-white">Where should this build be listed?</h2>
-            <p className="mt-2 text-sm leading-5 text-slate-400">Choose one or more channels. You can publish to connected channels now and get ready-to-use packs for the others.</p>
+            <h2 id="prebuilt-channel-title" className="mt-1 text-xl font-bold text-white">Publish to channels</h2>
+            <p className="mt-2 text-sm leading-5 text-slate-400">Each channel is assessed separately: existing listings are updated, missing listings are created, and unsupported channels receive a ready-to-post pack.</p>
           </div>
           <button type="button" aria-label="Close channel picker" onClick={onClose} disabled={submitting} className="cursor-pointer rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-white/[0.06] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"><X className="h-5 w-5" /></button>
         </div>
@@ -54,11 +63,13 @@ export function PrebuiltChannelPicker({
         <div className="mt-5 space-y-2">
           {CHANNELS.map(({ id, label, description, mode, icon: Icon }) => {
             const isSelected = selected.includes(id);
+            const plan = plans[id];
+            const stateLabel = plan?.state === "working" ? "Publishing…" : plan?.state === "queued" ? "Queued" : plan?.state === "complete" ? "Complete" : plan?.state === "failed" ? "Failed" : MODE_LABEL[mode];
             return (
               <button key={id} type="button" onClick={() => onChange(id)} disabled={submitting} aria-pressed={isSelected} className={`flex w-full cursor-pointer items-center gap-3 rounded-xl border p-3 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${isSelected ? "border-cyan-400/70 bg-cyan-400/[0.08]" : "border-slate-700 bg-slate-900/50 hover:border-slate-500"}`}>
                 <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${isSelected ? "bg-cyan-400/15 text-cyan-300" : "bg-slate-800 text-slate-400"}`}><Icon className="h-4 w-4" /></span>
-                <span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-white">{label}</span><span className="mt-0.5 block text-xs text-slate-400">{description}</span></span>
-                <span className={`hidden rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-wide sm:inline-flex ${mode === "api" ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300" : mode === "approval" ? "border-amber-400/30 bg-amber-400/10 text-amber-300" : "border-slate-600 bg-slate-800 text-slate-300"}`}>{MODE_LABEL[mode]}</span>
+                <span className="min-w-0 flex-1"><span className="block text-sm font-semibold text-white">{label}</span><span className="mt-0.5 block text-xs text-slate-400">{description}</span>{plan && <span className="mt-1 block text-xs text-cyan-200/80">Action: {plan.action}{plan.detail ? ` · ${plan.detail}` : ""}</span>}</span>
+                <span className={`hidden rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-wide sm:inline-flex ${plan?.state === "complete" ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300" : plan?.state === "failed" ? "border-red-400/30 bg-red-400/10 text-red-300" : plan?.state === "working" ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-300" : mode === "approval" ? "border-amber-400/30 bg-amber-400/10 text-amber-300" : mode === "api" ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300" : "border-slate-600 bg-slate-800 text-slate-300"}`}>{stateLabel}</span>
                 <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border ${isSelected ? "border-cyan-300 bg-cyan-300 text-slate-950" : "border-slate-600"}`}>{isSelected && <Check className="h-3.5 w-3.5" />}</span>
               </button>
             );
@@ -71,7 +82,7 @@ export function PrebuiltChannelPicker({
 
         <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
           <span className="text-xs text-slate-500">{selected.length} channel{selected.length === 1 ? "" : "s"} selected</span>
-          <div className="flex gap-2 sm:justify-end"><button type="button" onClick={onClose} disabled={submitting} className="cursor-pointer rounded-lg border border-slate-600 px-4 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:border-slate-400 disabled:opacity-50">Cancel</button><button type="button" onClick={onConfirm} disabled={!selected.length || submitting} className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-cyan-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition-colors hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-40">{submitting && <Loader2 className="h-4 w-4 animate-spin" />} {submitting ? "Preparing listings…" : "Continue with selected channels"}<ExternalLink className="h-3.5 w-3.5" /></button></div>
+          <div className="flex gap-2 sm:justify-end"><button type="button" onClick={onClose} disabled={submitting} className="cursor-pointer rounded-lg border border-slate-600 px-4 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:border-slate-400 disabled:opacity-50">{hasFinishedRun ? "Done" : "Cancel"}</button><button type="button" onClick={hasFinishedRun ? onClose : onConfirm} disabled={!selected.length || submitting} className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-cyan-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition-colors hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-40">{submitting && <Loader2 className="h-4 w-4 animate-spin" />} {submitting ? "Publishing…" : hasFinishedRun ? "Close" : "Publish selected channels"}{!hasFinishedRun && <ExternalLink className="h-3.5 w-3.5" />}</button></div>
         </div>
       </div>
     </div>

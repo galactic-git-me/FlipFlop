@@ -818,6 +818,12 @@ export const api = {
         `/manual-builds/${id}/generate-specifics`,
         { method: "POST" },
       ),
+    updateListingTitle: (id: number, title: string) =>
+      request<ManualBuild>(`/manual-builds/${id}/listing-title`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title }),
+      }),
     updateAspects: (id: number, aspects: Record<string, string[]>) =>
       request<ManualBuild>(`/manual-builds/${id}/aspects`, {
         method: "PATCH",

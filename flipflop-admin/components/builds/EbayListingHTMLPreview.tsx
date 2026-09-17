@@ -15,6 +15,7 @@ interface EbayListingHTMLPreviewProps {
   heroPhotoUrl?: string | null;
   onClose?: () => void;
   isModal?: boolean;
+  previewChannel?: "ebay" | "storefront";
 }
 
 const CONDITION_LABELS: Record<string, string> = {
@@ -37,7 +38,9 @@ export function EbayListingHTMLPreview({
   heroPhotoUrl,
   onClose,
   isModal = false,
+  previewChannel = "ebay",
 }: EbayListingHTMLPreviewProps) {
+  const isStorefront = previewChannel === "storefront";
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
   const [viewport, setViewport] = useState<"desktop" | "mobile">("desktop");
   const [previewMode, setPreviewMode] = useState<"search" | "listing">("search");
@@ -64,8 +67,8 @@ export function EbayListingHTMLPreview({
     <div className="min-h-screen bg-white font-sans text-[#191919]">
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-[1440px] items-center gap-4 px-5 py-4">
-          <div aria-label="eBay" className="shrink-0 text-[42px] font-semibold leading-none tracking-[-5px]">
-            <span className="text-[#e53238]">e</span><span className="text-[#0064d2]">b</span><span className="text-[#f5af02]">a</span><span className="text-[#86b817]">y</span>
+          <div aria-label={isStorefront ? "FlipFlop.shop" : "eBay"} className="shrink-0 text-[42px] font-semibold leading-none tracking-[-5px]">
+            {previewChannel === "storefront" ? <span className="text-cyan-600">FLIPFLOP<span className="text-blue-600">.SHOP</span></span> : <><span className="text-[#e53238]">e</span><span className="text-[#0064d2]">b</span><span className="text-[#f5af02]">a</span><span className="text-[#86b817]">y</span></>}
           </div>
           <div className="hidden text-xs leading-tight text-slate-600 md:block">Shop by<br />category⌄</div>
           <div className="flex h-11 min-w-0 flex-1 items-center rounded-full border-2 border-[#191919] px-5 text-sm text-slate-500">
@@ -77,7 +80,7 @@ export function EbayListingHTMLPreview({
       </header>
 
       <main className="mx-auto max-w-[1440px] px-5 pb-16 pt-4">
-        <div className="mb-5 text-xs text-slate-500">eBay › Computers/Tablets & Networking › Desktops & All-in-Ones</div>
+        <div className="mb-5 text-xs text-slate-500">{previewChannel === "storefront" ? "FlipFlop.shop › Pre-built computers" : "eBay › Computers/Tablets & Networking › Desktops & All-in-Ones"}</div>
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.45fr)_minmax(340px,.8fr)]">
           <section className="min-w-0">
             <div className="grid gap-3 sm:grid-cols-[76px_minmax(0,1fr)]">
@@ -111,11 +114,11 @@ export function EbayListingHTMLPreview({
               <div className="mt-5 grid grid-cols-[92px_1fr] gap-y-3 text-sm"><span>Condition:</span><strong>{conditionLabel}</strong><span>Postage:</span><strong className="text-[#067a46]">{postage}</strong><span>Located in:</span><span>Twickenham, United Kingdom</span></div>
             </div>
             <div className="space-y-3 py-6">
-              <button className="h-12 w-full rounded-full bg-[#3665f3] text-base font-semibold text-white">Buy it now</button>
-              <button className="h-12 w-full rounded-full border-2 border-[#3665f3] font-semibold text-[#3665f3]">Make offer</button>
-              <button className="flex h-12 w-full items-center justify-center gap-2 rounded-full border-2 border-[#3665f3] font-semibold text-[#3665f3]"><Heart size={18} /> Add to Watchlist</button>
+              <button className="h-12 w-full rounded-full bg-[#3665f3] text-base font-semibold text-white">{isStorefront ? "Add to basket" : "Buy it now"}</button>
+              <button className="h-12 w-full rounded-full border-2 border-[#3665f3] font-semibold text-[#3665f3]">{isStorefront ? "Checkout" : "Make offer"}</button>
+              {!isStorefront && <button className="flex h-12 w-full items-center justify-center gap-2 rounded-full border-2 border-[#3665f3] font-semibold text-[#3665f3]"><Heart size={18} /> Add to Watchlist</button>}
             </div>
-            <div className="rounded-2xl bg-[#f7f7f7] p-5 text-sm"><strong>Shop with confidence</strong><p className="mt-2 text-slate-600">eBay Money Back Guarantee. Get the item you ordered or your money back.</p></div>
+            <div className="rounded-2xl bg-[#f7f7f7] p-5 text-sm"><strong>Shop with confidence</strong><p className="mt-2 text-slate-600">{isStorefront ? "Secure checkout and FlipFlop.shop buyer support." : "eBay Money Back Guarantee. Get the item you ordered or your money back."}</p></div>
           </aside>
         </div>
 
@@ -134,7 +137,7 @@ export function EbayListingHTMLPreview({
           <div className="overflow-hidden rounded-sm bg-white shadow-sm" dangerouslySetInnerHTML={{ __html: description }} />
         </div>
       </section>
-      <footer className="mx-auto max-w-[1440px] px-5 py-12 text-sm text-slate-600"><strong className="text-lg text-[#191919]">About this seller</strong><p className="mt-4">theflipflop_dot_shop · Twickenham, London · 100% positive feedback</p></footer>
+      <footer className="mx-auto max-w-[1440px] px-5 py-12 text-sm text-slate-600"><strong className="text-lg text-[#191919]">About this seller</strong><p className="mt-4">{isStorefront ? "FlipFlop.shop · Twickenham, London" : "theflipflop_dot_shop · Twickenham, London · 100% positive feedback"}</p></footer>
     </div>
   );
 
@@ -172,7 +175,7 @@ export function EbayListingHTMLPreview({
   return (
     <div className="fixed inset-0 z-[100] overflow-y-auto bg-slate-950/90 p-2 md:p-5">
       <div className="sticky top-2 z-[110] mx-auto mb-3 flex max-w-[1440px] flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-700 bg-slate-900/95 px-4 py-3 text-white shadow-2xl backdrop-blur">
-        <div><div className="text-sm font-semibold">eBay listing preview</div><div className="text-xs text-slate-400">Uses the exact saved listing data and description. eBay may make minor platform layout changes.</div></div>
+        <div><div className="text-sm font-semibold">{isStorefront ? "FlipFlop.shop draft preview" : "eBay listing preview"}</div><div className="text-xs text-slate-400">Uses the exact saved listing data and description.</div></div>
         <div className="flex items-center gap-2">
           <div className="flex rounded-lg bg-slate-800 p-1">
             <button onClick={() => setPreviewMode("search")} className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-xs font-semibold transition-colors ${previewMode === "search" ? "bg-blue-600" : "text-slate-300 hover:bg-slate-700"}`}><Search size={16} /> Search result</button>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, Send, Trash2, RotateCcw, Loader2, Store, ShoppingBag, type LucideIcon } from "lucide-react";
+import { Eye, Send, Trash2, RotateCcw, Loader2, type LucideIcon } from "lucide-react";
 
 interface ListingStatus {
   platform: string;
@@ -16,16 +16,12 @@ interface CommandPanelProps {
   listingStatuses: ListingStatus[];
   onGenerateDescription?: () => void;
   onGenerateTitle?: () => void;
-  onPreviewEbay?: () => void;
-  onPublishEbay?: () => void;
-  onUpdateEbay?: () => void;
+  onPreviewDraft?: () => void;
+  onPublishChannels?: () => void;
   onDeleteEbay?: () => void;
-  onPublishStorefront?: () => void;
-  onListAsPrebuilt?: () => void;
   onCreateNew?: (platform: string) => void;
   isLoading?: boolean;
   isDeletingEbay?: boolean;
-  isPublishingStorefront?: boolean;
 }
 
 type ActionAccent = "blue" | "amber" | "red" | "green";
@@ -87,18 +83,13 @@ export function CommandPanel({
   listingStatuses,
   onGenerateDescription,
   onGenerateTitle,
-  onPreviewEbay,
-  onPublishEbay,
-  onUpdateEbay,
+  onPreviewDraft,
+  onPublishChannels,
   onDeleteEbay,
-  onPublishStorefront,
-  onListAsPrebuilt,
   isLoading = false,
   isDeletingEbay = false,
-  isPublishingStorefront = false,
 }: CommandPanelProps) {
   const ebayStatus = listingStatuses.find((s) => s.platform === "ebay");
-  const storefrontStatus = listingStatuses.find((s) => s.platform === "storefront");
 
   return (
     <div className="fixed right-4 top-1/3 z-50 flex flex-col items-center gap-2">
@@ -119,25 +110,12 @@ export function CommandPanel({
 
       <RailButton label="Generate title" icon={RotateCcw} onClick={onGenerateTitle} disabled={isLoading} isLoading={isLoading} accent="blue" />
       <RailButton label="Generate description" icon={RotateCcw} onClick={onGenerateDescription} disabled={isLoading} isLoading={isLoading} accent="blue" />
-      <RailButton label="Preview eBay listing" icon={Eye} onClick={onPreviewEbay} disabled={isLoading || !onPreviewEbay} accent="blue" />
-      <RailButton label="List as pre-built" icon={ShoppingBag} onClick={onListAsPrebuilt} disabled={isLoading || !onListAsPrebuilt} accent="green" />
+      <RailButton label="Preview draft" icon={Eye} onClick={onPreviewDraft} disabled={isLoading || !onPreviewDraft} accent="blue" />
+      <RailButton label="Publish to channels" icon={Send} onClick={onPublishChannels} disabled={isLoading || !onPublishChannels} accent="green" />
 
       {ebayStatus?.isListed ? (
-        <>
-          <RailButton label="Update eBay listing" icon={Send} onClick={onUpdateEbay} disabled={isLoading} isLoading={isLoading} accent="amber" />
-          <RailButton label="End eBay listing" icon={Trash2} onClick={onDeleteEbay} disabled={isLoading || isDeletingEbay} isLoading={isDeletingEbay} accent="red" />
-        </>
-      ) : (
-        <RailButton label="Publish to eBay" icon={Send} onClick={onPublishEbay} disabled={isLoading || !onPublishEbay} accent="green" />
-      )}
-      <RailButton
-        label={storefrontStatus?.isListed ? "Update website listing" : "Publish to website"}
-        icon={Store}
-        onClick={onPublishStorefront}
-        disabled={isLoading || isPublishingStorefront || !onPublishStorefront}
-        isLoading={isPublishingStorefront}
-        accent={storefrontStatus?.isListed ? "amber" : "green"}
-      />
+        <RailButton label="End eBay listing" icon={Trash2} onClick={onDeleteEbay} disabled={isLoading || isDeletingEbay} isLoading={isDeletingEbay} accent="red" />
+      ) : null}
     </div>
   );
 }

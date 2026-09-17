@@ -34,7 +34,7 @@ from app.schemas.manual_build import (
     ListOnStorefrontRequest, ListOnStorefrontResult, ReorderPhotosRequest,
     UpdateAspectsRequest, UpdateEbayListingConfigRequest, FulfillmentPolicyOut,
     CourierQuoteOut, InsuranceQuoteOut, SyncEbayOrderResult, BuyerAddressOut, BookShipmentRequest,
-    BookShipmentResult, UpdateEvidenceDataRequest,
+    BookShipmentResult, UpdateEvidenceDataRequest, UpdateListingTitleRequest,
 )
 from app.services import ai_service
 from app.services.ebay_listing_poster import EbayListingPoster, post_flip_to_ebay, prepare_ebay_listing_description
@@ -1692,6 +1692,20 @@ async def update_evidence_data(build_id: int, body: UpdateEvidenceDataRequest, d
     evidence = dict(build.evidence_data or {})
     evidence[body.kind] = body.data
     build.evidence_data = evidence
+    build.updated_at = datetime.utcnow()
+    await db.flush()
+    await db.refresh(build)
+    return build
+
+
+@router.patch("/{build_id}/listing-title", response_model=ManualBuildOut)
+async def update_listing_title(build_id: int, body: UpdateListingTitleRequest, db: AsyncSession = Depends(get_db)):
+    """Persist the editable title used by every publishing channel."""
+    result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
+    build = result.scalar_one_or_none()
+    if not build:
+        raise HTTPException(404, "Build not found")
+    build.generated_title = body.title.strip()
     build.updated_at = datetime.utcnow()
     await db.flush()
     await db.refresh(build)

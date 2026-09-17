@@ -23,7 +23,7 @@ import { DescriptionPreview } from "@/components/builds/DescriptionPreview";
 import { EbayListingHTMLPreview } from "@/components/builds/EbayListingHTMLPreview";
 import { PricingIntelligence } from "@/components/builds/PricingIntelligence";
 import { CommandPanel } from "@/components/builds/CommandPanel";
-import { PrebuiltChannelPicker, type PrebuiltChannel } from "@/components/builds/PrebuiltChannelPicker";
+import { PrebuiltChannelPicker, type ChannelPlan, type ChannelActionState, type PrebuiltChannel } from "@/components/builds/PrebuiltChannelPicker";
 import { PrebuiltChannelsPanel } from "@/components/builds/PrebuiltChannelsPanel";
 import { Build3DViewer } from "@/components/builds/Build3DViewer";
 
@@ -153,6 +153,7 @@ export default function BuildDetailPage() {
   const [selectedPrebuiltChannels, setSelectedPrebuiltChannels] = useState<PrebuiltChannel[]>([]);
   const [enabledPrebuiltChannels, setEnabledPrebuiltChannels] = useState<PrebuiltChannel[]>([]);
   const [listingToChannels, setListingToChannels] = useState(false);
+  const [channelPlans, setChannelPlans] = useState<Partial<Record<PrebuiltChannel, ChannelPlan>>>({});
   const [openingPortal, setOpeningPortal] = useState(false);
   const [draggedUrl, setDraggedUrl] = useState<string | null>(null);
   const [dragOverUrl, setDragOverUrl] = useState<string | null>(null);
@@ -660,26 +661,31 @@ export default function BuildDetailPage() {
     const priceNum = parseFloat(price) || build.ebay_price || build.last_evaluation?.mid || 0;
     if (!priceNum || priceNum <= 0) { toast.error("Enter an asking price before listing."); return; }
     setListingToChannels(true);
-    const manualChannels = channels.filter((channel) => !["flipflop_shop", "ebay_uk"].includes(channel));
-    try {
-      if (channels.includes("ebay_uk") && !build.ebay_live) {
-        const result = await api.manualBuilds.postToEbay(buildId, { price: priceNum, condition });
-        if (!result.success) throw new Error(result.error || "eBay rejected the listing.");
-        toast.success("Listed on eBay UK");
+    const initialPlans: Partial<Record<PrebuiltChannel, ChannelPlan>> = Object.fromEntries(channels.map((channel) => [channel, {
+      action: channel === "amazon" ? "Prepare listing pack; seller approval required" : ["facebook_marketplace", "vinted"].includes(channel) ? "Prepare manual listing pack" : (["ebay_uk", "flipflop_shop"].includes(channel) && (channel === "ebay_uk" ? build.ebay_live : build.storefront_live)) ? "Update existing listing" : "Create new listing",
+      state: "queued" as ChannelActionState,
+    }])) as Partial<Record<PrebuiltChannel, ChannelPlan>>;
+    setChannelPlans(initialPlans);
+    const updatePlan = (channel: PrebuiltChannel, state: ChannelActionState, detail?: string) => setChannelPlans((current) => ({ ...current, [channel]: { ...current[channel]!, state, detail } }));
+    const runChannel = async (channel: PrebuiltChannel) => {
+      updatePlan(channel, "working");
+      try {
+        if (channel === "ebay_uk") {
+          const result = await api.manualBuilds.postToEbay(buildId, { price: priceNum, condition });
+          if (!result.success) throw new Error(result.error || "eBay rejected the listing.");
+        } else if (channel === "flipflop_shop") {
+          await api.manualBuilds.listOnStorefront(buildId, priceNum);
+        } else {
+          downloadManualListingPack(channel);
+        }
+        updatePlan(channel, "complete");
+      } catch (error) {
+        updatePlan(channel, "failed", error instanceof Error ? error.message : "Action failed");
       }
-      if (channels.includes("flipflop_shop") && !build.storefront_live) {
-        await api.manualBuilds.listOnStorefront(buildId, priceNum);
-        toast.success("Listed on FlipFlop.shop");
-      }
-      manualChannels.forEach(downloadManualListingPack);
-      if (manualChannels.length) toast.success(`${manualChannels.length} manual listing pack${manualChannels.length === 1 ? "" : "s"} downloaded`);
-      if (channels.includes("amazon")) toast.info("Amazon still needs seller approval before it can be automated.");
-      setShowPrebuiltChannelPicker(false);
-      setSelectedPrebuiltChannels([]);
-      await refreshBuild();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Could not complete the selected listings");
-    } finally { setListingToChannels(false); }
+    };
+    await Promise.all(channels.map(runChannel));
+    await refreshBuild();
+    setListingToChannels(false);
   };
 
   const handle3dModelUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -884,15 +890,11 @@ export default function BuildDetailPage() {
             listingStatuses={listingStatuses}
             onGenerateDescription={() => generateListing(false)}
             onGenerateTitle={() => generateListing(false)}
-            onPreviewEbay={build.generated_title && build.generated_description ? () => setShowEbayPreview(true) : undefined}
-            onListAsPrebuilt={canPublish ? () => { setSelectedPrebuiltChannels([]); setShowPrebuiltChannelPicker(true); } : undefined}
-            onPublishEbay={postToEbay}
-            onUpdateEbay={postToEbay}
+            onPreviewDraft={build.generated_title && build.generated_description ? () => setShowEbayPreview(true) : undefined}
+            onPublishChannels={canPublish ? () => { setSelectedPrebuiltChannels([]); setChannelPlans({}); setShowPrebuiltChannelPicker(true); } : undefined}
             onDeleteEbay={() => setShowEndEbayConfirm(true)}
-            onPublishStorefront={canPublish ? listOnStorefront : undefined}
             isLoading={generating || posting || markingBuilt}
             isDeletingEbay={endingEbayListing}
-            isPublishingStorefront={listingOnStorefront}
           />
         )}
 
@@ -1193,22 +1195,17 @@ export default function BuildDetailPage() {
               <Sparkles className="w-4 h-4 text-slate-500" /> Sell this build
             </p>
 
-            {!build.generated_title ? (
-              <p className="text-sm text-slate-400 italic">
-                Use the actions in the side menu to generate your eBay listing details.
-              </p>
-            ) : (
-              <div className="flex flex-col gap-3">
-                <div>
-                  <label className="text-xs text-slate-500 uppercase font-mono">Title</label>
-                  <p className="text-sm font-semibold mt-1">{build.generated_title}</p>
-                </div>
-                <div>
-                  <label className="text-xs text-slate-500 uppercase font-mono mb-2 block">Description Preview</label>
-                  <DescriptionPreview html={build.generated_description} />
-                </div>
+            <div className="flex flex-col gap-3">
+              <div>
+                <label htmlFor="listing-title" className="text-xs text-slate-500 uppercase font-mono">Title</label>
+                <input id="listing-title" value={build.generated_title ?? ""} onChange={(event) => setBuild((current) => current ? { ...current, generated_title: event.target.value } : current)} onBlur={async (event) => { const title = event.target.value.trim(); if (!title) return; try { setBuild(await api.manualBuilds.updateListingTitle(build.id, title)); } catch { toast.error("Could not save the listing title"); } }} maxLength={80} placeholder="Generate a title or enter one manually" className="mt-1 w-full rounded-lg border border-white/[0.1] bg-black/30 px-3 py-2 text-sm font-semibold text-slate-100 placeholder:text-slate-600" />
               </div>
-            )}
+              {!build.generated_title && <p className="text-sm text-slate-400 italic">Use the actions in the side menu to generate your listing details, or enter a title above.</p>}
+              {build.generated_description && <div>
+                <label className="text-xs text-slate-500 uppercase font-mono mb-2 block">Description Preview</label>
+                <DescriptionPreview html={build.generated_description} />
+              </div>}
+            </div>
 
             {build.generated_title && (
               <div>
@@ -1979,6 +1976,7 @@ export default function BuildDetailPage() {
           condition={condition}
           shippingCost={build.shipping_cost}
           heroPhotoUrl={build.hero_photo_url ? displayMediaUrl(build.id, build.hero_photo_url) : null}
+          previewChannel="storefront"
           onClose={() => setShowEbayPreview(false)}
           isModal={true}
         />
@@ -1991,6 +1989,7 @@ export default function BuildDetailPage() {
           onClose={() => setShowPrebuiltChannelPicker(false)}
           onConfirm={() => void listAsPrebuilt()}
           submitting={listingToChannels}
+          plans={channelPlans}
         />
       )}
 

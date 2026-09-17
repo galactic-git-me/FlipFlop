@@ -171,6 +171,10 @@ class UpdateAspectsRequest(BaseModel):
     aspects: dict[str, list[str]]
 
 
+class UpdateListingTitleRequest(BaseModel):
+    title: str = Field(min_length=1, max_length=80)
+
+
 class UpdateEvidenceDataRequest(BaseModel):
     kind: str  # "spec_card" | "registration_plate" | "performance_card"
     data: dict
