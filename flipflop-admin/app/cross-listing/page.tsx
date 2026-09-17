@@ -89,6 +89,27 @@ function isLocalDevelopment() {
   return typeof window !== "undefined" && ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
 }
 
+function isDevelopmentMode() {
+  return process.env.NEXT_PUBLIC_APP_MODE !== "live";
+}
+
+function devListingUrl(source: CrossListingSource, channel: ChannelCapability) {
+  const params = new URLSearchParams({
+    title: source.listing.title,
+    description: source.listing.description,
+    price: source.listing.price == null ? "" : String(source.listing.price),
+    condition: source.listing.condition,
+    sku: source.listing.sku,
+    image: source.imageUrl ?? "",
+  });
+  return `/dev-listings/${channel.channel}/${source.buildId}?${params.toString()}`;
+}
+
+function devStorefrontUrl(buildId: number) {
+  const base = process.env.NEXT_PUBLIC_STOREFRONT_DEV_URL || "http://localhost:4313";
+  return `${base.replace(/\/$/, "")}/builds/${buildId}`;
+}
+
 function listingUrlFor(source?: CrossListingSource) {
   if (!source?.url) return null;
   if (source.source === "ebay_uk" && isLocalDevelopment() && source.externalId !== "not-created") {
@@ -250,8 +271,8 @@ export default function CrossListingPage() {
       const capability = channelCapabilities.find((entry) => entry.channel === destination);
       if (!capability) continue;
       if (capability.mode !== "api") {
-        if (isLocalDevelopment()) {
-          nextResults.push({ channel: capability.label, status: "blocked_in_development", message: `${capability.label} has no Sandbox environment configured, so this listing was not attempted in development.` });
+        if (isDevelopmentMode()) {
+          nextResults.push({ channel: capability.label, status: "published", message: `${capability.label} fake listing created for development. No external marketplace was contacted.`, url: devListingUrl(item, capability) });
         } else {
           nextResults.push({ channel: capability.label, status: "manual_action_required", message: `${capability.note} Use browser assist to have Codex create the listing with the complete payload and photos.`, assist: { source: item, channel: capability } });
         }
@@ -261,10 +282,10 @@ export default function CrossListingPage() {
       try {
         if (destination === "ebay_uk") {
           const result = await api.manualBuilds.postToEbay(item.buildId, { price: item.listing.price ?? 0, condition: item.listing.condition, publish: true });
-          nextResults.push({ channel: capability.label, status: result.success ? "published" : "failed", message: result.success ? "eBay accepted the publish request." : result.error ?? "eBay did not publish the listing.", url: result.url });
+          nextResults.push({ channel: capability.label, status: result.success ? "published" : "failed", message: result.success ? "eBay Sandbox accepted the publish request." : result.error ?? "eBay did not publish the listing.", url: result.url });
         } else if (destination === "flipflop_shop" && build) {
           const result = await api.manualBuilds.listOnStorefront(item.buildId, item.listing.price ?? 0);
-          nextResults.push({ channel: capability.label, status: "published", message: "Linked to the existing storefront product.", url: result.storefront_url });
+          nextResults.push({ channel: capability.label, status: "published", message: isDevelopmentMode() ? "Linked to the dev storefront product." : "Linked to the existing storefront product.", url: isDevelopmentMode() ? devStorefrontUrl(item.buildId) : result.storefront_url });
         }
       } catch (cause) { nextResults.push({ channel: capability.label, status: "failed", message: cause instanceof Error ? cause.message : "Provider request failed." }); }
     }

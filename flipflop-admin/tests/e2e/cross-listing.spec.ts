@@ -157,7 +157,7 @@ test("publishes a selected build to eBay and reports the accepted listing", asyn
   page.on("dialog", (dialog) => void dialog.accept());
   await page.getByRole("button", { name: "Review & submit" }).click();
 
-  await expect(page.getByText("eBay accepted the publish request.")).toBeVisible();
+  await expect(page.getByText("eBay Sandbox accepted the publish request.")).toBeVisible();
   await expect(page.getByText("Published", { exact: true }).last()).toBeVisible();
   await expect(page.getByRole("link", { name: "View listing" })).toHaveAttribute("href", /EBAY-42-published/);
 });
@@ -175,9 +175,9 @@ test("keeps manual-only destinations manual and links storefront without duplica
   const storefrontRequest = page.waitForRequest("**/proxy-api/manual-builds/43/list-on-storefront");
   await page.getByRole("button", { name: "Review & submit" }).click();
   await storefrontRequest;
-  await expect(page.getByText("Linked to the existing storefront product.")).toBeVisible();
-  await expect(page.getByText("Blocked In Development", { exact: true })).toHaveCount(2);
-  await expect(page.getByText("Seller API/feed onboarding is not configured in this app. Manual listing pack only.")).toHaveCount(2);
+  await expect(page.getByText("Linked to the dev storefront product.")).toBeVisible();
+  await expect(page.getByText("OnBuy fake listing created for development. No external marketplace was contacted.")).toBeVisible();
+  await expect(page.getByRole("link", { name: "View listing" })).toHaveAttribute("href", /\/dev-listings\/onbuy\/43/);
 });
 
 test("does not offer an eBay API publish when the seller account is disconnected", async ({ page, context }) => {
