@@ -451,6 +451,13 @@ export default function CrossListingPage() {
       const capability = channelCapabilities.find((entry) => entry.channel === destination);
       if (!capability) continue;
       setProgressJobs((current) => current.map((job) => job.buildId === item.buildId && job.channel === capability.label ? { ...job, status: "running" } : job));
+      // The local storefront on port 4313 is the development destination.
+      // Do not call the production-facing list-on-storefront API from dev;
+      // that endpoint creates or updates a public Product row.
+      if (destination === "flipflop_shop" && isDevelopmentMode()) {
+        addResult({ buildId: item.buildId, channel: capability.label, status: "published", message: "Development preview opened. No public storefront product was created or updated.", url: devStorefrontUrl(item.buildId) });
+        continue;
+      }
       if (capability.mode !== "api") {
         if (destination === "amazon") {
           addResult({ buildId: item.buildId, channel: capability.label, status: "failed", message: capability.note });
