@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import JSZip from "jszip";
 import {
   AlertTriangle, Check, CheckCircle2, ClipboardCopy, Download, ExternalLink,
   Filter, Link2, Loader2, PackageCheck, RefreshCw, Search, Send, ShieldCheck, X, Clock3, History,
@@ -305,7 +306,36 @@ export default function CrossListingPage() {
   const openReview = (item: CrossListingSource) => { setReviewId(item.id); setDraftTitle(item.listing.title); setDraftDescription(item.listing.description); setDraftPrice(item.listing.price == null ? "" : String(item.listing.price)); };
   const saveReview = () => { if (!review) return; setItems((current) => current.map((item) => item.buildId === review.buildId ? { ...item, listing: { ...item.listing, title: draftTitle, description: draftDescription, price: draftPrice ? Number(draftPrice) : null }, title: draftTitle, price: draftPrice ? Number(draftPrice) : null } : item)); setReviewId(null); };
 
-  const downloadSelectedPacks = () => { if (!selectedItems.length || !destinations.length) return; selectedItems.forEach((item) => destinations.forEach((destination) => { const capability = channelCapabilities.find((entry) => entry.channel === destination); if (!capability || capability.mode === "api") return; const text = `${item.listing.title}\n${item.listing.description}\n${item.listing.images.map((image) => image.url).join("\n")}`; const url = URL.createObjectURL(new Blob([text], { type: "text/plain" })); const anchor = document.createElement("a"); anchor.href = url; anchor.download = `flipflop-${item.buildId}-${destination}.txt`; anchor.click(); URL.revokeObjectURL(url); })); };
+  const downloadSelectedPacks = async () => {
+    if (!selectedItems.length || !destinations.length) return;
+    for (const item of selectedItems) for (const destination of destinations) {
+      const capability = channelCapabilities.find((entry) => entry.channel === destination);
+      if (!capability || capability.mode === "api") continue;
+
+      const zip = new JSZip();
+      const text = `${item.listing.title}\n\n${item.listing.description}\n\nImages:\n${item.listing.images.map((image) => image.url).join("\n")}`;
+      zip.file("listing.txt", text);
+
+      const build = builds[item.buildId];
+      if (build?.model_3d_url) {
+        const modelResponse = await fetch(`/proxy-api/manual-builds/${item.buildId}/model-3d/download`);
+        if (modelResponse.ok) {
+          const modelBlob = await modelResponse.blob();
+          const modelUrl = new URL(build.model_3d_url, window.location.origin);
+          const modelName = decodeURIComponent(modelUrl.pathname.split("/").pop() || `build-${item.buildId}.glb`);
+          zip.file(`3D Model/${modelName}`, modelBlob);
+        }
+      }
+
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(zipBlob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `flipflop-${item.buildId}-${destination}.zip`;
+      anchor.click();
+      URL.revokeObjectURL(url);
+    }
+  };
 
   const publish = async () => {
     if (!selectedItems.length || !destinations.length) return;

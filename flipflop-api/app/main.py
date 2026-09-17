@@ -767,7 +767,9 @@ app.include_router(gems_router)
 
 # Register after API routers so any future `/api/builds/...` API routes retain
 # precedence; model files are served from the non-overlapping build asset path.
-_builds_dir = _app_dir.parent / "builds"
+# Build-owned assets live beside the application directory. Keep this aligned
+# with manual_builds.py so generated files are served after reloads/deploys.
+_builds_dir = _app_dir.parent.parent / "builds"
 _builds_dir.mkdir(parents=True, exist_ok=True)
 app.mount("/api/builds", StaticFiles(directory=str(_builds_dir)), name="build-assets")
 

@@ -264,6 +264,7 @@ async def _run_build_3d_generation(
                 local_path.write_bytes(response.content)
                 if not local_path.is_file() or local_path.stat().st_size == 0:
                     raise RuntimeError(f"Downloaded GLB was not persisted at {local_path}")
+                _persist_build_model_download(build_id, filename, local_path)
                 entry.update(
                     status="succeeded",
                     progress=result.progress,
@@ -471,6 +472,16 @@ def _build_model_download_dir(build_id: int) -> Path:
     operator-facing contract: ``builds/<build_id>/3D Model``.
     """
     return _BUILD_ASSETS_ROOT / str(build_id) / "3D Model"
+
+
+def _persist_build_model_download(build_id: int, filename: str, source: Path) -> Path:
+    """Keep a canonical operator copy of a saved GLB in ``3D Model``."""
+    download_dir = _build_model_download_dir(build_id)
+    download_dir.mkdir(parents=True, exist_ok=True)
+    download_path = download_dir / filename
+    if source.resolve() != download_path.resolve():
+        shutil.copy2(source, download_path)
+    return download_path
 
 # HERO_IMAGE_URL is the one listing-template placeholder the LLM is
 # instructed NOT to fill in itself (see ebay_listing_system_prompt.md) — it
@@ -2444,6 +2455,7 @@ async def upload_build_3d_model(
     filename = f"model-3d-{uuid.uuid4().hex}.glb"
     local_path, public_url = _build_3d_asset_path(build_id, filename)
     local_path.write_bytes(model_bytes)
+    _persist_build_model_download(build_id, filename, local_path)
     build.model_3d_url = public_url
     build.updated_at = datetime.utcnow()
     await db.flush()
@@ -2470,11 +2482,7 @@ async def download_build_3d_model(build_id: int, db: AsyncSession = Depends(get_
     if source is None:
         raise HTTPException(404, "The saved 3D model file could not be found")
 
-    download_dir = _build_model_download_dir(build_id)
-    download_dir.mkdir(parents=True, exist_ok=True)
-    download_path = download_dir / filename
-    if source.resolve() != download_path.resolve():
-        shutil.copy2(source, download_path)
+    download_path = _persist_build_model_download(build_id, filename, source)
     return FileResponse(download_path, media_type="model/gltf-binary", filename=filename)
 
 
