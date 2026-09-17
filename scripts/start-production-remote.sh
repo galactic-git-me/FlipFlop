@@ -15,7 +15,9 @@ deploy_if_needed() {
   current_branch=$(git -C "$repo" branch --show-current)
   [[ "$current_branch" == "$branch" ]] || { echo "Production checkout $repo is on '$current_branch'; expected '$branch'. Refusing deployment."; exit 1; }
   [[ -z "$(git -C "$repo" status --porcelain)" ]] || { echo "Uncommitted production files: $repo"; exit 1; }
-  git -C "$repo" fetch --quiet origin "$branch"
+  # Update the exact tracking ref even when the remote checkout has a stale
+  # or incomplete fetch refspec.
+  git -C "$repo" fetch --quiet origin "$branch:refs/remotes/origin/$branch"
   local current_sha target_sha
   current_sha="$(git -C "$repo" rev-parse HEAD)"
   target_sha="$(git -C "$repo" rev-parse "origin/$branch")"
