@@ -123,7 +123,10 @@ export function canonicalFromBuild(build: ManualBuild): CanonicalListing {
     description: build.generated_description || "Listing copy has not been generated yet.",
     bulletPoints: Object.values(build.generated_aspects ?? {}).flat().slice(0, 8),
     faqs: [],
-    price: build.ebay_price ?? build.last_evaluation?.mid ?? null,
+    // Cross-listing uses the canonical build valuation. ebay_price may be an
+    // old marketplace-specific anchor (including an offer ceiling), which can
+    // be substantially higher than the saved canonical price.
+    price: build.last_evaluation?.mid ?? build.ebay_price ?? null,
     currency: "GBP",
     quantity: build.status === "sold" ? 0 : 1,
     condition: build.ebay_condition || "Used",

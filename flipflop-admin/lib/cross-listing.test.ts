@@ -52,4 +52,9 @@ describe("cross-listing normalisation", () => {
     expect(sources[0]?.source).toBe("flipflop_shop");
     expect(sources[0]?.status).toBe("draft");
   });
+
+  it("prefers the canonical evaluation price over a marketplace price anchor", () => {
+    const priced = { ...build, ebay_price: 2878.65, last_evaluation: { mid: 1450 } } as unknown as ManualBuild;
+    expect(canonicalFromBuild(priced).price).toBe(1450);
+  });
 });
