@@ -354,17 +354,17 @@ function archiveFilename(rawUrl: string, fallback: string): string {
   }
 }
 
-type ManualPackResource = {
+type CanonicalListingPackResource = {
   source: CrossListingSource;
   build?: ManualBuild;
   media: Array<{ kind: string; url: string; alt?: string }>;
   model3dUrl?: string | null;
 };
 
-function createManualPackResource(
+function createCanonicalListingPackResource(
   source: CrossListingSource,
   build?: ManualBuild
-): ManualPackResource {
+): CanonicalListingPackResource {
   return {
     source,
     build,
@@ -375,7 +375,7 @@ function createManualPackResource(
   };
 }
 
-async function downloadManualListingPack(resource: ManualPackResource) {
+async function downloadCanonicalListingPack(resource: CanonicalListingPackResource) {
   const { source, build } = resource;
   const listing = source.listing;
   const zip = new JSZip();
@@ -469,7 +469,7 @@ async function downloadManualListingPack(resource: ManualPackResource) {
   }
 
   const markdown = [
-    "# FlipFlop Manual Listing Pack",
+    "# FlipFlop Canonical Listing Pack",
     "",
     "- Reusable canonical pack for all listing channels",
     `- Source: ${source.source === "ebay_uk" ? "eBay UK" : "FlipFlop.shop"}`,
@@ -513,10 +513,10 @@ async function downloadManualListingPack(resource: ManualPackResource) {
       ? mediaFiles.map((file) => `- ${file}`)
       : ["- No downloadable media was available"]),
     "",
-    "## Manual steps",
-    "1. Open the seller dashboard for the chosen channel.",
-    "2. Create or update the listing using the fields above.",
-    "3. Upload the files from the Media and 3D Model folders.",
+    "## Use across channels",
+    "1. Open the destination channel's seller dashboard or API workflow.",
+    "2. Use this canonical content and media library to create or update the listing.",
+    "3. Apply only the destination-specific category, identifier and policy fields required by that channel.",
     "4. Confirm the returned listing ID and URL in FlipFlop admin.",
   ].join("\n");
   zip.file("listing.md", markdown);
@@ -550,12 +550,12 @@ async function downloadManualListingPack(resource: ManualPackResource) {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = `flipflop-${source.buildId}-manual-pack.zip`;
+  anchor.download = `flipflop-${source.buildId}-canonical-listing-pack.zip`;
   anchor.click();
   URL.revokeObjectURL(url);
 }
 
-function ManualPack({
+function CanonicalListingPack({
   source,
   build,
 }: {
@@ -566,10 +566,12 @@ function ManualPack({
     <button
       className="inline-flex cursor-pointer items-center gap-1.5 rounded border border-slate-600 px-2.5 py-1.5 text-xs text-slate-200 transition-colors hover:border-emerald-400/50 hover:text-emerald-300"
       onClick={() => {
-        void downloadManualListingPack(createManualPackResource(source, build));
+        void downloadCanonicalListingPack(
+          createCanonicalListingPackResource(source, build)
+        );
       }}
     >
-      <Download className="h-3.5 w-3.5" /> Manual pack
+      <Download className="h-3.5 w-3.5" /> Canonical listing pack
     </button>
   );
 }
@@ -577,13 +579,13 @@ function ManualPack({
 function ManualPackContents() {
   return (
     <div className="mt-3 rounded-lg border border-slate-800 bg-slate-950/40 px-3 py-2.5 text-[11px] text-slate-400">
-      <div className="mb-1 font-semibold uppercase tracking-wider text-slate-300">
-        Manual pack includes
+              <div className="mb-1 font-semibold uppercase tracking-wider text-slate-300">
+        Canonical listing pack includes
       </div>
       <div className="grid gap-x-5 gap-y-1 sm:grid-cols-2">
         <div>
-          <span className="text-slate-200">listing.md</span> — title, specifics,
-          FAQs and instructions
+                  <span className="text-slate-200">listing.md</span> — shared title,
+          specifics, FAQs and channel guidance
         </div>
         <div>
           <span className="text-slate-200">listing-body.html</span> — canonical
@@ -1256,8 +1258,8 @@ export default function CrossListingPage() {
   const downloadSelectedPacks = async () => {
     if (!selectedItems.length) return;
     for (const item of selectedItems) {
-      await downloadManualListingPack(
-        createManualPackResource(item, builds[item.buildId])
+      await downloadCanonicalListingPack(
+        createCanonicalListingPackResource(item, builds[item.buildId])
       );
     }
   };
@@ -2042,7 +2044,7 @@ export default function CrossListingPage() {
                 disabled={!selectedItems.length || !destinations.length}
                 className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-slate-600 px-3 py-2.5 text-xs text-slate-200 hover:border-slate-400 disabled:cursor-not-allowed disabled:opacity-40"
               >
-                <ClipboardCopy className="h-4 w-4" /> Download manual packs
+                <ClipboardCopy className="h-4 w-4" /> Download canonical listing packs
               </button>
               <button
                 onClick={() => {
@@ -2223,7 +2225,7 @@ export default function CrossListingPage() {
               </div>
             </div>
             <div className="mt-5 flex flex-wrap justify-end gap-2">
-              <ManualPack
+              <CanonicalListingPack
                 source={{
                   ...review,
                   listing: {

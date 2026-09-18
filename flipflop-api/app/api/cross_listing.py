@@ -118,6 +118,16 @@ async def publish_amazon(build_id: int, body: AmazonPublishIn, db: AsyncSession 
             condition=body.condition,
             images=body.images,
         )
+        # PUT listings returns submission status/issues, not reliably the
+        # customer-facing ASIN. Read the item back after an accepted submit so
+        # the admin can link to the real Amazon product page.
+        if str(result.get("status", "")).upper() in {"ACCEPTED", "VALID"}:
+            try:
+                result["listing_item"] = await client.get_listing(sku=sku)
+            except AmazonSPAPIError:
+                # Publishing succeeded even if the follow-up read is delayed.
+                # Preserve the accepted response and leave the URL unset.
+                pass
         issues = result.get("issues") or []
         accepted = str(result.get("status", "")).upper() in {"ACCEPTED", "VALID"} and not issues
         channel_listing.status = "published" if accepted else "failed"
@@ -136,7 +146,9 @@ async def publish_amazon(build_id: int, body: AmazonPublishIn, db: AsyncSession 
         message = "Amazon accepted the listing submission." if accepted else "Amazon returned listing requirements or validation issues."
         db.add(ListingPublishEvent(channel_listing_id=channel_listing.id, event_type="published" if accepted else "publish_failed", message=message, event_metadata={"sku": sku, "response": result}))
         await db.commit()
-        return {"success": accepted, "status": channel_listing.status, "sku": sku, "listing_url": None, "response": result, "message": message}
+        asin = _amazon_asin(result)
+        listing_url = f"https://www.amazon.co.uk/dp/{asin}" if accepted and asin else None
+        return {"success": accepted, "status": channel_listing.status, "sku": sku, "asin": asin, "listing_url": listing_url, "response": result, "message": message}
     except AmazonSPAPIError as exc:
         channel_listing.status = "failed"
         channel_listing.last_recreate_status = "failed"
@@ -259,3 +271,25 @@ def _schedule(row: ChannelListing) -> dict:
             "last_recreate_at": row.last_recreate_at.isoformat() if row.last_recreate_at else None,
             "recreate_count": row.recreate_count, "last_recreate_status": row.last_recreate_status,
             "last_recreate_message": row.last_recreate_message}
+
+
+def _amazon_asin(payload: dict) -> str | None:
+    """Extract an ASIN from the flexible Listings Items response shape."""
+    candidates: list[object] = []
+    candidates.extend(payload.get("identifiers") or [])
+    candidates.extend((payload.get("listing_item") or {}).get("identifiers") or [])
+    candidates.extend((payload.get("summaries") or []))
+    candidates.extend((payload.get("listing_item") or {}).get("summaries") or [])
+    for item in candidates:
+        if not isinstance(item, dict):
+            continue
+        for key in ("asin", "ASIN", "asin1"):
+            value = item.get(key)
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+        for identifier in item.get("identifiers") or []:
+            if isinstance(identifier, dict) and str(identifier.get("identifierType", "")).upper() == "ASIN":
+                value = identifier.get("identifier")
+                if isinstance(value, str) and value.strip():
+                    return value.strip()
+    return None
