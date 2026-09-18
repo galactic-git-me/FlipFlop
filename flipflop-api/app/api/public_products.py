@@ -9,6 +9,7 @@ from sqlalchemy.orm import selectinload
 
 from app.database import get_db
 from app.models.product import Product, ProductStatus, ProductType
+from app.models.manual_build import ManualBuild
 from app.models.cx_document import CXDocument, CXDocumentType, CXDocumentStatus
 from app.models.capture_3d import Capture3DAsset, Capture3DStatus
 
@@ -30,6 +31,10 @@ def _summary_payload(p: Product) -> dict:
         "has_benchmark_report": p.benchmark_report_document_id is not None,
         "has_3d_twin": p.capture_3d_asset_id is not None or bool(p.model_3d_url),
         "model_3d_url": p.model_3d_url,
+        "platform_category": {
+            "id": p.platform_category_id,
+            "name": p.platform_category_name,
+        } if p.platform_category_id or p.platform_category_name else None,
         "fulfilment": {
             "type": p.fulfilment_type,
             "handling_min_days": p.handling_min_days,
@@ -70,8 +75,29 @@ async def public_product_detail(product_id: int, db: AsyncSession = Depends(get_
         raise HTTPException(status_code=404, detail="Product no longer available")
 
     build_spec = None
+    item_specifics = product.item_specifics or {}
+    platform_category = {
+        "id": product.platform_category_id,
+        "name": product.platform_category_name,
+    } if product.platform_category_id or product.platform_category_name else None
     if product.build is not None:
         build_spec = product.build.spec_json
+        # Backfill the response for older direct listings created before the
+        # storefront-specific fields existed. Publishing again will persist
+        # these values; this keeps the live product page correct meanwhile.
+        if not item_specifics and product.build.manual_build_id:
+            manual_build = (
+                await db.execute(
+                    select(ManualBuild).where(ManualBuild.id == product.build.manual_build_id)
+                )
+            ).scalar_one_or_none()
+            if manual_build:
+                item_specifics = {
+                    name: ", ".join(str(value) for value in values if value is not None)
+                    for name, values in (manual_build.generated_aspects or {}).items()
+                    if isinstance(values, list) and any(value is not None for value in values)
+                }
+                platform_category = {"id": "179", "name": "PC Desktops & All-in-Ones"}
 
     benchmark = None
     if product.benchmark_report_document_id:
@@ -108,6 +134,8 @@ async def public_product_detail(product_id: int, db: AsyncSession = Depends(get_
         **_summary_payload(product),
         "description": product.description,
         "spec": build_spec,
+        "item_specifics": item_specifics,
+        "platform_category": platform_category,
         # Measured results only — never presented alongside estimates.
         "benchmark_report": benchmark,
         "twin_3d": twin or ({"optimized_asset_ref": product.model_3d_url, "preview_image_ref": None, "ar_ready": False} if product.model_3d_url else None),

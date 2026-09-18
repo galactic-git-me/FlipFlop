@@ -506,6 +506,18 @@ _EBAY_CATEGORY_179_ASPECTS = [
     "Motherboard Model", "Release Year", "SSD Capacity",
 ]
 
+_PC_BUILD_PLATFORM_CATEGORY_ID = "179"
+_PC_BUILD_PLATFORM_CATEGORY_NAME = "PC Desktops & All-in-Ones"
+
+
+def _direct_storefront_item_specifics(build: ManualBuild) -> dict[str, str]:
+    """Flatten saved eBay aspects for the direct storefront only."""
+    return {
+        name: ", ".join(str(value) for value in values if value is not None)
+        for name, values in (build.generated_aspects or {}).items()
+        if isinstance(values, list) and any(value is not None for value in values)
+    }
+
 
 def _load_selling_principles() -> str:
     """Read fresh on every call so edits to the file take effect immediately."""
@@ -2581,6 +2593,9 @@ async def list_on_storefront(
             product.title = build.generated_title
             product.description = build.generated_description
             product.model_3d_url = build.model_3d_url
+            product.item_specifics = _direct_storefront_item_specifics(build)
+            product.platform_category_id = _PC_BUILD_PLATFORM_CATEGORY_ID
+            product.platform_category_name = _PC_BUILD_PLATFORM_CATEGORY_NAME
             product.selected_faqs = selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides)
             product.fulfilment_type = "prebuilt"
             product.handling_min_days = 1
@@ -2609,6 +2624,9 @@ async def list_on_storefront(
         status=ProductStatus.LISTED,
         hero_photo_url=build.hero_photo_url,
         model_3d_url=build.model_3d_url,
+        item_specifics=_direct_storefront_item_specifics(build),
+        platform_category_id=_PC_BUILD_PLATFORM_CATEGORY_ID,
+        platform_category_name=_PC_BUILD_PLATFORM_CATEGORY_NAME,
         selected_faqs=selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides),
         fulfilment_type="prebuilt",
         handling_min_days=1,

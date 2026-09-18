@@ -507,6 +507,9 @@ async def lifespan(app: FastAPI):
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_count INTEGER DEFAULT 0",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS last_recreate_status VARCHAR(30)",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS last_recreate_message VARCHAR(500)",
+            "ALTER TABLE products ADD COLUMN IF NOT EXISTS item_specifics JSON",
+            "ALTER TABLE products ADD COLUMN IF NOT EXISTS platform_category_id VARCHAR(30)",
+            "ALTER TABLE products ADD COLUMN IF NOT EXISTS platform_category_name VARCHAR(150)",
         ):
             await conn.exec_driver_sql(statement)
         await _install_manual_build_delete_guard(conn)
