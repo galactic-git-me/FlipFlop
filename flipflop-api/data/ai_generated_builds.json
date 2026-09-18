@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-18T00:02:33.937692+00:00",
+  "generated_at": "2026-09-18T01:05:42.349724+00:00",
   "builds": [
     {
       "components": [
@@ -123,21 +123,21 @@
         "query": "gaming pc Ryzen 7 9800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 58,
-          "average_price": 1013.22,
+          "count": 49,
+          "average_price": 974.33,
           "unavailable_reason": null
         },
         "bin": {
           "available": true,
           "count": 49,
           "min_price": 419.24,
-          "max_price": 3500.0,
-          "average_price": 1874.61
+          "max_price": 3321.7,
+          "average_price": 1900.94
         }
       },
-      "resale_estimate": 1013.22,
+      "resale_estimate": 974.33,
       "resale_source": "sold_average",
-      "estimated_profit": 932.74,
+      "estimated_profit": 893.85,
       "rank": 1
     },
     {
@@ -263,7 +263,7 @@
         "sold": {
           "available": true,
           "count": 59,
-          "average_price": 950.46,
+          "average_price": 947.67,
           "unavailable_reason": null
         },
         "bin": {
@@ -274,9 +274,9 @@
           "average_price": 2043.03
         }
       },
-      "resale_estimate": 950.46,
+      "resale_estimate": 947.67,
       "resale_source": "sold_average",
-      "estimated_profit": 868.94,
+      "estimated_profit": 866.15,
       "rank": 2
     },
     {
@@ -402,7 +402,7 @@
         "sold": {
           "available": true,
           "count": 59,
-          "average_price": 950.46,
+          "average_price": 947.67,
           "unavailable_reason": null
         },
         "bin": {
@@ -410,29 +410,29 @@
           "count": 48,
           "min_price": 419.24,
           "max_price": 4900.33,
-          "average_price": 2008.76
+          "average_price": 2012.1
         }
       },
-      "resale_estimate": 950.46,
+      "resale_estimate": 947.67,
       "resale_source": "sold_average",
-      "estimated_profit": 868.0,
+      "estimated_profit": 865.21,
       "rank": 3
     },
     {
       "components": [
         {
-          "id": 41984526,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.aliexpress.com%2Fitem%2F1005012622327985.html%3F_randl_currency%3DGBP%26_randl_shipto%3DUK%26src%3Dgoogle:AM4%20Socket%20AMD%20Ryzen%209%205950X%20High%20Pe:e0a115b1a42890ab96f3ea2e1023ca79e74716947fa8c37729e7ad554ecd9996",
+          "id": 41984530,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.aliexpress.com%2Fitem%2F1005012623303787.html%3F_randl_currency%3DGBP%26_randl_shipto%3DUK%26src%3Dgoogle:AMD%20Ryzen%207%205800X3D%20Tray%20Processor%20No%:9b742149c59265506d387fdd4a9279c32b691d2c7c35aeacd68efc4c51dc7c5b",
           "category": "cpu",
-          "title": "AM4 Socket AMD Ryzen 9 5950X High Performance Gaming CPU 16 Core 32 Thread 4.9GHz 64MB Cache DDR4",
-          "seller": "AliExpress - AliExpress-2686587039",
-          "image_url": null,
-          "delivered_price": 3.45,
+          "title": "AMD Ryzen 7 5800X3D Tray Processor No Cooler 8 Core 16 Thread Up to 4.5GHz AM4 Socket 96MB 3D V",
+          "seller": "AliExpress - AliExpress-222028430",
+          "image_url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ02hVpx4dUUirLACLYFv2beVtM6tICzURJTQO5G6D-eH2SDMIxWWYhKMzFBSt38a5gakGKRYcIjSh_8UfPdv0VtbW_UM_bcXr-O-f-7IcKZnWqYlJDctaHPfKn&usqp=CAc",
+          "delivered_price": 0.86,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -3.45,
-          "url": "https://www.aliexpress.com/item/1005012622327985.html?_randl_currency=GBP&_randl_shipto=UK&src=google"
+          "estimated_profit": -0.86,
+          "url": "https://www.aliexpress.com/item/1005012623303787.html?_randl_currency=GBP&_randl_shipto=UK&src=google"
         },
         {
           "id": 41965064,
@@ -535,26 +535,26 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 82.22,
+      "build_cost": 79.63,
       "market": {
-        "query": "gaming pc AMD Ryzen 9 5950X SAPPHIRE PULSE AMD Radeon RX 6 8gb",
+        "query": "gaming pc AMD Ryzen 7 5800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 17,
-          "average_price": 747.77,
+          "count": 50,
+          "average_price": 748.51,
           "unavailable_reason": null
         },
         "bin": {
           "available": true,
-          "count": 50,
-          "min_price": 675.58,
-          "max_price": 7529.0,
-          "average_price": 1839.51
+          "count": 48,
+          "min_price": 399.95,
+          "max_price": 1849.0,
+          "average_price": 828.55
         }
       },
-      "resale_estimate": 747.77,
+      "resale_estimate": 748.51,
       "resale_source": "sold_average",
-      "estimated_profit": 665.55,
+      "estimated_profit": 668.88,
       "rank": 4
     },
     {
@@ -687,8 +687,8 @@
           "available": true,
           "count": 50,
           "min_price": 675.58,
-          "max_price": 7529.0,
-          "average_price": 1839.51
+          "max_price": 7129.0,
+          "average_price": 1797.25
         }
       },
       "resale_estimate": 747.77,
@@ -699,18 +699,18 @@
     {
       "components": [
         {
-          "id": 41984530,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.aliexpress.com%2Fitem%2F1005012623303787.html%3F_randl_currency%3DGBP%26_randl_shipto%3DUK%26src%3Dgoogle:AMD%20Ryzen%207%205800X3D%20Tray%20Processor%20No%:9b742149c59265506d387fdd4a9279c32b691d2c7c35aeacd68efc4c51dc7c5b",
+          "id": 41984573,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.aliexpress.com%2Fitem%2F1005012722323360.html%3F_randl_currency%3DGBP%26_randl_shipto%3DUK%26src%3Dgoogle:AMD%20Ryzen%207%205700X%20Desktop%20CPU%208%20Core:8c10dfa96ed5b57cfe00deeb288c8f3f5d8cc334f11e139ed7fe9b0f6c2ea414",
           "category": "cpu",
-          "title": "AMD Ryzen 7 5800X3D Tray Processor No Cooler 8 Core 16 Thread Up to 4.5GHz AM4 Socket 96MB 3D V",
-          "seller": "AliExpress - AliExpress-222028430",
-          "image_url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ02hVpx4dUUirLACLYFv2beVtM6tICzURJTQO5G6D-eH2SDMIxWWYhKMzFBSt38a5gakGKRYcIjSh_8UfPdv0VtbW_UM_bcXr-O-f-7IcKZnWqYlJDctaHPfKn&usqp=CAc",
-          "delivered_price": 0.86,
+          "title": "AMD Ryzen 7 5700X Desktop CPU 8 Core 16 Thread 3.4GHz 7NM 32MB L3 Cache 65W Socket AM4 PCIe 4.0",
+          "seller": "AliExpress - AliExpress-252640023",
+          "image_url": null,
+          "delivered_price": 3.7199999999999998,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -0.86,
-          "url": "https://www.aliexpress.com/item/1005012623303787.html?_randl_currency=GBP&_randl_shipto=UK&src=google"
+          "estimated_profit": -3.72,
+          "url": "https://www.aliexpress.com/item/1005012722323360.html?_randl_currency=GBP&_randl_shipto=UK&src=google"
         },
         {
           "id": 41965064,
@@ -813,26 +813,26 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 79.63,
+      "build_cost": 82.49,
       "market": {
-        "query": "gaming pc AMD Ryzen 7 5800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
+        "query": "gaming pc AMD Ryzen 7 5700X SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
           "count": 60,
-          "average_price": 726.15,
+          "average_price": 625.29,
           "unavailable_reason": null
         },
         "bin": {
           "available": true,
-          "count": 48,
-          "min_price": 399.95,
-          "max_price": 2444.95,
-          "average_price": 861.16
+          "count": 49,
+          "min_price": 295.8,
+          "max_price": 1849.0,
+          "average_price": 892.55
         }
       },
-      "resale_estimate": 726.15,
+      "resale_estimate": 625.29,
       "resale_source": "sold_average",
-      "estimated_profit": 646.52,
+      "estimated_profit": 542.8,
       "rank": 6
     }
   ],
