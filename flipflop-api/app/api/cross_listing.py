@@ -74,7 +74,14 @@ async def amazon_status():
             result["message"] = "The seller is authorized, but the configured marketplace is not enabled for this account."
         return result
     except AmazonSPAPIError as exc:
-        return {"connected": False, "configured": True, "message": str(exc), "status_code": exc.status_code}
+        return {
+            "connected": False,
+            "configured": True,
+            "environment": client.environment,
+            "marketplace_id": client.marketplace_id,
+            "message": f"{str(exc)} The production Amazon account or app authorization does not currently permit marketplace {client.marketplace_id}.",
+            "status_code": exc.status_code,
+        }
 
 
 @router.post("/amazon/publish/{build_id}")
