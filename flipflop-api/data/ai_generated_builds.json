@@ -1,284 +1,6 @@
 {
-  "generated_at": "2026-09-18T05:07:47.540847+00:00",
+  "generated_at": "2026-09-18T06:03:21.014455+00:00",
   "builds": [
-    {
-      "components": [
-        {
-          "id": 41984526,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.aliexpress.com%2Fitem%2F1005012622327985.html%3F_randl_currency%3DGBP%26_randl_shipto%3DUK%26src%3Dgoogle:AM4%20Socket%20AMD%20Ryzen%209%205950X%20High%20Pe:e0a115b1a42890ab96f3ea2e1023ca79e74716947fa8c37729e7ad554ecd9996",
-          "category": "cpu",
-          "title": "AM4 Socket AMD Ryzen 9 5950X High Performance Gaming CPU 16 Core 32 Thread 4.9GHz 64MB Cache DDR4",
-          "seller": "AliExpress - AliExpress-2686587039",
-          "image_url": null,
-          "delivered_price": 3.45,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -3.45,
-          "url": "https://www.aliexpress.com/item/1005012622327985.html?_randl_currency=GBP&_randl_shipto=UK&src=google"
-        },
-        {
-          "id": 41965064,
-          "listing_id": "awd_it:msi-a520m-a-pro-amd-am4-motherboard-cpu-bundle.html",
-          "category": "motherboard",
-          "title": "SAVE 5%",
-          "seller": "AWD-IT",
-          "image_url": "https://www.awd-it.co.uk/media/catalog/product/m/s/msi_a520m-a_pro_no_cooler.jpg?optimize=high&bg-color=255,255,255&fit=bounds&height=426&width=426&canvas=426:426",
-          "delivered_price": 5.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -5.0,
-          "url": "https://www.awd-it.co.uk/catalogsearch/result/?q=SAVE+5%25"
-        },
-        {
-          "id": 41950715,
-          "listing_id": "315893465405",
-          "category": "gpu",
-          "title": "SAPPHIRE PULSE AMD Radeon RX 6600 Xt COOLING HOUSE No GPU. Read",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/8D0AAOSwbPdnHg~M/s-l500.webp",
-          "delivered_price": 52.7,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -52.7,
-          "url": "https://www.ebay.co.uk/itm/315893465405"
-        },
-        {
-          "id": 41985503,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
-          "category": "ram",
-          "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
-          "seller": "www.ebay.co.uk",
-          "image_url": null,
-          "delivered_price": 6.95,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -6.95,
-          "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
-        },
-        {
-          "id": 41968662,
-          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
-          "category": "psu",
-          "title": "HP Common Slot HS PSU 460W Gold",
-          "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
-          "delivered_price": 4.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -4.0,
-          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
-        },
-        {
-          "id": 41972566,
-          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
-          "category": "ssd",
-          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
-          "seller": "eBay",
-          "image_url": null,
-          "delivered_price": 3.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "EVIDENCE_LIMITED_DEAL",
-          "estimated_profit": -3.99,
-          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
-        },
-        {
-          "id": 41963169,
-          "listing_id": "9355314284",
-          "category": "cooler",
-          "title": "Intel E97378-001 Stock CPU Cooler Heatsink Fan LGA1150/1151/1155/1156",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 3.33,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -3.33,
-          "url": "https://www.vinted.co.uk/items/9355314284"
-        },
-        {
-          "id": 41962195,
-          "listing_id": "8383269555",
-          "category": "case",
-          "title": "Fractal Design Silent Series R2 92mm Pc Case Fan",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 2.8,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "EVIDENCE_LIMITED_DEAL",
-          "estimated_profit": -2.8,
-          "url": "https://www.vinted.co.uk/items/8383269555"
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 4,
-      "build_cost": 82.22,
-      "market": {
-        "query": "gaming pc AMD Ryzen 9 5950X SAPPHIRE PULSE AMD Radeon RX 6 8gb",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "eBay sign-in is required for sold prices, but SOLD_COMPS_HEADLESS is enabled. Run it headed so the eBay login window can be completed."
-        },
-        "bin": {
-          "available": true,
-          "count": 50,
-          "min_price": 675.58,
-          "max_price": 7529.0,
-          "average_price": 1839.51
-        }
-      },
-      "resale_estimate": 1839.51,
-      "resale_source": "bin_average",
-      "estimated_profit": 1757.29,
-      "rank": 1
-    },
-    {
-      "components": [
-        {
-          "id": 41984522,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.aliexpress.com%2Fitem%2F1005012615776434.html%3F_randl_currency%3DGBP%26_randl_shipto%3DUK%26src%3Dgoogle:Ryzen%207%209800X3D%208%20Core%204.7G%20To%205.2G%:a51a32a34ac15b5359676baf5658a2e672318612e804b896b0bbfa918610283f",
-          "category": "cpu",
-          "title": "Ryzen 7 9800X3D 8 Core 4.7G To 5.2G 96MB L3 AM5 4nm Supports DDR5 120W No Fan Overclock God CPU",
-          "seller": "AliExpress - AliExpress-2686587039",
-          "image_url": null,
-          "delivered_price": 1.71,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.71,
-          "url": "https://www.aliexpress.com/item/1005012615776434.html?_randl_currency=GBP&_randl_shipto=UK&src=google"
-        },
-        {
-          "id": 41965064,
-          "listing_id": "awd_it:msi-a520m-a-pro-amd-am4-motherboard-cpu-bundle.html",
-          "category": "motherboard",
-          "title": "SAVE 5%",
-          "seller": "AWD-IT",
-          "image_url": "https://www.awd-it.co.uk/media/catalog/product/m/s/msi_a520m-a_pro_no_cooler.jpg?optimize=high&bg-color=255,255,255&fit=bounds&height=426&width=426&canvas=426:426",
-          "delivered_price": 5.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -5.0,
-          "url": "https://www.awd-it.co.uk/catalogsearch/result/?q=SAVE+5%25"
-        },
-        {
-          "id": 41950715,
-          "listing_id": "315893465405",
-          "category": "gpu",
-          "title": "SAPPHIRE PULSE AMD Radeon RX 6600 Xt COOLING HOUSE No GPU. Read",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/8D0AAOSwbPdnHg~M/s-l500.webp",
-          "delivered_price": 52.7,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -52.7,
-          "url": "https://www.ebay.co.uk/itm/315893465405"
-        },
-        {
-          "id": 41985503,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
-          "category": "ram",
-          "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
-          "seller": "www.ebay.co.uk",
-          "image_url": null,
-          "delivered_price": 6.95,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -6.95,
-          "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
-        },
-        {
-          "id": 41968662,
-          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
-          "category": "psu",
-          "title": "HP Common Slot HS PSU 460W Gold",
-          "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
-          "delivered_price": 4.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -4.0,
-          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
-        },
-        {
-          "id": 41972566,
-          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
-          "category": "ssd",
-          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
-          "seller": "eBay",
-          "image_url": null,
-          "delivered_price": 3.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "EVIDENCE_LIMITED_DEAL",
-          "estimated_profit": -3.99,
-          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
-        },
-        {
-          "id": 41963169,
-          "listing_id": "9355314284",
-          "category": "cooler",
-          "title": "Intel E97378-001 Stock CPU Cooler Heatsink Fan LGA1150/1151/1155/1156",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 3.33,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -3.33,
-          "url": "https://www.vinted.co.uk/items/9355314284"
-        },
-        {
-          "id": 41962195,
-          "listing_id": "8383269555",
-          "category": "case",
-          "title": "Fractal Design Silent Series R2 92mm Pc Case Fan",
-          "seller": null,
-          "image_url": null,
-          "delivered_price": 2.8,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "EVIDENCE_LIMITED_DEAL",
-          "estimated_profit": -2.8,
-          "url": "https://www.vinted.co.uk/items/8383269555"
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 4,
-      "build_cost": 80.48,
-      "market": {
-        "query": "gaming pc Ryzen 7 9800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
-        "sold": {
-          "available": true,
-          "count": 50,
-          "average_price": 1020.0,
-          "unavailable_reason": null
-        },
-        "bin": {
-          "available": true,
-          "count": 49,
-          "min_price": 419.24,
-          "max_price": 3149.0,
-          "average_price": 1834.19
-        }
-      },
-      "resale_estimate": 1020.0,
-      "resale_source": "sold_average",
-      "estimated_profit": 939.52,
-      "rank": 2
-    },
     {
       "components": [
         {
@@ -401,8 +123,8 @@
         "query": "gaming pc AMD Ryzen 7 9800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 59,
-          "average_price": 949.06,
+          "count": 49,
+          "average_price": 1007.55,
           "unavailable_reason": null
         },
         "bin": {
@@ -410,13 +132,13 @@
           "count": 49,
           "min_price": 714.53,
           "max_price": 4900.33,
-          "average_price": 2148.02
+          "average_price": 2086.62
         }
       },
-      "resale_estimate": 949.06,
+      "resale_estimate": 1007.55,
       "resale_source": "sold_average",
-      "estimated_profit": 867.54,
-      "rank": 3
+      "estimated_profit": 926.03,
+      "rank": 1
     },
     {
       "components": [
@@ -540,8 +262,8 @@
         "query": "gaming pc AMD Ryzen 7 9800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 59,
-          "average_price": 949.06,
+          "count": 49,
+          "average_price": 1007.66,
           "unavailable_reason": null
         },
         "bin": {
@@ -549,29 +271,29 @@
           "count": 49,
           "min_price": 714.53,
           "max_price": 4900.33,
-          "average_price": 2069.26
+          "average_price": 2087.94
         }
       },
-      "resale_estimate": 949.06,
+      "resale_estimate": 1007.66,
       "resale_source": "sold_average",
-      "estimated_profit": 866.6,
-      "rank": 4
+      "estimated_profit": 925.2,
+      "rank": 2
     },
     {
       "components": [
         {
-          "id": 41984530,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.aliexpress.com%2Fitem%2F1005012623303787.html%3F_randl_currency%3DGBP%26_randl_shipto%3DUK%26src%3Dgoogle:AMD%20Ryzen%207%205800X3D%20Tray%20Processor%20No%:9b742149c59265506d387fdd4a9279c32b691d2c7c35aeacd68efc4c51dc7c5b",
+          "id": 41984522,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.aliexpress.com%2Fitem%2F1005012615776434.html%3F_randl_currency%3DGBP%26_randl_shipto%3DUK%26src%3Dgoogle:Ryzen%207%209800X3D%208%20Core%204.7G%20To%205.2G%:a51a32a34ac15b5359676baf5658a2e672318612e804b896b0bbfa918610283f",
           "category": "cpu",
-          "title": "AMD Ryzen 7 5800X3D Tray Processor No Cooler 8 Core 16 Thread Up to 4.5GHz AM4 Socket 96MB 3D V",
-          "seller": "AliExpress - AliExpress-222028430",
-          "image_url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ02hVpx4dUUirLACLYFv2beVtM6tICzURJTQO5G6D-eH2SDMIxWWYhKMzFBSt38a5gakGKRYcIjSh_8UfPdv0VtbW_UM_bcXr-O-f-7IcKZnWqYlJDctaHPfKn&usqp=CAc",
-          "delivered_price": 0.86,
+          "title": "Ryzen 7 9800X3D 8 Core 4.7G To 5.2G 96MB L3 AM5 4nm Supports DDR5 120W No Fan Overclock God CPU",
+          "seller": "AliExpress - AliExpress-2686587039",
+          "image_url": null,
+          "delivered_price": 1.71,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -0.86,
-          "url": "https://www.aliexpress.com/item/1005012623303787.html?_randl_currency=GBP&_randl_shipto=UK&src=google"
+          "estimated_profit": -1.71,
+          "url": "https://www.aliexpress.com/item/1005012615776434.html?_randl_currency=GBP&_randl_shipto=UK&src=google"
         },
         {
           "id": 41965064,
@@ -674,27 +396,166 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 79.63,
+      "build_cost": 80.48,
       "market": {
-        "query": "gaming pc AMD Ryzen 7 5800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
+        "query": "gaming pc Ryzen 7 9800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 50,
-          "average_price": 756.49,
+          "count": 59,
+          "average_price": 993.15,
           "unavailable_reason": null
         },
         "bin": {
           "available": true,
-          "count": 48,
-          "min_price": 248.0,
-          "max_price": 1949.97,
-          "average_price": 864.49
+          "count": 49,
+          "min_price": 419.24,
+          "max_price": 4900.33,
+          "average_price": 1876.48
         }
       },
-      "resale_estimate": 756.49,
+      "resale_estimate": 993.15,
       "resale_source": "sold_average",
-      "estimated_profit": 676.86,
-      "rank": 5
+      "estimated_profit": 912.67,
+      "rank": 3
+    },
+    {
+      "components": [
+        {
+          "id": 41984526,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.aliexpress.com%2Fitem%2F1005012622327985.html%3F_randl_currency%3DGBP%26_randl_shipto%3DUK%26src%3Dgoogle:AM4%20Socket%20AMD%20Ryzen%209%205950X%20High%20Pe:e0a115b1a42890ab96f3ea2e1023ca79e74716947fa8c37729e7ad554ecd9996",
+          "category": "cpu",
+          "title": "AM4 Socket AMD Ryzen 9 5950X High Performance Gaming CPU 16 Core 32 Thread 4.9GHz 64MB Cache DDR4",
+          "seller": "AliExpress - AliExpress-2686587039",
+          "image_url": null,
+          "delivered_price": 3.45,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -3.45,
+          "url": "https://www.aliexpress.com/item/1005012622327985.html?_randl_currency=GBP&_randl_shipto=UK&src=google"
+        },
+        {
+          "id": 41965064,
+          "listing_id": "awd_it:msi-a520m-a-pro-amd-am4-motherboard-cpu-bundle.html",
+          "category": "motherboard",
+          "title": "SAVE 5%",
+          "seller": "AWD-IT",
+          "image_url": "https://www.awd-it.co.uk/media/catalog/product/m/s/msi_a520m-a_pro_no_cooler.jpg?optimize=high&bg-color=255,255,255&fit=bounds&height=426&width=426&canvas=426:426",
+          "delivered_price": 5.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -5.0,
+          "url": "https://www.awd-it.co.uk/catalogsearch/result/?q=SAVE+5%25"
+        },
+        {
+          "id": 41950715,
+          "listing_id": "315893465405",
+          "category": "gpu",
+          "title": "SAPPHIRE PULSE AMD Radeon RX 6600 Xt COOLING HOUSE No GPU. Read",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/8D0AAOSwbPdnHg~M/s-l500.webp",
+          "delivered_price": 52.7,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -52.7,
+          "url": "https://www.ebay.co.uk/itm/315893465405"
+        },
+        {
+          "id": 41985503,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
+          "category": "ram",
+          "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
+          "seller": "www.ebay.co.uk",
+          "image_url": null,
+          "delivered_price": 6.95,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -6.95,
+          "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
+        },
+        {
+          "id": 41968662,
+          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
+          "category": "psu",
+          "title": "HP Common Slot HS PSU 460W Gold",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
+          "delivered_price": 4.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -4.0,
+          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
+        },
+        {
+          "id": 41972566,
+          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
+          "category": "ssd",
+          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
+          "seller": "eBay",
+          "image_url": null,
+          "delivered_price": 3.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "EVIDENCE_LIMITED_DEAL",
+          "estimated_profit": -3.99,
+          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
+        },
+        {
+          "id": 41963169,
+          "listing_id": "9355314284",
+          "category": "cooler",
+          "title": "Intel E97378-001 Stock CPU Cooler Heatsink Fan LGA1150/1151/1155/1156",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 3.33,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -3.33,
+          "url": "https://www.vinted.co.uk/items/9355314284"
+        },
+        {
+          "id": 41962195,
+          "listing_id": "8383269555",
+          "category": "case",
+          "title": "Fractal Design Silent Series R2 92mm Pc Case Fan",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 2.8,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "EVIDENCE_LIMITED_DEAL",
+          "estimated_profit": -2.8,
+          "url": "https://www.vinted.co.uk/items/8383269555"
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 82.22,
+      "market": {
+        "query": "gaming pc AMD Ryzen 9 5950X SAPPHIRE PULSE AMD Radeon RX 6 8gb",
+        "sold": {
+          "available": true,
+          "count": 17,
+          "average_price": 747.77,
+          "unavailable_reason": null
+        },
+        "bin": {
+          "available": true,
+          "count": 50,
+          "min_price": 675.58,
+          "max_price": 7529.0,
+          "average_price": 1830.52
+        }
+      },
+      "resale_estimate": 747.77,
+      "resale_source": "sold_average",
+      "estimated_profit": 665.55,
+      "rank": 4
     },
     {
       "components": [
@@ -826,13 +687,152 @@
           "available": true,
           "count": 50,
           "min_price": 675.58,
-          "max_price": 7129.0,
-          "average_price": 1817.74
+          "max_price": 7529.0,
+          "average_price": 1823.24
         }
       },
       "resale_estimate": 747.77,
       "resale_source": "sold_average",
       "estimated_profit": 665.42,
+      "rank": 5
+    },
+    {
+      "components": [
+        {
+          "id": 41984530,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.aliexpress.com%2Fitem%2F1005012623303787.html%3F_randl_currency%3DGBP%26_randl_shipto%3DUK%26src%3Dgoogle:AMD%20Ryzen%207%205800X3D%20Tray%20Processor%20No%:9b742149c59265506d387fdd4a9279c32b691d2c7c35aeacd68efc4c51dc7c5b",
+          "category": "cpu",
+          "title": "AMD Ryzen 7 5800X3D Tray Processor No Cooler 8 Core 16 Thread Up to 4.5GHz AM4 Socket 96MB 3D V",
+          "seller": "AliExpress - AliExpress-222028430",
+          "image_url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ02hVpx4dUUirLACLYFv2beVtM6tICzURJTQO5G6D-eH2SDMIxWWYhKMzFBSt38a5gakGKRYcIjSh_8UfPdv0VtbW_UM_bcXr-O-f-7IcKZnWqYlJDctaHPfKn&usqp=CAc",
+          "delivered_price": 0.86,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -0.86,
+          "url": "https://www.aliexpress.com/item/1005012623303787.html?_randl_currency=GBP&_randl_shipto=UK&src=google"
+        },
+        {
+          "id": 41965064,
+          "listing_id": "awd_it:msi-a520m-a-pro-amd-am4-motherboard-cpu-bundle.html",
+          "category": "motherboard",
+          "title": "SAVE 5%",
+          "seller": "AWD-IT",
+          "image_url": "https://www.awd-it.co.uk/media/catalog/product/m/s/msi_a520m-a_pro_no_cooler.jpg?optimize=high&bg-color=255,255,255&fit=bounds&height=426&width=426&canvas=426:426",
+          "delivered_price": 5.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -5.0,
+          "url": "https://www.awd-it.co.uk/catalogsearch/result/?q=SAVE+5%25"
+        },
+        {
+          "id": 41950715,
+          "listing_id": "315893465405",
+          "category": "gpu",
+          "title": "SAPPHIRE PULSE AMD Radeon RX 6600 Xt COOLING HOUSE No GPU. Read",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/8D0AAOSwbPdnHg~M/s-l500.webp",
+          "delivered_price": 52.7,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -52.7,
+          "url": "https://www.ebay.co.uk/itm/315893465405"
+        },
+        {
+          "id": 41985503,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
+          "category": "ram",
+          "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
+          "seller": "www.ebay.co.uk",
+          "image_url": null,
+          "delivered_price": 6.95,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -6.95,
+          "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
+        },
+        {
+          "id": 41968662,
+          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
+          "category": "psu",
+          "title": "HP Common Slot HS PSU 460W Gold",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
+          "delivered_price": 4.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -4.0,
+          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
+        },
+        {
+          "id": 41972566,
+          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
+          "category": "ssd",
+          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
+          "seller": "eBay",
+          "image_url": null,
+          "delivered_price": 3.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "EVIDENCE_LIMITED_DEAL",
+          "estimated_profit": -3.99,
+          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
+        },
+        {
+          "id": 41963169,
+          "listing_id": "9355314284",
+          "category": "cooler",
+          "title": "Intel E97378-001 Stock CPU Cooler Heatsink Fan LGA1150/1151/1155/1156",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 3.33,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -3.33,
+          "url": "https://www.vinted.co.uk/items/9355314284"
+        },
+        {
+          "id": 41962195,
+          "listing_id": "8383269555",
+          "category": "case",
+          "title": "Fractal Design Silent Series R2 92mm Pc Case Fan",
+          "seller": null,
+          "image_url": null,
+          "delivered_price": 2.8,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "EVIDENCE_LIMITED_DEAL",
+          "estimated_profit": -2.8,
+          "url": "https://www.vinted.co.uk/items/8383269555"
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 79.63,
+      "market": {
+        "query": "gaming pc AMD Ryzen 7 5800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
+        "sold": {
+          "available": true,
+          "count": 50,
+          "average_price": 740.74,
+          "unavailable_reason": null
+        },
+        "bin": {
+          "available": true,
+          "count": 48,
+          "min_price": 399.95,
+          "max_price": 2444.95,
+          "average_price": 885.73
+        }
+      },
+      "resale_estimate": 740.74,
+      "resale_source": "sold_average",
+      "estimated_profit": 661.11,
       "rank": 6
     }
   ],
