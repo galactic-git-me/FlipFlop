@@ -135,36 +135,6 @@ function devStorefrontUrl(buildId: number) {
   return `${base.replace(/\/$/, "")}/builds/${buildId}`;
 }
 
-function displayMediaUrl(url: string): string {
-  try {
-    const parsed = new URL(url, "http://localhost");
-    if (parsed.pathname.endsWith("/api/proxy-glb")) {
-      const nestedUrl = parsed.searchParams.get("url");
-      if (nestedUrl) return displayMediaUrl(nestedUrl);
-    }
-    if (parsed.pathname.startsWith("/api/")) {
-      return `/proxy-api${parsed.pathname}${parsed.search}`;
-    }
-  } catch {
-    // Fall through to the simple path checks below.
-  }
-  const buildUploadMatch = url.match(
-    /^https?:\/\/(?:www\.)?theflipflop\.shop\/api\/uploads\/manual_builds\/([^/]+)\/(.+)$/
-  );
-  if (buildUploadMatch) {
-    return `/proxy-api/uploads/manual_builds/${buildUploadMatch[1]}/${buildUploadMatch[2]}`;
-  }
-  if (url.startsWith("/api/uploads/manual_builds/")) {
-    return `/proxy-api${url}`;
-  }
-  const modelUploadMatch = url.match(
-    /^https?:\/\/(?:www\.)?theflipflop\.shop\/api\/uploads\/models\/(.+)$/
-  );
-  if (modelUploadMatch) return `/proxy-api/uploads/models/${modelUploadMatch[1]}`;
-  if (url.startsWith("/api/builds/")) return `/proxy-api${url}`;
-  return url;
-}
-
 function displayImageUrl(url: string): string {
   // Public build photos already have browser-loadable URLs. Only rewrite
   // same-origin API paths; routing absolute image URLs through the GLB/API
@@ -1286,6 +1256,9 @@ export default function CrossListingPage() {
   };
 
   const reviewedBuild = review ? builds[review.buildId] : undefined;
+  const reviewModelUrl = reviewedBuild?.model_3d_url
+    ? `/proxy-api/manual-builds/${reviewedBuild.id}/model-3d/download`
+    : null;
   const reviewPhotos = reviewedBuild?.photos.filter((photo) => photo.kind === "photo") ??
     review?.listing.images.map((image) => ({ url: image.url, kind: "photo" as const })) ??
     [];
@@ -2141,8 +2114,8 @@ export default function CrossListingPage() {
                 )}
               </div>
               <div>
-                {reviewedBuild?.model_3d_url ? (
-                  <Build3DViewer url={displayMediaUrl(reviewedBuild.model_3d_url)} />
+                {reviewModelUrl ? (
+                  <Build3DViewer url={reviewModelUrl} />
                 ) : (
                   <div className="flex min-h-[180px] items-center justify-center rounded-lg border border-slate-700/80 bg-slate-900/50 p-4 text-center text-xs text-slate-500">
                     No 3D model is attached to this build.
