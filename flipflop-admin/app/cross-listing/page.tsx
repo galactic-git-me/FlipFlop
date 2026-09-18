@@ -909,14 +909,36 @@ export default function CrossListingPage() {
   const relistAtByBuild = useMemo(() => {
     const next = new Map<number, string>();
     const scheduleBuilds = new Set<number>();
+    const buildsById = new Map(
+      Object.values(builds).map((build) => [build.id, build])
+    );
+    const fallbackListedAt = (buildId: number) => {
+      const build = buildsById.get(buildId);
+      if (build?.listed_at) return build.listed_at;
+      // Older listings may not have listed_at populated. Their channel row's
+      // updatedAt is the best available listing timestamp in that case.
+      return (
+        items.find(
+          (source) =>
+            source.buildId === buildId &&
+            (source.status === "live" || source.status === "draft")
+        )?.updatedAt ?? null
+      );
+    };
     for (const schedule of schedules) {
       scheduleBuilds.add(schedule.build_id);
+      const listedAt = fallbackListedAt(schedule.build_id);
       if (!schedule.recreate_enabled) continue;
       const target =
         schedule.next_recreate_at ??
         (schedule.published_at
           ? new Date(
               new Date(schedule.published_at).getTime() +
+                relistPolicy.intervalDays * 86_400_000
+            ).toISOString()
+          : listedAt
+          ? new Date(
+              new Date(listedAt).getTime() +
                 relistPolicy.intervalDays * 86_400_000
             ).toISOString()
           : null);
@@ -932,7 +954,13 @@ export default function CrossListingPage() {
     }
     for (const build of Object.values(builds)) {
       if (scheduleBuilds.has(build.id) || !relistPolicy.enabledDefault) continue;
-      const listedAt = build.listed_at;
+      const listedAt = build.next_recreate_at
+        ? null
+        : fallbackListedAt(build.id);
+      if (build.next_recreate_at) {
+        next.set(build.id, build.next_recreate_at);
+        continue;
+      }
       if (!listedAt) continue;
       next.set(
         build.id,
