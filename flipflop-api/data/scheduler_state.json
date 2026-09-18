@@ -3,13 +3,13 @@
     "last_success_at": "2026-09-18T14:39:21.893494+00:00"
   },
   "manual_build_deferred_publish": {
-    "last_success_at": "2026-09-18T14:39:21.903291+00:00"
+    "last_success_at": "2026-09-18T20:50:19.102359+00:00"
   },
   "deferred_publish": {
-    "last_success_at": "2026-09-18T14:39:21.911724+00:00"
+    "last_success_at": "2026-09-18T20:50:19.135481+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-09-18T14:45:21.812486+00:00"
+    "last_success_at": "2026-09-18T20:51:18.255323+00:00"
   },
   "ai_build_generator": {
     "last_success_at": "2026-09-18T14:21:57.847688+00:00"
@@ -18,7 +18,7 @@
     "last_success_at": "2026-09-18T14:09:21.463297+00:00"
   },
   "manual_build_recreate_cycle": {
-    "last_success_at": "2026-09-18T14:09:22.366368+00:00"
+    "last_success_at": "2026-09-18T20:50:19.099921+00:00"
   },
   "offer_poll": {
     "last_success_at": "2026-09-18T14:39:21.901604+00:00"
@@ -45,10 +45,10 @@
     "last_success_at": "2026-09-18T14:39:21.902686+00:00"
   },
   "case_content_sourcing": {
-    "last_success_at": "2026-09-18T14:39:43.024272+00:00"
+    "last_success_at": "2026-09-18T20:50:39.038051+00:00"
   },
   "ebay_sales_tracker": {
-    "last_success_at": "2026-09-18T14:41:21.480615+00:00"
+    "last_success_at": "2026-09-18T20:52:18.161196+00:00"
   },
   "external_demand": {
     "last_success_at": "2026-09-18T14:10:42.997930+00:00"
@@ -69,7 +69,7 @@
     "last_success_at": "2026-09-18T07:00:00.083599+00:00"
   },
   "manual_build_send_to_watchers": {
-    "last_success_at": "2026-09-18T11:09:21.992371+00:00"
+    "last_success_at": "2026-09-18T20:50:20.003668+00:00"
   },
   "amazon_case_bestsellers": {
     "last_success_at": "2026-09-16T20:30:02.646093+00:00"
@@ -81,7 +81,7 @@
     "last_success_at": "2026-09-18T11:09:22.008759+00:00"
   },
   "cross_listing_recreate": {
-    "last_success_at": "2026-09-18T14:44:51.634909+00:00"
+    "last_success_at": "2026-09-18T20:50:49.114269+00:00"
   },
   "delivery_followup": {
     "last_success_at": "2026-09-18T14:45:06.448099+00:00"
