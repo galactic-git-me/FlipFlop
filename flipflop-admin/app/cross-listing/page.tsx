@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import JSZip from "jszip";
+import DOMPurify from "dompurify";
 import {
   AlertTriangle,
   Check,
@@ -611,6 +612,17 @@ function escapeHtml(value: string): string {
   );
 }
 
+function sanitizeListingDescription(value: string): string {
+  return DOMPurify.sanitize(value, {
+    ALLOWED_TAGS: [
+      "h1", "h2", "h3", "h4", "h5", "h6", "p", "ul", "ol", "li",
+      "blockquote", "strong", "b", "em", "i", "u", "a", "br", "hr",
+      "span", "div", "table", "tr", "td", "th", "tbody", "thead",
+    ],
+    ALLOWED_ATTR: ["style", "href", "target", "rel", "class"],
+  });
+}
+
 function openBrowserAssist({
   source,
   channel,
@@ -805,6 +817,7 @@ export default function CrossListingPage() {
   const [reviewId, setReviewId] = useState<string | null>(null);
   const [draftTitle, setDraftTitle] = useState("");
   const [draftDescription, setDraftDescription] = useState("");
+  const [editingDescriptionSource, setEditingDescriptionSource] = useState(false);
   const [draftPrice, setDraftPrice] = useState("");
   const [publishing, setPublishing] = useState(false);
   const [progressJobs, setProgressJobs] = useState<ProgressJob[]>([]);
@@ -1186,6 +1199,7 @@ export default function CrossListingPage() {
     setReviewId(item.id);
     setDraftTitle(item.listing.title);
     setDraftDescription(item.listing.description);
+    setEditingDescriptionSource(false);
     setDraftPrice(item.listing.price == null ? "" : String(item.listing.price));
   };
   const saveReview = () => {
@@ -2081,29 +2095,39 @@ export default function CrossListingPage() {
                 />
               </label>
             </div>
-            <label className="mt-2 block text-xs text-slate-400">
-              Description
-              <textarea
-                value={draftDescription}
-                onChange={(event) => setDraftDescription(event.target.value)}
-                rows={8}
-                className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm leading-6 text-slate-200 outline-none focus:border-emerald-400/60"
-              />
-              <span className="mt-1 block text-right text-[10px] text-slate-500">
-                {draftDescription.length} characters
-              </span>
-            </label>
-            <div className="mt-4 rounded-lg border border-slate-700/80 bg-white p-4 text-sm text-slate-900">
-              <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Rendered listing HTML
+            <div className="mt-2">
+              <div className="flex items-center justify-between gap-3 text-xs text-slate-400">
+                <span>{editingDescriptionSource ? "Description HTML source" : "Compiled description"}</span>
+                <button
+                  type="button"
+                  onClick={() => setEditingDescriptionSource((current) => !current)}
+                  className="rounded border border-slate-600 px-2 py-1 text-[10px] text-slate-300 hover:border-emerald-400/60 hover:text-emerald-300"
+                >
+                  {editingDescriptionSource ? "Preview description" : "Edit HTML source"}
+                </button>
               </div>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: `<h1>${escapeHtml(
-                    draftTitle
-                  )}</h1>${draftDescription}`,
-                }}
-              />
+              {editingDescriptionSource ? (
+                <>
+                  <textarea
+                    value={draftDescription}
+                    onChange={(event) => setDraftDescription(event.target.value)}
+                    rows={8}
+                    className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm leading-6 text-slate-200 outline-none focus:border-emerald-400/60"
+                  />
+                  <span className="mt-1 block text-right text-[10px] text-slate-500">
+                    {draftDescription.length} characters
+                  </span>
+                </>
+              ) : (
+                <div className="mt-1 rounded-lg border border-slate-700/80 bg-white p-4 text-sm text-slate-900">
+                  <h1 className="mb-4 text-xl font-semibold">{draftTitle}</h1>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: sanitizeListingDescription(draftDescription),
+                    }}
+                  />
+                </div>
+              )}
             </div>
             <div className="mt-4 rounded-lg border border-slate-700/80 bg-slate-900/50 p-3">
               <div className="mb-2 text-xs uppercase tracking-wider text-slate-500">
