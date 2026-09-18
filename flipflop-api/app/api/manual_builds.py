@@ -2003,8 +2003,8 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
         )
 
     # Get image URLs from build photos (already public URLs)
-    image_urls = []
-    if build.photos:
+    image_urls = list(body.images or [])
+    if not image_urls and build.photos:
         for photo in build.photos:
             # Photo is stored as {"url": "https://www.theflipflop.shop/api/uploads/...", "kind": "photo"}
             photo_url = photo.get("url") if isinstance(photo, dict) else photo

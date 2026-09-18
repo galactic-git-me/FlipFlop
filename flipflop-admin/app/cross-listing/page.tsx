@@ -57,6 +57,32 @@ type GroupedListing = {
   byChannel: Partial<Record<CrossListingChannel, CrossListingSource>>;
 };
 
+type ImageSelectionRequest = {
+  item: CrossListingSource;
+  capability: ChannelCapability;
+};
+
+function imageSelectionKey(buildId: number, channel: CrossListingChannel) {
+  return `${buildId}:${channel}`;
+}
+
+function listingWithImages(item: CrossListingSource, imageUrls: string[]) {
+  const images = imageUrls
+    .map((url, order) => {
+      const image = item.listing.images.find((candidate) => candidate.url === url);
+      return image ? { ...image, order } : null;
+    })
+    .filter((image): image is NonNullable<typeof image> => Boolean(image));
+  return {
+    ...item,
+    imageUrl: imageUrls[0] ?? item.imageUrl,
+    listing: {
+      ...item.listing,
+      images,
+    },
+  };
+}
+
 function groupListings(sources: CrossListingSource[]): GroupedListing[] {
   const groups = new Map<string, GroupedListing>();
   sources.forEach((source) => {
@@ -667,8 +693,13 @@ function openBrowserAssist({
     collectionAllowed: false as const,
     pickupAllowed: false as const,
   };
+  const selectedImageUrls = new Set(listing.images.map((image) => image.url));
   const assets = (build?.photos ?? [])
-    .filter((photo) => photo.url)
+    .filter(
+      (photo) =>
+        photo.url &&
+        (photo.kind !== "photo" || selectedImageUrls.has(photo.url))
+    )
     .map((photo) => ({ kind: photo.kind, url: photo.url }));
   const model3d = build?.model_3d_url
     ? { kind: "3d_model", url: build.model_3d_url }
@@ -853,6 +884,13 @@ export default function CrossListingPage() {
   const [publishing, setPublishing] = useState(false);
   const [progressJobs, setProgressJobs] = useState<ProgressJob[]>([]);
   const [results, setResults] = useState<ListingResult[]>([]);
+  const [imageSelectionRequests, setImageSelectionRequests] = useState<
+    ImageSelectionRequest[]
+  >([]);
+  const [imageSelectionIndex, setImageSelectionIndex] = useState(0);
+  const [imageSelectionDraft, setImageSelectionDraft] = useState<string[]>([]);
+  const [imageSelectionMain, setImageSelectionMain] = useState("");
+  const [imageSelections, setImageSelections] = useState<Record<string, string[]>>({});
   const [actions, setActions] = useState<
     Awaited<ReturnType<typeof api.crossListing.actions>>
   >([]);
@@ -1320,7 +1358,36 @@ export default function CrossListingPage() {
     }
   };
 
-  const publish = async () => {
+  const publish = () => {
+    if (!selectedItems.length || !destinations.length) return;
+    const requests = selectedItems.flatMap((item) =>
+      destinations.flatMap((destination) => {
+        const capability = channelCapabilities.find(
+          (entry) => entry.channel === destination
+        );
+        return capability &&
+          capability.maxImages !== null &&
+          item.listing.images.length > capability.maxImages
+          ? [{ item, capability }]
+          : [];
+      })
+    );
+    if (!requests.length) {
+      void executePublish({});
+      return;
+    }
+    const first = requests[0];
+    const initialUrls = first.item.listing.images
+      .map((image) => image.url)
+      .slice(0, first.capability.maxImages ?? undefined);
+    setImageSelectionRequests(requests);
+    setImageSelectionIndex(0);
+    setImageSelectionDraft(initialUrls);
+    setImageSelectionMain(initialUrls[0] ?? "");
+    setImageSelections({});
+  };
+
+  const executePublish = async (selectedImageMap: Record<string, string[]> = {}) => {
     if (!selectedItems.length || !destinations.length) return;
     setPublishing(true);
     setResults([]);
@@ -1356,6 +1423,12 @@ export default function CrossListingPage() {
           (entry) => entry.channel === destination
         );
         if (!capability) continue;
+        const imageUrls =
+          selectedImageMap[imageSelectionKey(item.buildId, destination)] ??
+          item.listing.images
+            .map((image) => image.url)
+            .slice(0, capability.maxImages ?? undefined);
+        const channelItem = listingWithImages(item, imageUrls);
         setProgressJobs((current) =>
           current.map((job) =>
             job.buildId === item.buildId && job.channel === capability.label
@@ -1377,7 +1450,7 @@ export default function CrossListingPage() {
               channel: capability.label,
               status: "published",
               message: `${capability.label} fake listing created for development. No external marketplace was contacted.`,
-              url: devListingUrl(item, capability),
+              url: devListingUrl(channelItem, capability),
             });
           } else {
             addResult({
@@ -1386,7 +1459,7 @@ export default function CrossListingPage() {
               status: "manual_action_required",
               message: `${capability.note} Use browser assist to have Codex create the listing with the complete payload and media assets.`,
               assist: {
-                source: item,
+                source: channelItem,
                 channel: capability,
                 build: builds[item.buildId],
               },
@@ -1401,6 +1474,7 @@ export default function CrossListingPage() {
               price: item.listing.price ?? 0,
               condition: item.listing.condition,
               publish: true,
+              images: channelItem.listing.images.map((image) => image.url),
             });
             addResult({
               buildId: item.buildId,
@@ -1412,15 +1486,15 @@ export default function CrossListingPage() {
               url: result.url,
             });
           } else if (destination === "amazon") {
-            const result = await api.crossListing.publishAmazon(item.buildId, {
-              title: item.listing.title,
-              description: item.listing.description,
-              bullet_points: item.listing.bulletPoints,
-              price: item.listing.price ?? 0,
-              quantity: item.listing.quantity,
-              condition: item.listing.condition,
-              images: item.listing.images.map((image) => image.url),
-              sku: item.listing.sku,
+            const result = await api.crossListing.publishAmazon(channelItem.buildId, {
+              title: channelItem.listing.title,
+              description: channelItem.listing.description,
+              bullet_points: channelItem.listing.bulletPoints,
+              price: channelItem.listing.price ?? 0,
+              quantity: channelItem.listing.quantity,
+              condition: channelItem.listing.condition,
+              images: channelItem.listing.images.map((image) => image.url),
+              sku: channelItem.listing.sku,
             });
             addResult({
               buildId: item.buildId,
@@ -1475,8 +1549,151 @@ export default function CrossListingPage() {
     await refresh();
   };
 
+  const imageSelectionRequest = imageSelectionRequests[imageSelectionIndex];
+  const finishImageSelection = () => {
+    if (!imageSelectionRequest || !imageSelectionMain) return;
+    const orderedUrls = [
+      imageSelectionMain,
+      ...imageSelectionDraft.filter((url) => url !== imageSelectionMain),
+    ];
+    const nextSelections = {
+      ...imageSelections,
+      [imageSelectionKey(
+        imageSelectionRequest.item.buildId,
+        imageSelectionRequest.capability.channel
+      )]: orderedUrls,
+    };
+    const nextIndex = imageSelectionIndex + 1;
+    if (nextIndex < imageSelectionRequests.length) {
+      const nextRequest = imageSelectionRequests[nextIndex];
+      const nextUrls = nextRequest.item.listing.images
+        .map((image) => image.url)
+        .slice(0, nextRequest.capability.maxImages ?? undefined);
+      setImageSelections(nextSelections);
+      setImageSelectionIndex(nextIndex);
+      setImageSelectionDraft(nextUrls);
+      setImageSelectionMain(nextUrls[0] ?? "");
+      return;
+    }
+    setImageSelectionRequests([]);
+    setImageSelectionIndex(0);
+    setImageSelectionDraft([]);
+    setImageSelectionMain("");
+    setImageSelections({});
+    void executePublish(nextSelections);
+  };
+
+  const cancelImageSelection = () => {
+    setImageSelectionRequests([]);
+    setImageSelectionIndex(0);
+    setImageSelectionDraft([]);
+    setImageSelectionMain("");
+    setImageSelections({});
+  };
+
   return (
     <div className="mx-auto min-h-full max-w-[1500px] space-y-5 p-4 md:p-6 lg:p-8">
+      {imageSelectionRequest && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Choose listing images"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm"
+        >
+          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-xl border border-emerald-400/30 bg-[#0e1724] p-5 shadow-2xl">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.18em] text-emerald-300">
+                  Image selection {imageSelectionIndex + 1} of {imageSelectionRequests.length}
+                </p>
+                <h2 className="mt-1 text-xl font-semibold text-white">
+                  Choose images for {imageSelectionRequest.capability.label}
+                </h2>
+                <p className="mt-1 text-sm text-slate-400">
+                  Build {imageSelectionRequest.item.buildId} has {imageSelectionRequest.item.listing.images.length} images, but this channel allows {imageSelectionRequest.capability.maxImages}. Choose one main image and up to {Math.max(0, (imageSelectionRequest.capability.maxImages ?? 1) - 1)} additional images.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={cancelImageSelection}
+                className="cursor-pointer rounded p-1 text-slate-400 hover:bg-slate-800 hover:text-white"
+                aria-label="Cancel image selection"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+              {imageSelectionRequest.item.listing.images.map((image, index) => {
+                const selected = imageSelectionDraft.includes(image.url);
+                const main = imageSelectionMain === image.url;
+                return (
+                  <div
+                    key={image.url}
+                    className={`overflow-hidden rounded-lg border ${
+                      main
+                        ? "border-emerald-300 ring-2 ring-emerald-300/40"
+                        : selected
+                        ? "border-sky-300/70"
+                        : "border-slate-700"
+                    } bg-slate-900/70`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (selected) {
+                          const next = imageSelectionDraft.filter((url) => url !== image.url);
+                          setImageSelectionDraft(next);
+                          if (main) setImageSelectionMain(next[0] ?? "");
+                        } else if (
+                          imageSelectionDraft.length < (imageSelectionRequest.capability.maxImages ?? 0)
+                        ) {
+                          setImageSelectionDraft([...imageSelectionDraft, image.url]);
+                          if (!imageSelectionMain) setImageSelectionMain(image.url);
+                        }
+                      }}
+                      className="block w-full cursor-pointer"
+                      aria-pressed={selected}
+                    >
+                      <img src={image.url} alt={image.alt} className="aspect-square w-full object-cover" />
+                      <span className="flex items-center justify-between px-2 py-1.5 text-left text-[11px] text-slate-300">
+                        <span>{selected ? "Selected" : `Photo ${index + 1}`}</span>
+                        {main && <span className="text-emerald-300">Main</span>}
+                      </span>
+                    </button>
+                    {selected && !main && (
+                      <button
+                        type="button"
+                        onClick={() => setImageSelectionMain(image.url)}
+                        className="w-full cursor-pointer border-t border-slate-700 px-2 py-1 text-[10px] text-sky-300 hover:bg-sky-400/10"
+                      >
+                        Make main image
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="mt-5 flex items-center justify-between gap-3 border-t border-slate-800 pt-4">
+              <span className="text-xs text-slate-400">
+                {imageSelectionDraft.length} / {imageSelectionRequest.capability.maxImages} selected
+              </span>
+              <div className="flex gap-2">
+                <button type="button" onClick={cancelImageSelection} className="cursor-pointer rounded-md border border-slate-600 px-3 py-2 text-sm text-slate-300 hover:bg-slate-800">
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={finishImageSelection}
+                  disabled={!imageSelectionMain}
+                  className="cursor-pointer rounded-md bg-emerald-400 px-3 py-2 text-sm font-semibold text-slate-950 hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {imageSelectionIndex + 1 < imageSelectionRequests.length ? "Next channel" : "Continue cross-listing"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {publishing && progressJobs.length > 0 && (
         <div
           role="dialog"

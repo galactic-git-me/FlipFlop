@@ -185,6 +185,7 @@ class PostToEbayRequest(BaseModel):
     price: float
     condition: str = "USED_EXCELLENT"
     publish: bool = True
+    images: Optional[list[str]] = None
 
 
 class PostToEbayResult(BaseModel):

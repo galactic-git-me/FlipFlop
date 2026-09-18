@@ -69,6 +69,8 @@ export interface CrossListingSource {
 export interface ChannelCapability {
   channel: CrossListingChannel;
   label: string;
+  /** Maximum number of listing images, including the main image. Null means no channel limit is configured. */
+  maxImages: number | null;
   mode: "api" | "manual" | "not_connected" | "requires_approval";
   connected: boolean;
   canPublish: boolean;
@@ -224,6 +226,7 @@ export function capabilities(
     {
       channel: "ebay_uk",
       label: "eBay UK",
+      maxImages: 24,
       mode: ebayConnected ? "api" : "not_connected",
       connected: ebayConnected,
       canPublish: ebayConnected,
@@ -238,6 +241,7 @@ export function capabilities(
     {
       channel: "flipflop_shop",
       label: "FlipFlop.shop",
+      maxImages: null,
       mode: "api",
       connected: true,
       canPublish: true,
@@ -249,6 +253,7 @@ export function capabilities(
     {
       channel: "onbuy",
       label: "OnBuy",
+      maxImages: 12,
       mode: "manual",
       connected: false,
       canPublish: false,
@@ -260,6 +265,7 @@ export function capabilities(
     {
       channel: "amazon",
       label: "Amazon",
+      maxImages: 10,
       mode: amazonConnected ? "api" : "requires_approval",
       connected: amazonConnected,
       canPublish: amazonConnected,
@@ -275,6 +281,7 @@ export function capabilities(
     {
       channel: "facebook_catalog",
       label: "Facebook catalog",
+      maxImages: 10,
       mode: "manual",
       connected: false,
       canPublish: false,
@@ -286,6 +293,7 @@ export function capabilities(
     {
       channel: "vinted",
       label: "Vinted",
+      maxImages: 20,
       mode: "manual",
       connected: false,
       canPublish: false,

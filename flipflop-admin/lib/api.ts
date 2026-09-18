@@ -1224,7 +1224,7 @@ export const api = {
       }),
     postToEbay: (
       id: number,
-      data: { price: number; condition: string; publish?: boolean }
+      data: { price: number; condition: string; publish?: boolean; images?: string[] }
     ) =>
       request<{
         success: boolean;
