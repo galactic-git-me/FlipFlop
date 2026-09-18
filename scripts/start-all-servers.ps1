@@ -700,19 +700,32 @@ $frontendApiUrl = if ($LocalBackend) { "http://localhost:4311" } else { "https:/
 # settings explicit because the read and write APIs use different credentials.
 $ebayEnvironment = "production"
 $ebayListingEnvironment = if ($runMode -eq "development") { "sandbox" } else { "production" }
+# Amazon SP-API follows the same safety boundary as listing writes. Keep the
+# values explicit in each child process so a production value in .env cannot
+# accidentally leak into a sandbox development run (or vice versa).
+$amazonEnvironment = if ($runMode -eq "development") { "sandbox" } else { "production" }
+$amazonEndpoint = if ($amazonEnvironment -eq "sandbox") {
+    "https://sandbox.sellingpartnerapi-eu.amazon.com"
+} else {
+    "https://sellingpartnerapi-eu.amazon.com"
+}
 # The startup mode is the source of truth for listing writes. Set this in the
 # launcher process as well as on the backend command so every child process
 # sees the same safety boundary. Do not read this from .env.local.
 $env:FLIPFLOP_RUNTIME_ENV = $runMode
 $env:EBAY_ENVIRONMENT = $ebayEnvironment
 $env:EBAY_LISTING_ENVIRONMENT = $ebayListingEnvironment
+$env:AMAZON_SP_API_ENVIRONMENT = $amazonEnvironment
+$env:AMAZON_SP_API_ENDPOINT = $amazonEndpoint
 Write-Host "[eBay] Sourcing environment: $ebayEnvironment"
 Write-Host "[eBay] Listing environment: $ebayListingEnvironment" -ForegroundColor $(if ($runMode -eq "development") { "Yellow" } else { "Green" })
+Write-Host "[Amazon] SP-API environment: $amazonEnvironment" -ForegroundColor $(if ($amazonEnvironment -eq "sandbox") { "Yellow" } else { "Green" })
+Write-Host "[Amazon] SP-API endpoint: $amazonEndpoint" -ForegroundColor Gray
 Write-Host ""
 $servers = @(
     @{
         name     = "backend"
-        cmdArgs  = @("/c", "cd flipflop-api && set FLIPFLOP_RUNTIME_ENV=$runMode && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set EBAY_ENVIRONMENT=$ebayEnvironment && set EBAY_LISTING_ENVIRONMENT=$ebayListingEnvironment && set ADMIN_FRONTEND_URL=http://localhost:4312 && set FRONTEND_URL=http://localhost:4313 && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4311")
+        cmdArgs  = @("/c", "cd flipflop-api && set FLIPFLOP_RUNTIME_ENV=$runMode && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set EBAY_ENVIRONMENT=$ebayEnvironment && set EBAY_LISTING_ENVIRONMENT=$ebayListingEnvironment && set AMAZON_SP_API_ENVIRONMENT=$amazonEnvironment && set AMAZON_SP_API_ENDPOINT=$amazonEndpoint && set ADMIN_FRONTEND_URL=http://localhost:4312 && set FRONTEND_URL=http://localhost:4313 && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4311")
         port     = 4311
         color    = "Yellow"
         skip     = $NoBackend -or (-not $LocalBackend)
@@ -728,7 +741,7 @@ $servers = @(
     },
     @{
         name     = "admin"
-        cmdArgs  = @("/c", "cd flipflop-admin && set ""NODE_ENV=development"" && set ""BACKEND_URL=$adminApiUrl"" && set ""NEXT_PUBLIC_API_URL=$adminApiUrl"" && set ""NEXT_PUBLIC_FLIPFLOP_ENV=$runMode"" && set ""EBAY_OPS_BACKEND_URL=$adminApiUrl"" && set ""GEMRADAR_URL=$adminGemRadarUrl"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4312 -H 0.0.0.0")
+        cmdArgs  = @("/c", "cd flipflop-admin && set ""NODE_ENV=development"" && set ""BACKEND_URL=$adminApiUrl"" && set ""NEXT_PUBLIC_API_URL=$adminApiUrl"" && set ""NEXT_PUBLIC_FLIPFLOP_ENV=$runMode"" && set ""AMAZON_SP_API_ENVIRONMENT=$amazonEnvironment"" && set ""AMAZON_SP_API_ENDPOINT=$amazonEndpoint"" && set ""EBAY_OPS_BACKEND_URL=$adminApiUrl"" && set ""GEMRADAR_URL=$adminGemRadarUrl"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4312 -H 0.0.0.0")
         port     = 4312
         color    = "Green"
         skip     = $NoAdmin
