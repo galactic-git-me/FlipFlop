@@ -204,6 +204,9 @@ class Settings(BaseSettings):
     smtp_user: str = ""
     smtp_pass: str = ""
     smtp_from: str = "noreply@flipflop.co.uk"
+    # In development, every outbound email is redirected here so real
+    # customer addresses are never contacted while testing email flows.
+    email_sandbox_recipient: str = ""
 
     # Email monitor (IMAP)
     imap_host: str = ""
