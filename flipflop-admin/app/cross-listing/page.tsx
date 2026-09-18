@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { api, type ManualBuild } from "@/lib/api";
 import { RailButton } from "@/components/builds/CommandPanel";
+import { Build3DViewer } from "@/components/builds/Build3DViewer";
 import {
   capabilities,
   sourcesFromBuild,
@@ -132,6 +133,24 @@ function devStorefrontUrl(buildId: number) {
   const base =
     process.env.NEXT_PUBLIC_STOREFRONT_DEV_URL || "http://localhost:4313";
   return `${base.replace(/\/$/, "")}/builds/${buildId}`;
+}
+
+function displayMediaUrl(url: string): string {
+  const buildUploadMatch = url.match(
+    /^https?:\/\/(?:www\.)?theflipflop\.shop\/api\/uploads\/manual_builds\/([^/]+)\/(.+)$/
+  );
+  if (buildUploadMatch) {
+    return `/proxy-api/uploads/manual_builds/${buildUploadMatch[1]}/${buildUploadMatch[2]}`;
+  }
+  if (url.startsWith("/api/uploads/manual_builds/")) {
+    return `/proxy-api${url}`;
+  }
+  const modelUploadMatch = url.match(
+    /^https?:\/\/(?:www\.)?theflipflop\.shop\/api\/uploads\/models\/(.+)$/
+  );
+  if (modelUploadMatch) return `/proxy-api/uploads/models/${modelUploadMatch[1]}`;
+  if (url.startsWith("/api/builds/")) return `/proxy-api${url}`;
+  return url;
 }
 
 function listingUrlFor(source?: CrossListingSource) {
@@ -1246,6 +1265,11 @@ export default function CrossListingPage() {
       void publish();
   };
 
+  const reviewedBuild = review ? builds[review.buildId] : undefined;
+  const reviewPhotos = reviewedBuild?.photos.filter((photo) => photo.kind === "photo") ??
+    review?.listing.images.map((image) => ({ url: image.url, kind: "photo" as const })) ??
+    [];
+
   const toggleRelist = async (item: GroupedListing) => {
     const enabled = !(relistEnabledByBuild.get(item.buildId) ?? relistPolicy.enabledDefault);
     const channels = tableChannels.filter((channel) => {
@@ -1930,7 +1954,9 @@ export default function CrossListingPage() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <button
-                      onClick={() => openReview(item.primary)}
+                      onClick={() =>
+                        openReview(item.byChannel.flipflop_shop ?? item.primary)
+                      }
                       className="cursor-pointer rounded border border-slate-700 px-2.5 py-1.5 text-xs text-slate-300 transition-colors hover:border-emerald-400/50 hover:text-emerald-300"
                     >
                       Review
@@ -2052,7 +2078,9 @@ export default function CrossListingPage() {
               <div>
                 <div className="text-xs uppercase tracking-wider text-emerald-300">
                   Payload review ·{" "}
-                  {review.source === "ebay_uk" ? "eBay UK" : "FlipFlop.shop"}
+                  {(review.channel ?? review.source) === "ebay_uk"
+                    ? "eBay UK"
+                    : "FlipFlop.shop"}
                 </div>
                 <h2 className="mt-1 text-xl font-semibold text-white">
                   {review.title}
@@ -2069,6 +2097,38 @@ export default function CrossListingPage() {
               >
                 <X className="h-5 w-5" />
               </button>
+            </div>
+            <div className="mt-5 grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
+              <div className="rounded-lg border border-slate-700/80 bg-slate-900/50 p-3">
+                <div className="mb-2 text-xs uppercase tracking-wider text-slate-500">
+                  Listing photos ({reviewPhotos.length})
+                </div>
+                {reviewPhotos.length > 0 ? (
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                    {reviewPhotos.map((photo, index) => (
+                      <img
+                        key={`${photo.url}-${index}`}
+                        src={displayMediaUrl(photo.url)}
+                        alt={`${review.title} photo ${index + 1}`}
+                        className="aspect-square w-full rounded-md border border-slate-700 object-cover"
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="py-8 text-center text-xs text-slate-500">
+                    No listing photos attached.
+                  </p>
+                )}
+              </div>
+              <div>
+                {reviewedBuild?.model_3d_url ? (
+                  <Build3DViewer url={displayMediaUrl(reviewedBuild.model_3d_url)} />
+                ) : (
+                  <div className="flex min-h-[180px] items-center justify-center rounded-lg border border-slate-700/80 bg-slate-900/50 p-4 text-center text-xs text-slate-500">
+                    No 3D model is attached to this build.
+                  </div>
+                )}
+              </div>
             </div>
             <div className="mt-5 grid gap-4 md:grid-cols-2">
               <label className="text-xs text-slate-400">
