@@ -1552,8 +1552,7 @@ export default function CrossListingPage() {
         />
       </div>
 
-      {false && (
-        <>
+      <>
           <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
             {channelCapabilities.map((channel) => {
               const active = destinations.includes(channel.channel);
@@ -1623,7 +1622,8 @@ export default function CrossListingPage() {
             })}
           </section>
 
-          <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4">
+          {false && (
+            <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4">
             <h2 className="flex items-center gap-2 text-sm font-semibold text-white">
               <History className="h-4 w-4 text-emerald-300" /> Recreate action
               log
@@ -1692,9 +1692,9 @@ export default function CrossListingPage() {
                 </p>
               )}
             </div>
-          </section>
-        </>
-      )}
+            </section>
+          )}
+      </>
 
       {warnings.length > 0 && (
         <div className="flex items-start gap-3 rounded-lg border border-yellow-400/30 bg-yellow-400/10 p-3 text-sm text-yellow-100">
