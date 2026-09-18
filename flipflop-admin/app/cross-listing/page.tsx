@@ -129,10 +129,20 @@ function devListingUrl(source: CrossListingSource, channel: ChannelCapability) {
   return `/dev-listings/${channel.channel}/${source.buildId}`;
 }
 
-function devStorefrontUrl(buildId: number) {
+function devStorefrontUrl(productId: number) {
   const base =
     process.env.NEXT_PUBLIC_STOREFRONT_DEV_URL || "http://localhost:4313";
-  return `${base.replace(/\/$/, "")}/builds/${buildId}`;
+  // The storefront product page is keyed by Product.id, not ManualBuild.id.
+  // A manual build can be converted into a different product id when it is
+  // listed, so never construct this URL from the source build id.
+  return `${base.replace(/\/$/, "")}/ready-to-ship/${productId}`;
+}
+
+function storefrontProductUrl(productId: string) {
+  const base = isLocalDevelopment()
+    ? process.env.NEXT_PUBLIC_STOREFRONT_DEV_URL || "http://localhost:4313"
+    : process.env.NEXT_PUBLIC_STOREFRONT_URL || "https://www.theflipflop.shop";
+  return `${base.replace(/\/$/, "")}/ready-to-ship/${encodeURIComponent(productId)}`;
 }
 
 function displayImageUrl(url: string): string {
@@ -144,7 +154,17 @@ function displayImageUrl(url: string): string {
 }
 
 function listingUrlFor(source?: CrossListingSource) {
-  if (!source?.url) return null;
+  if (!source) return null;
+  // FlipFlop.shop listings are persisted with the storefront Product ID in
+  // externalId. Rebuild the canonical product URL so it survives a reload;
+  // the source URL may be absent on older build summaries.
+  if (
+    source.source === "flipflop_shop" &&
+    source.externalId !== "not-created"
+  ) {
+    return storefrontProductUrl(source.externalId);
+  }
+  if (!source.url) return null;
   if (
     source.source === "ebay_uk" &&
     isLocalDevelopment() &&
@@ -1420,7 +1440,7 @@ export default function CrossListingPage() {
                 ? "Listed on the local development storefront. The public storefront was not contacted."
                 : "Linked to the existing storefront product.",
               url: isDevelopmentMode()
-                ? devStorefrontUrl(item.buildId)
+                ? devStorefrontUrl(result.product_id)
                 : result.storefront_url,
             });
           }
