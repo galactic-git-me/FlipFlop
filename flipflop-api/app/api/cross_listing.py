@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import os
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlalchemy import select
@@ -87,6 +88,12 @@ async def amazon_status():
 @router.post("/amazon/publish/{build_id}")
 async def publish_amazon(build_id: int, body: AmazonPublishIn, db: AsyncSession = Depends(get_db)):
     """Create/update the Amazon listing for a reviewed canonical build."""
+    runtime = os.getenv("FLIPFLOP_RUNTIME_ENV", "development").strip().lower()
+    if runtime not in {"live", "production", "prod"}:
+        raise HTTPException(
+            status_code=409,
+            detail="Amazon listing writes are disabled outside LIVE mode; production catalogue reads remain available.",
+        )
     build = await db.get(ManualBuild, build_id)
     if not build:
         raise HTTPException(status_code=404, detail="Build not found")

@@ -1769,6 +1769,13 @@ async def update_evidence_data(build_id: int, body: UpdateEvidenceDataRequest, d
 @router.patch("/{build_id}/listing-title", response_model=ManualBuildOut)
 async def update_listing_title(build_id: int, body: UpdateListingTitleRequest, db: AsyncSession = Depends(get_db)):
     """Persist the editable title used by every publishing channel."""
+    runtime = os.getenv("FLIPFLOP_RUNTIME_ENV", "development").strip().lower()
+    if runtime not in {"live", "production", "prod"}:
+        raise HTTPException(
+            409,
+            "Parcel2Go booking and payment are disabled outside LIVE mode; delivery quotes remain available.",
+        )
+
     result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
     build = result.scalar_one_or_none()
     if not build:

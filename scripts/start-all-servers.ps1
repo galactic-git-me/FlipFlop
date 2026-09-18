@@ -700,10 +700,10 @@ $frontendApiUrl = if ($LocalBackend) { "http://localhost:4311" } else { "https:/
 # settings explicit because the read and write APIs use different credentials.
 $ebayEnvironment = "production"
 $ebayListingEnvironment = if ($runMode -eq "development") { "sandbox" } else { "production" }
-# Amazon SP-API follows the same safety boundary as listing writes. Keep the
-# values explicit in each child process so a production value in .env cannot
-# accidentally leak into a sandbox development run (or vice versa).
-$amazonEnvironment = if ($runMode -eq "development") { "sandbox" } else { "production" }
+# Amazon remains production in both modes because development needs real
+# catalogue/rank data. The API write endpoint is separately blocked outside
+# LIVE mode, so this does not permit development listing writes.
+$amazonEnvironment = "production"
 $amazonEndpoint = if ($amazonEnvironment -eq "sandbox") {
     "https://sandbox.sellingpartnerapi-eu.amazon.com"
 } else {
