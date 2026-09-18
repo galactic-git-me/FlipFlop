@@ -723,7 +723,7 @@ type RecreateAction = Awaited<
   ReturnType<typeof api.crossListing.actions>
 >[number];
 
-function RecreateActionLog({
+function ActivityLog({
   actions,
   onOpenHandoff,
   onResult,
@@ -735,11 +735,11 @@ function RecreateActionLog({
   return (
     <section className="rounded-xl border border-slate-700/80 bg-[#0b121d]/90 p-4">
       <h2 className="flex items-center gap-2 text-sm font-semibold text-white">
-        <History className="h-4 w-4 text-emerald-300" /> Recreate action log
+        <History className="h-4 w-4 text-emerald-300" /> Activity log
       </h2>
       <p className="mt-1 text-xs text-slate-500">
-        End and recreate attempts are recorded per channel and also emitted as
-        admin notifications.
+        Publishing, handoff, failure and relisting activity is recorded per
+        vendor. Hover-free details are kept here so the table stays compact.
       </p>
       <div className="mt-3 space-y-2">
         {actions.slice(0, 20).map((action) => (
@@ -1719,7 +1719,7 @@ export default function CrossListingPage() {
               ))}
               {actions.length === 0 && (
                 <p className="py-4 text-center text-xs text-slate-500">
-                  No recreate actions recorded yet.
+                  No listing activity recorded yet.
                 </p>
               )}
             </div>
@@ -2054,7 +2054,7 @@ export default function CrossListingPage() {
         </section>
       )}
 
-      <RecreateActionLog
+      <ActivityLog
         actions={actions}
         onOpenHandoff={openScheduledHandoff}
         onResult={(id, success) => void recordCodexResult(id, success)}
