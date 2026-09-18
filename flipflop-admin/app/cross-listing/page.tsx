@@ -136,6 +136,18 @@ function devStorefrontUrl(buildId: number) {
 }
 
 function displayMediaUrl(url: string): string {
+  try {
+    const parsed = new URL(url, "http://localhost");
+    if (parsed.pathname.endsWith("/api/proxy-glb")) {
+      const nestedUrl = parsed.searchParams.get("url");
+      if (nestedUrl) return displayMediaUrl(nestedUrl);
+    }
+    if (parsed.pathname.startsWith("/api/")) {
+      return `/proxy-api${parsed.pathname}${parsed.search}`;
+    }
+  } catch {
+    // Fall through to the simple path checks below.
+  }
   const buildUploadMatch = url.match(
     /^https?:\/\/(?:www\.)?theflipflop\.shop\/api\/uploads\/manual_builds\/([^/]+)\/(.+)$/
   );
@@ -150,6 +162,14 @@ function displayMediaUrl(url: string): string {
   );
   if (modelUploadMatch) return `/proxy-api/uploads/models/${modelUploadMatch[1]}`;
   if (url.startsWith("/api/builds/")) return `/proxy-api${url}`;
+  return url;
+}
+
+function displayImageUrl(url: string): string {
+  // Public build photos already have browser-loadable URLs. Only rewrite
+  // same-origin API paths; routing absolute image URLs through the GLB/API
+  // proxy can make otherwise valid image links fail.
+  if (url.startsWith("/api/")) return `/proxy-api${url}`;
   return url;
 }
 
@@ -2108,7 +2128,7 @@ export default function CrossListingPage() {
                     {reviewPhotos.map((photo, index) => (
                       <img
                         key={`${photo.url}-${index}`}
-                        src={displayMediaUrl(photo.url)}
+                        src={displayImageUrl(photo.url)}
                         alt={`${review.title} photo ${index + 1}`}
                         className="aspect-square w-full rounded-md border border-slate-700 object-cover"
                       />
