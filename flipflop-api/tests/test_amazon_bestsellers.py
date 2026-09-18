@@ -1,4 +1,5 @@
 from app.services.amazon_bestsellers import (
+    _best_scored_match,
     clean_sales_velocity,
     extract_asin,
     match_row_by_bestseller,
@@ -47,3 +48,40 @@ def test_match_falls_back_to_fuzzy_title():
         rows,
     )
     assert matched is rows[0]
+
+
+def test_component_match_treats_storage_as_ssd():
+    rows = [{
+        "category": "ssd",
+        "cpk": "cpk-1",
+        "title": "Samsung 990 Pro 2TB NVMe SSD",
+        "url": "https://www.ebay.co.uk/itm/123",
+    }]
+    matched = _best_scored_match(
+        {"title": "Samsung 990 Pro 2TB NVMe SSD", "asin": "B0AAAA1111"},
+        rows,
+        "storage",
+    )
+    assert matched is rows[0]
+
+
+def test_component_match_rejects_ambiguous_title_variants():
+    rows = [
+        {
+            "category": "gpu",
+            "cpk": "cpk-1",
+            "title": "NVIDIA GeForce RTX 4070 12GB Gaming OC",
+            "url": "https://www.ebay.co.uk/itm/123",
+        },
+        {
+            "category": "gpu",
+            "cpk": "cpk-2",
+            "title": "NVIDIA GeForce RTX 4070 12GB Gaming XT",
+            "url": "https://www.ebay.co.uk/itm/456",
+        },
+    ]
+    assert _best_scored_match(
+        {"title": "NVIDIA GeForce RTX 4070 12GB Gaming", "asin": "B0AAAA1111"},
+        rows,
+        "gpu",
+    ) is None
