@@ -302,7 +302,21 @@ async def scrape_amazon_bestsellers() -> dict:
 
 def _best_scored_match(item: dict, rows: list[dict], category: str) -> dict | None:
     """Match an Amazon product to the strongest current CPK row."""
-    candidates = [row for row in rows if (row["category"] or "").lower() == category]
+    # The identity/scoring pipeline calls SSDs ``ssd`` and coolers ``cooler``;
+    # the Amazon bestseller list configuration historically used the broader
+    # ``storage``/``cooling`` labels.  Treat those as aliases or the whole
+    # bestseller list is scraped successfully but never attached to a CPK.
+    category_aliases = {
+        "storage": {"storage", "ssd"},
+        "ssd": {"storage", "ssd"},
+        "cooler": {"cooler", "cooling"},
+        "cooling": {"cooler", "cooling"},
+    }
+    accepted_categories = category_aliases.get(category, {category})
+    candidates = [
+        row for row in rows
+        if (row["category"] or "").lower() in accepted_categories
+    ]
     asin = (item.get("asin") or "").upper()
     for row in candidates:
         if asin and asin in (row["url"] or "").upper():
