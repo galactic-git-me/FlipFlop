@@ -13,7 +13,9 @@ const allowedOrigins = [
 // In Docker the backend is reachable at http://backend:8000.
 // In local dev it falls back to localhost:4311.
 const backendUrl = process.env.BACKEND_URL ?? "http://localhost:4311";
-const gemradarUrl = process.env.GEMRADAR_URL ?? "http://localhost:18000";
+// Gem Radar is mounted in the main API for local development. Deployments
+// that run it as a separate service can continue to provide GEMRADAR_URL.
+const gemradarUrl = process.env.GEMRADAR_URL ?? backendUrl;
 const ebayOpsBackendUrl = (process.env.EBAY_OPS_BACKEND_URL ?? backendUrl).replace(/\/$/, "");
 
 const nextConfig: NextConfig = {

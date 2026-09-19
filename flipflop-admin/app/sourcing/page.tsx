@@ -434,6 +434,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
   const [queueItems, setQueueItems] = useState<QueueItem[]>([]);
   const [clientElapsed, setClientElapsed] = useState(0);
   const [displayedScans, setDisplayedScans] = useState<ScanProgress[]>([]);
+  const [latestRun, setLatestRun] = useState<ScanRunHistory | null>(null);
   const [scanLock, setScanLock] = useState<PipelineStatusResponse["scanLock"]>(undefined);
   const lastLiveStatus = useRef<PipelineStatusResponse | null>(null);
   const lastLiveAt = useRef(0);
@@ -447,6 +448,29 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
     avgGemScore: 0,
     avgSuperGemScore: 0,
   });
+
+  useEffect(() => {
+    let cancelled = false;
+    const fetchLatestRun = async () => {
+      try {
+        const response = await fetch("/api/gem-radar/scan-run-history?limit=1&basis=processed", {
+          cache: "no-store",
+        });
+        if (!response.ok) return;
+        const runs = (await response.json()) as ScanRunHistory[];
+        if (!cancelled) setLatestRun(runs[0] ?? null);
+      } catch {
+        // The live scan panel remains useful if historical metadata is unavailable.
+      }
+    };
+
+    fetchLatestRun();
+    const interval = window.setInterval(fetchLatestRun, 30_000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -677,13 +701,13 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
   const avgSuperGemScore = status?.avgSuperGemScore ?? 0;
   const avgGemScore = status?.avgGemScore ?? 0;
   const hasActiveRun = displayedScans.length > 0 || Boolean(status?.activeScans?.length);
-  const displayedListingCount = hasActiveRun ? (status?.totalsAcrossActive.ingestedCount ?? 0) : (marketSnapshot?.ingestedCount ?? 0);
-  const displayedSuperGemCount = hasActiveRun ? superGemCount : (marketSnapshot?.superGemCount ?? 0);
-  const displayedAvgSuperGemScore = hasActiveRun ? avgSuperGemScore : (marketSnapshot?.avgSuperGemScore ?? 0);
-  const displayedGemCount = hasActiveRun ? gemCount : (marketSnapshot?.gemCount ?? 0);
-  const displayedAvgGemScore = hasActiveRun ? avgGemScore : (marketSnapshot?.avgGemScore ?? 0);
-  const displayedBinPricesCount = hasActiveRun ? (status?.binPricesCount ?? 0) : (marketSnapshot?.binPricesCount ?? 0);
-  const displayedSoldPricesCount = hasActiveRun ? (status?.soldPricesCount ?? 0) : (marketSnapshot?.soldPricesCount ?? 0);
+  const displayedListingCount = hasActiveRun ? (status?.totalsAcrossActive.ingestedCount ?? 0) : 0;
+  const displayedSuperGemCount = hasActiveRun ? superGemCount : 0;
+  const displayedAvgSuperGemScore = hasActiveRun ? avgSuperGemScore : 0;
+  const displayedGemCount = hasActiveRun ? gemCount : 0;
+  const displayedAvgGemScore = hasActiveRun ? avgGemScore : 0;
+  const displayedBinPricesCount = hasActiveRun ? (status?.binPricesCount ?? 0) : 0;
+  const displayedSoldPricesCount = hasActiveRun ? (status?.soldPricesCount ?? 0) : 0;
 
   return (
     <div className="mb-6 p-4 rounded-lg glass-panel">
@@ -691,7 +715,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <div className="w-64 shrink-0">
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold text-white">{hasActiveRun ? "Current Scan Run" : "Latest Market Snapshot"}</h3>
+              <h3 className="text-sm font-semibold text-white">{hasActiveRun ? "Current Scan Run" : "Most Recent Scan Run"}</h3>
               {isRunning && (
                 <div className="inline-flex items-center gap-1 px-2 py-1 rounded bg-blue-950/50 border border-blue-800">
                   <Clock size={12} className="text-blue-400 animate-pulse" />
@@ -700,7 +724,11 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
               )}
             </div>
             <p className="text-xs text-slate-400">
-              {hasActiveRun ? `${displayedScans.length} search${displayedScans.length !== 1 ? "es" : ""} in this run` : "No scan is currently running; showing the latest retained data"}
+              {hasActiveRun
+                ? `${displayedScans.length} search${displayedScans.length !== 1 ? "es" : ""} in this run`
+                : latestRun
+                  ? `${latestRun.runBy} · ${new Date(latestRun.occurredAt).toLocaleString()}`
+                  : "No completed scan run is available"}
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -725,7 +753,20 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
         )}
 
         {displayedScans.length === 0 ? (
-          <p className="text-xs text-slate-500">No scans to display.</p>
+          latestRun ? (
+            <div className="rounded-md border border-slate-700 bg-slate-900/40 px-3 py-3 text-sm text-slate-300">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-medium text-white">{latestRun.searchTerm}</span>
+                <span className="text-xs text-slate-400">{latestRun.totalListingsFound.toLocaleString()} listings</span>
+              </div>
+              <div className="mt-1 text-xs text-slate-400">
+                {latestRun.vendors.length > 0 ? latestRun.vendors.join(", ") : "No vendor details recorded"}
+                {latestRun.durationSeconds > 0 && ` · ${formatElapsedTime(latestRun.durationSeconds)}`}
+              </div>
+            </div>
+          ) : (
+            <p className="text-xs text-slate-500">No completed scan run is available.</p>
+          )
         ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
           {sortScansByDefinitionOrder(coalesceScansBySearchId(displayedScans)).map((scan) => {
