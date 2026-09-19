@@ -782,7 +782,7 @@ app.include_router(gems_router)
 _build_asset_candidates = [
     Path(os.environ["BUILD_ASSETS_DIR"]) if os.environ.get("BUILD_ASSETS_DIR") else None,
     Path("/builds"),
-    _app_dir.parent.parent.parent / "builds",
+    _app_dir.parent / "builds",
     _app_dir.parent.parent / "builds",
 ]
 _builds_dir = next((path for path in _build_asset_candidates if path and path.is_dir()), _app_dir.parent.parent.parent / "builds")

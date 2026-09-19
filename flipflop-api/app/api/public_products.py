@@ -206,6 +206,8 @@ async def public_product_detail(product_id: int, db: AsyncSession = Depends(get_
 
     return {
         **_summary_payload(product),
+        "build_id": product.build.manual_build_id if product.build else product.id,
+        "build_name": manual_build.name if manual_build and manual_build.name else product.title,
         "description": product.description,
         "spec": build_spec,
         "item_specifics": item_specifics,
