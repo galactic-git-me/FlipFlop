@@ -3268,6 +3268,7 @@ async def get_cpk_price_history(
     from app.models.gem_radar_observation import GemRadarListingObservation
     from app.models.gem_radar_listing_cpk import GemRadarListingCpk
     from app.models.gem_radar_scored_listing import GemRadarScoredListing
+    from app.models.gem_radar_sold_observation import GemRadarSoldObservation
     from sqlalchemy import select, desc, func
 
     # Get the listing to find its CPK
@@ -3322,6 +3323,21 @@ async def get_cpk_price_history(
     result = await db.execute(obs_stmt)
     observations = result.fetchall()
 
+    sold_day = func.date_trunc("day", GemRadarSoldObservation.observed_at)
+    sold_stmt = (
+        select(
+            sold_day.label("observed_day"),
+            func.avg(GemRadarSoldObservation.price + GemRadarSoldObservation.postage).label("avg_price"),
+            func.count(GemRadarSoldObservation.id).label("sold_count"),
+        )
+        .where(GemRadarSoldObservation.cpk == cpk)
+        .group_by(sold_day)
+        .order_by(desc(sold_day))
+        .limit(100)
+    )
+    sold_result = await db.execute(sold_stmt)
+    sold_observations = sold_result.fetchall()
+
     return {
         "cpk": cpk,
         "prices": [
@@ -3330,6 +3346,14 @@ async def get_cpk_price_history(
                 "delivered_price": float(obs[1]) if obs[1] else 0,
             }
             for obs in observations
+        ]
+        ,"sold_prices": [
+            {
+                "observed_at": obs[0].isoformat() if obs[0] else None,
+                "delivered_price": float(obs[1]) if obs[1] else 0,
+                "sold_count": int(obs[2]),
+            }
+            for obs in sold_observations
         ]
     }
 

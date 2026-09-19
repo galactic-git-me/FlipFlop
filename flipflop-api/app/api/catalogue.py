@@ -186,7 +186,16 @@ async def list_variants(
     if listing_keys:
         metrics = await db.execute(
             text("""
-                WITH latest_observations AS (
+                WITH cpk_for_listing AS (
+                    SELECT listing_id, cpk
+                    FROM gem_radar_listing_cpk
+                    WHERE listing_id = ANY(:listing_ids)
+                    UNION
+                    SELECT listing_id, cpk
+                    FROM gem_radar_scored_listings
+                    WHERE listing_id = ANY(:listing_ids)
+                      AND cpk IS NOT NULL
+                ), latest_observations AS (
                     SELECT DISTINCT ON (listing_id)
                         listing_id, watch_count, best_offer_enabled
                     FROM gem_radar_listing_observations
@@ -211,7 +220,7 @@ async def list_variants(
                        COUNT(*) FILTER (WHERE o.best_offer_enabled) AS offer_count,
                        COALESCE(MAX(sc.sold_count), 0) AS sold_count,
                        COALESCE(MAX(ac.active_count), 0) AS active_count
-                FROM gem_radar_listing_cpk c
+                FROM cpk_for_listing c
                 JOIN latest_observations o ON o.listing_id = c.listing_id
                 LEFT JOIN sold_counts sc ON sc.cpk = c.cpk
                 LEFT JOIN active_counts ac ON ac.cpk = c.cpk
@@ -235,6 +244,11 @@ async def list_variants(
             SELECT listing_id, cpk
             FROM gem_radar_listing_cpk
             WHERE listing_id = ANY(:listing_ids)
+            UNION
+            SELECT listing_id, cpk
+            FROM gem_radar_scored_listings
+            WHERE listing_id = ANY(:listing_ids)
+              AND cpk IS NOT NULL
         """),
         {"listing_ids": list(listing_keys)},
     ) if listing_keys else []
