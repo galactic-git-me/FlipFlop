@@ -1,5 +1,6 @@
 # FlipFlop Growth Engine — Paid Acquisition PRD
 
+**Parent specification:** `flipflop-growth-engine-mega-prd.md` v1.2  
 **Depends on:** MVP, Campaign Service, Product/Listing Service, Profitability Service, Consent Service, Tracking Service  
 **Release:** Paid Acquisition  
 **Primary outcome:** Launch and measure approved profitable paid campaigns

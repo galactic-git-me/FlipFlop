@@ -1,5 +1,6 @@
 # FlipFlop Growth Engine — Offers and Loyalty PRD
 
+**Parent specification:** `flipflop-growth-engine-mega-prd.md` v1.2  
 **Depends on:** Customer/Account Service, Checkout, Order Service, Profitability Service, Loyalty Service  
 **Release:** Offers and Loyalty  
 **Primary outcome:** Issue and redeem safe, auditable discounts without AI controlling eligibility or balances

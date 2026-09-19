@@ -1,5 +1,6 @@
 # FlipFlop Growth Engine — Analytics and Learning PRD
 
+**Parent specification:** `flipflop-growth-engine-mega-prd.md` v1.2  
 **Depends on:** MVP, Editorial, Newsletter, Offers, Paid Acquisition, Order Service  
 **Release:** Analytics and Learning  
 **Primary outcome:** Turn observed growth activity into clearly labelled attribution, experiments and evidence-backed recommendations

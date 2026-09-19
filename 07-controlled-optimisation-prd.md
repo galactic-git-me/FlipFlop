@@ -1,5 +1,6 @@
 # FlipFlop Growth Engine — Controlled Optimisation PRD
 
+**Parent specification:** `flipflop-growth-engine-mega-prd.md` v1.2  
 **Depends on:** All preceding phase PRDs, Agent Runtime, Approval Service, Analytics and Learning  
 **Release:** Controlled Optimisation  
 **Primary outcome:** Allow limited autonomous recommendations and low-risk actions without giving AI unrestricted control

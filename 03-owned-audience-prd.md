@@ -1,5 +1,6 @@
 # FlipFlop Growth Engine — Owned Audience and Newsletter PRD
 
+**Parent specification:** `flipflop-growth-engine-mega-prd.md` v1.2  
 **Depends on:** Marketing MVP, Editorial Expansion, Consent Service, Customer Service  
 **Release:** Owned Audience  
 **Primary outcome:** Create and send a consent-safe weekly newsletter and lifecycle communications
