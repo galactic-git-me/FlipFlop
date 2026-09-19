@@ -3,6 +3,8 @@ Public Ready-to-Ship product endpoints — no auth required.
 Consumed by the theflipflop.shop storefront /ready-to-ship pages.
 """
 from fastapi import APIRouter, Depends, HTTPException
+from pathlib import Path
+from urllib.parse import quote
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -19,6 +21,39 @@ router = APIRouter(prefix="/public", tags=["public-products"])
 # RESERVED/SOLD/WITHDRAWN/DRAFT must never appear as available — a sold
 # machine must not remain falsely listed.
 _AVAILABLE = (ProductStatus.LISTED,)
+_BUILD_ASSETS_ROOT = Path(__file__).resolve().parents[3] / "builds"
+_IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
+
+
+def _build_asset_pack(build_id: int | None, photos: list | None) -> dict:
+    """Expose the named image groups from the build pack to the storefront."""
+    empty = {"gallery": [], "specifications": [], "performance": []}
+    if not build_id:
+        return empty
+    build_dir = _BUILD_ASSETS_ROOT / f"{build_id:03d}"
+    if not build_dir.is_dir():
+        build_dir = _BUILD_ASSETS_ROOT / str(build_id)
+    if not build_dir.is_dir():
+        return empty
+
+    def url_for(path: Path) -> str:
+        relative = path.relative_to(_BUILD_ASSETS_ROOT).as_posix()
+        return f"/api/builds/{quote(relative, safe='/')}"
+
+    def files_in(folder: str) -> list[Path]:
+        directory = build_dir / folder
+        return sorted((p for p in directory.iterdir() if p.is_file() and p.suffix.lower() in _IMAGE_SUFFIXES), key=lambda p: p.name) if directory.is_dir() else []
+
+    pack = {key: [] for key in empty}
+    photo_rows = photos or []
+    pack["gallery"] = [{"url": row["url"], "title": row.get("title") or "Build photograph"} for row in photo_rows if isinstance(row, dict) and row.get("kind") == "photo" and row.get("url")]
+    if not pack["gallery"]:
+        pack["gallery"] = [{"url": url_for(path), "title": f"Build photograph {index + 1}"} for index, path in enumerate(files_in("Media"))]
+    pack["specifications"] = [{"url": url_for(path), "title": f"Specification card {index + 1}"} for index, path in enumerate(files_in("Specifications"))]
+    performance_titles = ["Overview and rankings", "Measured results and gaming estimates", "Productivity and system health", "Performance summary"]
+    performance_files = files_in("Performance")
+    pack["performance"] = [{"url": url_for(path), "title": f"Performance card {index + 1} — {performance_titles[index] if index < len(performance_titles) else path.stem}"} for index, path in enumerate(performance_files)]
+    return pack
 
 
 def _summary_payload(p: Product) -> dict:
@@ -75,6 +110,7 @@ async def public_product_detail(product_id: int, db: AsyncSession = Depends(get_
         raise HTTPException(status_code=404, detail="Product no longer available")
 
     build_spec = None
+    manual_build = None
     item_specifics = product.item_specifics or {}
     platform_category = {
         "id": product.platform_category_id,
@@ -98,6 +134,10 @@ async def public_product_detail(product_id: int, db: AsyncSession = Depends(get_
                     if isinstance(values, list) and any(value is not None for value in values)
                 }
                 platform_category = {"id": "179", "name": "PC Desktops & All-in-Ones"}
+        elif product.build.manual_build_id:
+            manual_build = (
+                await db.execute(select(ManualBuild).where(ManualBuild.id == product.build.manual_build_id))
+            ).scalar_one_or_none()
 
     benchmark = None
     if product.benchmark_report_document_id:
@@ -139,6 +179,7 @@ async def public_product_detail(product_id: int, db: AsyncSession = Depends(get_
         # Measured results only — never presented alongside estimates.
         "benchmark_report": benchmark,
         "twin_3d": twin or ({"optimized_asset_ref": product.model_3d_url, "preview_image_ref": None, "ar_ready": False} if product.model_3d_url else None),
+        "asset_pack": _build_asset_pack(product.build.manual_build_id if product.build else None, manual_build.photos if manual_build else None),
         "customer_policies": {
             "returns": "30-day returns. For a change of mind, the customer pays return postage; faulty or misdescribed goods are returned at FlipFlop's cost. Statutory rights are unaffected.",
             "warranty": "UK statutory consumer rights apply. Any remaining transferable manufacturer warranty is identified with the build; no unsupported manufacturer cover is implied.",
