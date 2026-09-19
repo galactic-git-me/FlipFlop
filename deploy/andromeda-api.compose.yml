@@ -85,7 +85,10 @@ services:
     networks:
       - flipflop-network
     volumes:
-      - ../runtime/builds:/builds
+      # Build GLBs are versioned under the repository's builds/ directory.
+      # Mounting runtime/builds here hid those files inside the container and
+      # made the public /api/builds/... URLs return 404.
+      - ../builds:/builds
       - ../runtime/api-data:/app/data
       - ../runtime/uploads:/app/data/uploads
       - ../runtime/scrapes:/app/scrapes
@@ -140,7 +143,7 @@ services:
     networks:
       - flipflop-network
     volumes:
-      - ../runtime/builds:/builds
+      - ../builds:/builds
       - ../runtime/api-data:/app/data
       - ../runtime/uploads:/app/data/uploads
       - ../runtime/scrapes:/app/scrapes
