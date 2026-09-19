@@ -711,6 +711,11 @@ app.include_router(settings_router.router, prefix="/api")
 app.include_router(debug.router, prefix="/api")
 app.include_router(logs_api.router, prefix="/api")
 app.include_router(playbooks.router, prefix="/api")
+# Keep the dashboard's legacy `/api/admin/orders` handlers ahead of the newer
+# async order-management router.  Both routers expose the same paths; route
+# registration order is therefore part of the API contract used by the admin
+# dashboard and its compatibility tests.
+app.include_router(admin_router)
 app.include_router(orders_router, prefix="")
 app.include_router(orders_admin_router, prefix="")
 app.include_router(drafts_router, prefix="")
@@ -768,7 +773,6 @@ app.include_router(quotes_router, prefix="/api")
 app.include_router(payments_router, prefix="/api")
 app.include_router(webhooks_router, prefix="/api")
 app.include_router(guides_router)
-app.include_router(admin_router)
 app.include_router(gems_router)
 
 # Register after API routers so any future `/api/builds/...` API routes retain
