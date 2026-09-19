@@ -777,9 +777,15 @@ app.include_router(gems_router)
 
 # Register after API routers so any future `/api/builds/...` API routes retain
 # precedence; model files are served from the non-overlapping build asset path.
-# Build-owned assets live beside the application directory. Keep this aligned
-# with manual_builds.py so generated files are served after reloads/deploys.
-_builds_dir = _app_dir.parent.parent / "builds"
+# In Docker the compose file mounts the repository's builds directory at
+# `/builds`; on the Windows checkout it lives beside `flipflop-api`.
+_build_asset_candidates = [
+    Path(os.environ["BUILD_ASSETS_DIR"]) if os.environ.get("BUILD_ASSETS_DIR") else None,
+    Path("/builds"),
+    _app_dir.parent.parent.parent / "builds",
+    _app_dir.parent.parent / "builds",
+]
+_builds_dir = next((path for path in _build_asset_candidates if path and path.is_dir()), _app_dir.parent.parent.parent / "builds")
 _builds_dir.mkdir(parents=True, exist_ok=True)
 app.mount("/api/builds", StaticFiles(directory=str(_builds_dir)), name="build-assets")
 
