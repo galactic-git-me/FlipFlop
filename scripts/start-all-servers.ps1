@@ -38,6 +38,54 @@ function Check-RepositoryForMode([string]$mode) {
     if (-not $branch -or $branch -eq "HEAD") {
         throw "Cannot update FlipFlop automatically while in a detached HEAD state."
     }
+    $expectedBranch = if ($mode -eq "development") {
+        if ($env:FLIPFLOP_DEVELOPMENT_BRANCH) { $env:FLIPFLOP_DEVELOPMENT_BRANCH } else { "dev" }
+    } else {
+        if ($env:FLIPFLOP_PRODUCTION_BRANCH) { $env:FLIPFLOP_PRODUCTION_BRANCH } else { "main" }
+    }
+    if ($branch -ne $expectedBranch) {
+        # Mode selection is also the branch selection. Never switch branches
+        # across local work, because that could hide or overwrite edits that
+        # belong to the other environment.
+        $worktreeChanges = & git -C $projectRoot status --porcelain
+        if ($worktreeChanges) {
+            $changedFiles = ($worktreeChanges -join [Environment]::NewLine)
+            throw @"
+Cannot start in $mode mode.
+
+  Current branch : $branch
+  Required branch: $expectedBranch
+  Reason         : local worktree changes prevent a safe branch switch.
+
+Detected changes:
+$changedFiles
+
+Resolve this before retrying:
+  1. Review the changes:
+       git status --short
+       git diff
+  2. Either commit them, or temporarily stash them:
+       git add -A; git commit -m "Save local changes before starting $mode mode"
+       # or: git stash push --include-untracked -m "Before starting $mode mode"
+  3. Re-run this startup command.
+
+The script did not switch branches, start services, deploy code, or discard any changes.
+"@
+        }
+
+        $localTarget = & git -C $projectRoot show-ref --verify --quiet "refs/heads/$expectedBranch"
+        if ($LASTEXITCODE -ne 0) {
+            throw "Cannot switch to '$expectedBranch': the local branch does not exist. Create it from origin/$expectedBranch first. No code was changed or deployed."
+        }
+
+        Write-Host "[*] Switching checkout from '$branch' to '$expectedBranch' for $mode mode..." -ForegroundColor Yellow
+        & git -C $projectRoot switch $expectedBranch
+        if ($LASTEXITCODE -ne 0) {
+            throw "Unable to switch to '$expectedBranch'. No code was changed or deployed."
+        }
+        Write-Host "[OK] Checkout switched to '$expectedBranch'." -ForegroundColor Green
+        $branch = $expectedBranch
+    }
 
     & git -C $projectRoot fetch --quiet origin $branch
     if ($LASTEXITCODE -ne 0) {
