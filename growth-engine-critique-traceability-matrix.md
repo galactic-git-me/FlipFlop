@@ -57,7 +57,7 @@
 | Organic post promotion implied universal availability | Resolved | Phase requirement | Paid Acquisition PRD §2 requires capability discovery; promotion is available only where the connector supports it. | None beyond connector implementation. |
 | Asset resizing versus generated-media approval unclear | Resolved | Normative requirement | Controlled Optimisation PRD §3 permits resizing approved assets as low risk; new/materially edited media requires review. | Encode mutation classification in Media Service. |
 | Newsletter missed-send behaviour missing | Resolved | Phase requirement | Owned Audience PRD §3 defaults to skip and notify when content is unsuitable or provider unavailable. | Configure holiday calendar and notification destination. |
-| Placeholder thresholds such as £X/Y% | Resolved | Configuration default | Offers/Loyalty PRD §5 and Master §49 use named fields such as `maximum_offer_exposure_gbp` and `maximum_discount_percent`. | Set production values after margin review. |
+| Placeholder discount thresholds | Resolved | Configuration default | Offers/Loyalty PRD §5 and Master §49 use named fields such as `maximum_offer_exposure_gbp` and `maximum_discount_percent`. | Set production values after margin review. |
 | Offer lifecycle did not cover no-code offers | Resolved | Phase requirement | Offers/Loyalty PRD §§2 and 6 separate offer lifecycle, optional voucher code and redemption event. | None. |
 | Campaign parent versus provider campaign unclear | Resolved | Normative requirement | Master §33 defines Growth Campaign as parent and channel/provider executions as children. | Implement foreign-key and reconciliation IDs. |
 | Provenance did not cover every channel | Resolved | Normative requirement | Master §40.2 requires provenance for blog, social, newsletter and paid adverts. | Add validation to each publication path. |
@@ -85,4 +85,3 @@ A clean document proves only that the source is structurally coherent. It does n
 5. Legally approved retention periods.
 6. Versioned OpenAPI contracts and provider fixtures.
 7. Rendered-document review and CI Markdown validation evidence.
-

@@ -2455,7 +2455,7 @@ The canonical profitability API must return `gross_revenue`, `discount_amount`, 
 All PRDs must pass these checks before approval:
 
 - No blank bullets or headings.
-- No placeholder policy values such as `£X`, `Y%`, `TBD` or unresolved question marks in acceptance criteria.
+- No unresolved threshold tokens, temporary placeholders or unresolved question marks in acceptance criteria.
 - Every table has the same number of cells in each row.
 - Every phase has explicit scope, exclusions, dependencies, states, acceptance criteria and launch gate.
 - Every cross-document dependency is present in the registry.
