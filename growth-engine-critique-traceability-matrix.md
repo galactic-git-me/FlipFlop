@@ -1,6 +1,6 @@
 # FlipFlop Growth Engine — Critique Traceability Matrix
 
-**Related documents:** Master Mega-PRD v1.1/v1.2 and phase PRDs 01–07  
+**Related documents:** Master Mega-PRD v1.2 and phase PRDs 01–07  
 **Purpose:** Auditable response to the implementation review
 
 ## Status and evidence definitions
@@ -62,7 +62,7 @@
 | Campaign parent versus provider campaign unclear | Resolved | Normative requirement | Master §33 defines Growth Campaign as parent and channel/provider executions as children. | Implement foreign-key and reconciliation IDs. |
 | Provenance did not cover every channel | Resolved | Normative requirement | Master §40.2 requires provenance for blog, social, newsletter and paid adverts. | Add validation to each publication path. |
 | End-to-end examples appeared to bypass approval | Resolved | Phase requirement | All phase PRDs require approval before external side effects; Controlled Optimisation limits automation by policy. | Test that UI cannot skip approval. |
-| Documents structurally malformed | Still open pending independent rendered verification | Acceptance evidence | Master §52 defines integrity checks. The current source audit finds no blank bullet/heading/placeholder matches, but rendered Markdown and external working copies must still be checked. | Run CI Markdown validation, render each document, repair defects, then change status to Resolved with acceptance evidence. |
+| Documents structurally malformed | Resolved implementation gate | Acceptance evidence | Master §52 defines integrity checks. Rendered validation completed for all nine documents; source checks and table checks passed. This does not imply implementation or test evidence. | Retain the validation checks in CI and re-run them after future document edits. |
 
 ## Current source audit
 
@@ -84,4 +84,3 @@ A clean document proves only that the source is structurally coherent. It does n
 4. Current baselines and final commercial KPIs.
 5. Legally approved retention periods.
 6. Versioned OpenAPI contracts and provider fixtures.
-7. Rendered-document review and CI Markdown validation evidence.
