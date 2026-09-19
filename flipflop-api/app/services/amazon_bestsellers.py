@@ -399,18 +399,6 @@ async def scrape_amazon_component_bestsellers() -> dict:
                             results["scraped"] += 1
                             if match:
                                 results["matched"] += 1
-                                if item.get("rating") is not None or item.get("review_count") is not None:
-                                    # This also backfills the currently-held
-                                    # scored row, so the catalogue updates as
-                                    # soon as the daily bestseller job runs.
-                                    await db.execute(
-                                        update(GemRadarScoredListing)
-                                        .where(GemRadarScoredListing.cpk == match["cpk"])
-                                        .values(
-                                            review_average_rating=item.get("rating"),
-                                            review_count=item.get("review_count"),
-                                        )
-                                    )
                         results["categories"] += 1
                     except Exception as exc:
                         log.warning("bestsellers.category_error", category=category, error=str(exc))

@@ -23,6 +23,7 @@ from app.schemas.catalogue import (
 )
 from app.services.catalogue_service import approve_variant, reject_variant
 from app.services.hardware_performance import enrich_listing_performance, load_benchmark_context
+from app.services.product_reviews import aggregate_cpk_reviews
 from app.routes.admin_auth import get_current_admin
 
 router = APIRouter(prefix="/catalogue", tags=["catalogue"], dependencies=[Depends(get_current_admin)])
@@ -299,30 +300,25 @@ async def list_variants(
             ORDER BY listing_id, scored_at DESC NULLS LAST, id DESC
         """)
     )
-    reviews_by_vendor: dict[tuple[str, str], tuple[float | None, int | None]] = {}
-    for row in cpk_review_result:
-        key = (row.cpk, (row.source or "unknown").lower())
-        current = reviews_by_vendor.get(key)
-        if current is None or (row.review_count or 0) > (current[1] or 0):
-            reviews_by_vendor[key] = (row.review_average_rating, row.review_count)
-
-    reviews_by_cpk: dict[str, tuple[float | None, int | None]] = {}
-    for (cpk, _vendor), (rating, count) in reviews_by_vendor.items():
-        if count is None or count < 0:
-            continue
-        old_rating, old_count = reviews_by_cpk.get(cpk, (None, 0))
-        total_count = (old_count or 0) + count
-        if total_count == 0:
-            reviews_by_cpk[cpk] = (rating if old_rating is None else old_rating, 0)
-        elif rating is not None and old_rating is not None and old_count:
-            reviews_by_cpk[cpk] = (
-                ((old_rating * old_count) + (rating * count)) / total_count,
-                total_count,
-            )
-        elif rating is not None:
-            reviews_by_cpk[cpk] = (rating, total_count)
-        else:
-            reviews_by_cpk[cpk] = (old_rating, total_count)
+    review_observations = [
+        (row.cpk, row.source, row.review_average_rating, row.review_count)
+        for row in cpk_review_result
+    ]
+    amazon_review_result = await db.execute(
+        text("""
+            SELECT DISTINCT ON (cpk)
+                   cpk, rating, review_count
+            FROM amazon_bestseller_observations
+            WHERE cpk IS NOT NULL
+              AND (rating IS NOT NULL OR review_count IS NOT NULL)
+            ORDER BY cpk, captured_at DESC, id DESC
+        """)
+    )
+    review_observations.extend(
+        (row.cpk, "amazon", row.rating, row.review_count)
+        for row in amazon_review_result
+    )
+    reviews_by_cpk = aggregate_cpk_reviews(review_observations)
 
     bestseller_result = await db.execute(
         text("""
