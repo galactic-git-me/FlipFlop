@@ -247,18 +247,22 @@ async def upsert_listing_price(
             FROM (
                 SELECT price FROM gem_radar_cpk_listing_price
                 WHERE cpk = :cpk
+                  AND price > 0
                   AND updated_at >= CURRENT_TIMESTAMP - INTERVAL '{MARKET_PRICE_WINDOW_DAYS} days'
                 UNION ALL
-                SELECT price FROM gem_radar_sold_observations
+                SELECT price + COALESCE(postage, 0) FROM gem_radar_sold_observations
                 WHERE cpk = :cpk
+                  AND price > 0
                   AND observed_at >= CURRENT_TIMESTAMP - INTERVAL '{MARKET_PRICE_WINDOW_DAYS} days'
                 UNION ALL
                 SELECT price FROM gem_radar_amazon_observations
                 WHERE cpk = :cpk
+                  AND price > 0
                   AND observed_at >= CURRENT_TIMESTAMP - INTERVAL '{MARKET_PRICE_WINDOW_DAYS} days'
                 UNION ALL
                 SELECT price FROM gem_radar_scan_observation
                 WHERE cpk = :cpk
+                  AND price > 0
                   AND observed_at >= CURRENT_TIMESTAMP - INTERVAL '{MARKET_PRICE_WINDOW_DAYS} days'
             ) AS all_prices
             """
@@ -324,18 +328,22 @@ async def get_market_price(db: AsyncSession, cpk: str) -> CPKMarketPrice | None:
             FROM (
                 SELECT price FROM gem_radar_cpk_listing_price
                 WHERE cpk = :cpk
+                  AND price > 0
                   AND updated_at >= CURRENT_TIMESTAMP - INTERVAL '{MARKET_PRICE_WINDOW_DAYS} days'
                 UNION ALL
-                SELECT price FROM gem_radar_sold_observations
+                SELECT price + COALESCE(postage, 0) FROM gem_radar_sold_observations
                 WHERE cpk = :cpk
+                  AND price > 0
                   AND observed_at >= CURRENT_TIMESTAMP - INTERVAL '{MARKET_PRICE_WINDOW_DAYS} days'
                 UNION ALL
                 SELECT price FROM gem_radar_amazon_observations
                 WHERE cpk = :cpk
+                  AND price > 0
                   AND observed_at >= CURRENT_TIMESTAMP - INTERVAL '{MARKET_PRICE_WINDOW_DAYS} days'
                 UNION ALL
                 SELECT price FROM gem_radar_scan_observation
                 WHERE cpk = :cpk
+                  AND price > 0
                   AND observed_at >= CURRENT_TIMESTAMP - INTERVAL '{MARKET_PRICE_WINDOW_DAYS} days'
             ) AS all_prices
             """
