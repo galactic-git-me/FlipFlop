@@ -44,7 +44,26 @@ function Check-RepositoryForMode([string]$mode) {
         if ($env:FLIPFLOP_PRODUCTION_BRANCH) { $env:FLIPFLOP_PRODUCTION_BRANCH } else { "main" }
     }
     if ($branch -ne $expectedBranch) {
-        throw "$mode mode requires the '$expectedBranch' branch; this checkout is on '$branch'. No code was changed or deployed."
+        # Mode selection is also the branch selection. Never switch branches
+        # across local work, because that could hide or overwrite edits that
+        # belong to the other environment.
+        $worktreeChanges = & git -C $projectRoot status --porcelain
+        if ($worktreeChanges) {
+            throw "$mode mode requires the '$expectedBranch' branch; this checkout is on '$branch' and has local changes. Commit or stash them before switching branches. No code was changed or deployed."
+        }
+
+        $localTarget = & git -C $projectRoot show-ref --verify --quiet "refs/heads/$expectedBranch"
+        if ($LASTEXITCODE -ne 0) {
+            throw "Cannot switch to '$expectedBranch': the local branch does not exist. Create it from origin/$expectedBranch first. No code was changed or deployed."
+        }
+
+        Write-Host "[*] Switching checkout from '$branch' to '$expectedBranch' for $mode mode..." -ForegroundColor Yellow
+        & git -C $projectRoot switch $expectedBranch
+        if ($LASTEXITCODE -ne 0) {
+            throw "Unable to switch to '$expectedBranch'. No code was changed or deployed."
+        }
+        Write-Host "[OK] Checkout switched to '$expectedBranch'." -ForegroundColor Green
+        $branch = $expectedBranch
     }
 
     & git -C $projectRoot fetch --quiet origin $branch
