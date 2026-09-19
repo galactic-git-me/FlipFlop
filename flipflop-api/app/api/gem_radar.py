@@ -3346,8 +3346,8 @@ async def get_cpk_price_history(
                 "delivered_price": float(obs[1]) if obs[1] else 0,
             }
             for obs in observations
-        ]
-        ,"sold_prices": [
+        ],
+        "sold_prices": [
             {
                 "observed_at": obs[0].isoformat() if obs[0] else None,
                 "delivered_price": float(obs[1]) if obs[1] else 0,
