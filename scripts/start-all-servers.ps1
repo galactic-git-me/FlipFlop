@@ -49,7 +49,28 @@ function Check-RepositoryForMode([string]$mode) {
         # belong to the other environment.
         $worktreeChanges = & git -C $projectRoot status --porcelain
         if ($worktreeChanges) {
-            throw "$mode mode requires the '$expectedBranch' branch; this checkout is on '$branch' and has local changes. Commit or stash them before switching branches. No code was changed or deployed."
+            $changedFiles = ($worktreeChanges -join [Environment]::NewLine)
+            throw @"
+Cannot start in $mode mode.
+
+  Current branch : $branch
+  Required branch: $expectedBranch
+  Reason         : local worktree changes prevent a safe branch switch.
+
+Detected changes:
+$changedFiles
+
+Resolve this before retrying:
+  1. Review the changes:
+       git status --short
+       git diff
+  2. Either commit them, or temporarily stash them:
+       git add -A; git commit -m "Save local changes before starting $mode mode"
+       # or: git stash push --include-untracked -m "Before starting $mode mode"
+  3. Re-run this startup command.
+
+The script did not switch branches, start services, deploy code, or discard any changes.
+"@
         }
 
         $localTarget = & git -C $projectRoot show-ref --verify --quiet "refs/heads/$expectedBranch"
