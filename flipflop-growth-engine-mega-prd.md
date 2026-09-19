@@ -62,7 +62,8 @@ The document is deliberately a mega-PRD because it describes the coherent end st
 | Owned Audience | Weekly newsletter drafting and sending; consent-aware audiences; abandoned-cart event capture; lifecycle messaging | Paid media optimisation; automatic high-value offers; loyalty ledger implementation unless an existing service is connected | Consent, suppression, bounce and complaint handling work end to end |
 | Offers and Loyalty | Site-wide, personal, abandoned-cart and loyalty offers; checkout eligibility; redemption ledger | AI authority over balances or eligibility; unrestricted automatic discounts | Deterministic tests prove correct eligibility, expiry, stacking, refunds and margin protection |
 | Paid Acquisition | eBay, Google and Meta adapters only after provider contracts are approved; campaign setup; spend and performance sync | Unsupported channels, automatic budget increases, unverified attribution claims | Sandbox/fixture tests, connector reconciliation and budget guardrails pass |
-| Learning and Optimisation | Attribution estimates, experiments, recommendations and historical learning | Claims of proven incrementality without a control design; autonomous optimisation outside guardrails | Reports label estimates correctly and recommendations show evidence and confidence |
+| Analytics and Learning | Attribution estimates, experiments, recommendations and historical learning | Claims of proven incrementality without a control design; autonomous optimisation | Reports label estimates correctly and recommendations show evidence and confidence |
+| Controlled Optimisation | Shadow-mode optimisation, policy-controlled recommendations and narrowly enabled low-risk automation | Autonomous spend increases, uncontrolled discounts, consent bypasses or unapproved public actions | Shadow-mode evidence, policy tests, rollback tests and zero guardrail bypasses |
 
 The MVP must display later-phase navigation as disabled or “Roadmap” with an explanation. It must not display a control that appears actionable while the required connector or service is unavailable.
 
@@ -2372,3 +2373,95 @@ The original broad acceptance criteria are retained as target-state criteria but
 - Added audience freshness, experiment design and learning-confidence requirements.
 - Added agent runtime limits, RBAC, operational targets and observability.
 - Clarified that the mega-PRD is a target-state document while the MVP remains deliberately narrow.
+
+---
+
+## 48. Document precedence and implementation authority
+
+The PRD set uses the following hierarchy:
+
+1. **Master Mega-PRD:** governs shared vocabulary, architecture, ownership, financial semantics, consent, security, attribution principles, approval principles and cross-cutting non-functional requirements.
+2. **Phase PRD:** governs the scope, exclusions, workflows, data requirements, acceptance criteria and launch gate for its specific release.
+3. **Existing Marketing MVP implementation brief:** governs provider-specific MVP details and existing codebase constraints where it does not conflict with the Master Mega-PRD’s cross-cutting rules.
+4. **Future implementation brief or configuration:** governs concrete provider IDs, API versions, environment variables, deployment settings, thresholds and rollout switches for the implementation being built.
+
+For a specific release, the Phase PRD governs what is implemented; the Master Mega-PRD governs how it must behave; the implementation brief governs concrete technical details. A lower-level document may narrow scope or add implementation detail, but may not weaken a higher-level security, consent, financial, audit or approval rule.
+
+Any conflict must be recorded as a decision before implementation. The decision must identify the conflicting documents, chosen rule, rationale, affected phase, owner, date and required document updates. Codex must stop and surface the conflict rather than silently selecting one interpretation.
+
+---
+
+## 49. Executable policy defaults
+
+The following defaults make the approval and automation model executable. They are configuration values, not hard-coded business logic.
+
+| Policy | Default |
+|---|---|
+| Approval validity | 24 hours for scheduled external actions; approval expires if the approved revision changes |
+| Single-user mode | Michael is Owner and may approve all actions; every approval is still recorded |
+| Multi-user self-approval | Blocked for high-risk actions when the author/requester and approver are the same person |
+| Emergency pause authority | Owner, Finance Approver and Growth Approver; Owner may pause all campaigns and offers |
+| Automatic-policy authorisation | Owner only; policy changes require an audit event and re-evaluation of active automations |
+| Low-risk automatic actions | Internal suggestions, approved-asset resizing, draft generation, hard-cap pause, invalid-source hold and review-task creation only |
+| Public publishing | Manual approval required by default |
+| Newsletter sending | Manual approval required by default |
+| Paid budget increase | Manual approval required; automatic decreases/pause may be enabled by policy |
+| High-value discount | Manual approval required when exposure exceeds `maximum_offer_exposure_gbp` or discount exceeds `maximum_discount_percent` |
+| Audit retention | Seven years for financial, voucher, loyalty, approval and external-action records; two years for raw marketing analytics unless a stricter policy applies |
+| Approval audit retention | Seven years |
+| Connector unknown result | No automatic retry until reconciliation or explicit user action |
+
+The owner must confirm or change these defaults before production activation. Changes are versioned and do not retroactively alter previous approvals.
+
+---
+
+## 50. Dependency contract registry
+
+Every named dependency must have an owner, interface, readiness criteria and fallback state before its phase is started.
+
+| Dependency | Owner | Minimum interface | Readiness gate | If unavailable |
+|---|---|---|---|---|
+| Customer/Account Service | Commerce platform | customer ID, login state, account status | authenticated test account and isolation tests | no personal offers or customer audiences |
+| Consent Service | Commerce/platform owner | purpose-specific consent, withdrawal, suppression and export | propagation fixture and stale-suppression alert | no marketing send or audience activation |
+| Approval Service | Growth platform | request, approve, reject, expire, revoke and audit | role matrix and expiry tests | all external actions remain blocked |
+| Agent Runtime | AI platform owner | tool scopes, structured output, cost/time limits, cancellation | prompt-injection and retry tests | draft/recommendation work may be queued, no side effects |
+| Product/Build Catalogue | Commerce platform | verified facts, price, stock and product IDs | stale-data and provenance tests | product-linked content and adverts are blocked |
+| Order/Profitability Service | Commerce/finance owner | order, refund, COGS, fees, VAT, fulfilment and contribution profit | worked-example reconciliation | no profit claims or financial optimisation |
+| Loyalty Service | Commerce platform owner | tier, balance, reserve, redeem, reverse and ledger | transactional concurrency tests | loyalty offers disabled |
+| Website Analytics | Web platform owner | events, sessions, UTM, freshness and deletion | synthetic-event reconciliation | analytics cards show unavailable |
+| Email Provider | Growth owner | send, unsubscribe, bounce, complaint and suppression | seeded inbox and failure fixtures | newsletter send disabled |
+| Social Providers | Growth owner | account, publish, metrics and revoke | per-provider connector contract | provider tab disabled |
+| Paid Providers | Growth/finance owner | campaign, spend, metrics, pause and reconcile | sandbox/fixture and cap tests | paid channel disabled |
+
+The phase PRD may add provider-specific requirements, but may not omit this readiness gate.
+
+---
+
+## 51. Financial incentive semantics
+
+Customer discounts and funding costs are separate concepts:
+
+- The **customer discount** reduces the customer consideration and therefore reduces net customer revenue.
+- The **voucher funding cost** records who bears the economic cost of the incentive. If FlipFlop funds it, the cost is deducted from contribution profit. If a supplier, marketplace or separately funded campaign budget bears it, the funding source and allocation are recorded and the FlipFlop contribution calculation follows the agreed funding contract.
+- A discount must not be deducted from revenue and then deducted again as FlipFlop-funded cost unless the funding contract explicitly requires both entries for reporting purposes.
+- Reports show both customer discount and funding responsibility so commercial and accounting views cannot be confused.
+
+The canonical profitability API must return `gross_revenue`, `discount_amount`, `net_revenue_ex_vat`, `vat_amount`, `cogs`, `fulfilment_cost`, `payment_fees`, `marketplace_fees`, `advertising_cost`, `incentive_funding_cost`, `contribution_profit`, `currency`, `fx_rate` and `calculated_at`.
+
+---
+
+## 52. Document integrity and traceability controls
+
+All PRDs must pass these checks before approval:
+
+- No blank bullets or headings.
+- No placeholder policy values such as `£X`, `Y%`, `TBD` or unresolved question marks in acceptance criteria.
+- Every table has the same number of cells in each row.
+- Every phase has explicit scope, exclusions, dependencies, states, acceptance criteria and launch gate.
+- Every cross-document dependency is present in the registry.
+- Every public side effect has an approval rule.
+- Every monetary term maps to the financial contract.
+- Every attribution claim identifies its evidence class.
+- Every unresolved conflict has a decision record.
+
+The traceability matrix supplied with this document is the review record for the earlier critique. It must be updated whenever a requirement changes.

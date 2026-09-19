@@ -4,6 +4,8 @@
 **Release:** Owned Audience  
 **Primary outcome:** Create and send a consent-safe weekly newsletter and lifecycle communications
 
+**Authority:** This phase governs owned-audience scope and acceptance. The Master Mega-PRD governs cross-cutting rules. Provider-specific implementation briefs govern concrete email-provider details.
+
 ## 1. Scope
 
 ### Included
@@ -78,4 +80,3 @@ Define sender identity, domain authentication, provider, API scopes, bounce hand
 ## 8. Launch gate
 
 Run a controlled test edition with a seeded audience, test inboxes, bounce/complaint fixtures, unsubscribe propagation, rendering checks and provider outage simulation.
-

@@ -4,6 +4,8 @@
 **Release:** Analytics and Learning  
 **Primary outcome:** Turn observed growth activity into clearly labelled attribution, experiments and evidence-backed recommendations
 
+**Authority:** This phase governs analytics and learning scope and acceptance. The Master Mega-PRD governs cross-cutting rules. Order, consent and analytics services govern source records.
+
 ## 1. Scope
 
 - Event collection and identity resolution.
@@ -65,4 +67,3 @@ Example: “Build photography was associated with higher saves” is valid descr
 ## 8. Launch gate
 
 Run a synthetic end-to-end dataset containing anonymous sessions, authenticated sessions, email clicks, social clicks, paid clicks, marketplace orders, refunds and unattributed sales. All totals and labels must reconcile.
-

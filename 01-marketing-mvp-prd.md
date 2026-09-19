@@ -5,6 +5,8 @@
 **Status:** Implementation-ready  
 **Primary outcome:** Reliable social publishing plus website analytics
 
+**Authority:** This phase governs MVP scope and acceptance. The Master Mega-PRD governs cross-cutting rules. Provider-specific implementation briefs govern concrete API and repository details.
+
 ## 1. Purpose
 
 Deliver the narrowest useful release of the Growth Engine: one admin entry point for creating, reviewing, scheduling and publishing social content, with website analytics and tracked-link visibility.
@@ -129,4 +131,3 @@ Do not show attributed profit or claim that a post caused a sale in this release
 - 100% external actions auditable.
 - Analytics visible within the configured freshness SLA.
 - WCAG 2.2 AA checks pass for admin MVP screens.
-

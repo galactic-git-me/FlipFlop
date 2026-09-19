@@ -4,6 +4,8 @@
 **Release:** Paid Acquisition  
 **Primary outcome:** Launch and measure approved profitable paid campaigns
 
+**Authority:** This phase governs paid-acquisition scope and acceptance. The Master Mega-PRD governs cross-cutting rules. Provider-specific implementation briefs govern concrete API versions, scopes and mappings.
+
 ## 1. Scope
 
 The first paid release must enable only providers with an approved connector contract. The initial candidate set is eBay Promoted Listings, Google Shopping/Search and Meta/Instagram, but each is separately gated.
@@ -78,4 +80,3 @@ Provider timeout becomes `unknown` until reconciliation. Partial batches report 
 ## 8. Launch gate
 
 One provider passes sandbox/fixture, spend-cap, timeout, partial-success, reconciliation and pause tests before the next provider is enabled.
-

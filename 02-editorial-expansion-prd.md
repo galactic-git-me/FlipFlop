@@ -4,6 +4,8 @@
 **Release:** Editorial Expansion  
 **Primary outcome:** Produce evidence-backed blog drafts and publish approved articles to the storefront
 
+**Authority:** This phase governs editorial scope and acceptance. The Master Mega-PRD governs cross-cutting rules. Provider-specific implementation briefs govern concrete CMS and repository details.
+
 ## 1. Purpose and scope
 
 Add AI-assisted editorial production without allowing AI to publish unapproved public content.
@@ -84,4 +86,3 @@ AI may research, outline and draft using approved sources. It may not invent tec
 ## 8. Launch gate
 
 Ten representative articles pass fact, provenance, accessibility, SEO, CMS publication and rollback tests with zero invented specifications or prices.
-

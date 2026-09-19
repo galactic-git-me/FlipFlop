@@ -4,6 +4,8 @@
 **Release:** Offers and Loyalty  
 **Primary outcome:** Issue and redeem safe, auditable discounts without AI controlling eligibility or balances
 
+**Authority:** This phase governs offer and loyalty scope and acceptance. The Master Mega-PRD governs cross-cutting rules. Checkout, order and loyalty contracts govern authoritative transactions.
+
 ## 1. Scope
 
 ### Included
@@ -92,4 +94,3 @@ Checkout redemption uses a transaction and idempotency key. Failed payment must 
 ## 8. Launch gate
 
 Pass concurrency, expiry, refund, duplicate redemption, account isolation and margin-protection tests with a sandbox checkout.
-

@@ -4,6 +4,8 @@
 **Release:** Controlled Optimisation  
 **Primary outcome:** Allow limited autonomous recommendations and low-risk actions without giving AI unrestricted control
 
+**Authority:** This phase governs controlled-optimisation scope and acceptance. The Master Mega-PRD governs cross-cutting rules. The Approval Service and versioned automation policies govern executable authority.
+
 ## 1. Scope
 
 - Cross-channel campaign sequencing.
@@ -69,4 +71,3 @@ Each run has tool permissions, maximum duration, token/cost budget, retry limit,
 ## 7. Launch gate
 
 Run in shadow mode first. Enable automatic actions only after a defined observation period with zero policy bypasses, zero duplicate side effects and acceptable agent cost/error rates.
-
