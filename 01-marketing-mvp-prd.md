@@ -1,6 +1,6 @@
 # FlipFlop Growth Engine — Marketing MVP PRD
 
-**Parent specification:** `flipflop-growth-engine-mega-prd.md` v1.1  
+**Parent specification:** `flipflop-growth-engine-mega-prd.md` v1.2  
 **Release:** Marketing MVP  
 **Status:** Implementation-ready  
 **Primary outcome:** Reliable social publishing plus website analytics

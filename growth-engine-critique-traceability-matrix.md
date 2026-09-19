@@ -3,6 +3,8 @@
 **Related documents:** Master Mega-PRD v1.2 and phase PRDs 01–07  
 **Purpose:** Auditable response to the implementation review
 
+**Version alignment:** Each phase PRD explicitly declares `flipflop-growth-engine-mega-prd.md` v1.2 as its parent specification: 01 Marketing MVP, 02 Editorial Expansion, 03 Owned Audience, 04 Offers & Loyalty, 05 Paid Acquisition, 06 Analytics & Learning and 07 Controlled Optimisation.
+
 ## Status and evidence definitions
 
 | Status | Meaning |
@@ -38,7 +40,7 @@
 | Consent/privacy requirements shallow | Resolved with implementation gate | Normative requirement + implementation dependency | Master §37 defines purposes, withdrawal, propagation, retention, deletion, exports and profiling notices. | Complete DPIA/privacy review before Owned Audience. |
 | External integrations underspecified | Partially resolved | Implementation dependency | Master §38 and each phase connector section define contract fields, capabilities, idempotency and reconciliation. | Add exact providers, APIs, scopes and fixture payloads. |
 | State machines incomplete | Resolved with implementation gate | Normative requirement + phase requirement | Master §39 and phase PRDs define campaign, content, newsletter, offer and agent states, transitions and concurrency rules. | Add provider-specific states only when required. |
-| Numeric goals and baselines missing | Partially resolved | Acceptance evidence | Master §44 defines initial operational thresholds. | Record current baselines and final commercial KPIs. |
+| Numeric goals and baselines missing | Partially resolved | Normative requirement + configuration target | Master §44 defines initial operational thresholds; these are written targets, not test results or measured baselines. | Record current baselines and final commercial KPIs. |
 | Exact MVP channels unclear | Partially resolved | Implementation dependency | MVP PRD delegates provider selection to the existing implementation configuration. | Copy the exact provider/capability list into configuration. |
 | Social moderation scope missing | Resolved | Phase requirement | MVP PRD and Master §40.3 limit MVP to monitoring/surfacing; replies, deletion and hiding are later scope. | None for MVP. |
 | Newsletter deliverability missing | Resolved with implementation gate | Phase requirement + implementation dependency | Owned Audience PRD §5 and Master §40.4 define sender identity, authentication, bounces, complaints, suppression, rendering and outage behaviour. | Select the concrete email provider and test fixtures. |
@@ -49,7 +51,7 @@
 | Loyalty source of truth unclear | Resolved with implementation gate | Normative requirement + implementation dependency | Master §33.2 and Offers/Loyalty PRD §§2 and 4 make Loyalty Service authoritative for balances and ledger transactions. | Confirm Loyalty Service API. |
 | Experiment design missing | Resolved with implementation gate | Normative requirement + phase requirement | Master §41.2 and Analytics/Learning PRD §5 require hypothesis, holdout, randomisation, sample size, stopping and contamination rules. | Choose experiment storage/reporting implementation. |
 | RBAC/separation of duties missing | Resolved with implementation gate | Normative requirement | Master §§34 and 43 define roles, permissions and self-approval behaviour. | Seed roles and test author/approver separation. |
-| Operational requirements missing | Resolved with implementation gate | Normative requirement + acceptance evidence | Master §44 defines initial targets, RPO/RTO, observability, browser and cost requirements. | Confirm production SLOs after MVP measurement. |
+| Operational requirements missing | Resolved with implementation gate | Normative requirement + configuration target | Master §44 defines initial targets, RPO/RTO, observability, browser and cost requirements; acceptance evidence must be generated during implementation. | Confirm production SLOs after MVP measurement. |
 | API contracts too vague | Partially resolved | Implementation dependency | Master §§23, 38 and 50 define endpoint groups, dependency interfaces and connector contract fields. | Produce concrete versioned OpenAPI contracts. |
 | Accessibility standard missing | Resolved with implementation gate | Normative requirement + acceptance evidence | Master §44 requires WCAG 2.2 AA. | Add automated and manual accessibility test evidence. |
 | Retention/storage controls missing | Partially resolved | Normative requirement + implementation dependency | Master §§37, 44 and 49 define retention classes and defaults. | Obtain legal approval for final retention periods. |
