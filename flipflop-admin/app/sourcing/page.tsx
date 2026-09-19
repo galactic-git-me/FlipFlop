@@ -429,7 +429,7 @@ function formatElapsedTime(seconds: number): string {
   return `${secs}s`;
 }
 
-function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null }) {
+function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: QueueStatus | null; marketSnapshot: MarketSnapshot | null }) {
   const [status, setStatus] = useState<PipelineStatusResponse | null>(null);
   const [queueItems, setQueueItems] = useState<QueueItem[]>([]);
   const [clientElapsed, setClientElapsed] = useState(0);
@@ -676,6 +676,14 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
   const gemCount = status?.gemCount ?? 0;
   const avgSuperGemScore = status?.avgSuperGemScore ?? 0;
   const avgGemScore = status?.avgGemScore ?? 0;
+  const hasActiveRun = displayedScans.length > 0 || Boolean(status?.activeScans?.length);
+  const displayedListingCount = hasActiveRun ? (status?.totalsAcrossActive.ingestedCount ?? 0) : (marketSnapshot?.ingestedCount ?? 0);
+  const displayedSuperGemCount = hasActiveRun ? superGemCount : (marketSnapshot?.superGemCount ?? 0);
+  const displayedAvgSuperGemScore = hasActiveRun ? avgSuperGemScore : (marketSnapshot?.avgSuperGemScore ?? 0);
+  const displayedGemCount = hasActiveRun ? gemCount : (marketSnapshot?.gemCount ?? 0);
+  const displayedAvgGemScore = hasActiveRun ? avgGemScore : (marketSnapshot?.avgGemScore ?? 0);
+  const displayedBinPricesCount = hasActiveRun ? (status?.binPricesCount ?? 0) : (marketSnapshot?.binPricesCount ?? 0);
+  const displayedSoldPricesCount = hasActiveRun ? (status?.soldPricesCount ?? 0) : (marketSnapshot?.soldPricesCount ?? 0);
 
   return (
     <div className="mb-6 p-4 rounded-lg glass-panel">
@@ -683,7 +691,7 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <div className="w-64 shrink-0">
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold text-white">Current Scan Run</h3>
+              <h3 className="text-sm font-semibold text-white">{hasActiveRun ? "Current Scan Run" : "Latest Market Snapshot"}</h3>
               {isRunning && (
                 <div className="inline-flex items-center gap-1 px-2 py-1 rounded bg-blue-950/50 border border-blue-800">
                   <Clock size={12} className="text-blue-400 animate-pulse" />
@@ -692,18 +700,18 @@ function PipelineDashboard({ queueStatus }: { queueStatus: QueueStatus | null })
               )}
             </div>
             <p className="text-xs text-slate-400">
-              {displayedScans.length} search{displayedScans.length !== 1 ? "es" : ""} in this run
+              {hasActiveRun ? `${displayedScans.length} search${displayedScans.length !== 1 ? "es" : ""} in this run` : "No scan is currently running; showing the latest retained data"}
             </p>
           </div>
           <div className="flex items-center gap-4">
             <QueueStatusBar queue={queueStatus} />
-            <MiniStat label="Listings" value={status?.totalsAcrossActive.ingestedCount ?? 0} color="#e2e8f0" />
-            <MiniStat label="SUPER GEMs" value={superGemCount} color="#fcd34d" />
-            <MiniStat label="Avg Super Gem" value={avgSuperGemScore.toFixed(1)} color="#fcd34d" />
-            <MiniStat label="GEMs" value={gemCount} color="#93c5fd" />
-            <MiniStat label="Avg Gem" value={avgGemScore.toFixed(1)} color="#93c5fd" />
-            <MiniStat label="BIN Prices" value={status?.binPricesCount ?? 0} color="#34d399" />
-            <MiniStat label="Sold Prices" value={status?.soldPricesCount ?? 0} color="#f472b6" />
+            <MiniStat label="Listings" value={displayedListingCount} color="#e2e8f0" />
+            <MiniStat label="SUPER GEMs" value={displayedSuperGemCount} color="#fcd34d" />
+            <MiniStat label="Avg Super Gem" value={displayedAvgSuperGemScore.toFixed(1)} color="#fcd34d" />
+            <MiniStat label="GEMs" value={displayedGemCount} color="#93c5fd" />
+            <MiniStat label="Avg Gem" value={displayedAvgGemScore.toFixed(1)} color="#93c5fd" />
+            <MiniStat label="BIN Prices" value={displayedBinPricesCount} color="#34d399" />
+            <MiniStat label="Sold Prices" value={displayedSoldPricesCount} color="#f472b6" />
           </div>
         </div>
 
@@ -3015,7 +3023,7 @@ function SourcingPageInner() {
         {mainTab === "stats" && (
           <>
             <MarketSnapshotPanel snapshot={marketSnapshot} />
-            <PipelineDashboard queueStatus={queueStatus} />
+            <PipelineDashboard queueStatus={queueStatus} marketSnapshot={marketSnapshot} />
             <StatsTab componentGems={componentGems || undefined} />
           </>
         )}

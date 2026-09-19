@@ -1914,6 +1914,13 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
         result = await db.execute(fallback_query)
         best = result.scalar_one_or_none()
 
+    # A category can legitimately have no active, recent listing after the
+    # quality filters. Do not dereference None here: the dashboard treats a
+    # null category result as "no qualifying gem" and can still render the
+    # market-wide snapshot.
+    if best is None:
+        return None
+
     cpu = None
     if best.category == "cpu" and best.title:
         cpu_match = re.search(r'(Intel|AMD)\s+(?:Core\s+)?(?:i[3-9]|Ryzen\s+[3-9]|[A-Z]+\s+\d+)[^\s]*', best.title, re.IGNORECASE)
