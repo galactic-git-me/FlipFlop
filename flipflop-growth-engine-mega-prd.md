@@ -4,7 +4,7 @@
 **Status:** Revised implementation baseline with phased roadmap
 **Product:** FlipFlop Admin / theflipflop.shop
 **Primary navigation:** One `Advertising & Growth` link in the admin application
-**Version:** 1.1
+**Version:** 1.2
 **Date:** 19 September 2026
 
 ---
@@ -2465,3 +2465,7 @@ All PRDs must pass these checks before approval:
 - Every unresolved conflict has a decision record.
 
 The traceability matrix supplied with this document is the review record for the earlier critique. It must be updated whenever a requirement changes.
+
+### 52.1 Verification status
+
+The current source audit checks blank bullets, blank headings, placeholder policy values, table delimiter consistency, phase headings and launch gates. These checks establish source integrity only. Rendered Markdown review and implementation test evidence remain separate release gates.
