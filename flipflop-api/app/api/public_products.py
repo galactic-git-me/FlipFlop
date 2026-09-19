@@ -27,7 +27,13 @@ _IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
 
 def _build_asset_pack(build_id: int | None, photos: list | None) -> dict:
     """Expose the named image groups from the build pack to the storefront."""
-    empty = {"gallery": [], "specifications": [], "performance": []}
+    empty = {
+        "gallery": [],
+        "specifications": [],
+        "performance": [],
+        "registration": [],
+        "model_3d": None,
+    }
     if not build_id:
         return empty
     build_dir = _BUILD_ASSETS_ROOT / f"{build_id:03d}"
@@ -44,7 +50,8 @@ def _build_asset_pack(build_id: int | None, photos: list | None) -> dict:
         directory = build_dir / folder
         return sorted((p for p in directory.iterdir() if p.is_file() and p.suffix.lower() in _IMAGE_SUFFIXES), key=lambda p: p.name) if directory.is_dir() else []
 
-    pack = {key: [] for key in empty}
+    pack = {key: [] for key in empty if key != "model_3d"}
+    pack["model_3d"] = None
     photo_rows = photos or []
     pack["gallery"] = [{"url": row["url"], "title": row.get("title") or "Build photograph"} for row in photo_rows if isinstance(row, dict) and row.get("kind") == "photo" and row.get("url")]
     if not pack["gallery"]:
@@ -53,6 +60,16 @@ def _build_asset_pack(build_id: int | None, photos: list | None) -> dict:
     performance_titles = ["Overview and rankings", "Measured results and gaming estimates", "Productivity and system health", "Performance summary"]
     performance_files = files_in("Performance")
     pack["performance"] = [{"url": url_for(path), "title": f"Performance card {index + 1} — {performance_titles[index] if index < len(performance_titles) else path.stem}"} for index, path in enumerate(performance_files)]
+    registration_files = files_in("Registration")
+    pack["registration"] = [{"url": url_for(path), "title": f"Registration plate {index + 1}"} for index, path in enumerate(registration_files)]
+
+    model_dir = build_dir / "3D Build"
+    model_files = sorted(
+        (path for path in model_dir.iterdir() if path.is_file() and path.suffix.lower() == ".glb"),
+        key=lambda path: ("complete_build" not in path.name.lower(), path.name),
+    ) if model_dir.is_dir() else []
+    if model_files:
+        pack["model_3d"] = {"url": url_for(model_files[0]), "title": "Completed build 3D model"}
     return pack
 
 
