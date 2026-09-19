@@ -311,7 +311,17 @@ async def pipeline_status_endpoint(
     # API process's ephemeral pipeline_status object.  Keep the original
     # response shape/card rendering, but hydrate activeScans from the shared
     # database whenever the in-memory view is empty.
-    if not snapshot.get("activeScans"):
+    # The queue worker runs in a separate process from the API. During an
+    # active sweep the API process can still have scan objects in memory while
+    # their counters remain at zero; the durable queue/observation rows are
+    # the authoritative progress source in that case as well.
+    active_scans = snapshot.get("activeScans") or []
+    active_totals = snapshot.get("totalsAcrossActive") or {}
+    needs_durable_hydration = (
+        not active_scans
+        or int(active_totals.get("ingestedCount") or 0) == 0
+    )
+    if needs_durable_hydration:
         from sqlalchemy import text
         from app.gem_radar.cpk_market import MIN_LISTINGS_FOR_SETTLED_PRICE
         from datetime import datetime
