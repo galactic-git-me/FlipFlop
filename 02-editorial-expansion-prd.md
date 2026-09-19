@@ -1,5 +1,6 @@
 # FlipFlop Growth Engine — Editorial Expansion PRD
 
+**Parent specification:** `flipflop-growth-engine-mega-prd.md` v1.2  
 **Depends on:** Marketing MVP, Product Catalogue, Media Service  
 **Release:** Editorial Expansion  
 **Primary outcome:** Produce evidence-backed blog drafts and publish approved articles to the storefront
