@@ -52,10 +52,27 @@ def _build_asset_pack(build_id: int | None, photos: list | None) -> dict:
 
     pack = {key: [] for key in empty if key != "model_3d"}
     pack["model_3d"] = None
-    photo_rows = photos or []
-    pack["gallery"] = [{"url": row["url"], "title": row.get("title") or "Build photograph"} for row in photo_rows if isinstance(row, dict) and row.get("kind") == "photo" and row.get("url")]
-    if not pack["gallery"]:
-        pack["gallery"] = [{"url": url_for(path), "title": f"Build photograph {index + 1}"} for index, path in enumerate(files_in("Media"))]
+    media_files = files_in("Media")
+    if media_files:
+        # The listing pack is the source of truth. Older database rows can
+        # contain one repeated legacy URL, which must not hide the complete
+        # Media folder from the storefront.
+        pack["gallery"] = [
+            {"url": url_for(path), "title": f"Build photograph {index + 1}"}
+            for index, path in enumerate(media_files)
+        ]
+    else:
+        photo_rows = photos or []
+        seen_urls: set[str] = set()
+        pack["gallery"] = []
+        for row in photo_rows:
+            if not isinstance(row, dict) or not row.get("url"):
+                continue
+            url = str(row["url"])
+            if url in seen_urls:
+                continue
+            seen_urls.add(url)
+            pack["gallery"].append({"url": url, "title": row.get("title") or f"Build photograph {len(pack['gallery']) + 1}"})
     pack["specifications"] = [{"url": url_for(path), "title": f"Specification card {index + 1}"} for index, path in enumerate(files_in("Specifications"))]
     performance_titles = ["Overview and rankings", "Measured results and gaming estimates", "Productivity and system health", "Performance summary"]
     performance_files = files_in("Performance")
