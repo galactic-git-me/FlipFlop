@@ -1,15 +1,15 @@
 {
   "ram_watcher": {
-    "last_success_at": "2026-09-19T16:12:19.424739+00:00"
+    "last_success_at": "2026-09-19T16:27:19.188162+00:00"
   },
   "manual_build_deferred_publish": {
-    "last_success_at": "2026-09-19T16:12:19.438681+00:00"
+    "last_success_at": "2026-09-19T16:27:19.191385+00:00"
   },
   "deferred_publish": {
-    "last_success_at": "2026-09-19T16:12:19.644806+00:00"
+    "last_success_at": "2026-09-19T16:27:19.197313+00:00"
   },
   "email_monitor": {
-    "last_success_at": "2026-09-19T16:23:19.592114+00:00"
+    "last_success_at": "2026-09-19T16:28:19.407783+00:00"
   },
   "ai_build_generator": {
     "last_success_at": "2026-09-19T16:24:38.985313+00:00"
@@ -81,10 +81,10 @@
     "last_success_at": "2026-09-19T14:12:19.457993+00:00"
   },
   "cross_listing_recreate": {
-    "last_success_at": "2026-09-19T16:22:49.042137+00:00"
+    "last_success_at": "2026-09-19T16:27:49.082832+00:00"
   },
   "delivery_followup": {
-    "last_success_at": "2026-09-19T16:23:04.222849+00:00"
+    "last_success_at": "2026-09-19T16:28:04.176723+00:00"
   },
   "amazon_component_bestsellers": {
     "last_success_at": "2026-09-19T14:19:48.716406+00:00"
