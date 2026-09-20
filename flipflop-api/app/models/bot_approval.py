@@ -27,8 +27,8 @@ class BotApprovalQueue(Base):
     __tablename__ = "bot_approval_queue"
 
     id = Column(Integer, primary_key=True)
-    approval_type = Column(Enum(ApprovalType), nullable=False, index=True)
-    status = Column(Enum(ApprovalStatus), default=ApprovalStatus.PENDING, nullable=False, index=True)
+    approval_type = Column(Enum(ApprovalType, values_callable=lambda e: [m.value for m in e]), nullable=False, index=True)
+    status = Column(Enum(ApprovalStatus, values_callable=lambda e: [m.value for m in e]), default=ApprovalStatus.PENDING, nullable=False, index=True)
     
     # Subject identification
     subject_sku = Column(String(200), nullable=True, index=True)  # For photo packs, 3D models
@@ -68,7 +68,7 @@ class PlaybookProposalExtended(Base):
     playbook_id = Column(String(100), nullable=False, index=True)
     customer_type = Column(String(100), nullable=True)
     budget_tier = Column(String(50), nullable=True)  # Value/Balanced/Performance
-    status = Column(Enum(ApprovalStatus), default=ApprovalStatus.DRAFT, nullable=False)
+    status = Column(Enum(ApprovalStatus, values_callable=lambda e: [m.value for m in e]), default=ApprovalStatus.DRAFT, nullable=False)
     
     # Core components BOM
     core_components = Column(JSON, nullable=False)
@@ -105,7 +105,7 @@ class PricingProposal(Base):
     id = Column(Integer, primary_key=True)
     target_type = Column(String(50), nullable=False)  # playbook / prebuilt
     target_id = Column(String(100), nullable=False, index=True)  # playbook_id or build_id
-    status = Column(Enum(ApprovalStatus), default=ApprovalStatus.PENDING, nullable=False)
+    status = Column(Enum(ApprovalStatus, values_callable=lambda e: [m.value for m in e]), default=ApprovalStatus.PENDING, nullable=False)
     
     # Pricing details
     sell_price_gbp = Column(Float, nullable=False)
