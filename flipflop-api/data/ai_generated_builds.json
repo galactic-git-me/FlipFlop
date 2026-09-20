@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-20T15:49:16.638356+00:00",
+  "generated_at": "2026-09-20T16:49:14.262148+00:00",
   "builds": [
     {
       "components": [
@@ -123,8 +123,8 @@
         "query": "gaming pc AMD Ryzen 7 9800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 49,
-          "average_price": 1012.01,
+          "count": 59,
+          "average_price": 1035.01,
           "unavailable_reason": null
         },
         "bin": {
@@ -132,12 +132,12 @@
           "count": 49,
           "min_price": 714.53,
           "max_price": 3579.0,
-          "average_price": 2101.05
+          "average_price": 2108.4
         }
       },
-      "resale_estimate": 1012.01,
+      "resale_estimate": 1035.01,
       "resale_source": "sold_average",
-      "estimated_profit": 930.49,
+      "estimated_profit": 953.49,
       "rank": 1
     },
     {
@@ -262,8 +262,8 @@
         "query": "gaming pc AMD Ryzen 7 9800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 58,
-          "average_price": 1009.88,
+          "count": 59,
+          "average_price": 1035.01,
           "unavailable_reason": null
         },
         "bin": {
@@ -271,12 +271,12 @@
           "count": 49,
           "min_price": 714.53,
           "max_price": 3579.0,
-          "average_price": 2101.05
+          "average_price": 2108.4
         }
       },
-      "resale_estimate": 1009.88,
+      "resale_estimate": 1035.01,
       "resale_source": "sold_average",
-      "estimated_profit": 927.42,
+      "estimated_profit": 952.55,
       "rank": 2
     },
     {
@@ -401,8 +401,8 @@
         "query": "gaming pc Ryzen 7 9800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 48,
-          "average_price": 959.91,
+          "count": 59,
+          "average_price": 999.32,
           "unavailable_reason": null
         },
         "bin": {
@@ -410,12 +410,12 @@
           "count": 49,
           "min_price": 464.93,
           "max_price": 3149.0,
-          "average_price": 1910.56
+          "average_price": 1891.37
         }
       },
-      "resale_estimate": 959.91,
+      "resale_estimate": 999.32,
       "resale_source": "sold_average",
-      "estimated_profit": 879.43,
+      "estimated_profit": 918.84,
       "rank": 3
     },
     {
@@ -540,8 +540,8 @@
         "query": "gaming pc AMD Ryzen 7 5800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 50,
-          "average_price": 781.59,
+          "count": 60,
+          "average_price": 782.11,
           "unavailable_reason": null
         },
         "bin": {
@@ -549,12 +549,12 @@
           "count": 48,
           "min_price": 248.0,
           "max_price": 2444.95,
-          "average_price": 887.0
+          "average_price": 875.81
         }
       },
-      "resale_estimate": 781.59,
+      "resale_estimate": 782.11,
       "resale_source": "sold_average",
-      "estimated_profit": 701.96,
+      "estimated_profit": 702.48,
       "rank": 4
     },
     {
@@ -679,21 +679,21 @@
         "query": "gaming pc AMD Ryzen 9 5950X SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 17,
-          "average_price": 747.77,
+          "count": 18,
+          "average_price": 747.9,
           "unavailable_reason": null
         },
         "bin": {
           "available": true,
           "count": 50,
           "min_price": 675.58,
-          "max_price": 7529.0,
-          "average_price": 1939.25
+          "max_price": 7329.0,
+          "average_price": 1937.7
         }
       },
-      "resale_estimate": 747.77,
+      "resale_estimate": 747.9,
       "resale_source": "sold_average",
-      "estimated_profit": 665.55,
+      "estimated_profit": 665.68,
       "rank": 5
     },
     {
@@ -818,21 +818,21 @@
         "query": "gaming pc AMD Ryzen 9 5950X SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": true,
-          "count": 17,
-          "average_price": 747.77,
+          "count": 18,
+          "average_price": 747.9,
           "unavailable_reason": null
         },
         "bin": {
           "available": true,
           "count": 50,
           "min_price": 675.58,
-          "max_price": 7529.0,
-          "average_price": 1939.25
+          "max_price": 7129.0,
+          "average_price": 1942.1
         }
       },
-      "resale_estimate": 747.77,
+      "resale_estimate": 747.9,
       "resale_source": "sold_average",
-      "estimated_profit": 665.42,
+      "estimated_profit": 665.55,
       "rank": 6
     }
   ],
