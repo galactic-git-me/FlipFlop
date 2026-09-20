@@ -59,16 +59,6 @@ jobs:
           chmod 600 ~/.ssh/andromeda
           printf '%s\n' "$SSH_HOST_KEY" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
-      - name: Repair production tracking ref
-        env:
-          ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}
-          ANDROMEDA_USER: ${{ secrets.ANDROMEDA_USER }}
-          ANDROMEDA_PORT: ${{ secrets.ANDROMEDA_PORT }}
-        run: |
-          ssh -i ~/.ssh/andromeda \
-            -p "${ANDROMEDA_PORT:-22}" \
-            "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
-            "git -C /home/mac/CODING/FlipFlop-production update-ref -d refs/remotes/origin/main || true"
       - name: Deploy exact commit
         env:
           ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}
