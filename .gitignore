@@ -33,6 +33,7 @@ yarn-error.log*
 
 # runtime logs and state (never commit these)
 .run-logs/
+tmp/
 *.log
 *.log.*
 flipflop.db
