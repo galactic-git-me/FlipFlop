@@ -59,7 +59,7 @@ jobs:
           chmod 600 ~/.ssh/andromeda
           printf '%s\n' "$SSH_HOST_KEY" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
-      - name: Deploy API and storefront together
+      - name: Deploy exact commit
         env:
           ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}
           ANDROMEDA_USER: ${{ secrets.ANDROMEDA_USER }}
@@ -68,7 +68,7 @@ jobs:
           ssh -i ~/.ssh/andromeda \
             -p "${ANDROMEDA_PORT:-22}" \
             "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
-            "/home/mac/CODING/FlipFlop-production/scripts/start-production-remote.sh"
+            "/home/mac/CODING/FlipFlop-production/deploy/deploy-andromeda.sh '${{ github.sha }}'"
       - name: Require extension dispatch token
         env:
           EXTENSION_DISPATCH_TOKEN: ${{ secrets.FLIPFLOP_EXTENSION_DISPATCH_TOKEN }}
