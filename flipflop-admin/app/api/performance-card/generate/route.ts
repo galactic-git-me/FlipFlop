@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import * as fs from "fs/promises";
-import * as path from "path";
+import { createBuildPerformancePortal } from "@/lib/performance-portal";
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,32 +23,10 @@ export async function POST(request: NextRequest) {
     const jsonText = await file.text();
     const performanceData = JSON.parse(jsonText);
 
-    const buildsRoot = path.resolve(process.cwd(), "..", "builds");
-    const numericBuildDir = path.join(buildsRoot, buildId);
-    const paddedBuildDir = path.join(buildsRoot, buildId.padStart(3, "0"));
-    let buildDir = numericBuildDir;
-    try {
-      await fs.stat(numericBuildDir);
-    } catch {
-      try {
-        await fs.stat(paddedBuildDir);
-        buildDir = paddedBuildDir;
-      } catch {
-        // New builds use their numeric ID until a padded directory is created.
-      }
-    }
-    const targetDir = path.join(buildDir, "Performance");
-    const targetFile = path.join(targetDir, "performance-data.json");
-
-    await fs.mkdir(targetDir, { recursive: true });
-    await fs.writeFile(
-      targetFile,
-      JSON.stringify(performanceData, null, 2),
-      "utf-8"
-    );
+    const { portalPath } = await createBuildPerformancePortal(buildId, performanceData);
 
     return NextResponse.json(
-      { success: true, message: "Performance card data saved" },
+      { success: true, message: "Performance data saved and build portal generated", portalPath },
       { status: 200 }
     );
   } catch (error) {
