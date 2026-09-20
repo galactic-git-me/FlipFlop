@@ -90,6 +90,18 @@ class AmazonSPAPI:
             "marketplace": matching,
         }
 
+    async def get_listing(self, *, sku: str) -> dict[str, Any]:
+        """Read the listing after an upsert so we can obtain its ASIN."""
+        response = await self._request(
+            "GET",
+            f"/listings/2021-08-01/items/{self.seller_id}/{sku}",
+            params={
+                "marketplaceIds": self.marketplace_id,
+                "includedData": "summaries,identifiers,issues",
+            },
+        )
+        return _json(response) or {}
+
     async def upsert_listing(self, *, sku: str, title: str, description: str, bullet_points: list[str], price: float, quantity: int, condition: str, images: list[str]) -> dict[str, Any]:
         if not sku.strip():
             raise AmazonSPAPIError("Amazon listing SKU cannot be empty.")
@@ -107,8 +119,13 @@ class AmazonSPAPI:
             "condition_type": [{"value": _condition(condition), "marketplace_id": self.marketplace_id}],
             "fulfillment_availability": [{"fulfillment_channel_code": "DEFAULT", "quantity": max(0, quantity)}],
             "purchasable_offer": [{"currency": "GBP", "our_price": [{"schedule": [{"value_with_tax": round(price, 2)}]}], "marketplace_id": self.marketplace_id}],
-            "main_product_image_locator": [{"media_location": images[0], "marketplace_id": self.marketplace_id}],
         }
+        # Amazon supports one main product image plus up to nine secondary
+        # product images for Listings Items. Keep the canonical order and
+        # ignore anything beyond Amazon's supported limit.
+        for index, image in enumerate(images[:10]):
+            attribute = "main_product_image_locator" if index == 0 else f"other_product_image_locator_{index}"
+            attributes[attribute] = [{"media_location": image, "marketplace_id": self.marketplace_id}]
         response = await self._request(
             "PUT",
             f"/listings/2021-08-01/items/{self.seller_id}/{sku}",

@@ -497,6 +497,9 @@ async def lifespan(app: FastAPI):
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS warranty_started_at TIMESTAMP",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS customer_id INTEGER",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS delivery_followup_sent_at TIMESTAMP",
+            "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS relist_enabled BOOLEAN DEFAULT TRUE",
+            "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS relist_interval_days INTEGER DEFAULT 7",
+            "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS relist_enabled_default BOOLEAN DEFAULT TRUE",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_enabled BOOLEAN DEFAULT FALSE",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_interval_days INTEGER",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS next_recreate_at TIMESTAMP",
@@ -504,6 +507,9 @@ async def lifespan(app: FastAPI):
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_count INTEGER DEFAULT 0",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS last_recreate_status VARCHAR(30)",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS last_recreate_message VARCHAR(500)",
+            "ALTER TABLE products ADD COLUMN IF NOT EXISTS item_specifics JSON",
+            "ALTER TABLE products ADD COLUMN IF NOT EXISTS platform_category_id VARCHAR(30)",
+            "ALTER TABLE products ADD COLUMN IF NOT EXISTS platform_category_name VARCHAR(150)",
         ):
             await conn.exec_driver_sql(statement)
         await _install_manual_build_delete_guard(conn)
@@ -705,6 +711,11 @@ app.include_router(settings_router.router, prefix="/api")
 app.include_router(debug.router, prefix="/api")
 app.include_router(logs_api.router, prefix="/api")
 app.include_router(playbooks.router, prefix="/api")
+# Keep the dashboard's legacy `/api/admin/orders` handlers ahead of the newer
+# async order-management router.  Both routers expose the same paths; route
+# registration order is therefore part of the API contract used by the admin
+# dashboard and its compatibility tests.
+app.include_router(admin_router)
 app.include_router(orders_router, prefix="")
 app.include_router(orders_admin_router, prefix="")
 app.include_router(drafts_router, prefix="")
@@ -762,12 +773,19 @@ app.include_router(quotes_router, prefix="/api")
 app.include_router(payments_router, prefix="/api")
 app.include_router(webhooks_router, prefix="/api")
 app.include_router(guides_router)
-app.include_router(admin_router)
 app.include_router(gems_router)
 
 # Register after API routers so any future `/api/builds/...` API routes retain
 # precedence; model files are served from the non-overlapping build asset path.
-_builds_dir = _app_dir.parent / "builds"
+# In Docker the compose file mounts the repository's builds directory at
+# `/builds`; on the Windows checkout it lives beside `flipflop-api`.
+_build_asset_candidates = [
+    Path(os.environ["BUILD_ASSETS_DIR"]) if os.environ.get("BUILD_ASSETS_DIR") else None,
+    Path("/builds"),
+    _app_dir.parent / "builds",
+    _app_dir.parent.parent / "builds",
+]
+_builds_dir = next((path for path in _build_asset_candidates if path and path.is_dir()), _app_dir.parent.parent.parent / "builds")
 _builds_dir.mkdir(parents=True, exist_ok=True)
 app.mount("/api/builds", StaticFiles(directory=str(_builds_dir)), name="build-assets")
 

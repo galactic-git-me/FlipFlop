@@ -7,6 +7,7 @@ import { PriceHistoryModal } from "./PriceHistoryModal";
 interface PriceObservation {
   observed_at: string;
   delivered_price: number;
+  sold_count?: number;
 }
 
 interface PriceHistorySparklineProps {
@@ -17,6 +18,7 @@ interface PriceHistorySparklineProps {
 export function PriceHistorySparkline({ listingId, listingTitle }: PriceHistorySparklineProps) {
   const [listingPrices, setListingPrices] = useState<PriceObservation[]>([]);
   const [cpkPrices, setCpkPrices] = useState<PriceObservation[]>([]);
+  const [soldPrices, setSoldPrices] = useState<PriceObservation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -56,6 +58,7 @@ export function PriceHistorySparkline({ listingId, listingTitle }: PriceHistoryS
         const [listingData, cpkData] = await Promise.all([listingResponse.json(), cpkResponse.json()]);
         setListingPrices(listingData.prices || []);
         setCpkPrices(cpkData.prices || []);
+        setSoldPrices(cpkData.sold_prices || []);
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") return;
         console.error(`Error fetching price history for ${listingId}:`, error);
@@ -103,6 +106,7 @@ export function PriceHistorySparkline({ listingId, listingTitle }: PriceHistoryS
           listingTitle={listingTitle}
           listingPrices={listingPrices}
           cpkPrices={cpkPrices}
+          soldPrices={soldPrices}
           onClose={() => setShowModal(false)}
         />
       )}

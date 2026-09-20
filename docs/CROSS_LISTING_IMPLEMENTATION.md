@@ -9,7 +9,7 @@ The pre-built workflow first submits a canonical listing and marks the `ManualBu
 | eBay UK | API action reuses the existing seller OAuth and `post-to-ebay` backend operation. | eBay's Inventory API supports inventory items, offers, publish, update and withdraw operations. The existing account flow remains the only credential flow. |
 | FlipFlop.shop | API action reuses `list-on-storefront` and links an existing product/build. | The direct storefront is an existing first-party API surface; cross-listing must not create a duplicate product. |
 | OnBuy | Manual-assist pack with `manual_action_required`. | No OnBuy seller connection/API/feed is configured in this repository, so the app does not claim to publish. |
-| Amazon | Manual-assist pack with `requires_approval`. | Amazon SP-API listing creation depends on seller authorization, the Product Listing role, marketplace/category requirements and identifiers. |
+| Amazon | Uses the server-side Amazon SP-API when the seller connection is authorized; otherwise blocked pending approval/configuration. | Amazon SP-API listing creation depends on seller authorization, the Product Listing role, marketplace/category requirements and identifiers. |
 | Facebook Marketplace | Manual/catalog-assist pack. | The app does not automate personal Marketplace posting or authenticated scraping. A future implementation must use an approved business catalog/feed route. |
 | Vinted | Manual-assist pack. | No approved seller integration is configured; consumer-account automation is intentionally not implemented. |
 
@@ -31,7 +31,7 @@ Official references used for these capability decisions:
 - Per-listing review/edit for title, description and price, with copied/transformed field summary.
 - Explicit confirmation before calling an API destination.
 - Batch result reporting with partial success preserved and manual-only results clearly labelled.
-- Downloadable manual listing packs containing content, image URLs and manual steps.
+- One downloadable canonical listing pack containing reusable content, public image URLs and media assets for any channel; destination-specific fields are applied only by the channel adapter or seller workflow.
 - No fake published state, mock URLs, private-image hotlinking or personal-account marketplace automation.
 
 ## Remaining backend work before full production automation

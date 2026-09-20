@@ -8,6 +8,7 @@ export function Build3DViewer({ url }: { url: string }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -16,6 +17,8 @@ export function Build3DViewer({ url }: { url: string }) {
     let disposed = false;
     let cleanup: () => void = () => {};
 
+    setState("loading");
+    setErrorMessage(null);
     (async () => {
       try {
         const THREE = await import("three");
@@ -91,8 +94,12 @@ export function Build3DViewer({ url }: { url: string }) {
           renderer.render(scene, camera);
         };
         animate();
-      } catch {
-        if (!disposed) setState("error");
+      } catch (cause) {
+        console.error("Failed to load saved GLB", { url, cause });
+        if (!disposed) {
+          setErrorMessage(cause instanceof Error ? cause.message : "Unknown viewer error");
+          setState("error");
+        }
       }
     })();
 
@@ -111,7 +118,7 @@ export function Build3DViewer({ url }: { url: string }) {
       <div className="relative h-80" ref={hostRef} aria-label="Interactive 3D model viewer">
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden="true" />
         {state === "loading" && <div className="absolute inset-0 grid place-items-center text-xs text-slate-400"><span className="flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> Loading textured model…</span></div>}
-        {state === "error" && <div className="absolute inset-0 grid place-items-center px-4 text-center text-xs text-red-300">The saved GLB could not be displayed. Use “Open GLB” to inspect the file.</div>}
+        {state === "error" && <div className="absolute inset-0 grid place-items-center px-4 text-center text-xs text-red-300">The saved GLB could not be displayed.<br /><span className="mt-1 break-all text-[10px] text-red-200/70">{errorMessage}</span></div>}
       </div>
     </div>
   );

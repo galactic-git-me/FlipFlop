@@ -70,6 +70,8 @@ from app.gem_radar.schemas import (
     SoldCompTarget,
 )
 from app.services.submission_queue_service import SubmissionQueueService
+from app.services.hardware_performance import enrich_listing_performance, load_benchmark_context
+from app.services.product_reviews import aggregate_cpk_reviews
 
 router = APIRouter(prefix="/gem-radar", tags=["gem-radar"])
 
@@ -309,7 +311,17 @@ async def pipeline_status_endpoint(
     # API process's ephemeral pipeline_status object.  Keep the original
     # response shape/card rendering, but hydrate activeScans from the shared
     # database whenever the in-memory view is empty.
-    if not snapshot.get("activeScans"):
+    # The queue worker runs in a separate process from the API. During an
+    # active sweep the API process can still have scan objects in memory while
+    # their counters remain at zero; the durable queue/observation rows are
+    # the authoritative progress source in that case as well.
+    active_scans = snapshot.get("activeScans") or []
+    active_totals = snapshot.get("totalsAcrossActive") or {}
+    needs_durable_hydration = (
+        not active_scans
+        or int(active_totals.get("ingestedCount") or 0) == 0
+    )
+    if needs_durable_hydration:
         from sqlalchemy import text
         from app.gem_radar.cpk_market import MIN_LISTINGS_FOR_SETTLED_PRICE
         from datetime import datetime
@@ -1126,28 +1138,25 @@ async def get_scored_listings_latest_run(
     # Reviews describe the matched product, not the marketplace listing.
     # Prefer a non-eBay retailer's product review when available, then share
     # that value with every listing carrying the same CPK.
-    product_reviews_by_vendor: dict[tuple[str, str], tuple[float | None, int | None]] = {}
-    for row in scored:
-        if not row.cpk or (row.review_average_rating is None and row.review_count is None):
-            continue
-        vendor_key = (row.cpk, (row.source or "unknown").lower())
-        current = product_reviews_by_vendor.get(vendor_key)
-        if current is None or (row.review_count or 0) > (current[1] or 0):
-            product_reviews_by_vendor[vendor_key] = (row.review_average_rating, row.review_count)
-    product_reviews: dict[str, tuple[float | None, int | None]] = {}
-    for (cpk, _vendor), (rating, count) in product_reviews_by_vendor.items():
-        total = product_reviews.get(cpk)
-        if total is None:
-            product_reviews[cpk] = (rating, count)
-            continue
-        old_rating, old_count = total
-        if rating is not None and count:
-            if old_rating is not None and old_count:
-                product_reviews[cpk] = ((old_rating * old_count + rating * count) / (old_count + count), old_count + count)
-            else:
-                product_reviews[cpk] = (rating, (old_count or 0) + count)
-        elif count:
-                product_reviews[cpk] = (old_rating, (old_count or 0) + count)
+    review_observations = [
+        (row.cpk, row.source, row.review_average_rating, row.review_count)
+        for row in scored
+    ]
+    amazon_review_result = await db.execute(
+        text("""
+            SELECT DISTINCT ON (cpk)
+                   cpk, rating, review_count
+            FROM amazon_bestseller_observations
+            WHERE cpk IS NOT NULL
+              AND (rating IS NOT NULL OR review_count IS NOT NULL)
+            ORDER BY cpk, captured_at DESC, id DESC
+        """)
+    )
+    review_observations.extend(
+        (row.cpk, "amazon", row.rating, row.review_count)
+        for row in amazon_review_result
+    )
+    product_reviews = aggregate_cpk_reviews(review_observations)
 
     # Amazon bestseller rank is a product signal, not a marketplace-listing
     # signal. Share the most recent rank for each CPK with every listing that
@@ -1170,6 +1179,23 @@ async def get_scored_listings_latest_run(
         }
         for row in bestseller_result
     }
+
+    benchmark_index, peer_scores = await load_benchmark_context(db)
+    performance_by_cpk: dict[str, dict] = {}
+    for row in scored:
+        if not row.cpk:
+            continue
+        performance = enrich_listing_performance(
+            category=row.category,
+            title=row.title,
+            canonical_model_id=row.canonical_model_id,
+            release_year=row.release_year,
+            delivered_price=row.delivered_price,
+            benchmark_index=benchmark_index,
+            peer_scores=peer_scores,
+        )
+        if performance.get("performance_status") == "MATCHED":
+            performance_by_cpk.setdefault(row.cpk, performance)
 
     return [
         {
@@ -1227,6 +1253,15 @@ async def get_scored_listings_latest_run(
             "scored_at": s.scored_at.isoformat() if s.scored_at else None,
             "listing_observed_at": s.listing_observed_at.isoformat() if s.listing_observed_at else None,
             "search_run_id": s.search_run_id,
+            **(performance_by_cpk.get(s.cpk) or enrich_listing_performance(
+                category=s.category,
+                title=s.title,
+                canonical_model_id=s.canonical_model_id,
+                release_year=s.release_year,
+                delivered_price=s.delivered_price,
+                benchmark_index=benchmark_index,
+                peer_scores=peer_scores,
+            )),
         }
         for s in scored
     ]
@@ -3249,6 +3284,8 @@ async def get_cpk_price_history(
     """
     from app.models.gem_radar_observation import GemRadarListingObservation
     from app.models.gem_radar_listing_cpk import GemRadarListingCpk
+    from app.models.gem_radar_scored_listing import GemRadarScoredListing
+    from app.models.gem_radar_sold_observation import GemRadarSoldObservation
     from sqlalchemy import select, desc, func
 
     # Get the listing to find its CPK
@@ -3259,10 +3296,31 @@ async def get_cpk_price_history(
     result = await db.execute(listing_stmt)
     row = result.first()
 
-    if not row or not row[0]:
+    cpk = row[0] if row and row[0] else None
+    if not cpk:
+        scored_row = await db.execute(
+            select(GemRadarScoredListing.cpk)
+            .where(
+                GemRadarScoredListing.listing_id == listing_id,
+                GemRadarScoredListing.cpk.is_not(None),
+            )
+            .order_by(GemRadarScoredListing.scored_at.desc(), GemRadarScoredListing.id.desc())
+            .limit(1)
+        )
+        cpk = scored_row.scalar_one_or_none()
+    if not cpk:
         return {"prices": []}
 
-    cpk = row[0]
+    # Some older or non-eBay listings have a CPK on their scored row before
+    # the association ledger is backfilled. Include both association paths so
+    # their observations still contribute to the shared CPK trend.
+    cpk_listing_ids = select(GemRadarListingCpk.listing_id).where(
+        GemRadarListingCpk.cpk == cpk
+    ).union(
+        select(GemRadarScoredListing.listing_id).where(
+            GemRadarScoredListing.cpk == cpk
+        )
+    )
 
     # Bucket observations by day. Listings are normally scanned at slightly
     # different timestamps, so grouping by the raw timestamp would produce
@@ -3273,11 +3331,7 @@ async def get_cpk_price_history(
             observed_day.label("observed_day"),
             func.avg(GemRadarListingObservation.delivered_price).label("avg_price"),
         )
-        .join(
-            GemRadarListingCpk,
-            GemRadarListingCpk.listing_id == GemRadarListingObservation.listing_id,
-        )
-        .where(GemRadarListingCpk.cpk == cpk)
+        .where(GemRadarListingObservation.listing_id.in_(cpk_listing_ids))
         .group_by(observed_day)
         .order_by(desc(observed_day))
         .limit(100)
@@ -3285,6 +3339,21 @@ async def get_cpk_price_history(
 
     result = await db.execute(obs_stmt)
     observations = result.fetchall()
+
+    sold_day = func.date_trunc("day", GemRadarSoldObservation.observed_at)
+    sold_stmt = (
+        select(
+            sold_day.label("observed_day"),
+            func.avg(GemRadarSoldObservation.price + GemRadarSoldObservation.postage).label("avg_price"),
+            func.count(GemRadarSoldObservation.id).label("sold_count"),
+        )
+        .where(GemRadarSoldObservation.cpk == cpk)
+        .group_by(sold_day)
+        .order_by(desc(sold_day))
+        .limit(100)
+    )
+    sold_result = await db.execute(sold_stmt)
+    sold_observations = sold_result.fetchall()
 
     return {
         "cpk": cpk,
@@ -3294,6 +3363,14 @@ async def get_cpk_price_history(
                 "delivered_price": float(obs[1]) if obs[1] else 0,
             }
             for obs in observations
+        ],
+        "sold_prices": [
+            {
+                "observed_at": obs[0].isoformat() if obs[0] else None,
+                "delivered_price": float(obs[1]) if obs[1] else 0,
+                "sold_count": int(obs[2]),
+            }
+            for obs in sold_observations
         ]
     }
 

@@ -48,6 +48,8 @@ export interface CanonicalListing {
 export interface CrossListingSource {
   id: string;
   source: SourcePlatform;
+  /** Destination channel for synthetic rows backed by channel_listings. */
+  channel?: CrossListingChannel;
   externalId: string;
   canonicalProductId: string;
   buildId: number;
@@ -60,12 +62,15 @@ export interface CrossListingSource {
   status: "live" | "draft" | "sold" | "ended" | "unavailable" | "failed";
   url: string | null;
   updatedAt: string;
+  error?: string | null;
   listing: CanonicalListing;
 }
 
 export interface ChannelCapability {
   channel: CrossListingChannel;
   label: string;
+  /** Maximum number of listing images, including the main image. Null means no channel limit is configured. */
+  maxImages: number | null;
   mode: "api" | "manual" | "not_connected" | "requires_approval";
   connected: boolean;
   canPublish: boolean;
@@ -90,16 +95,25 @@ export interface CrossListingSourceResponse {
   warnings: string[];
 }
 
-const sourceStatus = (build: ManualBuild, source: SourcePlatform): CrossListingSource["status"] => {
+const sourceStatus = (
+  build: ManualBuild,
+  source: SourcePlatform
+): CrossListingSource["status"] => {
   if (build.status === "sold") return "sold";
   if (source === "ebay_uk") {
-    if (build.ebay_listing_status === "active" || build.ebay_live) return "live";
+    if (build.ebay_listing_status === "active" || build.ebay_live)
+      return "live";
     if (build.ebay_listing_status === "draft") return "draft";
     if (build.ebay_listing_status === "ended") return "ended";
     return "unavailable";
   }
-  if (build.status === "in_progress" && !build.storefront_product_id) return "draft";
-  return build.storefront_product_id ? (build.storefront_live === false ? "ended" : "live") : "unavailable";
+  if (build.status === "in_progress" && !build.storefront_product_id)
+    return "draft";
+  return build.storefront_product_id
+    ? build.storefront_live === false
+      ? "ended"
+      : "live"
+    : "unavailable";
 };
 
 function specifications(build: ManualBuild): Record<string, string> {
@@ -111,17 +125,22 @@ function specifications(build: ManualBuild): Record<string, string> {
 }
 
 export function canonicalFromBuild(build: ManualBuild): CanonicalListing {
-  const photos = (build.photos ?? []).filter((photo) => photo.kind === "photo").map((photo, index) => ({
-    url: photo.url,
-    alt: `${build.name} product photo ${index + 1}`,
-    order: index,
-  }));
+  const photos = (build.photos ?? [])
+    .filter((photo) => photo.kind === "photo")
+    .map((photo, index) => ({
+      url: photo.url,
+      alt: `${build.name} product photo ${index + 1}`,
+      order: index,
+    }));
   return {
     productId: String(build.id),
     sku: `FF-BUILD-${build.id}`,
     title: build.generated_title || build.name,
-    description: build.generated_description || "Listing copy has not been generated yet.",
-    bulletPoints: Object.values(build.generated_aspects ?? {}).flat().slice(0, 8),
+    description:
+      build.generated_description || "Listing copy has not been generated yet.",
+    bulletPoints: Object.values(build.generated_aspects ?? {})
+      .flat()
+      .slice(0, 8),
     faqs: [],
     // Cross-listing uses the canonical build valuation. ebay_price may be an
     // old marketplace-specific anchor (including an offer ceiling), which can
@@ -132,7 +151,8 @@ export function canonicalFromBuild(build: ManualBuild): CanonicalListing {
     condition: build.ebay_condition || "Used",
     images: photos,
     specifications: specifications(build),
-    warranty: "See the saved build warranty and returns policy before publishing.",
+    warranty:
+      "See the saved build warranty and returns policy before publishing.",
     shipping: build.shipping_method || "Configure shipping before publishing.",
     deliveryMode: "delivery_only",
     collectionAllowed: false,
@@ -170,11 +190,16 @@ export function sourcesFromBuild(build: ManualBuild): CrossListingSource[] {
   // Keep newly-created builds visible so they can be reviewed/prepared before
   // they are marked built. The publish endpoints still enforce the lifecycle
   // requirement that a build must be built before it can go live.
-  if (build.storefront_product_id || ["in_progress", "built", "listed", "sold"].includes(build.status)) {
+  if (
+    build.storefront_product_id ||
+    ["in_progress", "built", "listed", "sold"].includes(build.status)
+  ) {
     items.push({
       id: `flipflop_shop:${build.id}`,
       source: "flipflop_shop",
-      externalId: build.storefront_product_id ? String(build.storefront_product_id) : "not-created",
+      externalId: build.storefront_product_id
+        ? String(build.storefront_product_id)
+        : "not-created",
       canonicalProductId: String(build.id),
       buildId: build.id,
       title: listing.title,
@@ -192,13 +217,90 @@ export function sourcesFromBuild(build: ManualBuild): CrossListingSource[] {
   return items;
 }
 
-export function capabilities(ebayConnected: boolean, amazonConnected = false, amazonMessage?: string): ChannelCapability[] {
+export function capabilities(
+  ebayConnected: boolean,
+  amazonConnected = false,
+  amazonMessage?: string
+): ChannelCapability[] {
   return [
-    { channel: "ebay_uk", label: "eBay UK", mode: ebayConnected ? "api" : "not_connected", connected: ebayConnected, canPublish: ebayConnected, canUpdate: ebayConnected, canEnd: ebayConnected, note: ebayConnected ? "Uses the existing seller OAuth and manual-build eBay operations." : "Connect the existing eBay seller account in Settings.", officialReference: "https://developer.ebay.com/api-docs/sell/inventory/overview.html" },
-    { channel: "flipflop_shop", label: "FlipFlop.shop", mode: "api", connected: true, canPublish: true, canUpdate: true, canEnd: false, note: "Reuses the canonical storefront product; duplicate products are not created here.", officialReference: "Internal storefront API" },
-    { channel: "onbuy", label: "OnBuy", mode: "manual", connected: false, canPublish: false, canUpdate: false, canEnd: false, note: "Seller API/feed onboarding is not configured in this app. Manual listing pack only.", officialReference: "https://www.onbuy.com/gb/sell/" },
-    { channel: "amazon", label: "Amazon", mode: amazonConnected ? "api" : "requires_approval", connected: amazonConnected, canPublish: amazonConnected, canUpdate: amazonConnected, canEnd: false, note: amazonConnected ? "Seller-authorized SP-API connection. Amazon may still return category, GTIN or product-type requirements for review." : amazonMessage || "Add the Amazon SP-API variables to the API service and authorize the seller account.", officialReference: "https://developer-docs.amazon.com/sp-api/docs/manage-product-listings-guide" },
-    { channel: "facebook_catalog", label: "Facebook catalog", mode: "manual", connected: false, canPublish: false, canUpdate: false, canEnd: false, note: "Catalog/feed route must be configured; personal Marketplace automation is not supported.", officialReference: "https://www.facebook.com/business/help/" },
-    { channel: "vinted", label: "Vinted", mode: "manual", connected: false, canPublish: false, canUpdate: false, canEnd: false, note: "No approved seller integration is configured. Manual-assist export only; no consumer-account automation.", officialReference: "https://www.vinted.co.uk/help" },
+    {
+      channel: "ebay_uk",
+      label: "eBay UK",
+      maxImages: 24,
+      mode: ebayConnected ? "api" : "not_connected",
+      connected: ebayConnected,
+      canPublish: ebayConnected,
+      canUpdate: ebayConnected,
+      canEnd: ebayConnected,
+      note: ebayConnected
+        ? "Uses the existing seller OAuth and manual-build eBay operations."
+        : "Connect the existing eBay seller account in Settings.",
+      officialReference:
+        "https://developer.ebay.com/api-docs/sell/inventory/overview.html",
+    },
+    {
+      channel: "flipflop_shop",
+      label: "FlipFlop.shop",
+      maxImages: null,
+      mode: "api",
+      connected: true,
+      canPublish: true,
+      canUpdate: true,
+      canEnd: false,
+      note: "Reuses the canonical storefront product; duplicate products are not created here.",
+      officialReference: "Internal storefront API",
+    },
+    {
+      channel: "onbuy",
+      label: "OnBuy",
+      maxImages: 12,
+      mode: "manual",
+      connected: false,
+      canPublish: false,
+      canUpdate: false,
+      canEnd: false,
+      note: "Seller API/feed onboarding is not configured in this app. Manual listing pack only.",
+      officialReference: "https://www.onbuy.com/gb/sell/",
+    },
+    {
+      channel: "amazon",
+      label: "Amazon",
+      maxImages: 10,
+      mode: amazonConnected ? "api" : "requires_approval",
+      connected: amazonConnected,
+      canPublish: amazonConnected,
+      canUpdate: amazonConnected,
+      canEnd: false,
+      note: amazonConnected
+        ? "Seller-authorized SP-API connection. Amazon may still return category, GTIN or product-type requirements for review."
+        : amazonMessage ||
+          "Add the Amazon SP-API variables to the API service and authorize the seller account.",
+      officialReference:
+        "https://developer-docs.amazon.com/sp-api/docs/manage-product-listings-guide",
+    },
+    {
+      channel: "facebook_catalog",
+      label: "Facebook catalog",
+      maxImages: 10,
+      mode: "manual",
+      connected: false,
+      canPublish: false,
+      canUpdate: false,
+      canEnd: false,
+      note: "Catalog/feed route must be configured; personal Marketplace automation is not supported.",
+      officialReference: "https://www.facebook.com/business/help/",
+    },
+    {
+      channel: "vinted",
+      label: "Vinted",
+      maxImages: 20,
+      mode: "manual",
+      connected: false,
+      canPublish: false,
+      canUpdate: false,
+      canEnd: false,
+      note: "No approved seller integration is configured. Manual-assist export only; no consumer-account automation.",
+      officialReference: "https://www.vinted.co.uk/help",
+    },
   ];
 }

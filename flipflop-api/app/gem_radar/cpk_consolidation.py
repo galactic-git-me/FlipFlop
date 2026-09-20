@@ -49,20 +49,30 @@ async def consolidate_cpk_pricing(db) -> dict[str, CPKPricingAggregate]:
 
     # Fetch all listings with CPK, grouped by CPK
     query = """
+    WITH latest AS (
+        SELECT DISTINCT ON (listing_id)
+            listing_id, cpk, category, cpk_data, source,
+            market_new_price, market_used_price
+        FROM gem_radar_scored_listings
+        WHERE cpk IS NOT NULL
+        ORDER BY listing_id, scored_at DESC NULLS LAST, id DESC
+    )
     SELECT
         cpk,
-        category,
-        (cpk_data->>'brand')::text as brand,
-        (cpk_data->>'model')::text as model,
-        COUNT(*) as listing_count,
+        MIN(category) as category,
+        MIN((cpk_data->>'brand')::text) as brand,
+        MIN((cpk_data->>'model')::text) as model,
+        COUNT(DISTINCT listing_id) as listing_count,
         COUNT(DISTINCT source) as vendor_count,
         PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY market_new_price) as median_new,
         PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY market_used_price) as median_used,
         MIN(COALESCE(market_new_price, market_used_price)) as min_price,
         MAX(COALESCE(market_new_price, market_used_price)) as max_price
-    FROM gem_radar_scored_listings
-    WHERE cpk IS NOT NULL
-    GROUP BY cpk, category, brand, model
+    FROM latest
+    -- CPK is the identity boundary. Descriptive fields can vary slightly
+    -- between vendor/listing rows; grouping by them would split one CPK into
+    -- multiple rows and the Python dict below would silently overwrite one.
+    GROUP BY cpk
     ORDER BY listing_count DESC
     """
 

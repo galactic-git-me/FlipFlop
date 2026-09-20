@@ -216,7 +216,7 @@ class GemRecommendationService:
             return "£500-800"
         elif price < 1000:
             return "£800-1000"
-        elif price < 1200:
+        elif price <= 1200:
             return "£1000-1200"
         elif price < 1500:
             return "£1200-1500"
@@ -517,16 +517,27 @@ IMPORTANT:
         if not component_name or not price_dict:
             return 0.0
 
-        component_name = component_name.strip().lower()
+        # Claude occasionally returns numeric component attributes (for
+        # example, ``psu_watts``).  Treat them as searchable text rather than
+        # raising and losing the entire financial enrichment.
+        component_name = str(component_name).strip().lower()
 
         # Try exact match first
         for name, price in price_dict.items():
             if name.lower() == component_name:
                 return float(price)
 
-        # Try substring match
+        # Try substring match, then token matching for natural descriptions
+        # such as "4080 Gaming" or "RTX 4070 Ti".
         for name, price in price_dict.items():
-            if name.lower() in component_name or component_name in name.lower():
+            name_lower = name.lower()
+            if name_lower in component_name or component_name in name_lower:
+                return float(price)
+            name_tokens = [token for token in name_lower.replace("-", " ").split() if token]
+            # Ignore generic vendor/category tokens (e.g. RTX) and accept a
+            # distinctive model token, which handles shortened descriptions.
+            distinctive_tokens = [token for token in name_tokens if token not in {"rtx", "rx", "gtx"}]
+            if distinctive_tokens and any(token in component_name for token in distinctive_tokens):
                 return float(price)
 
         return 0.0

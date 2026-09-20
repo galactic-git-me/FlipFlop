@@ -16,6 +16,7 @@ import {
 interface PriceObservation {
   observed_at: string;
   delivered_price: number;
+  sold_count?: number;
 }
 
 interface PriceHistoryModalProps {
@@ -23,6 +24,7 @@ interface PriceHistoryModalProps {
   listingTitle?: string;
   listingPrices: PriceObservation[];
   cpkPrices?: PriceObservation[];
+  soldPrices?: PriceObservation[];
   onClose: () => void;
 }
 
@@ -31,6 +33,7 @@ export function PriceHistoryModal({
   listingTitle,
   listingPrices,
   cpkPrices,
+  soldPrices = [],
   onClose,
 }: PriceHistoryModalProps) {
   useEffect(() => {
@@ -54,6 +57,9 @@ export function PriceHistoryModal({
         (a, b) => new Date(a.observed_at).getTime() - new Date(b.observed_at).getTime()
       )
     : [];
+  const sortedSold = [...soldPrices].sort(
+    (a, b) => new Date(a.observed_at).getTime() - new Date(b.observed_at).getTime()
+  );
 
   // Align both series to calendar days. The market endpoint is daily and a
   // listing can be observed multiple times per day; the latest listing value
@@ -66,6 +72,7 @@ export function PriceHistoryModal({
   const timestamps = new Set<number>();
   sortedListing.forEach((p) => timestamps.add(dayKey(p.observed_at)));
   sortedCpk.forEach((p) => timestamps.add(dayKey(p.observed_at)));
+  sortedSold.forEach((p) => timestamps.add(dayKey(p.observed_at)));
 
   const sortedTimestamps = Array.from(timestamps).sort((a, b) => a - b);
   const listingMap = new Map(
@@ -80,6 +87,9 @@ export function PriceHistoryModal({
       p.delivered_price,
     ])
   );
+  const soldMap = new Map(
+    sortedSold.map((p) => [dayKey(p.observed_at), p.delivered_price])
+  );
 
   const chartData = sortedTimestamps.map((ts) => ({
     timestamp: ts,
@@ -89,14 +99,16 @@ export function PriceHistoryModal({
     }),
     listingPrice: listingMap.get(ts),
     cpkPrice: cpkMap.get(ts),
+    soldPrice: soldMap.get(ts),
   }));
 
   // Stats for listing prices
   const listingPriceValues = sortedListing.map((p) => p.delivered_price);
-  const minListingPrice = Math.min(...listingPriceValues);
-  const maxListingPrice = Math.max(...listingPriceValues);
-  const avgListingPrice =
-    listingPriceValues.reduce((sum, p) => sum + p, 0) / listingPriceValues.length;
+  const minListingPrice = listingPriceValues.length > 0 ? Math.min(...listingPriceValues) : 0;
+  const maxListingPrice = listingPriceValues.length > 0 ? Math.max(...listingPriceValues) : 0;
+  const avgListingPrice = listingPriceValues.length > 0
+    ? listingPriceValues.reduce((sum, p) => sum + p, 0) / listingPriceValues.length
+    : 0;
   const currentListingPrice = sortedListing[sortedListing.length - 1]?.delivered_price ?? 0;
   const listingPriceChange = currentListingPrice - (sortedListing[0]?.delivered_price ?? 0);
 
@@ -134,7 +146,7 @@ export function PriceHistoryModal({
 
         {/* Content */}
         <div className="flex-1 overflow-auto p-4">
-          {listingPrices.length === 0 ? (
+          {listingPrices.length === 0 && sortedCpk.length === 0 && sortedSold.length === 0 ? (
             <div className="flex items-center justify-center h-64 text-slate-400">
               No price history available
             </div>
@@ -142,13 +154,13 @@ export function PriceHistoryModal({
             <>
               {/* Stats */}
               <div className="mb-6 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border border-blue-400/30 bg-blue-500/10 p-4">
+                {listingPrices.length > 0 && <div className="rounded-xl border border-blue-400/30 bg-blue-500/10 p-4">
                   <div className="text-xs text-slate-400">This Listing</div>
                   <div className="text-lg font-semibold text-blue-300 mb-1">
                     £{currentListingPrice.toFixed(0)}
                   </div>
                   <div className="text-xs text-slate-400">Average £{avgListingPrice.toFixed(0)} · Range £{minListingPrice.toFixed(0)}–£{maxListingPrice.toFixed(0)}</div>
-                </div>
+                </div>}
                 {cpkPrices && cpkPrices.length > 0 && (
                   <div className="rounded-xl border border-orange-400/30 bg-orange-500/10 p-4">
                     <div className="text-xs text-slate-400">Market CPK Average</div>
@@ -160,10 +172,19 @@ export function PriceHistoryModal({
                     </div>
                   </div>
                 )}
+                {sortedSold.length > 0 && <div className="rounded-xl border border-emerald-400/30 bg-emerald-500/10 p-4">
+                  <div className="text-xs text-slate-400">Completed CPK Sales</div>
+                  <div className="text-lg font-semibold text-emerald-300 mb-1">
+                    £{sortedSold[sortedSold.length - 1].delivered_price.toFixed(0)}
+                  </div>
+                  <div className="text-xs text-slate-400">
+                    {sortedSold.reduce((sum, p) => sum + (p.sold_count || 0), 0).toLocaleString()} sold observations
+                  </div>
+                </div>}
               </div>
 
               {/* vs Market */}
-              {cpkPrices && cpkPrices.length > 0 && (
+              {listingPrices.length > 0 && cpkPrices && cpkPrices.length > 0 && (
                 <div className="mb-6 rounded-xl border border-slate-700 bg-slate-800 p-4">
                   <div className="text-xs text-slate-400 mb-1">vs Market</div>
                   <div className="flex items-baseline gap-2">
@@ -182,7 +203,7 @@ export function PriceHistoryModal({
               )}
 
               {/* Trend */}
-              <div className="mb-6 rounded-xl border border-slate-700 bg-slate-800 p-4">
+              {listingPrices.length > 0 && <div className="mb-6 rounded-xl border border-slate-700 bg-slate-800 p-4">
                 <div className="text-xs text-slate-400">Trend (This Listing)</div>
                 <div className="flex items-baseline gap-2">
                   <span className="text-sm font-semibold text-slate-100">
@@ -205,7 +226,7 @@ export function PriceHistoryModal({
                         : "Stable"}
                   </span>
                 </div>
-              </div>
+              </div>}
 
               {/* Chart */}
               <div className="rounded-xl border border-slate-700 bg-slate-950/50 p-3 sm:p-5">
@@ -274,22 +295,39 @@ export function PriceHistoryModal({
                         connectNulls
                       />
                     )}
+                    {sortedSold.length > 0 && (
+                      <Line
+                        type="monotone"
+                        dataKey="soldPrice"
+                        stroke="#34d399"
+                        dot={false}
+                        activeDot={{ r: 6 }}
+                        isAnimationActive={false}
+                        name="Completed sales"
+                        strokeWidth={2}
+                        connectNulls
+                      />
+                    )}
                   </LineChart>
                 </ResponsiveContainer>
               </div>
 
               {/* Legend */}
               <div className="mt-3 flex gap-4 justify-center text-xs">
-                <div className="flex items-center gap-1">
+                {listingPrices.length > 0 && <div className="flex items-center gap-1">
                   <div className="w-3 h-0.5 bg-blue-400"></div>
                   <span className="text-slate-300">This Listing</span>
-                </div>
+                </div>}
                 {sortedCpk.length > 0 && (
                   <div className="flex items-center gap-1">
                     <div className="w-3 h-0.5 bg-orange-400"></div>
                     <span className="text-slate-300">Market CPK</span>
                   </div>
                 )}
+                {sortedSold.length > 0 && <div className="flex items-center gap-1">
+                  <div className="w-3 h-0.5 bg-emerald-400"></div>
+                  <span className="text-slate-300">Completed sales</span>
+                </div>}
               </div>
 
               {/* Observations Count */}
@@ -297,6 +335,7 @@ export function PriceHistoryModal({
                 {listingPrices.length} listing observation
                 {listingPrices.length !== 1 ? "s" : ""}
                 {sortedCpk.length > 0 && ` | ${sortedCpk.length} CPK observation${sortedCpk.length !== 1 ? "s" : ""}`}
+                {sortedSold.length > 0 && ` | ${sortedSold.length} sold-day${sortedSold.length !== 1 ? "s" : ""}`}
               </div>
             </>
           )}

@@ -23,7 +23,7 @@ export function PriceSparkline({
   height = 28,
   className = '',
 }: PriceSparklineProps) {
-  if (!listingPrices || listingPrices.length === 0) {
+  if ((!listingPrices || listingPrices.length === 0) && (!cpkPrices || cpkPrices.length === 0)) {
     return <span className="text-xs text-gray-400">—</span>;
   }
 
@@ -72,8 +72,8 @@ export function PriceSparkline({
     .join(' ');
 
   // Determine trend color for listing
-  const listingCurrent = sortedListing[sortedListing.length - 1].delivered_price;
-  const listingPrevious = sortedListing[0].delivered_price;
+  const listingCurrent = sortedListing[sortedListing.length - 1]?.delivered_price ?? 0;
+  const listingPrevious = sortedListing[0]?.delivered_price ?? listingCurrent;
   const listingChange = listingCurrent - listingPrevious;
   const listingTrendColor =
     listingChange < -0.01 ? '#3b82f6' : // Blue (price dropped)
@@ -134,14 +134,16 @@ export function PriceSparkline({
         )}
 
         {/* Listing price line (blue) */}
-        <polyline
-          points={listingPoints}
-          fill="none"
-          stroke={listingTrendColor}
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+        {sortedListing.length > 0 && (
+          <polyline
+            points={listingPoints}
+            fill="none"
+            stroke={listingTrendColor}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        )}
 
         {/* Current listing price dot */}
         {sortedListing.length > 0 && (

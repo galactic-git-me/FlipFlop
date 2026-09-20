@@ -9,7 +9,9 @@ class Customer(Base):
 
     id = Column(Integer, primary_key=True)
     email = Column(String(255), unique=True, nullable=False, index=True)
-    password_hash = Column(String(255), nullable=False)
+    # OAuth-created customers do not have a local password. Email/password
+    # accounts still populate this field through auth_service.
+    password_hash = Column(String(255), nullable=True)
     name = Column(String(255), nullable=False)
     address = Column(String(500), nullable=True)
     phone = Column(String(20), nullable=True)

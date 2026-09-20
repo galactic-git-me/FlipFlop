@@ -1,7 +1,9 @@
 "use client";
 
 import { useParams, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { ExternalLink, ShieldCheck, Store } from "lucide-react";
+import DOMPurify from "dompurify";
 
 const labels: Record<string, string> = {
   onbuy: "OnBuy",
@@ -14,12 +16,33 @@ export default function DevListingPage() {
   const params = useParams<{ channel: string; buildId: string }>();
   const search = useSearchParams();
   const channel = labels[params.channel] ?? params.channel;
-  const title = search.get("title") || "FlipFlop PC build";
-  const description = search.get("description") || "Development listing preview.";
-  const image = search.get("image");
-  const price = search.get("price");
-  const condition = search.get("condition") || "Used";
-  const sku = search.get("sku") || `FF-BUILD-${params.buildId}`;
+  const [preview, setPreview] = useState<Record<string, string> | null>(null);
+  useEffect(() => {
+    const stored = window.localStorage.getItem(`flipflop-dev-listing:${params.channel}:${params.buildId}`);
+    if (stored) {
+      try { setPreview(JSON.parse(stored) as Record<string, string>); } catch { /* use defaults */ }
+    }
+  }, [params.channel, params.buildId]);
+  // Query params remain a backwards-compatible fallback for old result links.
+  const title = preview?.title || search.get("title") || "FlipFlop PC build";
+  const description = preview?.description || search.get("description") || "Development listing preview.";
+  const image = preview?.image || search.get("image");
+  const price = preview?.price || search.get("price");
+  const condition = preview?.condition || search.get("condition") || "Used";
+  const sku = preview?.sku || search.get("sku") || `FF-BUILD-${params.buildId}`;
+  const [imageFailed, setImageFailed] = useState(false);
+  const safeDescription = DOMPurify.sanitize(description, {
+    ALLOWED_TAGS: [
+      "h1", "h2", "h3", "h4", "h5", "h6", "p", "ul", "ol", "li",
+      "blockquote", "strong", "b", "em", "i", "u", "a", "br", "hr",
+      "span", "div", "table", "tr", "td", "th", "tbody", "thead",
+    ],
+    ALLOWED_ATTR: ["style", "href", "target", "rel", "class"],
+  });
+
+  useEffect(() => {
+    setImageFailed(false);
+  }, [image]);
 
   return (
     <main className="min-h-screen bg-[#020617] px-4 py-8 text-slate-100 md:px-8">
@@ -40,7 +63,18 @@ export default function DevListingPage() {
         <section className="overflow-hidden rounded-2xl border border-slate-800 bg-[#0b121d] shadow-2xl shadow-black/20">
           <div className="grid gap-0 md:grid-cols-[minmax(280px,0.9fr)_1.1fr]">
             <div className="flex min-h-[300px] items-center justify-center bg-slate-950 p-6">
-              {image ? <img src={image} alt={title} className="max-h-[420px] w-full rounded-xl object-contain" /> : <div className="text-center text-sm text-slate-500">No product photo supplied</div>}
+              {image && !imageFailed ? (
+                <img
+                  src={image}
+                  alt={title}
+                  className="max-h-[420px] w-full rounded-xl object-contain"
+                  onError={() => setImageFailed(true)}
+                />
+              ) : (
+                <div className="text-center text-sm text-slate-500">
+                  {image ? "Product photo could not be loaded" : "No product photo supplied"}
+                </div>
+              )}
             </div>
             <div className="p-6 md:p-9">
               <div className="mb-4 flex flex-wrap gap-2 text-xs">
@@ -49,7 +83,10 @@ export default function DevListingPage() {
               </div>
               <h2 className="text-3xl font-semibold leading-tight text-white">{title}</h2>
               <div className="mt-5 text-3xl font-semibold text-emerald-300">{price ? `£${Number(price).toFixed(2)}` : "Price on request"}</div>
-              <p className="mt-6 whitespace-pre-wrap text-sm leading-7 text-slate-300">{description}</p>
+              <div
+                className="prose prose-invert mt-6 max-w-none text-sm leading-7 text-slate-300"
+                dangerouslySetInnerHTML={{ __html: safeDescription }}
+              />
               <div className="mt-7 border-t border-slate-800 pt-5 text-xs text-slate-400">
                 <div className="flex justify-between gap-4"><span>Delivery</span><span className="text-slate-200">Delivery only</span></div>
                 <div className="mt-2 flex justify-between gap-4"><span>Collection</span><span className="text-slate-200">Not available</span></div>

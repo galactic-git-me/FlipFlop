@@ -5,6 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.database import get_db
 from app.models.app_settings import AppSettings
+from app.models.channel_listing import ChannelListing
+from app.models.manual_build import ManualBuild
+from datetime import datetime, timedelta
 
 router = APIRouter(prefix="/settings", tags=["settings"])
 
@@ -27,6 +30,8 @@ class SettingsUpdate(BaseModel):
     free_shipping_enabled: bool | None = None
     local_pickup_enabled: bool | None = None
     listing_type_default: str | None = None
+    relist_interval_days: int | None = None
+    relist_enabled_default: bool | None = None
     gem_radar_scan_interval_minutes: int | None = None
     gem_radar_consecutive_misses_before_inactive: int | None = None
     gem_radar_scrape_artifacts_hours: int | None = None
@@ -73,6 +78,30 @@ async def update_settings(body: SettingsUpdate, db: AsyncSession = Depends(get_d
     settings = await _get_or_create(db)
     for field, value in body.model_dump(exclude_none=True).items():
         setattr(settings, field, value)
+    if body.relist_interval_days is not None:
+        interval = max(1, body.relist_interval_days)
+        now = datetime.utcnow()
+        schedules = (
+            await db.execute(
+                select(ChannelListing).where(ChannelListing.recreate_enabled.is_(True))
+            )
+        ).scalars().all()
+        for schedule in schedules:
+            schedule.recreate_interval_days = interval
+            if schedule.published_at:
+                schedule.next_recreate_at = schedule.published_at + timedelta(days=interval)
+            else:
+                schedule.next_recreate_at = now + timedelta(days=interval)
+        builds = (
+            await db.execute(
+                select(ManualBuild).where(
+                    ManualBuild.relist_enabled.is_(True),
+                    ManualBuild.listed_at.isnot(None),
+                )
+            )
+        ).scalars().all()
+        for build in builds:
+            build.next_recreate_at = build.listed_at + timedelta(days=interval)
     await db.flush()
     await db.refresh(settings)
 
@@ -121,6 +150,8 @@ def _to_dict(s: AppSettings) -> dict:
         "free_shipping_enabled": s.free_shipping_enabled,
         "local_pickup_enabled": s.local_pickup_enabled,
         "listing_type_default": s.listing_type_default,
+        "relist_interval_days": s.relist_interval_days or 7,
+        "relist_enabled_default": s.relist_enabled_default,
         "gem_radar_scan_interval_minutes": s.gem_radar_scan_interval_minutes,
         "gem_radar_consecutive_misses_before_inactive": s.gem_radar_consecutive_misses_before_inactive,
         "gem_radar_scrape_artifacts_hours": s.gem_radar_scrape_artifacts_hours,

@@ -36,6 +36,11 @@ class AppSettings(Base):
     local_pickup_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     listing_type_default: Mapped[str] = mapped_column(String(20), default="FixedPrice")
 
+    # Listing relist policy. New listings opt in by default and count from
+    # their publish time rather than from the moment the settings are saved.
+    relist_interval_days: Mapped[int] = mapped_column(Integer, default=7)
+    relist_enabled_default: Mapped[bool] = mapped_column(Boolean, default=True)
+
     # One cadence shared by all indirect/manual cross-listing channels.
     indirect_channel_recreate_interval_days: Mapped[int] = mapped_column(Integer, default=7)
 

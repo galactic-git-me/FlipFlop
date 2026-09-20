@@ -1,9 +1,11 @@
 name: Deploy production to Andromeda
 
 on:
-  # Production must be an explicit, reviewed action. The repository also has
-  # an autosync process that can push development commits, so a push trigger
-  # would allow those commits to deploy without an operator approving them.
+  # Every commit promoted to main deploys the API and storefront together.
+  # Development/autosync branches remain excluded from production.
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 concurrency:
@@ -57,7 +59,7 @@ jobs:
           chmod 600 ~/.ssh/andromeda
           printf '%s\n' "$SSH_HOST_KEY" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
-      - name: Deploy exact commit
+      - name: Deploy API and storefront together
         env:
           ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}
           ANDROMEDA_USER: ${{ secrets.ANDROMEDA_USER }}
@@ -66,4 +68,26 @@ jobs:
           ssh -i ~/.ssh/andromeda \
             -p "${ANDROMEDA_PORT:-22}" \
             "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
-            "/home/mac/CODING/FlipFlop-production/deploy/deploy-andromeda.sh '${{ github.sha }}'"
+            "/home/mac/CODING/FlipFlop-production/scripts/start-production-remote.sh"
+      - name: Require extension dispatch token
+        env:
+          EXTENSION_DISPATCH_TOKEN: ${{ secrets.FLIPFLOP_EXTENSION_DISPATCH_TOKEN }}
+        run: |
+          test -n "$EXTENSION_DISPATCH_TOKEN" || {
+            echo "Missing FLIPFLOP_EXTENSION_DISPATCH_TOKEN production secret." >&2
+            exit 1
+          }
+      - name: Build DEV and LIVE extensions
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.FLIPFLOP_EXTENSION_DISPATCH_TOKEN }}
+          script: |
+            await github.rest.repos.createDispatchEvent({
+              owner: 'galactic-git-me',
+              repo: 'FlipFlopXtension',
+              event_type: 'flipflop-production-push',
+              client_payload: {
+                source_repository: context.repo.owner + '/' + context.repo.repo,
+                source_sha: context.sha
+              }
+            });

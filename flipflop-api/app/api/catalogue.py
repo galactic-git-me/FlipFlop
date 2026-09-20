@@ -22,6 +22,8 @@ from app.schemas.catalogue import (
     RejectBody,
 )
 from app.services.catalogue_service import approve_variant, reject_variant
+from app.services.hardware_performance import enrich_listing_performance, load_benchmark_context
+from app.services.product_reviews import aggregate_cpk_reviews
 from app.routes.admin_auth import get_current_admin
 
 router = APIRouter(prefix="/catalogue", tags=["catalogue"], dependencies=[Depends(get_current_admin)])
@@ -168,16 +170,32 @@ async def list_variants(
     # Aggregate the latest demand observation per matched item so the admin
     # catalogue can show CPK evidence without double-counting historical
     # observations.
-    ebay_item_ids = {
-        l.external_id.split("|")[1]
-        for _, l, _ in rows
-        if l.external_id.startswith("ebay_v1|") and "|" in l.external_id
-    }
+    def item_key(listing: Listing) -> str:
+        """Return the scorer/observation ID for any marketplace listing."""
+        return (
+            listing.external_id.split("|")[1]
+            if listing.external_id.startswith("ebay_v1|") and "|" in listing.external_id
+            else listing.external_id
+        )
+
+    # CPK evidence is product-level.  Do not restrict the bridge to the
+    # legacy eBay external-id shape: Amazon, Vinted and future marketplace
+    # listings must inherit the same CPK evidence too.
+    listing_keys = {item_key(l) for _, l, _ in rows}
     cpk_metrics: dict[str, dict] = {}
-    if ebay_item_ids:
+    if listing_keys:
         metrics = await db.execute(
             text("""
-                WITH latest_observations AS (
+                WITH cpk_for_listing AS (
+                    SELECT listing_id, cpk
+                    FROM gem_radar_listing_cpk
+                    WHERE listing_id = ANY(:listing_ids)
+                    UNION
+                    SELECT listing_id, cpk
+                    FROM gem_radar_scored_listings
+                    WHERE listing_id = ANY(:listing_ids)
+                      AND cpk IS NOT NULL
+                ), latest_observations AS (
                     SELECT DISTINCT ON (listing_id)
                         listing_id, watch_count, best_offer_enabled
                     FROM gem_radar_listing_observations
@@ -202,14 +220,14 @@ async def list_variants(
                        COUNT(*) FILTER (WHERE o.best_offer_enabled) AS offer_count,
                        COALESCE(MAX(sc.sold_count), 0) AS sold_count,
                        COALESCE(MAX(ac.active_count), 0) AS active_count
-                FROM gem_radar_listing_cpk c
+                FROM cpk_for_listing c
                 JOIN latest_observations o ON o.listing_id = c.listing_id
                 LEFT JOIN sold_counts sc ON sc.cpk = c.cpk
                 LEFT JOIN active_counts ac ON ac.cpk = c.cpk
                 WHERE c.listing_id = ANY(:listing_ids)
                 GROUP BY c.cpk
             """),
-            {"listing_ids": list(ebay_item_ids)},
+            {"listing_ids": list(listing_keys)},
         )
         cpk_metrics = {
             row.cpk: {
@@ -226,9 +244,14 @@ async def list_variants(
             SELECT listing_id, cpk
             FROM gem_radar_listing_cpk
             WHERE listing_id = ANY(:listing_ids)
+            UNION
+            SELECT listing_id, cpk
+            FROM gem_radar_scored_listings
+            WHERE listing_id = ANY(:listing_ids)
+              AND cpk IS NOT NULL
         """),
-        {"listing_ids": list(ebay_item_ids)},
-    ) if ebay_item_ids else []
+        {"listing_ids": list(listing_keys)},
+    ) if listing_keys else []
     cpk_by_item = {row.listing_id: row.cpk for row in listing_cpks}
 
     review_result = await db.execute(
@@ -239,8 +262,8 @@ async def list_variants(
             WHERE listing_id = ANY(:listing_ids)
             ORDER BY listing_id, scored_at DESC NULLS LAST, id DESC
         """),
-        {"listing_ids": list(ebay_item_ids)},
-    ) if ebay_item_ids else []
+        {"listing_ids": list(listing_keys)},
+    ) if listing_keys else []
     reviews_by_item = {
         row.listing_id: {
             "review_average_rating": row.review_average_rating,
@@ -252,12 +275,6 @@ async def list_variants(
     # Reuse the sourcing dashboard's latest scored decision surface so the
     # catalogue shows the same condition, economics, class, decision and
     # evidence for each retained listing.
-    listing_keys = {
-        l.external_id.split("|")[1]
-        if l.external_id.startswith("ebay_v1|") and "|" in l.external_id
-        else l.external_id
-        for _, l, _ in rows
-    }
     scored_result = await db.execute(
         text("""
             SELECT DISTINCT ON (listing_id)
@@ -281,8 +298,11 @@ async def list_variants(
             cpk_by_item.setdefault(listing_id, scored_row.cpk)
 
     # Product reviews are shared across equivalent marketplace listings when
-    # they resolve to the same CPK. Prefer a non-eBay retailer's review as it
-    # is independent of the source listing being displayed.
+    # they resolve to the same CPK. Keep the strongest observation per vendor
+    # first, then combine vendors at CPK level: review counts are additive and
+    # star ratings use a review-count-weighted average. This means Amazon and
+    # eBay both contribute without counting several duplicate listings from
+    # the same vendor more than once.
     cpk_review_result = await db.execute(
         text("""
             SELECT DISTINCT ON (listing_id)
@@ -294,22 +314,25 @@ async def list_variants(
             ORDER BY listing_id, scored_at DESC NULLS LAST, id DESC
         """)
     )
-    reviews_by_vendor: dict[tuple[str, str], tuple[float | None, int | None]] = {}
-    for row in cpk_review_result:
-        key = (row.cpk, (row.source or "unknown").lower())
-        current = reviews_by_vendor.get(key)
-        if current is None or (row.review_count or 0) > (current[1] or 0):
-            reviews_by_vendor[key] = (row.review_average_rating, row.review_count)
-    reviews_by_cpk: dict[str, tuple[float | None, int | None]] = {}
-    for (cpk, _vendor), (rating, count) in reviews_by_vendor.items():
-        old_rating, old_count = reviews_by_cpk.get(cpk, (None, None))
-        if rating is not None and count:
-            if old_rating is not None and old_count:
-                reviews_by_cpk[cpk] = ((old_rating * old_count + rating * count) / (old_count + count), old_count + count)
-            else:
-                reviews_by_cpk[cpk] = (rating, (old_count or 0) + count)
-        elif count:
-            reviews_by_cpk[cpk] = (old_rating, (old_count or 0) + count)
+    review_observations = [
+        (row.cpk, row.source, row.review_average_rating, row.review_count)
+        for row in cpk_review_result
+    ]
+    amazon_review_result = await db.execute(
+        text("""
+            SELECT DISTINCT ON (cpk)
+                   cpk, rating, review_count
+            FROM amazon_bestseller_observations
+            WHERE cpk IS NOT NULL
+              AND (rating IS NOT NULL OR review_count IS NOT NULL)
+            ORDER BY cpk, captured_at DESC, id DESC
+        """)
+    )
+    review_observations.extend(
+        (row.cpk, "amazon", row.rating, row.review_count)
+        for row in amazon_review_result
+    )
+    reviews_by_cpk = aggregate_cpk_reviews(review_observations)
 
     bestseller_result = await db.execute(
         text("""
@@ -345,13 +368,6 @@ async def list_variants(
     ) if listing_keys else []
     observation_image_by_item = {row.listing_id: row.image_url for row in observation_images}
 
-    def item_key(listing: Listing) -> str:
-        return (
-            listing.external_id.split("|")[1]
-            if listing.external_id.startswith("ebay_v1|") and "|" in listing.external_id
-            else listing.external_id
-        )
-
     def scored(listing: Listing):
         return scored_by_item.get(item_key(listing))
 
@@ -371,6 +387,23 @@ async def list_variants(
         active = max(0, active_count or 0)
         total = sold + active
         return None if total == 0 else round(sold / total * 100, 1)
+
+    benchmark_index, peer_scores = await load_benchmark_context(db)
+    performance_by_cpk: dict[str, dict] = {}
+    for scored_row in scored_by_item.values():
+        if not scored_row.cpk:
+            continue
+        performance = enrich_listing_performance(
+            category=scored_row.category,
+            title=scored_row.title,
+            canonical_model_id=scored_row.canonical_model_id,
+            release_year=scored_row.release_year,
+            delivered_price=scored_row.delivered_price,
+            benchmark_index=benchmark_index,
+            peer_scores=peer_scores,
+        )
+        if performance.get("performance_status") == "MATCHED":
+            performance_by_cpk.setdefault(scored_row.cpk, performance)
 
     return [
         {
@@ -415,19 +448,28 @@ async def list_variants(
             "tier": v.tier,
             "display_price": v.display_price,
             "gem_score": l.gem_score,
-            "cpk": cpk_by_item.get(l.external_id.split("|")[1]) if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
-            "watch_count": cpk_metrics.get(cpk_by_item.get(l.external_id.split("|")[1]), {}).get("watch_count") if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
-            "offer_count": cpk_metrics.get(cpk_by_item.get(l.external_id.split("|")[1]), {}).get("offer_count") if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
-            "sold_count": cpk_metrics.get(cpk_by_item.get(l.external_id.split("|")[1]), {}).get("sold_count") if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else None,
+            "cpk": cpk_by_item.get(item_key(l)),
+            "watch_count": cpk_metrics.get(cpk_by_item.get(item_key(l)), {}).get("watch_count"),
+            "offer_count": cpk_metrics.get(cpk_by_item.get(item_key(l)), {}).get("offer_count"),
+            "sold_count": cpk_metrics.get(cpk_by_item.get(item_key(l)), {}).get("sold_count"),
             "active_count": cpk_metrics_for(l).get("active_count"),
             "sell_through_rate": sell_through_rate(cpk_metrics_for(l).get("sold_count"), cpk_metrics_for(l).get("active_count")),
-            "review_average_rating": (reviews_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "")) or (reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_average_rating"), reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_count")))[0],
-            "review_count": (reviews_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "")) or (reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_average_rating"), reviews_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else "", {}).get("review_count")))[1],
-            **bestseller_by_cpk.get(cpk_by_item.get(l.external_id.split("|")[1] if l.external_id.startswith("ebay_v1|") and "|" in l.external_id else ""), {
+            "review_average_rating": (reviews_by_cpk.get(cpk_by_item.get(item_key(l))) or (reviews_by_item.get(item_key(l), {}).get("review_average_rating"), reviews_by_item.get(item_key(l), {}).get("review_count")))[0],
+            "review_count": (reviews_by_cpk.get(cpk_by_item.get(item_key(l))) or (reviews_by_item.get(item_key(l), {}).get("review_average_rating"), reviews_by_item.get(item_key(l), {}).get("review_count")))[1],
+            **bestseller_by_cpk.get(cpk_by_item.get(item_key(l)), {
                 "amazon_bestseller_rank": None,
                 "amazon_bestseller_list": None,
                 "amazon_bestseller_captured_at": None,
             }),
+            **(performance_by_cpk.get(cpk_by_item.get(item_key(l))) or enrich_listing_performance(
+                category=getattr(scored(l), "category", None) or s.slot_type,
+                title=l.title,
+                canonical_model_id=getattr(scored(l), "canonical_model_id", None),
+                release_year=getattr(scored(l), "release_year", None),
+                delivered_price=getattr(scored(l), "delivered_price", None) or l.price,
+                benchmark_index=benchmark_index,
+                peer_scores=peer_scores,
+            )),
             "consecutive_misses": v.consecutive_misses,
             "last_seen_at": v.last_seen_at,
             "auto_published_at": v.auto_published_at,

@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import os
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlalchemy import select
@@ -74,12 +75,25 @@ async def amazon_status():
             result["message"] = "The seller is authorized, but the configured marketplace is not enabled for this account."
         return result
     except AmazonSPAPIError as exc:
-        return {"connected": False, "configured": True, "message": str(exc), "status_code": exc.status_code}
+        return {
+            "connected": False,
+            "configured": True,
+            "environment": client.environment,
+            "marketplace_id": client.marketplace_id,
+            "message": f"{str(exc)} The production Amazon account or app authorization does not currently permit marketplace {client.marketplace_id}.",
+            "status_code": exc.status_code,
+        }
 
 
 @router.post("/amazon/publish/{build_id}")
 async def publish_amazon(build_id: int, body: AmazonPublishIn, db: AsyncSession = Depends(get_db)):
     """Create/update the Amazon listing for a reviewed canonical build."""
+    runtime = os.getenv("FLIPFLOP_RUNTIME_ENV", "development").strip().lower()
+    if runtime not in {"live", "production", "prod"}:
+        raise HTTPException(
+            status_code=409,
+            detail="Amazon listing writes are disabled outside LIVE mode; production catalogue reads remain available.",
+        )
     build = await db.get(ManualBuild, build_id)
     if not build:
         raise HTTPException(status_code=404, detail="Build not found")
@@ -111,15 +125,37 @@ async def publish_amazon(build_id: int, body: AmazonPublishIn, db: AsyncSession 
             condition=body.condition,
             images=body.images,
         )
+        # PUT listings returns submission status/issues, not reliably the
+        # customer-facing ASIN. Read the item back after an accepted submit so
+        # the admin can link to the real Amazon product page.
+        if str(result.get("status", "")).upper() in {"ACCEPTED", "VALID"}:
+            try:
+                result["listing_item"] = await client.get_listing(sku=sku)
+            except AmazonSPAPIError:
+                # Publishing succeeded even if the follow-up read is delayed.
+                # Preserve the accepted response and leave the URL unset.
+                pass
         issues = result.get("issues") or []
         accepted = str(result.get("status", "")).upper() in {"ACCEPTED", "VALID"} and not issues
         channel_listing.status = "published" if accepted else "failed"
         channel_listing.external_listing_id = sku
         channel_listing.published_at = datetime.utcnow() if accepted else None
+        if accepted:
+            settings = await _app_settings(db)
+            channel_listing.recreate_enabled = settings.relist_enabled_default
+            channel_listing.recreate_interval_days = settings.relist_interval_days or 7
+            channel_listing.next_recreate_at = (
+                channel_listing.published_at
+                + timedelta(days=channel_listing.recreate_interval_days)
+                if channel_listing.recreate_enabled
+                else None
+            )
         message = "Amazon accepted the listing submission." if accepted else "Amazon returned listing requirements or validation issues."
         db.add(ListingPublishEvent(channel_listing_id=channel_listing.id, event_type="published" if accepted else "publish_failed", message=message, event_metadata={"sku": sku, "response": result}))
         await db.commit()
-        return {"success": accepted, "status": channel_listing.status, "sku": sku, "listing_url": None, "response": result, "message": message}
+        asin = _amazon_asin(result)
+        listing_url = f"https://www.amazon.co.uk/dp/{asin}" if accepted and asin else None
+        return {"success": accepted, "status": channel_listing.status, "sku": sku, "asin": asin, "listing_url": listing_url, "response": result, "message": message}
     except AmazonSPAPIError as exc:
         channel_listing.status = "failed"
         channel_listing.last_recreate_status = "failed"
@@ -154,19 +190,32 @@ async def list_schedules(build_id: int | None = Query(None), db: AsyncSession = 
 
 @router.put("/schedules")
 async def save_schedule(body: RecreateScheduleIn, db: AsyncSession = Depends(get_db)):
-    interval_days = body.interval_days
-    if body.channel in INDIRECT_CHANNELS:
-        settings = await _app_settings(db)
-        interval_days = settings.indirect_channel_recreate_interval_days or 7
+    settings = await _app_settings(db)
+    interval_days = settings.relist_interval_days or body.interval_days or 7
+    build = await db.get(ManualBuild, body.build_id)
+    if not build:
+        raise HTTPException(status_code=404, detail="Build not found")
     row = (await db.execute(select(ChannelListing).where(ChannelListing.manual_build_id == body.build_id, ChannelListing.channel == body.channel).order_by(ChannelListing.created_at.desc()))).scalars().first()
     if not row:
-        row = ChannelListing(manual_build_id=body.build_id, channel=body.channel, status="published")
+        row = ChannelListing(
+            manual_build_id=body.build_id,
+            channel=body.channel,
+            status="published",
+            published_at=build.listed_at or datetime.utcnow(),
+        )
         db.add(row)
     row.recreate_enabled = body.enabled
     row.recreate_interval_days = interval_days
-    row.next_recreate_at = datetime.utcnow() + timedelta(days=interval_days) if body.enabled else None
+    if row.published_at is None:
+        row.published_at = build.listed_at or datetime.utcnow()
+    row.next_recreate_at = (
+        row.published_at + timedelta(days=interval_days) if body.enabled else None
+    )
     row.last_recreate_status = "scheduled" if body.enabled else "paused"
     row.last_recreate_message = f"Recreate every {interval_days} day(s)."
+    if body.channel in {"ebay", "ebay_uk"}:
+        build.relist_enabled = body.enabled
+        build.next_recreate_at = row.next_recreate_at
     await db.commit()
     await db.refresh(row)
     return _schedule(row)
@@ -220,8 +269,34 @@ async def record_codex_result(event_id: int, body: CodexHandoffResultIn, db: Asy
 
 def _schedule(row: ChannelListing) -> dict:
     return {"id": row.id, "build_id": row.manual_build_id, "channel": row.channel, "status": row.status,
+            "external_listing_id": row.external_listing_id,
+            "published_at": row.published_at.isoformat() if row.published_at else None,
+            "withdrawn_at": row.withdrawn_at.isoformat() if row.withdrawn_at else None,
+            "updated_at": row.updated_at.isoformat() if row.updated_at else None,
             "recreate_enabled": row.recreate_enabled, "interval_days": row.recreate_interval_days,
             "next_recreate_at": row.next_recreate_at.isoformat() if row.next_recreate_at else None,
             "last_recreate_at": row.last_recreate_at.isoformat() if row.last_recreate_at else None,
             "recreate_count": row.recreate_count, "last_recreate_status": row.last_recreate_status,
             "last_recreate_message": row.last_recreate_message}
+
+
+def _amazon_asin(payload: dict) -> str | None:
+    """Extract an ASIN from the flexible Listings Items response shape."""
+    candidates: list[object] = []
+    candidates.extend(payload.get("identifiers") or [])
+    candidates.extend((payload.get("listing_item") or {}).get("identifiers") or [])
+    candidates.extend((payload.get("summaries") or []))
+    candidates.extend((payload.get("listing_item") or {}).get("summaries") or [])
+    for item in candidates:
+        if not isinstance(item, dict):
+            continue
+        for key in ("asin", "ASIN", "asin1"):
+            value = item.get(key)
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+        for identifier in item.get("identifiers") or []:
+            if isinstance(identifier, dict) and str(identifier.get("identifierType", "")).upper() == "ASIN":
+                value = identifier.get("identifier")
+                if isinstance(value, str) and value.strip():
+                    return value.strip()
+    return None

@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import String, Integer, Float, DateTime, JSON, ForeignKey
+from sqlalchemy import String, Integer, Float, DateTime, JSON, ForeignKey, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
@@ -150,6 +150,7 @@ class ManualBuild(Base):
     recreate_price_step_pct: Mapped[float] = mapped_column(Float, default=0.03)
     traffic_band: Mapped[str | None] = mapped_column(String(50))
     listed_at: Mapped[datetime | None] = mapped_column(DateTime)
+    relist_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     # ── Paid visibility / markdown (rows 40, 46) ──
     promoted_ad_rate_pct: Mapped[float | None] = mapped_column(Float)
     promoted_enabled: Mapped[bool] = mapped_column(default=False)

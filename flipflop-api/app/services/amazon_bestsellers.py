@@ -43,7 +43,7 @@ COMPONENT_BESTSELLER_LISTS = {
 }
 ASIN_RE = re.compile(r"/dp/([A-Z0-9]{10})", re.I)
 
-_EXTRACT_JS = """() => {
+_EXTRACT_JS = """(rankOffset = 0) => {
     const out = [];
     const seen = new Set();
     let cards = Array.from(document.querySelectorAll('#gridItemRoot'));
@@ -58,7 +58,7 @@ _EXTRACT_JS = """() => {
         const rankEl = card.querySelector('.zg-bdg-text, .zg-bdg-badge, span.zg-badge-text');
         const raw = (rankEl?.textContent || '').replace(/[^0-9]/g, '');
         const parsed = raw ? parseInt(raw, 10) : NaN;
-        return Number.isFinite(parsed) && parsed > 0 ? parsed : fallbackIndex;
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : rankOffset + fallbackIndex;
     };
 
     cards.forEach((item, index) => {
@@ -193,7 +193,7 @@ async def scrape_amazon_bestsellers() -> dict:
                 except Exception as exc:
                     log.debug("bestsellers.wait_selector_timeout", page=page_num, error=str(exc))
                 await asyncio.sleep(3)
-                page_items = await page.evaluate(_EXTRACT_JS)
+                page_items = await page.evaluate(_EXTRACT_JS, (page_num - 1) * 50)
                 log.info("bestsellers.extracted", page=page_num, count=len(page_items))
                 raw.extend(page_items)
 
@@ -302,19 +302,35 @@ async def scrape_amazon_bestsellers() -> dict:
 
 def _best_scored_match(item: dict, rows: list[dict], category: str) -> dict | None:
     """Match an Amazon product to the strongest current CPK row."""
-    candidates = [row for row in rows if (row["category"] or "").lower() == category]
-    asin = (item.get("asin") or "").upper()
-    for row in candidates:
-        if asin and asin in (row["url"] or "").upper():
-            return row
-    best = None
-    best_similarity = 0.66
+    # The identity/scoring pipeline calls SSDs ``ssd`` and coolers ``cooler``;
+    # the Amazon bestseller list configuration historically used the broader
+    # ``storage``/``cooling`` labels.  Treat those as aliases or the whole
+    # bestseller list is scraped successfully but never attached to a CPK.
+    category_aliases = {
+        "storage": {"storage", "ssd"},
+        "ssd": {"storage", "ssd"},
+        "cooler": {"cooler", "cooling"},
+        "cooling": {"cooler", "cooling"},
+    }
+    accepted_categories = category_aliases.get(category, {category})
+    candidates = [
+        row for row in rows
+        if (row["category"] or "").lower() in accepted_categories
+    ]
+    # Scored rows currently retain marketplace URLs, not Amazon ASINs, so an
+    # ASIN cannot be used as a reliable join key here.  Keep the title match
+    # conservative rather than claiming an ASIN match or attaching a rank to
+    # an ambiguous product variant.
+    scored = []
     for row in candidates:
         similarity = name_similarity(item.get("title") or "", row["title"] or "")
-        if similarity > best_similarity:
-            best_similarity = similarity
-            best = row
-    return best
+        scored.append((similarity, row))
+    scored.sort(key=lambda value: value[0], reverse=True)
+    if not scored or scored[0][0] <= 0.66:
+        return None
+    if len(scored) > 1 and scored[0][0] - scored[1][0] < 0.05:
+        return None
+    return scored[0][1]
 
 
 async def scrape_amazon_component_bestsellers() -> dict:
@@ -357,7 +373,7 @@ async def scrape_amazon_component_bestsellers() -> dict:
                             except Exception:
                                 pass
                             await asyncio.sleep(2)
-                            items.extend(await page.evaluate(_EXTRACT_JS))
+                            items.extend(await page.evaluate(_EXTRACT_JS, (page_num - 1) * 50))
 
                         unique: dict[str, dict] = {}
                         for item in items:
@@ -383,18 +399,6 @@ async def scrape_amazon_component_bestsellers() -> dict:
                             results["scraped"] += 1
                             if match:
                                 results["matched"] += 1
-                                if item.get("rating") is not None or item.get("review_count") is not None:
-                                    # This also backfills the currently-held
-                                    # scored row, so the catalogue updates as
-                                    # soon as the daily bestseller job runs.
-                                    await db.execute(
-                                        update(GemRadarScoredListing)
-                                        .where(GemRadarScoredListing.cpk == match["cpk"])
-                                        .values(
-                                            review_average_rating=item.get("rating"),
-                                            review_count=item.get("review_count"),
-                                        )
-                                    )
                         results["categories"] += 1
                     except Exception as exc:
                         log.warning("bestsellers.category_error", category=category, error=str(exc))

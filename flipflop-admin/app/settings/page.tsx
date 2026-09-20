@@ -27,6 +27,8 @@ interface AppSettings {
   free_shipping_enabled: boolean;
   local_pickup_enabled: boolean;
   listing_type_default: string;
+  relist_interval_days: number;
+  relist_enabled_default: boolean;
   opportunity_super_profit_gbp: number;
   opportunity_super_roi_pct: number;
   opportunity_super_confidence: number;
@@ -90,6 +92,8 @@ const DEFAULTS: AppSettings = {
   free_shipping_enabled: true,
   local_pickup_enabled: true,
   listing_type_default: "FixedPrice",
+  relist_interval_days: 7,
+  relist_enabled_default: true,
   opportunity_super_profit_gbp: 50,
   opportunity_super_roi_pct: 25,
   opportunity_super_confidence: 80,
@@ -650,6 +654,49 @@ export default function SettingsPage() {
                 onChange={e => setSettings(p => ({ ...p, returns_window_days: Number(e.target.value) }))}
                 className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm"
               />
+            </CardContent>
+          </Card>
+
+          <Card className="xl:col-span-2">
+            <CardHeader>
+              <CardTitle>Relisting policy</CardTitle>
+              <p className="text-xs text-slate-500">
+                Relisting countdowns start when each listing goes live. New
+                listings use this policy by default; individual listings can
+                be paused from Cross-listing.
+              </p>
+            </CardHeader>
+            <CardContent className="grid gap-4 pt-0 md:grid-cols-2">
+              <label className="text-xs text-slate-500">
+                Relist after (days)
+                <input
+                  type="number"
+                  min={1}
+                  max={365}
+                  value={settings.relist_interval_days}
+                  onChange={e =>
+                    setSettings(p => ({
+                      ...p,
+                      relist_interval_days: Math.max(1, Number(e.target.value)),
+                    }))
+                  }
+                  className="mt-1 w-full rounded-lg border border-[#1e2d45] bg-[#0a1119] px-3 py-2 text-sm"
+                />
+              </label>
+              <div className="flex items-center justify-between rounded border border-[#1e2d45] bg-[#0a1119] p-2">
+                <span className="text-sm text-slate-300">
+                  Enable relisting for new listings by default
+                </span>
+                <Toggle
+                  checked={settings.relist_enabled_default}
+                  onChange={() =>
+                    setSettings(p => ({
+                      ...p,
+                      relist_enabled_default: !p.relist_enabled_default,
+                    }))
+                  }
+                />
+              </div>
             </CardContent>
           </Card>
 

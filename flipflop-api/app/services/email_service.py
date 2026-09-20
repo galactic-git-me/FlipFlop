@@ -1,3 +1,4 @@
+import os
 import smtplib
 from html import escape
 from email.mime.text import MIMEText
@@ -27,7 +28,48 @@ def smtp_credentials() -> tuple[str, str, str]:
 def smtp_is_configured() -> bool:
     return all(smtp_credentials())
 
+
+def _is_live_runtime() -> bool:
+    runtime = os.getenv("FLIPFLOP_RUNTIME_ENV", settings.app_env or "dev").strip().lower()
+    return runtime in {"live", "production", "prod"}
+
+
+def _resolve_outbound_recipient(original: str, reference: str) -> str:
+    """Route development mail to the private sink instead of a customer."""
+    if _is_live_runtime():
+        return original
+
+    sink = settings.email_sandbox_recipient.strip()
+    if not sink:
+        log.error(
+            "Development email suppressed: EMAIL_SANDBOX_RECIPIENT is not configured",
+            reference=reference,
+            intended_recipient=original,
+        )
+        return ""
+
+    if sink != original:
+        log.info(
+            "Development email redirected to sandbox recipient",
+            reference=reference,
+            intended_recipient=original,
+            sandbox_recipient=sink,
+        )
+    return sink
+
+
 def _send(msg: MIMEMultipart, reference: str) -> bool:
+    recipient = _resolve_outbound_recipient(msg.get("To", ""), reference)
+    if not recipient:
+        return False
+    if msg.get("To"):
+        msg.replace_header("To", recipient)
+    else:
+        msg["To"] = recipient
+
+    if not _is_live_runtime() and not msg.get("Subject", "").startswith("[DEV]"):
+        msg.replace_header("Subject", f"[DEV] {msg.get('Subject', '')}")
+
     # Kill switch: EMAIL_DISPATCH_ENABLED can suppress all email
     if not is_enabled(FeatureFlags.EMAIL_DISPATCH_ENABLED):
         log.warning(

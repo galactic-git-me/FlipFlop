@@ -143,7 +143,15 @@ async def list_orders(
 
     # Apply filters
     if status:
-        query = query.filter(Order.status == status)
+        # SQLAlchemy's Enum column is backed by the enum member on some
+        # databases and by its stored name on others.  Convert the public
+        # value (for example, ``awaiting_sourcing``) before filtering so the
+        # dashboard behaves consistently with both SQLite and PostgreSQL.
+        try:
+            status_filter = OrderStatus(status)
+        except ValueError:
+            status_filter = status
+        query = query.filter(Order.status == status_filter)
 
     if date_from:
         date_from_dt = datetime.fromisoformat(date_from)

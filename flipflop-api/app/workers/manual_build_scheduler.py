@@ -11,7 +11,7 @@ tick instead of silently never publishing.
 """
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import structlog
 from sqlalchemy import select
@@ -43,7 +43,7 @@ async def run_deferred_manual_build_publish_job() -> dict:
 
         for build in due:
             try:
-                outcome = await _publish_due_build(build)
+                outcome = await _publish_due_build(build, db)
                 if outcome == "published":
                     published += 1
                 elif outcome == "no_token":
@@ -64,11 +64,9 @@ async def run_deferred_manual_build_publish_job() -> dict:
     }
 
 
-async def _publish_due_build(build) -> str:
+async def _publish_due_build(build, db) -> str:
     """Returns 'published', 'not_ready', or 'no_token'. Mutates `build`
     in place on success — caller commits."""
-    from app.services.traffic_bands import jittered_recreate_slot, DEFAULT_BAND
-
     outcome = await post_build_to_ebay(build)
     if outcome == "published":
         build.status = "listed"
@@ -77,7 +75,18 @@ async def _publish_due_build(build) -> str:
             # Rows 1/2/5/6/9: start the recreate/relist cycle clock the
             # first time this build actually goes live.
             build.listed_at = datetime.utcnow()
-            build.next_recreate_at = jittered_recreate_slot(build.traffic_band or DEFAULT_BAND, datetime.utcnow())
+            from app.models.app_settings import AppSettings
+            policy = (
+                await db.execute(
+                    select(AppSettings).where(AppSettings.name == "default")
+                )
+            ).scalar_one_or_none()
+            interval_days = policy.relist_interval_days if policy else 7
+            build.next_recreate_at = (
+                build.listed_at + timedelta(days=interval_days or 7)
+                if build.relist_enabled
+                else None
+            )
     return outcome
 
 

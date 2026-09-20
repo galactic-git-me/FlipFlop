@@ -32,12 +32,22 @@ _LONDON_TZ = ZoneInfo("Europe/London")
 
 _INSTALLED = False
 
+# The API runs from flipflop-api, while the development supervisor writes all
+# service logs to the shared FlipFlop/logs directory. Resolve that directory
+# from this file instead of relying on the process working directory.
+_LOG_ROOT = Path(
+    os.getenv(
+        "FLIPFLOP_LOG_DIR",
+        str(Path(__file__).resolve().parents[3] / "logs"),
+    )
+)
+
 _LOG_TARGETS = {
     "api": {"label": "API server", "kind": "memory", "file": None},
-    "gemradar": {"label": "Gem Radar server", "kind": "file", "file": os.getenv("GEMRADAR_LOG_FILE", "logs/gemradar-api.out")},
-    "admin": {"label": "Admin server", "kind": "file", "file": os.getenv("ADMIN_LOG_FILE", "logs/admin-4312.out")},
-    "frontend": {"label": "Frontend server", "kind": "file", "file": os.getenv("FRONTEND_LOG_FILE", "logs/frontend.log")},
-    "worker": {"label": "Background worker", "kind": "file", "file": os.getenv("WORKER_LOG_FILE", "logs/backend-4311.out")},
+    "gemradar": {"label": "Gem Radar server", "kind": "file", "file": str(_LOG_ROOT / "gemradar-api.out")},
+    "admin": {"label": "Admin server", "kind": "file", "file": str(_LOG_ROOT / "admin-4312.out")},
+    "frontend": {"label": "Frontend server", "kind": "file", "file": str(_LOG_ROOT / "frontend.log")},
+    "worker": {"label": "Background worker", "kind": "file", "file": str(_LOG_ROOT / "backend-4311.out")},
 }
 
 
@@ -46,7 +56,17 @@ def _target_file(target: str, mode: str) -> str | None:
     if not config or config["kind"] != "file":
         return None
     env_key = f"{target.upper()}_LOG_FILE_{mode.upper()}"
-    return os.getenv(env_key, config["file"])
+    if os.getenv(env_key):
+        return os.getenv(env_key)
+    if mode.lower() in {"dev", "development"}:
+        development_files = {
+            "gemradar": _LOG_ROOT / "gem-radar-18000.out",
+            "admin": _LOG_ROOT / "admin-4312.out",
+            "frontend": _LOG_ROOT / "frontend.log",
+            "worker": _LOG_ROOT / "backend-4311-dev-current.out",
+        }
+        return str(development_files.get(target, Path(config["file"])))
+    return config["file"]
 
 
 def _push(entry: dict) -> None:
@@ -100,7 +120,23 @@ async def get_log_history(tail: int = 300):
 
 @router.get("/targets")
 async def get_log_targets():
-    return [{"id": key, "label": value["label"], "available": value["kind"] == "memory" or Path(value["file"]).exists()} for key, value in _LOG_TARGETS.items()]
+    return [
+        {
+            "id": key,
+            "label": value["label"],
+            "available": value["kind"] == "memory"
+            or Path(value["file"]).exists()
+            or any(
+                candidate.exists()
+                for candidate in (
+                    _LOG_ROOT / "gem-radar-18000.out",
+                    _LOG_ROOT / "backend-4311-dev-current.out",
+                )
+                if key in {"gemradar", "worker"}
+            ),
+        }
+        for key, value in _LOG_TARGETS.items()
+    ]
 
 
 @router.get("/stream")

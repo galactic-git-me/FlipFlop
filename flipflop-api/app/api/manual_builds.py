@@ -20,6 +20,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, text
 from app.database import AsyncSessionLocal, get_db
 from app.models.manual_build import ManualBuild
+from app.models.app_settings import AppSettings
 from app.models.gem_radar_intelligence import ComponentRatingEvent, PreferredComponent
 from app.models.build import Build, BuildType, BuildStatus
 from app.models.product import Product, ProductType, ProductStatus
@@ -264,6 +265,7 @@ async def _run_build_3d_generation(
                 local_path.write_bytes(response.content)
                 if not local_path.is_file() or local_path.stat().st_size == 0:
                     raise RuntimeError(f"Downloaded GLB was not persisted at {local_path}")
+                _persist_build_model_download(build_id, filename, local_path)
                 entry.update(
                     status="succeeded",
                     progress=result.progress,
@@ -472,6 +474,16 @@ def _build_model_download_dir(build_id: int) -> Path:
     """
     return _BUILD_ASSETS_ROOT / str(build_id) / "3D Model"
 
+
+def _persist_build_model_download(build_id: int, filename: str, source: Path) -> Path:
+    """Keep a canonical operator copy of a saved GLB in ``3D Model``."""
+    download_dir = _build_model_download_dir(build_id)
+    download_dir.mkdir(parents=True, exist_ok=True)
+    download_path = download_dir / filename
+    if source.resolve() != download_path.resolve():
+        shutil.copy2(source, download_path)
+    return download_path
+
 # HERO_IMAGE_URL is the one listing-template placeholder the LLM is
 # instructed NOT to fill in itself (see ebay_listing_system_prompt.md) — it
 # varies per build, so only this backend can know the right value. Filled in
@@ -493,6 +505,18 @@ _EBAY_CATEGORY_179_ASPECTS = [
     "Country of Origin", "Colour", "Maximum RAM Capacity",
     "Motherboard Model", "Release Year", "SSD Capacity",
 ]
+
+_PC_BUILD_PLATFORM_CATEGORY_ID = "179"
+_PC_BUILD_PLATFORM_CATEGORY_NAME = "PC Desktops & All-in-Ones"
+
+
+def _direct_storefront_item_specifics(build: ManualBuild) -> dict[str, str]:
+    """Flatten saved eBay aspects for the direct storefront only."""
+    return {
+        name: ", ".join(str(value) for value in values if value is not None)
+        for name, values in (build.generated_aspects or {}).items()
+        if isinstance(values, list) and any(value is not None for value in values)
+    }
 
 
 def _load_selling_principles() -> str:
@@ -1745,6 +1769,13 @@ async def update_evidence_data(build_id: int, body: UpdateEvidenceDataRequest, d
 @router.patch("/{build_id}/listing-title", response_model=ManualBuildOut)
 async def update_listing_title(build_id: int, body: UpdateListingTitleRequest, db: AsyncSession = Depends(get_db)):
     """Persist the editable title used by every publishing channel."""
+    runtime = os.getenv("FLIPFLOP_RUNTIME_ENV", "development").strip().lower()
+    if runtime not in {"live", "production", "prod"}:
+        raise HTTPException(
+            409,
+            "Parcel2Go booking and payment are disabled outside LIVE mode; delivery quotes remain available.",
+        )
+
     result = await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))
     build = result.scalar_one_or_none()
     if not build:
@@ -1979,8 +2010,8 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
         )
 
     # Get image URLs from build photos (already public URLs)
-    image_urls = []
-    if build.photos:
+    image_urls = list(body.images or [])
+    if not image_urls and build.photos:
         for photo in build.photos:
             # Photo is stored as {"url": "https://www.theflipflop.shop/api/uploads/...", "kind": "photo"}
             photo_url = photo.get("url") if isinstance(photo, dict) else photo
@@ -2186,8 +2217,16 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
                 # got it there (manual "List on eBay" here, or the deferred
                 # scheduler in manual_build_scheduler.py).
                 build.listed_at = datetime.utcnow()
-                build.next_recreate_at = jittered_recreate_slot(
-                    build.traffic_band or DEFAULT_BAND, datetime.utcnow(),
+                policy = (
+                    await db.execute(
+                        select(AppSettings).where(AppSettings.name == "default")
+                    )
+                ).scalar_one_or_none()
+                interval_days = policy.relist_interval_days if policy else 7
+                build.next_recreate_at = (
+                    build.listed_at + timedelta(days=interval_days or 7)
+                    if build.relist_enabled
+                    else None
                 )
 
             # Row 40: promote automatically if opted in — a failure here
@@ -2444,6 +2483,7 @@ async def upload_build_3d_model(
     filename = f"model-3d-{uuid.uuid4().hex}.glb"
     local_path, public_url = _build_3d_asset_path(build_id, filename)
     local_path.write_bytes(model_bytes)
+    _persist_build_model_download(build_id, filename, local_path)
     build.model_3d_url = public_url
     build.updated_at = datetime.utcnow()
     await db.flush()
@@ -2470,11 +2510,7 @@ async def download_build_3d_model(build_id: int, db: AsyncSession = Depends(get_
     if source is None:
         raise HTTPException(404, "The saved 3D model file could not be found")
 
-    download_dir = _build_model_download_dir(build_id)
-    download_dir.mkdir(parents=True, exist_ok=True)
-    download_path = download_dir / filename
-    if source.resolve() != download_path.resolve():
-        shutil.copy2(source, download_path)
+    download_path = _persist_build_model_download(build_id, filename, source)
     return FileResponse(download_path, media_type="model/gltf-binary", filename=filename)
 
 
@@ -2564,6 +2600,9 @@ async def list_on_storefront(
             product.title = build.generated_title
             product.description = build.generated_description
             product.model_3d_url = build.model_3d_url
+            product.item_specifics = _direct_storefront_item_specifics(build)
+            product.platform_category_id = _PC_BUILD_PLATFORM_CATEGORY_ID
+            product.platform_category_name = _PC_BUILD_PLATFORM_CATEGORY_NAME
             product.selected_faqs = selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides)
             product.fulfilment_type = "prebuilt"
             product.handling_min_days = 1
@@ -2592,6 +2631,9 @@ async def list_on_storefront(
         status=ProductStatus.LISTED,
         hero_photo_url=build.hero_photo_url,
         model_3d_url=build.model_3d_url,
+        item_specifics=_direct_storefront_item_specifics(build),
+        platform_category_id=_PC_BUILD_PLATFORM_CATEGORY_ID,
+        platform_category_name=_PC_BUILD_PLATFORM_CATEGORY_NAME,
         selected_faqs=selected_faqs(build.id, build.selected_faq_ids, build.selected_faq_answer_overrides),
         fulfilment_type="prebuilt",
         handling_min_days=1,

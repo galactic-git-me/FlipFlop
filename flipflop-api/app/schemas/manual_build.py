@@ -44,7 +44,7 @@ class EvaluationResult(BaseModel):
 
 class BuildPhoto(BaseModel):
     url: str
-    kind: str = "photo"  # "photo" | "spec_card" | "registration_plate"
+    kind: str = "photo"  # "photo" | "video" | "spec_card" | "registration_plate" | "performance_card"
 
 
 class ManualBuildOut(BaseModel):
@@ -137,6 +137,7 @@ class ManualBuildOut(BaseModel):
     recreate_price_step_pct: float = 0.03
     traffic_band: Optional[str] = None
     listed_at: Optional[datetime] = None
+    relist_enabled: bool = True
     promoted_ad_rate_pct: Optional[float] = None
     marketplace_fees_actual: Optional[float] = None
     promotion_cost_actual: Optional[float] = None
@@ -184,6 +185,7 @@ class PostToEbayRequest(BaseModel):
     price: float
     condition: str = "USED_EXCELLENT"
     publish: bool = True
+    images: Optional[list[str]] = None
 
 
 class PostToEbayResult(BaseModel):
