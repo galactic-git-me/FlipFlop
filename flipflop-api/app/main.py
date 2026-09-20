@@ -41,6 +41,7 @@ from app.api import email_events
 from app.api import cross_listing
 from app.api import price_alerts
 from app.api import cases_bulk_import
+from app.api import curated_builds
 from app.routes.cases import router as cases_router
 from app.api.orders import router as orders_router, admin_router as orders_admin_router
 from app.api.drafts import router as drafts_router
@@ -769,6 +770,7 @@ app.include_router(auth_router, prefix="/api")
 app.include_router(oauth_router, prefix="/api")
 app.include_router(admin_auth_router, prefix="/api")
 app.include_router(motherboard_specs_router, prefix="/api")
+app.include_router(curated_builds.router, prefix="/api")
 app.include_router(quotes_router, prefix="/api")
 app.include_router(payments_router, prefix="/api")
 app.include_router(webhooks_router, prefix="/api")

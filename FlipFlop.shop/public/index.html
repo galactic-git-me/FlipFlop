@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlipFlop - Curated PC Builds</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+    <!-- Header -->
+    <header class="border-b border-slate-700 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+                    FlipFlop
+                </h1>
+                <nav class="flex gap-6">
+                    <a href="#builds" class="hover:text-blue-400 transition">Builds</a>
+                    <a href="#about" class="hover:text-blue-400 transition">About</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="container mx-auto px-4 py-16 text-center">
+        <h2 class="text-5xl font-bold mb-4">Premium Curated PC Builds</h2>
+        <p class="text-xl text-slate-300 max-w-2xl mx-auto">
+            Carefully designed configurations for every need. No compromises on quality.
+        </p>
+    </section>
+
+    <!-- Filter Section -->
+    <section id="filters" class="container mx-auto px-4 py-8">
+        <div class="flex flex-wrap gap-4 justify-center">
+            <button onclick="filterBuilds('all')" class="filter-btn active px-6 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 transition font-semibold">
+                All Builds
+            </button>
+        </div>
+    </section>
+
+    <!-- Builds Grid -->
+    <section id="builds" class="container mx-auto px-4 py-8">
+        <div id="loading" class="text-center py-12">
+            <div class="inline-block w-8 h-8 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+            <p class="mt-4 text-slate-400">Loading curated builds...</p>
+        </div>
+        
+        <div id="builds-container" class="hidden">
+            <!-- Builds will be inserted here -->
+        </div>
+
+        <div id="error" class="hidden text-center py-12">
+            <p class="text-red-400">Failed to load builds. Please try again later.</p>
+        </div>
+
+        <div id="empty" class="hidden text-center py-12">
+            <p class="text-slate-400">No published builds available at this time.</p>
+        </div>
+    </section>
+
+    <!-- Build Detail Modal -->
+    <div id="buildModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 id="modalTitle" class="text-3xl font-bold"></h3>
+                    <button onclick="closeModal()" class="text-slate-400 hover:text-white text-2xl">&times;</button>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="flex gap-2">
+                        <span id="modalSegment" class="px-3 py-1 bg-slate-700 rounded text-sm"></span>
+                        <span id="modalTier" class="px-3 py-1 bg-blue-600 rounded text-sm uppercase"></span>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold text-lg mb-2">Description</h4>
+                        <p id="modalDescription" class="text-slate-300"></p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold text-lg mb-2">What it's for</h4>
+                        <p id="modalUse" class="text-slate-300"></p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold text-lg mb-2">Components</h4>
+                        <div id="modalComponents" class="bg-slate-900 rounded-lg p-4 space-y-2">
+                            <!-- Components will be inserted here -->
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-sm text-slate-400">Starting from</span>
+                            <span id="modalPrice" class="text-4xl font-bold text-emerald-400"></span>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-700">
+                        <p class="text-sm text-slate-400">
+                            Interested in this build? Contact us for availability and custom options.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allBuilds = [];
+        let currentFilter = 'all';
+        const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:18000' : '';
+
+        async function fetchBuilds() {
+            try {
+                const response = await fetch(`${API_BASE}/api/public/curated-builds-catalogue`);
+                if (!response.ok) throw new Error('Failed to fetch');
+                
+                allBuilds = await response.json();
+                
+                if (allBuilds.length === 0) {
+                    showEmpty();
+                } else {
+                    setupFilters();
+                    renderBuilds();
+                }
+            } catch (error) {
+                console.error('Error fetching builds:', error);
+                showError();
+            }
+        }
+
+        function setupFilters() {
+            const segments = [...new Set(allBuilds.map(b => b.segment))];
+            const filtersContainer = document.getElementById('filters').querySelector('.flex');
+            
+            // Keep the "All Builds" button and add segment filters
+            segments.forEach(segment => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn px-6 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 transition font-semibold';
+                btn.textContent = segment;
+                btn.onclick = () => filterBuilds(segment);
+                filtersContainer.appendChild(btn);
+            });
+        }
+
+        function filterBuilds(filter) {
+            currentFilter = filter;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-blue-600');
+                btn.classList.add('bg-slate-700');
+            });
+            event.target.classList.add('active', 'bg-blue-600');
+            event.target.classList.remove('bg-slate-700');
+            
+            renderBuilds();
+        }
+
+        function renderBuilds() {
+            const container = document.getElementById('builds-container');
+            const filtered = currentFilter === 'all' 
+                ? allBuilds 
+                : allBuilds.filter(b => b.segment === currentFilter);
+
+            // Group by segment
+            const grouped = filtered.reduce((acc, build) => {
+                if (!acc[build.segment]) acc[build.segment] = [];
+                acc[build.segment].push(build);
+                return acc;
+            }, {});
+
+            container.innerHTML = Object.entries(grouped).map(([segment, builds]) => `
+                <div class="mb-12 fade-in">
+                    <h3 class="text-2xl font-bold mb-6 text-slate-200">${segment}</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${builds.map(build => `
+                            <div class="bg-slate-800 rounded-lg p-6 border border-slate-700 hover:border-blue-500 transition cursor-pointer"
+                                 onclick='showBuildDetail(${JSON.stringify(build).replace(/'/g, "&apos;")})'>
+                                ${build.is_featured ? '<div class="mb-2"><span class="text-xs px-2 py-1 bg-amber-600/20 text-amber-300 rounded">★ Featured</span></div>' : ''}
+                                <h4 class="text-xl font-bold mb-2">${build.name}</h4>
+                                <span class="text-xs text-slate-400 uppercase block mb-3">${build.tier}</span>
+                                <p class="text-slate-300 text-sm mb-4 line-clamp-2">${build.description}</p>
+                                ${build.estimated_price_gbp ? `
+                                    <div class="flex items-baseline gap-2">
+                                        <span class="text-xs text-slate-400">from</span>
+                                        <span class="text-2xl font-bold text-emerald-400">£${build.estimated_price_gbp.toFixed(2)}</span>
+                                    </div>
+                                ` : ''}
+                                <div class="mt-4 text-blue-400 text-sm font-semibold">View details →</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('loading').classList.add('hidden');
+            container.classList.remove('hidden');
+        }
+
+        function showBuildDetail(build) {
+            document.getElementById('modalTitle').textContent = build.name;
+            document.getElementById('modalSegment').textContent = build.segment;
+            document.getElementById('modalTier').textContent = build.tier;
+            document.getElementById('modalDescription').textContent = build.description;
+            document.getElementById('modalUse').textContent = build.use;
+            
+            const componentsContainer = document.getElementById('modalComponents');
+            componentsContainer.innerHTML = Object.entries(build.components)
+                .map(([key, value]) => `
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400 capitalize">${key.replace(/_/g, ' ')}</span>
+                        <span class="text-slate-200 text-right">${value}</span>
+                    </div>
+                `).join('');
+            
+            if (build.estimated_price_gbp) {
+                document.getElementById('modalPrice').textContent = `£${build.estimated_price_gbp.toFixed(2)}`;
+            } else {
+                document.getElementById('modalPrice').textContent = 'Contact for pricing';
+            }
+            
+            document.getElementById('buildModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('buildModal').classList.add('hidden');
+        }
+
+        function showError() {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('error').classList.remove('hidden');
+        }
+
+        function showEmpty() {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('empty').classList.remove('hidden');
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Close modal on background click
+        document.getElementById('buildModal').addEventListener('click', (e) => {
+            if (e.target.id === 'buildModal') closeModal();
+        });
+
+        // Initialize
+        fetchBuilds();
+    </script>
+</body>
+</html>

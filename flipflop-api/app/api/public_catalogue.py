@@ -476,3 +476,38 @@ async def public_custom_slots(playbook_id: int, db: AsyncSession = Depends(get_d
                 for variant in values:
                     bucket[variant['id']] = variant
     return [{**slot, 'variants_by_tier': {'budget': [], 'mid': list(pool.get(slot['slot_type'], {}).values()), 'high': []}} for slot in base]
+
+
+@router.get('/curated-builds-catalogue')
+async def public_curated_builds_catalogue(segment: str | None = None, db: AsyncSession = Depends(get_db)):
+    """Public endpoint - get published curated builds from the admin-managed catalogue."""
+    from app.models.curated_build import CuratedBuild
+    
+    query = select(CuratedBuild).where(
+        CuratedBuild.is_published == True, 
+        CuratedBuild.is_available == True
+    )
+    
+    if segment:
+        query = query.where(CuratedBuild.segment == segment)
+    
+    query = query.order_by(CuratedBuild.display_order, CuratedBuild.tier, CuratedBuild.name)
+    
+    result = await db.execute(query)
+    builds = result.scalars().all()
+    
+    return [
+        {
+            "id": b.id,
+            "definition_id": b.definition_id,
+            "segment": b.segment,
+            "tier": b.tier,
+            "name": b.name,
+            "description": b.description,
+            "use": b.use,
+            "components": b.components,
+            "estimated_price_gbp": b.estimated_price_gbp,
+            "is_featured": b.is_featured,
+        }
+        for b in builds
+    ]
