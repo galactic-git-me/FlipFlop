@@ -14,6 +14,9 @@ class ProductCheckoutIntentResponse(BaseModel):
     currency: str = "gbp"
     intent_id: str
 
+class ProductCheckoutIntentRequest(BaseModel):
+    discount_code: Optional[str] = None
+
 
 class ProductCheckoutConfirmRequest(BaseModel):
     intent_id: str = Field(..., description="Stripe PaymentIntent ID")
