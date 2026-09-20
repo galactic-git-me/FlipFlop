@@ -24,7 +24,7 @@ if [[ -n "$(git status --porcelain)" ]]; then
 fi
 
 log "Fetching origin/$BRANCH"
-git fetch --prune origin "$BRANCH"
+  git fetch --prune origin "$BRANCH:refs/remotes/origin/$BRANCH"
 
 if [[ -z "$TARGET_SHA" ]]; then
   TARGET_SHA="$(git rev-parse "origin/$BRANCH")"
