@@ -56,8 +56,12 @@ Once you have real numbers:
    IObit's FPS Calculator) and swap `cover` paths to existing files in
    `assets/covers/` (add new cover art there if a new title is needed).
 4. Leave `assets/` alone — logo, font, and intro video are shared across builds.
-5. Copy the whole `Personalised Website` folder (or just swap the JSON if hosting
-   from one place) to wherever the listing needs to point.
+5. In the admin build page, upload the JSON through **Upload performance-data.json**.
+   The admin route copies this template's `index.html`, `render.js`, and shared
+   `assets/` into `builds/<build-id>/Performance/`, writes the uploaded JSON as
+   that build's `performance-data.json`, and publishes the generated
+   `performance.html` through the listing pack. The storefront then loads that
+   build-specific portal from the pack rather than using a shared fallback.
 
 ## JSON schema notes
 

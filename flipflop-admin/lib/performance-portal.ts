@@ -1,9 +1,19 @@
 import * as fs from "fs/promises";
 import * as path from "path";
 
-const repoRoot = path.resolve(process.cwd(), "..");
-const buildsRoot = path.join(repoRoot, "builds");
-const templateRoot = path.join(repoRoot, "Personalised Website");
+const candidateRoots = [process.cwd(), path.resolve(process.cwd(), "..")];
+
+async function resolveRepoRoot(): Promise<string> {
+  for (const candidate of candidateRoots) {
+    if (
+      (await directoryExists(path.join(candidate, "builds"))) &&
+      (await directoryExists(path.join(candidate, "Personalised Website")))
+    ) {
+      return candidate;
+    }
+  }
+  throw new Error("Could not locate the FlipFlop builds and Personalised Website folders");
+}
 
 async function directoryExists(directory: string): Promise<boolean> {
   try {
@@ -18,6 +28,7 @@ export async function resolveBuildDirectory(buildId: string): Promise<string> {
     throw new Error("A valid numeric build_id is required");
   }
 
+  const buildsRoot = path.join(await resolveRepoRoot(), "builds");
   const candidates = [
     path.join(buildsRoot, buildId.padStart(3, "0")),
     path.join(buildsRoot, buildId),
@@ -42,6 +53,7 @@ export async function createBuildPerformancePortal(
 ): Promise<{ buildDir: string; targetDir: string; portalPath: string }> {
   const buildDir = await resolveBuildDirectory(buildId);
   const targetDir = path.join(buildDir, "Performance");
+  const templateRoot = path.join(await resolveRepoRoot(), "Personalised Website");
   const sourceIndex = path.join(templateRoot, "index.html");
   const sourceRenderer = path.join(templateRoot, "render.js");
   const sourceAssets = path.join(templateRoot, "assets");
