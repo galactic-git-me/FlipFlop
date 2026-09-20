@@ -17,6 +17,7 @@ import {
   Library,
   Bell,
   Truck,
+  CheckCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ServiceHealthPanel } from "./service-health-panel";
@@ -32,6 +33,7 @@ const PRIMARY_NAV = [
   { href: "/cross-listing", icon: Repeat2, label: "Cross-listing" },
   { href: "/dispatch-zone", icon: Truck, label: "Dispatch Zone" },
   { href: "/email-events", icon: Bell, label: "Email Events" },
+  { href: "/approvals", icon: CheckCircle, label: "Bot Approvals" },
   { href: "/cases-3d-priority", icon: Box, label: "3D Assets" },
   { href: "/problems", icon: AlertTriangle, label: "Problems" },
 ];

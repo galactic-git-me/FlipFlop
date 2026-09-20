@@ -170,6 +170,10 @@ from .cx_document import (
 from .usb_manifest import USBTemplate, USBManifest, USBManifestStatus
 from .capture_3d import Capture3DAsset, Capture3DStatus
 from .component_3d_asset import Component3DAsset, Component3DAssetStatus, AssetSubjectType
+from .bot_approval import (
+    BotApprovalQueue, ApprovalType, ApprovalStatus,
+    PlaybookProposalExtended, PricingProposal
+)
 from .photo_requirement import PhotoRequirement, PhotoType
 from .quality_gate import QualityGateCheck, QualityGateResult, EvidenceRequirement
 from .cx_cost_record import CXCostRecord
@@ -209,6 +213,8 @@ __all__ = [
     "USBTemplate", "USBManifest", "USBManifestStatus",
     "Capture3DAsset", "Capture3DStatus",
     "Component3DAsset", "Component3DAssetStatus", "AssetSubjectType",
+    "BotApprovalQueue", "ApprovalType", "ApprovalStatus",
+    "PlaybookProposalExtended", "PricingProposal",
     "PhotoRequirement", "PhotoType",
     "QualityGateCheck", "QualityGateResult", "EvidenceRequirement",
     "CXCostRecord",
