@@ -24,7 +24,10 @@ if [[ -n "$(git status --porcelain)" ]]; then
 fi
 
 log "Fetching origin/$BRANCH"
-  git fetch --prune origin "$BRANCH:refs/remotes/origin/$BRANCH"
+# A previous interrupted fetch can leave the remote-tracking ref undeletable.
+# Remove only this branch's local tracking ref, then recreate it from origin.
+git update-ref -d "refs/remotes/origin/$BRANCH" 2>/dev/null || true
+git fetch --prune origin "$BRANCH:refs/remotes/origin/$BRANCH"
 
 if [[ -z "$TARGET_SHA" ]]; then
   TARGET_SHA="$(git rev-parse "origin/$BRANCH")"
