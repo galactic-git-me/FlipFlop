@@ -315,7 +315,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, label, color
         )}
         {skippedLength > 0 && (
           <circle
-            cx={30} cy={30} r={radius} stroke="#94a3b8" strokeWidth={2} fill="none"
+            cx={30} cy={30} r={radius} stroke={color} strokeWidth={2} fill="none"
             strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
             strokeDashoffset={-skippedStartLength} strokeLinecap="butt"
             transform="rotate(-90 30 30)"
@@ -895,12 +895,12 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                       </div>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
-                      {typeof scan.superGemCount === "number" && (
+                      {typeof scan.superGemCount === "number" && scan.superGemCount > 0 && (
                         <span className="text-base font-bold text-amber-300 leading-none" title="Super Gems">
                           SG {scan.superGemCount}
                         </span>
                       )}
-                      {typeof scan.gemCount === "number" && (
+                      {typeof scan.gemCount === "number" && scan.gemCount > 0 && (
                         <span className="text-base font-bold text-blue-300 leading-none" title="Gems">
                           G {scan.gemCount}
                         </span>
