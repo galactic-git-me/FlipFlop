@@ -1,0 +1,113 @@
+{
+  "sku": "PREBUILT-PROMETHEUS-001",
+  "type": "prebuilt_ready_to_ship",
+  "name": "Prometheus",
+  "status": "in_stock",
+  "distinct_from_playbook": "FF-HPG-02 Prometheus ChromaFlair (that playbook upgrades GPU to RX 9070 XT; this unit keeps the installed RTX 3070)",
+  "case": "APNX Creator C1 ChromaFlair",
+  "argb_parts": [
+    "Thermalright Aqua Elite 240 V3 (white ARGB)",
+    "6x ARGB case fans",
+    "APNX Creator C1 ChromaFlair lighting zones"
+  ],
+  "components": [
+    {
+      "category": "cpu",
+      "name": "AMD Ryzen 7 7800X3D",
+      "est_replacement_cost_gbp": 300
+    },
+    {
+      "category": "motherboard",
+      "name": "ASUS PRIME X870-P",
+      "est_replacement_cost_gbp": 165
+    },
+    {
+      "category": "memory",
+      "name": "32GB (2x16GB) Lexar DDR5-6000/6400 EXPO",
+      "est_replacement_cost_gbp": 95
+    },
+    {
+      "category": "gpu",
+      "name": "NVIDIA GeForce RTX 3070 8GB",
+      "est_replacement_cost_gbp": 240,
+      "note": "used/refurb market; not new-retail"
+    },
+    {
+      "category": "storage",
+      "name": "1TB NVMe SSD (Crucial P3 / PCIe)",
+      "est_replacement_cost_gbp": 55
+    },
+    {
+      "category": "case",
+      "name": "APNX Creator C1 ChromaFlair",
+      "est_replacement_cost_gbp": 150
+    },
+    {
+      "category": "psu",
+      "name": "Corsair RM750i 750W modular",
+      "est_replacement_cost_gbp": 90
+    },
+    {
+      "category": "cooling",
+      "name": "Thermalright Aqua Elite 240 V3 white ARGB",
+      "est_replacement_cost_gbp": 45
+    },
+    {
+      "category": "fans",
+      "name": "6x ARGB fans (installed)",
+      "est_replacement_cost_gbp": 45
+    },
+    {
+      "category": "os",
+      "name": "Windows 11 Home",
+      "est_replacement_cost_gbp": 0
+    }
+  ],
+  "est_total_replacement_cost_gbp": 1185,
+  "pricing_guidance_for_PricingBot": {
+    "free_delivery_buffer_gbp": "50-100 (Michael preference)",
+    "channel_promo_buffer_gbp": "50-100 embedded in ask (eBay offers etc.)",
+    "do_not_use_playbook_sell": "FF-HPG-02 indicative sell ~2330 assumes RX 9070 XT \u2014 too high for this 3070 unit",
+    "comps_hint": "UK eBay sold: 7800X3D + RTX 3070 prebuilts typically mid-tier gaming; price on 3070 comps not 4070/9070"
+  },
+  "meshy_queue": [
+    {
+      "sku": "case-apnx-creator-c1-chromaflair",
+      "argb_zones": true
+    },
+    {
+      "sku": "cpu-ryzen-7-7800x3d",
+      "argb_zones": false
+    },
+    {
+      "sku": "gpu-rtx-3070-8gb",
+      "argb_zones": false
+    },
+    {
+      "sku": "cooler-thermalright-aqua-elite-240-v3-white",
+      "argb_zones": true
+    },
+    {
+      "sku": "fan-argb-120-generic-white",
+      "argb_zones": true,
+      "qty": 6
+    },
+    {
+      "sku": "mobo-asus-prime-x870-p",
+      "argb_zones": false
+    },
+    {
+      "sku": "ram-lexar-ddr5-dimm",
+      "argb_zones": false
+    },
+    {
+      "sku": "psu-corsair-rm750i",
+      "argb_zones": false
+    }
+  ],
+  "existing_messy_glbs": [
+    "builds\\002\\3D Build\\build_2_complete_build_d4f12539d4bc4886b6534db6cb4f0232.glb",
+    "builds\\002\\3D Build\\model-3d-db3dc40800744d29be6c726152a37b7a.glb"
+  ],
+  "photo_sources": "builds\\002\\ (real photos + enhanced) \u2014 prefer real product shots over old composite GLB"
+}
