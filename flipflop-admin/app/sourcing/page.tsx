@@ -249,13 +249,13 @@ function coalesceScansBySearchId(scans: ScanProgress[]): ScanProgress[] {
 // Small circular gauge -- replaces the earlier linear progress bars per
 // request. `value`/`max` drive the sweep angle; the label underneath gives
 // the raw fraction since a gauge alone can't show absolute counts.
-function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, label, color }: { value: number; max: number; failed?: number; skipped?: number; skippedStart?: number; label: string; color: string }) {
+function Gauge({ value, max, failed = 0, upstreamFailed = 0, label, color }: { value: number; max: number; failed?: number; upstreamFailed?: number; label: string; color: string }) {
   const patternId = `gauge-hatch-${useId().replace(/:/g, "")}`;
   const safeMax = Math.max(max, 0);
   const successful = Math.min(Math.max(value, 0), safeMax);
   const failedCount = Math.min(Math.max(failed, 0), Math.max(safeMax - successful, 0));
-  const skippedCount = Math.min(
-    Math.max(skipped, 0),
+  const upstreamFailedCount = Math.min(
+    Math.max(upstreamFailed, 0),
     Math.max(safeMax - successful - failedCount, 0),
   );
   // Percentage is successful output only. Failed/unavailable work is shown
@@ -269,11 +269,10 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, label, color
   const gaugeStrokeWidth = 7.5;
   const successfulLength = circumference * (successful / (safeMax || 1));
   const failedLength = circumference * (failedCount / (safeMax || 1));
-  const skippedLength = circumference * (skippedCount / (safeMax || 1));
+  const upstreamFailedLength = circumference * (upstreamFailedCount / (safeMax || 1));
   // Upstream failures must use the preceding stage's failure position. When
   // omitted, the segment follows this gauge's successful output as before.
-  const skippedStartCount = Math.min(Math.max(skippedStart ?? successful, 0), safeMax);
-  const skippedStartLength = circumference * (skippedStartCount / (safeMax || 1));
+ // The upstream arc is drawn immediately after this stage's solid/dotted output.
   return (
     <div className="flex flex-col items-center justify-center">
       <svg width={60} height={60} viewBox="0 0 60 60" className="drop-shadow-[1px_2px_1px_rgba(2,6,23,0.9)]">
@@ -312,12 +311,14 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, label, color
             transform={`rotate(${(successfulLength / circumference) * 360} 30 30)`}
           />
         )}
-        {skippedLength > 0 && (
-          <line
-            x1={30} y1={1.5} x2={30} y2={11.5} stroke="#020617" strokeWidth={1}
-            transform={`rotate(${(skippedStartLength / circumference) * 360} 30 30)`}
+ {upstreamFailedLength > 0 && (
+ <circle
+            cx={30} cy={30} r={radius} stroke={color} strokeWidth={1.5} fill="none"
+            strokeDasharray={`${upstreamFailedLength} ${circumference - upstreamFailedLength}`}
+            strokeDashoffset={-(successfulLength + failedLength)} strokeLinecap="butt"
+            transform="rotate(-90 30 30)" className="transition-all duration-500"
           />
-        )}
+ )}
         <text x={30} y={34} textAnchor="middle" className="fill-slate-100 text-[12px] font-semibold">
           {Math.round(pct)}%
         </text>
@@ -866,15 +867,17 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             // current stage's own terminal failures use the patterned
             // segment. Anything else remains an empty pending gap.
             const failedScores = 0;
-            const skippedCpk = failedIngested;
-            const skippedMarketPrices = Math.min(
-              failedIngested + failedCpk,
-              Math.max(searchTermTotal - scan.marketPricedCount - failedMarketPrices, 0),
-            );
-            const skippedScores = Math.min(
-              failedIngested + failedCpk + failedMarketPrices,
-              Math.max(searchTermTotal - scan.classifiedCount, 0),
-            );
+ const upstreamFailedCpk = failedIngested;
+ const upstreamFailedMarketPrices = failedIngested + failedCpk;
+ const upstreamFailedScores = failedIngested + failedCpk + failedMarketPrices;
+ // A downstream count can include records from an upstream failure bucket
+ // while the API is reconciling a completed run. Do not let those records
+ // inflate the solid score arc: only records with a valid upstream path can
+ // be successful at this stage.
+ const successfulScores = Math.min(
+ scan.classifiedCount,
+ Math.max(searchTermTotal - upstreamFailedScores, 0),
+ );
 
             return (
               <PixelCard key={scan.searchId || scan.query} variant={isComplete ? "emerald" : "default"}>
@@ -922,9 +925,9 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                         and lets a finished stage reach 100% without hiding
                         upstream failures. */}
                     <Gauge value={scan.ingestedCount} max={searchTermTotal} failed={failedIngested} label="Ingested" color="#8b5cf6" />
-                    <Gauge value={scan.cpkAssignedCount} max={searchTermTotal} failed={failedCpk} skipped={skippedCpk} skippedStart={scan.ingestedCount} label="CPK" color="#10b981" />
-                    <Gauge value={scan.marketPricedCount} max={searchTermTotal} failed={failedMarketPrices} skipped={skippedMarketPrices} skippedStart={scan.cpkAssignedCount} label="M Prices" color="#f59e0b" />
-                    <Gauge value={scan.classifiedCount} max={searchTermTotal} failed={failedScores} skipped={skippedScores} skippedStart={scan.marketPricedCount} label="Scores" color="#ec4899" />
+                    <Gauge value={scan.cpkAssignedCount} max={searchTermTotal} failed={failedCpk} upstreamFailed={upstreamFailedCpk} label="CPK" color="#10b981" />
+                    <Gauge value={scan.marketPricedCount} max={searchTermTotal} failed={failedMarketPrices} upstreamFailed={upstreamFailedMarketPrices} label="M Prices" color="#f59e0b" />
+                    <Gauge value={successfulScores} max={searchTermTotal} failed={failedScores} upstreamFailed={upstreamFailedScores} label="Scores" color="#ec4899" />
                   </div>
 
                   {vendorEntries.length > 0 && (
