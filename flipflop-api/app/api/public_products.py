@@ -42,6 +42,7 @@ def _build_asset_pack(
         "registration": [],
         "model_3d": None,
         "specifications_html": None,
+        "performance_html": None,
     }
     if not build_id:
         return empty
@@ -86,6 +87,19 @@ def _build_asset_pack(
     performance_titles = ["Overview and rankings", "Measured results and gaming estimates", "Productivity and system health", "Performance summary"]
     performance_files = files_in("Performance")
     pack["performance"] = [{"url": url_for(path), "title": f"Performance card {index + 1} — {performance_titles[index] if index < len(performance_titles) else path.stem}"} for index, path in enumerate(performance_files)]
+    performance_html = build_dir / "Performance" / "performance.html"
+    if performance_files and not performance_html.exists():
+        performance_html.parent.mkdir(parents=True, exist_ok=True)
+        images = "".join(
+            f"<figure><img src='{escape(path.name)}' alt='{escape(path.stem)}'><figcaption>{escape(path.stem.replace('-', ' '))}</figcaption></figure>"
+            for path in performance_files
+        )
+        performance_html.write_text(
+            "<!doctype html><html><head><meta charset='utf-8'><title>Performance</title><style>body{margin:0;padding:28px;background:#0d1015;color:#f5f7fa;font:15px Arial,sans-serif}h1{color:#b7f36a}main{display:grid;gap:22px}figure{margin:0;padding:12px;background:#151c28;border:1px solid #30425c;border-radius:14px}img{display:block;width:100%;height:auto;border-radius:9px}figcaption{padding:10px 2px 2px;color:#b9d7ff;text-transform:capitalize}</style></head><body><h1>Performance</h1><main>"
+            + images + "</main></body></html>", encoding="utf-8"
+        )
+    if performance_html.is_file():
+        pack["performance_html"] = {"url": url_for(performance_html), "title": "Full performance report"}
     registration_files = files_in("Registration")
     pack["registration"] = [{"url": url_for(path), "title": f"Registration plate {index + 1}"} for index, path in enumerate(registration_files)]
 
