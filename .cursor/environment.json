@@ -1,0 +1,19 @@
+{
+  "name": "FlipFlop (Gem Radar API + Admin)",
+  "install": "bash .cursor/install.sh",
+  "start": "bash .cursor/start.sh",
+  "terminals": [
+    {
+      "name": "gemradar-api-18000",
+      "command": "cd flipflop-api && source .venv/bin/activate && exec uvicorn app.gem_radar_standalone:app --host 0.0.0.0 --port 18000"
+    },
+    {
+      "name": "flipflop-admin-3002",
+      "command": "cd flipflop-admin && exec npm run dev -- -p 3002 -H 0.0.0.0"
+    }
+  ],
+  "ports": [
+    { "name": "gemradar-api", "port": 18000 },
+    { "name": "flipflop-admin", "port": 3002 }
+  ]
+}
