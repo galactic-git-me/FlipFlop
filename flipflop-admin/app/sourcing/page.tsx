@@ -270,8 +270,9 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, label, color
   const successfulLength = circumference * (successful / (safeMax || 1));
   const failedLength = circumference * (failedCount / (safeMax || 1));
   const skippedLength = circumference * (skippedCount / (safeMax || 1));
-  // Upstream failures must use the preceding stage's failure position. When
-  // omitted, the segment follows this gauge's successful output as before.
+  // Upstream failures start where the preceding stage stopped. They are
+  // drawn as a thin proportional arc so the next gauge carries forward the
+  // exact amount of work that could not reach it.
   const skippedStartCount = Math.min(Math.max(skippedStart ?? successful, 0), safeMax);
   const skippedStartLength = circumference * (skippedStartCount / (safeMax || 1));
   return (
@@ -313,9 +314,12 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, label, color
           />
         )}
         {skippedLength > 0 && (
-          <line
-            x1={30} y1={1.5} x2={30} y2={11.5} stroke="#020617" strokeWidth={1}
-            transform={`rotate(${(skippedStartLength / circumference) * 360} 30 30)`}
+          <circle
+            cx={30} cy={30} r={radius} stroke="#94a3b8" strokeWidth={2} fill="none"
+            strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
+            strokeDashoffset={-skippedStartLength} strokeLinecap="butt"
+            transform="rotate(-90 30 30)"
+            className="transition-all duration-500"
           />
         )}
         <text x={30} y={34} textAnchor="middle" className="fill-slate-100 text-[12px] font-semibold">
@@ -548,10 +552,15 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                 ingestedCount: Math.max(previous.ingestedCount ?? 0, scan.ingestedCount ?? 0),
                 ingestedNewCount: Math.max(previous.ingestedNewCount ?? 0, scan.ingestedNewCount ?? 0),
                 cpkAssignedCount: Math.max(previous.cpkAssignedCount ?? 0, scan.cpkAssignedCount ?? 0),
-                cpkFailedCount: Math.max(previous.cpkFailedCount ?? 0, scan.cpkFailedCount ?? 0),
-                marketPricedCount: Math.max(previous.marketPricedCount ?? 0, scan.marketPricedCount ?? 0),
-                classifiedCount: Math.max(previous.classifiedCount ?? 0, scan.classifiedCount ?? 0),
-                processedPercent: Math.max(previous.processedPercent ?? 0, scan.processedPercent ?? 0),
+                 cpkFailedCount: Math.max(previous.cpkFailedCount ?? 0, scan.cpkFailedCount ?? 0),
+                 marketPricedCount: Math.max(previous.marketPricedCount ?? 0, scan.marketPricedCount ?? 0),
+                 classifiedCount: Math.max(previous.classifiedCount ?? 0, scan.classifiedCount ?? 0),
+                 // Classification results are also monotonic within a run.
+                 // Preserve per-search GEM totals when a later poll contains
+                 // a partial/stale classification snapshot.
+                 gemCount: Math.max(previous.gemCount ?? 0, scan.gemCount ?? 0),
+                 superGemCount: Math.max(previous.superGemCount ?? 0, scan.superGemCount ?? 0),
+                 processedPercent: Math.max(previous.processedPercent ?? 0, scan.processedPercent ?? 0),
                 byVendor: mergedVendors,
                 discoveredByVendor: mergedDiscoveredVendors,
                 // Completion is monotonic within a sweep. The previous AND
@@ -886,12 +895,12 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                       </div>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
-                      {(scan.superGemCount ?? 0) > 0 && (
+                      {typeof scan.superGemCount === "number" && (
                         <span className="text-base font-bold text-amber-300 leading-none" title="Super Gems">
                           SG {scan.superGemCount}
                         </span>
                       )}
-                      {(scan.gemCount ?? 0) > 0 && (
+                      {typeof scan.gemCount === "number" && (
                         <span className="text-base font-bold text-blue-300 leading-none" title="Gems">
                           G {scan.gemCount}
                         </span>
