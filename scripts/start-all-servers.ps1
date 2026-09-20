@@ -28,6 +28,60 @@ $env:CUDA_VISIBLE_DEVICES = "0"
 $env:OLLAMA_NUM_PARALLEL = "4"
 $env:OLLAMA_KEEP_ALIVE = "-1"
 
+# LIVE mode may need to switch from a development branch to main. Keep the
+# stash created by this run distinguishable from the user's existing stashes
+# so cleanup can restore only what this script moved aside.
+$script:AutoLiveOriginalBranch = $null
+$script:AutoLiveStashMessage = $null
+$script:AutoLiveStashRef = $null
+
+function Restore-AutoLiveWorktree {
+    if (-not $script:AutoLiveStashMessage) {
+        return
+    }
+
+    Write-Host "[*] Restoring development branch and automatic live-mode stash..." -ForegroundColor Yellow
+
+    $currentBranch = (& git -C $projectRoot rev-parse --abbrev-ref HEAD 2>$null).Trim()
+    if ($currentBranch -ne $script:AutoLiveOriginalBranch) {
+        $currentChanges = & git -C $projectRoot status --porcelain
+        if ($currentChanges) {
+            Write-Warning "Cannot switch back to '$($script:AutoLiveOriginalBranch)' because live mode left worktree changes. The automatic stash was preserved."
+            return
+        }
+
+        & git -C $projectRoot switch $script:AutoLiveOriginalBranch
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warning "Could not switch back to '$($script:AutoLiveOriginalBranch)'. The automatic stash was preserved."
+            return
+        }
+    }
+
+    $currentChanges = & git -C $projectRoot status --porcelain
+    if ($currentChanges) {
+        Write-Warning "Not applying the automatic stash because the worktree is not clean. Use 'git stash list' to restore it manually."
+        return
+    }
+
+    $stashLine = & git -C $projectRoot stash list --format="%gd %s" | Where-Object { $_ -like "*$($script:AutoLiveStashMessage)*" } | Select-Object -First 1
+    if (-not $stashLine) {
+        Write-Warning "The automatic live-mode stash could not be found. Check 'git stash list'."
+        return
+    }
+
+    $stashRef = ($stashLine -split ' ', 2)[0]
+    & git -C $projectRoot stash pop $stashRef
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "The automatic stash could not be applied cleanly. It remains available as $stashRef."
+        return
+    }
+
+    Write-Host "[OK] Returned to '$($script:AutoLiveOriginalBranch)' and restored development changes." -ForegroundColor Green
+    $script:AutoLiveStashMessage = $null
+    $script:AutoLiveStashRef = $null
+    $script:AutoLiveOriginalBranch = $null
+}
+
 function Check-RepositoryForMode([string]$mode) {
     # LIVE OPERATOR follows GitHub and may fast-forward a clean checkout.
     # DEVELOPMENT is intentionally local-first: never overwrite edits, and
@@ -43,11 +97,34 @@ function Check-RepositoryForMode([string]$mode) {
     } else {
         if ($env:FLIPFLOP_PRODUCTION_BRANCH) { $env:FLIPFLOP_PRODUCTION_BRANCH } else { "main" }
     }
+    $worktreeChanges = & git -C $projectRoot status --porcelain
+    if ($mode -eq "live" -and $worktreeChanges) {
+        $script:AutoLiveOriginalBranch = $branch
+        $script:AutoLiveStashMessage = "flipflop-auto-live:$([guid]::NewGuid().ToString()):$branch"
+
+        Write-Host "[*] Temporarily stashing local changes before LIVE mode..." -ForegroundColor Yellow
+        & git -C $projectRoot stash push --include-untracked --message $script:AutoLiveStashMessage
+        if ($LASTEXITCODE -ne 0) {
+            $script:AutoLiveOriginalBranch = $null
+            $script:AutoLiveStashMessage = $null
+            throw "Could not create the automatic live-mode stash. No branch switch or live services were started."
+        }
+
+        $stashLine = & git -C $projectRoot stash list --format="%gd %s" | Where-Object { $_ -like "*$($script:AutoLiveStashMessage)*" } | Select-Object -First 1
+        if (-not $stashLine) {
+            $script:AutoLiveOriginalBranch = $null
+            $script:AutoLiveStashMessage = $null
+            throw "The automatic live-mode stash could not be located after creation. No branch switch or live services were started."
+        }
+        $script:AutoLiveStashRef = ($stashLine -split ' ', 2)[0]
+        Write-Host "[OK] Local changes stashed as $($script:AutoLiveStashRef)." -ForegroundColor Green
+        $worktreeChanges = @()
+    }
+
     if ($branch -ne $expectedBranch) {
         # Mode selection is also the branch selection. Never switch branches
         # across local work, because that could hide or overwrite edits that
         # belong to the other environment.
-        $worktreeChanges = & git -C $projectRoot status --porcelain
         if ($worktreeChanges) {
             $changedFiles = ($worktreeChanges -join [Environment]::NewLine)
             throw @"
@@ -317,7 +394,8 @@ function Promote-DevelopmentToProduction {
     Write-Host "[OK] Promoted $targetSha to origin/$productionBranch. The remote startup will deploy this exact commit." -ForegroundColor Green
 }
 
-$runMode = Select-RunMode
+try {
+    $runMode = Select-RunMode
 if ($runMode -eq "live") {
     Check-RepositoryForMode $runMode
     Write-Host "[*] Syncing production eBay account settings to Andromeda..." -ForegroundColor Cyan
@@ -930,5 +1008,8 @@ try {
             Write-Host "Stopped $($proc.name)" -ForegroundColor Gray
         }
     }
-    Write-Host "All servers stopped." -ForegroundColor Green
+Write-Host "All servers stopped." -ForegroundColor Green
+}
+} finally {
+    Restore-AutoLiveWorktree
 }
