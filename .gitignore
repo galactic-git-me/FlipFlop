@@ -43,6 +43,7 @@ flipflop.db-wal
 pc-flipper-backend/flipflop.db*
 pc-flipper-backend/data/ebay_playwright_state.json
 pc-flipper-backend/data/scheduler_state.json
+flipflop-api/data/scheduler_state.json
 
 # env files
 .env*

@@ -1,0 +1,69 @@
+{
+  "sku": "PREBUILT-PROMETHEUS-001",
+  "source": "production.manual_builds.id=2",
+  "name": "PROMETHEUS",
+  "status": "listed",
+  "prod_total_cost_gbp": 944.74,
+  "prod_ebay_price_gbp": 1450.0,
+  "gpu_confirmed": "Palit GameRock NVIDIA GeForce RTX 3070 8GB",
+  "cpu_confirmed": "AMD Ryzen 7 7800X3D",
+  "components": [
+    {
+      "slot": "cpu",
+      "name": "AMD Ryzen 7 7800X3D",
+      "price_paid": 195.0
+    },
+    {
+      "slot": "motherboard",
+      "name": "ASUS PRIME X870-P",
+      "price_paid": 166.0
+    },
+    {
+      "slot": "ram",
+      "name": "Lexar 32GB (2x16GB) DDR5-6400 CL38",
+      "price_paid": 250.0
+    },
+    {
+      "slot": "gpu",
+      "name": "Palit GameRock NVIDIA GeForce RTX 3070 8GB",
+      "price_paid": 180.0
+    },
+    {
+      "slot": "ssd",
+      "name": "Samsung 1TB M.2 NVMe SSD",
+      "price_paid": 0.0,
+      "market_price": 125.5
+    },
+    {
+      "slot": "psu",
+      "name": "Corsair RM750i 750W 80 Plus Gold Fully Modular",
+      "price_paid": 56.64
+    },
+    {
+      "slot": "case",
+      "name": "APNX ChromaFlair Iridescent Chassis",
+      "price_paid": 49.99
+    },
+    {
+      "slot": "cpu_cooler",
+      "name": "Thermalright Aqua Elite 240 White ARGB V3",
+      "price_paid": 38.99
+    },
+    {
+      "slot": "case_fans",
+      "name": "6x Addressable RGB Fans",
+      "price_paid": 0.0
+    },
+    {
+      "slot": "gpu_support",
+      "name": "Illuminated ARGB GPU Support Bracket",
+      "price_paid": 5.0
+    },
+    {
+      "slot": "operating_system",
+      "name": "Windows 11 Pro 64-bit",
+      "price_paid": 3.12
+    }
+  ],
+  "notes": "prod total_cost 944.74 vs catalogue est 1185; ebay_price already 1450 aligns with PricingBot 1449 draft"
+}
