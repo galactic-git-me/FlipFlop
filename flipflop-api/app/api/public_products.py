@@ -5,6 +5,8 @@ Consumed by the theflipflop.shop storefront /ready-to-ship pages.
 from fastapi import APIRouter, Depends, HTTPException
 from pathlib import Path
 from urllib.parse import quote
+from html import escape
+import json
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -25,7 +27,13 @@ _BUILD_ASSETS_ROOT = Path(__file__).resolve().parents[3] / "builds"
 _IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
 
 
-def _build_asset_pack(build_id: int | None, photos: list | None) -> dict:
+def _build_asset_pack(
+    build_id: int | None,
+    photos: list | None,
+    build_name: str | None = None,
+    spec: dict | None = None,
+    item_specifics: dict | None = None,
+) -> dict:
     """Expose the named image groups from the build pack to the storefront."""
     empty = {
         "gallery": [],
@@ -33,6 +41,7 @@ def _build_asset_pack(build_id: int | None, photos: list | None) -> dict:
         "performance": [],
         "registration": [],
         "model_3d": None,
+        "specifications_html": None,
     }
     if not build_id:
         return empty
@@ -79,6 +88,31 @@ def _build_asset_pack(build_id: int | None, photos: list | None) -> dict:
     pack["performance"] = [{"url": url_for(path), "title": f"Performance card {index + 1} — {performance_titles[index] if index < len(performance_titles) else path.stem}"} for index, path in enumerate(performance_files)]
     registration_files = files_in("Registration")
     pack["registration"] = [{"url": url_for(path), "title": f"Registration plate {index + 1}"} for index, path in enumerate(registration_files)]
+
+    # Keep a self-contained HTML copy of the generated specification document
+    # in the pack. This is the canonical portal; image cards remain available
+    # as a backwards-compatible fallback for older clients.
+    specifications_html = build_dir / "Specifications" / "specifications.html"
+    if not specifications_html.exists():
+        rows = []
+        for key, value in (item_specifics or {}).items():
+            rows.append(f"<tr><th>{escape(str(key))}</th><td>{escape(str(value))}</td></tr>")
+        if not rows:
+            for key, value in (spec or {}).items():
+                rows.append(f"<tr><th>{escape(str(key))}</th><td>{escape(json.dumps(value) if isinstance(value, (dict, list)) else str(value))}</td></tr>")
+        specifications_html.parent.mkdir(parents=True, exist_ok=True)
+        specifications_html.write_text(
+            "<!doctype html><html><head><meta charset='utf-8'><title>"
+            + escape(build_name or "Build specifications")
+            + "</title><style>body{margin:0;padding:32px;background:#0d1015;color:#f5f7fa;font:16px Arial,sans-serif}h1{color:#b7f36a}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:14px;border-bottom:1px solid #26354a}th{color:#ff9a4d;width:35%}td{color:#b9d7ff}</style></head><body><h1>"
+            + escape(build_name or "Build specifications")
+            + "</h1><table>"
+            + "".join(rows)
+            + "</table></body></html>",
+            encoding="utf-8",
+        )
+    if specifications_html.is_file():
+        pack["specifications_html"] = {"url": url_for(specifications_html), "title": "Full specifications"}
 
     model_dir = build_dir / "3D Build"
     model_files = sorted(
@@ -215,7 +249,13 @@ async def public_product_detail(product_id: int, db: AsyncSession = Depends(get_
         # Measured results only — never presented alongside estimates.
         "benchmark_report": benchmark,
         "twin_3d": twin or ({"optimized_asset_ref": product.model_3d_url, "preview_image_ref": None, "ar_ready": False} if product.model_3d_url else None),
-        "asset_pack": _build_asset_pack(product.build.manual_build_id if product.build else None, manual_build.photos if manual_build else None),
+        "asset_pack": _build_asset_pack(
+            product.build.manual_build_id if product.build else None,
+            manual_build.photos if manual_build else None,
+            manual_build.name if manual_build else product.title,
+            build_spec,
+            item_specifics,
+        ),
         "customer_policies": {
             "returns": "30-day returns. For a change of mind, the customer pays return postage; faulty or misdescribed goods are returned at FlipFlop's cost. Statutory rights are unaffected.",
             "warranty": "UK statutory consumer rights apply. Any remaining transferable manufacturer warranty is identified with the build; no unsupported manufacturer cover is implied.",
