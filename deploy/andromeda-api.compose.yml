@@ -62,6 +62,7 @@ services:
         required: false
     environment:
       APP_ENV: production
+      FLIPFLOP_RUNTIME_ENV: live
       WEB_ONLY: "true"
       DATABASE_URL: postgresql+asyncpg://flipper:flipper@postgres:5432/pcflipper
       SYNC_DATABASE_URL: postgresql://flipper:flipper@postgres:5432/pcflipper
@@ -126,6 +127,7 @@ services:
         required: false
     environment:
       APP_ENV: production
+      FLIPFLOP_RUNTIME_ENV: live
       WEB_ONLY: "false"
       DATABASE_URL: postgresql+asyncpg://flipper:flipper@postgres:5432/pcflipper
       SYNC_DATABASE_URL: postgresql://flipper:flipper@postgres:5432/pcflipper

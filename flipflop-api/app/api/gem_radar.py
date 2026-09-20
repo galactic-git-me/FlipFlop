@@ -327,7 +327,7 @@ async def pipeline_status_endpoint(
         from datetime import datetime
 
         live_items = await SubmissionQueueService.get_live_items(
-            db, limit=500, search_run_id_prefix=_run_id_prefix(environment)
+            db, limit=500
         )
         # search_id is the configured search-term identity. One extension
         # sweep can submit pages with query text that differs only in generated
@@ -2840,9 +2840,8 @@ async def queue_status(
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
 ) -> QueueStatusResponse:
-    environment = _runtime_environment()
     stats = await SubmissionQueueService.get_queue_stats(
-        db, search_run_id_prefix=_run_id_prefix(environment)
+        db
     )
     return QueueStatusResponse(**stats)
 
@@ -2851,9 +2850,8 @@ async def queue_items(
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
 ) -> QueueItemsResponse:
-    environment = _runtime_environment()
     rows = await SubmissionQueueService.get_live_items(
-        db, search_run_id_prefix=_run_id_prefix(environment)
+        db
     )
     return QueueItemsResponse(items=[QueueItemResponse(
         id=row.id, search_run_id=row.search_run_id, search_id=row.search_id,
