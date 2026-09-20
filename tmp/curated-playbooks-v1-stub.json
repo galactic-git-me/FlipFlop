@@ -1,0 +1,3239 @@
+{
+  "version": "v1-stub",
+  "currency": "GBP",
+  "notes": [
+    "Costs are catalogue estimates \u2014 replace with FlipFlopXtension live fast-delivery vendor prices before Michael approval.",
+    "indicative_sell_gbp is catalogue only; PricingBot owns suggested sell + upgrade add-ons.",
+    "Upsells are one-step-up within the same customer_type toward the next budget tier."
+  ],
+  "playbooks": [
+    {
+      "playbook_id": "FF-GVG-01",
+      "customer_type": "Great-value Gaming",
+      "budget_tier": "Budget",
+      "name": "Atlas Essential",
+      "status": "draft",
+      "est_component_cost_gbp": 695,
+      "indicative_sell_gbp": 930,
+      "note": "Entry GPU; make the value story about 32GB RAM, a quality case and a clean upgrade path.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen 5 5600",
+          "cost_gbp": 85,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Entry GPU; make the value story about 32GB RAM, a quality case and a clean upgrade path.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "MSI B550M PRO-VDH WIFI",
+          "cost_gbp": 95,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Entry GPU; make the value story about 32GB RAM, a quality case and a clean upgrade path.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "32GB (2x16GB) DDR4-3200",
+          "cost_gbp": 55,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Entry GPU; make the value story about 32GB RAM, a quality case and a clean upgrade path.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "NVIDIA GeForce RTX 5050 8GB",
+          "cost_gbp": 250,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Entry GPU; make the value story about 32GB RAM, a quality case and a clean upgrade path.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "1TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 60,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Entry GPU; make the value story about 32GB RAM, a quality case and a clean upgrade path.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Montech AIR 100 ARGB",
+          "cost_gbp": 65,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Entry GPU; make the value story about 32GB RAM, a quality case and a clean upgrade path.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": true
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair CX650 650W 80+ Bronze",
+          "cost_gbp": 65,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Entry GPU; make the value story about 32GB RAM, a quality case and a clean upgrade path.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Thermalright Assassin X 120 SE",
+          "cost_gbp": 20,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Entry GPU; make the value story about 32GB RAM, a quality case and a clean upgrade path.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Home",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Entry GPU; make the value story about 32GB RAM, a quality case and a clean upgrade path.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [
+        {
+          "category": "CPU / APU",
+          "from_sku": "AMD Ryzen 5 5600",
+          "to_sku": "AMD Ryzen 5 9600X",
+          "delta_cost_gbp": 120.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Motherboard",
+          "from_sku": "MSI B550M PRO-VDH WIFI",
+          "to_sku": "ASRock B850 Steel Legend WiFi",
+          "delta_cost_gbp": 95.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Memory",
+          "from_sku": "32GB (2x16GB) DDR4-3200",
+          "to_sku": "32GB (2x16GB) DDR5-6000 CL30",
+          "delta_cost_gbp": 60.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Graphics",
+          "from_sku": "NVIDIA GeForce RTX 5050 8GB",
+          "to_sku": "AMD Radeon RX 9060 XT 16GB",
+          "delta_cost_gbp": 180.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Primary storage",
+          "from_sku": "1TB PCIe 4.0 NVMe SSD",
+          "to_sku": "2TB PCIe 4.0 NVMe SSD",
+          "delta_cost_gbp": 50.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Power supply",
+          "from_sku": "Corsair CX650 650W 80+ Bronze",
+          "to_sku": "Corsair RM750e 750W 80+ Gold",
+          "delta_cost_gbp": 35.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "CPU cooling",
+          "from_sku": "Thermalright Assassin X 120 SE",
+          "to_sku": "Thermalright Peerless Assassin 120 SE",
+          "delta_cost_gbp": 15.0,
+          "delta_sell_gbp": null
+        }
+      ],
+      "allowed_cases": [
+        "Montech AIR 100 ARGB"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-GVG-02",
+      "customer_type": "Great-value Gaming",
+      "budget_tier": "Mid-range",
+      "name": "Atlas Pulse",
+      "status": "draft",
+      "est_component_cost_gbp": 1275,
+      "indicative_sell_gbp": 1700,
+      "note": "16GB VRAM makes this the strongest price-to-longevity gaming proposition.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen 5 9600X",
+          "cost_gbp": 205,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "16GB VRAM makes this the strongest price-to-longevity gaming proposition.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "ASRock B850 Steel Legend WiFi",
+          "cost_gbp": 190,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "16GB VRAM makes this the strongest price-to-longevity gaming proposition.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "32GB (2x16GB) DDR5-6000 CL30",
+          "cost_gbp": 115,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "16GB VRAM makes this the strongest price-to-longevity gaming proposition.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "AMD Radeon RX 9060 XT 16GB",
+          "cost_gbp": 430,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "16GB VRAM makes this the strongest price-to-longevity gaming proposition.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "2TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 110,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "16GB VRAM makes this the strongest price-to-longevity gaming proposition.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Montech SKY TWO GX",
+          "cost_gbp": 90,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "16GB VRAM makes this the strongest price-to-longevity gaming proposition.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair RM750e 750W 80+ Gold",
+          "cost_gbp": 100,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "16GB VRAM makes this the strongest price-to-longevity gaming proposition.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Thermalright Peerless Assassin 120 SE",
+          "cost_gbp": 35,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "16GB VRAM makes this the strongest price-to-longevity gaming proposition.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Home",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "16GB VRAM makes this the strongest price-to-longevity gaming proposition.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [
+        {
+          "category": "CPU / APU",
+          "from_sku": "AMD Ryzen 5 9600X",
+          "to_sku": "AMD Ryzen 7 9800X3D",
+          "delta_cost_gbp": 185.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Motherboard",
+          "from_sku": "ASRock B850 Steel Legend WiFi",
+          "to_sku": "ASUS TUF Gaming X870-PLUS WIFI",
+          "delta_cost_gbp": 50.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Graphics",
+          "from_sku": "AMD Radeon RX 9060 XT 16GB",
+          "to_sku": "AMD Radeon RX 9070 16GB",
+          "delta_cost_gbp": 170.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Power supply",
+          "from_sku": "Corsair RM750e 750W 80+ Gold",
+          "to_sku": "Corsair RM850e 850W 80+ Gold",
+          "delta_cost_gbp": 20.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "CPU cooling",
+          "from_sku": "Thermalright Peerless Assassin 120 SE",
+          "to_sku": "Arctic Liquid Freezer III 240",
+          "delta_cost_gbp": 35.0,
+          "delta_sell_gbp": null
+        }
+      ],
+      "allowed_cases": [
+        "Montech SKY TWO GX"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-GVG-03",
+      "customer_type": "Great-value Gaming",
+      "budget_tier": "High-end",
+      "name": "Atlas Apex",
+      "status": "draft",
+      "est_component_cost_gbp": 1730,
+      "indicative_sell_gbp": 2390,
+      "note": "The sensible enthusiast alternative to ultra-expensive halo GPUs.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen 7 9800X3D",
+          "cost_gbp": 390,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The sensible enthusiast alternative to ultra-expensive halo GPUs.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "ASUS TUF Gaming X870-PLUS WIFI",
+          "cost_gbp": 240,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The sensible enthusiast alternative to ultra-expensive halo GPUs.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "32GB (2x16GB) DDR5-6000 CL30",
+          "cost_gbp": 115,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The sensible enthusiast alternative to ultra-expensive halo GPUs.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "AMD Radeon RX 9070 16GB",
+          "cost_gbp": 600,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The sensible enthusiast alternative to ultra-expensive halo GPUs.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "2TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 110,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The sensible enthusiast alternative to ultra-expensive halo GPUs.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Lian Li LANCOOL 207",
+          "cost_gbp": 85,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The sensible enthusiast alternative to ultra-expensive halo GPUs.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair RM850e 850W 80+ Gold",
+          "cost_gbp": 120,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The sensible enthusiast alternative to ultra-expensive halo GPUs.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Arctic Liquid Freezer III 240",
+          "cost_gbp": 70,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The sensible enthusiast alternative to ultra-expensive halo GPUs.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Home",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The sensible enthusiast alternative to ultra-expensive halo GPUs.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [],
+      "allowed_cases": [
+        "Lian Li LANCOOL 207"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-HPG-01",
+      "customer_type": "High-performance Gaming",
+      "budget_tier": "Budget",
+      "name": "Vortex Start",
+      "status": "draft",
+      "est_component_cost_gbp": 1505,
+      "indicative_sell_gbp": 1920,
+      "note": "NVIDIA 16GB gives a gaming customer a credible route into local AI later.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "Intel Core Ultra 5 250K Plus",
+          "cost_gbp": 215,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA 16GB gives a gaming customer a credible route into local AI later.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "MSI Z890 GAMING PLUS WIFI",
+          "cost_gbp": 210,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA 16GB gives a gaming customer a credible route into local AI later.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "32GB (2x16GB) DDR5-6400",
+          "cost_gbp": 140,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA 16GB gives a gaming customer a credible route into local AI later.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "NVIDIA GeForce RTX 5060 Ti 16GB",
+          "cost_gbp": 650,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA 16GB gives a gaming customer a credible route into local AI later.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "1TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 60,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA 16GB gives a gaming customer a credible route into local AI later.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "NZXT H5 Flow",
+          "cost_gbp": 85,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA 16GB gives a gaming customer a credible route into local AI later.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair RM750e 750W 80+ Gold",
+          "cost_gbp": 100,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA 16GB gives a gaming customer a credible route into local AI later.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Thermalright Phantom Spirit 120 SE",
+          "cost_gbp": 45,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA 16GB gives a gaming customer a credible route into local AI later.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Home",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA 16GB gives a gaming customer a credible route into local AI later.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [
+        {
+          "category": "CPU / APU",
+          "from_sku": "Intel Core Ultra 5 250K Plus",
+          "to_sku": "AMD Ryzen 7 7800X3D",
+          "delta_cost_gbp": 85.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Memory",
+          "from_sku": "32GB (2x16GB) DDR5-6400",
+          "to_sku": "32GB (2x16GB) Lexar DDR5-6400 CL38",
+          "delta_cost_gbp": 110.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Graphics",
+          "from_sku": "NVIDIA GeForce RTX 5060 Ti 16GB",
+          "to_sku": "AMD Radeon RX 9070 XT 16GB",
+          "delta_cost_gbp": 110.0,
+          "delta_sell_gbp": null
+        }
+      ],
+      "allowed_cases": [
+        "NZXT H5 Flow"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-HPG-02",
+      "customer_type": "High-performance Gaming",
+      "budget_tier": "Mid-range",
+      "name": "Prometheus ChromaFlair",
+      "status": "draft",
+      "est_component_cost_gbp": 1772,
+      "indicative_sell_gbp": 2330,
+      "note": "Your existing recent build, retained as specified. Only the RTX 3070 is replaced with the RX 9070 XT.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen 7 7800X3D",
+          "cost_gbp": 300,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Your existing recent build, retained as specified. Only the RTX 3070 is replaced with the RX 9070 XT.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "ASUS PRIME X870-P",
+          "cost_gbp": 165,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Your existing recent build, retained as specified. Only the RTX 3070 is replaced with the RX 9070 XT.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "32GB (2x16GB) Lexar DDR5-6400 CL38",
+          "cost_gbp": 250,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Your existing recent build, retained as specified. Only the RTX 3070 is replaced with the RX 9070 XT.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "AMD Radeon RX 9070 XT 16GB",
+          "cost_gbp": 760,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Your existing recent build, retained as specified. Only the RTX 3070 is replaced with the RX 9070 XT.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "1TB PCIe 3.0 NVMe SSD",
+          "cost_gbp": 45,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Your existing recent build, retained as specified. Only the RTX 3070 is replaced with the RX 9070 XT.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "APNX Creator C1 ChromaFlair",
+          "cost_gbp": 150,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Your existing recent build, retained as specified. Only the RTX 3070 is replaced with the RX 9070 XT.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair RM750i 750W modular",
+          "cost_gbp": 57,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Your existing recent build, retained as specified. Only the RTX 3070 is replaced with the RX 9070 XT.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Thermalright Aqua Elite 240 V3",
+          "cost_gbp": 45,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Your existing recent build, retained as specified. Only the RTX 3070 is replaced with the RX 9070 XT.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Home",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Your existing recent build, retained as specified. Only the RTX 3070 is replaced with the RX 9070 XT.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [
+        {
+          "category": "CPU / APU",
+          "from_sku": "AMD Ryzen 7 7800X3D",
+          "to_sku": "AMD Ryzen 7 9850X3D",
+          "delta_cost_gbp": 200.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Motherboard",
+          "from_sku": "ASUS PRIME X870-P",
+          "to_sku": "ASUS ROG Crosshair X870E Hero",
+          "delta_cost_gbp": 485.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Graphics",
+          "from_sku": "AMD Radeon RX 9070 XT 16GB",
+          "to_sku": "NVIDIA GeForce RTX 5090 32GB",
+          "delta_cost_gbp": 2540.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Primary storage",
+          "from_sku": "1TB PCIe 3.0 NVMe SSD",
+          "to_sku": "4TB PCIe 4.0 NVMe SSD",
+          "delta_cost_gbp": 175.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Power supply",
+          "from_sku": "Corsair RM750i 750W modular",
+          "to_sku": "Corsair HX1200i 1200W 80+ Platinum",
+          "delta_cost_gbp": 263.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "CPU cooling",
+          "from_sku": "Thermalright Aqua Elite 240 V3",
+          "to_sku": "Arctic Liquid Freezer III 360",
+          "delta_cost_gbp": 45.0,
+          "delta_sell_gbp": null
+        }
+      ],
+      "allowed_cases": [
+        "APNX Creator C1 ChromaFlair"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-HPG-03",
+      "customer_type": "High-performance Gaming",
+      "budget_tier": "High-end",
+      "name": "Vortex Titan",
+      "status": "draft",
+      "est_component_cost_gbp": 5480,
+      "indicative_sell_gbp": 7190,
+      "note": "A halo build: protect margin with concierge setup, extensive benchmarking and premium aftercare.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen 7 9850X3D",
+          "cost_gbp": 500,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A halo build: protect margin with concierge setup, extensive benchmarking and premium aftercare.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "ASUS ROG Crosshair X870E Hero",
+          "cost_gbp": 650,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A halo build: protect margin with concierge setup, extensive benchmarking and premium aftercare.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "64GB (2x32GB) DDR5-6000 CL30",
+          "cost_gbp": 220,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A halo build: protect margin with concierge setup, extensive benchmarking and premium aftercare.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "NVIDIA GeForce RTX 5090 32GB",
+          "cost_gbp": 3300,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A halo build: protect margin with concierge setup, extensive benchmarking and premium aftercare.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "4TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 220,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A halo build: protect margin with concierge setup, extensive benchmarking and premium aftercare.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Fractal Design North XL",
+          "cost_gbp": 180,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A halo build: protect margin with concierge setup, extensive benchmarking and premium aftercare.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair HX1200i 1200W 80+ Platinum",
+          "cost_gbp": 320,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A halo build: protect margin with concierge setup, extensive benchmarking and premium aftercare.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Arctic Liquid Freezer III 360",
+          "cost_gbp": 90,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A halo build: protect margin with concierge setup, extensive benchmarking and premium aftercare.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Pro",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A halo build: protect margin with concierge setup, extensive benchmarking and premium aftercare.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [],
+      "allowed_cases": [
+        "Fractal Design North XL"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-STU-01",
+      "customer_type": "Student Hybrid",
+      "budget_tier": "Budget",
+      "name": "Campus AI Mini",
+      "status": "draft",
+      "est_component_cost_gbp": 480,
+      "indicative_sell_gbp": 670,
+      "note": "Ryzen AI chips are soldered mobile/compact-platform processors; sell this as a compact PC, not a DIY tower.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen AI 5 340 (integrated)",
+          "cost_gbp": 260,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Ryzen AI chips are soldered mobile/compact-platform processors; sell this as a compact PC, not a DIY tower.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "OEM compact APU mainboard (included)",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Ryzen AI chips are soldered mobile/compact-platform processors; sell this as a compact PC, not a DIY tower.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "32GB LPDDR5X",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Ryzen AI chips are soldered mobile/compact-platform processors; sell this as a compact PC, not a DIY tower.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "AMD Radeon 840M integrated",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Ryzen AI chips are soldered mobile/compact-platform processors; sell this as a compact PC, not a DIY tower.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "1TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 60,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Ryzen AI chips are soldered mobile/compact-platform processors; sell this as a compact PC, not a DIY tower.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "ASUS NUC 14 Pro-style compact chassis",
+          "cost_gbp": 160,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Ryzen AI chips are soldered mobile/compact-platform processors; sell this as a compact PC, not a DIY tower.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "External 120W power adapter",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Ryzen AI chips are soldered mobile/compact-platform processors; sell this as a compact PC, not a DIY tower.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Integrated low-noise cooling",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Ryzen AI chips are soldered mobile/compact-platform processors; sell this as a compact PC, not a DIY tower.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Home",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Ryzen AI chips are soldered mobile/compact-platform processors; sell this as a compact PC, not a DIY tower.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [
+        {
+          "category": "Motherboard",
+          "from_sku": "OEM compact APU mainboard (included)",
+          "to_sku": "MSI B850 GAMING PLUS WIFI",
+          "delta_cost_gbp": 165.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Memory",
+          "from_sku": "32GB LPDDR5X",
+          "to_sku": "32GB (2x16GB) DDR5-6000 CL30",
+          "delta_cost_gbp": 115.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Graphics",
+          "from_sku": "AMD Radeon 840M integrated",
+          "to_sku": "Intel Arc B580 12GB",
+          "delta_cost_gbp": 250.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Primary storage",
+          "from_sku": "1TB PCIe 4.0 NVMe SSD",
+          "to_sku": "2TB PCIe 4.0 NVMe SSD",
+          "delta_cost_gbp": 50.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Power supply",
+          "from_sku": "External 120W power adapter",
+          "to_sku": "Corsair RM650e 650W 80+ Gold",
+          "delta_cost_gbp": 85.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "CPU cooling",
+          "from_sku": "Integrated low-noise cooling",
+          "to_sku": "Thermalright Assassin X 120 SE",
+          "delta_cost_gbp": 20.0,
+          "delta_sell_gbp": null
+        }
+      ],
+      "allowed_cases": [
+        "ASUS NUC 14 Pro-style compact chassis"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-STU-02",
+      "customer_type": "Student Hybrid",
+      "budget_tier": "Mid-range",
+      "name": "Campus Studio",
+      "status": "draft",
+      "est_component_cost_gbp": 1025,
+      "indicative_sell_gbp": 1390,
+      "note": "A non-NVIDIA alternative that keeps the total achievable for students.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen 5 9600X",
+          "cost_gbp": 205,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A non-NVIDIA alternative that keeps the total achievable for students.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "MSI B850 GAMING PLUS WIFI",
+          "cost_gbp": 165,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A non-NVIDIA alternative that keeps the total achievable for students.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "32GB (2x16GB) DDR5-6000 CL30",
+          "cost_gbp": 115,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A non-NVIDIA alternative that keeps the total achievable for students.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "Intel Arc B580 12GB",
+          "cost_gbp": 250,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A non-NVIDIA alternative that keeps the total achievable for students.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "2TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 110,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A non-NVIDIA alternative that keeps the total achievable for students.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Fractal Design Pop Air",
+          "cost_gbp": 75,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A non-NVIDIA alternative that keeps the total achievable for students.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair RM650e 650W 80+ Gold",
+          "cost_gbp": 85,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A non-NVIDIA alternative that keeps the total achievable for students.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Thermalright Assassin X 120 SE",
+          "cost_gbp": 20,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A non-NVIDIA alternative that keeps the total achievable for students.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Home",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A non-NVIDIA alternative that keeps the total achievable for students.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [
+        {
+          "category": "CPU / APU",
+          "from_sku": "AMD Ryzen 5 9600X",
+          "to_sku": "Intel Core Ultra 7 270K Plus",
+          "delta_cost_gbp": 115.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Motherboard",
+          "from_sku": "MSI B850 GAMING PLUS WIFI",
+          "to_sku": "ASUS TUF GAMING Z890-PLUS WIFI",
+          "delta_cost_gbp": 85.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Memory",
+          "from_sku": "32GB (2x16GB) DDR5-6000 CL30",
+          "to_sku": "64GB (2x32GB) DDR5-6400",
+          "delta_cost_gbp": 145.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Graphics",
+          "from_sku": "Intel Arc B580 12GB",
+          "to_sku": "NVIDIA GeForce RTX 5070 Ti 16GB",
+          "delta_cost_gbp": 700.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Power supply",
+          "from_sku": "Corsair RM650e 650W 80+ Gold",
+          "to_sku": "Corsair RM850e 850W 80+ Gold",
+          "delta_cost_gbp": 35.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "CPU cooling",
+          "from_sku": "Thermalright Assassin X 120 SE",
+          "to_sku": "Arctic Liquid Freezer III 240",
+          "delta_cost_gbp": 50.0,
+          "delta_sell_gbp": null
+        }
+      ],
+      "allowed_cases": [
+        "Fractal Design Pop Air"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-STU-03",
+      "customer_type": "Student Hybrid",
+      "budget_tier": "High-end",
+      "name": "Campus Pro",
+      "status": "draft",
+      "est_component_cost_gbp": 2165,
+      "indicative_sell_gbp": 2950,
+      "note": "Position as the 'take me through the whole degree' machine.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "Intel Core Ultra 7 270K Plus",
+          "cost_gbp": 320,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Position as the 'take me through the whole degree' machine.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "ASUS TUF GAMING Z890-PLUS WIFI",
+          "cost_gbp": 250,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Position as the 'take me through the whole degree' machine.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "64GB (2x32GB) DDR5-6400",
+          "cost_gbp": 260,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Position as the 'take me through the whole degree' machine.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "NVIDIA GeForce RTX 5070 Ti 16GB",
+          "cost_gbp": 950,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Position as the 'take me through the whole degree' machine.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "2TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 110,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Position as the 'take me through the whole degree' machine.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Lian Li LANCOOL 207",
+          "cost_gbp": 85,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Position as the 'take me through the whole degree' machine.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair RM850e 850W 80+ Gold",
+          "cost_gbp": 120,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Position as the 'take me through the whole degree' machine.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Arctic Liquid Freezer III 240",
+          "cost_gbp": 70,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Position as the 'take me through the whole degree' machine.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Home",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Position as the 'take me through the whole degree' machine.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [],
+      "allowed_cases": [
+        "Lian Li LANCOOL 207"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-BOF-01",
+      "customer_type": "Business & Office",
+      "budget_tier": "Budget",
+      "name": "Deskwise Essential",
+      "status": "draft",
+      "est_component_cost_gbp": 415,
+      "indicative_sell_gbp": 590,
+      "note": "Use a simple black, quiet build with 3-year support options.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen 5 5600G",
+          "cost_gbp": 105,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Use a simple black, quiet build with 3-year support options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "MSI B550M PRO-VDH WIFI",
+          "cost_gbp": 95,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Use a simple black, quiet build with 3-year support options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "32GB (2x16GB) DDR4-3200",
+          "cost_gbp": 55,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Use a simple black, quiet build with 3-year support options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "Radeon Vega integrated",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Use a simple black, quiet build with 3-year support options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "1TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 60,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Use a simple black, quiet build with 3-year support options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Fractal Design Core 1100",
+          "cost_gbp": 45,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Use a simple black, quiet build with 3-year support options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair CX550 550W 80+ Bronze",
+          "cost_gbp": 55,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Use a simple black, quiet build with 3-year support options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "AMD Wraith Stealth",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Use a simple black, quiet build with 3-year support options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Pro",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Use a simple black, quiet build with 3-year support options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [
+        {
+          "category": "CPU / APU",
+          "from_sku": "AMD Ryzen 5 5600G",
+          "to_sku": "Intel Core Ultra 5 250K Plus",
+          "delta_cost_gbp": 110.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Motherboard",
+          "from_sku": "MSI B550M PRO-VDH WIFI",
+          "to_sku": "ASUS Pro Q870M-C-CSM",
+          "delta_cost_gbp": 125.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Memory",
+          "from_sku": "32GB (2x16GB) DDR4-3200",
+          "to_sku": "32GB (2x16GB) DDR5-6400",
+          "delta_cost_gbp": 85.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Primary storage",
+          "from_sku": "1TB PCIe 4.0 NVMe SSD",
+          "to_sku": "2TB PCIe 4.0 NVMe SSD",
+          "delta_cost_gbp": 50.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Power supply",
+          "from_sku": "Corsair CX550 550W 80+ Bronze",
+          "to_sku": "Corsair RM650e 650W 80+ Gold",
+          "delta_cost_gbp": 30.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "CPU cooling",
+          "from_sku": "AMD Wraith Stealth",
+          "to_sku": "Noctua NH-U12S redux",
+          "delta_cost_gbp": 55.0,
+          "delta_sell_gbp": null
+        }
+      ],
+      "allowed_cases": [
+        "Fractal Design Core 1100"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-BOF-02",
+      "customer_type": "Business & Office",
+      "budget_tier": "Mid-range",
+      "name": "Deskwise Pro",
+      "status": "draft",
+      "est_component_cost_gbp": 945,
+      "indicative_sell_gbp": 1290,
+      "note": "Emphasise quiet acoustics, 2TB storage and business-ready Windows Pro.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "Intel Core Ultra 5 250K Plus",
+          "cost_gbp": 215,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Emphasise quiet acoustics, 2TB storage and business-ready Windows Pro.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "ASUS Pro Q870M-C-CSM",
+          "cost_gbp": 220,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Emphasise quiet acoustics, 2TB storage and business-ready Windows Pro.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "32GB (2x16GB) DDR5-6400",
+          "cost_gbp": 140,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Emphasise quiet acoustics, 2TB storage and business-ready Windows Pro.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "Intel integrated graphics",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Emphasise quiet acoustics, 2TB storage and business-ready Windows Pro.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "2TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 110,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Emphasise quiet acoustics, 2TB storage and business-ready Windows Pro.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Fractal Design Define 7 Compact",
+          "cost_gbp": 120,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Emphasise quiet acoustics, 2TB storage and business-ready Windows Pro.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair RM650e 650W 80+ Gold",
+          "cost_gbp": 85,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Emphasise quiet acoustics, 2TB storage and business-ready Windows Pro.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Noctua NH-U12S redux",
+          "cost_gbp": 55,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Emphasise quiet acoustics, 2TB storage and business-ready Windows Pro.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Pro",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Emphasise quiet acoustics, 2TB storage and business-ready Windows Pro.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [
+        {
+          "category": "CPU / APU",
+          "from_sku": "Intel Core Ultra 5 250K Plus",
+          "to_sku": "AMD Ryzen AI 7 350 (integrated)",
+          "delta_cost_gbp": 175.0,
+          "delta_sell_gbp": null
+        }
+      ],
+      "allowed_cases": [
+        "Fractal Design Define 7 Compact"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-BOF-03",
+      "customer_type": "Business & Office",
+      "budget_tier": "High-end",
+      "name": "Deskwise Executive",
+      "status": "draft",
+      "est_component_cost_gbp": 750,
+      "indicative_sell_gbp": 1140,
+      "note": "This is a compact APU product. Ryzen AI 7 350 is not a socketed AM5 tower CPU.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen AI 7 350 (integrated)",
+          "cost_gbp": 390,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "This is a compact APU product. Ryzen AI 7 350 is not a socketed AM5 tower CPU.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "OEM compact APU mainboard (included)",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "This is a compact APU product. Ryzen AI 7 350 is not a socketed AM5 tower CPU.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "64GB LPDDR5X",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "This is a compact APU product. Ryzen AI 7 350 is not a socketed AM5 tower CPU.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "AMD Radeon 860M integrated",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "This is a compact APU product. Ryzen AI 7 350 is not a socketed AM5 tower CPU.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "2TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 110,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "This is a compact APU product. Ryzen AI 7 350 is not a socketed AM5 tower CPU.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Premium compact aluminium mini-PC chassis",
+          "cost_gbp": 250,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "This is a compact APU product. Ryzen AI 7 350 is not a socketed AM5 tower CPU.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "External 180W power adapter",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "This is a compact APU product. Ryzen AI 7 350 is not a socketed AM5 tower CPU.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Integrated low-noise cooling",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "This is a compact APU product. Ryzen AI 7 350 is not a socketed AM5 tower CPU.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Pro",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "This is a compact APU product. Ryzen AI 7 350 is not a socketed AM5 tower CPU.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [],
+      "allowed_cases": [
+        "Premium compact aluminium mini-PC chassis"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-CCR-01",
+      "customer_type": "Content Creation",
+      "budget_tier": "Budget",
+      "name": "Creator Forge",
+      "status": "draft",
+      "est_component_cost_gbp": 1710,
+      "indicative_sell_gbp": 2170,
+      "note": "NVIDIA acceleration and 64GB RAM are more important here than RGB excess.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "Intel Core Ultra 5 250K Plus",
+          "cost_gbp": 215,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA acceleration and 64GB RAM are more important here than RGB excess.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "MSI Z890 GAMING PLUS WIFI",
+          "cost_gbp": 210,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA acceleration and 64GB RAM are more important here than RGB excess.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "64GB (2x32GB) DDR5-6400",
+          "cost_gbp": 260,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA acceleration and 64GB RAM are more important here than RGB excess.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "NVIDIA GeForce RTX 5060 Ti 16GB",
+          "cost_gbp": 650,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA acceleration and 64GB RAM are more important here than RGB excess.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "2TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 110,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA acceleration and 64GB RAM are more important here than RGB excess.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Corsair 3500X",
+          "cost_gbp": 95,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA acceleration and 64GB RAM are more important here than RGB excess.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair RM750e 750W 80+ Gold",
+          "cost_gbp": 100,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA acceleration and 64GB RAM are more important here than RGB excess.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Arctic Liquid Freezer III 240",
+          "cost_gbp": 70,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA acceleration and 64GB RAM are more important here than RGB excess.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Home",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "NVIDIA acceleration and 64GB RAM are more important here than RGB excess.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [
+        {
+          "category": "CPU / APU",
+          "from_sku": "Intel Core Ultra 5 250K Plus",
+          "to_sku": "Intel Core Ultra 7 270K Plus",
+          "delta_cost_gbp": 105.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Motherboard",
+          "from_sku": "MSI Z890 GAMING PLUS WIFI",
+          "to_sku": "ASUS ProArt Z890-CREATOR WIFI",
+          "delta_cost_gbp": 290.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Graphics",
+          "from_sku": "NVIDIA GeForce RTX 5060 Ti 16GB",
+          "to_sku": "NVIDIA GeForce RTX 5080 16GB",
+          "delta_cost_gbp": 750.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Primary storage",
+          "from_sku": "2TB PCIe 4.0 NVMe SSD",
+          "to_sku": "4TB PCIe 4.0 NVMe SSD",
+          "delta_cost_gbp": 110.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Power supply",
+          "from_sku": "Corsair RM750e 750W 80+ Gold",
+          "to_sku": "Corsair RM1000x 1000W 80+ Gold",
+          "delta_cost_gbp": 80.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "CPU cooling",
+          "from_sku": "Arctic Liquid Freezer III 240",
+          "to_sku": "Arctic Liquid Freezer III 360",
+          "delta_cost_gbp": 20.0,
+          "delta_sell_gbp": null
+        }
+      ],
+      "allowed_cases": [
+        "Corsair 3500X"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-CCR-02",
+      "customer_type": "Content Creation",
+      "budget_tier": "Mid-range",
+      "name": "Creator Signal",
+      "status": "draft",
+      "est_component_cost_gbp": 3200,
+      "indicative_sell_gbp": 4110,
+      "note": "A genuinely professional creative rig with useful I/O and 4TB working space.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "Intel Core Ultra 7 270K Plus",
+          "cost_gbp": 320,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A genuinely professional creative rig with useful I/O and 4TB working space.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "ASUS ProArt Z890-CREATOR WIFI",
+          "cost_gbp": 500,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A genuinely professional creative rig with useful I/O and 4TB working space.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "64GB (2x32GB) DDR5-6400",
+          "cost_gbp": 260,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A genuinely professional creative rig with useful I/O and 4TB working space.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "NVIDIA GeForce RTX 5080 16GB",
+          "cost_gbp": 1400,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A genuinely professional creative rig with useful I/O and 4TB working space.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "4TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 220,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A genuinely professional creative rig with useful I/O and 4TB working space.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "ASUS ProArt PA602",
+          "cost_gbp": 230,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A genuinely professional creative rig with useful I/O and 4TB working space.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair RM1000x 1000W 80+ Gold",
+          "cost_gbp": 180,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A genuinely professional creative rig with useful I/O and 4TB working space.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Arctic Liquid Freezer III 360",
+          "cost_gbp": 90,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A genuinely professional creative rig with useful I/O and 4TB working space.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Pro",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A genuinely professional creative rig with useful I/O and 4TB working space.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [
+        {
+          "category": "CPU / APU",
+          "from_sku": "Intel Core Ultra 7 270K Plus",
+          "to_sku": "AMD Ryzen 9 9950X",
+          "delta_cost_gbp": 130.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Memory",
+          "from_sku": "64GB (2x32GB) DDR5-6400",
+          "to_sku": "128GB (4x32GB) DDR5-5600",
+          "delta_cost_gbp": 160.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Graphics",
+          "from_sku": "NVIDIA GeForce RTX 5080 16GB",
+          "to_sku": "NVIDIA GeForce RTX 5090 32GB",
+          "delta_cost_gbp": 1900.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Primary storage",
+          "from_sku": "4TB PCIe 4.0 NVMe SSD",
+          "to_sku": "4TB PCIe 4.0 NVMe SSD + 4TB project SSD",
+          "delta_cost_gbp": 210.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Power supply",
+          "from_sku": "Corsair RM1000x 1000W 80+ Gold",
+          "to_sku": "Corsair HX1200i 1200W 80+ Platinum",
+          "delta_cost_gbp": 140.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "CPU cooling",
+          "from_sku": "Arctic Liquid Freezer III 360",
+          "to_sku": "Arctic Liquid Freezer III 420",
+          "delta_cost_gbp": 25.0,
+          "delta_sell_gbp": null
+        }
+      ],
+      "allowed_cases": [
+        "ASUS ProArt PA602"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-CCR-03",
+      "customer_type": "Content Creation",
+      "budget_tier": "High-end",
+      "name": "Creator Nova",
+      "status": "draft",
+      "est_component_cost_gbp": 5675,
+      "indicative_sell_gbp": 7440,
+      "note": "Treat as a made-to-order flagship, with display-calibration and RAID options.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen 9 9950X",
+          "cost_gbp": 450,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Treat as a made-to-order flagship, with display-calibration and RAID options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "ASUS ProArt X870E-Creator WiFi",
+          "cost_gbp": 450,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Treat as a made-to-order flagship, with display-calibration and RAID options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "128GB (4x32GB) DDR5-5600",
+          "cost_gbp": 420,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Treat as a made-to-order flagship, with display-calibration and RAID options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "NVIDIA GeForce RTX 5090 32GB",
+          "cost_gbp": 3300,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Treat as a made-to-order flagship, with display-calibration and RAID options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "4TB PCIe 4.0 NVMe SSD + 4TB project SSD",
+          "cost_gbp": 430,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Treat as a made-to-order flagship, with display-calibration and RAID options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Fractal Design Define 7 XL",
+          "cost_gbp": 190,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Treat as a made-to-order flagship, with display-calibration and RAID options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair HX1200i 1200W 80+ Platinum",
+          "cost_gbp": 320,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Treat as a made-to-order flagship, with display-calibration and RAID options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Arctic Liquid Freezer III 420",
+          "cost_gbp": 115,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Treat as a made-to-order flagship, with display-calibration and RAID options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Pro",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Treat as a made-to-order flagship, with display-calibration and RAID options.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [],
+      "allowed_cases": [
+        "Fractal Design Define 7 XL"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-AIW-01",
+      "customer_type": "AI Workstation",
+      "budget_tier": "Budget",
+      "name": "Localhost 16",
+      "status": "draft",
+      "est_component_cost_gbp": 1670,
+      "indicative_sell_gbp": 2120,
+      "note": "The entry local-LLM build: 16GB VRAM, 64GB system RAM, NVIDIA CUDA ecosystem.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen 5 9600X",
+          "cost_gbp": 205,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The entry local-LLM build: 16GB VRAM, 64GB system RAM, NVIDIA CUDA ecosystem.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "MSI MAG B850 Tomahawk MAX WiFi",
+          "cost_gbp": 220,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The entry local-LLM build: 16GB VRAM, 64GB system RAM, NVIDIA CUDA ecosystem.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "64GB (2x32GB) DDR5-6000 CL30",
+          "cost_gbp": 220,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The entry local-LLM build: 16GB VRAM, 64GB system RAM, NVIDIA CUDA ecosystem.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "NVIDIA GeForce RTX 5060 Ti 16GB",
+          "cost_gbp": 650,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The entry local-LLM build: 16GB VRAM, 64GB system RAM, NVIDIA CUDA ecosystem.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "2TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 110,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The entry local-LLM build: 16GB VRAM, 64GB system RAM, NVIDIA CUDA ecosystem.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Fractal Design Meshify 2 Compact",
+          "cost_gbp": 130,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The entry local-LLM build: 16GB VRAM, 64GB system RAM, NVIDIA CUDA ecosystem.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair RM750e 750W 80+ Gold",
+          "cost_gbp": 100,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The entry local-LLM build: 16GB VRAM, 64GB system RAM, NVIDIA CUDA ecosystem.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Thermalright Peerless Assassin 120 SE",
+          "cost_gbp": 35,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The entry local-LLM build: 16GB VRAM, 64GB system RAM, NVIDIA CUDA ecosystem.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Pro + Ubuntu option",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "The entry local-LLM build: 16GB VRAM, 64GB system RAM, NVIDIA CUDA ecosystem.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [
+        {
+          "category": "CPU / APU",
+          "from_sku": "AMD Ryzen 5 9600X",
+          "to_sku": "AMD Ryzen 9 9950X",
+          "delta_cost_gbp": 245.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Motherboard",
+          "from_sku": "MSI MAG B850 Tomahawk MAX WiFi",
+          "to_sku": "ASUS ProArt X870E-Creator WiFi",
+          "delta_cost_gbp": 230.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Memory",
+          "from_sku": "64GB (2x32GB) DDR5-6000 CL30",
+          "to_sku": "128GB (4x32GB) DDR5-5600",
+          "delta_cost_gbp": 200.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Graphics",
+          "from_sku": "NVIDIA GeForce RTX 5060 Ti 16GB",
+          "to_sku": "ASRock AMD Radeon AI PRO R9700 Creator 32GB",
+          "delta_cost_gbp": 550.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Primary storage",
+          "from_sku": "2TB PCIe 4.0 NVMe SSD",
+          "to_sku": "4TB PCIe 4.0 NVMe SSD",
+          "delta_cost_gbp": 110.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Power supply",
+          "from_sku": "Corsair RM750e 750W 80+ Gold",
+          "to_sku": "Corsair RM1000x 1000W 80+ Gold",
+          "delta_cost_gbp": 80.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "CPU cooling",
+          "from_sku": "Thermalright Peerless Assassin 120 SE",
+          "to_sku": "Arctic Liquid Freezer III 360",
+          "delta_cost_gbp": 55.0,
+          "delta_sell_gbp": null
+        }
+      ],
+      "allowed_cases": [
+        "Fractal Design Meshify 2 Compact"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-AIW-02",
+      "customer_type": "AI Workstation",
+      "budget_tier": "Mid-range",
+      "name": "Localhost 32",
+      "status": "draft",
+      "est_component_cost_gbp": 3190,
+      "indicative_sell_gbp": 4100,
+      "note": "32GB VRAM is the headline. Be explicit that NVIDIA/CUDA software compatibility is broader than AMD/ROCm.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen 9 9950X",
+          "cost_gbp": 450,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "32GB VRAM is the headline. Be explicit that NVIDIA/CUDA software compatibility is broader than AMD/ROCm.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "ASUS ProArt X870E-Creator WiFi",
+          "cost_gbp": 450,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "32GB VRAM is the headline. Be explicit that NVIDIA/CUDA software compatibility is broader than AMD/ROCm.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "128GB (4x32GB) DDR5-5600",
+          "cost_gbp": 420,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "32GB VRAM is the headline. Be explicit that NVIDIA/CUDA software compatibility is broader than AMD/ROCm.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "ASRock AMD Radeon AI PRO R9700 Creator 32GB",
+          "cost_gbp": 1200,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "32GB VRAM is the headline. Be explicit that NVIDIA/CUDA software compatibility is broader than AMD/ROCm.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "4TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 220,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "32GB VRAM is the headline. Be explicit that NVIDIA/CUDA software compatibility is broader than AMD/ROCm.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Fractal Design Meshify 2 XL",
+          "cost_gbp": 180,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "32GB VRAM is the headline. Be explicit that NVIDIA/CUDA software compatibility is broader than AMD/ROCm.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair RM1000x 1000W 80+ Gold",
+          "cost_gbp": 180,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "32GB VRAM is the headline. Be explicit that NVIDIA/CUDA software compatibility is broader than AMD/ROCm.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Arctic Liquid Freezer III 360",
+          "cost_gbp": 90,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "32GB VRAM is the headline. Be explicit that NVIDIA/CUDA software compatibility is broader than AMD/ROCm.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Ubuntu 24.04 LTS + Windows 11 Pro dual-boot",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "32GB VRAM is the headline. Be explicit that NVIDIA/CUDA software compatibility is broader than AMD/ROCm.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [
+        {
+          "category": "CPU / APU",
+          "from_sku": "AMD Ryzen 9 9950X",
+          "to_sku": "AMD Ryzen Threadripper PRO 7975WX",
+          "delta_cost_gbp": 1650.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Motherboard",
+          "from_sku": "ASUS ProArt X870E-Creator WiFi",
+          "to_sku": "ASUS Pro WS WRX90E-SAGE SE",
+          "delta_cost_gbp": 800.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Memory",
+          "from_sku": "128GB (4x32GB) DDR5-5600",
+          "to_sku": "256GB (8x32GB) DDR5 ECC RDIMM",
+          "delta_cost_gbp": 1180.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Graphics",
+          "from_sku": "ASRock AMD Radeon AI PRO R9700 Creator 32GB",
+          "to_sku": "NVIDIA RTX 6000 Ada 48GB",
+          "delta_cost_gbp": 5300.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Primary storage",
+          "from_sku": "4TB PCIe 4.0 NVMe SSD",
+          "to_sku": "4TB PCIe 4.0 NVMe SSD + 8TB data SSD",
+          "delta_cost_gbp": 500.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Power supply",
+          "from_sku": "Corsair RM1000x 1000W 80+ Gold",
+          "to_sku": "Corsair AX1600i 1600W 80+ Titanium",
+          "delta_cost_gbp": 370.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "CPU cooling",
+          "from_sku": "Arctic Liquid Freezer III 360",
+          "to_sku": "Noctua NH-U14S TR5-SP6",
+          "delta_cost_gbp": 40.0,
+          "delta_sell_gbp": null
+        }
+      ],
+      "allowed_cases": [
+        "Fractal Design Meshify 2 XL"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-AIW-03",
+      "customer_type": "AI Workstation",
+      "budget_tier": "High-end",
+      "name": "Localhost 48",
+      "status": "draft",
+      "est_component_cost_gbp": 13350,
+      "indicative_sell_gbp": 17260,
+      "note": "Built for workstation stability and future GPU expansion; price as a consultation-led bespoke system.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen Threadripper PRO 7975WX",
+          "cost_gbp": 2100,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Built for workstation stability and future GPU expansion; price as a consultation-led bespoke system.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "ASUS Pro WS WRX90E-SAGE SE",
+          "cost_gbp": 1250,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Built for workstation stability and future GPU expansion; price as a consultation-led bespoke system.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "256GB (8x32GB) DDR5 ECC RDIMM",
+          "cost_gbp": 1600,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Built for workstation stability and future GPU expansion; price as a consultation-led bespoke system.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "NVIDIA RTX 6000 Ada 48GB",
+          "cost_gbp": 6500,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Built for workstation stability and future GPU expansion; price as a consultation-led bespoke system.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "4TB PCIe 4.0 NVMe SSD + 8TB data SSD",
+          "cost_gbp": 720,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Built for workstation stability and future GPU expansion; price as a consultation-led bespoke system.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Corsair 9000D Airflow",
+          "cost_gbp": 500,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Built for workstation stability and future GPU expansion; price as a consultation-led bespoke system.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair AX1600i 1600W 80+ Titanium",
+          "cost_gbp": 550,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Built for workstation stability and future GPU expansion; price as a consultation-led bespoke system.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Noctua NH-U14S TR5-SP6",
+          "cost_gbp": 130,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Built for workstation stability and future GPU expansion; price as a consultation-led bespoke system.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Ubuntu 24.04 LTS + Windows 11 Pro",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Built for workstation stability and future GPU expansion; price as a consultation-led bespoke system.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [],
+      "allowed_cases": [
+        "Corsair 9000D Airflow"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-SWD-01",
+      "customer_type": "Software Development",
+      "budget_tier": "Budget",
+      "name": "Codebase",
+      "status": "draft",
+      "est_component_cost_gbp": 1145,
+      "indicative_sell_gbp": 1480,
+      "note": "Make RAM, fast storage and quiet cooling the value story.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen 5 9600X",
+          "cost_gbp": 205,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Make RAM, fast storage and quiet cooling the value story.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "MSI B850 GAMING PLUS WIFI",
+          "cost_gbp": 165,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Make RAM, fast storage and quiet cooling the value story.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "64GB (2x32GB) DDR5-6000 CL30",
+          "cost_gbp": 220,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Make RAM, fast storage and quiet cooling the value story.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "Intel Arc B580 12GB",
+          "cost_gbp": 250,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Make RAM, fast storage and quiet cooling the value story.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "2TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 110,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Make RAM, fast storage and quiet cooling the value story.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Fractal Design Pop Air",
+          "cost_gbp": 75,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Make RAM, fast storage and quiet cooling the value story.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair RM650e 650W 80+ Gold",
+          "cost_gbp": 85,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Make RAM, fast storage and quiet cooling the value story.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Thermalright Peerless Assassin 120 SE",
+          "cost_gbp": 35,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Make RAM, fast storage and quiet cooling the value story.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Pro + WSL2",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Make RAM, fast storage and quiet cooling the value story.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [
+        {
+          "category": "CPU / APU",
+          "from_sku": "AMD Ryzen 5 9600X",
+          "to_sku": "Intel Core Ultra 7 270K Plus",
+          "delta_cost_gbp": 115.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Motherboard",
+          "from_sku": "MSI B850 GAMING PLUS WIFI",
+          "to_sku": "ASUS ProArt Z890-CREATOR WIFI",
+          "delta_cost_gbp": 335.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Memory",
+          "from_sku": "64GB (2x32GB) DDR5-6000 CL30",
+          "to_sku": "96GB (2x48GB) DDR5-6400",
+          "delta_cost_gbp": 110.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Graphics",
+          "from_sku": "Intel Arc B580 12GB",
+          "to_sku": "NVIDIA GeForce RTX 5060 Ti 16GB",
+          "delta_cost_gbp": 400.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Primary storage",
+          "from_sku": "2TB PCIe 4.0 NVMe SSD",
+          "to_sku": "4TB PCIe 4.0 NVMe SSD",
+          "delta_cost_gbp": 110.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Power supply",
+          "from_sku": "Corsair RM650e 650W 80+ Gold",
+          "to_sku": "Corsair RM850e 850W 80+ Gold",
+          "delta_cost_gbp": 35.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "CPU cooling",
+          "from_sku": "Thermalright Peerless Assassin 120 SE",
+          "to_sku": "Noctua NH-D15 G2",
+          "delta_cost_gbp": 95.0,
+          "delta_sell_gbp": null
+        }
+      ],
+      "allowed_cases": [
+        "Fractal Design Pop Air"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-SWD-02",
+      "customer_type": "Software Development",
+      "budget_tier": "Mid-range",
+      "name": "Compiler",
+      "status": "draft",
+      "est_component_cost_gbp": 2410,
+      "indicative_sell_gbp": 3120,
+      "note": "Good flagship developer workstation without paying for a 5090.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "Intel Core Ultra 7 270K Plus",
+          "cost_gbp": 320,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Good flagship developer workstation without paying for a 5090.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "ASUS ProArt Z890-CREATOR WIFI",
+          "cost_gbp": 500,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Good flagship developer workstation without paying for a 5090.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "96GB (2x48GB) DDR5-6400",
+          "cost_gbp": 330,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Good flagship developer workstation without paying for a 5090.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "NVIDIA GeForce RTX 5060 Ti 16GB",
+          "cost_gbp": 650,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Good flagship developer workstation without paying for a 5090.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "4TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 220,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Good flagship developer workstation without paying for a 5090.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Fractal Design North",
+          "cost_gbp": 140,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Good flagship developer workstation without paying for a 5090.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair RM850e 850W 80+ Gold",
+          "cost_gbp": 120,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Good flagship developer workstation without paying for a 5090.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Noctua NH-D15 G2",
+          "cost_gbp": 130,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Good flagship developer workstation without paying for a 5090.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Pro + Ubuntu VM",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Good flagship developer workstation without paying for a 5090.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [
+        {
+          "category": "CPU / APU",
+          "from_sku": "Intel Core Ultra 7 270K Plus",
+          "to_sku": "AMD Ryzen 9 9950X",
+          "delta_cost_gbp": 130.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Memory",
+          "from_sku": "96GB (2x48GB) DDR5-6400",
+          "to_sku": "128GB (4x32GB) DDR5-5600",
+          "delta_cost_gbp": 90.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Graphics",
+          "from_sku": "NVIDIA GeForce RTX 5060 Ti 16GB",
+          "to_sku": "NVIDIA GeForce RTX 5080 16GB",
+          "delta_cost_gbp": 750.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Primary storage",
+          "from_sku": "4TB PCIe 4.0 NVMe SSD",
+          "to_sku": "4TB PCIe 4.0 NVMe SSD + 4TB build-cache SSD",
+          "delta_cost_gbp": 210.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Power supply",
+          "from_sku": "Corsair RM850e 850W 80+ Gold",
+          "to_sku": "Corsair RM1000x 1000W 80+ Gold",
+          "delta_cost_gbp": 60.0,
+          "delta_sell_gbp": null
+        }
+      ],
+      "allowed_cases": [
+        "Fractal Design North"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-SWD-03",
+      "customer_type": "Software Development",
+      "budget_tier": "High-end",
+      "name": "Shipyard",
+      "status": "draft",
+      "est_component_cost_gbp": 3610,
+      "indicative_sell_gbp": 4800,
+      "note": "A polished option for an agency, founder or developer who wants no local compromises.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen 9 9950X",
+          "cost_gbp": 450,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A polished option for an agency, founder or developer who wants no local compromises.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "ASUS ProArt X870E-Creator WiFi",
+          "cost_gbp": 450,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A polished option for an agency, founder or developer who wants no local compromises.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "128GB (4x32GB) DDR5-5600",
+          "cost_gbp": 420,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A polished option for an agency, founder or developer who wants no local compromises.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "NVIDIA GeForce RTX 5080 16GB",
+          "cost_gbp": 1400,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A polished option for an agency, founder or developer who wants no local compromises.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "4TB PCIe 4.0 NVMe SSD + 4TB build-cache SSD",
+          "cost_gbp": 430,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A polished option for an agency, founder or developer who wants no local compromises.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Fractal Design Define 7 XL",
+          "cost_gbp": 190,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A polished option for an agency, founder or developer who wants no local compromises.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair RM1000x 1000W 80+ Gold",
+          "cost_gbp": 180,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A polished option for an agency, founder or developer who wants no local compromises.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Arctic Liquid Freezer III 360",
+          "cost_gbp": 90,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A polished option for an agency, founder or developer who wants no local compromises.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Pro + Ubuntu 24.04 dual-boot",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A polished option for an agency, founder or developer who wants no local compromises.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [],
+      "allowed_cases": [
+        "Fractal Design Define 7 XL"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-FAM-01",
+      "customer_type": "Family & Home",
+      "budget_tier": "Budget",
+      "name": "Hearth",
+      "status": "draft",
+      "est_component_cost_gbp": 415,
+      "indicative_sell_gbp": 590,
+      "note": "Keep the first family offering refreshingly simple and quiet.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen 5 5600G",
+          "cost_gbp": 105,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Keep the first family offering refreshingly simple and quiet.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "MSI B550M PRO-VDH WIFI",
+          "cost_gbp": 95,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Keep the first family offering refreshingly simple and quiet.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "32GB (2x16GB) DDR4-3200",
+          "cost_gbp": 55,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Keep the first family offering refreshingly simple and quiet.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "Radeon Vega integrated",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Keep the first family offering refreshingly simple and quiet.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "1TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 60,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Keep the first family offering refreshingly simple and quiet.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Fractal Design Core 1100",
+          "cost_gbp": 45,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Keep the first family offering refreshingly simple and quiet.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair CX550 550W 80+ Bronze",
+          "cost_gbp": 55,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Keep the first family offering refreshingly simple and quiet.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "AMD Wraith Stealth",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Keep the first family offering refreshingly simple and quiet.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Home",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Keep the first family offering refreshingly simple and quiet.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [
+        {
+          "category": "CPU / APU",
+          "from_sku": "AMD Ryzen 5 5600G",
+          "to_sku": "AMD Ryzen 5 9600X",
+          "delta_cost_gbp": 100.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Motherboard",
+          "from_sku": "MSI B550M PRO-VDH WIFI",
+          "to_sku": "ASRock B850 Steel Legend WiFi",
+          "delta_cost_gbp": 95.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Memory",
+          "from_sku": "32GB (2x16GB) DDR4-3200",
+          "to_sku": "32GB (2x16GB) DDR5-6000 CL30",
+          "delta_cost_gbp": 60.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Graphics",
+          "from_sku": "Radeon Vega integrated",
+          "to_sku": "AMD Radeon RX 9060 XT 16GB",
+          "delta_cost_gbp": 430.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Primary storage",
+          "from_sku": "1TB PCIe 4.0 NVMe SSD",
+          "to_sku": "2TB PCIe 4.0 NVMe SSD",
+          "delta_cost_gbp": 50.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Power supply",
+          "from_sku": "Corsair CX550 550W 80+ Bronze",
+          "to_sku": "Corsair RM650e 650W 80+ Gold",
+          "delta_cost_gbp": 30.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "CPU cooling",
+          "from_sku": "AMD Wraith Stealth",
+          "to_sku": "Thermalright Assassin X 120 SE",
+          "delta_cost_gbp": 20.0,
+          "delta_sell_gbp": null
+        }
+      ],
+      "allowed_cases": [
+        "Fractal Design Core 1100"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-FAM-02",
+      "customer_type": "Family & Home",
+      "budget_tier": "Mid-range",
+      "name": "Haven",
+      "status": "draft",
+      "est_component_cost_gbp": 1220,
+      "indicative_sell_gbp": 1640,
+      "note": "A sensible all-rounder with enough graphics power to stop it feeling outdated.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen 5 9600X",
+          "cost_gbp": 205,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A sensible all-rounder with enough graphics power to stop it feeling outdated.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "ASRock B850 Steel Legend WiFi",
+          "cost_gbp": 190,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A sensible all-rounder with enough graphics power to stop it feeling outdated.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "32GB (2x16GB) DDR5-6000 CL30",
+          "cost_gbp": 115,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A sensible all-rounder with enough graphics power to stop it feeling outdated.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "AMD Radeon RX 9060 XT 16GB",
+          "cost_gbp": 430,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A sensible all-rounder with enough graphics power to stop it feeling outdated.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "2TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 110,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A sensible all-rounder with enough graphics power to stop it feeling outdated.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "Montech AIR 100 ARGB",
+          "cost_gbp": 65,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A sensible all-rounder with enough graphics power to stop it feeling outdated.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": true
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair RM650e 650W 80+ Gold",
+          "cost_gbp": 85,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A sensible all-rounder with enough graphics power to stop it feeling outdated.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Thermalright Assassin X 120 SE",
+          "cost_gbp": 20,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A sensible all-rounder with enough graphics power to stop it feeling outdated.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Home",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "A sensible all-rounder with enough graphics power to stop it feeling outdated.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [
+        {
+          "category": "CPU / APU",
+          "from_sku": "AMD Ryzen 5 9600X",
+          "to_sku": "AMD Ryzen 7 9700X",
+          "delta_cost_gbp": 75.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Motherboard",
+          "from_sku": "ASRock B850 Steel Legend WiFi",
+          "to_sku": "ASUS TUF Gaming X870-PLUS WIFI",
+          "delta_cost_gbp": 50.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Memory",
+          "from_sku": "32GB (2x16GB) DDR5-6000 CL30",
+          "to_sku": "64GB (2x32GB) DDR5-6000 CL30",
+          "delta_cost_gbp": 105.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Graphics",
+          "from_sku": "AMD Radeon RX 9060 XT 16GB",
+          "to_sku": "AMD Radeon RX 9070 16GB",
+          "delta_cost_gbp": 170.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Primary storage",
+          "from_sku": "2TB PCIe 4.0 NVMe SSD",
+          "to_sku": "4TB PCIe 4.0 NVMe SSD",
+          "delta_cost_gbp": 110.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "Power supply",
+          "from_sku": "Corsair RM650e 650W 80+ Gold",
+          "to_sku": "Corsair RM850e 850W 80+ Gold",
+          "delta_cost_gbp": 35.0,
+          "delta_sell_gbp": null
+        },
+        {
+          "category": "CPU cooling",
+          "from_sku": "Thermalright Assassin X 120 SE",
+          "to_sku": "Thermalright Aqua Elite 240 V3",
+          "delta_cost_gbp": 25.0,
+          "delta_sell_gbp": null
+        }
+      ],
+      "allowed_cases": [
+        "Montech AIR 100 ARGB"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    },
+    {
+      "playbook_id": "FF-FAM-03",
+      "customer_type": "Family & Home",
+      "budget_tier": "High-end",
+      "name": "Horizon",
+      "status": "draft",
+      "est_component_cost_gbp": 1875,
+      "indicative_sell_gbp": 2580,
+      "note": "Reuse the APNX visual language in a broadly accessible premium build.",
+      "core_components": [
+        {
+          "category": "CPU / APU",
+          "sku_name": "AMD Ryzen 7 9700X",
+          "cost_gbp": 280,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Reuse the APNX visual language in a broadly accessible premium build.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Motherboard",
+          "sku_name": "ASUS TUF Gaming X870-PLUS WIFI",
+          "cost_gbp": 240,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Reuse the APNX visual language in a broadly accessible premium build.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Memory",
+          "sku_name": "64GB (2x32GB) DDR5-6000 CL30",
+          "cost_gbp": 220,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Reuse the APNX visual language in a broadly accessible premium build.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Graphics",
+          "sku_name": "AMD Radeon RX 9070 16GB",
+          "cost_gbp": 600,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Reuse the APNX visual language in a broadly accessible premium build.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Primary storage",
+          "sku_name": "4TB PCIe 4.0 NVMe SSD",
+          "cost_gbp": 220,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Reuse the APNX visual language in a broadly accessible premium build.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Case",
+          "sku_name": "APNX Creator C1 ChromaFlair",
+          "cost_gbp": 150,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Reuse the APNX visual language in a broadly accessible premium build.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Power supply",
+          "sku_name": "Corsair RM850e 850W 80+ Gold",
+          "cost_gbp": 120,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Reuse the APNX visual language in a broadly accessible premium build.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "CPU cooling",
+          "sku_name": "Thermalright Aqua Elite 240 V3",
+          "cost_gbp": 45,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Reuse the APNX visual language in a broadly accessible premium build.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        },
+        {
+          "category": "Operating system",
+          "sku_name": "Windows 11 Home",
+          "cost_gbp": 0,
+          "cost_basis": "Indicative UK procurement budget",
+          "note": "Reuse the APNX visual language in a broadly accessible premium build.",
+          "vendor": "TBD_fast_delivery",
+          "lead_time": "TBD",
+          "argb": false
+        }
+      ],
+      "upsells": [],
+      "allowed_cases": [
+        "APNX Creator C1 ChromaFlair"
+      ],
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+    }
+  ]
+}
