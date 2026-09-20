@@ -2253,6 +2253,96 @@ async def list_scan_run_history(
     ).scalars().all()
     history = [] if basis == "observations" else [ScanRunHistoryOut.model_validate(r, from_attributes=True) for r in rows]
 
+    # The live pipeline is intentionally ephemeral: queue rows disappear and
+    # pipeline_status.reset_run() clears its counters after Phase 2. The
+    # dashboard still needs the final metrics for the latest completed run,
+    # so enrich the small request used by the Sourcing card from durable
+    # observations. The history table has no search_run_id because it mirrors
+    # the extension's per-term CSV; the recorded term and run time provide a
+    # bounded, run-scoped match without touching the market-wide snapshot.
+    if basis == "processed" and history and limit == 1 and not history[0].is_legacy:
+        run = history[0]
+        from datetime import timedelta
+        from app.gem_radar.cpk_market import MIN_LISTINGS_FOR_SETTLED_PRICE
+
+        occurred_at = run.occurred_at.replace(tzinfo=None) if run.occurred_at.tzinfo else run.occurred_at
+        window_seconds = max(float(run.duration_seconds or 0), 60.0) + 60.0
+        metrics = (
+            await db.execute(
+                _text(
+                    """
+                    WITH run_observations AS (
+                        SELECT DISTINCT o.listing_id
+                        FROM gem_radar_listing_observations o
+                        WHERE o.search_query = :search_term
+                          AND o.observed_at BETWEEN :started_at AND :ended_at
+                    ),
+                    latest_scores AS (
+                        SELECT DISTINCT ON (sl.listing_id)
+                            sl.listing_id, sl.classification, sl.deal_score
+                        FROM gem_radar_scored_listings sl
+                        JOIN run_observations ro ON ro.listing_id = sl.listing_id
+                        WHERE sl.classification IS NOT NULL
+                        ORDER BY sl.listing_id, sl.scored_at DESC
+                    ),
+                    counts AS (
+                        SELECT
+                            COUNT(*) AS ingested_count,
+                            COUNT(*) FILTER (WHERE lc.cpk IS NOT NULL) AS cpk_assigned_count,
+                            COUNT(*) FILTER (
+                                WHERE mp.median_price IS NOT NULL
+                                  AND mp.listing_count >= :min_listings
+                            ) AS market_priced_count,
+                            COUNT(ls.listing_id) AS classified_count,
+                            COUNT(ls.listing_id) FILTER (WHERE UPPER(ls.classification) = 'GEM') AS gem_count,
+                            COUNT(ls.listing_id) FILTER (WHERE UPPER(ls.classification) = 'SUPER_GEM') AS super_gem_count,
+                            AVG(ls.deal_score) FILTER (WHERE UPPER(ls.classification) = 'GEM') AS avg_gem_score,
+                            AVG(ls.deal_score) FILTER (WHERE UPPER(ls.classification) = 'SUPER_GEM') AS avg_super_gem_score
+                        FROM run_observations ro
+                        LEFT JOIN gem_radar_listing_cpk lc ON lc.listing_id = ro.listing_id
+                        LEFT JOIN gem_radar_cpk_market_price mp ON mp.cpk = lc.cpk
+                        LEFT JOIN latest_scores ls ON ls.listing_id = ro.listing_id
+                    ),
+                    prices AS (
+                        SELECT
+                            (SELECT COUNT(DISTINCT p.listing_id)
+                             FROM gem_radar_cpk_listing_price p
+                             JOIN run_observations ro ON ro.listing_id = p.listing_id) AS bin_prices_count,
+                            (SELECT COUNT(*)
+                             FROM gem_radar_sold_observations so
+                             WHERE so.cpk IN (
+                                 SELECT DISTINCT lc2.cpk
+                                 FROM gem_radar_listing_cpk lc2
+                                 JOIN run_observations ro2 ON ro2.listing_id = lc2.listing_id
+                             )) AS sold_prices_count
+                    )
+                    SELECT counts.*, prices.* FROM counts CROSS JOIN prices
+                    """
+                ),
+                {
+                    "search_term": run.search_term,
+                    "started_at": occurred_at - timedelta(seconds=window_seconds),
+                    "ended_at": occurred_at + timedelta(seconds=60),
+                    "min_listings": MIN_LISTINGS_FOR_SETTLED_PRICE,
+                },
+            )
+        ).mappings().one()
+        history[0] = history[0].model_copy(
+            update={
+                "metrics_known": True,
+                "ingested_count": int(metrics["ingested_count"] or 0),
+                "cpk_assigned_count": int(metrics["cpk_assigned_count"] or 0),
+                "market_priced_count": int(metrics["market_priced_count"] or 0),
+                "classified_count": int(metrics["classified_count"] or 0),
+                "gem_count": int(metrics["gem_count"] or 0),
+                "super_gem_count": int(metrics["super_gem_count"] or 0),
+                "avg_gem_score": round(float(metrics["avg_gem_score"] or 0), 1),
+                "avg_super_gem_score": round(float(metrics["avg_super_gem_score"] or 0), 1),
+                "bin_prices_count": int(metrics["bin_prices_count"] or 0),
+                "sold_prices_count": int(metrics["sold_prices_count"] or 0),
+            }
+        )
+
     if basis == "processed":
         return history
 

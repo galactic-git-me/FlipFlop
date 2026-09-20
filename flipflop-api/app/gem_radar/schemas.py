@@ -160,6 +160,20 @@ class ScanRunHistoryOut(CamelModel):
     occurred_at: datetime
     is_legacy: bool = False
     completion_known: bool = True
+    # Optional run-scoped metrics. These are populated for the dashboard's
+    # latest completed run from durable observations; they are deliberately
+    # separate from the market-wide snapshot metrics.
+    metrics_known: bool = False
+    ingested_count: int = 0
+    cpk_assigned_count: int = 0
+    market_priced_count: int = 0
+    classified_count: int = 0
+    gem_count: int = 0
+    super_gem_count: int = 0
+    avg_gem_score: float = 0.0
+    avg_super_gem_score: float = 0.0
+    bin_prices_count: int = 0
+    sold_prices_count: int = 0
 
 
 class SoldCompSubmitRequest(CamelModel):
