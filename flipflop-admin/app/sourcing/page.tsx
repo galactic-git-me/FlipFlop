@@ -367,19 +367,30 @@ function ScoresGauge({ eligible, cpkFailures, marketFailures, ineligible, max }:
     <div className="flex flex-col items-center justify-center">
       <svg width={60} height={60} viewBox="0 0 60 60" className="drop-shadow-[1px_2px_1px_rgba(2,6,23,0.9)]" aria-label={`Scores: ${Math.round(pct)}% eligible`}>
         <title>{segments.map((segment) => `${segment.label}: ${segment.value}`).join(", ")}</title>
-        <defs>{segments.map((segment, index) => segment.dotted ? (
-          <pattern key={`${segment.color}-${index}`} id={`${id}-dot-${index}`} width="4" height="4" patternUnits="userSpaceOnUse">
-            <rect width="4" height="4" fill="#334155" opacity="0.55" />
-            <circle cx="2" cy="2" r="0.7" fill={segment.color} opacity="0.95" />
-          </pattern>
-        ) : null)}</defs>
+        <defs>
+          {/* Keep the successful Scores arc visually identical to the other
+              gauges: a bright highlight over its semantic base colour gives
+              the ring its raised, 3D appearance. */}
+          <linearGradient id={`${id}-eligible-gradient`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#ec4899" stopOpacity="0.72" />
+            <stop offset="38%" stopColor="#ffffff" stopOpacity="0.58" />
+            <stop offset="62%" stopColor="#ec4899" stopOpacity="1" />
+            <stop offset="100%" stopColor="#020617" stopOpacity="0.38" />
+          </linearGradient>
+          {segments.map((segment, index) => segment.dotted ? (
+            <pattern key={`${segment.color}-${index}`} id={`${id}-dot-${index}`} width="4" height="4" patternUnits="userSpaceOnUse">
+              <rect width="4" height="4" fill="#334155" opacity="0.55" />
+              <circle cx="2" cy="2" r="0.7" fill={segment.color} opacity="0.95" />
+            </pattern>
+          ) : null)}
+        </defs>
         <circle cx={30} cy={30} r={radius} stroke="#334155" strokeWidth={3} fill="none" />
         {segments.map((segment, index) => {
           const length = circumference * (segment.value / (safeMax || 1));
           const start = offset;
           offset += length;
           return length > 0 ? <circle key={segment.label} cx={30} cy={30} r={radius}
-            stroke={segment.dotted ? `url(#${id}-dot-${index})` : segment.color}
+            stroke={segment.dotted ? `url(#${id}-dot-${index})` : `url(#${id}-eligible-gradient)`}
             strokeWidth={7.5} fill="none" strokeDasharray={`${length} ${circumference - length}`}
             strokeDashoffset={-start} strokeLinecap="butt" transform="rotate(-90 30 30)"
             className="transition-all duration-500" /> : null;
