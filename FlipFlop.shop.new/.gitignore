@@ -15,8 +15,8 @@
 /.next/
 /out/
 
-# production
-/build
+# production (Next.js build output only)
+# Note: /build here means the root-level build/ directory, not app/build/
 
 # misc
 .DS_Store

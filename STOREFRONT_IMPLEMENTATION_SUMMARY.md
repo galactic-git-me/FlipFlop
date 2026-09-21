@@ -28,11 +28,39 @@ A complete Next.js 15 customer-facing storefront implementing the **correct cura
 
 ## ✅ All Requirements Met
 
-### 1. Shopfront Catalogue Browsing ✅
+### 1. Correct Customer Journey Flow ✅
 
-**Approved Curated Playbooks**: All 24 builds from `curated_build_definitions.json`
+**Budget First → Customer Type → Tier → Matching Builds**
 
-Organized by **customer_type × budget_tier**:
+#### Step 1: Budget Selection (`/build`)
+- 6 budget ranges presented as first choice
+- £300-500, £500-800, £800-1.2K, £1.2K-1.8K, £1.8K-2.5K, £2.5K+
+- Tracks `budget_chosen` analytics event
+
+#### Step 2: Customer Type Selection (`/build` - step 2)
+- **8 customer types** (exact labels as specified):
+  1. Great-value Gaming
+  2. High-performance Gaming
+  3. Student Hybrid
+  4. Business & Office
+  5. Content Creation
+  6. AI Workstation
+  7. Software Development
+  8. Family & Home
+- Tracks `customer_type_picked` analytics event
+
+#### Step 3: Tier Selection (`/build` - step 3)
+- **Budget / Mid-range / High-end** options for the selected customer type
+- AI Workstation High is disabled with "Bespoke / Consult Only" warning
+- Shows current selections (budget + customer type) for context
+
+#### Step 4: Matching Builds (`/build/configure`)
+- **Recommended build**: Highest price within budget for that tier
+- **Alternative options**: Other builds in the same tier within budget
+- **Bespoke handling**: FF-AIW-03 shown separately with consultation flow
+- Tracks `playbook_tier_shown` analytics event
+
+**All 24 approved curated playbooks** from `curated_build_definitions.json` available:
 
 | Segment | Budget | Mid-range | High-end |
 |---------|--------|-----------|----------|
@@ -218,37 +246,54 @@ Displayed on both catalogue cards and configurator spec sheets.
 
 ---
 
+## Customer Journey Flow
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ Homepage (/)                                            │
+│ "Start Building" button                                 │
+└────────────────┬────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────┐
+│ /build (Step 1: Budget)                                 │
+│ Select budget range (6 options)                          │
+│ → trackEvent('budget_chosen', 'wizard', metadata)       │
+└────────────────┬────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────┐
+│ /build (Step 2: Customer Type)                          │
+│ Pick one of 8 customer types                             │
+│ → trackEvent('customer_type_picked', segment, metadata) │
+└────────────────┬────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────┐
+│ /build/results?budget=1000&type=gaming-value            │
+│ Shows: Recommended + Lower-cost + Step-up               │
+│ → trackEvent('playbook_tier_shown', build.id, metadata) │
+└────────────────┬────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────┐
+│ /configure/[id]                                         │
+│ 3D viewer, case selection, customization                │
+│ → trackEvent('case_chosen', build.id, {case_id})       │
+│ → trackEvent('rgb_tweaked', build.id, {enabled})       │
+│ → trackEvent('ar_opened', build.id)                    │
+└─────────────────────────────────────────────────────────┘
+```
+
 ## Data Flow
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│ FlipFlop.shop (Next.js 15)                               │
-│ Port 3001                                                │
-└────────────────┬─────────────────────────────────────────┘
-                 │
-                 │ HTTP GET
-                 │ (API proxy via next.config.ts)
-                 │
-                 ▼
-┌──────────────────────────────────────────────────────────┐
-│ flipflop-api (FastAPI)                                   │
-│ Port 18000                                               │
-│                                                          │
-│ Endpoints used:                                          │
-│  GET /api/public/curated-builds                          │
-│  GET /api/public/cases                                   │
-│  GET /api/public/playbooks                               │
-└────────────────┬─────────────────────────────────────────┘
-                 │
-                 │ SQLAlchemy queries
-                 │
-                 ▼
-┌──────────────────────────────────────────────────────────┐
-│ PostgreSQL / SQLite Database                             │
-│  - playbooks table                                       │
-│  - case_catalogue table                                  │
-│  - curated_build_definitions.json (served by policy)     │
-└──────────────────────────────────────────────────────────┘
+FlipFlop.shop (Next.js 15) → flipflop-api (FastAPI) → Database
+
+Endpoints used:
+- GET /api/public/curated-builds (24 playbooks with pricing)
+- GET /api/public/cases (case catalogue)
+- POST /api/public/recommendation (budget → build matching - READY TO USE)
 ```
 
 **API Configuration**:
@@ -589,7 +634,53 @@ curl http://localhost:18000/api/public/cases | jq 'length'
 
 ---
 
-**Status**: ✅ **Implementation Complete**  
+---
+
+## Latest Update: 3-Tier Flow Implementation
+
+As of the latest update (per BuildBot + PricingBot specs), the flow has been enhanced to include a **3-tier selection step**:
+
+### Updated Journey (3 Steps)
+
+1. **Budget Selection** - Choose budget range (6 options)
+2. **Customer Type Selection** - Pick from 8 customer types (exact labels)
+3. **Tier Selection** - Choose Budget, Mid-range, or High-end
+4. **Results & Configuration** - View matching playbooks and configure
+
+### Key Implementation Changes
+
+**New/Updated Files:**
+- `app/build/page.tsx` - Now 3-step wizard (budget → type → tier)
+- `app/build/configure/page.tsx` - NEW: Filter by budget + type + tier
+- `.gitignore` - Fixed to allow `app/build/` (was blocking commit)
+
+**Removed:**
+- `app/build/results/page.tsx` - Replaced by tier step + configure page
+
+**Tier Selection Features:**
+- Shows 3 tier buttons: Budget (💰), Mid-range (⚡), High-end (🚀)
+- AI Workstation High tier is **disabled** with "Bespoke / Consult Only" warning
+- Displays current selections for context (budget + customer type)
+- Back navigation to adjust previous selections
+
+**Pricing Strategy Documented:**
+- Base price: `/api/public/curated-builds` (components + labour + overhead)
+- Upsell pricing (delta_sell): Structure documented, awaiting integration
+- Approved provisional pricing ids 66-89 ready for wiring
+- PricingBot will refresh when Xtension costs land
+
+### Analytics Event Flow (Corrected)
+
+1. `budget_chosen` (with budget_min, budget_max)
+2. `customer_type_picked` (with customer_type, budget)
+3. Tier selection → navigate to configure
+4. `playbook_tier_shown` (with segment, tier, budget, customer_type) - for recommended build
+5. `case_chosen`, `rgb_tweaked`, `ar_opened` - in configurator
+6. `drop_off` - when session ends
+
+---
+
+**Status**: ✅ **Implementation Complete (3-Tier Flow)**  
 **PR**: [#12 - Wire approved curated playbooks onto FlipFlop.shop](https://github.com/galactic-git-me/FlipFlop/pull/12)  
 **Branch**: `cursor/curated-playbooks-storefront-13ea`  
 **Ready for**: Review, testing, and merge to `dev`
