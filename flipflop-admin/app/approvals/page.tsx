@@ -71,6 +71,15 @@ function PlaybookProfitMatrix({ items }: { items: ApprovalItem[] }) {
   const playbooks = items.filter((i) => i.approval_type === "playbook");
   if (playbooks.length === 0) return null;
 
+  const pricingByPlaybook = new Map<string, ApprovalItem>();
+  for (const item of items) {
+    if (item.approval_type !== "pricing") continue;
+    const key = String(item.playbook_id || item.payload?.target_id || "");
+    if (!key) continue;
+    const prev = pricingByPlaybook.get(key);
+    if (!prev || item.id > prev.id) pricingByPlaybook.set(key, item);
+  }
+
   const tiers = ["Budget", "Mid-range", "High-end"] as const;
   const byType = new Map<string, ApprovalItem[]>();
   for (const item of playbooks) {
@@ -86,7 +95,7 @@ function PlaybookProfitMatrix({ items }: { items: ApprovalItem[] }) {
       <CardHeader className="pb-2">
         <CardTitle className="text-white text-lg">Playbook profit matrix</CardTitle>
         <p className="text-sm text-slate-400">
-          Rows = customer type, columns = budget tier. Cost from BuildBot BOMs; sell/profit fill when PricingBot posts.
+          Rows = customer type, columns = budget tier. Joins BuildBot playbooks with PricingBot proposals (provisional sells ok).
         </p>
       </CardHeader>
       <CardContent className="overflow-x-auto">
@@ -116,15 +125,28 @@ function PlaybookProfitMatrix({ items }: { items: ApprovalItem[] }) {
                         </td>
                       );
                     }
-                    const cost = playbookCost(item);
-                    const sell = typeof item.sell_price_gbp === "number" ? item.sell_price_gbp : null;
+                    const pricing = item.playbook_id
+                      ? pricingByPlaybook.get(item.playbook_id)
+                      : undefined;
+                    const cost =
+                      typeof pricing?.total_cost_gbp === "number"
+                        ? pricing.total_cost_gbp
+                        : playbookCost(item);
+                    const sell =
+                      typeof pricing?.sell_price_gbp === "number"
+                        ? pricing.sell_price_gbp
+                        : typeof item.sell_price_gbp === "number"
+                          ? item.sell_price_gbp
+                          : null;
                     const profit = sell != null && cost != null ? sell - cost : null;
                     const margin =
-                      typeof item.est_margin_pct === "number"
-                        ? item.est_margin_pct
-                        : profit != null && sell
-                          ? (profit / sell) * 100
-                          : null;
+                      typeof pricing?.est_margin_pct === "number"
+                        ? pricing.est_margin_pct
+                        : typeof item.est_margin_pct === "number"
+                          ? item.est_margin_pct
+                          : profit != null && sell
+                            ? (profit / sell) * 100
+                            : null;
                     return (
                       <td key={tier} className="py-3 px-2">
                         <div className="rounded-md border border-slate-700 bg-slate-950/50 p-2 space-y-0.5">
