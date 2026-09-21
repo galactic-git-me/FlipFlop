@@ -855,10 +855,11 @@ async def get_scored_listings(
             "gem_radar.scored_listings.malformed_awdit_filtered",
             count=malformed_awdit_count,
         )
-        scored = [
-            row for row in scored
-            if not is_malformed_awdit_listing(row.url, row.title)
-        ]
+    scored = [
+        row for row in scored
+        if not is_malformed_awdit_listing(row.url, row.title)
+        and not is_implausibly_low_aliexpress_listing(row.url, row.delivered_price)
+    ]
     if not scored:
         return []
 
@@ -977,6 +978,7 @@ async def get_scored_listings_current(
     scored = [
         row for row in scored
         if not is_malformed_awdit_listing(row.url, row.title)
+        and not is_implausibly_low_aliexpress_listing(row.url, row.delivered_price)
     ]
 
     # market_lower/median/upper_price and pct_offset were added via a raw
@@ -1129,6 +1131,7 @@ async def get_scored_listings_latest_run(
     scored = [
         row for row in scored
         if not is_malformed_awdit_listing(row.url, row.title)
+        and not is_implausibly_low_aliexpress_listing(row.url, row.delivered_price)
     ]
 
     cpk_price_fields = await _fetch_cpk_price_fields(db, [s.id for s in scored])
@@ -3111,14 +3114,27 @@ async def ingest_listings(
             count=len(malformed_awdit),
             titles=[listing.title for listing in malformed_awdit[:5]],
         )
-        payload = payload.model_copy(
-            update={
-                "listings": [
-                    listing for listing in payload.listings
-                    if not is_malformed_awdit_listing(listing.url, listing.title)
-                ]
-            }
+    implausibly_low_aliexpress = [
+        listing for listing in payload.listings
+        if is_implausibly_low_aliexpress_listing(listing.url, listing.current_delivered_price)
+    ]
+    if implausibly_low_aliexpress:
+        log.warning(
+            "gem_radar.reject_implausibly_low_aliexpress_listings",
+            count=len(implausibly_low_aliexpress),
+            titles=[listing.title for listing in implausibly_low_aliexpress[:5]],
         )
+    payload = payload.model_copy(
+        update={
+            "listings": [
+                listing for listing in payload.listings
+                if not is_malformed_awdit_listing(listing.url, listing.title)
+                and not is_implausibly_low_aliexpress_listing(
+                    listing.url, listing.current_delivered_price
+                )
+            ]
+        }
+    )
 
     # Collect all listing IDs from recent observations (7-day window)
     existing_ids = set()
