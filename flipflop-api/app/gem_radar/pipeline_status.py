@@ -261,6 +261,27 @@ def finish_submission(search_id: str, submission_id: object | None = None) -> No
         state.active_submissions = len(state.active_submission_ids)
 
 
+def is_scan_complete(
+    *,
+    active_submissions: int,
+    queued_submissions: int,
+    ingested_count: int,
+    cpk_assigned_count: int,
+    cpk_failed_count: int,
+    market_priced_count: int,
+    eligible_score_count: int,
+    ineligible_score_count: int,
+) -> bool:
+    """Return true only when the Scores gauge has no blank segment."""
+    return (
+        active_submissions == 0
+        and queued_submissions == 0
+        and ingested_count > 0
+        and (cpk_assigned_count + cpk_failed_count) >= ingested_count
+        and (eligible_score_count + ineligible_score_count) >= market_priced_count
+    )
+
+
 def reset_run() -> None:
     """Archives every search's final tally into history and clears the
     board. Called once Phase 2 has classified the whole sweep (see
@@ -623,11 +644,15 @@ async def snapshot(db, environment: str = "DEV") -> dict:
         # pending, or an intentionally ineligible listing) never acquire a
         # settled price. Requiring every listing to appear in one of those
         # two tables left otherwise-finished cards spinning at 99.x%.
-        is_complete = (
-            s.active_submissions == 0
-            and live_queue_by_search.get(s.search_id, 0) == 0
-            and s.ingested_count > 0
-            and (s.cpk_assigned_count + s.cpk_failed_count) >= s.ingested_count
+        is_complete = is_scan_complete(
+            active_submissions=s.active_submissions,
+            queued_submissions=live_queue_by_search.get(s.search_id, 0),
+            ingested_count=s.ingested_count,
+            cpk_assigned_count=s.cpk_assigned_count,
+            cpk_failed_count=s.cpk_failed_count,
+            market_priced_count=priced_count,
+            eligible_score_count=eligible_score_count,
+            ineligible_score_count=ineligible_score_count,
         )
 
         active_scans.append(
