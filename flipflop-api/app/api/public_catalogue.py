@@ -442,6 +442,8 @@ async def public_curated_slots(playbook_id: int, db: AsyncSession = Depends(get_
 @router.get('/curated-builds')
 async def public_curated_builds(db: AsyncSession = Depends(get_db)):
     from app.services.curated_build_policy import definitions, curated_slots
+    from app.services.ship_naming import enrich_curated_build_with_ship_name
+    
     playbooks = await public_list_playbooks(db)
     cases = await public_list_cases(db)
     by_name = {p['name']: p for p in playbooks}
@@ -459,8 +461,19 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
         if not cases:
             missing.append('case')
         parts = sum(float(v['display_price']) for v in chosen if v) + (min(float(c['rrp_gbp']) for c in cases) if cases else 0)
-        result.append({**definition, 'playbook_id': pb['id'] if pb else None, 'missing_components': missing,
-                       'price_gbp': round((parts + LABOUR_COST) * (1 + OVERHEAD_RATE), 2) if not missing else None})
+        
+        build_data = {
+            **definition, 
+            'playbook_id': pb['id'] if pb else None, 
+            'missing_components': missing,
+            'price_gbp': round((parts + LABOUR_COST) * (1 + OVERHEAD_RATE), 2) if not missing else None
+        }
+        
+        # Add Star Trek ship names
+        build_data = enrich_curated_build_with_ship_name(build_data)
+        
+        result.append(build_data)
+    
     return result
 
 
@@ -476,3 +489,37 @@ async def public_custom_slots(playbook_id: int, db: AsyncSession = Depends(get_d
                 for variant in values:
                     bucket[variant['id']] = variant
     return [{**slot, 'variants_by_tier': {'budget': [], 'mid': list(pool.get(slot['slot_type'], {}).values()), 'high': []}} for slot in base]
+
+
+# Analytics endpoints for curated journey
+from app.schemas.buying_flow import SessionAnalyticsEvent
+
+@router.post('/analytics/event')
+async def track_analytics_event(
+    event: SessionAnalyticsEvent,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Track an analytics event from the curated journey.
+    
+    Events include: budget_chosen, customer_type_picked, playbook_tier_shown,
+    case_chosen, rgb_tweaked, ar_opened, drop_off.
+    
+    This endpoint stores events for later analysis and ties them to customer
+    profiles when authenticated.
+    """
+    # TODO: Store in analytics table or send to analytics service
+    # For now, just log the event
+    import structlog
+    log = structlog.get_logger(__name__)
+    
+    log.info(
+        "curated_journey.analytics_event",
+        event_type=event.event_type,
+        curated_build_id=event.curated_build_id,
+        customer_id=event.customer_id,
+        metadata=event.metadata,
+        has_buying_flow=event.buying_flow is not None,
+    )
+    
+    return {"status": "tracked", "event_type": event.event_type}

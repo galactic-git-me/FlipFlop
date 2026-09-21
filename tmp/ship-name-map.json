@@ -1,0 +1,231 @@
+{
+  "source": "BuildBot approval queue ids 122-145 (re-stamped with display_name, no Base)",
+  "description": "Ship names stamped on all 24 curated playbooks with public display_name field",
+  "supersedes": "ids 98-121 (deprecated - had 'Base' naming)",
+  "tier_suffixes": {
+    "Budget": "",
+    "Mid-range": " Pro",
+    "High-end": " Ultra"
+  },
+  "segment_ships": {
+    "Great-value Gaming": "Reliant",
+    "High-performance Gaming": "Defiant",
+    "Student Hybrid": "Voyager",
+    "Business & Office": "Excelsior",
+    "Content Creation": "Galaxy",
+    "AI Workstation": "Enterprise",
+    "Software Development": "Titan",
+    "Family & Home": "Stargazer"
+  },
+  "segment_codes": {
+    "Great-value Gaming": "GVG",
+    "High-performance Gaming": "HPG",
+    "Student Hybrid": "STU",
+    "Business & Office": "BOF",
+    "Content Creation": "CCR",
+    "AI Workstation": "AIW",
+    "Software Development": "SWD",
+    "Family & Home": "FAM"
+  },
+  "builds": [
+    {
+      "id": "FF-GVG-01",
+      "segment": "Great-value Gaming",
+      "tier": "Budget",
+      "ship_name": "Reliant",
+      "display_name": "Reliant",
+      "bot_approval_queue_id": 122
+    },
+    {
+      "id": "FF-GVG-02",
+      "segment": "Great-value Gaming",
+      "tier": "Mid-range",
+      "ship_name": "Reliant Pro",
+      "display_name": "Reliant Pro",
+      "bot_approval_queue_id": 123
+    },
+    {
+      "id": "FF-GVG-03",
+      "segment": "Great-value Gaming",
+      "tier": "High-end",
+      "ship_name": "Reliant Ultra",
+      "display_name": "Reliant Ultra",
+      "bot_approval_queue_id": 124
+    },
+    {
+      "id": "FF-HPG-01",
+      "segment": "High-performance Gaming",
+      "tier": "Budget",
+      "ship_name": "Defiant",
+      "display_name": "Defiant",
+      "bot_approval_queue_id": 125
+    },
+    {
+      "id": "FF-HPG-02",
+      "segment": "High-performance Gaming",
+      "tier": "Mid-range",
+      "ship_name": "Defiant Pro",
+      "display_name": "Defiant Pro",
+      "bot_approval_queue_id": 126
+    },
+    {
+      "id": "FF-HPG-03",
+      "segment": "High-performance Gaming",
+      "tier": "High-end",
+      "ship_name": "Defiant Ultra",
+      "display_name": "Defiant Ultra",
+      "bot_approval_queue_id": 127
+    },
+    {
+      "id": "FF-STU-01",
+      "segment": "Student Hybrid",
+      "tier": "Budget",
+      "ship_name": "Voyager",
+      "display_name": "Voyager",
+      "bot_approval_queue_id": 128
+    },
+    {
+      "id": "FF-STU-02",
+      "segment": "Student Hybrid",
+      "tier": "Mid-range",
+      "ship_name": "Voyager Pro",
+      "display_name": "Voyager Pro",
+      "bot_approval_queue_id": 129
+    },
+    {
+      "id": "FF-STU-03",
+      "segment": "Student Hybrid",
+      "tier": "High-end",
+      "ship_name": "Voyager Ultra",
+      "display_name": "Voyager Ultra",
+      "bot_approval_queue_id": 130
+    },
+    {
+      "id": "FF-BOF-01",
+      "segment": "Business & Office",
+      "tier": "Budget",
+      "ship_name": "Excelsior",
+      "display_name": "Excelsior",
+      "bot_approval_queue_id": 131
+    },
+    {
+      "id": "FF-BOF-02",
+      "segment": "Business & Office",
+      "tier": "Mid-range",
+      "ship_name": "Excelsior Pro",
+      "display_name": "Excelsior Pro",
+      "bot_approval_queue_id": 132
+    },
+    {
+      "id": "FF-BOF-03",
+      "segment": "Business & Office",
+      "tier": "High-end",
+      "ship_name": "Excelsior Ultra",
+      "display_name": "Excelsior Ultra",
+      "bot_approval_queue_id": 133
+    },
+    {
+      "id": "FF-CCR-01",
+      "segment": "Content Creation",
+      "tier": "Budget",
+      "ship_name": "Galaxy",
+      "display_name": "Galaxy",
+      "bot_approval_queue_id": 134
+    },
+    {
+      "id": "FF-CCR-02",
+      "segment": "Content Creation",
+      "tier": "Mid-range",
+      "ship_name": "Galaxy Pro",
+      "display_name": "Galaxy Pro",
+      "bot_approval_queue_id": 135
+    },
+    {
+      "id": "FF-CCR-03",
+      "segment": "Content Creation",
+      "tier": "High-end",
+      "ship_name": "Galaxy Ultra",
+      "display_name": "Galaxy Ultra",
+      "bot_approval_queue_id": 136
+    },
+    {
+      "id": "FF-AIW-01",
+      "segment": "AI Workstation",
+      "tier": "Budget",
+      "ship_name": "Enterprise",
+      "display_name": "Enterprise",
+      "bot_approval_queue_id": 137
+    },
+    {
+      "id": "FF-AIW-02",
+      "segment": "AI Workstation",
+      "tier": "Mid-range",
+      "ship_name": "Enterprise Pro",
+      "display_name": "Enterprise Pro",
+      "bot_approval_queue_id": 138
+    },
+    {
+      "id": "FF-AIW-03",
+      "segment": "AI Workstation",
+      "tier": "High-end",
+      "ship_name": "Enterprise Ultra",
+      "display_name": "Enterprise Ultra",
+      "bespoke_consult": true,
+      "bot_approval_queue_id": 139
+    },
+    {
+      "id": "FF-SWD-01",
+      "segment": "Software Development",
+      "tier": "Budget",
+      "ship_name": "Titan",
+      "display_name": "Titan",
+      "bot_approval_queue_id": 140
+    },
+    {
+      "id": "FF-SWD-02",
+      "segment": "Software Development",
+      "tier": "Mid-range",
+      "ship_name": "Titan Pro",
+      "display_name": "Titan Pro",
+      "bot_approval_queue_id": 141
+    },
+    {
+      "id": "FF-SWD-03",
+      "segment": "Software Development",
+      "tier": "High-end",
+      "ship_name": "Titan Ultra",
+      "display_name": "Titan Ultra",
+      "bot_approval_queue_id": 142
+    },
+    {
+      "id": "FF-FAM-01",
+      "segment": "Family & Home",
+      "tier": "Budget",
+      "ship_name": "Stargazer",
+      "display_name": "Stargazer",
+      "bot_approval_queue_id": 143
+    },
+    {
+      "id": "FF-FAM-02",
+      "segment": "Family & Home",
+      "tier": "Mid-range",
+      "ship_name": "Stargazer Pro",
+      "display_name": "Stargazer Pro",
+      "bot_approval_queue_id": 144
+    },
+    {
+      "id": "FF-FAM-03",
+      "segment": "Family & Home",
+      "tier": "High-end",
+      "ship_name": "Stargazer Ultra",
+      "display_name": "Stargazer Ultra",
+      "bot_approval_queue_id": 145
+    }
+  ],
+  "pricing_reference": {
+    "note": "Pricing keys off playbook_id",
+    "approved_sells": "Bot approval queue ids 66-89",
+    "checkout_formula": "sticker_price + upsell_delta_sell"
+  },
+  "card_services_note": "Upsells on playbook; as-bought BOM regenerates 3 card services post-checkout with config_hash"
+}

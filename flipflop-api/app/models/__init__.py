@@ -175,6 +175,8 @@ from .quality_gate import QualityGateCheck, QualityGateResult, EvidenceRequireme
 from .cx_cost_record import CXCostRecord
 from .social_proof_event import SocialProofEvent
 from .customer_problem import CustomerProblem
+from .curated_promotion import CuratedPromotion
+from .curated_component_sku import CuratedComponentSKU, CuratedBuildAvailability, SKUSwapEvent
 
 __all__ = [
     "Customer",
@@ -214,4 +216,8 @@ __all__ = [
     "CXCostRecord",
     "SocialProofEvent",
     "CustomerProblem",
+    "CuratedPromotion",
+    "CuratedComponentSKU",
+    "CuratedBuildAvailability",
+    "SKUSwapEvent",
 ]
