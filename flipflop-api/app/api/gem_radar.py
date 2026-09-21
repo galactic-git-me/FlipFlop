@@ -1949,6 +1949,12 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
         result = await db.execute(fallback_query)
         best = result.scalar_one_or_none()
 
+    # It is normal for a category to have no active, qualifying listing. The
+    # dashboard treats null as an empty card; never turn absence of a gem into
+    # a whole-page 500 while live ingestion is in progress.
+    if best is None:
+        return None
+
     cpu = None
     if best.category == "cpu" and best.title:
         cpu_match = re.search(r'(Intel|AMD)\s+(?:Core\s+)?(?:i[3-9]|Ryzen\s+[3-9]|[A-Z]+\s+\d+)[^\s]*', best.title, re.IGNORECASE)
