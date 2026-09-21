@@ -348,11 +348,12 @@ function ScoresGauge({ eligible, cpkFailures, marketFailures, ineligible, max }:
   const safeMax = Math.max(max, 0);
   const radius = 24;
   const circumference = 2 * Math.PI * radius;
+  // The thick band is reserved for outcomes from Scores itself.  CPK and
+  // M Prices failures are upstream of Scores, so they are deliberately
+  // combined into the thin pink arc rather than rendered as dotted bars.
   const rawSegments = [
-    { value: eligible, color: "#ec4899", dotted: false, label: "eligible scores" },
-    { value: cpkFailures, color: "#ec4899", dotted: true, label: "CPK failures" },
-    { value: marketFailures, color: "#f59e0b", dotted: true, label: "M Prices failures" },
-    { value: ineligible, color: "#ec4899", dotted: true, label: "ineligible scores" },
+    { value: eligible, dotted: false, label: "eligible scores" },
+    { value: ineligible, dotted: true, label: "ineligible scores" },
   ];
   let allocated = 0;
   const segments = rawSegments.map((segment) => {
@@ -360,13 +361,20 @@ function ScoresGauge({ eligible, cpkFailures, marketFailures, ineligible, max }:
     allocated += value;
     return { ...segment, value };
   });
+  const upstreamFailures = Math.min(
+    Math.max(cpkFailures, 0) + Math.max(marketFailures, 0),
+    Math.max(safeMax - allocated, 0),
+  );
   const pct = safeMax > 0 ? (segments[0].value / safeMax) * 100 : 0;
   let offset = 0;
 
   return (
     <div className="flex flex-col items-center justify-center">
       <svg width={60} height={60} viewBox="0 0 60 60" className="drop-shadow-[1px_2px_1px_rgba(2,6,23,0.9)]" aria-label={`Scores: ${Math.round(pct)}% eligible`}>
-        <title>{segments.map((segment) => `${segment.label}: ${segment.value}`).join(", ")}</title>
+        <title>{[
+          ...segments.map((segment) => `${segment.label}: ${segment.value}`),
+          `upstream failures (CPK + M Prices): ${upstreamFailures}`,
+        ].join(", ")}</title>
         <defs>
           {/* Keep the successful Scores arc visually identical to the other
               gauges: a bright highlight over its semantic base colour gives
@@ -378,9 +386,9 @@ function ScoresGauge({ eligible, cpkFailures, marketFailures, ineligible, max }:
             <stop offset="100%" stopColor="#020617" stopOpacity="0.38" />
           </linearGradient>
           {segments.map((segment, index) => segment.dotted ? (
-            <pattern key={`${segment.color}-${index}`} id={`${id}-dot-${index}`} width="4" height="4" patternUnits="userSpaceOnUse">
+            <pattern key={index} id={`${id}-dot-${index}`} width="4" height="4" patternUnits="userSpaceOnUse">
               <rect width="4" height="4" fill="#334155" opacity="0.55" />
-              <circle cx="2" cy="2" r="0.7" fill={segment.color} opacity="0.95" />
+              <circle cx="2" cy="2" r="0.7" fill="#ec4899" opacity="0.95" />
             </pattern>
           ) : null)}
         </defs>
@@ -395,6 +403,21 @@ function ScoresGauge({ eligible, cpkFailures, marketFailures, ineligible, max }:
             strokeDashoffset={-start} strokeLinecap="butt" transform="rotate(-90 30 30)"
             className="transition-all duration-500" /> : null;
         })}
+        {upstreamFailures > 0 && (
+          <circle
+            cx={30}
+            cy={30}
+            r={radius}
+            stroke="#ec4899"
+            strokeWidth={2}
+            fill="none"
+            strokeDasharray={`${circumference * (upstreamFailures / (safeMax || 1))} ${circumference}`}
+            strokeDashoffset={-offset}
+            strokeLinecap="butt"
+            transform="rotate(-90 30 30)"
+            className="transition-all duration-500"
+          />
+        )}
         <text x={30} y={34} textAnchor="middle" className="fill-slate-100 text-[12px] font-semibold">{Math.round(pct)}%</text>
       </svg>
       <div className="text-[11px] text-white mt-1 text-center">Scores</div>
