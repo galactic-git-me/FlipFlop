@@ -116,27 +116,40 @@ function playbookCost(item: ApprovalItem): number | null {
   return null;
 }
 
-function PlaybookProfitMatrix({ items }: { items: ApprovalItem[] }) {
-  const playbooks = items.filter((i) => i.approval_type === "playbook");
-  if (playbooks.length === 0) return null;
 
-  const pricingByPlaybook = new Map<string, ApprovalItem>();
+function latestByPlaybookId(items: ApprovalItem[]): Map<string, ApprovalItem> {
+  const map = new Map<string, ApprovalItem>();
   for (const item of items) {
-    if (item.approval_type !== "pricing") continue;
-    const key = String(item.playbook_id || item.payload?.target_id || "");
+    const key = String(item.playbook_id || item.payload?.target_id || item.payload?.playbook_id || "");
     if (!key) continue;
-    const prev = pricingByPlaybook.get(key);
-    if (!prev || item.id > prev.id) pricingByPlaybook.set(key, item);
+    const prev = map.get(key);
+    if (!prev || item.id > prev.id) map.set(key, item);
   }
+  return map;
+}
+
+function PlaybookProfitMatrix({
+  playbooks,
+  livePricing,
+  pendingPricing,
+}: {
+  playbooks: ApprovalItem[];
+  livePricing: ApprovalItem[];
+  pendingPricing: ApprovalItem[];
+}) {
+  const playbookLatest = Array.from(latestByPlaybookId(playbooks.filter((i) => i.approval_type === "playbook")).values());
+  if (playbookLatest.length === 0) return null;
+
+  const liveById = latestByPlaybookId(livePricing);
+  const pendingById = latestByPlaybookId(pendingPricing);
 
   const tiers = ["Budget", "Mid-range", "High-end"] as const;
   const byType = new Map<string, ApprovalItem[]>();
-  for (const item of playbooks) {
+  for (const item of playbookLatest) {
     const ct = String(item.payload?.customer_type || "Other");
     if (!byType.has(ct)) byType.set(ct, []);
     byType.get(ct)!.push(item);
   }
-
   const types = Array.from(byType.keys()).sort();
 
   return (
@@ -144,7 +157,7 @@ function PlaybookProfitMatrix({ items }: { items: ApprovalItem[] }) {
       <CardHeader className="pb-2">
         <CardTitle className="text-white text-lg">Playbook profit matrix</CardTitle>
         <p className="text-sm text-slate-400">
-          Rows = customer type, columns = budget tier. Joins BuildBot playbooks with PricingBot proposals (provisional sells ok).
+          Live sell from approved pricing. Amber star = pending revise in approvals (strikethrough live to proposed).
         </p>
       </CardHeader>
       <CardContent className="overflow-x-auto">
@@ -153,7 +166,7 @@ function PlaybookProfitMatrix({ items }: { items: ApprovalItem[] }) {
             <tr className="text-left text-slate-400 border-b border-slate-700">
               <th className="py-2 pr-3 font-medium">Customer type</th>
               {tiers.map((tier) => (
-                <th key={tier} className="py-2 px-2 font-medium min-w-[9rem]">
+                <th key={tier} className="py-2 px-2 font-medium min-w-[10rem]">
                   {tier}
                 </th>
               ))}
@@ -167,39 +180,55 @@ function PlaybookProfitMatrix({ items }: { items: ApprovalItem[] }) {
                   <td className="py-3 pr-3 text-white font-medium whitespace-nowrap">{ct}</td>
                   {tiers.map((tier) => {
                     const item = row.find((i) => String(i.payload?.budget_tier) === tier);
-                    if (!item) {
+                    if (!item || !item.playbook_id) {
                       return (
                         <td key={tier} className="py-3 px-2 text-slate-600">
                           —
                         </td>
                       );
                     }
-                    const pricing = item.playbook_id
-                      ? pricingByPlaybook.get(item.playbook_id)
-                      : undefined;
+                    const live = liveById.get(item.playbook_id);
+                    const proposed = pendingById.get(item.playbook_id);
                     const cost =
-                      typeof pricing?.total_cost_gbp === "number"
-                        ? pricing.total_cost_gbp
-                        : playbookCost(item);
-                    const sell =
-                      typeof pricing?.sell_price_gbp === "number"
-                        ? pricing.sell_price_gbp
-                        : typeof item.sell_price_gbp === "number"
-                          ? item.sell_price_gbp
-                          : null;
+                      typeof proposed?.total_cost_gbp === "number"
+                        ? proposed.total_cost_gbp
+                        : typeof live?.total_cost_gbp === "number"
+                          ? live.total_cost_gbp
+                          : playbookCost(item);
+                    const liveSell = typeof live?.sell_price_gbp === "number" ? live.sell_price_gbp : null;
+                    const proposedSell =
+                      typeof proposed?.sell_price_gbp === "number" ? proposed.sell_price_gbp : null;
+                    const sell = proposedSell ?? liveSell;
                     const profit = sell != null && cost != null ? sell - cost : null;
                     const margin =
-                      typeof pricing?.est_margin_pct === "number"
-                        ? pricing.est_margin_pct
-                        : typeof item.est_margin_pct === "number"
-                          ? item.est_margin_pct
-                          : profit != null && sell
-                            ? (profit / sell) * 100
-                            : null;
+                      typeof (proposed ?? live)?.est_margin_pct === "number"
+                        ? (proposed ?? live)!.est_margin_pct!
+                        : profit != null && sell
+                          ? (profit / sell) * 100
+                          : null;
+                    const reason =
+                      typeof proposed?.payload?.pricing_rationale === "string"
+                        ? String(proposed.payload.pricing_rationale)
+                        : typeof proposed?.notes === "string"
+                          ? proposed.notes
+                          : null;
+                    const hasPropose = Boolean(proposed);
+
                     return (
                       <td key={tier} className="py-3 px-2">
-                        <div className="rounded-md border border-slate-700 bg-slate-950/50 p-2 space-y-0.5">
-                          <div className="text-xs font-semibold text-white">{playbookPublicName(item) || item.playbook_id}</div>
+                        <div
+                          className={`rounded-md border p-2 space-y-0.5 ${
+                            hasPropose
+                              ? "border-amber-400/60 bg-amber-500/10 ring-1 ring-amber-400/20"
+                              : "border-slate-700 bg-slate-950/50"
+                          }`}
+                        >
+                          <div className="flex items-center gap-1">
+                            {hasPropose ? <span className="text-amber-300 text-xs">★</span> : null}
+                            <div className="text-xs font-semibold text-white">
+                              {playbookPublicName(item) || item.playbook_id}
+                            </div>
+                          </div>
                           <div className="text-[10px] text-slate-500 font-mono">{item.playbook_id}</div>
                           {playbookMemoryGen(item) && (
                             <div className="text-[10px] font-semibold text-violet-300">{playbookMemoryGen(item)}</div>
@@ -208,12 +237,27 @@ function PlaybookProfitMatrix({ items }: { items: ApprovalItem[] }) {
                             Cost {cost != null ? formatCurrency(cost) : "—"}
                           </div>
                           <div className="text-green-400">
-                            Sell {sell != null ? formatCurrency(sell) : "—"}
+                            Sell{" "}
+                            {hasPropose && liveSell != null && proposedSell != null ? (
+                              <>
+                                <span className="line-through text-slate-500 mr-1">{formatCurrency(liveSell)}</span>
+                                <span className="text-amber-200">{formatCurrency(proposedSell)}</span>
+                              </>
+                            ) : sell != null ? (
+                              formatCurrency(sell)
+                            ) : (
+                              "—"
+                            )}
                           </div>
                           <div className={profit != null ? "text-cyan-300 font-semibold" : "text-slate-500"}>
                             Profit {profit != null ? formatCurrency(profit) : "awaiting price"}
                             {margin != null ? ` (${margin.toFixed(0)}%)` : ""}
                           </div>
+                          {hasPropose && reason ? (
+                            <div className="text-[10px] text-amber-200/90 line-clamp-2" title={reason}>
+                              {reason.length > 90 ? `${reason.slice(0, 90)}…` : reason}
+                            </div>
+                          ) : null}
                         </div>
                       </td>
                     );
@@ -237,10 +281,14 @@ export default function ApprovalsPage() {
   const [processingId, setProcessingId] = useState<number | null>(null);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [bulkProcessing, setBulkProcessing] = useState(false);
+  const [matrixPlaybooks, setMatrixPlaybooks] = useState<ApprovalItem[]>([]);
+  const [matrixLivePricing, setMatrixLivePricing] = useState<ApprovalItem[]>([]);
+  const [matrixPendingPricing, setMatrixPendingPricing] = useState<ApprovalItem[]>([]);
 
   useEffect(() => {
     loadSummary();
     loadPendingItems();
+    loadMatrixData();
   }, [selectedType]);
 
   async function loadSummary() {
@@ -267,6 +315,27 @@ export default function ApprovalsPage() {
       console.error("Failed to load items:", error);
     } finally {
       setLoading(false);
+    }
+  }
+
+
+  async function loadMatrixData() {
+    try {
+      const [pbRes, pendingPriceRes, livePriceRes] = await Promise.all([
+        fetch(`${API_BASE}/api/bot-approvals/pending?approval_type=playbook&limit=200`),
+        fetch(`${API_BASE}/api/bot-approvals/pending?approval_type=pricing&limit=200`),
+        fetch(`${API_BASE}/api/bot-approvals/history?approval_type=pricing&status=approved&limit=200`),
+      ]);
+      const [pb, pendingPrice, livePrice] = await Promise.all([
+        readJsonResponse(pbRes),
+        readJsonResponse(pendingPriceRes),
+        readJsonResponse(livePriceRes),
+      ]);
+      setMatrixPlaybooks(Array.isArray(pb) ? pb : []);
+      setMatrixPendingPricing(Array.isArray(pendingPrice) ? pendingPrice : []);
+      setMatrixLivePricing(Array.isArray(livePrice) ? livePrice : []);
+    } catch (error) {
+      console.error("Failed to load matrix data:", error);
     }
   }
 
@@ -337,6 +406,7 @@ export default function ApprovalsPage() {
       }
       await loadSummary();
       await loadPendingItems();
+      await loadMatrixData();
     } catch (error) {
       console.error(`Bulk ${action} failed:`, error);
       alert(`Bulk ${action} failed: ${error}`);
@@ -452,8 +522,12 @@ export default function ApprovalsPage() {
         )}
 
         <div className="space-y-4">
-          {(!selectedType || selectedType === "playbook") && (
-          <PlaybookProfitMatrix items={items} />
+          {(!selectedType || selectedType === "playbook" || selectedType === "pricing") && (
+          <PlaybookProfitMatrix
+            playbooks={matrixPlaybooks}
+            livePricing={matrixLivePricing}
+            pendingPricing={matrixPendingPricing}
+          />
         )}
 
         {loading ? (
