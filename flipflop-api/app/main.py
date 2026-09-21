@@ -147,6 +147,7 @@ from app.routes.gems import router as gems_router
 from app.routes.admin_auth import router as admin_auth_router
 from app.api.motherboard_specs import router as motherboard_specs_router
 from app.api.curated_promotion import router as curated_promotion_router
+from app.api.meshy_asset_downloader import router as meshy_asset_downloader_router
 from app.api.curated_availability import public_router as curated_availability_public_router, admin_router as curated_availability_admin_router
 from app.api.logs import install_log_capture
 from app.services.playwright_scraper import chromium_available
@@ -772,6 +773,7 @@ app.include_router(oauth_router, prefix="/api")
 app.include_router(admin_auth_router, prefix="/api")
 app.include_router(motherboard_specs_router, prefix="/api")
 app.include_router(curated_promotion_router, prefix="")
+app.include_router(meshy_asset_downloader_router, prefix="")
 app.include_router(curated_availability_public_router, prefix="")
 app.include_router(curated_availability_admin_router, prefix="")
 app.include_router(quotes_router, prefix="/api")

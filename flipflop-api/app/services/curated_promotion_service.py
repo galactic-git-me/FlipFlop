@@ -278,10 +278,56 @@ class CuratedPromotionService:
     
     def _export_3d_assets(self) -> Dict:
         """Export 3D asset references (.glb files from MeshyBot)."""
-        data = {"assets": [], "note": "3D assets pending MeshyBot .glb generation"}
+        data = {
+            "assets": [],
+            "note": "3D assets (.glb files) - export includes local copies"
+        }
         
-        # TODO: When .glb assets are generated and stored, export references here
-        # Placeholder for future implementation
+        # Export Component3DAsset records that are approved and have local glb_ref
+        # This ensures we're not exporting expired Meshy URLs
+        try:
+            from app.models.component_3d_asset import Component3DAsset, Component3DAssetStatus
+            from app.database import SessionLocal
+            
+            with SessionLocal() as db:
+                # Query approved/validated assets with local storage
+                assets = db.query(Component3DAsset).filter(
+                    Component3DAsset.status.in_([
+                        Component3DAssetStatus.VALIDATED,
+                        Component3DAssetStatus.FINAL,
+                        Component3DAssetStatus.CLEANED
+                    ]),
+                    Component3DAsset.glb_ref.isnot(None),
+                    # Exclude Meshy CDN URLs (will expire)
+                    ~Component3DAsset.glb_ref.like('%meshy%')
+                ).all()
+                
+                for asset in assets:
+                    asset_data = {
+                        "id": asset.id,
+                        "subject_type": asset.subject_type.value if asset.subject_type else None,
+                        "subject_id": asset.subject_id,
+                        "category": asset.category,
+                        "family_key": asset.family_key,
+                        "glb_ref": asset.glb_ref,
+                        "preview_image_ref": asset.preview_image_ref,
+                        "status": asset.status.value if asset.status else None,
+                        "version": asset.version,
+                        "is_active": asset.is_active,
+                        "file_size_kb": asset.file_size_kb,
+                        "poly_count": asset.poly_count,
+                        "review_decision": asset.review_decision
+                    }
+                    data["assets"].append(asset_data)
+                
+                log.info(
+                    "curated_promotion.export_3d_assets",
+                    count=len(data["assets"])
+                )
+        
+        except Exception as e:
+            log.error("curated_promotion.export_3d_assets_failed", error=str(e))
+            data["error"] = str(e)
         
         return data
     
@@ -374,18 +420,104 @@ class CuratedPromotionService:
         return result
     
     def _import_3d_assets(self, assets_3d_data: Dict, dry_run: bool) -> Dict:
-        """Import 3D asset references into target environment."""
+        """
+        Import 3D asset references into target environment.
+        
+        Note: This imports asset metadata and references to locally-stored .glb files.
+        The actual .glb files must be copied separately (via rsync or similar).
+        """
         result = {"success": True, "imported": 0, "skipped": 0, "errors": []}
         
         assets = assets_3d_data.get("assets", [])
         
         if dry_run:
-            result["note"] = "DRY RUN: 3D assets pending MeshyBot .glb generation"
+            result["imported"] = len(assets)
+            result["note"] = f"DRY RUN: Would import {len(assets)} 3D asset references"
             return result
         
-        # TODO: Implement when .glb assets are generated and tracked
-        result["note"] = "3D assets not yet implemented"
-        result["skipped"] = len(assets)
+        if not assets:
+            result["note"] = "No 3D assets to import"
+            return result
+        
+        # Import asset metadata into target database
+        try:
+            from app.models.component_3d_asset import Component3DAsset, Component3DAssetStatus, AssetSubjectType
+            from app.database import SessionLocal
+            
+            with SessionLocal() as db:
+                for asset_data in assets:
+                    try:
+                        # Check if asset already exists
+                        existing = db.query(Component3DAsset).filter(
+                            Component3DAsset.subject_type == AssetSubjectType[asset_data["subject_type"].upper()],
+                            Component3DAsset.subject_id == asset_data["subject_id"],
+                            Component3DAsset.version == asset_data["version"]
+                        ).first()
+                        
+                        if existing:
+                            # Update existing record
+                            existing.glb_ref = asset_data["glb_ref"]
+                            existing.preview_image_ref = asset_data.get("preview_image_ref")
+                            existing.status = Component3DAssetStatus[asset_data["status"].upper()]
+                            existing.is_active = asset_data.get("is_active", False)
+                            existing.file_size_kb = asset_data.get("file_size_kb")
+                            existing.poly_count = asset_data.get("poly_count")
+                            existing.review_decision = asset_data.get("review_decision")
+                            result["skipped"] += 1
+                            
+                            log.info(
+                                "curated_promotion.3d_asset_updated",
+                                asset_id=existing.id,
+                                subject_type=asset_data["subject_type"],
+                                subject_id=asset_data["subject_id"]
+                            )
+                        else:
+                            # Create new record
+                            new_asset = Component3DAsset(
+                                subject_type=AssetSubjectType[asset_data["subject_type"].upper()],
+                                subject_id=asset_data["subject_id"],
+                                category=asset_data.get("category"),
+                                family_key=asset_data.get("family_key"),
+                                status=Component3DAssetStatus[asset_data["status"].upper()],
+                                version=asset_data.get("version", 1),
+                                is_active=asset_data.get("is_active", False),
+                                glb_ref=asset_data["glb_ref"],
+                                preview_image_ref=asset_data.get("preview_image_ref"),
+                                file_size_kb=asset_data.get("file_size_kb"),
+                                poly_count=asset_data.get("poly_count"),
+                                review_decision=asset_data.get("review_decision")
+                            )
+                            db.add(new_asset)
+                            result["imported"] += 1
+                            
+                            log.info(
+                                "curated_promotion.3d_asset_imported",
+                                subject_type=asset_data["subject_type"],
+                                subject_id=asset_data["subject_id"]
+                            )
+                    
+                    except Exception as e:
+                        result["errors"].append(
+                            f"Failed to import asset {asset_data.get('id')}: {str(e)}"
+                        )
+                        log.error(
+                            "curated_promotion.3d_asset_import_failed",
+                            asset_id=asset_data.get("id"),
+                            error=str(e)
+                        )
+                
+                db.commit()
+                
+                result["note"] = (
+                    f"Imported {result['imported']} new assets, "
+                    f"updated {result['skipped']} existing. "
+                    "Note: .glb files must be rsync'd separately to data/uploads/3d-assets/"
+                )
+        
+        except Exception as e:
+            result["success"] = False
+            result["errors"].append(f"3D asset import failed: {str(e)}")
+            log.error("curated_promotion.3d_asset_import_error", error=str(e))
         
         return result
     
