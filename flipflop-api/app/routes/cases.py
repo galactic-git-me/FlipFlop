@@ -232,7 +232,11 @@ async def search_3d_reference_images(
     query: str = Query(min_length=2, max_length=180),
     db: AsyncSession = Depends(get_db),
 ):
-    """Search Google Images for owner-reviewed 3D reference candidates."""
+    """Search Google Images for owner-reviewed 3D reference candidates.
+
+    Custom Search JSON API is Google's legacy image-search product. It is
+    retained only while the configured project still has access.
+    """
     case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
@@ -268,6 +272,16 @@ async def search_3d_reference_images(
             detail = exc.response.json().get("error", {}).get("message") or detail
         except ValueError:
             pass
+        if exc.response.status_code == 403 and "Custom Search JSON API" in detail:
+            raise HTTPException(
+                status_code=503,
+                detail=(
+                    "Google Custom Search JSON API is not available to this project. "
+                    "Google is retiring it: use Vertex AI Search for a site-restricted "
+                    "search (up to 50 domains), or register interest with Google for "
+                    "whole-web search. Upload approved reference images manually in the meantime."
+                ),
+            ) from exc
         raise HTTPException(status_code=502, detail=detail) from exc
     except (httpx.HTTPError, ValueError) as exc:
         raise HTTPException(status_code=502, detail=f"Google Images search failed: {exc}") from exc

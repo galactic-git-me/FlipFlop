@@ -163,6 +163,16 @@ and excellent airflow for budget gaming builds."
 
 ## Workflow
 
+### Reference-image search availability
+
+The in-app reference-image search uses Google's Custom Search JSON API. Google
+has announced that this product must be replaced by **1 January 2027**. For a
+search limited to 50 or fewer approved manufacturer/reviewer domains, migrate
+to Vertex AI Search. Whole-web search requires registering interest with
+Google's new full-web search offering. Until that access is provisioned, use
+the image-upload control in the 3D review screen to add owner-approved
+manufacturer images.
+
 ### Step 1: Visit /cases-3d-sourcing
 - Shows top 30 cases by Amazon bestseller rank
 - Geometry Green case at top
