@@ -44,6 +44,7 @@ from app.services.ai_build_generator import generate_ai_builds
 from app.services.email_monitor import EmailMonitor
 from app.services.ebay_sales_tracker import get_tracker as get_ebay_sales_tracker
 from app.database import get_db
+from app.services.growth_social import publish_due_posts
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -242,6 +243,13 @@ async def run_ebay_sales_tracker() -> dict:
 
     tracker = get_ebay_sales_tracker()
     return await tracker.poll_sales()
+
+
+async def run_growth_social_publisher() -> dict:
+    """Process only due posts that already passed the approval workflow."""
+    async for db in get_db():
+        result = await publish_due_posts(db)
+        return {"ok": True, **result}
 
 
 def get_scheduler() -> AsyncIOScheduler:
@@ -647,6 +655,17 @@ def start_scheduler():
             max_instances=1,
             next_run_time=now + timedelta(minutes=1),
         )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=1),
+        id="growth_social_publisher",
+        name="Growth Engine Social Publisher",
+        kwargs={"job_id": "growth_social_publisher", "fn": run_growth_social_publisher},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(minutes=1),
+    )
 
     if settings.ebay_reselling_enabled:
         scheduler.add_job(

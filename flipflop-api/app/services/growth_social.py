@@ -350,6 +350,10 @@ async def schedule_or_publish(db: AsyncSession, post: SocialPost, actor: str = "
 async def publish_post(db: AsyncSession, post: SocialPost, actor: str = "system") -> SocialPost:
     release = await get_active_release(db)
     require_capability(release, "social_publishing")
+    # A confirmed publication is a successful idempotent retry, not an invalid
+    # state transition. Never create another provider action for it.
+    if post.status == "published":
+        return post
     if post.status not in {"approved", "scheduled", "needs_attention", "publishing"}:
         raise ValueError("Post is not ready to publish")
     revision = await latest_revision(db, post.id)

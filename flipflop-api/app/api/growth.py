@@ -24,6 +24,11 @@ def _error(error: Exception) -> HTTPException:
     return HTTPException(422, str(error))
 
 
+async def _serialize_post(db: AsyncSession, post: SocialPost) -> dict:
+    """Attach the immutable current revision without leaking ORM objects."""
+    return social.serialize_post(post, await social.latest_revision(db, post.id))
+
+
 @router.get("/release")
 async def release(db: AsyncSession = Depends(get_db)):
     return serialize_release(await get_active_release(db))
@@ -49,14 +54,14 @@ async def assets(db: AsyncSession = Depends(get_db)):
 @router.get("/social/posts")
 async def posts(db: AsyncSession = Depends(get_db)):
     rows = (await db.execute(select(SocialPost).order_by(SocialPost.updated_at.desc()))).scalars().all()
-    return {"items": [await social.serialize_post(db, row) for row in rows]}
+    return {"items": [await _serialize_post(db, row) for row in rows]}
 
 
 @router.post("/social/posts", status_code=201)
 async def create_post(payload: dict[str, Any], db: AsyncSession = Depends(get_db)):
     try:
         post = await social.create_post(db, payload, actor=str(payload.get("actor") or "owner"))
-        return await social.serialize_post(db, post)
+        return await _serialize_post(db, post)
     except Exception as exc:
         raise _error(exc) from exc
 
@@ -68,7 +73,7 @@ async def revise_post(post_id: int, payload: dict[str, Any], db: AsyncSession = 
         raise HTTPException(404, "Social post not found")
     try:
         post = await social.revise_post(db, post, payload, actor=str(payload.get("actor") or "owner"))
-        return await social.serialize_post(db, post)
+        return await _serialize_post(db, post)
     except Exception as exc:
         raise _error(exc) from exc
 
@@ -80,7 +85,7 @@ async def submit_post(post_id: int, payload: dict[str, Any] | None = None, db: A
         raise HTTPException(404, "Social post not found")
     try:
         post = await social.submit_for_review(db, post, actor=str((payload or {}).get("actor") or "owner"))
-        return await social.serialize_post(db, post)
+        return await _serialize_post(db, post)
     except Exception as exc:
         raise _error(exc) from exc
 
@@ -92,7 +97,7 @@ async def decide_post(post_id: int, payload: dict[str, Any], db: AsyncSession = 
         raise HTTPException(404, "Social post not found")
     try:
         post = await social.decide_approval(db, post, approve=bool(payload.get("approve")), actor=str(payload.get("actor") or "owner"), reason=str(payload.get("reason") or ""))
-        return await social.serialize_post(db, post)
+        return await _serialize_post(db, post)
     except Exception as exc:
         raise _error(exc) from exc
 
@@ -104,7 +109,7 @@ async def execute_post(post_id: int, payload: dict[str, Any] | None = None, db: 
         raise HTTPException(404, "Social post not found")
     try:
         post = await social.schedule_or_publish(db, post, actor=str((payload or {}).get("actor") or "owner"))
-        return await social.serialize_post(db, post)
+        return await _serialize_post(db, post)
     except Exception as exc:
         raise _error(exc) from exc
 
