@@ -4,11 +4,13 @@
 **PR**: [#12](https://github.com/galactic-git-me/FlipFlop/pull/12)  
 **Status**: ✅ Complete and ready for review
 
+**⚠️ CORRECTED**: Now implements the proper budget-first journey per Michael's clarification.
+
 ---
 
 ## What Was Built
 
-A complete Next.js 15 customer-facing storefront for browsing and configuring approved curated PC builds from the FlipFlop playbook catalogue.
+A complete Next.js 15 customer-facing storefront implementing the **correct curated journey flow**: budget selection → customer type → matching builds → configurator.
 
 ### Location
 ```
