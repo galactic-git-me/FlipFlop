@@ -162,7 +162,13 @@
       "allowed_cases": [
         "Montech AIR 100 ARGB"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Reliant",
+      "tier_label": "",
+      "display_name": "Reliant",
+      "bespoke_consult": false,
+      "public_name": "Reliant",
+      "internal_tier": "Budget"
     },
     {
       "playbook_id": "FF-GVG-02",
@@ -305,7 +311,13 @@
       "allowed_cases": [
         "Montech SKY TWO GX"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Reliant",
+      "tier_label": "Pro",
+      "display_name": "Reliant Pro",
+      "bespoke_consult": false,
+      "public_name": "Reliant Pro",
+      "internal_tier": "Mid-range"
     },
     {
       "playbook_id": "FF-GVG-03",
@@ -412,7 +424,13 @@
       "allowed_cases": [
         "Lian Li LANCOOL 207"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Reliant",
+      "tier_label": "Ultra",
+      "display_name": "Reliant Ultra",
+      "bespoke_consult": false,
+      "public_name": "Reliant Ultra",
+      "internal_tier": "High-end"
     },
     {
       "playbook_id": "FF-HPG-01",
@@ -541,7 +559,13 @@
       "allowed_cases": [
         "NZXT H5 Flow"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Defiant",
+      "tier_label": "",
+      "display_name": "Defiant",
+      "bespoke_consult": false,
+      "public_name": "Defiant",
+      "internal_tier": "Budget"
     },
     {
       "playbook_id": "FF-HPG-02",
@@ -691,7 +715,13 @@
       "allowed_cases": [
         "APNX Creator C1 ChromaFlair"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Defiant",
+      "tier_label": "Pro",
+      "display_name": "Defiant Pro",
+      "bespoke_consult": false,
+      "public_name": "Defiant Pro",
+      "internal_tier": "Mid-range"
     },
     {
       "playbook_id": "FF-HPG-03",
@@ -798,7 +828,13 @@
       "allowed_cases": [
         "Fractal Design North XL"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Defiant",
+      "tier_label": "Ultra",
+      "display_name": "Defiant Ultra",
+      "bespoke_consult": false,
+      "public_name": "Defiant Ultra",
+      "internal_tier": "High-end"
     },
     {
       "playbook_id": "FF-STU-01",
@@ -948,7 +984,13 @@
       "allowed_cases": [
         "ASUS NUC 14 Pro-style compact chassis"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Voyager",
+      "tier_label": "",
+      "display_name": "Voyager",
+      "bespoke_consult": false,
+      "public_name": "Voyager",
+      "internal_tier": "Budget"
     },
     {
       "playbook_id": "FF-STU-02",
@@ -1098,7 +1140,13 @@
       "allowed_cases": [
         "Fractal Design Pop Air"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Voyager",
+      "tier_label": "Pro",
+      "display_name": "Voyager Pro",
+      "bespoke_consult": false,
+      "public_name": "Voyager Pro",
+      "internal_tier": "Mid-range"
     },
     {
       "playbook_id": "FF-STU-03",
@@ -1205,7 +1253,13 @@
       "allowed_cases": [
         "Lian Li LANCOOL 207"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Voyager",
+      "tier_label": "Ultra",
+      "display_name": "Voyager Ultra",
+      "bespoke_consult": false,
+      "public_name": "Voyager Ultra",
+      "internal_tier": "High-end"
     },
     {
       "playbook_id": "FF-BOF-01",
@@ -1355,7 +1409,13 @@
       "allowed_cases": [
         "Fractal Design Core 1100"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Excelsior",
+      "tier_label": "",
+      "display_name": "Excelsior",
+      "bespoke_consult": false,
+      "public_name": "Excelsior",
+      "internal_tier": "Budget"
     },
     {
       "playbook_id": "FF-BOF-02",
@@ -1470,7 +1530,13 @@
       "allowed_cases": [
         "Fractal Design Define 7 Compact"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Excelsior",
+      "tier_label": "Pro",
+      "display_name": "Excelsior Pro",
+      "bespoke_consult": false,
+      "public_name": "Excelsior Pro",
+      "internal_tier": "Mid-range"
     },
     {
       "playbook_id": "FF-BOF-03",
@@ -1577,7 +1643,13 @@
       "allowed_cases": [
         "Premium compact aluminium mini-PC chassis"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Excelsior",
+      "tier_label": "Ultra",
+      "display_name": "Excelsior Ultra",
+      "bespoke_consult": false,
+      "public_name": "Excelsior Ultra",
+      "internal_tier": "High-end"
     },
     {
       "playbook_id": "FF-CCR-01",
@@ -1727,7 +1799,13 @@
       "allowed_cases": [
         "Corsair 3500X"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Galaxy",
+      "tier_label": "",
+      "display_name": "Galaxy",
+      "bespoke_consult": false,
+      "public_name": "Galaxy",
+      "internal_tier": "Budget"
     },
     {
       "playbook_id": "FF-CCR-02",
@@ -1877,7 +1955,13 @@
       "allowed_cases": [
         "ASUS ProArt PA602"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Galaxy",
+      "tier_label": "Pro",
+      "display_name": "Galaxy Pro",
+      "bespoke_consult": false,
+      "public_name": "Galaxy Pro",
+      "internal_tier": "Mid-range"
     },
     {
       "playbook_id": "FF-CCR-03",
@@ -1984,7 +2068,13 @@
       "allowed_cases": [
         "Fractal Design Define 7 XL"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Galaxy",
+      "tier_label": "Ultra",
+      "display_name": "Galaxy Ultra",
+      "bespoke_consult": false,
+      "public_name": "Galaxy Ultra",
+      "internal_tier": "High-end"
     },
     {
       "playbook_id": "FF-AIW-01",
@@ -2141,7 +2231,13 @@
       "allowed_cases": [
         "Fractal Design Meshify 2 Compact"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Enterprise",
+      "tier_label": "",
+      "display_name": "Enterprise",
+      "bespoke_consult": false,
+      "public_name": "Enterprise",
+      "internal_tier": "Budget"
     },
     {
       "playbook_id": "FF-AIW-02",
@@ -2298,7 +2394,13 @@
       "allowed_cases": [
         "Fractal Design Meshify 2 XL"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Enterprise",
+      "tier_label": "Pro",
+      "display_name": "Enterprise Pro",
+      "bespoke_consult": false,
+      "public_name": "Enterprise Pro",
+      "internal_tier": "Mid-range"
     },
     {
       "playbook_id": "FF-AIW-03",
@@ -2405,7 +2507,13 @@
       "allowed_cases": [
         "Corsair 9000D Airflow"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Enterprise",
+      "tier_label": "Ultra",
+      "display_name": "Enterprise Ultra",
+      "bespoke_consult": true,
+      "public_name": "Enterprise Ultra",
+      "internal_tier": "High-end"
     },
     {
       "playbook_id": "FF-SWD-01",
@@ -2562,7 +2670,13 @@
       "allowed_cases": [
         "Fractal Design Pop Air"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Titan",
+      "tier_label": "",
+      "display_name": "Titan",
+      "bespoke_consult": false,
+      "public_name": "Titan",
+      "internal_tier": "Budget"
     },
     {
       "playbook_id": "FF-SWD-02",
@@ -2705,7 +2819,13 @@
       "allowed_cases": [
         "Fractal Design North"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Titan",
+      "tier_label": "Pro",
+      "display_name": "Titan Pro",
+      "bespoke_consult": false,
+      "public_name": "Titan Pro",
+      "internal_tier": "Mid-range"
     },
     {
       "playbook_id": "FF-SWD-03",
@@ -2812,7 +2932,13 @@
       "allowed_cases": [
         "Fractal Design Define 7 XL"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Titan",
+      "tier_label": "Ultra",
+      "display_name": "Titan Ultra",
+      "bespoke_consult": false,
+      "public_name": "Titan Ultra",
+      "internal_tier": "High-end"
     },
     {
       "playbook_id": "FF-FAM-01",
@@ -2969,7 +3095,13 @@
       "allowed_cases": [
         "Fractal Design Core 1100"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Stargazer",
+      "tier_label": "",
+      "display_name": "Stargazer",
+      "bespoke_consult": false,
+      "public_name": "Stargazer",
+      "internal_tier": "Budget"
     },
     {
       "playbook_id": "FF-FAM-02",
@@ -3126,7 +3258,13 @@
       "allowed_cases": [
         "Montech AIR 100 ARGB"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Stargazer",
+      "tier_label": "Pro",
+      "display_name": "Stargazer Pro",
+      "bespoke_consult": false,
+      "public_name": "Stargazer Pro",
+      "internal_tier": "Mid-range"
     },
     {
       "playbook_id": "FF-FAM-03",
@@ -3233,7 +3371,13 @@
       "allowed_cases": [
         "APNX Creator C1 ChromaFlair"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "ship_name": "Stargazer",
+      "tier_label": "Ultra",
+      "display_name": "Stargazer Ultra",
+      "bespoke_consult": false,
+      "public_name": "Stargazer Ultra",
+      "internal_tier": "High-end"
     }
   ]
 }
