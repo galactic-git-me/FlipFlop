@@ -1,0 +1,245 @@
+{
+  "public_naming": "Budget = ship only (no Base); Mid = Pro; High = Ultra",
+  "playbooks": [
+    {
+      "playbook_id": "FF-GVG-01",
+      "customer_type": "Great-value Gaming",
+      "budget_tier": "Budget",
+      "ship_name": "Reliant",
+      "tier_label": "",
+      "display_name": "Reliant",
+      "public_name": "Reliant",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-GVG-02",
+      "customer_type": "Great-value Gaming",
+      "budget_tier": "Mid-range",
+      "ship_name": "Reliant",
+      "tier_label": "Pro",
+      "display_name": "Reliant Pro",
+      "public_name": "Reliant Pro",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-GVG-03",
+      "customer_type": "Great-value Gaming",
+      "budget_tier": "High-end",
+      "ship_name": "Reliant",
+      "tier_label": "Ultra",
+      "display_name": "Reliant Ultra",
+      "public_name": "Reliant Ultra",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-HPG-01",
+      "customer_type": "High-performance Gaming",
+      "budget_tier": "Budget",
+      "ship_name": "Defiant",
+      "tier_label": "",
+      "display_name": "Defiant",
+      "public_name": "Defiant",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-HPG-02",
+      "customer_type": "High-performance Gaming",
+      "budget_tier": "Mid-range",
+      "ship_name": "Defiant",
+      "tier_label": "Pro",
+      "display_name": "Defiant Pro",
+      "public_name": "Defiant Pro",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-HPG-03",
+      "customer_type": "High-performance Gaming",
+      "budget_tier": "High-end",
+      "ship_name": "Defiant",
+      "tier_label": "Ultra",
+      "display_name": "Defiant Ultra",
+      "public_name": "Defiant Ultra",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-STU-01",
+      "customer_type": "Student Hybrid",
+      "budget_tier": "Budget",
+      "ship_name": "Voyager",
+      "tier_label": "",
+      "display_name": "Voyager",
+      "public_name": "Voyager",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-STU-02",
+      "customer_type": "Student Hybrid",
+      "budget_tier": "Mid-range",
+      "ship_name": "Voyager",
+      "tier_label": "Pro",
+      "display_name": "Voyager Pro",
+      "public_name": "Voyager Pro",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-STU-03",
+      "customer_type": "Student Hybrid",
+      "budget_tier": "High-end",
+      "ship_name": "Voyager",
+      "tier_label": "Ultra",
+      "display_name": "Voyager Ultra",
+      "public_name": "Voyager Ultra",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-BOF-01",
+      "customer_type": "Business & Office",
+      "budget_tier": "Budget",
+      "ship_name": "Excelsior",
+      "tier_label": "",
+      "display_name": "Excelsior",
+      "public_name": "Excelsior",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-BOF-02",
+      "customer_type": "Business & Office",
+      "budget_tier": "Mid-range",
+      "ship_name": "Excelsior",
+      "tier_label": "Pro",
+      "display_name": "Excelsior Pro",
+      "public_name": "Excelsior Pro",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-BOF-03",
+      "customer_type": "Business & Office",
+      "budget_tier": "High-end",
+      "ship_name": "Excelsior",
+      "tier_label": "Ultra",
+      "display_name": "Excelsior Ultra",
+      "public_name": "Excelsior Ultra",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-CCR-01",
+      "customer_type": "Content Creation",
+      "budget_tier": "Budget",
+      "ship_name": "Galaxy",
+      "tier_label": "",
+      "display_name": "Galaxy",
+      "public_name": "Galaxy",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-CCR-02",
+      "customer_type": "Content Creation",
+      "budget_tier": "Mid-range",
+      "ship_name": "Galaxy",
+      "tier_label": "Pro",
+      "display_name": "Galaxy Pro",
+      "public_name": "Galaxy Pro",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-CCR-03",
+      "customer_type": "Content Creation",
+      "budget_tier": "High-end",
+      "ship_name": "Galaxy",
+      "tier_label": "Ultra",
+      "display_name": "Galaxy Ultra",
+      "public_name": "Galaxy Ultra",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-AIW-01",
+      "customer_type": "AI Workstation",
+      "budget_tier": "Budget",
+      "ship_name": "Enterprise",
+      "tier_label": "",
+      "display_name": "Enterprise",
+      "public_name": "Enterprise",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-AIW-02",
+      "customer_type": "AI Workstation",
+      "budget_tier": "Mid-range",
+      "ship_name": "Enterprise",
+      "tier_label": "Pro",
+      "display_name": "Enterprise Pro",
+      "public_name": "Enterprise Pro",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-AIW-03",
+      "customer_type": "AI Workstation",
+      "budget_tier": "High-end",
+      "ship_name": "Enterprise",
+      "tier_label": "Ultra",
+      "display_name": "Enterprise Ultra",
+      "public_name": "Enterprise Ultra",
+      "bespoke_consult": true
+    },
+    {
+      "playbook_id": "FF-SWD-01",
+      "customer_type": "Software Development",
+      "budget_tier": "Budget",
+      "ship_name": "Titan",
+      "tier_label": "",
+      "display_name": "Titan",
+      "public_name": "Titan",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-SWD-02",
+      "customer_type": "Software Development",
+      "budget_tier": "Mid-range",
+      "ship_name": "Titan",
+      "tier_label": "Pro",
+      "display_name": "Titan Pro",
+      "public_name": "Titan Pro",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-SWD-03",
+      "customer_type": "Software Development",
+      "budget_tier": "High-end",
+      "ship_name": "Titan",
+      "tier_label": "Ultra",
+      "display_name": "Titan Ultra",
+      "public_name": "Titan Ultra",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-FAM-01",
+      "customer_type": "Family & Home",
+      "budget_tier": "Budget",
+      "ship_name": "Stargazer",
+      "tier_label": "",
+      "display_name": "Stargazer",
+      "public_name": "Stargazer",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-FAM-02",
+      "customer_type": "Family & Home",
+      "budget_tier": "Mid-range",
+      "ship_name": "Stargazer",
+      "tier_label": "Pro",
+      "display_name": "Stargazer Pro",
+      "public_name": "Stargazer Pro",
+      "bespoke_consult": false
+    },
+    {
+      "playbook_id": "FF-FAM-03",
+      "customer_type": "Family & Home",
+      "budget_tier": "High-end",
+      "ship_name": "Stargazer",
+      "tier_label": "Ultra",
+      "display_name": "Stargazer Ultra",
+      "public_name": "Stargazer Ultra",
+      "bespoke_consult": false
+    }
+  ]
+}
