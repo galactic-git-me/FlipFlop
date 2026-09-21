@@ -156,7 +156,7 @@ export default function CataloguePage() {
         // production API, so a browser-side env flag can be stale or belong
         // to a different process. The backend already resolves DEV/LIVE from
         // FLIPFLOP_RUNTIME_ENV at the point where the data is queried.
-        const raw = await api.gemRadar.scoredListingsLatestRun() as Array<Record<string, unknown>>;
+        const raw = await api.gemRadar.scoredListingsLatestRun(undefined, 500) as Array<Record<string, unknown>>;
         setVariants(raw.map((row, index) => ({
           id: Number(row.id ?? index), listing_id: String(row.listing_id ?? row.id ?? index),
           listing_title: String(row.title ?? "Untitled listing"), image_url: (row.image_url as string | null) ?? null,

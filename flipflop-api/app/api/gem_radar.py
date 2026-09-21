@@ -1080,6 +1080,12 @@ async def _fetch_cpk_price_fields(db: AsyncSession, ids: list[int]) -> dict[int,
 @router.get("/scored-listings-latest-run")
 async def get_scored_listings_latest_run(
     environment: Literal["DEV", "LIVE"] | None = Query(default=None),
+    limit: int = Query(
+        default=500,
+        ge=1,
+        le=1000,
+        description="Maximum actionable listings to return",
+    ),
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
 ) -> list[dict]:
@@ -1129,6 +1135,7 @@ async def get_scored_listings_latest_run(
             & (GemRadarScoredListing.scored_at == latest_scored_at.c.scored_at),
         )
         .order_by(GemRadarScoredListing.scored_at.desc())
+        .limit(limit)
     )
     scored = result.scalars().all()
     scored = [
