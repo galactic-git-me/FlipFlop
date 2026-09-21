@@ -82,8 +82,7 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
                 lo.condition_normalised AS condition, lo.item_price, lo.postage_price,
                 lo.delivered_price, lo.source, lo.observed_at,
                 cpk.cpk, cpk.cpk_data, lo.category AS observed_category, lo.bid_count, lo.watch_count,
- lo.epid, lo.seller_feedback_percent, lo.seller_feedback_count,
- lo.review_average_rating, lo.review_count,
+                lo.epid, lo.seller_feedback_percent, lo.seller_feedback_count,
                 lo.delivery_text, lo.delivery_postcode
             FROM gem_radar_listing_observations lo
             LEFT JOIN gem_radar_listing_cpk cpk ON lo.listing_id = cpk.listing_id
@@ -181,8 +180,7 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
             listing_id, title, seller_name, image_url, condition,
             item_price, postage_price, delivered_price, source, observed_at,
             cpk, cpk_data, observed_category, bid_count, watch_count,
- epid, seller_feedback_percent, seller_feedback_count,
- review_average_rating, review_count,
+            epid, seller_feedback_percent, seller_feedback_count,
             delivery_text, delivery_postcode,
         ) = row
 
@@ -327,13 +325,9 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
         # for GEM/SUPER_GEM eBay items), so using only existing_reviews here
         # silently discarded Amazon/Google Shopping/etc. review values before
         # they could be aggregated at CPK level.
- existing_average, existing_count = existing_reviews.get(listing_id, (None, None))
- review_average_rating = (
-     existing_average
-     if existing_average is not None
-     else review_average_rating
- )
- review_count = existing_count if existing_count is not None else review_count
+        existing_average, existing_count = existing_reviews.get(listing_id, (None, None))
+        review_average_rating = existing_average
+        review_count = existing_count
         if enrich_product_reviews and classification in ("GEM", "SUPER_GEM") and epid:
             reviews = await get_product_reviews(epid)
             review_average_rating = reviews.average_rating

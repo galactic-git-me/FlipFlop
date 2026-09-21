@@ -766,7 +766,14 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             // state, which reads as a stalled/hung run even though it finished.
             setDisplayedScans((prev) =>
               prev.some((scan) => !scan.isComplete || scan.activeSubmissions !== 0)
-                ? prev.map((scan) => ({ ...scan, isComplete: true, activeSubmissions: 0 }))
+            ? prev.map((scan) => {
+                const scoresSettled =
+                  (scan.eligibleScoreCount ?? 0) + (scan.ineligibleScoreCount ?? 0) >=
+                  (scan.marketPricedCount ?? 0);
+                return scoresSettled
+                  ? { ...scan, isComplete: true, activeSubmissions: 0 }
+                  : { ...scan, activeSubmissions: 0 };
+              })
                 : prev
             );
             setClientElapsed(0);
