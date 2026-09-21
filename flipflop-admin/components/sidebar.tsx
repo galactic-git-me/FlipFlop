@@ -32,6 +32,7 @@ const PRIMARY_NAV = [
   { href: "/cross-listing", icon: Repeat2, label: "Cross-listing" },
   { href: "/dispatch-zone", icon: Truck, label: "Dispatch Zone" },
   { href: "/email-events", icon: Bell, label: "Email Events" },
+  { href: "/advertising-growth", icon: Bell, label: "Advertising & Growth" },
   { href: "/cases-3d-priority", icon: Box, label: "3D Assets" },
   { href: "/problems", icon: AlertTriangle, label: "Problems" },
 ];
