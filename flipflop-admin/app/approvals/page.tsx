@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
 import { readJsonResponse } from "@/lib/read-json-response";
+import { Build3DViewer } from "@/components/builds/Build3DViewer";
 
 const API_BASE = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4311").replace(/\/$/, "");
 
@@ -615,18 +616,24 @@ function ApprovalPayloadPreview({ type, payload }: { type: string; payload: Reco
   }
 
   if (type === "model_3d") {
+    const glbUrl = typeof payload.glb_url === "string" ? payload.glb_url : null;
     return (
-      <div className="space-y-2">
-        {payload.glb_url && (
+      <div className="space-y-3">
+        {glbUrl ? (
+          <Build3DViewer url={glbUrl} />
+        ) : (
+          <div className="text-sm text-amber-400">No GLB URL on this submission</div>
+        )}
+        {glbUrl && (
           <div>
             <span className="text-slate-400 text-sm">GLB:</span>{" "}
             <a
-              href={payload.glb_url as string}
+              href={glbUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-cyan-400 hover:underline font-mono text-sm"
+              className="text-cyan-400 hover:underline font-mono text-sm break-all"
             >
-              {payload.glb_url as string}
+              {glbUrl}
             </a>
           </div>
         )}
@@ -642,9 +649,9 @@ function ApprovalPayloadPreview({ type, payload }: { type: string; payload: Reco
             className="w-64 h-64 object-cover rounded border border-slate-700 bg-slate-900"
           />
         )}
-        {payload.poly_count && (
-          <div className="text-sm text-slate-400">Poly count: {payload.poly_count}</div>
-        )}
+        {payload.poly_count ? (
+          <div className="text-sm text-slate-400">Poly count: {String(payload.poly_count)}</div>
+        ) : null}
       </div>
     );
   }
