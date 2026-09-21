@@ -1,0 +1,15 @@
+{
+  "sku": "NZXT-H6-FLOW",
+  "category": "case",
+  "glb_url": "https://assets.meshy.ai/b7d35f20-cae5-454f-80da-4abb3d48c6e8/tasks/01a0c3a5-bc81-7168-bc8c-c0aeadc44bab/output/model.glb?Expires=1790248795&Signature=KPO7bJlBsNLsDuxWImMhiUxy13urvdbPkdUI-IK8wd6WnkLFaT5hTEqPLIvmWDAcE5nrBoLqEdc92lfEit00fsaOt6G9fkRfE3TGqusOz~~JlgZu~8oUPfoA0jsIfdEkBowy3gKSWz8nwRGSxT8iIiv7zIR6YuLBXt3O8kbCc7pb7Ol--o7B~FGsYeMuId3-~CZq-E~utu6y-rv57bHxMIgRw1D3AKC9ShrwX3LzaYdwCVBMgLIoynpgi3MgdR0bPLc4OS6ybL6s5ys4oe85c~z3pskQQkiYR0kFsAKozFSFAs5jEbQxWwfrNKIiKTarUd3ar7VU-lXDZyi~Vk12hA__&Key-Pair-Id=K1VGYTHIYLM9UM",
+  "preview_image_url": "https://assets.meshy.ai/b7d35f20-cae5-454f-80da-4abb3d48c6e8/tasks/01a0c3a5-bc81-7168-bc8c-c0aeadc44bab/output/preview.png?Expires=1790248795&Signature=RnvPzx~XdWvHVGfWDue8IXI60-Ncpj3qj~VpIX2VIn2jPScvo09MofF0QbFGfxl8lcLF92pCsfig1pELE8LnfEfmXrXxiZAkrx5UWkaTXqrpi8UJDse0GnbWzotXihr4hy6N~q4pKgZktbfz6M7uRChIDQ6FoKQ0G1mEzXDZgoRtoKwmnPKirqdHgvScDNVF9Sb4qkdLCaDU8vnkxYm1KTrqM2YTseforoDE-K50QAXA6hFHtu6GI-k3oqdLrJOKuLyYZpqQ08qptOrjrppYNwRtk-ONTIEMHxWtnArQqHx-AU1k9M53OTfo72co~U2ZJgxYs9sgNiujL9mmQ15WQg__&Key-Pair-Id=K1VGYTHIYLM9UM",
+  "poly_count": null,
+  "file_size_kb": 76241,
+  "source_image_refs": [
+    "https://cdn.shopify.com/s/files/1/1986/9305/files/h6-flow_black_04_leftside.png?v=1789302072",
+    "https://cdn.shopify.com/s/files/1/1986/9305/files/h6-flow_black_11_exploded.png?v=1789302072",
+    "https://cdn.shopify.com/s/files/1/1986/9305/files/h6-flow_black_07_rightside.png?v=1789302072",
+    "https://cdn.shopify.com/s/files/1/1986/9305/files/h6-flow_black_10_interior.png?v=1789302072"
+  ],
+  "submitted_by": "MeshyBot"
+}

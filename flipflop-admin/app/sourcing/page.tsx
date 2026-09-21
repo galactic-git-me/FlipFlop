@@ -47,8 +47,14 @@ interface Listing {
   market_median_price?: number | null;
   market_upper_price?: number | null;
   pct_offset?: number | null;
-  watch_count?: number | null;
-  best_offer_enabled?: boolean;
+  amazon_bestseller_rank?: number | null;
+  amazon_bestseller_list?: string | null;
+  amazon_bestseller_category?: string | null;
+  amazon_bestseller_captured_at?: string | null;
+  performance_rank?: number | null;
+  performance_peer_count?: number | null;
+  performance_percentile?: number | null;
+  performance_status?: string | null;
   classification: string;
   deal_score: number;
   confidence: string;
@@ -117,6 +123,8 @@ interface ScanProgress {
   cpkFailedCount?: number;
   marketPricedCount: number; // Listings with non-null market price
   classifiedCount: number;   // Listings with classification (GEM, SUPER_GEM, etc)
+  eligibleScoreCount?: number; // Market-priced listings with an eligible score
+  ineligibleScoreCount?: number; // Market-priced listings with a terminal ineligible score
   gemCount?: number;
   superGemCount?: number;
   processedPercent: number;  // % through full pipeline
@@ -232,7 +240,9 @@ function coalesceScansBySearchId(scans: ScanProgress[]): ScanProgress[] {
     existing.ingestedNewCount += scan.ingestedNewCount;
     existing.cpkAssignedCount += scan.cpkAssignedCount;
     existing.marketPricedCount += scan.marketPricedCount;
-    existing.classifiedCount += scan.classifiedCount;
+  existing.classifiedCount += scan.classifiedCount;
+  existing.eligibleScoreCount = (existing.eligibleScoreCount ?? 0) + (scan.eligibleScoreCount ?? 0);
+  existing.ineligibleScoreCount = (existing.ineligibleScoreCount ?? 0) + (scan.ineligibleScoreCount ?? 0);
     existing.gemCount = (existing.gemCount ?? 0) + (scan.gemCount ?? 0);
     existing.superGemCount = (existing.superGemCount ?? 0) + (scan.superGemCount ?? 0);
     existing.excludedAuctionCount += scan.excludedAuctionCount;
@@ -249,7 +259,7 @@ function coalesceScansBySearchId(scans: ScanProgress[]): ScanProgress[] {
 // Small circular gauge -- replaces the earlier linear progress bars per
 // request. `value`/`max` drive the sweep angle; the label underneath gives
 // the raw fraction since a gauge alone can't show absolute counts.
-function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, label, color }: { value: number; max: number; failed?: number; skipped?: number; skippedStart?: number; label: string; color: string }) {
+function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, displayValue, label, color }: { value: number; max: number; failed?: number; skipped?: number; skippedStart?: number; displayValue?: number; label: string; color: string }) {
   const patternId = `gauge-hatch-${useId().replace(/:/g, "")}`;
   const safeMax = Math.max(max, 0);
   const successful = Math.min(Math.max(value, 0), safeMax);
@@ -260,7 +270,8 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, label, color
   );
   // Percentage is successful output only. Failed/unavailable work is shown
   // separately as patterned segments; empty track space remains pending.
-  const pct = safeMax > 0 ? (successful / safeMax) * 100 : 0;
+  const reportedValue = Math.min(Math.max(displayValue ?? value, 0), safeMax);
+  const pct = safeMax > 0 ? (reportedValue / safeMax) * 100 : 0;
   const radius = 24;
   const circumference = 2 * Math.PI * radius;
   // Successful output and current-stage failures share the full gauge width.
@@ -270,8 +281,9 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, label, color
   const successfulLength = circumference * (successful / (safeMax || 1));
   const failedLength = circumference * (failedCount / (safeMax || 1));
   const skippedLength = circumference * (skippedCount / (safeMax || 1));
-  // Upstream failures must use the preceding stage's failure position. When
-  // omitted, the segment follows this gauge's successful output as before.
+  // Upstream failures start where the preceding stage stopped. They are
+  // drawn as a thin proportional arc so the next gauge carries forward the
+  // exact amount of work that could not reach it.
   const skippedStartCount = Math.min(Math.max(skippedStart ?? successful, 0), safeMax);
   const skippedStartLength = circumference * (skippedStartCount / (safeMax || 1));
   return (
@@ -313,9 +325,12 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, label, color
           />
         )}
         {skippedLength > 0 && (
-          <line
-            x1={30} y1={1.5} x2={30} y2={11.5} stroke="#020617" strokeWidth={1}
-            transform={`rotate(${(skippedStartLength / circumference) * 360} 30 30)`}
+          <circle
+            cx={30} cy={30} r={radius} stroke={color} strokeWidth={2} fill="none"
+            strokeDasharray={`${skippedLength} ${circumference - skippedLength}`}
+            strokeDashoffset={-skippedStartLength} strokeLinecap="butt"
+            transform="rotate(-90 30 30)"
+            className="transition-all duration-500"
           />
         )}
         <text x={30} y={34} textAnchor="middle" className="fill-slate-100 text-[12px] font-semibold">
@@ -323,7 +338,104 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, label, color
         </text>
       </svg>
       <div className="text-[11px] text-white mt-1 text-center">{label}</div>
-      <div className="text-[11px] text-slate-300 text-center">{value}/{max}</div>
+      <div className="text-[11px] text-slate-300 text-center">{reportedValue}/{max}</div>
+    </div>
+  );
+}
+
+function ScoresGauge({ eligible, cpkFailures, marketFailures, upstreamFailureStart, ineligible, max }: {
+  eligible: number;
+  cpkFailures: number;
+  marketFailures: number;
+  upstreamFailureStart: number;
+  ineligible: number;
+  max: number;
+}) {
+  const id = useId().replace(/:/g, "");
+  const safeMax = Math.max(max, 0);
+  const radius = 24;
+  const circumference = 2 * Math.PI * radius;
+  // The thick band is reserved for outcomes from Scores itself.  CPK and
+  // M Prices failures are upstream of Scores, so they are deliberately
+  // combined into the thin pink arc rather than rendered as dotted bars.
+  const rawSegments = [
+    { value: eligible, dotted: false, label: "eligible scores" },
+    { value: ineligible, dotted: true, label: "ineligible scores" },
+  ];
+  let allocated = 0;
+  const segments = rawSegments.map((segment) => {
+    const value = Math.min(Math.max(segment.value, 0), Math.max(safeMax - allocated, 0));
+    allocated += value;
+    return { ...segment, value };
+  });
+  const upstreamFailures = Math.min(
+    Math.max(cpkFailures, 0) + Math.max(marketFailures, 0),
+    Math.max(safeMax - allocated, 0),
+  );
+  // Match the upstream gauges' population positions.  M Prices failures
+  // begin immediately after the successfully market-priced listings; CPK
+  // failures follow them.  The thin combined arc therefore begins at the
+  // M Prices failure position, not after the Score-stage bands.
+  const upstreamFailureStartLength = circumference * (
+    Math.min(Math.max(upstreamFailureStart, 0), safeMax) / (safeMax || 1)
+  );
+  const pct = safeMax > 0 ? (segments[0].value / safeMax) * 100 : 0;
+  let offset = 0;
+
+  return (
+    <div className="flex flex-col items-center justify-center">
+      <svg width={60} height={60} viewBox="0 0 60 60" className="drop-shadow-[1px_2px_1px_rgba(2,6,23,0.9)]" aria-label={`Scores: ${Math.round(pct)}% eligible`}>
+        <title>{[
+          ...segments.map((segment) => `${segment.label}: ${segment.value}`),
+          `upstream failures (CPK + M Prices): ${upstreamFailures}`,
+        ].join(", ")}</title>
+        <defs>
+          {/* Keep the successful Scores arc visually identical to the other
+              gauges: a bright highlight over its semantic base colour gives
+              the ring its raised, 3D appearance. */}
+          <linearGradient id={`${id}-eligible-gradient`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#ec4899" stopOpacity="0.72" />
+            <stop offset="38%" stopColor="#ffffff" stopOpacity="0.58" />
+            <stop offset="62%" stopColor="#ec4899" stopOpacity="1" />
+            <stop offset="100%" stopColor="#020617" stopOpacity="0.38" />
+          </linearGradient>
+          {segments.map((segment, index) => segment.dotted ? (
+            <pattern key={index} id={`${id}-dot-${index}`} width="4" height="4" patternUnits="userSpaceOnUse">
+              <rect width="4" height="4" fill="#334155" opacity="0.55" />
+              <circle cx="2" cy="2" r="0.7" fill="#ec4899" opacity="0.95" />
+            </pattern>
+          ) : null)}
+        </defs>
+        <circle cx={30} cy={30} r={radius} stroke="#334155" strokeWidth={3} fill="none" />
+        {segments.map((segment, index) => {
+          const length = circumference * (segment.value / (safeMax || 1));
+          const start = offset;
+          offset += length;
+          return length > 0 ? <circle key={segment.label} cx={30} cy={30} r={radius}
+            stroke={segment.dotted ? `url(#${id}-dot-${index})` : `url(#${id}-eligible-gradient)`}
+            strokeWidth={7.5} fill="none" strokeDasharray={`${length} ${circumference - length}`}
+            strokeDashoffset={-start} strokeLinecap="butt" transform="rotate(-90 30 30)"
+            className="transition-all duration-500" /> : null;
+        })}
+        {upstreamFailures > 0 && (
+          <circle
+            cx={30}
+            cy={30}
+            r={radius}
+            stroke="#ec4899"
+            strokeWidth={2}
+            fill="none"
+            strokeDasharray={`${circumference * (upstreamFailures / (safeMax || 1))} ${circumference}`}
+            strokeDashoffset={-upstreamFailureStartLength}
+            strokeLinecap="butt"
+            transform="rotate(-90 30 30)"
+            className="transition-all duration-500"
+          />
+        )}
+        <text x={30} y={34} textAnchor="middle" className="fill-slate-100 text-[12px] font-semibold">{Math.round(pct)}%</text>
+      </svg>
+      <div className="text-[11px] text-white mt-1 text-center">Scores</div>
+      <div className="text-[11px] text-slate-300 text-center">{segments[0].value}/{max}</div>
     </div>
   );
 }
@@ -548,10 +660,17 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                 ingestedCount: Math.max(previous.ingestedCount ?? 0, scan.ingestedCount ?? 0),
                 ingestedNewCount: Math.max(previous.ingestedNewCount ?? 0, scan.ingestedNewCount ?? 0),
                 cpkAssignedCount: Math.max(previous.cpkAssignedCount ?? 0, scan.cpkAssignedCount ?? 0),
-                cpkFailedCount: Math.max(previous.cpkFailedCount ?? 0, scan.cpkFailedCount ?? 0),
-                marketPricedCount: Math.max(previous.marketPricedCount ?? 0, scan.marketPricedCount ?? 0),
-                classifiedCount: Math.max(previous.classifiedCount ?? 0, scan.classifiedCount ?? 0),
-                processedPercent: Math.max(previous.processedPercent ?? 0, scan.processedPercent ?? 0),
+                 cpkFailedCount: Math.max(previous.cpkFailedCount ?? 0, scan.cpkFailedCount ?? 0),
+                 marketPricedCount: Math.max(previous.marketPricedCount ?? 0, scan.marketPricedCount ?? 0),
+  classifiedCount: Math.max(previous.classifiedCount ?? 0, scan.classifiedCount ?? 0),
+  eligibleScoreCount: Math.max(previous.eligibleScoreCount ?? 0, scan.eligibleScoreCount ?? 0),
+  ineligibleScoreCount: Math.max(previous.ineligibleScoreCount ?? 0, scan.ineligibleScoreCount ?? 0),
+                 // Classification results are also monotonic within a run.
+                 // Preserve per-search GEM totals when a later poll contains
+                 // a partial/stale classification snapshot.
+                 gemCount: Math.max(previous.gemCount ?? 0, scan.gemCount ?? 0),
+                 superGemCount: Math.max(previous.superGemCount ?? 0, scan.superGemCount ?? 0),
+                 processedPercent: Math.max(previous.processedPercent ?? 0, scan.processedPercent ?? 0),
                 byVendor: mergedVendors,
                 discoveredByVendor: mergedDiscoveredVendors,
                 // Completion is monotonic within a sweep. The previous AND
@@ -653,7 +772,14 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             // state, which reads as a stalled/hung run even though it finished.
             setDisplayedScans((prev) =>
               prev.some((scan) => !scan.isComplete || scan.activeSubmissions !== 0)
-                ? prev.map((scan) => ({ ...scan, isComplete: true, activeSubmissions: 0 }))
+            ? prev.map((scan) => {
+                const scoresSettled =
+                  (scan.eligibleScoreCount ?? 0) + (scan.ineligibleScoreCount ?? 0) >=
+                  (scan.marketPricedCount ?? 0);
+                return scoresSettled
+                  ? { ...scan, isComplete: true, activeSubmissions: 0 }
+                  : { ...scan, activeSubmissions: 0 };
+              })
                 : prev
             );
             setClientElapsed(0);
@@ -869,16 +995,21 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             // next stage; they were never eligible for that stage. The
             // current stage's own terminal failures use the patterned
             // segment. Anything else remains an empty pending gap.
-            const failedScores = 0;
             const skippedCpk = failedIngested;
             const skippedMarketPrices = Math.min(
               failedIngested + failedCpk,
               Math.max(searchTermTotal - scan.marketPricedCount - failedMarketPrices, 0),
             );
-            const skippedScores = Math.min(
-              failedIngested + failedCpk + failedMarketPrices,
-              Math.max(searchTermTotal - scan.classifiedCount, 0),
-            );
+            // Scores are counted independently of market-price settlement,
+            // so the raw classification total can include listings that
+            // failed upstream. Partition those overlapping listings out of
+            // the thick successful segment: upstream losses remain a thin
+            // pink arc, successful scores are solid, and the track stays
+            // blank for work that has not reached a terminal outcome.
+  // Scores use the full ingested population: terminal upstream failures occupy
+  // their own dotted segments, while only genuinely unfinished work is blank.
+  const successfulScores = scan.eligibleScoreCount ?? 0;
+  const ineligibleScores = scan.ineligibleScoreCount ?? 0;
 
             return (
               <PixelCard key={scan.searchId || scan.query} variant={isComplete ? "emerald" : "default"}>
@@ -890,12 +1021,12 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                       </div>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
-                      {(scan.superGemCount ?? 0) > 0 && (
+                      {typeof scan.superGemCount === "number" && scan.superGemCount > 0 && (
                         <span className="text-base font-bold text-amber-300 leading-none" title="Super Gems">
                           SG {scan.superGemCount}
                         </span>
                       )}
-                      {(scan.gemCount ?? 0) > 0 && (
+                      {typeof scan.gemCount === "number" && scan.gemCount > 0 && (
                         <span className="text-base font-bold text-blue-300 leading-none" title="Gems">
                           G {scan.gemCount}
                         </span>
@@ -921,14 +1052,18 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                   </div>
 
                   <div className="flex justify-center gap-3">
-                    {/* Each stage is measured against the population it can
-                        actually process. This preserves meaningful progress
-                        and lets a finished stage reach 100% without hiding
-                        upstream failures. */}
+                    {/* Every gauge is measured against this run's ingested population. */}
                     <Gauge value={scan.ingestedCount} max={searchTermTotal} failed={failedIngested} label="Ingested" color="#8b5cf6" />
                     <Gauge value={scan.cpkAssignedCount} max={searchTermTotal} failed={failedCpk} skipped={skippedCpk} skippedStart={scan.ingestedCount} label="CPK" color="#10b981" />
                     <Gauge value={scan.marketPricedCount} max={searchTermTotal} failed={failedMarketPrices} skipped={skippedMarketPrices} skippedStart={scan.cpkAssignedCount} label="M Prices" color="#f59e0b" />
-                    <Gauge value={scan.classifiedCount} max={searchTermTotal} failed={failedScores} skipped={skippedScores} skippedStart={scan.marketPricedCount} label="Scores" color="#ec4899" />
+                    <ScoresGauge
+                      eligible={successfulScores}
+                      cpkFailures={failedCpk}
+                      marketFailures={failedMarketPrices}
+                      upstreamFailureStart={scan.marketPricedCount}
+                      ineligible={ineligibleScores}
+                      max={searchTermTotal}
+                    />
                   </div>
 
                   {vendorEntries.length > 0 && (
@@ -1437,7 +1572,7 @@ function stockLaneFor(listing: Listing): Exclude<StockLane, "all"> | "unknown" {
   return "unknown";
 }
 
-type SortKey = "source" | "title" | "seller" | "condition" | "price_variance" | "delivered_price" | "market_lower_price" | "market_median_price" | "market_upper_price" | "classification" | "decision" | "deal_score" | "watch_count" | "best_offer_enabled";
+type SortKey = "source" | "title" | "seller" | "condition" | "price_variance" | "delivered_price" | "market_lower_price" | "market_median_price" | "market_upper_price" | "classification" | "decision" | "deal_score" | "amazon_bestseller_rank" | "performance_rank";
 type SortDir = "asc" | "desc";
 
 const CLASSIFICATION_RANK: Record<string, number> = {
@@ -1966,7 +2101,9 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
       setSortDir(sortDir === "asc" ? "desc" : "asc");
     } else {
       setSortKey(key);
-      setSortDir("desc");
+      // Rank #1 is the best result, unlike price and deal score where higher
+      // values are generally more useful at the top of the table.
+      setSortDir(key === "amazon_bestseller_rank" || key === "performance_rank" ? "asc" : "desc");
     }
   };
 
@@ -2132,8 +2269,8 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                 <SortHeader label="Decision" sortKey="decision" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} widthClassName="w-20" />
                 <SortHeader label="Score" sortKey="deal_score" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-14" />
                 <th className="text-left text-slate-200 font-semibold w-16">Evidence</th>
-                <SortHeader label="Watches" sortKey="watch_count" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-16" />
-                <SortHeader label="Offers" sortKey="best_offer_enabled" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-14" />
+                <SortHeader label="Amazon BSR" sortKey="amazon_bestseller_rank" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
+                <SortHeader label="Performance" sortKey="performance_rank" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-24" />
               </tr>
             </thead>
             <tbody>
@@ -2231,10 +2368,18 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                       </button>
                     </td>
                     <td className="p-3 text-right text-cyan-300">
-                      {listing.watch_count ?? "—"}
+                      {listing.amazon_bestseller_rank != null ? (
+                        <span title={`Amazon Best Sellers${listing.amazon_bestseller_category ? ` · ${listing.amazon_bestseller_category}` : ""}${listing.amazon_bestseller_list ? ` · ${listing.amazon_bestseller_list}` : ""}${listing.amazon_bestseller_captured_at ? ` · captured ${new Date(listing.amazon_bestseller_captured_at).toLocaleDateString()}` : ""}`}>
+                          #{listing.amazon_bestseller_rank.toLocaleString()}
+                        </span>
+                      ) : "—"}
                     </td>
-                    <td className={`p-3 text-right ${listing.best_offer_enabled ? "text-emerald-300" : "text-slate-500"}`}>
-                      {listing.best_offer_enabled ? "Yes" : "No"}
+                    <td className="p-3 text-right text-violet-300">
+                      {listing.performance_rank != null && listing.performance_peer_count != null ? (
+                        <span title={`${listing.performance_percentile != null ? `${listing.performance_percentile.toFixed(0)}th percentile` : "Hardware benchmark rank"} among comparable ${listing.category?.toUpperCase() ?? "hardware"} models.`}>
+                          #{listing.performance_rank} / {listing.performance_peer_count}
+                        </span>
+                      ) : "—"}
                     </td>
                   </tr>
                 );
@@ -2471,14 +2616,14 @@ function priceVariancePercent(listing: Listing): number | null {
   return ((listing.market_median_price! - listing.delivered_price) / listing.delivered_price) * 100;
 }
 
-function buildInsightPoints(listings: Listing[], kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "watchesVariance" | "priceMedian"): InsightPoint[] {
+function buildInsightPoints(listings: Listing[], kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "amazonBestsellerVariance" | "priceMedian"): InsightPoint[] {
   return listings.flatMap((listing) => {
     const variance = priceVariancePercent(listing);
     const base = { title: listing.title, classification: listing.classification };
     if (kind === "sellThrough" && variance !== null && Number.isFinite(listing.sell_through_rate_pct) && Number.isFinite(listing.sold_listing_count)) return [{ ...base, x: variance, y: listing.sell_through_rate_pct!, bubble: listing.sold_listing_count!, xLabel: "Price variance", yLabel: "Sell-through", bubbleLabel: "Sold comps", xUnit: "%", yUnit: "%" }];
     if (kind === "profitRoi" && Number.isFinite(listing.expected_profit) && Number.isFinite(listing.roi_pct)) return [{ ...base, x: listing.expected_profit!, y: listing.roi_pct!, bubble: Math.max(0, listing.delivered_price), xLabel: "Expected profit", yLabel: "Model ROI", bubbleLabel: "Listing price", xUnit: "£", yUnit: "%", bubbleUnit: "£" }];
     if (kind === "confidenceVariance" && variance !== null && Number.isFinite(listing.market_confidence)) return [{ ...base, x: listing.market_confidence!, y: variance, bubble: Math.max(0, listing.market_sample_size ?? 0), xLabel: "Market confidence", yLabel: "Price variance", bubbleLabel: "Comparable sample", xUnit: "/100", yUnit: "%" }];
-    if (kind === "watchesVariance" && variance !== null && Number.isFinite(listing.watch_count)) return [{ ...base, x: listing.watch_count!, y: variance, bubble: listing.best_offer_enabled ? 1 : 0, xLabel: "Watchers", yLabel: "Price variance", bubbleLabel: "Best offer", xUnit: "", yUnit: "%" }];
+    if (kind === "amazonBestsellerVariance" && variance !== null && Number.isFinite(listing.amazon_bestseller_rank)) return [{ ...base, x: listing.amazon_bestseller_rank!, y: variance, bubble: Math.max(0, listing.delivered_price), xLabel: "Amazon Best Seller rank", yLabel: "Price variance", bubbleLabel: "Listing price", xUnit: "#", yUnit: "%", bubbleUnit: "£" }];
     if (kind === "priceMedian" && Number.isFinite(listing.delivered_price) && listing.delivered_price > 0 && Number.isFinite(listing.market_median_price) && listing.market_median_price! > 0) return [{ ...base, x: listing.delivered_price, y: listing.market_median_price!, bubble: Math.max(0, listing.expected_profit ?? 0), xLabel: "Listing price", yLabel: "Market median", bubbleLabel: "Expected profit", xUnit: "£", yUnit: "£", bubbleUnit: "£" }];
     return [];
   });
@@ -2493,7 +2638,7 @@ function insightDomain(values: number[], includeZero = true): [number, number] {
 function formatInsightValue(value: number, unit = "") {
   const absoluteValue = Math.abs(value);
   const formatted = absoluteValue >= 1000 ? absoluteValue.toLocaleString(undefined, { maximumFractionDigits: 0 }) : absoluteValue.toFixed(1);
-  return `${value < 0 ? "-" : ""}${unit === "£" ? "£" : ""}${formatted}${unit === "%" ? "%" : unit === "/100" ? "/100" : ""}`;
+  return `${value < 0 ? "-" : ""}${unit === "£" || unit === "#" ? unit : ""}${formatted}${unit === "%" ? "%" : unit === "/100" ? "/100" : ""}`;
 }
 
 function InsightTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: InsightPoint }> }) {
@@ -2508,7 +2653,7 @@ function InsightTooltip({ active, payload }: { active?: boolean; payload?: Array
   </div>;
 }
 
-const InsightScatterChart = memo(function InsightScatterChart({ listings, kind, title, description, insight, diagonal = false }: { listings: Listing[]; kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "watchesVariance" | "priceMedian"; title: string; description: string; insight: string; diagonal?: boolean }) {
+const InsightScatterChart = memo(function InsightScatterChart({ listings, kind, title, description, insight, diagonal = false }: { listings: Listing[]; kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "amazonBestsellerVariance" | "priceMedian"; title: string; description: string; insight: string; diagonal?: boolean }) {
   const points = useMemo(() => buildInsightPoints(listings, kind), [listings, kind]);
   const xDomain = useMemo(() => insightDomain(points.map((point) => point.x)), [points]);
   const yDomain = useMemo(() => diagonal ? xDomain : insightDomain(points.map((point) => point.y)), [diagonal, points, xDomain]);
@@ -2774,7 +2919,7 @@ const AnalyticsTab = memo(function AnalyticsTab({ listings }: { listings: Listin
         <InsightScatterChart listings={listings} kind="sellThrough" title="Price Variance vs Sell-through" description="Discount opportunity against observed market liquidity; bubble size is sold comparable count." insight="Upper-right points combine a meaningful discount with proven demand. A large discount with weak sell-through is a warning, not automatically a bargain." />
         <InsightScatterChart listings={listings} kind="profitRoi" title="Expected Profit vs Model ROI" description="Absolute return against percentage return; bubble size is the listing price." insight="Top-right points are strongest on both measures. High ROI with tiny profit is a small-ticket opportunity; high profit with low ROI ties up more capital." />
         <InsightScatterChart listings={listings} kind="confidenceVariance" title="Market Confidence vs Price Variance" description="How much the market supports the price gap; bubble size is comparable sample size." insight="Look for positive variance with high confidence. Large gaps supported by small samples or low confidence are the most likely false gems." />
-        <InsightScatterChart listings={listings} kind="watchesVariance" title="Watchers vs Price Variance" description="Buyer interest against the gap to market; bubble size indicates whether best offer is enabled." insight="A positive gap with many watchers is a demand-backed opportunity. High variance with no watchers suggests the price advantage may not convert." />
+        <InsightScatterChart listings={listings} kind="amazonBestsellerVariance" title="Amazon Best Seller Rank vs Price Variance" description="Amazon category position against the gap to market; lower rank numbers are better. Bubble size is the listing price." insight="Look for a positive price gap with a low Amazon rank. Amazon rank is a product-level signal, not a measure of this marketplace listing's demand." />
         <InsightScatterChart listings={listings} kind="priceMedian" title="Listing Price vs Market Median" description="Direct price positioning; the dashed diagonal marks parity with the market median." insight="Points above the diagonal have a listing price below market. The farther above, the larger the discount; use classification colour and bubble profit to judge quality." diagonal />
       </div>
       <ClassificationLegend classifications={[...CLASSIFICATION_ORDER]} />
@@ -2917,7 +3062,7 @@ function SourcingPageInner() {
       // the next scheduled refresh can recover normally.
       const signal = AbortSignal.timeout(15_000);
       const [listingsRes, componentRes, queueRes] = await Promise.all([
-        fetch(`/api/gem-radar/scored-listings-latest-run?environment=${process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV"}`, { cache: "no-store", signal }),
+        fetch(`/api/gem-radar/scored-listings-latest-run?environment=${process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV"}&limit=500`, { cache: "no-store", signal }),
         fetch(`/api/gem-radar/gem-by-component`, { cache: "no-store", signal }),
         fetch(`/api/gem-radar/queue-status`, { cache: "no-store", signal }),
       ]);

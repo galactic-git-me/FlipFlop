@@ -52,24 +52,61 @@ def _clean_score(raw: str) -> float:
     return float(re.sub(r'[^\d.]', '', raw) or "0")
 
 
-def _parse_generic_table(html: str, table_id: str, component_type: str) -> list[BenchmarkRecord]:
+def _parse_generic_table(
+    html: str, table_id: str | tuple[str, ...], component_type: str
+) -> list[BenchmarkRecord]:
     soup = BeautifulSoup(html, "html.parser")
-    table = soup.find("table", {"id": table_id})
-    if not table:
-        table = soup.find("table")
+    table_ids = (table_id,) if isinstance(table_id, str) else table_id
+    table = next(
+        (soup.find("table", {"id": candidate}) for candidate in table_ids if soup.find("table", {"id": candidate})),
+        None,
+    )
     if not table:
         return []
+
+    headers = [header.get_text(" ", strip=True).lower() for header in table.find_all("th")]
+    name_index = next(
+        (index for index, header in enumerate(headers) if "name" in header or "model" in header),
+        None,
+    )
+    score_index = next(
+        (
+            index
+            for index, header in enumerate(headers)
+            if "mark" in header and "rank" not in header and "value" not in header
+        ),
+        None,
+    )
 
     records: list[BenchmarkRecord] = []
     for row in table.find_all("tr"):
         cells = row.find_all("td")
         if len(cells) < 2:
             continue
-        name_cell = cells[1]
-        name = name_cell.get_text(strip=True)
-        if not name:
+        if name_index is not None and name_index < len(cells):
+            resolved_name_index = name_index
+        else:
+            resolved_name_index = next(
+                (index for index, cell in enumerate(cells) if cell.find("a")), None
+            )
+        if resolved_name_index is None:
             continue
-        score_raw = cells[-1].get_text(strip=True) if len(cells) >= 3 else "0"
+
+        name_cell = cells[resolved_name_index]
+        name = name_cell.get_text(strip=True)
+        if not name or not re.search(r"[A-Za-z]", name):
+            continue
+        if score_index is not None and score_index < len(cells):
+            score_raw = cells[score_index].get_text(strip=True)
+        else:
+            score_raw = next(
+                (
+                    cell.get_text(strip=True)
+                    for cell in cells[resolved_name_index + 1 :]
+                    if _clean_score(cell.get_text(strip=True)) > 0
+                ),
+                "0",
+            )
         try:
             score = _clean_score(score_raw)
         except ValueError:
@@ -101,7 +138,9 @@ def parse_passmark_cpu_table(html: str) -> list[BenchmarkRecord]:
 
 
 def parse_passmark_gpu_table(html: str) -> list[BenchmarkRecord]:
-    return _parse_generic_table(html, "gputable", "gpu")
+    # PassMark currently uses ``cputable`` on both CPU and GPU list pages;
+    # retain the historical ID for archived fixtures and older source pages.
+    return _parse_generic_table(html, ("cputable", "gputable"), "gpu")
 
 
 def parse_passmark_disk_table(html: str) -> list[BenchmarkRecord]:

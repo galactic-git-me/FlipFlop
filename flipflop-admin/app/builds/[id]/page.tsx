@@ -12,7 +12,7 @@ import {
 import { Toaster, toast } from "sonner";
 import confetti from "canvas-confetti";
 import JSZip from "jszip";
-import { api, ManualBuild, ComponentRating, ProductFaq } from "@/lib/api";
+import { api, API_BASE_URL, ManualBuild, ComponentRating, ProductFaq } from "@/lib/api";
 import { formatCurrency } from "@/lib/utils";
 import { drawRegistrationPlate, drawSpecCard, canvasToBlob, loadLogo } from "@/lib/build-cards";
 import { EbayOffersSection } from "@/components/builds/EbayOffersSection";
@@ -169,6 +169,7 @@ export default function BuildDetailPage() {
   const [performanceCardGenerated, setPerformanceCardGenerated] = useState(false);
   const [performanceCardImageUrls, setPerformanceCardImageUrls] = useState<string[]>([]);
   const [performanceCardZipUrl, setPerformanceCardZipUrl] = useState<string | null>(null);
+  const performanceCardHtmlUrl = `${API_BASE_URL}/builds/${buildId}/Performance/performance.html`;
 
   const [activeTab, setActiveTab] = useState<"build" | "pricing" | "listing" | "channels" | "media" | "specifics" | "faqs" | "shipping" | "fulfillment">("build");
 
@@ -1477,7 +1478,7 @@ export default function BuildDetailPage() {
                         const data = await response.json();
                         if (data.success) {
                           alert(`Performance card data saved!\n\n${data.message}`);
-                          setPerformanceCardGenerated(false);
+                          setPerformanceCardGenerated(true);
                         } else {
                           throw new Error(data.error || "Failed to process");
                         }
@@ -1525,23 +1526,36 @@ export default function BuildDetailPage() {
                 </button>
               </div>
 
-              {performanceCardGenerated && performanceCardImageUrls.length > 0 && (
+              {performanceCardGenerated && (
                 <div className="mt-4 flex flex-col gap-3">
                   <p className="text-xs text-slate-500">
-                    Performance Card — split into {performanceCardImageUrls.length} sections so each one displays properly instead of one tall, skewed image.
+                    Full HTML performance report
                   </p>
-                  <div className="grid grid-cols-3 gap-2">
-                    {performanceCardImageUrls.map((url, i) => (
-                      <img
-                        key={url}
-                        src={url}
-                        alt={`Performance Card part ${i + 1}`}
-                        className="w-full rounded-lg border border-white/[0.1] bg-black"
-                      />
-                    ))}
-                  </div>
+                  <iframe
+                    src={performanceCardHtmlUrl}
+                    title="Performance Card HTML report"
+                    className="w-full min-h-[760px] rounded-lg border border-white/[0.1] bg-black"
+                  />
+                  {performanceCardImageUrls.length > 0 && (
+                    <details className="rounded-lg border border-white/[0.08] bg-black/20 p-3">
+                      <summary className="cursor-pointer text-xs text-slate-400">
+                        Listing image exports ({performanceCardImageUrls.length})
+                      </summary>
+                      <div className="mt-3 grid grid-cols-3 gap-2">
+                        {performanceCardImageUrls.map((url, i) => (
+                          <img
+                            key={url}
+                            src={url}
+                            alt={`Performance Card export ${i + 1}`}
+                            className="w-full rounded-lg border border-white/[0.1] bg-black"
+                          />
+                        ))}
+                      </div>
+                    </details>
+                  )}
                   <div className="flex gap-3">
-                    <button
+                    {performanceCardImageUrls.length > 0 && (
+                      <button
                       onClick={async () => {
                         setUploadingPhotos(true);
                         try {
@@ -1565,8 +1579,10 @@ export default function BuildDetailPage() {
                     >
                       {uploadingPhotos ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImagePlus className="w-4 h-4" />}
                       Add to Listing Photos
-                    </button>
-                    <button
+                      </button>
+                    )}
+                    {performanceCardZipUrl && (
+                      <button
                       onClick={() => {
                         if (!performanceCardZipUrl) return;
                         const link = document.createElement("a");
@@ -1577,7 +1593,8 @@ export default function BuildDetailPage() {
                       className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 text-green-300 rounded transition-colors"
                     >
                       <Download className="w-4 h-4" /> Download Zip
-                    </button>
+                      </button>
+                    )}
                     <button
                       onClick={() => setPerformanceCardGenerated(false)}
                       className="flex-1 text-xs text-slate-500 hover:text-slate-300 border border-white/[0.1] rounded px-3 py-2 transition-colors"

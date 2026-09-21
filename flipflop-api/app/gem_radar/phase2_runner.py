@@ -326,16 +326,8 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
         # silently discarded Amazon/Google Shopping/etc. review values before
         # they could be aggregated at CPK level.
         existing_average, existing_count = existing_reviews.get(listing_id, (None, None))
-        review_average_rating = (
-            existing_average
-            if existing_average is not None
-            else listing.review_average_rating
-        )
-        review_count = (
-            existing_count
-            if existing_count is not None
-            else listing.review_count
-        )
+        review_average_rating = existing_average
+        review_count = existing_count
         if enrich_product_reviews and classification in ("GEM", "SUPER_GEM") and epid:
             reviews = await get_product_reviews(epid)
             review_average_rating = reviews.average_rating

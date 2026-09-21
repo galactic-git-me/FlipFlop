@@ -1,6 +1,8 @@
 from app.gem_radar.marketplace import (
     fallback_listing_url,
     infer_listing_source,
+    is_implausibly_low_aliexpress_listing,
+    is_parts_or_non_working_listing,
     is_malformed_awdit_listing,
     usable_listing_url,
 )
@@ -31,6 +33,31 @@ def test_awdit_real_title_is_kept() -> None:
         "https://www.awd-it.co.uk/intel-core-i5-12400f.html",
         "Intel Core i5-12400F Processor",
     )
+
+
+def test_aliexpress_promotional_from_price_is_rejected() -> None:
+    assert is_implausibly_low_aliexpress_listing(
+        "https://www.aliexpress.com/item/100500000.html",
+        2.75,
+    )
+    assert not is_implausibly_low_aliexpress_listing(
+        "https://www.aliexpress.com/item/100500000.html",
+        10.00,
+    )
+
+
+def test_low_prices_from_other_marketplaces_are_not_rejected_by_aliexpress_rule() -> None:
+    assert not is_implausibly_low_aliexpress_listing(
+        "https://www.ebay.co.uk/itm/123",
+        2.75,
+    )
+
+
+def test_parts_or_non_working_titles_are_rejected() -> None:
+    assert is_parts_or_non_working_listing("Intel Core i9-12900K - BROKEN")
+    assert is_parts_or_non_working_listing("RTX 3080 not working - no display")
+    assert is_parts_or_non_working_listing("AMD Ryzen 7 5800X - parts only")
+    assert not is_parts_or_non_working_listing("Intel Core i9-12900K Processor")
 
 
 def test_overclockers_homepage_falls_back_to_product_search() -> None:

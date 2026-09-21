@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import * as fs from "fs/promises";
 import * as path from "path";
 import JSZip from "jszip";
+import { createBuildPerformancePortal } from "@/lib/performance-portal";
 
 /**
  * Splits the card into 3 roughly-equal vertical bands, but only ever cuts
@@ -61,32 +62,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const buildsRoot = path.resolve(process.cwd(), "..", "builds");
-    const numericBuildDir = path.join(buildsRoot, buildId);
-    const paddedBuildDir = path.join(buildsRoot, buildId.padStart(3, "0"));
-    let buildDir = numericBuildDir;
-    try {
-      await fs.stat(numericBuildDir);
-    } catch {
-      try {
-        await fs.stat(paddedBuildDir);
-        buildDir = paddedBuildDir;
-      } catch {
-        // New builds use their numeric ID until a padded directory is created.
-      }
-    }
-    const targetDir = path.join(buildDir, "Performance");
-
-    await fs.mkdir(targetDir, { recursive: true });
-    const targetFile = path.join(targetDir, "performance-data.json");
-
-    await fs.writeFile(
-      targetFile,
-      JSON.stringify(performanceData, null, 2),
-      "utf-8"
-    );
-
-    console.log(`[Performance Card] Saved JSON to ${targetFile}`);
+    const { targetDir, portalPath } = await createBuildPerformancePortal(buildId, performanceData);
+    console.log(`[Performance Card] Generated build-specific portal at ${portalPath}`);
 
     try {
       const { chromium } = await import("playwright");

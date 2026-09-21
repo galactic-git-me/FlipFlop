@@ -29,7 +29,9 @@ from app.gem_radar.inventory_match import fetch_inventory_awareness
 from app.gem_radar.marketplace import (
     fallback_listing_url,
     infer_marketplace,
+    is_implausibly_low_aliexpress_listing,
     is_malformed_awdit_listing,
+    is_parts_or_non_working_listing,
     usable_listing_url,
 )
 from app.gem_radar.observations import (
@@ -347,6 +349,8 @@ async def pipeline_status_endpoint(
                 "cpkAssignedCount": 0,
                 "marketPricedCount": 0,
                 "classifiedCount": 0,
+                "eligibleScoreCount": 0,
+                "ineligibleScoreCount": 0,
                 "processedPercent": 0,
                 "excludedAuctionCount": 0,
                 "byVendor": {},
@@ -390,9 +394,21 @@ async def pipeline_status_endpoint(
                             WHERE mp.median_price IS NOT NULL
                               AND mp.listing_count >= :min_listings
                         ) AS priced_count,
-                        COUNT(DISTINCT o.listing_id) FILTER (
-                            WHERE sl.classification IS NOT NULL
-                        ) AS classified_count
+                    COUNT(DISTINCT o.listing_id) FILTER (
+                        WHERE sl.classification IS NOT NULL
+                    ) AS classified_count,
+                    COUNT(DISTINCT o.listing_id) FILTER (
+                        WHERE mp.median_price IS NOT NULL
+                          AND mp.listing_count >= :min_listings
+                          AND sl.classification IS NOT NULL
+                          AND sl.eligible IS TRUE
+                    ) AS eligible_score_count,
+                    COUNT(DISTINCT o.listing_id) FILTER (
+                        WHERE mp.median_price IS NOT NULL
+                          AND mp.listing_count >= :min_listings
+                          AND sl.classification IS NOT NULL
+                          AND sl.eligible IS NOT TRUE
+                    ) AS ineligible_score_count
                     FROM gem_radar_listing_observations o
                     LEFT JOIN gem_radar_listing_cpk lc ON lc.listing_id = o.listing_id
                     LEFT JOIN gem_radar_cpk_market_price mp ON mp.cpk = lc.cpk
@@ -403,12 +419,14 @@ async def pipeline_status_endpoint(
                 ),
                 {"run_ids": run_ids, "min_listings": MIN_LISTINGS_FOR_SETTLED_PRICE},
             )
-            for run_id, source, ingested, cpk, priced, classified in progress_rows:
+            for run_id, source, ingested, cpk, priced, classified, eligible_score, ineligible_score in progress_rows:
                 scan = run_id_to_scan[run_id]
                 scan["ingestedCount"] += ingested
                 scan["cpkAssignedCount"] += cpk
                 scan["marketPricedCount"] += priced
                 scan["classifiedCount"] += classified
+                scan["eligibleScoreCount"] += eligible_score
+                scan["ineligibleScoreCount"] += ineligible_score
                 vendor = source or "unknown"
                 scan["byVendor"][vendor] = scan["byVendor"].get(vendor, 0) + ingested
 
@@ -838,10 +856,12 @@ async def get_scored_listings(
             "gem_radar.scored_listings.malformed_awdit_filtered",
             count=malformed_awdit_count,
         )
-        scored = [
-            row for row in scored
-            if not is_malformed_awdit_listing(row.url, row.title)
-        ]
+    scored = [
+        row for row in scored
+        if not is_malformed_awdit_listing(row.url, row.title)
+        and not is_implausibly_low_aliexpress_listing(row.url, row.delivered_price)
+        and not is_parts_or_non_working_listing(row.title)
+    ]
     if not scored:
         return []
 
@@ -960,6 +980,8 @@ async def get_scored_listings_current(
     scored = [
         row for row in scored
         if not is_malformed_awdit_listing(row.url, row.title)
+        and not is_implausibly_low_aliexpress_listing(row.url, row.delivered_price)
+        and not is_parts_or_non_working_listing(row.title)
     ]
 
     # market_lower/median/upper_price and pct_offset were added via a raw
@@ -1058,6 +1080,12 @@ async def _fetch_cpk_price_fields(db: AsyncSession, ids: list[int]) -> dict[int,
 @router.get("/scored-listings-latest-run")
 async def get_scored_listings_latest_run(
     environment: Literal["DEV", "LIVE"] | None = Query(default=None),
+    limit: int = Query(
+        default=500,
+        ge=1,
+        le=1000,
+        description="Maximum actionable listings to return",
+    ),
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
 ) -> list[dict]:
@@ -1107,11 +1135,14 @@ async def get_scored_listings_latest_run(
             & (GemRadarScoredListing.scored_at == latest_scored_at.c.scored_at),
         )
         .order_by(GemRadarScoredListing.scored_at.desc())
+        .limit(limit)
     )
     scored = result.scalars().all()
     scored = [
         row for row in scored
         if not is_malformed_awdit_listing(row.url, row.title)
+        and not is_implausibly_low_aliexpress_listing(row.url, row.delivered_price)
+        and not is_parts_or_non_working_listing(row.title)
     ]
 
     cpk_price_fields = await _fetch_cpk_price_fields(db, [s.id for s in scored])
@@ -1949,10 +1980,9 @@ async def _fetch_best_gem_for_category(db: AsyncSession, category: str, since, r
         result = await db.execute(fallback_query)
         best = result.scalar_one_or_none()
 
-    # A category can legitimately have no active, recent listing after the
-    # quality filters. Do not dereference None here: the dashboard treats a
-    # null category result as "no qualifying gem" and can still render the
-    # market-wide snapshot.
+    # It is normal for a category to have no active, qualifying listing. The
+    # dashboard treats null as an empty card; never turn absence of a gem into
+    # a whole-page 500 while live ingestion is in progress.
     if best is None:
         return None
 
@@ -2632,14 +2662,28 @@ async def _submit_scan_body(
             count=len(malformed_awdit),
             titles=[listing.title for listing in malformed_awdit[:5]],
         )
-        payload = payload.model_copy(
-            update={
-                "listings": [
-                    listing for listing in payload.listings
-                    if not is_malformed_awdit_listing(listing.url, listing.title)
-                ]
-            }
+    implausibly_low_aliexpress = [
+        listing for listing in payload.listings
+        if is_implausibly_low_aliexpress_listing(listing.url, listing.current_delivered_price)
+    ]
+    if implausibly_low_aliexpress:
+        log.warning(
+            "gem_radar.reject_implausibly_low_aliexpress_listings",
+            count=len(implausibly_low_aliexpress),
+            titles=[listing.title for listing in implausibly_low_aliexpress[:5]],
         )
+    payload = payload.model_copy(
+        update={
+            "listings": [
+                listing for listing in payload.listings
+                if not is_malformed_awdit_listing(listing.url, listing.title)
+                and not is_implausibly_low_aliexpress_listing(
+                    listing.url, listing.current_delivered_price
+                )
+                and not is_parts_or_non_working_listing(listing.title)
+            ]
+        }
+    )
 
     # Search terms are configured by component category, but individual
     # listing payloads do not carry that field.  Preserve the search-level
@@ -3172,14 +3216,28 @@ async def ingest_listings(
             count=len(malformed_awdit),
             titles=[listing.title for listing in malformed_awdit[:5]],
         )
-        payload = payload.model_copy(
-            update={
-                "listings": [
-                    listing for listing in payload.listings
-                    if not is_malformed_awdit_listing(listing.url, listing.title)
-                ]
-            }
+    implausibly_low_aliexpress = [
+        listing for listing in payload.listings
+        if is_implausibly_low_aliexpress_listing(listing.url, listing.current_delivered_price)
+    ]
+    if implausibly_low_aliexpress:
+        log.warning(
+            "gem_radar.reject_implausibly_low_aliexpress_listings",
+            count=len(implausibly_low_aliexpress),
+            titles=[listing.title for listing in implausibly_low_aliexpress[:5]],
         )
+    payload = payload.model_copy(
+        update={
+            "listings": [
+                listing for listing in payload.listings
+                if not is_malformed_awdit_listing(listing.url, listing.title)
+                and not is_implausibly_low_aliexpress_listing(
+                    listing.url, listing.current_delivered_price
+                )
+                and not is_parts_or_non_working_listing(listing.title)
+            ]
+        }
+    )
 
     # Collect all listing IDs from recent observations (7-day window)
     existing_ids = set()

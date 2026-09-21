@@ -152,6 +152,13 @@ async def run_benchmark_refresh(run_type: str = "daily") -> dict:
         cpu_records = await fetch_passmark_cpus()
         gpu_records = await fetch_passmark_gpus()
         disk_records = await fetch_passmark_disks()
+        if not cpu_records or not gpu_records:
+            missing = ", ".join(
+                name
+                for name, records in (("CPU", cpu_records), ("GPU", gpu_records))
+                if not records
+            )
+            raise RuntimeError(f"PassMark returned no valid {missing} benchmark records")
         all_records = cpu_records + gpu_records + disk_records
 
         if run_type == "daily":

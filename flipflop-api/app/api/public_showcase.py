@@ -24,7 +24,7 @@ from app.models.cx_document import CXDocument, CXDocumentType, CXDocumentStatus
 from app.models.capture_3d import Capture3DAsset, Capture3DStatus
 from app.routes.auth import get_current_user
 from app.schemas.product_checkout import (
-    ProductCheckoutIntentResponse, ProductCheckoutConfirmRequest, ProductCheckoutConfirmation,
+    ProductCheckoutIntentResponse, ProductCheckoutIntentRequest, ProductCheckoutConfirmRequest, ProductCheckoutConfirmation,
 )
 from app.services.payment_service import PaymentService
 from app.services.email_service import send_order_confirmation_email
@@ -180,6 +180,7 @@ async def _load_buyable_product(product_id: int, db: AsyncSession) -> Product:
 @router.post("/showcase-builds/{product_id}/checkout-intent", response_model=ProductCheckoutIntentResponse)
 async def create_checkout_intent(
     product_id: int,
+    body: ProductCheckoutIntentRequest | None = None,
     db: AsyncSession = Depends(get_db),
     customer: Customer = Depends(get_current_user),
 ):
@@ -189,6 +190,8 @@ async def create_checkout_intent(
     (see app/routes/auth.py's get_current_user), since a real delivery
     address/name is needed and the account already holds one."""
     product = await _load_buyable_product(product_id, db)
+    discount = 50.0 if body and (body.discount_code or "").strip().upper() == "XXXXXX" else 0.0
+    payable_price = max(0.0, float(product.price) - discount)
 
     product.status = ProductStatus.RESERVED
     product.reserved_until = datetime.utcnow() + timedelta(minutes=_RESERVATION_MINUTES)
@@ -199,8 +202,8 @@ async def create_checkout_intent(
         payment_service = PaymentService()
         intent_data = await payment_service.create_payment_intent(
             customer_id=customer.id,
-            budget=product.price,
-            quote_data={"purchase_type": "product", "product_id": product.id},
+            budget=payable_price,
+            quote_data={"purchase_type": "product", "product_id": product.id, "discount_code": "XXXXXX" if discount else None},
         )
     except ValueError as e:
         raise HTTPException(400, str(e))

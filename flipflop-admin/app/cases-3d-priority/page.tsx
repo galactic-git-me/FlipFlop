@@ -56,12 +56,8 @@ interface ReferenceCandidateResponse {
   candidates: ReferenceCandidate[];
   approved_selection?: { status?: string; images?: ReferenceCandidate[] };
 }
-
-interface ImageSearchResult extends ReferenceCandidate {
-  thumbnail_url?: string | null;
-}
-
 const DIRECT_BACKEND_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4311").replace(/\/$/, "");
+const GOOGLE_CSE_ENGINE_ID = process.env.NEXT_PUBLIC_GOOGLE_CSE_ENGINE_ID;
 
 const sourcingLabels: Array<[string, string]> = [
   ["product_images", "Images"],
@@ -232,10 +228,7 @@ export default function Cases3DPriorityPage() {
   const [referenceNotice, setReferenceNotice] = useState<string | null>(null);
   const [newReferenceUrl, setNewReferenceUrl] = useState("");
   const [newReferenceSource, setNewReferenceSource] = useState<ReferenceSource>("manufacturer");
-  const [imageSearchQuery, setImageSearchQuery] = useState("");
-  const [imageSearchResults, setImageSearchResults] = useState<ImageSearchResult[]>([]);
-  const [imageSearchBusy, setImageSearchBusy] = useState(false);
-  const [imageSearchError, setImageSearchError] = useState<string | null>(null);
+  const [googleCseLoadError, setGoogleCseLoadError] = useState<string | null>(null);
   const [generatedReviewUrl, setGeneratedReviewUrl] = useState<string | null>(null);
   const [generatingCaseId, setGeneratingCaseId] = useState<number | null>(null);
   const [evidenceReview, setEvidenceReview] = useState<{ caseItem: PriorityCaseItem; stage: "product_images" | "youtube_video" | "meshy_generation" } | null>(null);
@@ -317,23 +310,17 @@ export default function Cases3DPriorityPage() {
     }
   };
 
-  const searchGoogleImages = async (caseId: number) => {
-    const query = imageSearchQuery.trim();
-    if (query.length < 2) return;
-    setImageSearchBusy(true);
-    setImageSearchError(null);
-    try {
-      const response = await fetch(`/api/cases/${caseId}/3d-reference-image-search?query=${encodeURIComponent(query)}`, { cache: "no-store" });
-      const data = await readJsonResponse<{ results?: ImageSearchResult[]; detail?: string }>(response);
-      if (!response.ok) throw new Error(data.detail || "Could not search Google Images");
-      setImageSearchResults(data.results || []);
-    } catch (caught) {
-      setImageSearchError(caught instanceof Error ? caught.message : "Could not search Google Images");
-      setImageSearchResults([]);
-    } finally {
-      setImageSearchBusy(false);
-    }
-  };
+  useEffect(() => {
+    if (!GOOGLE_CSE_ENGINE_ID || evidenceReview?.stage !== "product_images") return;
+    document.getElementById("google-programmable-search")?.remove();
+    setGoogleCseLoadError(null);
+    const script = document.createElement("script");
+    script.id = "google-programmable-search";
+    script.async = true;
+    script.src = `https://cse.google.com/cse.js?cx=${encodeURIComponent(GOOGLE_CSE_ENGINE_ID)}`;
+    script.onerror = () => setGoogleCseLoadError("Google's approved-sites search could not load. Check your connection or any content blocker, then reopen this panel.");
+    document.head.appendChild(script);
+  }, [evidenceReview?.stage]);
 
   const approveReferences = async (caseId: number) => {
     if (selectedReferences.length !== 4) return;
@@ -422,8 +409,6 @@ export default function Cases3DPriorityPage() {
   const openEvidenceReview = async (caseItem: PriorityCaseItem, stage: "product_images" | "youtube_video" | "meshy_generation") => {
     if (stage === "product_images") {
       setImageSearchQuery(`${caseItem.name} PC case product photos`);
-      setImageSearchResults([]);
-      setImageSearchError(null);
     }
     if (stage === "product_images" || stage === "meshy_generation") await openReferenceSelection(caseItem.id);
     setEvidenceReview({ caseItem, stage });
@@ -868,56 +853,15 @@ export default function Cases3DPriorityPage() {
               {evidenceReview.stage === "product_images" && (
                 <>
                   <p className="mb-4 text-sm text-slate-300">Select exactly four images. The first selected image is the texture and colour master.</p>
-                  <section aria-label="Google Images search" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
-                    <label htmlFor="google-image-search" className="text-xs font-semibold uppercase tracking-wide text-cyan-200">Search Google Images</label>
-                    <p className="mt-1 text-xs text-slate-400">Find additional angles without leaving the approval screen. Check that all four pictures show the same chassis and that you have permission to use them.</p>
-                    <form
-                      className="mt-3 flex flex-col gap-2 sm:flex-row"
-                      onSubmit={event => {
-                        event.preventDefault();
-                        void searchGoogleImages(evidenceReview.caseItem.id);
-                      }}
-                    >
-                      <div className="relative min-w-0 flex-1">
-                        <Search aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-                        <input
-                          id="google-image-search"
-                          type="search"
-                          value={imageSearchQuery}
-                          onChange={event => setImageSearchQuery(event.target.value)}
-                          placeholder="Case model and colour"
-                          className="w-full rounded-md border border-slate-700 bg-slate-950 py-2.5 pl-9 pr-3 text-sm text-slate-100 outline-none transition-colors placeholder:text-slate-600 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
-                        />
-                      </div>
-                      <Button type="submit" disabled={imageSearchBusy || imageSearchQuery.trim().length < 2} className="cursor-pointer bg-cyan-700 hover:bg-cyan-600">
-                        {imageSearchBusy ? <RefreshCw className="mr-2 h-4 w-4 animate-spin motion-reduce:animate-none" /> : <Search className="mr-2 h-4 w-4" />}
-                        {imageSearchBusy ? "Searching…" : "Search images"}
-                      </Button>
-                    </form>
-                    {imageSearchError && <p role="alert" className="mt-3 text-xs text-red-300">{imageSearchError}</p>}
-                    {imageSearchResults.length > 0 && (
-                      <div className="mt-4">
-                        <p className="mb-2 text-xs text-slate-400">Google results · click a picture to add or remove it from your four selections</p>
-                        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
-                          {imageSearchResults.map(result => {
-                            const selectedIndex = selectedReferences.findIndex(item => item.url === result.url);
-                            return (
-                              <button
-                                key={result.url}
-                                type="button"
-                                onClick={() => toggleReference(result)}
-                                aria-pressed={selectedIndex >= 0}
-                                title={result.label || "Google Images result"}
-                                className={`relative cursor-pointer overflow-hidden rounded-md border bg-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700 hover:border-cyan-500/70"}`}
-                              >
-                                { }
-                                <img src={result.thumbnail_url || result.url} alt={result.label || "Google Images result"} className="h-28 w-full object-contain" loading="lazy" />
-                                {selectedIndex >= 0 && <span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{selectedIndex + 1}</span>}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
+                  <section aria-label="Approved-sites image search" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
+                    <h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">Search approved sites</h3>
+                    <p className="mt-1 text-xs text-slate-400">Search Google&apos;s approved-site index below, switch to <strong>Image</strong>, then open a suitable result and add its direct image URL or upload the image.</p>
+                    {!GOOGLE_CSE_ENGINE_ID ? (
+                      <p role="alert" className="mt-3 text-xs text-red-300">Set NEXT_PUBLIC_GOOGLE_CSE_ENGINE_ID in the admin environment to enable this search.</p>
+                    ) : googleCseLoadError ? (
+                      <p role="alert" className="mt-3 text-xs text-red-300">{googleCseLoadError}</p>
+                    ) : (
+                      <div className="gcse-search mt-4" data-enableImageSearch="true" data-linkTarget="_blank" />
                     )}
                   </section>
                   {referenceBusy && !referenceData ? (
