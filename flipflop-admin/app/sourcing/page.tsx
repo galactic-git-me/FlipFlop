@@ -337,10 +337,11 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, displayValue
   );
 }
 
-function ScoresGauge({ eligible, cpkFailures, marketFailures, ineligible, max }: {
+function ScoresGauge({ eligible, cpkFailures, marketFailures, upstreamFailureStart, ineligible, max }: {
   eligible: number;
   cpkFailures: number;
   marketFailures: number;
+  upstreamFailureStart: number;
   ineligible: number;
   max: number;
 }) {
@@ -364,6 +365,13 @@ function ScoresGauge({ eligible, cpkFailures, marketFailures, ineligible, max }:
   const upstreamFailures = Math.min(
     Math.max(cpkFailures, 0) + Math.max(marketFailures, 0),
     Math.max(safeMax - allocated, 0),
+  );
+  // Match the upstream gauges' population positions.  M Prices failures
+  // begin immediately after the successfully market-priced listings; CPK
+  // failures follow them.  The thin combined arc therefore begins at the
+  // M Prices failure position, not after the Score-stage bands.
+  const upstreamFailureStartLength = circumference * (
+    Math.min(Math.max(upstreamFailureStart, 0), safeMax) / (safeMax || 1)
   );
   const pct = safeMax > 0 ? (segments[0].value / safeMax) * 100 : 0;
   let offset = 0;
@@ -412,7 +420,7 @@ function ScoresGauge({ eligible, cpkFailures, marketFailures, ineligible, max }:
             strokeWidth={2}
             fill="none"
             strokeDasharray={`${circumference * (upstreamFailures / (safeMax || 1))} ${circumference}`}
-            strokeDashoffset={-offset}
+            strokeDashoffset={-upstreamFailureStartLength}
             strokeLinecap="butt"
             transform="rotate(-90 30 30)"
             className="transition-all duration-500"
@@ -1035,6 +1043,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                       eligible={successfulScores}
                       cpkFailures={failedCpk}
                       marketFailures={failedMarketPrices}
+                      upstreamFailureStart={scan.marketPricedCount}
                       ineligible={ineligibleScores}
                       max={searchTermTotal}
                     />
