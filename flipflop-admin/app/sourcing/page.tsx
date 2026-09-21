@@ -254,10 +254,11 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, label, color
   const safeMax = Math.max(max, 0);
   const successful = Math.min(Math.max(value, 0), safeMax);
   const failedCount = Math.min(Math.max(failed, 0), Math.max(safeMax - successful, 0));
-  const skippedCount = Math.min(
-    Math.max(skipped, 0),
-    Math.max(safeMax - successful - failedCount, 0),
-  );
+  // Upstream-blocked work is a lineage marker, rather than a mutually
+  // exclusive part of this stage's result. It may overlap the successful
+  // portion when the API reports stage totals from different pipeline
+  // snapshots, so do not clip it to this gauge's remaining blank space.
+  const skippedCount = Math.min(Math.max(skipped, 0), safeMax);
   // Percentage is successful output only. Failed/unavailable work is shown
   // separately as patterned segments; empty track space remains pending.
   const pct = safeMax > 0 ? (successful / safeMax) * 100 : 0;
@@ -880,9 +881,14 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
               failedIngested + failedCpk,
               Math.max(searchTermTotal - scan.marketPricedCount - failedMarketPrices, 0),
             );
+            // Keep the full upstream-loss lineage visible on Scores. For
+            // example, 7% failing CPK plus 34% failing Market Prices must
+            // render as a 41% thin pink arc, even if the score counter is
+            // reported from a later snapshot and already exceeds the
+            // remaining blank portion of its own ring.
             const skippedScores = Math.min(
               failedIngested + failedCpk + failedMarketPrices,
-              Math.max(searchTermTotal - scan.classifiedCount, 0),
+              searchTermTotal,
             );
 
             return (
