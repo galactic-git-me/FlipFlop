@@ -11,6 +11,12 @@ Used in two phases:
 - Post-purchase: Regenerate with as-bought BOM (including upsells) for personalised portal
 
 config_hash ties catalogue looks to as-bought books/portal.
+
+PUBLIC DISPLAY NAMING:
+- Budget tier: Just ship name (e.g., "Reliant")
+- Mid-range tier: Ship name + " Pro" (e.g., "Reliant Pro")
+- High-end tier: Ship name + " Ultra" (e.g., "Reliant Ultra")
+- DO NOT use "Base" in customer-facing cards
 """
 import json
 import hashlib

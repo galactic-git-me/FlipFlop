@@ -18,12 +18,14 @@ Implements Michael's high-priority requirements:
 
 ### Naming Scheme
 
-**Pattern**: `{Ship Name} [{Suffix}]`
+**PUBLIC DISPLAY PATTERN**: `{Ship Name} [{Suffix}]`
 
-**Tier Suffixes**:
-- **Budget** → No suffix (e.g., "Miranda")
-- **Mid-range** → " Pro" (e.g., "Miranda Pro")
-- **High-end** → " Ultra" (e.g., "Miranda Ultra")
+**Tier Display (Customer-Facing)**:
+- **Budget** → Just ship name, no suffix (e.g., "Reliant")
+- **Mid-range** → Ship + " Pro" (e.g., "Reliant Pro")
+- **High-end** → Ship + " Ultra" (e.g., "Reliant Ultra")
+
+**⚠️ IMPORTANT**: DO NOT use "Base" in customer-facing UI, listing packs, performance/spec HTML, or registration cards. Internal data model can still use Budget/Mid-range/High-end.
 
 ### Customer Type → Ship Name Mapping
 

@@ -1,10 +1,13 @@
 """
 Star Trek ship naming for curated playbooks.
 
-Maps customer types × tiers to starship names:
-- Base tier (Budget) = ship name (e.g., "Reliant")
-- Pro tier (Mid-range) = ship name + " Pro" (e.g., "Reliant Pro")
-- Ultra tier (High-end) = ship name + " Ultra" (e.g., "Reliant Ultra")
+PUBLIC DISPLAY (customer-facing):
+- Budget tier = ship name only (e.g., "Reliant")
+- Mid-range tier = ship name + " Pro" (e.g., "Reliant Pro")
+- High-end tier = ship name + " Ultra" (e.g., "Reliant Ultra")
+
+DO NOT use "Base" on customer-facing UI, listing packs, perf/spec HTML, or registration cards.
+Internal data model can still use Budget/Mid-range/High-end.
 
 Ship names stamped by BuildBot on all 24 playbooks (bot approval queue ids 98-121).
 
@@ -216,20 +219,27 @@ def enrich_curated_build_with_ship_name(build: dict) -> dict:
 
 def get_tier_display_name(tier: str) -> str:
     """
-    Get friendly tier display name for UI.
+    Get friendly tier display name for customer-facing UI.
+    
+    DO NOT use "Base" - Budget tier should just be the ship name without suffix.
     
     Args:
         tier: Tier (Budget, Mid-range, High-end)
     
     Returns:
-        Display name (Base, Pro, Ultra)
+        Display suffix for tier ("" for Budget, "Pro" for Mid-range, "Ultra" for High-end)
+    
+    Note:
+        Budget tier returns empty string - display just the ship name.
+        Mid-range returns "Pro" - display "{Ship} Pro"
+        High-end returns "Ultra" - display "{Ship} Ultra"
     """
-    tier_map = {
-        "Budget": "Base",
+    tier_suffix_map = {
+        "Budget": "",  # Just ship name, no "Base"
         "Mid-range": "Pro",
         "High-end": "Ultra"
     }
-    return tier_map.get(tier, tier)
+    return tier_suffix_map.get(tier, "")
 
 
 def get_bot_approval_queue_id(build_id: str) -> Optional[int]:

@@ -12,18 +12,23 @@ Refactor existing pre-built card tooling into **3 reusable services** shared by 
 
 ## Ship Names (LOCKED ✅)
 
-| Customer Type | Ship Name | Example (Pro) |
-|---------------|-----------|---------------|
-| Great-value Gaming | **Reliant** | Reliant Pro |
-| High-performance Gaming | **Defiant** | Defiant Pro |
-| Student Hybrid | **Voyager** | Voyager Pro |
-| Business & Office | **Excelsior** | Excelsior Pro |
-| Content Creation | **Galaxy** | Galaxy Pro |
-| AI Workstation | **Enterprise** | Enterprise Pro |
-| Software Development | **Titan** | Titan Pro |
-| Family & Home | **Stargazer** | Stargazer Pro |
+| Customer Type | Ship Name | Budget | Mid-range | High-end |
+|---------------|-----------|--------|-----------|----------|
+| Great-value Gaming | **Reliant** | Reliant | Reliant Pro | Reliant Ultra |
+| High-performance Gaming | **Defiant** | Defiant | Defiant Pro | Defiant Ultra |
+| Student Hybrid | **Voyager** | Voyager | Voyager Pro | Voyager Ultra |
+| Business & Office | **Excelsior** | Excelsior | Excelsior Pro | Excelsior Ultra |
+| Content Creation | **Galaxy** | Galaxy | Galaxy Pro | Galaxy Ultra |
+| AI Workstation | **Enterprise** | Enterprise | Enterprise Pro | Enterprise Ultra |
+| Software Development | **Titan** | Titan | Titan Pro | Titan Ultra |
+| Family & Home | **Stargazer** | Stargazer | Stargazer Pro | Stargazer Ultra |
 
-**Display pattern**: `{Ship}`, `{Ship} Pro`, `{Ship} Ultra` for Budget / Mid / High
+**PUBLIC DISPLAY PATTERN**:
+- Budget → `{Ship}` (e.g., "Reliant")
+- Mid-range → `{Ship} Pro` (e.g., "Reliant Pro")
+- High-end → `{Ship} Ultra` (e.g., "Reliant Ultra")
+
+**⚠️ DO NOT use "Base"** - Budget tier is just the ship name without suffix
 
 **Special case**: FF-AIW-03 (AI Workstation High) = "Enterprise Ultra" (bespoke/consult only)
 

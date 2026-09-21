@@ -74,9 +74,9 @@ const CUSTOMER_TYPES = [
 ]
 
 const TIERS = [
-  { id: 'budget', label: 'Base', icon: '💰', description: 'Great value for essential performance', sublabel: 'Budget' },
-  { id: 'mid', label: 'Pro', icon: '⚡', description: 'Balanced power and price', sublabel: 'Mid-range' },
-  { id: 'high', label: 'Ultra', icon: '🚀', description: 'Maximum performance', sublabel: 'High-end' },
+  { id: 'budget', label: 'Budget', icon: '💰', description: 'Great value for essential performance', display: '' },
+  { id: 'mid', label: 'Pro', icon: '⚡', description: 'Balanced power and price', display: 'Pro' },
+  { id: 'high', label: 'Ultra', icon: '🚀', description: 'Maximum performance', display: 'Ultra' },
 ]
 
 export default function BuildWizard() {
