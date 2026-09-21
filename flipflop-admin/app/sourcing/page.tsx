@@ -249,19 +249,19 @@ function coalesceScansBySearchId(scans: ScanProgress[]): ScanProgress[] {
 // Small circular gauge -- replaces the earlier linear progress bars per
 // request. `value`/`max` drive the sweep angle; the label underneath gives
 // the raw fraction since a gauge alone can't show absolute counts.
-function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, label, color }: { value: number; max: number; failed?: number; skipped?: number; skippedStart?: number; label: string; color: string }) {
+function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, displayValue, label, color }: { value: number; max: number; failed?: number; skipped?: number; skippedStart?: number; displayValue?: number; label: string; color: string }) {
   const patternId = `gauge-hatch-${useId().replace(/:/g, "")}`;
   const safeMax = Math.max(max, 0);
   const successful = Math.min(Math.max(value, 0), safeMax);
   const failedCount = Math.min(Math.max(failed, 0), Math.max(safeMax - successful, 0));
-  // Upstream-blocked work is a lineage marker, rather than a mutually
-  // exclusive part of this stage's result. It may overlap the successful
-  // portion when the API reports stage totals from different pipeline
-  // snapshots, so do not clip it to this gauge's remaining blank space.
-  const skippedCount = Math.min(Math.max(skipped, 0), safeMax);
+  const skippedCount = Math.min(
+    Math.max(skipped, 0),
+    Math.max(safeMax - successful - failedCount, 0),
+  );
   // Percentage is successful output only. Failed/unavailable work is shown
   // separately as patterned segments; empty track space remains pending.
-  const pct = safeMax > 0 ? (successful / safeMax) * 100 : 0;
+  const reportedValue = Math.min(Math.max(displayValue ?? value, 0), safeMax);
+  const pct = safeMax > 0 ? (reportedValue / safeMax) * 100 : 0;
   const radius = 24;
   const circumference = 2 * Math.PI * radius;
   // Successful output and current-stage failures share the full gauge width.
@@ -328,7 +328,7 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, label, color
         </text>
       </svg>
       <div className="text-[11px] text-white mt-1 text-center">{label}</div>
-      <div className="text-[11px] text-slate-300 text-center">{value}/{max}</div>
+      <div className="text-[11px] text-slate-300 text-center">{reportedValue}/{max}</div>
     </div>
   );
 }
@@ -881,15 +881,17 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
               failedIngested + failedCpk,
               Math.max(searchTermTotal - scan.marketPricedCount - failedMarketPrices, 0),
             );
-            // Keep the full upstream-loss lineage visible on Scores. For
-            // example, 7% failing CPK plus 34% failing Market Prices must
-            // render as a 41% thin pink arc, even if the score counter is
-            // reported from a later snapshot and already exceeds the
-            // remaining blank portion of its own ring.
+            // Scores are counted independently of market-price settlement,
+            // so the raw classification total can include listings that
+            // failed upstream. Partition those overlapping listings out of
+            // the thick successful segment: upstream losses remain a thin
+            // pink arc, successful scores are solid, and the track stays
+            // blank for work that has not reached a terminal outcome.
             const skippedScores = Math.min(
               failedIngested + failedCpk + failedMarketPrices,
-              searchTermTotal,
+              Math.min(scan.classifiedCount, searchTermTotal),
             );
+            const successfulScores = Math.max(scan.classifiedCount - skippedScores, 0);
 
             return (
               <PixelCard key={scan.searchId || scan.query} variant={isComplete ? "emerald" : "default"}>
@@ -939,7 +941,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                     <Gauge value={scan.ingestedCount} max={searchTermTotal} failed={failedIngested} label="Ingested" color="#8b5cf6" />
                     <Gauge value={scan.cpkAssignedCount} max={searchTermTotal} failed={failedCpk} skipped={skippedCpk} skippedStart={scan.ingestedCount} label="CPK" color="#10b981" />
                     <Gauge value={scan.marketPricedCount} max={searchTermTotal} failed={failedMarketPrices} skipped={skippedMarketPrices} skippedStart={scan.cpkAssignedCount} label="M Prices" color="#f59e0b" />
-                    <Gauge value={scan.classifiedCount} max={searchTermTotal} failed={failedScores} skipped={skippedScores} skippedStart={scan.marketPricedCount} label="Scores" color="#ec4899" />
+                    <Gauge value={successfulScores} displayValue={scan.classifiedCount} max={searchTermTotal} failed={failedScores} skipped={skippedScores} skippedStart={successfulScores} label="Scores" color="#ec4899" />
                   </div>
 
                   {vendorEntries.length > 0 && (
