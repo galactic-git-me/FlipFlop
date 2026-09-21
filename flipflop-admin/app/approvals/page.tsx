@@ -284,7 +284,7 @@ function ApprovalCard({
             </div>
           )}
 
-          {(item.sell_price_gbp || item.total_cost_gbp || item.est_margin_pct) && (
+          {(item.sell_price_gbp != null || item.total_cost_gbp != null || typeof item.est_margin_pct === "number") && (
             <div className="grid grid-cols-3 gap-4 p-3 rounded-lg bg-slate-800/50 border border-slate-700">
               {item.sell_price_gbp && (
                 <div>
@@ -302,7 +302,7 @@ function ApprovalCard({
                   </div>
                 </div>
               )}
-              {item.est_margin_pct !== undefined && (
+              {typeof item.est_margin_pct === "number" && (
                 <div>
                   <div className="text-xs text-slate-400">Margin</div>
                   <div className="text-lg font-bold text-cyan-400">
