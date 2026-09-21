@@ -330,9 +330,10 @@ function ApprovalPayloadPreview({ type, payload }: { type: string; payload: Reco
           {images.map((url, idx) => (
             <img
               key={idx}
-              src={url}
+              src={url?.startsWith("http") ? `/api/proxy-image?url=${encodeURIComponent(url)}` : url}
               alt={`Photo ${idx + 1}`}
-              className="w-full h-32 object-cover rounded border border-slate-700"
+              referrerPolicy="no-referrer"
+              className="w-full h-32 object-cover rounded border border-slate-700 bg-slate-900"
             />
           ))}
         </div>
@@ -358,9 +359,14 @@ function ApprovalPayloadPreview({ type, payload }: { type: string; payload: Reco
         )}
         {payload.preview_image_url && (
           <img
-            src={payload.preview_image_url as string}
+            src={
+              String(payload.preview_image_url).startsWith("http")
+                ? `/api/proxy-image?url=${encodeURIComponent(String(payload.preview_image_url))}`
+                : String(payload.preview_image_url)
+            }
             alt="Preview"
-            className="w-64 h-64 object-cover rounded border border-slate-700"
+            referrerPolicy="no-referrer"
+            className="w-64 h-64 object-cover rounded border border-slate-700 bg-slate-900"
           />
         )}
         {payload.poly_count && (
