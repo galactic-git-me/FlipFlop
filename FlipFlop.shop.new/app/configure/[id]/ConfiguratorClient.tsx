@@ -19,8 +19,8 @@ export function ConfiguratorClient({ build, cases }: Props) {
   const [showARView, setShowARView] = useState(false)
   
   useEffect(() => {
-    // Track playbook entry
-    trackEvent('playbook_entered', build.id, {
+    // Track playbook/tier shown (step 3 in Michael's event order)
+    trackEvent('playbook_tier_shown', build.id, {
       segment: build.segment,
       tier: build.tier,
     })
