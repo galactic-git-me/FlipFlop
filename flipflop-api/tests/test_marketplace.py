@@ -2,6 +2,7 @@ from app.gem_radar.marketplace import (
     fallback_listing_url,
     infer_listing_source,
     is_implausibly_low_aliexpress_listing,
+    is_parts_or_non_working_listing,
     is_malformed_awdit_listing,
     usable_listing_url,
 )
@@ -50,6 +51,13 @@ def test_low_prices_from_other_marketplaces_are_not_rejected_by_aliexpress_rule(
         "https://www.ebay.co.uk/itm/123",
         2.75,
     )
+
+
+def test_parts_or_non_working_titles_are_rejected() -> None:
+    assert is_parts_or_non_working_listing("Intel Core i9-12900K - BROKEN")
+    assert is_parts_or_non_working_listing("RTX 3080 not working - no display")
+    assert is_parts_or_non_working_listing("AMD Ryzen 7 5800X - parts only")
+    assert not is_parts_or_non_working_listing("Intel Core i9-12900K Processor")
 
 
 def test_overclockers_homepage_falls_back_to_product_search() -> None:

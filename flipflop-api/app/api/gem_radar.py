@@ -31,6 +31,7 @@ from app.gem_radar.marketplace import (
     infer_marketplace,
     is_implausibly_low_aliexpress_listing,
     is_malformed_awdit_listing,
+    is_parts_or_non_working_listing,
     usable_listing_url,
 )
 from app.gem_radar.observations import (
@@ -859,6 +860,7 @@ async def get_scored_listings(
         row for row in scored
         if not is_malformed_awdit_listing(row.url, row.title)
         and not is_implausibly_low_aliexpress_listing(row.url, row.delivered_price)
+        and not is_parts_or_non_working_listing(row.title)
     ]
     if not scored:
         return []
@@ -979,6 +981,7 @@ async def get_scored_listings_current(
         row for row in scored
         if not is_malformed_awdit_listing(row.url, row.title)
         and not is_implausibly_low_aliexpress_listing(row.url, row.delivered_price)
+        and not is_parts_or_non_working_listing(row.title)
     ]
 
     # market_lower/median/upper_price and pct_offset were added via a raw
@@ -1132,6 +1135,7 @@ async def get_scored_listings_latest_run(
         row for row in scored
         if not is_malformed_awdit_listing(row.url, row.title)
         and not is_implausibly_low_aliexpress_listing(row.url, row.delivered_price)
+        and not is_parts_or_non_working_listing(row.title)
     ]
 
     cpk_price_fields = await _fetch_cpk_price_fields(db, [s.id for s in scored])
@@ -2579,6 +2583,7 @@ async def _submit_scan_body(
                 and not is_implausibly_low_aliexpress_listing(
                     listing.url, listing.current_delivered_price
                 )
+                and not is_parts_or_non_working_listing(listing.title)
             ]
         }
     )
@@ -3132,6 +3137,7 @@ async def ingest_listings(
                 and not is_implausibly_low_aliexpress_listing(
                     listing.url, listing.current_delivered_price
                 )
+                and not is_parts_or_non_working_listing(listing.title)
             ]
         }
     )

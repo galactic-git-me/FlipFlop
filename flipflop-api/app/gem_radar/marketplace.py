@@ -19,6 +19,9 @@ from urllib.parse import quote_plus, unquote, urlparse
 # already-known source.
 _ASIN_PATTERN = re.compile(r"^B0[A-Z0-9]{8}$")
 _AWD_PROMO_BADGE_TITLE = re.compile(r"^save\s+\d+(?:\.\d+)?\s*%$", re.IGNORECASE)
+_PARTS_OR_NON_WORKING_TITLE = re.compile(
+    r"\b(?:broken|not[-\s]+working|parts?\s+only)\b", re.IGNORECASE
+)
 
 # AliExpress search cards can expose a variant, coupon, or "from" price
 # rather than the price for the product in the title. Such values are not
@@ -149,6 +152,11 @@ _FALLBACK_SEARCH_TEMPLATES: dict[str, str] = {
     "bargain_hardware": "https://www.bargainhardware.co.uk/catalogsearch/result/?q={query}",
     "google_shopping": "https://www.google.com/search?tbm=shop&q={query}",
 }
+
+
+def is_parts_or_non_working_listing(title: str | None) -> bool:
+    """Reject listings explicitly advertised as broken, non-working, or parts only."""
+    return bool(_PARTS_OR_NON_WORKING_TITLE.search(title or ""))
 
 
 def is_implausibly_low_aliexpress_listing(
