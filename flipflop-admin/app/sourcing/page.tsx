@@ -117,6 +117,8 @@ interface ScanProgress {
   cpkFailedCount?: number;
   marketPricedCount: number; // Listings with non-null market price
   classifiedCount: number;   // Listings with classification (GEM, SUPER_GEM, etc)
+  eligibleScoreCount?: number; // Market-priced listings with an eligible score
+  ineligibleScoreCount?: number; // Market-priced listings with a terminal ineligible score
   gemCount?: number;
   superGemCount?: number;
   processedPercent: number;  // % through full pipeline
@@ -232,7 +234,9 @@ function coalesceScansBySearchId(scans: ScanProgress[]): ScanProgress[] {
     existing.ingestedNewCount += scan.ingestedNewCount;
     existing.cpkAssignedCount += scan.cpkAssignedCount;
     existing.marketPricedCount += scan.marketPricedCount;
-    existing.classifiedCount += scan.classifiedCount;
+  existing.classifiedCount += scan.classifiedCount;
+  existing.eligibleScoreCount = (existing.eligibleScoreCount ?? 0) + (scan.eligibleScoreCount ?? 0);
+  existing.ineligibleScoreCount = (existing.ineligibleScoreCount ?? 0) + (scan.ineligibleScoreCount ?? 0);
     existing.gemCount = (existing.gemCount ?? 0) + (scan.gemCount ?? 0);
     existing.superGemCount = (existing.superGemCount ?? 0) + (scan.superGemCount ?? 0);
     existing.excludedAuctionCount += scan.excludedAuctionCount;
@@ -329,6 +333,61 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, displayValue
       </svg>
       <div className="text-[11px] text-white mt-1 text-center">{label}</div>
       <div className="text-[11px] text-slate-300 text-center">{reportedValue}/{max}</div>
+    </div>
+  );
+}
+
+function ScoresGauge({ eligible, cpkFailures, marketFailures, ineligible, max }: {
+  eligible: number;
+  cpkFailures: number;
+  marketFailures: number;
+  ineligible: number;
+  max: number;
+}) {
+  const id = useId().replace(/:/g, "");
+  const safeMax = Math.max(max, 0);
+  const radius = 24;
+  const circumference = 2 * Math.PI * radius;
+  const rawSegments = [
+    { value: eligible, color: "#ec4899", dotted: false, label: "eligible scores" },
+    { value: cpkFailures, color: "#ec4899", dotted: true, label: "CPK failures" },
+    { value: marketFailures, color: "#f59e0b", dotted: true, label: "M Prices failures" },
+    { value: ineligible, color: "#ec4899", dotted: true, label: "ineligible scores" },
+  ];
+  let allocated = 0;
+  const segments = rawSegments.map((segment) => {
+    const value = Math.min(Math.max(segment.value, 0), Math.max(safeMax - allocated, 0));
+    allocated += value;
+    return { ...segment, value };
+  });
+  const pct = safeMax > 0 ? (segments[0].value / safeMax) * 100 : 0;
+  let offset = 0;
+
+  return (
+    <div className="flex flex-col items-center justify-center">
+      <svg width={60} height={60} viewBox="0 0 60 60" className="drop-shadow-[1px_2px_1px_rgba(2,6,23,0.9)]" aria-label={`Scores: ${Math.round(pct)}% eligible`}>
+        <title>{segments.map((segment) => `${segment.label}: ${segment.value}`).join(", ")}</title>
+        <defs>{segments.filter((segment) => segment.dotted).map((segment, index) => (
+          <pattern key={`${segment.color}-${index}`} id={`${id}-dot-${index}`} width="4" height="4" patternUnits="userSpaceOnUse">
+            <rect width="4" height="4" fill="#334155" opacity="0.55" />
+            <circle cx="2" cy="2" r="0.7" fill={segment.color} opacity="0.95" />
+          </pattern>
+        ))}</defs>
+        <circle cx={30} cy={30} r={radius} stroke="#334155" strokeWidth={3} fill="none" />
+        {segments.map((segment, index) => {
+          const length = circumference * (segment.value / (safeMax || 1));
+          const start = offset;
+          offset += length;
+          return length > 0 ? <circle key={segment.label} cx={30} cy={30} r={radius}
+            stroke={segment.dotted ? `url(#${id}-dot-${index})` : segment.color}
+            strokeWidth={7.5} fill="none" strokeDasharray={`${length} ${circumference - length}`}
+            strokeDashoffset={-start} strokeLinecap="butt" transform="rotate(-90 30 30)"
+            className="transition-all duration-500" /> : null;
+        })}
+        <text x={30} y={34} textAnchor="middle" className="fill-slate-100 text-[12px] font-semibold">{Math.round(pct)}%</text>
+      </svg>
+      <div className="text-[11px] text-white mt-1 text-center">Scores</div>
+      <div className="text-[11px] text-slate-300 text-center">{segments[0].value}/{max}</div>
     </div>
   );
 }
@@ -555,7 +614,9 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                 cpkAssignedCount: Math.max(previous.cpkAssignedCount ?? 0, scan.cpkAssignedCount ?? 0),
                  cpkFailedCount: Math.max(previous.cpkFailedCount ?? 0, scan.cpkFailedCount ?? 0),
                  marketPricedCount: Math.max(previous.marketPricedCount ?? 0, scan.marketPricedCount ?? 0),
-                 classifiedCount: Math.max(previous.classifiedCount ?? 0, scan.classifiedCount ?? 0),
+  classifiedCount: Math.max(previous.classifiedCount ?? 0, scan.classifiedCount ?? 0),
+  eligibleScoreCount: Math.max(previous.eligibleScoreCount ?? 0, scan.eligibleScoreCount ?? 0),
+  ineligibleScoreCount: Math.max(previous.ineligibleScoreCount ?? 0, scan.ineligibleScoreCount ?? 0),
                  // Classification results are also monotonic within a run.
                  // Preserve per-search GEM totals when a later poll contains
                  // a partial/stale classification snapshot.
@@ -875,7 +936,6 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             // next stage; they were never eligible for that stage. The
             // current stage's own terminal failures use the patterned
             // segment. Anything else remains an empty pending gap.
-            const failedScores = 0;
             const skippedCpk = failedIngested;
             const skippedMarketPrices = Math.min(
               failedIngested + failedCpk,
@@ -887,11 +947,10 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             // the thick successful segment: upstream losses remain a thin
             // pink arc, successful scores are solid, and the track stays
             // blank for work that has not reached a terminal outcome.
-            const skippedScores = Math.min(
-              failedIngested + failedCpk + failedMarketPrices,
-              Math.min(scan.classifiedCount, searchTermTotal),
-            );
-            const successfulScores = Math.max(scan.classifiedCount - skippedScores, 0);
+  // Scores use the full ingested population: terminal upstream failures occupy
+  // their own dotted segments, while only genuinely unfinished work is blank.
+  const successfulScores = scan.eligibleScoreCount ?? 0;
+  const ineligibleScores = scan.ineligibleScoreCount ?? 0;
 
             return (
               <PixelCard key={scan.searchId || scan.query} variant={isComplete ? "emerald" : "default"}>
@@ -934,14 +993,17 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                   </div>
 
                   <div className="flex justify-center gap-3">
-                    {/* Each stage is measured against the population it can
-                        actually process. This preserves meaningful progress
-                        and lets a finished stage reach 100% without hiding
-                        upstream failures. */}
+                    {/* Every gauge is measured against this run's ingested population. */}
                     <Gauge value={scan.ingestedCount} max={searchTermTotal} failed={failedIngested} label="Ingested" color="#8b5cf6" />
                     <Gauge value={scan.cpkAssignedCount} max={searchTermTotal} failed={failedCpk} skipped={skippedCpk} skippedStart={scan.ingestedCount} label="CPK" color="#10b981" />
                     <Gauge value={scan.marketPricedCount} max={searchTermTotal} failed={failedMarketPrices} skipped={skippedMarketPrices} skippedStart={scan.cpkAssignedCount} label="M Prices" color="#f59e0b" />
-                    <Gauge value={successfulScores} displayValue={scan.classifiedCount} max={searchTermTotal} failed={failedScores} skipped={skippedScores} skippedStart={successfulScores} label="Scores" color="#ec4899" />
+                    <ScoresGauge
+                      eligible={successfulScores}
+                      cpkFailures={failedCpk}
+                      marketFailures={failedMarketPrices}
+                      ineligible={ineligibleScores}
+                      max={searchTermTotal}
+                    />
                   </div>
 
                   {vendorEntries.length > 0 && (

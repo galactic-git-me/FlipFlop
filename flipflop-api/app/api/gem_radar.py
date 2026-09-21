@@ -347,6 +347,8 @@ async def pipeline_status_endpoint(
                 "cpkAssignedCount": 0,
                 "marketPricedCount": 0,
                 "classifiedCount": 0,
+                "eligibleScoreCount": 0,
+                "ineligibleScoreCount": 0,
                 "processedPercent": 0,
                 "excludedAuctionCount": 0,
                 "byVendor": {},
@@ -390,9 +392,21 @@ async def pipeline_status_endpoint(
                             WHERE mp.median_price IS NOT NULL
                               AND mp.listing_count >= :min_listings
                         ) AS priced_count,
-                        COUNT(DISTINCT o.listing_id) FILTER (
-                            WHERE sl.classification IS NOT NULL
-                        ) AS classified_count
+                    COUNT(DISTINCT o.listing_id) FILTER (
+                        WHERE sl.classification IS NOT NULL
+                    ) AS classified_count,
+                    COUNT(DISTINCT o.listing_id) FILTER (
+                        WHERE mp.median_price IS NOT NULL
+                          AND mp.listing_count >= :min_listings
+                          AND sl.classification IS NOT NULL
+                          AND sl.eligible IS TRUE
+                    ) AS eligible_score_count,
+                    COUNT(DISTINCT o.listing_id) FILTER (
+                        WHERE mp.median_price IS NOT NULL
+                          AND mp.listing_count >= :min_listings
+                          AND sl.classification IS NOT NULL
+                          AND sl.eligible IS NOT TRUE
+                    ) AS ineligible_score_count
                     FROM gem_radar_listing_observations o
                     LEFT JOIN gem_radar_listing_cpk lc ON lc.listing_id = o.listing_id
                     LEFT JOIN gem_radar_cpk_market_price mp ON mp.cpk = lc.cpk
@@ -403,12 +417,14 @@ async def pipeline_status_endpoint(
                 ),
                 {"run_ids": run_ids, "min_listings": MIN_LISTINGS_FOR_SETTLED_PRICE},
             )
-            for run_id, source, ingested, cpk, priced, classified in progress_rows:
+            for run_id, source, ingested, cpk, priced, classified, eligible_score, ineligible_score in progress_rows:
                 scan = run_id_to_scan[run_id]
                 scan["ingestedCount"] += ingested
                 scan["cpkAssignedCount"] += cpk
                 scan["marketPricedCount"] += priced
                 scan["classifiedCount"] += classified
+                scan["eligibleScoreCount"] += eligible_score
+                scan["ineligibleScoreCount"] += ineligible_score
                 vendor = source or "unknown"
                 scan["byVendor"][vendor] = scan["byVendor"].get(vendor, 0) + ingested
 

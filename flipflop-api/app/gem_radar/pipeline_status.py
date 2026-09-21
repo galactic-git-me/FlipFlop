@@ -131,7 +131,7 @@ class SearchRunState:
     # than the last as a run goes on. These let snapshot() only ask the DB
     # about listing_ids it hasn't already gotten a definitive answer for.
     resolved_priced_ids: set[str] = field(default_factory=set)
-    resolved_classification: dict[str, tuple[str, float]] = field(default_factory=dict)
+    resolved_classification: dict[str, tuple[str, float, bool]] = field(default_factory=dict)
 
     def elapsed_s(self) -> float:
         return round(time.monotonic() - self.started_at, 1)
@@ -481,23 +481,27 @@ async def snapshot(db, environment: str = "DEV") -> dict:
         result = await db.execute(
             text(
                 """
-                SELECT listing_id, classification, deal_score
+            SELECT listing_id, classification, deal_score, eligible
                 FROM gem_radar_scored_listings
                 WHERE listing_id = ANY(:ids) AND classification IS NOT NULL
                 """
             ),
             {"ids": unresolved_classified_ids},
         )
-        for lid, classification, deal_score in result.fetchall():
+        for lid, classification, deal_score, eligible in result.fetchall():
             classified_listing_ids.add(lid)
-            owning_state_by_listing_id[lid].resolved_classification[lid] = (classification, deal_score)
+            owning_state_by_listing_id[lid].resolved_classification[lid] = (
+                classification,
+                deal_score,
+                bool(eligible),
+            )
 
     # classification_counts / classification_avg_score are derived fresh
     # each call from the (now mostly-cached) resolved_classification maps --
     # cheap, pure-Python bookkeeping, not a DB round-trip.
     scores_by_class: dict[str, list[float]] = {}
     for s in states:
-        for classification, deal_score in s.resolved_classification.values():
+        for classification, deal_score, _eligible in s.resolved_classification.values():
             # Older rows and a few enrichment paths have emitted casing or
             # surrounding whitespace inconsistently.  The dashboard counters
             # are tier counters, so normalise at the boundary rather than
@@ -541,6 +545,20 @@ async def snapshot(db, environment: str = "DEV") -> dict:
     for s in states:
         priced_count = sum(1 for lid in s.listing_ids if lid in priced_listing_ids)
         classified_count = sum(1 for lid in s.listing_ids if lid in classified_listing_ids)
+        eligible_score_count = sum(
+            1
+            for lid in s.listing_ids
+            if lid in priced_listing_ids
+            and (score := s.resolved_classification.get(lid)) is not None
+            and score[2]
+        )
+        ineligible_score_count = sum(
+            1
+            for lid in s.listing_ids
+            if lid in priced_listing_ids
+            and (score := s.resolved_classification.get(lid)) is not None
+            and not score[2]
+        )
         scan_gem_count = sum(
             1 for classification, _ in s.resolved_classification.values()
             if str(classification or "").strip().upper() == "GEM"
@@ -635,6 +653,8 @@ async def snapshot(db, environment: str = "DEV") -> dict:
                 # It never reflected listings Phase 2 scores as a result of
                 # THIS run, so it permanently undercounted.
                 "classifiedCount": classified_count,
+                "eligibleScoreCount": eligible_score_count,
+                "ineligibleScoreCount": ineligible_score_count,
                 "gemCount": scan_gem_count,
                 "superGemCount": scan_super_gem_count,
                 "marketPricedCount": priced_count,
