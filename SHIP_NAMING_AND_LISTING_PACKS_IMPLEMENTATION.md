@@ -27,13 +27,18 @@ Implements Michael's high-priority requirements:
 
 **⚠️ IMPORTANT**: DO NOT use "Base" in customer-facing UI, listing packs, performance/spec HTML, or registration cards. Internal data model can still use Budget/Mid-range/High-end.
 
+**Ship Names Stamped by BuildBot**:
+- **Latest**: Approval queue ids **122-145** (with `display_name` field, no "Base")
+- **Supersedes**: ids 98-121 (deprecated - had "Base" naming)
+- Customer-facing copy MUST use `display_name` field when present from approved payloads.
+
 ### Customer Type → Ship Name Mapping
 
 | Customer Type | Ship Name | Series | Example (Mid-range) |
 |---------------|-----------|--------|---------------------|
 | AI Workstation | Enterprise | TNG | Enterprise Pro |
 | High-performance Gaming | Defiant | DS9 | Defiant Pro |
-| Great-value Gaming | Miranda | TOS/TNG | Miranda Pro |
+| Great-value Gaming | Reliant | TOS/TNG | Reliant Pro |
 | Student Hybrid | Voyager | VOY | Voyager Pro |
 | Business & Office | Excelsior | TOS/TNG | Excelsior Pro |
 | Content Creation | Galaxy | TNG | Galaxy Pro |
@@ -81,11 +86,13 @@ def enrich_curated_build_with_ship_name(build: dict) -> dict
   "segment": "Great-value Gaming",
   "tier": "Mid-range",
   "name": "Atlas Pulse",
-  "ship_name": "Miranda Pro",
-  "ship_display_name": "Miranda Pro",
+  "display_name": "Reliant Pro",
+  "ship_name": "Reliant Pro",
+  "ship_display_name": "Reliant Pro",
   "ship_series": "TOS/TNG",
-  "ship_description": "Reliable workhorse, served Starfleet for over a century",
+  "ship_description": "Reliable workhorse class ship",
   "price_gbp": 899,
+  "bot_approval_queue_id": 123,
   ...
 }
 ```
@@ -170,7 +177,7 @@ async def generate_performance_card_for_curated_build(
 ```json
 {
   "meta": {
-    "pc_name": "Miranda Pro",
+    "pc_name": "Reliant Pro",
     "ship_series": "TOS/TNG",
     "tier": "Mid-range"
   },
@@ -248,7 +255,7 @@ async def get_curated_build_listing_pack(build_id: str):
     Returns:
     {
       "build_id": "FF-GVG-02",
-      "ship_name": "Miranda Pro",
+      "ship_name": "Reliant Pro",
       "images": [
         {"type": "hero", "url": "...", "alt": "Miranda Pro Hero Shot"},
         {"type": "spec_card", "url": "...", "alt": "Specifications"},

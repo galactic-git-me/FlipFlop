@@ -1,6 +1,7 @@
 {
-  "source": "BuildBot approval queue ids 98-121",
-  "description": "Ship names stamped on all 24 curated playbooks",
+  "source": "BuildBot approval queue ids 122-145 (re-stamped with display_name, no Base)",
+  "description": "Ship names stamped on all 24 curated playbooks with public display_name field",
+  "supersedes": "ids 98-121 (deprecated - had 'Base' naming)",
   "tier_suffixes": {
     "Budget": "",
     "Mid-range": " Pro",
@@ -33,7 +34,7 @@
       "tier": "Budget",
       "ship_name": "Reliant",
       "display_name": "Reliant",
-      "bot_approval_queue_id": 98
+      "bot_approval_queue_id": 122
     },
     {
       "id": "FF-GVG-02",
@@ -41,7 +42,7 @@
       "tier": "Mid-range",
       "ship_name": "Reliant Pro",
       "display_name": "Reliant Pro",
-      "bot_approval_queue_id": 99
+      "bot_approval_queue_id": 123
     },
     {
       "id": "FF-GVG-03",
@@ -49,7 +50,7 @@
       "tier": "High-end",
       "ship_name": "Reliant Ultra",
       "display_name": "Reliant Ultra",
-      "bot_approval_queue_id": 100
+      "bot_approval_queue_id": 124
     },
     {
       "id": "FF-HPG-01",
@@ -57,7 +58,7 @@
       "tier": "Budget",
       "ship_name": "Defiant",
       "display_name": "Defiant",
-      "bot_approval_queue_id": 101
+      "bot_approval_queue_id": 125
     },
     {
       "id": "FF-HPG-02",
@@ -65,7 +66,7 @@
       "tier": "Mid-range",
       "ship_name": "Defiant Pro",
       "display_name": "Defiant Pro",
-      "bot_approval_queue_id": 102
+      "bot_approval_queue_id": 126
     },
     {
       "id": "FF-HPG-03",
@@ -73,7 +74,7 @@
       "tier": "High-end",
       "ship_name": "Defiant Ultra",
       "display_name": "Defiant Ultra",
-      "bot_approval_queue_id": 103
+      "bot_approval_queue_id": 127
     },
     {
       "id": "FF-STU-01",
@@ -81,7 +82,7 @@
       "tier": "Budget",
       "ship_name": "Voyager",
       "display_name": "Voyager",
-      "bot_approval_queue_id": 104
+      "bot_approval_queue_id": 128
     },
     {
       "id": "FF-STU-02",
@@ -89,7 +90,7 @@
       "tier": "Mid-range",
       "ship_name": "Voyager Pro",
       "display_name": "Voyager Pro",
-      "bot_approval_queue_id": 105
+      "bot_approval_queue_id": 129
     },
     {
       "id": "FF-STU-03",
@@ -97,7 +98,7 @@
       "tier": "High-end",
       "ship_name": "Voyager Ultra",
       "display_name": "Voyager Ultra",
-      "bot_approval_queue_id": 106
+      "bot_approval_queue_id": 130
     },
     {
       "id": "FF-BOF-01",
@@ -105,7 +106,7 @@
       "tier": "Budget",
       "ship_name": "Excelsior",
       "display_name": "Excelsior",
-      "bot_approval_queue_id": 107
+      "bot_approval_queue_id": 131
     },
     {
       "id": "FF-BOF-02",
@@ -113,7 +114,7 @@
       "tier": "Mid-range",
       "ship_name": "Excelsior Pro",
       "display_name": "Excelsior Pro",
-      "bot_approval_queue_id": 108
+      "bot_approval_queue_id": 132
     },
     {
       "id": "FF-BOF-03",
@@ -121,7 +122,7 @@
       "tier": "High-end",
       "ship_name": "Excelsior Ultra",
       "display_name": "Excelsior Ultra",
-      "bot_approval_queue_id": 109
+      "bot_approval_queue_id": 133
     },
     {
       "id": "FF-CCR-01",
@@ -129,7 +130,7 @@
       "tier": "Budget",
       "ship_name": "Galaxy",
       "display_name": "Galaxy",
-      "bot_approval_queue_id": 110
+      "bot_approval_queue_id": 134
     },
     {
       "id": "FF-CCR-02",
@@ -137,7 +138,7 @@
       "tier": "Mid-range",
       "ship_name": "Galaxy Pro",
       "display_name": "Galaxy Pro",
-      "bot_approval_queue_id": 111
+      "bot_approval_queue_id": 135
     },
     {
       "id": "FF-CCR-03",
@@ -145,7 +146,7 @@
       "tier": "High-end",
       "ship_name": "Galaxy Ultra",
       "display_name": "Galaxy Ultra",
-      "bot_approval_queue_id": 112
+      "bot_approval_queue_id": 136
     },
     {
       "id": "FF-AIW-01",
@@ -153,7 +154,7 @@
       "tier": "Budget",
       "ship_name": "Enterprise",
       "display_name": "Enterprise",
-      "bot_approval_queue_id": 113
+      "bot_approval_queue_id": 137
     },
     {
       "id": "FF-AIW-02",
@@ -161,7 +162,7 @@
       "tier": "Mid-range",
       "ship_name": "Enterprise Pro",
       "display_name": "Enterprise Pro",
-      "bot_approval_queue_id": 114
+      "bot_approval_queue_id": 138
     },
     {
       "id": "FF-AIW-03",
@@ -170,7 +171,7 @@
       "ship_name": "Enterprise Ultra",
       "display_name": "Enterprise Ultra",
       "bespoke_consult": true,
-      "bot_approval_queue_id": 115
+      "bot_approval_queue_id": 139
     },
     {
       "id": "FF-SWD-01",
@@ -178,7 +179,7 @@
       "tier": "Budget",
       "ship_name": "Titan",
       "display_name": "Titan",
-      "bot_approval_queue_id": 116
+      "bot_approval_queue_id": 140
     },
     {
       "id": "FF-SWD-02",
@@ -186,7 +187,7 @@
       "tier": "Mid-range",
       "ship_name": "Titan Pro",
       "display_name": "Titan Pro",
-      "bot_approval_queue_id": 117
+      "bot_approval_queue_id": 141
     },
     {
       "id": "FF-SWD-03",
@@ -194,7 +195,7 @@
       "tier": "High-end",
       "ship_name": "Titan Ultra",
       "display_name": "Titan Ultra",
-      "bot_approval_queue_id": 118
+      "bot_approval_queue_id": 142
     },
     {
       "id": "FF-FAM-01",
@@ -202,7 +203,7 @@
       "tier": "Budget",
       "ship_name": "Stargazer",
       "display_name": "Stargazer",
-      "bot_approval_queue_id": 119
+      "bot_approval_queue_id": 143
     },
     {
       "id": "FF-FAM-02",
@@ -210,7 +211,7 @@
       "tier": "Mid-range",
       "ship_name": "Stargazer Pro",
       "display_name": "Stargazer Pro",
-      "bot_approval_queue_id": 120
+      "bot_approval_queue_id": 144
     },
     {
       "id": "FF-FAM-03",
@@ -218,7 +219,7 @@
       "tier": "High-end",
       "ship_name": "Stargazer Ultra",
       "display_name": "Stargazer Ultra",
-      "bot_approval_queue_id": 121
+      "bot_approval_queue_id": 145
     }
   ],
   "pricing_reference": {

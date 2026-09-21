@@ -9,12 +9,16 @@ PUBLIC DISPLAY (customer-facing):
 DO NOT use "Base" on customer-facing UI, listing packs, perf/spec HTML, or registration cards.
 Internal data model can still use Budget/Mid-range/High-end.
 
-Ship names stamped by BuildBot on all 24 playbooks (bot approval queue ids 98-121).
+Ship names stamped by BuildBot on all 24 playbooks:
+- Latest: approval queue ids 122-145 (with display_name field, no "Base")
+- Supersedes: ids 98-121 (deprecated - had "Base" naming)
 
 Naming approach:
-1. Prefer ship_name field from approved playbook payload (once approved)
-2. Fall back to tmp/ship-name-map.json (BuildBot source of truth)
-3. Fall back to data/ship_names.json (legacy config)
+1. Prefer display_name field from approved playbook payload (BuildBot ids 122-145)
+2. Fall back to ship_name from approved payload
+3. Fall back to tmp/ship-name-map.json (BuildBot source of truth)
+4. Fall back to data/ship_names.json (legacy config)
+5. Compute from segment + tier
 
 This ensures we use stamped names when available, but never break if fields missing.
 """
@@ -28,7 +32,7 @@ def _load_ship_name_map() -> dict:
     Load ship name map - prefer BuildBot stamped version.
     
     Load order:
-    1. tmp/ship-name-map.json (BuildBot source of truth, ids 98-121)
+    1. tmp/ship-name-map.json (BuildBot source of truth, ids 122-145)
     2. data/ship_names.json (legacy config)
     3. Hardcoded fallback
     """
@@ -178,8 +182,10 @@ def enrich_curated_build_with_ship_name(build: dict) -> dict:
     """
     Add ship_name and ship_display_name fields to a curated build dict.
     
-    Prefers ship_name already present in build (from approved payload),
-    falls back to computing from map/config if missing.
+    Priority order for naming (BuildBot re-stamped playbooks with display_name):
+    1. display_name field from approved payload (BuildBot ids 122-145, no "Base")
+    2. ship_name field from approved payload (older payloads)
+    3. Compute from map lookup or segment + tier
     
     Args:
         build: Curated build dict with 'id', 'segment', and 'tier'
@@ -191,12 +197,18 @@ def enrich_curated_build_with_ship_name(build: dict) -> dict:
     segment = build.get("segment", "")
     tier = build.get("tier", "")
     
-    # Prefer ship_name already in build (from approved playbook payload)
-    if "ship_name" not in build or not build["ship_name"]:
-        build["ship_name"] = get_ship_display_name(build_id, segment, tier)
-    
-    # ship_display_name is the same as ship_name (kept for backwards compat)
-    build["ship_display_name"] = build["ship_name"]
+    # Priority 1: display_name from BuildBot stamped payload (ids 122-145)
+    if "display_name" in build and build["display_name"]:
+        build["ship_name"] = build["display_name"]
+        build["ship_display_name"] = build["display_name"]
+    # Priority 2: ship_name already in build (from older payload)
+    elif "ship_name" in build and build["ship_name"]:
+        build["ship_display_name"] = build["ship_name"]
+    # Priority 3: Compute from map or segment + tier
+    else:
+        computed_name = get_ship_display_name(build_id, segment, tier)
+        build["ship_name"] = computed_name
+        build["ship_display_name"] = computed_name
     
     # Add ship metadata for rich display (if available)
     ship_meta = get_ship_metadata(segment)
@@ -246,7 +258,9 @@ def get_bot_approval_queue_id(build_id: str) -> Optional[int]:
     """
     Get the bot approval queue ID for a curated build.
     
-    Ship names were stamped by BuildBot on approval queue ids 98-121.
+    Ship names were stamped by BuildBot:
+    - Latest: approval queue ids 122-145 (with display_name, no "Base")
+    - Supersedes: ids 98-121 (deprecated)
     Pricing approved sells are on ids 66-89.
     
     Args:
