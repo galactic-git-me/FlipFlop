@@ -311,14 +311,16 @@ export default function Cases3DPriorityPage() {
   };
 
   useEffect(() => {
-    if (!GOOGLE_CSE_ENGINE_ID || document.getElementById("google-programmable-search")) return;
+    if (!GOOGLE_CSE_ENGINE_ID || evidenceReview?.stage !== "product_images") return;
+    document.getElementById("google-programmable-search")?.remove();
+    setGoogleCseLoadError(null);
     const script = document.createElement("script");
     script.id = "google-programmable-search";
     script.async = true;
     script.src = `https://cse.google.com/cse.js?cx=${encodeURIComponent(GOOGLE_CSE_ENGINE_ID)}`;
     script.onerror = () => setGoogleCseLoadError("Google's approved-sites search could not load. Check your connection or any content blocker, then reopen this panel.");
     document.head.appendChild(script);
-  }, []);
+  }, [evidenceReview?.stage]);
 
   const approveReferences = async (caseId: number) => {
     if (selectedReferences.length !== 4) return;
