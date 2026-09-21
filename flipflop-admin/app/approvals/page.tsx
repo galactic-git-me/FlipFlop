@@ -86,7 +86,7 @@ function PlaybookProfitMatrix({ items }: { items: ApprovalItem[] }) {
       <CardHeader className="pb-2">
         <CardTitle className="text-white text-lg">Playbook profit matrix</CardTitle>
         <p className="text-sm text-slate-400">
-          Cost from BuildBot pending BOMs. Sell / profit fill in when PricingBot posts — blank sell means awaiting pricing.
+          Rows = customer type, columns = budget tier. Cost from BuildBot BOMs; sell/profit fill when PricingBot posts.
         </p>
       </CardHeader>
       <CardContent className="overflow-x-auto">
@@ -386,6 +386,21 @@ function ApprovalCard({
             <div>
               <span className="text-slate-400 text-sm">Playbook ID:</span>{" "}
               <span className="text-white font-mono">{item.playbook_id}</span>
+            </div>
+          )}
+
+          {(item.approval_type === "playbook" || item.approval_type === "prebuilt") && (
+            <div className="flex flex-wrap gap-2">
+              {item.payload?.customer_type ? (
+                <span className="rounded-full border border-cyan-500/40 bg-cyan-500/10 px-2.5 py-0.5 text-xs text-cyan-200">
+                  Customer: {String(item.payload.customer_type)}
+                </span>
+              ) : null}
+              {item.payload?.budget_tier ? (
+                <span className="rounded-full border border-orange-500/40 bg-orange-500/10 px-2.5 py-0.5 text-xs text-orange-200">
+                  Budget: {String(item.payload.budget_tier)}
+                </span>
+              ) : null}
             </div>
           )}
 
