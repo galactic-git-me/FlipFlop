@@ -560,11 +560,11 @@ async def snapshot(db, environment: str = "DEV") -> dict:
             and not score[2]
         )
         scan_gem_count = sum(
-            1 for classification, _ in s.resolved_classification.values()
+            1 for classification, _score, _eligible in s.resolved_classification.values()
             if str(classification or "").strip().upper() == "GEM"
         )
         scan_super_gem_count = sum(
-            1 for classification, _ in s.resolved_classification.values()
+            1 for classification, _score, _eligible in s.resolved_classification.values()
             if str(classification or "").strip().upper() == "SUPER_GEM"
         )
 
