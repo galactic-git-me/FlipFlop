@@ -2603,7 +2603,7 @@ const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch(`/api/gem-radar/scan-run-history?limit=10000&basis=${metric}`, {
+    fetch(`/api/gem-radar/scan-run-history?limit=100000&basis=${metric}`, {
       cache: "no-store",
       signal: AbortSignal.timeout(15_000),
     })

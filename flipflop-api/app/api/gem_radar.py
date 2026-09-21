@@ -2231,7 +2231,10 @@ async def record_scan_run_history(
 
 @router.get("/scan-run-history", response_model=list[ScanRunHistoryOut])
 async def list_scan_run_history(
-    limit: int = Query(50, ge=1, le=10000),
+    # The dashboard needs the complete persisted history.  Keep a generous
+    # upper bound for protection against accidental unbounded responses, but
+    # do not truncate normal history at 10,000 rows.
+    limit: int = Query(50, ge=1, le=100000),
     basis: Literal["combined", "processed", "observations"] = Query("combined"),
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
