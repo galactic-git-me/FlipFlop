@@ -294,7 +294,7 @@ export default function ApprovalsPage() {
   async function loadSummary() {
     try {
       const response = await fetch(`${API_BASE}/api/bot-approvals/summary`);
-      const data = await readJsonResponse(response);
+      const data = await readJsonResponse<ApprovalSummary>(response);
       setSummary(data);
     } catch (error) {
       console.error("Failed to load summary:", error);
@@ -308,7 +308,7 @@ export default function ApprovalsPage() {
         ? `${API_BASE}/api/bot-approvals/pending?approval_type=${selectedType}&limit=200`
         : `${API_BASE}/api/bot-approvals/pending?limit=200`;
       const response = await fetch(url);
-      const data = await readJsonResponse(response);
+      const data = await readJsonResponse<ApprovalItem[]>(response);
       setItems(data);
       setSelectedIds([]);
     } catch (error) {
@@ -327,9 +327,9 @@ export default function ApprovalsPage() {
         fetch(`${API_BASE}/api/bot-approvals/history?approval_type=pricing&status=approved&limit=200`),
       ]);
       const [pb, pendingPrice, livePrice] = await Promise.all([
-        readJsonResponse(pbRes),
-        readJsonResponse(pendingPriceRes),
-        readJsonResponse(livePriceRes),
+        readJsonResponse<ApprovalItem[]>(pbRes),
+        readJsonResponse<ApprovalItem[]>(pendingPriceRes),
+        readJsonResponse<ApprovalItem[]>(livePriceRes),
       ]);
       setMatrixPlaybooks(Array.isArray(pb) ? pb : []);
       setMatrixPendingPricing(Array.isArray(pendingPrice) ? pendingPrice : []);
@@ -750,7 +750,7 @@ function ApprovalPayloadPreview({ type, payload }: { type: string; payload: Reco
             </a>
           </div>
         )}
-        {payload.preview_image_url && (
+        {typeof payload.preview_image_url === "string" && (
           <img
             src={
               String(payload.preview_image_url).startsWith("http")
@@ -795,13 +795,13 @@ function ApprovalPayloadPreview({ type, payload }: { type: string; payload: Reco
   if (type === "pricing") {
     return (
       <div className="space-y-2 text-sm">
-        {payload.pricing_rationale && (
+        {typeof payload.pricing_rationale === "string" && (
           <div>
             <span className="text-slate-400">Rationale:</span>{" "}
             <span className="text-white">{payload.pricing_rationale as string}</span>
           </div>
         )}
-        {payload.delivery_buffer_gbp && (
+        {typeof payload.delivery_buffer_gbp === "number" && (
           <div>
             <span className="text-slate-400">Delivery Buffer:</span>{" "}
             <span className="text-white">{formatCurrency(payload.delivery_buffer_gbp as number)}</span>

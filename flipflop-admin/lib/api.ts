@@ -1561,6 +1561,18 @@ export const api = {
       request<{ ok: boolean }>(`/alerts/${id}/ack`, { method: "POST" }),
   },
 
+  approvals: {
+    summary: () =>
+      request<{
+        total_pending: number;
+        pending_photo_packs: number;
+        pending_models_3d: number;
+        pending_playbooks: number;
+        pending_prebuilts: number;
+        pending_pricing: number;
+      }>("/bot-approvals/summary"),
+  },
+
   favourites: {
     list: () =>
       request<{ items: import("./types").Favourite[]; groups: string[] }>(

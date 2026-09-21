@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Bell, BellRing, Heart, Radio, Search, Settings } from "lucide-react";
+import { Bell, BellRing, ClipboardCheck, Heart, Radio, Search, Settings } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import type { PlaybookProposal } from "@/lib/types";
@@ -33,6 +33,7 @@ export function TopCommandBar() {
   const [pendingProposals, setPendingProposals] = useState<PlaybookProposal[]>([]);
   const [alerts, setAlerts] = useState<Array<{ id: number; code: string; message: string; link_url?: string | null; created_at?: string | null }>>([]);
   const [priceAlertCount, setPriceAlertCount] = useState(0);
+  const [pendingApprovalCount, setPendingApprovalCount] = useState(0);
   const [toasts, setToasts] = useState<Array<{ id: string; text: string; linkUrl?: string | null; persistent?: boolean }>>([]);
   const [confettiPieces, setConfettiPieces] = useState<Array<{ id: string; left: number; delay: number; duration: number; size: number; color: string; drift: number }>>([]);
   const [isLocalEnvironment, setIsLocalEnvironment] = useState(process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "development");
@@ -64,10 +65,11 @@ export function TopCommandBar() {
     let mounted = true;
     const load = async () => {
       try {
-        const [rows, alertRowsRaw, priceAlertRows] = await Promise.all([
+        const [rows, alertRowsRaw, priceAlertRows, approvalSummary] = await Promise.all([
           api.playbooks.proposals.list("pending"),
           api.alerts.list(100, false),
           api.priceAlerts.list().catch(() => ({ items: [], active_count: 0, triggered_count: 0 })),
+          api.approvals.summary().catch(() => ({ total_pending: 0 })),
         ]);
         if (!mounted) return;
         setPendingProposals(rows);
@@ -75,6 +77,7 @@ export function TopCommandBar() {
           .slice(0, 25);
         setAlerts(alertRows);
         setPriceAlertCount(priceAlertRows.active_count);
+        setPendingApprovalCount(approvalSummary.total_pending);
 
         if (seenProposalIdsRef.current.size === 0) {
           const seeded = new Set(rows.map((r) => r.id));
@@ -263,6 +266,19 @@ export function TopCommandBar() {
               </span>
             )}
           </button>
+          <Link
+            href="/approvals"
+            className="relative"
+            aria-label={`Approvals${pendingApprovalCount ? ` (${pendingApprovalCount} pending)` : ""}`}
+            title="Approvals"
+          >
+            <ClipboardCheck className="h-4 w-4 transition-colors hover:text-violet-300" />
+            {pendingApprovalCount > 0 && (
+              <span className="absolute -top-1.5 -right-2 min-w-[16px] h-4 px-1 rounded-full bg-violet-400 text-[10px] leading-4 text-[#12051f] font-bold text-center">
+                {pendingApprovalCount > 99 ? "99+" : pendingApprovalCount}
+              </span>
+            )}
+          </Link>
           <button
             type="button"
             onClick={() => router.push("/price-alerts")}
