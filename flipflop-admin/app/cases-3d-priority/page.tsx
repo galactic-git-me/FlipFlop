@@ -443,8 +443,6 @@ export default function Cases3DPriorityPage() {
   const openEvidenceReview = async (caseItem: PriorityCaseItem, stage: "product_images" | "youtube_video" | "meshy_generation") => {
     if (stage === "product_images") {
       setImageSearchQuery(`${caseItem.name} PC case product photos`);
-      setImageSearchResults([]);
-      setImageSearchError(null);
     }
     if (stage === "product_images" || stage === "meshy_generation") await openReferenceSelection(caseItem.id);
     setEvidenceReview({ caseItem, stage });
