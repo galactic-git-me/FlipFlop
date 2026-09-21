@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-21T06:05:52.724024+00:00",
+  "generated_at": "2026-09-21T07:05:50.785684+00:00",
   "builds": [
     {
       "components": [
@@ -271,12 +271,12 @@
           "count": 49,
           "min_price": 718.0,
           "max_price": 3579.0,
-          "average_price": 2175.52
+          "average_price": 2196.72
         }
       },
-      "resale_estimate": 2175.52,
+      "resale_estimate": 2196.72,
       "resale_source": "bin_average",
-      "estimated_profit": 2093.06,
+      "estimated_profit": 2114.26,
       "rank": 2
     },
     {
@@ -409,13 +409,13 @@
           "available": true,
           "count": 50,
           "min_price": 675.58,
-          "max_price": 7529.0,
-          "average_price": 1965.56
+          "max_price": 7329.0,
+          "average_price": 1961.56
         }
       },
-      "resale_estimate": 1965.56,
+      "resale_estimate": 1961.56,
       "resale_source": "bin_average",
-      "estimated_profit": 1883.21,
+      "estimated_profit": 1879.21,
       "rank": 3
     },
     {
@@ -549,12 +549,12 @@
           "count": 49,
           "min_price": 464.93,
           "max_price": 3579.0,
-          "average_price": 1951.34
+          "average_price": 1934.34
         }
       },
-      "resale_estimate": 1951.34,
+      "resale_estimate": 1934.34,
       "resale_source": "bin_average",
-      "estimated_profit": 1870.86,
+      "estimated_profit": 1853.86,
       "rank": 4
     },
     {
@@ -688,29 +688,29 @@
           "count": 50,
           "min_price": 675.58,
           "max_price": 7529.0,
-          "average_price": 1845.5
+          "average_price": 1883.6
         }
       },
-      "resale_estimate": 1845.5,
+      "resale_estimate": 1883.6,
       "resale_source": "bin_average",
-      "estimated_profit": 1763.28,
+      "estimated_profit": 1801.38,
       "rank": 5
     },
     {
       "components": [
         {
-          "id": 41984573,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.aliexpress.com%2Fitem%2F1005012722323360.html%3F_randl_currency%3DGBP%26_randl_shipto%3DUK%26src%3Dgoogle:AMD%20Ryzen%207%205700X%20Desktop%20CPU%208%20Core:8c10dfa96ed5b57cfe00deeb288c8f3f5d8cc334f11e139ed7fe9b0f6c2ea414",
+          "id": 41984530,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.aliexpress.com%2Fitem%2F1005012623303787.html%3F_randl_currency%3DGBP%26_randl_shipto%3DUK%26src%3Dgoogle:AMD%20Ryzen%207%205800X3D%20Tray%20Processor%20No%:9b742149c59265506d387fdd4a9279c32b691d2c7c35aeacd68efc4c51dc7c5b",
           "category": "cpu",
-          "title": "AMD Ryzen 7 5700X Desktop CPU 8 Core 16 Thread 3.4GHz 7NM 32MB L3 Cache 65W Socket AM4 PCIe 4.0",
-          "seller": "AliExpress - AliExpress-252640023",
-          "image_url": null,
-          "delivered_price": 3.7199999999999998,
+          "title": "AMD Ryzen 7 5800X3D Tray Processor No Cooler 8 Core 16 Thread Up to 4.5GHz AM4 Socket 96MB 3D V",
+          "seller": "AliExpress - AliExpress-222028430",
+          "image_url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ02hVpx4dUUirLACLYFv2beVtM6tICzURJTQO5G6D-eH2SDMIxWWYhKMzFBSt38a5gakGKRYcIjSh_8UfPdv0VtbW_UM_bcXr-O-f-7IcKZnWqYlJDctaHPfKn&usqp=CAc",
+          "delivered_price": 0.86,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -3.72,
-          "url": "https://www.aliexpress.com/item/1005012722323360.html?_randl_currency=GBP&_randl_shipto=UK&src=google"
+          "estimated_profit": -0.86,
+          "url": "https://www.aliexpress.com/item/1005012623303787.html?_randl_currency=GBP&_randl_shipto=UK&src=google"
         },
         {
           "id": 41965064,
@@ -813,9 +813,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 82.49,
+      "build_cost": 79.63,
       "market": {
-        "query": "gaming pc AMD Ryzen 7 5700X SAPPHIRE PULSE AMD Radeon RX 6 8gb",
+        "query": "gaming pc AMD Ryzen 7 5800X3D SAPPHIRE PULSE AMD Radeon RX 6 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -825,14 +825,14 @@
         "bin": {
           "available": true,
           "count": 48,
-          "min_price": 295.8,
-          "max_price": 1700.99,
-          "average_price": 919.41
+          "min_price": 248.0,
+          "max_price": 1949.97,
+          "average_price": 889.09
         }
       },
-      "resale_estimate": 919.41,
+      "resale_estimate": 889.09,
       "resale_source": "bin_average",
-      "estimated_profit": 836.92,
+      "estimated_profit": 809.46,
       "rank": 6
     }
   ],
