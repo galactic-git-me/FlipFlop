@@ -2,78 +2,131 @@
 Star Trek ship naming for curated playbooks.
 
 Maps customer types × tiers to starship names:
-- Base tier = ship name (e.g., "Miranda")
-- Mid-range = ship name + " Pro" (e.g., "Miranda Pro")
-- High-end = ship name + " Ultra" (e.g., "Miranda Ultra")
+- Base tier (Budget) = ship name (e.g., "Reliant")
+- Pro tier (Mid-range) = ship name + " Pro" (e.g., "Reliant Pro")
+- Ultra tier (High-end) = ship name + " Ultra" (e.g., "Reliant Ultra")
 
-Configuration in data/ship_names.json allows names to be changed without code changes.
+Ship names stamped by BuildBot on all 24 playbooks (bot approval queue ids 98-121).
+
+Naming approach:
+1. Prefer ship_name field from approved playbook payload (once approved)
+2. Fall back to tmp/ship-name-map.json (BuildBot source of truth)
+3. Fall back to data/ship_names.json (legacy config)
+
+This ensures we use stamped names when available, but never break if fields missing.
 """
 import json
 from pathlib import Path
 from typing import Optional
 
 
-def _load_ship_names() -> dict:
-    """Load ship names configuration from data/ship_names.json"""
-    config_path = Path(__file__).resolve().parents[2] / 'data' / 'ship_names.json'
-    if not config_path.exists():
-        # Fallback default mapping if file missing
-        return {
-            "tier_suffixes": {
-                "Budget": "",
-                "Mid-range": " Pro",
-                "High-end": " Ultra"
-            },
-            "ship_names": {
-                "AI Workstation": {"base_name": "Enterprise"},
-                "High-performance Gaming": {"base_name": "Defiant"},
-                "Great-value Gaming": {"base_name": "Miranda"},
-                "Student Hybrid": {"base_name": "Voyager"},
-                "Business & Office": {"base_name": "Excelsior"},
-                "Content Creation": {"base_name": "Galaxy"},
-                "Software Development": {"base_name": "Titan"},
-                "Family & Home": {"base_name": "Stargazer"},
-            }
-        }
+def _load_ship_name_map() -> dict:
+    """
+    Load ship name map - prefer BuildBot stamped version.
     
-    return json.loads(config_path.read_text(encoding='utf-8'))
+    Load order:
+    1. tmp/ship-name-map.json (BuildBot source of truth, ids 98-121)
+    2. data/ship_names.json (legacy config)
+    3. Hardcoded fallback
+    """
+    # Try BuildBot stamped map first (source of truth)
+    buildbot_map_path = Path(__file__).resolve().parents[2] / 'tmp' / 'ship-name-map.json'
+    if buildbot_map_path.exists():
+        return json.loads(buildbot_map_path.read_text(encoding='utf-8'))
+    
+    # Fall back to legacy config
+    config_path = Path(__file__).resolve().parents[2] / 'data' / 'ship_names.json'
+    if config_path.exists():
+        return json.loads(config_path.read_text(encoding='utf-8'))
+    
+    # Hardcoded fallback if both missing
+    return {
+        "tier_suffixes": {
+            "Budget": "",
+            "Mid-range": " Pro",
+            "High-end": " Ultra"
+        },
+        "segment_ships": {
+            "Great-value Gaming": "Reliant",
+            "High-performance Gaming": "Defiant",
+            "Student Hybrid": "Voyager",
+            "Business & Office": "Excelsior",
+            "Content Creation": "Galaxy",
+            "AI Workstation": "Enterprise",
+            "Software Development": "Titan",
+            "Family & Home": "Stargazer",
+        }
+    }
+
+
+def get_ship_name_from_map(build_id: str) -> Optional[str]:
+    """
+    Get ship name directly from BuildBot map by build ID.
+    
+    Preferred method: read stamped ship_name from map.
+    
+    Args:
+        build_id: Curated build ID (e.g., "FF-GVG-02")
+    
+    Returns:
+        Ship name with tier suffix (e.g., "Reliant Pro") or None if not found
+    """
+    map_data = _load_ship_name_map()
+    builds = map_data.get("builds", [])
+    
+    for build in builds:
+        if build.get("id") == build_id:
+            return build.get("ship_name")
+    
+    return None
 
 
 def get_ship_name(segment: str, tier: str) -> str:
     """
-    Get the ship name for a curated build.
+    Get the ship name for a curated build by segment and tier.
+    
+    Falls back to computing ship name if not in map.
     
     Args:
         segment: Customer type (e.g., "Great-value Gaming")
         tier: Tier (Budget, Mid-range, High-end)
     
     Returns:
-        Ship name with appropriate suffix (e.g., "Miranda", "Miranda Pro", "Miranda Ultra")
+        Ship name with appropriate suffix (e.g., "Reliant", "Reliant Pro", "Reliant Ultra")
     
     Examples:
         >>> get_ship_name("Great-value Gaming", "Budget")
-        'Miranda'
+        'Reliant'
         >>> get_ship_name("Great-value Gaming", "Mid-range")
-        'Miranda Pro'
+        'Reliant Pro'
         >>> get_ship_name("AI Workstation", "High-end")
         'Enterprise Ultra'
     """
-    config = _load_ship_names()
+    map_data = _load_ship_name_map()
     
-    ship_config = config.get("ship_names", {}).get(segment)
-    if not ship_config:
-        # Fallback: use segment name if no ship name configured
+    # Try to get base ship name from map
+    segment_ships = map_data.get("segment_ships", {})
+    ship_names_legacy = map_data.get("ship_names", {})
+    
+    base_name = segment_ships.get(segment)
+    if not base_name and segment in ship_names_legacy:
+        # Legacy format compatibility
+        base_name = ship_names_legacy[segment].get("base_name")
+    
+    if not base_name:
+        # Ultimate fallback: use segment name
         return segment
     
-    base_name = ship_config.get("base_name", segment)
-    suffix = config.get("tier_suffixes", {}).get(tier, "")
-    
+    # Apply tier suffix
+    suffix = map_data.get("tier_suffixes", {}).get(tier, "")
     return f"{base_name}{suffix}"
 
 
 def get_ship_display_name(build_id: str, segment: str, tier: str) -> str:
     """
-    Get the display name for a curated build, handling special cases.
+    Get the display name for a curated build.
+    
+    Prefers stamped ship_name from BuildBot map, falls back to computed name.
     
     Args:
         build_id: Curated build ID (e.g., "FF-AIW-03")
@@ -81,15 +134,14 @@ def get_ship_display_name(build_id: str, segment: str, tier: str) -> str:
         tier: Tier
     
     Returns:
-        Display name (e.g., "Miranda Pro", or special case handling)
+        Display name (e.g., "Reliant Pro", "Enterprise Ultra")
     """
-    config = _load_ship_names()
+    # First, try to get from BuildBot stamped map (preferred)
+    stamped_name = get_ship_name_from_map(build_id)
+    if stamped_name:
+        return stamped_name
     
-    # Check for special case overrides (e.g., FF-AIW-03 bespoke)
-    special_cases = config.get("special_cases", {})
-    if build_id in special_cases:
-        return special_cases[build_id].get("display_name", get_ship_name(segment, tier))
-    
+    # Fall back to computing from segment + tier
     return get_ship_name(segment, tier)
 
 
@@ -103,32 +155,61 @@ def get_ship_metadata(segment: str) -> Optional[dict]:
     Returns:
         Dict with base_name, series, description, or None if not found
     """
-    config = _load_ship_names()
-    return config.get("ship_names", {}).get(segment)
+    map_data = _load_ship_name_map()
+    
+    # Try legacy format first (has series/description)
+    ship_names_legacy = map_data.get("ship_names", {})
+    if segment in ship_names_legacy:
+        return ship_names_legacy[segment]
+    
+    # Fall back to creating minimal metadata from segment_ships
+    segment_ships = map_data.get("segment_ships", {})
+    base_name = segment_ships.get(segment)
+    if base_name:
+        return {"base_name": base_name}
+    
+    return None
 
 
 def enrich_curated_build_with_ship_name(build: dict) -> dict:
     """
     Add ship_name and ship_display_name fields to a curated build dict.
     
+    Prefers ship_name already present in build (from approved payload),
+    falls back to computing from map/config if missing.
+    
     Args:
         build: Curated build dict with 'id', 'segment', and 'tier'
     
     Returns:
-        Same dict with added 'ship_name' and 'ship_display_name' fields
+        Same dict with added/preserved 'ship_name' and 'ship_display_name' fields
     """
     build_id = build.get("id", "")
     segment = build.get("segment", "")
     tier = build.get("tier", "")
     
-    build["ship_name"] = get_ship_name(segment, tier)
-    build["ship_display_name"] = get_ship_display_name(build_id, segment, tier)
+    # Prefer ship_name already in build (from approved playbook payload)
+    if "ship_name" not in build or not build["ship_name"]:
+        build["ship_name"] = get_ship_display_name(build_id, segment, tier)
     
-    # Add ship metadata for rich display
+    # ship_display_name is the same as ship_name (kept for backwards compat)
+    build["ship_display_name"] = build["ship_name"]
+    
+    # Add ship metadata for rich display (if available)
     ship_meta = get_ship_metadata(segment)
     if ship_meta:
-        build["ship_series"] = ship_meta.get("series")
-        build["ship_description"] = ship_meta.get("description")
+        if "ship_series" not in build:
+            build["ship_series"] = ship_meta.get("series")
+        if "ship_description" not in build:
+            build["ship_description"] = ship_meta.get("description")
+    
+    # Mark bespoke builds
+    map_data = _load_ship_name_map()
+    builds_list = map_data.get("builds", [])
+    for map_build in builds_list:
+        if map_build.get("id") == build_id and map_build.get("bespoke_consult"):
+            build["bespoke_consult"] = True
+            break
     
     return build
 
@@ -149,3 +230,26 @@ def get_tier_display_name(tier: str) -> str:
         "High-end": "Ultra"
     }
     return tier_map.get(tier, tier)
+
+
+def get_bot_approval_queue_id(build_id: str) -> Optional[int]:
+    """
+    Get the bot approval queue ID for a curated build.
+    
+    Ship names were stamped by BuildBot on approval queue ids 98-121.
+    Pricing approved sells are on ids 66-89.
+    
+    Args:
+        build_id: Curated build ID (e.g., "FF-GVG-02")
+    
+    Returns:
+        Bot approval queue ID or None if not found
+    """
+    map_data = _load_ship_name_map()
+    builds = map_data.get("builds", [])
+    
+    for build in builds:
+        if build.get("id") == build_id:
+            return build.get("bot_approval_queue_id")
+    
+    return None
