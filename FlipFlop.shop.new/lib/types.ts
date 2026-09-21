@@ -68,3 +68,30 @@ export interface AnalyticsEvent {
   metadata?: Record<string, any>
   timestamp: string
 }
+
+export interface BuyingFlowData {
+  // Gift vs self
+  is_gift: boolean
+  recipient_age_band?: 'child' | 'teen' | 'adult' | 'senior' | null
+  
+  // Packaging & delivery
+  discreet_packaging: boolean
+  urgency?: 'asap' | 'this_week' | 'flexible' | null
+  
+  // PC experience
+  is_first_pc?: boolean | null
+  current_gpu?: string | null  // GPU model or 'dont_know'
+  
+  // Business
+  is_business_buyer: boolean
+  wants_vat_invoice: boolean
+  
+  // Aesthetics
+  aesthetic_preference?: 'quiet' | 'rgb' | null
+  
+  // Journey context
+  journey_budget_min?: number | null
+  journey_budget_max?: number | null
+  journey_customer_type?: string | null
+  journey_tier?: 'budget' | 'mid' | 'high' | null
+}

@@ -1,4 +1,4 @@
-import { AnalyticsEvent } from './types'
+import { AnalyticsEvent, BuyingFlowData } from './types'
 
 /**
  * Track customer journey events for AnalyticsBot
@@ -13,6 +13,34 @@ import { AnalyticsEvent } from './types'
  * 7. ar_opened - AR view opened
  * 8. drop_off - Customer leaves without completing
  */
+
+/**
+ * Get buying flow data from session storage
+ */
+export function getBuyingFlowData(): BuyingFlowData | null {
+  if (typeof window !== 'undefined') {
+    const data = sessionStorage.getItem('flipflop_buying_flow')
+    return data ? JSON.parse(data) : null
+  }
+  return null
+}
+
+/**
+ * Update buying flow data (progressive disclosure)
+ */
+export function updateBuyingFlowData(updates: Partial<BuyingFlowData>) {
+  if (typeof window !== 'undefined') {
+    const existing = getBuyingFlowData() || {
+      is_gift: false,
+      discreet_packaging: false,
+      is_business_buyer: false,
+      wants_vat_invoice: false,
+    }
+    const updated = { ...existing, ...updates }
+    sessionStorage.setItem('flipflop_buying_flow', JSON.stringify(updated))
+  }
+}
+
 export function trackEvent(
   event_type: AnalyticsEvent['event_type'] | 'budget_chosen' | 'customer_type_picked' | 'playbook_tier_shown',
   curated_build_id: string,
@@ -25,16 +53,30 @@ export function trackEvent(
     timestamp: new Date().toISOString(),
   }
 
-  // TODO: Wire to AnalyticsBot backend
-  // POST /api/analytics/events
-  // For now, log to console and store in sessionStorage for debugging
   console.log('[Analytics Event]', event)
   
   if (typeof window !== 'undefined') {
+    // Store event locally
     const key = 'flipflop_analytics_events'
     const existing = JSON.parse(sessionStorage.getItem(key) || '[]')
     existing.push(event)
     sessionStorage.setItem(key, JSON.stringify(existing))
+    
+    // Send to backend with buying flow context
+    const buyingFlow = getBuyingFlowData()
+    const customerId = localStorage.getItem('flipflop_customer_id')
+    
+    fetch('/api/public/analytics/event', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event_type: event.event_type,
+        curated_build_id: event.curated_build_id,
+        metadata: event.metadata,
+        buying_flow: buyingFlow,
+        customer_id: customerId ? parseInt(customerId) : null,
+      }),
+    }).catch(err => console.warn('Failed to send analytics event:', err))
   }
 }
 

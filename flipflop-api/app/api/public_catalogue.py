@@ -476,3 +476,37 @@ async def public_custom_slots(playbook_id: int, db: AsyncSession = Depends(get_d
                 for variant in values:
                     bucket[variant['id']] = variant
     return [{**slot, 'variants_by_tier': {'budget': [], 'mid': list(pool.get(slot['slot_type'], {}).values()), 'high': []}} for slot in base]
+
+
+# Analytics endpoints for curated journey
+from app.schemas.buying_flow import SessionAnalyticsEvent
+
+@router.post('/analytics/event')
+async def track_analytics_event(
+    event: SessionAnalyticsEvent,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Track an analytics event from the curated journey.
+    
+    Events include: budget_chosen, customer_type_picked, playbook_tier_shown,
+    case_chosen, rgb_tweaked, ar_opened, drop_off.
+    
+    This endpoint stores events for later analysis and ties them to customer
+    profiles when authenticated.
+    """
+    # TODO: Store in analytics table or send to analytics service
+    # For now, just log the event
+    import structlog
+    log = structlog.get_logger(__name__)
+    
+    log.info(
+        "curated_journey.analytics_event",
+        event_type=event.event_type,
+        curated_build_id=event.curated_build_id,
+        customer_id=event.customer_id,
+        metadata=event.metadata,
+        has_buying_flow=event.buying_flow is not None,
+    )
+    
+    return {"status": "tracked", "event_type": event.event_type}
