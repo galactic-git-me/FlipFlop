@@ -47,8 +47,14 @@ interface Listing {
   market_median_price?: number | null;
   market_upper_price?: number | null;
   pct_offset?: number | null;
-  watch_count?: number | null;
-  best_offer_enabled?: boolean;
+  amazon_bestseller_rank?: number | null;
+  amazon_bestseller_list?: string | null;
+  amazon_bestseller_category?: string | null;
+  amazon_bestseller_captured_at?: string | null;
+  performance_rank?: number | null;
+  performance_peer_count?: number | null;
+  performance_percentile?: number | null;
+  performance_status?: string | null;
   classification: string;
   deal_score: number;
   confidence: string;
@@ -1562,7 +1568,7 @@ function stockLaneFor(listing: Listing): Exclude<StockLane, "all"> | "unknown" {
   return "unknown";
 }
 
-type SortKey = "source" | "title" | "seller" | "condition" | "price_variance" | "delivered_price" | "market_lower_price" | "market_median_price" | "market_upper_price" | "classification" | "decision" | "deal_score" | "watch_count" | "best_offer_enabled";
+type SortKey = "source" | "title" | "seller" | "condition" | "price_variance" | "delivered_price" | "market_lower_price" | "market_median_price" | "market_upper_price" | "classification" | "decision" | "deal_score" | "amazon_bestseller_rank" | "performance_rank";
 type SortDir = "asc" | "desc";
 
 const CLASSIFICATION_RANK: Record<string, number> = {
@@ -2091,7 +2097,9 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
       setSortDir(sortDir === "asc" ? "desc" : "asc");
     } else {
       setSortKey(key);
-      setSortDir("desc");
+      // Rank #1 is the best result, unlike price and deal score where higher
+      // values are generally more useful at the top of the table.
+      setSortDir(key === "amazon_bestseller_rank" || key === "performance_rank" ? "asc" : "desc");
     }
   };
 
@@ -2257,8 +2265,8 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                 <SortHeader label="Decision" sortKey="decision" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} widthClassName="w-20" />
                 <SortHeader label="Score" sortKey="deal_score" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-14" />
                 <th className="text-left text-slate-200 font-semibold w-16">Evidence</th>
-                <SortHeader label="Watches" sortKey="watch_count" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-16" />
-                <SortHeader label="Offers" sortKey="best_offer_enabled" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-14" />
+                <SortHeader label="Amazon BSR" sortKey="amazon_bestseller_rank" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
+                <SortHeader label="Performance" sortKey="performance_rank" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-24" />
               </tr>
             </thead>
             <tbody>
@@ -2356,10 +2364,18 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
                       </button>
                     </td>
                     <td className="p-3 text-right text-cyan-300">
-                      {listing.watch_count ?? "—"}
+                      {listing.amazon_bestseller_rank != null ? (
+                        <span title={`Amazon Best Sellers${listing.amazon_bestseller_category ? ` · ${listing.amazon_bestseller_category}` : ""}${listing.amazon_bestseller_list ? ` · ${listing.amazon_bestseller_list}` : ""}${listing.amazon_bestseller_captured_at ? ` · captured ${new Date(listing.amazon_bestseller_captured_at).toLocaleDateString()}` : ""}`}>
+                          #{listing.amazon_bestseller_rank.toLocaleString()}
+                        </span>
+                      ) : "—"}
                     </td>
-                    <td className={`p-3 text-right ${listing.best_offer_enabled ? "text-emerald-300" : "text-slate-500"}`}>
-                      {listing.best_offer_enabled ? "Yes" : "No"}
+                    <td className="p-3 text-right text-violet-300">
+                      {listing.performance_rank != null && listing.performance_peer_count != null ? (
+                        <span title={`${listing.performance_percentile != null ? `${listing.performance_percentile.toFixed(0)}th percentile` : "Hardware benchmark rank"} among comparable ${listing.category?.toUpperCase() ?? "hardware"} models.`}>
+                          #{listing.performance_rank} / {listing.performance_peer_count}
+                        </span>
+                      ) : "—"}
                     </td>
                   </tr>
                 );
@@ -2596,14 +2612,14 @@ function priceVariancePercent(listing: Listing): number | null {
   return ((listing.market_median_price! - listing.delivered_price) / listing.delivered_price) * 100;
 }
 
-function buildInsightPoints(listings: Listing[], kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "watchesVariance" | "priceMedian"): InsightPoint[] {
+function buildInsightPoints(listings: Listing[], kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "amazonBestsellerVariance" | "priceMedian"): InsightPoint[] {
   return listings.flatMap((listing) => {
     const variance = priceVariancePercent(listing);
     const base = { title: listing.title, classification: listing.classification };
     if (kind === "sellThrough" && variance !== null && Number.isFinite(listing.sell_through_rate_pct) && Number.isFinite(listing.sold_listing_count)) return [{ ...base, x: variance, y: listing.sell_through_rate_pct!, bubble: listing.sold_listing_count!, xLabel: "Price variance", yLabel: "Sell-through", bubbleLabel: "Sold comps", xUnit: "%", yUnit: "%" }];
     if (kind === "profitRoi" && Number.isFinite(listing.expected_profit) && Number.isFinite(listing.roi_pct)) return [{ ...base, x: listing.expected_profit!, y: listing.roi_pct!, bubble: Math.max(0, listing.delivered_price), xLabel: "Expected profit", yLabel: "Model ROI", bubbleLabel: "Listing price", xUnit: "£", yUnit: "%", bubbleUnit: "£" }];
     if (kind === "confidenceVariance" && variance !== null && Number.isFinite(listing.market_confidence)) return [{ ...base, x: listing.market_confidence!, y: variance, bubble: Math.max(0, listing.market_sample_size ?? 0), xLabel: "Market confidence", yLabel: "Price variance", bubbleLabel: "Comparable sample", xUnit: "/100", yUnit: "%" }];
-    if (kind === "watchesVariance" && variance !== null && Number.isFinite(listing.watch_count)) return [{ ...base, x: listing.watch_count!, y: variance, bubble: listing.best_offer_enabled ? 1 : 0, xLabel: "Watchers", yLabel: "Price variance", bubbleLabel: "Best offer", xUnit: "", yUnit: "%" }];
+    if (kind === "amazonBestsellerVariance" && variance !== null && Number.isFinite(listing.amazon_bestseller_rank)) return [{ ...base, x: listing.amazon_bestseller_rank!, y: variance, bubble: Math.max(0, listing.delivered_price), xLabel: "Amazon Best Seller rank", yLabel: "Price variance", bubbleLabel: "Listing price", xUnit: "#", yUnit: "%", bubbleUnit: "£" }];
     if (kind === "priceMedian" && Number.isFinite(listing.delivered_price) && listing.delivered_price > 0 && Number.isFinite(listing.market_median_price) && listing.market_median_price! > 0) return [{ ...base, x: listing.delivered_price, y: listing.market_median_price!, bubble: Math.max(0, listing.expected_profit ?? 0), xLabel: "Listing price", yLabel: "Market median", bubbleLabel: "Expected profit", xUnit: "£", yUnit: "£", bubbleUnit: "£" }];
     return [];
   });
@@ -2618,7 +2634,7 @@ function insightDomain(values: number[], includeZero = true): [number, number] {
 function formatInsightValue(value: number, unit = "") {
   const absoluteValue = Math.abs(value);
   const formatted = absoluteValue >= 1000 ? absoluteValue.toLocaleString(undefined, { maximumFractionDigits: 0 }) : absoluteValue.toFixed(1);
-  return `${value < 0 ? "-" : ""}${unit === "£" ? "£" : ""}${formatted}${unit === "%" ? "%" : unit === "/100" ? "/100" : ""}`;
+  return `${value < 0 ? "-" : ""}${unit === "£" || unit === "#" ? unit : ""}${formatted}${unit === "%" ? "%" : unit === "/100" ? "/100" : ""}`;
 }
 
 function InsightTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: InsightPoint }> }) {
@@ -2633,7 +2649,7 @@ function InsightTooltip({ active, payload }: { active?: boolean; payload?: Array
   </div>;
 }
 
-const InsightScatterChart = memo(function InsightScatterChart({ listings, kind, title, description, insight, diagonal = false }: { listings: Listing[]; kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "watchesVariance" | "priceMedian"; title: string; description: string; insight: string; diagonal?: boolean }) {
+const InsightScatterChart = memo(function InsightScatterChart({ listings, kind, title, description, insight, diagonal = false }: { listings: Listing[]; kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "amazonBestsellerVariance" | "priceMedian"; title: string; description: string; insight: string; diagonal?: boolean }) {
   const points = useMemo(() => buildInsightPoints(listings, kind), [listings, kind]);
   const xDomain = useMemo(() => insightDomain(points.map((point) => point.x)), [points]);
   const yDomain = useMemo(() => diagonal ? xDomain : insightDomain(points.map((point) => point.y)), [diagonal, points, xDomain]);
@@ -2888,7 +2904,7 @@ const AnalyticsTab = memo(function AnalyticsTab({ listings }: { listings: Listin
         <InsightScatterChart listings={listings} kind="sellThrough" title="Price Variance vs Sell-through" description="Discount opportunity against observed market liquidity; bubble size is sold comparable count." insight="Upper-right points combine a meaningful discount with proven demand. A large discount with weak sell-through is a warning, not automatically a bargain." />
         <InsightScatterChart listings={listings} kind="profitRoi" title="Expected Profit vs Model ROI" description="Absolute return against percentage return; bubble size is the listing price." insight="Top-right points are strongest on both measures. High ROI with tiny profit is a small-ticket opportunity; high profit with low ROI ties up more capital." />
         <InsightScatterChart listings={listings} kind="confidenceVariance" title="Market Confidence vs Price Variance" description="How much the market supports the price gap; bubble size is comparable sample size." insight="Look for positive variance with high confidence. Large gaps supported by small samples or low confidence are the most likely false gems." />
-        <InsightScatterChart listings={listings} kind="watchesVariance" title="Watchers vs Price Variance" description="Buyer interest against the gap to market; bubble size indicates whether best offer is enabled." insight="A positive gap with many watchers is a demand-backed opportunity. High variance with no watchers suggests the price advantage may not convert." />
+        <InsightScatterChart listings={listings} kind="amazonBestsellerVariance" title="Amazon Best Seller Rank vs Price Variance" description="Amazon category position against the gap to market; lower rank numbers are better. Bubble size is the listing price." insight="Look for a positive price gap with a low Amazon rank. Amazon rank is a product-level signal, not a measure of this marketplace listing's demand." />
         <InsightScatterChart listings={listings} kind="priceMedian" title="Listing Price vs Market Median" description="Direct price positioning; the dashed diagonal marks parity with the market median." insight="Points above the diagonal have a listing price below market. The farther above, the larger the discount; use classification colour and bubble profit to judge quality." diagonal />
       </div>
       <ClassificationLegend classifications={[...CLASSIFICATION_ORDER]} />
