@@ -34,3 +34,6 @@ DeferredBrowserMetrics/
 
 # Gem Radar scrape artifacts (PDFs, SCREENED.json) - 24h retention, not source
 scrapes/
+
+# Local scheduler runtime state
+/data/scheduler_state.json
