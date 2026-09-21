@@ -53,6 +53,107 @@ const typeIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   pricing: DollarSign,
 };
 
+
+function playbookCost(item: ApprovalItem): number | null {
+  if (typeof item.total_cost_gbp === "number") return item.total_cost_gbp;
+  const comps = item.payload?.core_components;
+  if (Array.isArray(comps)) {
+    const sum = comps.reduce((acc: number, c: unknown) => {
+      const cost = (c as { cost_gbp?: number })?.cost_gbp;
+      return acc + (typeof cost === "number" ? cost : 0);
+    }, 0);
+    return sum > 0 ? sum : null;
+  }
+  return null;
+}
+
+function PlaybookProfitMatrix({ items }: { items: ApprovalItem[] }) {
+  const playbooks = items.filter((i) => i.approval_type === "playbook");
+  if (playbooks.length === 0) return null;
+
+  const tiers = ["Budget", "Mid-range", "High-end"] as const;
+  const byType = new Map<string, ApprovalItem[]>();
+  for (const item of playbooks) {
+    const ct = String(item.payload?.customer_type || "Other");
+    if (!byType.has(ct)) byType.set(ct, []);
+    byType.get(ct)!.push(item);
+  }
+
+  const types = Array.from(byType.keys()).sort();
+
+  return (
+    <Card className="mb-6 bg-slate-900/60 border-slate-700">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-white text-lg">Playbook profit matrix</CardTitle>
+        <p className="text-sm text-slate-400">
+          Cost from BuildBot pending BOMs. Sell / profit fill in when PricingBot posts — blank sell means awaiting pricing.
+        </p>
+      </CardHeader>
+      <CardContent className="overflow-x-auto">
+        <table className="w-full text-sm border-collapse">
+          <thead>
+            <tr className="text-left text-slate-400 border-b border-slate-700">
+              <th className="py-2 pr-3 font-medium">Customer type</th>
+              {tiers.map((tier) => (
+                <th key={tier} className="py-2 px-2 font-medium min-w-[9rem]">
+                  {tier}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {types.map((ct) => {
+              const row = byType.get(ct) || [];
+              return (
+                <tr key={ct} className="border-b border-slate-800 align-top">
+                  <td className="py-3 pr-3 text-white font-medium whitespace-nowrap">{ct}</td>
+                  {tiers.map((tier) => {
+                    const item = row.find((i) => String(i.payload?.budget_tier) === tier);
+                    if (!item) {
+                      return (
+                        <td key={tier} className="py-3 px-2 text-slate-600">
+                          —
+                        </td>
+                      );
+                    }
+                    const cost = playbookCost(item);
+                    const sell = typeof item.sell_price_gbp === "number" ? item.sell_price_gbp : null;
+                    const profit = sell != null && cost != null ? sell - cost : null;
+                    const margin =
+                      typeof item.est_margin_pct === "number"
+                        ? item.est_margin_pct
+                        : profit != null && sell
+                          ? (profit / sell) * 100
+                          : null;
+                    return (
+                      <td key={tier} className="py-3 px-2">
+                        <div className="rounded-md border border-slate-700 bg-slate-950/50 p-2 space-y-0.5">
+                          <div className="text-[10px] text-slate-500 font-mono">{item.playbook_id}</div>
+                          <div className="text-orange-300">
+                            Cost {cost != null ? formatCurrency(cost) : "—"}
+                          </div>
+                          <div className="text-green-400">
+                            Sell {sell != null ? formatCurrency(sell) : "—"}
+                          </div>
+                          <div className={profit != null ? "text-cyan-300 font-semibold" : "text-slate-500"}>
+                            Profit {profit != null ? formatCurrency(profit) : "awaiting price"}
+                            {margin != null ? ` (${margin.toFixed(0)}%)` : ""}
+                          </div>
+                        </div>
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </CardContent>
+    </Card>
+  );
+}
+
+
 export default function ApprovalsPage() {
   const [summary, setSummary] = useState<ApprovalSummary | null>(null);
   const [items, setItems] = useState<ApprovalItem[]>([]);
@@ -184,7 +285,11 @@ export default function ApprovalsPage() {
         )}
 
         <div className="space-y-4">
-          {loading ? (
+          {(!selectedType || selectedType === "playbook") && (
+          <PlaybookProfitMatrix items={items} />
+        )}
+
+        {loading ? (
             <Card className="bg-slate-900/50 border-slate-700">
               <CardContent className="p-8 text-center text-slate-400">Loading...</CardContent>
             </Card>
