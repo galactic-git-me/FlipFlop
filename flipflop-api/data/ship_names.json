@@ -17,9 +17,9 @@
       "description": "Tough little warship, first ship designed to fight the Borg"
     },
     "Great-value Gaming": {
-      "base_name": "Miranda",
-      "series": "TOS/TNG",
-      "description": "Reliable workhorse, served Starfleet for over a century"
+      "base_name": "Reliant",
+      "series": "TOS",
+      "description": "Miranda-class starship, NCC-1864, Khan's chosen vessel"
     },
     "Student Hybrid": {
       "base_name": "Voyager",
@@ -58,20 +58,20 @@
     "FF-GVG-01": {
       "segment": "Great-value Gaming",
       "tier": "Budget",
-      "ship_name": "Miranda",
-      "display_name": "Miranda"
+      "ship_name": "Reliant",
+      "display_name": "Reliant"
     },
     "FF-GVG-02": {
       "segment": "Great-value Gaming",
       "tier": "Mid-range",
-      "ship_name": "Miranda Pro",
-      "display_name": "Miranda Pro"
+      "ship_name": "Reliant Pro",
+      "display_name": "Reliant Pro"
     },
     "FF-GVG-03": {
       "segment": "Great-value Gaming",
       "tier": "High-end",
-      "ship_name": "Miranda Ultra",
-      "display_name": "Miranda Ultra"
+      "ship_name": "Reliant Ultra",
+      "display_name": "Reliant Ultra"
     },
     "FF-HPG-02": {
       "segment": "High-performance Gaming",
