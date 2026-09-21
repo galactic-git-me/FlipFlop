@@ -19,6 +19,12 @@ export interface CuratedBuild {
   playbook_id?: number
   missing_components: string[]
   price_gbp?: number
+  
+  // Star Trek ship naming
+  ship_name?: string
+  ship_display_name?: string
+  ship_series?: string
+  ship_description?: string
 }
 
 export interface CuratedBuildsResponse {

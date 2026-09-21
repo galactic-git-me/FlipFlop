@@ -442,6 +442,8 @@ async def public_curated_slots(playbook_id: int, db: AsyncSession = Depends(get_
 @router.get('/curated-builds')
 async def public_curated_builds(db: AsyncSession = Depends(get_db)):
     from app.services.curated_build_policy import definitions, curated_slots
+    from app.services.ship_naming import enrich_curated_build_with_ship_name
+    
     playbooks = await public_list_playbooks(db)
     cases = await public_list_cases(db)
     by_name = {p['name']: p for p in playbooks}
@@ -459,8 +461,19 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
         if not cases:
             missing.append('case')
         parts = sum(float(v['display_price']) for v in chosen if v) + (min(float(c['rrp_gbp']) for c in cases) if cases else 0)
-        result.append({**definition, 'playbook_id': pb['id'] if pb else None, 'missing_components': missing,
-                       'price_gbp': round((parts + LABOUR_COST) * (1 + OVERHEAD_RATE), 2) if not missing else None})
+        
+        build_data = {
+            **definition, 
+            'playbook_id': pb['id'] if pb else None, 
+            'missing_components': missing,
+            'price_gbp': round((parts + LABOUR_COST) * (1 + OVERHEAD_RATE), 2) if not missing else None
+        }
+        
+        # Add Star Trek ship names
+        build_data = enrich_curated_build_with_ship_name(build_data)
+        
+        result.append(build_data)
+    
     return result
 
 
