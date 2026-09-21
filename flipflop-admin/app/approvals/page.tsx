@@ -180,8 +180,8 @@ export default function ApprovalsPage() {
     setLoading(true);
     try {
       const url = selectedType
-        ? `${API_BASE}/api/bot-approvals/pending?approval_type=${selectedType}`
-        : `${API_BASE}/api/bot-approvals/pending`;
+        ? `${API_BASE}/api/bot-approvals/pending?approval_type=${selectedType}&limit=200`
+        : `${API_BASE}/api/bot-approvals/pending?limit=200`;
       const response = await fetch(url);
       const data = await readJsonResponse(response);
       setItems(data);
