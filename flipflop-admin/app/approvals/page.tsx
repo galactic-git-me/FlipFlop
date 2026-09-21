@@ -54,6 +54,23 @@ const typeIcons: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 
+
+function playbookMemoryGen(item: ApprovalItem): "DDR4" | "DDR5" | "LPDDR5X" | null {
+  const comps = item.payload?.core_components;
+  if (!Array.isArray(comps)) return null;
+  const text = comps
+    .filter((c) => {
+      const cat = String((c as { category?: string })?.category || "").toLowerCase();
+      return cat === "memory" || cat === "ram";
+    })
+    .map((c) => String((c as { title?: string; sku?: string })?.title || (c as { sku?: string })?.sku || ""))
+    .join(" ");
+  if (/LPDDR5X/i.test(text)) return "LPDDR5X";
+  if (/DDR5/i.test(text)) return "DDR5";
+  if (/DDR4/i.test(text)) return "DDR4";
+  return null;
+}
+
 function playbookCost(item: ApprovalItem): number | null {
   if (typeof item.total_cost_gbp === "number") return item.total_cost_gbp;
   const comps = item.payload?.core_components;
@@ -151,6 +168,9 @@ function PlaybookProfitMatrix({ items }: { items: ApprovalItem[] }) {
                       <td key={tier} className="py-3 px-2">
                         <div className="rounded-md border border-slate-700 bg-slate-950/50 p-2 space-y-0.5">
                           <div className="text-[10px] text-slate-500 font-mono">{item.playbook_id}</div>
+                          {playbookMemoryGen(item) && (
+                            <div className="text-[10px] font-semibold text-violet-300">{playbookMemoryGen(item)}</div>
+                          )}
                           <div className="text-orange-300">
                             Cost {cost != null ? formatCurrency(cost) : "—"}
                           </div>
@@ -527,6 +547,11 @@ function ApprovalCard({
               {item.payload?.budget_tier ? (
                 <span className="rounded-full border border-orange-500/40 bg-orange-500/10 px-2.5 py-0.5 text-xs text-orange-200">
                   Budget: {String(item.payload.budget_tier)}
+                </span>
+              ) : null}
+              {playbookMemoryGen(item) ? (
+                <span className="rounded-full border border-violet-500/40 bg-violet-500/10 px-2.5 py-0.5 text-xs text-violet-200">
+                  Memory: {playbookMemoryGen(item)}
                 </span>
               ) : null}
             </div>
