@@ -1,6 +1,7 @@
 from app.gem_radar.marketplace import (
     fallback_listing_url,
     infer_listing_source,
+    is_implausibly_low_aliexpress_listing,
     is_malformed_awdit_listing,
     usable_listing_url,
 )
@@ -30,6 +31,24 @@ def test_awdit_real_title_is_kept() -> None:
     assert not is_malformed_awdit_listing(
         "https://www.awd-it.co.uk/intel-core-i5-12400f.html",
         "Intel Core i5-12400F Processor",
+    )
+
+
+def test_aliexpress_promotional_from_price_is_rejected() -> None:
+    assert is_implausibly_low_aliexpress_listing(
+        "https://www.aliexpress.com/item/100500000.html",
+        2.75,
+    )
+    assert not is_implausibly_low_aliexpress_listing(
+        "https://www.aliexpress.com/item/100500000.html",
+        10.00,
+    )
+
+
+def test_low_prices_from_other_marketplaces_are_not_rejected_by_aliexpress_rule() -> None:
+    assert not is_implausibly_low_aliexpress_listing(
+        "https://www.ebay.co.uk/itm/123",
+        2.75,
     )
 
 

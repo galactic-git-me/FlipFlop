@@ -29,6 +29,7 @@ from app.gem_radar.inventory_match import fetch_inventory_awareness
 from app.gem_radar.marketplace import (
     fallback_listing_url,
     infer_marketplace,
+    is_implausibly_low_aliexpress_listing,
     is_malformed_awdit_listing,
     usable_listing_url,
 )
@@ -2557,14 +2558,27 @@ async def _submit_scan_body(
             count=len(malformed_awdit),
             titles=[listing.title for listing in malformed_awdit[:5]],
         )
-        payload = payload.model_copy(
-            update={
-                "listings": [
-                    listing for listing in payload.listings
-                    if not is_malformed_awdit_listing(listing.url, listing.title)
-                ]
-            }
+    implausibly_low_aliexpress = [
+        listing for listing in payload.listings
+        if is_implausibly_low_aliexpress_listing(listing.url, listing.current_delivered_price)
+    ]
+    if implausibly_low_aliexpress:
+        log.warning(
+            "gem_radar.reject_implausibly_low_aliexpress_listings",
+            count=len(implausibly_low_aliexpress),
+            titles=[listing.title for listing in implausibly_low_aliexpress[:5]],
         )
+    payload = payload.model_copy(
+        update={
+            "listings": [
+                listing for listing in payload.listings
+                if not is_malformed_awdit_listing(listing.url, listing.title)
+                and not is_implausibly_low_aliexpress_listing(
+                    listing.url, listing.current_delivered_price
+                )
+            ]
+        }
+    )
 
     # Search terms are configured by component category, but individual
     # listing payloads do not carry that field.  Preserve the search-level

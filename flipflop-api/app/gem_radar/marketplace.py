@@ -20,6 +20,11 @@ from urllib.parse import quote_plus, unquote, urlparse
 _ASIN_PATTERN = re.compile(r"^B0[A-Z0-9]{8}$")
 _AWD_PROMO_BADGE_TITLE = re.compile(r"^save\s+\d+(?:\.\d+)?\s*%$", re.IGNORECASE)
 
+# AliExpress search cards can expose a variant, coupon, or "from" price
+# rather than the price for the product in the title. Such values are not
+# actionable complete-component offers and must not influence CPK prices.
+_ALIEXPRESS_MIN_ACTIONABLE_PRICE_GBP = 10.00
+
 _DOMAIN_TO_MARKETPLACE: dict[str, str] = {
     "ebay.co.uk": "ebay",
     "ebay.com": "ebay",
@@ -144,6 +149,17 @@ _FALLBACK_SEARCH_TEMPLATES: dict[str, str] = {
     "bargain_hardware": "https://www.bargainhardware.co.uk/catalogsearch/result/?q={query}",
     "google_shopping": "https://www.google.com/search?tbm=shop&q={query}",
 }
+
+
+def is_implausibly_low_aliexpress_listing(
+    url: str | None, delivered_price: float | None
+) -> bool:
+    """Reject AliExpress promotional/variant prices, not low prices elsewhere."""
+    return bool(
+        infer_marketplace(url) == "aliexpress"
+        and delivered_price is not None
+        and 0 < delivered_price < _ALIEXPRESS_MIN_ACTIONABLE_PRICE_GBP
+    )
 
 
 def _google_shopping_embedded_url(listing_id: str) -> str | None:
