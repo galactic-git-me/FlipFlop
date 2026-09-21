@@ -72,6 +72,37 @@ function playbookMemoryGen(item: ApprovalItem): "DDR4" | "DDR5" | "LPDDR5X" | nu
   return null;
 }
 
+
+const SHIP_BY_CUSTOMER_TYPE: Record<string, string> = {
+  "Great-value Gaming": "Reliant",
+  "High-performance Gaming": "Defiant",
+  "Student Hybrid": "Voyager",
+  "Business & Office": "Excelsior",
+  "Content Creation": "Galaxy",
+  "AI Workstation": "Enterprise",
+  "Software Development": "Titan",
+  "Family & Home": "Stargazer",
+};
+
+function playbookPublicName(item: ApprovalItem): string | null {
+  const fromPayload =
+    (typeof item.payload?.display_name === "string" && item.payload.display_name) ||
+    (typeof item.payload?.public_name === "string" && item.payload.public_name) ||
+    null;
+  if (fromPayload) return fromPayload;
+
+  const ship =
+    (typeof item.payload?.ship_name === "string" && item.payload.ship_name) ||
+    SHIP_BY_CUSTOMER_TYPE[String(item.payload?.customer_type || "")] ||
+    null;
+  if (!ship) return null;
+
+  const tier = String(item.payload?.budget_tier || "");
+  if (tier === "Mid-range") return `${ship} Pro`;
+  if (tier === "High-end") return `${ship} Ultra`;
+  return ship; // Budget: no Base suffix
+}
+
 function playbookCost(item: ApprovalItem): number | null {
   if (typeof item.total_cost_gbp === "number") return item.total_cost_gbp;
   const comps = item.payload?.core_components;
@@ -168,6 +199,7 @@ function PlaybookProfitMatrix({ items }: { items: ApprovalItem[] }) {
                     return (
                       <td key={tier} className="py-3 px-2">
                         <div className="rounded-md border border-slate-700 bg-slate-950/50 p-2 space-y-0.5">
+                          <div className="text-xs font-semibold text-white">{playbookPublicName(item) || item.playbook_id}</div>
                           <div className="text-[10px] text-slate-500 font-mono">{item.playbook_id}</div>
                           {playbookMemoryGen(item) && (
                             <div className="text-[10px] font-semibold text-violet-300">{playbookMemoryGen(item)}</div>
@@ -484,8 +516,15 @@ function ApprovalCard({
               <Icon className="h-5 w-5 text-cyan-400" />
             </div>
             <div>
-              <CardTitle className="text-white text-lg">{typeLabels[item.approval_type]}</CardTitle>
+              <CardTitle className="text-white text-lg">
+                {item.approval_type === "playbook" && playbookPublicName(item)
+                  ? playbookPublicName(item)
+                  : typeLabels[item.approval_type]}
+              </CardTitle>
               <div className="text-sm text-slate-400 mt-1">
+                {item.approval_type === "playbook" && playbookPublicName(item) ? (
+                  <span>{typeLabels[item.approval_type]} · </span>
+                ) : null}
                 {item.submitted_by} • {new Date(item.submitted_at).toLocaleString()}
               </div>
             </div>
