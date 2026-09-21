@@ -182,6 +182,8 @@ export default function ApprovalsPage() {
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [processingId, setProcessingId] = useState<number | null>(null);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [bulkProcessing, setBulkProcessing] = useState(false);
 
   useEffect(() => {
     loadSummary();
@@ -207,6 +209,7 @@ export default function ApprovalsPage() {
       const response = await fetch(url);
       const data = await readJsonResponse(response);
       setItems(data);
+      setSelectedIds([]);
     } catch (error) {
       console.error("Failed to load items:", error);
     } finally {
@@ -235,6 +238,58 @@ export default function ApprovalsPage() {
       alert(`Failed to ${action}: ${error}`);
     } finally {
       setProcessingId(null);
+    }
+  }
+
+
+  function toggleSelected(id: number) {
+    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  }
+
+  function toggleSelectAll() {
+    if (selectedIds.length === items.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(items.map((i) => i.id));
+    }
+  }
+
+  async function handleBulkDecision(action: "approve" | "reject") {
+    if (selectedIds.length === 0) return;
+    let reason: string | undefined;
+    if (action === "reject") {
+      const prompted = prompt(`Rejection reason for ${selectedIds.length} item(s) (optional):`);
+      if (prompted === null) return;
+      reason = prompted || undefined;
+    } else if (
+      !confirm(`Approve ${selectedIds.length} selected item(s)?`)
+    ) {
+      return;
+    }
+
+    setBulkProcessing(true);
+    try {
+      for (const id of selectedIds) {
+        setProcessingId(id);
+        const response = await fetch(`${API_BASE}/api/bot-approvals/${id}/decision`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action, rejection_reason: reason }),
+        });
+        if (!response.ok) {
+          const error = await response.json().catch(() => ({}));
+          alert(`Failed to ${action} #${id}: ${error.detail || "Unknown error"}`);
+          break;
+        }
+      }
+      await loadSummary();
+      await loadPendingItems();
+    } catch (error) {
+      console.error(`Bulk ${action} failed:`, error);
+      alert(`Bulk ${action} failed: ${error}`);
+    } finally {
+      setProcessingId(null);
+      setBulkProcessing(false);
     }
   }
 
@@ -306,6 +361,43 @@ export default function ApprovalsPage() {
           </div>
         )}
 
+        {items.length > 0 && (
+          <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-slate-700 bg-slate-900/60 px-4 py-3">
+            <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
+              <input
+                type="checkbox"
+                className="h-4 w-4 rounded border-slate-600 bg-slate-950"
+                checked={items.length > 0 && selectedIds.length === items.length}
+                onChange={toggleSelectAll}
+                disabled={bulkProcessing || loading}
+              />
+              Select all ({items.length})
+            </label>
+            <span className="text-xs text-slate-500">{selectedIds.length} selected</span>
+            <div className="ml-auto flex flex-wrap gap-2">
+              <Button
+                size="sm"
+                onClick={() => handleBulkDecision("approve")}
+                disabled={selectedIds.length === 0 || bulkProcessing}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                <Check className="h-4 w-4 mr-1" />
+                Approve ({selectedIds.length})
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleBulkDecision("reject")}
+                disabled={selectedIds.length === 0 || bulkProcessing}
+                className="border-red-500/50 text-red-400 hover:bg-red-500/10"
+              >
+                <X className="h-4 w-4 mr-1" />
+                Reject ({selectedIds.length})
+              </Button>
+            </div>
+          </div>
+        )}
+
         <div className="space-y-4">
           {(!selectedType || selectedType === "playbook") && (
           <PlaybookProfitMatrix items={items} />
@@ -327,7 +419,9 @@ export default function ApprovalsPage() {
                 key={item.id}
                 item={item}
                 onDecision={handleDecision}
-                processing={processingId === item.id}
+                processing={processingId === item.id || bulkProcessing}
+                selected={selectedIds.includes(item.id)}
+                onToggleSelect={() => toggleSelected(item.id)}
               />
             ))
           )}
@@ -341,18 +435,30 @@ function ApprovalCard({
   item,
   onDecision,
   processing,
+  selected,
+  onToggleSelect,
 }: {
   item: ApprovalItem;
   onDecision: (id: number, action: "approve" | "reject", reason?: string) => Promise<void>;
   processing: boolean;
+  selected: boolean;
+  onToggleSelect: () => void;
 }) {
   const Icon = typeIcons[item.approval_type] || AlertCircle;
 
   return (
-    <Card className="bg-slate-900/70 border-slate-700">
+    <Card className={`bg-slate-900/70 border-slate-700 ${selected ? "border-cyan-500/70 ring-1 ring-cyan-500/30" : ""}`}>
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              className="h-4 w-4 rounded border-slate-600 bg-slate-950 mt-1"
+              checked={selected}
+              onChange={onToggleSelect}
+              disabled={processing}
+              aria-label={`Select approval ${item.id}`}
+            />
             <div className="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30">
               <Icon className="h-5 w-5 text-cyan-400" />
             </div>
