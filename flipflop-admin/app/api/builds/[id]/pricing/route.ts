@@ -14,7 +14,7 @@ export async function GET(
   const fetchSold = searchParams.get("fetch_sold") ?? "false";
 
   try {
-    const backendOrigin = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4311").replace(/\/$/, "");
+    const backendOrigin = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4314").replace(/\/$/, "");
     const apiUrl = `${backendOrigin}/api/builds/${id}/pricing?fetch_sold=${fetchSold}`;
     const res = await fetch(apiUrl, {
       signal: AbortSignal.timeout(30000), // sold-comps fetch can hit ScrapingBee live, slower than a typical read

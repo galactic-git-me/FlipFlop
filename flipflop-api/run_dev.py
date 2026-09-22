@@ -42,7 +42,7 @@ import argparse
 import uvicorn
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--port", type=int, default=4311)
+ap.add_argument("--port", type=int, default=4314)
 ap.add_argument("--host", default="0.0.0.0")
 args = ap.parse_args()
 

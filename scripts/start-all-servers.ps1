@@ -743,7 +743,7 @@ Write-Host ""
 # facing website remains on Andromeda.
 Write-Host "[*] Cleaning up lingering processes on dev ports..." -ForegroundColor Cyan
 $devPorts = @(4312, 5173)
-if ($LocalBackend) { $devPorts += 4311 }
+if ($LocalBackend) { $devPorts += 4314 }
 # 18000 is a second queue-owning Gem Radar service. When it is not selected
 # for this run it must still be cleaned up; otherwise an orphaned instance
 # can consume the same submission_queue alongside the main API and double
@@ -825,9 +825,9 @@ if ($runMode -eq "live") {
 }
 
 # Server configuration
-$adminApiUrl = if ($LocalBackend) { "http://localhost:4311" } else { "https://www.theflipflop.shop" }
+$adminApiUrl = if ($LocalBackend) { "http://localhost:4314" } else { "https://www.theflipflop.shop" }
 $adminGemRadarUrl = if ($LocalGemRadar) { "http://localhost:18000" } elseif ($LocalBackend) { $adminApiUrl } else { "https://www.theflipflop.shop" }
-$frontendApiUrl = if ($LocalBackend) { "http://localhost:4311" } else { "https://www.theflipflop.shop" }
+$frontendApiUrl = if ($LocalBackend) { "http://localhost:4314" } else { "https://www.theflipflop.shop" }
 # DEV reads the real eBay marketplace so sourcing has real inventory. Listing
 # writes remain sandbox-only in DEV; LIVE uses production for both. Keep these
 # settings explicit because the read and write APIs use different credentials.
@@ -861,8 +861,12 @@ Write-Host ""
 $servers = @(
     @{
         name     = "backend"
-        cmdArgs  = @("/c", "cd flipflop-api && set FLIPFLOP_RUNTIME_ENV=$runMode && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set EBAY_ENVIRONMENT=$ebayEnvironment && set EBAY_LISTING_ENVIRONMENT=$ebayListingEnvironment && set AMAZON_SP_API_ENVIRONMENT=$amazonEnvironment && set AMAZON_SP_API_ENDPOINT=$amazonEndpoint && set ADMIN_FRONTEND_URL=http://localhost:4312 && set FRONTEND_URL=http://localhost:4313 && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4311")
-        port     = 4311
+        # OLLAMA_BASE_URL points at the dev priority-proxy (11436), not Ollama
+        # (11434) directly -- production's requests reach Ollama unproxied via
+        # the Andromeda SSH tunnel and must never wait behind dev's GPU usage.
+        # See scripts/ollama-dev-proxy.py.
+        cmdArgs  = @("/c", "cd flipflop-api && set FLIPFLOP_RUNTIME_ENV=$runMode && set OLLAMA_BASE_URL=http://localhost:11436 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set EBAY_ENVIRONMENT=$ebayEnvironment && set EBAY_LISTING_ENVIRONMENT=$ebayListingEnvironment && set AMAZON_SP_API_ENVIRONMENT=$amazonEnvironment && set AMAZON_SP_API_ENDPOINT=$amazonEndpoint && set ADMIN_FRONTEND_URL=http://localhost:4312 && set FRONTEND_URL=http://localhost:4313 && .venv\Scripts\python.exe run_dev.py --host 0.0.0.0 --port 4314")
+        port     = 4314
         color    = "Yellow"
         skip     = $NoBackend -or (-not $LocalBackend)
     },
@@ -870,7 +874,7 @@ $servers = @(
         name     = "gemradar-api"
         # Preserve the normal development workflow: reload is enabled only in
         # development mode and omitted for production-style runs.
-        cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11434 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set PYTHONUNBUFFERED=1 && .venv\Scripts\python.exe -m uvicorn app.gem_radar_standalone:app --host 0.0.0.0 --port 18000" + $(if ($runMode -eq "development") { " --reload --reload-dir app" } else { "" }))
+        cmdArgs  = @("/c", "cd flipflop-api && set OLLAMA_BASE_URL=http://localhost:11436 && set OLLAMA_MODEL=qwen2.5:7b-instruct && set PYTHONUNBUFFERED=1 && .venv\Scripts\python.exe -m uvicorn app.gem_radar_standalone:app --host 0.0.0.0 --port 18000" + $(if ($runMode -eq "development") { " --reload --reload-dir app" } else { "" }))
         port     = 18000
         color    = "Blue"
         skip     = $NoGemRadar -or (-not $LocalGemRadar)

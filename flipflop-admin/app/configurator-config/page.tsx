@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp, Eye, EyeOff, GripVertical, Loader } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4311").trim();
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4314").trim();
 
 interface Playbook {
   id: number;

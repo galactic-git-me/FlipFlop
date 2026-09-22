@@ -291,13 +291,13 @@ def build_layout(
 
 def main() -> int:
     p = argparse.ArgumentParser()
-    p.add_argument("--base-url", default="http://127.0.0.1:4311", help="Backend base URL without /api")
+    p.add_argument("--base-url", default="http://127.0.0.1:4314", help="Backend base URL without /api")
     p.add_argument("--refresh", type=float, default=1.0, help="Refresh seconds")
     p.add_argument("--log-file", default="", help="Path to backend log file to tail")
     args = p.parse_args()
 
     api = args.base_url.rstrip("/") + "/api"
-    log_file = args.log_file or str((Path(__file__).resolve().parents[2] / ".run-logs" / "backend-4311.log"))
+    log_file = args.log_file or str((Path(__file__).resolve().parents[2] / ".run-logs" / "backend-4314.log"))
     tailer = LogTailer(log_file=log_file, max_lines=24)
 
     with httpx.Client(follow_redirects=True) as client:

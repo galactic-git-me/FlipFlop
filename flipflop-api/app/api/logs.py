@@ -47,7 +47,7 @@ _LOG_TARGETS = {
     "gemradar": {"label": "Gem Radar server", "kind": "file", "file": str(_LOG_ROOT / "gemradar-api.out")},
     "admin": {"label": "Admin server", "kind": "file", "file": str(_LOG_ROOT / "admin-4312.out")},
     "frontend": {"label": "Frontend server", "kind": "file", "file": str(_LOG_ROOT / "frontend.log")},
-    "worker": {"label": "Background worker", "kind": "file", "file": str(_LOG_ROOT / "backend-4311.out")},
+    "worker": {"label": "Background worker", "kind": "file", "file": str(_LOG_ROOT / "backend-4314.out")},
 }
 
 
@@ -63,7 +63,7 @@ def _target_file(target: str, mode: str) -> str | None:
             "gemradar": _LOG_ROOT / "gem-radar-18000.out",
             "admin": _LOG_ROOT / "admin-4312.out",
             "frontend": _LOG_ROOT / "frontend.log",
-            "worker": _LOG_ROOT / "backend-4311-dev-current.out",
+            "worker": _LOG_ROOT / "backend-4314-dev-current.out",
         }
         return str(development_files.get(target, Path(config["file"])))
     return config["file"]
@@ -130,7 +130,7 @@ async def get_log_targets():
                 candidate.exists()
                 for candidate in (
                     _LOG_ROOT / "gem-radar-18000.out",
-                    _LOG_ROOT / "backend-4311-dev-current.out",
+                    _LOG_ROOT / "backend-4314-dev-current.out",
                 )
                 if key in {"gemradar", "worker"}
             ),

@@ -56,7 +56,7 @@ interface ReferenceCandidateResponse {
   candidates: ReferenceCandidate[];
   approved_selection?: { status?: string; images?: ReferenceCandidate[] };
 }
-const DIRECT_BACKEND_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4311").replace(/\/$/, "");
+const DIRECT_BACKEND_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4314").replace(/\/$/, "");
 const GOOGLE_CSE_ENGINE_ID = process.env.NEXT_PUBLIC_GOOGLE_CSE_ENGINE_ID;
 
 const sourcingLabels: Array<[string, string]> = [
