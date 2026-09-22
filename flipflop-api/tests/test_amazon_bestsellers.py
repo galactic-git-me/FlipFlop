@@ -1,10 +1,27 @@
 from app.services.amazon_bestsellers import (
     _best_scored_match,
+    bestseller_page_urls,
     clean_sales_velocity,
     extract_asin,
     match_row_by_bestseller,
     name_similarity,
 )
+
+
+def test_bestseller_page_urls_keeps_advertised_pages_and_caps_them():
+    base = "https://www.amazon.co.uk/Best-Sellers-Computers-Accessories-CPUs/zgbs/computers/430515031/"
+    urls = bestseller_page_urls(
+        base,
+        [
+            f"{base}?pg=2",
+            f"{base}?pg=3",
+            f"{base}?pg=3",
+            f"{base}?pg=99",
+            "https://www.amazon.co.uk/example?pg=not-a-page",
+        ],
+    )
+
+    assert urls == [base, f"{base}?pg=2", f"{base}?pg=3"]
 
 
 class _Row:

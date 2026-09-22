@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import re
+from urllib.parse import parse_qs, urlparse
 from datetime import datetime
 
 from difflib import SequenceMatcher
@@ -32,15 +33,16 @@ BESTSELLER_URL = (
 # Amazon's component bestseller pages.  The list name is stored with every
 # daily observation so the UI can explain exactly what a rank means.
 COMPONENT_BESTSELLER_LISTS = {
-    "cpu": ("CPUs", "https://www.amazon.co.uk/Best-Sellers-Computers-CPUs/zgbs/computers/229189/"),
-    "gpu": ("Graphics Cards", "https://www.amazon.co.uk/Best-Sellers-Computers-Graphics-Cards/zgbs/computers/284822/"),
-    "ram": ("Computer Memory", "https://www.amazon.co.uk/Best-Sellers-Computers-Computer-Memory/zgbs/computers/172500/"),
-    "storage": ("Internal Solid State Drives", "https://www.amazon.co.uk/Best-Sellers-Computers-Internal-Solid-State-Drives/zgbs/computers/430507031/"),
-    "motherboard": ("Motherboards", "https://www.amazon.co.uk/Best-Sellers-Computers-Motherboards/zgbs/computers/430500031/"),
-    "psu": ("Computer Power Supplies", "https://www.amazon.co.uk/Best-Sellers-Computers-Computer-Power-Supplies/zgbs/computers/1161760/"),
-    "cooler": ("Computer CPU Cooling Fans", "https://www.amazon.co.uk/Best-Sellers-Computers-CPU-Cooling-Fans/zgbs/computers/491286/"),
+    "cpu": ("CPUs", "https://www.amazon.co.uk/Best-Sellers-Computers-Accessories-CPUs/zgbs/computers/430515031/"),
+    "gpu": ("Graphics Cards", "https://www.amazon.co.uk/Best-Sellers-Computers-Accessories-Graphics-Cards/zgbs/computers/430500031/"),
+    "ram": ("Computer Memory", "https://www.amazon.co.uk/Best-Sellers-Computers-Accessories-Computer-Memory/zgbs/computers/430511031/"),
+    "storage": ("Data Storage", "https://www.amazon.co.uk/Best-Sellers-Computers-Accessories-Data-Storage/zgbs/computers/17477985031/"),
+    "motherboard": ("Motherboards", "https://www.amazon.co.uk/Best-Sellers-Computers-Accessories-Motherboards/zgbs/computers/430512031/"),
+    "psu": ("Power Supplies", "https://www.amazon.co.uk/Best-Sellers-Computers-Accessories-Power-Supplies/zgbs/computers/430514031/"),
     "case": ("Computer Cases", BESTSELLER_URL),
 }
+
+MAX_BESTSELLER_PAGES = 10
 ASIN_RE = re.compile(r"/dp/([A-Z0-9]{10})", re.I)
 
 _EXTRACT_JS = """(rankOffset = 0) => {
@@ -70,6 +72,7 @@ _EXTRACT_JS = """(rankOffset = 0) => {
             title = (titleEl?.textContent || '').trim();
         }
         let href = linkEl?.href || linkEl?.getAttribute('href') || '';
+        if (!title) title = (linkEl?.textContent || '').trim();
         if (href.startsWith('/')) href = 'https://www.amazon.co.uk' + href;
         const asinAttr = item.getAttribute('data-asin') || '';
         const asinMatch = href.match(/\\/dp\\/([A-Z0-9]{10})/i);
@@ -126,6 +129,32 @@ def clean_sales_velocity(text: str | None) -> str | None:
     if len(cleaned) < 60 and "bought" in cleaned.lower():
         return cleaned
     return None
+
+
+def bestseller_page_urls(base_url: str, pagination_urls: list[str]) -> list[str]:
+    """Return page one plus Amazon's advertised bestseller pages, capped safely."""
+    pages: dict[int, str] = {1: base_url}
+    for url in pagination_urls:
+        try:
+            page = int(parse_qs(urlparse(url).query).get("pg", [""])[0])
+        except (TypeError, ValueError):
+            continue
+        if 2 <= page <= MAX_BESTSELLER_PAGES:
+            pages.setdefault(page, url)
+    return [pages[page] for page in sorted(pages)]
+
+
+async def scroll_bestseller_page_to_end(page) -> None:
+    """Trigger Amazon's lazy-loaded lower rankings before parsing a page."""
+    previous_height = -1
+    for _ in range(12):
+        height = await page.evaluate("document.body.scrollHeight")
+        await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+        await page.wait_for_timeout(500)
+        current_height = await page.evaluate("document.body.scrollHeight")
+        if current_height == height == previous_height:
+            break
+        previous_height = current_height
 
 
 def name_similarity(a: str, b: str) -> float:
@@ -362,8 +391,8 @@ async def scrape_amazon_component_bestsellers() -> dict:
                 for category, (list_name, base_url) in COMPONENT_BESTSELLER_LISTS.items():
                     try:
                         items: list[dict] = []
-                        for page_num in (1, 2):
-                            url = base_url if page_num == 1 else f"{base_url}?pg={page_num}"
+                        page_urls = [base_url]
+                        for page_num, url in enumerate(page_urls, start=1):
                             await page.goto(url, wait_until="domcontentloaded", timeout=45000)
                             try:
                                 await page.wait_for_selector(
@@ -373,7 +402,13 @@ async def scrape_amazon_component_bestsellers() -> dict:
                             except Exception:
                                 pass
                             await asyncio.sleep(2)
+                            await scroll_bestseller_page_to_end(page)
                             items.extend(await page.evaluate(_EXTRACT_JS, (page_num - 1) * 50))
+                            if page_num == 1:
+                                pagination_urls = await page.locator("a[href*='pg=']").evaluate_all(
+                                    "links => links.map(link => link.href)"
+                                )
+                                page_urls = bestseller_page_urls(base_url, pagination_urls)
 
                         unique: dict[str, dict] = {}
                         for item in items:
