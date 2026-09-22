@@ -133,7 +133,10 @@ function isLocalDevelopment() {
 }
 
 function isDevelopmentMode() {
-  return process.env.NEXT_PUBLIC_APP_MODE !== "live";
+  // Fake /dev-listings pages are a development-only escape hatch. Treat
+  // every value other than the explicit dev mode as live so a missing,
+  // stale, or differently named production value cannot create fake links.
+  return process.env.NEXT_PUBLIC_APP_MODE === "dev";
 }
 
 function devListingUrl(source: CrossListingSource, channel: ChannelCapability) {
