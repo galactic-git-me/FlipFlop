@@ -1,0 +1,3 @@
+{
+  "/api/cases/[caseId]/3d-reference-image-search/route": "app/api/cases/[caseId]/3d-reference-image-search/route.js"
+}

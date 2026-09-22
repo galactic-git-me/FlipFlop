@@ -15,6 +15,7 @@
 #
 # Requires elevation (installing a service needs admin rights).
 $ErrorActionPreference = 'Stop'
+Start-Transcript -Path (Join-Path $env:TEMP 'install-prod-admin-transcript.log') -Force
 $repo = Split-Path -Parent $PSScriptRoot
 $admin = Join-Path $repo 'flipflop-admin'
 $npmExe = (Get-Command npm.cmd -ErrorAction SilentlyContinue).Source
@@ -45,3 +46,4 @@ nssm restart FlipFlopProdAdmin
 
 Start-Sleep -Seconds 3
 sc query FlipFlopProdAdmin
+Stop-Transcript
