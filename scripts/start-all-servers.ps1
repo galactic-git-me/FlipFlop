@@ -831,6 +831,9 @@ $amazonEndpoint = if ($amazonEnvironment -eq "sandbox") {
 # launcher process as well as on the backend command so every child process
 # sees the same safety boundary. Do not read this from .env.local.
 $env:FLIPFLOP_RUNTIME_ENV = $runMode
+$adminAppMode = if ($runMode -eq "live") { "live" } else { "dev" }
+$adminStorefrontUrl = "https://www.theflipflop.shop"
+$adminStorefrontDevUrl = "http://localhost:4313"
 $env:EBAY_ENVIRONMENT = $ebayEnvironment
 $env:EBAY_LISTING_ENVIRONMENT = $ebayListingEnvironment
 $env:AMAZON_SP_API_ENVIRONMENT = $amazonEnvironment
@@ -859,7 +862,7 @@ $servers = @(
     },
     @{
         name     = "admin"
-        cmdArgs  = @("/c", "cd flipflop-admin && set ""NODE_ENV=development"" && set ""BACKEND_URL=$adminApiUrl"" && set ""NEXT_PUBLIC_API_URL=$adminApiUrl"" && set ""NEXT_PUBLIC_FLIPFLOP_ENV=$runMode"" && set ""AMAZON_SP_API_ENVIRONMENT=$amazonEnvironment"" && set ""AMAZON_SP_API_ENDPOINT=$amazonEndpoint"" && set ""EBAY_OPS_BACKEND_URL=$adminApiUrl"" && set ""GEMRADAR_URL=$adminGemRadarUrl"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4312 -H 0.0.0.0")
+        cmdArgs  = @("/c", "cd flipflop-admin && set ""NODE_ENV=development"" && set ""BACKEND_URL=$adminApiUrl"" && set ""NEXT_PUBLIC_API_URL=$adminApiUrl"" && set ""NEXT_PUBLIC_FLIPFLOP_ENV=$runMode"" && set ""NEXT_PUBLIC_APP_MODE=$adminAppMode"" && set ""NEXT_PUBLIC_STOREFRONT_URL=$adminStorefrontUrl"" && set ""NEXT_PUBLIC_STOREFRONT_DEV_URL=$adminStorefrontDevUrl"" && set ""AMAZON_SP_API_ENVIRONMENT=$amazonEnvironment"" && set ""AMAZON_SP_API_ENDPOINT=$amazonEndpoint"" && set ""EBAY_OPS_BACKEND_URL=$adminApiUrl"" && set ""GEMRADAR_URL=$adminGemRadarUrl"" && set ""NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct"" && npm run dev -- -p 4312 -H 0.0.0.0")
         port     = 4312
         color    = "Green"
         skip     = $NoAdmin
