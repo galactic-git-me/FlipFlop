@@ -103,7 +103,9 @@ function Check-RepositoryForMode([string]$mode) {
         $script:AutoLiveStashMessage = "flipflop-auto-live:$([guid]::NewGuid().ToString()):$branch"
 
         Write-Host "[*] Temporarily stashing local changes before LIVE mode..." -ForegroundColor Yellow
-        & git -C $projectRoot stash push --include-untracked --message $script:AutoLiveStashMessage
+        # Pytest's cache is disposable and can be held by another process on Windows.
+        # Leave it in place so an inaccessible cache cannot prevent a LIVE launch.
+        & git -C $projectRoot stash push --include-untracked --message $script:AutoLiveStashMessage -- . ':(exclude).pytest_cache'
         if ($LASTEXITCODE -ne 0) {
             $script:AutoLiveOriginalBranch = $null
             $script:AutoLiveStashMessage = $null
