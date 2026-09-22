@@ -6,7 +6,7 @@ This directory contains scripts to start all FlipFlop platform servers (backend,
 
 | Server | Type | Port | Technology |
 |--------|------|------|------------|
-| Backend | API | 4311 | FastAPI (Python) |
+| Backend | API | 4314 | FastAPI (Python) |
 | Admin | Web | 4312 | Next.js (Node.js) |
 | Frontend | Web | 4313 | Next.js (Node.js) |
 
@@ -51,7 +51,7 @@ chmod +x scripts/start-all-servers.sh
 
 Once all servers are running, access them at:
 
-- **Backend API**: http://localhost:4311
+- **Backend API**: http://localhost:4314
 - **Admin Dashboard**: http://localhost:4312
 - **Frontend Shop**: http://localhost:4313
 
@@ -109,7 +109,7 @@ Ensure you're running the script from the project root or adjust the working dir
 
 ### "Port already in use"
 If a port is already in use:
-1. Find the process: `lsof -i :4311` (macOS/Linux) or `netstat -ano | findstr :4311` (Windows)
+1. Find the process: `lsof -i :4314` (macOS/Linux) or `netstat -ano | findstr :4314` (Windows)
 2. Kill the process: `kill <PID>` (macOS/Linux) or `taskkill /PID <PID> /F` (Windows)
 3. Run the script again
 
@@ -138,8 +138,8 @@ The scripts automatically set required environment variables:
 
 | Variable | Value |
 |----------|-------|
-| `NEXT_PUBLIC_API_URL` | `http://localhost:4311` |
-| `BACKEND_URL` | `http://localhost:4311` |
+| `NEXT_PUBLIC_API_URL` | `http://localhost:4314` |
+| `BACKEND_URL` | `http://localhost:4314` |
 
 These can be overridden by setting them before running the script.
 
@@ -175,19 +175,19 @@ If you prefer to start servers individually:
 #### Backend (FastAPI)
 ```bash
 cd flipflop-api
-python run_dev.py --host 0.0.0.0 --port 4311
+python run_dev.py --host 0.0.0.0 --port 4314
 ```
 
 #### Admin (Next.js)
 ```bash
 cd flipflop-admin
-NEXT_PUBLIC_API_URL=http://localhost:4311 npm run dev -- -p 4312 -H 0.0.0.0
+NEXT_PUBLIC_API_URL=http://localhost:4314 npm run dev -- -p 4312 -H 0.0.0.0
 ```
 
 #### Frontend (Next.js)
 ```bash
 cd ../FlipFlop.shop
-BACKEND_URL=http://localhost:4311 NEXT_PUBLIC_API_URL=http://localhost:4311 npm run dev -- -p 4313 -H 0.0.0.0
+BACKEND_URL=http://localhost:4314 NEXT_PUBLIC_API_URL=http://localhost:4314 npm run dev -- -p 4313 -H 0.0.0.0
 ```
 
 ## Notes

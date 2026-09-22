@@ -973,7 +973,7 @@ Write-Host "  eBay CDP browser:  localhost:9222" -ForegroundColor Cyan
 Write-Host "  Ollama:            http://localhost:11434" -ForegroundColor Cyan
 Write-Host "  Admin:             http://localhost:4312" -ForegroundColor Green
 Write-Host "  Performance Card:  http://localhost:5173" -ForegroundColor Cyan
-if ($LocalBackend -and -not $NoBackend) { Write-Host "  Legacy backend:     http://localhost:4311" -ForegroundColor Yellow }
+if ($LocalBackend -and -not $NoBackend) { Write-Host "  Legacy backend:     http://localhost:4314" -ForegroundColor Yellow }
 if ($LocalGemRadar -and -not $NoGemRadar) { Write-Host "  Legacy Gem Radar:   http://localhost:18000" -ForegroundColor Blue }
 if ($LocalFrontend -and -not $NoFrontend) { Write-Host "  Local frontend:     http://localhost:4313" -ForegroundColor Magenta }
 Write-Host ""

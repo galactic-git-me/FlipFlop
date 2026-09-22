@@ -59,11 +59,11 @@ start_server() {
 
     # Start the server in background
     if [ "$name" = "backend" ]; then
-        EBAY_ENVIRONMENT=sandbox EBAY_LISTING_ENVIRONMENT=sandbox python run_dev.py --host 0.0.0.0 --port 4311 > /tmp/flipflop-backend.log 2>&1 &
+        EBAY_ENVIRONMENT=sandbox EBAY_LISTING_ENVIRONMENT=sandbox python run_dev.py --host 0.0.0.0 --port 4314 > /tmp/flipflop-backend.log 2>&1 &
     elif [ "$name" = "admin" ]; then
-        NODE_ENV=development NEXT_PUBLIC_API_URL=http://localhost:4311 NEXT_PUBLIC_FLIPFLOP_ENV=development npm run dev -- -p 4312 -H 0.0.0.0 > /tmp/flipflop-admin.log 2>&1 &
+        NODE_ENV=development NEXT_PUBLIC_API_URL=http://localhost:4314 NEXT_PUBLIC_FLIPFLOP_ENV=development npm run dev -- -p 4312 -H 0.0.0.0 > /tmp/flipflop-admin.log 2>&1 &
     elif [ "$name" = "frontend" ]; then
-        NODE_ENV=development BACKEND_URL=http://localhost:4311 NEXT_PUBLIC_API_URL=http://localhost:4311 NEXT_PUBLIC_FLIPFLOP_ENV=development npm run dev -- --webpack -p 4313 -H 0.0.0.0 > /tmp/flipflop-frontend.log 2>&1 &
+        NODE_ENV=development BACKEND_URL=http://localhost:4314 NEXT_PUBLIC_API_URL=http://localhost:4314 NEXT_PUBLIC_FLIPFLOP_ENV=development npm run dev -- --webpack -p 4313 -H 0.0.0.0 > /tmp/flipflop-frontend.log 2>&1 &
     fi
 
     local pid=$!
@@ -79,7 +79,7 @@ echo ""
 
 # Start servers
 if [ "$NO_BACKEND" = false ]; then
-    start_server "backend" "$PROJECT_ROOT/flipflop-api" "python" "run_dev.py" "4311" "$YELLOW" || true
+    start_server "backend" "$PROJECT_ROOT/flipflop-api" "python" "run_dev.py" "4314" "$YELLOW" || true
 fi
 
 if [ "$NO_ADMIN" = false ]; then
@@ -97,7 +97,7 @@ echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━�
 
 echo ""
 echo -e "${CYAN}🔗 Access URLs:${NC}"
-echo -e "${YELLOW}  Backend:  http://localhost:4311${NC}"
+echo -e "${YELLOW}  Backend:  http://localhost:4314${NC}"
 echo -e "${GREEN}  Admin:    http://localhost:4312${NC}"
 echo -e "${MAGENTA}  Frontend: http://localhost:4313${NC}"
 echo ""
