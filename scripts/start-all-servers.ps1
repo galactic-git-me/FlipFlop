@@ -17,8 +17,19 @@ param(
     [switch]$NoAdmin = $false,
     [switch]$NoFrontend = $false,
     [switch]$NoPeerSync = $false,
-    [switch]$NoExtensionBuild = $false
+    [switch]$NoExtensionBuild = $false,
+    # Non-interactive entry point for scheduled/unattended runs (e.g. before a
+    # scraper scan). Bypasses the Select-RunMode keypress prompt and the
+    # Confirm-LocalDatabaseRefresh prompt (treated as "no refresh" — a full
+    # prod->dev DB refresh is too heavy/risky to run unattended twice a day).
+    # Also skips the infinite Ctrl+C keep-alive loop and its teardown: server
+    # processes are left running detached, and this script returns once they
+    # report healthy (or a timeout is hit) instead of blocking forever.
+    [ValidateSet("live", "development")]
+    [string]$RunMode = $null,
+    [int]$UnattendedHealthTimeoutSeconds = 120
 )
+$Unattended = [bool]$RunMode
 
 $ErrorActionPreference = "Stop"
 $projectRoot = Split-Path -Parent $PSScriptRoot
@@ -397,7 +408,7 @@ function Promote-DevelopmentToProduction {
 }
 
 try {
-    $runMode = Select-RunMode
+    $runMode = if ($Unattended) { $RunMode } else { Select-RunMode }
 if ($runMode -eq "live") {
     Check-RepositoryForMode $runMode
     Write-Host "[*] Syncing production eBay account settings to Andromeda..." -ForegroundColor Cyan
@@ -434,8 +445,10 @@ if ($runMode -eq "live") {
     $LocalBackend = $true
     $NoPeerSync = $true
 }
-if ($runMode -eq "development") {
+if ($runMode -eq "development" -and -not $Unattended) {
     Confirm-LocalDatabaseRefresh
+} elseif ($runMode -eq "development") {
+    Write-Host "[INFO] Unattended run: skipping the local database refresh prompt (dev DB left as-is)." -ForegroundColor Yellow
 }
 
 Write-Host ""
@@ -968,6 +981,28 @@ Write-Host ""
 Write-Host "View logs (example):" -ForegroundColor Cyan
 Write-Host "  Get-Content $logsDir\admin.log -Tail 50 -Wait" -ForegroundColor Gray
 Write-Host ""
+if ($Unattended) {
+    # Scheduled/unattended entry point: wait for every port-bearing server to
+    # come up healthy, then return control to the caller with servers left
+    # running detached. There is no Ctrl+C here to stop them, and no teardown
+    # -- an orchestrator (e.g. run-scheduled-scan.ps1) owns the process from here.
+    Write-Host "[*] Unattended mode: waiting up to $UnattendedHealthTimeoutSeconds`s for servers to report healthy..." -ForegroundColor Cyan
+    $deadline = [DateTime]::UtcNow.AddSeconds($UnattendedHealthTimeoutSeconds)
+    $pending = @($processes | Where-Object { $null -ne $_.port })
+    while ($pending.Count -gt 0 -and [DateTime]::UtcNow -lt $deadline) {
+        $pending = @($pending | Where-Object {
+            -not [bool](Get-NetTCPConnection -LocalPort $_.port -State Listen -ErrorAction SilentlyContinue)
+        })
+        if ($pending.Count -gt 0) { Start-Sleep -Seconds 2 }
+    }
+    if ($pending.Count -gt 0) {
+        $names = ($pending | ForEach-Object { $_.name }) -join ", "
+        throw "Timed out after $UnattendedHealthTimeoutSeconds`s waiting for: $names. Servers were left running for inspection; check logs under $logsDir."
+    }
+    Write-Host "[OK] All servers healthy (ports listening). Leaving them running and returning." -ForegroundColor Green
+    return
+}
+
 Write-Host "Press Ctrl+C to stop all servers" -ForegroundColor Gray
 Write-Host ""
 
