@@ -228,6 +228,7 @@ export default function Cases3DPriorityPage() {
   const [referenceNotice, setReferenceNotice] = useState<string | null>(null);
   const [newReferenceUrl, setNewReferenceUrl] = useState("");
   const [newReferenceSource, setNewReferenceSource] = useState<ReferenceSource>("manufacturer");
+  const [imageSearchQuery, setImageSearchQuery] = useState("");
   const [googleCseLoadError, setGoogleCseLoadError] = useState<string | null>(null);
   const [generatedReviewUrl, setGeneratedReviewUrl] = useState<string | null>(null);
   const [generatingCaseId, setGeneratingCaseId] = useState<number | null>(null);
@@ -861,7 +862,7 @@ export default function Cases3DPriorityPage() {
                     ) : googleCseLoadError ? (
                       <p role="alert" className="mt-3 text-xs text-red-300">{googleCseLoadError}</p>
                     ) : (
-                      <div className="gcse-search mt-4" data-enableImageSearch="true" data-linkTarget="_blank" />
+                      <div className="gcse-search mt-4" data-enableImageSearch="true" data-linkTarget="_blank" data-query={imageSearchQuery} />
                     )}
                   </section>
                   {referenceBusy && !referenceData ? (
