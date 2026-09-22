@@ -391,8 +391,16 @@ async def scrape_amazon_component_bestsellers() -> dict:
                 for category, (list_name, base_url) in COMPONENT_BESTSELLER_LISTS.items():
                     try:
                         items: list[dict] = []
+                        # Discover Amazon's actual pagination after the first
+                        # page, then use an index-driven loop.  A ``for``
+                        # iterator would keep pointing at the original
+                        # one-item list if we reassigned ``page_urls``.
                         page_urls = [base_url]
-                        for page_num, url in enumerate(page_urls, start=1):
+                        page_index = 0
+                        while page_index < len(page_urls):
+                            url = page_urls[page_index]
+                            page_num = page_index + 1
+                            page_index += 1
                             await page.goto(url, wait_until="domcontentloaded", timeout=45000)
                             try:
                                 await page.wait_for_selector(
