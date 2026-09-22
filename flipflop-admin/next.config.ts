@@ -18,7 +18,16 @@ const backendUrl = process.env.BACKEND_URL ?? "http://localhost:4314";
 const gemradarUrl = process.env.GEMRADAR_URL ?? backendUrl;
 const ebayOpsBackendUrl = (process.env.EBAY_OPS_BACKEND_URL ?? backendUrl).replace(/\/$/, "");
 
+// DEV and PROD admin now run as two simultaneous, always-on instances from
+// this SAME checkout (no git worktree/second clone). Without a distinct
+// build output per instance they'd share .next and corrupt each other's
+// build manifest across concurrent writes. NEXT_DIST_DIR lets each service
+// point at its own directory; unset (e.g. plain `npm run dev` locally)
+// falls back to the Next.js default ".next".
+const distDir = process.env.NEXT_DIST_DIR?.trim() || ".next";
+
 const nextConfig: NextConfig = {
+  distDir,
   turbopack: {
     root: path.join(__dirname),
   },
