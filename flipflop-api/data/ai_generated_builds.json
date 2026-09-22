@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-22T08:18:42.207636+00:00",
+  "generated_at": "2026-09-22T09:18:41.558914+00:00",
   "builds": [
     {
       "components": [
@@ -132,152 +132,13 @@
           "count": 50,
           "min_price": 156.7,
           "max_price": 1548.65,
-          "average_price": 635.25
+          "average_price": 653.76
         }
       },
-      "resale_estimate": 635.25,
+      "resale_estimate": 653.76,
       "resale_source": "bin_average",
-      "estimated_profit": 507.09,
+      "estimated_profit": 525.6,
       "rank": 1
-    },
-    {
-      "components": [
-        {
-          "id": 42361245,
-          "listing_id": "820143592936",
-          "category": "cpu",
-          "title": "AMD Ryzen 3 3200G 4-Core 3.6GHz AM4 CPU Processor MPN YD3200C5M4MFH",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/3DgAAeSwt3xqraX4/s-l225.jpg",
-          "delivered_price": 8.39,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -8.39,
-          "url": "https://www.ebay.co.uk/itm/820143592936"
-        },
-        {
-          "id": 42384304,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F137747772671%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:GIGABYTE%20B:84e671385feda7b695930785b408837b7d80ba6b59a1665fe0545435ecb3f1e8",
-          "category": "motherboard",
-          "title": "GIGABYTE B550 GAMING X V2 ATX AM4 DDR4 4-DIMM M.2 USB 3.2 Motherboard. GIGABYTE. Motherboards. B550 GAMING X V2.",
-          "seller": "www.ebay.co.uk",
-          "image_url": null,
-          "delivered_price": 22.54,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -22.54,
-          "url": "https://www.ebay.co.uk/itm/137747772671?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
-        },
-        {
-          "id": 42384037,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.dhgate.com%2Fproduct%2Fxiaodiao-rtx3060-12g-rtx3050-8g-ai-drawing%2F1103401808.html%3Ff%3Dbm%257CGMC%257C%257Bifdyn%253Adyn%257D%257Bifpla%253Apla%257D%257B:9f1da85abee4b4854a56e1482b44b3217e57ee365dcb3a845a212fd964378b70",
-          "category": "gpu",
-          "title": "Xiaodiao RTX3060/12G/RTX3050/8G AI Drawing Graphic Design Game Desktop Graphics Card 240527",
-          "seller": "DHgate online store",
-          "image_url": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSjbmmTn22n3ZsPNGXBIAZ_zT9MecEyFea1SjhbAFnAVQiV9Du_-3hLTLRHK8-laxcsqtIhAOejWnr9-SlLzxMugbUz-kr6g0EokDQvMg84ZvhIrz1BwEaF-JoXwQX5Ne7XBpv7wJAxsg&usqp=CAc",
-          "delivered_price": 60.64,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -60.64,
-          "url": "https://www.dhgate.com/product/xiaodiao-rtx3060-12g-rtx3050-8g-ai-drawing/1103401808.html?f=bm%7CGMC%7C%7Bifdyn%3Adyn%7D%7Bifpla%3Apla%7D%7B"
-        },
-        {
-          "id": 42384204,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
-          "category": "ram",
-          "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
-          "seller": "www.ebay.co.uk",
-          "image_url": null,
-          "delivered_price": 6.95,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -6.95,
-          "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
-        },
-        {
-          "id": 42365302,
-          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
-          "category": "psu",
-          "title": "HP Common Slot HS PSU 460W Gold",
-          "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
-          "delivered_price": 4.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -4.0,
-          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
-        },
-        {
-          "id": 42369257,
-          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
-          "category": "ssd",
-          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
-          "seller": "eBay",
-          "image_url": null,
-          "delivered_price": 3.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INELIGIBLE",
-          "estimated_profit": -3.99,
-          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
-        },
-        {
-          "id": 42340622,
-          "listing_id": "178153685569",
-          "category": "cooler",
-          "title": "8 Intel push pins for CPU coolers",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/oSoAAOSwIBFnfqrm/s-l225.jpg",
-          "delivered_price": 4.77,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -4.77,
-          "url": "https://www.ebay.co.uk/itm/178153685569"
-        },
-        {
-          "id": 42343327,
-          "listing_id": "203167398831",
-          "category": "case",
-          "title": "40mm 4cm Fan Guard Grill PC Case Fan Protector - Metal Cooling",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/zXwAAOSwp6xfovCN/s-l225.jpg",
-          "delivered_price": 2.61,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "EVIDENCE_LIMITED_DEAL",
-          "estimated_profit": -2.61,
-          "url": "https://www.ebay.co.uk/itm/203167398831"
-        }
-      ],
-      "compatibility_confidence": "matched",
-      "super_gem_count": 4,
-      "build_cost": 113.89,
-      "market": {
-        "query": "gaming pc AMD Ryzen 3 3200G RTX3060 8gb",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "eBay sign-in is required for sold prices, but SOLD_COMPS_HEADLESS is enabled. Run it headed so the eBay login window can be completed."
-        },
-        "bin": {
-          "available": true,
-          "count": 49,
-          "min_price": 276.98,
-          "max_price": 1156.65,
-          "average_price": 617.1
-        }
-      },
-      "resale_estimate": 617.1,
-      "resale_source": "bin_average",
-      "estimated_profit": 503.21,
-      "rank": 2
     },
     {
       "components": [
@@ -410,12 +271,151 @@
           "count": 49,
           "min_price": 276.98,
           "max_price": 1156.65,
-          "average_price": 613.14
+          "average_price": 624.49
         }
       },
-      "resale_estimate": 613.14,
+      "resale_estimate": 624.49,
       "resale_source": "bin_average",
-      "estimated_profit": 496.58,
+      "estimated_profit": 507.93,
+      "rank": 2
+    },
+    {
+      "components": [
+        {
+          "id": 42361245,
+          "listing_id": "820143592936",
+          "category": "cpu",
+          "title": "AMD Ryzen 3 3200G 4-Core 3.6GHz AM4 CPU Processor MPN YD3200C5M4MFH",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/3DgAAeSwt3xqraX4/s-l225.jpg",
+          "delivered_price": 8.39,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -8.39,
+          "url": "https://www.ebay.co.uk/itm/820143592936"
+        },
+        {
+          "id": 42384304,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F137747772671%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:GIGABYTE%20B:84e671385feda7b695930785b408837b7d80ba6b59a1665fe0545435ecb3f1e8",
+          "category": "motherboard",
+          "title": "GIGABYTE B550 GAMING X V2 ATX AM4 DDR4 4-DIMM M.2 USB 3.2 Motherboard. GIGABYTE. Motherboards. B550 GAMING X V2.",
+          "seller": "www.ebay.co.uk",
+          "image_url": null,
+          "delivered_price": 22.54,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -22.54,
+          "url": "https://www.ebay.co.uk/itm/137747772671?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
+        },
+        {
+          "id": 42384037,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.dhgate.com%2Fproduct%2Fxiaodiao-rtx3060-12g-rtx3050-8g-ai-drawing%2F1103401808.html%3Ff%3Dbm%257CGMC%257C%257Bifdyn%253Adyn%257D%257Bifpla%253Apla%257D%257B:9f1da85abee4b4854a56e1482b44b3217e57ee365dcb3a845a212fd964378b70",
+          "category": "gpu",
+          "title": "Xiaodiao RTX3060/12G/RTX3050/8G AI Drawing Graphic Design Game Desktop Graphics Card 240527",
+          "seller": "DHgate online store",
+          "image_url": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSjbmmTn22n3ZsPNGXBIAZ_zT9MecEyFea1SjhbAFnAVQiV9Du_-3hLTLRHK8-laxcsqtIhAOejWnr9-SlLzxMugbUz-kr6g0EokDQvMg84ZvhIrz1BwEaF-JoXwQX5Ne7XBpv7wJAxsg&usqp=CAc",
+          "delivered_price": 60.64,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -60.64,
+          "url": "https://www.dhgate.com/product/xiaodiao-rtx3060-12g-rtx3050-8g-ai-drawing/1103401808.html?f=bm%7CGMC%7C%7Bifdyn%3Adyn%7D%7Bifpla%3Apla%7D%7B"
+        },
+        {
+          "id": 42384204,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
+          "category": "ram",
+          "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
+          "seller": "www.ebay.co.uk",
+          "image_url": null,
+          "delivered_price": 6.95,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -6.95,
+          "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
+        },
+        {
+          "id": 42365302,
+          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
+          "category": "psu",
+          "title": "HP Common Slot HS PSU 460W Gold",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
+          "delivered_price": 4.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -4.0,
+          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
+        },
+        {
+          "id": 42369257,
+          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
+          "category": "ssd",
+          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
+          "seller": "eBay",
+          "image_url": null,
+          "delivered_price": 3.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INELIGIBLE",
+          "estimated_profit": -3.99,
+          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
+        },
+        {
+          "id": 42340622,
+          "listing_id": "178153685569",
+          "category": "cooler",
+          "title": "8 Intel push pins for CPU coolers",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/oSoAAOSwIBFnfqrm/s-l225.jpg",
+          "delivered_price": 4.77,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -4.77,
+          "url": "https://www.ebay.co.uk/itm/178153685569"
+        },
+        {
+          "id": 42343327,
+          "listing_id": "203167398831",
+          "category": "case",
+          "title": "40mm 4cm Fan Guard Grill PC Case Fan Protector - Metal Cooling",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/zXwAAOSwp6xfovCN/s-l225.jpg",
+          "delivered_price": 2.61,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "EVIDENCE_LIMITED_DEAL",
+          "estimated_profit": -2.61,
+          "url": "https://www.ebay.co.uk/itm/203167398831"
+        }
+      ],
+      "compatibility_confidence": "matched",
+      "super_gem_count": 4,
+      "build_cost": 113.89,
+      "market": {
+        "query": "gaming pc AMD Ryzen 3 3200G RTX3060 8gb",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "eBay sign-in is required for sold prices, but SOLD_COMPS_HEADLESS is enabled. Run it headed so the eBay login window can be completed."
+        },
+        "bin": {
+          "available": true,
+          "count": 49,
+          "min_price": 276.98,
+          "max_price": 1156.65,
+          "average_price": 617.57
+        }
+      },
+      "resale_estimate": 617.57,
+      "resale_source": "bin_average",
+      "estimated_profit": 503.68,
       "rank": 3
     },
     {
@@ -549,12 +549,12 @@
           "count": 49,
           "min_price": 276.98,
           "max_price": 1156.65,
-          "average_price": 613.14
+          "average_price": 619.64
         }
       },
-      "resale_estimate": 613.14,
+      "resale_estimate": 619.64,
       "resale_source": "bin_average",
-      "estimated_profit": 495.09,
+      "estimated_profit": 501.59,
       "rank": 4
     },
     {
@@ -688,12 +688,12 @@
           "count": 49,
           "min_price": 276.98,
           "max_price": 1156.65,
-          "average_price": 614.84
+          "average_price": 623.04
         }
       },
-      "resale_estimate": 614.84,
+      "resale_estimate": 623.04,
       "resale_source": "bin_average",
-      "estimated_profit": 488.21,
+      "estimated_profit": 496.41,
       "rank": 5
     },
     {
@@ -825,14 +825,14 @@
         "bin": {
           "available": true,
           "count": 50,
-          "min_price": 200.0,
+          "min_price": 233.4,
           "max_price": 1399.0,
-          "average_price": 589.59
+          "average_price": 592.64
         }
       },
-      "resale_estimate": 589.59,
+      "resale_estimate": 592.64,
       "resale_source": "bin_average",
-      "estimated_profit": 473.27,
+      "estimated_profit": 476.32,
       "rank": 6
     }
   ],
