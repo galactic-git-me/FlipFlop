@@ -3,7 +3,7 @@
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ExternalLink, ShieldCheck, Store } from "lucide-react";
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 
 const labels: Record<string, string> = {
   onbuy: "OnBuy",
