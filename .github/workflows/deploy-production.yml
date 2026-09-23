@@ -86,7 +86,7 @@ jobs:
           chmod 600 ~/.ssh/andromeda
           printf '%s\n' "$SSH_HOST_KEY" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
-      - name: Deploy API and storefront together
+      - name: Deploy tagged Andromeda services
         env:
           ANDROMEDA_HOST: ${{ secrets.ANDROMEDA_HOST }}
           ANDROMEDA_USER: ${{ secrets.ANDROMEDA_USER }}
