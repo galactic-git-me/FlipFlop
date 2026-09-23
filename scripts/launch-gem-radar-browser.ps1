@@ -6,6 +6,48 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+
+function Test-DevApi {
+    try {
+        $response = Invoke-WebRequest -Uri 'http://127.0.0.1:4311/health' -UseBasicParsing -TimeoutSec 2
+        return $response.StatusCode -eq 200
+    } catch {
+        return $false
+    }
+}
+
+if ($Target -eq 'dev' -and -not (Test-DevApi)) {
+    $projectRoot = Split-Path -Parent $PSScriptRoot
+    $backendRoot = Join-Path $projectRoot 'flipflop-api'
+    $python = Join-Path $backendRoot '.venv\Scripts\python.exe'
+    if (-not (Test-Path -LiteralPath $python)) {
+        throw "Development Python environment not found at $python."
+    }
+
+    $env:FLIPFLOP_RUNTIME_ENV = 'development'
+    $env:OLLAMA_BASE_URL = 'http://127.0.0.1:11435'
+    $env:OLLAMA_MODEL = 'qwen2.5:7b-instruct'
+    $env:EBAY_ENVIRONMENT = 'production'
+    $env:EBAY_LISTING_ENVIRONMENT = 'sandbox'
+    $env:AMAZON_SP_API_ENVIRONMENT = 'production'
+    $env:AMAZON_SP_API_ENDPOINT = 'https://sellingpartnerapi-eu.amazon.com'
+    $env:ADMIN_FRONTEND_URL = 'http://localhost:4312'
+    $env:FRONTEND_URL = 'http://localhost:4313'
+
+    Start-Process -FilePath $python `
+        -ArgumentList @('run_dev.py', '--host', '127.0.0.1', '--port', '4311') `
+        -WorkingDirectory $backendRoot `
+        -WindowStyle Hidden
+
+    $deadline = (Get-Date).AddSeconds(45)
+    while ((Get-Date) -lt $deadline -and -not (Test-DevApi)) {
+        Start-Sleep -Seconds 1
+    }
+    if (-not (Test-DevApi)) {
+        throw 'Development API did not become healthy on 127.0.0.1:4311.'
+    }
+}
+
 $chromeCandidates = @(
     (Join-Path ${env:ProgramFiles} 'Google\Chrome\Application\chrome.exe'),
     (Join-Path ${env:ProgramFiles(x86)} 'Google\Chrome\Application\chrome.exe'),
