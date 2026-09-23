@@ -1,0 +1,10 @@
+node_modules
+.next
+.pytest_cache
+.git
+.env*
+**/.env*
+**/node_modules
+**/.next
+runtime
+logs
