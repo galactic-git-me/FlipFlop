@@ -48,7 +48,8 @@ services:
       API_URL: http://localhost:18000
       HOST: 0.0.0.0
       PORT: 8000
-      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      # Route development LLM calls through the local priority gateway.
+      OLLAMA_BASE_URL: http://host.docker.internal:11435
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
