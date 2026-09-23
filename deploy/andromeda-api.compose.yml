@@ -32,7 +32,9 @@ services:
     image: alpine:3.20
     container_name: flipflop-production-ollama-tunnel
     restart: unless-stopped
-    command: ["/bin/sh", "-c", "apk add --no-cache openssh-client && exec ssh -N -T -g -o BatchMode=yes -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=yes -L 0.0.0.0:11434:127.0.0.1:11434 mclar@prometheus-ts"]
+    # Forward production traffic to the production-priority gateway listener
+    # on prometheus-ts, rather than bypassing the gateway and hitting Ollama.
+    command: ["/bin/sh", "-c", "apk add --no-cache openssh-client && exec ssh -N -T -g -o BatchMode=yes -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=yes -L 0.0.0.0:11434:127.0.0.1:11436 mclar@prometheus-ts"]
     volumes:
       - /home/mac/.ssh/id_ed25519:/root/.ssh/id_ed25519:ro
       - /home/mac/.ssh/known_hosts:/root/.ssh/known_hosts:ro
