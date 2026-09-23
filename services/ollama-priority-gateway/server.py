@@ -14,7 +14,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse, StreamingResponse
 
 
-UPSTREAM = os.getenv("OLLAMA_UPSTREAM_URL", "http://127.0.0.1:11434").rstrip("/")
+UPSTREAM = os.getenv("OLLAMA_UPSTREAM_URL", "http://127.0.0.1:11433").rstrip("/")
 MAX_QUEUE = int(os.getenv("OLLAMA_GATEWAY_MAX_QUEUE", "100"))
 GENERATION_PATHS = {"/api/chat", "/api/generate", "/api/embed", "/api/embeddings"}
 READ_ONLY_PATHS = {"/api/tags", "/api/version", "/api/ps"}
@@ -182,13 +182,16 @@ def create_app(priority: int, name: str) -> FastAPI:
 
 
 async def serve() -> None:
+    other = uvicorn.Server(
+        uvicorn.Config(create_app(2, "other"), host=os.getenv("OTHER_LISTEN_HOST", "127.0.0.1"), port=int(os.getenv("OTHER_LISTEN_PORT", "11434")), log_level="info")
+    )
     dev = uvicorn.Server(
         uvicorn.Config(create_app(1, "dev"), host=os.getenv("DEV_LISTEN_HOST", "127.0.0.1"), port=int(os.getenv("DEV_LISTEN_PORT", "11435")), log_level="info")
     )
     prod = uvicorn.Server(
         uvicorn.Config(create_app(0, "production"), host=os.getenv("PROD_LISTEN_HOST", "0.0.0.0"), port=int(os.getenv("PROD_LISTEN_PORT", "11436")), log_level="info")
     )
-    await asyncio.gather(dev.serve(), prod.serve())
+    await asyncio.gather(other.serve(), dev.serve(), prod.serve())
 
 
 if __name__ == "__main__":
