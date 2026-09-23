@@ -91,12 +91,13 @@ class PriorityForwarder:
 
             try:
                 assert self._client is not None
-                upstream = await self._client.stream(
+                upstream_request = self._client.build_request(
                     request.method,
                     f"{UPSTREAM}{request.path}{request.query}",
                     content=request.body,
                     headers=request.headers,
-                ).__aenter__()
+                )
+                upstream = await self._client.send(upstream_request, stream=True)
 
                 async def body_stream() -> AsyncIterator[bytes]:
                     try:
