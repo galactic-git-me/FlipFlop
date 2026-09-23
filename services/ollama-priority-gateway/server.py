@@ -189,7 +189,7 @@ async def serve() -> None:
         uvicorn.Config(create_app(1, "dev"), host=os.getenv("DEV_LISTEN_HOST", "127.0.0.1"), port=int(os.getenv("DEV_LISTEN_PORT", "11435")), log_level="info")
     )
     prod = uvicorn.Server(
-        uvicorn.Config(create_app(0, "production"), host=os.getenv("PROD_LISTEN_HOST", "0.0.0.0"), port=int(os.getenv("PROD_LISTEN_PORT", "11436")), log_level="info")
+        uvicorn.Config(create_app(0, "production"), host=os.getenv("PROD_LISTEN_HOST", "127.0.0.1"), port=int(os.getenv("PROD_LISTEN_PORT", "11436")), log_level="info")
     )
     await asyncio.gather(other.serve(), dev.serve(), prod.serve())
 

@@ -26,9 +26,8 @@ On the current Windows development machine, use
 the gateway, and leaves the standard `11434` address available for other
 programs. On Omarchy, run the equivalent two processes under systemd.
 
-The service binds the development listener to loopback and the production
-listener to all interfaces. Restrict port `11436` to the Tailscale interface
-with the host firewall when deploying on Linux.
+All listeners bind to loopback. Production reaches `11436` through the SSH
+tunnel, so the gateway is never exposed directly to the LAN or tailnet.
 
 ## Configuration
 
@@ -39,7 +38,7 @@ with the host firewall when deploying on Linux.
 | `OTHER_LISTEN_PORT` | `11434` | Other-program listener |
 | `DEV_LISTEN_HOST` | `127.0.0.1` | Development bind address |
 | `DEV_LISTEN_PORT` | `11435` | Development listener |
-| `PROD_LISTEN_HOST` | `0.0.0.0` | Production bind address |
+| `PROD_LISTEN_HOST` | `127.0.0.1` | Production bind address |
 | `PROD_LISTEN_PORT` | `11436` | Production listener |
 | `OLLAMA_GATEWAY_MAX_QUEUE` | `100` | Maximum waiting requests per listener |
 
