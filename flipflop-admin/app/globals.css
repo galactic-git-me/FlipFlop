@@ -49,6 +49,11 @@
   --font-serif: 'Courier New', 'Monaco', monospace;
   --font-sans: 'Menlo', 'Monaco', 'Courier New', monospace;
   --font-mono: 'Courier New', monospace;
+  /* Keep production builds offline-safe. The previous next/font/google
+     imports downloaded fonts during every build and made deploys depend on
+     Google Fonts availability. */
+  --font-rajdhani: 'Trebuchet MS', 'Arial Narrow', Arial, sans-serif;
+  --font-jetbrains: 'Cascadia Mono', 'Consolas', 'Courier New', monospace;
 
   /* Animation */
   --duration-fast: 150ms;

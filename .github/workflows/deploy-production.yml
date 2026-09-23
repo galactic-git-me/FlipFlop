@@ -1,12 +1,16 @@
 name: Deploy production to Andromeda
 
 on:
-  # Every commit promoted to main deploys the API and storefront together.
-  # Development/autosync branches remain excluded from production.
-  push:
-    branches:
-      - main
   workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to deploy (must point to main)"
+        required: true
+        type: string
+      confirm:
+        description: "Type DEPLOY-PRODUCTION to confirm"
+        required: true
+        type: string
 
 concurrency:
   group: flipflop-production
@@ -16,8 +20,10 @@ permissions:
   contents: read
 
 jobs:
-  verify:
+  verify-release:
     runs-on: ubuntu-latest
+    outputs:
+      release_sha: ${{ steps.release.outputs.sha }}
     env:
       OLLAMA_MODEL: disabled-in-ci
       EBAY_TOKEN_ENCRYPTION_KEY: ci-only-ebay-token-encryption-test-key
@@ -26,16 +32,37 @@ jobs:
         working-directory: flipflop-api
     steps:
       - uses: actions/checkout@v5
-      - name: Require production branch
-        if: github.ref != 'refs/heads/main'
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.tag || github.ref }}
+      - name: Require explicit confirmation
+        if: inputs.confirm != 'DEPLOY-PRODUCTION'
         run: |
-          echo "Production deployment must be dispatched from main (received ${{ github.ref }})."
+          echo "Production deployment requires confirmation value DEPLOY-PRODUCTION."
           exit 1
+      - name: Verify release tag is on main
+        id: release
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          git fetch --force --tags origin main
+          test -n "$RELEASE_TAG"
+          sha="$(git rev-parse "$RELEASE_TAG^{commit}")"
+          git merge-base --is-ancestor "$RELEASE_TAG" origin/main || {
+            echo "Release tag $RELEASE_TAG is not reachable from origin/main." >&2
+            exit 1
+          }
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
           cache-dependency-path: flipflop-api/requirements*.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: flipflop-admin/package-lock.json
       - name: Install API dependencies
         run: pip install -r requirements.txt -r requirements-dev.txt pytest pytest-asyncio
       - name: Verify eBay OAuth and price alerts
@@ -45,7 +72,7 @@ jobs:
           tests/test_component_price_alert_matching.py
 
   deploy:
-    needs: verify
+    needs: verify-release
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -68,7 +95,7 @@ jobs:
           ssh -i ~/.ssh/andromeda \
             -p "${ANDROMEDA_PORT:-22}" \
             "$ANDROMEDA_USER@$ANDROMEDA_HOST" \
-            "/home/mac/CODING/FlipFlop-production/scripts/start-production-remote.sh"
+            "/home/mac/CODING/FlipFlop-production/deploy/deploy-andromeda.sh '${{ needs.verify-release.outputs.release_sha }}'"
       - name: Require extension dispatch token
         env:
           EXTENSION_DISPATCH_TOKEN: ${{ secrets.FLIPFLOP_EXTENSION_DISPATCH_TOKEN }}
@@ -88,6 +115,6 @@ jobs:
               event_type: 'flipflop-production-push',
               client_payload: {
                 source_repository: context.repo.owner + '/' + context.repo.repo,
-                source_sha: context.sha
+                source_sha: '${{ needs.verify-release.outputs.release_sha }}'
               }
             });
