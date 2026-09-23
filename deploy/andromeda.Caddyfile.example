@@ -1,0 +1,10 @@
+# Install these site blocks in Andromeda's active Caddyfile. The applications
+# bind only to localhost; Caddy is the public TLS boundary.
+
+www.theflipflop.shop, theflipflop.shop {
+    reverse_proxy 127.0.0.1:3020
+}
+
+admin.theflipflop.shop {
+    reverse_proxy 127.0.0.1:3021
+}

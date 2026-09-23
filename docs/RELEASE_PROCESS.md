@@ -45,3 +45,8 @@ The repository administrator must configure these Actions secrets:
 The `production` environment should be enabled even on plans where required
 reviewers are unavailable. The explicit workflow confirmation remains the
 final deployment gate.
+
+The Andromeda checkout must contain `FlipFlop.shop` beside the main checkout
+or at `$REPO_DIR/FlipFlop.shop`; the production compose build uses that sibling
+repository as the storefront build context. Install the Caddy site blocks from
+`deploy/andromeda.Caddyfile.example` before the first full-stack deployment.

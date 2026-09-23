@@ -19,6 +19,7 @@ const gemradarUrl = process.env.GEMRADAR_URL ?? backendUrl;
 const ebayOpsBackendUrl = (process.env.EBAY_OPS_BACKEND_URL ?? backendUrl).replace(/\/$/, "");
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   turbopack: {
     root: path.join(__dirname),
   },

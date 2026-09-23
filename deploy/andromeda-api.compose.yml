@@ -159,6 +159,66 @@ services:
       retries: 3
       start_period: 20s
 
+  storefront:
+    build:
+      context: ../../FlipFlop.shop
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: /api
+    container_name: flipflop-production-storefront
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      BACKEND_URL: http://api:4311
+      NEXT_PUBLIC_API_URL: /api
+    ports:
+      - "127.0.0.1:3020:3000"
+    networks:
+      - flipflop-network
+    volumes:
+      - ../runtime/public-media:/app/public/media
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  admin:
+    build:
+      context: ..
+      dockerfile: flipflop-admin/Dockerfile.prod
+      args:
+        NEXT_PUBLIC_API_URL: /api
+    container_name: flipflop-production-admin
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+      gemradar-worker:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      BACKEND_URL: http://api:4311
+      GEMRADAR_URL: http://gemradar-worker:8000
+      NEXT_PUBLIC_API_URL: /api
+      NEXT_PUBLIC_FLIPFLOP_ENV: live
+      PUBLIC_HOST: admin.theflipflop.shop
+      NEXT_PUBLIC_STOREFRONT_URL: https://www.theflipflop.shop
+    ports:
+      - "127.0.0.1:3021:3000"
+    networks:
+      - flipflop-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
 volumes:
   flipflop_production_postgres:
   flipflop_production_redis:
