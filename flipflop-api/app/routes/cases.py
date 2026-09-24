@@ -13,6 +13,7 @@ from app.database import get_db
 from app.models.case import Case
 from app.models.catalogue import CaseCatalogue
 from app.models.listing import Listing
+from app.services.browser_pool import managed_playwright
 from app.models.gem_radar_intelligence import PreferredComponent
 from app.services.media_sync import sync_to_public_media
 
@@ -171,6 +172,33 @@ def _append_candidate(items: list[dict], seen: set[str], url: object, source: st
         return
     seen.add(url)
     items.append({"url": url, "source": _candidate_source(url, source), "source_page": source_page, "label": label})
+
+
+def _case_identity(case: Case) -> str:
+    name = f"{case.brand or ''} {case.model or ''}".strip() if case.model else case.name
+    return re.split(r"\s+(?:ARGB|RGB|Panoramic|Tempered|Glass|Mid[- ]Tower|PC Case)\b", name, maxsplit=1, flags=re.I)[0].strip()
+
+
+def _exact_case_match(case: Case, title: str) -> bool:
+    identity = _case_identity(case)
+    required = re.findall(r"[a-z0-9]+", identity.lower())
+    actual = re.findall(r"[a-z0-9]+", title.lower())
+    if not required or not all(token in actual for token in required):
+        return False
+    # Preserve the chassis colour when the catalogued product specifies it.
+    colours = {"black", "white", "silver", "pink", "red", "blue"}
+    expected_colour = next((token for token in re.findall(r"[a-z0-9]+", case.name.lower()) if token in colours), None)
+    actual_colours = colours.intersection(actual)
+    return not (expected_colour and actual_colours and expected_colour not in actual_colours)
+
+
+async def _matched_vendor_listings(case: Case, db: AsyncSession) -> list[Listing]:
+    identity = _case_identity(case)
+    distinctive = next((token for token in re.findall(r"[a-z0-9]+", identity.lower()) if any(c.isdigit() for c in token)), None)
+    if not distinctive:
+        return []
+    rows = (await db.execute(select(Listing).where(Listing.title.ilike(f"%{distinctive}%"), Listing.image_urls.isnot(None)).limit(500))).scalars().all()
+    return [row for row in rows if row.image_urls and _exact_case_match(case, row.title)]
 
 
 @router.get("/{case_id}/3d-reference-candidates")
