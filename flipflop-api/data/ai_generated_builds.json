@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-24T20:07:31.572468+00:00",
+  "generated_at": "2026-09-24T21:07:40.024776+00:00",
   "builds": [
     {
       "components": [
@@ -143,145 +143,6 @@
     {
       "components": [
         {
-          "id": 43079496,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.alibaba.com%2Fpla%2FIntel-Core-I5-6th-Series-I5-6400T_1601754500208.html%3Fmark%3Dgoogle_shopping%26biz%3Dpla%26searchText%3Dcpus%26product_id%3D16017545002:536ebafe837f32dea3efb3b046e96d6861fe44987120ff88a6b7b6df170745a0",
-          "category": "cpu",
-          "title": "Wholesale Intel Core I5 6th eries I5-6400T CPU LGA 1151 2.8 GHz Desktop Processor (New & Used) SR2L1,1 Bag",
-          "seller": "Alibaba.com",
-          "image_url": null,
-          "delivered_price": 3.66,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -3.66,
-          "url": "https://www.alibaba.com/pla/Intel-Core-I5-6th-Series-I5-6400T_1601754500208.html?mark=google_shopping&biz=pla&searchText=cpus&product_id=16017545002"
-        },
-        {
-          "id": 43061165,
-          "listing_id": "bargain_hardware:dell-22y99-poweredge-r620-ram-cpu-vented-slot-cover-022y99",
-          "category": "motherboard",
-          "title": "Dell PowerEdge R620 RAM/CPU Vented Slot Cover",
-          "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/placeholder/default/image-coming-soon-new_1.jpg",
-          "delivered_price": 1.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.0,
-          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Dell+PowerEdge+R620+RAM%2FCPU+Vented+Slot+Cover"
-        },
-        {
-          "id": 43052956,
-          "listing_id": "389586065431",
-          "category": "gpu",
-          "title": "NVIDIA Quadro K2000 2GB GDDR5 Graphics Card GPU",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/nuEAAeSwgsVphftp/s-l225.jpg",
-          "delivered_price": 18.02,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -18.02,
-          "url": "https://www.ebay.co.uk/itm/389586065431"
-        },
-        {
-          "id": 43081632,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
-          "category": "ram",
-          "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
-          "seller": "www.ebay.co.uk",
-          "image_url": null,
-          "delivered_price": 6.95,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -6.95,
-          "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
-        },
-        {
-          "id": 43061491,
-          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
-          "category": "psu",
-          "title": "HP Common Slot HS PSU 460W Gold",
-          "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
-          "delivered_price": 4.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -4.0,
-          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
-        },
-        {
-          "id": 43065505,
-          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
-          "category": "ssd",
-          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
-          "seller": "eBay",
-          "image_url": null,
-          "delivered_price": 3.99,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INELIGIBLE",
-          "estimated_profit": -3.99,
-          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
-        },
-        {
-          "id": 43036824,
-          "listing_id": "178153685569",
-          "category": "cooler",
-          "title": "8 Intel push pins for CPU coolers",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/oSoAAOSwIBFnfqrm/s-l225.jpg",
-          "delivered_price": 4.77,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -4.77,
-          "url": "https://www.ebay.co.uk/itm/178153685569"
-        },
-        {
-          "id": 43039529,
-          "listing_id": "203167398831",
-          "category": "case",
-          "title": "40mm 4cm Fan Guard Grill PC Case Fan Protector - Metal Cooling",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/zXwAAOSwp6xfovCN/s-l225.jpg",
-          "delivered_price": 2.61,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "GEM",
-          "estimated_profit": -2.61,
-          "url": "https://www.ebay.co.uk/itm/203167398831"
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 4,
-      "build_cost": 45.0,
-      "market": {
-        "query": "gaming pc I5-6400T Quadro K2000 8gb",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "eBay sign-in is required for sold prices, but SOLD_COMPS_HEADLESS is enabled. Run it headed so the eBay login window can be completed."
-        },
-        "bin": {
-          "available": true,
-          "count": 49,
-          "min_price": 62.49,
-          "max_price": 1089.2,
-          "average_price": 389.84
-        }
-      },
-      "resale_estimate": 389.84,
-      "resale_source": "bin_average",
-      "estimated_profit": 344.84,
-      "rank": 2
-    },
-    {
-      "components": [
-        {
           "id": 43079855,
           "listing_id": "google-shopping:https%3A%2F%2Fwww.alibaba.com%2Fproduct-detail%2FIntel-Core-I5-6th-Series-I5_1601754500208.html%3Fmark%3Dgoogle_shopping%26pcy%3Dgb_en:Wholesale%20Intel%20Core%20I5%206th%20e:21ce035b6884f8a8575a504c1f98c55b5cfe18ad320fe8a8ec5a3e941f17e0d4",
           "category": "cpu",
@@ -410,12 +271,151 @@
           "count": 49,
           "min_price": 62.49,
           "max_price": 1089.2,
-          "average_price": 389.19
+          "average_price": 392.65
         }
       },
-      "resale_estimate": 389.19,
+      "resale_estimate": 392.65,
       "resale_source": "bin_average",
-      "estimated_profit": 344.15,
+      "estimated_profit": 347.61,
+      "rank": 2
+    },
+    {
+      "components": [
+        {
+          "id": 43079496,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.alibaba.com%2Fpla%2FIntel-Core-I5-6th-Series-I5-6400T_1601754500208.html%3Fmark%3Dgoogle_shopping%26biz%3Dpla%26searchText%3Dcpus%26product_id%3D16017545002:536ebafe837f32dea3efb3b046e96d6861fe44987120ff88a6b7b6df170745a0",
+          "category": "cpu",
+          "title": "Wholesale Intel Core I5 6th eries I5-6400T CPU LGA 1151 2.8 GHz Desktop Processor (New & Used) SR2L1,1 Bag",
+          "seller": "Alibaba.com",
+          "image_url": null,
+          "delivered_price": 3.66,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -3.66,
+          "url": "https://www.alibaba.com/pla/Intel-Core-I5-6th-Series-I5-6400T_1601754500208.html?mark=google_shopping&biz=pla&searchText=cpus&product_id=16017545002"
+        },
+        {
+          "id": 43061165,
+          "listing_id": "bargain_hardware:dell-22y99-poweredge-r620-ram-cpu-vented-slot-cover-022y99",
+          "category": "motherboard",
+          "title": "Dell PowerEdge R620 RAM/CPU Vented Slot Cover",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/placeholder/default/image-coming-soon-new_1.jpg",
+          "delivered_price": 1.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.0,
+          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Dell+PowerEdge+R620+RAM%2FCPU+Vented+Slot+Cover"
+        },
+        {
+          "id": 43052956,
+          "listing_id": "389586065431",
+          "category": "gpu",
+          "title": "NVIDIA Quadro K2000 2GB GDDR5 Graphics Card GPU",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/nuEAAeSwgsVphftp/s-l225.jpg",
+          "delivered_price": 18.02,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -18.02,
+          "url": "https://www.ebay.co.uk/itm/389586065431"
+        },
+        {
+          "id": 43081632,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
+          "category": "ram",
+          "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
+          "seller": "www.ebay.co.uk",
+          "image_url": null,
+          "delivered_price": 6.95,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -6.95,
+          "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
+        },
+        {
+          "id": 43061491,
+          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
+          "category": "psu",
+          "title": "HP Common Slot HS PSU 460W Gold",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
+          "delivered_price": 4.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -4.0,
+          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
+        },
+        {
+          "id": 43065505,
+          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
+          "category": "ssd",
+          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
+          "seller": "eBay",
+          "image_url": null,
+          "delivered_price": 3.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INELIGIBLE",
+          "estimated_profit": -3.99,
+          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
+        },
+        {
+          "id": 43036824,
+          "listing_id": "178153685569",
+          "category": "cooler",
+          "title": "8 Intel push pins for CPU coolers",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/oSoAAOSwIBFnfqrm/s-l225.jpg",
+          "delivered_price": 4.77,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -4.77,
+          "url": "https://www.ebay.co.uk/itm/178153685569"
+        },
+        {
+          "id": 43039529,
+          "listing_id": "203167398831",
+          "category": "case",
+          "title": "40mm 4cm Fan Guard Grill PC Case Fan Protector - Metal Cooling",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/zXwAAOSwp6xfovCN/s-l225.jpg",
+          "delivered_price": 2.61,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "GEM",
+          "estimated_profit": -2.61,
+          "url": "https://www.ebay.co.uk/itm/203167398831"
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 45.0,
+      "market": {
+        "query": "gaming pc I5-6400T Quadro K2000 8gb",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "eBay sign-in is required for sold prices, but SOLD_COMPS_HEADLESS is enabled. Run it headed so the eBay login window can be completed."
+        },
+        "bin": {
+          "available": true,
+          "count": 49,
+          "min_price": 84.99,
+          "max_price": 1089.2,
+          "average_price": 390.51
+        }
+      },
+      "resale_estimate": 390.51,
+      "resale_source": "bin_average",
+      "estimated_profit": 345.51,
       "rank": 3
     },
     {
@@ -687,13 +687,13 @@
           "available": true,
           "count": 47,
           "min_price": 105.0,
-          "max_price": 1199.99,
-          "average_price": 326.58
+          "max_price": 824.99,
+          "average_price": 322.94
         }
       },
-      "resale_estimate": 326.58,
+      "resale_estimate": 322.94,
       "resale_source": "bin_average",
-      "estimated_profit": 282.24,
+      "estimated_profit": 278.6,
       "rank": 5
     },
     {
@@ -827,12 +827,12 @@
           "count": 48,
           "min_price": 85.0,
           "max_price": 1427.25,
-          "average_price": 291.93
+          "average_price": 297.35
         }
       },
-      "resale_estimate": 291.93,
+      "resale_estimate": 297.35,
       "resale_source": "bin_average",
-      "estimated_profit": 248.36,
+      "estimated_profit": 253.78,
       "rank": 6
     }
   ],
