@@ -115,21 +115,29 @@ _EXTRACT_JS = """(rankOffset = 0) => {
 
 async def _load_bestseller_page(page, url: str, rank_offset: int) -> list[dict]:
     """Scroll Amazon's lazy grid until all 50 products have rendered."""
-    await page.goto(url, wait_until="domcontentloaded", timeout=45000)
-    await page.wait_for_selector("#gridItemRoot", timeout=15000)
-    for _ in range(12):
-        if await page.locator("#gridItemRoot").count() >= 50:
-            break
-        await page.locator("#gridItemRoot").last.scroll_into_view_if_needed()
-        await page.mouse.wheel(0, 1500)
-        await page.wait_for_timeout(500)
-    cards = await page.locator("#gridItemRoot").count()
-    if cards < 50:
-        raise ValueError(f"incomplete Amazon bestseller page {url}: {cards}/50 cards")
-    items = await page.evaluate(_EXTRACT_JS, rank_offset)
-    if len(items) < 50:
-        raise ValueError(f"incomplete Amazon bestseller extraction {url}: {len(items)}/50 products")
-    return items
+    last_error: Exception | None = None
+    for attempt in range(3):
+        try:
+            await page.goto(url, wait_until="domcontentloaded", timeout=45000)
+            await page.wait_for_selector("#gridItemRoot", timeout=15000)
+            for _ in range(12):
+                if await page.locator("#gridItemRoot").count() >= 50:
+                    break
+                await page.locator("#gridItemRoot").last.scroll_into_view_if_needed()
+                await page.mouse.wheel(0, 1500)
+                await page.wait_for_timeout(500)
+            cards = await page.locator("#gridItemRoot").count()
+            if cards < 50:
+                raise ValueError(f"incomplete Amazon bestseller page {url}: {cards}/50 cards")
+            items = await page.evaluate(_EXTRACT_JS, rank_offset)
+            if len(items) < 50:
+                raise ValueError(f"incomplete Amazon bestseller extraction {url}: {len(items)}/50 products")
+            return items
+        except Exception as exc:
+            last_error = exc
+            if attempt < 2:
+                await asyncio.sleep(2 * (attempt + 1))
+    raise ValueError(f"Amazon bestseller page failed after 3 attempts: {url}: {last_error}")
 
 
 def extract_asin(url: str | None) -> str | None:
@@ -399,7 +407,7 @@ def bestseller_item_matches_category(title: str, category: str) -> bool:
     return False
 
 
-async def scrape_amazon_component_bestsellers() -> dict:
+async def scrape_amazon_component_bestsellers(categories: list[str] | None = None) -> dict:
     """Capture daily Amazon bestseller ranks for all supported PC components.
 
     Ranks are historical observations.  A current scored listing is matched
@@ -408,6 +416,10 @@ async def scrape_amazon_component_bestsellers() -> dict:
     marketplace listing for that product to inherit the same rank in the
     catalogue.
     """
+    selected_lists = {key: value for key, value in COMPONENT_BESTSELLER_LISTS.items()
+                      if categories is None or key in categories}
+    if not selected_lists or (categories is not None and len(selected_lists) != len(set(categories))):
+        raise ValueError("Unknown or empty Amazon bestseller category selection")
     results = {"scraped": 0, "matched": 0, "categories": 0, "errors": 0, "category_results": {}}
     async with managed_playwright() as p:
         browser, context = await _make_pw_context(p)
@@ -425,7 +437,7 @@ async def scrape_amazon_component_bestsellers() -> dict:
                 )).mappings().all()
                 scored = [dict(row) for row in scored_rows]
 
-                for category, (list_name, base_url) in COMPONENT_BESTSELLER_LISTS.items():
+                for category, (list_name, base_url) in selected_lists.items():
                     try:
                         match_categories = {"storage": {"ssd", "storage"}, "cooler": {"cooler", "cooling"}}.get(category, {category})
                         scored_for_category = [row for row in scored if (row.get("category") or "").lower() in match_categories]
@@ -493,9 +505,9 @@ async def scrape_amazon_component_bestsellers() -> dict:
             await page.close()
             await context.close()
             await browser.close()
-    results["ok"] = results["errors"] == 0 and results["matched"] > 0 and results["categories"] == len(COMPONENT_BESTSELLER_LISTS)
+    results["ok"] = results["errors"] == 0 and results["matched"] > 0 and results["categories"] == len(selected_lists)
     if not results["ok"]:
-        results["reason"] = f"coverage_failed: {results['categories']}/{len(COMPONENT_BESTSELLER_LISTS)} lists, {results['matched']} CPK matches, {results['errors']} errors"
+        results["reason"] = f"coverage_failed: {results['categories']}/{len(selected_lists)} lists, {results['matched']} CPK matches, {results['errors']} errors"
     log.info("bestsellers.components_complete", **results)
     return results
 

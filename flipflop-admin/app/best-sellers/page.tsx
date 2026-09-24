@@ -56,6 +56,7 @@ export default function BestSellersPage() {
         <span className={fresh ? "text-emerald-300" : "text-amber-300"}>{selected.last_captured_at ? `${fresh ? "Updated" : "Stale · last updated"} ${new Date(selected.last_captured_at).toLocaleString()}` : "No scrape captured"}</span>
         <a className="ml-auto inline-flex items-center gap-1 text-cyan-300 underline hover:text-cyan-100" href={selected.source_url} target="_blank" rel="noopener noreferrer">Amazon list <ExternalLink className="h-3 w-3" /></a>
       </section>}
+      {selected && selected.count < 100 && <p role="alert" className="rounded-lg border border-amber-600/50 bg-amber-950/30 p-3 text-sm text-amber-200">Incomplete source coverage: {selected.count}/100 Amazon ranks captured. Treat this list as partial until the next successful scrape.</p>}
 
       {loading ? <p role="status" className="text-slate-400">Loading bestseller list…</p> : !data?.products.length ? (
         <p className="rounded-xl border border-amber-600/40 bg-amber-950/20 p-6 text-amber-200">No captured products for this category. The list is not covered yet; this is not a zero-sales result.</p>
