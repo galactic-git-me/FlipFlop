@@ -1,35 +1,35 @@
 {
-  "generated_at": "2026-09-24T07:50:26.229759+00:00",
+  "generated_at": "2026-09-24T08:50:20.875131+00:00",
   "builds": [
     {
       "components": [
         {
-          "id": 42695653,
-          "listing_id": "327332133203",
+          "id": 42704330,
+          "listing_id": "820143592936",
           "category": "cpu",
-          "title": "Intel Core i7-6700K 4.00GHz SR2L0 LGA1151 CPU Processor Quad core",
+          "title": "AMD Ryzen 3 3200G 4-Core 3.6GHz AM4 CPU Processor MPN YD3200C5M4MFH",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/tw0AAeSw1XFqGabk/s-l225.jpg",
-          "delivered_price": 19.99,
+          "image_url": "https://i.ebayimg.com/images/g/3DgAAeSwt3xqraX4/s-l225.jpg",
+          "delivered_price": 8.39,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -19.99,
-          "url": "https://www.ebay.co.uk/itm/327332133203"
+          "estimated_profit": -8.39,
+          "url": "https://www.ebay.co.uk/itm/820143592936"
         },
         {
-          "id": 42701865,
-          "listing_id": "407101332796",
+          "id": 42728160,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F137747772671%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:GIGABYTE%20B:84e671385feda7b695930785b408837b7d80ba6b59a1665fe0545435ecb3f1e8",
           "category": "motherboard",
-          "title": "Asus Z97-P Motherboard (only)",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/nsEAAeSwYaxqZy4r/s-l225.jpg",
-          "delivered_price": 25.21,
+          "title": "GIGABYTE B550 GAMING X V2 ATX AM4 DDR4 4-DIMM M.2 USB 3.2 Motherboard. GIGABYTE. Motherboards. B550 GAMING X V2.",
+          "seller": "www.ebay.co.uk",
+          "image_url": null,
+          "delivered_price": 22.54,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -25.21,
-          "url": "https://www.ebay.co.uk/itm/407101332796"
+          "estimated_profit": -22.54,
+          "url": "https://www.ebay.co.uk/itm/137747772671?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
         },
         {
           "id": 42727886,
@@ -116,11 +116,11 @@
           "url": "https://www.ebay.co.uk/itm/203167398831"
         }
       ],
-      "compatibility_confidence": "unknown",
+      "compatibility_confidence": "matched",
       "super_gem_count": 4,
-      "build_cost": 128.16,
+      "build_cost": 113.89,
       "market": {
-        "query": "gaming pc Intel Core i7-6700K RTX3060 8gb",
+        "query": "gaming pc AMD Ryzen 3 3200G RTX3060 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -130,45 +130,45 @@
         "bin": {
           "available": true,
           "count": 50,
-          "min_price": 156.7,
-          "max_price": 1975.0,
-          "average_price": 634.41
+          "min_price": 229.1,
+          "max_price": 1156.65,
+          "average_price": 616.02
         }
       },
-      "resale_estimate": 634.41,
+      "resale_estimate": 616.02,
       "resale_source": "bin_average",
-      "estimated_profit": 506.25,
+      "estimated_profit": 502.13,
       "rank": 1
     },
     {
       "components": [
         {
-          "id": 42695605,
-          "listing_id": "327323063822",
+          "id": 42704330,
+          "listing_id": "820143592936",
           "category": "cpu",
-          "title": "Intel I5-7400 3.00GHz 6MB Quad Core CPU Processor LGA 1151",
+          "title": "AMD Ryzen 3 3200G 4-Core 3.6GHz AM4 CPU Processor MPN YD3200C5M4MFH",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/DGAAAeSwS3Bqi0hh/s-l225.jpg",
-          "delivered_price": 8.15,
+          "image_url": "https://i.ebayimg.com/images/g/3DgAAeSwt3xqraX4/s-l225.jpg",
+          "delivered_price": 8.39,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -8.15,
-          "url": "https://www.ebay.co.uk/itm/327323063822"
+          "estimated_profit": -8.39,
+          "url": "https://www.ebay.co.uk/itm/820143592936"
         },
         {
-          "id": 42701865,
-          "listing_id": "407101332796",
+          "id": 42729978,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F398334841382%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:MSI%20B550M%:c4e0347f15579952d54c84e4f5e3b88edf9a4589f706aedc32a7fdcd0a4c9cad",
           "category": "motherboard",
-          "title": "Asus Z97-P Motherboard (only)",
-          "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/nsEAAeSwYaxqZy4r/s-l225.jpg",
-          "delivered_price": 25.21,
+          "title": "MSI B550M PRO-VDH WIFI B550 AM4 mATX DDR4 4-Slot WiFi M.2 Motherboard. MSI. Motherboards.",
+          "seller": "www.ebay.co.uk",
+          "image_url": null,
+          "delivered_price": 26.7,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -25.21,
-          "url": "https://www.ebay.co.uk/itm/407101332796"
+          "estimated_profit": -26.7,
+          "url": "https://www.ebay.co.uk/itm/398334841382?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
         },
         {
           "id": 42727886,
@@ -255,11 +255,11 @@
           "url": "https://www.ebay.co.uk/itm/203167398831"
         }
       ],
-      "compatibility_confidence": "unknown",
+      "compatibility_confidence": "matched",
       "super_gem_count": 4,
-      "build_cost": 116.32,
+      "build_cost": 118.05,
       "market": {
-        "query": "gaming pc Intel I5-7400 RTX3060 8gb",
+        "query": "gaming pc AMD Ryzen 3 3200G RTX3060 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -269,14 +269,14 @@
         "bin": {
           "available": true,
           "count": 50,
-          "min_price": 223.0,
-          "max_price": 1399.0,
-          "average_price": 620.2
+          "min_price": 229.1,
+          "max_price": 1156.65,
+          "average_price": 619.94
         }
       },
-      "resale_estimate": 620.2,
+      "resale_estimate": 619.94,
       "resale_source": "bin_average",
-      "estimated_profit": 503.88,
+      "estimated_profit": 501.89,
       "rank": 2
     },
     {
@@ -410,43 +410,43 @@
           "count": 50,
           "min_price": 229.1,
           "max_price": 1156.65,
-          "average_price": 620.25
+          "average_price": 615.97
         }
       },
-      "resale_estimate": 620.25,
+      "resale_estimate": 615.97,
       "resale_source": "bin_average",
-      "estimated_profit": 503.69,
+      "estimated_profit": 499.41,
       "rank": 3
     },
     {
       "components": [
         {
-          "id": 42704330,
-          "listing_id": "820143592936",
+          "id": 42695605,
+          "listing_id": "327323063822",
           "category": "cpu",
-          "title": "AMD Ryzen 3 3200G 4-Core 3.6GHz AM4 CPU Processor MPN YD3200C5M4MFH",
+          "title": "Intel I5-7400 3.00GHz 6MB Quad Core CPU Processor LGA 1151",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/3DgAAeSwt3xqraX4/s-l225.jpg",
-          "delivered_price": 8.39,
+          "image_url": "https://i.ebayimg.com/images/g/DGAAAeSwS3Bqi0hh/s-l225.jpg",
+          "delivered_price": 8.15,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -8.39,
-          "url": "https://www.ebay.co.uk/itm/820143592936"
+          "estimated_profit": -8.15,
+          "url": "https://www.ebay.co.uk/itm/327323063822"
         },
         {
-          "id": 42728160,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F137747772671%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:GIGABYTE%20B:84e671385feda7b695930785b408837b7d80ba6b59a1665fe0545435ecb3f1e8",
+          "id": 42701865,
+          "listing_id": "407101332796",
           "category": "motherboard",
-          "title": "GIGABYTE B550 GAMING X V2 ATX AM4 DDR4 4-DIMM M.2 USB 3.2 Motherboard. GIGABYTE. Motherboards. B550 GAMING X V2.",
-          "seller": "www.ebay.co.uk",
-          "image_url": null,
-          "delivered_price": 22.54,
+          "title": "Asus Z97-P Motherboard (only)",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/nsEAAeSwYaxqZy4r/s-l225.jpg",
+          "delivered_price": 25.21,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -22.54,
-          "url": "https://www.ebay.co.uk/itm/137747772671?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
+          "estimated_profit": -25.21,
+          "url": "https://www.ebay.co.uk/itm/407101332796"
         },
         {
           "id": 42727886,
@@ -533,11 +533,11 @@
           "url": "https://www.ebay.co.uk/itm/203167398831"
         }
       ],
-      "compatibility_confidence": "matched",
+      "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 113.89,
+      "build_cost": 116.32,
       "market": {
-        "query": "gaming pc AMD Ryzen 3 3200G RTX3060 8gb",
+        "query": "gaming pc Intel I5-7400 RTX3060 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -547,45 +547,45 @@
         "bin": {
           "available": true,
           "count": 50,
-          "min_price": 229.1,
-          "max_price": 1156.65,
-          "average_price": 613.55
+          "min_price": 181.2,
+          "max_price": 1399.0,
+          "average_price": 615.27
         }
       },
-      "resale_estimate": 613.55,
+      "resale_estimate": 615.27,
       "resale_source": "bin_average",
-      "estimated_profit": 499.66,
+      "estimated_profit": 498.95,
       "rank": 4
     },
     {
       "components": [
         {
-          "id": 42704330,
-          "listing_id": "820143592936",
+          "id": 42695653,
+          "listing_id": "327332133203",
           "category": "cpu",
-          "title": "AMD Ryzen 3 3200G 4-Core 3.6GHz AM4 CPU Processor MPN YD3200C5M4MFH",
+          "title": "Intel Core i7-6700K 4.00GHz SR2L0 LGA1151 CPU Processor Quad core",
           "seller": null,
-          "image_url": "https://i.ebayimg.com/images/g/3DgAAeSwt3xqraX4/s-l225.jpg",
-          "delivered_price": 8.39,
+          "image_url": "https://i.ebayimg.com/images/g/tw0AAeSw1XFqGabk/s-l225.jpg",
+          "delivered_price": 19.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -8.39,
-          "url": "https://www.ebay.co.uk/itm/820143592936"
+          "estimated_profit": -19.99,
+          "url": "https://www.ebay.co.uk/itm/327332133203"
         },
         {
-          "id": 42729978,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F398334841382%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:MSI%20B550M%:c4e0347f15579952d54c84e4f5e3b88edf9a4589f706aedc32a7fdcd0a4c9cad",
+          "id": 42701865,
+          "listing_id": "407101332796",
           "category": "motherboard",
-          "title": "MSI B550M PRO-VDH WIFI B550 AM4 mATX DDR4 4-Slot WiFi M.2 Motherboard. MSI. Motherboards.",
-          "seller": "www.ebay.co.uk",
-          "image_url": null,
-          "delivered_price": 26.7,
+          "title": "Asus Z97-P Motherboard (only)",
+          "seller": null,
+          "image_url": "https://i.ebayimg.com/images/g/nsEAAeSwYaxqZy4r/s-l225.jpg",
+          "delivered_price": 25.21,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -26.7,
-          "url": "https://www.ebay.co.uk/itm/398334841382?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
+          "estimated_profit": -25.21,
+          "url": "https://www.ebay.co.uk/itm/407101332796"
         },
         {
           "id": 42727886,
@@ -672,11 +672,11 @@
           "url": "https://www.ebay.co.uk/itm/203167398831"
         }
       ],
-      "compatibility_confidence": "matched",
+      "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 118.05,
+      "build_cost": 128.16,
       "market": {
-        "query": "gaming pc AMD Ryzen 3 3200G RTX3060 8gb",
+        "query": "gaming pc Intel Core i7-6700K RTX3060 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -686,14 +686,14 @@
         "bin": {
           "available": true,
           "count": 50,
-          "min_price": 229.1,
-          "max_price": 1156.65,
-          "average_price": 614.75
+          "min_price": 156.7,
+          "max_price": 1975.0,
+          "average_price": 626.3
         }
       },
-      "resale_estimate": 614.75,
+      "resale_estimate": 626.3,
       "resale_source": "bin_average",
-      "estimated_profit": 496.7,
+      "estimated_profit": 498.14,
       "rank": 5
     },
     {
@@ -820,19 +820,19 @@
           "available": false,
           "count": 0,
           "average_price": null,
-          "unavailable_reason": "No comparable sold listings found"
+          "unavailable_reason": "eBay sign-in is required for sold prices, but SOLD_COMPS_HEADLESS is enabled. Run it headed so the eBay login window can be completed."
         },
         "bin": {
           "available": true,
           "count": 50,
           "min_price": 229.1,
           "max_price": 1156.65,
-          "average_price": 617.79
+          "average_price": 615.97
         }
       },
-      "resale_estimate": 617.79,
+      "resale_estimate": 615.97,
       "resale_source": "bin_average",
-      "estimated_profit": 491.16,
+      "estimated_profit": 489.34,
       "rank": 6
     }
   ],
