@@ -128,6 +128,12 @@ function compactCaseName(caseItem: PriorityCaseItem) {
   return [brand, model, colour].filter(Boolean).join("-").toLocaleUpperCase();
 }
 
+function candidateMatchesQuery(candidate: ReferenceCandidate, query: string) {
+  const terms = query.toLowerCase().split(/[^a-z0-9]+/).filter(term => term.length > 2);
+  const haystack = `${candidate.label || ""} ${candidate.source_page || ""} ${candidate.url}`.toLowerCase();
+  return terms.length > 0 && terms.filter(term => haystack.includes(term)).length >= Math.min(2, terms.length);
+}
+
 function hasIncludedFans(caseItem: PriorityCaseItem) {
   const title = caseItem.name;
   if (/(?:fans?\s+(?:included|pre-installed)|pre-installed[^,;–|]{0,60}fans?|includes?\s+\d+\s*(?:x\s*)?(?:\d+\s*mm\s*)?(?:\w+\s+){0,3}fans?|with\s+\d+\s*(?:x\s*)?(?:\d+\s*mm\s*)?(?:\w+\s+){0,3}fans?)/i.test(title)) return true;
@@ -310,9 +316,9 @@ export default function Cases3DPriorityPage() {
     }
   };
 
-  const searchGoogleImages = async () => {
+  const searchGoogleImages = async (queryOverride?: string) => {
     if (!evidenceReview) return;
-    const query = googleQuery.trim() || `${evidenceReview.caseItem.name} PC case chassis`;
+    const query = queryOverride?.trim() || googleQuery.trim() || `${evidenceReview.caseItem.name} PC case chassis`;
     setReferenceBusy(true);
     setError(null);
     try {
@@ -327,6 +333,14 @@ export default function Cases3DPriorityPage() {
       setReferenceBusy(false);
     }
   };
+
+  useEffect(() => {
+    if (evidenceReview?.stage !== "product_images") return;
+    const query = `${evidenceReview.caseItem.name} PC case chassis`;
+    setGoogleQuery(query);
+    setGoogleResults([]);
+    void searchGoogleImages(query);
+  }, [evidenceReview?.caseItem.id, evidenceReview?.stage]);
 
   const approveReferences = async (caseId: number) => {
     if (selectedReferences.length !== 4) return;
@@ -883,9 +897,9 @@ export default function Cases3DPriorityPage() {
                   </section>
                   {referenceBusy && !referenceData ? (
                     <div className="flex items-center justify-center py-16 text-slate-400"><RefreshCw className="mr-2 h-4 w-4 animate-spin" /> Loading images…</div>
-                  ) : referenceData?.candidates.length ? (
+                  ) : googleResults.length ? (
                     <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
-                      {referenceData.candidates.map(candidate => {
+                      {googleResults.map(candidate => {
                         const selectedIndex = selectedReferences.findIndex(item => item.url === candidate.url);
                         return (
                           <button
@@ -901,7 +915,7 @@ export default function Cases3DPriorityPage() {
                         );
                       })}
                     </div>
-                  ) : <p className="py-12 text-center text-slate-500">No candidate images have been recorded.</p>}
+                  ) : <p className="py-12 text-center text-slate-500">No Google results match this case yet. Refine the search or try again.</p>}
                 </>
               )}
 
