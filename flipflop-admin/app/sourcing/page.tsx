@@ -1082,7 +1082,7 @@ function MarketSnapshotPanel({ snapshot }: { snapshot: MarketSnapshot | null }) 
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="w-64 shrink-0">
           <h3 className="text-sm font-semibold text-white">Market Snapshot</h3>
-          <p className="text-xs text-slate-400">Every currently-active listing in the DB, not just this run</p>
+          <p className="text-xs text-slate-400">All listing IDs observed in the last 24 hours, including records outside the scored fixed-price table below</p>
         </div>
         <div className="flex items-center gap-4">
           <MiniStat label="Listings" value={snapshot?.ingestedCount ?? 0} color="#e2e8f0" />
@@ -2951,6 +2951,7 @@ function SourcingPageInner() {
   const [queueStatus, setQueueStatus] = useState<QueueStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
+  const [backendConnected, setBackendConnected] = useState(false);
   const [nextRefreshIn, setNextRefreshIn] = useState(0);
   const [nextScanAt, setNextScanAt] = useState<Date | null>(null);
   const [lastScanAt, setLastScanAt] = useState<Date | null>(null);
@@ -3003,6 +3004,7 @@ function SourcingPageInner() {
         fetch(`/api/gem-radar/gem-by-component`, { cache: "no-store", signal }),
         fetch(`/api/gem-radar/queue-status`, { cache: "no-store", signal }),
       ]);
+      setBackendConnected(listingsRes.ok || componentRes.ok || queueRes.ok);
 
       if (listingsRes.ok) {
         const data = await listingsRes.json() as { items: Listing[]; has_more: boolean };
@@ -3027,9 +3029,10 @@ function SourcingPageInner() {
         setQueueStatus(data);
       }
 
-      setLastUpdate(new Date());
+      if (listingsRes.ok || componentRes.ok || queueRes.ok) setLastUpdate(new Date());
       setNextRefreshIn(5);
     } catch (error) {
+      setBackendConnected(false);
       console.error("Error fetching data:", error);
     } finally {
       dataRequestInFlight.current = false;
@@ -3096,6 +3099,10 @@ function SourcingPageInner() {
         </div>
 
         <div className="flex items-center gap-3">
+          <div className="hidden rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2 text-xs text-slate-200 lg:block" title={lastUpdate ? `Last successful API response: ${lastUpdate.toLocaleString()}. This does not verify the browser extension is online.` : "No successful API response yet. Browser extension connection is not independently verified."}>
+            <span className={backendConnected ? "text-emerald-400" : "text-amber-300"}>●</span> API {backendConnected ? "connected" : "unavailable"}
+            <span className="ml-2 text-slate-400">· Extension connection unverified</span>
+          </div>
           {/* Next scan countdown — estimate only, see fetchScanSchedule's comment */}
           <div
             className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/[0.06] backdrop-blur-xl px-4 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
