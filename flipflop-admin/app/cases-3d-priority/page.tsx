@@ -440,7 +440,8 @@ export default function Cases3DPriorityPage() {
       const response = await fetch("/api/cases/priority-for-3d", { method: "POST" });
       const data = await readJsonResponse<{ cases?: PriorityCaseItem[]; detail?: string; error?: string }>(response);
       if (!response.ok) throw new Error(data.detail || data.error || "Could not freeze campaign");
-      setCases(data.cases || []);
+      const refreshed = await fetch("/api/cases/priority-for-3d?limit=100", { cache: "no-store" });
+      setCases(refreshed.ok ? await readJsonResponse<PriorityCaseItem[]>(refreshed) : data.cases || []);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not freeze campaign");
     } finally {
