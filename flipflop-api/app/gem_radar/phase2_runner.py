@@ -48,6 +48,9 @@ class Phase2Result:
     classified_count: int
     unsettled_count: int
     classification_counts: dict[str, int] = field(default_factory=dict)
+    review_source_count: int = 0
+    review_saved_count: int = 0
+    coverage_errors: list[str] = field(default_factory=list)
 
 
 def component_alert_matches_listing(
@@ -177,6 +180,9 @@ async def run_phase2_classification(
     classified_count = 0
     unsettled_count = 0
     classification_counts: dict[str, int] = {}
+    recent_amazon_count = 0
+    review_source_count = 0
+    review_saved_count = 0
 
     for row in listings:
         (
@@ -186,6 +192,11 @@ async def run_phase2_classification(
             epid, seller_feedback_percent, seller_feedback_count,
             delivery_text, delivery_postcode, observed_review_average, observed_review_count,
         ) = row
+
+        if source == "amazon" and observed_at >= datetime.utcnow() - timedelta(hours=24):
+            recent_amazon_count += 1
+        if observed_review_average is not None and observed_review_count is not None and observed_review_count > 0:
+            review_source_count += 1
 
         title_condition = (title or "").lower()
         if (condition or "").lower() in {"parts_only", "for_parts", "untested"} or re.search(
@@ -337,6 +348,8 @@ async def run_phase2_classification(
             if reviews.average_rating is not None and reviews.review_count is not None:
                 review_average_rating = reviews.average_rating
                 review_count = reviews.review_count
+        if review_average_rating is not None and review_count is not None and review_count > 0:
+            review_saved_count += 1
 
         decision = opportunity.decision
 
@@ -487,4 +500,10 @@ async def run_phase2_classification(
         classified_count=classified_count,
         unsettled_count=unsettled_count,
         classification_counts=classification_counts,
+        review_source_count=review_source_count,
+        review_saved_count=review_saved_count,
+        coverage_errors=(
+            ["Amazon listings are present but no rated review observations were captured"]
+            if recent_amazon_count and review_source_count == 0 else []
+        ) + (["Review observations were captured but none survived scoring"] if review_source_count and review_saved_count == 0 else []),
     )

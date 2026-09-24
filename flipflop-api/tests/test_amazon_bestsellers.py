@@ -4,6 +4,7 @@ from app.services.amazon_bestsellers import (
     extract_asin,
     match_row_by_bestseller,
     name_similarity,
+    bestseller_item_matches_category,
 )
 
 
@@ -85,3 +86,17 @@ def test_component_match_rejects_ambiguous_title_variants():
         rows,
         "gpu",
     ) is None
+
+
+def test_duplicate_vendor_rows_same_cpk_do_not_make_match_ambiguous():
+    rows = [
+        {"category": "cpu", "cpk": "same", "title": "AMD Ryzen 7 7700 CPU"},
+        {"category": "cpu", "cpk": "same", "title": "AMD Ryzen 7 7700 CPU"},
+    ]
+    assert _best_scored_match({"title": "AMD Ryzen 7 7700 CPU"}, rows, "cpu")["cpk"] == "same"
+
+
+def test_bestseller_category_rejects_redirected_browse_lists():
+    assert bestseller_item_matches_category("AMD Ryzen 7 7700 Desktop Processor", "cpu")
+    assert not bestseller_item_matches_category("RTX 5060 Graphics Card", "motherboard")
+    assert not bestseller_item_matches_category("LTO 8 Data Cartridge", "storage")

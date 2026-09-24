@@ -160,6 +160,9 @@ async def run_benchmark_refresh(run_type: str = "daily") -> dict:
             )
             raise RuntimeError(f"PassMark returned no valid {missing} benchmark records")
         all_records = cpu_records + gpu_records + disk_records
+        amd_records = [r for r in cpu_records if "amd" in r.model.lower() or "ryzen" in r.model.lower()]
+        if not amd_records:
+            raise RuntimeError("PassMark CPU import has no AMD records")
 
         if run_type == "daily":
             async with AsyncSessionLocal() as db:
@@ -168,6 +171,8 @@ async def run_benchmark_refresh(run_type: str = "daily") -> dict:
             active = build_active_model_list(pb_models, listing_models)
             active_norms = {m.normalized for m in active}
             all_records = [r for r in all_records if r.normalized_model in active_norms]
+        if not all_records:
+            raise RuntimeError("PassMark import matched no active models")
 
         log.info("benchmark_refresh.upserting", count=len(all_records))
         async with AsyncSessionLocal() as db:
@@ -180,6 +185,8 @@ async def run_benchmark_refresh(run_type: str = "daily") -> dict:
                     failed += 1
                     errors.append(f"{record.model}: {exc}")
             await db.commit()
+        if failed:
+            raise RuntimeError(f"PassMark import failed for {failed} of {checked} records: {'; '.join(errors[:3])}")
 
         async with AsyncSessionLocal() as db:
             result = await db.execute(select(BenchmarkRefreshRun).where(BenchmarkRefreshRun.id == run_id))

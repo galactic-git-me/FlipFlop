@@ -33,13 +33,13 @@ BESTSELLER_URL = (
 # Amazon's component bestseller pages.  The list name is stored with every
 # daily observation so the UI can explain exactly what a rank means.
 COMPONENT_BESTSELLER_LISTS = {
-    "cpu": ("CPUs", "https://www.amazon.co.uk/Best-Sellers-Computers-CPUs/zgbs/computers/229189/"),
-    "gpu": ("Graphics Cards", "https://www.amazon.co.uk/Best-Sellers-Computers-Graphics-Cards/zgbs/computers/284822/"),
-    "ram": ("Computer Memory", "https://www.amazon.co.uk/Best-Sellers-Computers-Computer-Memory/zgbs/computers/172500/"),
-    "storage": ("Internal Solid State Drives", "https://www.amazon.co.uk/Best-Sellers-Computers-Internal-Solid-State-Drives/zgbs/computers/430507031/"),
-    "motherboard": ("Motherboards", "https://www.amazon.co.uk/Best-Sellers-Computers-Motherboards/zgbs/computers/430500031/"),
-    "psu": ("Computer Power Supplies", "https://www.amazon.co.uk/Best-Sellers-Computers-Computer-Power-Supplies/zgbs/computers/1161760/"),
-    "cooler": ("Computer CPU Cooling Fans", "https://www.amazon.co.uk/Best-Sellers-Computers-CPU-Cooling-Fans/zgbs/computers/491286/"),
+    "cpu": ("CPUs", "https://www.amazon.co.uk/zgbs/computers/430515031/"),
+    "gpu": ("Graphics Cards", "https://www.amazon.co.uk/zgbs/computers/430500031/"),
+    "ram": ("Computer Memory", "https://www.amazon.co.uk/zgbs/computers/430511031/"),
+    "storage": ("Internal Solid State Drives", "https://www.amazon.co.uk/zgbs/computers/430505031/"),
+    "motherboard": ("Motherboards", "https://www.amazon.co.uk/zgbs/computers/430512031/"),
+    "psu": ("Computer Power Supplies", "https://www.amazon.co.uk/zgbs/computers/430514031/"),
+    "cooler": ("Fans & Cooling", "https://www.amazon.co.uk/zgbs/computers/430499031/"),
     "case": ("Computer Cases", BESTSELLER_URL),
 }
 ASIN_RE = re.compile(r"/dp/([A-Z0-9]{10})", re.I)
