@@ -231,6 +231,9 @@ function liveStatus(caseItem: PriorityCaseItem) {
 export default function Cases3DPriorityPage() {
   const router = useRouter();
   const [cases, setCases] = useState<PriorityCaseItem[]>([]);
+  const [caseScope, setCaseScope] = useState<"Campaign" | "Overclockers" | "Amazon">("Campaign");
+  const [casePage, setCasePage] = useState(1);
+  const [hasNextCasePage, setHasNextCasePage] = useState(false);
   const [loading, setLoading] = useState(true);
   const [completedCases, setCompletedCases] = useState<PriorityCaseItem[]>([]);
   const [freezing, setFreezing] = useState(false);
@@ -524,9 +527,12 @@ export default function Cases3DPriorityPage() {
         // Fetch priority cases for 3D modeling (top 30)
         // Include explicitly-added priority exceptions (for example APNX C1 at
         // rank 31) as well as the original frozen top-30 campaign.
-        const response = await fetch("/api/cases/priority-for-3d?limit=100");
+        const params = new URLSearchParams({ limit: caseScope === "Campaign" ? "100" : "101", offset: String((casePage - 1) * 100) });
+        if (caseScope !== "Campaign") params.set("source_site", caseScope);
+        const response = await fetch(`/api/cases/priority-for-3d?${params}`, { cache: "no-store" });
         const data = await readJsonResponse<PriorityCaseItem[]>(response);
-        setCases(data.filter(caseItem => !/raspberry\s*pi|raspberrypi|\brpi\b/i.test(caseItem.name)));
+        setHasNextCasePage(data.length > 100);
+        setCases(data.slice(0, 100).filter(caseItem => !/raspberry\s*pi|raspberrypi|\brpi\b/i.test(caseItem.name)));
 
         // Count how many already have models
         const withModels = await fetch("/api/cases/with-3d-models?limit=1000");
@@ -540,7 +546,7 @@ export default function Cases3DPriorityPage() {
     };
 
     void load();
-  }, []);
+  }, [caseScope, casePage]);
 
   const meshyQueueCount = cases.filter(caseItem => {
     const status = caseItem.sourcing_3d_evidence?.stages?.meshy_generation?.status || "not_started";
@@ -562,20 +568,24 @@ export default function Cases3DPriorityPage() {
             <Box className="w-6 h-6 text-purple-400" /> 3D Model Priority Queue
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Frozen priority cases plus manually added exceptions. Select four source pictures before generating a draft model.
+            Browse the frozen campaign or all available retailer cases. Select four source pictures before generating a draft model.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button type="button" variant="outline" onClick={() => router.push("/components-3d-review")} className="cursor-pointer border-purple-500/40 text-purple-200">
             <Eye className="mr-2 h-4 w-4" /> Open 3D approval viewer
           </Button>
-          <Button onClick={freezeCampaign} disabled={freezing || cases.some(item => item.priority_3d_rank)} className="cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-300">
+          <Button onClick={freezeCampaign} disabled={freezing || caseScope !== "Campaign" || cases.some(item => item.priority_3d_rank)} className="cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-300">
             {freezing ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <LockKeyhole className="mr-2 h-4 w-4" />}
             {cases.some(item => item.priority_3d_rank) ? "Top 30 frozen" : "Freeze top 30"}
           </Button>
         </div>
       </div>
       <ThreeDWorkflowNav />
+      <div className="flex flex-wrap items-center gap-2" aria-label="Case source">
+        {(["Campaign", "Overclockers", "Amazon"] as const).map(scope => <button key={scope} type="button" aria-pressed={caseScope === scope} onClick={() => { setCaseScope(scope); setCasePage(1); }} className={`rounded-lg border px-3 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-cyan-400 ${caseScope === scope ? "border-cyan-400 bg-cyan-950 text-cyan-100" : "border-slate-700 text-slate-300 hover:border-slate-500"}`}>{scope}</button>)}
+        {caseScope !== "Campaign" && <span className="text-xs text-slate-400">Showing page {casePage} of {caseScope} cases without 3D models</span>}
+      </div>
       {error && <div role="alert" className="rounded-md border border-red-500/60 bg-red-950/60 px-4 py-3 text-sm text-red-200">{error}</div>}
 
       {/* Progress summary */}
@@ -650,7 +660,7 @@ export default function Cases3DPriorityPage() {
         <div className="space-y-3">
           <div className="flex items-center justify-between gap-4">
             <p className="text-xs font-medium uppercase tracking-wider text-slate-500">Next to create, ordered by popularity</p>
-            <p className="text-xs text-slate-500">{cases.length} cases</p>
+            <div className="flex items-center gap-2 text-xs text-slate-400"><span>{cases.length} cases</span>{caseScope !== "Campaign" && <><button type="button" disabled={casePage === 1} onClick={() => setCasePage(page => page - 1)} className="rounded border border-slate-600 px-2 py-1 disabled:opacity-40">Previous</button><button type="button" disabled={!hasNextCasePage} onClick={() => setCasePage(page => page + 1)} className="rounded border border-slate-600 px-2 py-1 disabled:opacity-40">Next</button></>}</div>
           </div>
           <div className="overflow-x-auto rounded-xl border border-[#1e2d45] bg-[#0b121d]">
             <table className="w-full min-w-[1380px] border-collapse text-left text-sm">

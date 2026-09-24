@@ -1129,6 +1129,69 @@ async def get_scored_listings_facets(db: AsyncSession = Depends(get_db), _: None
     return {"total": total, "categories": categories, "vendors": vendors, "classifications": classes, "category_classifications": category_classes, "stock": stock}
 
 
+@router.get("/sourcing-analytics")
+async def get_sourcing_analytics(
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+) -> dict:
+    """Chart cohort across all active listings, independent of table paging.
+
+    Keep every BSR-linked row and a bounded, classification-stratified sample
+    of the rest so rare tiers remain visible without rendering tens of
+    thousands of scatter points in the browser.
+    """
+    from sqlalchemy import text
+
+    rows = (await db.execute(text("""
+        WITH active AS (
+            SELECT DISTINCT listing_id FROM gem_radar_listing_observations
+            WHERE observed_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
+              AND listing_type = 'buy_it_now'
+        ), latest AS (
+            SELECT DISTINCT ON (s.listing_id) s.*
+            FROM gem_radar_scored_listings s JOIN active a USING (listing_id)
+            ORDER BY s.listing_id, s.scored_at DESC, s.id DESC
+        ), latest_bsr AS (
+            SELECT DISTINCT ON (cpk) cpk, rank
+            FROM amazon_bestseller_observations WHERE cpk IS NOT NULL
+            ORDER BY cpk, captured_at DESC, id DESC
+        ), ranked AS (
+            SELECT l.id, l.title, l.classification, l.deal_score,
+                   l.roi_pct, l.expected_profit, l.delivered_price,
+                   l.market_median_price, l.market_confidence,
+                   l.market_sample_size, l.sell_through_rate_pct,
+                   l.sold_listing_count, b.rank AS amazon_bestseller_rank,
+                   ROW_NUMBER() OVER (
+                       PARTITION BY l.classification ORDER BY l.scored_at DESC, l.id DESC
+                   ) AS sample_rank
+            FROM latest l LEFT JOIN latest_bsr b ON b.cpk = l.cpk
+        )
+        SELECT title, classification, deal_score, roi_pct, expected_profit,
+               delivered_price, market_median_price, market_confidence,
+               market_sample_size, sell_through_rate_pct, sold_listing_count,
+               amazon_bestseller_rank
+        FROM ranked
+        WHERE sample_rank <= 250 OR amazon_bestseller_rank IS NOT NULL
+        ORDER BY classification, sample_rank
+    """))).mappings().all()
+    counts = (await db.execute(text("""
+        WITH active AS (
+            SELECT DISTINCT listing_id FROM gem_radar_listing_observations
+            WHERE observed_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
+              AND listing_type = 'buy_it_now'
+        ), latest AS (
+            SELECT DISTINCT ON (s.listing_id) s.listing_id, s.classification
+            FROM gem_radar_scored_listings s JOIN active a USING (listing_id)
+            ORDER BY s.listing_id, s.scored_at DESC, s.id DESC
+        ) SELECT classification, COUNT(*) AS total FROM latest GROUP BY classification
+    """))).all()
+    return {
+        "total": sum(row.total for row in counts),
+        "classification_counts": {row.classification or "UNKNOWN": row.total for row in counts},
+        "items": [dict(row) for row in rows],
+    }
+
+
 @router.get("/scored-listings-latest-run")
 async def get_scored_listings_latest_run(
     environment: Literal["DEV", "LIVE"] | None = Query(default=None),

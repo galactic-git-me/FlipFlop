@@ -566,6 +566,8 @@ async def update_3d_sourcing_evidence(
 @router.get("/priority-for-3d")
 async def get_cases_priority_for_3d(
     limit: int = 100,
+    offset: int = 0,
+    source_site: str | None = None,
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -575,9 +577,15 @@ async def get_cases_priority_for_3d(
     """
     from sqlalchemy import case as sql_case
 
+    if source_site not in (None, "Amazon", "Overclockers"):
+        raise HTTPException(status_code=400, detail="Unsupported case source")
+    if limit < 1 or limit > 101 or offset < 0:
+        raise HTTPException(status_code=400, detail="Invalid case page")
     frozen_exists = (await db.execute(select(func.count()).select_from(Case).where(Case.priority_3d_rank.isnot(None)))).scalar_one()
     priority_filter = (
-        and_(Case.has_3d_model == False, Case.priority_3d_rank.isnot(None))
+        and_(Case.has_3d_model == False, Case.source_site == source_site)
+        if source_site
+        else and_(Case.has_3d_model == False, Case.priority_3d_rank.isnot(None))
         if frozen_exists
         else Case.has_3d_model == False
     )
@@ -585,11 +593,12 @@ async def get_cases_priority_for_3d(
         select(Case)
         .where(priority_filter, ~Case.name.ilike("%raspberry%"))
         .order_by(
-            Case.priority_3d_rank.asc().nullslast() if frozen_exists else Case.bestseller_rank.asc().nullslast(),
+            Case.priority_3d_rank.asc().nullslast() if frozen_exists and not source_site else Case.bestseller_rank.asc().nullslast(),
             sql_case((Case.source_site == "Amazon", 0), else_=1),  # Amazon prioritized
             Case.price.asc(),  # Cheaper cases first
         )
         .limit(limit)
+        .offset(offset)
     )
     cases = result.scalars().all()
     preferred_names = await _preferred_case_names(db)
