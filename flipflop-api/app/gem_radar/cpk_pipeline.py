@@ -25,6 +25,7 @@ from app.gem_radar.cpk_market import upsert_listing_price, upsert_scan_price
 from app.gem_radar.benchmarks import normalize_match_key
 from app.gem_radar.opportunity_scoring import identity_gates
 from app.gem_radar.identity import resolve_identity
+from app.gem_radar.fan_category import correct_case_fan_cpk
 
 
 _ALIAS_CACHE: tuple[float, list[tuple[str, str, dict]]] | None = None
@@ -209,6 +210,23 @@ async def assign_cpk_and_accumulate_price(
                 brand = extracted.brand
                 model = extracted.model
                 extracted_category = extracted.category
+
+    # Cached identities and catalogue aliases can predate the fan guard.
+    # Correct the persisted identity before assigning its market-price cohort.
+    if extracted_category == "case":
+        identity_row = (await db.execute(
+            text("SELECT cpk_data FROM gem_radar_listing_cpk WHERE listing_id = :listing_id"),
+            {"listing_id": listing_id},
+        )).scalar_one_or_none()
+        if identity_row:
+            corrected_cpk, corrected_data = correct_case_fan_cpk(title, identity_row)
+            if corrected_data.get("category") == "fan":
+                cpk, extracted_category = corrected_cpk, "fan"
+                await db.execute(text("""
+                    UPDATE gem_radar_listing_cpk
+                    SET cpk = :cpk, cpk_data = :data, updated_at = CURRENT_TIMESTAMP
+                    WHERE listing_id = :listing_id
+                """), {"cpk": cpk, "data": json.dumps(corrected_data), "listing_id": listing_id})
 
     match_key = normalize_match_key(title)
 
