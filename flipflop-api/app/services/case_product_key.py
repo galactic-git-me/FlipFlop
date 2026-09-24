@@ -19,6 +19,8 @@ def case_product_identity(title: str, brand: str | None = None, model: str | Non
     name = re.split(r"\s+[|–—]\s+|\s+-\s+|[,;]", name, maxsplit=1)[0]
     name = _DESCRIPTION_START.split(name, maxsplit=1)[0]
     words = re.findall(r"[a-z0-9]+", name.lower())
+    if len(words) < 2 or not any(word not in {"pc", "case", "computer", "gaming", "atx", "mid", "tower"} for word in words):
+        words = re.findall(r"[a-z0-9]+", title.lower())[:24]
     colour_words = re.findall(r"[a-z0-9]+", title.lower())
     colour = next((word for word in colour_words if word in _COLOURS), None)
     if colour == "gray":

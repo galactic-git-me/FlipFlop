@@ -207,7 +207,7 @@ async def _matched_vendor_listings(case: Case, db: AsyncSession) -> list[Listing
 async def _matched_case_offers(case: Case, db: AsyncSession) -> list[Case]:
     distinctive = next((token for token in re.findall(r"[a-z0-9]+", _case_identity(case).lower()) if any(c.isdigit() for c in token)), None)
     if not distinctive:
-        return []
+        return [case]
     rows = (await db.execute(select(Case).where(Case.name.ilike(f"%{distinctive}%")))).scalars().all()
     cpk = case_product_key(case.name, case.brand, case.model)
     return [row for row in rows if case_product_key(row.name, row.brand, row.model) == cpk]
