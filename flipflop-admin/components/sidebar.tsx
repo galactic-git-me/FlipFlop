@@ -15,6 +15,7 @@ import {
   ChartNoAxesCombined,
   Repeat2,
   Library,
+  Trophy,
   Bell,
   Truck,
 } from "lucide-react";
@@ -23,6 +24,7 @@ import { ServiceHealthPanel } from "./service-health-panel";
 
 const PRIMARY_NAV = [
   { href: "/sourcing", icon: Search, label: "Sourcing" },
+  { href: "/best-sellers", icon: Trophy, label: "Best Sellers" },
   { href: "/catalogue", icon: Library, label: "Catalogue" },
   { href: "/builds", icon: Package, label: "Pre-Built" },
   { href: "/configurator-config", icon: Settings2, label: "Custom Builds" },
