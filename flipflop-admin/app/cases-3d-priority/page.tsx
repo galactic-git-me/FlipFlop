@@ -233,6 +233,7 @@ export default function Cases3DPriorityPage() {
   const [cases, setCases] = useState<PriorityCaseItem[]>([]);
   const [caseScope, setCaseScope] = useState<"Campaign" | "Overclockers" | "Amazon">("Campaign");
   const [casePage, setCasePage] = useState(1);
+  const [campaignFrozen, setCampaignFrozen] = useState(false);
   const [hasNextCasePage, setHasNextCasePage] = useState(false);
   const [loading, setLoading] = useState(true);
   const [completedCases, setCompletedCases] = useState<PriorityCaseItem[]>([]);
@@ -476,8 +477,11 @@ export default function Cases3DPriorityPage() {
       const response = await fetch("/api/cases/priority-for-3d", { method: "POST" });
       const data = await readJsonResponse<{ cases?: PriorityCaseItem[]; detail?: string; error?: string }>(response);
       if (!response.ok) throw new Error(data.detail || data.error || "Could not freeze campaign");
-      const refreshed = await fetch("/api/cases/priority-for-3d?limit=100", { cache: "no-store" });
-      setCases(refreshed.ok ? await readJsonResponse<PriorityCaseItem[]>(refreshed) : data.cases || []);
+      const refreshed = await fetch("/api/cases/priority-for-3d?limit=101", { cache: "no-store" });
+      const refreshedCases = refreshed.ok ? await readJsonResponse<PriorityCaseItem[]>(refreshed) : data.cases || [];
+      setCampaignFrozen(refreshedCases.some(caseItem => caseItem.priority_3d_rank != null));
+      setHasNextCasePage(refreshedCases.length > 100);
+      setCases(refreshedCases.slice(0, 100));
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not freeze campaign");
     } finally {
@@ -524,13 +528,13 @@ export default function Cases3DPriorityPage() {
     const load = async () => {
       setLoading(true);
       try {
-        // Fetch priority cases for 3D modeling (top 30)
-        // Include explicitly-added priority exceptions (for example APNX C1 at
-        // rank 31) as well as the original frozen top-30 campaign.
-        const params = new URLSearchParams({ limit: caseScope === "Campaign" ? "100" : "101", offset: String((casePage - 1) * 100) });
+        // Fetch the frozen campaign plus Overclockers cases omitted when it
+        // was frozen, and preserve explicitly-added ranked exceptions.
+        const params = new URLSearchParams({ limit: "101", offset: String((casePage - 1) * 100) });
         if (caseScope !== "Campaign") params.set("source_site", caseScope);
         const response = await fetch(`/api/cases/priority-for-3d?${params}`, { cache: "no-store" });
         const data = await readJsonResponse<PriorityCaseItem[]>(response);
+        if (caseScope === "Campaign") setCampaignFrozen(data.some(caseItem => caseItem.priority_3d_rank != null));
         setHasNextCasePage(data.length > 100);
         setCases(data.slice(0, 100).filter(caseItem => !/raspberry\s*pi|raspberrypi|\brpi\b/i.test(caseItem.name)));
 
@@ -568,16 +572,16 @@ export default function Cases3DPriorityPage() {
             <Box className="w-6 h-6 text-purple-400" /> 3D Model Priority Queue
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Browse the frozen campaign or all available retailer cases. Select four source pictures before generating a draft model.
+            The frozen campaign also includes available Overclockers cases that were outside its original ranking. Select four source pictures before generating a draft model.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button type="button" variant="outline" onClick={() => router.push("/components-3d-review")} className="cursor-pointer border-purple-500/40 text-purple-200">
             <Eye className="mr-2 h-4 w-4" /> Open 3D approval viewer
           </Button>
-          <Button onClick={freezeCampaign} disabled={freezing || caseScope !== "Campaign" || cases.some(item => item.priority_3d_rank)} className="cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-300">
+          <Button onClick={freezeCampaign} disabled={freezing || caseScope !== "Campaign" || campaignFrozen || casePage > 1} className="cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-300">
             {freezing ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <LockKeyhole className="mr-2 h-4 w-4" />}
-            {cases.some(item => item.priority_3d_rank) ? "Top 30 frozen" : "Freeze top 30"}
+            {campaignFrozen ? "Top 30 frozen" : "Freeze top 30"}
           </Button>
         </div>
       </div>
@@ -660,7 +664,7 @@ export default function Cases3DPriorityPage() {
         <div className="space-y-3">
           <div className="flex items-center justify-between gap-4">
             <p className="text-xs font-medium uppercase tracking-wider text-slate-500">Next to create, ordered by popularity</p>
-            <div className="flex items-center gap-2 text-xs text-slate-400"><span>{cases.length} cases</span>{caseScope !== "Campaign" && <><button type="button" disabled={casePage === 1} onClick={() => setCasePage(page => page - 1)} className="rounded border border-slate-600 px-2 py-1 disabled:opacity-40">Previous</button><button type="button" disabled={!hasNextCasePage} onClick={() => setCasePage(page => page + 1)} className="rounded border border-slate-600 px-2 py-1 disabled:opacity-40">Next</button></>}</div>
+            <div className="flex items-center gap-2 text-xs text-slate-400"><span>{cases.length} cases</span>{(casePage > 1 || hasNextCasePage) && <><button type="button" disabled={casePage === 1} onClick={() => setCasePage(page => page - 1)} className="rounded border border-slate-600 px-2 py-1 disabled:opacity-40">Previous</button><button type="button" disabled={!hasNextCasePage} onClick={() => setCasePage(page => page + 1)} className="rounded border border-slate-600 px-2 py-1 disabled:opacity-40">Next</button></>}</div>
           </div>
           <div className="overflow-x-auto rounded-xl border border-[#1e2d45] bg-[#0b121d]">
             <table className="w-full min-w-[1380px] border-collapse text-left text-sm">

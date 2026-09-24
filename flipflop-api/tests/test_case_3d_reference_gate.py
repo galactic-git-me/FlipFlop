@@ -6,7 +6,7 @@ from pydantic import ValidationError
 
 from app.api.assets_admin import CaseMeshyGenerate, _owner_approved_case_images
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
-from app.routes.cases import CaseReferenceApproval, _priority_source_filter
+from app.routes.cases import CaseReferenceApproval, _priority_case_filter, _priority_source_filter
 
 
 def _image(index: int) -> dict[str, str]:
@@ -43,6 +43,13 @@ def test_overclockers_priority_filter_includes_uk_suffix_variants() -> None:
 
 def test_campaign_priority_filter_remains_unfiltered_by_source() -> None:
     assert _priority_source_filter(None) is None
+
+
+def test_frozen_campaign_also_includes_unranked_overclockers_cases() -> None:
+    sql = str(_priority_case_filter(None, True).compile(compile_kwargs={"literal_binds": True})).lower()
+    assert "priority_3d_rank is not null" in sql
+    assert "%overclockers%" in sql
+    assert " or " in sql
 
 
 def test_scored_listing_model_maps_all_market_classification_columns() -> None:

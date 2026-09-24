@@ -603,7 +603,6 @@ async def get_cases_priority_for_3d(
     if limit < 1 or limit > 101 or offset < 0:
         raise HTTPException(status_code=400, detail="Invalid case page")
     frozen_exists = (await db.execute(select(func.count()).select_from(Case).where(Case.priority_3d_rank.isnot(None)))).scalar_one()
-    source_filter = _priority_source_filter(source_site)
     priority_filter = _priority_case_filter(source_site, bool(frozen_exists))
     result = await db.execute(
         select(Case)
