@@ -8,11 +8,13 @@ _FAN_PRODUCT = re.compile(
     r"fan\s+(?:kit|pack)|(?:120|140|200)\s*mm\b.{0,65}\bfan\b|"
     r"\bfan\b.{0,25}\b(?:120|140|200)\s*mm\b)", re.I,
 )
-_CHASSIS = re.compile(r"\b(?:pc\s+case|computer\s+case|chassis|mid[ -]?tower|full[ -]?tower|mini[ -]?tower)\b", re.I)
+_CHASSIS = re.compile(r"\b(?:pc\s+case|computer\s+case|(?:atx|gaming|tower)\s+case|chassis|enclosure|mid[ -]?tower|full[ -]?tower|mini[ -]?tower)\b", re.I)
 
 
 def is_standalone_fan(title: str, data: dict | None = None) -> bool:
     if _CHASSIS.search(title):
+        return False
+    if re.search(r"\bcontroller\b", title, re.I) and not re.search(r"\b(?:120|140|200)\s*mm\b", title, re.I):
         return False
     specs = (data or {}).get("specs") or {}
     # Model metadata alone is not proof: legacy case CPKs can have incorrect
@@ -23,7 +25,7 @@ def is_standalone_fan(title: str, data: dict | None = None) -> bool:
 
 def correct_case_fan_cpk(title: str, data: dict) -> tuple[str, dict]:
     """Keep brand/model, but isolate confirmed fans in a fan CPK."""
-    if data.get("category") != "case" or not is_standalone_fan(title, data):
+    if data.get("category") != "case" or not data.get("brand") or not data.get("model") or not is_standalone_fan(title, data):
         return data.get("cpk"), data
     corrected = {**data, "category": "fan"}
     corrected["cpk"] = hashlib.sha256(
