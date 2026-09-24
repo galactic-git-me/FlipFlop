@@ -101,14 +101,14 @@ def test_case_identity_parser_handles_bundles_and_empty_chassis():
     )
 
 
-def test_super_gem_requires_profit_roi_confidence_liquidity_and_no_veto():
+def test_super_gem_requires_profit_roi_and_no_veto():
     policy = OpportunityPolicy()
     market = robust_sold_market(comps([590, 600, 610, 620, 630, 640]), subject_listing_id="999", policy=policy)
     assert market is not None
     result = score_opportunity(
         listing_price=350, title="AMD Ryzen 7 7800X3D", cpk_data={"category": "cpu", "brand": "amd", "model": "7800x3d", "specs": {"socket": "am5"}},
         market=market, sold_count_90d=20, active_count=5, watch_velocity=1.0, bid_velocity=0.5,
-        policy=policy,
+        policy=policy, listing_condition="new",
     )
     assert result.classification == "SUPER_GEM"
     assert result.decision == "BUY_NOW"
@@ -138,12 +138,11 @@ def test_preliminary_cohort_is_evidence_limited():
         cpk_data={"category": "cpu", "brand": "AMD", "model": "Ryzen 7 7800X3D", "specs": {"socket": "am5"}},
         market=market, sold_count_90d=3, active_count=2,
         watch_velocity=2, bid_velocity=1, policy=policy, delivery_cost=0,
-        extra_risk_flags=("preliminary_sold_cohort",),
+        extra_risk_flags=("preliminary_sold_cohort",), listing_condition="new",
     )
-    assert result.classification == "EVIDENCE_LIMITED_DEAL"
+    assert result.classification == "SUPER_GEM"
     assert result.decision == "INVESTIGATE"
-    # Eligibility means no hard identity veto; evidence still prevents an
-    # actionable buy decision through classification/decision.
+    assert result.evidence_status == "SPARSE_SOLD_EVIDENCE"
     assert result.eligible
 
 
@@ -234,11 +233,12 @@ def test_single_active_comparable_is_evidence_limited_not_ok_deal():
         market=market, sold_count_90d=0, active_count=3,
         watch_velocity=None, bid_velocity=None, policy=policy,
     )
-    assert result.classification == "EVIDENCE_LIMITED_DEAL"
+    assert result.classification == "SUPER_GEM"
     assert result.decision == "INVESTIGATE"
+    assert result.evidence_status == "SPARSE_SOLD_EVIDENCE"
 
 
-def test_zero_sell_through_prevents_a_verified_bargain_becoming_a_super_gem():
+def test_zero_sell_through_is_visible_without_demoting_bargain_tier():
     policy = OpportunityPolicy()
     market = robust_sold_market(comps([85, 88, 90, 92, 95, 97]), subject_listing_id="999", policy=policy)
     assert market is not None
@@ -249,7 +249,7 @@ def test_zero_sell_through_prevents_a_verified_bargain_becoming_a_super_gem():
         watch_velocity=None, bid_velocity=None, policy=policy,
     )
     assert result.liquidity_score == 0.0
-    assert result.classification == "EVIDENCE_LIMITED_DEAL"
+    assert result.classification == "SUPER_GEM"
     assert result.decision == "INVESTIGATE"
 
 
@@ -279,7 +279,7 @@ def test_sell_through_uses_sold_over_sold_plus_active_and_changes_liquidity():
 
 
 def test_risk_flags_have_distinct_severity_and_are_deduplicated():
-    assert risk_safety_score(["preliminary_sold_cohort"]) == 90
+    assert risk_safety_score(["preliminary_sold_cohort"]) == 100
     assert risk_safety_score(["accessory_or_parts_listing"]) == 45
     assert risk_safety_score(["bundle_listing", "bundle_listing"]) == 65
 
@@ -312,7 +312,7 @@ def test_gem_economics_do_not_require_a_redundant_market_discount_gate():
     assert 75 <= result.score < 85
 
 
-def test_strong_economics_with_low_confidence_are_evidence_limited():
+def test_strong_economics_with_low_confidence_keep_deal_tier():
     policy = OpportunityPolicy(minimum_sold_comps=3, minimum_source_diversity=1, gem_confidence=100)
     market = robust_sold_market(
         [SoldComparable(value, source_url=f"https://retailer.test/{index}") for index, value in enumerate([100, 150, 200], 1)],
@@ -327,6 +327,28 @@ def test_strong_economics_with_low_confidence_are_evidence_limited():
     )
     assert result.expected_profit and result.expected_profit >= 3
     assert result.roi_pct and result.roi_pct >= 15
-    assert result.classification == "EVIDENCE_LIMITED_DEAL"
+    assert result.classification == "SUPER_GEM"
     assert result.decision == "INVESTIGATE"
-    assert 70 <= result.score < 75
+    assert 85 <= result.score <= 100
+
+
+def test_evidence_flags_and_market_confidence_do_not_change_tier_or_score():
+    policy = OpportunityPolicy(minimum_sold_comps=3)
+    market = robust_sold_market(comps([100, 102, 104, 106]), subject_listing_id="999", policy=policy)
+    assert market is not None
+    arguments = dict(
+        listing_price=75, title="Noctua NH-D15 CPU Cooler",
+        cpk_data={"category": "cooler", "brand": "Noctua", "model": "NH-D15"},
+        sold_count_90d=5, active_count=3, watch_velocity=1,
+        bid_velocity=1, policy=policy, listing_condition="new",
+    )
+    verified = score_opportunity(market=market, **arguments)
+    limited = score_opportunity(
+        market=replace(market, confidence=5, sample_size=1),
+        extra_risk_flags=("preliminary_sold_cohort",), **arguments,
+    )
+    assert verified.classification == limited.classification
+    assert verified.score == limited.score
+    assert verified.evidence_status != limited.evidence_status
+    assert limited.decision == "INVESTIGATE"
+from dataclasses import replace
