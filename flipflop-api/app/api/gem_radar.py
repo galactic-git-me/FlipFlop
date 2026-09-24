@@ -1100,6 +1100,7 @@ async def get_scored_listings_facets(db: AsyncSession = Depends(get_db), _: None
     categories: dict[str, int] = {}
     vendors: dict[str, dict] = {}
     classes: dict[str, int] = {}
+    category_classes: dict[str, dict[str, int]] = {}
     total = 0
     known = {"cpu", "motherboard", "ram", "psu", "ssd", "gpu", "cooler", "fan", "case"}
     for row in rows:
@@ -1113,7 +1114,9 @@ async def get_scored_listings_facets(db: AsyncSession = Depends(get_db), _: None
         tier = row.classification or "unknown"
         vendor["classifications"][tier] = vendor["classifications"].get(tier, 0) + n
         classes[tier] = classes.get(tier, 0) + n
-    return {"total": total, "categories": categories, "vendors": vendors, "classifications": classes}
+        category_bucket = category_classes.setdefault(category, {})
+        category_bucket[tier] = category_bucket.get(tier, 0) + n
+    return {"total": total, "categories": categories, "vendors": vendors, "classifications": classes, "category_classifications": category_classes}
 
 
 @router.get("/scored-listings-latest-run")

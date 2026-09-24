@@ -1518,6 +1518,8 @@ function findLatestRunId(listings: Listing[]): string | null {
 
 type GemFilter = "all" | "SUPER_GEM" | "GEM" | "EVIDENCE_LIMITED_DEAL" | "EMERGING_OPPORTUNITY" | "OK_DEAL" | "AVERAGE_DEAL" | "POOR_DEAL" | "INSUFFICIENT_DATA" | "IDENTITY_FAILED" | "IDENTITY_PENDING" | "INELIGIBLE";
 type StockLane = "all" | "new" | "open_box" | "used";
+type SourcingFilters = { component: ComponentType; stockLane: StockLane; classification: GemFilter; title: string; sortKey: SortKey; sortDir: SortDir };
+type SourcingFacets = { total: number; categories: Record<string, number>; vendors: Record<string, { total: number; classifications: Record<string, number> }>; classifications: Record<string, number>; category_classifications: Record<string, Record<string, number>> };
 
 const STOCK_LANES: { value: StockLane; label: string; description: string }[] = [
   { value: "all", label: "All stock", description: "Every retained sourcing opportunity" },
