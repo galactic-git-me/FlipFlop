@@ -447,6 +447,10 @@ async def scrape_amazon_component_bestsellers() -> dict:
 
                         if len(unique) < 100:
                             raise ValueError(f"{category} bestseller list has only {len(unique)}/100 unique products")
+                        ranks = {int(item["rank"]) for item in unique.values()}
+                        if ranks != set(range(1, 101)):
+                            missing = sorted(set(range(1, 101)) - ranks)
+                            raise ValueError(f"{category} bestseller ranks incomplete; missing {missing}")
                         valid_items = [item for item in unique.values() if bestseller_item_matches_category(item["title"], category)]
                         if len(valid_items) < 5:
                             raise ValueError(f"{category} bestseller list has only {len(valid_items)} category-valid items out of {len(unique)}")
