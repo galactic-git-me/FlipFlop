@@ -893,17 +893,18 @@ export default function Cases3DPriorityPage() {
                     <div className="flex items-center justify-center py-16 text-slate-400"><RefreshCw className="mr-2 h-4 w-4 animate-spin" /> Loading images…</div>
                   ) : referenceData?.candidates.length ? (
                     <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
-                      {referenceData.candidates.map(candidate => {
+                      {referenceData.candidates.map((candidate, candidateIndex) => {
                         const selectedIndex = selectedReferences.findIndex(item => item.url === candidate.url);
                         return (
                           <button
-                            key={candidate.url}
+                            key={`${candidate.url}-${candidateIndex}`}
                             type="button"
                             onClick={() => toggleReference(candidate)}
                             className={`relative cursor-pointer overflow-hidden rounded-md border bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700 hover:border-slate-500"}`}
                           >
                             { }
                             <img src={candidate.url} alt={candidate.label || "Case reference"} className="h-44 w-full object-contain" />
+                            <span className="absolute inset-x-0 bottom-0 truncate bg-slate-950/85 px-2 py-1 text-[10px] text-white">{candidate.label?.split(" · ")[0] || "Vendor"}</span>
                             {selectedIndex >= 0 && <span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{selectedIndex + 1}</span>}
                           </button>
                         );

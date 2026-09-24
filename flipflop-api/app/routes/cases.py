@@ -202,6 +202,14 @@ async def _matched_vendor_listings(case: Case, db: AsyncSession) -> list[Listing
     return [row for row in rows if row.image_urls and _exact_case_match(case, row.title)]
 
 
+async def _matched_case_offers(case: Case, db: AsyncSession) -> list[Case]:
+    distinctive = next((token for token in re.findall(r"[a-z0-9]+", _case_identity(case).lower()) if any(c.isdigit() for c in token)), None)
+    if not distinctive:
+        return []
+    rows = (await db.execute(select(Case).where(Case.name.ilike(f"%{distinctive}%"), Case.image_url.isnot(None)))).scalars().all()
+    return [row for row in rows if _exact_case_match(case, row.name)]
+
+
 @router.get("/{case_id}/3d-reference-candidates")
 async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(get_db)):
     """Collate candidate photos without silently deciding which four are sent to Meshy."""
@@ -215,9 +223,10 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
     vendor_candidates: list[dict] = []
     vendor_names: set[str] = set()
     seen: set[str] = set()
-    if case.image_url and _exact_case_match(case, case.name):
-        _append_candidate(vendor_candidates, seen, case.image_url, "retailer", case.source_url, f"{case.source_site} · {case.name}")
-        vendor_names.add(case.source_site)
+    for offer in await _matched_case_offers(case, db):
+        vendor_candidates.append({"url": offer.image_url, "source": "retailer", "source_page": offer.source_url, "label": f"{offer.source_site} · {offer.name}"})
+        seen.add(offer.image_url)
+        vendor_names.add(offer.source_site)
     for listing in await _matched_vendor_listings(case, db):
         vendor = listing.source_name or "Vendor listing"
         main_image = next((url for url in listing.image_urls if isinstance(url, str) and url.startswith(("https://", "http://"))), None)
@@ -245,15 +254,19 @@ async def get_3d_overclockers_gallery(case_id: int, db: AsyncSession = Depends(g
     case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
+    offer = next((row for row in await _matched_case_offers(case, db) if "overclockers" in (row.source_site or "").lower()), None)
     listing = next((row for row in await _matched_vendor_listings(case, db) if "overclockers" in (row.source_name or "").lower()), None)
+    fallback_urls = [offer.image_url] if offer and offer.image_url else []
+    if listing:
+        fallback_urls.extend(url for url in listing.image_urls or [] if isinstance(url, str))
     search_url = f"https://www.overclockers.co.uk/search?sSearch={quote_plus(_case_identity(case))}"
     try:
         async with managed_playwright(engine="patchright") as playwright:
             browser = await playwright.chromium.launch(headless=True)
             try:
                 page = await browser.new_page()
-                await page.goto(listing.url if listing else search_url, wait_until="domcontentloaded", timeout=25000)
-                if not listing:
+                await page.goto((offer.source_url if offer else None) or (listing.url if listing else search_url), wait_until="domcontentloaded", timeout=25000)
+                if not offer and not listing:
                     links = await page.locator("a[href*='/product/']").all()
                     for link in links[:25]:
                         title = (await link.inner_text(timeout=1500)).strip()
@@ -261,7 +274,7 @@ async def get_3d_overclockers_gallery(case_id: int, db: AsyncSession = Depends(g
                             await link.click(timeout=10000)
                             break
                 if not _exact_case_match(case, await page.title()):
-                    return {"results": [], "source_page": None, "detail": "No exact Overclockers product match found"}
+                    raise ValueError("Overclockers did not return the matching product page")
                 image_urls: list[str] = []
                 for _ in range(30):
                     urls = await page.locator(".swiper-slide img").evaluate_all("nodes => nodes.map(img => img.getAttribute('data-src') || img.getAttribute('src') || img.getAttribute('data-lazy-src')).filter(Boolean)")
@@ -281,8 +294,12 @@ async def get_3d_overclockers_gallery(case_id: int, db: AsyncSession = Depends(g
                 return {"results": results, "source_page": page.url}
             finally:
                 await browser.close()
-    except Exception as exc:
-        raise HTTPException(status_code=502, detail=f"Could not load Overclockers gallery: {type(exc).__name__}") from exc
+    except Exception:
+        return {
+            "results": [{"url": url, "source": "retailer", "source_page": offer.source_url if offer else listing.url if listing else None, "label": f"Overclockers · {_case_identity(case)}"} for url in dict.fromkeys(fallback_urls)],
+            "source_page": offer.source_url if offer else listing.url if listing else None,
+            "detail": "Overclockers blocked the live gallery; showing saved product photos",
+        }
 
 
 @router.get("/{case_id}/3d-reference-image-search")
@@ -548,8 +565,7 @@ async def get_cases_priority_for_3d(
     for case in cases:
         payload = _priority_payload(case, preferred_names)
         vendors = {row.source_name for row in await _matched_vendor_listings(case, db) if row.source_name}
-        if case.image_url and case.source_site:
-            vendors.add(case.source_site)
+        vendors.update(row.source_site for row in await _matched_case_offers(case, db) if row.source_site)
         payload["vendor_count"] = len(vendors)
         payloads.append(payload)
     return payloads
