@@ -1920,8 +1920,8 @@ function formatPriceColumn(listing: Listing, column: PriceColumn, asPercent: boo
   return value == null ? "—" : `£${value.toFixed(2)}`;
 }
 
-function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
-  const sources = [...new Set(listings.map((l) => l.source))].sort(
+function VendorStackedBarChart({ listings, facets }: { listings: Listing[]; facets: SourcingFacets | null }) {
+  const sources = facets ? Object.keys(facets.vendors).sort((a, b) => facets.vendors[b].total - facets.vendors[a].total) : [...new Set(listings.map((l) => l.source))].sort(
     (a, b) => listings.filter((l) => l.source === b).length - listings.filter((l) => l.source === a).length
   );
 
@@ -1931,7 +1931,7 @@ function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
     const vendorListings = listings.filter((l) => l.source === source);
     const row: Record<string, string | number> = { vendor: SOURCE_LABELS[source] || source };
     for (const tier of VENDOR_CHART_TIERS) {
-      row[tier] = tier === "INSUFFICIENT_DATA"
+      row[tier] = facets ? (facets.vendors[source]?.classifications[tier] ?? 0) : tier === "INSUFFICIENT_DATA"
         ? vendorListings.filter((l) => l.classification === tier && evidenceStatusForChart(l) === "INSUFFICIENT_DATA").length
         : VENDOR_EVIDENCE_TIERS.includes(tier)
           ? vendorListings.filter((l) => l.classification === "INSUFFICIENT_DATA" && evidenceStatusForChart(l) === tier).length
@@ -1977,8 +1977,8 @@ function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
   );
 }
 
-function VendorSummaryTable({ listings, sourceActivity }: { listings: Listing[]; sourceActivity: Record<string, string | null> }) {
-  const sources = [...new Set(listings.map((l) => l.source))].sort(
+function VendorSummaryTable({ listings, sourceActivity, facets }: { listings: Listing[]; sourceActivity: Record<string, string | null>; facets: SourcingFacets | null }) {
+  const sources = facets ? Object.keys(facets.vendors).sort((a, b) => facets.vendors[b].total - facets.vendors[a].total) : [...new Set(listings.map((l) => l.source))].sort(
     (a, b) => listings.filter((l) => l.source === b).length - listings.filter((l) => l.source === a).length
   );
 
@@ -2007,10 +2007,10 @@ function VendorSummaryTable({ listings, sourceActivity }: { listings: Listing[];
                   <SourceBadge source={source} />
                   {sourceActivity[source] && <span className="ml-2 text-[10px] text-slate-400" title="Last listing observed; this does not prove a live connection">Seen {new Date(sourceActivity[source]!).toLocaleString()}</span>}
                 </td>
-                <td className="p-2.5 text-right text-slate-100 font-semibold">{vendorListings.length}</td>
+                <td className="p-2.5 text-right text-slate-100 font-semibold">{facets ? facets.vendors[source].total : vendorListings.length}</td>
                 {VENDOR_SUMMARY_TABLE_TIERS.map((tier) => (
                   <td key={tier} className="p-2.5 text-right text-slate-300">
-                    {vendorListings.filter((l) => l.classification === tier).length}
+                    {facets ? (facets.vendors[source].classifications[tier] ?? 0) : vendorListings.filter((l) => l.classification === tier).length}
                   </td>
                 ))}
               </tr>
@@ -2022,7 +2022,7 @@ function VendorSummaryTable({ listings, sourceActivity }: { listings: Listing[];
   );
 }
 
-function ListingsTab({ listings, sourceActivity, highlightListingId, page, hasMore, onPageChange }: { listings: Listing[]; sourceActivity: Record<string, string | null>; highlightListingId?: string | null; page: number; hasMore: boolean; onPageChange: (page: number) => void }) {
+function ListingsTab({ listings, sourceActivity, facets, total, legacy, highlightListingId, page, hasMore, onPageChange, onFiltersChange }: { listings: Listing[]; sourceActivity: Record<string, string | null>; facets: SourcingFacets | null; total: number; legacy: boolean; highlightListingId?: string | null; page: number; hasMore: boolean; onPageChange: (page: number) => void; onFiltersChange: (filters: SourcingFilters) => void }) {
   const [componentTab, setComponentTab] = useState<ComponentType>("CPU");
   const [stockLane, setStockLane] = useState<StockLane>("all");
   const [gemFilter, setGemFilter] = useState<GemFilter>("all");
@@ -2031,6 +2031,11 @@ function ListingsTab({ listings, sourceActivity, highlightListingId, page, hasMo
   const [titleQuery, setTitleQuery] = useState("");
   const [explanationListing, setExplanationListing] = useState<Listing | null>(null);
   const [showRowPercentages, setShowRowPercentages] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => onFiltersChange({ component: componentTab, stockLane, classification: gemFilter, title: titleQuery, sortKey, sortDir }), 250);
+    return () => clearTimeout(timer);
+  }, [componentTab, stockLane, gemFilter, titleQuery, sortKey, sortDir]);
 
   // Jump straight to a specific listing when arriving from a favourite-match
   // toast/notification link (?listing=<listing_id>) — switch to its tab so
@@ -2087,25 +2092,25 @@ function ListingsTab({ listings, sourceActivity, highlightListingId, page, hasMo
     }
   }
   const mergedListings = [...mergedByProduct.values()];
-  const filtered = mergedListings.sort((a, b) => {
+  const filtered = (legacy ? mergedListings : listings).sort((a, b) => {
     const cmp = compareSortValue(a, b, sortKey);
     return sortDir === "asc" ? cmp : -cmp;
   });
   const visibleListings = filtered;
   const tabCounts = COMPONENT_TABS.map((tab) => ({
     tab,
-    count: byLane.filter((l) => listingTab(l) === tab).length,
+    count: facets ? (facets.categories[tab.toLowerCase()] ?? 0) : byLane.filter((l) => listingTab(l) === tab).length,
   }));
   const classificationCounts = CLASSIFICATION_BADGE_ORDER.map((classification) => ({
     classification,
-    count: byComponent.filter((l) => l.classification === classification).length,
+    count: facets ? (facets.category_classifications[componentTab.toLowerCase()]?.[classification] ?? 0) : byComponent.filter((l) => l.classification === classification).length,
   }));
 
   return (
     <>
       <div className="flex flex-col lg:flex-row gap-4">
-        <VendorSummaryTable listings={listings} sourceActivity={sourceActivity} />
-        <VendorStackedBarChart listings={listings} />
+        <VendorSummaryTable listings={listings} sourceActivity={sourceActivity} facets={facets} />
+        <VendorStackedBarChart listings={listings} facets={facets} />
       </div>
 
       <div className="flex gap-2 overflow-x-auto pb-2 border-b border-slate-700 mb-4">
@@ -2133,7 +2138,7 @@ function ListingsTab({ listings, sourceActivity, highlightListingId, page, hasMo
               : "bg-slate-700/40 text-slate-300 border border-slate-600/40 hover:bg-slate-700/70"
           }`}
         >
-          All ({byComponent.length})
+          All ({facets ? (facets.categories[componentTab.toLowerCase()] ?? 0) : byComponent.length})
         </button>
         {classificationCounts.map(({ classification, count }) => (
           <button
@@ -2154,7 +2159,7 @@ function ListingsTab({ listings, sourceActivity, highlightListingId, page, hasMo
 
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3 text-sm">
         <span className="text-slate-400">
-          Showing {filtered.length} matching rows on loaded page {page}. Filters and vendor totals above apply to this page; the market snapshot includes all active observations.
+          Showing {filtered.length} rows on page {page} of {Math.max(1, Math.ceil(total / 100))} ({total.toLocaleString()} matching scored fixed-price listings). Vendor and category totals cover the whole scored set.
         </span>
         <div className="flex items-center gap-2">
           <button type="button" disabled={page <= 1} onClick={() => onPageChange(Math.max(1, page - 1))} className="cursor-pointer rounded border border-slate-600 bg-slate-700 px-3 py-1.5 text-slate-200 disabled:cursor-not-allowed disabled:opacity-40">Previous</button>
@@ -2951,6 +2956,9 @@ function SourcingPageInner() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [listingPage, setListingPage] = useState(1);
   const [listingHasMore, setListingHasMore] = useState(false);
+  const [listingTotal, setListingTotal] = useState(0);
+  const [listingFacets, setListingFacets] = useState<SourcingFacets | null>(null);
+  const [listingFilters, setListingFilters] = useState<SourcingFilters>({ component: "CPU", stockLane: "all", classification: "all", title: "", sortKey: "deal_score", sortDir: "desc" });
   const [legacyListingsApi, setLegacyListingsApi] = useState(false);
   const [componentGems, setComponentGems] = useState<Record<string, GemData | null> | null>(null);
   const [queueStatus, setQueueStatus] = useState<QueueStatus | null>(null);
@@ -3006,7 +3014,7 @@ function SourcingPageInner() {
       // the next scheduled refresh can recover normally.
       const signal = AbortSignal.timeout(15_000);
       const [listingsRes, componentRes, queueRes] = await Promise.all([
-        fetch(`/api/gem-radar/scored-listings-latest-run?environment=${process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV"}&limit=100&offset=${(listingPage - 1) * 100}&paged=true`, { cache: "no-store", signal }),
+        fetch(`/api/gem-radar/scored-listings-latest-run?environment=${process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV"}&limit=100&offset=${(listingPage - 1) * 100}&paged=true&category=${listingFilters.component.toLowerCase()}&classification=${listingFilters.classification}&stock_lane=${listingFilters.stockLane}&title_query=${encodeURIComponent(listingFilters.title)}&sort_key=${listingFilters.sortKey}&sort_dir=${listingFilters.sortDir}`, { cache: "no-store", signal }),
         fetch(`/api/gem-radar/gem-by-component`, { cache: "no-store", signal }),
         fetch(`/api/gem-radar/queue-status`, { cache: "no-store", signal }),
       ]);
@@ -3016,6 +3024,7 @@ function SourcingPageInner() {
         const data = normalizeScoredListingsResponse<Listing>(await listingsRes.json());
         setListings(data.items);
         setListingHasMore(data.hasMore);
+        setListingTotal("total" in data ? Number(data.total) : data.items.length);
         setLegacyListingsApi(data.legacy);
         if (data.items.length === 0) {
           console.debug("scored-listings returned empty (queue still processing or listings not recently observed)");
@@ -3060,11 +3069,18 @@ function SourcingPageInner() {
       clearInterval(interval);
       clearInterval(countdown);
     };
-  }, [listingPage]);
+  }, [listingPage, listingFilters]);
 
   useEffect(() => {
     fetchScanSchedule();
     fetchMarketSnapshot();
+    const fetchListingFacets = async () => {
+      try {
+        const response = await fetch("/api/gem-radar/scored-listings-facets", { cache: "no-store" });
+        if (response.ok) setListingFacets(await response.json());
+      } catch { /* Listings remain usable while summary refreshes. */ }
+    };
+    void fetchListingFacets();
     const fetchSourceActivity = async () => {
       try {
         const response = await fetch("/api/gem-radar/source-activity", { cache: "no-store" });
@@ -3078,6 +3094,7 @@ function SourcingPageInner() {
     // with the 1s pipeline progress polling or active queue work.
     const snapshotInterval = setInterval(fetchMarketSnapshot, 120000);
     const activityInterval = setInterval(fetchSourceActivity, 60000);
+    const facetsInterval = setInterval(fetchListingFacets, 60000);
     // Tick every second purely to re-render the countdown display.
     const tickInterval = setInterval(() => setNowTick(Date.now()), 1000);
 
@@ -3085,6 +3102,7 @@ function SourcingPageInner() {
       clearInterval(scheduleInterval);
       clearInterval(snapshotInterval);
       clearInterval(activityInterval);
+      clearInterval(facetsInterval);
       clearInterval(tickInterval);
     };
   }, []);
@@ -3191,7 +3209,7 @@ function SourcingPageInner() {
         )}
         {mainTab === "listings" && <>
           {legacyListingsApi && <p role="status" className="mb-3 rounded border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm text-amber-200">The API is still running the old listings format. Restart the local backend to enable pages beyond the first 100 rows.</p>}
-          <ListingsTab listings={listings} sourceActivity={sourceActivity} highlightListingId={highlightListingId} page={listingPage} hasMore={listingHasMore} onPageChange={setListingPage} />
+          <ListingsTab listings={listings} sourceActivity={sourceActivity} facets={listingFacets} total={listingTotal} legacy={legacyListingsApi} highlightListingId={highlightListingId} page={listingPage} hasMore={listingHasMore} onPageChange={setListingPage} onFiltersChange={filters => { setListingPage(1); setListingFilters(current => JSON.stringify(current) === JSON.stringify(filters) ? current : filters); }} />
         </>}
         {mainTab === "analytics" && <AnalyticsTab listings={listings} />}
       </div>
