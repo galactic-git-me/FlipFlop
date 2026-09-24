@@ -853,7 +853,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
               {hasActiveRun
                 ? `${displayedScans.length} search${displayedScans.length !== 1 ? "es" : ""} in this run`
                 : latestRun
-                  ? `${latestRun.runBy} · ${new Date(latestRun.occurredAt).toLocaleString()}`
+                  ? `${latestRun.runBy} · Last updated ${new Date(latestRun.occurredAt).toLocaleString()}`
                   : "No completed scan run is available"}
             </p>
           </div>
@@ -878,22 +878,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
           </div>
         )}
 
-        {displayedScans.length === 0 ? (
-          latestRun ? (
-            <div className="rounded-md border border-slate-700 bg-slate-900/40 px-3 py-3 text-sm text-slate-300">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="font-medium text-white">{latestRun.searchTerm}</span>
-                <span className="text-xs text-slate-400">{latestRun.totalListingsFound.toLocaleString()} listings</span>
-              </div>
-              <div className="mt-1 text-xs text-slate-400">
-                {latestRun.vendors.length > 0 ? latestRun.vendors.join(", ") : "No vendor details recorded"}
-                {latestRun.durationSeconds > 0 && ` · ${formatElapsedTime(latestRun.durationSeconds)}`}
-              </div>
-            </div>
-          ) : (
-            <p className="text-xs text-slate-500">No completed scan run is available.</p>
-          )
-        ) : (
+        {displayedScans.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
           {sortScansByDefinitionOrder(coalesceScansBySearchId(displayedScans)).map((scan) => {
             // Preserve a consistent vendor row. When configuration metadata is
@@ -3189,6 +3174,7 @@ function SourcingPageInner() {
         {mainTab === "stats" && (
           <>
             <MarketSnapshotPanel snapshot={marketSnapshot} />
+            <PipelineDashboard queueStatus={queueStatus} marketSnapshot={marketSnapshot} />
             <StatsTab componentGems={componentGems || undefined} />
           </>
         )}
