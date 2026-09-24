@@ -43,7 +43,7 @@ interface PriorityCaseItem {
   };
 }
 
-type ReferenceSource = "amazon" | "manufacturer" | "google" | "retailer" | "manual";
+type ReferenceSource = "amazon" | "manufacturer" | "google" | "bing" | "retailer" | "manual";
 
 interface ReferenceCandidate {
   url: string;
@@ -245,6 +245,9 @@ export default function Cases3DPriorityPage() {
   const [overclockersResults, setOverclockersResults] = useState<ReferenceCandidate[]>([]);
   const [overclockersError, setOverclockersError] = useState<string | null>(null);
   const [overclockersBusy, setOverclockersBusy] = useState(false);
+  const [bingResults, setBingResults] = useState<ReferenceCandidate[]>([]);
+  const [bingError, setBingError] = useState<string | null>(null);
+  const [bingBusy, setBingBusy] = useState(false);
   const [generatedReviewUrl, setGeneratedReviewUrl] = useState<string | null>(null);
   const [generatingCaseId, setGeneratingCaseId] = useState<number | null>(null);
   const [evidenceReview, setEvidenceReview] = useState<{ caseItem: PriorityCaseItem; stage: "product_images" | "youtube_video" | "meshy_generation" } | null>(null);
@@ -358,10 +361,40 @@ export default function Cases3DPriorityPage() {
     }, 2000);
   };
 
+  const loadBingImages = async (caseId: number) => {
+    setBingBusy(true);
+    setBingError(null);
+    try {
+      const response = await fetch(`/api/cases/${caseId}/3d-bing-images`, { cache: "no-store" });
+      const data = await readJsonResponse<{ results?: ReferenceCandidate[]; detail?: string }>(response);
+      if (!response.ok) throw new Error(data.detail || "Could not load Bing images");
+      setBingResults(data.results || []);
+    } catch (caught) {
+      setBingError(caught instanceof Error ? caught.message : "Could not load Bing images");
+    } finally {
+      setBingBusy(false);
+    }
+  };
+
+  const sourceBingInChrome = () => {
+    if (!evidenceReview) return;
+    const caseId = evidenceReview.caseItem.id;
+    const query = shortCaseSearchName(evidenceReview.caseItem);
+    window.open(`https://www.bing.com/images/search?q=${encodeURIComponent(query)}#flipflop-bing-case-${caseId}`, "_blank", "noopener,noreferrer");
+    let attempts = 0;
+    const timer = window.setInterval(() => {
+      attempts += 1;
+      void loadBingImages(caseId);
+      if (attempts >= 20) window.clearInterval(timer);
+    }, 2000);
+  };
+
   useEffect(() => {
     if (evidenceReview?.stage !== "product_images") return;
     setOverclockersResults([]);
     void loadOverclockersGallery(evidenceReview.caseItem.id);
+    setBingResults([]);
+    void loadBingImages(evidenceReview.caseItem.id);
   }, [evidenceReview?.caseItem.id, evidenceReview?.stage]);
 
   const approveReferences = async (caseId: number) => {
@@ -929,8 +962,22 @@ export default function Cases3DPriorityPage() {
                     </div>
                   ) : <p className="py-12 text-center text-slate-500">No exact vendor matches are available for this case yet.</p>}
                   </section>
+                  <section aria-label="Bing Images results" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">3. Bing Images results</h3>
+                      <div className="flex gap-2"><Button type="button" variant="outline" onClick={sourceBingInChrome}>Search Bing in Chrome</Button><Button type="button" variant="outline" disabled={bingBusy} onClick={() => void loadBingImages(evidenceReview.caseItem.id)}>Reload results</Button></div>
+                    </div>
+                    <p className="mt-2 text-xs text-slate-400">Searches {shortCaseSearchName(evidenceReview.caseItem)}. Review each result before selecting it.</p>
+                    {bingBusy && <p className="mt-3 text-xs text-slate-400">Loading Bing images…</p>}
+                    {bingError && <p className="mt-3 text-xs text-amber-300">{bingError}</p>}
+                    {!bingBusy && !bingError && bingResults.length === 0 && <p className="mt-3 text-xs text-slate-400">No matching Bing images captured yet. Open the search in Chrome to source them.</p>}
+                    {bingResults.length > 0 && <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">{bingResults.map(candidate => {
+                      const selectedIndex = selectedReferences.findIndex(item => item.url === candidate.url);
+                      return <button key={candidate.url} type="button" onClick={() => toggleReference(candidate)} className={`relative cursor-pointer overflow-hidden rounded-md border bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700 hover:border-slate-500"}`}><img src={candidate.url} alt={candidate.label || "Bing case image"} className="h-32 w-full object-contain" /><span className="absolute inset-x-0 bottom-0 truncate bg-slate-950/85 px-2 py-1 text-[10px] text-white">{candidate.label || "Bing Images"}</span>{selectedIndex >= 0 && <span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{selectedIndex + 1}</span>}</button>;
+                    })}</div>}
+                  </section>
                   <section aria-label="Selected reference photos" className="rounded-lg border border-slate-700 p-4">
-                    <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-cyan-200">3. Selected photos ({selectedReferences.length}/4)</h3>
+                    <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-cyan-200">4. Selected photos ({selectedReferences.length}/4)</h3>
                     <div className="grid grid-cols-2 gap-3 md:grid-cols-4">{selectedReferences.map((candidate, index) => <button key={candidate.url} type="button" onClick={() => toggleReference(candidate)} className="relative cursor-pointer overflow-hidden rounded-md border border-cyan-300 bg-white"><img src={candidate.url} alt={`Selected reference ${index + 1}`} className="h-32 w-full object-contain" /><span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{index + 1}</span></button>)}</div>
                   </section>
                 </>
