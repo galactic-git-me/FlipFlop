@@ -9,9 +9,11 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.add_column("amazon_bestseller_observations", sa.Column("price", sa.Float(), nullable=True))
-    op.add_column("amazon_bestseller_observations", sa.Column("rrp", sa.Float(), nullable=True))
-    op.add_column("amazon_bestseller_observations", sa.Column("sales_velocity", sa.String(80), nullable=True))
+    # create_all() may have already created these from the ORM model before
+    # Alembic runs in a local development database.
+    op.execute("ALTER TABLE amazon_bestseller_observations ADD COLUMN IF NOT EXISTS price FLOAT")
+    op.execute("ALTER TABLE amazon_bestseller_observations ADD COLUMN IF NOT EXISTS rrp FLOAT")
+    op.execute("ALTER TABLE amazon_bestseller_observations ADD COLUMN IF NOT EXISTS sales_velocity VARCHAR(80)")
 
 
 def downgrade() -> None:
