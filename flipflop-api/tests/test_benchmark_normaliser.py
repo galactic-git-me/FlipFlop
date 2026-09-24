@@ -8,6 +8,9 @@ def test_normalise_cpu_variants():
     assert normalise_cpu("Intel Core i7-13700K") == "intel_core_i7_13700k"
     assert normalise_cpu("i7 13700K") == "intel_core_i7_13700k"
     assert normalise_cpu("Core i5-12400F") == "intel_core_i5_12400f"
+    assert normalise_cpu("AMD Ryzen 7 7700 CPU - 5.3 GHz, Socket AM5") == "amd_ryzen_7_7700"
+    assert normalise_cpu("AMD Ryzen 5 9600 Processor (AM5) - Tray CPU") == "amd_ryzen_5_9600"
+    assert normalise_cpu("AMD Ryzen 7 7800X3D 8-Core Processor") == "amd_ryzen_7_7800x3d"
 
 def test_normalise_gpu_variants():
     assert normalise_gpu("RTX 3070") == "nvidia_geforce_rtx_3070"

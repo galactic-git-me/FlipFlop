@@ -1254,22 +1254,44 @@ async def get_scored_listings_latest_run(
         for row in observation_result
     }
 
-    # Reviews describe the matched product, not the marketplace listing.
-    # Prefer a non-eBay retailer's product review when available, then share
-    # that value with every listing carrying the same CPK.
-    review_observations = [
-        (row.cpk, row.source, row.review_average_rating, row.review_count)
-        for row in scored
-    ]
+    # Product reviews must be aggregated over the entire CPK, not merely
+    # vendors that happen to be present on the current paginated page.
+    page_cpks = list({row.cpk for row in scored if row.cpk})
+    review_observations = []
+    if page_cpks:
+        scored_review_result = await db.execute(
+            text("""
+                SELECT cpk, source, review_average_rating, review_count
+                FROM gem_radar_scored_listings
+                WHERE cpk = ANY(:cpks)
+                  AND review_average_rating IS NOT NULL AND review_count > 0
+            """), {"cpks": page_cpks},
+        )
+        review_observations.extend(tuple(row) for row in scored_review_result)
+        observed_review_result = await db.execute(
+            text("""
+                WITH latest AS (
+                    SELECT DISTINCT ON (listing_id) listing_id, source,
+                           review_average_rating, review_count
+                    FROM gem_radar_listing_observations
+                    WHERE review_average_rating IS NOT NULL AND review_count > 0
+                    ORDER BY listing_id, observed_at DESC, id DESC
+                )
+                SELECT c.cpk, l.source, l.review_average_rating, l.review_count
+                FROM latest l JOIN gem_radar_listing_cpk c ON c.listing_id = l.listing_id
+                WHERE c.cpk = ANY(:cpks)
+            """), {"cpks": page_cpks},
+        )
+        review_observations.extend(tuple(row) for row in observed_review_result)
     amazon_review_result = await db.execute(
         text("""
             SELECT DISTINCT ON (cpk)
                    cpk, rating, review_count
             FROM amazon_bestseller_observations
-            WHERE cpk IS NOT NULL
+            WHERE cpk = ANY(:cpks)
               AND (rating IS NOT NULL OR review_count IS NOT NULL)
             ORDER BY cpk, captured_at DESC, id DESC
-        """)
+        """), {"cpks": page_cpks}
     )
     review_observations.extend(
         (row.cpk, "amazon", row.rating, row.review_count)

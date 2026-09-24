@@ -85,7 +85,8 @@ async def run_phase2_classification(
                 lo.delivered_price, lo.source, lo.observed_at,
                 cpk.cpk, cpk.cpk_data, lo.category AS observed_category, lo.bid_count, lo.watch_count,
                 lo.epid, lo.seller_feedback_percent, lo.seller_feedback_count,
-                lo.delivery_text, lo.delivery_postcode
+                lo.delivery_text, lo.delivery_postcode,
+                lo.review_average_rating, lo.review_count
             FROM gem_radar_listing_observations lo
             LEFT JOIN gem_radar_listing_cpk cpk ON lo.listing_id = cpk.listing_id
             ORDER BY lo.listing_id, lo.observed_at DESC, lo.id DESC
@@ -183,7 +184,7 @@ async def run_phase2_classification(
             item_price, postage_price, delivered_price, source, observed_at,
             cpk, cpk_data, observed_category, bid_count, watch_count,
             epid, seller_feedback_percent, seller_feedback_count,
-            delivery_text, delivery_postcode,
+            delivery_text, delivery_postcode, observed_review_average, observed_review_count,
         ) = row
 
         title_condition = (title or "").lower()
@@ -329,12 +330,13 @@ async def run_phase2_classification(
         # silently discarded Amazon/Google Shopping/etc. review values before
         # they could be aggregated at CPK level.
         existing_average, existing_count = existing_reviews.get(listing_id, (None, None))
-        review_average_rating = existing_average
-        review_count = existing_count
+        review_average_rating = observed_review_average if observed_review_average is not None else existing_average
+        review_count = observed_review_count if observed_review_count is not None else existing_count
         if enrich_product_reviews and classification in ("GEM", "SUPER_GEM") and epid:
             reviews = await get_product_reviews(epid)
-            review_average_rating = reviews.average_rating
-            review_count = reviews.review_count
+            if reviews.average_rating is not None and reviews.review_count is not None:
+                review_average_rating = reviews.average_rating
+                review_count = reviews.review_count
 
         decision = opportunity.decision
 
@@ -356,6 +358,7 @@ async def run_phase2_classification(
             image_url=image_url,
             condition=condition,
             category=category,
+            canonical_model_id=(cpk_data or {}).get("model") if category in {"cpu", "gpu"} else None,
             epid=epid,
             seller_feedback_percent=seller_feedback_percent,
             seller_feedback_count=seller_feedback_count,
