@@ -1304,7 +1304,7 @@ async def get_scored_listings_latest_run(
         prices = cpk_price_fields.get(listing.id, {})
         explanation = listing.scoring_explanation or {}
         basis = (explanation.get("market") or {}).get("basis", "")
-        cohort = "new" if (listing.condition or "").lower() == "new" else "used"
+        cohort = "used" if re.search(r"\b(?:b[ -]?grade|open[ -]?box|refurbished|renewed)\b", listing.title or "", re.I) else ("new" if (listing.condition or "").lower() == "new" else "used")
         candidates = market_candidates.get((listing.cpk, cohort, "sold" if basis == "SOLD_REFINED" else "active"), [])
         market_links_by_id[listing.id] = market_endpoint_links(
             explanation, prices.get("market_lower_price"), prices.get("market_upper_price"), candidates,
