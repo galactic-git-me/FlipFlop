@@ -1077,11 +1077,56 @@ async def _fetch_cpk_price_fields(db: AsyncSession, ids: list[int]) -> dict[int,
     }
 
 
+@router.get("/scored-listings-facets")
+async def get_scored_listings_facets(db: AsyncSession = Depends(get_db), _: None = Depends(require_operator)) -> dict:
+    """Full active scored BIN population behind the Listings tab filters."""
+    from sqlalchemy import text
+
+    rows = (await db.execute(text("""
+        WITH active AS (
+            SELECT DISTINCT listing_id FROM gem_radar_listing_observations
+            WHERE observed_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
+              AND listing_type = 'buy_it_now'
+        ), latest AS (
+            SELECT DISTINCT ON (s.listing_id)
+                   s.source, s.category, s.classification, s.condition
+            FROM gem_radar_scored_listings s
+            JOIN active a ON a.listing_id = s.listing_id
+            ORDER BY s.listing_id, s.scored_at DESC, s.id DESC
+        )
+        SELECT source, category, classification, condition, COUNT(*) AS n
+        FROM latest GROUP BY source, category, classification, condition
+    """))).fetchall()
+    categories: dict[str, int] = {}
+    vendors: dict[str, dict] = {}
+    classes: dict[str, int] = {}
+    total = 0
+    known = {"cpu", "motherboard", "ram", "psu", "ssd", "gpu", "cooler", "fan", "case"}
+    for row in rows:
+        n = int(row.n)
+        total += n
+        category = row.category if row.category in known else "other"
+        categories[category] = categories.get(category, 0) + n
+        source = row.source or "unknown"
+        vendor = vendors.setdefault(source, {"total": 0, "classifications": {}})
+        vendor["total"] += n
+        tier = row.classification or "unknown"
+        vendor["classifications"][tier] = vendor["classifications"].get(tier, 0) + n
+        classes[tier] = classes.get(tier, 0) + n
+    return {"total": total, "categories": categories, "vendors": vendors, "classifications": classes}
+
+
 @router.get("/scored-listings-latest-run")
 async def get_scored_listings_latest_run(
     environment: Literal["DEV", "LIVE"] | None = Query(default=None),
     offset: int = Query(default=0, ge=0),
     paged: bool = Query(default=False),
+    category: str | None = Query(default=None),
+    classification: str | None = Query(default=None),
+    stock_lane: Literal["all", "new", "open_box", "used"] = Query(default="all"),
+    title_query: str | None = Query(default=None, max_length=120),
+    sort_key: str = Query(default="deal_score"),
+    sort_dir: Literal["asc", "desc"] = Query(default="desc"),
     limit: int = Query(
         default=500,
         ge=1,
@@ -1096,7 +1141,7 @@ async def get_scored_listings_latest_run(
     Historical and auction rows remain in the database for evidence and
     Auction Intel, but are never actionable sourcing cards.
     """
-    from sqlalchemy import select, func, text
+    from sqlalchemy import select, func, text, or_
 
     # The API/database instance is already environment-specific: the live API
     # points at the production database and the local API points at the DEV
@@ -1113,7 +1158,7 @@ async def get_scored_listings_latest_run(
     )
     actionable_ids = {row.listing_id for row in active_observations}
     if not actionable_ids:
-        return {"items": [], "has_more": False} if paged else []
+        return {"items": [], "has_more": False, "total": 0} if paged else []
 
     # Get the latest scored row for each listing in this environment's active
     # observation snapshot.  This remains isolated even when DEV and LIVE
@@ -1129,17 +1174,42 @@ async def get_scored_listings_latest_run(
         .group_by(GemRadarScoredListing.listing_id)
         .subquery()
     )
-    result = await db.execute(
+    statement = (
         select(GemRadarScoredListing)
         .join(
             latest_scored_at,
             (GemRadarScoredListing.listing_id == latest_scored_at.c.listing_id)
             & (GemRadarScoredListing.scored_at == latest_scored_at.c.scored_at),
         )
-        .order_by(GemRadarScoredListing.scored_at.desc(), GemRadarScoredListing.id.desc())
-        .offset(offset)
-        .limit(limit + 1 if paged else limit)
     )
+    if category == "other":
+        statement = statement.where(or_(GemRadarScoredListing.category.is_(None), ~GemRadarScoredListing.category.in_(["cpu", "motherboard", "ram", "psu", "ssd", "gpu", "cooler", "fan", "case"])))
+    elif category:
+        statement = statement.where(GemRadarScoredListing.category == category.lower())
+    if classification and classification != "all":
+        statement = statement.where(GemRadarScoredListing.classification == classification)
+    condition = func.lower(func.coalesce(GemRadarScoredListing.condition, ""))
+    if stock_lane == "new":
+        statement = statement.where(condition == "new")
+    elif stock_lane == "open_box":
+        statement = statement.where(or_(condition.contains("refurb"), condition.contains("open"), condition.contains("new other"), condition.contains("new_other"), condition.contains("b grade"), condition.contains("b_grade")))
+    elif stock_lane == "used":
+        statement = statement.where(or_(condition.contains("used"), condition.contains("pre owned"), condition.contains("pre_owned")))
+    if title_query:
+        statement = statement.where(GemRadarScoredListing.title.ilike(f"%{title_query.strip()}%"))
+    total = (await db.execute(select(func.count()).select_from(statement.order_by(None).subquery()))).scalar_one() if paged else 0
+    sort_columns = {
+        "source": GemRadarScoredListing.source,
+        "title": GemRadarScoredListing.title,
+        "condition": GemRadarScoredListing.condition,
+        "delivered_price": GemRadarScoredListing.delivered_price,
+        "classification": GemRadarScoredListing.classification,
+        "decision": GemRadarScoredListing.decision,
+        "deal_score": GemRadarScoredListing.deal_score,
+    }
+    sort_column = sort_columns.get(sort_key, GemRadarScoredListing.deal_score)
+    statement = statement.order_by(sort_column.asc().nulls_last() if sort_dir == "asc" else sort_column.desc().nulls_last(), GemRadarScoredListing.id.desc())
+    result = await db.execute(statement.offset(offset).limit(limit + 1 if paged else limit))
     scored = result.scalars().all()
     has_more = paged and len(scored) > limit
     if paged:
@@ -1302,7 +1372,7 @@ async def get_scored_listings_latest_run(
         }
         for s in scored
     ]
-    return {"items": items, "has_more": has_more} if paged else items
+    return {"items": items, "has_more": has_more, "total": total} if paged else items
 
 
 async def _new_vs_recurring_counts(db: AsyncSession, active_ids: set[str]) -> dict[str, dict[str, int]]:
