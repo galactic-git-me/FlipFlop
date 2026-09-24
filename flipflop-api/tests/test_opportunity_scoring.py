@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 from app.gem_radar.opportunity_scoring import (
     OpportunityPolicy, SoldComparable, category_economics, desirability_score,
     identity_gates, liquidity_score, risk_safety_score, robust_sold_market,
@@ -351,4 +353,3 @@ def test_evidence_flags_and_market_confidence_do_not_change_tier_or_score():
     assert verified.score == limited.score
     assert verified.evidence_status != limited.evidence_status
     assert limited.decision == "INVESTIGATE"
-from dataclasses import replace

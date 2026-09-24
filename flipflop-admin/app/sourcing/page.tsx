@@ -1545,7 +1545,7 @@ const CLASSIFICATION_RANK: Record<string, number> = {
 
 // Best deal to worst — shared between the filter tags and the row badge so
 // the two stay visually consistent.
-const CLASSIFICATION_BADGE_ORDER: string[] = ["SUPER_GEM", "GEM", "EVIDENCE_LIMITED_DEAL", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "IDENTITY_PENDING", "IDENTITY_FAILED", "INELIGIBLE"];
+const CLASSIFICATION_BADGE_ORDER: string[] = ["SUPER_GEM", "GEM", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "IDENTITY_PENDING", "IDENTITY_FAILED", "INELIGIBLE"];
 const CLASSIFICATION_BADGE_COLORS: Record<string, string> = {
   SUPER_GEM: "bg-amber-600 text-white",
   GEM: "bg-blue-600 text-white",
@@ -2436,7 +2436,7 @@ function ListingsTab({ listings, sourceActivity, facets, total, legacy, highligh
   );
 }
 
-const CLASSIFICATION_ORDER = ["SUPER_GEM", "GEM", "EVIDENCE_LIMITED_DEAL", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "INELIGIBLE"] as const;
+const CLASSIFICATION_ORDER = ["SUPER_GEM", "GEM", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "INELIGIBLE"] as const;
 const CLASSIFICATION_COLORS: Record<string, string> = {
   SUPER_GEM: "#f59e0b",
   GEM: "#3b82f6",
