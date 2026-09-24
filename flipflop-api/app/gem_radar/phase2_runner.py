@@ -71,7 +71,9 @@ def component_alert_matches_listing(
     )
 
 
-async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews: bool = True) -> Phase2Result:
+async def run_phase2_classification(
+    db: AsyncSession, *, enrich_product_reviews: bool = True, emit_side_effects: bool = True,
+) -> Phase2Result:
     policy = await load_opportunity_policy(db)
 
     result = await db.execute(
@@ -141,7 +143,7 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
     """))).all()
     velocities = {row[0]: (float(row[1]) if row[1] is not None else None, float(row[2]) if row[2] is not None else None) for row in velocity_rows}
 
-    favourites = (await db.execute(select(Favourite))).scalars().all()
+    favourites = (await db.execute(select(Favourite))).scalars().all() if emit_side_effects else []
     preferred_keys = set((await db.execute(select(PreferredComponent.component_key))).scalars().all())
     component_price_alerts = (await db.execute(select(PriceAlert).where(
         PriceAlert.alert_type == "component",
@@ -151,7 +153,7 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
         PriceAlert.monitoring_status.in_(("pending_evidence", "armed")),
     ))).scalars().all()
     alerts_by_cpk: dict[str, list[PriceAlert]] = defaultdict(list)
-    if is_enabled(FeatureFlags.PRICE_ALERTS_RULES_ENABLED):
+    if emit_side_effects and is_enabled(FeatureFlags.PRICE_ALERTS_RULES_ENABLED):
         for component_alert in component_price_alerts:
             alerts_by_cpk[component_alert.cpk].append(component_alert)
     triggered_component_alerts: list[tuple[PriceAlert, Money]] = []
@@ -217,10 +219,11 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
                     unsettled_count += 1
 
         # Record demand snapshot for velocity tracking (Phase 2 enhancement).
-        await record_demand_snapshot(
-            db, listing_id, SEARCH_RUN_ID,
-            watch_count, bid_count, delivered_price
-        )
+        if emit_side_effects:
+            await record_demand_snapshot(
+                db, listing_id, SEARCH_RUN_ID,
+                watch_count, bid_count, delivered_price
+            )
         for alert in alerts_by_cpk.get(cpk, []):
             alert.last_evaluated_at = datetime.utcnow()
             if not component_alert_matches_listing(
@@ -442,8 +445,8 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
                 .order_by(GemRadarDecisionEvent.created_at.desc())
                 .limit(1)
             )
-        ).scalar_one_or_none()
-        if (
+        ).scalar_one_or_none() if emit_side_effects else None
+        if emit_side_effects and (
             latest_decision is None
             or latest_decision.classification != classification
             or latest_decision.decision != decision
@@ -472,8 +475,9 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
 
     await db.commit()
 
-    for alert, trigger_price in triggered_component_alerts:
-        await send_price_alert_email(db, alert, trigger_price)
+    if emit_side_effects:
+        for alert, trigger_price in triggered_component_alerts:
+            await send_price_alert_email(db, alert, trigger_price)
 
     return Phase2Result(
         total_cpk_tagged=len(listings),
