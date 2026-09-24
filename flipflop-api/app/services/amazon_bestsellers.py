@@ -38,7 +38,7 @@ COMPONENT_BESTSELLER_LISTS = {
     "ram": ("Computer Memory", "https://www.amazon.co.uk/zgbs/computers/430511031/"),
     "storage": ("Internal Solid State Drives", "https://www.amazon.co.uk/zgbs/computers/430505031/"),
     "motherboard": ("Motherboards", "https://www.amazon.co.uk/zgbs/computers/430512031/"),
-    "psu": ("Computer Power Supplies", "https://www.amazon.co.uk/zgbs/computers/430514031/"),
+    "psu": ("Power Supplies", "https://www.amazon.co.uk/zgbs/computers/430514031/"),
     "cooler": ("Fans & Cooling", "https://www.amazon.co.uk/zgbs/computers/430499031/"),
     "case": ("Computer Cases", BESTSELLER_URL),
 }
@@ -382,7 +382,7 @@ async def scrape_amazon_component_bestsellers() -> dict:
     marketplace listing for that product to inherit the same rank in the
     catalogue.
     """
-    results = {"scraped": 0, "matched": 0, "categories": 0, "errors": 0}
+    results = {"scraped": 0, "matched": 0, "categories": 0, "errors": 0, "category_results": {}}
     async with managed_playwright() as p:
         browser, context = await _make_pw_context(p)
         page = await context.new_page()
@@ -405,6 +405,9 @@ async def scrape_amazon_component_bestsellers() -> dict:
                         for page_num in (1, 2):
                             url = base_url if page_num == 1 else f"{base_url}?pg={page_num}"
                             await page.goto(url, wait_until="domcontentloaded", timeout=45000)
+                            page_title = (await page.title()).lower()
+                            if list_name.lower() not in page_title:
+                                raise ValueError(f"unexpected Amazon list page: {page_title[:100]}")
                             try:
                                 await page.wait_for_selector(
                                     "#gridItemRoot, .zg-grid-general-faceout, div[data-asin]",
@@ -425,6 +428,7 @@ async def scrape_amazon_component_bestsellers() -> dict:
                         valid_items = [item for item in unique.values() if bestseller_item_matches_category(item["title"], category)]
                         if len(valid_items) < 5:
                             raise ValueError(f"{category} bestseller list has only {len(valid_items)} category-valid items out of {len(unique)}")
+                        category_matched = 0
                         for item in sorted(valid_items, key=lambda value: value["rank"]):
                             match = _best_scored_match(item, scored, category)
                             db.add(AmazonBestsellerObservation(
@@ -442,10 +446,13 @@ async def scrape_amazon_component_bestsellers() -> dict:
                             results["scraped"] += 1
                             if match:
                                 results["matched"] += 1
+                                category_matched += 1
                         results["categories"] += 1
+                        results["category_results"][category] = {"status": "ok", "parsed": len(unique), "valid": len(valid_items), "matched": category_matched}
                     except Exception as exc:
                         log.warning("bestsellers.category_error", category=category, error=str(exc))
                         results["errors"] += 1
+                        results["category_results"][category] = {"status": "failed", "error": str(exc)}
                 await db.commit()
         finally:
             await page.close()

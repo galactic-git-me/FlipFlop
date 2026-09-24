@@ -3708,3 +3708,56 @@ async def get_about_flipflop(
         "error": "About FlipFlop file not found",
         "content": "",
     }
+@router.get("/best-sellers")
+async def get_best_sellers(
+    category: str = Query(default="case"),
+    db: AsyncSession = Depends(get_db),
+    _: None = Depends(require_operator),
+) -> dict:
+    """Latest observed Amazon list, with explicit per-category freshness."""
+    from sqlalchemy import text
+    from app.services.amazon_bestsellers import COMPONENT_BESTSELLER_LISTS
+
+    if category not in COMPONENT_BESTSELLER_LISTS:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=400, detail="Unsupported bestseller category")
+    category_rows = (await db.execute(text("""
+        SELECT category, MAX(captured_at) AS latest
+        FROM amazon_bestseller_observations
+        WHERE category = ANY(:categories)
+        GROUP BY category
+    """), {"categories": list(COMPONENT_BESTSELLER_LISTS)})).all()
+    latest_by_category = {row.category: row.latest for row in category_rows}
+    summaries = []
+    for key, (name, url) in COMPONENT_BESTSELLER_LISTS.items():
+        latest = latest_by_category.get(key)
+        count = matched = rated = 0
+        if latest:
+            counts = (await db.execute(text("""
+                SELECT COUNT(DISTINCT asin), COUNT(DISTINCT asin) FILTER (WHERE cpk IS NOT NULL),
+                       COUNT(DISTINCT asin) FILTER (WHERE rating IS NOT NULL AND review_count > 0)
+                FROM amazon_bestseller_observations
+                WHERE category=:category AND captured_at >= :latest - INTERVAL '3 hours'
+            """), {"category": key, "latest": latest})).one()
+            count, matched, rated = map(int, counts)
+        summaries.append({"category": key, "name": name, "source_url": url,
+                          "count": count, "matched": matched, "rated": rated,
+                          "last_captured_at": latest.isoformat() if latest else None})
+    current = next(row for row in summaries if row["category"] == category)
+    products = []
+    if current["last_captured_at"]:
+        rows = (await db.execute(text("""
+            SELECT DISTINCT ON (asin) asin, title, url, image_url, rank, cpk,
+                   rating, review_count, captured_at
+            FROM amazon_bestseller_observations
+            WHERE category=:category
+              AND captured_at >= :latest - INTERVAL '3 hours'
+            ORDER BY asin, captured_at DESC, id DESC
+        """), {"category": category, "latest": latest_by_category[category]})).all()
+        products = [
+            {"asin": row.asin, "title": row.title, "url": row.url, "image_url": row.image_url,
+             "rank": row.rank, "cpk": row.cpk, "rating": row.rating,
+             "review_count": row.review_count, "captured_at": row.captured_at.isoformat()}
+            for row in sorted(rows, key=lambda item: item.rank)
+        ]
+    return {"categories": summaries, "selected_category": category, "products": products}

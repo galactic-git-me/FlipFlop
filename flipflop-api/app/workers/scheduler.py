@@ -194,6 +194,8 @@ async def _run_job_with_history(job_id: str, fn: Callable[[], Awaitable[dict]]) 
         result = await fn()
         finished = datetime.now(timezone.utc)
         took_ms = int((perf_counter() - t0) * 1000)
+        if job_id == "amazon_component_bestsellers" and isinstance(result, dict) and result.get("ok") is False:
+            raise RuntimeError(str(result.get("reason") or result.get("category_results") or "incomplete bestseller coverage"))
         if isinstance(result, dict) and result.get("ok") is False:
             reason = str(result.get("reason") or "not_ready")
             summary = f"Skipped ({reason}, {took_ms}ms)"
