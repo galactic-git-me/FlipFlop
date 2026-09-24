@@ -1974,7 +1974,7 @@ function VendorStackedBarChart({ listings }: { listings: Listing[] }) {
   );
 }
 
-function VendorSummaryTable({ listings }: { listings: Listing[] }) {
+function VendorSummaryTable({ listings, sourceActivity }: { listings: Listing[]; sourceActivity: Record<string, string | null> }) {
   const sources = [...new Set(listings.map((l) => l.source))].sort(
     (a, b) => listings.filter((l) => l.source === b).length - listings.filter((l) => l.source === a).length
   );
@@ -2002,6 +2002,7 @@ function VendorSummaryTable({ listings }: { listings: Listing[] }) {
               <tr key={source} className="border-b border-slate-700 last:border-b-0">
                 <td className="p-2.5">
                   <SourceBadge source={source} />
+                  {sourceActivity[source] && <span className="ml-2 text-[10px] text-slate-400" title="Last listing observed; this does not prove a live connection">Seen {new Date(sourceActivity[source]!).toLocaleString()}</span>}
                 </td>
                 <td className="p-2.5 text-right text-slate-100 font-semibold">{vendorListings.length}</td>
                 {VENDOR_SUMMARY_TABLE_TIERS.map((tier) => (
@@ -2018,7 +2019,7 @@ function VendorSummaryTable({ listings }: { listings: Listing[] }) {
   );
 }
 
-function ListingsTab({ listings, highlightListingId, page, hasMore, onPageChange }: { listings: Listing[]; highlightListingId?: string | null; page: number; hasMore: boolean; onPageChange: (page: number) => void }) {
+function ListingsTab({ listings, sourceActivity, highlightListingId, page, hasMore, onPageChange }: { listings: Listing[]; sourceActivity: Record<string, string | null>; highlightListingId?: string | null; page: number; hasMore: boolean; onPageChange: (page: number) => void }) {
   const [componentTab, setComponentTab] = useState<ComponentType>("CPU");
   const [stockLane, setStockLane] = useState<StockLane>("all");
   const [gemFilter, setGemFilter] = useState<GemFilter>("all");
@@ -2100,7 +2101,7 @@ function ListingsTab({ listings, highlightListingId, page, hasMore, onPageChange
   return (
     <>
       <div className="flex flex-col lg:flex-row gap-4">
-        <VendorSummaryTable listings={listings} />
+        <VendorSummaryTable listings={listings} sourceActivity={sourceActivity} />
         <VendorStackedBarChart listings={listings} />
       </div>
 
@@ -2952,6 +2953,7 @@ function SourcingPageInner() {
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const [backendConnected, setBackendConnected] = useState(false);
+  const [sourceActivity, setSourceActivity] = useState<Record<string, string | null>>({});
   const [nextRefreshIn, setNextRefreshIn] = useState(0);
   const [nextScanAt, setNextScanAt] = useState<Date | null>(null);
   const [lastScanAt, setLastScanAt] = useState<Date | null>(null);
@@ -3058,17 +3060,26 @@ function SourcingPageInner() {
   useEffect(() => {
     fetchScanSchedule();
     fetchMarketSnapshot();
+    const fetchSourceActivity = async () => {
+      try {
+        const response = await fetch("/api/gem-radar/source-activity", { cache: "no-store" });
+        if (response.ok) setSourceActivity(await response.json());
+      } catch { /* Last-observed timestamps are advisory. */ }
+    };
+    void fetchSourceActivity();
     // Keep lightweight schedule polling frequent enough for the countdown.
     const scheduleInterval = setInterval(fetchScanSchedule, 30000);
     // Market snapshot is a whole-database aggregation; it must not compete
     // with the 1s pipeline progress polling or active queue work.
     const snapshotInterval = setInterval(fetchMarketSnapshot, 120000);
+    const activityInterval = setInterval(fetchSourceActivity, 60000);
     // Tick every second purely to re-render the countdown display.
     const tickInterval = setInterval(() => setNowTick(Date.now()), 1000);
 
     return () => {
       clearInterval(scheduleInterval);
       clearInterval(snapshotInterval);
+      clearInterval(activityInterval);
       clearInterval(tickInterval);
     };
   }, []);
@@ -3173,7 +3184,7 @@ function SourcingPageInner() {
             <StatsTab componentGems={componentGems || undefined} />
           </>
         )}
-        {mainTab === "listings" && <ListingsTab listings={listings} highlightListingId={highlightListingId} page={listingPage} hasMore={listingHasMore} onPageChange={setListingPage} />}
+        {mainTab === "listings" && <ListingsTab listings={listings} sourceActivity={sourceActivity} highlightListingId={highlightListingId} page={listingPage} hasMore={listingHasMore} onPageChange={setListingPage} />}
         {mainTab === "analytics" && <AnalyticsTab listings={listings} />}
       </div>
     </div>
