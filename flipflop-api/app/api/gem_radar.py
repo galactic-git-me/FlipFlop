@@ -3748,7 +3748,7 @@ async def get_best_sellers(
     if current["last_captured_at"]:
         rows = (await db.execute(text("""
             SELECT DISTINCT ON (asin) asin, title, url, image_url, rank, cpk,
-                   rating, review_count, captured_at
+                   rating, review_count, price, rrp, sales_velocity, captured_at
             FROM amazon_bestseller_observations
             WHERE category=:category
               AND captured_at >= CAST(:latest AS timestamp) - INTERVAL '3 hours'
@@ -3757,7 +3757,8 @@ async def get_best_sellers(
         products = [
             {"asin": row.asin, "title": row.title, "url": row.url, "image_url": row.image_url,
              "rank": row.rank, "cpk": row.cpk, "rating": row.rating,
-             "review_count": row.review_count, "captured_at": row.captured_at.isoformat()}
+             "review_count": row.review_count, "price": row.price, "rrp": row.rrp,
+             "sales_velocity": row.sales_velocity, "captured_at": row.captured_at.isoformat()}
             for row in sorted(rows, key=lambda item: item.rank)
         ]
     return {"categories": summaries, "selected_category": category, "products": products}

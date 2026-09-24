@@ -451,6 +451,9 @@ async def scrape_amazon_component_bestsellers() -> dict:
                                 cpk=match["cpk"] if match else None,
                                 rating=item.get("rating"),
                                 review_count=item.get("review_count"),
+                                price=item.get("price"),
+                                rrp=item.get("rrp"),
+                                sales_velocity=clean_sales_velocity(item.get("sales_velocity")),
                             ))
                             results["scraped"] += 1
                             if match:
