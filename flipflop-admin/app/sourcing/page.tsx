@@ -3,7 +3,7 @@
 import { memo, Suspense, useEffect, useId, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer, Info, X, History } from "lucide-react";
+import { RefreshCw, BarChart3, Gem, Flame, Loader2, Clock, CheckCircle2, AlertTriangle, MinusCircle, Timer, X, History } from "lucide-react";
 import PixelCard from "../../components/ui/PixelCard";
 import { VendorLogo } from "../../components/VendorLogo";
 import { PriceHistorySparkline } from "../../components/listings/PriceHistorySparkline";
@@ -1870,6 +1870,26 @@ function evidenceStatusForChart(listing: Listing): string {
   return "INSUFFICIENT_DATA";
 }
 
+function classificationTooltip(listing: Listing): string {
+  const lines = [
+    explainClassification(listing),
+    `Evidence: ${(listing.evidence_status ?? "UNKNOWN").replace(/_/g, " ")}`,
+    `Reason: ${(listing.evidence_reason ?? "—").replace(/_/g, " ")}`,
+    `Market basis: ${(listing.scoring_explanation?.market?.basis ?? "NONE").replace(/_/g, " ")}`,
+    `Comparables: ${listing.market_sample_size ?? 0}`,
+    `Market confidence: ${listing.market_confidence == null ? "—" : `${listing.market_confidence.toFixed(0)}/100`}`,
+  ];
+  if (listing.evidence_confidence) {
+    lines.push(...Object.entries(listing.evidence_confidence).map(([name, value]) =>
+      `${name.replace(/_/g, " ")}: ${Math.round(value * 100)}%`
+    ));
+  }
+  if (listing.scoring_explanation?.risk_flags?.length) {
+    lines.push(`Warnings: ${listing.scoring_explanation.risk_flags.map((flag) => flag.replace(/_/g, " ")).join(", ")}`);
+  }
+  return lines.join("\n");
+}
+
 type PriceColumn = "listing" | "low" | "median" | "high";
 
 function priceValueForColumn(listing: Listing, column: PriceColumn): number | null {
@@ -1907,7 +1927,7 @@ function formatPriceColumn(listing: Listing, column: PriceColumn, asPercent: boo
     return value == null ? "—" : `${value.toFixed(1)}%`;
   }
   const value = priceValueForColumn(listing, column);
-  return value == null ? "—" : `£${value.toFixed(2)}`;
+  return value == null ? "—" : `£${Math.round(value).toLocaleString()}`;
 }
 
 function MarketPriceCell({ listing, column, asPercent }: { listing: Listing; column: "low" | "median" | "high"; asPercent: boolean }) {
@@ -2033,11 +2053,11 @@ function VendorSummaryTable({ listings, sourceActivity, facets }: { listings: Li
 function ListingsTab({ listings, sourceActivity, facets, total, legacy, highlightListingId, page, hasMore, onPageChange, onFiltersChange }: { listings: Listing[]; sourceActivity: Record<string, string | null>; facets: SourcingFacets | null; total: number; legacy: boolean; highlightListingId?: string | null; page: number; hasMore: boolean; onPageChange: (page: number) => void; onFiltersChange: (filters: SourcingFilters) => void }) {
   const [componentTab, setComponentTab] = useState<ComponentType>("CPU");
   const [stockLane, setStockLane] = useState<StockLane>("all");
+  const [explanationListing, setExplanationListing] = useState<Listing | null>(null);
   const [gemFilter, setGemFilter] = useState<GemFilter>("all");
   const [sortKey, setSortKey] = useState<SortKey>("deal_score");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [titleQuery, setTitleQuery] = useState("");
-  const [explanationListing, setExplanationListing] = useState<Listing | null>(null);
   const [showRowPercentages, setShowRowPercentages] = useState(false);
 
   useEffect(() => {
@@ -2229,7 +2249,6 @@ function ListingsTab({ listings, sourceActivity, facets, total, legacy, highligh
                 <SortHeader label={showRowPercentages ? "High %" : "High"} sortKey="market_upper_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
                 <SortHeader label="Class" sortKey="classification" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} widthClassName="w-24" />
                 <SortHeader label="Score" sortKey="deal_score" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-14" />
-                <th className="text-left text-slate-200 font-semibold w-16">Evidence</th>
                 <SortHeader label="Amazon BSR" sortKey="amazon_bestseller_rank" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
                 <SortHeader label="Performance" sortKey="performance_rank" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-24" />
                 <th className="text-right text-slate-200 font-semibold w-20" title="Sampled sold comparables in the last 90 days">Sold (90d)</th>
@@ -2301,20 +2320,13 @@ function ListingsTab({ listings, sourceActivity, facets, total, legacy, highligh
                     <td className="p-3 text-right text-slate-100">
                       <MarketPriceCell listing={listing} column="high" asPercent={showRowPercentages} />
                     </td>
-                    <td className="p-3" title={explainClassification(listing)}>
-                      <ClassificationBadge classification={listing.classification} />
+                    <td className="p-3">
+                      <button type="button" onClick={() => setExplanationListing(listing)} title={classificationTooltip(listing)} aria-label={`Classification evidence for ${listing.title}`} className="cursor-pointer rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+                        <ClassificationBadge classification={listing.classification} />
+                      </button>
                     </td>
                     <td className="p-3 text-right text-slate-100 font-semibold" title={explainClassification(listing)}>
                       {listing.deal_score.toFixed(1)}
-                    </td>
-                    <td className="p-3">
-                      <button
-                        type="button"
-                        onClick={() => setExplanationListing(listing)}
-                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-cyan-400/25 bg-cyan-400/10 px-2 py-1 text-xs font-semibold text-cyan-300 transition-colors duration-200 hover:bg-cyan-400/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
-                      >
-                        <Info className="h-3.5 w-3.5" /> Why?
-                      </button>
                     </td>
                     <td className="p-3 text-right text-cyan-300">
                       {listing.amazon_bestseller_rank != null ? (
