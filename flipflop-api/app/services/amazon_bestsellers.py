@@ -20,6 +20,7 @@ from app.models.case import Case
 from app.models.part import Part, PartCategory
 from app.models.amazon_bestseller_observation import AmazonBestsellerObservation
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
+from app.services.case_product_key import case_product_key
 from app.services.browser_pool import managed_playwright
 from app.swarms.cases import RawCase, _make_pw_context, _upsert_case, _upsert_case_new
 
@@ -392,7 +393,7 @@ async def scrape_amazon_component_bestsellers() -> dict:
                                 url=item.get("url"),
                                 image_url=item.get("image_url"),
                                 rank=int(item["rank"]),
-                                cpk=match["cpk"] if match else None,
+                                cpk=case_product_key(item["title"]) if category == "case" else match["cpk"] if match else None,
                                 rating=item.get("rating"),
                                 review_count=item.get("review_count"),
                             ))

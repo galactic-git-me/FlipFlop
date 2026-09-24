@@ -21,6 +21,7 @@ import httpx
 import structlog
 
 from app.config import get_settings
+from app.services.case_product_key import case_product_key
 
 log = structlog.get_logger(__name__)
 
@@ -58,7 +59,7 @@ _PLACEHOLDER_ECHO_MARKERS = (
 # case bundles, where the title often contains plenty of useful identity but
 # little prose the LLM can rely on.
 _CASE_FAMILY_PATTERNS = (
-    ("corsair", r"(?:3500x|4000d|5000d|6500d|7000d|2500x|2500d|frame\s+4000d)"),
+    ("corsair", r"(?:3500x|4000d|5000d|6500d|7000d|2500x|2500d|frame\s+(?:4000d|4500x)|4500x)"),
     ("nzxt", r"(?:h[1-9]\d?|f[1-9]\d?|h[2-9]\d{2}|f[2-9]\d{2})"),
     ("fractal-design", r"(?:define\s+[rst]\d+|focus\s+g|meshify\s+[a-z]\d*|north(?:\s+xl)?)"),
     ("cooler-master", r"(?:nr\d{3,4}p?(?:\s+max)?|masterbox\s+[a-z0-9-]+)"),
@@ -161,14 +162,13 @@ async def extract_cpk(
     case_identity = extract_case_identity(title)
     if case_identity and (category is None or category == "case"):
         brand, model = case_identity
-        cpk_input = f"case|{brand}|{model}"
         return ExtractedProductData(
             category="case",
             brand=brand,
             model=model,
             specs={},
             confidence=0.92,
-            cpk=hashlib.sha256(cpk_input.encode()).hexdigest()[:16],
+            cpk=case_product_key(title),
         )
 
     prompt = f"""You are a PC hardware product data extractor. Extract structured info from this listing title.

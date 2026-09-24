@@ -14,6 +14,7 @@ from app.database import get_db
 from app.models.case import Case
 from app.models.catalogue import CaseCatalogue
 from app.models.listing import Listing
+from app.services.case_product_key import case_product_key
 from app.models.gem_radar_intelligence import PreferredComponent
 from app.services.media_sync import sync_to_public_media
 
@@ -74,6 +75,7 @@ def _priority_payload(case: Case, preferred_names: list[str] | None = None) -> d
     return {
         "id": case.id,
         "name": case.name,
+        "cpk": case_product_key(case.name, case.brand, case.model),
         "brand": case.brand,
         "model": case.model,
         "price": case.price_new or case.price or 0,
@@ -198,15 +200,17 @@ async def _matched_vendor_listings(case: Case, db: AsyncSession) -> list[Listing
     if not distinctive:
         return []
     rows = (await db.execute(select(Listing).where(Listing.title.ilike(f"%{distinctive}%"), Listing.image_urls.isnot(None)).limit(500))).scalars().all()
-    return [row for row in rows if row.image_urls and _exact_case_match(case, row.title)]
+    cpk = case_product_key(case.name, case.brand, case.model)
+    return [row for row in rows if row.image_urls and case_product_key(row.title, row.case_brand, row.case_model) == cpk]
 
 
 async def _matched_case_offers(case: Case, db: AsyncSession) -> list[Case]:
     distinctive = next((token for token in re.findall(r"[a-z0-9]+", _case_identity(case).lower()) if any(c.isdigit() for c in token)), None)
     if not distinctive:
         return []
-    rows = (await db.execute(select(Case).where(Case.name.ilike(f"%{distinctive}%"), Case.image_url.isnot(None)))).scalars().all()
-    return [row for row in rows if _exact_case_match(case, row.name)]
+    rows = (await db.execute(select(Case).where(Case.name.ilike(f"%{distinctive}%")))).scalars().all()
+    cpk = case_product_key(case.name, case.brand, case.model)
+    return [row for row in rows if case_product_key(row.name, row.brand, row.model) == cpk]
 
 
 @router.get("/{case_id}/3d-reference-candidates")
@@ -223,8 +227,9 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
     vendor_names: set[str] = set()
     seen: set[str] = set()
     for offer in await _matched_case_offers(case, db):
-        vendor_candidates.append({"url": offer.image_url, "source": "retailer", "source_page": offer.source_url, "label": f"{offer.source_site} · {offer.name}"})
-        seen.add(offer.image_url)
+        if offer.image_url:
+            vendor_candidates.append({"url": offer.image_url, "source": "retailer", "source_page": offer.source_url, "label": f"{offer.source_site} · {offer.name}"})
+            seen.add(offer.image_url)
         vendor_names.add(offer.source_site)
     for listing in await _matched_vendor_listings(case, db):
         vendor = listing.source_name or "Vendor listing"
@@ -237,6 +242,7 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
     return {
         "case_id": case.id,
         "case_name": case.name,
+        "cpk": case_product_key(case.name, case.brand, case.model),
         "sourcing_ready": (
             (stages.get("manufacturer_3d") or {}).get("status") in ("not_found", "complete")
             and (stages.get("third_party_3d") or {}).get("status") == "not_found"
