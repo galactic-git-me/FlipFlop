@@ -5,7 +5,8 @@ from fastapi import HTTPException
 from pydantic import ValidationError
 
 from app.api.assets_admin import CaseMeshyGenerate, _owner_approved_case_images
-from app.routes.cases import CaseReferenceApproval
+from app.models.gem_radar_scored_listing import GemRadarScoredListing
+from app.routes.cases import CaseReferenceApproval, _priority_source_filter
 
 
 def _image(index: int) -> dict[str, str]:
@@ -31,3 +32,22 @@ def test_generation_requires_the_saved_four_images_in_saved_order() -> None:
 def test_generation_contract_requires_four_images() -> None:
     with pytest.raises(ValidationError):
         CaseMeshyGenerate(image_urls=["https://images.example.test/one.jpg"])
+
+
+def test_overclockers_priority_filter_includes_uk_suffix_variants() -> None:
+    expression = _priority_source_filter("Overclockers")
+    sql = str(expression.compile(compile_kwargs={"literal_binds": True})).lower()
+    assert "like" in sql
+    assert "%overclockers%" in sql
+
+
+def test_campaign_priority_filter_remains_unfiltered_by_source() -> None:
+    assert _priority_source_filter(None) is None
+
+
+def test_scored_listing_model_maps_all_market_classification_columns() -> None:
+    expected = {
+        "market_lower_price", "market_median_price", "market_upper_price",
+        "pct_offset", "recommendation",
+    }
+    assert expected.issubset(GemRadarScoredListing.__table__.columns.keys())

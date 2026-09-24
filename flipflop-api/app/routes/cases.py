@@ -8,7 +8,7 @@ from uuid import uuid4
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 import httpx
 from pydantic import BaseModel, Field, HttpUrl
-from sqlalchemy import select, and_, func, update
+from sqlalchemy import select, and_, func, or_, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.case import Case
@@ -252,6 +252,27 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
         "vendor_names": sorted(vendor_names),
         "approved_selection": approved,
     }
+
+
+def _priority_source_filter(source_site: str | None):
+    if source_site == "Overclockers":
+        # Imported case rows have historically used both "Overclockers" and
+        # "Overclockers UK". Keep the source tab inclusive of both spellings.
+        return Case.source_site.ilike("%overclockers%")
+    return Case.source_site == source_site if source_site else None
+
+
+def _priority_case_filter(source_site: str | None, frozen_exists: bool):
+    without_model = Case.has_3d_model == False  # noqa: E712
+    source_filter = _priority_source_filter(source_site)
+    if source_filter is not None:
+        return and_(without_model, source_filter)
+    if frozen_exists:
+        # Keep the frozen campaign intact while surfacing Overclockers stock
+        # that was excluded when the campaign was frozen. Rankless additions
+        # sort after frozen campaign rows below.
+        return and_(without_model, or_(Case.priority_3d_rank.isnot(None), Case.source_site.ilike("%overclockers%")))
+    return without_model
 
 
 @router.get("/{case_id}/3d-overclockers-gallery")
@@ -582,13 +603,8 @@ async def get_cases_priority_for_3d(
     if limit < 1 or limit > 101 or offset < 0:
         raise HTTPException(status_code=400, detail="Invalid case page")
     frozen_exists = (await db.execute(select(func.count()).select_from(Case).where(Case.priority_3d_rank.isnot(None)))).scalar_one()
-    priority_filter = (
-        and_(Case.has_3d_model == False, Case.source_site == source_site)
-        if source_site
-        else and_(Case.has_3d_model == False, Case.priority_3d_rank.isnot(None))
-        if frozen_exists
-        else Case.has_3d_model == False
-    )
+    source_filter = _priority_source_filter(source_site)
+    priority_filter = _priority_case_filter(source_site, bool(frozen_exists))
     result = await db.execute(
         select(Case)
         .where(priority_filter, ~Case.name.ilike("%raspberry%"))
