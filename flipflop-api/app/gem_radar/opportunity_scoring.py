@@ -1,8 +1,8 @@
 """Explainable, gated opportunity scoring for Gem Radar.
 
 Market value, economics, liquidity and build preference are deliberately
-separate.  A strong price signal can never compensate for an identity,
-evidence or profitability veto.
+separate. Evidence quality is reported independently of deal tier and score;
+hard identity vetoes still prevent a bargain classification.
 """
 from __future__ import annotations
 
@@ -122,7 +122,6 @@ def category_economics(category: str, policy: OpportunityPolicy) -> CategoryEcon
 _CLASSIFICATION_SCORE_BANDS: dict[str, tuple[float, float]] = {
     "SUPER_GEM": (85.0, 100.0),
     "GEM": (75.0, 84.9),
-    "EVIDENCE_LIMITED_DEAL": (70.0, 74.9),
     "OK_DEAL": (65.0, 69.9),
     "AVERAGE_DEAL": (50.0, 64.9),
     "POOR_DEAL": (0.0, 49.9),
@@ -451,14 +450,16 @@ RISK_PENALTIES = {
     "category_identity_conflict": 55.0, "whole_system_misclassified_as_component": 55.0,
     "bundle_listing": 35.0, "multi_variant_listing": 30.0,
     "specialised_mining_hardware": 35.0, "retro_platform_excluded": 25.0,
-    "insufficient_same_condition_sold_comparables": 18.0,
-    "insufficient_comparable_source_diversity": 15.0, "preliminary_sold_cohort": 10.0,
 }
+EVIDENCE_FLAGS = frozenset({
+    "insufficient_same_condition_sold_comparables",
+    "insufficient_comparable_source_diversity", "preliminary_sold_cohort",
+})
 
 
 def risk_safety_score(flags: Iterable[str]) -> float:
-    """Return 0-100 safety using flag severity rather than raw flag count."""
-    penalty = sum(RISK_PENALTIES.get(flag, 20.0) for flag in set(flags))
+    """Score identity/safety risks, not the quality of market evidence."""
+    penalty = sum(RISK_PENALTIES.get(flag, 20.0) for flag in set(flags) - EVIDENCE_FLAGS)
     return max(0.0, min(100.0, 100.0 - penalty))
 
 
@@ -507,6 +508,8 @@ def score_opportunity(
         title=title, cpk_data=cpk_data, market=market, sold_count=sold_count_90d,
         active_count=active_count, policy=policy, listing_condition=listing_condition,
     )
+    if "preliminary_sold_cohort" in risk_flags and evidence_status == "CLASSIFIABLE":
+        evidence_status = evidence_reason = "SPARSE_SOLD_EVIDENCE"
     if market is None:
         risk_flags.append("insufficient_same_condition_sold_comparables")
     elif market.source_diversity < policy.minimum_source_diversity and market.basis != "FIXED_RETAIL_CONTEXT":
@@ -514,6 +517,7 @@ def score_opportunity(
 
     liquidity = liquidity_score(sold_count_90d, active_count, watch_velocity, bid_velocity)
     desirability = desirability_score(title, cpk_data, preferred, inventory_fit)
+    # Evidence quality is reported separately; it must not lower the deal score.
     risk = risk_safety_score(risk_flags)
 
     if market is None:
@@ -566,12 +570,14 @@ def score_opportunity(
     weights = [policy.weight_economic_pct, policy.weight_desirability_pct, policy.weight_market_confidence_pct, policy.weight_risk_safety_pct, policy.weight_liquidity_pct]
     if any(weight < 0 for weight in weights) or sum(weights) <= 0:
         weights = [45.0, 15.0, 15.0, 5.0, 20.0]
-    score_parts = [(economic_score, weights[0]), (desirability, weights[1]), (market.confidence, weights[2]), (risk, weights[3])]
+    # Market confidence is evidence quality, not deal quality. Preserve the
+    # policy's relative weights for the remaining economic/demand signals.
+    score_parts = [(economic_score, weights[0]), (desirability, weights[1]), (risk, weights[3])]
     if liquidity is not None:
         score_parts.append((liquidity, weights[4]))
     total_score = sum(value * weight for value, weight in score_parts) / sum(weight for _, weight in score_parts)
     provisional_evidence = "preliminary_sold_cohort" in risk_flags
-    evidence_limited = provisional_evidence or market.sample_size < policy.minimum_sold_comps
+    evidence_limited = provisional_evidence or market.sample_size < policy.minimum_sold_comps or evidence_status != "CLASSIFIABLE"
     hard_identity_vetoes = {
         "identity_incomplete", "accessory_or_parts_listing", "category_identity_conflict",
         "whole_system_misclassified_as_component", "bundle_listing", "specialised_mining_hardware",
@@ -608,14 +614,8 @@ def score_opportunity(
             f"{category.upper()} gates: GEM £{economics.gem_profit:.0f}/{economics.gem_roi_pct:.0f}% ROI; "
             f"SUPER_GEM £{economics.super_profit:.0f}/{economics.super_roi_pct:.0f}% ROI."
         )
-    emerging_profit_floor = min(policy.gem_profit, 10.0) if is_component else policy.gem_profit
-    # Deal tier answers "how exceptional is the buy?"  Evidence and identity
-    # remain hard gates, but liquidity/desirability rank urgency rather than
-    # vetoing a genuine bargain.  The former all-gates-at-once rule made a
-    # slow-moving item mathematically incapable of being a SUPER_GEM even at
-    # a 60% discount with a strong comparable cohort.
-    super_confidence_floor = max(55.0, policy.super_confidence - 25.0)
-    gem_confidence_floor = max(50.0, policy.gem_confidence - 20.0)
+    # Tier describes economics; evidence and demand are displayed separately.
+    # Missing observations must not demote a potential GEM/SUPER_GEM.
     if blocking_flags:
         classification, decision = "INELIGIBLE", "IGNORE"
         reasons.append("A hard identity or market-quality veto prevents deal classification.")
@@ -624,32 +624,22 @@ def score_opportunity(
                 f"Candidate price £{listing_price:.2f} is an extreme outlier versus the "
                 f"£{market.median:.2f} same-condition CPK median and has been excluded."
             )
-    elif evidence_limited and profit >= emerging_profit_floor and roi >= 25 and market.confidence >= 40:
-        classification, decision = "EVIDENCE_LIMITED_DEAL", "INVESTIGATE"
-        reasons.append(
-            f"Promising economics, but only {market.sample_size} robust comparable"
-            f"{'s' if market.sample_size != 1 else ''}: verify identity and price manually before buying."
-        )
-    elif evidence_limited:
-        classification, decision = "INSUFFICIENT_DATA", "INVESTIGATE"
-        reasons.append("The comparable cohort is below the minimum evidence requirement and the provisional opportunity gates were not all met.")
-    elif eligible and profit >= economics.super_profit and roi >= economics.super_roi_pct and market_discount_pct >= policy.super_market_discount_pct and market.confidence >= super_confidence_floor and liquidity is not None and liquidity >= policy.super_liquidity and total_score >= policy.super_score:
+    elif eligible and profit >= economics.super_profit and roi >= economics.super_roi_pct and market_discount_pct >= policy.super_market_discount_pct:
         classification, decision = "SUPER_GEM", "BUY_NOW"
-    elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market_discount_pct >= policy.gem_market_discount_pct and market.confidence >= gem_confidence_floor and liquidity is not None and liquidity >= policy.gem_liquidity and total_score >= policy.gem_score:
-        classification, decision = "GEM", "BUY_NOW"
     elif eligible and profit >= economics.gem_profit and roi >= economics.gem_roi_pct and market_discount_pct >= policy.gem_market_discount_pct:
-        classification, decision = "EVIDENCE_LIMITED_DEAL", "INVESTIGATE"
-        liquidity_text = "unknown" if liquidity is None else f"{liquidity:.0f}/100"
-        reasons.append(
-            f"Economics pass the {category.upper() or 'configured'} GEM gates, but "
-            f"market confidence is {market.confidence:.0f}/100 (needs {gem_confidence_floor:.0f}) "
-            f"and liquidity is {liquidity_text} (needs {policy.gem_liquidity:.0f}/100)."
-        )
+        classification, decision = "GEM", "BUY_NOW"
     elif profit > 0 and eligible:
         classification, decision = "OK_DEAL", "MAKE_OFFER"
     elif profit > 0:
         classification, decision = "AVERAGE_DEAL", "INVESTIGATE"
     else:
         classification, decision = "POOR_DEAL", "IGNORE"
+    if evidence_limited:
+        reasons.append(
+            f"Evidence limited ({evidence_status}; {market.sample_size} comparables): "
+            "verify identity and market price manually before buying."
+        )
+        if classification in {"SUPER_GEM", "GEM"}:
+            decision = "INVESTIGATE"
     tier_aligned_score = score_within_classification(total_score, classification)
     return OpportunityResult(classification, decision, round(tier_aligned_score, 1), round(profit, 2), round(roi, 2), round(walk_away, 2), None if liquidity is None else round(liquidity, 1), round(desirability, 1), round(risk, 1), market, eligible, reasons, risk_flags, {k: round(v, 2) for k, v in costs.items()}, evidence_status, evidence_reason, evidence_confidence)

@@ -2248,6 +2248,7 @@ function ListingsTab({ listings, sourceActivity, facets, total, legacy, highligh
                 <SortHeader label={showRowPercentages ? "Median %" : "Median"} sortKey="market_median_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
                 <SortHeader label={showRowPercentages ? "High %" : "High"} sortKey="market_upper_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
                 <SortHeader label="Class" sortKey="classification" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} widthClassName="w-24" />
+                <th className="text-left text-slate-200 font-semibold w-20" title="Evidence quality is separate from deal class and score">Evidence</th>
                 <SortHeader label="Score" sortKey="deal_score" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-14" />
                 <SortHeader label="Amazon BSR" sortKey="amazon_bestseller_rank" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
                 <SortHeader label="Performance" sortKey="performance_rank" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-24" />
@@ -2324,6 +2325,13 @@ function ListingsTab({ listings, sourceActivity, facets, total, legacy, highligh
                       <button type="button" onClick={() => setExplanationListing(listing)} title={classificationTooltip(listing)} aria-label={`Classification evidence for ${listing.title}`} className="cursor-pointer rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
                         <ClassificationBadge classification={listing.classification} />
                       </button>
+                    </td>
+                    <td className="p-3" title={classificationTooltip(listing)}>
+                      {listing.evidence_status === "CLASSIFIABLE" ? (
+                        <span className="rounded bg-emerald-900/40 px-1.5 py-1 text-emerald-300">Verified</span>
+                      ) : listing.evidence_status ? (
+                        <span className="rounded bg-amber-900/40 px-1.5 py-1 text-amber-300">Limited</span>
+                      ) : <span className="text-slate-500">—</span>}
                     </td>
                     <td className="p-3 text-right text-slate-100 font-semibold" title={explainClassification(listing)}>
                       {listing.deal_score.toFixed(1)}
