@@ -12,7 +12,7 @@ import re
 from datetime import datetime
 
 from difflib import SequenceMatcher
-from sqlalchemy import select, update
+from sqlalchemy import select, update, text
 import structlog
 
 from app.database import AsyncSessionLocal
@@ -87,7 +87,7 @@ _EXTRACT_JS = """(rankOffset = 0) => {
             .map((el) => (el.textContent || '').trim())
             .find((t) => t.length < 60 && /bought in (the )?past month/i.test(t));
         const strike = item.querySelector('.a-price[data-a-strike="true"] .a-offscreen, .a-text-price .a-offscreen');
-        const priceWhole = item.querySelector('.a-price:not([data-a-strike="true"]) .a-offscreen');
+        const priceWhole = item.querySelector('.a-price:not([data-a-strike="true"]) .a-offscreen, .a-color-price, [class*="p13n-sc-price_"]');
 
         const parseMoney = (text) => {
             if (!text) return null;
@@ -438,6 +438,9 @@ async def scrape_amazon_component_bestsellers() -> dict:
                         if len(valid_items) < 5:
                             raise ValueError(f"{category} bestseller list has only {len(valid_items)} category-valid items out of {len(unique)}")
                         category_matched = 0
+                        category_priced = sum(item.get("price") is not None for item in valid_items)
+                        if category_priced == 0:
+                            raise ValueError(f"{category} bestseller list has no extracted prices")
                         for item in sorted(valid_items, key=lambda value: value["rank"]):
                             match = _best_scored_match(item, scored_for_category, category)
                             db.add(AmazonBestsellerObservation(
@@ -460,7 +463,7 @@ async def scrape_amazon_component_bestsellers() -> dict:
                                 results["matched"] += 1
                                 category_matched += 1
                         results["categories"] += 1
-                        results["category_results"][category] = {"status": "ok", "parsed": len(unique), "valid": len(valid_items), "matched": category_matched}
+                        results["category_results"][category] = {"status": "ok", "parsed": len(unique), "valid": len(valid_items), "matched": category_matched, "priced": category_priced}
                     except Exception as exc:
                         log.warning("bestsellers.category_error", category=category, error=str(exc))
                         results["errors"] += 1
@@ -475,3 +478,40 @@ async def scrape_amazon_component_bestsellers() -> dict:
         results["reason"] = f"coverage_failed: {results['categories']}/{len(COMPONENT_BESTSELLER_LISTS)} lists, {results['matched']} CPK matches, {results['errors']} errors"
     log.info("bestsellers.components_complete", **results)
     return results
+
+
+async def backfill_recent_bestseller_prices() -> dict[str, int]:
+    """Refresh offer fields on already-captured ASINs without rematching CPKs."""
+    updated: dict[str, int] = {}
+    async with managed_playwright() as p:
+        browser, context = await _make_pw_context(p)
+        page = await context.new_page()
+        try:
+            async with AsyncSessionLocal() as db:
+                for category, (_, base_url) in COMPONENT_BESTSELLER_LISTS.items():
+                    count = 0
+                    for page_num in (1, 2):
+                        url = base_url if page_num == 1 else f"{base_url}?pg={page_num}"
+                        await page.goto(url, wait_until="domcontentloaded", timeout=45000)
+                        items = await page.evaluate(_EXTRACT_JS, (page_num - 1) * 50)
+                        for item in items:
+                            if item.get("price") is None:
+                                continue
+                            result = await db.execute(text("""
+                                UPDATE amazon_bestseller_observations
+                                SET price=:price, rrp=:rrp, sales_velocity=:sales_velocity
+                                WHERE category=:category AND asin=:asin
+                                  AND captured_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
+                            """), {"price": item["price"], "rrp": item.get("rrp"),
+                                   "sales_velocity": clean_sales_velocity(item.get("sales_velocity")),
+                                   "category": category, "asin": item["asin"]})
+                            count += result.rowcount or 0
+                    if count == 0:
+                        raise RuntimeError(f"No recent {category} bestseller prices could be backfilled")
+                    updated[category] = count
+                    await db.commit()
+        finally:
+            await page.close()
+            await context.close()
+            await browser.close()
+    return updated
