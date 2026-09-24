@@ -2,6 +2,7 @@
 from datetime import datetime
 import os
 import re
+from urllib.parse import quote_plus
 from pathlib import Path
 from uuid import uuid4
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
@@ -211,75 +212,18 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
     evidence = dict(case.sourcing_3d_evidence or {})
     stages = dict(evidence.get("stages") or {})
     product_stage = dict(stages.get("product_images") or {})
-    candidates: list[dict] = []
     vendor_candidates: list[dict] = []
+    vendor_names: set[str] = set()
     seen: set[str] = set()
-    _append_candidate(candidates, seen, case.image_url, _candidate_source(case.image_url or ""), case.source_url, "Catalogue image")
-
-    for item in product_stage.get("candidate_images") or []:
-        if isinstance(item, dict):
-            _append_candidate(candidates, seen, item.get("url"), item.get("source") or "manual", item.get("source_page"), item.get("label"))
-    for url in product_stage.get("urls") or []:
-        _append_candidate(candidates, seen, url, "manual", case.source_url)
-    for attempt in product_stage.get("attempts") or []:
-        if not isinstance(attempt, dict):
-            continue
-        source = attempt.get("source") or attempt.get("provider") or "manual"
-        source_page = attempt.get("source_page") or attempt.get("source_url")
-        for key in ("image_urls", "urls", "source_image_urls"):
-            for url in attempt.get(key) or []:
-                _append_candidate(candidates, seen, url, str(source).lower(), source_page)
-        for assessment in attempt.get("image_assessments") or []:
-            if isinstance(assessment, dict):
-                _append_candidate(candidates, seen, assessment.get("url"), str(source).lower(), source_page)
-
-    # Amazon galleries captured by FlipflopXtension are stored on the case
-    # catalogue. Match conservatively by brand plus model/name tokens.
-    catalogue_rows_all = (await db.execute(select(CaseCatalogue))).scalars().all()
-    identity_text = f"{case.brand or ''} {case.model or ''} {case.name}".lower()
-    identity_text = re.split(r"\s+(?:argb|rgb|panoramic|tempered|glass|mid[- ]tower|pc case)\b", identity_text, maxsplit=1)[0]
-    model_tokens = [
-        token for token in identity_text.replace("-", " ").split()
-        if len(token) > 2 and token not in {"case", "pc", "mid", "tower", "glass", "black", "white", "rgb", "argb", "panoramic"}
-    ]
-    catalogue_rows = [
-        row for row in catalogue_rows_all
-        if model_tokens and all(token in row.name.lower().replace("-", " ") for token in model_tokens[-2:])
-    ]
-    for row in catalogue_rows:
-        haystack = row.name.lower()
-        if model_tokens and not all(token in haystack for token in model_tokens):
-            continue
-        for url in row.images or []:
-            _append_candidate(candidates, seen, url, "amazon", case.source_url, f"Stored Amazon gallery · {row.name}")
-
-    # Reuse product photography already captured from matched vendor listings.
-    # Prefer the explicit catalogue link; otherwise require both brand and model
-    # tokens in the parsed case fields/title to avoid importing other cases.
-    catalogue_ids = [row.id for row in catalogue_rows]
-    listing_filters = []
-    if catalogue_ids:
-        listing_filters.append(Listing.case_catalogue_id.in_(catalogue_ids))
-    if case.brand:
-        listing_filters.append(
-            and_(
-                Listing.case_brand.ilike(f"%{case.brand}%"),
-                Listing.case_model.ilike(f"%{case.model}%") if case.model else Listing.title.ilike(f"%{case.name}%"),
-            )
-        )
-    if listing_filters:
-        listing_rows = (
-            await db.execute(
-                select(Listing).where(
-                    Listing.image_urls.isnot(None),
-                    Listing.case_catalogue_id.in_(catalogue_ids) if catalogue_ids else listing_filters[-1],
-                ).limit(200)
-            )
-        ).scalars().all()
-        for listing in listing_rows:
-            vendor = listing.source_name or "Vendor listing"
-        for url in listing.image_urls or []:
-                _append_candidate(vendor_candidates, seen, url, "retailer", listing.url, f"{vendor} · {listing.title}")
+    if case.image_url and _exact_case_match(case, case.name):
+        _append_candidate(vendor_candidates, seen, case.image_url, "retailer", case.source_url, f"{case.source_site} · {case.name}")
+        vendor_names.add(case.source_site)
+    for listing in await _matched_vendor_listings(case, db):
+        vendor = listing.source_name or "Vendor listing"
+        main_image = next((url for url in listing.image_urls if isinstance(url, str) and url.startswith(("https://", "http://"))), None)
+        if main_image:
+            _append_candidate(vendor_candidates, seen, main_image, "retailer", listing.url, f"{vendor} · {listing.title}")
+            vendor_names.add(vendor)
 
     approved = product_stage.get("approved_selection") or {}
     return {
@@ -289,12 +233,56 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
             (stages.get("manufacturer_3d") or {}).get("status") in ("not_found", "complete")
             and (stages.get("third_party_3d") or {}).get("status") == "not_found"
         ),
-        # The picker is deliberately vendor-only. Historical sourcing attempts,
-        # broad catalogue galleries, and search results are not safe references
-        # for this exact chassis.
         "candidates": vendor_candidates,
+        "vendor_count": len(vendor_names),
+        "vendor_names": sorted(vendor_names),
         "approved_selection": approved,
     }
+
+
+@router.get("/{case_id}/3d-overclockers-gallery")
+async def get_3d_overclockers_gallery(case_id: int, db: AsyncSession = Depends(get_db)):
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    listing = next((row for row in await _matched_vendor_listings(case, db) if "overclockers" in (row.source_name or "").lower()), None)
+    search_url = f"https://www.overclockers.co.uk/search?sSearch={quote_plus(_case_identity(case))}"
+    try:
+        async with managed_playwright(engine="patchright") as playwright:
+            browser = await playwright.chromium.launch(headless=True)
+            try:
+                page = await browser.new_page()
+                await page.goto(listing.url if listing else search_url, wait_until="domcontentloaded", timeout=25000)
+                if not listing:
+                    links = await page.locator("a[href*='/product/']").all()
+                    for link in links[:25]:
+                        title = (await link.inner_text(timeout=1500)).strip()
+                        if _exact_case_match(case, title):
+                            await link.click(timeout=10000)
+                            break
+                if not _exact_case_match(case, await page.title()):
+                    return {"results": [], "source_page": None, "detail": "No exact Overclockers product match found"}
+                image_urls: list[str] = []
+                for _ in range(30):
+                    urls = await page.locator(".swiper-slide img").evaluate_all("nodes => nodes.map(img => img.getAttribute('data-src') || img.getAttribute('src') || img.getAttribute('data-lazy-src')).filter(Boolean)")
+                    image_urls.extend(urls)
+                    next_button = page.locator(".swiper-button-next[aria-label='Next slide']").first
+                    if not await next_button.count() or await next_button.get_attribute("aria-disabled") == "true":
+                        break
+                    await next_button.click(timeout=2000)
+                from urllib.parse import urljoin
+                results: list[dict] = []
+                seen: set[str] = set()
+                for raw in image_urls:
+                    url = urljoin(page.url, raw)
+                    if url not in seen and url.startswith("https://"):
+                        seen.add(url)
+                        results.append({"url": url, "source": "retailer", "source_page": page.url, "label": f"Overclockers · {_case_identity(case)}"})
+                return {"results": results, "source_page": page.url}
+            finally:
+                await browser.close()
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"Could not load Overclockers gallery: {type(exc).__name__}") from exc
 
 
 @router.get("/{case_id}/3d-reference-image-search")
@@ -556,8 +544,15 @@ async def get_cases_priority_for_3d(
     )
     cases = result.scalars().all()
     preferred_names = await _preferred_case_names(db)
-
-    return [_priority_payload(case, preferred_names) for case in cases]
+    payloads = []
+    for case in cases:
+        payload = _priority_payload(case, preferred_names)
+        vendors = {row.source_name for row in await _matched_vendor_listings(case, db) if row.source_name}
+        if case.image_url and case.source_site:
+            vendors.add(case.source_site)
+        payload["vendor_count"] = len(vendors)
+        payloads.append(payload)
+    return payloads
 
 
 @router.get("/with-3d-models")

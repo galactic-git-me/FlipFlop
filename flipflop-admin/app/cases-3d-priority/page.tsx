@@ -25,6 +25,7 @@ interface PriorityCaseItem {
   source_site?: string;
   source_url?: string;
   image_url?: string;
+  vendor_count?: number;
   bestseller_rank?: number;
   priority_3d_rank?: number;
   priority_3d_batch?: number;
@@ -54,6 +55,8 @@ interface ReferenceCandidate {
 interface ReferenceCandidateResponse {
   sourcing_ready: boolean;
   candidates: ReferenceCandidate[];
+  vendor_count?: number;
+  vendor_names?: string[];
   approved_selection?: { status?: string; images?: ReferenceCandidate[] };
 }
 const DIRECT_BACKEND_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4311").replace(/\/$/, "");
@@ -239,8 +242,9 @@ export default function Cases3DPriorityPage() {
   const [referenceNotice, setReferenceNotice] = useState<string | null>(null);
   const [newReferenceUrl, setNewReferenceUrl] = useState("");
   const [newReferenceSource, setNewReferenceSource] = useState<ReferenceSource>("manufacturer");
-  const [googleQuery, setGoogleQuery] = useState("");
-  const [googleResults, setGoogleResults] = useState<ReferenceCandidate[]>([]);
+  const [overclockersResults, setOverclockersResults] = useState<ReferenceCandidate[]>([]);
+  const [overclockersError, setOverclockersError] = useState<string | null>(null);
+  const [overclockersBusy, setOverclockersBusy] = useState(false);
   const [generatedReviewUrl, setGeneratedReviewUrl] = useState<string | null>(null);
   const [generatingCaseId, setGeneratingCaseId] = useState<number | null>(null);
   const [evidenceReview, setEvidenceReview] = useState<{ caseItem: PriorityCaseItem; stage: "product_images" | "youtube_video" | "meshy_generation" } | null>(null);
@@ -322,30 +326,26 @@ export default function Cases3DPriorityPage() {
     }
   };
 
-  const searchGoogleImages = async (queryOverride?: string) => {
-    if (!evidenceReview) return;
-    const query = queryOverride?.trim() || googleQuery.trim() || `${shortCaseSearchName(evidenceReview.caseItem)} PC case`;
-    setReferenceBusy(true);
-    setError(null);
+  const loadOverclockersGallery = async (caseId: number) => {
+    setOverclockersBusy(true);
+    setOverclockersError(null);
     try {
-      const response = await fetch(`/api/cases/${evidenceReview.caseItem.id}/3d-reference-image-search?query=${encodeURIComponent(query)}`, { cache: "no-store" });
+      const response = await fetch(`/api/cases/${caseId}/3d-overclockers-gallery`, { cache: "no-store" });
       const data = await readJsonResponse<{ results?: ReferenceCandidate[]; detail?: string }>(response);
-      if (!response.ok) throw new Error(data.detail || "Google image search failed");
-      setGoogleResults(data.results || []);
-      setReferenceNotice(`${data.results?.length || 0} Google image results found for “${query}”.`);
+      if (!response.ok) throw new Error(data.detail || "Could not load Overclockers photos");
+      setOverclockersResults(data.results || []);
+      if (data.detail) setOverclockersError(data.detail);
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Google image search failed");
+      setOverclockersError(caught instanceof Error ? caught.message : "Could not load Overclockers photos");
     } finally {
-      setReferenceBusy(false);
+      setOverclockersBusy(false);
     }
   };
 
   useEffect(() => {
     if (evidenceReview?.stage !== "product_images") return;
-    const query = `${shortCaseSearchName(evidenceReview.caseItem)} PC case`;
-    setGoogleQuery(query);
-    setGoogleResults([]);
-    void searchGoogleImages(query);
+    setOverclockersResults([]);
+    void loadOverclockersGallery(evidenceReview.caseItem.id);
   }, [evidenceReview?.caseItem.id, evidenceReview?.stage]);
 
   const approveReferences = async (caseId: number) => {
@@ -629,7 +629,7 @@ export default function Cases3DPriorityPage() {
                   </td>
                   <td className="px-4 py-3 align-middle">
                     <div className="flex min-w-[260px] items-center gap-3">
-                      <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded-md border border-slate-700 bg-[#0a1119]">
+                      <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-md border border-slate-700 bg-[#0a1119]">
                         {caseItem.image_url ? (
                         <img
                           src={caseItem.image_url}
@@ -637,6 +637,7 @@ export default function Cases3DPriorityPage() {
                           className="h-full w-full object-cover"
                         />
                         ) : <Box className="m-4 h-5 w-5 text-slate-600" />}
+                        <span title="Matching vendors" className="absolute bottom-0 right-0 rounded-tl bg-cyan-950/90 px-1 text-[10px] font-bold text-cyan-100">{caseItem.vendor_count ?? 0} vendors</span>
                       </div>
                       <div className="min-w-0">
                         <p
@@ -876,31 +877,18 @@ export default function Cases3DPriorityPage() {
               {evidenceReview.stage === "product_images" && (
                 <>
                   <p className="mb-4 text-sm text-slate-300">Select exactly four images. The first selected image is the texture and colour master.</p>
-                  <section aria-label="Approved-sites image search" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
-                    <h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">Vendor product photos</h3>
-                    <p className="mt-1 text-xs text-slate-400">Photos already captured from the matched vendor listings for this exact case.</p>
-                    <div className="mt-3 flex gap-2">
-                      <input
-                        value={googleQuery}
-                        onChange={event => setGoogleQuery(event.target.value)}
-                        onKeyDown={event => { if (event.key === "Enter") void searchGoogleImages(); }}
-                        placeholder={`${shortCaseSearchName(evidenceReview.caseItem)} PC case`}
-                        className="min-w-0 flex-1 rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-slate-200"
-                      />
-                      <Button type="button" onClick={() => void searchGoogleImages()} disabled={referenceBusy} className="cursor-pointer bg-cyan-700 hover:bg-cyan-600"><Search className="mr-2 h-4 w-4" /> Search</Button>
-                    </div>
-                    {googleResults.length > 0 && (
-                      <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
-                        {googleResults.map(candidate => {
-                          const selectedIndex = selectedReferences.findIndex(item => item.url === candidate.url);
-                          return <button key={candidate.url} type="button" onClick={() => toggleReference(candidate)} className={`relative overflow-hidden rounded-md border bg-white ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700"}`}>
-                            <img src={candidate.url} alt={candidate.label || "Google image result"} className="h-32 w-full object-contain" />
-                            {selectedIndex >= 0 && <span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{selectedIndex + 1}</span>}
-                          </button>;
-                        })}
-                      </div>
-                    )}
+                  <section aria-label="Overclockers gallery" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
+                    <div className="flex items-center justify-between gap-3"><h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">1. Overclockers product gallery</h3><Button type="button" variant="outline" disabled={overclockersBusy} onClick={() => void loadOverclockersGallery(evidenceReview.caseItem.id)}>Reload gallery</Button></div>
+                    {overclockersBusy && <p className="mt-3 text-xs text-slate-400">Loading all gallery thumbnails…</p>}
+                    {overclockersError && <p className="mt-3 text-xs text-amber-300">{overclockersError}</p>}
+                    {!overclockersBusy && !overclockersError && overclockersResults.length === 0 && <p className="mt-3 text-xs text-slate-400">No exact Overclockers product found.</p>}
+                    {overclockersResults.length > 0 && <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">{overclockersResults.map(candidate => {
+                      const selectedIndex = selectedReferences.findIndex(item => item.url === candidate.url);
+                      return <button key={candidate.url} type="button" onClick={() => toggleReference(candidate)} className={`relative cursor-pointer overflow-hidden rounded-md border bg-white ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700"}`}><img src={candidate.url} alt={candidate.label || "Overclockers case photo"} className="h-32 w-full object-contain" />{selectedIndex >= 0 && <span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{selectedIndex + 1}</span>}</button>;
+                    })}</div>}
                   </section>
+                  <section aria-label="Matching vendor main photos" className="mb-5">
+                    <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-cyan-200">2. Matching vendors ({referenceData?.vendor_count ?? 0})</h3>
                   {referenceBusy && !referenceData ? (
                     <div className="flex items-center justify-center py-16 text-slate-400"><RefreshCw className="mr-2 h-4 w-4 animate-spin" /> Loading images…</div>
                   ) : referenceData?.candidates.length ? (
@@ -921,7 +909,12 @@ export default function Cases3DPriorityPage() {
                         );
                       })}
                     </div>
-                  ) : <p className="py-12 text-center text-slate-500">No vendor product photos are available for this case yet.</p>}
+                  ) : <p className="py-12 text-center text-slate-500">No exact vendor matches are available for this case yet.</p>}
+                  </section>
+                  <section aria-label="Selected reference photos" className="rounded-lg border border-slate-700 p-4">
+                    <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-cyan-200">3. Selected photos ({selectedReferences.length}/4)</h3>
+                    <div className="grid grid-cols-2 gap-3 md:grid-cols-4">{selectedReferences.map((candidate, index) => <button key={candidate.url} type="button" onClick={() => toggleReference(candidate)} className="relative cursor-pointer overflow-hidden rounded-md border border-cyan-300 bg-white"><img src={candidate.url} alt={`Selected reference ${index + 1}`} className="h-32 w-full object-contain" /><span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{index + 1}</span></button>)}</div>
+                  </section>
                 </>
               )}
 
