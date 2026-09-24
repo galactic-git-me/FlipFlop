@@ -877,8 +877,8 @@ export default function Cases3DPriorityPage() {
                 <>
                   <p className="mb-4 text-sm text-slate-300">Select exactly four images. The first selected image is the texture and colour master.</p>
                   <section aria-label="Approved-sites image search" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
-                    <h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">Search this exact case</h3>
-                    <p className="mt-1 text-xs text-slate-400">Results are searched for this case through the configured Google Images API.</p>
+                    <h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">Vendor product photos</h3>
+                    <p className="mt-1 text-xs text-slate-400">Photos already captured from the matched vendor listings for this exact case.</p>
                     <div className="mt-3 flex gap-2">
                       <input
                         value={googleQuery}
@@ -903,9 +903,9 @@ export default function Cases3DPriorityPage() {
                   </section>
                   {referenceBusy && !referenceData ? (
                     <div className="flex items-center justify-center py-16 text-slate-400"><RefreshCw className="mr-2 h-4 w-4 animate-spin" /> Loading images…</div>
-                  ) : googleResults.length ? (
+                  ) : referenceData?.candidates.length ? (
                     <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
-                      {googleResults.map(candidate => {
+                      {referenceData.candidates.map(candidate => {
                         const selectedIndex = selectedReferences.findIndex(item => item.url === candidate.url);
                         return (
                           <button
@@ -921,7 +921,7 @@ export default function Cases3DPriorityPage() {
                         );
                       })}
                     </div>
-                  ) : <p className="py-12 text-center text-slate-500">No Google results match this case yet. Refine the search or try again.</p>}
+                  ) : <p className="py-12 text-center text-slate-500">No vendor product photos are available for this case yet.</p>}
                 </>
               )}
 

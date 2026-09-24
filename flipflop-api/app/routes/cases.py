@@ -1,6 +1,7 @@
 """PC Case sourcing and 3D model management endpoints."""
 from datetime import datetime
 import os
+import re
 from pathlib import Path
 from uuid import uuid4
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
@@ -183,6 +184,7 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
     stages = dict(evidence.get("stages") or {})
     product_stage = dict(stages.get("product_images") or {})
     candidates: list[dict] = []
+    vendor_candidates: list[dict] = []
     seen: set[str] = set()
     _append_candidate(candidates, seen, case.image_url, _candidate_source(case.image_url or ""), case.source_url, "Catalogue image")
 
@@ -205,8 +207,17 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
 
     # Amazon galleries captured by FlipflopXtension are stored on the case
     # catalogue. Match conservatively by brand plus model/name tokens.
-    catalogue_rows = (await db.execute(select(CaseCatalogue).where(CaseCatalogue.brand.ilike(case.brand or "%")))).scalars().all()
-    model_tokens = [token.lower() for token in (case.model or "").replace("-", " ").split() if len(token) > 1]
+    catalogue_rows_all = (await db.execute(select(CaseCatalogue))).scalars().all()
+    identity_text = f"{case.brand or ''} {case.model or ''} {case.name}".lower()
+    identity_text = re.split(r"\s+(?:argb|rgb|panoramic|tempered|glass|mid[- ]tower|pc case)\b", identity_text, maxsplit=1)[0]
+    model_tokens = [
+        token for token in identity_text.replace("-", " ").split()
+        if len(token) > 2 and token not in {"case", "pc", "mid", "tower", "glass", "black", "white", "rgb", "argb", "panoramic"}
+    ]
+    catalogue_rows = [
+        row for row in catalogue_rows_all
+        if model_tokens and all(token in row.name.lower().replace("-", " ") for token in model_tokens[-2:])
+    ]
     for row in catalogue_rows:
         haystack = row.name.lower()
         if model_tokens and not all(token in haystack for token in model_tokens):
@@ -239,8 +250,8 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
         ).scalars().all()
         for listing in listing_rows:
             vendor = listing.source_name or "Vendor listing"
-            for url in listing.image_urls or []:
-                _append_candidate(candidates, seen, url, "retailer", listing.url, f"{vendor} · {listing.title}")
+        for url in listing.image_urls or []:
+                _append_candidate(vendor_candidates, seen, url, "retailer", listing.url, f"{vendor} · {listing.title}")
 
     approved = product_stage.get("approved_selection") or {}
     return {
@@ -250,7 +261,10 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
             (stages.get("manufacturer_3d") or {}).get("status") in ("not_found", "complete")
             and (stages.get("third_party_3d") or {}).get("status") == "not_found"
         ),
-        "candidates": candidates,
+        # The picker is deliberately vendor-only. Historical sourcing attempts,
+        # broad catalogue galleries, and search results are not safe references
+        # for this exact chassis.
+        "candidates": vendor_candidates,
         "approved_selection": approved,
     }
 
