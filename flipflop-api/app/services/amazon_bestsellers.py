@@ -22,7 +22,7 @@ from app.models.amazon_bestseller_observation import AmazonBestsellerObservation
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.services.case_product_key import case_product_key
 from app.services.browser_pool import managed_playwright
-from app.swarms.cases import RawCase, _make_pw_context, _upsert_case, _upsert_case_new
+from app.swarms.cases import RawCase, _make_pw_context, _upsert_case
 
 log = structlog.get_logger(__name__)
 
@@ -227,8 +227,17 @@ async def scrape_amazon_bestsellers() -> dict:
                     .where(~Case.sales_velocity.ilike("%bought%"))
                     .values(sales_velocity=None)
                 )
+                amazon_by_asin = {
+                    extract_asin(row.source_url): row for row in case_rows
+                    if row.source_site.lower() == "amazon" and extract_asin(row.source_url)
+                }
+                amazon_by_cpk = {
+                    case_product_key(row.name, row.brand, row.model): row for row in case_rows
+                    if row.source_site.lower() == "amazon"
+                }
                 for item in items:
-                    matching_case = match_row_by_bestseller(item, case_rows)
+                    item_cpk = case_product_key(item["title"])
+                    matching_case = amazon_by_asin.get(item["asin"]) or amazon_by_cpk.get(item_cpk)
                     matching_part = match_row_by_bestseller(item, part_rows)
 
                     if matching_case:
@@ -245,25 +254,29 @@ async def scrape_amazon_bestsellers() -> dict:
                         if item.get("price"):
                             matching_case.price = item["price"]
                             matching_case.price_new = item["price"]
+                        matching_case.source_url = item["url"]
+                        matching_case.image_url = item.get("image_url") or matching_case.image_url
                         matching_case.updated_at = datetime.utcnow()
                         results["matched"] += 1
                     else:
-                        created = await _upsert_case_new(db, RawCase(
+                        created = Case(
                             name=item["title"],
                             price=float(item["price"] or 0),
+                            price_new=float(item["price"] or 0),
                             source_site="Amazon",
                             source_url=item["url"],
                             image_url=item.get("image_url") or "",
-                            theme="Bestseller",
                             rating=item.get("rating"),
                             review_count=item.get("review_count"),
                             sales_velocity=clean_sales_velocity(item.get("sales_velocity")),
                             rrp=item.get("rrp"),
-                        ))
-                        if created:
-                            created.bestseller_rank = int(item["rank"])
-                            case_rows.append(created)
-                            results["created"] += 1
+                            bestseller_rank=int(item["rank"]),
+                        )
+                        db.add(created)
+                        case_rows.append(created)
+                        results["created"] += 1
+                    amazon_by_asin[item["asin"]] = matching_case or created
+                    amazon_by_cpk[item_cpk] = matching_case or created
 
                     if matching_part:
                         matching_part.bestseller_rank = int(item["rank"])
