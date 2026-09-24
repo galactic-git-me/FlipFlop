@@ -3737,7 +3737,7 @@ async def get_best_sellers(
                 SELECT COUNT(DISTINCT asin), COUNT(DISTINCT asin) FILTER (WHERE cpk IS NOT NULL),
                        COUNT(DISTINCT asin) FILTER (WHERE rating IS NOT NULL AND review_count > 0)
                 FROM amazon_bestseller_observations
-                WHERE category=:category AND captured_at >= :latest - INTERVAL '3 hours'
+                WHERE category=:category AND captured_at >= CAST(:latest AS timestamp) - INTERVAL '3 hours'
             """), {"category": key, "latest": latest})).one()
             count, matched, rated = map(int, counts)
         summaries.append({"category": key, "name": name, "source_url": url,
@@ -3751,7 +3751,7 @@ async def get_best_sellers(
                    rating, review_count, captured_at
             FROM amazon_bestseller_observations
             WHERE category=:category
-              AND captured_at >= :latest - INTERVAL '3 hours'
+              AND captured_at >= CAST(:latest AS timestamp) - INTERVAL '3 hours'
             ORDER BY asin, captured_at DESC, id DESC
         """), {"category": category, "latest": latest_by_category[category]})).all()
         products = [

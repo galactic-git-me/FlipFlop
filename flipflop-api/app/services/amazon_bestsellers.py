@@ -331,6 +331,10 @@ def _best_scored_match(item: dict, rows: list[dict], category: str) -> dict | No
         row for row in rows
         if (row["category"] or "").lower() in accepted_categories
     ]
+    # A full sweep contains tens of thousands of scored rows. Compare the
+    # expensive sequence ratio only for plausible same-product candidates.
+    generic = {"the", "for", "with", "and", "computer", "gaming", "case", "pc", "black", "white", "rgb", "argb"}
+    item_tokens = set(re.findall(r"[a-z0-9]{3,}", (item.get("title") or "").lower())) - generic
     # Scored rows currently retain marketplace URLs, not Amazon ASINs, so an
     # ASIN cannot be used as a reliable join key here.  Keep the title match
     # conservative rather than claiming an ASIN match or attaching a rank to
@@ -338,6 +342,9 @@ def _best_scored_match(item: dict, rows: list[dict], category: str) -> dict | No
     scored_by_cpk: dict[str, tuple[float, dict]] = {}
     for row in candidates:
         if not row.get("cpk"):
+            continue
+        row_tokens = set(re.findall(r"[a-z0-9]{3,}", (row["title"] or "").lower())) - generic
+        if len(item_tokens & row_tokens) < 2:
             continue
         similarity = name_similarity(item.get("title") or "", row["title"] or "")
         previous = scored_by_cpk.get(row["cpk"])
@@ -401,6 +408,8 @@ async def scrape_amazon_component_bestsellers() -> dict:
 
                 for category, (list_name, base_url) in COMPONENT_BESTSELLER_LISTS.items():
                     try:
+                        match_categories = {"storage": {"ssd", "storage"}, "cooler": {"cooler", "cooling"}}.get(category, {category})
+                        scored_for_category = [row for row in scored if (row.get("category") or "").lower() in match_categories]
                         items: list[dict] = []
                         for page_num in (1, 2):
                             url = base_url if page_num == 1 else f"{base_url}?pg={page_num}"
@@ -430,7 +439,7 @@ async def scrape_amazon_component_bestsellers() -> dict:
                             raise ValueError(f"{category} bestseller list has only {len(valid_items)} category-valid items out of {len(unique)}")
                         category_matched = 0
                         for item in sorted(valid_items, key=lambda value: value["rank"]):
-                            match = _best_scored_match(item, scored, category)
+                            match = _best_scored_match(item, scored_for_category, category)
                             db.add(AmazonBestsellerObservation(
                                 category=category,
                                 list_name=list_name,
