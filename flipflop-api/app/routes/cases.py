@@ -11,6 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.case import Case
 from app.models.catalogue import CaseCatalogue
+from app.models.listing import Listing
 from app.models.gem_radar_intelligence import PreferredComponent
 from app.services.media_sync import sync_to_public_media
 
@@ -212,6 +213,34 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
             continue
         for url in row.images or []:
             _append_candidate(candidates, seen, url, "amazon", case.source_url, f"Stored Amazon gallery · {row.name}")
+
+    # Reuse product photography already captured from matched vendor listings.
+    # Prefer the explicit catalogue link; otherwise require both brand and model
+    # tokens in the parsed case fields/title to avoid importing other cases.
+    catalogue_ids = [row.id for row in catalogue_rows]
+    listing_filters = []
+    if catalogue_ids:
+        listing_filters.append(Listing.case_catalogue_id.in_(catalogue_ids))
+    if case.brand:
+        listing_filters.append(
+            and_(
+                Listing.case_brand.ilike(f"%{case.brand}%"),
+                Listing.case_model.ilike(f"%{case.model}%") if case.model else Listing.title.ilike(f"%{case.name}%"),
+            )
+        )
+    if listing_filters:
+        listing_rows = (
+            await db.execute(
+                select(Listing).where(
+                    Listing.image_urls.isnot(None),
+                    Listing.case_catalogue_id.in_(catalogue_ids) if catalogue_ids else listing_filters[-1],
+                ).limit(200)
+            )
+        ).scalars().all()
+        for listing in listing_rows:
+            vendor = listing.source_name or "Vendor listing"
+            for url in listing.image_urls or []:
+                _append_candidate(candidates, seen, url, "retailer", listing.url, f"{vendor} · {listing.title}")
 
     approved = product_stage.get("approved_selection") or {}
     return {
