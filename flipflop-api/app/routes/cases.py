@@ -14,7 +14,6 @@ from app.database import get_db
 from app.models.case import Case
 from app.models.catalogue import CaseCatalogue
 from app.models.listing import Listing
-from app.services.browser_pool import managed_playwright
 from app.models.gem_radar_intelligence import PreferredComponent
 from app.services.media_sync import sync_to_public_media
 
@@ -255,51 +254,35 @@ async def get_3d_overclockers_gallery(case_id: int, db: AsyncSession = Depends(g
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
     offer = next((row for row in await _matched_case_offers(case, db) if "overclockers" in (row.source_site or "").lower()), None)
-    listing = next((row for row in await _matched_vendor_listings(case, db) if "overclockers" in (row.source_name or "").lower()), None)
-    fallback_urls = [offer.image_url] if offer and offer.image_url else []
-    if listing:
-        fallback_urls.extend(url for url in listing.image_urls or [] if isinstance(url, str))
-    search_url = f"https://www.overclockers.co.uk/search?sSearch={quote_plus(_case_identity(case))}"
-    try:
-        async with managed_playwright(engine="patchright") as playwright:
-            browser = await playwright.chromium.launch(headless=True)
-            try:
-                page = await browser.new_page()
-                await page.goto((offer.source_url if offer else None) or (listing.url if listing else search_url), wait_until="domcontentloaded", timeout=25000)
-                if not offer and not listing:
-                    links = await page.locator("a[href*='/product/']").all()
-                    for link in links[:25]:
-                        title = (await link.inner_text(timeout=1500)).strip()
-                        if _exact_case_match(case, title):
-                            await link.click(timeout=10000)
-                            break
-                if not _exact_case_match(case, await page.title()):
-                    raise ValueError("Overclockers did not return the matching product page")
-                image_urls: list[str] = []
-                for _ in range(30):
-                    urls = await page.locator(".swiper-slide img").evaluate_all("nodes => nodes.map(img => img.getAttribute('data-src') || img.getAttribute('src') || img.getAttribute('data-lazy-src')).filter(Boolean)")
-                    image_urls.extend(urls)
-                    next_button = page.locator(".swiper-button-next[aria-label='Next slide']").first
-                    if not await next_button.count() or await next_button.get_attribute("aria-disabled") == "true":
-                        break
-                    await next_button.click(timeout=2000)
-                from urllib.parse import urljoin
-                results: list[dict] = []
-                seen: set[str] = set()
-                for raw in image_urls:
-                    url = urljoin(page.url, raw)
-                    if url not in seen and url.startswith("https://"):
-                        seen.add(url)
-                        results.append({"url": url, "source": "retailer", "source_page": page.url, "label": f"Overclockers · {_case_identity(case)}"})
-                return {"results": results, "source_page": page.url}
-            finally:
-                await browser.close()
-    except Exception:
-        return {
-            "results": [{"url": url, "source": "retailer", "source_page": offer.source_url if offer else listing.url if listing else None, "label": f"Overclockers · {_case_identity(case)}"} for url in dict.fromkeys(fallback_urls)],
-            "source_page": offer.source_url if offer else listing.url if listing else None,
-            "detail": "Overclockers blocked the live gallery; showing saved product photos",
-        }
+    gallery = ((case.sourcing_3d_evidence or {}).get("stages") or {}).get("product_images", {}).get("overclockers_gallery") or []
+    results = [{"url": url, "source": "retailer", "source_page": offer.source_url if offer else None, "label": f"Overclockers · {_case_identity(case)}"} for url in gallery]
+    if not results and offer and offer.image_url:
+        results = [{"url": offer.image_url, "source": "retailer", "source_page": offer.source_url, "label": f"Overclockers · {_case_identity(case)}"}]
+    return {"results": results, "source_page": offer.source_url if offer else None, "captured": bool(gallery)}
+
+
+class OverclockersGalleryCapture(BaseModel):
+    source_page: HttpUrl
+    images: list[HttpUrl] = Field(min_length=1, max_length=100)
+
+
+@router.post("/{case_id}/3d-overclockers-gallery")
+async def save_3d_overclockers_gallery(case_id: int, body: OverclockersGalleryCapture, db: AsyncSession = Depends(get_db)):
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    offer = next((row for row in await _matched_case_offers(case, db) if "overclockers" in (row.source_site or "").lower()), None)
+    if not offer or str(body.source_page).split("#", 1)[0].rstrip("/") != (offer.source_url or "").split("#", 1)[0].rstrip("/"):
+        raise HTTPException(status_code=422, detail="Page does not match this case's Overclockers product")
+    evidence = dict(case.sourcing_3d_evidence or {})
+    stages = dict(evidence.get("stages") or {})
+    product_stage = dict(stages.get("product_images") or {})
+    product_stage["overclockers_gallery"] = list(dict.fromkeys(str(url) for url in body.images))
+    stages["product_images"] = product_stage
+    evidence["stages"] = stages
+    case.sourcing_3d_evidence = evidence
+    await db.commit()
+    return {"count": len(product_stage["overclockers_gallery"])}
 
 
 @router.get("/{case_id}/3d-reference-image-search")

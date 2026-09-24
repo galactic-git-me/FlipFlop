@@ -331,15 +331,31 @@ export default function Cases3DPriorityPage() {
     setOverclockersError(null);
     try {
       const response = await fetch(`/api/cases/${caseId}/3d-overclockers-gallery`, { cache: "no-store" });
-      const data = await readJsonResponse<{ results?: ReferenceCandidate[]; detail?: string }>(response);
+      const data = await readJsonResponse<{ results?: ReferenceCandidate[]; detail?: string; captured?: boolean }>(response);
       if (!response.ok) throw new Error(data.detail || "Could not load Overclockers photos");
       setOverclockersResults(data.results || []);
-      if (data.detail) setOverclockersError(data.detail);
+      if (!data.captured) setOverclockersError("Open the Overclockers product in Chrome to capture its full gallery.");
     } catch (caught) {
       setOverclockersError(caught instanceof Error ? caught.message : "Could not load Overclockers photos");
     } finally {
       setOverclockersBusy(false);
     }
+  };
+
+  const sourceOverclockersInChrome = () => {
+    if (!evidenceReview) return;
+    const productUrl = referenceData?.candidates.find(candidate => candidate.label?.startsWith("Overclockers ·"))?.source_page;
+    if (!productUrl) {
+      setOverclockersError("No matching Overclockers product page is stored for this case.");
+      return;
+    }
+    window.open(`${productUrl.split("#")[0]}#flipflop-case-${evidenceReview.caseItem.id}`, "_blank", "noopener,noreferrer");
+    let attempts = 0;
+    const timer = window.setInterval(() => {
+      attempts += 1;
+      void loadOverclockersGallery(evidenceReview.caseItem.id);
+      if (attempts >= 20) window.clearInterval(timer);
+    }, 2000);
   };
 
   useEffect(() => {
@@ -878,7 +894,7 @@ export default function Cases3DPriorityPage() {
                 <>
                   <p className="mb-4 text-sm text-slate-300">Select exactly four images. The first selected image is the texture and colour master.</p>
                   <section aria-label="Overclockers gallery" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
-                    <div className="flex items-center justify-between gap-3"><h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">1. Overclockers product gallery</h3><Button type="button" variant="outline" disabled={overclockersBusy} onClick={() => void loadOverclockersGallery(evidenceReview.caseItem.id)}>Reload gallery</Button></div>
+                    <div className="flex items-center justify-between gap-3"><h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">1. Overclockers product gallery</h3><div className="flex gap-2"><Button type="button" variant="outline" onClick={sourceOverclockersInChrome}>Source photos in Chrome</Button><Button type="button" variant="outline" disabled={overclockersBusy} onClick={() => void loadOverclockersGallery(evidenceReview.caseItem.id)}>Reload gallery</Button></div></div>
                     {overclockersBusy && <p className="mt-3 text-xs text-slate-400">Loading all gallery thumbnails…</p>}
                     {overclockersError && <p className="mt-3 text-xs text-amber-300">{overclockersError}</p>}
                     {!overclockersBusy && !overclockersError && overclockersResults.length === 0 && <p className="mt-3 text-xs text-slate-400">No exact Overclockers product found.</p>}
