@@ -151,7 +151,7 @@ class SourcingEvidencePatch(BaseModel):
 
 class CaseReferenceImage(BaseModel):
     url: HttpUrl
-    source: str = Field(pattern="^(amazon|manufacturer|google|retailer|manual)$")
+    source: str = Field(pattern="^(amazon|manufacturer|google|bing|retailer|manual)$")
     source_page: HttpUrl | None = None
     label: str | None = None
 
@@ -265,6 +265,46 @@ async def get_3d_overclockers_gallery(case_id: int, db: AsyncSession = Depends(g
     if not results and offer and offer.image_url:
         results = [{"url": offer.image_url, "source": "retailer", "source_page": offer.source_url, "label": f"Overclockers · {_case_identity(case)}"}]
     return {"results": results, "source_page": offer.source_url if offer else None, "captured": bool(gallery)}
+
+
+@router.get("/{case_id}/3d-bing-images")
+async def get_3d_bing_images(case_id: int, db: AsyncSession = Depends(get_db)):
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    images = ((case.sourcing_3d_evidence or {}).get("stages") or {}).get("product_images", {}).get("bing_images") or []
+    return {"results": images, "captured": bool(images)}
+
+
+class BingImageCapture(BaseModel):
+    source_page: HttpUrl
+    images: list[dict] = Field(max_length=100)
+
+
+@router.post("/{case_id}/3d-bing-images")
+async def save_3d_bing_images(case_id: int, body: BingImageCapture, db: AsyncSession = Depends(get_db)):
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    if body.source_page.host not in {"www.bing.com", "bing.com"} or not body.source_page.path.startswith("/images/search"):
+        raise HTTPException(status_code=422, detail="Capture must come from Bing Images")
+    results = []
+    seen = set()
+    for image in body.images:
+        url = str(image.get("url") or "")
+        if not url.startswith(("https://", "http://")) or url in seen:
+            continue
+        seen.add(url)
+        results.append({"url": url, "source": "bing", "source_page": str(image.get("source_page") or body.source_page), "label": str(image.get("label") or "Bing Images")[:200]})
+    evidence = dict(case.sourcing_3d_evidence or {})
+    stages = dict(evidence.get("stages") or {})
+    product_stage = dict(stages.get("product_images") or {})
+    product_stage["bing_images"] = results
+    stages["product_images"] = product_stage
+    evidence["stages"] = stages
+    case.sourcing_3d_evidence = evidence
+    await db.commit()
+    return {"count": len(results)}
 
 
 class OverclockersGalleryCapture(BaseModel):
