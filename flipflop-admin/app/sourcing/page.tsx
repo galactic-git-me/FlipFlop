@@ -3024,7 +3024,7 @@ function SourcingPageInner() {
         const data = normalizeScoredListingsResponse<Listing>(await listingsRes.json());
         setListings(data.items);
         setListingHasMore(data.hasMore);
-        setListingTotal("total" in data ? Number(data.total) : data.items.length);
+        setListingTotal(data.total);
         setLegacyListingsApi(data.legacy);
         if (data.items.length === 0) {
           console.debug("scored-listings returned empty (queue still processing or listings not recently observed)");
