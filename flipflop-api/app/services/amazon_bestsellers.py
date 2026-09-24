@@ -335,16 +335,42 @@ def _best_scored_match(item: dict, rows: list[dict], category: str) -> dict | No
     # ASIN cannot be used as a reliable join key here.  Keep the title match
     # conservative rather than claiming an ASIN match or attaching a rank to
     # an ambiguous product variant.
-    scored = []
+    scored_by_cpk: dict[str, tuple[float, dict]] = {}
     for row in candidates:
+        if not row.get("cpk"):
+            continue
         similarity = name_similarity(item.get("title") or "", row["title"] or "")
-        scored.append((similarity, row))
-    scored.sort(key=lambda value: value[0], reverse=True)
+        previous = scored_by_cpk.get(row["cpk"])
+        if previous is None or similarity > previous[0]:
+            scored_by_cpk[row["cpk"]] = (similarity, row)
+    scored = sorted(scored_by_cpk.values(), key=lambda value: value[0], reverse=True)
     if not scored or scored[0][0] <= 0.66:
         return None
     if len(scored) > 1 and scored[0][0] - scored[1][0] < 0.05:
         return None
     return scored[0][1]
+
+
+def bestseller_item_matches_category(title: str, category: str) -> bool:
+    """Reject Amazon redirects/incorrect browse-node lists before ranking them."""
+    value = title.lower()
+    if category == "cpu":
+        return bool(re.search(r"\b(?:ryzen|threadripper|core\s+i[3579]|core\s+ultra|processor|cpu)\b", value)) and not bool(re.search(r"\b(?:motherboard|cooler|heatsink|laptop)\b", value))
+    if category == "gpu":
+        return bool(re.search(r"\b(?:graphics\s+card|geforce|radeon|rtx\s*\d|gtx\s*\d|rx\s*\d)\b", value)) and "laptop" not in value
+    if category == "motherboard":
+        return bool(re.search(r"\b(?:motherboard|mainboard)\b", value))
+    if category == "storage":
+        return bool(re.search(r"\b(?:ssd|solid\s+state)\b", value)) and not bool(re.search(r"\b(?:hdd|hard\s+drive|cartridge|tape)\b", value))
+    if category == "case":
+        return bool(re.search(r"\b(?:pc\s+case|computer\s+case|chassis|mid[- ]tower|full[- ]tower)\b", value))
+    if category == "ram":
+        return bool(re.search(r"\b(?:ram|memory|dimm|ddr[345])\b", value))
+    if category == "psu":
+        return bool(re.search(r"\b(?:power\s+supply|psu)\b", value))
+    if category == "cooler":
+        return bool(re.search(r"\b(?:cpu\s+cooler|aio|heatsink|liquid\s+cooler)\b", value))
+    return False
 
 
 async def scrape_amazon_component_bestsellers() -> dict:
@@ -396,7 +422,10 @@ async def scrape_amazon_component_bestsellers() -> dict:
                                 item["asin"] = asin
                                 unique[asin] = item
 
-                        for item in sorted(unique.values(), key=lambda value: value["rank"]):
+                        valid_items = [item for item in unique.values() if bestseller_item_matches_category(item["title"], category)]
+                        if len(valid_items) < 5:
+                            raise ValueError(f"{category} bestseller list has only {len(valid_items)} category-valid items out of {len(unique)}")
+                        for item in sorted(valid_items, key=lambda value: value["rank"]):
                             match = _best_scored_match(item, scored, category)
                             db.add(AmazonBestsellerObservation(
                                 category=category,
@@ -406,7 +435,7 @@ async def scrape_amazon_component_bestsellers() -> dict:
                                 url=item.get("url"),
                                 image_url=item.get("image_url"),
                                 rank=int(item["rank"]),
-                                cpk=case_product_key(item["title"]) if category == "case" else match["cpk"] if match else None,
+                                cpk=match["cpk"] if match else None,
                                 rating=item.get("rating"),
                                 review_count=item.get("review_count"),
                             ))
@@ -422,5 +451,8 @@ async def scrape_amazon_component_bestsellers() -> dict:
             await page.close()
             await context.close()
             await browser.close()
+    results["ok"] = results["errors"] == 0 and results["matched"] > 0 and results["categories"] == len(COMPONENT_BESTSELLER_LISTS)
+    if not results["ok"]:
+        results["reason"] = f"coverage_failed: {results['categories']}/{len(COMPONENT_BESTSELLER_LISTS)} lists, {results['matched']} CPK matches, {results['errors']} errors"
     log.info("bestsellers.components_complete", **results)
     return results

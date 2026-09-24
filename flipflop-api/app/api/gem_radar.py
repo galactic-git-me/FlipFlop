@@ -74,6 +74,7 @@ from app.gem_radar.schemas import (
 from app.services.submission_queue_service import SubmissionQueueService
 from app.services.hardware_performance import enrich_listing_performance, load_benchmark_context
 from app.services.product_reviews import aggregate_cpk_reviews
+from app.services.amazon_bestsellers import bestseller_item_matches_category
 
 router = APIRouter(prefix="/gem-radar", tags=["gem-radar"])
 
@@ -1305,7 +1306,7 @@ async def get_scored_listings_latest_run(
     bestseller_result = await db.execute(
         text("""
             SELECT DISTINCT ON (cpk)
-                   cpk, category, list_name, rank, captured_at
+                   cpk, category, title, list_name, rank, captured_at
             FROM amazon_bestseller_observations
             WHERE cpk IS NOT NULL
             ORDER BY cpk, captured_at DESC, id DESC
@@ -1319,6 +1320,7 @@ async def get_scored_listings_latest_run(
             "amazon_bestseller_captured_at": row.captured_at.isoformat() if row.captured_at else None,
         }
         for row in bestseller_result
+        if bestseller_item_matches_category(row.title, row.category)
     }
 
     benchmark_index, peer_scores = await load_benchmark_context(db)
