@@ -68,6 +68,8 @@ interface Listing {
   market_sample_size?: number | null;
   active_listing_count?: number | null;
   sold_listing_count?: number | null;
+  review_average_rating?: number | null;
+  review_count?: number | null;
   sell_through_rate_pct?: number | null;
   market_source_diversity?: number | null;
   market_spread_pct?: number | null;
@@ -1489,18 +1491,6 @@ function priceVariance(listing: Listing): { amount: number; percent: number } | 
   return { amount, percent: (amount / listing.delivered_price) * 100 };
 }
 
-function PriceVarianceCell({ listing }: { listing: Listing }) {
-  const variance = priceVariance(listing);
-  if (!variance) return <span className="text-slate-500">—</span>;
-  const positive = variance.amount >= 0;
-  const sign = positive ? "+" : "-";
-  return (
-    <span className={`font-semibold whitespace-nowrap ${positive ? "text-emerald-400" : "text-red-400"}`}>
-      {sign}£{Math.abs(variance.amount).toFixed(0)} ({sign}{Math.abs(variance.percent).toFixed(0)}%)
-    </span>
-  );
-}
-
 // The most recent scraping run represented in the currently loaded listings
 // — grouping by search_run_id rather than a timestamp-proximity threshold,
 // since listings within one run can be observed a little apart from each
@@ -1920,6 +1910,24 @@ function formatPriceColumn(listing: Listing, column: PriceColumn, asPercent: boo
   return value == null ? "—" : `£${value.toFixed(2)}`;
 }
 
+function MarketPriceCell({ listing, column, asPercent }: { listing: Listing; column: "low" | "median" | "high"; asPercent: boolean }) {
+  const marketPrice = priceValueForColumn(listing, column);
+  const amount = marketPrice == null ? null : marketPrice - listing.delivered_price;
+  const percent = amount != null && listing.delivered_price > 0 ? (amount / listing.delivered_price) * 100 : null;
+  const positive = amount != null && amount >= 0;
+  const sign = positive ? "+" : "-";
+  return (
+    <div title={column === "median" ? "Median of the robust, same-condition comparable cohort used by classification. Difference from delivered listing price." : "Difference from delivered listing price."}>
+      <div>{formatPriceColumn(listing, column, asPercent)}</div>
+      {amount != null && percent != null && (
+        <div className={`whitespace-nowrap text-[10px] font-semibold ${positive ? "text-emerald-400" : "text-red-400"}`}>
+          {sign}£{Math.abs(amount).toFixed(0)} ({sign}{Math.abs(percent).toFixed(0)}%)
+        </div>
+      )}
+    </div>
+  );
+}
+
 function VendorStackedBarChart({ listings, facets }: { listings: Listing[]; facets: SourcingFacets | null }) {
   const sources = facets ? Object.keys(facets.vendors).sort((a, b) => facets.vendors[b].total - facets.vendors[a].total) : [...new Set(listings.map((l) => l.source))].sort(
     (a, b) => listings.filter((l) => l.source === b).length - listings.filter((l) => l.source === a).length
@@ -2219,13 +2227,13 @@ function ListingsTab({ listings, sourceActivity, facets, total, legacy, highligh
                 <SortHeader label={showRowPercentages ? "Low %" : "Low"} sortKey="market_lower_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
                 <SortHeader label={showRowPercentages ? "Median %" : "Median"} sortKey="market_median_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
                 <SortHeader label={showRowPercentages ? "High %" : "High"} sortKey="market_upper_price" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
-                <SortHeader label="Vs Median" sortKey="price_variance" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-24" />
                 <SortHeader label="Class" sortKey="classification" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} widthClassName="w-24" />
-                <SortHeader label="Decision" sortKey="decision" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} widthClassName="w-20" />
                 <SortHeader label="Score" sortKey="deal_score" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-14" />
                 <th className="text-left text-slate-200 font-semibold w-16">Evidence</th>
                 <SortHeader label="Amazon BSR" sortKey="amazon_bestseller_rank" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-20" />
                 <SortHeader label="Performance" sortKey="performance_rank" activeSort={sortKey} sortDir={sortDir} onSort={handleSort} align="right" widthClassName="w-24" />
+                <th className="text-right text-slate-200 font-semibold w-20" title="Sampled sold comparables in the last 90 days">Sold (90d)</th>
+                <th className="text-right text-slate-200 font-semibold w-24" title="Product star rating and review count">Stars (reviews)</th>
               </tr>
             </thead>
             <tbody>
@@ -2285,30 +2293,16 @@ function ListingsTab({ listings, sourceActivity, facets, total, legacy, highligh
                       <PriceHistorySparkline listingId={listing.listing_id} listingTitle={listing.title} />
                     </td>
                     <td className="p-3 text-right text-slate-100">
-                      {formatPriceColumn(listing, "low", showRowPercentages)}
+                      <MarketPriceCell listing={listing} column="low" asPercent={showRowPercentages} />
                     </td>
                     <td className="p-3 text-right text-slate-100">
-                      {(listing.market_median_price ?? listing.conservative_resale_price) != null ? (
-                        <span title="Median of the robust, same-condition comparable cohort used by classification.">
-                          {formatPriceColumn(listing, "median", showRowPercentages)}
-                        </span>
-                      ) : formatPriceColumn(listing, "median", showRowPercentages)}
+                      <MarketPriceCell listing={listing} column="median" asPercent={showRowPercentages} />
                     </td>
                     <td className="p-3 text-right text-slate-100">
-                      {formatPriceColumn(listing, "high", showRowPercentages)}
-                    </td>
-                    <td className="p-3 text-right">
-                      <PriceVarianceCell listing={listing} />
+                      <MarketPriceCell listing={listing} column="high" asPercent={showRowPercentages} />
                     </td>
                     <td className="p-3" title={explainClassification(listing)}>
                       <ClassificationBadge classification={listing.classification} />
-                    </td>
-                    <td className="p-3">
-                      <DecisionBadge
-                        decision={listing.decision}
-                        classification={listing.classification}
-                        confidence={listing.confidence}
-                      />
                     </td>
                     <td className="p-3 text-right text-slate-100 font-semibold" title={explainClassification(listing)}>
                       {listing.deal_score.toFixed(1)}
@@ -2334,6 +2328,14 @@ function ListingsTab({ listings, sourceActivity, facets, total, legacy, highligh
                         <span title={`${listing.performance_percentile != null ? `${listing.performance_percentile.toFixed(0)}th percentile` : "Hardware benchmark rank"} among comparable ${listing.category?.toUpperCase() ?? "hardware"} models.`}>
                           #{listing.performance_rank} / {listing.performance_peer_count}
                         </span>
+                      ) : "—"}
+                    </td>
+                    <td className="p-3 text-right text-slate-200" title="Sampled sold comparables for the same product and condition in the last 90 days; not this seller's total sales.">
+                      {listing.sold_listing_count != null ? listing.sold_listing_count.toLocaleString() : "—"}
+                    </td>
+                    <td className="p-3 text-right text-amber-300" title="Product star rating and review count; not this seller's rating.">
+                      {listing.review_average_rating != null ? (
+                        <span className="whitespace-nowrap">★ {listing.review_average_rating.toFixed(1)} {listing.review_count != null ? `(${listing.review_count.toLocaleString()})` : ""}</span>
                       ) : "—"}
                     </td>
                   </tr>
