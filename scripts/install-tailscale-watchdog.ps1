@@ -1,20 +1,18 @@
 #requires -RunAsAdministrator
 
+param(
+    [switch]$InstallDisabled
+)
+
 $ErrorActionPreference = 'Stop'
 $taskName = 'FlipFlop Tailscale Watchdog'
 $watchdog = Join-Path $PSScriptRoot 'ensure-tailscale-online.ps1'
 $pwsh = (Get-Command pwsh.exe -ErrorAction SilentlyContinue).Source
 if (-not $pwsh) { $pwsh = (Get-Command powershell.exe -ErrorAction Stop).Source }
 
-# Tailscale's supported Windows unattended mode keeps the node connected when
-# no interactive user is signed in. The watchdog handles the separate failure
-# mode where the service remains running but its backend becomes unresponsive.
-& tailscale.exe up --unattended=true
-if ($LASTEXITCODE -ne 0) { throw 'Unable to enable Tailscale unattended mode.' }
-
 $action = New-ScheduledTaskAction -Execute $pwsh -Argument "-NoProfile -NonInteractive -ExecutionPolicy Bypass -File `"$watchdog`""
 $startupTrigger = New-ScheduledTaskTrigger -AtStartup
-$recurringTrigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1) -RepetitionInterval (New-TimeSpan -Minutes 5)
+$recurringTrigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1) -RepetitionInterval (New-TimeSpan -Minutes 15)
 $settings = New-ScheduledTaskSettingsSet `
     -StartWhenAvailable `
     -MultipleInstances IgnoreNew `
@@ -29,8 +27,13 @@ Register-ScheduledTask `
     -Trigger @($startupTrigger, $recurringTrigger) `
     -Settings $settings `
     -Principal $principal `
-    -Description 'Restarts a hung/offline Tailscale service and restores unattended mode for FlipFlop production connectivity.' `
+    -Description 'Restarts a hung/offline Tailscale service for FlipFlop production connectivity.' `
     -Force | Out-Null
 
-Start-ScheduledTask -TaskName $taskName
-Write-Output "Installed and started '$taskName'. Logs: $env:ProgramData\FlipFlop\logs\tailscale-watchdog.log"
+if ($InstallDisabled) {
+    Disable-ScheduledTask -TaskName $taskName | Out-Null
+    Write-Output "Installed '$taskName' disabled. Enable it after Tailscale is online."
+} else {
+    Start-ScheduledTask -TaskName $taskName
+    Write-Output "Installed and started '$taskName'. Logs: $env:ProgramData\FlipFlop\logs\tailscale-watchdog.log"
+}
