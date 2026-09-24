@@ -128,6 +128,12 @@ function compactCaseName(caseItem: PriorityCaseItem) {
   return [brand, model, colour].filter(Boolean).join("-").toLocaleUpperCase();
 }
 
+function shortCaseSearchName(caseItem: PriorityCaseItem) {
+  const name = caseItem.name.replace(/\s+/g, " ").trim();
+  const shortened = name.split(/\s+(?:ARGB|RGB|Panoramic|Tempered|Glass|Mid[- ]Tower|Gaming|PC Case|Computer Case)\b/i)[0].trim();
+  return shortened || name;
+}
+
 function candidateMatchesQuery(candidate: ReferenceCandidate, query: string) {
   const terms = query.toLowerCase().split(/[^a-z0-9]+/).filter(term => term.length > 2);
   const haystack = `${candidate.label || ""} ${candidate.source_page || ""} ${candidate.url}`.toLowerCase();
@@ -318,7 +324,7 @@ export default function Cases3DPriorityPage() {
 
   const searchGoogleImages = async (queryOverride?: string) => {
     if (!evidenceReview) return;
-    const query = queryOverride?.trim() || googleQuery.trim() || `${evidenceReview.caseItem.name} PC case chassis`;
+    const query = queryOverride?.trim() || googleQuery.trim() || `${shortCaseSearchName(evidenceReview.caseItem)} PC case`;
     setReferenceBusy(true);
     setError(null);
     try {
@@ -336,7 +342,7 @@ export default function Cases3DPriorityPage() {
 
   useEffect(() => {
     if (evidenceReview?.stage !== "product_images") return;
-    const query = `${evidenceReview.caseItem.name} PC case chassis`;
+    const query = `${shortCaseSearchName(evidenceReview.caseItem)} PC case`;
     setGoogleQuery(query);
     setGoogleResults([]);
     void searchGoogleImages(query);
@@ -878,7 +884,7 @@ export default function Cases3DPriorityPage() {
                         value={googleQuery}
                         onChange={event => setGoogleQuery(event.target.value)}
                         onKeyDown={event => { if (event.key === "Enter") void searchGoogleImages(); }}
-                        placeholder={`${evidenceReview.caseItem.name} PC case chassis`}
+                        placeholder={`${shortCaseSearchName(evidenceReview.caseItem)} PC case`}
                         className="min-w-0 flex-1 rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-slate-200"
                       />
                       <Button type="button" onClick={() => void searchGoogleImages()} disabled={referenceBusy} className="cursor-pointer bg-cyan-700 hover:bg-cyan-600"><Search className="mr-2 h-4 w-4" /> Search</Button>
