@@ -320,7 +320,7 @@ export default function Cases3DPriorityPage() {
     script.src = `https://cse.google.com/cse.js?cx=${encodeURIComponent(GOOGLE_CSE_ENGINE_ID)}`;
     script.onerror = () => setGoogleCseLoadError("Google's approved-sites search could not load. Check your connection or any content blocker, then reopen this panel.");
     document.head.appendChild(script);
-  }, [evidenceReview?.stage]);
+  }, [evidenceReview?.stage, evidenceReview?.caseItem.id]);
 
   const approveReferences = async (caseId: number) => {
     if (selectedReferences.length !== 4) return;
@@ -858,7 +858,13 @@ export default function Cases3DPriorityPage() {
                     ) : googleCseLoadError ? (
                       <p role="alert" className="mt-3 text-xs text-red-300">{googleCseLoadError}</p>
                     ) : (
-                      <div className="gcse-search mt-4" data-enableImageSearch="true" data-linkTarget="_blank" />
+                      <div
+                        key={evidenceReview.caseItem.id}
+                        className="gcse-search mt-4"
+                        data-enableImageSearch="true"
+                        data-linkTarget="_blank"
+                        data-query={`"${evidenceReview.caseItem.name}" PC case chassis product photos`}
+                      />
                     )}
                   </section>
                   {referenceBusy && !referenceData ? (
