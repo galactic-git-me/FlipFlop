@@ -113,6 +113,25 @@ _EXTRACT_JS = """(rankOffset = 0) => {
 }"""
 
 
+async def _load_bestseller_page(page, url: str, rank_offset: int) -> list[dict]:
+    """Scroll Amazon's lazy grid until all 50 products have rendered."""
+    await page.goto(url, wait_until="domcontentloaded", timeout=45000)
+    await page.wait_for_selector("#gridItemRoot", timeout=15000)
+    for _ in range(12):
+        if await page.locator("#gridItemRoot").count() >= 50:
+            break
+        await page.locator("#gridItemRoot").last.scroll_into_view_if_needed()
+        await page.mouse.wheel(0, 1500)
+        await page.wait_for_timeout(500)
+    cards = await page.locator("#gridItemRoot").count()
+    if cards < 50:
+        raise ValueError(f"incomplete Amazon bestseller page {url}: {cards}/50 cards")
+    items = await page.evaluate(_EXTRACT_JS, rank_offset)
+    if len(items) < 50:
+        raise ValueError(f"incomplete Amazon bestseller extraction {url}: {len(items)}/50 products")
+    return items
+
+
 def extract_asin(url: str | None) -> str | None:
     if not url:
         return None
@@ -413,19 +432,11 @@ async def scrape_amazon_component_bestsellers() -> dict:
                         items: list[dict] = []
                         for page_num in (1, 2):
                             url = base_url if page_num == 1 else f"{base_url}?pg={page_num}"
-                            await page.goto(url, wait_until="domcontentloaded", timeout=45000)
+                            page_items = await _load_bestseller_page(page, url, (page_num - 1) * 50)
                             page_title = (await page.title()).lower()
                             if list_name.lower() not in page_title:
                                 raise ValueError(f"unexpected Amazon list page: {page_title[:100]}")
-                            try:
-                                await page.wait_for_selector(
-                                    "#gridItemRoot, .zg-grid-general-faceout, div[data-asin]",
-                                    timeout=15000,
-                                )
-                            except Exception:
-                                pass
-                            await asyncio.sleep(2)
-                            items.extend(await page.evaluate(_EXTRACT_JS, (page_num - 1) * 50))
+                            items.extend(page_items)
 
                         unique: dict[str, dict] = {}
                         for item in items:
@@ -434,6 +445,8 @@ async def scrape_amazon_component_bestsellers() -> dict:
                                 item["asin"] = asin
                                 unique[asin] = item
 
+                        if len(unique) < 100:
+                            raise ValueError(f"{category} bestseller list has only {len(unique)}/100 unique products")
                         valid_items = [item for item in unique.values() if bestseller_item_matches_category(item["title"], category)]
                         if len(valid_items) < 5:
                             raise ValueError(f"{category} bestseller list has only {len(valid_items)} category-valid items out of {len(unique)}")
@@ -441,8 +454,11 @@ async def scrape_amazon_component_bestsellers() -> dict:
                         category_priced = sum(item.get("price") is not None for item in valid_items)
                         if category_priced == 0:
                             raise ValueError(f"{category} bestseller list has no extracted prices")
-                        for item in sorted(valid_items, key=lambda value: value["rank"]):
-                            match = _best_scored_match(item, scored_for_category, category)
+                        for item in sorted(unique.values(), key=lambda value: value["rank"]):
+                            # Preserve every Amazon rank in the admin list, even when
+                            # Amazon places an unrelated item in this source category.
+                            match = (_best_scored_match(item, scored_for_category, category)
+                                     if bestseller_item_matches_category(item["title"], category) else None)
                             db.add(AmazonBestsellerObservation(
                                 category=category,
                                 list_name=list_name,
@@ -492,8 +508,7 @@ async def backfill_recent_bestseller_prices() -> dict[str, int]:
                     count = 0
                     for page_num in (1, 2):
                         url = base_url if page_num == 1 else f"{base_url}?pg={page_num}"
-                        await page.goto(url, wait_until="domcontentloaded", timeout=45000)
-                        items = await page.evaluate(_EXTRACT_JS, (page_num - 1) * 50)
+                        items = await _load_bestseller_page(page, url, (page_num - 1) * 50)
                         for item in items:
                             if item.get("price") is None:
                                 continue
