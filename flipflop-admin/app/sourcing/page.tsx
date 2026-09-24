@@ -2018,8 +2018,7 @@ function VendorSummaryTable({ listings }: { listings: Listing[] }) {
   );
 }
 
-function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; highlightListingId?: string | null }) {
-  const PAGE_SIZE = 100;
+function ListingsTab({ listings, highlightListingId, page, hasMore, onPageChange }: { listings: Listing[]; highlightListingId?: string | null; page: number; hasMore: boolean; onPageChange: (page: number) => void }) {
   const [componentTab, setComponentTab] = useState<ComponentType>("CPU");
   const [stockLane, setStockLane] = useState<StockLane>("all");
   const [gemFilter, setGemFilter] = useState<GemFilter>("all");
@@ -2028,7 +2027,6 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
   const [titleQuery, setTitleQuery] = useState("");
   const [explanationListing, setExplanationListing] = useState<Listing | null>(null);
   const [showRowPercentages, setShowRowPercentages] = useState(false);
-  const [page, setPage] = useState(1);
 
   // Jump straight to a specific listing when arriving from a favourite-match
   // toast/notification link (?listing=<listing_id>) — switch to its tab so
@@ -2089,20 +2087,7 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
     const cmp = compareSortValue(a, b, sortKey);
     return sortDir === "asc" ? cmp : -cmp;
   });
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const currentPage = Math.min(page, totalPages);
-  const pageStart = (currentPage - 1) * PAGE_SIZE;
-  const visibleListings = filtered.slice(pageStart, pageStart + PAGE_SIZE);
-
-  useEffect(() => {
-    setPage(1);
-  }, [componentTab, stockLane, gemFilter, sortKey, sortDir, titleQuery]);
-
-  useEffect(() => {
-    if (!highlightListingId) return;
-    const index = filtered.findIndex((listing) => listing.listing_id === highlightListingId);
-    if (index >= 0) setPage(Math.floor(index / PAGE_SIZE) + 1);
-  }, [highlightListingId, componentTab]);
+  const visibleListings = filtered;
   const tabCounts = COMPONENT_TABS.map((tab) => ({
     tab,
     count: byLane.filter((l) => listingTab(l) === tab).length,
@@ -2165,12 +2150,12 @@ function ListingsTab({ listings, highlightListingId }: { listings: Listing[]; hi
 
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3 text-sm">
         <span className="text-slate-400">
-          Showing {filtered.length === 0 ? 0 : pageStart + 1}–{Math.min(pageStart + PAGE_SIZE, filtered.length)} of {filtered.length}
+          Showing {filtered.length} matching rows on loaded page {page}. Filters and vendor totals above apply to this page; the market snapshot includes all active observations.
         </span>
         <div className="flex items-center gap-2">
-          <button type="button" disabled={currentPage <= 1} onClick={() => setPage((value) => Math.max(1, value - 1))} className="rounded border border-slate-600 bg-slate-700 px-3 py-1.5 text-slate-200 disabled:cursor-not-allowed disabled:opacity-40">Previous</button>
-          <span className="min-w-24 text-center text-slate-300">Page {currentPage} of {totalPages}</span>
-          <button type="button" disabled={currentPage >= totalPages} onClick={() => setPage((value) => Math.min(totalPages, value + 1))} className="rounded border border-slate-600 bg-slate-700 px-3 py-1.5 text-slate-200 disabled:cursor-not-allowed disabled:opacity-40">Next</button>
+          <button type="button" disabled={page <= 1} onClick={() => onPageChange(Math.max(1, page - 1))} className="cursor-pointer rounded border border-slate-600 bg-slate-700 px-3 py-1.5 text-slate-200 disabled:cursor-not-allowed disabled:opacity-40">Previous</button>
+          <span className="min-w-20 text-center text-slate-300">Page {page}</span>
+          <button type="button" disabled={!hasMore} onClick={() => onPageChange(page + 1)} className="cursor-pointer rounded border border-slate-600 bg-slate-700 px-3 py-1.5 text-slate-200 disabled:cursor-not-allowed disabled:opacity-40">Next</button>
         </div>
       </div>
 
@@ -2960,6 +2945,8 @@ function SourcingPageInner() {
   const highlightListingId = searchParams.get("listing");
   const [mainTab, setMainTab] = useState<MainTab>("stats");
   const [listings, setListings] = useState<Listing[]>([]);
+  const [listingPage, setListingPage] = useState(1);
+  const [listingHasMore, setListingHasMore] = useState(false);
   const [componentGems, setComponentGems] = useState<Record<string, GemData | null> | null>(null);
   const [queueStatus, setQueueStatus] = useState<QueueStatus | null>(null);
   const [loading, setLoading] = useState(true);
@@ -3012,20 +2999,21 @@ function SourcingPageInner() {
       // the next scheduled refresh can recover normally.
       const signal = AbortSignal.timeout(15_000);
       const [listingsRes, componentRes, queueRes] = await Promise.all([
-        fetch(`/api/gem-radar/scored-listings-latest-run?environment=${process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV"}&limit=500`, { cache: "no-store", signal }),
+        fetch(`/api/gem-radar/scored-listings-latest-run?environment=${process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV"}&limit=100&offset=${(listingPage - 1) * 100}&paged=true`, { cache: "no-store", signal }),
         fetch(`/api/gem-radar/gem-by-component`, { cache: "no-store", signal }),
         fetch(`/api/gem-radar/queue-status`, { cache: "no-store", signal }),
       ]);
 
       if (listingsRes.ok) {
-        const data = await listingsRes.json();
-        setListings(data);
-        if (data.length === 0) {
+        const data = await listingsRes.json() as { items: Listing[]; has_more: boolean };
+        setListings(data.items);
+        setListingHasMore(data.has_more);
+        if (data.items.length === 0) {
           console.debug("scored-listings returned empty (queue still processing or listings not recently observed)");
         } else {
-          const gems = data.filter((l: Listing) => l.classification === "GEM").length;
-          const superGems = data.filter((l: Listing) => l.classification === "SUPER_GEM").length;
-          console.debug(`scored-listings: ${data.length} total, ${superGems} SUPER_GEM, ${gems} GEM`);
+          const gems = data.items.filter((l: Listing) => l.classification === "GEM").length;
+          const superGems = data.items.filter((l: Listing) => l.classification === "SUPER_GEM").length;
+          console.debug(`scored-listings page ${listingPage}: ${data.items.length} rows, ${superGems} SUPER_GEM, ${gems} GEM`);
         }
       } else {
         console.warn(`scored-listings returned ${listingsRes.status}`);
@@ -3062,7 +3050,7 @@ function SourcingPageInner() {
       clearInterval(interval);
       clearInterval(countdown);
     };
-  }, []);
+  }, [listingPage]);
 
   useEffect(() => {
     fetchScanSchedule();
@@ -3178,7 +3166,7 @@ function SourcingPageInner() {
             <StatsTab componentGems={componentGems || undefined} />
           </>
         )}
-        {mainTab === "listings" && <ListingsTab listings={listings} highlightListingId={highlightListingId} />}
+        {mainTab === "listings" && <ListingsTab listings={listings} highlightListingId={highlightListingId} page={listingPage} hasMore={listingHasMore} onPageChange={setListingPage} />}
         {mainTab === "analytics" && <AnalyticsTab listings={listings} />}
       </div>
     </div>
