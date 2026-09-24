@@ -295,7 +295,10 @@ async def save_3d_bing_images(case_id: int, body: BingImageCapture, db: AsyncSes
         if not url.startswith(("https://", "http://")) or url in seen:
             continue
         seen.add(url)
-        results.append({"url": url, "source": "bing", "source_page": str(image.get("source_page") or body.source_page), "label": str(image.get("label") or "Bing Images")[:200]})
+        source_page = str(image.get("source_page") or "")
+        if not source_page.startswith(("https://", "http://")):
+            source_page = str(body.source_page)
+        results.append({"url": url, "source": "bing", "source_page": source_page, "label": str(image.get("label") or "Bing Images")[:200]})
     evidence = dict(case.sourcing_3d_evidence or {})
     stages = dict(evidence.get("stages") or {})
     product_stage = dict(stages.get("product_images") or {})
