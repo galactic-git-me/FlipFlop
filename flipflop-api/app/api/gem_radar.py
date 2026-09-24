@@ -1080,6 +1080,8 @@ async def _fetch_cpk_price_fields(db: AsyncSession, ids: list[int]) -> dict[int,
 @router.get("/scored-listings-latest-run")
 async def get_scored_listings_latest_run(
     environment: Literal["DEV", "LIVE"] | None = Query(default=None),
+    offset: int = Query(default=0, ge=0),
+    paged: bool = Query(default=False),
     limit: int = Query(
         default=500,
         ge=1,
@@ -1088,7 +1090,7 @@ async def get_scored_listings_latest_run(
     ),
     db: AsyncSession = Depends(get_db),
     _: None = Depends(require_operator),
-) -> list[dict]:
+) -> list[dict] | dict:
     """Get the latest scored row for every active fixed-price listing.
 
     Historical and auction rows remain in the database for evidence and
@@ -1111,7 +1113,7 @@ async def get_scored_listings_latest_run(
     )
     actionable_ids = {row.listing_id for row in active_observations}
     if not actionable_ids:
-        return []
+        return {"items": [], "has_more": False} if paged else []
 
     # Get the latest scored row for each listing in this environment's active
     # observation snapshot.  This remains isolated even when DEV and LIVE
@@ -1134,10 +1136,14 @@ async def get_scored_listings_latest_run(
             (GemRadarScoredListing.listing_id == latest_scored_at.c.listing_id)
             & (GemRadarScoredListing.scored_at == latest_scored_at.c.scored_at),
         )
-        .order_by(GemRadarScoredListing.scored_at.desc())
-        .limit(limit)
+        .order_by(GemRadarScoredListing.scored_at.desc(), GemRadarScoredListing.id.desc())
+        .offset(offset)
+        .limit(limit + 1 if paged else limit)
     )
     scored = result.scalars().all()
+    has_more = paged and len(scored) > limit
+    if paged:
+        scored = scored[:limit]
     scored = [
         row for row in scored
         if not is_malformed_awdit_listing(row.url, row.title)
@@ -1228,7 +1234,7 @@ async def get_scored_listings_latest_run(
         if performance.get("performance_status") == "MATCHED":
             performance_by_cpk.setdefault(row.cpk, performance)
 
-    return [
+    items = [
         {
             "id": s.id,
             "listing_id": s.listing_id,
@@ -1296,6 +1302,7 @@ async def get_scored_listings_latest_run(
         }
         for s in scored
     ]
+    return {"items": items, "has_more": has_more} if paged else items
 
 
 async def _new_vs_recurring_counts(db: AsyncSession, active_ids: set[str]) -> dict[str, dict[str, int]]:
