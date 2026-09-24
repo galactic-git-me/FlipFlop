@@ -8,6 +8,7 @@ import PixelCard from "../../components/ui/PixelCard";
 import { VendorLogo } from "../../components/VendorLogo";
 import { PriceHistorySparkline } from "../../components/listings/PriceHistorySparkline";
 import { api, MarketSnapshot } from "@/lib/api";
+import { normalizeScoredListingsResponse } from "@/lib/scored-listings-response";
 import { fuzzyMatches } from "@/lib/fuzzy";
 import { VENDOR_ORDER, VENDOR_META, canonicalVendorKey } from "@/lib/vendors";
 import {
@@ -2948,6 +2949,7 @@ function SourcingPageInner() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [listingPage, setListingPage] = useState(1);
   const [listingHasMore, setListingHasMore] = useState(false);
+  const [legacyListingsApi, setLegacyListingsApi] = useState(false);
   const [componentGems, setComponentGems] = useState<Record<string, GemData | null> | null>(null);
   const [queueStatus, setQueueStatus] = useState<QueueStatus | null>(null);
   const [loading, setLoading] = useState(true);
@@ -3009,9 +3011,10 @@ function SourcingPageInner() {
       setBackendConnected(listingsRes.ok || componentRes.ok || queueRes.ok);
 
       if (listingsRes.ok) {
-        const data = await listingsRes.json() as { items: Listing[]; has_more: boolean };
+        const data = normalizeScoredListingsResponse<Listing>(await listingsRes.json());
         setListings(data.items);
-        setListingHasMore(data.has_more);
+        setListingHasMore(data.hasMore);
+        setLegacyListingsApi(data.legacy);
         if (data.items.length === 0) {
           console.debug("scored-listings returned empty (queue still processing or listings not recently observed)");
         } else {
@@ -3184,7 +3187,10 @@ function SourcingPageInner() {
             <StatsTab componentGems={componentGems || undefined} />
           </>
         )}
-        {mainTab === "listings" && <ListingsTab listings={listings} sourceActivity={sourceActivity} highlightListingId={highlightListingId} page={listingPage} hasMore={listingHasMore} onPageChange={setListingPage} />}
+        {mainTab === "listings" && <>
+          {legacyListingsApi && <p role="status" className="mb-3 rounded border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm text-amber-200">The API is still running the old listings format. Restart the local backend to enable pages beyond the first 100 rows.</p>}
+          <ListingsTab listings={listings} sourceActivity={sourceActivity} highlightListingId={highlightListingId} page={listingPage} hasMore={listingHasMore} onPageChange={setListingPage} />
+        </>}
         {mainTab === "analytics" && <AnalyticsTab listings={listings} />}
       </div>
     </div>
