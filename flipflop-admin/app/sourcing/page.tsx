@@ -47,6 +47,8 @@ interface Listing {
   market_lower_price?: number | null;
   market_median_price?: number | null;
   market_upper_price?: number | null;
+  market_lower_url?: string | null;
+  market_upper_url?: string | null;
   pct_offset?: number | null;
   amazon_bestseller_rank?: number | null;
   amazon_bestseller_list?: string | null;
@@ -1936,9 +1938,14 @@ function MarketPriceCell({ listing, column, asPercent }: { listing: Listing; col
   const percent = amount != null && listing.delivered_price > 0 ? (amount / listing.delivered_price) * 100 : null;
   const positive = amount != null && amount >= 0;
   const sign = positive ? "+" : "-";
+  const url = column === "low" ? listing.market_lower_url : column === "high" ? listing.market_upper_url : null;
   return (
     <div title={column === "median" ? "Median of the robust, same-condition comparable cohort used by classification. Difference from delivered listing price." : "Difference from delivered listing price."}>
-      <div>{formatPriceColumn(listing, column, asPercent)}</div>
+      {url ? (
+        <a href={url} target="_blank" rel="noopener noreferrer" className="underline decoration-dotted underline-offset-2 hover:text-cyan-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-400" aria-label={`Open listing closest to market ${column} for ${listing.title}`} title={`Open comparable listing closest to market ${column} (market price may be an estimate)`}>
+          {formatPriceColumn(listing, column, asPercent)}
+        </a>
+      ) : <div>{formatPriceColumn(listing, column, asPercent)}</div>}
       {amount != null && percent != null && (
         <div className={`whitespace-nowrap text-[10px] font-semibold ${positive ? "text-emerald-400" : "text-red-400"}`}>
           {sign}£{Math.abs(amount).toFixed(0)} ({sign}{Math.abs(percent).toFixed(0)}%)

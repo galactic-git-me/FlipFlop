@@ -1258,6 +1258,57 @@ async def get_scored_listings_latest_run(
     # Product reviews must be aggregated over the entire CPK, not merely
     # vendors that happen to be present on the current paginated page.
     page_cpks = list({row.cpk for row in scored if row.cpk})
+    # Use the very cohort retained in each row's market explanation, not a
+    # generic CPK search result. Quantiles can be interpolated, so link the
+    # nearest contributing listing rather than claiming an exact-price match.
+    from collections import defaultdict
+    from app.gem_radar.market_links import market_endpoint_links
+    market_candidates: dict[tuple[str, str, str], list[tuple[str, str, float]]] = defaultdict(list)
+    if page_cpks:
+        sold_link_rows = await db.execute(text("""
+            SELECT cpk, LOWER(condition), price + COALESCE(postage, 0), source_url
+            FROM gem_radar_sold_observations
+            WHERE cpk = ANY(:cpks) AND source_url IS NOT NULL
+              AND observed_at >= CURRENT_TIMESTAMP - INTERVAL '90 days' AND price > 0
+        """), {"cpks": page_cpks})
+        for cpk, condition, price, url in sold_link_rows:
+            cohort = "new" if condition == "new" else "used"
+            market_candidates[(cpk, cohort, "sold")].append((url, url, float(price)))
+        active_link_rows = await db.execute(text("""
+            WITH latest_observation AS (
+                SELECT DISTINCT ON (listing_id) listing_id, title, source, condition_normalised
+                FROM gem_radar_listing_observations
+                ORDER BY listing_id, observed_at DESC, id DESC
+            ), latest_scored AS (
+                SELECT DISTINCT ON (listing_id) listing_id, url
+                FROM gem_radar_scored_listings
+                ORDER BY listing_id, scored_at DESC, id DESC
+            )
+            SELECT p.cpk, p.listing_id, p.price, o.source, o.title,
+                   o.condition_normalised, s.url
+            FROM gem_radar_cpk_listing_price p
+            JOIN latest_observation o ON o.listing_id = p.listing_id
+            LEFT JOIN latest_scored s ON s.listing_id = p.listing_id
+            WHERE p.cpk = ANY(:cpks) AND p.price > 0
+              AND p.updated_at >= CURRENT_TIMESTAMP - INTERVAL '14 days'
+        """), {"cpks": page_cpks})
+        fixed_sources = {"amazon", "overclockers", "scan", "awd_it", "computer_orbit", "bargain_hardware", "cex"}
+        for cpk, listing_id, price, source, title, condition, url in active_link_rows:
+            cohort = "used" if re.search(r"\b(?:b[ -]?grade|open[ -]?box|refurbished|renewed)\b", title or "", re.I) else ("new" if (condition or "").lower() == "new" else "used")
+            factor = 1.0 if source in fixed_sources else (0.92 if cohort == "new" else 0.88)
+            key = f"{source or 'active'}://{listing_id}"
+            if url:
+                market_candidates[(cpk, cohort, "active")].append((key, url, float(price) * factor))
+    market_links_by_id = {}
+    for listing in scored:
+        prices = cpk_price_fields.get(listing.id, {})
+        explanation = listing.scoring_explanation or {}
+        basis = (explanation.get("market") or {}).get("basis", "")
+        cohort = "new" if (listing.condition or "").lower() == "new" else "used"
+        candidates = market_candidates.get((listing.cpk, cohort, "sold" if basis == "SOLD_REFINED" else "active"), [])
+        market_links_by_id[listing.id] = market_endpoint_links(
+            explanation, prices.get("market_lower_price"), prices.get("market_upper_price"), candidates,
+        )
     review_observations = []
     if page_cpks:
         scored_review_result = await db.execute(
@@ -1357,6 +1408,7 @@ async def get_scored_listings_latest_run(
             "market_new_price": s.market_new_price,
             "market_used_price": s.market_used_price,
             **cpk_price_fields.get(s.id, {}),
+            **market_links_by_id.get(s.id, {}),
             "watch_count": observation_fields.get(s.listing_id, {}).get("watch_count", s.watch_count),
             "best_offer_enabled": observation_fields.get(s.listing_id, {}).get("best_offer_enabled", False),
             "review_average_rating": (product_reviews.get(s.cpk) or (s.review_average_rating, s.review_count))[0],
