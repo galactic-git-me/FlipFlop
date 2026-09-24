@@ -1519,7 +1519,7 @@ function findLatestRunId(listings: Listing[]): string | null {
 type GemFilter = "all" | "SUPER_GEM" | "GEM" | "EVIDENCE_LIMITED_DEAL" | "EMERGING_OPPORTUNITY" | "OK_DEAL" | "AVERAGE_DEAL" | "POOR_DEAL" | "INSUFFICIENT_DATA" | "IDENTITY_FAILED" | "IDENTITY_PENDING" | "INELIGIBLE";
 type StockLane = "all" | "new" | "open_box" | "used";
 type SourcingFilters = { component: ComponentType; stockLane: StockLane; classification: GemFilter; title: string; sortKey: SortKey; sortDir: SortDir };
-type SourcingFacets = { total: number; categories: Record<string, number>; vendors: Record<string, { total: number; classifications: Record<string, number> }>; classifications: Record<string, number>; category_classifications: Record<string, Record<string, number>> };
+type SourcingFacets = { total: number; categories: Record<string, number>; vendors: Record<string, { total: number; classifications: Record<string, number> }>; classifications: Record<string, number>; category_classifications: Record<string, Record<string, number>>; stock: Record<string, number> };
 
 const STOCK_LANES: { value: StockLane; label: string; description: string }[] = [
   { value: "all", label: "All stock", description: "Every retained sourcing opportunity" },
@@ -2092,7 +2092,7 @@ function ListingsTab({ listings, sourceActivity, facets, total, legacy, highligh
     }
   }
   const mergedListings = [...mergedByProduct.values()];
-  const filtered = (legacy ? mergedListings : listings).sort((a, b) => {
+  const filtered = [...(legacy ? mergedListings : listings)].sort((a, b) => {
     const cmp = compareSortValue(a, b, sortKey);
     return sortDir === "asc" ? cmp : -cmp;
   });
@@ -2346,7 +2346,7 @@ function ListingsTab({ listings, sourceActivity, facets, total, legacy, highligh
 
       <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3" role="group" aria-label="Stock condition lane">
         {STOCK_LANES.map((lane) => {
-          const count = lane.value === "all" ? listings.length : listings.filter((listing) => stockLaneFor(listing) === lane.value).length;
+          const count = facets ? (facets.stock[lane.value] ?? 0) : lane.value === "all" ? listings.length : listings.filter((listing) => stockLaneFor(listing) === lane.value).length;
           const active = stockLane === lane.value;
           return (
             <button
@@ -3208,7 +3208,7 @@ function SourcingPageInner() {
           </>
         )}
         {mainTab === "listings" && <>
-          {legacyListingsApi && <p role="status" className="mb-3 rounded border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm text-amber-200">The API is still running the old listings format. Restart the local backend to enable pages beyond the first 100 rows.</p>}
+          {legacyListingsApi && <p role="status" className="mb-3 rounded border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm text-amber-200">The API is still running the old listings code. Restart the local backend to enable global category filters, accurate vendor totals and pagination.</p>}
           <ListingsTab listings={listings} sourceActivity={sourceActivity} facets={listingFacets} total={listingTotal} legacy={legacyListingsApi} highlightListingId={highlightListingId} page={listingPage} hasMore={listingHasMore} onPageChange={setListingPage} onFiltersChange={filters => { setListingPage(1); setListingFilters(current => JSON.stringify(current) === JSON.stringify(filters) ? current : filters); }} />
         </>}
         {mainTab === "analytics" && <AnalyticsTab listings={listings} />}

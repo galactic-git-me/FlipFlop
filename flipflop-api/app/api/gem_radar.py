@@ -1101,11 +1101,20 @@ async def get_scored_listings_facets(db: AsyncSession = Depends(get_db), _: None
     vendors: dict[str, dict] = {}
     classes: dict[str, int] = {}
     category_classes: dict[str, dict[str, int]] = {}
+    stock = {"all": 0, "new": 0, "open_box": 0, "used": 0}
     total = 0
     known = {"cpu", "motherboard", "ram", "psu", "ssd", "gpu", "cooler", "fan", "case"}
     for row in rows:
         n = int(row.n)
         total += n
+        stock["all"] += n
+        condition = (row.condition or "").lower().replace("-", " ").replace("_", " ")
+        if condition == "new":
+            stock["new"] += n
+        elif any(term in condition for term in ("refurb", "open box", "new other", "b grade")):
+            stock["open_box"] += n
+        elif any(term in condition for term in ("used", "pre owned")):
+            stock["used"] += n
         category = row.category if row.category in known else "other"
         categories[category] = categories.get(category, 0) + n
         source = row.source or "unknown"
@@ -1116,7 +1125,7 @@ async def get_scored_listings_facets(db: AsyncSession = Depends(get_db), _: None
         classes[tier] = classes.get(tier, 0) + n
         category_bucket = category_classes.setdefault(category, {})
         category_bucket[tier] = category_bucket.get(tier, 0) + n
-    return {"total": total, "categories": categories, "vendors": vendors, "classifications": classes, "category_classifications": category_classes}
+    return {"total": total, "categories": categories, "vendors": vendors, "classifications": classes, "category_classifications": category_classes, "stock": stock}
 
 
 @router.get("/scored-listings-latest-run")
