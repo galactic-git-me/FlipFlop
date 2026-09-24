@@ -1,6 +1,8 @@
 # FlipFlop Platform - Start All Servers
 
-This directory contains scripts to start all FlipFlop platform servers (backend, admin, and frontend).
+This launcher starts only the local FlipFlop development servers on
+`prometheus-ts`. It never deploys, starts, or modifies production on
+`andromeda-ts`.
 
 ## Servers
 
@@ -9,6 +11,7 @@ This directory contains scripts to start all FlipFlop platform servers (backend,
 | Backend | API | 4311 | FastAPI (Python) |
 | Admin | Web | 4312 | Next.js (Node.js) |
 | Frontend | Web | 4313 | Next.js (Node.js) |
+| Gem Radar standalone (optional) | API/worker | 18000 | FastAPI (Python) |
 
 ## Quick Start
 
@@ -17,13 +20,19 @@ This directory contains scripts to start all FlipFlop platform servers (backend,
 # From project root
 .\scripts\start-all-servers.ps1
 
-# Or with verbose output
-.\scripts\start-all-servers.ps1 -Verbose
-
 # Or skip specific servers
 .\scripts\start-all-servers.ps1 -NoBackend
 .\scripts\start-all-servers.ps1 -NoAdmin
 .\scripts\start-all-servers.ps1 -NoFrontend
+
+# Optional: also start the standalone DEV Gem Radar worker
+.\scripts\start-all-servers.ps1 -GemRadarStandalone
+
+# Optional: rebuild the unpacked DEV browser extension first
+.\scripts\start-all-servers.ps1 -BuildExtension
+
+# Validate prerequisites without starting or stopping anything
+.\scripts\start-all-servers.ps1 -CheckOnly
 ```
 
 ### Windows (Command Prompt)
@@ -57,17 +66,18 @@ Once all servers are running, access them at:
 
 ## Features
 
-✅ Starts all three servers in parallel  
+✅ Starts all three development servers in parallel
 ✅ Displays status and port information  
 ✅ Shows colorized output for easy identification  
 ✅ Supports selective server startup  
-✅ Verbose mode for debugging  
-✅ Cross-platform support (Windows, macOS, Linux)
+✅ Uses hot reload for API and frontend development
+✅ Routes DEV AI requests through Ollama priority port 11435
 
 ## Logs
 
 ### Windows (PowerShell)
-Logs are displayed in the console window. Servers run in foreground.
+Logs are written to the repository's `logs` directory. The launcher remains
+in the foreground so `Ctrl+C` can stop every development process it started.
 
 ### macOS/Linux (Bash)
 Logs are written to:
@@ -138,10 +148,15 @@ The scripts automatically set required environment variables:
 
 | Variable | Value |
 |----------|-------|
-| `NEXT_PUBLIC_API_URL` | `http://localhost:4311` |
-| `BACKEND_URL` | `http://localhost:4311` |
+| `NEXT_PUBLIC_API_URL` | `http://127.0.0.1:4311` |
+| `BACKEND_URL` | `http://127.0.0.1:4311` |
+| `FLIPFLOP_RUNTIME_ENV` | `development` |
+| `OLLAMA_BASE_URL` | `http://127.0.0.1:11435` |
+| `EBAY_ENVIRONMENT` | `production` (read/sourcing) |
+| `EBAY_LISTING_ENVIRONMENT` | `sandbox` (writes/listing) |
 
-These can be overridden by setting them before running the script.
+The launcher sets these explicitly so a stale shell environment cannot point
+development at production accidentally.
 
 ## Advanced Usage
 
