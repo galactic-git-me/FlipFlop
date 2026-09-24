@@ -596,6 +596,7 @@ async def get_cases_priority_for_3d(
             Case.priority_3d_rank.asc().nullslast() if frozen_exists and not source_site else Case.bestseller_rank.asc().nullslast(),
             sql_case((Case.source_site == "Amazon", 0), else_=1),  # Amazon prioritized
             Case.price.asc(),  # Cheaper cases first
+            Case.id.asc(),
         )
         .limit(limit)
         .offset(offset)

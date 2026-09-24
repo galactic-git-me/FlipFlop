@@ -2443,7 +2443,7 @@ function ListingsTab({ listings, sourceActivity, facets, total, legacy, highligh
   );
 }
 
-const CLASSIFICATION_ORDER = ["SUPER_GEM", "GEM", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "INELIGIBLE"] as const;
+const CLASSIFICATION_ORDER = ["SUPER_GEM", "GEM", "OK_DEAL", "AVERAGE_DEAL", "POOR_DEAL", "INSUFFICIENT_DATA", "IDENTITY_PENDING", "IDENTITY_FAILED", "INELIGIBLE"] as const;
 const CLASSIFICATION_COLORS: Record<string, string> = {
   SUPER_GEM: "#f59e0b",
   GEM: "#3b82f6",
@@ -2453,8 +2453,12 @@ const CLASSIFICATION_COLORS: Record<string, string> = {
   AVERAGE_DEAL: "#64748b",
   POOR_DEAL: "#ef4444",
   INSUFFICIENT_DATA: "#475569",
+  IDENTITY_PENDING: "#a855f7",
+  IDENTITY_FAILED: "#d946ef",
   INELIGIBLE: "#9f1239",
 };
+
+type AnalyticsListing = Pick<Listing, "title" | "deal_score" | "classification" | "delivered_price" | "market_median_price" | "roi_pct" | "expected_profit" | "sell_through_rate_pct" | "sold_listing_count" | "market_confidence" | "market_sample_size" | "amazon_bestseller_rank">;
 
 interface ScatterPoint {
   title: string;
@@ -2475,7 +2479,7 @@ function ClassificationLegend({ classifications }: { classifications: string[] }
 // Only plot economics produced by the scoring model. Falling back to the
 // listing's own delivered price manufactured a 0% ROI for every unscored
 // listing and flattened the useful 1,500-point distribution into one line.
-function buildScatterPoints(listings: Listing[]): ScatterPoint[] {
+function buildScatterPoints(listings: AnalyticsListing[]): ScatterPoint[] {
   return listings
     .filter((l) => Number.isFinite(l.roi_pct) && Number.isFinite(l.expected_profit))
     .map((l) => ({
@@ -2512,7 +2516,7 @@ function ScatterTooltip({ active, payload, metricLabel = "Model ROI" }: { active
   );
 }
 
-const DealScoreRoiChart = memo(function DealScoreRoiChart({ listings }: { listings: Listing[] }) {
+const DealScoreRoiChart = memo(function DealScoreRoiChart({ listings }: { listings: AnalyticsListing[] }) {
   const points = useMemo(() => buildScatterPoints(listings), [listings]);
   const yDomain = useMemo(() => computeRoiDomain(points.map((p) => p.roiPercent)), [points]);
   const plottedPoints = useMemo(() => points.map((point) => ({
@@ -2595,12 +2599,12 @@ interface InsightPoint {
   bubbleUnit?: string;
 }
 
-function priceVariancePercent(listing: Listing): number | null {
+function priceVariancePercent(listing: AnalyticsListing): number | null {
   if (!Number.isFinite(listing.delivered_price) || listing.delivered_price <= 0 || !Number.isFinite(listing.market_median_price) || listing.market_median_price! <= 0) return null;
   return ((listing.market_median_price! - listing.delivered_price) / listing.delivered_price) * 100;
 }
 
-function buildInsightPoints(listings: Listing[], kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "amazonBestsellerVariance" | "priceMedian"): InsightPoint[] {
+function buildInsightPoints(listings: AnalyticsListing[], kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "amazonBestsellerVariance" | "priceMedian"): InsightPoint[] {
   return listings.flatMap((listing) => {
     const variance = priceVariancePercent(listing);
     const base = { title: listing.title, classification: listing.classification };
@@ -2637,7 +2641,7 @@ function InsightTooltip({ active, payload }: { active?: boolean; payload?: Array
   </div>;
 }
 
-const InsightScatterChart = memo(function InsightScatterChart({ listings, kind, title, description, insight, diagonal = false }: { listings: Listing[]; kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "amazonBestsellerVariance" | "priceMedian"; title: string; description: string; insight: string; diagonal?: boolean }) {
+const InsightScatterChart = memo(function InsightScatterChart({ listings, kind, title, description, insight, diagonal = false }: { listings: AnalyticsListing[]; kind: "sellThrough" | "profitRoi" | "confidenceVariance" | "amazonBestsellerVariance" | "priceMedian"; title: string; description: string; insight: string; diagonal?: boolean }) {
   const points = useMemo(() => buildInsightPoints(listings, kind), [listings, kind]);
   const xDomain = useMemo(() => insightDomain(points.map((point) => point.x)), [points]);
   const yDomain = useMemo(() => diagonal ? xDomain : insightDomain(points.map((point) => point.y)), [diagonal, points, xDomain]);
@@ -2883,10 +2887,27 @@ const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
   );
 });
 
-const AnalyticsTab = memo(function AnalyticsTab({ listings }: { listings: Listing[] }) {
+const AnalyticsTab = memo(function AnalyticsTab() {
+  const [analytics, setAnalytics] = useState<{ items: AnalyticsListing[]; total: number; classification_counts: Record<string, number> } | null>(null);
+  const [analyticsError, setAnalyticsError] = useState<string | null>(null);
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/gem-radar/sourcing-analytics", { cache: "no-store", signal: controller.signal })
+      .then(async response => {
+        if (!response.ok) throw new Error(`Analytics API returned ${response.status}`);
+        return response.json();
+      })
+      .then(data => { setAnalytics(data); setAnalyticsError(null); })
+      .catch(error => { if (!controller.signal.aborted) setAnalyticsError(String(error)); });
+    return () => controller.abort();
+  }, []);
+  const listings = analytics?.items ?? [];
   return (
     <div className="space-y-6">
       <ScanRunsOverTimeChart />
+      {analyticsError ? <p role="alert" className="rounded-lg border border-red-700 bg-red-950/30 p-3 text-sm text-red-200">{analyticsError}. Restart the local API if the new analytics endpoint is not active.</p> : !analytics ? <p role="status" className="text-sm text-slate-400">Loading full-population analytics…</p> : <p className="text-sm text-slate-400">Charts use {listings.length.toLocaleString()} stratified points from {analytics.total.toLocaleString()} active listings, independent of Listings filters. Every BSR-linked listing is included.</p>}
+      {analytics && <div className="flex flex-wrap gap-2 text-xs text-slate-300">{CLASSIFICATION_ORDER.map(c => <span key={c} className="rounded border border-slate-700 px-2 py-1">{c.replaceAll("_", " ")}: {(analytics.classification_counts[c] ?? 0).toLocaleString()}</span>)}</div>}
+      {analytics && <>
       <div className="grid items-stretch gap-4 xl:grid-cols-2 2xl:grid-cols-3">
         <DealScoreRoiChart listings={listings} />
         <InsightScatterChart listings={listings} kind="sellThrough" title="Price Variance vs Sell-through" description="Discount opportunity against observed market liquidity; bubble size is sold comparable count." insight="Upper-right points combine a meaningful discount with proven demand. A large discount with weak sell-through is a warning, not automatically a bargain." />
@@ -2896,6 +2917,7 @@ const AnalyticsTab = memo(function AnalyticsTab({ listings }: { listings: Listin
         <InsightScatterChart listings={listings} kind="priceMedian" title="Listing Price vs Market Median" description="Direct price positioning; the dashed diagonal marks parity with the market median." insight="Points above the diagonal have a listing price below market. The farther above, the larger the discount; use classification colour and bubble profit to judge quality." diagonal />
       </div>
       <ClassificationLegend classifications={[...CLASSIFICATION_ORDER]} />
+      </>}
 
       <div className="p-4 bg-blue-900/20 rounded-lg border border-blue-700/30">
         <p className="text-blue-200">
@@ -3240,7 +3262,7 @@ function SourcingPageInner() {
           {legacyListingsApi && <p role="status" className="mb-3 rounded border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm text-amber-200">The API is still running the old listings code. Restart the local backend to enable global category filters, accurate vendor totals and pagination.</p>}
           <ListingsTab listings={listings} sourceActivity={sourceActivity} facets={listingFacets} total={listingTotal} legacy={legacyListingsApi} highlightListingId={highlightListingId} page={listingPage} hasMore={listingHasMore} onPageChange={setListingPage} onFiltersChange={filters => { setListingPage(1); setListingFilters(current => JSON.stringify(current) === JSON.stringify(filters) ? current : filters); }} />
         </>}
-        {mainTab === "analytics" && <AnalyticsTab listings={listings} />}
+        {mainTab === "analytics" && <AnalyticsTab />}
       </div>
     </div>
   );
