@@ -2032,6 +2032,20 @@ async def get_gem_by_component(
     return gems
 
 
+@router.get("/source-activity")
+async def get_source_activity(db: AsyncSession = Depends(get_db), _: None = Depends(require_operator)) -> dict:
+    """Last actual listing observation per vendor, not a connection heartbeat."""
+    from sqlalchemy import text
+
+    rows = (await db.execute(text("""
+        SELECT source, MAX(observed_at) AS last_seen
+        FROM gem_radar_listing_observations
+        WHERE source IS NOT NULL
+        GROUP BY source
+    """))).fetchall()
+    return {row.source: row.last_seen.isoformat() if row.last_seen else None for row in rows}
+
+
 @router.get("/market-snapshot")
 async def get_market_snapshot(db: AsyncSession = Depends(get_db), _: None = Depends(require_operator)) -> dict:
     """Whole-DB view of the current market — same categories as the Current
