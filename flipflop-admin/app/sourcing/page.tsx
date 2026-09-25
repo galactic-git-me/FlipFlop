@@ -960,8 +960,11 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             // segment. Anything else remains an empty pending gap.
             const skippedCpk = failedIngested;
             const successfulScores = scan.eligibleScoreCount ?? 0;
-            const classifiedScores = scan.classifiedCount ?? 0;
-            const ineligibleScores = Math.max(classifiedScores - successfulScores, 0);
+            // Only scores on market-priced listings reached this stage.
+            // classifiedCount also includes listings rejected upstream, so it
+            // cannot be used for the Scores dotted segment or it eats the
+            // thin line carrying CPK and M Prices failures forward.
+            const ineligibleScores = scan.ineligibleScoreCount ?? 0;
             const scoreUpstreamFailures = Math.min(
               failedIngested + failedCpk + failedMarketPrices,
               Math.max(searchTermTotal - successfulScores - ineligibleScores, 0),
