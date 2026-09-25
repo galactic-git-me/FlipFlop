@@ -3940,6 +3940,26 @@ async def get_best_sellers(
                     ) o ON TRUE
                     WHERE s.cpk = ANY(:cpks)
                 )
+                , active_listing_cpks AS (
+                    SELECT r.listing_id, r.cpk, r.source
+                    FROM resolved_listing_cpks r
+                    LEFT JOIN gem_radar_listing_lifecycle lifecycle
+                      ON lifecycle.listing_id = r.listing_id
+                    WHERE (lifecycle.status IS NULL OR lifecycle.status = 'active'
+                           OR EXISTS (
+                               SELECT 1 FROM gem_radar_listing_observations o
+                               WHERE o.listing_id = r.listing_id
+                                 AND o.observed_at > lifecycle.archived_at
+                           ))
+                      AND NOT EXISTS (
+                          SELECT 1 FROM listing_archive a
+                          WHERE a.external_id = r.listing_id
+                      )
+                      AND NOT EXISTS (
+                          SELECT 1 FROM listings l
+                          WHERE l.external_id = r.listing_id AND l.status <> 'active'
+                      )
+                )
                 , latest_offer_details AS (
                     SELECT DISTINCT ON (p.listing_id)
                            p.listing_id, p.cpk, p.price,
@@ -3958,22 +3978,26 @@ async def get_best_sellers(
                     ) s ON TRUE
                     WHERE p.cpk = ANY(:cpks) AND p.price > 0
                       AND p.updated_at >= CURRENT_TIMESTAMP - INTERVAL '14 days'
+                      AND EXISTS (
+                          SELECT 1 FROM active_listing_cpks active
+                          WHERE active.listing_id = p.listing_id AND active.cpk = p.cpk
+                      )
                     ORDER BY p.listing_id, p.updated_at DESC
                 )
-                SELECT resolved_listing_cpks.cpk,
-                       COUNT(DISTINCT resolved_listing_cpks.listing_id) AS listing_count,
-                       ARRAY_AGG(DISTINCT resolved_listing_cpks.source) FILTER (WHERE resolved_listing_cpks.source IS NOT NULL) AS marketplace_sources,
+                SELECT active_listing_cpks.cpk,
+                       COUNT(DISTINCT active_listing_cpks.listing_id) AS listing_count,
+                       ARRAY_AGG(DISTINCT active_listing_cpks.source) FILTER (WHERE active_listing_cpks.source IS NOT NULL) AS marketplace_sources,
                        MIN(offers.price) FILTER (WHERE offers.price > 0) AS cheapest_market_price,
                        (ARRAY_AGG(offers.url ORDER BY offers.price ASC NULLS LAST) FILTER (WHERE offers.price > 0))[1] AS cheapest_market_url,
                        (ARRAY_AGG(offers.source ORDER BY offers.price ASC NULLS LAST) FILTER (WHERE offers.price > 0))[1] AS cheapest_market_source
-                FROM resolved_listing_cpks
+                FROM active_listing_cpks
                 LEFT JOIN LATERAL (
                     SELECT listing_id, url, price, source
                     FROM latest_offer_details d
-                    WHERE d.cpk = resolved_listing_cpks.cpk
-                ) offers ON offers.listing_id = resolved_listing_cpks.listing_id
-                WHERE resolved_listing_cpks.cpk = ANY(:cpks)
-                GROUP BY resolved_listing_cpks.cpk
+                    WHERE d.cpk = active_listing_cpks.cpk
+                ) offers ON offers.listing_id = active_listing_cpks.listing_id
+                WHERE active_listing_cpks.cpk = ANY(:cpks)
+                GROUP BY active_listing_cpks.cpk
             """), {"cpks": cpks})).all()
             listing_counts = {
                 row.cpk: {
