@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { LayoutGrid, List, RefreshCw, Search, Table2, Trophy } from "lucide-react";
 import { canonicalVendorKey, VENDOR_META } from "@/lib/vendors";
 import { VendorLogo } from "../../components/VendorLogo";
+import { PriceHistorySparkline } from "../../components/listings/PriceHistorySparkline";
 
 type ViewMode = "table" | "listings" | "grid";
 type Category = { category: string; name: string; source_url: string; count: number; matched: number; rated: number; last_captured_at: string | null };
@@ -20,6 +21,9 @@ type Product = {
   market_low: number | null;
   market_median: number | null;
   market_high: number | null;
+  cheapest_market_price: number | null;
+  cheapest_market_url: string | null;
+  cheapest_market_source: string | null;
   rating: number | null;
   review_count: number | null;
   price: number | null;
@@ -102,13 +106,12 @@ function ProductCard({ product, index, compact }: { product: Product; index: num
 function TableView({ products }: { products: Product[] }) {
   return <div className="overflow-x-auto rounded-lg border border-white/10 bg-[#0b1119]"><table className="w-full min-w-[1320px] text-left text-xs">
     <thead className="border-b border-white/10 bg-white/[0.03] text-[10px] uppercase tracking-wider text-slate-500"><tr>
-      <th className="px-4 py-3">Product</th><th className="px-3 py-3">Category</th><th className="px-3 py-3">CPK</th><th className="px-3 py-3">Vendors</th><th className="px-3 py-3 text-right">Amazon price</th><th className="px-3 py-3 text-right">Market low / median / high</th><th className="px-3 py-3 text-right">Matched listings</th><th className="px-3 py-3 text-right">Amazon rank</th><th className="px-3 py-3 text-right">Reviews</th><th className="px-3 py-3">Sales velocity</th>
+      <th className="px-3 py-3">Source</th><th className="px-3 py-3">Title</th><th className="px-3 py-3">Condition</th><th className="px-3 py-3 text-right">Price</th><th className="px-3 py-3">History</th><th className="px-3 py-3 text-right">Low</th><th className="px-3 py-3 text-right">Median</th><th className="px-3 py-3 text-right">High</th><th className="px-3 py-3">Class</th><th className="px-3 py-3">Evidence</th><th className="px-3 py-3 text-right">Score</th><th className="px-3 py-3 text-right">Amazon BSR</th><th className="px-3 py-3 text-right">Performance</th><th className="px-3 py-3 text-right">Sold (90d)</th><th className="px-3 py-3 text-right">Stars (reviews)</th>
     </tr></thead><tbody>{products.map(product => <tr key={`${product.category}:${product.asin}`} className="border-b border-white/5 transition last:border-0 hover:bg-white/[0.03]">
-      <td className="max-w-[440px] px-4 py-3"><a href={product.url ?? undefined} target="_blank" rel="noopener noreferrer" className="line-clamp-2 font-medium text-white hover:text-cyan-300 hover:underline">{product.title}</a><p className="mt-1 text-[10px] uppercase text-slate-600">ASIN {product.asin}</p></td>
-      <td className="px-3 py-3 capitalize text-slate-400">{product.category}</td><td className="px-3 py-3"><MatchBadge product={product} /></td><td className="px-3 py-3"><VendorSummary product={product} /></td>
-      <td className="px-3 py-3 text-right font-semibold text-white">{product.price == null ? "—" : `£${product.price.toFixed(2)}`}</td><td className="px-3 py-3 text-right"><MarketRange product={product} /></td>
-      <td className="px-3 py-3 text-right font-mono text-cyan-200">{product.cpk ? (product.marketplace_listing_count ?? 0).toLocaleString() : "—"}</td><td className="px-3 py-3 text-right font-mono text-amber-300">#{product.rank}</td>
-      <td className="px-3 py-3 text-right text-amber-200">{product.rating == null ? "—" : `★ ${product.rating.toFixed(1)}`}<span className="block text-[9px] text-slate-500">{product.review_count?.toLocaleString() ?? "—"}</span></td><td className="px-3 py-3 text-slate-300">{product.sales_velocity ?? "—"}</td>
+      <td className="px-3 py-2"><VendorMarks sources={["amazon", ...product.marketplace_sources]} /></td><td className="max-w-[390px] px-3 py-2"><a href={product.cheapest_market_url ?? product.url ?? undefined} target="_blank" rel="noopener noreferrer" className="line-clamp-2 font-medium text-white hover:text-cyan-300 hover:underline">{product.title}</a></td>
+      <td className="px-3 py-2"><span className="rounded bg-emerald-500/20 px-2 py-1 text-emerald-300">new</span></td><td className="px-3 py-2 text-right font-semibold text-white">{product.cheapest_market_price == null ? "—" : `£${product.cheapest_market_price.toFixed(2)}`}<span className="block text-[9px] text-slate-500">{product.cheapest_market_source ?? "—"}</span></td><td className="px-2 py-2"><PriceHistorySparkline listingId={product.asin} listingTitle={product.title} /></td>
+      <td className="px-3 py-2 text-right font-mono">{product.market_low == null ? "—" : `£${product.market_low.toFixed(0)}`}</td><td className="px-3 py-2 text-right font-mono">{product.market_median == null ? "—" : `£${product.market_median.toFixed(0)}`}</td><td className="px-3 py-2 text-right font-mono">{product.market_high == null ? "—" : `£${product.market_high.toFixed(0)}`}</td>
+      <td className="px-3 py-2"><span className="rounded bg-orange-500/20 px-2 py-1 text-orange-300">AMAZON</span></td><td className="px-3 py-2"><span className="rounded bg-amber-500/10 px-2 py-1 text-amber-300">{product.cpk ? "Matched" : "Limited"}</span></td><td className="px-3 py-2 text-right font-mono">—</td><td className="px-3 py-2 text-right font-mono text-amber-300">#{product.rank}</td><td className="px-3 py-2 text-right font-mono text-violet-300">—</td><td className="px-3 py-2 text-right font-mono">—</td><td className="px-3 py-2 text-right text-amber-200">{product.rating == null ? "—" : `★ ${product.rating.toFixed(1)}`} ({product.review_count?.toLocaleString() ?? "—"})</td>
     </tr>)}</tbody></table></div>;
 }
 

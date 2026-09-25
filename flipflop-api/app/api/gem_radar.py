@@ -3940,6 +3940,26 @@ async def get_best_sellers(
                     ) o ON TRUE
                     WHERE s.cpk = ANY(:cpks)
                 )
+                , latest_offer_details AS (
+                    SELECT DISTINCT ON (p.listing_id)
+                           p.listing_id, p.cpk, p.price,
+                           COALESCE(o.source, s.source) AS source,
+                           s.url
+                    FROM gem_radar_cpk_listing_price p
+                    LEFT JOIN LATERAL (
+                        SELECT source FROM gem_radar_listing_observations
+                        WHERE listing_id=p.listing_id
+                        ORDER BY observed_at DESC, id DESC LIMIT 1
+                    ) o ON TRUE
+                    LEFT JOIN LATERAL (
+                        SELECT source, url FROM gem_radar_scored_listings
+                        WHERE listing_id=p.listing_id
+                        ORDER BY scored_at DESC NULLS LAST, id DESC LIMIT 1
+                    ) s ON TRUE
+                    WHERE p.cpk = ANY(:cpks) AND p.price > 0
+                      AND p.updated_at >= CURRENT_TIMESTAMP - INTERVAL '14 days'
+                    ORDER BY p.listing_id, p.updated_at DESC
+                )
                 SELECT cpk,
                        COUNT(DISTINCT listing_id) AS listing_count,
                        ARRAY_AGG(DISTINCT source) FILTER (WHERE source IS NOT NULL) AS marketplace_sources,
@@ -3948,12 +3968,11 @@ async def get_best_sellers(
                        (ARRAY_AGG(offers.source ORDER BY offers.price ASC NULLS LAST) FILTER (WHERE offers.price > 0))[1] AS cheapest_market_source
                 FROM resolved_listing_cpks
                 LEFT JOIN LATERAL (
-                    SELECT DISTINCT ON (listing_id) listing_id, url, actual_listing_price AS price, source
-                    FROM gem_radar_scored_listings s
-                    WHERE s.cpk = resolved_listing_cpks.cpk
-                    ORDER BY listing_id, scored_at DESC NULLS LAST, id DESC
+                    SELECT listing_id, url, price, source
+                    FROM latest_offer_details d
+                    WHERE d.cpk = resolved_listing_cpks.cpk
                 ) offers ON offers.listing_id = resolved_listing_cpks.listing_id
-                WHERE cpk = ANY(:cpks)
+                WHERE resolved_listing_cpks.cpk = ANY(:cpks)
                 GROUP BY cpk
             """), {"cpks": cpks})).all()
             listing_counts = {
@@ -3966,6 +3985,21 @@ async def get_best_sellers(
                 }
                 for row in count_rows
             }
+            # Compare each current marketplace offer with Amazon's captured
+            # price so the shared table can display the true lowest observed
+            # offer and identify the site that has it.
+            for product in products:
+                matched = listing_counts.get(product["cpk"])
+                amazon_price = product.get("price")
+                if not matched or amazon_price is None or amazon_price <= 0:
+                    continue
+                market_price = matched.get("cheapest_market_price")
+                if market_price is None or amazon_price <= market_price:
+                    matched.update({
+                        "cheapest_market_price": amazon_price,
+                        "cheapest_market_url": product.get("url"),
+                        "cheapest_market_source": "amazon",
+                    })
             market_rows = (await db.execute(text("""
                 SELECT cpk, min_price, median_price, max_price
                 FROM gem_radar_cpk_market_price
@@ -3984,6 +4018,10 @@ async def get_best_sellers(
                     "market_high": row.max_price,
                 })
         for product in products:
+            if product.get("cpk") is None:
+                product["cheapest_market_price"] = product.get("price")
+                product["cheapest_market_url"] = product.get("url")
+                product["cheapest_market_source"] = "amazon" if product.get("price") else None
             product.update(listing_counts.get(product["cpk"], {
                 "marketplace_listing_count": None if not product["cpk"] else 0,
                 "marketplace_sources": [],
