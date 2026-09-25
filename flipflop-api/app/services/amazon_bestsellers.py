@@ -21,7 +21,8 @@ from app.models.part import Part, PartCategory
 from app.models.amazon_bestseller_observation import AmazonBestsellerObservation
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.models.gem_radar_listing_cpk import GemRadarListingCpk
-from app.gem_radar.product_identifiers import categories_compatible
+from app.gem_radar.product_identifiers import categories_compatible, extract_asin as extract_marketplace_asin
+from app.gem_radar.cpk_pipeline import _valid_existing_cpk
 from app.services.case_product_key import case_product_key
 from app.services.browser_pool import managed_playwright
 from app.swarms.cases import RawCase, _make_pw_context, _upsert_case
@@ -44,7 +45,6 @@ COMPONENT_BESTSELLER_LISTS = {
     "cooler": ("Fans & Cooling", "https://www.amazon.co.uk/zgbs/computers/430499031/"),
     "case": ("Computer Cases", BESTSELLER_URL),
 }
-ASIN_RE = re.compile(r"/(?:dp|gp/product)/([A-Z0-9]{10})", re.I)
 
 _EXTRACT_JS = """(rankOffset = 0) => {
     const out = [];
@@ -160,10 +160,7 @@ async def _load_bestseller_page(page, url: str, rank_offset: int) -> tuple[list[
 
 
 def extract_asin(url: str | None) -> str | None:
-    if not url:
-        return None
-    match = ASIN_RE.search(url)
-    return match.group(1).upper() if match else None
+    return extract_marketplace_asin(url)
 
 
 def clean_sales_velocity(text: str | None) -> str | None:
@@ -387,7 +384,9 @@ def _best_scored_match(item: dict, rows: list[dict], category: str) -> dict | No
         if exact_rows:
             exact_cpk_rows = [
                 row for row in exact_rows
-                if row.get("cpk") and categories_compatible(category, row.get("category"))
+                if row.get("cpk")
+                and row.get("identity_valid", True)
+                and categories_compatible(category, row.get("category"))
             ]
             distinct_cpks = {row["cpk"] for row in exact_cpk_rows}
             return exact_cpk_rows[0] if len(distinct_cpks) == 1 else None
@@ -479,13 +478,35 @@ async def scrape_amazon_component_bestsellers(categories: list[str] | None = Non
                         GemRadarScoredListing.cpk,
                         GemRadarScoredListing.title,
                         GemRadarScoredListing.url,
+                        GemRadarScoredListing.scored_at,
                     ).where(GemRadarScoredListing.source == "amazon")
+                    .order_by(GemRadarScoredListing.scored_at.desc())
                 )).mappings().all()
-                amazon_by_asin: dict[str, list[dict]] = {}
+                latest_amazon_by_listing = {}
                 for row in amazon_rows:
+                    latest_amazon_by_listing.setdefault(row["listing_id"], row)
+                durable_cpk_by_listing = {}
+                if latest_amazon_by_listing:
+                    durable_rows = (await db.execute(
+                        select(
+                            GemRadarListingCpk.listing_id,
+                            GemRadarListingCpk.cpk,
+                            GemRadarListingCpk.cpk_data,
+                        ).where(GemRadarListingCpk.listing_id.in_(latest_amazon_by_listing))
+                    )).mappings().all()
+                    durable_cpk_by_listing = {row["listing_id"]: dict(row) for row in durable_rows}
+                amazon_by_asin: dict[str, list[dict]] = {}
+                for row in latest_amazon_by_listing.values():
                     amazon_row = dict(row)
                     asin = extract_asin(amazon_row.get("url")) or str(amazon_row.get("listing_id") or "").upper()
                     if asin:
+                        durable = durable_cpk_by_listing.get(amazon_row["listing_id"])
+                        identity_data = (durable or {}).get("cpk_data") or {}
+                        amazon_row["cpk"] = (durable or {}).get("cpk")
+                        amazon_row["category"] = identity_data.get("category") or amazon_row.get("category")
+                        amazon_row["identity_valid"] = bool(
+                            durable and _valid_existing_cpk(identity_data, amazon_row.get("title") or "")
+                        )
                         amazon_by_asin.setdefault(asin, []).append(amazon_row)
 
                 for category, (list_name, base_url) in selected_lists.items():

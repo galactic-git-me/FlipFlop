@@ -2,17 +2,20 @@
 from __future__ import annotations
 
 import re
+from urllib.parse import unquote
 
 
-_ASIN_RE = re.compile(r"/(?:dp|gp/product)/([A-Z0-9]{10})(?:[/?#]|$)", re.IGNORECASE)
-_ASIN_ID_RE = re.compile(r"\b([A-Z0-9]{10})\b", re.IGNORECASE)
+_ASIN_RE = re.compile(
+    r"/(?:dp|gp/product|gp/aw/d|exec/obidos/ASIN)/([A-Z0-9]{10})(?:[/?#]|$)",
+    re.IGNORECASE,
+)
 
 
 def extract_asin(value: str | None) -> str | None:
     """Extract an Amazon ASIN from a product URL or a standalone listing ID."""
     if not value:
         return None
-    match = _ASIN_RE.search(value)
+    match = _ASIN_RE.search(unquote(value))
     if match:
         return match.group(1).upper()
     # Amazon scrapes commonly use the ASIN itself as listing_id. Do not infer
