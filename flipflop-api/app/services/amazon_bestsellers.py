@@ -42,7 +42,7 @@ COMPONENT_BESTSELLER_LISTS = {
     "cooler": ("Fans & Cooling", "https://www.amazon.co.uk/zgbs/computers/430499031/"),
     "case": ("Computer Cases", BESTSELLER_URL),
 }
-ASIN_RE = re.compile(r"/dp/([A-Z0-9]{10})", re.I)
+ASIN_RE = re.compile(r"/(?:dp|gp/product)/([A-Z0-9]{10})", re.I)
 
 _EXTRACT_JS = """(rankOffset = 0) => {
     const out = [];
@@ -371,6 +371,25 @@ def _best_scored_match(item: dict, rows: list[dict], category: str) -> dict | No
         "cooling": {"cooler", "cooling"},
     }
     accepted_categories = category_aliases.get(category, {category})
+    asin = (item.get("asin") or "").upper()
+    if asin:
+        # ASIN is the strongest available identity for Amazon marketplace
+        # listings. If we have an exact listing, use it only when its CPK is
+        # present and its resolved category agrees. Do not fall through to a
+        # fuzzy title match when the exact row is unclassified or conflicted.
+        exact_rows = [
+            row for row in rows
+            if extract_asin(row.get("url")) == asin
+            or str(row.get("listing_id") or "").upper() == asin
+        ]
+        if exact_rows:
+            exact_cpk_rows = [
+                row for row in exact_rows
+                if row.get("cpk") and (row.get("category") or "").lower() in accepted_categories
+            ]
+            distinct_cpks = {row["cpk"] for row in exact_cpk_rows}
+            return exact_cpk_rows[0] if len(distinct_cpks) == 1 else None
+
     candidates = [
         row for row in rows
         if (row["category"] or "").lower() in accepted_categories
@@ -379,10 +398,8 @@ def _best_scored_match(item: dict, rows: list[dict], category: str) -> dict | No
     # expensive sequence ratio only for plausible same-product candidates.
     generic = {"the", "for", "with", "and", "computer", "gaming", "case", "pc", "black", "white", "rgb", "argb"}
     item_tokens = set(re.findall(r"[a-z0-9]{3,}", (item.get("title") or "").lower())) - generic
-    # Scored rows currently retain marketplace URLs, not Amazon ASINs, so an
-    # ASIN cannot be used as a reliable join key here.  Keep the title match
-    # conservative rather than claiming an ASIN match or attaching a rank to
-    # an ambiguous product variant.
+    # Without an exact ASIN listing, keep title matching conservative rather
+    # than attaching a rank to an ambiguous product variant.
     scored_by_cpk: dict[str, tuple[float, dict]] = {}
     for row in candidates:
         if not row.get("cpk"):
@@ -453,11 +470,29 @@ async def scrape_amazon_component_bestsellers(categories: list[str] | None = Non
                     ).where(GemRadarScoredListing.cpk.is_not(None))
                 )).mappings().all()
                 scored = [dict(row) for row in scored_rows]
+                amazon_rows = (await db.execute(
+                    select(
+                        GemRadarScoredListing.listing_id,
+                        GemRadarScoredListing.category,
+                        GemRadarScoredListing.cpk,
+                        GemRadarScoredListing.title,
+                        GemRadarScoredListing.url,
+                    ).where(GemRadarScoredListing.source == "amazon")
+                )).mappings().all()
+                amazon_by_asin: dict[str, list[dict]] = {}
+                for row in amazon_rows:
+                    amazon_row = dict(row)
+                    asin = extract_asin(amazon_row.get("url")) or str(amazon_row.get("listing_id") or "").upper()
+                    if asin:
+                        amazon_by_asin.setdefault(asin, []).append(amazon_row)
 
                 for category, (list_name, base_url) in selected_lists.items():
                     try:
                         match_categories = {"storage": {"ssd", "storage"}, "cooler": {"cooler", "cooling"}}.get(category, {category})
-                        scored_for_category = [row for row in scored if (row.get("category") or "").lower() in match_categories]
+                        scored_for_category = [
+                            row for row in scored
+                            if (row.get("category") or "").lower() in match_categories
+                        ]
                         items: list[dict] = []
                         page_urls: set[str] = set()
                         url: str | None = base_url
@@ -500,7 +535,8 @@ async def scrape_amazon_component_bestsellers(categories: list[str] | None = Non
                         for item in sorted(unique.values(), key=lambda value: value["rank"]):
                             # Preserve every Amazon rank in the admin list, even when
                             # Amazon places an unrelated item in this source category.
-                            match = (_best_scored_match(item, scored_for_category, category)
+                            exact_rows = amazon_by_asin.get(item["asin"], [])
+                            match = (_best_scored_match(item, [*scored_for_category, *exact_rows], category)
                                      if bestseller_item_matches_category(item["title"], category) else None)
                             db.add(AmazonBestsellerObservation(
                                 category=category,
