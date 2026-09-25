@@ -541,6 +541,11 @@ async def pipeline_status_endpoint(
         if sweep_signal and not sweep_signal.pending and sweep_signal.requested_at
         else None
     )
+    snapshot["pendingSweepRequestedAt"] = (
+        sweep_signal.requested_at.isoformat() + "Z"
+        if sweep_signal and sweep_signal.pending and sweep_signal.requested_at
+        else None
+    )
     return snapshot
 
 

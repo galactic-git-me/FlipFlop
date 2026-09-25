@@ -148,6 +148,8 @@ interface ScanProgress {
 
 interface PipelineStatusResponse {
   runId?: string | null;
+  completedSweepRequestedAt?: string | null;
+  pendingSweepRequestedAt?: string | null;
   activeScans: ScanProgress[];
   recentHistory: Array<{ query: string; total_listings: number; ingested_count: number; elapsed_s: number; failed: boolean }>;
   binPricesCount: number;
@@ -542,6 +544,9 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
   const lastLiveAt = useRef(0);
   const runScans = useRef(new Map<string, ScanProgress>());
   const displayedRunId = useRef<string | null>(null);
+  const runFirstSeenAt = useRef(0);
+  const observedPendingSweepAt = useRef<string | null>(null);
+  const runWasCompleted = useRef(false);
   const runMaxima = useRef({
     binPricesCount: 0,
     soldPricesCount: 0,
@@ -588,10 +593,30 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
           const queueIsRunning = Boolean(
             queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0),
           );
+          if (queueIsRunning && runWasCompleted.current) {
+            runScans.current.clear();
+            displayedRunId.current = null;
+            runFirstSeenAt.current = Date.now();
+            observedPendingSweepAt.current = null;
+            runWasCompleted.current = false;
+          }
+          if (activeScans.length > 0 && runFirstSeenAt.current === 0) {
+            runFirstSeenAt.current = Date.now();
+          }
+          if (data.pendingSweepRequestedAt) {
+            observedPendingSweepAt.current = data.pendingSweepRequestedAt;
+          }
+          const sweepFinished = Boolean(
+            data.completedSweepRequestedAt &&
+            (observedPendingSweepAt.current === data.completedSweepRequestedAt ||
+              Date.parse(data.completedSweepRequestedAt) >= runFirstSeenAt.current),
+          );
+          if (sweepFinished && !queueIsRunning) runWasCompleted.current = true;
           const completedRunIsIdle =
             activeScans.length > 0 &&
             !queueIsRunning &&
             (
+              sweepFinished ||
               activeScans.every((scan: ScanProgress) => scan.isComplete && scan.activeSubmissions === 0) ||
               (displayedScans.length > 0 && displayedScans.every((scan) => scan.isComplete && scan.activeSubmissions === 0))
             );
@@ -606,6 +631,8 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
               (!displayedRunId.current && runScans.current.size > 0)
             )) {
               runScans.current.clear();
+              runFirstSeenAt.current = Date.now();
+              observedPendingSweepAt.current = null;
               runMaxima.current = { binPricesCount: 0, soldPricesCount: 0, gemCount: 0, superGemCount: 0, avgGemScore: 0, avgSuperGemScore: 0 };
               lastLiveStatus.current = null;
             }
@@ -667,7 +694,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                 // current expression could leave every card spinning forever
                 // after its first incomplete poll, until the whole sweep was
                 // cleared by the backend.
-                isComplete: previous.isComplete || scan.isComplete,
+                isComplete: previous.isComplete || scan.isComplete || (sweepFinished && !queueIsRunning),
               });
             }
             const accumulatedScans = Array.from(runScans.current.values());
@@ -720,6 +747,9 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             // Do not keep folding late/stale snapshots into a run after all
             // cards are complete and the durable queue is idle. The previous
             // accumulated snapshot is the final result for this run.
+            if (sweepFinished) {
+              setDisplayedScans((prev) => prev.map((scan) => ({ ...scan, isComplete: true, activeSubmissions: 0 })));
+            }
             if (lastLiveStatus.current) setStatus(lastLiveStatus.current);
           } else if (queueIsRunning) {
             // The queue is the durable source of truth for whether this run
@@ -752,7 +782,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             }
           }
 
-          if (activeScans.length === 0 && displayedScans.length > 0 && !queueIsRunning) {
+          if (activeScans.length === 0 && displayedScans.length > 0 && !queueIsRunning && sweepFinished) {
             // Backend's activeScans went empty -- it already called reset_run()
             // and archived this run into recentHistory (see pipeline_status.py).
             // Keep the cards visible until the next run starts, but flip them to
@@ -760,18 +790,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             // a card's isComplete/activeSubmissions/percentages stay stuck at
             // whatever they were on the LAST poll before the backend cleared its
             // state, which reads as a stalled/hung run even though it finished.
-            setDisplayedScans((prev) =>
-              prev.some((scan) => !scan.isComplete || scan.activeSubmissions !== 0)
-            ? prev.map((scan) => {
-                const scoresSettled =
-                  (scan.eligibleScoreCount ?? 0) + (scan.ineligibleScoreCount ?? 0) >=
-                  (scan.marketPricedCount ?? 0);
-                return scoresSettled
-                  ? { ...scan, isComplete: true, activeSubmissions: 0 }
-                  : { ...scan, activeSubmissions: 0 };
-              })
-                : prev
-            );
+            setDisplayedScans((prev) => prev.map((scan) => ({ ...scan, isComplete: true, activeSubmissions: 0 })));
             setClientElapsed(0);
           }
         }
