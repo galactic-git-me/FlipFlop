@@ -57,6 +57,7 @@ async def _rows(db: AsyncSession):
             ~Listing.title.ilike("%for parts%"), ~Listing.title.ilike("%parts only%"),
             ~Listing.title.ilike("%not working%"), ~Listing.title.ilike("%spares or repair%"),
             ~Listing.external_id.ilike("%206450130546%"),
+            CatalogueVariant.status != "hidden",
         ).order_by(CatalogueVariant.auto_published_at.desc())
     )).all()
 
@@ -79,7 +80,7 @@ def _refresh_availability(variant: CatalogueVariant, listing: Listing) -> None:
 async def get_custom_catalogue(db: AsyncSession = Depends(get_db)):
     items = []
     seen_listings: set[int] = set()
-    for variant, listing, slot in await _rows(db):
+    for variant, listing, slot in sorted(await _rows(db), key=lambda row: (not row[0].custom_for_builds, -row[0].id)):
         if listing.id in seen_listings:
             continue
         seen_listings.add(listing.id)
@@ -89,10 +90,10 @@ async def get_custom_catalogue(db: AsyncSession = Depends(get_db)):
                 variant.custom_cost_snapshot = listing.price
                 if variant.custom_display_price is None:
                     variant.custom_display_price = variant.display_price
-            elif variant.custom_display_price is not None and variant.custom_proposed_price is None:
+            elif variant.custom_display_price is not None:
                 delta = listing.price - variant.custom_cost_snapshot
-                if abs(delta) >= 0.01:
-                    variant.custom_proposed_price = round(max(0, variant.custom_display_price + delta), 2)
+                proposed = round(max(0, variant.custom_display_price + delta), 2)
+                variant.custom_proposed_price = proposed if abs(proposed - variant.custom_display_price) >= 0.01 else None
         items.append(_item(variant, listing, slot))
     settings = await _settings(db)
     return {"items": items, "is_live": settings.is_live}
@@ -151,9 +152,13 @@ async def public_custom_catalogue(db: AsyncSession = Depends(get_db)):
     if not settings or not settings.is_live:
         return {"is_live": False, "components": []}
     components = []
-    for variant, listing, slot in await _rows(db):
+    seen_listings: set[int] = set()
+    for variant, listing, slot in sorted(await _rows(db), key=lambda row: (not row[0].custom_for_builds, -row[0].id)):
         if not variant.custom_for_builds:
             continue
+        if listing.id in seen_listings:
+            continue
+        seen_listings.add(listing.id)
         _refresh_availability(variant, listing)
         if variant.custom_sale_status != "on_sale":
             continue

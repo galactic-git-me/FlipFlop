@@ -192,6 +192,7 @@ async def list_assets(
     subject_type: str | None = None,
     status: str | None = None,
     curated_only: bool = False,
+    custom_only: bool = False,
     db: AsyncSession = Depends(get_db),
 ):
     q = select(Component3DAsset).order_by(
@@ -215,6 +216,12 @@ async def list_assets(
             (Component3DAsset.subject_type == AssetSubjectType.VARIANT)
             & (Component3DAsset.subject_id == CatalogueVariant.id),
         ).where(CatalogueVariant.curated_for_builds.is_(True))
+    if custom_only:
+        q = q.join(
+            CatalogueVariant,
+            (Component3DAsset.subject_type == AssetSubjectType.VARIANT)
+            & (Component3DAsset.subject_id == CatalogueVariant.id),
+        ).where(CatalogueVariant.custom_for_builds.is_(True))
     rows = (await db.execute(q)).scalars().all()
     return await _serialize_many(db, rows)
 
@@ -223,6 +230,7 @@ class ReviewBatchCreate(BaseModel):
     size: int = Field(default=10, ge=1, le=10)
     asset_ids: list[int] | None = Field(default=None, min_length=1, max_length=10)
     curated_only: bool = False
+    custom_only: bool = False
 
 
 async def _batch_payload(batch_id: str, assets: list[Component3DAsset], db: AsyncSession) -> dict:
@@ -266,6 +274,12 @@ async def create_review_batch(
             (Component3DAsset.subject_type == AssetSubjectType.VARIANT)
             & (Component3DAsset.subject_id == CatalogueVariant.id),
         ).where(CatalogueVariant.curated_for_builds.is_(True))
+    if body.custom_only:
+        query = query.join(
+            CatalogueVariant,
+            (Component3DAsset.subject_type == AssetSubjectType.VARIANT)
+            & (Component3DAsset.subject_id == CatalogueVariant.id),
+        ).where(CatalogueVariant.custom_for_builds.is_(True))
     candidates = (
         await db.execute(
             query.order_by(Component3DAsset.created_at, Component3DAsset.id)

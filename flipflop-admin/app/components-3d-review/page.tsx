@@ -478,6 +478,7 @@ export default function Components3DReviewPage() {
   const [actionBusy, setActionBusy] = useState(false);
   const [rightsConfirmed, setRightsConfirmed] = useState(false);
   const [curatedOnly, setCuratedOnly] = useState(false);
+  const [customOnly, setCustomOnly] = useState(false);
   const [scaleConfirmed, setScaleConfirmed] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -492,9 +493,11 @@ export default function Components3DReviewPage() {
       try {
         const batchId = new URLSearchParams(window.location.search).get("batch");
         const isCuratedOnly = new URLSearchParams(window.location.search).get("curatedOnly") === "1";
+        const isCustomOnly = new URLSearchParams(window.location.search).get("customOnly") === "1";
         setCuratedOnly(isCuratedOnly);
+        setCustomOnly(isCustomOnly);
         const [response, casesResponse] = await Promise.all([
-          fetch(batchId ? `/api/assets-3d/review-batches/${batchId}` : `/api/assets-3d${isCuratedOnly ? "?subject_type=variant&curated_only=true" : ""}`),
+          fetch(batchId ? `/api/assets-3d/review-batches/${batchId}` : `/api/assets-3d${isCuratedOnly ? "?subject_type=variant&curated_only=true" : isCustomOnly ? "?subject_type=variant&custom_only=true" : ""}`),
           fetch("/api/cases/priority-for-3d?limit=100"),
         ]);
         const data = await readJsonResponse<Component3DAsset[] | { detail?: string; error?: string; data?: Component3DAsset[]; assets?: Component3DAsset[] }>(response);
@@ -588,7 +591,7 @@ export default function Components3DReviewPage() {
       const response = await fetch("/api/assets-3d/review-batches", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ size: 10, curated_only: curatedOnly }),
+        body: JSON.stringify({ size: 10, curated_only: curatedOnly, custom_only: customOnly }),
       });
       const data = await readJsonResponse<ReviewBatch & { detail?: string; error?: string }>(response);
       if (!response.ok) throw new Error(data.detail || data.error || "Could not create review batch");
@@ -731,7 +734,7 @@ export default function Components3DReviewPage() {
               disabled={actionBusy}
               className="cursor-pointer rounded-md border border-sky-500 bg-sky-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-sky-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {curatedOnly ? "Start curated batch" : "Start next batch of 10"}
+              {curatedOnly ? "Start curated batch" : customOnly ? "Start custom batch" : "Start next batch of 10"}
             </button>
           )}
         </div>
