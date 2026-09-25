@@ -2326,24 +2326,38 @@ async def get_market_snapshot(db: AsyncSession = Depends(get_db), _: None = Depe
                     FROM gem_radar_listing_observations
                     GROUP BY listing_id
                 ),
-                active_ids AS (
+                candidate_ids AS (
+                    -- The lifecycle table is the durable current-state index.
+                    -- Do not require a retained observation row for an active
+                    -- listing: observations are pruned after 30 days, while an
+                    -- active lifecycle row remains authoritative until the
+                    -- listing is sold or missed in consecutive scan snapshots.
+                    SELECT lifecycle.listing_id
+                    FROM gem_radar_listing_lifecycle lifecycle
+                    WHERE lifecycle.status = 'active'
+
+                    UNION
+
+                    -- Include listings not yet reconciled, and fresh sightings
+                    -- that have reappeared since their last archived decision.
                     SELECT s.listing_id
                     FROM stored_ids s
                     LEFT JOIN gem_radar_listing_lifecycle lifecycle
                       ON lifecycle.listing_id = s.listing_id
+                    WHERE lifecycle.status IS NULL
+                       OR s.last_seen_at > lifecycle.archived_at
+                ),
+                active_ids AS (
+                    SELECT candidates.listing_id
+                    FROM candidate_ids candidates
                     WHERE NOT EXISTS (
                         SELECT 1 FROM listing_archive a
-                        WHERE a.external_id = s.listing_id
+                        WHERE a.external_id = candidates.listing_id
                     )
                     AND NOT EXISTS (
                         SELECT 1 FROM listings l
-                        WHERE l.external_id = s.listing_id
+                        WHERE l.external_id = candidates.listing_id
                           AND l.status <> 'active'
-                    )
-                    AND (
-                        lifecycle.status IS NULL
-                        OR lifecycle.status = 'active'
-                        OR s.last_seen_at > lifecycle.archived_at
                     )
                 ),
                 latest_scored AS (
