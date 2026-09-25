@@ -3,7 +3,7 @@ from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from sqlalchemy import or_, select
+from sqlalchemy import and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -50,15 +50,18 @@ async def _rows(db: AsyncSession):
         select(CatalogueVariant, Listing, PlaybookSlot)
         .join(Listing, CatalogueVariant.listing_id == Listing.id)
         .join(PlaybookSlot, CatalogueVariant.slot_id == PlaybookSlot.id)
-        .where(
-            Listing.classification.in_((Classification.gem, Classification.amazing_gem)),
-            Listing.listing_type == "buy_it_now",
-            or_(Listing.condition.is_(None), Listing.condition.notin_(("for_parts", "parts_only", "untested"))),
-            ~Listing.title.ilike("%for parts%"), ~Listing.title.ilike("%parts only%"),
-            ~Listing.title.ilike("%not working%"), ~Listing.title.ilike("%spares or repair%"),
-            ~Listing.external_id.ilike("%206450130546%"),
-            CatalogueVariant.status != "hidden",
-        ).order_by(CatalogueVariant.auto_published_at.desc())
+        .where(or_(
+            CatalogueVariant.custom_for_builds.is_(True),
+            and_(
+                Listing.classification.in_((Classification.gem, Classification.amazing_gem)),
+                Listing.listing_type == "buy_it_now",
+                or_(Listing.condition.is_(None), Listing.condition.notin_(("for_parts", "parts_only", "untested"))),
+                ~Listing.title.ilike("%for parts%"), ~Listing.title.ilike("%parts only%"),
+                ~Listing.title.ilike("%not working%"), ~Listing.title.ilike("%spares or repair%"),
+                ~Listing.external_id.ilike("%206450130546%"),
+                CatalogueVariant.status != "hidden",
+            ),
+        )).order_by(CatalogueVariant.auto_published_at.desc())
     )).all()
 
 
@@ -72,7 +75,14 @@ async def _settings(db: AsyncSession) -> CustomBuildSettings:
 
 
 def _refresh_availability(variant: CatalogueVariant, listing: Listing) -> None:
-    available = variant.status == "active" and listing.status.value == "active"
+    title = (listing.title or "").lower()
+    clean_listing = (
+        listing.listing_type == "buy_it_now"
+        and listing.classification in (Classification.gem, Classification.amazing_gem)
+        and listing.condition not in ("for_parts", "parts_only", "untested")
+        and not any(term in title for term in ("for parts", "parts only", "not working", "spares or repair"))
+    )
+    available = variant.status == "active" and listing.status.value == "active" and clean_listing
     variant.custom_sale_status = "on_sale" if available else "out_of_stock"
 
 
@@ -128,19 +138,34 @@ async def approve_component_price(variant_id: int, db: AsyncSession = Depends(ge
     return {"id": variant.id, "price": variant.custom_display_price, "custom_cost_snapshot": variant.custom_cost_snapshot}
 
 
+@router.post("/variants/{variant_id}/dismiss-price")
+async def dismiss_component_price(variant_id: int, db: AsyncSession = Depends(get_db)):
+    variant = await db.get(CatalogueVariant, variant_id)
+    if not variant or variant.custom_proposed_price is None:
+        raise HTTPException(status_code=409, detail="No proposed custom-build price is available")
+    listing = await db.get(Listing, variant.listing_id)
+    variant.custom_proposed_price = None
+    variant.custom_cost_snapshot = listing.price if listing else variant.custom_cost_snapshot
+    return {"id": variant.id, "dismissed": True, "custom_cost_snapshot": variant.custom_cost_snapshot}
+
+
 @router.post("/go-live")
 async def set_custom_catalogue_live(body: LiveBody, db: AsyncSession = Depends(get_db)):
     settings = await _settings(db)
     if body.is_live:
         available_by_slot: set[str] = set()
+        has_pending_prices = False
         for variant, listing, slot in await _rows(db):
             if variant.custom_for_builds:
                 _refresh_availability(variant, listing)
+                has_pending_prices = has_pending_prices or variant.custom_proposed_price is not None
                 if variant.custom_sale_status == "on_sale":
                     available_by_slot.add(slot.slot_type)
         missing = sorted(REQUIRED_SLOTS - available_by_slot)
         if missing:
             raise HTTPException(status_code=409, detail=f"Add an available custom component for: {', '.join(missing)}")
+        if has_pending_prices:
+            raise HTTPException(status_code=409, detail="Approve or dismiss the proposed component price changes before publishing")
     settings.is_live = body.is_live
     settings.updated_at = datetime.utcnow()
     return {"is_live": settings.is_live}

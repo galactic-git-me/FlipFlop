@@ -195,6 +195,8 @@ async def list_assets(
     custom_only: bool = False,
     db: AsyncSession = Depends(get_db),
 ):
+    if curated_only and custom_only:
+        raise HTTPException(status_code=422, detail="Choose either curated_only or custom_only")
     q = select(Component3DAsset).order_by(
         Component3DAsset.subject_type,
         Component3DAsset.subject_id,
@@ -252,6 +254,8 @@ async def create_review_batch(
     body: ReviewBatchCreate,
     db: AsyncSession = Depends(get_db),
 ):
+    if body.curated_only and body.custom_only:
+        raise HTTPException(status_code=422, detail="Choose either curated_only or custom_only")
     """Claim the next unreviewed candidates, with a hard maximum of ten."""
     query = select(Component3DAsset).where(
         Component3DAsset.review_batch_id.is_(None),
