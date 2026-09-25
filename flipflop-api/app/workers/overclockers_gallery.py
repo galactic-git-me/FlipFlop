@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from urllib.parse import urlparse
 
 import structlog
-from sqlalchemy import or_, select
+from sqlalchemy import select
 
 from app.database import AsyncSessionLocal
 from app.models.case import Case
@@ -15,7 +15,6 @@ from app.services.case_product_key import case_product_key
 from app.services.proxy import playwright_proxy_config
 
 log = structlog.get_logger(__name__)
-_BATCH_SIZE = 8
 _RETRY_AFTER = timedelta(minutes=30)
 
 
@@ -28,10 +27,11 @@ async def _collect_gallery(context, product_url: str, retailer: str) -> list[str
             await page.wait_for_selector("img", timeout=12000)
         except Exception:
             pass
-        # Let lazy-loaded gallery thumbnails populate before reading the page.
-        await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-        await asyncio.sleep(1)
-        return await page.evaluate("""() => {
+        # Scroll in increments so lazy-loaded gallery images are all requested.
+        for fraction in (0.35, 0.7, 1):
+            await page.evaluate("fraction => window.scrollTo(0, document.body.scrollHeight * fraction)", fraction)
+            await asyncio.sleep(0.4)
+        return await page.evaluate("""(retailer) => {
           const roots = [...document.querySelectorAll(
             '[class*=gallery], [id*=gallery], [data-gallery], [class*=product-image], [class*=product__media], #altImages, #main-image-container'
           )];
@@ -52,45 +52,40 @@ async def _collect_gallery(context, product_url: str, retailer: str) -> list[str
             if (!/[.](jpe?g|png|webp)(?:$|[?#])/i.test(url.href)) continue;
             values.push(url.href);
           }
-          return [...new Set(values)].slice(0, 80);
-        }""")
+          return [...new Set(values)];
+        }""", retailer)
     finally:
         await page.close()
 
 
 async def run_overclockers_gallery_sourcing() -> dict:
-    """Fetch a small batch of unprocessed product galleries on each scheduler tick."""
+    """Fetch galleries for every listed Overclockers case and refresh old captures."""
     now = datetime.utcnow()
     async with AsyncSessionLocal() as db:
         cases = (await db.execute(
             select(Case)
-            .where(or_(Case.source_site.ilike("%overclockers%"), Case.source_site == "Amazon"), Case.source_url.is_not(None))
+            .where(Case.source_site.ilike("%overclockers%"), Case.source_url.is_not(None))
             .order_by(Case.created_at.desc())
-            .limit(800)
         )).scalars().all()
         todo = []
         todo_keys: set[str] = set()
         for case in cases:
             product_stage = (((case.sourcing_3d_evidence or {}).get("stages") or {}).get("product_images") or {})
-            if product_stage.get("overclockers_gallery"):
-                continue
             attempted = product_stage.get("overclockers_gallery_attempted_at")
             try:
-                if attempted and datetime.fromisoformat(attempted) > now - _RETRY_AFTER:
+                if product_stage.get("overclockers_gallery") and attempted and datetime.fromisoformat(attempted) > now - _RETRY_AFTER:
                     continue
             except (TypeError, ValueError):
                 pass
-            if urlparse(case.source_url).hostname not in {"overclockers.co.uk", "www.overclockers.co.uk", "amazon.co.uk", "www.amazon.co.uk"}:
+            if urlparse(case.source_url).hostname not in {"overclockers.co.uk", "www.overclockers.co.uk"}:
                 continue
             key = case_product_key(case.name, case.brand, case.model)
             if key in todo_keys:
                 continue
             offers = [offer for offer in cases if case_product_key(offer.name, offer.brand, offer.model) == key]
-            offers.sort(key=lambda offer: 0 if "overclockers" in offer.source_site.lower() else 1)
-            todo.append((case.id, [(offer.source_url, "amazon" if offer.source_site.lower() == "amazon" else "overclockers") for offer in offers if offer.source_url]))
+            offers.sort(key=lambda offer: 0 if offer.id == case.id else 1)
+            todo.append((case.id, [(offer.source_url, "overclockers") for offer in offers if offer.source_url]))
             todo_keys.add(key)
-            if len(todo) >= _BATCH_SIZE:
-                break
 
     if not todo:
         return {"ok": True, "queued": 0, "saved": 0}
@@ -108,11 +103,9 @@ async def run_overclockers_gallery_sourcing() -> dict:
                         if not case:
                             continue
                         try:
-                            images: list[str] = []
-                            gallery_source = None
+                            all_images: list[str] = []
+                            gallery_sources: list[str] = []
                             for product_url, retailer in product_pages:
-                                if retailer == "amazon" and urlparse(product_url).hostname not in {"amazon.co.uk", "www.amazon.co.uk"}:
-                                    continue
                                 if retailer == "overclockers" and urlparse(product_url).hostname not in {"overclockers.co.uk", "www.overclockers.co.uk"}:
                                     continue
                                 try:
@@ -121,15 +114,17 @@ async def run_overclockers_gallery_sourcing() -> dict:
                                     log.info("overclockers_gallery.offer_unavailable", case_id=case_id, retailer=retailer, error=str(exc))
                                     continue
                                 if images:
-                                    gallery_source = retailer
-                                    break
+                                    gallery_sources.append(product_url)
+                                    for image in images:
+                                        if image not in all_images:
+                                            all_images.append(image)
                             evidence = dict(case.sourcing_3d_evidence or {"schema_version": 1, "stages": {}})
                             stages = dict(evidence.get("stages") or {})
                             product_stage = dict(stages.get("product_images") or {})
                             product_stage["overclockers_gallery_attempted_at"] = datetime.utcnow().isoformat()
-                            if images:
-                                product_stage["overclockers_gallery"] = images
-                                product_stage["gallery_source"] = gallery_source
+                            if all_images:
+                                product_stage["overclockers_gallery"] = all_images
+                                product_stage["gallery_sources"] = gallery_sources
                                 product_stage["overclockers_gallery_status"] = "found"
                                 saved += 1
                             else:
