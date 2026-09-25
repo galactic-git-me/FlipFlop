@@ -32,6 +32,11 @@ class SettingsUpdate(BaseModel):
     listing_type_default: str | None = None
     relist_interval_days: int | None = None
     relist_enabled_default: bool | None = None
+    speedy_delivery_price_gbp: float | None = None
+    standard_curated_custom_days: int | None = None
+    speedy_curated_custom_days: int | None = None
+    standard_prebuilt_days: int | None = None
+    speedy_prebuilt_cutoff_hour: int | None = None
     gem_radar_scan_interval_minutes: int | None = None
     gem_radar_consecutive_misses_before_inactive: int | None = None
     gem_radar_scrape_artifacts_hours: int | None = None
@@ -152,6 +157,11 @@ def _to_dict(s: AppSettings) -> dict:
         "listing_type_default": s.listing_type_default,
         "relist_interval_days": s.relist_interval_days or 7,
         "relist_enabled_default": s.relist_enabled_default,
+        "speedy_delivery_price_gbp": s.speedy_delivery_price_gbp,
+        "standard_curated_custom_days": s.standard_curated_custom_days,
+        "speedy_curated_custom_days": s.speedy_curated_custom_days,
+        "standard_prebuilt_days": s.standard_prebuilt_days,
+        "speedy_prebuilt_cutoff_hour": s.speedy_prebuilt_cutoff_hour,
         "gem_radar_scan_interval_minutes": s.gem_radar_scan_interval_minutes,
         "gem_radar_consecutive_misses_before_inactive": s.gem_radar_consecutive_misses_before_inactive,
         "gem_radar_scrape_artifacts_hours": s.gem_radar_scrape_artifacts_hours,

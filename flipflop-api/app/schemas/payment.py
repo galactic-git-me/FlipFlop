@@ -17,6 +17,8 @@ class PlaybookBuildConfig(BaseModel):
     slot_selections: dict[int, int] = Field(default_factory=dict)
     case_id: Optional[int] = None
     chosen_week: Optional[str] = None
+    validation_mode: Optional[str] = None
+    curated_build_id: Optional[int] = None
 
     class Config:
         json_schema_extra = {
@@ -41,6 +43,7 @@ class CreatePaymentIntentRequest(BaseModel):
     budget: Optional[float] = Field(None, gt=0, description="Total quote price in GBP")
     customer_id: int = Field(..., gt=0, description="Customer ID")
     build_config: Optional[PlaybookBuildConfig] = None
+    speedy_delivery: bool = False
 
     @model_validator(mode="after")
     def _require_budget_or_build_config(self) -> "CreatePaymentIntentRequest":

@@ -16,6 +16,7 @@ class ProductCheckoutIntentResponse(BaseModel):
 
 class ProductCheckoutIntentRequest(BaseModel):
     discount_code: Optional[str] = None
+    speedy_delivery: bool = False
 
 
 class ProductCheckoutConfirmRequest(BaseModel):

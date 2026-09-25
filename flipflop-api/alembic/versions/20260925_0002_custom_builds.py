@@ -5,8 +5,8 @@ from alembic import op
 import sqlalchemy as sa
 
 
-revision: str = "20260925_0002"
-down_revision: Union[str, None] = "20260925_0001"
+revision: str = "cb_20260925_02_custom"
+down_revision: Union[str, None] = "cb_20260925_01_catalogue"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

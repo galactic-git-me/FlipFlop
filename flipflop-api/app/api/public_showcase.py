@@ -9,6 +9,7 @@ pedestal) until a real twin exists — the frontend never fabricates a 3D
 model for a build that doesn't have one.
 """
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
@@ -31,8 +32,22 @@ from app.services.email_service import send_order_confirmation_email
 from app.services.alerts import emit_alert
 from app.services.cross_channel_guard import withdraw_ebay_for_sold_build
 from app.config import get_settings
+from app.services.storefront_delivery import delivery_choice, checkout_metadata, load_delivery_settings, add_working_days
+from app.models.app_settings import AppSettings
 
 router = APIRouter(prefix="/public", tags=["public-showcase"])
+
+
+@router.get("/delivery-policy")
+async def get_delivery_policy(db: AsyncSession = Depends(get_db)):
+    settings = await load_delivery_settings(db)
+    return {
+        "speedy_delivery_price_gbp": settings.speedy_delivery_price_gbp,
+        "standard_curated_custom_days": settings.standard_curated_custom_days,
+        "speedy_curated_custom_days": settings.speedy_curated_custom_days,
+        "standard_prebuilt_days": settings.standard_prebuilt_days,
+        "speedy_prebuilt_cutoff_hour": settings.speedy_prebuilt_cutoff_hour,
+    }
 
 # How long a reservation holds a product out of sale while the buyer is
 # mid-checkout — matches Product.reserved_until's documented purpose (Ch.9.6).
@@ -191,7 +206,8 @@ async def create_checkout_intent(
     address/name is needed and the account already holds one."""
     product = await _load_buyable_product(product_id, db)
     discount = 50.0 if body and (body.discount_code or "").strip().upper() == "XXXXXX" else 0.0
-    payable_price = max(0.0, float(product.price) - discount)
+    choice = await delivery_choice(db, "prebuilt", bool(body and body.speedy_delivery))
+    payable_price = max(0.0, float(product.price) - discount) + choice["fee_gbp"]
 
     product.status = ProductStatus.RESERVED
     product.reserved_until = datetime.utcnow() + timedelta(minutes=_RESERVATION_MINUTES)
@@ -204,6 +220,7 @@ async def create_checkout_intent(
             customer_id=customer.id,
             budget=payable_price,
             quote_data={"purchase_type": "product", "product_id": product.id, "discount_code": "XXXXXX" if discount else None},
+            metadata={"purchase_type": "product", "product_id": product.id, **checkout_metadata(choice)},
         )
     except ValueError as e:
         raise HTTPException(400, str(e))
@@ -215,7 +232,7 @@ async def create_checkout_intent(
     import stripe
     stripe.PaymentIntent.modify(
         intent_data["intent_id"],
-        metadata={"purchase_type": "product", "product_id": str(product.id), "customer_id": str(customer.id)},
+        metadata={"purchase_type": "product", "product_id": str(product.id), "customer_id": str(customer.id), **checkout_metadata(choice)},
     )
 
     return ProductCheckoutIntentResponse(**intent_data)
@@ -285,6 +302,15 @@ async def confirm_checkout(
         status=OrderStatus.READY_TO_PACKAGE,  # already built — nothing left to source/assemble
         specs={"product_id": product.id, "build_title": product.title},
         customer_price=payment_data["amount"],
+        fast_track_selected=payment_data["metadata"].get("fast_track_selected") == "true",
+        fast_track_fee=float(payment_data["metadata"].get("delivery_fee_gbp", 0)),
+        promised_delivery_date=(
+            add_working_days(
+                datetime.now(ZoneInfo("Europe/London")).replace(tzinfo=None),
+                int(payment_data["metadata"].get("delivery_days") or 1),
+            )
+            if payment_data["metadata"].get("delivery_days") else None
+        ),
         component_costs=0.0,
         overhead_amount=0.0,
         stripe_payment_intent_id=body.intent_id,

@@ -41,6 +41,13 @@ class AppSettings(Base):
     relist_interval_days: Mapped[int] = mapped_column(Integer, default=7)
     relist_enabled_default: Mapped[bool] = mapped_column(Boolean, default=True)
 
+    # Storefront delivery option promises, shown and priced at checkout.
+    speedy_delivery_price_gbp: Mapped[float] = mapped_column(Float, default=49.0)
+    standard_curated_custom_days: Mapped[int] = mapped_column(Integer, default=5)
+    speedy_curated_custom_days: Mapped[int] = mapped_column(Integer, default=3)
+    standard_prebuilt_days: Mapped[int] = mapped_column(Integer, default=3)
+    speedy_prebuilt_cutoff_hour: Mapped[int] = mapped_column(Integer, default=14)
+
     # One cadence shared by all indirect/manual cross-listing channels.
     indirect_channel_recreate_interval_days: Mapped[int] = mapped_column(Integer, default=7)
 

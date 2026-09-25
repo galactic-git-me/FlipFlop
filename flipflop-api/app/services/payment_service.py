@@ -32,6 +32,7 @@ class PaymentService:
         customer_id: int,
         budget: float,
         quote_data: dict,
+        metadata: dict | None = None,
     ) -> dict:
         """
         Create a Stripe payment intent for a quote.
@@ -61,6 +62,7 @@ class PaymentService:
                 metadata={
                     "customer_id": str(customer_id),
                     "budget": str(budget),
+                    **{str(k): str(v) for k, v in (metadata or {}).items()},
                 },
                 description=f"Custom PC Build Quote - £{budget}",
             )
@@ -129,6 +131,7 @@ class PaymentService:
                 "status": "completed",
                 "created_at": datetime.utcfromtimestamp(intent.created),
                 "charge_id": intent.latest_charge,
+                "metadata": dict(intent.metadata or {}),
             }
 
         except stripe.error.StripeError as e:
