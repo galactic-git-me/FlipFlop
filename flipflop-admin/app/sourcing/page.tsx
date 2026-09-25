@@ -616,7 +616,6 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             activeScans.length > 0 &&
             !queueIsRunning &&
             (
-              sweepFinished ||
               activeScans.every((scan: ScanProgress) => scan.isComplete && scan.activeSubmissions === 0) ||
               (displayedScans.length > 0 && displayedScans.every((scan) => scan.isComplete && scan.activeSubmissions === 0))
             );
@@ -694,7 +693,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                 // current expression could leave every card spinning forever
                 // after its first incomplete poll, until the whole sweep was
                 // cleared by the backend.
-                isComplete: previous.isComplete || scan.isComplete || (sweepFinished && !queueIsRunning),
+                isComplete: previous.isComplete || scan.isComplete,
               });
             }
             const accumulatedScans = Array.from(runScans.current.values());
@@ -747,9 +746,6 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             // Do not keep folding late/stale snapshots into a run after all
             // cards are complete and the durable queue is idle. The previous
             // accumulated snapshot is the final result for this run.
-            if (sweepFinished) {
-              setDisplayedScans((prev) => prev.map((scan) => ({ ...scan, isComplete: true, activeSubmissions: 0 })));
-            }
             if (lastLiveStatus.current) setStatus(lastLiveStatus.current);
           } else if (queueIsRunning) {
             // The queue is the durable source of truth for whether this run
@@ -783,14 +779,10 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
           }
 
           if (activeScans.length === 0 && displayedScans.length > 0 && !queueIsRunning && sweepFinished) {
-            // Backend's activeScans went empty -- it already called reset_run()
-            // and archived this run into recentHistory (see pipeline_status.py).
-            // Keep the cards visible until the next run starts, but flip them to
-            // "complete" instead of leaving them frozen mid-progress: without this,
-            // a card's isComplete/activeSubmissions/percentages stay stuck at
-            // whatever they were on the LAST poll before the backend cleared its
-            // state, which reads as a stalled/hung run even though it finished.
-            setDisplayedScans((prev) => prev.map((scan) => ({ ...scan, isComplete: true, activeSubmissions: 0 })));
+            // The sweep boundary only says the extension finished submitting
+            // listings. Keep each card's pipeline completion state: pending
+            // CPK, market-price, or score work must remain visible across the
+            // backend's in-memory reset instead of being turned green here.
             setClientElapsed(0);
           }
         }
@@ -970,9 +962,12 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                 scan.cpkFailedCount ?? 0,
                 Math.max(searchTermTotal - scan.cpkAssignedCount, 0),
               );
-            // A CPK-assigned listing without a settled price is a terminal
-            // M Prices failure for this scan; a later scan may settle its CPK.
-            const failedMarketPrices = Math.max(scan.cpkAssignedCount - scan.marketPricedCount, 0);
+            // A CPK-assigned listing without a settled price is still pending;
+            // it can settle on a later sighting. Leave it as an empty gauge
+            // segment instead of painting it as a terminal failure.
+            const failedMarketPrices = isComplete
+              ? Math.max(scan.cpkAssignedCount - scan.marketPricedCount, 0)
+              : 0;
             // Keep upstream failures as the outlined/skipped segment at the
             // next stage; they were never eligible for that stage. The
             // current stage's own terminal failures use the patterned

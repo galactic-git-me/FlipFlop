@@ -629,21 +629,11 @@ async def snapshot(db, environment: str = "DEV") -> dict:
             1,
         )
 
-        # Complete only once:
-        # 1. No submissions still in flight
-        # 2. At least one listing was encountered
-        # 3. CPK assignment has caught up with ingested count (not total, which
-        #    includes cross-run dupes that already have CPKs from prior runs).
-        #    cpk_failed_count covers listings that were attempted and gave up
-        #    (Ollama error, low-confidence extraction) -- without adding those
-        #    in, a single failed extraction made cpk_assigned_count
-        #    permanently unreachable and the card spun forever.
-        # Classification and market-price enrichment are Phase 2 outcomes,
-        # not prerequisites for declaring Phase 1 finished. Some legitimate
-        # terminal outcomes (insufficient comparable evidence, identity
-        # pending, or an intentionally ineligible listing) never acquire a
-        # settled price. Requiring every listing to appear in one of those
-        # two tables left otherwise-finished cards spinning at 99.x%.
+        # A queue drain only means ingestion work stopped. Keep the card open
+        # while any listing still has a blank segment in a downstream gauge:
+        # CPK failures are retried when the listing is seen again, market
+        # prices can settle on a later sighting, and score outcomes are
+        # produced by Phase 2. Missing work must not be treated as complete.
         is_complete = is_scan_complete(
             active_submissions=s.active_submissions,
             queued_submissions=live_queue_by_search.get(s.search_id, 0),
@@ -653,6 +643,11 @@ async def snapshot(db, environment: str = "DEV") -> dict:
             market_priced_count=priced_count,
             eligible_score_count=eligible_score_count,
             ineligible_score_count=ineligible_score_count,
+        ) and (
+            s.ingested_count >= actual_total_listings
+            and s.cpk_assigned_count >= s.ingested_count
+            and priced_count >= s.cpk_assigned_count
+            and eligible_score_count + ineligible_score_count >= priced_count
         )
 
         active_scans.append(
