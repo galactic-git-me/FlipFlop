@@ -3886,12 +3886,25 @@ async def get_best_sellers(
         """), {"category": category, "latest": latest_by_category[category]})).all()
         products = [
             {"asin": row.asin, "title": row.title, "url": row.url, "image_url": row.image_url,
-             "category": category,
+             "category": category, "list_name": current["name"],
              "rank": row.rank, "cpk": row.cpk, "rating": row.rating,
              "review_count": row.review_count, "price": row.price, "rrp": row.rrp,
              "sales_velocity": row.sales_velocity, "captured_at": row.captured_at.isoformat()}
             for row in sorted(rows, key=lambda item: item.rank)
         ]
+        benchmark_index, peer_scores = await load_benchmark_context(db)
+        for product in products:
+            performance = enrich_listing_performance(
+                category=category,
+                title=product["title"],
+                canonical_model_id=None,
+                release_year=None,
+                delivered_price=float(product["price"] or 0),
+                benchmark_index=benchmark_index,
+                peer_scores=peer_scores,
+            )
+            product["performance_rank"] = performance.get("performance_rank")
+            product["performance_peer_count"] = performance.get("performance_peer_count")
         cpks = list({product["cpk"] for product in products if product["cpk"]})
         listing_counts: dict[str, int] = {}
         if cpks:
