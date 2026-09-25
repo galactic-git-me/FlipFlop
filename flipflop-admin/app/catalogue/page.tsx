@@ -11,11 +11,12 @@ import { PriceHistorySparkline } from "../../components/listings/PriceHistorySpa
 import { VendorLogo } from "../../components/VendorLogo";
 
 type ViewMode = "table" | "listings" | "grid";
-type CatalogueScope = "all" | "curated";
+type CatalogueScope = "bestsellers" | "all" | "curated";
 type Variant = {
   id: number; listing_id?: number | string; listing_title: string; image_url?: string | null; slot_type: string;
-  playbook_id: number; status: string; tier: string; display_price: number;
+  playbook_id: number; status: string; tier: string; display_price: number | null;
   gem_score: number; consecutive_misses: number; last_seen_at: string;
+  isAmazonBestseller?: boolean; sales_velocity?: string | null;
   source_name?: string | null; channel_sources?: string[];
   price_history_listing_id?: string | null; market_lower_price?: number | null; market_median_price?: number | null; market_upper_price?: number | null;
   cpk?: string | null; watch_count?: number | null; offer_count?: number | null; sold_count?: number | null; active_count?: number | null; sell_through_rate?: number | null;
@@ -95,13 +96,10 @@ function MarketPrice({ variant: v }: { variant: Variant }) {
 }
 
 function ReviewSummary({ variant: v }: { variant: Variant }) {
-  if (v.review_average_rating == null && v.review_count == null) {
-    return <div className="text-[10px] text-slate-600">—</div>;
-  }
   return <div className="flex items-center gap-1.5 text-xs" title="Product review rating and review count">
     <Star className="h-3.5 w-3.5 fill-amber-300 text-amber-300" />
     <span className="font-mono font-semibold text-amber-200">{v.review_average_rating == null ? "—" : v.review_average_rating.toFixed(1)}</span>
-    <span className="text-slate-500">({v.review_count == null ? "—" : v.review_count.toLocaleString()})</span>
+    <span className="text-slate-500">({v.review_count == null ? "—" : v.review_count.toLocaleString()} reviews)</span>
   </div>;
 }
 
@@ -113,9 +111,8 @@ function RankSummary({ variant: v }: { variant: Variant }) {
 }
 
 function PerformanceSummary({ variant: v }: { variant: Variant }) {
-  return <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[10px]" title="Performance score and rank are product/CPK-level and shared across marketplace listings">
-    <span className="text-violet-300">Score <b className="font-mono">{v.performance_score == null ? "—" : v.performance_score.toFixed(1)}</b></span>
-    <span className="text-slate-500">Rank <b className="font-mono text-violet-200">{v.performance_rank == null ? "—" : `#${v.performance_rank.toLocaleString()}`}</b></span>
+  return <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[10px]" title="Relative performance rank among benchmarked products">
+    <span className="text-violet-300">Rank <b className="font-mono text-violet-200">{v.performance_rank == null ? "—" : `#${v.performance_rank.toLocaleString()}${v.performance_peer_count ? ` / ${v.performance_peer_count.toLocaleString()}` : ""}`}</b></span>
   </div>;
 }
 
@@ -139,7 +136,7 @@ function SourcingDetails({ variant: v }: { variant: Variant }) {
 export default function CataloguePage() {
   const [variants, setVariants] = useState<Variant[]>([]);
   const [view, setView] = useState<ViewMode>("grid");
-  const [scope, setScope] = useState<CatalogueScope>("all");
+  const [scope, setScope] = useState<CatalogueScope>("bestsellers");
   const [category, setCategory] = useState("All components");
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
@@ -150,7 +147,53 @@ export default function CataloguePage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      if (scope === "all") {
+      if (scope === "bestsellers") {
+        const bestsellerCategories: Record<string, string> = {
+          CPU: "cpu", GPU: "gpu", Memory: "ram", Storage: "storage",
+          "PC Cases": "case", Motherboard: "motherboard", "Power supply": "psu", Cooling: "cooler",
+        };
+        const categoryKeys = category === "All components"
+          ? Object.values(bestsellerCategories)
+          : [bestsellerCategories[category]].filter(Boolean);
+        const responses = await Promise.all(categoryKeys.map(async key => {
+          const response = await fetch(`/api/best-sellers?category=${encodeURIComponent(key)}`, { cache: "no-store" });
+          if (!response.ok) throw new Error(`Could not load ${key} bestseller data (${response.status})`);
+          return await response.json() as { products: Array<Record<string, unknown>> };
+        }));
+        const products = responses.flatMap(result => result.products);
+        setVariants(products.map((row, index) => ({
+          id: index + 1,
+          listing_id: String(row.asin ?? index),
+          listing_title: String(row.title ?? "Untitled Amazon product"),
+          image_url: (row.image_url as string | null) ?? null,
+          slot_type: String(row.category ?? "other"),
+          playbook_id: 0,
+          status: "active",
+          tier: "bestseller",
+          display_price: typeof row.price === "number" ? row.price : null,
+          gem_score: 0,
+          consecutive_misses: 0,
+          last_seen_at: String(row.captured_at ?? ""),
+          isAmazonBestseller: true,
+          sales_velocity: (row.sales_velocity as string | null) ?? null,
+          source_name: "Amazon",
+          channel_sources: (row.marketplace_sources as string[] | undefined) ?? [],
+          cpk: (row.cpk as string | null) ?? null,
+          amazon_bestseller_rank: Number(row.rank),
+          amazon_bestseller_list: String(row.list_name ?? row.category ?? "Amazon Best Sellers"),
+          amazon_bestseller_captured_at: String(row.captured_at ?? ""),
+          review_average_rating: (row.rating as number | null) ?? null,
+          review_count: (row.review_count as number | null) ?? null,
+          market_lower_price: (row.market_low as number | null) ?? null,
+          market_median_price: (row.market_median as number | null) ?? null,
+          market_upper_price: (row.market_high as number | null) ?? null,
+          performance_rank: (row.performance_rank as number | null) ?? null,
+          performance_peer_count: (row.performance_peer_count as number | null) ?? null,
+          url: (row.url as string | null) ?? null,
+          deal_score: null,
+          classification: "AMAZON BESTSELLER",
+        })));
+      } else if (scope === "all") {
         // Let the API select its own runtime environment. The admin can be
         // served locally while pointing at either the DEV API or the live
         // production API, so a browser-side env flag can be stale or belong
@@ -186,7 +229,7 @@ export default function CataloguePage() {
     }
     catch { setVariants(fallback); }
     finally { setLoading(false); }
-  }, [scope, status]);
+  }, [scope, status, category]);
   useEffect(() => { void load(); }, [load]);
 
   const visible = useMemo(() => variants.filter(v => {
@@ -195,10 +238,14 @@ export default function CataloguePage() {
     const matchesCategory = category === "All components" || v.slot_type.toLowerCase() === categoryKey;
     return matchesQuery && matchesCategory;
   }).sort((a, b) => {
+    if (scope === "bestsellers") {
+      return (a.amazon_bestseller_rank ?? Number.MAX_SAFE_INTEGER) - (b.amazon_bestseller_rank ?? Number.MAX_SAFE_INTEGER)
+        || a.listing_title.localeCompare(b.listing_title);
+    }
     const scoreA = a.deal_score ?? a.gem_score / 10;
     const scoreB = b.deal_score ?? b.gem_score / 10;
     return scoreB - scoreA || a.listing_title.localeCompare(b.listing_title);
-  }), [variants, query, category]);
+  }), [variants, query, category, scope]);
   const pageCount = Math.max(1, Math.ceil(visible.length / pageSize));
   const pagedVisible = visible.slice((page - 1) * pageSize, page * pageSize);
 
@@ -219,17 +266,17 @@ export default function CataloguePage() {
 
         <div className="min-w-0">
           <section className="sticky top-4 z-20 -mx-1 mb-3 min-w-0 rounded-lg bg-[#05080d]/95 px-1 pb-1 pt-1 backdrop-blur-md">
-            <div className="mb-2 flex items-center gap-2"><span className="text-xs font-semibold text-slate-400">Scope</span>{([['all','All listings'],['curated','Curated catalogue']] as const).map(([value,label]) => <button key={value} onClick={() => { setScope(value); setPage(1); }} className={`rounded-full border px-3 py-1 text-[10px] transition ${scope === value ? "border-cyan-400/50 bg-cyan-400/10 text-cyan-300" : "border-white/10 text-slate-500 hover:text-white"}`}>{label}</button>)}<span className="text-[10px] text-slate-600">{scope === "all" ? "Current active market listings" : "GEM/SUPER_GEM products mapped to build slots"}</span></div>
+          <div className="mb-2 flex items-center gap-2"><span className="text-xs font-semibold text-slate-400">Scope</span>{([['bestsellers','Amazon Best Sellers'],['all','All listings'],['curated','Curated catalogue']] as const).map(([value,label]) => <button key={value} onClick={() => { setScope(value); setPage(1); }} className={`rounded-full border px-3 py-1 text-[10px] transition ${scope === value ? "border-cyan-400/50 bg-cyan-400/10 text-cyan-300" : "border-white/10 text-slate-500 hover:text-white"}`}>{label}</button>)}<span className="text-[10px] text-slate-600">{scope === "bestsellers" ? "Official Amazon category ranks, review ratings and review counts" : scope === "all" ? "Current active market listings" : "GEM/SUPER_GEM products mapped to build slots"}</span></div>
             <div className="flex flex-col gap-3 rounded-lg border border-white/10 bg-[#0b1119] p-3 shadow-xl shadow-black/20 md:flex-row md:items-center">
             <label className="flex min-w-0 flex-1 items-center gap-2 rounded-md border border-white/10 bg-black/20 px-3 text-slate-500 focus-within:border-cyan-400/60"><Search className="h-4 w-4 shrink-0" /><span className="sr-only">Search catalogue</span><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search components, models or titles" className="h-9 min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-600" /></label>
-            <div className="flex items-center gap-2"><select value={status} onChange={e => setStatus(e.target.value)} className="h-9 rounded-md border border-white/10 bg-[#111923] px-2 text-xs text-slate-300 outline-none"><option value="all">All statuses</option><option value="active">Active</option><option value="pending_review">Needs review</option><option value="hidden">Hidden</option></select><button className="inline-flex h-9 items-center gap-2 rounded-md border border-white/10 px-3 text-xs text-slate-300 hover:border-cyan-400/40"><Filter className="h-3.5 w-3.5" /> Filters</button></div>
+            <div className="flex items-center gap-2">{scope !== "bestsellers" && <select value={status} onChange={e => setStatus(e.target.value)} className="h-9 rounded-md border border-white/10 bg-[#111923] px-2 text-xs text-slate-300 outline-none"><option value="all">All statuses</option><option value="active">Active</option><option value="pending_review">Needs review</option><option value="hidden">Hidden</option></select>}<button className="inline-flex h-9 items-center gap-2 rounded-md border border-white/10 px-3 text-xs text-slate-300 hover:border-cyan-400/40"><Filter className="h-3.5 w-3.5" /> Filters</button></div>
             </div>
             <div className="mt-3 flex flex-wrap items-center gap-2"><span className="mr-1 text-xs text-slate-500">Popular:</span>{["CPU", "GPU", "DDR4", "NVMe", "AM4"].map(chip => <button key={chip} onClick={() => setQuery(chip)} className="cursor-pointer rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] text-slate-300 transition hover:border-cyan-400/50 hover:text-cyan-300">{chip}</button>)}</div>
           </section>
 
-          <div className="mb-3 flex flex-col gap-3 border-b border-white/10 pb-3 sm:flex-row sm:items-center sm:justify-between"><div><span className="text-sm font-semibold text-white">{visible.length.toLocaleString()} results</span><span className="ml-2 text-xs text-slate-500">Sorted by gem score · showing {pagedVisible.length.toLocaleString()}</span></div><div className="flex items-center gap-3"><span className="text-xs text-slate-500">View</span><div className="flex overflow-hidden rounded-md border border-white/10 bg-[#0b1119]">{([["table", Table2, "Table"], ["listings", List, "Listings"], ["grid", LayoutGrid, "Grid"]] as const).map(([value, Icon, label]) => <button key={value} onClick={() => setView(value)} aria-pressed={view === value} className={`inline-flex cursor-pointer items-center gap-1.5 px-3 py-2 text-[11px] transition ${view === value ? "bg-cyan-400 text-slate-950" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}><Icon className="h-3.5 w-3.5" />{label}</button>)}</div></div></div>
+          <div className="mb-3 flex flex-col gap-3 border-b border-white/10 pb-3 sm:flex-row sm:items-center sm:justify-between"><div><span className="text-sm font-semibold text-white">{visible.length.toLocaleString()} results</span><span className="ml-2 text-xs text-slate-500">Sorted by {scope === "bestsellers" ? "Amazon Best Sellers rank" : "gem score"} · showing {pagedVisible.length.toLocaleString()}</span></div><div className="flex items-center gap-3"><span className="text-xs text-slate-500">View</span><div className="flex overflow-hidden rounded-md border border-white/10 bg-[#0b1119]">{([["table", Table2, "Table"], ["listings", List, "Listings"], ["grid", LayoutGrid, "Grid"]] as const).map(([value, Icon, label]) => <button key={value} onClick={() => setView(value)} aria-pressed={view === value} className={`inline-flex cursor-pointer items-center gap-1.5 px-3 py-2 text-[11px] transition ${view === value ? "bg-cyan-400 text-slate-950" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}><Icon className="h-3.5 w-3.5" />{label}</button>)}</div></div></div>
 
-          {view === "table" ? <TableView variants={pagedVisible} /> : <div className={view === "grid" ? "grid gap-3 sm:grid-cols-2 xl:grid-cols-3" : "space-y-3"}>{pagedVisible.map((v, index) => <ListingCard key={v.id} variant={v} index={index} compact={view === "listings"} />)}</div>}
+          {scope === "bestsellers" ? (view === "table" ? <BestsellerTableView variants={pagedVisible} /> : <div className={view === "grid" ? "grid gap-3 sm:grid-cols-2 xl:grid-cols-3" : "space-y-3"}>{pagedVisible.map((v, index) => <BestsellerCard key={v.listing_id ?? v.id} variant={v} index={index} />)}</div>) : (view === "table" ? <TableView variants={pagedVisible} /> : <div className={view === "grid" ? "grid gap-3 sm:grid-cols-2 xl:grid-cols-3" : "space-y-3"}>{pagedVisible.map((v, index) => <ListingCard key={v.id} variant={v} index={index} compact={view === "listings"} />)}</div>)}
           {!loading && visible.length === 0 && <div className="rounded-lg border border-dashed border-white/10 py-16 text-center text-sm text-slate-500">No catalogue matches. Try clearing the search or filters.</div>}
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500"><span>Showing {visible.length ? ((page - 1) * pageSize + 1).toLocaleString() : 0}–{Math.min(page * pageSize, visible.length).toLocaleString()} of {visible.length.toLocaleString()} listings</span><div className="flex items-center gap-2"><label className="flex items-center gap-1.5">Per page<select aria-label="Listings per page" value={pageSize} onChange={e => { setPageSize(Number(e.target.value)); setPage(1); }} className="rounded border border-white/10 bg-[#111923] px-2 py-1 text-xs text-slate-300 outline-none"><option value={50}>50</option><option value={100}>100</option><option value={200}>200</option></select></label><div className="flex items-center gap-1"><button aria-label="Previous catalogue page" disabled={page <= 1} onClick={() => setPage(p => Math.max(1, p - 1))} className="cursor-pointer rounded border border-white/10 p-1.5 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"><ChevronLeft className="h-3.5 w-3.5" /></button><span className="px-2 text-slate-300">{page} / {pageCount}</span><button aria-label="Next catalogue page" disabled={page >= pageCount} onClick={() => setPage(p => Math.min(pageCount, p + 1))} className="cursor-pointer rounded border border-white/10 p-1.5 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"><ChevronRight className="h-3.5 w-3.5" /></button></div></div></div>
         </div>
@@ -254,4 +301,24 @@ function ListingCard({ variant: v, index, compact }: { variant: Variant; index: 
 function TableView({ variants }: { variants: Variant[] }) {
   const metric = (value: number | null | undefined) => value == null ? "—" : value.toLocaleString();
   return <div className="overflow-x-auto rounded-lg border border-white/10 bg-[#0b1119]"><table className="w-full min-w-[1580px] text-left text-xs"><thead className="border-b border-white/10 bg-white/[0.03] text-[10px] uppercase tracking-wider text-slate-500"><tr><th className="px-4 py-3">Listing</th><th className="px-3 py-3">Category</th><th className="px-3 py-3">Status</th><th className="px-3 py-3">Classification</th><th className="px-3 py-3">Channels</th><th className="px-3 py-3 text-right">Price</th><th className="px-3 py-3 text-right">Gem score</th><th className="px-3 py-3 text-right" title="Amazon bestseller rank shared at product/CPK level">Amazon rank</th><th className="px-3 py-3 text-right" title="Performance score and rank shared at product/CPK level">Performance</th><th className="px-3 py-3 text-center">Price trend</th><th className="px-3 py-3 text-right" title="Market median">M/M</th><th className="px-3 py-3 text-right">Reviews</th><th className="px-3 py-3 text-right">Sold · 90d</th><th className="px-4 py-3" /></tr></thead><tbody>{variants.map(v => <tr key={v.id} className="border-b border-white/5 transition last:border-0 hover:bg-white/[0.03]"><td className="max-w-[420px] px-4 py-3"><p className="truncate font-medium text-white">{v.listing_title}</p><p className="mt-1 text-[10px] uppercase text-slate-600">{v.tier} tier · #{v.id}</p></td><td className="px-3 py-3 text-slate-400">{v.slot_type}</td><td className="px-3 py-3"><Status value={v.status} /></td><td className="px-3 py-3 text-[10px] font-semibold uppercase text-amber-200">{v.classification?.replace(/_/g, " ") ?? "—"}</td><td className="px-3 py-3"><ChannelLogos sources={v.channel_sources} current={v.source_name} /></td><td className="px-3 py-3 text-right font-semibold text-white">£{v.display_price.toFixed(0)}</td><td className="px-3 py-3 text-right font-mono font-bold text-emerald-300">{v.gem_score.toFixed(0)}</td><td className="px-3 py-3 text-right font-mono text-amber-300">{v.amazon_bestseller_rank == null ? "—" : `#${v.amazon_bestseller_rank.toLocaleString()}`}<span className="block text-[9px] text-slate-600">{v.amazon_bestseller_list ?? "Product / CPK"}</span></td><td className="px-3 py-3 text-right font-mono text-violet-300"><p>{v.performance_score == null ? "—" : v.performance_score.toFixed(1)}</p><p className="text-[9px] text-slate-500">{v.performance_rank == null ? "Rank —" : `Rank #${v.performance_rank.toLocaleString()}`}</p></td><td className="px-3 py-3"><PriceHistorySparkline listingId={v.price_history_listing_id ?? String(v.listing_id ?? v.id)} listingTitle={v.listing_title} /></td><td className="px-3 py-3 text-right"><MarketPrice variant={v} /></td><td className="px-3 py-3 text-right"><ReviewSummary variant={v} /></td><td className="px-3 py-3 text-right"><p className="font-mono text-emerald-200">{metric(v.sold_count)}</p><p className="text-[10px] text-cyan-200" title="Sold divided by sold plus active comparable listings">ST {v.sell_through_rate == null ? "—" : `${v.sell_through_rate.toFixed(1)}%`}</p></td><td className="px-3 py-3 text-right text-slate-500">{v.last_seen_at}</td><td className="px-4 py-3 text-right"><button aria-label={`Toggle visibility for ${v.listing_title}`} className="cursor-pointer rounded p-1.5 text-slate-500 hover:bg-white/10 hover:text-white">{v.status === "active" ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}</button></td></tr>)}</tbody></table></div>;
+}
+
+function BestsellerTableView({ variants }: { variants: Variant[] }) {
+  return <div className="overflow-x-auto rounded-lg border border-white/10 bg-[#0b1119]"><table className="w-full min-w-[900px] text-left text-xs"><thead className="border-b border-white/10 bg-white/[0.03] text-[10px] uppercase tracking-wider text-slate-500"><tr><th className="px-4 py-3 text-right">Amazon rank</th><th className="px-3 py-3">Product</th><th className="px-3 py-3">Category</th><th className="px-3 py-3 text-right">Amazon price</th><th className="px-3 py-3 text-right">Performance rank</th><th className="px-3 py-3 text-right">Reviews</th><th className="px-3 py-3">Marketplace coverage</th></tr></thead><tbody>{variants.map(v => <tr key={v.listing_id ?? v.id} className="border-b border-white/5 transition last:border-0 hover:bg-white/[0.03]"><td className="px-4 py-3 text-right font-mono text-amber-300">#{v.amazon_bestseller_rank?.toLocaleString() ?? "—"}</td><td className="max-w-[520px] px-3 py-3"><a href={v.url ?? undefined} target="_blank" rel="noopener noreferrer" className="font-medium text-white hover:text-cyan-300 hover:underline">{v.listing_title}</a><span className="mt-1 block font-mono text-[10px] text-slate-600">ASIN {v.listing_id}</span></td><td className="px-3 py-3 capitalize text-slate-400">{v.slot_type}</td><td className="px-3 py-3 text-right font-mono text-white">{v.display_price == null ? "—" : `£${v.display_price.toFixed(2)}`}</td><td className="px-3 py-3 text-right"><PerformanceSummary variant={v} /></td><td className="px-3 py-3 text-right"><ReviewSummary variant={v} /></td><td className="px-3 py-3"><ChannelLogos sources={v.channel_sources} current="Amazon" /></td></tr>)}</tbody></table></div>;
+}
+
+function BestsellerCard({ variant: v, index }: { variant: Variant; index: number }) {
+  return <article className="overflow-hidden rounded-lg border border-white/10 bg-[#0b1119] transition hover:border-cyan-400/40">
+    <div className={`relative flex h-40 items-center justify-center overflow-hidden bg-gradient-to-br ${imageTones[index % imageTones.length]}`}>
+      {v.image_url && <img src={v.image_url} alt="" className="absolute inset-0 h-full w-full object-contain mix-blend-screen" />}
+      {!v.image_url && <span className="text-xs uppercase tracking-widest text-white/50">No image captured</span>}
+      <span className="absolute left-2 top-2 rounded-md border border-amber-300/30 bg-slate-950/85 px-2 py-1 font-mono text-xs font-bold text-amber-300">Amazon #{v.amazon_bestseller_rank?.toLocaleString() ?? "—"}</span>
+    </div>
+    <div className="space-y-3 p-3">
+      <div><p className="mb-1 text-[10px] uppercase tracking-wider text-cyan-400">{v.amazon_bestseller_list} · ASIN {v.listing_id}</p><a href={v.url ?? undefined} target="_blank" rel="noopener noreferrer" className="line-clamp-2 text-sm font-semibold text-white hover:text-cyan-300 hover:underline">{v.listing_title}</a></div>
+      <div className="flex flex-wrap items-end justify-between gap-3"><div><p className="text-lg font-bold text-white">{v.display_price == null ? "—" : `£${v.display_price.toFixed(2)}`}</p><p className="text-[10px] text-slate-500">Amazon price</p></div><div><ReviewSummary variant={v} /><p className="mt-1 text-right text-[10px] text-slate-500">Customer reviews</p></div></div>
+      <div className="flex items-center justify-between border-t border-white/10 pt-2"><PerformanceSummary variant={v} /><ChannelLogos sources={v.channel_sources} current="Amazon" /></div>
+      {v.sales_velocity && <p className="text-[10px] text-slate-400">{v.sales_velocity}</p>}
+    </div>
+  </article>;
 }
