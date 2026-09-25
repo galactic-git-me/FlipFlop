@@ -140,18 +140,22 @@ async def assign_cpk_and_accumulate_price(
             await db.execute(text("DELETE FROM gem_radar_cpk_listing_price WHERE listing_id = :listing_id"), {"listing_id": listing_id})
             await db.execute(text("DELETE FROM gem_radar_listing_cpk WHERE listing_id = :listing_id"), {"listing_id": listing_id})
         if asin:
-            candidate = (await db.execute(text("""
-                SELECT cpk, cpk_data, cpk_confidence
+            candidates = (await db.execute(text("""
+                SELECT listing_id, cpk, cpk_data, cpk_confidence
                 FROM gem_radar_listing_cpk
-                WHERE listing_id = :asin
-            """), {"asin": asin})).first()
-            if (
-                candidate is not None
-                and asin != listing_id
-                and _valid_existing_cpk(candidate[1], title)
-                and categories_compatible(category, (candidate[1] or {}).get("category"))
-            ):
-                asin_identity = candidate
+                WHERE listing_id = :asin OR listing_id ILIKE :asin_pattern
+            """), {"asin": asin, "asin_pattern": f"%{asin}%"})).mappings().all()
+            valid_candidates = [
+                candidate for candidate in candidates
+                if extract_asin(candidate["listing_id"]) == asin
+                and candidate["listing_id"] != listing_id
+                and _valid_existing_cpk(candidate["cpk_data"], title)
+                and categories_compatible(category, (candidate["cpk_data"] or {}).get("category"))
+            ]
+            candidate_cpks = {candidate["cpk"] for candidate in valid_candidates}
+            if len(candidate_cpks) == 1:
+                candidate = valid_candidates[0]
+                asin_identity = (candidate["cpk"], candidate["cpk_data"], candidate["cpk_confidence"])
 
     if row is not None and _valid_existing_cpk(row[1], title):
         cpk = row[0]
