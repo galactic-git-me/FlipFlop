@@ -143,7 +143,8 @@ async def _load_bestseller_page(page, url: str, rank_offset: int) -> tuple[list[
             else:
                 raise ValueError(f"Amazon bestseller page did not reach a stable bottom: {url}")
             items = await page.evaluate(_EXTRACT_JS, rank_offset)
-            next_href = await page.locator('a[aria-label="Go to next page"], li.a-last a, a:has-text("Next")').first.get_attribute("href") if await page.locator('a[aria-label="Go to next page"], li.a-last a, a:has-text("Next")').count() else None
+            next_selector = 'a[aria-label="Go to next page"], li.a-last:not(.a-disabled) a'
+            next_href = await page.locator(next_selector).first.get_attribute("href") if await page.locator(next_selector).count() else None
             next_url = page.url.split("#")[0]
             if next_href:
                 from urllib.parse import urljoin
