@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ExternalLink, RefreshCw, Trophy } from "lucide-react";
 
 type Category = { category: string; name: string; source_url: string; count: number; matched: number; rated: number; last_captured_at: string | null };
-type Product = { asin: string; title: string; url: string | null; image_url: string | null; rank: number; cpk: string | null; rating: number | null; review_count: number | null; price: number | null; rrp: number | null; sales_velocity: string | null };
+type Product = { asin: string; title: string; url: string | null; image_url: string | null; rank: number; cpk: string | null; marketplace_listing_count: number | null; rating: number | null; review_count: number | null; price: number | null; rrp: number | null; sales_velocity: string | null };
 type Response = { categories: Category[]; selected_category: string; products: Product[] };
 
 export default function BestSellersPage() {
@@ -62,7 +62,7 @@ export default function BestSellersPage() {
         <p className="rounded-xl border border-amber-600/40 bg-amber-950/20 p-6 text-amber-200">No captured products for this category. The list is not covered yet; this is not a zero-sales result.</p>
       ) : <div className="overflow-x-auto rounded-xl border border-slate-700 bg-slate-800/70">
         <table className="w-full min-w-[720px] text-left text-sm">
-          <thead className="bg-slate-700/80 text-xs uppercase tracking-wide text-slate-300"><tr><th className="p-3">Rank</th><th className="p-3">Product</th><th className="p-3">Amazon price</th><th className="p-3">Rating</th><th className="p-3">Reviews</th><th className="p-3">Sales</th><th className="p-3">CPK match</th></tr></thead>
+          <thead className="bg-slate-700/80 text-xs uppercase tracking-wide text-slate-300"><tr><th className="p-3">Rank</th><th className="p-3">Product</th><th className="p-3">Amazon price</th><th className="p-3">Rating</th><th className="p-3">Reviews</th><th className="p-3">Sales</th><th className="p-3">Marketplace listings</th><th className="p-3">CPK match</th></tr></thead>
           <tbody>{data.products.map(product => <tr key={product.asin} className="border-t border-slate-700 hover:bg-slate-700/40">
             <td className="p-3 font-bold text-amber-300">#{product.rank}</td>
             <td className="p-3"><div className="flex items-center gap-3">
@@ -73,6 +73,9 @@ export default function BestSellersPage() {
             <td className="p-3 text-amber-300">{product.rating != null ? `★ ${product.rating.toFixed(1)}` : "—"}</td>
             <td className="p-3 tabular-nums">{product.review_count?.toLocaleString() ?? "—"}</td>
             <td className="p-3 text-xs text-slate-300">{product.sales_velocity ?? "—"}</td>
+            <td className="p-3 tabular-nums" title={product.cpk ? "Distinct marketplace listing IDs associated with this CPK" : "A CPK is required to count linked marketplace listings"}>
+              {product.marketplace_listing_count == null ? <span className="text-slate-400">Needs CPK</span> : `${product.marketplace_listing_count} ${product.marketplace_listing_count === 1 ? "listing" : "listings"}`}
+            </td>
             <td className="p-3">{product.cpk ? <span className="rounded bg-emerald-900/50 px-2 py-1 text-emerald-200">Matched</span> : <span className="rounded bg-slate-700 px-2 py-1 text-slate-300">Unmatched</span>}</td>
           </tr>)}</tbody>
         </table>

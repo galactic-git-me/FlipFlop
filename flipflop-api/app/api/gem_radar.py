@@ -3877,4 +3877,46 @@ async def get_best_sellers(
              "sales_velocity": row.sales_velocity, "captured_at": row.captured_at.isoformat()}
             for row in sorted(rows, key=lambda item: item.rank)
         ]
+        cpks = list({product["cpk"] for product in products if product["cpk"]})
+        listing_counts: dict[str, int] = {}
+        if cpks:
+            count_rows = (await db.execute(text("""
+                WITH candidate_listing_ids AS (
+                    SELECT listing_id
+                    FROM gem_radar_listing_cpk
+                    WHERE cpk = ANY(:cpks)
+                    UNION
+                    SELECT listing_id
+                    FROM gem_radar_scored_listings
+                    WHERE cpk = ANY(:cpks)
+                ), latest_scored AS (
+                    SELECT DISTINCT ON (s.listing_id) s.listing_id, s.cpk, s.source
+                    FROM gem_radar_scored_listings s
+                    JOIN candidate_listing_ids c USING (listing_id)
+                    ORDER BY s.listing_id, s.scored_at DESC NULLS LAST, s.id DESC
+                ), resolved_listing_cpks AS (
+                    SELECT c.listing_id, COALESCE(d.cpk, s.cpk) AS cpk, s.source
+                    FROM candidate_listing_ids c
+                    LEFT JOIN gem_radar_listing_cpk d USING (listing_id)
+                    LEFT JOIN latest_scored s USING (listing_id)
+                )
+                SELECT cpk,
+                       COUNT(DISTINCT listing_id) AS listing_count,
+                       ARRAY_REMOVE(ARRAY_AGG(DISTINCT source), NULL) AS marketplace_sources
+                FROM resolved_listing_cpks
+                WHERE cpk = ANY(:cpks)
+                GROUP BY cpk
+            """), {"cpks": cpks})).all()
+            listing_counts = {
+                row.cpk: {
+                    "marketplace_listing_count": int(row.listing_count),
+                    "marketplace_sources": list(row.marketplace_sources or []),
+                }
+                for row in count_rows
+            }
+        for product in products:
+            product.update(listing_counts.get(product["cpk"], {
+                "marketplace_listing_count": None if not product["cpk"] else 0,
+                "marketplace_sources": [],
+            }))
     return {"categories": summaries, "selected_category": category, "products": products}
