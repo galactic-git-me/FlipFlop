@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
 from app.database import get_db
-from app.models.catalogue import CatalogueVariant
+from app.models.catalogue import CatalogueVariant, PlaybookSlot
 from app.models.curated_build_segment import CuratedBuildSegment
 from app.models.listing import Listing
 from app.routes.admin_auth import get_current_admin
@@ -53,11 +53,13 @@ async def _component_context(db: AsyncSession, ids: set[int]) -> dict[int, dict]
     rows = (await db.execute(
         select(CatalogueVariant, Listing)
         .join(Listing, Listing.id == CatalogueVariant.listing_id)
+        .join(PlaybookSlot, PlaybookSlot.id == CatalogueVariant.slot_id)
         .where(CatalogueVariant.id.in_(ids))
     )).all()
     return {
         variant.id: {
             "id": variant.id,
+            "slot_type": slot.slot_type,
             "title": listing.title,
             "price": listing.price,
             "status": listing.status.value if hasattr(listing.status, "value") else listing.status,
@@ -66,7 +68,7 @@ async def _component_context(db: AsyncSession, ids: set[int]) -> dict[int, dict]
             "url": listing.url,
             "curated_for_builds": variant.curated_for_builds,
         }
-        for variant, listing in rows
+        for variant, listing, slot in rows
     }
 
 
@@ -86,12 +88,19 @@ async def get_curated_builds(db: AsyncSession = Depends(get_db)):
         selected = [item for item in component_rows.values() if item]
         total = sum(item["price"] or 0 for item in selected)
         row["component_cost"] = round(total, 2)
+        if segment.component_cost_snapshot is not None and segment.selling_price is not None:
+            delta = total - segment.component_cost_snapshot
+            if abs(delta) >= 0.01 and segment.proposed_selling_price is None:
+                row["proposed_selling_price"] = round(max(0, segment.selling_price + delta), 2)
         row["availability_status"] = "out_of_stock" if any(item["status"] != "active" for item in selected) else "in_stock"
+        if row["availability_status"] == "out_of_stock" and segment.is_live:
+            segment.is_live = False
         payload.append(row)
     return {"segments": payload, "components": list((await _component_context(db, {
         row[0].id for row in (await db.execute(
-            select(CatalogueVariant, Listing)
+            select(CatalogueVariant, Listing, PlaybookSlot)
             .join(Listing, Listing.id == CatalogueVariant.listing_id)
+            .join(PlaybookSlot, PlaybookSlot.id == CatalogueVariant.slot_id)
             .where(CatalogueVariant.curated_for_builds.is_(True))
         )).all()
     })).values())}
@@ -112,6 +121,9 @@ async def upsert_segment(body: SegmentInput, db: AsyncSession = Depends(get_db))
         segment.components = body.components
     if body.selling_price is not None:
         segment.selling_price = body.selling_price
+        ids = {int(value) for value in (body.components or segment.components or {}).values() if str(value).isdigit()}
+        context = await _component_context(db, ids)
+        segment.component_cost_snapshot = sum(item["price"] or 0 for item in context.values())
     if body.is_live is not None:
         segment.is_live = body.is_live
     await db.flush()
@@ -162,4 +174,7 @@ async def apply_proposed_price(segment_id: int, db: AsyncSession = Depends(get_d
         raise HTTPException(status_code=409, detail="No proposed price is available")
     segment.selling_price = segment.proposed_selling_price
     segment.proposed_selling_price = None
+    ids = {int(value) for value in (segment.components or {}).values() if str(value).isdigit()}
+    context = await _component_context(db, ids)
+    segment.component_cost_snapshot = sum(item["price"] or 0 for item in context.values())
     return _segment_json(segment)

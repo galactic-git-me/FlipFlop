@@ -24,6 +24,7 @@ def upgrade() -> None:
         sa.Column("components", sa.JSON(), nullable=False),
         sa.Column("selling_price", sa.Float(), nullable=True),
         sa.Column("proposed_selling_price", sa.Float(), nullable=True),
+        sa.Column("component_cost_snapshot", sa.Float(), nullable=True),
         sa.Column("availability_status", sa.String(length=30), nullable=False, server_default="in_stock"),
         sa.Column("is_live", sa.Boolean(), nullable=False, server_default=sa.false()),
         sa.Column("regeneration_status", sa.String(length=30), nullable=False, server_default="idle"),
