@@ -523,7 +523,6 @@ async def lifespan(app: FastAPI):
     # if settings.app_env == "dev":
     #     await _wipe_dev_data()
     # await _seed_default_data()
-    await _load_db_settings_into_config()
     reaper = None
     gem_radar_retention = None
     queue_processor = None
@@ -602,38 +601,6 @@ async def _queue_unevaluated_gems():
         log.info("startup.gem_queue_backfill", queued=queued, candidates=len(listings))
     except Exception as exc:
         log.warning("startup.gem_queue_backfill_failed", error=str(exc))
-
-
-async def _load_db_settings_into_config():
-    """
-    Push DB-stored API keys and model config into the live Settings cache
-    so ai_service.py picks them up immediately on startup without requiring
-    a server restart after the user saves a key in the Settings UI.
-    """
-    from app.database import AsyncSessionLocal
-    from app.models.app_settings import AppSettings
-    from app.models.source_search_term import SourceSearchTerm
-    from sqlalchemy import select
-    try:
-        async with AsyncSessionLocal() as db:
-            result = await db.execute(select(AppSettings).where(AppSettings.name == "default"))
-            db_settings = result.scalar_one_or_none()
-            if not db_settings:
-                return
-            cfg = get_settings()
-            if db_settings.openrouter_api_key:
-                cfg.openrouter_api_key = db_settings.openrouter_api_key
-            if db_settings.openrouter_primary_model:
-                cfg.openrouter_primary_model = db_settings.openrouter_primary_model
-            if db_settings.ollama_model:
-                cfg.ollama_model = db_settings.ollama_model
-            log.info(
-                "config.loaded_from_db",
-                has_openrouter_key=bool(db_settings.openrouter_api_key),
-                model=cfg.openrouter_primary_model,
-            )
-    except Exception as exc:
-        log.warning("config.db_load_failed", error=str(exc))
 
 
 app = FastAPI(
@@ -1305,10 +1272,8 @@ async def _seed_default_data():
         if settings_count == 0:
             db.add(AppSettings(
                 name="default",
-                ollama_model=settings.ollama_model,
-                ollama_base_url=settings.ollama_base_url,
             ))
-            log.info("seeded.app_settings", model=settings.ollama_model)
+            log.info("seeded.app_settings")
 
         # ── Seed / migrate canonical playbooks ───────────────────────────────
         # Handled by playbook_seeder: retires old playbooks, renames, inserts

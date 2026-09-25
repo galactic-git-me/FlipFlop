@@ -11,6 +11,17 @@ from datetime import datetime, timedelta
 
 router = APIRouter(prefix="/settings", tags=["settings"])
 
+# These values are supplied per runtime by the service environment. Keep the
+# request fields for old clients, but never save them to app_settings.
+ENV_BACKED_SETTINGS = {
+    "ollama_base_url",
+    "ollama_model",
+    "openrouter_api_key",
+    "openrouter_primary_model",
+    "ebay_app_id",
+    "image_gen_provider",
+}
+
 
 class SettingsUpdate(BaseModel):
     max_concurrent_flips: int | None = None
@@ -81,9 +92,9 @@ async def get_settings(db: AsyncSession = Depends(get_db)):
 @router.put("/")
 async def update_settings(body: SettingsUpdate, db: AsyncSession = Depends(get_db)):
     settings = await _get_or_create(db)
-    # Runtime AI routing belongs to OLLAMA_BASE_URL in the service environment.
-    # Ignore the legacy UI field so stale DB values cannot bypass priority.
-    for field, value in body.model_dump(exclude_none=True, exclude={"ollama_base_url"}).items():
+    # API credentials, providers and model endpoints are runtime configuration,
+    # never user preferences. Ignore legacy fields so DB rows cannot shadow env.
+    for field, value in body.model_dump(exclude_none=True, exclude=ENV_BACKED_SETTINGS).items():
         setattr(settings, field, value)
     if body.relist_interval_days is not None:
         interval = max(1, body.relist_interval_days)
@@ -112,16 +123,6 @@ async def update_settings(body: SettingsUpdate, db: AsyncSession = Depends(get_d
     await db.flush()
     await db.refresh(settings)
 
-    # Propagate to live config cache so ai_service picks up changes without restart
-    from app.config import get_settings as get_cfg
-    cfg = get_cfg()
-    if body.openrouter_api_key:
-        cfg.openrouter_api_key = body.openrouter_api_key
-    if body.ollama_model:
-        cfg.ollama_model = body.ollama_model
-    if body.openrouter_primary_model:
-        cfg.openrouter_primary_model = body.openrouter_primary_model
-
     return _to_dict(settings)
 
 
@@ -146,12 +147,12 @@ def _to_dict(s: AppSettings) -> dict:
         "auto_buy_autonomous": s.auto_buy_autonomous,
         "auto_buy_daily_limit": s.auto_buy_daily_limit,
         "ollama_base_url": cfg.ollama_base_url,
-        "ollama_model": s.ollama_model,
-        "openrouter_api_key": "***" if s.openrouter_api_key else "",
-        "openrouter_primary_model": s.openrouter_primary_model,
-        "ebay_app_id": "***" if s.ebay_app_id else "",
+        "ollama_model": cfg.ollama_model,
+        "openrouter_api_key": "***" if cfg.openrouter_api_key else "",
+        "openrouter_primary_model": cfg.openrouter_primary_model,
+        "ebay_app_id": "***" if cfg.ebay_app_id else "",
         "image_gen_enabled": s.image_gen_enabled,
-        "image_gen_provider": s.image_gen_provider,
+        "image_gen_provider": cfg.image_gen_provider,
         "handling_time_days": s.handling_time_days,
         "returns_accepted": s.returns_accepted,
         "returns_window_days": s.returns_window_days,
