@@ -14,7 +14,7 @@ import json
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 
-from sqlalchemy import or_, select, update
+from sqlalchemy import or_, select, text, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from sqlalchemy import func
@@ -47,54 +47,39 @@ async def get_consecutive_misses_before_inactive(db: AsyncSession) -> int:
 
 
 async def get_active_listing_ids(db: AsyncSession) -> set[str]:
-    """Listing IDs observed within the last 24 hours. Simple time-based approach:
-    if a listing was seen in the last 24 hours, it's active. If it hasn't been
-    seen for 24+ hours, it's inactive (but never deleted — retained for historical
-    price benchmarking).
-
-    Based on GemRadarListingObservation.search_run_id, NOT
-    GemRadarScoredListing — this is the critical distinction. A listing that
-    keeps showing up in scrapes but hasn't changed price gets deduped out of
-    re-scoring for 7 days (see submit_scan), so gem_radar_scored_listings
-    only gets a new row when something is genuinely new or stale. If "active"
-    were based on that table, a listing would silently age out within hours
-    even though it never stopped appearing — it just wasn't novel enough to
-    re-score. Observations are different: every sighting touches its row
-    (see touch_observation for the deduped path, record_observation for the
-    fresh path), so observed_at genuinely means "still turning up in scrapes,"
-    which is what "active" is supposed to mean.
-
-    Everything in the app (dashboards, tables, charts) should filter through
-    this — but historical/inactive rows are NEVER deleted and remain fully
-    usable for market-price benchmarking (build_batch_price_index draws on
-    ALL historical observations regardless of active status)."""
-    cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
-
-    result = await db.execute(
-        select(GemRadarListingObservation.listing_id)
-        .where(GemRadarListingObservation.observed_at >= cutoff.replace(tzinfo=None))
-        .distinct()
-    )
+    """Listing IDs still active after the last completed sweep's lifecycle pass."""
+    result = await db.execute(text(_ACTIVE_LISTING_IDS_SQL))
     return {row[0] for row in result.all()}
 
 
 async def get_active_buy_it_now_listing_ids(db: AsyncSession) -> set[str]:
-    """Currently observed fixed-price listings suitable for sourcing cards.
-
-    Auction lots belong in Auction Intel, never Gem-of-Day/component cards.
-    This reads the sighting ledger because the scored table does not retain
-    listing_type and a bulk rescore can make an old row's scored_at look new.
-    """
-    cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
-    result = await db.execute(
-        select(GemRadarListingObservation.listing_id)
-        .where(
-            GemRadarListingObservation.observed_at >= cutoff.replace(tzinfo=None),
-            GemRadarListingObservation.listing_type == "buy_it_now",
-        )
-        .distinct()
-    )
+    """Active fixed-price listings suitable for sourcing cards."""
+    result = await db.execute(text(_ACTIVE_LISTING_IDS_SQL + " AND latest.listing_type = 'buy_it_now'"))
     return {row[0] for row in result.all()}
+
+
+_ACTIVE_LISTING_IDS_SQL = """
+    WITH latest AS (
+        SELECT DISTINCT ON (listing_id) listing_id, listing_type, observed_at
+        FROM gem_radar_listing_observations
+        ORDER BY listing_id, observed_at DESC, id DESC
+    )
+    SELECT latest.listing_id
+    FROM latest
+    LEFT JOIN gem_radar_listing_lifecycle lifecycle
+      ON lifecycle.listing_id = latest.listing_id
+    WHERE (lifecycle.status IS NULL OR lifecycle.status = 'active'
+           OR latest.observed_at > lifecycle.archived_at)
+      AND NOT EXISTS (
+        SELECT 1 FROM listing_archive archive
+        WHERE archive.external_id = latest.listing_id
+      )
+      AND NOT EXISTS (
+        SELECT 1 FROM listings listing
+        WHERE listing.external_id = latest.listing_id
+          AND listing.status <> 'active'
+      )
+"""
 
 # How similar two titles from the same seller must be (token-overlap ratio)
 # before a new listing_id is treated as a likely relisting of an old one.

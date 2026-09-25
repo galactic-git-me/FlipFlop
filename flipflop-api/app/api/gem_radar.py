@@ -1101,10 +1101,18 @@ async def get_scored_listings_facets(db: AsyncSession = Depends(get_db), _: None
     from sqlalchemy import text
 
     rows = (await db.execute(text("""
-        WITH active AS (
-            SELECT DISTINCT listing_id FROM gem_radar_listing_observations
-            WHERE observed_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
-              AND listing_type = 'buy_it_now'
+        WITH latest_observation AS (
+            SELECT DISTINCT ON (listing_id) listing_id, listing_type, observed_at
+            FROM gem_radar_listing_observations
+            ORDER BY listing_id, observed_at DESC, id DESC
+        ), active AS (
+            SELECT o.listing_id FROM latest_observation o
+            LEFT JOIN gem_radar_listing_lifecycle lifecycle USING (listing_id)
+            WHERE o.listing_type = 'buy_it_now'
+              AND (lifecycle.status IS NULL OR lifecycle.status = 'active'
+                   OR o.observed_at > lifecycle.archived_at)
+              AND NOT EXISTS (SELECT 1 FROM listing_archive a WHERE a.external_id = o.listing_id)
+              AND NOT EXISTS (SELECT 1 FROM listings l WHERE l.external_id = o.listing_id AND l.status <> 'active')
         ), latest AS (
             SELECT DISTINCT ON (s.listing_id)
                    s.source, s.category, s.classification, s.condition
@@ -1192,10 +1200,18 @@ async def get_sourcing_analytics(
         ORDER BY classification, sample_rank
     """))).mappings().all()
     counts = (await db.execute(text("""
-        WITH active AS (
-            SELECT DISTINCT listing_id FROM gem_radar_listing_observations
-            WHERE observed_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
-              AND listing_type = 'buy_it_now'
+        WITH latest_observation AS (
+            SELECT DISTINCT ON (listing_id) listing_id, listing_type, observed_at
+            FROM gem_radar_listing_observations
+            ORDER BY listing_id, observed_at DESC, id DESC
+        ), active AS (
+            SELECT o.listing_id FROM latest_observation o
+            LEFT JOIN gem_radar_listing_lifecycle lifecycle USING (listing_id)
+            WHERE o.listing_type = 'buy_it_now'
+              AND (lifecycle.status IS NULL OR lifecycle.status = 'active'
+                   OR o.observed_at > lifecycle.archived_at)
+              AND NOT EXISTS (SELECT 1 FROM listing_archive a WHERE a.external_id = o.listing_id)
+              AND NOT EXISTS (SELECT 1 FROM listings l WHERE l.external_id = o.listing_id AND l.status <> 'active')
         ), latest AS (
             SELECT DISTINCT ON (s.listing_id) s.listing_id, s.classification
             FROM gem_radar_scored_listings s JOIN active a USING (listing_id)
@@ -2306,12 +2322,15 @@ async def get_market_snapshot(db: AsyncSession = Depends(get_db), _: None = Depe
             text(
                 """
                 WITH stored_ids AS (
-                    SELECT DISTINCT listing_id
+                    SELECT listing_id, MAX(observed_at) AS last_seen_at
                     FROM gem_radar_listing_observations
+                    GROUP BY listing_id
                 ),
                 active_ids AS (
                     SELECT s.listing_id
                     FROM stored_ids s
+                    LEFT JOIN gem_radar_listing_lifecycle lifecycle
+                      ON lifecycle.listing_id = s.listing_id
                     WHERE NOT EXISTS (
                         SELECT 1 FROM listing_archive a
                         WHERE a.external_id = s.listing_id
@@ -2320,6 +2339,11 @@ async def get_market_snapshot(db: AsyncSession = Depends(get_db), _: None = Depe
                         SELECT 1 FROM listings l
                         WHERE l.external_id = s.listing_id
                           AND l.status <> 'active'
+                    )
+                    AND (
+                        lifecycle.status IS NULL
+                        OR lifecycle.status = 'active'
+                        OR s.last_seen_at > lifecycle.archived_at
                     )
                 ),
                 latest_scored AS (

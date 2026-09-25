@@ -369,12 +369,15 @@ async def _phase2_trigger_loop() -> None:
                         # catalogue cannot publish a partial sweep.
                         from app.services.catalogue_service import run_catalogue_pipeline
                         catalogue_result = await run_catalogue_pipeline(db)
+                        from app.gem_radar.listing_lifecycle import reconcile_listing_lifecycle
+                        lifecycle_result = await reconcile_listing_lifecycle(db)
                         logger.info(
                             "phase2_trigger.phase2_complete",
                             total_cpk_tagged=phase2_result.total_cpk_tagged,
                             classified=phase2_result.classified_count,
                             unsettled=phase2_result.unsettled_count,
                             catalogue=catalogue_result,
+                            listing_lifecycle=lifecycle_result,
                         )
                         signal.pending = False
                         await db.commit()

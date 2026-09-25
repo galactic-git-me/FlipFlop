@@ -32,6 +32,7 @@ from app.models.inventory_allocation import InventoryAllocation
 from app.models.pricing_bias import PricingBias
 from app.models.draft_build import DraftBuild
 from app.models.gem_radar_observation import GemRadarListingObservation
+from app.models.gem_radar_listing_lifecycle import GemRadarListingLifecycle
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.models.gem_radar_seller_profile import GemRadarSellerProfile
 from app.models.gem_radar_sold_observation import GemRadarSoldObservation
