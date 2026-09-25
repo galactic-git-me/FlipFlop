@@ -50,20 +50,12 @@ function VendorMarks({ sources }: { sources: string[] }) {
   </div>;
 }
 
-function VendorSummary({ product }: { product: Product }) {
-  const count = vendorKeys(product.marketplace_sources).length;
-  return <div className="min-w-0" title="Distinct marketplace sources with listings linked to this CPK">
-    {product.cpk && <VendorMarks sources={product.marketplace_sources} />}
-    <p className="mt-1 text-[10px] font-semibold text-cyan-300">{product.cpk ? `${count} ${count === 1 ? "vendor" : "vendors"}` : "Needs CPK"}</p>
-  </div>;
-}
-
 function ProductArt({ product, index, compact = false }: { product: Product; index: number; compact?: boolean }) {
   return <div className={`relative flex items-center justify-center overflow-hidden bg-gradient-to-br ${IMAGE_TONES[index % IMAGE_TONES.length]} ${compact ? "h-28 w-full sm:h-full sm:min-h-36 sm:w-48" : "h-44 w-full"}`}>
     {product.image_url && <img src={product.image_url} alt="" className="absolute inset-0 h-full w-full object-contain mix-blend-screen" />}
     <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "linear-gradient(135deg, transparent 45%, rgba(255,255,255,.22) 46%, transparent 48%), linear-gradient(45deg, transparent 45%, rgba(0,220,255,.18) 46%, transparent 48%)", backgroundSize: "28px 28px" }} />
     {!product.image_url && <div className="relative rounded-lg border border-white/20 bg-black/25 px-5 py-6 text-center shadow-2xl backdrop-blur-sm"><div className="mx-auto mb-2 h-8 w-16 rounded border border-cyan-200/60 bg-cyan-300/20" /><span className="block max-w-32 text-[10px] font-semibold uppercase tracking-wider text-white/75">{product.title.split(" ").slice(0, 3).join(" ")}</span><span className="mt-1 block text-[9px] uppercase text-white/45">No image captured</span></div>}
-    <span className="absolute left-2 top-2 rounded-md border border-amber-300/30 bg-slate-950/85 px-2 py-1 font-mono text-xs font-bold text-amber-300">#{product.rank}</span>
+    <span className="absolute left-2 top-2 rounded-md border border-amber-300/30 bg-slate-950/85 px-2 py-1 font-mono text-xs font-bold text-amber-300">#{product.rank} - {({ cpu: "CPUs", gpu: "Graphics Cards", ram: "Computer Memory", storage: "Internal Solid State Drives", motherboard: "Motherboards", psu: "Power Supplies", cooler: "Fans & Cooling", case: "Computer Cases" } as Record<string, string>)[product.category] ?? product.category}</span>
     <div className="absolute bottom-2 right-2 flex items-center gap-1 rounded-md border border-white/15 bg-slate-950/85 px-2 py-1 shadow-lg backdrop-blur-sm">{product.cpk ? <><VendorMarks sources={product.marketplace_sources} /><span className="pl-1 text-[10px] font-semibold text-cyan-200">{vendorKeys(product.marketplace_sources).length} vendors</span></> : <span className="text-[10px] font-semibold text-amber-300">Needs CPK</span>}</div>
   </div>;
 }
@@ -84,21 +76,20 @@ function MatchBadge({ product }: { product: Product }) {
 }
 
 function ProductCard({ product, index, compact }: { product: Product; index: number; compact: boolean }) {
-  const title = product.url
-    ? <a href={product.url} target="_blank" rel="noopener noreferrer" className="line-clamp-2 text-sm font-semibold leading-snug text-white hover:text-cyan-300 hover:underline">{product.title}</a>
-    : <h2 className="line-clamp-2 text-sm font-semibold leading-snug text-white">{product.title}</h2>;
-  return <article className={`overflow-hidden rounded-lg border border-white/10 bg-[#0b1119] transition-colors hover:border-cyan-400/40 ${compact ? "flex flex-col sm:flex-row" : ""}`}>
+  return <article className={`overflow-hidden rounded-lg border border-cyan-400/25 bg-[#0b1119] transition-colors hover:border-cyan-400/50 ${compact ? "flex flex-col sm:flex-row" : ""}`}>
     <ProductArt product={product} index={index} compact={compact} />
-    <div className="min-w-0 flex-1 p-3">
-      <div className="mb-2 flex items-start justify-between gap-3"><div className="min-w-0"><p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-400">{product.category} · ASIN {product.asin}</p>{title}</div><MatchBadge product={product} /></div>
-      <div className="mt-3 flex flex-wrap items-end gap-x-6 gap-y-3">
-        <div><p className="text-xl font-bold text-white">{product.price == null ? "—" : `£${product.price.toFixed(2)}`}</p><p className="text-[10px] text-slate-500">Amazon price</p></div>
-        {product.rrp != null && product.price != null && product.rrp > product.price && <div><p className="text-sm text-slate-400 line-through">£{product.rrp.toFixed(2)}</p><p className="text-[10px] text-slate-500">RRP</p></div>}
-        <div><MarketRange product={product} /><p className="text-[10px] text-slate-500">Market low / median / high</p></div>
-        <div><p className="font-mono text-sm font-bold text-amber-200">{product.rating == null ? "—" : `★ ${product.rating.toFixed(1)}`}</p><p className="text-[10px] text-slate-500">{product.review_count == null ? "No reviews" : `${product.review_count.toLocaleString()} reviews`}</p></div>
-        <div><p className="font-mono text-sm font-semibold text-cyan-200">{product.cpk ? (product.marketplace_listing_count ?? 0).toLocaleString() : "—"}</p><p className="text-[10px] text-slate-500">Marketplace listings</p></div>
-        <div><p className="text-sm text-slate-200">{product.sales_velocity ?? "—"}</p><p className="text-[10px] text-slate-500">Amazon sales</p></div>
-      </div>
+    <div className="grid min-w-0 flex-1 gap-x-5 gap-y-3 p-3 sm:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-7">
+      <div className="min-w-0 sm:col-span-2 xl:col-span-4 2xl:col-span-7"><p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-400">Amazon Best Sellers · ASIN {product.asin}</p><a href={product.cheapest_market_url ?? product.url ?? undefined} target="_blank" rel="noopener noreferrer" className="line-clamp-2 text-sm font-semibold leading-snug text-white hover:text-cyan-300 hover:underline">{product.title}</a></div>
+      <div><p className="text-base font-bold text-white">{product.cheapest_market_price == null ? "—" : `£${product.cheapest_market_price.toFixed(2)}`}</p><p className="text-[10px] text-slate-500">Price · {product.cheapest_market_source ?? "no matched offer"}</p></div>
+      <div className="flex items-center gap-2"><PriceHistorySparkline listingId={product.asin} listingTitle={product.title} /><span className="text-[10px] text-slate-500">History</span></div>
+      <div><MarketRange product={product} /><p className="text-[10px] text-slate-500">Low / median / high</p></div>
+      <div><p className="text-sm font-semibold text-orange-300">AMAZON</p><p className="text-[10px] text-slate-500">Class</p></div>
+      <div><p className="text-sm font-semibold text-amber-300">{product.cpk ? "Matched" : "Limited"}</p><p className="text-[10px] text-slate-500">Evidence · {product.marketplace_listing_count?.toLocaleString() ?? "—"} listings</p></div>
+      <div><p className="font-mono text-sm font-semibold text-slate-300">—</p><p className="text-[10px] text-slate-500">Score</p></div>
+      <div><p className="font-mono text-sm font-semibold text-amber-300">#{product.rank} - {({ cpu: "CPUs", gpu: "Graphics Cards", ram: "Computer Memory", storage: "Internal Solid State Drives", motherboard: "Motherboards", psu: "Power Supplies", cooler: "Fans & Cooling", case: "Computer Cases" } as Record<string, string>)[product.category] ?? product.category}</p><p className="text-[10px] text-slate-500">Amazon BSR</p></div>
+      <div><p className="font-mono text-sm text-violet-300">—</p><p className="text-[10px] text-slate-500">Performance</p></div>
+      <div><p className="font-mono text-sm text-slate-300">—</p><p className="text-[10px] text-slate-500">Sold (90d)</p></div>
+      <div><p className="font-mono text-sm font-semibold text-amber-200">{product.rating == null ? "—" : `★ ${product.rating.toFixed(1)}`} ({product.review_count?.toLocaleString() ?? "—"})</p><p className="text-[10px] text-slate-500">Stars (reviews)</p></div>
     </div>
   </article>;
 }
