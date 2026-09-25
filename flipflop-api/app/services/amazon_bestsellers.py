@@ -20,6 +20,8 @@ from app.models.case import Case
 from app.models.part import Part, PartCategory
 from app.models.amazon_bestseller_observation import AmazonBestsellerObservation
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
+from app.models.gem_radar_listing_cpk import GemRadarListingCpk
+from app.gem_radar.product_identifiers import categories_compatible
 from app.services.case_product_key import case_product_key
 from app.services.browser_pool import managed_playwright
 from app.swarms.cases import RawCase, _make_pw_context, _upsert_case
@@ -385,7 +387,7 @@ def _best_scored_match(item: dict, rows: list[dict], category: str) -> dict | No
         if exact_rows:
             exact_cpk_rows = [
                 row for row in exact_rows
-                if row.get("cpk") and (row.get("category") or "").lower() in accepted_categories
+                if row.get("cpk") and categories_compatible(category, row.get("category"))
             ]
             distinct_cpks = {row["cpk"] for row in exact_cpk_rows}
             return exact_cpk_rows[0] if len(distinct_cpks) == 1 else None

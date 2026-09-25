@@ -26,6 +26,7 @@ from app.gem_radar.benchmarks import normalize_match_key
 from app.gem_radar.opportunity_scoring import identity_gates
 from app.gem_radar.identity import resolve_identity
 from app.gem_radar.fan_category import correct_case_fan_cpk
+from app.gem_radar.product_identifiers import categories_compatible, extract_asin
 
 
 _ALIAS_CACHE: tuple[float, list[tuple[str, str, dict]]] | None = None
@@ -112,6 +113,7 @@ async def assign_cpk_and_accumulate_price(
     condition: str | None,
     price: float | None,
     scan_price: float | None = None,
+    source_url: str | None = None,
 ) -> str | None:
     """Looks up (or extracts, via one LLM call if genuinely new) this
     listing's CPK, persists it to gem_radar_listing_cpk, and folds its price
@@ -129,18 +131,52 @@ async def assign_cpk_and_accumulate_price(
     )
     row = existing.fetchone()
 
+    asin = extract_asin(source_url) or extract_asin(listing_id)
+    asin_identity = None
+    if row is None or not _valid_existing_cpk(row[1], title):
+        if row is not None:
+            # Quarantine stale/invalid identity before looking for a trusted
+            # identity from an exact marketplace product identifier.
+            await db.execute(text("DELETE FROM gem_radar_cpk_listing_price WHERE listing_id = :listing_id"), {"listing_id": listing_id})
+            await db.execute(text("DELETE FROM gem_radar_listing_cpk WHERE listing_id = :listing_id"), {"listing_id": listing_id})
+        if asin and asin != listing_id:
+            candidate = (await db.execute(text("""
+                SELECT cpk, cpk_data, cpk_confidence
+                FROM gem_radar_listing_cpk
+                WHERE listing_id = :asin
+            """), {"asin": asin})).first()
+            if (
+                candidate is not None
+                and _valid_existing_cpk(candidate[1], title)
+                and categories_compatible(category, (candidate[1] or {}).get("category"))
+            ):
+                asin_identity = candidate
+
     if row is not None and _valid_existing_cpk(row[1], title):
         cpk = row[0]
         cpk_data = row[1] or {}
         brand = cpk_data.get("brand")
         model = cpk_data.get("model")
         extracted_category = cpk_data.get("category")
+    elif asin_identity is not None:
+        cpk, cpk_data, cpk_confidence = asin_identity
+        cpk_data = cpk_data or {}
+        brand = cpk_data.get("brand")
+        model = cpk_data.get("model")
+        extracted_category = cpk_data.get("category") or category
+        await db.execute(text("""
+            INSERT INTO gem_radar_listing_cpk (listing_id, cpk, cpk_data, cpk_confidence)
+            VALUES (:listing_id, :cpk, :cpk_data, :cpk_confidence)
+            ON CONFLICT (listing_id) DO UPDATE SET
+                cpk = EXCLUDED.cpk, cpk_data = EXCLUDED.cpk_data,
+                cpk_confidence = EXCLUDED.cpk_confidence, updated_at = CURRENT_TIMESTAMP
+        """), {
+            "listing_id": listing_id,
+            "cpk": cpk,
+            "cpk_data": json.dumps(cpk_data),
+            "cpk_confidence": cpk_confidence,
+        })
     else:
-        if row is not None:
-            # Quarantine stale/invalid identity before re-extraction; prices
-            # tied to it are removed so it cannot contaminate another cohort.
-            await db.execute(text("DELETE FROM gem_radar_cpk_listing_price WHERE listing_id = :listing_id"), {"listing_id": listing_id})
-            await db.execute(text("DELETE FROM gem_radar_listing_cpk WHERE listing_id = :listing_id"), {"listing_id": listing_id})
         alias = await _lookup_unique_catalog_alias(db, title)
         if alias is not None:
             cpk, alias_data = alias

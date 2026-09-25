@@ -3066,6 +3066,7 @@ async def _submit_scan_body(
                         condition=listing.condition_normalised,
                         price=listing.current_delivered_price,
                         scan_price=listing.scan_price,
+                        source_url=listing.url,
                     )
                     await task_db.commit()
                     return (listing.listing_id, cpk)
