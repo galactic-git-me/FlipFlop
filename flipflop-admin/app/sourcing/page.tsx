@@ -373,7 +373,7 @@ function ScoresGauge({ eligible, ineligible, upstreamFailures, upstreamFailureSt
   });
   const upstreamFailureCount = Math.min(
     Math.max(upstreamFailures, 0),
-    Math.max(safeMax - allocated, 0),
+    Math.max(safeMax - Math.min(Math.max(upstreamFailureStart, 0), safeMax), 0),
   );
   const upstreamFailureStartLength = circumference * (
     Math.min(Math.max(upstreamFailureStart, 0), safeMax) / (safeMax || 1)
@@ -965,11 +965,10 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             // cannot be used for the Scores dotted segment or it eats the
             // thin line carrying CPK and M Prices failures forward.
             const ineligibleScores = scan.ineligibleScoreCount ?? 0;
-            const scoreUpstreamFailures = Math.min(
-              failedIngested + failedCpk + failedMarketPrices,
-              Math.max(searchTermTotal - successfulScores - ineligibleScores, 0),
-            );
-            const scoreUpstreamStart = successfulScores + ineligibleScores;
+            // Preserve the positions of the upstream dotted arcs: M Prices
+            // failures start after priced listings, then CPK failures follow.
+            const scoreUpstreamFailures = failedMarketPrices + failedCpk;
+            const scoreUpstreamStart = scan.marketPricedCount;
 
             return (
               <PixelCard key={scan.searchId || scan.query} variant={isComplete ? "emerald" : "default"}>

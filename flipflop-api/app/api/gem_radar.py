@@ -529,6 +529,18 @@ async def pipeline_status_endpoint(
                 for s in snapshot["activeScans"]
             ),
         }
+    # The worker clears this flag only after Phase 2 and catalogue publication
+    # succeed. Its timestamp lets a separate API process report the sweep's
+    # terminal boundary to dashboard clients.
+    from app.models.gem_radar_sweep_signal import GemRadarSweepSignal
+    sweep_signal = (await db.execute(
+        select(GemRadarSweepSignal).where(GemRadarSweepSignal.id == 1)
+    )).scalar_one_or_none()
+    snapshot["completedSweepRequestedAt"] = (
+        sweep_signal.requested_at.isoformat() + "Z"
+        if sweep_signal and not sweep_signal.pending and sweep_signal.requested_at
+        else None
+    )
     return snapshot
 
 
