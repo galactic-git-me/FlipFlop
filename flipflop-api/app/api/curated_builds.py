@@ -92,7 +92,8 @@ async def get_curated_builds(db: AsyncSession = Depends(get_db)):
             delta = total - segment.component_cost_snapshot
             if abs(delta) >= 0.01 and segment.proposed_selling_price is None:
                 row["proposed_selling_price"] = round(max(0, segment.selling_price + delta), 2)
-        row["availability_status"] = "out_of_stock" if any(item["status"] != "active" for item in selected) else "in_stock"
+        assigned_count = len(segment.components or {})
+        row["availability_status"] = "out_of_stock" if len(selected) != assigned_count or any(item["status"] != "active" for item in selected) else "in_stock"
         if row["availability_status"] == "out_of_stock" and segment.is_live:
             segment.is_live = False
         payload.append(row)

@@ -477,6 +477,7 @@ export default function Components3DReviewPage() {
   const [actionNotice, setActionNotice] = useState<string | null>(null);
   const [actionBusy, setActionBusy] = useState(false);
   const [rightsConfirmed, setRightsConfirmed] = useState(false);
+  const [curatedOnly, setCuratedOnly] = useState(false);
   const [scaleConfirmed, setScaleConfirmed] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -490,8 +491,10 @@ export default function Components3DReviewPage() {
       setLoading(true);
       try {
         const batchId = new URLSearchParams(window.location.search).get("batch");
+        const isCuratedOnly = new URLSearchParams(window.location.search).get("curatedOnly") === "1";
+        setCuratedOnly(isCuratedOnly);
         const [response, casesResponse] = await Promise.all([
-          fetch(batchId ? `/api/assets-3d/review-batches/${batchId}` : "/api/assets-3d"),
+          fetch(batchId ? `/api/assets-3d/review-batches/${batchId}` : `/api/assets-3d${isCuratedOnly ? "?subject_type=variant&curated_only=true" : ""}`),
           fetch("/api/cases/priority-for-3d?limit=100"),
         ]);
         const data = await readJsonResponse<Component3DAsset[] | { detail?: string; error?: string; data?: Component3DAsset[]; assets?: Component3DAsset[] }>(response);
@@ -585,7 +588,7 @@ export default function Components3DReviewPage() {
       const response = await fetch("/api/assets-3d/review-batches", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ size: 10 }),
+        body: JSON.stringify({ size: 10, curated_only: curatedOnly }),
       });
       const data = await readJsonResponse<ReviewBatch & { detail?: string; error?: string }>(response);
       if (!response.ok) throw new Error(data.detail || data.error || "Could not create review batch");
@@ -722,13 +725,13 @@ export default function Components3DReviewPage() {
               </button>
             </>
           ) : (
-            <button
-              type="button"
-              onClick={startReviewBatch}
+              <button
+                type="button"
+                onClick={startReviewBatch}
               disabled={actionBusy}
               className="cursor-pointer rounded-md border border-sky-500 bg-sky-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-sky-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Start next batch of 10
+              {curatedOnly ? "Start curated batch" : "Start next batch of 10"}
             </button>
           )}
         </div>
