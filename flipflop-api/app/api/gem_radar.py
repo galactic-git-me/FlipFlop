@@ -4009,21 +4009,6 @@ async def get_best_sellers(
                 }
                 for row in count_rows
             }
-            # Compare each current marketplace offer with Amazon's captured
-            # price so the shared table can display the true lowest observed
-            # offer and identify the site that has it.
-            for product in products:
-                matched = listing_counts.get(product["cpk"])
-                amazon_price = product.get("price")
-                if not matched or amazon_price is None or amazon_price <= 0:
-                    continue
-                market_price = matched.get("cheapest_market_price")
-                if market_price is None or amazon_price <= market_price:
-                    matched.update({
-                        "cheapest_market_price": amazon_price,
-                        "cheapest_market_url": product.get("url"),
-                        "cheapest_market_source": "amazon",
-                    })
             market_rows = (await db.execute(text("""
                 SELECT cpk, min_price, median_price, max_price
                 FROM gem_radar_cpk_market_price
@@ -4042,10 +4027,6 @@ async def get_best_sellers(
                     "market_high": row.max_price,
                 })
         for product in products:
-            if product.get("cpk") is None:
-                product["cheapest_market_price"] = product.get("price")
-                product["cheapest_market_url"] = product.get("url")
-                product["cheapest_market_source"] = "amazon" if product.get("price") else None
             product.update(listing_counts.get(product["cpk"], {
                 "marketplace_listing_count": None if not product["cpk"] else 0,
                 "marketplace_sources": [],
@@ -4053,4 +4034,12 @@ async def get_best_sellers(
                 "market_median": None,
                 "market_high": None,
             }))
+            amazon_price = product.get("price")
+            market_price = product.get("cheapest_market_price")
+            if amazon_price is not None and amazon_price > 0 and (
+                market_price is None or amazon_price <= market_price
+            ):
+                product["cheapest_market_price"] = amazon_price
+                product["cheapest_market_url"] = product.get("url")
+                product["cheapest_market_source"] = "amazon"
     return {"categories": summaries, "selected_category": category, "products": products}
