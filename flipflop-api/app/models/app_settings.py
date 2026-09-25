@@ -17,7 +17,9 @@ class AppSettings(Base):
     auto_buy_autonomous: Mapped[bool] = mapped_column(Boolean, default=False)
     auto_buy_daily_limit: Mapped[int] = mapped_column(Integer, default=3)
 
-    ollama_base_url: Mapped[str] = mapped_column(Text, default="http://localhost:11434")
+    # Kept for API compatibility. Runtime routing is controlled by the
+    # OLLAMA_BASE_URL environment variable, not by a persisted user setting.
+    ollama_base_url: Mapped[str] = mapped_column(Text, default="")
     ollama_model: Mapped[str] = mapped_column(String(100), default="")
     openrouter_api_key: Mapped[str] = mapped_column(Text, default="")
     openrouter_primary_model: Mapped[str] = mapped_column(String(100), default="google/gemma-4-31b-it:free")

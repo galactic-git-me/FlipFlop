@@ -101,7 +101,10 @@ Is this a viable flip?"""
     from app.gem_radar.claude_screening import _ollama_semaphore
 
     settings = get_settings()
-    ollama_base_url = settings.ollama_base_url or "http://localhost:11434"
+    ollama_base_url = settings.ollama_base_url.strip().rstrip("/")
+    if not ollama_base_url:
+        log.info("margin_verifier.ollama_disabled", listing_id=listing_id)
+        return None
     ollama_model = settings.ollama_model
 
     try:

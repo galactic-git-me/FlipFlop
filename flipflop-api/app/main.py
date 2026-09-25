@@ -627,8 +627,6 @@ async def _load_db_settings_into_config():
                 cfg.openrouter_primary_model = db_settings.openrouter_primary_model
             if db_settings.ollama_model:
                 cfg.ollama_model = db_settings.ollama_model
-            if db_settings.ollama_base_url:
-                cfg.ollama_base_url = db_settings.ollama_base_url
             log.info(
                 "config.loaded_from_db",
                 has_openrouter_key=bool(db_settings.openrouter_api_key),

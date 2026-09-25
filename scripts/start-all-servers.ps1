@@ -15,6 +15,33 @@ $ErrorActionPreference = 'Stop'
 $projectRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $storefrontRoot = Join-Path (Split-Path -Parent $projectRoot) 'FlipFlop.shop'
 $logsDir = Join-Path $projectRoot 'logs'
+$apiRoot = Join-Path $projectRoot 'flipflop-api'
+
+function Get-ApiEnvironmentValue([string]$Name) {
+    if ($Name -eq 'OLLAMA_BASE_URL') {
+        $devProcessValue = [Environment]::GetEnvironmentVariable('DEV_OLLAMA_BASE_URL')
+        if (-not [string]::IsNullOrWhiteSpace($devProcessValue)) { return $devProcessValue.Trim() }
+    } else {
+        $processValue = [Environment]::GetEnvironmentVariable($Name)
+        if (-not [string]::IsNullOrWhiteSpace($processValue)) { return $processValue.Trim() }
+    }
+
+    foreach ($fileName in @('.env.local', '.env')) {
+        $filePath = Join-Path $apiRoot $fileName
+        if (-not (Test-Path -LiteralPath $filePath)) { continue }
+        foreach ($line in Get-Content -LiteralPath $filePath) {
+            if ($line -match "^\s*$([regex]::Escape($Name))\s*=\s*(.*?)\s*$") {
+                $value = $Matches[1].Trim().Trim('"').Trim("'")
+                if (-not [string]::IsNullOrWhiteSpace($value)) { return $value }
+            }
+        }
+    }
+    if ($Name -eq 'OLLAMA_BASE_URL') {
+        $processValue = [Environment]::GetEnvironmentVariable($Name)
+        if (-not [string]::IsNullOrWhiteSpace($processValue)) { return $processValue.Trim() }
+    }
+    throw "$Name must be set in the process environment or flipflop-api/.env.local/.env."
+}
 
 function Assert-DevelopmentPrerequisites {
     $required = @()
@@ -126,29 +153,31 @@ $env:EBAY_ENVIRONMENT = 'production'
 $env:EBAY_LISTING_ENVIRONMENT = 'sandbox'
 $env:AMAZON_SP_API_ENVIRONMENT = 'production'
 $env:AMAZON_SP_API_ENDPOINT = 'https://sellingpartnerapi-eu.amazon.com'
-$env:OLLAMA_BASE_URL = 'http://127.0.0.1:11435'
-$env:OLLAMA_MODEL = 'qwen2.5:7b-instruct'
+$ollamaBaseUrl = Get-ApiEnvironmentValue 'OLLAMA_BASE_URL'
+$ollamaModel = Get-ApiEnvironmentValue 'OLLAMA_MODEL'
+$env:OLLAMA_BASE_URL = $ollamaBaseUrl
+$env:OLLAMA_MODEL = $ollamaModel
 
 $servers = @()
 $apiUrl = 'http://127.0.0.1:4311'
 
 if (-not $NoBackend) {
-    $command = 'set "FLIPFLOP_RUNTIME_ENV=development" && set "OLLAMA_BASE_URL=http://127.0.0.1:11435" && set "OLLAMA_MODEL=qwen2.5:7b-instruct" && set "EBAY_ENVIRONMENT=production" && set "EBAY_LISTING_ENVIRONMENT=sandbox" && set "AMAZON_SP_API_ENVIRONMENT=production" && set "AMAZON_SP_API_ENDPOINT=https://sellingpartnerapi-eu.amazon.com" && set "ADMIN_FRONTEND_URL=http://localhost:4312" && set "FRONTEND_URL=http://localhost:4313" && .venv\Scripts\python.exe run_dev.py --host 127.0.0.1 --port 4311'
+    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"EBAY_ENVIRONMENT=production`" && set `"EBAY_LISTING_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENVIRONMENT=production`" && set `"AMAZON_SP_API_ENDPOINT=https://sellingpartnerapi-eu.amazon.com`" && set `"ADMIN_FRONTEND_URL=http://localhost:4312`" && set `"FRONTEND_URL=http://localhost:4313`" && .venv\Scripts\python.exe run_dev.py --host 127.0.0.1 --port 4311"
     $servers += Start-DevelopmentServer -Name 'backend' -WorkingDirectory (Join-Path $projectRoot 'flipflop-api') -Command $command -Port 4311 -Color Yellow
 }
 
 if ($GemRadarStandalone) {
-    $command = 'set "FLIPFLOP_RUNTIME_ENV=development" && set "OLLAMA_BASE_URL=http://127.0.0.1:11435" && set "OLLAMA_MODEL=qwen2.5:7b-instruct" && set "PYTHONUNBUFFERED=1" && .venv\Scripts\python.exe -m uvicorn app.gem_radar_standalone:app --host 127.0.0.1 --port 18000 --reload --reload-dir app'
+    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"PYTHONUNBUFFERED=1`" && .venv\Scripts\python.exe -m uvicorn app.gem_radar_standalone:app --host 127.0.0.1 --port 18000 --reload --reload-dir app"
     $servers += Start-DevelopmentServer -Name 'gemradar-api' -WorkingDirectory (Join-Path $projectRoot 'flipflop-api') -Command $command -Port 18000 -Color Blue
 }
 
 if (-not $NoAdmin) {
-    $command = "set `"NODE_ENV=development`" && set `"BACKEND_URL=$apiUrl`" && set `"NEXT_PUBLIC_API_URL=$apiUrl`" && set `"NEXT_PUBLIC_FLIPFLOP_ENV=development`" && set `"EBAY_OPS_BACKEND_URL=$apiUrl`" && set `"GEMRADAR_URL=$apiUrl`" && set `"NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct`" && npm.cmd run dev -- -p 4312 -H 127.0.0.1"
+    $command = "set `"NODE_ENV=development`" && set `"BACKEND_URL=$apiUrl`" && set `"NEXT_PUBLIC_API_URL=$apiUrl`" && set `"NEXT_PUBLIC_FLIPFLOP_ENV=development`" && set `"EBAY_OPS_BACKEND_URL=$apiUrl`" && set `"GEMRADAR_URL=$apiUrl`" && set `"NEXT_PUBLIC_OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"NEXT_PUBLIC_OLLAMA_MODEL=$ollamaModel`" && npm.cmd run dev -- -p 4312 -H 127.0.0.1"
     $servers += Start-DevelopmentServer -Name 'admin' -WorkingDirectory (Join-Path $projectRoot 'flipflop-admin') -Command $command -Port 4312 -Color Green
 }
 
 if (-not $NoFrontend) {
-    $command = "set `"NODE_ENV=development`" && set `"BACKEND_URL=$apiUrl`" && set `"NEXT_PUBLIC_API_URL=$apiUrl`" && set `"NEXT_PUBLIC_FLIPFLOP_ENV=development`" && set `"NEXT_PUBLIC_OLLAMA_MODEL=qwen2.5:7b-instruct`" && npm.cmd run dev -- --webpack -p 4313 -H 127.0.0.1"
+    $command = "set `"NODE_ENV=development`" && set `"BACKEND_URL=$apiUrl`" && set `"NEXT_PUBLIC_API_URL=$apiUrl`" && set `"NEXT_PUBLIC_FLIPFLOP_ENV=development`" && set `"NEXT_PUBLIC_OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"NEXT_PUBLIC_OLLAMA_MODEL=$ollamaModel`" && npm.cmd run dev -- --webpack -p 4313 -H 127.0.0.1"
     $servers += Start-DevelopmentServer -Name 'frontend' -WorkingDirectory $storefrontRoot -Command $command -Port 4313 -Color Magenta
 }
 
@@ -168,7 +197,7 @@ foreach ($server in $servers) {
         Write-Host "[FAILED]  $($server.Name.PadRight(14)) See $($server.LogFile)" -ForegroundColor Red
     }
 }
-Write-Host '[INFO] DEV uses production marketplace reads, sandbox eBay listing writes, and Ollama priority 2.' -ForegroundColor Yellow
+Write-Host "[INFO] DEV uses production marketplace reads, sandbox eBay listing writes, and Ollama gateway $ollamaBaseUrl (priority 1)." -ForegroundColor Yellow
 Write-Host '[INFO] Press Ctrl+C to stop the development servers started here.' -ForegroundColor Gray
 
 try {

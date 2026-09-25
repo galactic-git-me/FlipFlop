@@ -25,8 +25,6 @@ if ($Target -eq 'dev' -and -not (Test-DevApi)) {
     }
 
     $env:FLIPFLOP_RUNTIME_ENV = 'development'
-    $env:OLLAMA_BASE_URL = 'http://127.0.0.1:11435'
-    $env:OLLAMA_MODEL = 'qwen2.5:7b-instruct'
     $env:EBAY_ENVIRONMENT = 'production'
     $env:EBAY_LISTING_ENVIRONMENT = 'sandbox'
     $env:AMAZON_SP_API_ENVIRONMENT = 'production'
