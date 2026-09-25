@@ -3872,6 +3872,7 @@ async def get_best_sellers(
         """), {"category": category, "latest": latest_by_category[category]})).all()
         products = [
             {"asin": row.asin, "title": row.title, "url": row.url, "image_url": row.image_url,
+             "category": category,
              "rank": row.rank, "cpk": row.cpk, "rating": row.rating,
              "review_count": row.review_count, "price": row.price, "rrp": row.rrp,
              "sales_velocity": row.sales_velocity, "captured_at": row.captured_at.isoformat()}
@@ -3902,7 +3903,7 @@ async def get_best_sellers(
                 )
                 SELECT cpk,
                        COUNT(DISTINCT listing_id) AS listing_count,
-                       ARRAY_REMOVE(ARRAY_AGG(DISTINCT source), NULL) AS marketplace_sources
+                       ARRAY_AGG(DISTINCT source) FILTER (WHERE source IS NOT NULL) AS marketplace_sources
                 FROM resolved_listing_cpks
                 WHERE cpk = ANY(:cpks)
                 GROUP BY cpk
@@ -3914,9 +3915,26 @@ async def get_best_sellers(
                 }
                 for row in count_rows
             }
+            market_rows = (await db.execute(text("""
+                SELECT cpk, min_price, median_price, max_price
+                FROM gem_radar_cpk_market_price
+                WHERE cpk = ANY(:cpks)
+            """), {"cpks": cpks})).all()
+            for row in market_rows:
+                listing_counts.setdefault(row.cpk, {
+                    "marketplace_listing_count": 0,
+                    "marketplace_sources": [],
+                }).update({
+                    "market_low": row.min_price,
+                    "market_median": row.median_price,
+                    "market_high": row.max_price,
+                })
         for product in products:
             product.update(listing_counts.get(product["cpk"], {
                 "marketplace_listing_count": None if not product["cpk"] else 0,
                 "marketplace_sources": [],
+                "market_low": None,
+                "market_median": None,
+                "market_high": None,
             }))
     return {"categories": summaries, "selected_category": category, "products": products}
