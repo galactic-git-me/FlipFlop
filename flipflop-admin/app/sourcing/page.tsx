@@ -146,6 +146,15 @@ interface ScanProgress {
   configuredVendors?: string[];
 }
 
+function hasNoPendingGaugeWork(scan: ScanProgress): boolean {
+  const denominator = Math.max(scan.eligibleCount ?? scan.totalListings ?? 0, scan.ingestedCount ?? 0);
+  return denominator > 0 &&
+    scan.ingestedCount >= denominator &&
+    scan.cpkAssignedCount >= scan.ingestedCount &&
+    scan.marketPricedCount >= scan.cpkAssignedCount &&
+    (scan.eligibleScoreCount ?? 0) + (scan.ineligibleScoreCount ?? 0) >= scan.marketPricedCount;
+}
+
 interface PipelineStatusResponse {
   runId?: string | null;
   completedSweepRequestedAt?: string | null;
@@ -667,6 +676,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                   Number(count),
                 );
               }
+              const pipelineComplete = hasNoPendingGaugeWork({ ...previous, ...scan });
               runScans.current.set(scan.searchId, {
                 ...previous,
                 ...scan,
@@ -693,7 +703,12 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                 // current expression could leave every card spinning forever
                 // after its first incomplete poll, until the whole sweep was
                 // cleared by the backend.
-                isComplete: previous.isComplete || scan.isComplete,
+                // Keep the green check tied to full stage coverage even if a
+                // backend response still uses the older queue-drained rule.
+                isComplete: pipelineComplete && (
+                  previous.isComplete || scan.isComplete ||
+                  (sweepFinished && !queueIsRunning)
+                ),
               });
             }
             const accumulatedScans = Array.from(runScans.current.values());
@@ -783,6 +798,11 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             // listings. Keep each card's pipeline completion state: pending
             // CPK, market-price, or score work must remain visible across the
             // backend's in-memory reset instead of being turned green here.
+            setDisplayedScans((prev) => prev.map((scan) => ({
+              ...scan,
+              isComplete: scan.isComplete || hasNoPendingGaugeWork(scan),
+              activeSubmissions: 0,
+            })));
             setClientElapsed(0);
           }
         }
