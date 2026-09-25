@@ -3895,11 +3895,18 @@ async def get_best_sellers(
                     FROM gem_radar_scored_listings s
                     JOIN candidate_listing_ids c USING (listing_id)
                     ORDER BY s.listing_id, s.scored_at DESC NULLS LAST, s.id DESC
+                ), latest_observation AS (
+                    SELECT DISTINCT ON (o.listing_id) o.listing_id, o.source
+                    FROM gem_radar_listing_observations o
+                    JOIN candidate_listing_ids c USING (listing_id)
+                    ORDER BY o.listing_id, o.observed_at DESC, o.id DESC
                 ), resolved_listing_cpks AS (
-                    SELECT c.listing_id, COALESCE(d.cpk, s.cpk) AS cpk, s.source
+                    SELECT c.listing_id, COALESCE(d.cpk, s.cpk) AS cpk,
+                           COALESCE(s.source, o.source) AS source
                     FROM candidate_listing_ids c
                     LEFT JOIN gem_radar_listing_cpk d USING (listing_id)
                     LEFT JOIN latest_scored s USING (listing_id)
+                    LEFT JOIN latest_observation o USING (listing_id)
                 )
                 SELECT cpk,
                        COUNT(DISTINCT listing_id) AS listing_count,

@@ -37,10 +37,11 @@ function vendorKeys(sources: string[] = []) {
 
 function VendorMarks({ sources }: { sources: string[] }) {
   const vendors = vendorKeys(sources);
+  const shown = vendors.slice(0, 4);
   return <div className="flex flex-wrap items-center gap-1" title={vendors.map(key => VENDOR_META[key]?.label ?? key).join(", ") || "No matched marketplaces"}>
-    {vendors.length ? vendors.map(key => VENDOR_META[key]
+    {vendors.length ? <>{shown.map(key => VENDOR_META[key]
       ? <VendorLogo key={key} vendor={key} />
-      : <span key={key} className="inline-flex h-6 min-w-6 items-center justify-center rounded border border-white/10 bg-black/30 px-1.5 font-mono text-[9px] font-bold uppercase text-slate-300">{key.slice(0, 2)}</span>)
+      : <span key={key} className="inline-flex h-6 min-w-6 items-center justify-center rounded border border-white/10 bg-black/30 px-1.5 font-mono text-[9px] font-bold uppercase text-slate-300">{key.slice(0, 2)}</span>)}{vendors.length > shown.length && <span className="text-[9px] text-slate-400">+{vendors.length - shown.length}</span>}</>
       : <span className="text-[10px] text-slate-600">No matched vendors</span>}
   </div>;
 }
@@ -48,7 +49,7 @@ function VendorMarks({ sources }: { sources: string[] }) {
 function VendorSummary({ product }: { product: Product }) {
   const count = vendorKeys(product.marketplace_sources).length;
   return <div className="min-w-0" title="Distinct marketplace sources with listings linked to this CPK">
-    <VendorMarks sources={product.marketplace_sources} />
+    {product.cpk && <VendorMarks sources={product.marketplace_sources} />}
     <p className="mt-1 text-[10px] font-semibold text-cyan-300">{product.cpk ? `${count} ${count === 1 ? "vendor" : "vendors"}` : "Needs CPK"}</p>
   </div>;
 }
@@ -59,7 +60,7 @@ function ProductArt({ product, index, compact = false }: { product: Product; ind
     <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "linear-gradient(135deg, transparent 45%, rgba(255,255,255,.22) 46%, transparent 48%), linear-gradient(45deg, transparent 45%, rgba(0,220,255,.18) 46%, transparent 48%)", backgroundSize: "28px 28px" }} />
     {!product.image_url && <div className="relative rounded-lg border border-white/20 bg-black/25 px-5 py-6 text-center shadow-2xl backdrop-blur-sm"><div className="mx-auto mb-2 h-8 w-16 rounded border border-cyan-200/60 bg-cyan-300/20" /><span className="block max-w-32 text-[10px] font-semibold uppercase tracking-wider text-white/75">{product.title.split(" ").slice(0, 3).join(" ")}</span><span className="mt-1 block text-[9px] uppercase text-white/45">No image captured</span></div>}
     <span className="absolute left-2 top-2 rounded-md border border-amber-300/30 bg-slate-950/85 px-2 py-1 font-mono text-xs font-bold text-amber-300">#{product.rank}</span>
-    <div className="absolute bottom-2 right-2 flex items-center gap-1 rounded-md border border-white/15 bg-slate-950/85 px-2 py-1 shadow-lg backdrop-blur-sm"><VendorMarks sources={product.marketplace_sources} /><span className="pl-1 text-[10px] font-semibold text-cyan-200">{product.cpk ? `${vendorKeys(product.marketplace_sources).length} vendors` : "Needs CPK"}</span></div>
+    <div className="absolute bottom-2 right-2 flex items-center gap-1 rounded-md border border-white/15 bg-slate-950/85 px-2 py-1 shadow-lg backdrop-blur-sm">{product.cpk ? <><VendorMarks sources={product.marketplace_sources} /><span className="pl-1 text-[10px] font-semibold text-cyan-200">{vendorKeys(product.marketplace_sources).length} vendors</span></> : <span className="text-[10px] font-semibold text-amber-300">Needs CPK</span>}</div>
   </div>;
 }
 
