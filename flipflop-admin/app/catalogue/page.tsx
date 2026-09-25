@@ -98,8 +98,8 @@ function MarketPrice({ variant: v }: { variant: Variant }) {
 function ReviewSummary({ variant: v }: { variant: Variant }) {
   return <div className="flex items-center gap-1.5 text-xs" title="Product review rating and review count">
     <Star className="h-3.5 w-3.5 fill-amber-300 text-amber-300" />
-    <span className="font-mono font-semibold text-amber-200">{v.review_average_rating == null ? "—" : v.review_average_rating.toFixed(1)}</span>
-    <span className="text-slate-500">({v.review_count == null ? "—" : v.review_count.toLocaleString()} reviews)</span>
+    <span className="font-mono font-semibold text-amber-200">{v.review_average_rating == null ? "Rating unavailable" : v.review_average_rating.toFixed(1)}</span>
+    <span className="text-slate-500">({v.review_count == null ? "count unavailable" : v.review_count.toLocaleString()} reviews)</span>
   </div>;
 }
 
