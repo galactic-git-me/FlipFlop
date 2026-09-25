@@ -348,11 +348,8 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, displayValue
   );
 }
 
-function ScoresGauge({ eligible, cpkFailures, marketFailures, upstreamFailureStart, ineligible, max }: {
+function ScoresGauge({ eligible, ineligible, max }: {
   eligible: number;
-  cpkFailures: number;
-  marketFailures: number;
-  upstreamFailureStart: number;
   ineligible: number;
   max: number;
 }) {
@@ -360,9 +357,8 @@ function ScoresGauge({ eligible, cpkFailures, marketFailures, upstreamFailureSta
   const safeMax = Math.max(max, 0);
   const radius = 24;
   const circumference = 2 * Math.PI * radius;
-  // The thick band is reserved for outcomes from Scores itself.  CPK and
-  // M Prices failures are upstream of Scores, so they are deliberately
-  // combined into the thin pink arc rather than rendered as dotted bars.
+  // The thick band shows score outcomes. Eligible classifications are solid;
+  // ineligible classifications remain visible as a patterned segment.
   const rawSegments = [
     { value: eligible, dotted: false, label: "eligible scores" },
     { value: ineligible, dotted: true, label: "ineligible scores" },
@@ -373,17 +369,6 @@ function ScoresGauge({ eligible, cpkFailures, marketFailures, upstreamFailureSta
     allocated += value;
     return { ...segment, value };
   });
-  const upstreamFailures = Math.min(
-    Math.max(cpkFailures, 0) + Math.max(marketFailures, 0),
-    Math.max(safeMax - allocated, 0),
-  );
-  // Match the upstream gauges' population positions.  M Prices failures
-  // begin immediately after the successfully market-priced listings; CPK
-  // failures follow them.  The thin combined arc therefore begins at the
-  // M Prices failure position, not after the Score-stage bands.
-  const upstreamFailureStartLength = circumference * (
-    Math.min(Math.max(upstreamFailureStart, 0), safeMax) / (safeMax || 1)
-  );
   const pct = safeMax > 0 ? (segments[0].value / safeMax) * 100 : 0;
   let offset = 0;
 
@@ -392,7 +377,6 @@ function ScoresGauge({ eligible, cpkFailures, marketFailures, upstreamFailureSta
       <svg width={60} height={60} viewBox="0 0 60 60" className="drop-shadow-[1px_2px_1px_rgba(2,6,23,0.9)]" aria-label={`Scores: ${Math.round(pct)}% eligible`}>
         <title>{[
           ...segments.map((segment) => `${segment.label}: ${segment.value}`),
-          `upstream failures (CPK + M Prices): ${upstreamFailures}`,
         ].join(", ")}</title>
         <defs>
           {/* Keep the successful Scores arc visually identical to the other
@@ -422,21 +406,6 @@ function ScoresGauge({ eligible, cpkFailures, marketFailures, upstreamFailureSta
             strokeDashoffset={-start} strokeLinecap="butt" transform="rotate(-90 30 30)"
             className="transition-all duration-500" /> : null;
         })}
-        {upstreamFailures > 0 && (
-          <circle
-            cx={30}
-            cy={30}
-            r={radius}
-            stroke="#ec4899"
-            strokeWidth={2}
-            fill="none"
-            strokeDasharray={`${circumference * (upstreamFailures / (safeMax || 1))} ${circumference}`}
-            strokeDashoffset={-upstreamFailureStartLength}
-            strokeLinecap="butt"
-            transform="rotate(-90 30 30)"
-            className="transition-all duration-500"
-          />
-        )}
         <text x={30} y={34} textAnchor="middle" className="fill-slate-100 text-[12px] font-semibold">{Math.round(pct)}%</text>
       </svg>
       <div className="text-[11px] text-white mt-1 text-center">Scores</div>
@@ -994,8 +963,8 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             // blank for work that has not reached a terminal outcome.
   // Scores use the full ingested population: terminal upstream failures occupy
   // their own dotted segments, while only genuinely unfinished work is blank.
-  const successfulScores = scan.eligibleScoreCount ?? 0;
-  const ineligibleScores = scan.ineligibleScoreCount ?? 0;
+            const successfulScores = scan.eligibleScoreCount ?? 0;
+            const ineligibleScores = scan.ineligibleScoreCount ?? 0;
 
             return (
               <PixelCard key={scan.searchId || scan.query} variant={isComplete ? "emerald" : "default"}>
@@ -1044,9 +1013,6 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                     <Gauge value={scan.marketPricedCount} max={searchTermTotal} failed={failedMarketPrices} skipped={skippedMarketPrices} skippedStart={scan.cpkAssignedCount} label="M Prices" color="#f59e0b" />
                     <ScoresGauge
                       eligible={successfulScores}
-                      cpkFailures={failedCpk}
-                      marketFailures={failedMarketPrices}
-                      upstreamFailureStart={scan.marketPricedCount}
                       ineligible={ineligibleScores}
                       max={searchTermTotal}
                     />
