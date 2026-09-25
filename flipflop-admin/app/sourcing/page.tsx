@@ -348,9 +348,11 @@ function Gauge({ value, max, failed = 0, skipped = 0, skippedStart, displayValue
   );
 }
 
-function ScoresGauge({ eligible, ineligible, max }: {
+function ScoresGauge({ eligible, ineligible, upstreamFailures, upstreamFailureStart, max }: {
   eligible: number;
   ineligible: number;
+  upstreamFailures: number;
+  upstreamFailureStart: number;
   max: number;
 }) {
   const id = useId().replace(/:/g, "");
@@ -369,6 +371,13 @@ function ScoresGauge({ eligible, ineligible, max }: {
     allocated += value;
     return { ...segment, value };
   });
+  const upstreamFailureCount = Math.min(
+    Math.max(upstreamFailures, 0),
+    Math.max(safeMax - allocated, 0),
+  );
+  const upstreamFailureStartLength = circumference * (
+    Math.min(Math.max(upstreamFailureStart, 0), safeMax) / (safeMax || 1)
+  );
   const pct = safeMax > 0 ? (segments[0].value / safeMax) * 100 : 0;
   let offset = 0;
 
@@ -377,6 +386,7 @@ function ScoresGauge({ eligible, ineligible, max }: {
       <svg width={60} height={60} viewBox="0 0 60 60" className="drop-shadow-[1px_2px_1px_rgba(2,6,23,0.9)]" aria-label={`Scores: ${Math.round(pct)}% eligible`}>
         <title>{[
           ...segments.map((segment) => `${segment.label}: ${segment.value}`),
+          `upstream failures: ${upstreamFailureCount}`,
         ].join(", ")}</title>
         <defs>
           {/* Keep the successful Scores arc visually identical to the other
@@ -406,6 +416,12 @@ function ScoresGauge({ eligible, ineligible, max }: {
             strokeDashoffset={-start} strokeLinecap="butt" transform="rotate(-90 30 30)"
             className="transition-all duration-500" /> : null;
         })}
+        {upstreamFailureCount > 0 && (
+          <circle cx={30} cy={30} r={radius} stroke="#ec4899" strokeWidth={2} fill="none"
+            strokeDasharray={`${circumference * (upstreamFailureCount / (safeMax || 1))} ${circumference}`}
+            strokeDashoffset={-upstreamFailureStartLength} strokeLinecap="butt"
+            transform="rotate(-90 30 30)" className="transition-all duration-500" />
+        )}
         <text x={30} y={34} textAnchor="middle" className="fill-slate-100 text-[12px] font-semibold">{Math.round(pct)}%</text>
       </svg>
       <div className="text-[11px] text-white mt-1 text-center">Scores</div>
@@ -935,36 +951,22 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                 scan.cpkFailedCount ?? 0,
                 Math.max(searchTermTotal - scan.cpkAssignedCount, 0),
               );
-            // A CPK-assigned listing with no settled market price is already
-            // known to be unmatched. It may become priced later if another
-            // comparable listing settles the same CPK, so this dotted segment
-            // can legitimately shrink while the scan is still running.
-            const failedMarketPrices = isComplete
-              ? Math.max(scan.cpkAssignedCount - scan.marketPricedCount, 0)
-              : 0;
-            // There is no separate scoring-failure counter yet. A missing
-            // classification therefore stays blank (pending) until the API
-            // can distinguish a failed scoring attempt from phase-two work
-            // that has not run.
+            // A CPK-assigned listing without a settled price is a terminal
+            // M Prices failure for this scan; a later scan may settle its CPK.
+            const failedMarketPrices = Math.max(scan.cpkAssignedCount - scan.marketPricedCount, 0);
             // Keep upstream failures as the outlined/skipped segment at the
             // next stage; they were never eligible for that stage. The
             // current stage's own terminal failures use the patterned
             // segment. Anything else remains an empty pending gap.
             const skippedCpk = failedIngested;
-            const skippedMarketPrices = Math.min(
-              failedIngested + failedCpk,
-              Math.max(searchTermTotal - scan.marketPricedCount - failedMarketPrices, 0),
-            );
-            // Scores are counted independently of market-price settlement,
-            // so the raw classification total can include listings that
-            // failed upstream. Partition those overlapping listings out of
-            // the thick successful segment: upstream losses remain a thin
-            // pink arc, successful scores are solid, and the track stays
-            // blank for work that has not reached a terminal outcome.
-  // Scores use the full ingested population: terminal upstream failures occupy
-  // their own dotted segments, while only genuinely unfinished work is blank.
             const successfulScores = scan.eligibleScoreCount ?? 0;
-            const ineligibleScores = scan.ineligibleScoreCount ?? 0;
+            const classifiedScores = scan.classifiedCount ?? 0;
+            const ineligibleScores = Math.max(classifiedScores - successfulScores, 0);
+            const scoreUpstreamFailures = Math.min(
+              failedIngested + failedCpk + failedMarketPrices,
+              Math.max(searchTermTotal - successfulScores - ineligibleScores, 0),
+            );
+            const scoreUpstreamStart = successfulScores + ineligibleScores;
 
             return (
               <PixelCard key={scan.searchId || scan.query} variant={isComplete ? "emerald" : "default"}>
@@ -1010,10 +1012,12 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
                     {/* Every gauge is measured against this run's ingested population. */}
                     <Gauge value={scan.ingestedCount} max={searchTermTotal} failed={failedIngested} label="Ingested" color="#8b5cf6" />
                     <Gauge value={scan.cpkAssignedCount} max={searchTermTotal} failed={failedCpk} skipped={skippedCpk} skippedStart={scan.ingestedCount} label="CPK" color="#10b981" />
-                    <Gauge value={scan.marketPricedCount} max={searchTermTotal} failed={failedMarketPrices} skipped={skippedMarketPrices} skippedStart={scan.cpkAssignedCount} label="M Prices" color="#f59e0b" />
+                    <Gauge value={scan.marketPricedCount} max={searchTermTotal} failed={failedMarketPrices} skipped={failedIngested + failedCpk} skippedStart={scan.cpkAssignedCount} label="M Prices" color="#f59e0b" />
                     <ScoresGauge
                       eligible={successfulScores}
                       ineligible={ineligibleScores}
+                      upstreamFailures={scoreUpstreamFailures}
+                      upstreamFailureStart={scoreUpstreamStart}
                       max={searchTermTotal}
                     />
                   </div>
