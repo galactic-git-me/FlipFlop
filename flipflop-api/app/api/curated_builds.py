@@ -179,3 +179,26 @@ async def apply_proposed_price(segment_id: int, db: AsyncSession = Depends(get_d
     context = await _component_context(db, ids)
     segment.component_cost_snapshot = sum(item["price"] or 0 for item in context.values())
     return _segment_json(segment)
+
+
+@router.post("/segments/{segment_id}/publish")
+async def publish_segment(segment_id: int, body: dict, db: AsyncSession = Depends(get_db)):
+    segment = await db.get(CuratedBuildSegment, segment_id)
+    if not segment:
+        raise HTTPException(status_code=404, detail="Playbook segment not found")
+    if not body.get("is_live", True):
+        segment.is_live = False
+        return _segment_json(segment)
+    required = {"cpu", "gpu", "motherboard", "ram", "storage", "psu", "case"}
+    selected = segment.components or {}
+    if not required.issubset(selected):
+        raise HTTPException(status_code=409, detail="Assign CPU, GPU, motherboard, RAM, storage, PSU and case before publishing")
+    if segment.selling_price is None or segment.selling_price <= 0:
+        raise HTTPException(status_code=409, detail="Set a valid selling price before publishing")
+    ids = {int(value) for value in selected.values() if str(value).isdigit()}
+    context = await _component_context(db, ids)
+    if len(context) != len(ids) or any(not item["curated_for_builds"] or item["status"] != "active" for item in context.values()):
+        raise HTTPException(status_code=409, detail="Every selected component must remain curated and currently available")
+    segment.is_live = True
+    segment.availability_status = "in_stock"
+    return _segment_json(segment)

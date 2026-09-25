@@ -60,6 +60,7 @@ from app.api.companion import router as companion_router
 from app.api.price_benchmarks import router as price_benchmarks_router
 from app.api.catalogue import router as catalogue_router
 from app.api.curated_builds import router as curated_builds_router
+from app.api.custom_builds import router as custom_builds_router, public_router as custom_builds_public_router
 from app.api.configurator_admin import router as configurator_admin_router
 from app.api.public_catalogue import router as public_catalogue_router
 from app.api.public_configurator import router as public_configurator_router
@@ -750,6 +751,8 @@ app.include_router(ram_watch_router, prefix="/api")
 app.include_router(price_benchmarks_router, prefix="/api")
 app.include_router(catalogue_router, prefix="/api")
 app.include_router(curated_builds_router, prefix="/api")
+app.include_router(custom_builds_router, prefix="/api")
+app.include_router(custom_builds_public_router, prefix="/api")
 app.include_router(configurator_admin_router, prefix="/api")
 app.include_router(public_catalogue_router, prefix="/api")
 app.include_router(public_configurator_router, prefix="/api")
