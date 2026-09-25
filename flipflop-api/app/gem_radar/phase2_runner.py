@@ -199,13 +199,10 @@ async def run_phase2_classification(
             review_source_count += 1
 
         title_condition = (title or "").lower()
-        if (condition or "").lower() in {"parts_only", "for_parts", "untested"} or re.search(
+        unsuitable_condition = bool((condition or "").lower() in {"parts_only", "for_parts", "untested"} or re.search(
             r"\b(?:for\s*parts|parts\s*only|not\s*working|spares?\s*(?:or|/)\s*repair)\b",
             title_condition,
-        ):
-            # Parts-only/untested listings are not valid resale candidates and
-            # must never be normalised into the ordinary used cohort.
-            continue
+        ))
         title_marks_non_new = any(term in title_condition for term in ("b grade", "b-grade", "open box", "open-box", "refurbished", "renewed"))
         normalised_condition = "new" if (condition or "").lower() == "new" and not title_marks_non_new else "used"
         category = (cpk_data or {}).get("category") or observed_category
@@ -288,7 +285,21 @@ async def run_phase2_classification(
         sell_through_rate = sell_through_rate_pct(sold_count, active_count) if cpk else None
         preferred = cpk in preferred_keys
         watch_velocity, bid_velocity = velocities.get(listing_id, (None, None))
-        if cpk:
+        if unsuitable_condition:
+            # Persist a terminal result so these listings do not remain blank
+            # in the Scores gauge after the sweep finishes.
+            opportunity = OpportunityResult(
+                classification="INELIGIBLE", decision="IGNORE", score=0.0,
+                expected_profit=None, roi_pct=None, walk_away_price=None,
+                liquidity_score=None, desirability_score=None,
+                risk_score=0.0, market=None, eligible=False,
+                reasons=["Listing is for parts, repair, or untested."],
+                risk_flags=["parts_or_untested"],
+                evidence_status="INELIGIBLE",
+                evidence_reason="parts_or_untested",
+                evidence_confidence={},
+            )
+        elif cpk:
             opportunity = score_opportunity(
                 listing_price=delivered_price, title=title, cpk_data=cpk_data,
                 market=market, sold_count_90d=sold_count, active_count=active_count,
