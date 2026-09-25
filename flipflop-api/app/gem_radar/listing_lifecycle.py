@@ -28,12 +28,29 @@ async def reconcile_listing_lifecycle(db: AsyncSession) -> dict[str, int]:
             SELECT r.search_term, vendor.source, r.occurred_at
             FROM gem_radar_scan_runs r
             CROSS JOIN LATERAL jsonb_array_elements_text(r.vendors::jsonb) AS vendor(source)
+        ), ordered_runs AS (
+            SELECT search_term, source, occurred_at,
+                   lag(occurred_at) OVER (
+                       PARTITION BY search_term, source ORDER BY occurred_at
+                   ) AS previous_at
+            FROM expanded_runs
+        ), cycle_runs AS (
+            SELECT search_term, source, occurred_at,
+                   sum(CASE WHEN previous_at IS NULL
+                                 OR occurred_at - previous_at > INTERVAL '30 minutes'
+                            THEN 1 ELSE 0 END) OVER (
+                       PARTITION BY search_term, source ORDER BY occurred_at
+                   ) AS cycle_id
+            FROM ordered_runs
+        ), scan_cycles AS (
+            SELECT search_term, source, max(occurred_at) AS occurred_at
+            FROM cycle_runs GROUP BY search_term, source, cycle_id
         ), ranked_runs AS (
             SELECT search_term, source, occurred_at,
                 row_number() OVER (
                     PARTITION BY search_term, source ORDER BY occurred_at DESC
                 ) AS run_rank
-            FROM expanded_runs
+            FROM scan_cycles
         ), missed_cutoff AS (
             SELECT search_term, source, occurred_at
             FROM ranked_runs WHERE run_rank = :misses
@@ -47,13 +64,13 @@ async def reconcile_listing_lifecycle(db: AsyncSession) -> dict[str, int]:
             SELECT l.listing_id, l.observed_at,
                 CASE
                     WHEN sold.sold_at > l.observed_at THEN 'sold'
-                    WHEN cutoff.occurred_at > l.observed_at THEN 'archived'
+                    WHEN cutoff.occurred_at > l.observed_at + INTERVAL '10 minutes' THEN 'archived'
                     WHEN l.observed_at < CURRENT_TIMESTAMP - INTERVAL '3 days' THEN 'archived'
                     ELSE 'active'
                 END AS status,
                 CASE
                     WHEN sold.sold_at > l.observed_at THEN 'exact_sold_item'
-                    WHEN cutoff.occurred_at > l.observed_at THEN 'missed_scans'
+                    WHEN cutoff.occurred_at > l.observed_at + INTERVAL '10 minutes' THEN 'missed_scans'
                     WHEN l.observed_at < CURRENT_TIMESTAMP - INTERVAL '3 days' THEN 'unseen_3_days'
                     ELSE NULL
                 END AS archive_reason

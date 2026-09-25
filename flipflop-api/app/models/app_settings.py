@@ -67,14 +67,12 @@ class AppSettings(Base):
     # only — the backend otherwise has zero visibility into it). Synced
     # best-effort by the extension's setConfig() on every save (see
     # FlipFlopXtension/src/lib/storage.ts) via PUT /api/gem-radar/scan-interval.
-    # Used to derive the "2 consecutive scan cycles missed -> inactive"
-    # listing threshold — see gem_radar/observations.get_active_listing_ids.
-    # Default matches the extension's own SchedulerConfigSchema default.
+    # The extension's scan cadence. Default matches its scheduler setting.
     gem_radar_scan_interval_minutes: Mapped[int] = mapped_column(Integer, default=180)
     # How many consecutive scan cycles a listing can go unseen before it's
-    # treated as inactive — configurable in the extension's Retention
-    # settings (retention.consecutiveMissesBeforeInactive), synced the same
-    # way as gem_radar_scan_interval_minutes above.
+    # archived after later completed scans of the same search term and vendor
+    # — configurable in the extension's Retention settings and used by the
+    # Gem Radar listing lifecycle reconciliation.
     gem_radar_consecutive_misses_before_inactive: Mapped[int] = mapped_column(Integer, default=2)
     # Retention config (extension's retention.scrapeArtifactsHours /
     # preserveWatchedListingEvidence), synced the same way — see

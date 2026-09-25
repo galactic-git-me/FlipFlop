@@ -1,6 +1,5 @@
 """Record active and archived Gem Radar listing availability."""
 from alembic import op
-import sqlalchemy as sa
 
 
 revision = "20260925_0003"
@@ -10,16 +9,20 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.create_table(
-        "gem_radar_listing_lifecycle",
-        sa.Column("listing_id", sa.String(255), primary_key=True),
-        sa.Column("status", sa.String(20), nullable=False),
-        sa.Column("archive_reason", sa.String(40), nullable=True),
-        sa.Column("last_seen_at", sa.DateTime(), nullable=False),
-        sa.Column("archived_at", sa.DateTime(), nullable=True),
-        sa.Column("updated_at", sa.DateTime(), nullable=False),
-    )
-    op.create_index("ix_gem_radar_listing_lifecycle_status", "gem_radar_listing_lifecycle", ["status"])
+    op.execute("""
+        CREATE TABLE IF NOT EXISTS gem_radar_listing_lifecycle (
+            listing_id VARCHAR(255) PRIMARY KEY,
+            status VARCHAR(20) NOT NULL,
+            archive_reason VARCHAR(40),
+            last_seen_at TIMESTAMP NOT NULL,
+            archived_at TIMESTAMP,
+            updated_at TIMESTAMP NOT NULL
+        )
+    """)
+    op.execute("""
+        CREATE INDEX IF NOT EXISTS ix_gem_radar_listing_lifecycle_status
+        ON gem_radar_listing_lifecycle (status)
+    """)
 
 
 def downgrade() -> None:
