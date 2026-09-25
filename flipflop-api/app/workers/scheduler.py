@@ -39,6 +39,7 @@ from app.workers.cross_listing_recreate import run_cross_listing_recreate_job
 from app.workers.delivery_followup import run_delivery_followup_job
 from app.workers.message_poll import run_message_poll_job
 from app.workers.case_content_sourcing import run_case_content_sourcing
+from app.workers.overclockers_gallery import run_overclockers_gallery_sourcing
 from app.services.amazon_bestsellers import scrape_amazon_component_bestsellers
 from app.services.ai_build_generator import generate_ai_builds
 from app.services.email_monitor import EmailMonitor
@@ -327,6 +328,16 @@ def start_scheduler():
         replace_existing=True,
         max_instances=1,
         next_run_time=now + timedelta(seconds=20),
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=1),
+        id="overclockers_gallery_sourcing",
+        name="Overclockers Product Galleries",
+        kwargs={"job_id": "overclockers_gallery_sourcing", "fn": run_overclockers_gallery_sourcing},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(seconds=30),
     )
     scheduler.add_job(
         _run_job_with_history,

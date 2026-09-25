@@ -38,6 +38,7 @@ interface PriorityCaseItem {
   is_preferred?: boolean;
   has_3d_model?: boolean;
   model_3d_url?: string;
+  overclockers_gallery?: string[];
   sourcing_3d_evidence?: {
     stages?: Record<string, SourcingStageEvidence>;
   };
@@ -349,18 +350,18 @@ export default function Cases3DPriorityPage() {
     }
   };
 
-  const sourceOverclockersInChrome = (caseId: number, productUrl: string, existingWindow?: Window | null) => {
-    const sourceWindow = existingWindow || window.open("about:blank", "_blank");
-    if (sourceWindow) {
-      sourceWindow.location.href = `${productUrl.split("#")[0]}#flipflop-case-${caseId}`;
-    } else {
-      setOverclockersError("Your browser blocked the Overclockers tab. Allow popups and reopen the image review.");
+  const sourceOverclockersInChrome = () => {
+    if (!evidenceReview) return;
+    const productUrl = referenceData?.candidates.find(candidate => candidate.label?.startsWith("Overclockers ·"))?.source_page;
+    if (!productUrl) {
+      setOverclockersError("No matching Overclockers product page is stored for this case.");
       return;
     }
+    window.open(`${productUrl.split("#")[0]}#flipflop-case-${evidenceReview.caseItem.id}`, "_blank", "noopener,noreferrer");
     let attempts = 0;
     const timer = window.setInterval(() => {
       attempts += 1;
-      void loadOverclockersGallery(caseId);
+      void loadOverclockersGallery(evidenceReview.caseItem.id);
       if (attempts >= 20) window.clearInterval(timer);
     }, 2000);
   };
@@ -490,19 +491,8 @@ export default function Cases3DPriorityPage() {
   };
 
   const openEvidenceReview = async (caseItem: PriorityCaseItem, stage: "product_images" | "youtube_video" | "meshy_generation") => {
-    // Open a blank tab during the user's click so the browser permits the
-    // retailer page to load after the matching offer URL is resolved.
-    const retailerTab = stage === "product_images" && caseItem.source_site?.toLowerCase().includes("overclockers")
-      ? window.open("about:blank", "_blank")
-      : null;
     if (stage === "product_images" || stage === "meshy_generation") await openReferenceSelection(caseItem.id);
     setEvidenceReview({ caseItem, stage });
-    if (stage === "product_images" && retailerTab) {
-      const productUrl = referenceData?.candidates.find(candidate => candidate.label?.startsWith("Overclockers ·"))?.source_page
-        || caseItem.source_url;
-      if (productUrl?.includes("overclockers.co.uk")) sourceOverclockersInChrome(caseItem.id, productUrl, retailerTab);
-      else retailerTab.close();
-    }
   };
 
   const closeEvidenceReview = () => {
@@ -561,6 +551,23 @@ export default function Cases3DPriorityPage() {
     };
 
     void load();
+  }, [caseScope, casePage]);
+
+  useEffect(() => {
+    const refreshGalleryPhotos = async () => {
+      try {
+        const params = new URLSearchParams({ limit: "101", offset: String((casePage - 1) * 100) });
+        if (caseScope !== "Campaign") params.set("source_site", caseScope);
+        const response = await fetch(`/api/cases/priority-for-3d?${params}`, { cache: "no-store" });
+        if (!response.ok) return;
+        const data = await readJsonResponse<PriorityCaseItem[]>(response);
+        setCases(data.slice(0, 100).filter(caseItem => !/raspberry\s*pi|raspberrypi|\brpi\b/i.test(caseItem.name)));
+      } catch {
+        // Keep the currently displayed cases if a background refresh fails.
+      }
+    };
+    const timer = window.setInterval(() => void refreshGalleryPhotos(), 60000);
+    return () => window.clearInterval(timer);
   }, [caseScope, casePage]);
 
   const meshyQueueCount = cases.filter(caseItem => {
@@ -736,6 +743,15 @@ export default function Cases3DPriorityPage() {
                             </span>
                           )}
                         </div>
+                        {!!caseItem.overclockers_gallery?.length && (
+                          <div className="mt-2 flex max-w-md gap-1 overflow-x-auto pb-1" aria-label={`${caseItem.overclockers_gallery.length} Overclockers product photos`}>
+                            {caseItem.overclockers_gallery.map((url, imageIndex) => (
+                              <a key={url} href={url} target="_blank" rel="noreferrer" title={`Overclockers photo ${imageIndex + 1}`} className="h-10 w-10 flex-none overflow-hidden rounded border border-slate-700 bg-white">
+                                <img src={url} alt={`${compactCaseName(caseItem)} photo ${imageIndex + 1}`} loading="lazy" className="h-full w-full object-contain" />
+                              </a>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </td>
@@ -953,11 +969,7 @@ export default function Cases3DPriorityPage() {
                 <>
                   <p className="mb-4 text-sm text-slate-300">Select exactly four images. The first selected image is the texture and colour master.</p>
                   <section aria-label="Overclockers gallery" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
-                    <div className="flex items-center justify-between gap-3"><h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">1. Overclockers product gallery</h3><div className="flex gap-2"><Button type="button" variant="outline" onClick={() => {
-                      const productUrl = referenceData?.candidates.find(candidate => candidate.label?.startsWith("Overclockers ·"))?.source_page;
-                      if (productUrl) sourceOverclockersInChrome(evidenceReview.caseItem.id, productUrl);
-                      else setOverclockersError("No matching Overclockers product page is stored for this case.");
-                    }}>Source photos in Chrome</Button><Button type="button" variant="outline" disabled={overclockersBusy} onClick={() => void loadOverclockersGallery(evidenceReview.caseItem.id)}>Reload gallery</Button></div></div>
+                    <div className="flex items-center justify-between gap-3"><h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">1. Overclockers product gallery</h3><div className="flex gap-2"><Button type="button" variant="outline" onClick={sourceOverclockersInChrome}>Source photos in Chrome</Button><Button type="button" variant="outline" disabled={overclockersBusy} onClick={() => void loadOverclockersGallery(evidenceReview.caseItem.id)}>Reload gallery</Button></div></div>
                     {overclockersBusy && <p className="mt-3 text-xs text-slate-400">Loading all gallery thumbnails…</p>}
                     {overclockersError && <p className="mt-3 text-xs text-amber-300">{overclockersError}</p>}
                     {!overclockersBusy && !overclockersError && overclockersResults.length === 0 && <p className="mt-3 text-xs text-slate-400">No exact Overclockers product found.</p>}

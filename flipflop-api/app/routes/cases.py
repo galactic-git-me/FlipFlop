@@ -72,6 +72,7 @@ async def _preferred_case_names(db: AsyncSession) -> list[str]:
 
 
 def _priority_payload(case: Case, preferred_names: list[str] | None = None) -> dict:
+    product_images = (((case.sourcing_3d_evidence or {}).get("stages") or {}).get("product_images") or {})
     return {
         "id": case.id,
         "name": case.name,
@@ -83,6 +84,7 @@ def _priority_payload(case: Case, preferred_names: list[str] | None = None) -> d
         "source_site": case.source_site,
         "source_url": case.source_url,
         "image_url": case.image_url,
+        "overclockers_gallery": product_images.get("overclockers_gallery") or [],
         "bestseller_rank": case.bestseller_rank,
         "priority_3d_rank": case.priority_3d_rank,
         "priority_3d_batch": case.priority_3d_batch,
