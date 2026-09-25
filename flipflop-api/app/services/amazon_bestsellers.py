@@ -12,7 +12,7 @@ import re
 from datetime import datetime
 
 from difflib import SequenceMatcher
-from sqlalchemy import select, update, text
+from sqlalchemy import select, update, text, or_
 import structlog
 
 from app.database import AsyncSessionLocal
@@ -468,35 +468,33 @@ async def scrape_amazon_component_bestsellers(categories: list[str] | None = Non
                         GemRadarScoredListing.cpk,
                         GemRadarScoredListing.title,
                         GemRadarScoredListing.url,
-                    ).where(GemRadarScoredListing.cpk.is_not(None))
-                )).mappings().all()
-                scored = [dict(row) for row in scored_rows]
-                amazon_rows = (await db.execute(
-                    select(
-                        GemRadarScoredListing.listing_id,
-                        GemRadarScoredListing.category,
-                        GemRadarScoredListing.cpk,
-                        GemRadarScoredListing.title,
-                        GemRadarScoredListing.url,
                         GemRadarScoredListing.scored_at,
-                    ).where(GemRadarScoredListing.source == "amazon")
-                    .order_by(GemRadarScoredListing.scored_at.desc())
+                    ).where(or_(
+                        GemRadarScoredListing.cpk.is_not(None),
+                        GemRadarScoredListing.source.in_(("amazon", "google_shopping")),
+                    )).order_by(GemRadarScoredListing.scored_at.desc().nulls_last())
                 )).mappings().all()
-                latest_amazon_by_listing = {}
-                for row in amazon_rows:
-                    latest_amazon_by_listing.setdefault(row["listing_id"], row)
+                scored = [dict(row) for row in scored_rows if row["cpk"] is not None]
+                latest_marketplace_by_listing = {}
+                for row in scored_rows:
+                    latest_marketplace_by_listing.setdefault(row["listing_id"], row)
+                asin_marketplace_rows = {
+                    listing_id: row
+                    for listing_id, row in latest_marketplace_by_listing.items()
+                    if extract_asin(row.get("url")) or extract_asin(listing_id)
+                }
                 durable_cpk_by_listing = {}
-                if latest_amazon_by_listing:
+                if asin_marketplace_rows:
                     durable_rows = (await db.execute(
                         select(
                             GemRadarListingCpk.listing_id,
                             GemRadarListingCpk.cpk,
                             GemRadarListingCpk.cpk_data,
-                        ).where(GemRadarListingCpk.listing_id.in_(latest_amazon_by_listing))
+                        ).where(GemRadarListingCpk.listing_id.in_(asin_marketplace_rows))
                     )).mappings().all()
                     durable_cpk_by_listing = {row["listing_id"]: dict(row) for row in durable_rows}
-                amazon_by_asin: dict[str, list[dict]] = {}
-                for row in latest_amazon_by_listing.values():
+                marketplace_by_asin: dict[str, list[dict]] = {}
+                for row in asin_marketplace_rows.values():
                     amazon_row = dict(row)
                     asin = extract_asin(amazon_row.get("url")) or str(amazon_row.get("listing_id") or "").upper()
                     if asin:
@@ -507,7 +505,7 @@ async def scrape_amazon_component_bestsellers(categories: list[str] | None = Non
                         amazon_row["identity_valid"] = bool(
                             durable and _valid_existing_cpk(identity_data, amazon_row.get("title") or "")
                         )
-                        amazon_by_asin.setdefault(asin, []).append(amazon_row)
+                        marketplace_by_asin.setdefault(asin, []).append(amazon_row)
 
                 for category, (list_name, base_url) in selected_lists.items():
                     try:
@@ -558,7 +556,7 @@ async def scrape_amazon_component_bestsellers(categories: list[str] | None = Non
                         for item in sorted(unique.values(), key=lambda value: value["rank"]):
                             # Preserve every Amazon rank in the admin list, even when
                             # Amazon places an unrelated item in this source category.
-                            exact_rows = amazon_by_asin.get(item["asin"], [])
+                            exact_rows = marketplace_by_asin.get(item["asin"], [])
                             match = (_best_scored_match(item, [*scored_for_category, *exact_rows], category)
                                      if bestseller_item_matches_category(item["title"], category) else None)
                             db.add(AmazonBestsellerObservation(
