@@ -17,6 +17,7 @@ type Variant = {
   playbook_id: number; status: string; tier: string; display_price: number | null;
   gem_score: number; consecutive_misses: number; last_seen_at: string;
   isAmazonBestseller?: boolean; sales_velocity?: string | null;
+  cheapest_market_price?: number | null; cheapest_market_url?: string | null; cheapest_market_source?: string | null;
   source_name?: string | null; channel_sources?: string[];
   price_history_listing_id?: string | null; market_lower_price?: number | null; market_median_price?: number | null; market_upper_price?: number | null;
   cpk?: string | null; watch_count?: number | null; offer_count?: number | null; sold_count?: number | null; active_count?: number | null; sell_through_rate?: number | null;
@@ -177,7 +178,7 @@ export default function CataloguePage() {
           isAmazonBestseller: true,
           sales_velocity: (row.sales_velocity as string | null) ?? null,
           source_name: "Amazon",
-          channel_sources: (row.marketplace_sources as string[] | undefined) ?? [],
+          channel_sources: ["Amazon", ...((row.marketplace_sources as string[] | undefined) ?? [])],
           cpk: (row.cpk as string | null) ?? null,
           amazon_bestseller_rank: Number(row.rank),
           amazon_bestseller_list: String(row.list_name ?? row.category ?? "Amazon Best Sellers"),
@@ -187,6 +188,9 @@ export default function CataloguePage() {
           market_lower_price: (row.market_low as number | null) ?? null,
           market_median_price: (row.market_median as number | null) ?? null,
           market_upper_price: (row.market_high as number | null) ?? null,
+          cheapest_market_price: (row.cheapest_market_price as number | null) ?? null,
+          cheapest_market_url: (row.cheapest_market_url as string | null) ?? null,
+          cheapest_market_source: (row.cheapest_market_source as string | null) ?? null,
           performance_rank: (row.performance_rank as number | null) ?? null,
           performance_peer_count: (row.performance_peer_count as number | null) ?? null,
           url: (row.url as string | null) ?? null,
@@ -306,7 +310,7 @@ function TableView({ variants }: { variants: Variant[] }) {
 }
 
 function BestsellerTableView({ variants }: { variants: Variant[] }) {
-  return <div className="overflow-x-auto rounded-lg border border-white/10 bg-[#0b1119]"><table className="w-full min-w-[900px] text-left text-xs"><thead className="border-b border-white/10 bg-white/[0.03] text-[10px] uppercase tracking-wider text-slate-500"><tr><th className="px-4 py-3 text-right">Amazon rank</th><th className="px-3 py-3">Product</th><th className="px-3 py-3">Category</th><th className="px-3 py-3 text-right">Amazon price</th><th className="px-3 py-3 text-right">Performance rank</th><th className="px-3 py-3 text-right">Reviews</th><th className="px-3 py-3">Marketplace coverage</th></tr></thead><tbody>{variants.map(v => <tr key={v.listing_id ?? v.id} className="border-b border-white/5 transition last:border-0 hover:bg-white/[0.03]"><td className="px-4 py-3 text-right font-mono text-amber-300">#{v.amazon_bestseller_rank?.toLocaleString() ?? "—"}</td><td className="max-w-[520px] px-3 py-3"><a href={v.url ?? undefined} target="_blank" rel="noopener noreferrer" className="font-medium text-white hover:text-cyan-300 hover:underline">{v.listing_title}</a><span className="mt-1 block font-mono text-[10px] text-slate-600">ASIN {v.listing_id}</span></td><td className="px-3 py-3 capitalize text-slate-400">{v.slot_type}</td><td className="px-3 py-3 text-right font-mono text-white">{v.display_price == null ? "—" : `£${v.display_price.toFixed(2)}`}</td><td className="px-3 py-3 text-right"><PerformanceSummary variant={v} /></td><td className="px-3 py-3 text-right"><ReviewSummary variant={v} /></td><td className="px-3 py-3"><ChannelLogos sources={v.channel_sources} current="Amazon" /></td></tr>)}</tbody></table></div>;
+  return <div className="overflow-x-auto rounded-lg border border-white/10 bg-[#0b1119]"><table className="w-full min-w-[900px] text-left text-xs"><thead className="border-b border-white/10 bg-white/[0.03] text-[10px] uppercase tracking-wider text-slate-500"><tr><th className="px-4 py-3 text-right">Amazon rank</th><th className="px-3 py-3">Product</th><th className="px-3 py-3">Category</th><th className="px-3 py-3 text-right">Cheapest offer</th><th className="px-3 py-3 text-right">Performance rank</th><th className="px-3 py-3 text-right">Reviews</th><th className="px-3 py-3">Marketplace coverage</th></tr></thead><tbody>{variants.map(v => <tr key={v.listing_id ?? v.id} className="border-b border-white/5 transition last:border-0 hover:bg-white/[0.03]"><td className="px-4 py-3 text-right font-mono text-amber-300">#{v.amazon_bestseller_rank?.toLocaleString() ?? "—"}</td><td className="max-w-[520px] px-3 py-3"><a href={v.url ?? undefined} target="_blank" rel="noopener noreferrer" className="font-medium text-white hover:text-cyan-300 hover:underline">{v.listing_title}</a><span className="mt-1 block font-mono text-[10px] text-slate-600">ASIN {v.listing_id}</span></td><td className="px-3 py-3 capitalize text-slate-400">{v.slot_type}</td><td className="px-3 py-3 text-right">{v.cheapest_market_url ? <a href={v.cheapest_market_url} target="_blank" rel="noopener noreferrer" className="font-mono font-semibold text-emerald-200 hover:underline">{v.cheapest_market_price == null ? "View offer" : `£${v.cheapest_market_price.toFixed(2)}`}</a> : <span className="text-slate-500">{v.cheapest_market_price == null ? "—" : `£${v.cheapest_market_price.toFixed(2)}`}</span>}<span className="mt-1 block text-[10px] text-slate-500">{v.cheapest_market_source ?? "No matched marketplace offer"}</span></td><td className="px-3 py-3 text-right"><PerformanceSummary variant={v} /></td><td className="px-3 py-3 text-right"><ReviewSummary variant={v} /></td><td className="px-3 py-3"><ChannelLogos sources={v.channel_sources} /></td></tr>)}</tbody></table></div>;
 }
 
 function BestsellerCard({ variant: v, index }: { variant: Variant; index: number }) {
@@ -318,8 +322,8 @@ function BestsellerCard({ variant: v, index }: { variant: Variant; index: number
     </div>
     <div className="space-y-3 p-3">
       <div><p className="mb-1 text-[10px] uppercase tracking-wider text-cyan-400">{v.amazon_bestseller_list} · ASIN {v.listing_id}</p><a href={v.url ?? undefined} target="_blank" rel="noopener noreferrer" className="line-clamp-2 text-sm font-semibold text-white hover:text-cyan-300 hover:underline">{v.listing_title}</a></div>
-      <div className="flex flex-wrap items-end justify-between gap-3"><div><p className="text-lg font-bold text-white">{v.display_price == null ? "—" : `£${v.display_price.toFixed(2)}`}</p><p className="text-[10px] text-slate-500">Amazon price</p></div><div><ReviewSummary variant={v} /><p className="mt-1 text-right text-[10px] text-slate-500">Customer reviews</p></div></div>
-      <div className="flex items-center justify-between border-t border-white/10 pt-2"><PerformanceSummary variant={v} /><ChannelLogos sources={v.channel_sources} current="Amazon" /></div>
+      <div className="flex flex-wrap items-end justify-between gap-3"><div>{v.cheapest_market_url ? <a href={v.cheapest_market_url} target="_blank" rel="noopener noreferrer" className="text-lg font-bold text-emerald-200 hover:underline">{v.cheapest_market_price == null ? "View cheapest" : `£${v.cheapest_market_price.toFixed(2)}`}</a> : <p className="text-lg font-bold text-white">{v.cheapest_market_price == null ? "No matched offer" : `£${v.cheapest_market_price.toFixed(2)}`}</p>}<p className="text-[10px] text-slate-500">{v.cheapest_market_source ? `Cheapest on ${v.cheapest_market_source}` : "Cheapest matched marketplace offer"}</p></div><div><ReviewSummary variant={v} /><p className="mt-1 text-right text-[10px] text-slate-500">Customer reviews</p></div></div>
+      <div className="flex items-center justify-between border-t border-white/10 pt-2"><PerformanceSummary variant={v} /><ChannelLogos sources={v.channel_sources}  /></div>
       {v.sales_velocity && <p className="text-[10px] text-slate-400">{v.sales_velocity}</p>}
     </div>
   </article>;

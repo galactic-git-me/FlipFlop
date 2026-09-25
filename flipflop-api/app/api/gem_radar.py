@@ -3889,56 +3889,70 @@ async def get_best_sellers(
              "category": category, "list_name": current["name"],
              "rank": row.rank, "cpk": row.cpk, "rating": row.rating,
              "review_count": row.review_count, "price": row.price, "rrp": row.rrp,
-             "sales_velocity": row.sales_velocity, "captured_at": row.captured_at.isoformat()}
+             "sales_velocity": row.sales_velocity, "captured_at": row.captured_at.isoformat(),
+             "performance_rank": None, "performance_peer_count": None,
+             "marketplace_listing_count": None, "marketplace_sources": [],
+             "cheapest_market_price": None, "cheapest_market_url": None,
+             "cheapest_market_source": None,
+             "market_low": None, "market_median": None, "market_high": None}
             for row in sorted(rows, key=lambda item: item.rank)
         ]
-        benchmark_index, peer_scores = await load_benchmark_context(db)
-        for product in products:
-            performance = enrich_listing_performance(
-                category=category,
-                title=product["title"],
-                canonical_model_id=None,
-                release_year=None,
-                delivered_price=float(product["price"] or 0),
-                benchmark_index=benchmark_index,
-                peer_scores=peer_scores,
-            )
-            product["performance_rank"] = performance.get("performance_rank")
-            product["performance_peer_count"] = performance.get("performance_peer_count")
         cpks = list({product["cpk"] for product in products if product["cpk"]})
-        listing_counts: dict[str, int] = {}
+        listing_counts: dict[str, dict] = {}
         if cpks:
+            benchmark_index, peer_scores = await load_benchmark_context(db)
+            for product in products:
+                if not product["cpk"]:
+                    continue
+                performance = enrich_listing_performance(
+                    category=category,
+                    title=product["title"],
+                    canonical_model_id=None,
+                    release_year=None,
+                    delivered_price=float(product["price"] or 0),
+                    benchmark_index=benchmark_index,
+                    peer_scores=peer_scores,
+                )
+                product["performance_rank"] = performance.get("performance_rank")
+                product["performance_peer_count"] = performance.get("performance_peer_count")
             count_rows = (await db.execute(text("""
-                WITH candidate_listing_ids AS (
-                    SELECT listing_id
-                    FROM gem_radar_listing_cpk
-                    WHERE cpk = ANY(:cpks)
+                WITH resolved_listing_cpks AS (
+                    SELECT d.listing_id, d.cpk, COALESCE(s.source, o.source) AS source
+                    FROM gem_radar_listing_cpk d
+                    LEFT JOIN LATERAL (
+                        SELECT source FROM gem_radar_scored_listings
+                        WHERE listing_id=d.listing_id
+                        ORDER BY scored_at DESC NULLS LAST, id DESC LIMIT 1
+                    ) s ON TRUE
+                    LEFT JOIN LATERAL (
+                        SELECT source FROM gem_radar_listing_observations
+                        WHERE listing_id=d.listing_id
+                        ORDER BY observed_at DESC, id DESC LIMIT 1
+                    ) o ON TRUE
+                    WHERE d.cpk = ANY(:cpks)
                     UNION
-                    SELECT listing_id
-                    FROM gem_radar_scored_listings
-                    WHERE cpk = ANY(:cpks)
-                ), latest_scored AS (
-                    SELECT DISTINCT ON (s.listing_id) s.listing_id, s.cpk, s.source
+                    SELECT s.listing_id, s.cpk, COALESCE(s.source, o.source) AS source
                     FROM gem_radar_scored_listings s
-                    JOIN candidate_listing_ids c USING (listing_id)
-                    ORDER BY s.listing_id, s.scored_at DESC NULLS LAST, s.id DESC
-                ), latest_observation AS (
-                    SELECT DISTINCT ON (o.listing_id) o.listing_id, o.source
-                    FROM gem_radar_listing_observations o
-                    JOIN candidate_listing_ids c USING (listing_id)
-                    ORDER BY o.listing_id, o.observed_at DESC, o.id DESC
-                ), resolved_listing_cpks AS (
-                    SELECT c.listing_id, COALESCE(d.cpk, s.cpk) AS cpk,
-                           COALESCE(s.source, o.source) AS source
-                    FROM candidate_listing_ids c
-                    LEFT JOIN gem_radar_listing_cpk d USING (listing_id)
-                    LEFT JOIN latest_scored s USING (listing_id)
-                    LEFT JOIN latest_observation o USING (listing_id)
+                    LEFT JOIN LATERAL (
+                        SELECT source FROM gem_radar_listing_observations
+                        WHERE listing_id=s.listing_id
+                        ORDER BY observed_at DESC, id DESC LIMIT 1
+                    ) o ON TRUE
+                    WHERE s.cpk = ANY(:cpks)
                 )
                 SELECT cpk,
                        COUNT(DISTINCT listing_id) AS listing_count,
-                       ARRAY_AGG(DISTINCT source) FILTER (WHERE source IS NOT NULL) AS marketplace_sources
+                       ARRAY_AGG(DISTINCT source) FILTER (WHERE source IS NOT NULL) AS marketplace_sources,
+                       MIN(offers.price) FILTER (WHERE offers.price > 0) AS cheapest_market_price,
+                       (ARRAY_AGG(offers.url ORDER BY offers.price ASC NULLS LAST) FILTER (WHERE offers.price > 0))[1] AS cheapest_market_url,
+                       (ARRAY_AGG(offers.source ORDER BY offers.price ASC NULLS LAST) FILTER (WHERE offers.price > 0))[1] AS cheapest_market_source
                 FROM resolved_listing_cpks
+                LEFT JOIN LATERAL (
+                    SELECT DISTINCT ON (listing_id) listing_id, url, actual_listing_price AS price, source
+                    FROM gem_radar_scored_listings s
+                    WHERE s.cpk = resolved_listing_cpks.cpk
+                    ORDER BY listing_id, scored_at DESC NULLS LAST, id DESC
+                ) offers ON offers.listing_id = resolved_listing_cpks.listing_id
                 WHERE cpk = ANY(:cpks)
                 GROUP BY cpk
             """), {"cpks": cpks})).all()
@@ -3946,6 +3960,9 @@ async def get_best_sellers(
                 row.cpk: {
                     "marketplace_listing_count": int(row.listing_count),
                     "marketplace_sources": list(row.marketplace_sources or []),
+                    "cheapest_market_price": row.cheapest_market_price,
+                    "cheapest_market_url": row.cheapest_market_url,
+                    "cheapest_market_source": row.cheapest_market_source,
                 }
                 for row in count_rows
             }
@@ -3958,6 +3975,9 @@ async def get_best_sellers(
                 listing_counts.setdefault(row.cpk, {
                     "marketplace_listing_count": 0,
                     "marketplace_sources": [],
+                    "cheapest_market_price": None,
+                    "cheapest_market_url": None,
+                    "cheapest_market_source": None,
                 }).update({
                     "market_low": row.min_price,
                     "market_median": row.median_price,
