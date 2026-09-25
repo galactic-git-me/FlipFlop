@@ -1078,7 +1078,7 @@ function MarketSnapshotPanel({ snapshot }: { snapshot: MarketSnapshot | null }) 
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="w-64 shrink-0">
           <h3 className="text-sm font-semibold text-white">Market Snapshot</h3>
-          <p className="text-xs text-slate-400">All listing IDs observed in the last 24 hours, including records outside the scored fixed-price table below</p>
+          <p className="text-xs text-slate-400">All stored market listing IDs across scan runs, excluding archived and known inactive listings</p>
         </div>
         <div className="flex items-center gap-4">
           <MiniStat label="Listings" value={snapshot?.ingestedCount ?? 0} color="#e2e8f0" />

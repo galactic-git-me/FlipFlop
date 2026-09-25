@@ -2286,18 +2286,17 @@ async def get_source_activity(db: AsyncSession = Depends(get_db), _: None = Depe
 
 @router.get("/market-snapshot")
 async def get_market_snapshot(db: AsyncSession = Depends(get_db), _: None = Depends(require_operator)) -> dict:
-    """Whole-DB view of the current market — same categories as the Current
-    Scan Run panel (Listings/SUPER GEMs/GEMs/Avg scores/BIN Prices/Sold
-    Prices), but scoped to every currently-active listing (see
-    observations.get_active_listing_ids) rather than just the latest run.
-    This is the "most up to date view of the market" total, not a run delta.
+    """Whole-DB market totals across stored, unarchived listings.
+
+    Unlike the live Listings table, this snapshot is cumulative across scan
+    runs. Known archived and non-active listings are excluded.
 
     Dedupes to each listing's most recent scored row (gem_radar_scored_listings
     is append-only, same reasoning as /scored-listings) so a re-scored
     listing isn't double-counted or counted under a stale classification.
     """
-    # Keep the active set inside PostgreSQL. Materialising every active
-    # listing ID in Python and binding it to several ANY(:ids) predicates
+    # Keep the population inside PostgreSQL. Materialising every listing
+    # ID in Python and binding it to several ANY(:ids) predicates
     # caused PostgreSQL OOM once the market grew into the hundreds of
     # thousands of rows.
     from sqlalchemy import text
@@ -2306,10 +2305,22 @@ async def get_market_snapshot(db: AsyncSession = Depends(get_db), _: None = Depe
         await db.execute(
             text(
                 """
-                WITH active_ids AS (
+                WITH stored_ids AS (
                     SELECT DISTINCT listing_id
                     FROM gem_radar_listing_observations
-                    WHERE observed_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
+                ),
+                active_ids AS (
+                    SELECT s.listing_id
+                    FROM stored_ids s
+                    WHERE NOT EXISTS (
+                        SELECT 1 FROM listing_archive a
+                        WHERE a.external_id = s.listing_id
+                    )
+                    AND NOT EXISTS (
+                        SELECT 1 FROM listings l
+                        WHERE l.external_id = s.listing_id
+                          AND l.status <> 'active'
+                    )
                 ),
                 latest_scored AS (
                     SELECT DISTINCT ON (s.listing_id)
