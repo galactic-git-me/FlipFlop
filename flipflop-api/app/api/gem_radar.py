@@ -3960,9 +3960,9 @@ async def get_best_sellers(
                       AND p.updated_at >= CURRENT_TIMESTAMP - INTERVAL '14 days'
                     ORDER BY p.listing_id, p.updated_at DESC
                 )
-                SELECT cpk,
-                       COUNT(DISTINCT listing_id) AS listing_count,
-                       ARRAY_AGG(DISTINCT source) FILTER (WHERE source IS NOT NULL) AS marketplace_sources,
+                SELECT resolved_listing_cpks.cpk,
+                       COUNT(DISTINCT resolved_listing_cpks.listing_id) AS listing_count,
+                       ARRAY_AGG(DISTINCT resolved_listing_cpks.source) FILTER (WHERE resolved_listing_cpks.source IS NOT NULL) AS marketplace_sources,
                        MIN(offers.price) FILTER (WHERE offers.price > 0) AS cheapest_market_price,
                        (ARRAY_AGG(offers.url ORDER BY offers.price ASC NULLS LAST) FILTER (WHERE offers.price > 0))[1] AS cheapest_market_url,
                        (ARRAY_AGG(offers.source ORDER BY offers.price ASC NULLS LAST) FILTER (WHERE offers.price > 0))[1] AS cheapest_market_source
@@ -3973,7 +3973,7 @@ async def get_best_sellers(
                     WHERE d.cpk = resolved_listing_cpks.cpk
                 ) offers ON offers.listing_id = resolved_listing_cpks.listing_id
                 WHERE resolved_listing_cpks.cpk = ANY(:cpks)
-                GROUP BY cpk
+                GROUP BY resolved_listing_cpks.cpk
             """), {"cpks": cpks})).all()
             listing_counts = {
                 row.cpk: {
