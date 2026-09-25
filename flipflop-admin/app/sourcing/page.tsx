@@ -860,7 +860,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             </div>
             <p className="text-xs text-slate-400">
               {hasActiveRun
-                ? `${displayedScans.length} search${displayedScans.length !== 1 ? "es" : ""} in this run`
+                ? `${displayedScans.length} search${displayedScans.length !== 1 ? "es" : ""} in this run · new to database`
                 : latestRun
                   ? `${latestRun.runBy} · Last updated ${new Date(latestRun.occurredAt).toLocaleString()}`
                   : "No completed scan run is available"}
@@ -868,7 +868,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
           </div>
           <div className="flex items-center gap-4">
             <QueueStatusBar queue={queueStatus} />
-            <MiniStat label="Listings" value={displayedListingCount} color="#e2e8f0" />
+            <MiniStat label="New Listings" value={displayedListingCount} color="#e2e8f0" />
             <MiniStat label="SUPER GEMs" value={displayedSuperGemCount} color="#fcd34d" />
             <MiniStat label="Avg Super Gem" value={displayedAvgSuperGemScore.toFixed(1)} color="#fcd34d" />
             <MiniStat label="GEMs" value={displayedGemCount} color="#93c5fd" />
