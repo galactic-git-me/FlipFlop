@@ -108,6 +108,9 @@ class Settings(BaseSettings):
     # no-ops with a clear error until this is set, same convention as
     # anthropic_api_key etc.
     meshy_api_key: str = ""
+    # Optional Hermes workflow receiver for curated-build generation.
+    hermes_curated_build_webhook_url: str = ""
+    hermes_curated_build_callback_url: str = ""
 
     # Parcel2Go courier quotes (app/services/parcel2go_courier.py) — used by
     # the build sell page to quote real tracked-delivery cost from a build's

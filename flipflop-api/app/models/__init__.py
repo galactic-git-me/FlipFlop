@@ -26,6 +26,7 @@ from app.models.manual_build import ManualBuild
 from app.models.pc_builder import PCBuild, PCBuildPurchasePlan
 from app.models.benchmark import HardwareBenchmark, ComponentPerformanceMetric, BenchmarkRefreshRun
 from app.models.catalogue import PlaybookSlot, CatalogueVariant, CaseCatalogue
+from app.models.curated_build_segment import CuratedBuildSegment
 from app.models.build_capacity import BuildCapacity
 from app.models.build_capacity_override import BuildCapacityOverride
 from app.models.inventory_allocation import InventoryAllocation
@@ -92,6 +93,7 @@ __all__ = [
     "PlaybookSlot",
     "CatalogueVariant",
     "CaseCatalogue",
+    "CuratedBuildSegment",
     "Order",
     "BuildCapacity",
     "BuildCapacityOverride",

@@ -60,6 +60,7 @@ class CatalogueVariant(Base):
     auto_published_at: Mapped[str] = mapped_column(
         String(50), default=lambda: datetime.utcnow().isoformat()
     )
+    curated_for_builds: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False, index=True)
     reviewed_at: Mapped[Optional[str]] = mapped_column(String(50))
     reviewed_by: Mapped[Optional[str]] = mapped_column(String(100))
     reject_reason: Mapped[Optional[str]] = mapped_column(String(200))
