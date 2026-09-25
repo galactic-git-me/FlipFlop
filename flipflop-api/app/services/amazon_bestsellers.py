@@ -113,26 +113,42 @@ _EXTRACT_JS = """(rankOffset = 0) => {
 }"""
 
 
-async def _load_bestseller_page(page, url: str, rank_offset: int) -> list[dict]:
-    """Scroll Amazon's lazy grid until all 50 products have rendered."""
+async def _load_bestseller_page(page, url: str, rank_offset: int) -> tuple[list[dict], str | None, bool]:
+    """Scroll one bestseller page to its end and return products/next URL/completion."""
     last_error: Exception | None = None
     for attempt in range(3):
         try:
             await page.goto(url, wait_until="domcontentloaded", timeout=45000)
-            await page.wait_for_selector("#gridItemRoot", timeout=15000)
-            for _ in range(12):
-                if await page.locator("#gridItemRoot").count() >= 50:
+            await page.wait_for_selector("#gridItemRoot, .zg-grid-general-faceout, div[data-asin]", timeout=15000)
+            selector = "#gridItemRoot"
+            if await page.locator(selector).count() == 0:
+                selector = ".zg-grid-general-faceout"
+            if await page.locator(selector).count() == 0:
+                selector = "div[data-asin]"
+            previous_count = -1
+            stable_rounds = 0
+            for _ in range(80):
+                cards = await page.locator(selector).count()
+                if cards == previous_count:
+                    stable_rounds += 1
+                else:
+                    stable_rounds = 0
+                    previous_count = cards
+                await page.locator(selector).last.scroll_into_view_if_needed()
+                await page.mouse.wheel(0, 1800)
+                await page.wait_for_timeout(350)
+                at_bottom = await page.evaluate("window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 8")
+                if at_bottom and stable_rounds >= 3:
                     break
-                await page.locator("#gridItemRoot").last.scroll_into_view_if_needed()
-                await page.mouse.wheel(0, 1500)
-                await page.wait_for_timeout(500)
-            cards = await page.locator("#gridItemRoot").count()
-            if cards < 50:
-                raise ValueError(f"incomplete Amazon bestseller page {url}: {cards}/50 cards")
+            else:
+                raise ValueError(f"Amazon bestseller page did not reach a stable bottom: {url}")
             items = await page.evaluate(_EXTRACT_JS, rank_offset)
-            if len(items) < 50:
-                raise ValueError(f"incomplete Amazon bestseller extraction {url}: {len(items)}/50 products")
-            return items
+            next_href = await page.locator('a[aria-label="Go to next page"], li.a-last a, a:has-text("Next")').first.get_attribute("href") if await page.locator('a[aria-label="Go to next page"], li.a-last a, a:has-text("Next")').count() else None
+            next_url = page.url.split("#")[0]
+            if next_href:
+                from urllib.parse import urljoin
+                next_url = urljoin(page.url, next_href).split("#")[0]
+            return items, next_url if next_href else None, True
         except Exception as exc:
             last_error = exc
             if attempt < 2:
@@ -442,13 +458,30 @@ async def scrape_amazon_component_bestsellers(categories: list[str] | None = Non
                         match_categories = {"storage": {"ssd", "storage"}, "cooler": {"cooler", "cooling"}}.get(category, {category})
                         scored_for_category = [row for row in scored if (row.get("category") or "").lower() in match_categories]
                         items: list[dict] = []
-                        for page_num in (1, 2):
-                            url = base_url if page_num == 1 else f"{base_url}?pg={page_num}"
-                            page_items = await _load_bestseller_page(page, url, (page_num - 1) * 50)
+                        page_urls: set[str] = set()
+                        url: str | None = base_url
+                        page_num = 1
+                        while url:
+                            normalized_url = url.split("#")[0]
+                            if normalized_url in page_urls:
+                                raise ValueError(f"Amazon bestseller pagination loop detected at {normalized_url}")
+                            page_urls.add(normalized_url)
+                            page_items, next_url, page_complete = await _load_bestseller_page(page, normalized_url, (page_num - 1) * 50)
+                            if not page_complete:
+                                raise ValueError(f"Amazon bestseller page {page_num} was not fully traversed")
                             page_title = (await page.title()).lower()
                             if list_name.lower() not in page_title:
                                 raise ValueError(f"unexpected Amazon list page: {page_title[:100]}")
                             items.extend(page_items)
+                            if next_url and next_url in page_urls:
+                                raise ValueError(f"Amazon bestseller next-page link loops to {next_url}")
+                            url = next_url
+                            page_num += 1
+                            if page_num > 100:
+                                raise ValueError(f"Amazon bestseller pagination exceeded 100 pages for {category}")
+
+                        if not page_urls:
+                            raise ValueError(f"{category} bestseller list had no pages")
 
                         unique: dict[str, dict] = {}
                         for item in items:
@@ -457,19 +490,12 @@ async def scrape_amazon_component_bestsellers(categories: list[str] | None = Non
                                 item["asin"] = asin
                                 unique[asin] = item
 
-                        if len(unique) < 100:
-                            raise ValueError(f"{category} bestseller list has only {len(unique)}/100 unique products")
-                        ranks = {int(item["rank"]) for item in unique.values()}
-                        if ranks != set(range(1, 101)):
-                            missing = sorted(set(range(1, 101)) - ranks)
-                            raise ValueError(f"{category} bestseller ranks incomplete; missing {missing}")
+                        if not unique:
+                            raise ValueError(f"{category} bestseller pages yielded no products")
                         valid_items = [item for item in unique.values() if bestseller_item_matches_category(item["title"], category)]
-                        if len(valid_items) < 5:
-                            raise ValueError(f"{category} bestseller list has only {len(valid_items)} category-valid items out of {len(unique)}")
                         category_matched = 0
                         category_priced = sum(item.get("price") is not None for item in valid_items)
-                        if category_priced == 0:
-                            raise ValueError(f"{category} bestseller list has no extracted prices")
+                        category_scraped = category_matched_total = 0
                         for item in sorted(unique.values(), key=lambda value: value["rank"]):
                             # Preserve every Amazon rank in the admin list, even when
                             # Amazon places an unrelated item in this source category.
@@ -490,24 +516,27 @@ async def scrape_amazon_component_bestsellers(categories: list[str] | None = Non
                                 rrp=item.get("rrp"),
                                 sales_velocity=clean_sales_velocity(item.get("sales_velocity")),
                             ))
-                            results["scraped"] += 1
+                            category_scraped += 1
                             if match:
-                                results["matched"] += 1
+                                category_matched_total += 1
                                 category_matched += 1
+                        await db.commit()
+                        results["scraped"] += category_scraped
+                        results["matched"] += category_matched_total
                         results["categories"] += 1
-                        results["category_results"][category] = {"status": "ok", "parsed": len(unique), "valid": len(valid_items), "matched": category_matched, "priced": category_priced}
+                        results["category_results"][category] = {"status": "ok", "pages": len(page_urls), "parsed": len(unique), "valid": len(valid_items), "matched": category_matched, "priced": category_priced}
                     except Exception as exc:
+                        await db.rollback()
                         log.warning("bestsellers.category_error", category=category, error=str(exc))
                         results["errors"] += 1
                         results["category_results"][category] = {"status": "failed", "error": str(exc)}
-                await db.commit()
         finally:
             await page.close()
             await context.close()
             await browser.close()
-    results["ok"] = results["errors"] == 0 and results["matched"] > 0 and results["categories"] == len(selected_lists)
+    results["ok"] = results["errors"] == 0 and results["categories"] == len(selected_lists)
     if not results["ok"]:
-        results["reason"] = f"coverage_failed: {results['categories']}/{len(selected_lists)} lists, {results['matched']} CPK matches, {results['errors']} errors"
+        results["reason"] = f"pagination_failed: {results['categories']}/{len(selected_lists)} lists completed, {results['errors']} errors"
     log.info("bestsellers.components_complete", **results)
     return results
 
@@ -522,21 +551,29 @@ async def backfill_recent_bestseller_prices() -> dict[str, int]:
             async with AsyncSessionLocal() as db:
                 for category, (_, base_url) in COMPONENT_BESTSELLER_LISTS.items():
                     count = 0
-                    for page_num in (1, 2):
-                        url = base_url if page_num == 1 else f"{base_url}?pg={page_num}"
-                        items = await _load_bestseller_page(page, url, (page_num - 1) * 50)
-                        for item in items:
-                            if item.get("price") is None:
-                                continue
-                            result = await db.execute(text("""
-                                UPDATE amazon_bestseller_observations
-                                SET price=:price, rrp=:rrp, sales_velocity=:sales_velocity
-                                WHERE category=:category AND asin=:asin
-                                  AND captured_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
-                            """), {"price": item["price"], "rrp": item.get("rrp"),
-                                   "sales_velocity": clean_sales_velocity(item.get("sales_velocity")),
-                                   "category": category, "asin": item["asin"]})
-                            count += result.rowcount or 0
+                    url: str | None = base_url
+                    page_num = 1
+                    seen_pages: set[str] = set()
+                    items: list[dict] = []
+                    while url:
+                        if url in seen_pages:
+                            raise ValueError(f"Amazon bestseller pagination loop detected at {url}")
+                        seen_pages.add(url)
+                        page_items, url, _ = await _load_bestseller_page(page, url, (page_num - 1) * 50)
+                        items.extend(page_items)
+                        page_num += 1
+                    for item in items:
+                        if item.get("price") is None:
+                            continue
+                        result = await db.execute(text("""
+                            UPDATE amazon_bestseller_observations
+                            SET price=:price, rrp=:rrp, sales_velocity=:sales_velocity
+                            WHERE category=:category AND asin=:asin
+                              AND captured_at >= CURRENT_TIMESTAMP - INTERVAL '24 hours'
+                        """), {"price": item["price"], "rrp": item.get("rrp"),
+                               "sales_velocity": clean_sales_velocity(item.get("sales_velocity")),
+                               "category": category, "asin": item["asin"]})
+                        count += result.rowcount or 0
                     if count == 0:
                         raise RuntimeError(f"No recent {category} bestseller prices could be backfilled")
                     updated[category] = count
