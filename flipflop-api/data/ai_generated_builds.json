@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-09-26T13:14:38.018173+00:00",
+  "generated_at": "2026-09-26T15:15:40.931541+00:00",
   "builds": [
     {
       "components": [
         {
-          "id": 43771466,
+          "id": 43845577,
           "listing_id": "227472624264",
           "category": "cpu",
           "title": "Intel Xeon E5-2650 v4 Processor 12-Core 2.2GHz CPU LGA2011-3 SR2N3 Server",
@@ -18,7 +18,7 @@
           "url": "https://www.ebay.co.uk/itm/227472624264"
         },
         {
-          "id": 43791861,
+          "id": 43865688,
           "listing_id": "bargain_hardware:dell-22y99-poweredge-r620-ram-cpu-vented-slot-cover-022y99",
           "category": "motherboard",
           "title": "Dell PowerEdge R620 RAM/CPU Vented Slot Cover",
@@ -32,7 +32,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Dell+PowerEdge+R620+RAM%2FCPU+Vented+Slot+Cover"
         },
         {
-          "id": 43795309,
+          "id": 43869127,
           "listing_id": "computer_orbit:nvidia-12vhpwr-12-4-pin-to-4x-8-pin-pcie-power-adapter-cable",
           "category": "gpu",
           "title": "Nvidia 12VHPWR 12+4 pin to 4x 8 pin PCIe Power Adapter Cable",
@@ -46,7 +46,7 @@
           "url": "https://computerorbit.com/search?q=Nvidia+12VHPWR+12%2B4+pin+to+4x+8+pin+PCIe+Power+Adapter+Cable&type=product"
         },
         {
-          "id": 43813600,
+          "id": 43887531,
           "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
           "category": "ram",
           "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
@@ -60,7 +60,7 @@
           "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
         },
         {
-          "id": 43792186,
+          "id": 43866012,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -74,21 +74,21 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
         },
         {
-          "id": 43796243,
-          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
+          "id": 43903689,
+          "listing_id": "google-shopping:WD%20Blue%20SN5100%201TB%20M.2%20NVMe%20Solid%20State%20Drive%20%2F%20SSD:1:Novatech.co.uk",
           "category": "ssd",
-          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
-          "seller": "eBay",
+          "title": "WD Blue SN5100 1TB M.2 NVMe Solid State Drive / SSD",
+          "seller": "Novatech.co.uk",
           "image_url": null,
-          "delivered_price": 3.99,
+          "delivered_price": 1.0,
           "market_new_price": null,
           "market_used_price": null,
-          "classification": "INELIGIBLE",
-          "estimated_profit": -3.99,
-          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -1.0,
+          "url": "https://www.google.com/search?tbm=shop&q=WD+Blue+SN5100+1TB+M.2+NVMe+Solid+State+Drive+%2F+SSD"
         },
         {
-          "id": 43800342,
+          "id": 43874175,
           "listing_id": "google-shopping:Antec%20T120%20Fan%20CPU%20Cooler:4.39:AWD-IT",
           "category": "cooler",
           "title": "Antec T120 Fan CPU Cooler",
@@ -102,7 +102,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=Antec+T120+Fan+CPU+Cooler"
         },
         {
-          "id": 43767291,
+          "id": 43841459,
           "listing_id": "176499066653",
           "category": "case",
           "title": "1 x Honor Magic 4 Lite Series PC Case - Black",
@@ -118,7 +118,7 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 38.41,
+      "build_cost": 35.42,
       "market": {
         "query": "gaming pc Intel Xeon E5-2650 Nvidia 12VHPWR 12+4 pin to 4x  8gb",
         "sold": {
@@ -137,13 +137,13 @@
       },
       "resale_estimate": 175.68,
       "resale_source": "bin_average",
-      "estimated_profit": 137.27,
+      "estimated_profit": 140.26,
       "rank": 1
     },
     {
       "components": [
         {
-          "id": 43821222,
+          "id": 43895226,
           "listing_id": "google-shopping:Intel%20Intel%20Xeon%20Processor%20E5-2650%20v4:3.59:eBay",
           "category": "cpu",
           "title": "Intel Intel Xeon Processor E5-2650 v4",
@@ -157,7 +157,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=Intel+Intel+Xeon+Processor+E5-2650+v4"
         },
         {
-          "id": 43791861,
+          "id": 43865688,
           "listing_id": "bargain_hardware:dell-22y99-poweredge-r620-ram-cpu-vented-slot-cover-022y99",
           "category": "motherboard",
           "title": "Dell PowerEdge R620 RAM/CPU Vented Slot Cover",
@@ -171,7 +171,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Dell+PowerEdge+R620+RAM%2FCPU+Vented+Slot+Cover"
         },
         {
-          "id": 43795309,
+          "id": 43869127,
           "listing_id": "computer_orbit:nvidia-12vhpwr-12-4-pin-to-4x-8-pin-pcie-power-adapter-cable",
           "category": "gpu",
           "title": "Nvidia 12VHPWR 12+4 pin to 4x 8 pin PCIe Power Adapter Cable",
@@ -185,7 +185,7 @@
           "url": "https://computerorbit.com/search?q=Nvidia+12VHPWR+12%2B4+pin+to+4x+8+pin+PCIe+Power+Adapter+Cable&type=product"
         },
         {
-          "id": 43813600,
+          "id": 43887531,
           "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
           "category": "ram",
           "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
@@ -199,7 +199,7 @@
           "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
         },
         {
-          "id": 43792186,
+          "id": 43866012,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -213,21 +213,21 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
         },
         {
-          "id": 43796243,
-          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
+          "id": 43903689,
+          "listing_id": "google-shopping:WD%20Blue%20SN5100%201TB%20M.2%20NVMe%20Solid%20State%20Drive%20%2F%20SSD:1:Novatech.co.uk",
           "category": "ssd",
-          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
-          "seller": "eBay",
+          "title": "WD Blue SN5100 1TB M.2 NVMe Solid State Drive / SSD",
+          "seller": "Novatech.co.uk",
           "image_url": null,
-          "delivered_price": 3.99,
+          "delivered_price": 1.0,
           "market_new_price": null,
           "market_used_price": null,
-          "classification": "INELIGIBLE",
-          "estimated_profit": -3.99,
-          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -1.0,
+          "url": "https://www.google.com/search?tbm=shop&q=WD+Blue+SN5100+1TB+M.2+NVMe+Solid+State+Drive+%2F+SSD"
         },
         {
-          "id": 43800342,
+          "id": 43874175,
           "listing_id": "google-shopping:Antec%20T120%20Fan%20CPU%20Cooler:4.39:AWD-IT",
           "category": "cooler",
           "title": "Antec T120 Fan CPU Cooler",
@@ -241,7 +241,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=Antec+T120+Fan+CPU+Cooler"
         },
         {
-          "id": 43767291,
+          "id": 43841459,
           "listing_id": "176499066653",
           "category": "case",
           "title": "1 x Honor Magic 4 Lite Series PC Case - Black",
@@ -257,7 +257,7 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 38.41,
+      "build_cost": 35.42,
       "market": {
         "query": "gaming pc Intel Intel Xeon Processor E5- Nvidia 12VHPWR 12+4 pin to 4x  8gb",
         "sold": {
@@ -276,13 +276,13 @@
       },
       "resale_estimate": 175.68,
       "resale_source": "bin_average",
-      "estimated_profit": 137.27,
+      "estimated_profit": 140.26,
       "rank": 2
     },
     {
       "components": [
         {
-          "id": 43821290,
+          "id": 43895294,
           "listing_id": "google-shopping:Intel%20Pentium%20Intel%20Pentium%20Processor%20G620:1.99:eBay%20-%20pcupgradeuk",
           "category": "cpu",
           "title": "Intel Pentium Intel Pentium Processor G620",
@@ -296,7 +296,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=Intel+Pentium+Intel+Pentium+Processor+G620"
         },
         {
-          "id": 43791861,
+          "id": 43865688,
           "listing_id": "bargain_hardware:dell-22y99-poweredge-r620-ram-cpu-vented-slot-cover-022y99",
           "category": "motherboard",
           "title": "Dell PowerEdge R620 RAM/CPU Vented Slot Cover",
@@ -310,7 +310,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Dell+PowerEdge+R620+RAM%2FCPU+Vented+Slot+Cover"
         },
         {
-          "id": 43795309,
+          "id": 43869127,
           "listing_id": "computer_orbit:nvidia-12vhpwr-12-4-pin-to-4x-8-pin-pcie-power-adapter-cable",
           "category": "gpu",
           "title": "Nvidia 12VHPWR 12+4 pin to 4x 8 pin PCIe Power Adapter Cable",
@@ -324,7 +324,7 @@
           "url": "https://computerorbit.com/search?q=Nvidia+12VHPWR+12%2B4+pin+to+4x+8+pin+PCIe+Power+Adapter+Cable&type=product"
         },
         {
-          "id": 43813600,
+          "id": 43887531,
           "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
           "category": "ram",
           "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
@@ -338,7 +338,7 @@
           "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
         },
         {
-          "id": 43792186,
+          "id": 43866012,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -352,21 +352,21 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
         },
         {
-          "id": 43796243,
-          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
+          "id": 43903689,
+          "listing_id": "google-shopping:WD%20Blue%20SN5100%201TB%20M.2%20NVMe%20Solid%20State%20Drive%20%2F%20SSD:1:Novatech.co.uk",
           "category": "ssd",
-          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
-          "seller": "eBay",
+          "title": "WD Blue SN5100 1TB M.2 NVMe Solid State Drive / SSD",
+          "seller": "Novatech.co.uk",
           "image_url": null,
-          "delivered_price": 3.99,
+          "delivered_price": 1.0,
           "market_new_price": null,
           "market_used_price": null,
-          "classification": "INELIGIBLE",
-          "estimated_profit": -3.99,
-          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -1.0,
+          "url": "https://www.google.com/search?tbm=shop&q=WD+Blue+SN5100+1TB+M.2+NVMe+Solid+State+Drive+%2F+SSD"
         },
         {
-          "id": 43800342,
+          "id": 43874175,
           "listing_id": "google-shopping:Antec%20T120%20Fan%20CPU%20Cooler:4.39:AWD-IT",
           "category": "cooler",
           "title": "Antec T120 Fan CPU Cooler",
@@ -380,7 +380,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=Antec+T120+Fan+CPU+Cooler"
         },
         {
-          "id": 43767291,
+          "id": 43841459,
           "listing_id": "176499066653",
           "category": "case",
           "title": "1 x Honor Magic 4 Lite Series PC Case - Black",
@@ -396,7 +396,7 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 36.81,
+      "build_cost": 33.82,
       "market": {
         "query": "gaming pc Intel Pentium Intel Pentium Pr Nvidia 12VHPWR 12+4 pin to 4x  8gb",
         "sold": {
@@ -415,13 +415,13 @@
       },
       "resale_estimate": 149.33,
       "resale_source": "bin_average",
-      "estimated_profit": 112.52,
+      "estimated_profit": 115.51,
       "rank": 3
     },
     {
       "components": [
         {
-          "id": 43826912,
+          "id": 43900987,
           "listing_id": "google-shopping:PC%20CPU%20Intel%20Pentium%20E2160%201.80GHZ%20SLA8Z%20LGA775%20Processor%20Socket%20Computer.%20Intel.%20CPUs%2FProcessors.%204053162224476:2.23:eBay%20-%20merseyelectonics",
           "category": "cpu",
           "title": "PC CPU Intel Pentium E2160 1.80GHZ SLA8Z LGA775 Processor Socket Computer. Intel. CPUs/Processors. 4053162224476",
@@ -435,7 +435,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=PC+CPU+Intel+Pentium+E2160+1.80GHZ+SLA8Z+LGA775+Processor+Socket+Computer.+Intel.+CPUs%2FProcessors.+4053162224476"
         },
         {
-          "id": 43791861,
+          "id": 43865688,
           "listing_id": "bargain_hardware:dell-22y99-poweredge-r620-ram-cpu-vented-slot-cover-022y99",
           "category": "motherboard",
           "title": "Dell PowerEdge R620 RAM/CPU Vented Slot Cover",
@@ -449,7 +449,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Dell+PowerEdge+R620+RAM%2FCPU+Vented+Slot+Cover"
         },
         {
-          "id": 43795309,
+          "id": 43869127,
           "listing_id": "computer_orbit:nvidia-12vhpwr-12-4-pin-to-4x-8-pin-pcie-power-adapter-cable",
           "category": "gpu",
           "title": "Nvidia 12VHPWR 12+4 pin to 4x 8 pin PCIe Power Adapter Cable",
@@ -463,7 +463,7 @@
           "url": "https://computerorbit.com/search?q=Nvidia+12VHPWR+12%2B4+pin+to+4x+8+pin+PCIe+Power+Adapter+Cable&type=product"
         },
         {
-          "id": 43813600,
+          "id": 43887531,
           "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
           "category": "ram",
           "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
@@ -477,7 +477,7 @@
           "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
         },
         {
-          "id": 43792186,
+          "id": 43866012,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -491,21 +491,21 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
         },
         {
-          "id": 43796243,
-          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
+          "id": 43903689,
+          "listing_id": "google-shopping:WD%20Blue%20SN5100%201TB%20M.2%20NVMe%20Solid%20State%20Drive%20%2F%20SSD:1:Novatech.co.uk",
           "category": "ssd",
-          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
-          "seller": "eBay",
+          "title": "WD Blue SN5100 1TB M.2 NVMe Solid State Drive / SSD",
+          "seller": "Novatech.co.uk",
           "image_url": null,
-          "delivered_price": 3.99,
+          "delivered_price": 1.0,
           "market_new_price": null,
           "market_used_price": null,
-          "classification": "INELIGIBLE",
-          "estimated_profit": -3.99,
-          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -1.0,
+          "url": "https://www.google.com/search?tbm=shop&q=WD+Blue+SN5100+1TB+M.2+NVMe+Solid+State+Drive+%2F+SSD"
         },
         {
-          "id": 43800342,
+          "id": 43874175,
           "listing_id": "google-shopping:Antec%20T120%20Fan%20CPU%20Cooler:4.39:AWD-IT",
           "category": "cooler",
           "title": "Antec T120 Fan CPU Cooler",
@@ -519,7 +519,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=Antec+T120+Fan+CPU+Cooler"
         },
         {
-          "id": 43767291,
+          "id": 43841459,
           "listing_id": "176499066653",
           "category": "case",
           "title": "1 x Honor Magic 4 Lite Series PC Case - Black",
@@ -535,7 +535,7 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 37.05,
+      "build_cost": 34.06,
       "market": {
         "query": "gaming pc Intel Pentium E2160 Nvidia 12VHPWR 12+4 pin to 4x  8gb",
         "sold": {
@@ -554,13 +554,13 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -37.05,
+      "estimated_profit": -34.06,
       "rank": 4
     },
     {
       "components": [
         {
-          "id": 43821219,
+          "id": 43895223,
           "listing_id": "google-shopping:Intel%20Intel%20Pentium%20Processor%20G4560%20bx80677g4560:2.39:eBay",
           "category": "cpu",
           "title": "Intel Intel Pentium Processor G4560 bx80677g4560",
@@ -574,7 +574,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=Intel+Intel+Pentium+Processor+G4560+bx80677g4560"
         },
         {
-          "id": 43791861,
+          "id": 43865688,
           "listing_id": "bargain_hardware:dell-22y99-poweredge-r620-ram-cpu-vented-slot-cover-022y99",
           "category": "motherboard",
           "title": "Dell PowerEdge R620 RAM/CPU Vented Slot Cover",
@@ -588,7 +588,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Dell+PowerEdge+R620+RAM%2FCPU+Vented+Slot+Cover"
         },
         {
-          "id": 43795309,
+          "id": 43869127,
           "listing_id": "computer_orbit:nvidia-12vhpwr-12-4-pin-to-4x-8-pin-pcie-power-adapter-cable",
           "category": "gpu",
           "title": "Nvidia 12VHPWR 12+4 pin to 4x 8 pin PCIe Power Adapter Cable",
@@ -602,7 +602,7 @@
           "url": "https://computerorbit.com/search?q=Nvidia+12VHPWR+12%2B4+pin+to+4x+8+pin+PCIe+Power+Adapter+Cable&type=product"
         },
         {
-          "id": 43813600,
+          "id": 43887531,
           "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
           "category": "ram",
           "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
@@ -616,7 +616,7 @@
           "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
         },
         {
-          "id": 43792186,
+          "id": 43866012,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -630,21 +630,21 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
         },
         {
-          "id": 43796243,
-          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
+          "id": 43903689,
+          "listing_id": "google-shopping:WD%20Blue%20SN5100%201TB%20M.2%20NVMe%20Solid%20State%20Drive%20%2F%20SSD:1:Novatech.co.uk",
           "category": "ssd",
-          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
-          "seller": "eBay",
+          "title": "WD Blue SN5100 1TB M.2 NVMe Solid State Drive / SSD",
+          "seller": "Novatech.co.uk",
           "image_url": null,
-          "delivered_price": 3.99,
+          "delivered_price": 1.0,
           "market_new_price": null,
           "market_used_price": null,
-          "classification": "INELIGIBLE",
-          "estimated_profit": -3.99,
-          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -1.0,
+          "url": "https://www.google.com/search?tbm=shop&q=WD+Blue+SN5100+1TB+M.2+NVMe+Solid+State+Drive+%2F+SSD"
         },
         {
-          "id": 43800342,
+          "id": 43874175,
           "listing_id": "google-shopping:Antec%20T120%20Fan%20CPU%20Cooler:4.39:AWD-IT",
           "category": "cooler",
           "title": "Antec T120 Fan CPU Cooler",
@@ -658,7 +658,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=Antec+T120+Fan+CPU+Cooler"
         },
         {
-          "id": 43767291,
+          "id": 43841459,
           "listing_id": "176499066653",
           "category": "case",
           "title": "1 x Honor Magic 4 Lite Series PC Case - Black",
@@ -674,7 +674,7 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 37.21,
+      "build_cost": 34.22,
       "market": {
         "query": "gaming pc Intel Intel Pentium Processor  Nvidia 12VHPWR 12+4 pin to 4x  8gb",
         "sold": {
@@ -693,13 +693,13 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -37.21,
+      "estimated_profit": -34.22,
       "rank": 5
     },
     {
       "components": [
         {
-          "id": 43819137,
+          "id": 43893134,
           "listing_id": "google-shopping:Intel%20Core%20i5%20Quad-Core%20i5-4430%203GHz%20Desktop%20Processor:3:CeX",
           "category": "cpu",
           "title": "Intel Core i5 Quad-Core i5-4430 3GHz Desktop Processor",
@@ -713,7 +713,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=Intel+Core+i5+Quad-Core+i5-4430+3GHz+Desktop+Processor"
         },
         {
-          "id": 43791861,
+          "id": 43865688,
           "listing_id": "bargain_hardware:dell-22y99-poweredge-r620-ram-cpu-vented-slot-cover-022y99",
           "category": "motherboard",
           "title": "Dell PowerEdge R620 RAM/CPU Vented Slot Cover",
@@ -727,7 +727,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Dell+PowerEdge+R620+RAM%2FCPU+Vented+Slot+Cover"
         },
         {
-          "id": 43795309,
+          "id": 43869127,
           "listing_id": "computer_orbit:nvidia-12vhpwr-12-4-pin-to-4x-8-pin-pcie-power-adapter-cable",
           "category": "gpu",
           "title": "Nvidia 12VHPWR 12+4 pin to 4x 8 pin PCIe Power Adapter Cable",
@@ -741,7 +741,7 @@
           "url": "https://computerorbit.com/search?q=Nvidia+12VHPWR+12%2B4+pin+to+4x+8+pin+PCIe+Power+Adapter+Cable&type=product"
         },
         {
-          "id": 43813600,
+          "id": 43887531,
           "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
           "category": "ram",
           "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
@@ -755,7 +755,7 @@
           "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
         },
         {
-          "id": 43792186,
+          "id": 43866012,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -769,21 +769,21 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
         },
         {
-          "id": 43796243,
-          "listing_id": "google-shopping:128gb%20256gb%20512gb%20M.2%202280%20Nvme%20Ssd%20Solid%20State%20Drive%20-%20Various%20Brands:3.99:eBay",
+          "id": 43903689,
+          "listing_id": "google-shopping:WD%20Blue%20SN5100%201TB%20M.2%20NVMe%20Solid%20State%20Drive%20%2F%20SSD:1:Novatech.co.uk",
           "category": "ssd",
-          "title": "128gb 256gb 512gb M.2 2280 Nvme Ssd Solid State Drive - Various Brands",
-          "seller": "eBay",
+          "title": "WD Blue SN5100 1TB M.2 NVMe Solid State Drive / SSD",
+          "seller": "Novatech.co.uk",
           "image_url": null,
-          "delivered_price": 3.99,
+          "delivered_price": 1.0,
           "market_new_price": null,
           "market_used_price": null,
-          "classification": "INELIGIBLE",
-          "estimated_profit": -3.99,
-          "url": "https://www.google.com/search?tbm=shop&q=128gb+256gb+512gb+M.2+2280+Nvme+Ssd+Solid+State+Drive+-+Various+Brands"
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -1.0,
+          "url": "https://www.google.com/search?tbm=shop&q=WD+Blue+SN5100+1TB+M.2+NVMe+Solid+State+Drive+%2F+SSD"
         },
         {
-          "id": 43800342,
+          "id": 43874175,
           "listing_id": "google-shopping:Antec%20T120%20Fan%20CPU%20Cooler:4.39:AWD-IT",
           "category": "cooler",
           "title": "Antec T120 Fan CPU Cooler",
@@ -797,7 +797,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=Antec+T120+Fan+CPU+Cooler"
         },
         {
-          "id": 43767291,
+          "id": 43841459,
           "listing_id": "176499066653",
           "category": "case",
           "title": "1 x Honor Magic 4 Lite Series PC Case - Black",
@@ -813,7 +813,7 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 37.82,
+      "build_cost": 34.83,
       "market": {
         "query": "gaming pc Core i5-4430 Nvidia 12VHPWR 12+4 pin to 4x  8gb",
         "sold": {
@@ -832,10 +832,10 @@
       },
       "resale_estimate": 0.0,
       "resale_source": "component_estimate",
-      "estimated_profit": -37.82,
+      "estimated_profit": -34.83,
       "rank": 6
     }
   ],
   "candidates_evaluated": 10,
-  "total_compatible_combinations": 2393
+  "total_compatible_combinations": 2446
 }

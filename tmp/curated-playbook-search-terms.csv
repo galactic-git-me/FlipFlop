@@ -1,0 +1,110 @@
+﻿component_type,search_term,tags,playbook_ids,default_or_upsell
+CPU / APU,AMD Ryzen 5 5600,Curated; ASIN:B08166SLDF,FF-GVG-01,default
+CPU / APU,AMD Ryzen 5 5600G,Curated; ASIN:B0CQ4GYTTX,FF-BOF-01; FF-FAM-01,default
+CPU / APU,AMD Ryzen 5 9600X,Curated; ASIN:B0D6NN6TM7,FF-AIW-01; FF-FAM-01; FF-FAM-02; FF-GVG-01; FF-GVG-02; FF-STU-02; FF-SWD-01,upsell
+CPU / APU,AMD Ryzen 7 7800X3D,Curated; ASIN:B0CTD76W9C,FF-HPG-01; FF-HPG-02,upsell
+CPU / APU,AMD Ryzen 7 9700X,Curated; ASIN:B0D6NMDNNX,FF-FAM-02; FF-FAM-03,upsell
+CPU / APU,AMD Ryzen 7 9800X3D,Curated; ASIN:B0DKFMSMYK,FF-GVG-02; FF-GVG-03,upsell
+CPU / APU,AMD Ryzen 7 9850X3D,Curated; ASIN:B0G8JMLXNQ,FF-HPG-02; FF-HPG-03,upsell
+CPU / APU,AMD Ryzen 9 9950X,Curated; ASIN:B0D6NNRBGP,FF-AIW-01; FF-AIW-02; FF-CCR-02; FF-CCR-03; FF-SWD-02; FF-SWD-03,upsell
+CPU / APU,AMD Ryzen AI 5 340 (integrated),Curated; ASIN:B0CQ4GYTTX,FF-STU-01,default
+CPU / APU,AMD Ryzen AI 7 350 (integrated),Curated; ASIN:B0D6NMDNNX,FF-BOF-02; FF-BOF-03,upsell
+CPU / APU,AMD Ryzen Threadripper PRO 7975WX,Curated; ASIN:B0D6NNRBGP,FF-AIW-02; FF-AIW-03,upsell
+CPU / APU,Intel Core Ultra 5 250K Plus,Curated; ASIN:B0GMKXVVJQ,FF-BOF-01; FF-BOF-02; FF-CCR-01; FF-HPG-01,upsell
+CPU / APU,Intel Core Ultra 7 270K Plus,Curated; ASIN:B0GMLJCBBM,FF-CCR-01; FF-CCR-02; FF-STU-02; FF-STU-03; FF-SWD-01; FF-SWD-02,upsell
+CPU cooling,AMD Wraith Stealth,Curated; ASIN:B0B8Z283NZ,FF-BOF-01; FF-FAM-01,default
+CPU cooling,Arctic Liquid Freezer III 240,Curated; ASIN:B0DLWGG85P; ASIN:B0FNMN4BM3,FF-CCR-01; FF-GVG-02; FF-GVG-03; FF-STU-02; FF-STU-03,upsell
+CPU cooling,Arctic Liquid Freezer III 360,Curated; ASIN:B0DLWGG85P,FF-AIW-01; FF-AIW-02; FF-CCR-01; FF-CCR-02; FF-HPG-02; FF-HPG-03; FF-SWD-03,upsell
+CPU cooling,Arctic Liquid Freezer III 420,Curated; ASIN:B0DLWGG85P,FF-CCR-02; FF-CCR-03,upsell
+CPU cooling,Integrated low-noise cooling,Curated; ASIN:B0B4G8QKZP; ASIN:B0B8Z283NZ,FF-BOF-03; FF-STU-01,default
+CPU cooling,Noctua NH-D15 G2,Curated; ASIN:B0DWSP4VKS,FF-SWD-01; FF-SWD-02,upsell
+CPU cooling,Noctua NH-U12S redux,Curated; ASIN:B09VH14935,FF-BOF-01; FF-BOF-02,upsell
+CPU cooling,Noctua NH-U14S TR5-SP6,Curated; ASIN:B0DLWGG85P,FF-AIW-02; FF-AIW-03,upsell
+CPU cooling,Thermalright Aqua Elite 240 V3,Curated; ASIN:B0FNMN4BM3,FF-FAM-02; FF-FAM-03; FF-HPG-02,upsell
+CPU cooling,Thermalright Assassin X 120 SE,Curated; ASIN:B0B8Z283NZ,FF-FAM-01; FF-FAM-02; FF-GVG-01; FF-STU-01; FF-STU-02,upsell
+CPU cooling,Thermalright Peerless Assassin 120 SE,Curated; ASIN:B0B4G8QKZP,FF-AIW-01; FF-GVG-01; FF-GVG-02; FF-SWD-01,upsell
+CPU cooling,Thermalright Phantom Spirit 120 SE,Curated; ASIN:B0DWSP4VKS,FF-HPG-01,default
+Case,APNX Creator C1 ChromaFlair,Curated; ASIN:B0FJ2V6VVP,FF-FAM-03; FF-HPG-02,default
+Case,ASUS NUC 14 Pro-style compact chassis,Curated; ASIN:B0DFS88R2L,FF-STU-01,default
+Case,ASUS ProArt PA602,Curated; ASIN:B0CJCJ3ZZB,FF-CCR-02,default
+Case,Corsair 3500X,Curated; ASIN:B0FJ2V6VVP,FF-CCR-01,default
+Case,Corsair 9000D Airflow,Curated; ASIN:B0CJCJ3ZZB,FF-AIW-03,default
+Case,Fractal Design Core 1100,Curated; ASIN:B08G56SF52,FF-BOF-01; FF-FAM-01,default
+Case,Fractal Design Define 7 Compact,Curated; ASIN:B0DGXQL5T9,FF-BOF-02,default
+Case,Fractal Design Define 7 XL,Curated; ASIN:B0CJCJ3ZZB,FF-CCR-03; FF-SWD-03,default
+Case,Fractal Design Meshify 2 Compact,Curated; ASIN:B0D2MK6NML,FF-AIW-01,default
+Case,Fractal Design Meshify 2 XL,Curated; ASIN:B0CJCJ3ZZB,FF-AIW-02,default
+Case,Fractal Design North,Curated; ASIN:B0CJCJ3ZZB,FF-SWD-02,default
+Case,Fractal Design North XL,Curated; ASIN:B0CJCJ3ZZB,FF-HPG-03,default
+Case,Fractal Design Pop Air,Curated; ASIN:B0D2MK6NML,FF-STU-02; FF-SWD-01,default
+Case,Lian Li LANCOOL 207,Curated; ASIN:B0CJCJ3ZZB,FF-GVG-03; FF-STU-03,default
+Case,Montech AIR 100 ARGB,Curated; ASIN:B0D2MK6NML; ASIN:B0DQPMJ6MJ,FF-FAM-02; FF-GVG-01,default
+Case,Montech SKY TWO GX,Curated; ASIN:B0D2MK6NML,FF-GVG-02,default
+Case,NZXT H5 Flow,Curated; ASIN:B0D2MK6NML,FF-HPG-01,default
+Case,Premium compact aluminium mini-PC chassis,Curated; ASIN:B0DFS88R2L,FF-BOF-03,default
+Graphics,AMD Radeon 840M integrated,Curated,FF-STU-01,default
+Graphics,AMD Radeon 860M integrated,Curated,FF-BOF-03,default
+Graphics,AMD Radeon RX 9060 XT 16GB,Curated; ASIN:B0F9QM1M6R,FF-FAM-01; FF-FAM-02; FF-GVG-01; FF-GVG-02,upsell
+Graphics,AMD Radeon RX 9070 16GB,Curated; ASIN:B0DRPQPQQC,FF-FAM-02; FF-FAM-03; FF-GVG-02; FF-GVG-03,upsell
+Graphics,AMD Radeon RX 9070 XT 16GB,Curated; ASIN:B0DT7B79K9,FF-HPG-01; FF-HPG-02,upsell
+Graphics,ASRock AMD Radeon AI PRO R9700 Creator 32GB,Curated; ASIN:B0FJ8XPXTM,FF-AIW-01; FF-AIW-02,upsell
+Graphics,Intel Arc B580 12GB,Curated; ASIN:B0DNV4NWF7,FF-STU-01; FF-STU-02; FF-SWD-01,upsell
+Graphics,Intel integrated graphics,Curated,FF-BOF-02,default
+Graphics,NVIDIA GeForce RTX 5050 8GB,Curated; ASIN:B096Y5JNZC,FF-GVG-01,default
+Graphics,NVIDIA GeForce RTX 5060 Ti 16GB,Curated; ASIN:B0F4DVKSZ4,FF-AIW-01; FF-CCR-01; FF-HPG-01; FF-SWD-01; FF-SWD-02,upsell
+Graphics,NVIDIA GeForce RTX 5070 Ti 16GB,Curated; ASIN:B0DTGPC5KR,FF-STU-02; FF-STU-03,upsell
+Graphics,NVIDIA GeForce RTX 5080 16GB,Curated; ASIN:B0DS65VMC6,FF-CCR-01; FF-CCR-02; FF-SWD-02; FF-SWD-03,upsell
+Graphics,NVIDIA GeForce RTX 5090 32GB,Curated; ASIN:B0DTHV8THW,FF-CCR-02; FF-CCR-03; FF-HPG-02; FF-HPG-03,upsell
+Graphics,NVIDIA RTX 6000 Ada 48GB,Curated; ASIN:B0DTHV8THW,FF-AIW-02; FF-AIW-03,upsell
+Graphics,Radeon Vega integrated,Curated,FF-BOF-01; FF-FAM-01,default
+Memory,128GB (4x32GB) DDR5-5600,Curated; ASIN:B0F7RY9V4N,FF-AIW-01; FF-AIW-02; FF-CCR-02; FF-CCR-03; FF-SWD-02; FF-SWD-03,upsell
+Memory,256GB (8x32GB) DDR5 ECC RDIMM,Curated; ASIN:B0F7RY9V4N,FF-AIW-02; FF-AIW-03,upsell
+Memory,32GB (2x16GB) DDR4-3200,Curated; ASIN:B0CB2TZKCG; ASIN:B0CT9BMGLF,FF-BOF-01; FF-FAM-01; FF-GVG-01,default
+Memory,32GB (2x16GB) DDR5-6000 CL30,Curated; ASIN:B0BPTKD797,FF-FAM-01; FF-FAM-02; FF-GVG-01; FF-GVG-02; FF-GVG-03; FF-STU-01; FF-STU-02,upsell
+Memory,32GB (2x16GB) DDR5-6400,Curated; ASIN:B0BPTKD797,FF-BOF-01; FF-BOF-02; FF-HPG-01,upsell
+Memory,32GB (2x16GB) Lexar DDR5-6400 CL38,Curated; ASIN:B0BPTKD797,FF-HPG-01; FF-HPG-02,upsell
+Memory,32GB LPDDR5X,Curated; ASIN:B0CT9BMGLF,FF-STU-01,default
+Memory,64GB (2x32GB) DDR5-6000 CL30,Curated; ASIN:B0C5M7J967,FF-AIW-01; FF-FAM-02; FF-FAM-03; FF-HPG-03; FF-SWD-01,upsell
+Memory,64GB (2x32GB) DDR5-6400,Curated; ASIN:B0C5M7J967,FF-CCR-01; FF-CCR-02; FF-STU-02; FF-STU-03,upsell
+Memory,64GB LPDDR5X,Curated; ASIN:B0C5M7J967,FF-BOF-03,default
+Memory,96GB (2x48GB) DDR5-6400,Curated; ASIN:B0F7RY9V4N,FF-SWD-01; FF-SWD-02,upsell
+Motherboard,ASRock B850 Steel Legend WiFi,Curated; ASIN:B096Y1H9VR,FF-FAM-01; FF-FAM-02; FF-GVG-01; FF-GVG-02,upsell
+Motherboard,ASUS PRIME X870-P,Curated; ASIN:B0DPKVF29H,FF-HPG-02,default
+Motherboard,ASUS Pro Q870M-C-CSM,Curated; ASIN:B0DCZM8QK5,FF-BOF-01; FF-BOF-02,upsell
+Motherboard,ASUS Pro WS WRX90E-SAGE SE,Curated; ASIN:B09KB8GGN1,FF-AIW-02; FF-AIW-03,upsell
+Motherboard,ASUS ProArt X870E-Creator WiFi,Curated; ASIN:B09KB8GGN1,FF-AIW-01; FF-AIW-02; FF-CCR-03; FF-SWD-03,upsell
+Motherboard,ASUS ProArt Z890-CREATOR WIFI,Curated; ASIN:B0DCZM8QK5,FF-CCR-01; FF-CCR-02; FF-SWD-01; FF-SWD-02,upsell
+Motherboard,ASUS ROG Crosshair X870E Hero,Curated; ASIN:B09KB8GGN1,FF-HPG-02; FF-HPG-03,upsell
+Motherboard,ASUS TUF GAMING Z890-PLUS WIFI,Curated; ASIN:B0DCZM8QK5,FF-STU-02; FF-STU-03,upsell
+Motherboard,ASUS TUF Gaming X870-PLUS WIFI,Curated; ASIN:B0DGQ9C2TH,FF-FAM-02; FF-FAM-03; FF-GVG-02; FF-GVG-03,upsell
+Motherboard,MSI B550M PRO-VDH WIFI,Curated; ASIN:B08BCR4ZRS; ASIN:B0CJR9PD93,FF-BOF-01; FF-FAM-01; FF-GVG-01,default
+Motherboard,MSI B850 GAMING PLUS WIFI,Curated; ASIN:B096Y1H9VR,FF-STU-01; FF-STU-02; FF-SWD-01,upsell
+Motherboard,MSI MAG B850 Tomahawk MAX WiFi,Curated; ASIN:B096Y1H9VR,FF-AIW-01,default
+Motherboard,MSI Z890 GAMING PLUS WIFI,Curated; ASIN:B0DCZM8QK5,FF-CCR-01; FF-HPG-01,default
+Motherboard,OEM compact APU mainboard (included),Curated; ASIN:B0CJR9PD93,FF-BOF-03; FF-STU-01,default
+Operating system,Ubuntu 24.04 LTS + Windows 11 Pro,Curated,FF-AIW-03,default
+Operating system,Ubuntu 24.04 LTS + Windows 11 Pro dual-boot,Curated,FF-AIW-02,default
+Operating system,Windows 11 Home,Curated,FF-CCR-01; FF-FAM-01; FF-FAM-02; FF-FAM-03; FF-GVG-01; FF-GVG-02; FF-GVG-03; FF-HPG-01; FF-HPG-02; FF-STU-01; FF-STU-02; FF-STU-03,default
+Operating system,Windows 11 Pro,Curated,FF-BOF-01; FF-BOF-02; FF-BOF-03; FF-CCR-02; FF-CCR-03; FF-HPG-03,default
+Operating system,Windows 11 Pro + Ubuntu 24.04 dual-boot,Curated,FF-SWD-03,default
+Operating system,Windows 11 Pro + Ubuntu VM,Curated,FF-SWD-02,default
+Operating system,Windows 11 Pro + Ubuntu option,Curated,FF-AIW-01,default
+Operating system,Windows 11 Pro + WSL2,Curated,FF-SWD-01,default
+Power supply,Corsair AX1600i 1600W 80+ Titanium,Curated; ASIN:B0DMPDVR18,FF-AIW-02; FF-AIW-03,upsell
+Power supply,Corsair CX550 550W 80+ Bronze,Curated; ASIN:B09GW3QZLJ,FF-BOF-01; FF-FAM-01,default
+Power supply,Corsair CX650 650W 80+ Bronze,Curated; ASIN:B09GW3QZLJ,FF-GVG-01,default
+Power supply,Corsair HX1200i 1200W 80+ Platinum,Curated; ASIN:B0F3JJYXDP,FF-CCR-02; FF-CCR-03; FF-HPG-02; FF-HPG-03,upsell
+Power supply,Corsair RM1000x 1000W 80+ Gold,Curated; ASIN:B0D9C1HG19,FF-AIW-01; FF-AIW-02; FF-CCR-01; FF-CCR-02; FF-SWD-02; FF-SWD-03,upsell
+Power supply,Corsair RM650e 650W 80+ Gold,Curated; ASIN:B09GW3QZLJ; ASIN:B0BYKHQWXF,FF-BOF-01; FF-BOF-02; FF-FAM-01; FF-FAM-02; FF-STU-01; FF-STU-02; FF-SWD-01,upsell
+Power supply,Corsair RM750e 750W 80+ Gold,Curated; ASIN:B0BYKHQWXF,FF-AIW-01; FF-CCR-01; FF-GVG-01; FF-GVG-02; FF-HPG-01,upsell
+Power supply,Corsair RM750i 750W modular,Curated; ASIN:B0F3DRP6B3,FF-HPG-02,default
+Power supply,Corsair RM850e 850W 80+ Gold,Curated; ASIN:B0F3DRP6B3,FF-FAM-02; FF-FAM-03; FF-GVG-02; FF-GVG-03; FF-STU-02; FF-STU-03; FF-SWD-01; FF-SWD-02,upsell
+Power supply,External 120W power adapter,Curated; ASIN:B09GW3QZLJ,FF-STU-01,default
+Power supply,External 180W power adapter,Curated; ASIN:B09GW3QZLJ,FF-BOF-03,default
+Primary storage,1TB PCIe 3.0 NVMe SSD,Curated; ASIN:B0DC8RVRBZ,FF-HPG-02,default
+Primary storage,1TB PCIe 4.0 NVMe SSD,Curated; ASIN:B0B9C3ZVHR; ASIN:B0CNSV1M47,FF-BOF-01; FF-FAM-01; FF-GVG-01; FF-HPG-01; FF-STU-01,default
+Primary storage,2TB PCIe 4.0 NVMe SSD,Curated; ASIN:B0DC8RVRBZ,FF-AIW-01; FF-BOF-01; FF-BOF-02; FF-BOF-03; FF-CCR-01; FF-FAM-01; FF-FAM-02; FF-GVG-01; FF-GVG-02; FF-GVG-03; FF-STU-01; FF-STU-02; FF-STU-03; FF-SWD-01,upsell
+Primary storage,4TB PCIe 4.0 NVMe SSD,Curated; ASIN:B0DC6KDV6R,FF-AIW-01; FF-AIW-02; FF-CCR-01; FF-CCR-02; FF-FAM-02; FF-FAM-03; FF-HPG-02; FF-HPG-03; FF-SWD-01; FF-SWD-02,upsell
+Primary storage,4TB PCIe 4.0 NVMe SSD + 4TB build-cache SSD,Curated; ASIN:B0DC6KDV6R,FF-SWD-02; FF-SWD-03,upsell
+Primary storage,4TB PCIe 4.0 NVMe SSD + 4TB project SSD,Curated; ASIN:B0DC6KDV6R,FF-CCR-02; FF-CCR-03,upsell
+Primary storage,4TB PCIe 4.0 NVMe SSD + 8TB data SSD,Curated; ASIN:B0DC6KDV6R,FF-AIW-02; FF-AIW-03,upsell
