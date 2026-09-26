@@ -145,7 +145,7 @@ async def main(apply: bool) -> None:
                 assignments += 1
                 print(f"{build['name']:16} {slot:12} #{best['rank']:3} {best['title'][:85]}")
             if apply:
-                await db.execute(text("UPDATE curated_build_segments SET bestseller_components = :choices, is_live = false WHERE id = :id"), {"choices": json.dumps(choices), "id": segment.id})
+                await db.execute(text("UPDATE curated_build_segments SET bestseller_components = CAST(:choices AS json), is_live = false WHERE id = :id"), {"choices": json.dumps(choices), "id": segment.id})
         if apply:
             await db.commit()
         print(f"\n{'Applied' if apply else 'Dry run'}: {assignments} high-confidence assignments, {len(gaps)} gaps")

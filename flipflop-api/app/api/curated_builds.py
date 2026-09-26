@@ -75,13 +75,14 @@ async def bestseller_catalogue(db: AsyncSession = Depends(get_db)):
                   AND image_url NOT LIKE '%._RC'
                 ORDER BY observed_at DESC, id DESC LIMIT 1
             ) o ON true
-            WHERE (s.listing_id = a.asin OR (a.cpk IS NOT NULL AND s.cpk = a.cpk))
-              AND s.delivered_price > 0
-              AND s.category IN (
-                CASE a.category WHEN 'storage' THEN 'ssd'
-                    WHEN 'cooler' THEN 'cooling' ELSE a.category END,
-                a.category
-              )
+            WHERE s.delivered_price > 0
+              AND (s.listing_id = a.asin OR (
+                a.cpk IS NOT NULL AND s.cpk = a.cpk AND s.category IN (
+                  CASE a.category WHEN 'storage' THEN 'ssd'
+                      WHEN 'cooler' THEN 'cooling' ELSE a.category END,
+                  a.category
+                )
+              ))
             ORDER BY (s.listing_id = a.asin) DESC,
                 (COALESCE(
                 CASE WHEN s.image_url ~* '^https?://' AND s.image_url NOT LIKE '%._RC' THEN s.image_url END,
@@ -110,14 +111,8 @@ async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depe
     exists = (await db.execute(text("""
         SELECT EXISTS (
             SELECT 1 FROM amazon_bestseller_observations a
-            JOIN gem_radar_scored_listings s ON s.cpk = a.cpk
-            WHERE a.category = :category AND a.cpk = :cpk
-              AND s.delivered_price > 0
-              AND s.category IN (
-                  CASE a.category WHEN 'storage' THEN 'ssd'
-                      WHEN 'cooler' THEN 'cooling' ELSE a.category END,
-                  a.category
-              )
+            WHERE a.category = :category
+              AND COALESCE(a.cpk, 'asin:' || a.asin) = :cpk
         )
     """), {"category": body.category, "cpk": body.cpk})).scalar()
     if not exists:
@@ -126,7 +121,8 @@ async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depe
         has_image = (await db.execute(text("""
             SELECT EXISTS (
                 SELECT 1 FROM amazon_bestseller_observations a
-                WHERE a.category = :category AND a.cpk = :cpk
+                WHERE a.category = :category
+                  AND COALESCE(a.cpk, 'asin:' || a.asin) = :cpk
                   AND a.image_url ~* '^https?://'
                   AND a.image_url NOT LIKE '%._RC'
             ) OR EXISTS (
