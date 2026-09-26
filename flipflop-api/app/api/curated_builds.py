@@ -59,27 +59,34 @@ async def bestseller_catalogue(db: AsyncSession = Depends(get_db)):
         FROM ranked a
         JOIN LATERAL (
             SELECT s.listing_id, s.source, s.title,
-                s.url, COALESCE(NULLIF(s.image_url, ''), (
-                    SELECT o.image_url FROM gem_radar_listing_observations o
-                    WHERE o.listing_id = s.listing_id
-                      AND o.image_url IS NOT NULL AND o.image_url <> ''
-                    ORDER BY o.observed_at DESC, o.id DESC LIMIT 1
-                )) AS image_url, s.delivered_price, s.condition, s.scored_at
+                s.url, COALESCE(NULLIF(s.image_url, ''), o.image_url) AS image_url,
+                s.delivered_price, s.condition, s.scored_at
             FROM gem_radar_scored_listings s
+            LEFT JOIN LATERAL (
+                SELECT image_url FROM gem_radar_listing_observations
+                WHERE listing_id = s.listing_id
+                  AND image_url IS NOT NULL AND image_url <> ''
+                ORDER BY observed_at DESC, id DESC LIMIT 1
+            ) o ON true
             WHERE s.cpk = a.cpk AND s.delivered_price > 0
               AND s.category IN (
                 CASE a.category WHEN 'storage' THEN 'ssd'
                     WHEN 'cooler' THEN 'cooling' ELSE a.category END,
                 a.category
               )
-            ORDER BY s.scored_at DESC
+            ORDER BY (COALESCE(NULLIF(s.image_url, ''), o.image_url) IS NOT NULL) DESC,
+                s.scored_at DESC
             LIMIT 1
         ) m ON true
         LEFT JOIN curated_bestseller_reviews r
             ON r.category = a.category AND r.cpk = a.cpk
         ORDER BY a.category, a.rank
     """))).mappings().all()
-    return {"items": [dict(row) for row in rows]}
+    visible = [dict(row) for row in rows if row["marketplace_image_url"]]
+    return {
+        "items": visible,
+        "excluded_without_marketplace_image": len(rows) - len(visible),
+    }
 
 
 class BestsellerReviewInput(BaseModel):
@@ -107,6 +114,25 @@ async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depe
     """), {"category": body.category, "cpk": body.cpk})).scalar()
     if not exists:
         raise HTTPException(status_code=404, detail="Matched bestseller product not found")
+    if body.status == "approved":
+        has_image = (await db.execute(text("""
+            SELECT EXISTS (
+                SELECT 1 FROM gem_radar_scored_listings s
+                WHERE s.cpk = :cpk AND s.delivered_price > 0
+                  AND s.category IN (
+                      CASE :category WHEN 'storage' THEN 'ssd'
+                          WHEN 'cooler' THEN 'cooling' ELSE :category END,
+                      :category
+                  )
+                  AND (NULLIF(s.image_url, '') IS NOT NULL OR EXISTS (
+                      SELECT 1 FROM gem_radar_listing_observations o
+                      WHERE o.listing_id = s.listing_id
+                        AND NULLIF(o.image_url, '') IS NOT NULL
+                  ))
+            )
+        """), {"category": body.category, "cpk": body.cpk})).scalar()
+        if not has_image:
+            raise HTTPException(status_code=409, detail="Capture a marketplace picture before approving this match")
     if body.status == "pending":
         await db.execute(text("""
             DELETE FROM curated_bestseller_reviews
