@@ -20,6 +20,7 @@ class CuratedBuildSegment(Base):
     budget_min: Mapped[float | None] = mapped_column(Float)
     budget_max: Mapped[float | None] = mapped_column(Float)
     components: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
+    bestseller_components: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
     selling_price: Mapped[float | None] = mapped_column(Float)
     proposed_selling_price: Mapped[float | None] = mapped_column(Float)
     component_cost_snapshot: Mapped[float | None] = mapped_column(Float)

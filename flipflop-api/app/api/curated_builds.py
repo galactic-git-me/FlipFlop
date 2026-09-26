@@ -92,6 +92,11 @@ async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depe
             JOIN gem_radar_scored_listings s ON s.cpk = a.cpk
             WHERE a.category = :category AND a.cpk = :cpk
               AND s.delivered_price > 0
+              AND s.category IN (
+                  CASE a.category WHEN 'storage' THEN 'ssd'
+                      WHEN 'cooler' THEN 'cooling' ELSE a.category END,
+                  a.category
+              )
         )
     """), {"category": body.category, "cpk": body.cpk})).scalar()
     if not exists:
@@ -121,6 +126,13 @@ class SegmentInput(BaseModel):
     is_live: bool | None = None
 
 
+SLOT_BESTSELLER_CATEGORY = {
+    "cpu": "cpu", "gpu": "gpu", "motherboard": "motherboard",
+    "ram": "ram", "storage": "storage", "psu": "psu",
+    "cooling": "cooler", "case": "case",
+}
+
+
 def _segment_json(segment: CuratedBuildSegment) -> dict:
     return {
         "id": segment.id,
@@ -129,6 +141,7 @@ def _segment_json(segment: CuratedBuildSegment) -> dict:
         "budget_min": segment.budget_min,
         "budget_max": segment.budget_max,
         "components": segment.components or {},
+        "bestseller_components": segment.bestseller_components or {},
         "selling_price": segment.selling_price,
         "proposed_selling_price": segment.proposed_selling_price,
         "availability_status": segment.availability_status,
@@ -221,6 +234,42 @@ async def upsert_segment(body: SegmentInput, db: AsyncSession = Depends(get_db))
     if body.is_live is not None:
         segment.is_live = body.is_live
     await db.flush()
+    return _segment_json(segment)
+
+
+class BestsellerComponentInput(BaseModel):
+    slot: str
+    cpk: str | None = None
+
+
+@router.put("/segments/{segment_id}/bestseller-component")
+async def set_segment_bestseller_component(
+    segment_id: int, body: BestsellerComponentInput, db: AsyncSession = Depends(get_db)
+):
+    segment = await db.get(CuratedBuildSegment, segment_id)
+    if not segment:
+        raise HTTPException(status_code=404, detail="Playbook segment not found")
+    category = SLOT_BESTSELLER_CATEGORY.get(body.slot)
+    if not category:
+        raise HTTPException(status_code=422, detail="Unknown build component slot")
+    choices = dict(segment.bestseller_components or {})
+    if body.cpk:
+        approved = (await db.execute(text("""
+            SELECT EXISTS (
+                SELECT 1 FROM curated_bestseller_reviews r
+                JOIN amazon_bestseller_observations a
+                    ON a.category = r.category AND a.cpk = r.cpk
+                WHERE r.category = :category AND r.cpk = :cpk
+                  AND r.status = 'approved'
+            )
+        """), {"category": category, "cpk": body.cpk})).scalar()
+        if not approved:
+            raise HTTPException(status_code=409, detail="Approve this bestseller product before assigning it")
+        choices[body.slot] = {"category": category, "cpk": body.cpk}
+    else:
+        choices.pop(body.slot, None)
+    segment.bestseller_components = choices
+    segment.is_live = False
     return _segment_json(segment)
 
 
