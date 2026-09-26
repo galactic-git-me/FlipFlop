@@ -223,7 +223,7 @@ function compactPart(title: string | undefined, slot: "cpu" | "gpu" | "ram" | "s
   if (!title) return "Pending";
   if (slot === "cpu") return title.match(/\b(?:\d{4,5}(?:X3D|X|G|WX)?|(?:250|270)K Plus)\b/i)?.[0] ?? title.slice(0, 24);
   if (slot === "gpu") return title.match(/\b(?:RTX\s*\d{4}(?:\s*Ti)?|RX\s*\d{4}(?:\s*XT)?|Arc\s*B580|R9700)\b/i)?.[0] ?? title.slice(0, 24);
-  if (slot === "ram") return `${title.match(/\b(?:16|32|64|96|128|256)GB\b/i)?.[0] ?? "RAM"} ${title.match(/\bDDR[45]\b/i)?.[0] ?? ""}`.trim();
+  if (slot === "ram") return `${title.match(/\b(?:16|32|64|96|128|256)GB\b/i)?.[0] ?? "RAM"} ${title.match(/\b(?:LPDDR[345]X?|DDR[345])\b/i)?.[0] ?? ""}`.trim();
   return title.match(/\b(?:512GB|1TB|2TB|4TB|8TB)\b/i)?.[0] ?? title.slice(0, 20);
 }
 
@@ -242,13 +242,15 @@ function PlaybookGrid({ builds, segments, matches, selectedId, onSelect }: { bui
           const refs = segment?.bestseller_components ?? {};
           const product = (slot: string) => { const ref = refs[slot]; return ref ? byProduct.get(`${ref.category}:${ref.cpk}`) : undefined; };
           const integrated = /integrated/i.test(build.core_components.find(item => item.category === "Graphics")?.sku_name ?? "");
+          const memorySpec = build.core_components.find(item => item.category === "Memory")?.sku_name;
+          const memoryLabel = compactPart(memorySpec ?? product("ram")?.title, "ram");
           const selected = Object.keys(refs).length;
           const subtotal = Object.values(refs).reduce((sum, ref) => sum + (byProduct.get(`${ref.category}:${ref.cpk}`)?.price ?? 0), 0);
           const unpriced = Object.values(refs).some(ref => byProduct.get(`${ref.category}:${ref.cpk}`)?.price == null);
-          return <button key={tier} type="button" onClick={() => segment && onSelect(segment.id)} disabled={!segment} aria-label={`${build.name}, ${type}, ${tier}, ${selected} products selected; open build details`} className={`min-h-[76px] border-l border-white/10 px-3 py-2 text-left transition hover:bg-white/[.06] disabled:cursor-default ${selectedId === segment?.id ? "bg-cyan-400/[.08]" : ""}`}>
+          return <button key={tier} type="button" onClick={() => segment && onSelect(segment.id)} disabled={!segment} aria-label={`${build.name}, ${type}, ${tier}, ${memoryLabel} memory, ${selected} products selected; open build details`} className={`min-h-[76px] border-l border-white/10 px-3 py-2 text-left transition hover:bg-white/[.06] disabled:cursor-default ${selectedId === segment?.id ? "bg-cyan-400/[.08]" : ""}`}>
             <div className="flex items-baseline justify-between gap-2"><span className="text-sm font-semibold text-white">{build.name}</span><span className="whitespace-nowrap text-xs font-semibold text-cyan-200">{selected ? `£${Math.round(subtotal).toLocaleString()}${unpriced ? "+" : ""}` : "—"}</span></div>
             <p className="mt-1 truncate text-[11px] text-slate-300">CPU {compactPart(product("cpu")?.title, "cpu")} · GPU {integrated ? "integrated" : compactPart(product("gpu")?.title, "gpu")}</p>
-            <p className="truncate text-[11px] text-slate-400">RAM {compactPart(product("ram")?.title, "ram")} · SSD {compactPart(product("storage")?.title, "storage")} <span className="text-emerald-300">· {selected}/{integrated ? 7 : 8}</span></p>
+            <p className="truncate text-[11px] text-slate-400"><span className="font-semibold text-cyan-200">RAM {memoryLabel}</span> · SSD {compactPart(product("storage")?.title, "storage")} <span className="text-emerald-300">· {selected}/{integrated ? 7 : 8}</span></p>
           </button>;
         })}</div>)}</div></div>}
   </section>;
