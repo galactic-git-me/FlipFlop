@@ -1,156 +1,180 @@
-"""Recommend Amazon bestseller CPKs for the curated playbook.
+"""Assign the 24 curated builds from captured Amazon bestseller products.
 
-Dry run by default. Only ``--apply`` writes selections, and only selections
-with a strong model/spec match are written. Approval remains a separate step.
+Selections are product identities (CPKs), not supplier offers or approvals.
+Run without arguments to audit the exact matches; pass --apply to persist.
 """
 
 import argparse
 import asyncio
 import json
-import math
 import re
 from pathlib import Path
 
-from rapidfuzz import fuzz
 from sqlalchemy import text
 
 from app.database import AsyncSessionLocal
 
 
-CATEGORIES = {
-    "CPU / APU": ("cpu", "cpu"),
-    "Motherboard": ("motherboard", "motherboard"),
-    "Memory": ("ram", "ram"),
-    "Graphics": ("gpu", "gpu"),
-    "Primary storage": ("storage", "storage"),
-    "Case": ("case", "case"),
-    "Power supply": ("psu", "psu"),
-    "CPU cooling": ("cooling", "cooler"),
+# Each expression identifies a specific product or a clearly equivalent spec.
+# The first valid ranked Amazon product wins within an expression.
+PRODUCTS = {
+    "cpu": {
+        "5600x": r"\b5600x\b", "8600g": r"\b8600g\b", "9600x": r"\b9600x\b",
+        "9700x": r"\b9700x\b", "7800x3d": r"\b7800x3d\b",
+        "9800x3d": r"\b9800x\s*3d\b|\b9800x3d\b", "9850x3d": r"\b9850x3d\b",
+        "9950x": r"\b9950x\b(?!3d)", "9950x3d": r"\b9950x3d\b",
+        "250k": r"\b250k\s+plus\b", "270k": r"\b270k\s+plus\b",
+    },
+    "motherboard": {
+        "b550m": r"\bB550M\s+PRO.VDH\s+WIFI\b",
+        "b850m": r"\bPRIME\s+B850M.A\s+Wi.Fi\b",
+        "b850": r"\bB850\s+GAMING\s+PLUS\s+WIFI(?:6E)?\b",
+        "b850_tomahawk": r"\bB850\s+TOMAHAWK\s+MAX\s+WIFI\b",
+        "x870": r"\bX870.PLUS\s+WIFI\b",
+        "x870e": r"\bProArt\s+X870E.Creator\s+WiFi\b",
+        "z890": r"\bPRO\s+Z890.A\s+WIFI\b|\bPRIME\s+Z890.P\s+WIFI\b",
+    },
+    "ram": {
+        "ddr4_32": r"(?:DDR4.{0,30}32GB|32GB.{0,30}DDR4).{0,50}3200",
+        "ddr5_16": r"(?:DDR5.{0,30}16GB|16GB.{0,30}DDR5).{0,50}(?:5600|6000)",
+        "ddr5_32": r"(?:DDR5.{0,30}32GB|32GB.{0,30}DDR5).{0,50}6000.{0,20}CL30",
+        "ddr5_64": r"(?:DDR5.{0,30}64GB|64GB.{0,30}DDR5).{0,50}6000.{0,20}CL30",
+        "ddr5_96": r"(?:DDR5.{0,30}96GB|96GB.{0,30}DDR5).{0,50}6000",
+    },
+    "gpu": {
+        "5050": r"\bRTX\s+5050\b.{0,50}\b8G(?:B)?\b",
+        "b580": r"\bArc\s+B580\b.{0,50}\b12G(?:B)?\b",
+        "9060xt": r"\bRX\s+9060\s+XT\b.{0,60}\b16G(?:B)?\b",
+        "9070": r"\bRX\s+9070\b(?!\s*XT).{0,60}\b16G(?:B)?\b",
+        "9070xt": r"\bRX\s+9070\s+XT\b.{0,60}\b16G(?:B)?\b",
+        "5060ti16": r"\bRTX\s+5060\s+Ti\b.{0,60}\b16G(?:B)?\b",
+        "5070ti16": r"\bRTX\s+5070\s+Ti\b.{0,60}\b16G(?:B)?\b",
+        "5080": r"\bRTX\s+5080\b.{0,60}\b16G(?:B)?\b",
+        "5090": r"\bRTX\s+5090\b.{0,60}\b32G(?:B)?\b(?!.*\bBOX\b)",
+        "r9700": r"\bR9700\b.{0,60}\b32G(?:B)?\b",
+    },
+    "storage": {
+        "512gb": r"\b512GB\b.{0,55}\bNVMe\b|\bNVMe\b.{0,55}\b512GB\b",
+        "1tb": r"\b1TB\b.{0,65}\b(?:NVMe|PCIe\s*(?:Gen)?\s*4)\b",
+        "2tb": r"\b2TB\b.{0,65}\b(?:NVMe|PCIe\s*(?:Gen)?\s*4)\b",
+        "4tb": r"\b4TB\b.{0,65}\b(?:NVMe|PCIe\s*(?:Gen)?\s*4)\b",
+    },
+    "case": {
+        "office": r"\bCiT\s+Work\s+Office\s+PC\s+Case\b",
+        "compact": r"\bLian\s+Li\s+A3\s+mATX\s+PC\s+Case\b",
+        "h3": r"\bNZXT\s+H3\s+Flow\b",
+        "h5": r"\bNZXT\s+H5\s+Flow\b",
+        "corsair3500": r"\bCORSAIR\s+3500X\b",
+        "northxl": r"\bFractal\s+Design\s+North\s+XL\b",
+        "quiet": r"\bbe\s+quiet!\s+Pure\s+Base\s+501\b",
+    },
+    "psu": {
+        "650bronze": r"\bMSI\s+MAG\s+A650BN\b",
+        "750gold": r"\bCORSAIR\s+RM750e\b",
+        "850gold": r"\bCORSAIR\s+RM850e\b",
+        "1000gold": r"\bCORSAIR\s+RM1000x\b(?!\s+SHIFT)",
+        "1200plat": r"\bCORSAIR\s+HX1200i\b",
+        "1600titanium": r"\bSeasonic\s+PRIME\s+TX.1600\b",
+    },
+    "cooler": {
+        "assassin": r"\bThermalright\s+Assassin\s+X\s+120R\s+SE\b",
+        "peerless": r"\bThermalright\s+Peerless\s+Assassin\s+120\s+SE\b",
+        "phantom": r"\bPhantom\s+Spirit\s+120\s+(?:SE|EVO)\b",
+        "freezer36": r"\bARCTIC\s+Freezer\s+36\b",
+        "aio240": r"\bbe\s+quiet!\s+Pure\s+Loop\s+3\s+240mm\b",
+        "aio360": r"\bARCTIC\s+Liquid\s+Freezer\s+III\s+Pro\s+360\b",
+    },
 }
 
 
-def normalise(value: str) -> str:
-    return re.sub(r"[^a-z0-9]+", " ", value.casefold()).strip()
+# Customer purpose is reflected in CPU/GPU/RAM, cooling, acoustics and case.
+# "integrated" means the chosen CPU supplies graphics; no separate card is bought.
+PROFILES = {
+    "Galileo": ("5600x", "b550m", "ddr4_32", "5050", "1tb", "h3", "650bronze", "assassin"),
+    "Cerritos": ("9600x", "b850", "ddr5_32", "9060xt", "2tb", "h5", "750gold", "peerless"),
+    "Voyager": ("9800x3d", "x870", "ddr5_32", "9070", "2tb", "northxl", "850gold", "aio360"),
+    "Columbus": ("250k", "z890", "ddr5_32", "5060ti16", "1tb", "h5", "750gold", "phantom"),
+    "Defiant": ("7800x3d", "b850_tomahawk", "ddr5_32", "9070xt", "2tb", "corsair3500", "850gold", "aio240"),
+    "Titan": ("9850x3d", "x870e", "ddr5_64", "5090", "4tb", "northxl", "1200plat", "aio360"),
+    "Copernicus": ("8600g", "b850m", "ddr5_16", "integrated", "512gb", "compact", "650bronze", "assassin"),
+    "Equinox": ("9600x", "b850", "ddr5_32", "b580", "2tb", "h5", "650bronze", "assassin"),
+    "Discovery": ("270k", "z890", "ddr5_64", "5070ti16", "2tb", "northxl", "850gold", "aio240"),
+    "Hawking": ("8600g", "b850m", "ddr5_16", "integrated", "512gb", "office", "650bronze", "assassin"),
+    "Reliant": ("250k", "z890", "ddr5_32", "integrated", "2tb", "quiet", "650bronze", "freezer36"),
+    "Excelsior": ("9700x", "b850m", "ddr5_64", "integrated", "2tb", "compact", "650bronze", "peerless"),
+    "Goddard": ("250k", "z890", "ddr5_64", "5060ti16", "2tb", "corsair3500", "750gold", "aio240"),
+    "Stargazer": ("270k", "z890", "ddr5_64", "5080", "4tb", "northxl", "1000gold", "aio360"),
+    "Odyssey": ("9950x", "x870e", "ddr5_96", "5090", "4tb", "northxl", "1200plat", "aio360"),
+    "Chaffee": ("9600x", "b850", "ddr5_64", "5060ti16", "2tb", "h5", "750gold", "peerless"),
+    "Rhode Island": ("9950x", "x870e", "ddr5_96", "r9700", "4tb", "northxl", "1000gold", "aio360"),
+    "Enterprise": ("9950x3d", "x870e", "ddr5_96", "5090", "4tb", "northxl", "1600titanium", "aio360"),
+    "Sakharov": ("9600x", "b850", "ddr5_64", "b580", "2tb", "h5", "750gold", "peerless"),
+    "Protostar": ("270k", "z890", "ddr5_96", "5060ti16", "4tb", "northxl", "850gold", "phantom"),
+    "Prometheus": ("9950x", "x870e", "ddr5_96", "5080", "4tb", "northxl", "1000gold", "aio360"),
+    "Cochrane": ("8600g", "b850m", "ddr5_16", "integrated", "512gb", "office", "650bronze", "assassin"),
+    "Grissom": ("9600x", "b850", "ddr5_32", "9060xt", "2tb", "h5", "750gold", "assassin"),
+    "Galaxy": ("9700x", "x870", "ddr5_64", "9070", "4tb", "corsair3500", "850gold", "aio240"),
+}
 
-
-def model(value: str, category: str) -> str | None:
-    value = normalise(value)
-    patterns = {
-        "cpu": r"\b(?:\d{4,5}(?:x3d|xt|x|g|f|wx)?|(?:250|270)k plus)\b",
-        "gpu": r"\b(?:r9700|b580|(?:5050|5060|5070|5080|5090|9060|9070)(?: ti| xt)?)\b",
-        "motherboard": r"\b(?:[abxzq]\d{3,4}[a-z]?)\b",
-    }
-    match = re.search(patterns.get(category, r"a^"), value)
-    return match.group(0).replace(" ", "") if match else None
-
-
-def capacity(value: str, category: str) -> int | None:
-    value = normalise(value)
-    if category == "ram":
-        match = re.search(r"\b(16|32|64|96|128|256)gb\b", value)
-        return int(match.group(1)) if match else None
-    if category == "storage":
-        match = re.search(r"\b(1|2|4|8)tb\b", value)
-        return int(match.group(1)) if match else None
-    if category == "psu":
-        match = re.search(r"\b(450|500|550|600|650|700|750|850|1000|1200|1500|1600)w\b", value)
-        return int(match.group(1)) if match else None
-    return None
-
-
-def compatibility_score(target: str, candidate: str, category: str) -> tuple[float, list[str]]:
-    a, b = normalise(target), normalise(candidate)
-    score = fuzz.token_set_ratio(a, b) * 0.55
-    issues = []
-    wanted_model, actual_model = model(target, category), model(candidate, category)
-    if wanted_model:
-        if wanted_model == actual_model:
-            score += 65
-        else:
-            score -= 45
-            issues.append(f"model {wanted_model} → {actual_model or 'unknown'}")
-    wanted_capacity, actual_capacity = capacity(target, category), capacity(candidate, category)
-    if wanted_capacity:
-        if wanted_capacity == actual_capacity:
-            score += 35
-        else:
-            score -= 35
-            issues.append(f"capacity {wanted_capacity} → {actual_capacity or 'unknown'}")
-    if category == "ram":
-        for generation in ("ddr4", "ddr5", "lpddr5"):
-            if generation in a and generation not in b:
-                score -= 70
-                issues.append(f"{generation} unavailable")
-                break
-    if category == "storage" and "nvme" in a and "nvme" not in b:
-        score -= 60
-        issues.append("not NVMe")
-    if category == "gpu" and any(word in b for word in ("enclosure", "box", "laptop")):
-        score -= 100
-        issues.append("not a desktop card")
-    if category == "cpu" and any(word in b for word in ("laptop", "mini pc", "desktop computer")):
-        score -= 100
-        issues.append("not a standalone CPU")
-    if category == "case" and any(word in b for word in ("fan only", "cpu cooler")):
-        score -= 100
-    return score, issues
+SLOTS = ("cpu", "motherboard", "ram", "gpu", "storage", "case", "psu", "cooling")
+CATEGORY = {"cooling": "cooler", **{slot: slot for slot in SLOTS if slot != "cooling"}}
 
 
 async def main(apply: bool) -> None:
-    playbooks = json.loads((Path(__file__).resolve().parents[2] / "tmp" / "curated-playbooks-v1-stub.json").read_text(encoding="utf-8"))["playbooks"]
+    builds = json.loads((Path(__file__).resolve().parents[2] / "tmp" / "curated-playbooks-v1-stub.json").read_text(encoding="utf-8"))["playbooks"]
+    if {b["name"] for b in builds} != set(PROFILES):
+        raise RuntimeError("Profile names must exactly match the 24 playbooks")
     async with AsyncSessionLocal() as db:
-        candidates = (await db.execute(text("""
-            SELECT DISTINCT ON (a.category, a.cpk) a.category, a.cpk, a.title,
-                a.rank, a.price
-            FROM amazon_bestseller_observations a
-            WHERE a.cpk IS NOT NULL AND EXISTS (
-                SELECT 1 FROM gem_radar_scored_listings s
-                WHERE s.cpk = a.cpk AND s.delivered_price > 0
-            )
-            ORDER BY a.category, a.cpk, a.captured_at DESC
+        rows = (await db.execute(text("""
+            SELECT DISTINCT ON (category, cpk) category, cpk, title, rank, price
+            FROM amazon_bestseller_observations
+            WHERE cpk IS NOT NULL
+            ORDER BY category, cpk, captured_at DESC
         """))).mappings().all()
-        by_category = {category: [row for row in candidates if row["category"] == category] for _, category in CATEGORIES.values()}
-        segments = {(row.customer_type, row.budget_level): row for row in (await db.execute(text("SELECT id, customer_type, budget_level, bestseller_components FROM curated_build_segments"))).all()}
-        assignments = 0
-        gaps = []
-        for build in playbooks:
-            key = (build["customer_type"], build["budget_tier"])
-            segment = segments.get(key)
-            if not segment:
-                gaps.append((build["name"], "missing segment"))
+        segments = {(r.customer_type, r.budget_level): r for r in (await db.execute(text(
+            "SELECT id, customer_type, budget_level, budget_min, budget_max FROM curated_build_segments"
+        ))).all()}
+        missing = []
+        plan = []
+        for build in builds:
+            segment = segments.get((build["customer_type"], build["budget_tier"]))
+            if segment is None:
+                missing.append((build["name"], "segment missing"))
                 continue
-            choices = dict(segment.bestseller_components or {})
-            for component in build["core_components"]:
-                spec = CATEGORIES.get(component["category"])
-                if not spec:
+            choices = {}
+            observed_total = 0.0
+            missing_prices = 0
+            for slot, key in zip(SLOTS, PROFILES[build["name"]], strict=True):
+                if key == "integrated":
                     continue
-                slot, category = spec
-                target = component["sku_name"]
-                if "integrated" in target.casefold() or "included" in target.casefold():
-                    gaps.append((build["name"], slot, "integrated or included in another component"))
+                category = CATEGORY[slot]
+                expression = PRODUCTS[category][key]
+                candidates = [r for r in rows if r["category"] == category and re.search(expression, r["title"], re.I)]
+                if not candidates:
+                    missing.append((build["name"], slot, key))
                     continue
-                ranked = sorted(by_category[category], key=lambda row: (
-                    compatibility_score(target, row["title"], category)[0]
-                    - math.log1p(max(row["rank"] or 1, 1))
-                ), reverse=True)
-                if not ranked:
-                    gaps.append((build["name"], slot, "no bestseller match"))
-                    continue
-                best = ranked[0]
-                score, issues = compatibility_score(target, best["title"], category)
-                if issues or score < 75:
-                    gaps.append((build["name"], slot, target, best["title"], round(score), issues))
-                    continue
-                choices[slot] = {"category": category, "cpk": best["cpk"]}
-                assignments += 1
-                print(f"{build['name']:16} {slot:12} #{best['rank']:3} {best['title'][:85]}")
-            if apply:
-                await db.execute(text("UPDATE curated_build_segments SET bestseller_components = CAST(:choices AS json), is_live = false WHERE id = :id"), {"choices": json.dumps(choices), "id": segment.id})
+                candidates.sort(key=lambda r: (r["price"] is None, r["rank"] or 999, r["price"] or 0))
+                chosen = candidates[0]
+                choices[slot] = {"category": category, "cpk": chosen["cpk"]}
+                observed_total += chosen["price"] or 0
+                missing_prices += chosen["price"] is None
+                print(f"{build['name']:16} {slot:12} #{chosen['rank']:3} {chosen['title'][:95]}")
+            plan.append((segment.id, build["name"], choices))
+            print(f"TOTAL {build['name']:16} Amazon £{observed_total:.2f} ({missing_prices} unpriced); customer range £{segment.budget_min or 0:.0f}–{segment.budget_max or 'open'}")
+        print(f"\n{len(plan)} builds; {sum(len(c) for _, _, c in plan)} component selections; {len(missing)} missing choices")
+        for gap in missing:
+            print("MISSING", *gap)
         if apply:
+            if missing:
+                raise RuntimeError("Refusing partial playbook assignment; resolve missing bestseller products first")
+            for segment_id, _, choices in plan:
+                await db.execute(text("""
+                    UPDATE curated_build_segments
+                    SET bestseller_components = CAST(:choices AS json), is_live = false
+                    WHERE id = :id
+                """), {"choices": json.dumps(choices), "id": segment_id})
             await db.commit()
-        print(f"\n{'Applied' if apply else 'Dry run'}: {assignments} high-confidence assignments, {len(gaps)} gaps")
-        for gap in gaps:
-            print("GAP", *gap)
+            print("Applied all 24 builds")
 
 
 if __name__ == "__main__":
