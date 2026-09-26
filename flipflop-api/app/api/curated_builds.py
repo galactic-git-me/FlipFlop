@@ -31,7 +31,7 @@ async def draft_playbook():
 
 @router.get("/bestseller-catalogue")
 async def bestseller_catalogue(db: AsyncSession = Depends(get_db)):
-    """Ranked Amazon products with a verified CPK and a marketplace match.
+    """Every captured Amazon bestseller, with its own ASIN as a minimum match.
 
     The Amazon snapshot supplies product identity and rank. Marketplace prices
     remain separate from the Amazon observation and are never treated as an
@@ -44,22 +44,23 @@ async def bestseller_catalogue(db: AsyncSession = Depends(get_db)):
                 rating, review_count, captured_at
             FROM amazon_bestseller_observations
             ORDER BY category, asin, captured_at DESC
-        ), ranked AS (
-            SELECT DISTINCT ON (category, cpk) *
-            FROM latest
-            WHERE cpk IS NOT NULL
-            ORDER BY category, cpk, rank ASC
         )
-        SELECT a.*, COALESCE(r.status, 'pending') AS review_status,
-            m.listing_id AS marketplace_listing_id,
-            m.source AS marketplace_source, m.title AS marketplace_title,
-            m.url AS marketplace_url,
+        SELECT a.category, a.asin, a.title, a.url, a.image_url, a.rank,
+            COALESCE(a.cpk, 'asin:' || a.asin) AS cpk, a.price,
+            a.rating, a.review_count, a.captured_at,
+            COALESCE(r.status, 'pending') AS review_status,
+            COALESCE(m.listing_id, 'amazon-bestseller:' || a.asin) AS marketplace_listing_id,
+            COALESCE(m.source, 'amazon') AS marketplace_source,
+            COALESCE(m.title, a.title) AS marketplace_title,
+            COALESCE(m.url, a.url) AS marketplace_url,
             COALESCE(m.image_url, a.image_url) AS marketplace_image_url,
-            (m.image_url IS NULL) AS marketplace_image_is_reference,
-            m.delivered_price AS marketplace_price,
-            m.condition AS marketplace_condition, m.scored_at AS marketplace_seen_at
-        FROM ranked a
-        JOIN LATERAL (
+            (m.listing_id IS NOT NULL AND m.image_url IS NULL) AS marketplace_image_is_reference,
+            (m.listing_id IS NULL) AS marketplace_is_self_capture,
+            COALESCE(m.delivered_price, a.price) AS marketplace_price,
+            m.condition AS marketplace_condition,
+            COALESCE(m.scored_at, a.captured_at) AS marketplace_seen_at
+        FROM latest a
+        LEFT JOIN LATERAL (
             SELECT s.listing_id, s.source, s.title,
                 s.url, COALESCE(
                     CASE WHEN s.image_url ~* '^https?://' AND s.image_url NOT LIKE '%._RC' THEN s.image_url END,
@@ -74,13 +75,15 @@ async def bestseller_catalogue(db: AsyncSession = Depends(get_db)):
                   AND image_url NOT LIKE '%._RC'
                 ORDER BY observed_at DESC, id DESC LIMIT 1
             ) o ON true
-            WHERE s.cpk = a.cpk AND s.delivered_price > 0
+            WHERE (s.listing_id = a.asin OR (a.cpk IS NOT NULL AND s.cpk = a.cpk))
+              AND s.delivered_price > 0
               AND s.category IN (
                 CASE a.category WHEN 'storage' THEN 'ssd'
                     WHEN 'cooler' THEN 'cooling' ELSE a.category END,
                 a.category
               )
-            ORDER BY (COALESCE(
+            ORDER BY (s.listing_id = a.asin) DESC,
+                (COALESCE(
                 CASE WHEN s.image_url ~* '^https?://' AND s.image_url NOT LIKE '%._RC' THEN s.image_url END,
                 o.image_url
             ) IS NOT NULL) DESC,
@@ -88,7 +91,7 @@ async def bestseller_catalogue(db: AsyncSession = Depends(get_db)):
             LIMIT 1
         ) m ON true
         LEFT JOIN curated_bestseller_reviews r
-            ON r.category = a.category AND r.cpk = a.cpk
+            ON r.category = a.category AND r.cpk = COALESCE(a.cpk, 'asin:' || a.asin)
         ORDER BY a.category, a.rank
     """))).mappings().all()
     return {"items": [dict(row) for row in rows]}
@@ -325,14 +328,14 @@ async def set_segment_bestseller_component(
         raise HTTPException(status_code=422, detail="Unknown build component slot")
     choices = dict(segment.bestseller_components or {})
     if body.cpk:
-        approved = (await db.execute(text("""
+        eligible = (await db.execute(text("""
             SELECT EXISTS (
-                SELECT 1 FROM curated_bestseller_reviews r
-                JOIN amazon_bestseller_observations a
-                    ON a.category = r.category AND a.cpk = r.cpk
+                SELECT 1 FROM amazon_bestseller_observations a
                 JOIN gem_radar_scored_listings s ON s.cpk = a.cpk
-                WHERE r.category = :category AND r.cpk = :cpk
-                  AND r.status = 'approved'
+                LEFT JOIN curated_bestseller_reviews r
+                    ON r.category = a.category AND r.cpk = a.cpk
+                WHERE a.category = :category AND a.cpk = :cpk
+                  AND COALESCE(r.status, 'pending') <> 'rejected'
                   AND s.delivered_price > 0
                   AND s.category IN (
                       CASE a.category WHEN 'storage' THEN 'ssd'
@@ -348,8 +351,8 @@ async def set_segment_bestseller_component(
                   ))
             )
         """), {"category": category, "cpk": body.cpk})).scalar()
-        if not approved:
-            raise HTTPException(status_code=409, detail="Approve this bestseller product before assigning it")
+        if not eligible:
+            raise HTTPException(status_code=409, detail="This bestseller has no eligible marketplace match")
         choices[body.slot] = {"category": category, "cpk": body.cpk}
     else:
         choices.pop(body.slot, None)
