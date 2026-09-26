@@ -88,18 +88,6 @@ export default function CuratedBuildsPage() {
     } catch (e) { setError(e instanceof Error ? e.message : "Could not save review"); }
     finally { setBusy(false); }
   };
-  const assignBestseller = async (segment: Segment, slot: string, cpk: string) => {
-    setBusy(true); setError("");
-    try {
-      const response = await fetch(`/api/curated-builds/segments/${segment.id}/bestseller-component`, {
-        method: "PUT", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slot, cpk: cpk || null }),
-      });
-      if (!response.ok) throw new Error((await response.json()).detail || "Could not assign bestseller product");
-      await load();
-    } catch (e) { setError(e instanceof Error ? e.message : "Could not assign bestseller product"); }
-    finally { setBusy(false); }
-  };
   const updateChoice = async (slot: string, value: string) => {
     if (!selected) return;
     const choices = { ...selected.components };
@@ -162,7 +150,7 @@ export default function CuratedBuildsPage() {
         {components.length > 0 && <><h3 className="font-semibold">Approved catalogue variants</h3>{view === "table" ? <div className="overflow-x-auto rounded-xl border border-white/10"><table className="w-full text-left text-sm"><thead className="bg-[#14202d] text-xs text-slate-400"><tr>{["Product", "Type", "Price", "Availability", "Curated"].map(h => <th key={h} className="px-4 py-3">{h}</th>)}</tr></thead><tbody>{filteredComponents.map(c => <tr key={c.id} className="border-t border-white/5"><td className="max-w-xl px-4 py-3"><div className="flex items-center gap-3"><ProductThumbnail src={c.image_url} alt={c.title} /><span>{c.title}</span></div></td><td className="px-4 py-3">{SLOT_LABELS[c.slot_type] || c.slot_type}</td><td className="px-4 py-3">£{c.price?.toFixed(2)}</td><td className="px-4 py-3"><Badge tone={c.status === "active" ? "green" : "red"}>{c.status}</Badge></td><td className="px-4 py-3"><Toggle checked={c.curated_for_builds} onClick={() => void toggleCurated(c)}/></td></tr>)}</tbody></table></div> : <div className={view === "grid" ? "grid gap-4 sm:grid-cols-2 xl:grid-cols-4" : "space-y-3"}>{filteredComponents.map(c => <article key={c.id} className={`overflow-hidden rounded-xl border border-white/10 bg-[#101924] ${view === "listings" ? "flex items-center gap-4 p-3" : "p-3"}`}><div className={view === "grid" ? "mb-3" : ""}><ProductThumbnail src={c.image_url} alt={c.title} large={view === "grid"}/></div><div className="min-w-0 flex-1"><p className="line-clamp-2 text-sm font-medium">{c.title}</p><p className="mt-1 text-xs text-slate-400">{SLOT_LABELS[c.slot_type] || c.slot_type} · £{c.price?.toFixed(2)}</p><p className="mt-1 text-xs text-slate-500">Last seen {c.last_seen_at ? new Date(c.last_seen_at).toLocaleDateString() : "unknown"}</p></div><Toggle checked={c.curated_for_builds} onClick={() => void toggleCurated(c)}/></article>)}</div>}</>}</section>}
 
       {tab === "playbook" && <PlaybookGrid builds={draftBuilds} segments={segments} matches={bestsellerMatches} selectedId={selectedId} onSelect={setSelectedId} />}
-      {tab === "playbook" && selectedId !== null && selected && <div role="dialog" aria-modal="true" aria-label={`${selected.customer_type} ${selected.budget_level} build`} className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-3 sm:p-6" onClick={() => setSelectedId(null)}><div className="max-h-[94vh] w-full max-w-6xl overflow-y-auto rounded-2xl border border-white/15 bg-[#0b1119] p-4 shadow-2xl sm:p-6" onClick={event => event.stopPropagation()}><div className="mb-4 flex items-start justify-between gap-4"><div><p className="text-xs uppercase tracking-widest text-cyan-300">Playbook build</p><h2 className="mt-1 text-2xl font-semibold">{draftBuilds.find(build => build.customer_type === selected.customer_type && build.budget_tier === selected.budget_level)?.name ?? selected.customer_type}</h2><p className="mt-1 text-sm text-slate-400">{selected.customer_type} · {selected.budget_level} · customer budget {formatBudgetRange(selected)}</p></div><button type="button" onClick={() => setSelectedId(null)} aria-label="Close build details" className="rounded-lg border border-white/10 p-2 text-slate-300 hover:bg-white/10"><X className="h-5 w-5"/></button></div><ReviewedBestsellerChoices segment={selected} build={draftBuilds.find(b => b.customer_type === selected.customer_type && b.budget_tier === selected.budget_level)} matches={bestsellerMatches} busy={busy} onAssign={assignBestseller} /><div className="mt-4 flex justify-end"><button disabled={busy} onClick={() => void generate(selected)} className="inline-flex items-center gap-2 rounded-lg bg-violet-500 px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50"><Sparkles className="h-4 w-4"/>{selected.regeneration_status === "queued" ? "Generation queued" : "Generate Build with Hermes"}</button></div></div></div>}
+      {tab === "playbook" && selectedId !== null && selected && <div role="dialog" aria-modal="true" aria-label={`${selected.customer_type} ${selected.budget_level} build`} className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-3 sm:p-6" onClick={() => setSelectedId(null)}><div className="max-h-[94vh] w-full max-w-6xl overflow-y-auto rounded-2xl border border-white/15 bg-[#0b1119] p-4 shadow-2xl sm:p-6" onClick={event => event.stopPropagation()}><div className="mb-4 flex items-start justify-between gap-4"><div><p className="text-xs uppercase tracking-widest text-cyan-300">Playbook build</p><h2 className="mt-1 text-2xl font-semibold">{draftBuilds.find(build => build.customer_type === selected.customer_type && build.budget_tier === selected.budget_level)?.name ?? selected.customer_type}</h2><p className="mt-1 text-sm text-slate-400">{selected.customer_type} · {selected.budget_level} · customer budget {formatBudgetRange(selected)}</p></div><button type="button" onClick={() => setSelectedId(null)} aria-label="Close build details" className="rounded-lg border border-white/10 p-2 text-slate-300 hover:bg-white/10"><X className="h-5 w-5"/></button></div><ReviewedBestsellerChoices segment={selected} build={draftBuilds.find(b => b.customer_type === selected.customer_type && b.budget_tier === selected.budget_level)} builds={draftBuilds} matches={bestsellerMatches} /><div className="mt-4 flex justify-end"><button disabled={busy} onClick={() => void generate(selected)} className="inline-flex items-center gap-2 rounded-lg bg-violet-500 px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50"><Sparkles className="h-4 w-4"/>{selected.regeneration_status === "queued" ? "Generation queued" : "Generate Build with Hermes"}</button></div></div></div>}
 
       {tab === "inventory" && <section className="space-y-4"><div><h2 className="text-xl font-semibold">Price and Inventory</h2><p className="text-sm text-slate-400">Supplier listing price and last-seen status are used to flag component changes and unavailable builds.</p></div>{segments.length === 0 ? <Empty title="No playbook segments" text="Create playbook segments to see pricing and availability."/> : <div className="overflow-x-auto rounded-xl border border-white/10"><table className="w-full text-left text-sm"><thead className="bg-[#14202d] text-xs text-slate-400"><tr>{["Build segment", "Components", "Cost", "Selling price", "Availability", "State"].map(x=><th className="px-4 py-3" key={x}>{x}</th>)}</tr></thead><tbody>{segments.map(s=><tr key={s.id} className="border-t border-white/5"><td className="px-4 py-3 font-medium">{s.customer_type} · {s.budget_level}</td><td className="max-w-md px-4 py-3 text-xs text-slate-400">{Object.values(s.component_details).filter(Boolean).map(c=>c!.title).join(" · ") || "No components assigned"}</td><td className="px-4 py-3">£{s.component_cost.toFixed(2)}</td><td className="px-4 py-3">{s.proposed_selling_price != null ? <span>£{s.selling_price?.toFixed(2) ?? "—"} <span className="text-amber-300">→ £{s.proposed_selling_price.toFixed(2)}</span> <button onClick={()=>void applyPrice(s)} className="ml-2 text-cyan-300 underline">Apply</button></span> : s.selling_price == null ? "—" : `£${s.selling_price.toFixed(2)}`}</td><td className="px-4 py-3"><Badge tone={s.availability_status === "out_of_stock" ? "red" : "green"}>{s.availability_status === "out_of_stock" ? "Out of stock" : "Available"}</Badge></td><td className="px-4 py-3 text-xs">{s.is_live ? "Live" : "Draft"}</td></tr>)}</tbody></table></div>}</section>}
 
@@ -266,29 +254,41 @@ function PlaybookGrid({ builds, segments, matches, selectedId, onSelect }: { bui
   </section>;
 }
 
-function ReviewedBestsellerChoices({ segment, build, matches, busy, onAssign }: {
-  segment: Segment; build?: DraftBuild; matches: BestsellerMatch[]; busy: boolean;
-  onAssign: (segment: Segment, slot: string, cpk: string) => Promise<void>;
+function ReviewedBestsellerChoices({ segment, build, builds, matches }: {
+  segment: Segment; build?: DraftBuild; builds: DraftBuild[]; matches: BestsellerMatch[];
 }) {
   const slotCategory: Record<string, string> = { cpu: "cpu", gpu: "gpu", motherboard: "motherboard", ram: "ram", storage: "storage", psu: "psu", cooling: "cooler", case: "case" };
+  const draftCategorySlot: Record<string, string> = { "CPU / APU": "cpu", Motherboard: "motherboard", Memory: "ram", Graphics: "gpu", "Primary storage": "storage", "Power supply": "psu", "CPU cooling": "cooling", Case: "case" };
   const choices = segment.bestseller_components ?? {};
   const integratedGraphics = /integrated/i.test(build?.core_components.find(item => item.category === "Graphics")?.sku_name ?? "");
   const selectedMatches = Object.values(choices).map(ref => matches.find(item => item.category === ref.category && item.cpk === ref.cpk)).filter((item): item is BestsellerMatch => Boolean(item));
   const observedTotal = selectedMatches.reduce((sum, item) => sum + (item.marketplace_price ?? 0), 0);
+  const tierOrder = ["Budget", "Mid-range", "High-end"];
+  const nextBuild = build && tierOrder[tierOrder.indexOf(build.budget_tier) + 1]
+    ? builds.find(item => item.customer_type === build.customer_type && item.budget_tier === tierOrder[tierOrder.indexOf(build.budget_tier) + 1])
+    : undefined;
   return <section className="rounded-xl border border-emerald-400/20 bg-[#101924] p-5">
-    <h2 className="text-lg font-semibold">Amazon bestseller components</h2>
-    <p className="mt-1 text-sm text-slate-400">Build choices come from the Amazon bestseller lists and matched marketplace products. Pending choices still need approval. Marketplace prices are comparison snapshots.</p>
+    <h2 className="text-lg font-semibold">Default build and one step-up</h2>
+    <p className="mt-1 text-sm text-slate-400">Each component shows the selected bestseller default and one curated upgrade. Upgrade cost deltas are catalogue estimates; supplier matching and selling prices still need review.</p>
     <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">{Object.entries(slotCategory).map(([slot, category]) => {
       if (slot === "gpu" && integratedGraphics) return <div key={slot} className="space-y-1.5 text-xs text-slate-400">GPU<div className="rounded-lg border border-white/10 bg-[#0b1119] px-3 py-2.5 text-sm text-emerald-200">Integrated with CPU</div></div>;
-      const options = [...new Map(matches.filter(item => item.category === category && !item.cpk.startsWith("asin:") && item.review_status !== "rejected").sort((a, b) => a.rank - b.rank).map(item => [item.cpk, item])).values()];
-      const current = choices[slot]?.cpk ?? "";
-      return <label key={slot} className="space-y-1.5 text-xs text-slate-400">{SLOT_LABELS[slot]}
-        <select disabled={busy} value={current} onChange={event => void onAssign(segment, slot, event.target.value)} className="w-full rounded-lg border border-white/10 bg-[#0b1119] px-3 py-2.5 text-sm text-white disabled:opacity-50">
-          <option value="">No bestseller product assigned</option>
-          {options.map(item => <option key={item.cpk} value={item.cpk}>#{item.rank} {item.title.slice(0, 75)} · {item.marketplace_price == null ? "price unavailable" : `£${item.marketplace_price.toFixed(2)}`} · {item.review_status}</option>)}
-        </select>
-      </label>;
+      const ref = choices[slot];
+      const current = ref ? matches.find(item => item.category === ref.category && item.cpk === ref.cpk) : undefined;
+      const core = build?.core_components.find(item => draftCategorySlot[item.category] === slot);
+      const explicitUpgrade = build?.upsells.find(item => draftCategorySlot[item.category] === slot);
+      const nextTierPart = nextBuild?.core_components.find(item => draftCategorySlot[item.category] === slot);
+      const upgradeName = explicitUpgrade?.to_sku ?? nextTierPart?.sku_name;
+      const nextTierBase = build?.core_components.find(item => draftCategorySlot[item.category] === slot);
+      const upgradeDelta = explicitUpgrade?.delta_cost_gbp ?? (nextTierPart && nextTierBase ? nextTierPart.cost_gbp - nextTierBase.cost_gbp : null);
+      const upgradeMatch = upgradeName
+        ? matches.filter(item => item.category === category && !item.cpk.startsWith("asin:") && item.review_status !== "rejected")
+          .find(item => item.title.toLowerCase().includes(upgradeName.toLowerCase()) || upgradeName.toLowerCase().includes(item.title.toLowerCase()))
+        : undefined;
+      return <div key={slot} className="space-y-1.5 text-xs text-slate-400"><h3 className="font-medium">{SLOT_LABELS[slot]}</h3>
+        <div className="rounded-lg border border-cyan-400/20 bg-[#0b1119] p-3"><p className="text-[10px] font-semibold uppercase tracking-wider text-cyan-300">Default</p><p className="mt-1 line-clamp-2 text-sm font-medium text-white">{current?.title ?? core?.sku_name ?? "No default assigned"}</p><p className="mt-1 text-xs text-slate-400">{current ? `Amazon match · ${current.marketplace_price == null ? "price unavailable" : `£${current.marketplace_price.toFixed(2)}`}` : "Marketplace match pending"}</p></div>
+        <div className="rounded-lg border border-violet-400/20 bg-violet-400/[.04] p-3"><p className="text-[10px] font-semibold uppercase tracking-wider text-violet-300">One upsell</p><p className="mt-1 line-clamp-2 text-sm font-medium text-white">{upgradeName ?? "No higher tier defined"}</p><p className="mt-1 text-xs text-slate-400">{upgradeDelta != null ? `Estimated component cost Δ £${upgradeDelta > 0 ? "+" : ""}${upgradeDelta.toFixed(0)}` : nextTierPart ? "Catalogue cost pending" : "Top tier · bespoke upgrade on request"}{upgradeMatch ? ` · Amazon match #${upgradeMatch.rank}` : upgradeName ? " · marketplace match pending" : ""}</p></div>
+      </div>;
     })}</div>
-    <p className="mt-4 text-xs text-amber-300">{selectedMatches.length}/{integratedGraphics ? 7 : 8} hardware products selected · marketplace comparison total £{observedTotal.toFixed(2)}. Compatibility, delivery, procurement cost and PricingBot selling price still need validation before launch.</p>
+    <p className="mt-4 text-xs text-amber-300">{selectedMatches.length}/{integratedGraphics ? 7 : 8} hardware defaults selected · marketplace comparison total £{observedTotal.toFixed(2)}. Compatibility, delivery, procurement cost and PricingBot selling price still need validation before launch.</p>
   </section>;
 }
