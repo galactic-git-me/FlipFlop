@@ -10,6 +10,8 @@ The two vNext PRDs in `docs/prd/` set the product direction. This file records d
 - Pure pricing rules now enforce explicit non-new consent, Priority's Amazon/Overclockers supplier pool, Standard's retail-only pool, full true-cost and contribution floors, and a separate sold-market gate. They are not yet connected to live supplier or checkout data.
 - Admin-only `/api/commerce-intelligence/price-assessment` and `/gem-assessment` endpoints expose review calculations without creating a customer quote or authorising a purchase. Gem assessment includes all-in costs, conservative resale, net contribution, profit velocity, max-buy and the speculative-capital ceiling.
 - Admin-only `/api/commerce-intelligence/procurement-assessment` searches approved, stocked, recent candidate offers for a BOM that meets envelope minimums and explicit socket, memory, power and case compatibility checks. It fails closed when required evidence is missing or the exhaustive search would be too large.
+- `UpgradeAssessment` persists customer-owned PC intake, expert advice, revisioned scope and explicit approval for material changes. The sibling storefront now has `/upgrade-my-pc` for authenticated submission, advice and approval. Photo/system-report links can be provided; direct file upload and workshop intake remain to be built.
+- The admin app has an Upgrade Desk for reviewing submissions and publishing KEEP / UPGRADE / OPTIONAL / DON'T SPEND HERE / TRANSFORM advice.
 - The sibling `FlipFlop.shop` storefront has a `/find-my-pc` guided route, a primary homepage CTA, and immediate access to the homepage without the blocking startup video.
 - The endpoint is explicitly `requirements_only`: it cannot be used as a quote or to initiate checkout.
 

@@ -18,6 +18,7 @@ import {
   Trophy,
   Bell,
   Truck,
+  Wrench,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ServiceHealthPanel } from "./service-health-panel";
@@ -29,6 +30,7 @@ const PRIMARY_NAV = [
   { href: "/builds", icon: Package, label: "Pre-Built" },
   { href: "/configurator-config", icon: Settings2, label: "Custom Builds" },
   { href: "/pc-builder", icon: Zap, label: "Curated Builds" },
+  { href: "/upgrade-desk", icon: Wrench, label: "Upgrade Desk" },
   { href: "/inventory", icon: Warehouse, label: "Inventory" },
   { href: "/demand", icon: ChartNoAxesCombined, label: "Demand" },
   { href: "/cross-listing", icon: Repeat2, label: "Cross-listing" },
