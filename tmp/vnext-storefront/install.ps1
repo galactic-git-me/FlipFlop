@@ -33,8 +33,8 @@ $cta = $cta.Replace('href="/start" variant="primary" autoAnimate>Build your mach
 Set-Content -LiteralPath $ctaPath -Value $cta -NoNewline
 
 $homePath = Join-Path $shop 'app\page.tsx'
-$home = Get-Content -LiteralPath $homePath -Raw
-$home = $home.Replace('import StartupExperience from "@/components/home/StartupExperience";', 'import Hero from "@/components/home/Hero";')
-$home = $home.Replace('<StartupExperience />', '<Hero />')
-Set-Content -LiteralPath $homePath -Value $home -NoNewline
+$homePageText = Get-Content -LiteralPath $homePath -Raw
+$homePageText = $homePageText.Replace('import StartupExperience from "@/components/home/StartupExperience";', 'import Hero from "@/components/home/Hero";')
+$homePageText = $homePageText.Replace('<StartupExperience />', '<Hero />')
+Set-Content -LiteralPath $homePath -Value $homePageText -NoNewline
 Write-Output 'Installed guided journey, API proxy, homepage CTA and immediate hero.'
