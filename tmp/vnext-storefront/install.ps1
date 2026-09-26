@@ -23,8 +23,9 @@ $oldLink = '<Link href="/start" className="nav-start-link" aria-label="Start Her
 $newLink = '<Link href="/find-my-pc" className="nav-start-link" aria-label="Find My PC">'
 if ($layout.Contains($oldLink)) {
     $layout = $layout.Replace($oldLink, $newLink)
-    Set-Content -LiteralPath $layoutPath -Value $layout -NoNewline
 } elseif (-not $layout.Contains($newLink)) { throw 'Expected navigation marker missing' }
+$layout = $layout.Replace('<span className="nav-start-label">Start Here</span>', '<span className="nav-start-label">Find My PC</span>')
+Set-Content -LiteralPath $layoutPath -Value $layout -NoNewline
 
 $ctaPath = Join-Path $shop 'components\home\FinalCTA.tsx'
 $cta = Get-Content -LiteralPath $ctaPath -Raw
@@ -37,4 +38,22 @@ $homePageText = Get-Content -LiteralPath $homePath -Raw
 $homePageText = $homePageText.Replace('import StartupExperience from "@/components/home/StartupExperience";', 'import Hero from "@/components/home/Hero";')
 $homePageText = $homePageText.Replace('<StartupExperience />', '<Hero />')
 Set-Content -LiteralPath $homePath -Value $homePageText -NoNewline
+
+$heroPath = Join-Path $shop 'components\home\Hero.tsx'
+$heroText = Get-Content -LiteralPath $heroPath -Raw
+$heroText = $heroText.Replace('Beautiful machines,', 'The right PC.')
+$heroText = $heroText.Replace('built to be admired.', 'Without needing to become a PC expert.')
+$heroText = $heroText.Replace("whiteSpace: 'nowrap'", "whiteSpace: 'normal'")
+$heroMarker = '        {/* CTAs moved to FinalCTA at the bottom of the page — here we only'
+if ($heroText.Contains($heroMarker)) {
+    $heroText = $heroText.Replace($heroMarker, @'
+        <p className="text-center text-slate-200" style={{ marginBottom: "1rem" }}>Tell us what you do and what matters. We will handle the component homework.</p>
+        <div className="flex flex-wrap justify-center gap-3" style={{ marginBottom: "1rem" }}>
+          <a href="/find-my-pc" className="rounded-full bg-orange-500 px-6 py-3 font-semibold text-black">Find my PC</a>
+          <a href="/ready-to-ship" className="rounded-full border border-white/50 px-6 py-3 text-white">See what's ready now</a>
+        </div>
+        {/* CTAs moved to FinalCTA at the bottom of the page — here we only
+'@)
+}
+Set-Content -LiteralPath $heroPath -Value $heroText -NoNewline
 Write-Output 'Installed guided journey, API proxy, homepage CTA and immediate hero.'
