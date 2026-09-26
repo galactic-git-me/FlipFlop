@@ -1,11 +1,13 @@
 """Admin API for the curated-build playbook and catalogue subset."""
+import json
 from datetime import datetime
+from pathlib import Path
 from uuid import uuid4
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
@@ -16,6 +18,97 @@ from app.models.listing import Listing
 from app.routes.admin_auth import get_current_admin
 
 router = APIRouter(prefix="/curated-builds", tags=["curated-builds"], dependencies=[Depends(get_current_admin)])
+
+
+@router.get("/draft-playbook")
+async def draft_playbook():
+    """Return the local planning draft without implying supplier approval."""
+    path = Path(__file__).resolve().parents[3] / "tmp" / "curated-playbooks-v1-stub.json"
+    if not path.exists():
+        raise HTTPException(status_code=404, detail="Draft playbook file is unavailable")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+@router.get("/bestseller-catalogue")
+async def bestseller_catalogue(db: AsyncSession = Depends(get_db)):
+    """Ranked Amazon products with a verified CPK and a marketplace match.
+
+    The Amazon snapshot supplies product identity and rank. Marketplace prices
+    remain separate from the Amazon observation and are never treated as an
+    approved component or procurement quote.
+    """
+    rows = (await db.execute(text("""
+        WITH latest AS (
+            SELECT DISTINCT ON (category, asin)
+                category, asin, title, url, image_url, rank, cpk, price,
+                rating, review_count, captured_at
+            FROM amazon_bestseller_observations
+            ORDER BY category, asin, captured_at DESC
+        ), ranked AS (
+            SELECT DISTINCT ON (category, cpk) *
+            FROM latest
+            WHERE cpk IS NOT NULL
+            ORDER BY category, cpk, rank ASC
+        )
+        SELECT a.*, COALESCE(r.status, 'pending') AS review_status,
+            m.listing_id AS marketplace_listing_id,
+            m.source AS marketplace_source, m.title AS marketplace_title,
+            m.url AS marketplace_url, m.delivered_price AS marketplace_price,
+            m.condition AS marketplace_condition, m.scored_at AS marketplace_seen_at
+        FROM ranked a
+        JOIN LATERAL (
+            SELECT s.listing_id, s.source, s.title,
+                s.url, s.delivered_price, s.condition, s.scored_at
+            FROM gem_radar_scored_listings s
+            WHERE s.cpk = a.cpk AND s.delivered_price > 0
+              AND s.category IN (
+                CASE a.category WHEN 'storage' THEN 'ssd'
+                    WHEN 'cooler' THEN 'cooling' ELSE a.category END,
+                a.category
+              )
+            ORDER BY s.scored_at DESC
+            LIMIT 1
+        ) m ON true
+        LEFT JOIN curated_bestseller_reviews r
+            ON r.category = a.category AND r.cpk = a.cpk
+        ORDER BY a.category, a.rank
+    """))).mappings().all()
+    return {"items": [dict(row) for row in rows]}
+
+
+class BestsellerReviewInput(BaseModel):
+    category: str = Field(min_length=1, max_length=40)
+    cpk: str = Field(min_length=1, max_length=255)
+    status: str
+
+
+@router.put("/bestseller-catalogue/review")
+async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depends(get_db)):
+    if body.status not in {"approved", "rejected", "pending"}:
+        raise HTTPException(status_code=422, detail="Invalid review status")
+    exists = (await db.execute(text("""
+        SELECT EXISTS (
+            SELECT 1 FROM amazon_bestseller_observations a
+            JOIN gem_radar_scored_listings s ON s.cpk = a.cpk
+            WHERE a.category = :category AND a.cpk = :cpk
+              AND s.delivered_price > 0
+        )
+    """), {"category": body.category, "cpk": body.cpk})).scalar()
+    if not exists:
+        raise HTTPException(status_code=404, detail="Matched bestseller product not found")
+    if body.status == "pending":
+        await db.execute(text("""
+            DELETE FROM curated_bestseller_reviews
+            WHERE category = :category AND cpk = :cpk
+        """), {"category": body.category, "cpk": body.cpk})
+    else:
+        await db.execute(text("""
+            INSERT INTO curated_bestseller_reviews (category, cpk, status, reviewed_at)
+            VALUES (:category, :cpk, :status, now())
+            ON CONFLICT (category, cpk) DO UPDATE
+            SET status = EXCLUDED.status, reviewed_at = EXCLUDED.reviewed_at
+        """), {"category": body.category, "cpk": body.cpk, "status": body.status})
+    return {"category": body.category, "cpk": body.cpk, "review_status": body.status}
 
 
 class SegmentInput(BaseModel):
@@ -51,7 +144,7 @@ async def _component_context(db: AsyncSession, ids: set[int]) -> dict[int, dict]
     if not ids:
         return {}
     rows = (await db.execute(
-        select(CatalogueVariant, Listing)
+        select(CatalogueVariant, Listing, PlaybookSlot)
         .join(Listing, Listing.id == CatalogueVariant.listing_id)
         .join(PlaybookSlot, PlaybookSlot.id == CatalogueVariant.slot_id)
         .where(CatalogueVariant.id.in_(ids))
@@ -93,7 +186,7 @@ async def get_curated_builds(db: AsyncSession = Depends(get_db)):
             if abs(delta) >= 0.01 and segment.proposed_selling_price is None:
                 row["proposed_selling_price"] = round(max(0, segment.selling_price + delta), 2)
         assigned_count = len(segment.components or {})
-        row["availability_status"] = "out_of_stock" if len(selected) != assigned_count or any(item["status"] != "active" for item in selected) else "in_stock"
+        row["availability_status"] = "out_of_stock" if assigned_count == 0 or len(selected) != assigned_count or any(item["status"] != "active" for item in selected) else "in_stock"
         if row["availability_status"] == "out_of_stock" and segment.is_live:
             segment.is_live = False
         payload.append(row)
