@@ -17,6 +17,7 @@ class SubmissionQueueService:
         source_url: str,
         max_candidates_for_deep_research: int,
         listings: list,
+        search_tags: list[str] | None = None,
     ) -> SubmissionQueue:
         """Enqueue a submission for async processing"""
         submission = SubmissionQueue(
@@ -24,6 +25,7 @@ class SubmissionQueueService:
             search_id=search_id,
             query=query,
             source_url=source_url,
+            search_tags=search_tags or [],
             max_candidates_for_deep_research=max_candidates_for_deep_research,
             listings_json=listings,
             status="pending",

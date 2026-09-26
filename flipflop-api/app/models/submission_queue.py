@@ -15,6 +15,7 @@ class SubmissionQueue(BaseModel):
     search_id = Column(String(255), nullable=False)
     query = Column(String(500), nullable=False)
     source_url = Column(String(1000), nullable=False)
+    search_tags = Column(JSON, nullable=False, default=list)
     max_candidates_for_deep_research = Column(Integer, default=50)
 
     # Listings data (stored as JSON)

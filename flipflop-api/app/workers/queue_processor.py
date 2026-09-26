@@ -458,6 +458,7 @@ async def _process_single_submission(submission):
                 searchId=submission.search_id,
                 query=submission.query,
                 sourceUrl=submission.source_url,
+                tags=submission.search_tags or [],
                 maxCandidatesForDeepResearch=submission.max_candidates_for_deep_research,
                 listings=listings,
             )

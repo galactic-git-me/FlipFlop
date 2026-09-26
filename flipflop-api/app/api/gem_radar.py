@@ -2868,7 +2868,65 @@ async def _submit_scan_body(
     import time as _time
 
     from app.gem_radar.cpk_pipeline import assign_cpk_and_accumulate_price
+    from app.gem_radar.cpk_pipeline import _deterministic_identity, _lookup_unique_catalog_alias
     from app.gem_radar.observations import find_existing_listing
+
+    tagged_asins = {
+        tag.split(":", 1)[1].strip().upper()
+        for tag in payload.tags
+        if tag.lower().startswith("asin:") and tag.split(":", 1)[1].strip()
+    }
+    if tagged_asins:
+        # Curated ASIN searches are comparison searches: Amazon is the source
+        # of the identity, so only confidently identified listings from other
+        # vendors proceed. Unknown identities are deliberately dropped.
+        asin_rows = (await db.execute(text("""
+            SELECT DISTINCT ON (asin) asin, cpk, title
+            FROM amazon_bestseller_observations
+            WHERE upper(asin) = ANY(:asins) AND cpk IS NOT NULL
+            ORDER BY asin, captured_at DESC
+        """), {"asins": list(tagged_asins)})).mappings().all()
+        target_cpks = {row["cpk"] for row in asin_rows}
+        expected_identities = []
+        from app.gem_radar.marketplace import infer_marketplace
+        from app.gem_radar.identity import resolve_identity
+        for row in asin_rows:
+            identity = resolve_identity(row["title"])
+            expected_identities.append((row["cpk"], identity))
+
+        accepted = []
+        for listing in payload.listings:
+            if infer_marketplace(listing.url) == "amazon":
+                continue
+            identity_match = await _lookup_unique_catalog_alias(db, listing.title)
+            candidate_cpk = identity_match[0] if identity_match else None
+            if candidate_cpk not in target_cpks:
+                deterministic = _deterministic_identity(listing.title, None, listing.current_delivered_price)
+                candidate_cpk = deterministic[0] if deterministic else None
+            if candidate_cpk not in target_cpks:
+                # Compare resolved manufacturer/model identities to the exact
+                # Amazon bestseller identity. This handles retailer titles
+                # whose canonical CPK alias has not been seen before.
+                candidate = resolve_identity(listing.title, delivered_price=listing.current_delivered_price)
+                candidate_model = " ".join((candidate.brand or "", candidate.model or "")).casefold().strip()
+                for target_cpk, expected in expected_identities:
+                    expected_model = " ".join((expected.brand or "", expected.model or "")).casefold().strip()
+                    if target_model and candidate_model == expected_model:
+                        candidate_cpk = target_cpk
+                        break
+            if candidate_cpk in target_cpks:
+                accepted.append(listing.model_copy(update={"search_tags": payload.tags}))
+        rejected_count = len(payload.listings) - len(accepted)
+        if rejected_count:
+            log.info("gem_radar.curated_asin_filter", rejected=rejected_count, accepted=len(accepted), asins=sorted(tagged_asins))
+        payload = payload.model_copy(update={"listings": accepted})
+
+    # Persist search tags on each observation payload so the Curated marker is
+    # carried through queueing and any scoring result built from that listing.
+    if payload.tags:
+        payload = payload.model_copy(update={
+            "listings": [listing.model_copy(update={"search_tags": payload.tags}) for listing in payload.listings]
+        })
 
     malformed_awdit = [
         listing for listing in payload.listings
@@ -3158,6 +3216,7 @@ async def submit_scan_queued(
         search_id=payload.search_id,
         query=payload.query,
         source_url=payload.source_url,
+        search_tags=payload.tags,
         max_candidates_for_deep_research=payload.max_candidates_for_deep_research,
         # mode="json" — plain model_dump() leaves extracted_at/auction_end_at
         # as Python datetime objects, which the listings_json JSON column's

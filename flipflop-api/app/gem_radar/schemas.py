@@ -10,7 +10,7 @@ from datetime import datetime
 from hashlib import sha256
 from typing import Literal, Optional
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 def _to_camel(snake: str) -> str:
@@ -89,6 +89,7 @@ class ExtractedListing(CamelModel):
     prime_eligible: Optional[bool] = None
     delivery_text: Optional[str] = None
     delivery_postcode: Optional[str] = None
+    search_tags: list[str] = Field(default_factory=list)
 
     @field_validator("listing_id", mode="before")
     @classmethod
@@ -135,6 +136,7 @@ class ScanSubmitRequest(CamelModel):
     search_id: str
     query: str
     source_url: str
+    tags: list[str] = Field(default_factory=list)
     max_candidates_for_deep_research: int
     listings: list[ExtractedListing]
 
