@@ -1,7 +1,7 @@
 """
 Market price research service using LLM + eBay data.
 
-Queries the database for comparable PC builds and uses Claude LLM to analyze
+Queries the database for comparable PC builds and uses the configured model hierarchy to analyze
 market pricing and suggest optimal price point.
 """
 import json

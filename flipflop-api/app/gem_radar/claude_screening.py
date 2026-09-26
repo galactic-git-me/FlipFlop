@@ -1,16 +1,13 @@
-"""Claude-assisted screening (PRD §29-30) — identity refinement, bundle
-detection, risk interpretation, and reasoning text ONLY. Output is forced
-through a tool schema (never parsed from free text — see _OPENROUTER tier)
-so malformed output is a schema-validation error, not a regex miss.
+"""Model-assisted screening (PRD §29-30) — identity refinement, bundle
+detection, risk interpretation, and reasoning text ONLY. Output is validated
+from a tool call or JSON-mode response; malformed output fails safe.
 
 Two-stage cost control (PRD §30): the caller (router) only invokes this for
 the top `max_candidates_for_deep_research` listings by deterministic score
 per scan — see api/gem_radar.py.
 
-Two-tier provider chain: Ollama (local, GPU-accelerated, no rate limits) ->
-OpenRouter (cloud fallback, free models, OpenAI-compatible tool-calling).
-Ollama handles text-only screening via JSON-mode; most locally-runnable
-models lack vision + tool-calling for photo-verification tier.
+Provider and model selection is delegated to ModelSelectionService, which
+skips incompatible tiers for vision requests.
 """
 from __future__ import annotations
 
@@ -196,7 +193,7 @@ async def screen_with_claude(
 # --- Batched photo/title category verification -----------------------------
 #
 # Cost-batching without stitching photos into a physical collage: both
-# Anthropic and OpenRouter (OpenAI-compatible) natively accept several
+# Ollama and OpenRouter (OpenAI-compatible) natively accept several
 # separate images in one message, so a batch of N candidates costs one
 # system prompt + one round of output tokens instead of N of each, while
 # every photo stays at full resolution. A stitched grid would save the same
@@ -205,9 +202,8 @@ async def screen_with_claude(
 # box, a cable connector needing to be read) gets missed.
 #
 # Kept deliberately conservative: too large a batch risks the model losing
-# track of which numbered image maps to which listing. No Ollama tier here
-# — vision + structured output together is a much higher bar than most
-# locally-runnable models reliably clear; this tier stays cloud-only.
+# track of which numbered image maps to which listing. Text-only Ollama
+# models are skipped by the shared selector for this vision task.
 VERIFICATION_BATCH_SIZE = 10
 
 _VERIFY_TOOL_SCHEMA = {
@@ -348,8 +344,8 @@ async def verify_categories_batch(
     """Batched photo+title category check for a set of candidates, each a
     (listing_id, title, category, image_url) tuple. Split into batches of
     VERIFICATION_BATCH_SIZE and run concurrently — one vision request per
-    batch instead of per listing. Uses OpenRouter only (Anthropic removed,
-    no Ollama tier for vision).
+    batch instead of per listing. Uses the configured hierarchy, skipping
+    any provider/model that cannot handle image input.
 
     Returns only the listings flagged as NOT matching their claimed
     category — an empty list if no provider is configured or every attempt
@@ -358,7 +354,7 @@ async def verify_categories_batch(
     flagged".
     """
     settings = get_settings()
-    if not settings.openrouter_api_key or not candidates:
+    if not candidates:
         return []
 
     batches = _chunks(candidates, VERIFICATION_BATCH_SIZE)

@@ -9,7 +9,7 @@ The service:
 1. Fetches and analyzes order data from the last 30 days
 2. Identifies demand patterns (popular budgets, use cases, components)
 3. Fetches current market prices for components
-4. Calls Claude API to analyze demand + market and generate build recommendations
+4. Calls the configured model hierarchy to analyze demand + market and generate recommendations
 5. Calculates actual profit margins and risk assessments
 6. Stores recommendations in the database for admin review
 """
@@ -34,7 +34,7 @@ class GemRecommendationService:
     """
     LLM-powered gem build recommendation service.
 
-    Uses Claude to analyze demand patterns and generate speculative inventory recommendations.
+    Uses the configured model hierarchy to analyze demand patterns and generate recommendations.
     """
 
     def __init__(self, db: AsyncSession, anthropic_api_key: Optional[str] = None):
@@ -43,7 +43,7 @@ class GemRecommendationService:
 
         Args:
             db: AsyncSession for database operations
-            anthropic_api_key: Anthropic API key (uses ANTHROPIC_API_KEY env var if not provided)
+            anthropic_api_key: Deprecated compatibility argument; runtime selection is configured centrally.
         """
         self.db = db
         # Retain the legacy optional argument for callers; provider credentials
@@ -51,7 +51,7 @@ class GemRecommendationService:
 
     async def generate_recommendations(self, analysis_days: int = 30) -> Dict[str, Any]:
         """
-        Generate gem build recommendations using Claude API.
+        Generate gem build recommendations through the configured model hierarchy.
 
         Process:
         1. Analyze demand from recent orders
@@ -77,11 +77,11 @@ class GemRecommendationService:
             market_prices = self._get_market_prices()
             log.info("Market prices fetched", component_count=len(market_prices))
 
-            # 3. Call Claude with analysis
-            recommendations = await self._call_claude_for_recommendations(
+            # 3. Call the configured model hierarchy with the analysis
+            recommendations = await self._call_model_for_recommendations(
                 demand_analysis, market_prices, analysis_days
             )
-            log.info("Claude generated recommendations", count=len(recommendations))
+            log.info("Model generated recommendations", count=len(recommendations))
 
             # 4. Enrich recommendations with financial analysis
             for rec in recommendations:
@@ -293,14 +293,14 @@ class GemRecommendationService:
             },
         }
 
-    async def _call_claude_for_recommendations(
+    async def _call_model_for_recommendations(
         self,
         demand_analysis: Dict[str, Any],
         market_prices: Dict[str, Dict[str, float]],
         analysis_days: int,
     ) -> List[Dict[str, Any]]:
         """
-        Call Claude API to analyze demand and generate gem recommendations.
+        Call the configured model hierarchy to analyze demand and generate recommendations.
 
         Claude receives:
         - Demand patterns from the last N days

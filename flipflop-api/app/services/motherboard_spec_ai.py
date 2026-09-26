@@ -17,7 +17,6 @@ from dataclasses import dataclass
 
 import structlog
 
-from app.config import get_settings
 from app.services.model_selection_service import model_selection_service
 
 log = structlog.get_logger(__name__)

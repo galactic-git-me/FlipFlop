@@ -136,6 +136,12 @@ services:
       REDIS_URL: redis://redis:6379/0
       OLLAMA_BASE_URL: http://ollama-tunnel:11434
       OLLAMA_MODEL: qwen2.5:7b-instruct
+      LLM_PRIMARY_PROVIDER: ollama
+      LLM_PRIMARY_MODEL: qwen2.5:7b-instruct
+      LLM_SECONDARY_PROVIDER: openrouter-free
+      LLM_SECONDARY_MODEL: google/gemma-4-31b-it:free
+      LLM_TERTIARY_PROVIDER: openrouter
+      LLM_TERTIARY_MODEL: auto:cheapest
       EBAY_LISTING_ENVIRONMENT: production
       # Was capped at 2 (config.py default) as an emergency throttle during a
       # past RAM-pressure incident. Confirmed 2026-09-07: 16GiB available,

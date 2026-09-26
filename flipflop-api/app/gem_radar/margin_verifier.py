@@ -72,7 +72,7 @@ async def verify_margin_async(
     market_resale_median: float | None,
     market_resale_range: tuple[float, float] | None,
 ) -> VerificationResult | None:
-    """Verify if listing has real profit margin using Qwen2:7b.
+    """Verify if listing has a real profit margin using configured model tiers.
 
     Returns None if verification fails; result contains is_viable_flip flag.
     Non-blocking—designed for background queue.

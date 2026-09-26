@@ -7,12 +7,10 @@ import json
 import asyncio
 from typing import AsyncIterator
 
-import httpx
 import structlog
 from sqlalchemy import select, func, Integer
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.config import get_settings
 from app.services.model_selection_service import model_selection_service
 from app.models.listing import Listing, Classification
 

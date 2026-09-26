@@ -17,10 +17,8 @@ import re
 from dataclasses import dataclass
 from typing import Optional
 
-import httpx
 import structlog
 
-from app.config import get_settings
 from app.services.model_selection_service import model_selection_service
 from app.services.case_product_key import case_product_key
 
