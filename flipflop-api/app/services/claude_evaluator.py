@@ -26,6 +26,7 @@ import re
 from dataclasses import dataclass
 
 import structlog
+from app.services.model_selection_service import model_selection_service
 
 log = structlog.get_logger(__name__)
 
@@ -143,97 +144,16 @@ async def evaluate_listing(listing_data: dict) -> ClaudeEvalResult | None:
     Send listing data to the best available AI and return a structured verdict.
     Returns None if all backends fail.
     """
-    from app.config import get_settings
-    _s = get_settings()
-
     prompt = _build_prompt(listing_data)
-    messages = [{"role": "user", "content": prompt}]
-    raw: str | None = None
-    model_used = "none"
-
-    # 1 — Anthropic Claude Opus 4.8 (primary — best reasoning for complex PC flipping analysis)
-    if not raw and _s.anthropic_api_key:
-        try:
-            import anthropic
-            client = anthropic.AsyncAnthropic(api_key=_s.anthropic_api_key)
-            resp = await client.messages.create(
-                model="claude-opus-4-8",
-                max_tokens=512,
-                system=EVAL_SYSTEM,
-                messages=messages,
-            )
-            raw = resp.content[0].text if resp.content else None
-            model_used = "claude-opus-4-8"
-        except Exception as exc:
-            log.warning("claude_evaluator.anthropic_failed", error=str(exc))
-
-    # 2 — OpenRouter (fallback when Anthropic unavailable)
-    if not raw and _s.openrouter_api_key:
-        import httpx
-        for attempt in range(4):
-            try:
-                wait = (2 ** attempt) * 5  # 5s, 10s, 20s, 40s
-                if attempt > 0:
-                    await asyncio.sleep(wait)
-                async with httpx.AsyncClient(timeout=60) as client:
-                    resp = await client.post(
-                        "https://openrouter.ai/api/v1/chat/completions",
-                        headers={
-                            "Authorization": f"Bearer {_s.openrouter_api_key}",
-                            "HTTP-Referer": _s.frontend_url,
-                            "X-Title": "PC Flipper Gem Evaluator",
-                        },
-                        json={
-                            "model": _s.openrouter_primary_model or "meta-llama/llama-3.1-8b-instruct",
-                            "messages": [
-                                {"role": "system", "content": EVAL_SYSTEM},
-                                {"role": "user", "content": prompt},
-                            ],
-                            "max_tokens": 512,
-                        },
-                    )
-                    if resp.status_code == 429:
-                        retry_after = int(resp.headers.get("Retry-After", wait))
-                        log.warning("claude_evaluator.openrouter_rate_limited", attempt=attempt, retry_after=retry_after)
-                        await asyncio.sleep(retry_after)
-                        continue
-                    resp.raise_for_status()
-                    data = resp.json()
-                    raw = data["choices"][0]["message"]["content"]
-                    actual = data.get("model", _s.openrouter_primary_model or "")
-                    model_used = f"openrouter/{actual.split('/')[-1].replace(':free', '')}"
-                    break
-            except Exception as exc:
-                log.warning("claude_evaluator.openrouter_failed", attempt=attempt, error=str(exc))
-                if attempt == 3:
-                    break
-
-    # 3 — Ollama local (last resort — disabled by default since it rarely runs)
-    # if not raw and _s.ollama_base_url:
-    #     try:
-    #         import httpx
-    #         async with httpx.AsyncClient(timeout=180) as client:
-    #             resp = await client.post(
-    #                 f"{_s.ollama_base_url}/api/chat",
-    #                 json={
-    #                     "model": _s.ollama_model,
-    #                     "messages": [
-    #                         {"role": "system", "content": EVAL_SYSTEM},
-    #                         {"role": "user", "content": prompt},
-    #                     ],
-    #                     "stream": False,
-    #                 },
-    #             )
-    #             resp.raise_for_status()
-    #             raw = resp.json().get("message", {}).get("content")
-    #             model_used = f"ollama/{_s.ollama_model}"
-    #     except Exception as exc:
-    #         log.warning("claude_evaluator.ollama_failed", error=str(exc), exc_type=type(exc).__name__)
-
-    if not raw:
+    try:
+        result = await model_selection_service.complete(
+            task="Listing gem evaluation", messages=[{"role": "user", "content": prompt}],
+            system_prompt=EVAL_SYSTEM, max_tokens=512, timeout=180,
+        )
+    except Exception as exc:
+        log.warning("claude_evaluator.all_models_failed", error=str(exc))
         return None
-
-    return _parse_verdict(raw, model_used)
+    return _parse_verdict(result.text, f"{result.provider}/{result.model}")
 
 
 def _parse_verdict(raw: str, model_used: str) -> ClaudeEvalResult | None:

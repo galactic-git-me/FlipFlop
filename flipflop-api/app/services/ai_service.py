@@ -6,6 +6,7 @@ import httpx
 import urllib.parse
 from pathlib import Path
 from app.config import get_settings
+from app.services.model_selection_service import model_selection_service
 
 settings = get_settings()
 
@@ -66,53 +67,12 @@ async def chat(
     """Returns (response_text, model_used)."""
     messages = _build_messages(message, history, listing_context)
 
-    # Re-read settings so in-process changes (via /settings PUT) take effect without restart
-    _s = get_settings()
-
-    # 1. Try Ollama (local gemma4:e4b) — primary
-    if _s.ollama_base_url:
-        try:
-            response = await _ollama_chat(messages, _s)
-            if response:
-                return response, _s.ollama_model
-        except Exception as e:
-            print(f"[hermes] Ollama failed: {e}")
-
-    # 2. Try OpenRouter free models as fallback
-    if _s.openrouter_api_key:
-        primary = _s.openrouter_primary_model or OPENROUTER_FREE_MODELS[0]
-        try:
-            result = await _openrouter_chat(messages, primary, _s.openrouter_api_key)
-            if result:
-                content, label = result
-                return content, f"openrouter/{label}"
-        except Exception as e:
-            print(f"[hermes] OpenRouter primary ({primary}) failed: {e}")
-
-        for model in OPENROUTER_FREE_MODELS:
-            if model == primary:
-                continue
-            try:
-                result = await _openrouter_chat(messages, model, _s.openrouter_api_key)
-                if result:
-                    content, label = result
-                    return content, f"openrouter/{label}"
-            except Exception as e:
-                print(f"[hermes] OpenRouter {model} failed: {e}")
-
-    # 3. Try Claude as last resort (with prompt caching for cost savings)
-    if _s.anthropic_api_key:
-        try:
-            response = await _claude_chat(messages)
-            if response:
-                return response, "claude-haiku-4-5"
-        except Exception as e:
-            print(f"[hermes] Claude failed: {e}")
-
-    return (
-        "All AI backends offline. Ensure Ollama is running (`ollama serve`) or add an OpenRouter API key in Settings.",
-        "none",
-    )
+    try:
+        result = await model_selection_service.complete(task="Hermes chat", messages=messages, system_prompt=SYSTEM_PROMPT)
+        return result.text, f"{result.provider}/{result.model}"
+    except Exception as e:
+        print(f"[hermes] all model tiers failed: {e}")
+        return "All configured AI model tiers are unavailable. Check Ollama and OpenRouter configuration.", "none"
 
 
 async def generate_listing_content(
@@ -326,32 +286,15 @@ async def chat_with_images(system_prompt: str, user_text: str, image_urls: list[
     configured via GET /api/settings.
     """
     _s = get_settings()
-    if not _s.ollama_base_url:
-        return ("Ollama is not configured (ollama_base_url is empty).", "none")
-
     images_b64 = [b64 for url in image_urls if (b64 := await _fetch_image_as_base64(url))]
-
-    user_message: dict = {"role": "user", "content": user_text}
-    if images_b64:
-        user_message["images"] = images_b64
-
     try:
-        # Long timeout: this prompt is huge and the output (multi-section
-        # report + a full branded HTML page) is long — a local 7B model
-        # needs real time to work through both.
-        async with httpx.AsyncClient(timeout=600) as client:
-            resp = await client.post(
-                f"{_s.ollama_base_url}/api/chat",
-                json={
-                    "model": _s.ollama_model,
-                    "messages": [{"role": "system", "content": system_prompt}, user_message],
-                    "stream": False,
-                },
-            )
-            resp.raise_for_status()
-            content = resp.json().get("message", {}).get("content")
-            if content:
-                return content, _s.ollama_model
+        import base64
+        images = [(base64.b64decode(encoded), "image/jpeg") for encoded in images_b64]
+        result = await model_selection_service.complete(
+            task="Multimodal build analysis", messages=[{"role": "user", "content": user_text}],
+            system_prompt=system_prompt, max_tokens=8192, timeout=600, images=images, require_vision=True,
+        )
+        return result.text, f"{result.provider}/{result.model}"
     except Exception as e:
         print(f"[hermes] Ollama (vision) failed: {e}")
 
@@ -437,46 +380,11 @@ async def generate_ebay_listing(system_prompt: str, materials: str) -> tuple[str
     Uses prompt caching on the system prompt to reduce token usage and improve latency
     on subsequent calls with the same prompt template.
     """
-    _s = get_settings()
-
-    # Try Claude first (now that account is fixed)
-    if _s.anthropic_api_key:
-        try:
-            import anthropic
-            client = anthropic.AsyncAnthropic(api_key=_s.anthropic_api_key)
-            resp = await client.messages.create(
-                model="claude-haiku-4-5-20251001",
-                max_tokens=8192,
-                system=[
-                    {
-                        "type": "text",
-                        "text": system_prompt,
-                        "cache_control": {"type": "ephemeral"}
-                    }
-                ],
-                messages=[{"role": "user", "content": materials}],
-            )
-            content = resp.content[0].text if resp.content else ""
-            if content:
-                return content, "claude-haiku"
-        except Exception as e:
-            print(f"[listing] Claude failed: {e}")
-
-    # Fallback: OpenRouter
-    if _s.openrouter_api_key:
-        messages = [{"role": "user", "content": materials}]
-        for model in ["google/gemma-4-31b-it:free", "mistralai/mistral-7b-instruct:free"]:
-            try:
-                result = await _openrouter_chat_with_system(
-                    messages, model, _s.openrouter_api_key, system_prompt, max_tokens=4000
-                )
-                if result:
-                    return result
-            except Exception as e:
-                print(f"[listing] {model} failed: {e}")
-                continue
-
-    raise RuntimeError("No AI backend available for listing generation")
+    result = await model_selection_service.complete(
+        task="Manual eBay listing content", messages=[{"role": "user", "content": materials}],
+        system_prompt=system_prompt, max_tokens=8192, timeout=180,
+    )
+    return result.text, f"{result.provider}/{result.model}"
 
 
 def _template_titles(cpu, ram_gb, storage_gb, gpu, case_theme) -> list[str]:

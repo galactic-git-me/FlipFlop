@@ -13,6 +13,16 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
     openrouter_api_key: str = ""
     openrouter_primary_model: str = "google/gemma-4-31b-it:free"
+    # Central model selection order. Ollama's URL is supplied per runtime
+    # (dev gateway vs production tunnel); never hard-code its port here.
+    llm_primary_provider: str = "ollama"
+    llm_primary_model: str = "qwen2.5:7b-instruct"
+    llm_secondary_provider: str = "openrouter"
+    llm_secondary_model: str = "google/gemma-4-31b-it:free"
+    llm_tertiary_provider: str = "openrouter"
+    # Special value: resolve the cheapest currently available paid model
+    # from OpenRouter's public model catalogue.
+    llm_tertiary_model: str = "auto:cheapest"
     # Environment-specific Ollama gateway. Set to the DEV or PROD priority
     # endpoint in each runtime; never infer a direct engine/default port here.
     ollama_base_url: str = ""

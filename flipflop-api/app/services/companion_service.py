@@ -13,6 +13,7 @@ from sqlalchemy import select, func, Integer
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
+from app.services.model_selection_service import model_selection_service
 from app.models.listing import Listing, Classification
 
 log = structlog.get_logger(__name__)
@@ -154,67 +155,50 @@ async def stream_companion(
     db: AsyncSession,
 ) -> AsyncIterator[str]:
     """Yields SSE-formatted strings."""
-    _s = get_settings()
-    ollama_url = f"{_s.ollama_base_url}/api/chat"
-    model = _s.ollama_model
-
     snapshot = await get_catalogue_snapshot(db)
     system = build_system_prompt(snapshot, page_context)
 
     messages = [{"role": "system", "content": system}] + history + [{"role": "user", "content": message}]
 
-    async with httpx.AsyncClient(timeout=60) as client:
+    try:
+        selected = await model_selection_service.complete(
+            task="Companion chat", messages=messages, tools=[SEARCH_TOOL_SCHEMA], max_tokens=1024,
+        )
+        assistant_msg = selected.assistant_message
+        tool_calls = selected.tool_calls
+    except Exception as exc:
+        log.warning("companion.model_selection_error", error=str(exc))
+        _err_msg = "I'm having trouble connecting to my brain right now. Try again in a moment."
+        yield f"data: {json.dumps({'type': 'token', 'content': _err_msg})}\n\n"
+        yield f"data: {json.dumps({'type': 'done', 'model_used': 'none'})}\n\n"
+        return
+
+    if tool_calls:
+        tool_call = tool_calls[0]
+        fn = tool_call.get("function", {})
+        raw_args = fn.get("arguments", {})
+        args = parse_search_args(raw_args if isinstance(raw_args, dict) else json.loads(raw_args))
+        results = await do_search_listings(db, **args)
+        yield f"data: {json.dumps({'type': 'search_results', 'results': results})}\n\n"
+        if assistant_msg.get("role") != "assistant":
+            assistant_msg["role"] = "assistant"
+        messages.append(assistant_msg)
+        messages.append({"role": "tool", "content": json.dumps(results),
+                         "name": "search_listings", "tool_call_id": tool_call.get("id", "search_listings")})
         try:
-            resp = await client.post(ollama_url, json={
-                "model": model,
-                "messages": messages,
-                "tools": [SEARCH_TOOL_SCHEMA],
-                "stream": False,
-            })
-            resp.raise_for_status()
-            data = resp.json()
+            selected = await model_selection_service.complete(
+                task="Companion chat follow-up", messages=messages, max_tokens=1024,
+            )
+            final_text = selected.text
         except Exception as exc:
-            log.warning("companion.ollama_error", error=str(exc))
-            _err_msg = "I'm having trouble connecting to my brain right now. Try again in a moment."
-            yield f"data: {json.dumps({'type': 'token', 'content': _err_msg})}\n\n"
-            yield f"data: {json.dumps({'type': 'done', 'model_used': 'none'})}\n\n"
-            return
-
-        assistant_msg = data.get("message", {})
-        tool_calls = assistant_msg.get("tool_calls") or []
-
-        if tool_calls:
-            tool_call = tool_calls[0]
-            fn = tool_call.get("function", {})
-            raw_args = fn.get("arguments", {})
-            args = parse_search_args(raw_args if isinstance(raw_args, dict) else json.loads(raw_args))
-
-            results = await do_search_listings(db, **args)
-            yield f"data: {json.dumps({'type': 'search_results', 'results': results})}\n\n"
-
-            messages.append(assistant_msg)
-            messages.append({
-                "role": "tool",
-                "content": json.dumps(results),
-                "name": "search_listings",
-            })
-            try:
-                resp2 = await client.post(ollama_url, json={
-                    "model": model,
-                    "messages": messages,
-                    "stream": False,
-                })
-                resp2.raise_for_status()
-                final_text = resp2.json().get("message", {}).get("content", "")
-            except Exception as exc:
-                log.warning("companion.ollama_followup_error", error=str(exc))
-                final_text = "Found those results — had a hiccup summarising them, but they're above."
-        else:
-            final_text = assistant_msg.get("content", "")
+            log.warning("companion.model_followup_failed", error=str(exc))
+            final_text = "Found those results — had a hiccup summarising them, but they're above."
+    else:
+        final_text = selected.text
 
     chunk_size = 5
     for i in range(0, len(final_text), chunk_size):
         yield f"data: {json.dumps({'type': 'token', 'content': final_text[i:i+chunk_size]})}\n\n"
         await asyncio.sleep(0.01)
 
-    yield f"data: {json.dumps({'type': 'done', 'model_used': f'ollama/{model}'})}\n\n"
+    yield f"data: {json.dumps({'type': 'done', 'model_used': f'{selected.provider}/{selected.model}'})}\n\n"
