@@ -20,6 +20,7 @@ from dataclasses import dataclass
 import structlog
 
 from app.config import get_settings
+from app.services.model_selection_service import model_selection_service
 
 log = structlog.get_logger(__name__)
 
@@ -73,91 +74,17 @@ class MotherboardSpecAIResult:
     raw: dict
 
 
-async def _try_ollama(settings, user_content: str) -> str | None:
-    if not settings.ollama_base_url:
-        return None
-    try:
-        import httpx
-        async with httpx.AsyncClient(timeout=60) as client:
-            resp = await client.post(
-                f"{settings.ollama_base_url}/api/chat",
-                json={
-                    "model": settings.ollama_model,
-                    "messages": [
-                        {"role": "system", "content": _SYSTEM_PROMPT},
-                        {"role": "user", "content": user_content},
-                    ],
-                    "stream": False,
-                },
-            )
-            resp.raise_for_status()
-            return resp.json().get("message", {}).get("content")
-    except Exception as exc:
-        log.warning("motherboard_spec_ai.ollama_failed", error=str(exc), exc_type=type(exc).__name__)
-        return None
-
-
-async def _try_openrouter(settings, user_content: str) -> str | None:
-    if not settings.openrouter_api_key:
-        return None
-    try:
-        import httpx
-        async with httpx.AsyncClient(timeout=60) as client:
-            resp = await client.post(
-                "https://openrouter.ai/api/v1/chat/completions",
-                headers={
-                    "Authorization": f"Bearer {settings.openrouter_api_key}",
-                    "HTTP-Referer": settings.frontend_url,
-                    "X-Title": "FlipFlop Motherboard Spec Backfill",
-                },
-                json={
-                    "model": settings.openrouter_primary_model or "meta-llama/llama-3.1-8b-instruct",
-                    "messages": [
-                        {"role": "system", "content": _SYSTEM_PROMPT},
-                        {"role": "user", "content": user_content},
-                    ],
-                    "max_tokens": 400,
-                },
-            )
-            resp.raise_for_status()
-            data = resp.json()
-            return data["choices"][0]["message"]["content"]
-    except Exception as exc:
-        log.warning("motherboard_spec_ai.openrouter_failed", error=str(exc))
-        return None
-
-
-async def _try_anthropic(settings, user_content: str) -> str | None:
-    if not settings.anthropic_api_key:
-        return None
-    try:
-        import anthropic
-        client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
-        resp = await client.messages.create(
-            model="claude-opus-4-8",
-            max_tokens=400,
-            system=_SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": user_content}],
-        )
-        return resp.content[0].text if resp.content else None
-    except Exception as exc:
-        log.warning("motherboard_spec_ai.anthropic_failed", error=str(exc))
-        return None
-
-
 async def extract_motherboard_spec(title: str) -> MotherboardSpecAIResult | None:
-    settings = get_settings()
     user_content = f"Motherboard listing title: {title}"
-
-    # Local first (free, this app's actual default per ai_service.py) → free
-    # OpenRouter tier → paid Anthropic only as a last resort.
-    raw_text = await _try_ollama(settings, user_content)
-    if not raw_text:
-        raw_text = await _try_openrouter(settings, user_content)
-    if not raw_text:
-        raw_text = await _try_anthropic(settings, user_content)
-
-    if not raw_text:
+    try:
+        result = await model_selection_service.complete(
+            task="Motherboard specification extraction",
+            messages=[{"role": "user", "content": user_content}],
+            system_prompt=_SYSTEM_PROMPT, max_tokens=400,
+        )
+        raw_text = result.text
+    except Exception as exc:
+        log.warning("motherboard_spec_ai.all_models_failed", error=str(exc))
         return None
 
     match = re.search(r"\{[\s\S]*\}", raw_text)

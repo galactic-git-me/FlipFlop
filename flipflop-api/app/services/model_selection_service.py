@@ -72,6 +72,7 @@ class ModelSelectionService:
         images: list[tuple[bytes, str]] | None = None,
         require_vision: bool = False,
         require_tools: bool = False,
+        tool_choice: dict[str, Any] | str | None = None,
     ) -> ModelResult:
         errors: list[str] = []
         for tier in self.tiers():
@@ -101,6 +102,7 @@ class ModelSelectionService:
                     tools=tools,
                     json_mode=json_mode,
                     images=images or [],
+                    tool_choice=tool_choice,
                 )
                 if result.text.strip() or result.tool_calls:
                     log.info(
@@ -120,7 +122,8 @@ class ModelSelectionService:
                        messages: list[dict[str, Any]], system_prompt: str | None,
                        max_tokens: int, timeout: float,
                        tools: list[dict[str, Any]] | None, json_mode: bool,
-                       images: list[tuple[bytes, str]]) -> ModelResult:
+                       images: list[tuple[bytes, str]],
+                       tool_choice: dict[str, Any] | str | None) -> ModelResult:
         if provider in {"ollama", "local"}:
             if not self.settings.ollama_base_url:
                 raise ModelSelectionError("OLLAMA_BASE_URL is empty for this runtime")
@@ -152,7 +155,7 @@ class ModelSelectionService:
             payload["response_format"] = {"type": "json_object"}
         if tools:
             payload["tools"] = [_to_openai_tool(t) for t in tools]
-            payload["tool_choice"] = "auto"
+            payload["tool_choice"] = tool_choice or "auto"
         async with httpx.AsyncClient(timeout=timeout) as client:
             resp = await client.post(
                 "https://openrouter.ai/api/v1/chat/completions",

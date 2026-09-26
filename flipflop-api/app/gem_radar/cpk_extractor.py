@@ -21,6 +21,7 @@ import httpx
 import structlog
 
 from app.config import get_settings
+from app.services.model_selection_service import model_selection_service
 from app.services.case_product_key import case_product_key
 
 log = structlog.get_logger(__name__)
@@ -216,176 +217,58 @@ Input: "Mystery Box - PC Parts"
 Output: {{"category":null,"brand":null,"model":null,"specs":{{}},"confidence":0.0,"extraction_notes":"no product data"}}
 """
 
-    # CPK extraction is enrichment and must not hold the queue hostage. A
-    # missing model endpoint should fail immediately, not occupy one of the
-    # four global extraction slots while the queue waits for retries.
-    settings = get_settings()
-    endpoint = (settings.ollama_base_url or "").strip().rstrip("/")
-    # The production web tier must never silently try to use a model on its
-    # own loopback interface. The database used to contain the default local
-    # Ollama URL even though no Ollama service exists in that container.
-    # Ollama is the local/dev provider and must win whenever it is configured.
-    # Previously the mere presence of an OpenRouter key forced every extraction
-    # request to the cloud, even when the dev API had a working local Ollama
-    # endpoint. That made a scan look busy while the local GPU remained idle.
-    use_openrouter = not bool(endpoint)
-    if use_openrouter and not settings.openrouter_api_key:
-        log.warning("cpk_extractor.no_model_endpoint")
-        return None
-    # Retry only plausibly transient failures. Low-confidence or malformed
-    # model output is a data-quality result and should remain rejected.
-    max_attempts = 2
-    timeout = httpx.Timeout(20.0, connect=3.0)
-
-    for attempt in range(max_attempts):
+    # Keep extractions from flooding the local model gateway during scans.
+    try:
+        async with _CPK_EXTRACTOR_SEMAPHORE:
+            selected = await model_selection_service.complete(
+                task="Gem Radar canonical product extraction",
+                messages=[{"role": "user", "content": prompt}],
+                system_prompt="Return only valid JSON. Do not use markdown or explanations.",
+                max_tokens=256, timeout=45, json_mode=True,
+            )
+        output = selected.text.strip()
         try:
-            async with _CPK_EXTRACTOR_SEMAPHORE:
-                async with httpx.AsyncClient(timeout=timeout) as client:
-                    if use_openrouter:
-                        request_url = "https://openrouter.ai/api/v1/chat/completions"
-                        request_headers = {
-                            "Authorization": f"Bearer {settings.openrouter_api_key}",
-                            "Content-Type": "application/json",
-                            "HTTP-Referer": settings.frontend_url,
-                            "X-Title": "FlipFlop Gem Radar",
-                        }
-                        request_body = {
-                            "model": settings.openrouter_primary_model,
-                            "messages": [
-                                {
-                                    "role": "system",
-                                    "content": "Return only valid JSON. Do not use markdown or explanations.",
-                                },
-                                {"role": "user", "content": prompt},
-                            ],
-                            "temperature": 0.1,
-                            "max_tokens": 256,
-                            "response_format": {"type": "json_object"},
-                        }
-                    else:
-                        request_url = f"{endpoint}/api/generate"
-                        request_headers = None
-                        request_body = {
-                            "model": settings.ollama_model,
-                            "prompt": prompt,
-                            "stream": False,
-                            "format": "json",
-                            "options": {
-                                "temperature": 0.1,
-                                "num_predict": 256,
-                            },
-                        }
-                    resp = await client.post(
-                        request_url,
-                        headers=request_headers,
-                        json=request_body,
-                    )
+            data = json.loads(output)
+        except json.JSONDecodeError:
+            import re
+            match = re.search(r'\{.*\}', output, re.DOTALL)
+            if not match:
+                log.warning("cpk_extractor.json_parse_failed", output=output[:100])
+                return None
+            data = json.loads(match.group())
 
-                if resp.status_code != 200:
-                    transient_status = resp.status_code in {408, 429} or resp.status_code >= 500
-                    if transient_status and attempt + 1 < max_attempts:
-                        log.warning(
-                            "cpk_extractor.transient_error_retry",
-                            status=resp.status_code,
-                            attempt=attempt,
-                        )
-                        continue
-                    log.warning("cpk_extractor.model_error", status=resp.status_code, attempt=attempt)
-                    return None
-
-                # Success, process response
-                result = resp.json()
-                if use_openrouter:
-                    output = result.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
-                else:
-                    output = result.get("response", "").strip()
-
-                # Extract JSON from response
-                try:
-                    data = json.loads(output)
-                except json.JSONDecodeError:
-                    # Try to find JSON in output (model might add text before/after)
-                    import re
-                    match = re.search(r'\{.*\}', output, re.DOTALL)
-                    if not match:
-                        safe_output = output[:100].encode('utf-8', errors='replace').decode('utf-8', errors='replace')
-                        log.warning("cpk_extractor.json_parse_failed", output=safe_output)
-                        return None
-                    data = json.loads(match.group())
-
-                # Identity is upstream of every market cohort. A speculative
-                # match cannot be rescued by Phase 2 because it has already
-                # polluted the comparable set, so only high-confidence model
-                # extractions may receive a canonical product key.
-                if data.get("confidence", 0) < 0.7:
-                    log.debug("cpk_extractor.low_confidence", title=_safe_title(title), confidence=data.get("confidence"))
-                    return None
-
-                # Skip if no category/brand/model
-                category, brand, model = data.get("category"), data.get("brand"), data.get("model")
-                if not (category and brand and model):
-                    return None
-
-                # Skip if the model echoed its own prompt's field-description
-                # text back as the value instead of extracting real data —
-                # see _PLACEHOLDER_ECHO_MARKERS above. Accepting this as
-                # valid previously meant every listing hitting this failure
-                # mode for the same category collapsed into one shared,
-                # nonsense CPK.
-                if _is_placeholder_echo(brand) or _is_placeholder_echo(model):
-                    log.warning("cpk_extractor.placeholder_echo", title=_safe_title(title), category=category)
-                    return None
-
-                # Skip multi-category answers ("cpu|gpu") — a real standalone
-                # part is exactly one category; a hedge/join means the model
-                # couldn't tell (typically a full-PC bundle slipping past
-                # DETECTED_CATEGORY), and accepting it collapses every such
-                # bundle into one shared CPK regardless of its actual parts.
-                if category not in _VALID_CATEGORIES:
-                    log.debug("cpk_extractor.invalid_category", title=_safe_title(title), category=category)
-                    return None
-
-                # Generate Canonical Product Key from category|brand|model ONLY.
-                # `specs` is deliberately excluded from the hash input: it's a
-                # free-form dict the LLM extracts per-listing from whatever
-                # detail happens to appear in that seller's title, so it varies
-                # listing-to-listing for the exact same physical product (one
-                # seller's title mentions cores/threads/socket, another's
-                # doesn't). Since this is a cryptographic hash with no fuzzy
-                # matching, including specs meant two listings of the identical
-                # product almost never produced the same CPK — silently
-                # preventing get_market_price() from ever seeing 2+ listings
-                # share a key, so market prices never settled. specs is still
-                # captured in cpk_data for display/debugging, just not hashed.
-                data["brand"] = _slug(str(data["brand"]))
-                data["model"] = canonical_variant_model(data["category"], str(data["model"]), title)
-                if not data["brand"] or not data["model"]:
-                    return None
-                cpk_input = f"{data['category']}|{data['brand']}|{data['model']}"
-                cpk = hashlib.sha256(cpk_input.encode()).hexdigest()[:16]  # 16-char hex
-
-                return ExtractedProductData(
-                    category=data["category"],
-                    brand=data["brand"],
-                    model=data["model"],
-                    specs=data.get("specs", {}),
-                    confidence=data.get("confidence", 0),
-                    cpk=cpk,
-                )
-
-        except (httpx.TimeoutException, httpx.NetworkError) as exc:
-            if attempt + 1 < max_attempts:
-                log.warning(
-                    "cpk_extractor.transient_failure_retry",
-                    error=str(exc),
-                    attempt=attempt,
-                )
-                continue
-            log.warning("cpk_extractor.exception", error=str(exc), title=_safe_title(title))
+        # Identity is upstream of every market cohort. Only high-confidence
+        # model extractions may receive a canonical product key.
+        if data.get("confidence", 0) < 0.7:
+            log.debug("cpk_extractor.low_confidence", title=_safe_title(title), confidence=data.get("confidence"))
             return None
-        except Exception as exc:
-            log.warning("cpk_extractor.exception", error=str(exc), title=_safe_title(title))
+
+        category, brand, model = data.get("category"), data.get("brand"), data.get("model")
+        if not (category and brand and model):
             return None
+
+        if _is_placeholder_echo(brand) or _is_placeholder_echo(model):
+            log.warning("cpk_extractor.placeholder_echo", title=_safe_title(title), category=category)
+            return None
+
+        if category not in _VALID_CATEGORIES:
+            log.debug("cpk_extractor.invalid_category", title=_safe_title(title), category=category)
+            return None
+
+        data["brand"] = _slug(str(data["brand"]))
+        data["model"] = canonical_variant_model(data["category"], str(data["model"]), title)
+        if not data["brand"] or not data["model"]:
+            return None
+        cpk_input = f"{data['category']}|{data['brand']}|{data['model']}"
+        cpk = hashlib.sha256(cpk_input.encode()).hexdigest()[:16]
+
+        return ExtractedProductData(
+            category=data["category"], brand=data["brand"], model=data["model"],
+            specs=data.get("specs", {}), confidence=data.get("confidence", 0), cpk=cpk,
+        )
+    except Exception as exc:
+        log.warning("cpk_extractor.exception", error=str(exc), title=_safe_title(title))
+        return None
 
 
 async def test_extraction():

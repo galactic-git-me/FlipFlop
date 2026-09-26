@@ -97,36 +97,18 @@ given above, never a remembered price for this model.
 
 Is this a viable flip?"""
 
-    from app.config import get_settings
+from app.config import get_settings
+from app.services.model_selection_service import model_selection_service
     from app.gem_radar.claude_screening import _ollama_semaphore
 
-    settings = get_settings()
-    ollama_base_url = settings.ollama_base_url.strip().rstrip("/")
-    if not ollama_base_url:
-        log.info("margin_verifier.ollama_disabled", listing_id=listing_id)
-        return None
-    ollama_model = settings.ollama_model
-
     try:
-        # Shares claude_screening.py's semaphore — see the comment there.
-        # Real observed latency for a trivial prompt on this GPU was 45s
-        # under concurrent load (99% GPU util, 6.1/8GB VRAM), so 15s was
-        # guaranteed to time out almost every call; 90s gives real headroom
-        # while still bounding a genuinely stuck request.
-        async with _ollama_semaphore, httpx.AsyncClient(timeout=90.0) as client:
-            response = await client.post(
-                f"{ollama_base_url}/api/generate",
-                json={
-                    "model": ollama_model,
-                    "prompt": f"{_VERIFICATION_PROMPT}\n\n{user_prompt}",
-                    "stream": False,
-                    "format": "json",
-                },
+        async with _ollama_semaphore:
+            selected = await model_selection_service.complete(
+                task="Gem Radar margin verification",
+                messages=[{"role": "user", "content": user_prompt}],
+                system_prompt=_VERIFICATION_PROMPT, max_tokens=400, timeout=120, json_mode=True,
             )
-            response.raise_for_status()
-
-            data = response.json()
-            output_text = data.get("response", "").strip()
+            output_text = selected.text.strip()
 
             # Extract JSON from output (strip markdown if present)
             if output_text.startswith("```json"):
@@ -148,10 +130,10 @@ Is this a viable flip?"""
                 source_purchase_price=purchase_price,
             )
 
-    except asyncio.TimeoutError:
+    except (asyncio.TimeoutError, httpx.TimeoutException):
         log.warning("margin_verifier.qwen_timeout", listing_id=listing_id)
         return None
-    except (json.JSONDecodeError, httpx.RequestError) as exc:
+    except (json.JSONDecodeError, httpx.RequestError, RuntimeError) as exc:
         # httpx timeout exceptions frequently stringify to "" — log the
         # exception type too, or a timeout is indistinguishable from a
         # genuinely empty/unhelpful error message in the logs.

@@ -12,6 +12,7 @@ import re
 from dataclasses import dataclass
 
 import structlog
+from app.services.model_selection_service import model_selection_service
 
 log = structlog.get_logger(__name__)
 
@@ -90,86 +91,16 @@ def _build_part_prompt(d: dict) -> str:
 
 async def evaluate_part(part_data: dict) -> PartGemResult | None:
     """Send part data to the best available AI and return a verdict. Returns None if all backends fail."""
-    from app.config import get_settings
-    _s = get_settings()
-
     prompt = _build_part_prompt(part_data)
-    messages = [{"role": "user", "content": prompt}]
-    raw: str | None = None
-    model_used = "none"
-
-    if not raw and _s.anthropic_api_key:
-        try:
-            import anthropic
-            client = anthropic.AsyncAnthropic(api_key=_s.anthropic_api_key)
-            resp = await client.messages.create(
-                model="claude-opus-4-8",
-                max_tokens=256,
-                system=PART_EVAL_SYSTEM,
-                messages=messages,
-            )
-            raw = resp.content[0].text if resp.content else None
-            model_used = "claude-opus-4-8"
-        except Exception as exc:
-            log.warning("part_gem_evaluator.anthropic_failed", error=str(exc))
-
-    if not raw and _s.openrouter_api_key:
-        import httpx
-        for attempt in range(3):
-            try:
-                if attempt > 0:
-                    await asyncio.sleep(5 * attempt)
-                async with httpx.AsyncClient(timeout=60) as client:
-                    resp = await client.post(
-                        "https://openrouter.ai/api/v1/chat/completions",
-                        headers={
-                            "Authorization": f"Bearer {_s.openrouter_api_key}",
-                            "HTTP-Referer": _s.frontend_url,
-                            "X-Title": "PC Flipper Parts Gem Evaluator",
-                        },
-                        json={
-                            "model": _s.openrouter_primary_model or "meta-llama/llama-3.1-8b-instruct",
-                            "messages": [
-                                {"role": "system", "content": PART_EVAL_SYSTEM},
-                                {"role": "user", "content": prompt},
-                            ],
-                            "max_tokens": 256,
-                        },
-                    )
-                    resp.raise_for_status()
-                    data = resp.json()
-                    raw = data["choices"][0]["message"]["content"]
-                    actual = data.get("model", _s.openrouter_primary_model or "")
-                    model_used = f"openrouter/{actual.split('/')[-1].replace(':free', '')}"
-                    break
-            except Exception as exc:
-                log.warning("part_gem_evaluator.openrouter_failed", attempt=attempt, error=str(exc))
-
-    if not raw and _s.ollama_base_url:
-        try:
-            import httpx
-            async with httpx.AsyncClient(timeout=120) as client:
-                resp = await client.post(
-                    f"{_s.ollama_base_url}/api/chat",
-                    json={
-                        "model": _s.ollama_model,
-                        "messages": [
-                            {"role": "system", "content": PART_EVAL_SYSTEM},
-                            {"role": "user", "content": prompt},
-                        ],
-                        "stream": False,
-                    },
-                )
-                resp.raise_for_status()
-                raw = resp.json().get("message", {}).get("content")
-                model_used = f"ollama/{_s.ollama_model}"
-        except Exception as exc:
-            log.warning("part_gem_evaluator.ollama_failed", error=str(exc))
-
-    if not raw:
+    try:
+        result = await model_selection_service.complete(
+            task="Part gem evaluation", messages=[{"role": "user", "content": prompt}],
+            system_prompt=PART_EVAL_SYSTEM, max_tokens=256,
+        )
+    except Exception as exc:
+        log.warning("part_gem_evaluator.all_models_failed", error=str(exc))
         return None
-
-    return _parse_part_verdict(raw, model_used)
+    return _parse_part_verdict(result.text, f"{result.provider}/{result.model}")
 
 
 def _parse_part_verdict(raw: str, model_used: str) -> PartGemResult | None:

@@ -43,6 +43,7 @@ import structlog
 
 from app.config import get_settings, Settings
 from app.gem_radar.schemas import ExtractedListing, Identity
+from app.services.model_selection_service import model_selection_service
 
 log = structlog.get_logger(__name__)
 
@@ -328,20 +329,26 @@ async def screen_with_claude(
 
     Provider priority: Ollama (local, fast, GPU) -> OpenRouter (cloud, fallback)
     """
-    settings = get_settings()
-    if not (settings.openrouter_api_key or settings.ollama_base_url):
-        log.info("gem_radar.claude_screening.no_provider_configured")
-        return None
-
     user_prompt = _build_user_prompt(listing, identity)
-
-    # Try local Ollama first (fast, GPU-accelerated, no rate limits)
-    result = await _screen_via_ollama(settings, user_prompt)
-    if result is not None:
-        return result
-
-    # Fall back to OpenRouter (cloud, when local is unavailable)
-    return await _screen_via_openrouter(settings, user_prompt, max_retries)
+    try:
+        selected = await model_selection_service.complete(
+            task="Gem Radar identity and risk screening",
+            messages=[{"role": "user", "content": user_prompt}],
+            system_prompt=_SYSTEM_PROMPT + "\n\nReturn one JSON object with keys: canonical_name, canonical_model_id, identity_confidence, release_year, is_bundle, bundle_components, additional_risk_notes, reasoning_summary.",
+            max_tokens=512, timeout=180, json_mode=True,
+            tools=[_ASSESS_TOOL_SCHEMA], require_tools=True,
+            tool_choice={"type": "function", "function": {"name": "submit_identity_and_risk_assessment"}},
+        )
+        if selected.tool_calls:
+            args = selected.tool_calls[0].get("function", {}).get("arguments", {})
+            if isinstance(args, str):
+                args = json.loads(args)
+            return _parse_assist_result(args)
+        if selected.text:
+            return _parse_assist_result(json.loads(selected.text))
+    except Exception as exc:
+        log.warning("gem_radar.claude_screening.model_selection_failed", error=str(exc))
+    return None
 
 
 # --- Batched photo/title category verification -----------------------------
@@ -527,14 +534,34 @@ async def _verify_batch_via_openrouter(
 async def _verify_one_batch(
     settings: Settings, candidates: list[tuple[str, str, str, str]], max_retries: int
 ) -> list[VerificationFailure]:
-    """candidates: list of (listing_id, title, category, image_url).
-
-    Only uses OpenRouter (Anthropic removed). No local tier for vision."""
+    """Verify a batch through the centralized vision-capable model chain."""
     numbered, index_to_listing_id = await _fetch_batch_images(candidates)
     if not numbered:
         return []
-
-    return await _verify_batch_via_openrouter(settings, numbered, index_to_listing_id, max_retries)
+    text_parts = []
+    images = []
+    for n, (title, category, image_bytes, media_type) in enumerate(numbered, start=1):
+        text_parts.append(f'Listing {n}: "{title}" — claimed category: {category}')
+        images.append((image_bytes, media_type))
+    try:
+        selected = await model_selection_service.complete(
+            task="Gem Radar photo category verification",
+            messages=[{"role": "user", "content": "\n".join(text_parts)}],
+            system_prompt=_VERIFY_SYSTEM_PROMPT, max_tokens=1024, timeout=180,
+            tools=[_VERIFY_TOOL_SCHEMA], require_vision=True, require_tools=True,
+            images=images,
+            tool_choice={"type": "function", "function": {"name": "submit_category_verification"}},
+        )
+        if selected.tool_calls:
+            data = selected.tool_calls[0].get("function", {}).get("arguments", {})
+            if isinstance(data, str):
+                data = json.loads(data)
+        else:
+            data = json.loads(selected.text)
+        return _parse_verify_result(data, index_to_listing_id)
+    except Exception as exc:
+        log.warning("gem_radar.claude_screening.verify_model_selection_failed", error=str(exc))
+        return []
 
 
 async def verify_categories_batch(
