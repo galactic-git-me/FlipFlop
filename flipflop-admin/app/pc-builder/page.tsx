@@ -234,7 +234,7 @@ function PlaybookGrid({ builds, segments, selectedId, onSelect }: { builds: Draf
   const tiers = ["Budget", "Mid-range", "High-end"];
   const highlights = [{ category: "CPU / APU", slot: "cpu", label: "CPU" }, { category: "Graphics", slot: "gpu", label: "GPU" }, { category: "Memory", slot: "ram", label: "Memory" }, { category: "Primary storage", slot: "storage", label: "Storage" }, { category: "Case", slot: "case", label: "Case" }];
   return <section className="space-y-4" aria-label="Playbook build grid">
-    <div><h2 className="text-xl font-semibold">The Playbook</h2><p className="mt-1 text-sm text-slate-400">Seven customer types, three budget tiers. Select a build to inspect its full specification and catalogue assignments.</p></div>
+    <div><h2 className="text-xl font-semibold">The Playbook</h2><p className="mt-1 text-sm text-slate-400">{types.length} customer types, three budget tiers. Select a build to inspect its full specification and catalogue assignments.</p></div>
     {builds.length === 0 ? <Empty title="No playbook builds loaded" text="The draft playbook could not be loaded." /> : <div className="overflow-x-auto rounded-xl border border-white/10">
       <div className="min-w-[1100px]"><div className="grid grid-cols-[160px_repeat(3,minmax(0,1fr))] bg-[#14202d] text-sm font-semibold text-slate-300"><div className="px-4 py-3">Customer type</div>{tiers.map(tier => <div key={tier} className="px-4 py-3">{tier}</div>)}</div>
         {types.map(type => <div key={type} className="grid grid-cols-[160px_repeat(3,minmax(0,1fr))] border-t border-white/10"><h3 className="px-4 py-4 text-sm font-semibold text-cyan-200">{type}</h3>{tiers.map(tier => {
