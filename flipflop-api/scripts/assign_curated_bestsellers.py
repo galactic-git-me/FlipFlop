@@ -107,7 +107,7 @@ PROFILES = {
     "Odyssey": ("9950x", "x870e", "ddr5_96", "5090", "4tb", "northxl", "1200plat", "aio360"),
     "Chaffee": ("9600x", "b850", "ddr5_64", "5060ti16", "2tb", "h5", "750gold", "peerless"),
     "Rhode Island": ("9950x", "x870e", "ddr5_96", "r9700", "4tb", "northxl", "1000gold", "aio360"),
-    "Enterprise": ("9950x3d", "x870e", "ddr5_96", "5090", "4tb", "northxl", "1600titanium", "aio360"),
+    "Enterprise": ("9950x", "x870e", "ddr5_96", "5090", "4tb", "northxl", "1600titanium", "aio360"),
     "Sakharov": ("9600x", "b850", "ddr5_64", "b580", "2tb", "h5", "750gold", "peerless"),
     "Protostar": ("270k", "z890", "ddr5_96", "5060ti16", "4tb", "northxl", "850gold", "phantom"),
     "Prometheus": ("9950x", "x870e", "ddr5_96", "5080", "4tb", "northxl", "1000gold", "aio360"),
