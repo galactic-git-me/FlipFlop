@@ -124,7 +124,8 @@ class ExtractedListing(CamelModel):
         if not isinstance(value, str):
             return None
         image_url = value.strip()
-        if len(image_url) > 1000 or not image_url.lower().startswith(("https://", "http://")):
+        if (len(image_url) > 1000 or not image_url.lower().startswith(("https://", "http://"))
+                or image_url.lower().endswith("._rc")):
             return None
         return image_url
 

@@ -359,6 +359,7 @@ async def touch_observation(
     search_run_id: str,
     observed_at: datetime,
     search_query: str | None = None,
+    image_url: str | None = None,
 ) -> bool:
     """Lightweight "still here" update for a listing the 7-day dedup window
     skipped from full re-scoring: bumps its most recent observation's
@@ -386,6 +387,8 @@ async def touch_observation(
     row.search_run_id = search_run_id
     if search_query is not None:
         row.search_query = search_query
+    if image_url and (not row.image_url or row.image_url.endswith("._RC")):
+        row.image_url = image_url
     if row.source is None:
         # Deduped listings do not carry the full ExtractedListing payload, so
         # recover synthetic aggregator origins from the qualified listing ID.

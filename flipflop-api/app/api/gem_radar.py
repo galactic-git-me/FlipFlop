@@ -2985,6 +2985,7 @@ async def _submit_scan_body(
                     if listing.extracted_at.tzinfo
                     else listing.extracted_at,
                     search_query=payload.query,
+                    image_url=listing.image_url,
                 )
                 touched_unchanged_count += 1
             else:
