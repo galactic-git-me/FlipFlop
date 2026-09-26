@@ -199,7 +199,7 @@ foreach ($server in $servers) {
         Write-Host "[FAILED]  $($server.Name.PadRight(14)) See $($server.LogFile)" -ForegroundColor Red
     }
 }
-Write-Host "[INFO] DEV uses production marketplace reads, sandbox eBay listing writes, and Ollama gateway $ollamaBaseUrl (priority 1)." -ForegroundColor Yellow
+Write-Host "[INFO] DEV uses production marketplace reads, sandbox eBay listing writes, and Ollama gateway $ollamaBaseUrl (second priority: after production, before other apps)." -ForegroundColor Yellow
 Write-Host '[INFO] Press Ctrl+C to stop the development servers started here.' -ForegroundColor Gray
 
 try {

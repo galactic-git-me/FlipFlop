@@ -4,9 +4,9 @@ This service is the single access point to the Ollama instance on
 `prometheus-ts`.
 
 - Ollama itself runs behind the gateway on `127.0.0.1:11433`.
-- Other local programs use the normal Ollama address `127.0.0.1:11434`.
-- Development clients use `127.0.0.1:11435`.
-- Production reaches `prometheus-ts:11436` over Tailscale/SSH.
+- Other local programs use `127.0.0.1:11434` (third priority).
+- FlipFlop development clients use `127.0.0.1:11435` (second priority).
+- Production reaches `prometheus-ts:11436` over Tailscale/SSH (first priority).
 - Only one generation request is forwarded at a time. Waiting production
   requests are always selected before development, then other applications.
 

@@ -165,8 +165,10 @@ model (`LLM_SECONDARY_PROVIDER=openrouter-free` and
 OpenRouter tiers require `OPENROUTER_API_KEY`. Set those `LLM_*` variables in
 the API runtime environment to change the provider/model order. Keep
 `OLLAMA_BASE_URL` environment-specific: development uses the local gateway on
-port `11435`; production worker traffic uses the `ollama-tunnel` service on
-port `11434`. Vision requests skip text-only local models and select a
+port `11435` (second priority); production worker traffic uses the
+`ollama-tunnel` service on container port `11434`, which forwards to the
+production-priority listener on Prometheus port `11436`. Other local apps use
+Prometheus port `11434` (third priority). Vision requests skip text-only local models and select a
 vision-capable configured/cloud tier.
 
 The launcher sets these explicitly so a stale shell environment cannot point
