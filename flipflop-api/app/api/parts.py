@@ -9,6 +9,7 @@ from app.schemas.part import PartOut, PartCreate
 from app.schemas.component import ComponentPriceData
 from app.services.part_gem_scorer import score_groups, GOOD_SOURCES
 from app.services.part_gem_eval_queue import enqueue_part_for_claude
+from app.services.model_selection_service import model_selection_service
 from app.services.component_models import CANONICAL_MODELS
 
 router = APIRouter(prefix="/parts", tags=["parts"])
@@ -252,7 +253,6 @@ async def paste_scan(body: dict, db: AsyncSession = Depends(get_db)):
     """
     from datetime import datetime
     import json, re, asyncio
-    from app.config import get_settings
 
     raw_text = str(body.get("text", "")).strip()
     source = str(body.get("source", "eBay UK")).strip() or "eBay UK"
@@ -306,69 +306,15 @@ If no PC components are found in the text, return an empty array: []"""
     user_msg = f"MARKETPLACE TEXT TO PARSE:\n\n{raw_text}"
     raw_response: str | None = None
     model_used = "none"
-    _s = get_settings()
-
-    if _s.anthropic_api_key:
-        try:
-            import anthropic
-            client = anthropic.AsyncAnthropic(api_key=_s.anthropic_api_key)
-            resp = await client.messages.create(
-                model="claude-haiku-4-5-20251001",
-                max_tokens=4096,
-                system=SYSTEM,
-                messages=[{"role": "user", "content": user_msg}],
-            )
-            raw_response = resp.content[0].text if resp.content else None
-            model_used = "claude-haiku-4-5"
-        except Exception:
-            pass
-
-    if not raw_response and _s.openrouter_api_key:
-        import httpx
-        try:
-            async with httpx.AsyncClient(timeout=120) as client:
-                resp = await client.post(
-                    "https://openrouter.ai/api/v1/chat/completions",
-                    headers={
-                        "Authorization": f"Bearer {_s.openrouter_api_key}",
-                        "HTTP-Referer": _s.frontend_url,
-                        "X-Title": "PC Flipper Paste Scanner",
-                    },
-                    json={
-                        "model": _s.openrouter_primary_model or "anthropic/claude-haiku-4-5",
-                        "messages": [
-                            {"role": "system", "content": SYSTEM},
-                            {"role": "user",   "content": user_msg},
-                        ],
-                        "max_tokens": 4096,
-                    },
-                )
-                resp.raise_for_status()
-                raw_response = resp.json()["choices"][0]["message"]["content"]
-                model_used = "openrouter"
-        except Exception:
-            pass
-
-    if not raw_response and _s.ollama_base_url:
-        try:
-            import httpx
-            async with httpx.AsyncClient(timeout=180) as client:
-                resp = await client.post(
-                    f"{_s.ollama_base_url}/api/chat",
-                    json={
-                        "model": _s.ollama_model,
-                        "messages": [
-                            {"role": "system", "content": SYSTEM},
-                            {"role": "user",   "content": user_msg},
-                        ],
-                        "stream": False,
-                    },
-                )
-                resp.raise_for_status()
-                raw_response = resp.json().get("message", {}).get("content")
-                model_used = f"ollama/{_s.ollama_model}"
-        except Exception:
-            pass
+    try:
+        selected = await model_selection_service.complete(
+            task="Parts catalogue paste scan", messages=[{"role": "user", "content": user_msg}],
+            system_prompt=SYSTEM, max_tokens=4096, timeout=180, json_mode=True,
+        )
+        raw_response = selected.text
+        model_used = f"{selected.provider}/{selected.model}"
+    except Exception:
+        raw_response = None
 
     if not raw_response:
         return {"parsed": 0, "gems": 0, "super_gems": 0, "items": [], "error": "AI backend unavailable"}

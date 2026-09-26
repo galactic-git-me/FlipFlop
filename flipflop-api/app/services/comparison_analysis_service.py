@@ -10,7 +10,7 @@ two builds they might spend real money on) than casual chat.
 """
 
 import structlog
-from app.config import get_settings
+from app.services.model_selection_service import model_selection_service
 from app.schemas.build_comparison import ComparedBuildOut
 
 log = structlog.get_logger(__name__)
@@ -42,21 +42,12 @@ def _build_prompt(builds: list[ComparedBuildOut]) -> str:
 
 
 async def generate_comparison_analysis(builds: list[ComparedBuildOut]) -> str:
-    settings = get_settings()
-    if not settings.anthropic_api_key:
-        return FALLBACK_MESSAGE
-
     try:
-        import anthropic
-
-        client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
-        resp = await client.messages.create(
-            model="claude-sonnet-5",
-            max_tokens=600,
-            messages=[{"role": "user", "content": _build_prompt(builds)}],
+        result = await model_selection_service.complete(
+            task="Build comparison analysis",
+            messages=[{"role": "user", "content": _build_prompt(builds)}], max_tokens=600,
         )
-        text = resp.content[0].text if resp.content else None
-        return text.strip() if text else FALLBACK_MESSAGE
+        return result.text.strip() if result.text else FALLBACK_MESSAGE
     except Exception as e:
         log.warning("comparison_analysis.claude_call_failed", error=str(e))
         return FALLBACK_MESSAGE

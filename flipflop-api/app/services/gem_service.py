@@ -22,7 +22,7 @@ from decimal import Decimal
 
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
-from anthropic import Anthropic
+from app.services.model_selection_service import model_selection_service
 
 from app.models.gem import GemBuild, GemRiskLevel
 from app.models.order import Order, OrderStatus
@@ -46,7 +46,8 @@ class GemRecommendationService:
             anthropic_api_key: Anthropic API key (uses ANTHROPIC_API_KEY env var if not provided)
         """
         self.db = db
-        self.client = Anthropic(api_key=anthropic_api_key) if anthropic_api_key else Anthropic()
+        # Retain the legacy optional argument for callers; provider credentials
+        # and model routing now come from ModelSelectionService runtime config.
 
     async def generate_recommendations(self, analysis_days: int = 30) -> Dict[str, Any]:
         """
@@ -385,22 +386,13 @@ IMPORTANT:
 - Ensure JSON is valid (no trailing commas, proper quotes)
 """.strip()
 
-            log.info("Calling Claude API for recommendations")
-
-            # Call Claude
-            message = self.client.messages.create(
-                model="claude-3-5-sonnet-20241022",
-                max_tokens=2000,
-                messages=[
-                    {
-                        "role": "user",
-                        "content": analysis_prompt
-                    }
-                ]
+            log.info("Calling configured model tiers for recommendations")
+            selected = await model_selection_service.complete(
+                task="Gem build recommendations",
+                messages=[{"role": "user", "content": analysis_prompt}], max_tokens=2000,
             )
-
-            response_text = message.content[0].text
-            log.info("Received Claude response", response_length=len(response_text))
+            response_text = selected.text
+            log.info("Received model response", response_length=len(response_text), model=selected.model)
 
             # Extract JSON from response (Claude may include markdown fencing)
             json_str = response_text

@@ -5,10 +5,7 @@ Primary: Ollama (local gemma4:e4b) → OpenRouter free models → Anthropic Clau
 import httpx
 import urllib.parse
 from pathlib import Path
-from app.config import get_settings
 from app.services.model_selection_service import model_selection_service
-
-settings = get_settings()
 
 _SELLING_PRINCIPLES_PATH = Path(__file__).resolve().parent.parent.parent / "config" / "selling_principles.md"
 
@@ -48,16 +45,6 @@ Current market context:
 
 When evaluating listings, always give: verdict, reasoning, upgrade path if applicable, estimated profit range.
 Keep responses concise but complete. Use markdown for structure."""
-
-# OpenRouter free models to try in order — primary first
-OPENROUTER_FREE_MODELS = [
-    "google/gemma-4-31b-it:free",       # primary
-    "google/gemma-3-4b-it:free",        # fallback 1
-    "mistralai/mistral-7b-instruct:free",  # fallback 2
-    "nousresearch/hermes-3-llama-3.1-405b:free",
-    "meta-llama/llama-3.2-3b-instruct:free",
-]
-
 
 async def chat(
     message: str,
@@ -247,21 +234,6 @@ def _build_messages(message: str, history: list[dict], listing_context: dict | N
     return messages
 
 
-async def _ollama_chat(messages: list[dict], cfg=None) -> str | None:
-    cfg = cfg or settings
-    async with httpx.AsyncClient(timeout=90) as client:
-        resp = await client.post(
-            f"{cfg.ollama_base_url}/api/chat",
-            json={
-                "model": cfg.ollama_model,
-                "messages": [{"role": "system", "content": SYSTEM_PROMPT}] + messages,
-                "stream": False,
-            },
-        )
-        resp.raise_for_status()
-        return resp.json().get("message", {}).get("content")
-
-
 async def _fetch_image_as_base64(url: str) -> str | None:
     try:
         async with httpx.AsyncClient(timeout=30) as client:
@@ -279,13 +251,8 @@ async def chat_with_images(system_prompt: str, user_text: str, image_urls: list[
     factual content out of supplied images (spec card, registration plate,
     performance card renders) alongside a large structured-output prompt.
 
-    Uses whatever model is configured in settings.ollama_model — this MUST
-    be a vision-capable model (e.g. qwen2.5vl:7b). A text-only model like
-    plain qwen2:7b silently ignores the images field, so if this starts
-    reliably describing images incorrectly, check what model is actually
-    configured via GET /api/settings.
+    Uses the configured vision-capable tiers; text-only tiers are skipped.
     """
-    _s = get_settings()
     images_b64 = [b64 for url in image_urls if (b64 := await _fetch_image_as_base64(url))]
     try:
         import base64
@@ -296,90 +263,13 @@ async def chat_with_images(system_prompt: str, user_text: str, image_urls: list[
         )
         return result.text, f"{result.provider}/{result.model}"
     except Exception as e:
-        print(f"[hermes] Ollama (vision) failed: {e}")
+        print(f"[hermes] vision model tiers failed: {e}")
 
     return ("Ollama request failed — check backend logs for details.", "none")
 
 
-async def _openrouter_chat(messages: list[dict], model: str, api_key: str | None = None) -> tuple[str, str] | None:
-    """Returns (content, actual_model_used) or None on failure."""
-    key = api_key or settings.openrouter_api_key
-    async with httpx.AsyncClient(timeout=60) as client:
-        resp = await client.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {key}",
-                "HTTP-Referer": settings.frontend_url,
-                "X-Title": "PC Flipper Hermes",
-            },
-            json={
-                "model": model,
-                "messages": [{"role": "system", "content": SYSTEM_PROMPT}] + messages,
-                "max_tokens": 1024,
-            },
-        )
-        resp.raise_for_status()
-        data = resp.json()
-        content = data["choices"][0]["message"]["content"]
-        # Use the model OpenRouter actually routed to (may differ from requested)
-        actual_model = data.get("model", model)
-        # Shorten to just the model name portion for display
-        label = actual_model.split("/")[-1].replace(":free", "") if "/" in actual_model else actual_model
-        return content, label
-
-
-async def _openrouter_chat_with_system(
-    messages: list[dict], model: str, api_key: str, system_prompt: str, max_tokens: int = 1024
-) -> tuple[str, str] | None:
-    """Call OpenRouter with custom system prompt and max_tokens. Returns (content, model_label) or None."""
-    async with httpx.AsyncClient(timeout=120) as client:
-        resp = await client.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "HTTP-Referer": settings.frontend_url,
-                "X-Title": "FlipFlop Listing Generator",
-            },
-            json={
-                "model": model,
-                "messages": [{"role": "system", "content": system_prompt}] + messages,
-                "max_tokens": max_tokens,
-            },
-        )
-        resp.raise_for_status()
-        data = resp.json()
-        content = data["choices"][0]["message"]["content"]
-        actual_model = data.get("model", model)
-        label = actual_model.split("/")[-1].replace(":free", "") if "/" in actual_model else actual_model
-        return content, label
-
-
-async def _claude_chat(messages: list[dict]) -> str | None:
-    import anthropic
-    client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
-    resp = await client.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=1024,
-        system=[
-            {
-                "type": "text",
-                "text": SYSTEM_PROMPT,
-                "cache_control": {"type": "ephemeral"}
-            }
-        ],
-        messages=messages,
-    )
-    return resp.content[0].text if resp.content else None
-
-
 async def generate_ebay_listing(system_prompt: str, materials: str) -> tuple[str, str]:
-    """Generate eBay listing via Claude API with prompt caching (primary) or OpenRouter fallback.
-
-    Returns (response_text, model_used) or raises if no backend available.
-
-    Uses prompt caching on the system prompt to reduce token usage and improve latency
-    on subsequent calls with the same prompt template.
-    """
+    """Generate eBay listing content through the shared model hierarchy."""
     result = await model_selection_service.complete(
         task="Manual eBay listing content", messages=[{"role": "user", "content": materials}],
         system_prompt=system_prompt, max_tokens=8192, timeout=180,

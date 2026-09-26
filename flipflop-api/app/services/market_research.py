@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
-import anthropic
+from app.services.model_selection_service import model_selection_service
 
 log = structlog.get_logger(__name__)
 
@@ -87,26 +87,6 @@ async def research_build_price(
             for c in comparables
         ]
 
-        # Call Claude to analyze and suggest price
-        try:
-            client = anthropic.Anthropic()
-        except Exception as e:
-            log.warning("claude_api.key_missing", error=str(e))
-            # Fallback: use statistical analysis instead
-            prices = [c[2] for c in comparables if c[2]]
-            if prices:
-                median_price = sorted(prices)[len(prices) // 2]
-                return {
-                    "suggested_price": float(median_price),
-                    "reasoning": f"Based on {len(prices)} recent sold comparables. Median market price from eBay data.",
-                    "sources_analyzed": len(prices),
-                }
-            return {
-                "suggested_price": 2500.00,
-                "reasoning": "No comparable data available. Using conservative estimate.",
-                "sources_analyzed": 0,
-            }
-
         prompt = f"""You are a PC build pricing expert. Analyze these recent eBay comparable sales and suggest an optimal market price for a new custom build.
 
 Build Type: {playbook_name}
@@ -131,20 +111,26 @@ Respond in JSON format:
   "market_trend": "<stable/rising/falling>"
 }}"""
 
-        response = client.messages.create(
-            model="claude-opus-4-8",
-            max_tokens=500,
-            messages=[{"role": "user", "content": prompt}],
-        )
+        try:
+            selected = await model_selection_service.complete(
+                task="Build market price research", messages=[{"role": "user", "content": prompt}],
+                max_tokens=500, json_mode=True,
+            )
+            response_text = selected.text
+        except Exception as exc:
+            log.warning("market_research.all_models_failed", error=str(exc))
+            prices = [c[2] for c in comparables if c[2]]
+            median_price = sorted(prices)[len(prices) // 2] if prices else 2500.0
+            return {"suggested_price": float(median_price),
+                    "reasoning": f"Based on {len(prices)} recent comparable sales (model service unavailable).",
+                    "sources_analyzed": len(prices)}
 
-        # Parse response
-        response_text = response.content[0].text
         try:
             json_start = response_text.find("{")
             json_end = response_text.rfind("}") + 1
             result_json = json.loads(response_text[json_start:json_end])
         except json.JSONDecodeError:
-            # Fallback if Claude doesn't return valid JSON
+            # Fallback if the selected model doesn't return valid JSON
             result_json = {
                 "suggested_price": 2500.00,
                 "reasoning": response_text[:500],
