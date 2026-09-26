@@ -76,8 +76,10 @@ Once all servers are running, access them at:
 ## Logs
 
 ### Windows (PowerShell)
-Logs are written to the repository's `logs` directory. The launcher remains
-in the foreground so `Ctrl+C` can stop every development process it started.
+Logs are written to the repository's `logs` directory with a unique timestamp
+and launcher PID in each filename. This avoids collisions with logs still held
+open by an abandoned DEV process. The launcher remains in the foreground so
+`Ctrl+C` can stop every development process it started.
 
 ### macOS/Linux (Bash)
 Logs are written to:

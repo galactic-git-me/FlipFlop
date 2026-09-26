@@ -16,6 +16,7 @@ $projectRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $storefrontRoot = Join-Path (Split-Path -Parent $projectRoot) 'FlipFlop.shop'
 $logsDir = Join-Path $projectRoot 'logs'
 $apiRoot = Join-Path $projectRoot 'flipflop-api'
+$launcherRunId = "$(Get-Date -Format 'yyyyMMdd-HHmmss')-$PID"
 
 function Get-ApiEnvironmentValue([string]$Name) {
     if ($Name -eq 'OLLAMA_BASE_URL') {
@@ -113,7 +114,9 @@ function Start-DevelopmentServer {
         [ConsoleColor]$Color
     )
 
-    $logFile = Join-Path $logsDir "$Name.log"
+    # Each launcher run gets independent files. An abandoned DEV child can
+    # keep its redirected log open after its listening port has gone away.
+    $logFile = Join-Path $logsDir "$Name-$launcherRunId.log"
     $arguments = @('/d', '/s', '/c', "$Command > `"$logFile`" 2>&1")
     $process = Start-Process -FilePath 'cmd.exe' -ArgumentList $arguments -WorkingDirectory $WorkingDirectory -NoNewWindow -PassThru
     return @{ Name = $Name; Process = $process; Port = $Port; Color = $Color; LogFile = $logFile }
