@@ -5,7 +5,8 @@
     "Costs are catalogue estimates — replace with FlipFlopXtension live fast-delivery vendor prices before Michael approval.",
     "indicative_sell_gbp is catalogue only; PricingBot owns suggested sell + upgrade add-ons.",
     "Upsells are one-step-up within the same customer_type toward the next budget tier.",
-    "Fleet naming: Budget = shuttlecraft, Mid-range = smaller starships, High-end = major starships; Enterprise is the AI Workstation flagship."
+    "Fleet naming: Budget = shuttlecraft, Mid-range = smaller starships, High-end = major starships; Enterprise is the AI Workstation flagship.",
+    "Budget ranges are customer total spend in GBP; minimum is inclusive, maximum is exclusive, and High-end has no upper bound. Draft prices remain indicative pending PricingBot and supplier review."
   ],
   "playbooks": [
     {
@@ -163,7 +164,9 @@
       "allowed_cases": [
         "Montech AIR 100 ARGB"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 0,
+      "budget_max_exclusive_gbp": 1300
     },
     {
       "playbook_id": "FF-GVG-02",
@@ -306,7 +309,9 @@
       "allowed_cases": [
         "Montech SKY TWO GX"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 1300,
+      "budget_max_exclusive_gbp": 2050
     },
     {
       "playbook_id": "FF-GVG-03",
@@ -413,7 +418,9 @@
       "allowed_cases": [
         "Lian Li LANCOOL 207"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 2050,
+      "budget_max_exclusive_gbp": null
     },
     {
       "playbook_id": "FF-HPG-01",
@@ -542,7 +549,9 @@
       "allowed_cases": [
         "NZXT H5 Flow"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 0,
+      "budget_max_exclusive_gbp": 2150
     },
     {
       "playbook_id": "FF-HPG-02",
@@ -692,7 +701,9 @@
       "allowed_cases": [
         "APNX Creator C1 ChromaFlair"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 2150,
+      "budget_max_exclusive_gbp": 4750
     },
     {
       "playbook_id": "FF-HPG-03",
@@ -799,7 +810,9 @@
       "allowed_cases": [
         "Fractal Design North XL"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 4750,
+      "budget_max_exclusive_gbp": null
     },
     {
       "playbook_id": "FF-STU-01",
@@ -949,7 +962,9 @@
       "allowed_cases": [
         "ASUS NUC 14 Pro-style compact chassis"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 0,
+      "budget_max_exclusive_gbp": 1000
     },
     {
       "playbook_id": "FF-STU-02",
@@ -1099,7 +1114,9 @@
       "allowed_cases": [
         "Fractal Design Pop Air"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 1000,
+      "budget_max_exclusive_gbp": 2150
     },
     {
       "playbook_id": "FF-STU-03",
@@ -1206,7 +1223,9 @@
       "allowed_cases": [
         "Lian Li LANCOOL 207"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 2150,
+      "budget_max_exclusive_gbp": null
     },
     {
       "playbook_id": "FF-BOF-01",
@@ -1356,7 +1375,9 @@
       "allowed_cases": [
         "Fractal Design Core 1100"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 0,
+      "budget_max_exclusive_gbp": 900
     },
     {
       "playbook_id": "FF-BOF-02",
@@ -1471,7 +1492,9 @@
       "allowed_cases": [
         "Fractal Design Define 7 Compact"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 900,
+      "budget_max_exclusive_gbp": 1500
     },
     {
       "playbook_id": "FF-BOF-03",
@@ -1578,7 +1601,9 @@
       "allowed_cases": [
         "Premium compact aluminium mini-PC chassis"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 1500,
+      "budget_max_exclusive_gbp": null
     },
     {
       "playbook_id": "FF-CCR-01",
@@ -1728,7 +1753,9 @@
       "allowed_cases": [
         "Corsair 3500X"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 0,
+      "budget_max_exclusive_gbp": 3150
     },
     {
       "playbook_id": "FF-CCR-02",
@@ -1878,7 +1905,9 @@
       "allowed_cases": [
         "ASUS ProArt PA602"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 3150,
+      "budget_max_exclusive_gbp": 5750
     },
     {
       "playbook_id": "FF-CCR-03",
@@ -1985,7 +2014,9 @@
       "allowed_cases": [
         "Fractal Design Define 7 XL"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 5750,
+      "budget_max_exclusive_gbp": null
     },
     {
       "playbook_id": "FF-AIW-01",
@@ -2142,7 +2173,9 @@
       "allowed_cases": [
         "Fractal Design Meshify 2 Compact"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 0,
+      "budget_max_exclusive_gbp": 3100
     },
     {
       "playbook_id": "FF-AIW-02",
@@ -2299,7 +2332,9 @@
       "allowed_cases": [
         "Fractal Design Meshify 2 XL"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 3100,
+      "budget_max_exclusive_gbp": 10700
     },
     {
       "playbook_id": "FF-AIW-03",
@@ -2406,7 +2441,9 @@
       "allowed_cases": [
         "Corsair 9000D Airflow"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 10700,
+      "budget_max_exclusive_gbp": null
     },
     {
       "playbook_id": "FF-SWD-01",
@@ -2563,7 +2600,9 @@
       "allowed_cases": [
         "Fractal Design Pop Air"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 0,
+      "budget_max_exclusive_gbp": 2300
     },
     {
       "playbook_id": "FF-SWD-02",
@@ -2706,7 +2745,9 @@
       "allowed_cases": [
         "Fractal Design North"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 2300,
+      "budget_max_exclusive_gbp": 3950
     },
     {
       "playbook_id": "FF-SWD-03",
@@ -2813,7 +2854,9 @@
       "allowed_cases": [
         "Fractal Design Define 7 XL"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 3950,
+      "budget_max_exclusive_gbp": null
     },
     {
       "playbook_id": "FF-FAM-01",
@@ -2970,7 +3013,9 @@
       "allowed_cases": [
         "Fractal Design Core 1100"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 0,
+      "budget_max_exclusive_gbp": 1100
     },
     {
       "playbook_id": "FF-FAM-02",
@@ -3127,7 +3172,9 @@
       "allowed_cases": [
         "Montech AIR 100 ARGB"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 1100,
+      "budget_max_exclusive_gbp": 2100
     },
     {
       "playbook_id": "FF-FAM-03",
@@ -3234,7 +3281,9 @@
       "allowed_cases": [
         "APNX Creator C1 ChromaFlair"
       ],
-      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live"
+      "cost_source": "catalogue_estimate_pending_FlipFlopXtension_live",
+      "budget_min_gbp": 2100,
+      "budget_max_exclusive_gbp": null
     }
   ]
 }

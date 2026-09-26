@@ -24,14 +24,19 @@ def main() -> None:
         for item in playbooks:
             connection.execute(text("""
                 INSERT INTO curated_build_segments
-                    (customer_type, budget_level, components, availability_status,
+                    (customer_type, budget_level, budget_min, budget_max, components, availability_status,
                      is_live, regeneration_status, updated_at)
-                VALUES (:customer_type, :budget_level, '{}'::json, 'out_of_stock',
+                VALUES (:customer_type, :budget_level, :budget_min, :budget_max, '{}'::json, 'out_of_stock',
                         false, 'idle', now())
-                ON CONFLICT (customer_type, budget_level) DO NOTHING
+                ON CONFLICT (customer_type, budget_level) DO UPDATE SET
+                    budget_min = COALESCE(curated_build_segments.budget_min, EXCLUDED.budget_min),
+                    budget_max = CASE WHEN curated_build_segments.budget_min IS NULL
+                        THEN EXCLUDED.budget_max ELSE curated_build_segments.budget_max END
             """), {
                 "customer_type": item["customer_type"],
                 "budget_level": item["budget_tier"],
+                "budget_min": item["budget_min_gbp"],
+                "budget_max": item["budget_max_exclusive_gbp"],
             })
     print(f"Ensured {len(pairs)} draft segments")
 

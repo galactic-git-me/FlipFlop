@@ -126,6 +126,20 @@ class SegmentInput(BaseModel):
     is_live: bool | None = None
 
 
+@router.get("/match-budget")
+async def match_budget(customer_type: str, budget_gbp: float, db: AsyncSession = Depends(get_db)):
+    if budget_gbp < 0:
+        raise HTTPException(status_code=422, detail="Budget must be zero or greater")
+    segments = (await db.execute(select(CuratedBuildSegment).where(
+        CuratedBuildSegment.customer_type == customer_type,
+        CuratedBuildSegment.budget_min.is_not(None),
+    ))).scalars().all()
+    matches = [s for s in segments if s.budget_min <= budget_gbp and (s.budget_max is None or budget_gbp < s.budget_max)]
+    if len(matches) != 1:
+        raise HTTPException(status_code=404, detail="No unique budget segment found for this customer type and amount")
+    return _segment_json(matches[0])
+
+
 SLOT_BESTSELLER_CATEGORY = {
     "cpu": "cpu", "gpu": "gpu", "motherboard": "motherboard",
     "ram": "ram", "storage": "storage", "psu": "psu",
@@ -215,10 +229,24 @@ async def get_curated_builds(db: AsyncSession = Depends(get_db)):
 
 @router.post("/segments")
 async def upsert_segment(body: SegmentInput, db: AsyncSession = Depends(get_db)):
+    if body.budget_min is not None and body.budget_min < 0:
+        raise HTTPException(status_code=422, detail="Minimum budget must be zero or greater")
+    if body.budget_max is not None and (body.budget_min is None or body.budget_max <= body.budget_min):
+        raise HTTPException(status_code=422, detail="Maximum budget must be greater than minimum budget")
     segment = (await db.execute(select(CuratedBuildSegment).where(
         CuratedBuildSegment.customer_type == body.customer_type,
         CuratedBuildSegment.budget_level == body.budget_level,
     ))).scalar_one_or_none()
+    if body.budget_min is not None:
+        peers = (await db.execute(select(CuratedBuildSegment).where(
+            CuratedBuildSegment.customer_type == body.customer_type,
+            CuratedBuildSegment.budget_min.is_not(None),
+        ))).scalars().all()
+        for peer in peers:
+            if segment is not None and peer.id == segment.id:
+                continue
+            if (body.budget_max is None or peer.budget_min < body.budget_max) and (peer.budget_max is None or body.budget_min < peer.budget_max):
+                raise HTTPException(status_code=409, detail=f"Budget range overlaps {peer.budget_level}")
     if segment is None:
         segment = CuratedBuildSegment(customer_type=body.customer_type, budget_level=body.budget_level)
         db.add(segment)
