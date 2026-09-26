@@ -60,6 +60,7 @@ from app.models.demand_metrics_snapshot import DemandMetricsSnapshot
 from app.models.demand_alert import DemandAlert
 from app.models.demand_export_audit import DemandExportAudit
 from app.models.customer_review import CustomerReview
+from app.models.recommendation_session import RecommendationSession
 
 __all__ = [
     "Listing", "ListingStatus",
