@@ -313,6 +313,7 @@ async def record_observation(
         observed_at=listing.extracted_at.replace(tzinfo=None) if listing.extracted_at.tzinfo else listing.extracted_at,
         search_run_id=search_run_id,
         search_query=search_query,
+        search_tags=listing.search_tags,
         source=infer_listing_source(listing.url, listing.listing_id),
         epid=listing.epid,
         gtin=listing.gtin,
@@ -360,6 +361,7 @@ async def touch_observation(
     observed_at: datetime,
     search_query: str | None = None,
     image_url: str | None = None,
+    search_tags: list[str] | None = None,
 ) -> bool:
     """Lightweight "still here" update for a listing the 7-day dedup window
     skipped from full re-scoring: bumps its most recent observation's
@@ -387,6 +389,8 @@ async def touch_observation(
     row.search_run_id = search_run_id
     if search_query is not None:
         row.search_query = search_query
+    if search_tags:
+        row.search_tags = list(dict.fromkeys([*(row.search_tags or []), *search_tags]))
     if image_url and (not row.image_url or row.image_url.endswith("._RC")):
         row.image_url = image_url
     if row.source is None:

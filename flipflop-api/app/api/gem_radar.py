@@ -888,10 +888,18 @@ async def get_scored_listings(
     # its own raw UPDATE of these same columns), so read them the same way.
     ids = [s.id for s in scored]
     raw_result = await db.execute(
-        text("SELECT id, market_median_price FROM gem_radar_scored_listings WHERE id = ANY(:ids)"),
+        text("""
+            SELECT s.id, s.market_median_price,
+                (SELECT o.search_tags FROM gem_radar_listing_observations o
+                 WHERE o.listing_id = s.listing_id
+                 ORDER BY o.observed_at DESC, o.id DESC LIMIT 1) AS search_tags
+            FROM gem_radar_scored_listings s WHERE s.id = ANY(:ids)
+        """),
         {"ids": ids},
     )
-    median_by_id = {row.id: row.market_median_price for row in raw_result}
+    result_rows = raw_result.fetchall()
+    median_by_id = {row.id: row.market_median_price for row in result_rows}
+    tags_by_id = {row.id: row.search_tags for row in result_rows}
 
     response: list[ScoredListing] = []
     for rank, s in enumerate(scored, start=1):
@@ -918,6 +926,7 @@ async def get_scored_listings(
                     watch_count=s.watch_count,
                     auction_end_at=None,
                     image_url=s.image_url,
+                    search_tags=tags_by_id.get(s.id),
                     sponsored=False,
                     extracted_at=s.listing_observed_at,
                     epid=s.epid,
@@ -3044,6 +3053,7 @@ async def _submit_scan_body(
                     else listing.extracted_at,
                     search_query=payload.query,
                     image_url=listing.image_url,
+                    search_tags=payload.tags,
                 )
                 touched_unchanged_count += 1
             else:

@@ -6,7 +6,7 @@ DB storage is cheap enough that gating it to watched-only would trade real
 correctness for a marginal storage saving.
 """
 from datetime import datetime
-from sqlalchemy import String, Integer, Float, DateTime, Boolean, Text
+from sqlalchemy import String, Integer, Float, DateTime, Boolean, Text, JSON
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
@@ -51,6 +51,7 @@ class GemRadarListingObservation(Base):
     # still-fresh listings from "active" the moment a third distinct search
     # under the same category landed.
     search_query: Mapped[str | None] = mapped_column(String(500), index=True, nullable=True)
+    search_tags: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
     # Marketplace this sighting came from (ebay/vinted/overclockers/temu),
     # inferred from the listing URL at write time (see
     # app.gem_radar.marketplace.infer_marketplace) — ExtractedListing itself
