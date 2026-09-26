@@ -12,13 +12,13 @@ CPU / APU,Intel Core Ultra 5 250K Plus,Curated,FF-BOF-01; FF-BOF-02; FF-CCR-01; 
 CPU / APU,Intel Core Ultra 7 270K Plus,Curated,FF-CCR-01; FF-CCR-02; FF-STU-02; FF-STU-03; FF-SWD-01; FF-SWD-02,upsell
 CPU cooling,AMD Wraith Stealth,Curated,FF-BOF-01; FF-FAM-01,default
 CPU cooling,Arctic Liquid Freezer III 240,Curated,FF-CCR-01; FF-GVG-02; FF-GVG-03; FF-STU-02; FF-STU-03,upsell
-CPU cooling,Arctic Liquid Freezer III 360,Curated; ASIN:B0DLWGG85P,FF-AIW-01; FF-AIW-02; FF-CCR-01; FF-CCR-02; FF-HPG-02; FF-HPG-03; FF-SWD-03,upsell
+CPU cooling,Arctic Liquid Freezer III 360,Curated,FF-AIW-01; FF-AIW-02; FF-CCR-01; FF-CCR-02; FF-HPG-02; FF-HPG-03; FF-SWD-03,upsell
 CPU cooling,Arctic Liquid Freezer III 420,Curated,FF-CCR-02; FF-CCR-03,upsell
 CPU cooling,Noctua NH-D15 G2,Curated,FF-SWD-01; FF-SWD-02,upsell
 CPU cooling,Noctua NH-U12S redux,Curated,FF-BOF-01; FF-BOF-02,upsell
 CPU cooling,Noctua NH-U14S TR5-SP6,Curated,FF-AIW-02; FF-AIW-03,upsell
 CPU cooling,Thermalright Aqua Elite 240 V3,Curated,FF-FAM-02; FF-FAM-03; FF-HPG-02,upsell
-CPU cooling,Thermalright Assassin X 120 SE,Curated; ASIN:B0B8Z283NZ,FF-FAM-01; FF-FAM-02; FF-GVG-01; FF-STU-01; FF-STU-02,upsell
+CPU cooling,Thermalright Assassin X 120 SE,Curated,FF-FAM-01; FF-FAM-02; FF-GVG-01; FF-STU-01; FF-STU-02,upsell
 CPU cooling,Thermalright Peerless Assassin 120 SE,Curated; ASIN:B0B4G8QKZP,FF-AIW-01; FF-GVG-01; FF-GVG-02; FF-SWD-01,upsell
 CPU cooling,Thermalright Phantom Spirit 120 SE,Curated; ASIN:B0DWSP4VKS,FF-HPG-01,default
 Case,APNX Creator C1 ChromaFlair,Curated,FF-FAM-03; FF-HPG-02,default
@@ -32,13 +32,13 @@ Case,Fractal Design Define 7 XL,Curated,FF-CCR-03; FF-SWD-03,default
 Case,Fractal Design Meshify 2 Compact,Curated,FF-AIW-01,default
 Case,Fractal Design Meshify 2 XL,Curated,FF-AIW-02,default
 Case,Fractal Design North,Curated,FF-SWD-02,default
-Case,Fractal Design North XL,Curated,FF-HPG-03,default
+Case,Fractal Design North XL,Curated; ASIN:B0CJCJ3ZZB,FF-HPG-03,default
 Case,Fractal Design Pop Air,Curated,FF-STU-02; FF-SWD-01,default
 Case,Lian Li LANCOOL 207,Curated,FF-GVG-03; FF-STU-03,default
 Case,Montech AIR 100 ARGB,Curated,FF-FAM-02; FF-GVG-01,default
 Case,Montech SKY TWO GX,Curated,FF-GVG-02,default
 Case,NZXT H5 Flow,Curated; ASIN:B0D2MK6NML,FF-HPG-01,default
-Case,Premium compact aluminium mini-PC chassis,Curated; ASIN:B0DFS88R2L,FF-BOF-03,default
+Case,Premium compact aluminium mini-PC chassis,Curated,FF-BOF-03,default
 Graphics,AMD Radeon RX 9060 XT 16GB,Curated; ASIN:B0F9QM1M6R,FF-FAM-01; FF-FAM-02; FF-GVG-01; FF-GVG-02,upsell
 Graphics,AMD Radeon RX 9070 16GB,Curated,FF-FAM-02; FF-FAM-03; FF-GVG-02; FF-GVG-03,upsell
 Graphics,AMD Radeon RX 9070 XT 16GB,Curated; ASIN:B0DT7B79K9,FF-HPG-01; FF-HPG-02,upsell
@@ -65,13 +65,13 @@ Motherboard,ASRock B850 Steel Legend WiFi,Curated,FF-FAM-01; FF-FAM-02; FF-GVG-0
 Motherboard,ASUS PRIME X870-P,Curated,FF-HPG-02,default
 Motherboard,ASUS Pro Q870M-C-CSM,Curated,FF-BOF-01; FF-BOF-02,upsell
 Motherboard,ASUS Pro WS WRX90E-SAGE SE,Curated,FF-AIW-02; FF-AIW-03,upsell
-Motherboard,ASUS ProArt X870E-Creator WiFi,Curated,FF-AIW-01; FF-AIW-02; FF-CCR-03; FF-SWD-03,upsell
+Motherboard,ASUS ProArt X870E-Creator WiFi,Curated; ASIN:B09KB8GGN1,FF-AIW-01; FF-AIW-02; FF-CCR-03; FF-SWD-03,upsell
 Motherboard,ASUS ProArt Z890-CREATOR WIFI,Curated,FF-CCR-01; FF-CCR-02; FF-SWD-01; FF-SWD-02,upsell
 Motherboard,ASUS ROG Crosshair X870E Hero,Curated,FF-HPG-02; FF-HPG-03,upsell
 Motherboard,ASUS TUF GAMING Z890-PLUS WIFI,Curated,FF-STU-02; FF-STU-03,upsell
-Motherboard,ASUS TUF Gaming X870-PLUS WIFI,Curated,FF-FAM-02; FF-FAM-03; FF-GVG-02; FF-GVG-03,upsell
-Motherboard,MSI B550M PRO-VDH WIFI,Curated,FF-BOF-01; FF-FAM-01; FF-GVG-01,default
-Motherboard,MSI B850 GAMING PLUS WIFI,Curated,FF-STU-01; FF-STU-02; FF-SWD-01,upsell
+Motherboard,ASUS TUF Gaming X870-PLUS WIFI,Curated; ASIN:B0DGQ9C2TH,FF-FAM-02; FF-FAM-03; FF-GVG-02; FF-GVG-03,upsell
+Motherboard,MSI B550M PRO-VDH WIFI,Curated; ASIN:B08BCR4ZRS,FF-BOF-01; FF-FAM-01; FF-GVG-01,default
+Motherboard,MSI B850 GAMING PLUS WIFI,Curated; ASIN:B096Y1H9VR,FF-STU-01; FF-STU-02; FF-SWD-01,upsell
 Motherboard,MSI MAG B850 Tomahawk MAX WiFi,Curated,FF-AIW-01,default
 Motherboard,MSI Z890 GAMING PLUS WIFI,Curated,FF-CCR-01; FF-HPG-01,default
 Power supply,Corsair AX1600i 1600W 80+ Titanium,Curated,FF-AIW-02; FF-AIW-03,upsell
