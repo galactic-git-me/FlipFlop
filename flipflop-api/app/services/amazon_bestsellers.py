@@ -438,7 +438,15 @@ def bestseller_item_matches_category(title: str, category: str) -> bool:
     if category == "psu":
         return bool(re.search(r"\b(?:power\s+supply|psu)\b", value))
     if category == "cooler":
-        return bool(re.search(r"\b(?:cpu\s+cooler|aio|heatsink|liquid\s+cooler)\b", value))
+        # Amazon's broad "Fans & Cooling" node also contains thermal paste,
+        # pads, case fans, laptop cooling pads, and other accessories. Keep
+        # only actual CPU cooling assemblies in the curated cooler category.
+        if re.search(r"\b(?:thermal\s+paste|paste|thermal\s+compound|thermal\s+grease|thermal\s+pad|cooling\s+pad|case\s+fan|fan\s+hub)\b", value):
+            return False
+        return bool(re.search(
+            r"\b(?:cpu\s+(?:air\s+|liquid\s+)?cooler|air\s+cooler|liquid\s+cooler|aio|all[- ]in[- ]one\s+(?:cpu\s+)?cooler|cpu\s+heatsink)\b",
+            value,
+        ))
     return False
 
 
@@ -550,10 +558,14 @@ async def scrape_amazon_component_bestsellers(categories: list[str] | None = Non
                         if not unique:
                             raise ValueError(f"{category} bestseller pages yielded no products")
                         valid_items = [item for item in unique.values() if bestseller_item_matches_category(item["title"], category)]
+                        # Retain historical behavior for other component lists,
+                        # but never persist unrelated products from Amazon's
+                        # broad cooling node into the CPU cooler catalogue.
+                        captured_items = valid_items if category == "cooler" else list(unique.values())
                         category_matched = 0
                         category_priced = sum(item.get("price") is not None for item in valid_items)
                         category_scraped = category_matched_total = 0
-                        for item in sorted(unique.values(), key=lambda value: value["rank"]):
+                        for item in sorted(captured_items, key=lambda value: value["rank"]):
                             # Preserve every Amazon rank in the admin list, even when
                             # Amazon places an unrelated item in this source category.
                             exact_rows = marketplace_by_asin.get(item["asin"], [])

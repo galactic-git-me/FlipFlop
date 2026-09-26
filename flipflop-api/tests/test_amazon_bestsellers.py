@@ -100,3 +100,16 @@ def test_bestseller_category_rejects_redirected_browse_lists():
     assert bestseller_item_matches_category("AMD Ryzen 7 7700 Desktop Processor", "cpu")
     assert not bestseller_item_matches_category("RTX 5060 Graphics Card", "motherboard")
     assert not bestseller_item_matches_category("LTO 8 Data Cartridge", "storage")
+
+
+def test_cpu_cooler_bestsellers_exclude_paste_and_general_fans():
+    assert bestseller_item_matches_category(
+        "Thermalright Peerless Assassin 120 SE CPU Air Cooler", "cooler"
+    )
+    assert bestseller_item_matches_category(
+        "ARCTIC Liquid Freezer III 360 A-RGB AIO CPU Liquid Cooler", "cooler"
+    )
+    assert not bestseller_item_matches_category("Noctua NT-H2 Thermal Paste", "cooler")
+    assert not bestseller_item_matches_category("Thermal Grizzly Kryonaut Thermal Compound", "cooler")
+    assert not bestseller_item_matches_category("ARCTIC P12 PWM Case Fan", "cooler")
+    assert not bestseller_item_matches_category("Laptop Cooling Pad with Fans", "cooler")

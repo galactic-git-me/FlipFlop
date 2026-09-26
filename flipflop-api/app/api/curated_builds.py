@@ -93,6 +93,10 @@ async def bestseller_catalogue(db: AsyncSession = Depends(get_db)):
         ) m ON true
         LEFT JOIN curated_bestseller_reviews r
             ON r.category = a.category AND r.cpk = COALESCE(a.cpk, 'asin:' || a.asin)
+        WHERE a.category <> 'cooler' OR (
+            a.title ~* '\\m(cpu[[:space:]]+(air[[:space:]]+|liquid[[:space:]]+)?cooler|air[[:space:]]+cooler|liquid[[:space:]]+cooler|aio|all[-[:space:]]in[-[:space:]]one[[:space:]]+(cpu[[:space:]]+)?cooler|cpu[[:space:]]+heatsink)\\M'
+            AND a.title !~* '\\m(thermal[[:space:]]+paste|paste|thermal[[:space:]]+compound|thermal[[:space:]]+grease|thermal[[:space:]]+pad|cooling[[:space:]]+pad|case[[:space:]]+fan|fan[[:space:]]+hub)\\M'
+        )
         ORDER BY a.category, a.rank
     """))).mappings().all()
     return {"items": [dict(row) for row in rows]}
@@ -331,6 +335,10 @@ async def set_segment_bestseller_component(
                 LEFT JOIN curated_bestseller_reviews r
                     ON r.category = a.category AND r.cpk = a.cpk
                 WHERE a.category = :category AND a.cpk = :cpk
+                  AND (a.category <> 'cooler' OR (
+                      a.title ~* '\\m(cpu[[:space:]]+(air[[:space:]]+|liquid[[:space:]]+)?cooler|air[[:space:]]+cooler|liquid[[:space:]]+cooler|aio|all[-[:space:]]in[-[:space:]]one[[:space:]]+(cpu[[:space:]]+)?cooler|cpu[[:space:]]+heatsink)\\M'
+                      AND a.title !~* '\\m(thermal[[:space:]]+paste|paste|thermal[[:space:]]+compound|thermal[[:space:]]+grease|thermal[[:space:]]+pad|cooling[[:space:]]+pad|case[[:space:]]+fan|fan[[:space:]]+hub)\\M'
+                  ))
                   AND COALESCE(r.status, 'pending') <> 'rejected'
                   AND s.delivered_price > 0
                   AND s.category IN (
