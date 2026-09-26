@@ -53,7 +53,9 @@ async def bestseller_catalogue(db: AsyncSession = Depends(get_db)):
         SELECT a.*, COALESCE(r.status, 'pending') AS review_status,
             m.listing_id AS marketplace_listing_id,
             m.source AS marketplace_source, m.title AS marketplace_title,
-            m.url AS marketplace_url, m.image_url AS marketplace_image_url,
+            m.url AS marketplace_url,
+            COALESCE(m.image_url, a.image_url) AS marketplace_image_url,
+            (m.image_url IS NULL) AS marketplace_image_is_reference,
             m.delivered_price AS marketplace_price,
             m.condition AS marketplace_condition, m.scored_at AS marketplace_seen_at
         FROM ranked a
@@ -89,11 +91,7 @@ async def bestseller_catalogue(db: AsyncSession = Depends(get_db)):
             ON r.category = a.category AND r.cpk = a.cpk
         ORDER BY a.category, a.rank
     """))).mappings().all()
-    visible = [dict(row) for row in rows if row["marketplace_image_url"]]
-    return {
-        "items": visible,
-        "excluded_without_marketplace_image": len(rows) - len(visible),
-    }
+    return {"items": [dict(row) for row in rows]}
 
 
 class BestsellerReviewInput(BaseModel):
@@ -124,6 +122,11 @@ async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depe
     if body.status == "approved":
         has_image = (await db.execute(text("""
             SELECT EXISTS (
+                SELECT 1 FROM amazon_bestseller_observations a
+                WHERE a.category = :category AND a.cpk = :cpk
+                  AND a.image_url ~* '^https?://'
+                  AND a.image_url NOT LIKE '%._RC'
+            ) OR EXISTS (
                 SELECT 1 FROM gem_radar_scored_listings s
                 WHERE s.cpk = :cpk AND s.delivered_price > 0
                   AND s.category IN (
@@ -140,7 +143,7 @@ async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depe
             )
         """), {"category": body.category, "cpk": body.cpk})).scalar()
         if not has_image:
-            raise HTTPException(status_code=409, detail="Capture a marketplace picture before approving this match")
+            raise HTTPException(status_code=409, detail="Capture a product picture before approving this match")
     if body.status == "pending":
         await db.execute(text("""
             DELETE FROM curated_bestseller_reviews
@@ -336,7 +339,8 @@ async def set_segment_bestseller_component(
                           WHEN 'cooler' THEN 'cooling' ELSE a.category END,
                       a.category
                   )
-                  AND ((s.image_url ~* '^https?://' AND s.image_url NOT LIKE '%._RC') OR EXISTS (
+                  AND (a.image_url ~* '^https?://' OR
+                       (s.image_url ~* '^https?://' AND s.image_url NOT LIKE '%._RC') OR EXISTS (
                       SELECT 1 FROM gem_radar_listing_observations o
                       WHERE o.listing_id = s.listing_id
                         AND o.image_url ~* '^https?://'

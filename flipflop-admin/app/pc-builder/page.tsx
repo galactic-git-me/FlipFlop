@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
 type ViewMode = "table" | "listings" | "grid";
 type Tab = "segments" | "catalogue" | "playbook" | "inventory" | "assets" | "live";
 type Component = { id: number; slot_type: string; title: string; price: number; status: string; last_seen_at?: string; image_url?: string | null; url?: string; curated_for_builds: boolean };
-type BestsellerMatch = { category: string; rank: number; asin: string; cpk: string; title: string; url: string | null; image_url: string | null; price: number | null; marketplace_listing_id: string; marketplace_source: string; marketplace_title: string; marketplace_url: string | null; marketplace_image_url: string | null; marketplace_price: number; marketplace_condition: string | null; marketplace_seen_at: string; review_status: "pending" | "approved" | "rejected" };
+type BestsellerMatch = { category: string; rank: number; asin: string; cpk: string; title: string; url: string | null; image_url: string | null; price: number | null; marketplace_listing_id: string; marketplace_source: string; marketplace_title: string; marketplace_url: string | null; marketplace_image_url: string | null; marketplace_image_is_reference: boolean; marketplace_price: number; marketplace_condition: string | null; marketplace_seen_at: string; review_status: "pending" | "approved" | "rejected" };
 type DraftBuild = { playbook_id: string; customer_type: string; budget_tier: string; name: string; status: string; est_component_cost_gbp: number; indicative_sell_gbp: number; note: string; core_components: { category: string; sku_name: string; cost_gbp: number }[]; upsells: { category: string; from_sku: string; to_sku: string; delta_cost_gbp: number; delta_sell_gbp: number | null }[] };
 type Segment = { id: number; customer_type: string; budget_level: string; budget_min: number | null; budget_max: number | null; components: Record<string, number>; bestseller_components: Record<string, { category: string; cpk: string }>; component_details: Record<string, Component | null>; component_cost: number; selling_price?: number; proposed_selling_price?: number; availability_status: string; is_live: boolean; regeneration_status: string };
 type Asset = { id: number; subject_type: string; subject_id: number | null; status: string; preview_image_ref?: string | null; glb_ref?: string | null; review_decision?: string | null; category?: string | null };
@@ -28,7 +28,6 @@ export default function CuratedBuildsPage() {
   const [segments, setSegments] = useState<Segment[]>([]);
   const [components, setComponents] = useState<Component[]>([]);
   const [bestsellerMatches, setBestsellerMatches] = useState<BestsellerMatch[]>([]);
-  const [matchesAwaitingImages, setMatchesAwaitingImages] = useState(0);
   const [draftBuilds, setDraftBuilds] = useState<DraftBuild[]>([]);
   const [assets, setAssets] = useState<Asset[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -51,7 +50,6 @@ export default function CuratedBuildsPage() {
       if (bestsellerResponse.ok) {
         const matchPayload = await bestsellerResponse.json();
         setBestsellerMatches(matchPayload.items ?? []);
-        setMatchesAwaitingImages(matchPayload.excluded_without_marketplace_image ?? 0);
       }
       if (draftResponse.ok) setDraftBuilds((await draftResponse.json()).playbooks ?? []);
       if (assetResponse.ok) setAssets(await assetResponse.json());
@@ -193,7 +191,7 @@ function MatchReviewModal({ match, index, count, busy, error, onClose, onPreviou
       </header>
       <div className="grid min-h-0 flex-1 grid-cols-1 gap-px overflow-y-auto bg-white/10 md:grid-cols-2 md:overflow-hidden">
         <MatchImagePanel key={`amazon-${match.asin}`} label="Amazon bestseller" title={match.title} price={match.price} imageUrl={match.image_url} url={match.url} detail={`ASIN ${match.asin}`} />
-        <MatchImagePanel key={`market-${match.marketplace_listing_id}`} label={`${match.marketplace_source} listing`} title={match.marketplace_title} price={match.marketplace_price} imageUrl={match.marketplace_image_url} url={match.marketplace_url} detail={match.marketplace_condition ?? "Condition unknown"} />
+        <MatchImagePanel key={`market-${match.marketplace_listing_id}`} label={match.marketplace_image_is_reference ? `${match.marketplace_source} · product reference photo` : `${match.marketplace_source} listing`} title={match.marketplace_title} price={match.marketplace_price} imageUrl={match.marketplace_image_url} url={match.marketplace_url} detail={match.marketplace_condition ?? "Condition unknown"} />
       </div>
       <footer className="shrink-0 border-t border-white/10 bg-[#0b1119] px-4 py-3 sm:px-6">
         {error && <p role="alert" className="mb-2 text-sm text-rose-300">{error}</p>}
