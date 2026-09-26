@@ -5,8 +5,9 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
 from app.routes.admin_auth import get_current_admin
-from app.services.commerce_pricing import Condition, CostStack, MarketEvidence, evaluate_price
+from app.services.commerce_pricing import Condition, ConditionPolicy, CostStack, FulfilmentMode, MarketEvidence, evaluate_price
 from app.services.gem_economics import GemCosts, assess_gem
+from app.services.procurement_optimizer import ApprovedPart, optimise_bom
 
 router = APIRouter(prefix="/commerce-intelligence", tags=["commerce-intelligence"], dependencies=[Depends(get_current_admin)])
 
@@ -87,3 +88,23 @@ def gem_assessment(body: GemAssessmentRequest) -> dict:
         body.minimum_net_contribution_gbp, body.estimated_days_to_sell,
         body.remaining_speculative_budget_gbp, sold_sample_size=body.sold_sample_size,
     )
+
+
+class ProcurementAssessmentRequest(BaseModel):
+    hard_minimums: dict
+    candidates: list[ApprovedPart]
+    mode: FulfilmentMode
+    condition_policy: ConditionPolicy
+    nonnew_consent: bool = False
+    priority_capacity: bool = False
+    parts_cost_ceiling_gbp: Decimal | None = Field(default=None, ge=0)
+
+
+@router.post("/procurement-assessment")
+def procurement_assessment(body: ProcurementAssessmentRequest) -> dict:
+    plan = optimise_bom(
+        body.hard_minimums, body.candidates, body.mode, body.condition_policy,
+        body.nonnew_consent, priority_capacity=body.priority_capacity,
+        parts_cost_ceiling_gbp=body.parts_cost_ceiling_gbp,
+    )
+    return {"status": "assessment_only", "plan": plan}

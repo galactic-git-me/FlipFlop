@@ -61,6 +61,7 @@ from app.models.demand_alert import DemandAlert
 from app.models.demand_export_audit import DemandExportAudit
 from app.models.customer_review import CustomerReview
 from app.models.recommendation_session import RecommendationSession
+from app.models.upgrade_assessment import UpgradeAssessment
 
 __all__ = [
     "Listing", "ListingStatus",

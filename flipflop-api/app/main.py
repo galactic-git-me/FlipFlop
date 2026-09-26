@@ -35,7 +35,7 @@ from app.database import engine, Base
 from app import models as _models  # noqa: F401  Ensures all ORM models are registered before create_all
 from app.workers.scheduler import start_scheduler, stop_scheduler, run_startup_bootstrap
 from app.api import listings, flips, parts, sources, chat, config, swarms, inventory, inventory_allocations, inventory_intelligence, growth
-from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms, price_evidence, recommendations, commerce_intelligence
+from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms, price_evidence, recommendations, commerce_intelligence, upgrades
 from app.api import alerts, reselling, ebay_listings, favourites
 from app.api import email_events
 from app.api import cross_listing
@@ -682,6 +682,8 @@ app.include_router(logs_api.router, prefix="/api")
 app.include_router(playbooks.router, prefix="/api")
 app.include_router(recommendations.router, prefix="/api")
 app.include_router(commerce_intelligence.router, prefix="/api")
+app.include_router(upgrades.router, prefix="/api")
+app.include_router(upgrades.admin_router, prefix="/api")
 app.include_router(growth.router, prefix="/api")
 # Keep the dashboard's legacy `/api/admin/orders` handlers ahead of the newer
 # async order-management router.  Both routers expose the same paths; route
