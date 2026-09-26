@@ -10,7 +10,7 @@ from sqlalchemy import select
 
 from app.database import AsyncSessionLocal
 from app.models.case import Case
-from app.services.browser_pool import BACKGROUND_HEADED_ARGS, managed_playwright
+from app.services.browser_pool import managed_playwright
 from app.services.case_product_key import case_product_key
 from app.services.proxy import playwright_proxy_config
 
@@ -73,7 +73,7 @@ async def run_overclockers_gallery_sourcing() -> dict:
             product_stage = (((case.sourcing_3d_evidence or {}).get("stages") or {}).get("product_images") or {})
             attempted = product_stage.get("overclockers_gallery_attempted_at")
             try:
-                if product_stage.get("overclockers_gallery") and attempted and datetime.fromisoformat(attempted) > now - _RETRY_AFTER:
+                if attempted and datetime.fromisoformat(attempted) > now - _RETRY_AFTER:
                     continue
             except (TypeError, ValueError):
                 pass
@@ -93,7 +93,7 @@ async def run_overclockers_gallery_sourcing() -> dict:
     saved = 0
     failures: list[str] = []
     async with managed_playwright(engine="patchright") as p:
-        browser = await p.chromium.launch(headless=False, args=BACKGROUND_HEADED_ARGS, proxy=playwright_proxy_config())
+        browser = await p.chromium.launch(headless=True, proxy=playwright_proxy_config())
         try:
             context = await browser.new_context(viewport={"width": 1366, "height": 768}, locale="en-GB", timezone_id="Europe/London")
             try:

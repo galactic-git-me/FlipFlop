@@ -331,7 +331,7 @@ def start_scheduler():
     )
     scheduler.add_job(
         _run_job_with_history,
-        trigger=IntervalTrigger(minutes=1),
+        trigger=IntervalTrigger(minutes=30),
         id="overclockers_gallery_sourcing",
         name="Overclockers Product Galleries",
         kwargs={"job_id": "overclockers_gallery_sourcing", "fn": run_overclockers_gallery_sourcing},
