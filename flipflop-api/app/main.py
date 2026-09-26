@@ -402,6 +402,8 @@ async def _reap_zombie_children() -> None:
     SIGCHLD=SIG_IGN approach above.  Catches both ChildProcessError and
     the broader OSError so it never silently dies.
     """
+    if not hasattr(os, "WNOHANG"):
+        return
     while True:
         try:
             reaped = 0

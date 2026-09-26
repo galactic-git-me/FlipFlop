@@ -97,8 +97,8 @@ given above, never a remembered price for this model.
 
 Is this a viable flip?"""
 
-from app.config import get_settings
-from app.services.model_selection_service import model_selection_service
+    from app.config import get_settings
+    from app.services.model_selection_service import model_selection_service
     from app.gem_radar.claude_screening import _ollama_semaphore
 
     try:

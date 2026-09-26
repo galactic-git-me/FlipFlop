@@ -19,12 +19,13 @@ def upgrade() -> None:
     op.add_column("catalogue_variants", sa.Column("custom_sale_status", sa.String(length=20), nullable=False, server_default="out_of_stock"))
     op.create_index("ix_catalogue_variants_custom_for_builds", "catalogue_variants", ["custom_for_builds"])
     op.create_index("ix_catalogue_variants_custom_sale_status", "catalogue_variants", ["custom_sale_status"])
-    op.create_table(
+    if not sa.inspect(op.get_bind()).has_table("custom_build_settings"):
+        op.create_table(
         "custom_build_settings",
         sa.Column("id", sa.Integer(), primary_key=True),
         sa.Column("is_live", sa.Boolean(), nullable=False, server_default=sa.false()),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
-    )
+        )
 
 
 def downgrade() -> None:

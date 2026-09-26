@@ -14,7 +14,8 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     op.add_column("catalogue_variants", sa.Column("curated_for_builds", sa.Boolean(), nullable=False, server_default=sa.false()))
     op.create_index("ix_catalogue_variants_curated_for_builds", "catalogue_variants", ["curated_for_builds"])
-    op.create_table(
+    if not sa.inspect(op.get_bind()).has_table("curated_build_segments"):
+        op.create_table(
         "curated_build_segments",
         sa.Column("id", sa.Integer(), primary_key=True),
         sa.Column("customer_type", sa.String(length=120), nullable=False),
@@ -32,7 +33,7 @@ def upgrade() -> None:
         sa.Column("regeneration_error", sa.Text(), nullable=True),
         sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.UniqueConstraint("customer_type", "budget_level", name="uq_curated_segment_type_budget"),
-    )
+        )
 
 
 def downgrade() -> None:
