@@ -17,7 +17,7 @@ type Variant = {
   playbook_id: number; status: string; tier: string; display_price: number | null;
   gem_score: number; consecutive_misses: number; last_seen_at: string;
   isAmazonBestseller?: boolean; sales_velocity?: string | null;
-  cheapest_market_price?: number | null; cheapest_market_url?: string | null; cheapest_market_source?: string | null;
+  cheapest_market_price?: number | null; cheapest_market_url?: string | null; cheapest_market_source?: string | null; marketplace_listing_count?: number | null;
   source_name?: string | null; channel_sources?: string[];
   price_history_listing_id?: string | null; market_lower_price?: number | null; market_median_price?: number | null; market_upper_price?: number | null;
   cpk?: string | null; watch_count?: number | null; offer_count?: number | null; sold_count?: number | null; active_count?: number | null; sell_through_rate?: number | null;
@@ -189,6 +189,7 @@ export default function CataloguePage() {
           market_median_price: (row.market_median as number | null) ?? null,
           market_upper_price: (row.market_high as number | null) ?? null,
           cheapest_market_price: (row.cheapest_market_price as number | null) ?? null,
+          marketplace_listing_count: (row.marketplace_listing_count as number | null) ?? null,
           cheapest_market_url: (row.cheapest_market_url as string | null) ?? null,
           cheapest_market_source: (row.cheapest_market_source as string | null) ?? null,
           performance_rank: (row.performance_rank as number | null) ?? null,

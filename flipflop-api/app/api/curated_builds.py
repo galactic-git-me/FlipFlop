@@ -53,12 +53,18 @@ async def bestseller_catalogue(db: AsyncSession = Depends(get_db)):
         SELECT a.*, COALESCE(r.status, 'pending') AS review_status,
             m.listing_id AS marketplace_listing_id,
             m.source AS marketplace_source, m.title AS marketplace_title,
-            m.url AS marketplace_url, m.delivered_price AS marketplace_price,
+            m.url AS marketplace_url, m.image_url AS marketplace_image_url,
+            m.delivered_price AS marketplace_price,
             m.condition AS marketplace_condition, m.scored_at AS marketplace_seen_at
         FROM ranked a
         JOIN LATERAL (
             SELECT s.listing_id, s.source, s.title,
-                s.url, s.delivered_price, s.condition, s.scored_at
+                s.url, COALESCE(NULLIF(s.image_url, ''), (
+                    SELECT o.image_url FROM gem_radar_listing_observations o
+                    WHERE o.listing_id = s.listing_id
+                      AND o.image_url IS NOT NULL AND o.image_url <> ''
+                    ORDER BY o.observed_at DESC, o.id DESC LIMIT 1
+                )) AS image_url, s.delivered_price, s.condition, s.scored_at
             FROM gem_radar_scored_listings s
             WHERE s.cpk = a.cpk AND s.delivered_price > 0
               AND s.category IN (
