@@ -8,7 +8,6 @@ import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy import select, text
-from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
@@ -19,7 +18,6 @@ from app.models.listing import Listing
 from app.routes.admin_auth import get_current_admin
 
 router = APIRouter(prefix="/curated-builds", tags=["curated-builds"], dependencies=[Depends(get_current_admin)])
-CURATED_LISTING_SOURCES = ("amazon", "overclockers")
 
 
 @router.get("/draft-playbook")
@@ -62,7 +60,7 @@ async def bestseller_catalogue(db: AsyncSession = Depends(get_db)):
         JOIN LATERAL (
             SELECT s.listing_id, s.source, s.title,
                 s.url, COALESCE(
-                    CASE WHEN s.image_url ~* '^https?://' THEN s.image_url END,
+                    CASE WHEN s.image_url ~* '^https?://' AND s.image_url NOT LIKE '%._RC' THEN s.image_url END,
                     o.image_url
                 ) AS image_url,
                 s.delivered_price, s.condition, s.scored_at
@@ -71,17 +69,17 @@ async def bestseller_catalogue(db: AsyncSession = Depends(get_db)):
                 SELECT image_url FROM gem_radar_listing_observations
                 WHERE listing_id = s.listing_id
                   AND image_url ~* '^https?://'
+                  AND image_url NOT LIKE '%._RC'
                 ORDER BY observed_at DESC, id DESC LIMIT 1
             ) o ON true
             WHERE s.cpk = a.cpk AND s.delivered_price > 0
-              AND s.source IN ('amazon', 'overclockers')
               AND s.category IN (
                 CASE a.category WHEN 'storage' THEN 'ssd'
                     WHEN 'cooler' THEN 'cooling' ELSE a.category END,
                 a.category
               )
             ORDER BY (COALESCE(
-                CASE WHEN s.image_url ~* '^https?://' THEN s.image_url END,
+                CASE WHEN s.image_url ~* '^https?://' AND s.image_url NOT LIKE '%._RC' THEN s.image_url END,
                 o.image_url
             ) IS NOT NULL) DESC,
                 s.scored_at DESC
@@ -114,7 +112,6 @@ async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depe
             JOIN gem_radar_scored_listings s ON s.cpk = a.cpk
             WHERE a.category = :category AND a.cpk = :cpk
               AND s.delivered_price > 0
-              AND s.source IN ('amazon', 'overclockers')
               AND s.category IN (
                   CASE a.category WHEN 'storage' THEN 'ssd'
                       WHEN 'cooler' THEN 'cooling' ELSE a.category END,
@@ -129,16 +126,16 @@ async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depe
             SELECT EXISTS (
                 SELECT 1 FROM gem_radar_scored_listings s
                 WHERE s.cpk = :cpk AND s.delivered_price > 0
-                  AND s.source IN ('amazon', 'overclockers')
                   AND s.category IN (
                       CASE :category WHEN 'storage' THEN 'ssd'
                           WHEN 'cooler' THEN 'cooling' ELSE :category END,
                       :category
                   )
-                  AND (s.image_url ~* '^https?://' OR EXISTS (
+                  AND ((s.image_url ~* '^https?://' AND s.image_url NOT LIKE '%._RC') OR EXISTS (
                       SELECT 1 FROM gem_radar_listing_observations o
                       WHERE o.listing_id = s.listing_id
                         AND o.image_url ~* '^https?://'
+                        AND o.image_url NOT LIKE '%._RC'
                   ))
             )
         """), {"category": body.category, "cpk": body.cpk})).scalar()
@@ -224,7 +221,6 @@ async def _component_context(db: AsyncSession, ids: set[int]) -> dict[int, dict]
             "id": variant.id,
             "slot_type": slot.slot_type,
             "title": listing.title,
-            "source_name": listing.source_name,
             "price": listing.price,
             "status": listing.status.value if hasattr(listing.status, "value") else listing.status,
             "last_seen_at": listing.last_seen_at.isoformat() if listing.last_seen_at else None,
@@ -257,7 +253,7 @@ async def get_curated_builds(db: AsyncSession = Depends(get_db)):
             if abs(delta) >= 0.01 and segment.proposed_selling_price is None:
                 row["proposed_selling_price"] = round(max(0, segment.selling_price + delta), 2)
         assigned_count = len(segment.components or {})
-        row["availability_status"] = "out_of_stock" if assigned_count == 0 or len(selected) != assigned_count or any(item["status"] != "active" or (item["source_name"] or "").lower() not in CURATED_LISTING_SOURCES for item in selected) else "in_stock"
+        row["availability_status"] = "out_of_stock" if assigned_count == 0 or len(selected) != assigned_count or any(item["status"] != "active" for item in selected) else "in_stock"
         if row["availability_status"] == "out_of_stock" and segment.is_live:
             segment.is_live = False
         payload.append(row)
@@ -267,7 +263,6 @@ async def get_curated_builds(db: AsyncSession = Depends(get_db)):
             .join(Listing, Listing.id == CatalogueVariant.listing_id)
             .join(PlaybookSlot, PlaybookSlot.id == CatalogueVariant.slot_id)
             .where(CatalogueVariant.curated_for_builds.is_(True))
-            .where(func.lower(Listing.source_name).in_(CURATED_LISTING_SOURCES))
         )).all()
     })).values())}
 
@@ -298,10 +293,6 @@ async def upsert_segment(body: SegmentInput, db: AsyncSession = Depends(get_db))
     segment.budget_min = body.budget_min
     segment.budget_max = body.budget_max
     if body.components is not None:
-        component_ids = {int(value) for value in body.components.values() if str(value).isdigit()}
-        context = await _component_context(db, component_ids)
-        if len(context) != len(component_ids) or any((item["source_name"] or "").lower() not in CURATED_LISTING_SOURCES for item in context.values()):
-            raise HTTPException(status_code=422, detail="Curated build listings must come from Amazon or Overclockers")
         segment.components = body.components
     if body.selling_price is not None:
         segment.selling_price = body.selling_price
@@ -339,17 +330,17 @@ async def set_segment_bestseller_component(
                 JOIN gem_radar_scored_listings s ON s.cpk = a.cpk
                 WHERE r.category = :category AND r.cpk = :cpk
                   AND r.status = 'approved'
-                  AND s.source IN ('amazon', 'overclockers')
                   AND s.delivered_price > 0
                   AND s.category IN (
                       CASE a.category WHEN 'storage' THEN 'ssd'
                           WHEN 'cooler' THEN 'cooling' ELSE a.category END,
                       a.category
                   )
-                  AND (s.image_url ~* '^https?://' OR EXISTS (
+                  AND ((s.image_url ~* '^https?://' AND s.image_url NOT LIKE '%._RC') OR EXISTS (
                       SELECT 1 FROM gem_radar_listing_observations o
                       WHERE o.listing_id = s.listing_id
                         AND o.image_url ~* '^https?://'
+                        AND o.image_url NOT LIKE '%._RC'
                   ))
             )
         """), {"category": category, "cpk": body.cpk})).scalar()
@@ -368,10 +359,6 @@ async def set_curated_variant(variant_id: int, body: dict, db: AsyncSession = De
     variant = await db.get(CatalogueVariant, variant_id)
     if not variant:
         raise HTTPException(status_code=404, detail="Catalogue item not found")
-    if body.get("curated_for_builds"):
-        listing = await db.get(Listing, variant.listing_id)
-        if not listing or (listing.source_name or "").lower() not in CURATED_LISTING_SOURCES:
-            raise HTTPException(status_code=422, detail="Curated build listings must come from Amazon or Overclockers")
     variant.curated_for_builds = bool(body.get("curated_for_builds"))
     variant.updated_at = datetime.utcnow().isoformat()
     return {"id": variant.id, "curated_for_builds": variant.curated_for_builds}
@@ -433,8 +420,8 @@ async def publish_segment(segment_id: int, body: dict, db: AsyncSession = Depend
         raise HTTPException(status_code=409, detail="Set a valid selling price before publishing")
     ids = {int(value) for value in selected.values() if str(value).isdigit()}
     context = await _component_context(db, ids)
-    if len(context) != len(ids) or any(not item["curated_for_builds"] or item["status"] != "active" or (item["source_name"] or "").lower() not in CURATED_LISTING_SOURCES for item in context.values()):
-        raise HTTPException(status_code=409, detail="Every selected component must be available and curated from Amazon or Overclockers")
+    if len(context) != len(ids) or any(not item["curated_for_builds"] or item["status"] != "active" for item in context.values()):
+        raise HTTPException(status_code=409, detail="Every selected component must remain curated and currently available")
     segment.is_live = True
     segment.availability_status = "in_stock"
     return _segment_json(segment)
