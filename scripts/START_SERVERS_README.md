@@ -152,8 +152,22 @@ The scripts automatically set required environment variables:
 | `BACKEND_URL` | `http://127.0.0.1:4311` |
 | `FLIPFLOP_RUNTIME_ENV` | `development` |
 | `OLLAMA_BASE_URL` | `http://127.0.0.1:11435` |
+| `OLLAMA_MODEL` | `qwen2.5:7b-instruct` (default) |
 | `EBAY_ENVIRONMENT` | `production` (read/sourcing) |
 | `EBAY_LISTING_ENVIRONMENT` | `sandbox` (writes/listing) |
+
+All backend LLM workflows use `app/services/model_selection_service.py`.
+The default hierarchy is `LLM_PRIMARY_PROVIDER=ollama` with
+`LLM_PRIMARY_MODEL=qwen2.5:7b-instruct`, then the configured OpenRouter free
+model (`LLM_SECONDARY_PROVIDER=openrouter-free` and
+`LLM_SECONDARY_MODEL=google/gemma-4-31b-it:free`), then
+`LLM_TERTIARY_PROVIDER=openrouter` with `LLM_TERTIARY_MODEL=auto:cheapest`.
+OpenRouter tiers require `OPENROUTER_API_KEY`. Set those `LLM_*` variables in
+the API runtime environment to change the provider/model order. Keep
+`OLLAMA_BASE_URL` environment-specific: development uses the local gateway on
+port `11435`; production worker traffic uses the `ollama-tunnel` service on
+port `11434`. Vision requests skip text-only local models and select a
+vision-capable configured/cloud tier.
 
 The launcher sets these explicitly so a stale shell environment cannot point
 development at production accidentally.

@@ -1,7 +1,4 @@
-"""
-Hermes AI service.
-Primary: Ollama (local gemma4:e4b) → OpenRouter free models → Anthropic Claude last resort.
-"""
+"""Hermes product-facing AI workflows, routed through ModelSelectionService."""
 import httpx
 import urllib.parse
 from pathlib import Path

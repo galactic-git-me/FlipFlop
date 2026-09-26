@@ -21,7 +21,7 @@ from app.database import AsyncSessionLocal
 log = structlog.get_logger(__name__)
 
 _MAX_QUEUE     = 2_000
-_NUM_WORKERS   = 6     # six workers — Anthropic Haiku primary (fast + cheap)
+_NUM_WORKERS   = 6     # work is routed through the configured model hierarchy
 _CALL_DELAY    = 1.0   # gap between calls per worker
 
 _queue:   asyncio.Queue | None = None
@@ -77,7 +77,7 @@ async def stop_eval_workers() -> None:
 
 async def _worker(worker_id: int) -> None:
     q = get_queue()
-    # Stagger workers to avoid simultaneous Ollama calls when Anthropic is unavailable
+    # Stagger model calls to avoid a burst against the local Ollama gateway.
     if worker_id > 0:
         await asyncio.sleep(worker_id * 5)
     log.debug("claude_eval_queue.worker_ready", worker=worker_id)

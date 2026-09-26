@@ -1,11 +1,9 @@
 """AI-assisted structured spec extraction for motherboards.
 
-Provider order follows app/services/ai_service.py's established convention,
-NOT claude_evaluator.py's (which puts paid Anthropic first) — local Ollama
-first (free, no rate limits, this app's actual default), then OpenRouter's
-free tier, then Anthropic only as a last resort. This is a low-stakes
-extraction task (one motherboard model's public spec sheet), not the kind of
-high-stakes reasoning that would justify skipping straight to a paid model.
+Provider order follows the environment-configured model selection hierarchy:
+local Ollama, OpenRouter free tier, then the cheapest paid OpenRouter model.
+This is a low-stakes extraction task (one motherboard model's public spec
+sheet).
 
 Every row this produces is saved with reviewed=False — see MotherboardSpec's
 docstring for why an unreviewed AI guess must never drive a hard

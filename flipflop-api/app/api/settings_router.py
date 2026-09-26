@@ -150,6 +150,12 @@ def _to_dict(s: AppSettings) -> dict:
         "ollama_model": cfg.ollama_model,
         "openrouter_api_key": "***" if cfg.openrouter_api_key else "",
         "openrouter_primary_model": cfg.openrouter_primary_model,
+        "llm_model_hierarchy": [
+            {"tier": "primary", "provider": cfg.llm_primary_provider, "model": cfg.llm_primary_model},
+            {"tier": "secondary", "provider": cfg.llm_secondary_provider,
+             "model": cfg.llm_secondary_model or "google/gemma-4-31b-it:free"},
+            {"tier": "tertiary", "provider": cfg.llm_tertiary_provider, "model": cfg.llm_tertiary_model},
+        ],
         "ebay_app_id": "***" if cfg.ebay_app_id else "",
         "image_gen_enabled": s.image_gen_enabled,
         "image_gen_provider": cfg.image_gen_provider,

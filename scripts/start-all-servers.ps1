@@ -40,6 +40,7 @@ function Get-ApiEnvironmentValue([string]$Name) {
         $processValue = [Environment]::GetEnvironmentVariable($Name)
         if (-not [string]::IsNullOrWhiteSpace($processValue)) { return $processValue.Trim() }
     }
+    if ($Name -eq 'OLLAMA_MODEL') { return 'qwen2.5:7b-instruct' }
     throw "$Name must be set in the process environment or flipflop-api/.env.local/.env."
 }
 

@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     # (dev gateway vs production tunnel); never hard-code its port here.
     llm_primary_provider: str = "ollama"
     llm_primary_model: str = "qwen2.5:7b-instruct"
-    llm_secondary_provider: str = "openrouter"
+    llm_secondary_provider: str = "openrouter-free"
     llm_secondary_model: str = "google/gemma-4-31b-it:free"
     llm_tertiary_provider: str = "openrouter"
     # Special value: resolve the cheapest currently available paid model
@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     # Environment-specific Ollama gateway. Set to the DEV or PROD priority
     # endpoint in each runtime; never infer a direct engine/default port here.
     ollama_base_url: str = ""
-    ollama_model: str  # Must be set via OLLAMA_MODEL env var
+    ollama_model: str = "qwen2.5:7b-instruct"
     scrapingbee_api_key: str = ""  # For eBay sold comps scraping
 
     ebay_app_id: str = ""

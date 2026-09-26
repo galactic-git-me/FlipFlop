@@ -55,7 +55,8 @@ class ModelSelectionService:
         s = self.settings
         return [
             ModelTier(s.llm_primary_provider.strip().lower(), s.llm_primary_model.strip(), "primary"),
-            ModelTier(s.llm_secondary_provider.strip().lower(), s.llm_secondary_model.strip(), "secondary"),
+            ModelTier(s.llm_secondary_provider.strip().lower(),
+                      (s.llm_secondary_model or "google/gemma-4-31b-it:free").strip(), "secondary"),
             ModelTier(s.llm_tertiary_provider.strip().lower(), s.llm_tertiary_model.strip(), "tertiary"),
         ]
 

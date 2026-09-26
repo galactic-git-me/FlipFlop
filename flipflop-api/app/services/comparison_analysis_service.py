@@ -1,13 +1,4 @@
-"""AI-generated tradeoff analysis for a multi-build comparison.
-
-Reuses the same AsyncAnthropic client pattern as _claude_chat
-(app/services/ai_service.py) rather than the sync `Anthropic` client used in
-gem_service.py — this runs inside an async FastAPI endpoint, where a
-blocking sync HTTP call would stall the event loop. Uses a stronger model
-than ai_service.py's haiku-tier chat: comparison analysis is a lower-
-frequency, higher-stakes-per-call feature (helping a customer choose between
-two builds they might spend real money on) than casual chat.
-"""
+"""AI-generated tradeoff analysis for multi-build comparisons."""
 
 import structlog
 from app.services.model_selection_service import model_selection_service
@@ -16,7 +7,7 @@ from app.schemas.build_comparison import ComparedBuildOut
 log = structlog.get_logger(__name__)
 
 FALLBACK_MESSAGE = (
-    "AI analysis is unavailable right now (ANTHROPIC_API_KEY not configured). "
+    "AI analysis is unavailable right now (configured model tiers are unavailable). "
     "The comparison table above is still accurate."
 )
 
