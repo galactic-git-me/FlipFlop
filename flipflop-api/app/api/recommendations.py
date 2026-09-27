@@ -15,9 +15,11 @@ async def create_envelope(requirements: CustomerRequirements, db: AsyncSession =
         envelope = build_envelope(requirements)
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
+    requirements_snapshot = requirements.model_dump()
+    requirements_snapshot["playbook_version"] = envelope["playbook_version"]
     session = RecommendationSession(
         rules_version=envelope["envelope_version"],
-        requirements_json=requirements.model_dump(),
+        requirements_json=requirements_snapshot,
         envelope_json=envelope,
     )
     db.add(session)

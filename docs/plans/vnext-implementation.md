@@ -15,12 +15,19 @@ The two vNext PRDs in `docs/prd/` set the product direction. This file records d
 - The sibling `FlipFlop.shop` storefront has a `/find-my-pc` guided route, a primary homepage CTA, and immediate access to the homepage without the blocking startup video.
 - The endpoint is explicitly `requirements_only`: it cannot be used as a quote or to initiate checkout.
 
+## Slice 1 — Playbook versioning and guided recommendation plans (complete)
+
+- Playbook rules are versioned (`1.0`, `1.1`) and the active version is saved with each recommendation envelope for replay.
+- The guided flow now captures relevant secondary uses, gaming resolution/refresh/focus, development workload, local-AI workload, content-creation workload, practical preferences and explicit condition policy.
+- The deterministic reveal returns only the Save, Recommended and Stretch performance plans that have a concrete target difference. Stretch is omitted for a firm budget and is never treated as an automatic spend authorization.
+- Each plan remains SKU-free and unpriced. The reveal states that stock, compatibility, cost and market checks are still required; this work does not make a recommendation purchasable.
+- Earlier Playbook version `1.0` remains selectable for session replay and does not apply the new workload overlays.
+
 ## Next implementation slices
 
-1. Version Playbook rules and broaden the guided questions/recommendation reveal into actual compliant options.
-2. Connect approved SKUs and compatibility rules; form compliant BOM candidates and ready-to-ship matches. Suppress recommendations when evidence is missing.
-3. Add supplier offers, condition policies, landed costs, full cost stack, contribution floors, market evidence and immutable quote snapshots.
-4. Gate Priority, Standard and Flexible by actual suppliers, stock, workshop capacity and sourcing policy. Add honest customer ETA ranges and approval events.
-5. Connect payment safe-to-procure state, refunds, upgrade assessment and the customer tracking portal. Extend Gem Hunter scoring with all-in cost and max-buy evidence.
+1. Connect approved SKUs and compatibility rules; form compliant BOM candidates and ready-to-ship matches. Suppress recommendations when evidence is missing.
+2. Add supplier offers, condition policies, landed costs, full cost stack, contribution floors, market evidence and immutable quote snapshots.
+3. Gate Priority, Standard and Flexible by actual suppliers, stock, workshop capacity and sourcing policy. Add honest customer ETA ranges and approval events.
+4. Connect payment safe-to-procure state, refunds, upgrade assessment and the customer tracking portal. Extend Gem Hunter scoring with all-in cost and max-buy evidence.
 
 No vNext recommendation should be sold until the procurement, market, margin, fulfilment and payment gates above are complete and verified.
