@@ -88,17 +88,19 @@
   white-space: nowrap;
 }
 
-.prebuilt {
+.prebuilt_fast_track,
+.prebuilt_standard {
   background: #d1fae5;
   color: #065f46;
 }
 
-.fast_track {
+.build_fast_track {
   background: #fef3c7;
   color: #92400e;
 }
 
-.normal {
+.build_normal,
+.build_flexible {
   background: #e5e7eb;
   color: #374151;
 }

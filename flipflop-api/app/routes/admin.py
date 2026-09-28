@@ -6,7 +6,7 @@ from jose import jwt
 from datetime import timezone
 from app.config import get_settings
 from sqlalchemy.orm import Session
-from sqlalchemy import select, func, case
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
 from typing import Optional
@@ -135,12 +135,11 @@ async def list_order_priority(
     limit: int = Query(50, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
 ):
-    """Active orders grouped by fulfilment urgency, then oldest first."""
+    """Active orders sorted by delivery commitment and component readiness."""
     prebuilt = select(Product.id).where(
         Product.sold_order_id == Order.id,
         Product.product_type == ProductType.PREBUILT,
     ).exists()
-    rank = case((prebuilt, 0), (Order.fast_track_selected.is_(True), 1), else_=2)
     criteria = [Order.status.notin_((OrderStatus.SHIPPED, OrderStatus.COMPLETED))]
     if status:
         try:
@@ -150,18 +149,41 @@ async def list_order_priority(
 
     total = await db.scalar(select(func.count(Order.id)).where(*criteria))
     result = await db.execute(
-        select(Order, Customer.name, rank.label("priority_rank"))
+        select(Order, Customer.name, prebuilt.label("is_prebuilt"))
         .join(Customer, Customer.id == Order.customer_id)
         .where(*criteria)
-        .order_by(rank, Order.created_at, Order.id)
-        .offset(skip)
-        .limit(limit)
     )
     now = datetime.utcnow()
-    labels = ("prebuilt", "fast_track", "normal")
-    return {
-        "total": total or 0,
-        "orders": [{
+    labels = ("prebuilt_fast_track", "prebuilt_standard", "build_fast_track", "build_normal", "build_flexible")
+    rows = []
+    for order, customer_name, is_prebuilt in result.all():
+        specs = order.specs or {}
+        mode = specs.get("delivery_mode")
+        if is_prebuilt:
+            rank = 0 if order.fast_track_selected else 1
+        elif order.fast_track_selected:
+            rank = 2
+        elif mode == "flexible":
+            rank = 4
+        else:
+            rank = 3
+        # Every ordered component must arrive before a build can start.
+        components = specs.get("ordered_components") or []
+        arrival_dates = []
+        if isinstance(components, list):
+            for component in components:
+                if not isinstance(component, dict) or component.get("received_at"):
+                    continue
+                try:
+                    arrival = datetime.fromisoformat(component["expected_arrival_at"].replace("Z", "+00:00"))
+                    if arrival.tzinfo is not None:
+                        arrival = arrival.astimezone(timezone.utc).replace(tzinfo=None)
+                    arrival_dates.append(arrival)
+                except (KeyError, TypeError, ValueError):
+                    arrival_dates = []
+                    break
+        ready_at = max(arrival_dates) if arrival_dates else None
+        rows.append({
             "id": order.id,
             "order_id": order.order_id,
             "customer_name": customer_name,
@@ -169,9 +191,20 @@ async def list_order_priority(
             "customer_price": order.customer_price,
             "days_elapsed": max(0, (now - order.created_at).days),
             "created_at": order.created_at,
-            "priority_kind": labels[priority_rank],
-            "priority_rank": priority_rank,
-        } for order, customer_name, priority_rank in result.all()],
+            "priority_kind": labels[rank],
+            "priority_rank": rank + 1,
+            "components_ready_at": ready_at,
+        })
+    rows.sort(key=lambda row: (
+        row["priority_rank"],
+        datetime.max if row["priority_rank"] > 2 and row["components_ready_at"] is None else (
+            row["components_ready_at"] if row["priority_rank"] > 2 else datetime.min
+        ),
+        -row["customer_price"], row["created_at"], row["id"],
+    ))
+    return {
+        "total": total or 0,
+        "orders": rows[skip:skip + limit],
     }
 
 @router.get("/orders")

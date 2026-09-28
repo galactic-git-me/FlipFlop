@@ -57,7 +57,7 @@ The two vNext PRDs in `docs/prd/` set the product direction. This file records d
 ### Remaining gates
 
 1. Connect live supplier offer and stock feeds plus trusted sold-market evidence; reconcile feed identity and provenance before using data in customer flows. Existing build sold observations are tied to manual builds, and their `sold_at` field can contain retrieval time rather than a confirmed sale date.
-2. Reconcile the legacy order slot model with current `Order` fields, then connect holds to payment-safe order assignment, approval events and honest customer ETA ranges.
+2. Show an admin order priority queue based on the delivery commitment: pre-built Fast Track, pre-built Standard, curated/custom Fast Track, curated/custom Normal, then curated/custom Flexible. Within pre-built groups, sort by customer spend descending. Within curated/custom groups, sort by the date when all ordered components are expected to arrive, then by spend descending. Unknown component dates remain visibly unknown and follow dated orders in their group. This queue does not assign build slots.
 3. Connect payment safe-to-procure state, refunds, upgrade assessment and the customer tracking portal. Extend Gem Hunter scoring with all-in cost and max-buy evidence.
 
 No vNext recommendation should be sold until the procurement, market, margin, fulfilment and payment gates above are complete and verified.

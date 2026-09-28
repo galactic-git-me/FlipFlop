@@ -12,7 +12,8 @@ interface Order {
   customer_price: number;
   days_elapsed: number;
   created_at: string;
-  priority_kind: 'prebuilt' | 'fast_track' | 'normal';
+  priority_kind: 'prebuilt_fast_track' | 'prebuilt_standard' | 'build_fast_track' | 'build_normal' | 'build_flexible';
+  components_ready_at: string | null;
 }
 
 export default function OrdersPage() {
@@ -76,16 +77,18 @@ export default function OrdersPage() {
   };
 
   const priorityLabels = {
-    prebuilt: 'Pre-built',
-    fast_track: 'Fast Track',
-    normal: 'Normal',
+    prebuilt_fast_track: '1 · Pre-built Fast Track',
+    prebuilt_standard: '2 · Pre-built Standard',
+    build_fast_track: '3 · Curated / Custom Fast Track',
+    build_normal: '4 · Curated / Custom Normal',
+    build_flexible: '5 · Curated / Custom Flexible',
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1>Order Priority Queue</h1>
-        <p>Active orders grouped by fulfilment priority, oldest first within each group.</p>
+        <p>Active orders by delivery commitment. Pre-built ties use customer spend; curated and custom ties use component arrival, then spend.</p>
       </div>
 
       <div className={styles.controls}>
@@ -125,6 +128,7 @@ export default function OrdersPage() {
                   <th>Order #</th>
                   <th>Customer</th>
                   <th>Priority</th>
+                  <th>Components ready</th>
                   <th>Status</th>
                   <th>Price</th>
                   <th>Days Elapsed</th>
@@ -141,6 +145,7 @@ export default function OrdersPage() {
                         {priorityLabels[order.priority_kind]}
                       </span>
                     </td>
+                    <td>{order.priority_kind.startsWith('prebuilt') ? 'Ready' : order.components_ready_at ? new Date(order.components_ready_at).toLocaleDateString('en-GB') : 'ETA unknown'}</td>
                     <td>
                       <span
                         className={styles.statusBadge}
@@ -168,7 +173,7 @@ export default function OrdersPage() {
                   </tr>
                 ))}
                 {orders.length === 0 && (
-                  <tr><td colSpan={7} className={styles.emptyState}>No active orders match this filter.</td></tr>
+                  <tr><td colSpan={8} className={styles.emptyState}>No active orders match this filter.</td></tr>
                 )}
               </tbody>
             </table>
