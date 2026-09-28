@@ -1,7 +1,7 @@
 """Append-only supplier evidence and commercial quote assessments."""
 from datetime import datetime, timezone
 
-from sqlalchemy import Boolean, DateTime, Integer, JSON, Numeric, String
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, JSON, Numeric, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database import Base
@@ -56,5 +56,35 @@ class WorkshopCapacityEvidence(Base):
     evidence_ref: Mapped[str] = mapped_column(String(500), nullable=False)
     captured_by_admin_id: Mapped[int] = mapped_column(Integer, nullable=False)
     captured_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc)
+    )
+
+
+class WorkshopCapacityReservation(Base):
+    __tablename__ = "workshop_capacity_reservations"
+    __table_args__ = (UniqueConstraint("quote_snapshot_id", name="uq_capacity_reservation_quote"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    quote_snapshot_id: Mapped[int] = mapped_column(ForeignKey("price_quote_snapshots.id"), nullable=False)
+    capacity_evidence_id: Mapped[int] = mapped_column(ForeignKey("workshop_capacity_evidence.id"), nullable=False)
+    build_week: Mapped[str] = mapped_column(String(8), nullable=False, index=True)
+    status: Mapped[str] = mapped_column(String(20), nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    created_by_admin_id: Mapped[int] = mapped_column(Integer, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc)
+    )
+    released_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class WorkshopCapacityReservationEvent(Base):
+    __tablename__ = "workshop_capacity_reservation_events"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    reservation_id: Mapped[int] = mapped_column(ForeignKey("workshop_capacity_reservations.id"), nullable=False)
+    event_type: Mapped[str] = mapped_column(String(20), nullable=False)
+    reason: Mapped[str | None] = mapped_column(String(500))
+    admin_id: Mapped[int] = mapped_column(Integer, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc)
     )

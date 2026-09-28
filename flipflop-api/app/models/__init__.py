@@ -62,7 +62,10 @@ from app.models.demand_export_audit import DemandExportAudit
 from app.models.customer_review import CustomerReview
 from app.models.recommendation_session import RecommendationSession
 from app.models.upgrade_assessment import UpgradeAssessment
-from app.models.commerce_evidence import SupplierOfferEvidence, PriceQuoteSnapshot, WorkshopCapacityEvidence
+from app.models.commerce_evidence import (
+    SupplierOfferEvidence, PriceQuoteSnapshot, WorkshopCapacityEvidence,
+    WorkshopCapacityReservation, WorkshopCapacityReservationEvent,
+)
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -223,4 +226,5 @@ __all__ = [
     "SocialProofEvent",
     "CustomerProblem",
     "SupplierOfferEvidence", "PriceQuoteSnapshot", "WorkshopCapacityEvidence",
+    "WorkshopCapacityReservation", "WorkshopCapacityReservationEvent",
 ]

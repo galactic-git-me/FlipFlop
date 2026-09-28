@@ -36,7 +36,6 @@ The two vNext PRDs in `docs/prd/` set the product direction. This file records d
 
 - Admins can append supplier offer observations with explicit source/reference, stock state, condition, full landed-cost inputs, capture time and delivery estimate.
 - Quote assessment loads the persisted offer records, applies freshness, stock, supplier, delivery, condition-policy and fulfilment-mode gates, and requires exactly one eligible offer for every required BOM part.
-- Priority remains closed because workshop capacity does not yet have a persisted evidence source; an admin request cannot assert capacity to bypass the gate.
 - The calculation derives parts cost from the selected evidence, applies the full cost stack, contribution/margin floors and the existing sold-market freshness/sample/condition checks.
 - Every assessment persists an immutable evidence and decision snapshot, including failed assessments. This is review tooling only: supplier ingestion is still manual, market evidence is still submitted by an admin, and no storefront, checkout or payment path consumes these snapshots.
 
@@ -45,12 +44,19 @@ The two vNext PRDs in `docs/prd/` set the product direction. This file records d
 - Admins can append week-specific capacity observations with a source/reference and observation time; historical evidence is retained.
 - Admin-only read endpoints expose the capacity history and each quote's saved evidence and decision for review.
 - Made-to-order quote assessments require a capacity record observed within 24 hours, with open slots for the current or a future ISO build week. Priority's supplier and delivery rules still apply on top of this gate.
-- The capacity observation is copied into each quote snapshot. Assessments do not reserve a slot, consume capacity, create an order, or promise an ETA.
+- The capacity observation is copied into each quote snapshot. Assessments do not create an order or promise an ETA.
+
+### Slice 5 — Short workshop holds (admin-only foundation)
+
+- A passing, recent made-to-order quote snapshot can acquire one 15-minute hold for its build week. Capture, hold and release operations serialize on that week in Postgres, and the active-hold count cannot exceed the latest evidenced capacity.
+- New capacity evidence supersedes earlier observations. The capacity value represents slots available to the quote-hold pool after existing booked work, before active quote holds are subtracted.
+- A hold rechecks the latest capacity observation and the saved supplier and sold-market timestamps. Repeated requests for the same snapshot return its active hold; an expired or released hold requires a new assessment. Admin release records a reason, and hold/release events are retained.
+- These holds are internal planning state. They are not connected to order assignment, checkout or payment, and expiry does not trigger procurement.
 
 ### Remaining gates
 
 1. Connect live supplier offer and stock feeds plus trusted sold-market evidence; reconcile feed identity and provenance before using data in customer flows.
-2. Add capacity reservations and change/approval events so concurrent quote or order flows cannot claim the same slot; derive honest customer ETA ranges.
+2. Reconcile the legacy order slot model with current `Order` fields, then connect holds to payment-safe order assignment, approval events and honest customer ETA ranges.
 3. Connect payment safe-to-procure state, refunds, upgrade assessment and the customer tracking portal. Extend Gem Hunter scoring with all-in cost and max-buy evidence.
 
 No vNext recommendation should be sold until the procurement, market, margin, fulfilment and payment gates above are complete and verified.

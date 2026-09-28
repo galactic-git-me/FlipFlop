@@ -1,5 +1,5 @@
 """Admin-only economic assessments; these do not create customer offers."""
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -9,11 +9,17 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.models.admin_user import AdminUser
-from app.models.commerce_evidence import PriceQuoteSnapshot, SupplierOfferEvidence, WorkshopCapacityEvidence
+from app.models.commerce_evidence import (
+    PriceQuoteSnapshot, SupplierOfferEvidence, WorkshopCapacityEvidence,
+    WorkshopCapacityReservation, WorkshopCapacityReservationEvent,
+)
 from app.routes.admin_auth import get_current_admin
 from app.services.commerce_pricing import Condition, ConditionPolicy, CostStack, FulfilmentMode, MarketEvidence, SupplierOffer, eligible_offers, evaluate_price
 from app.services.gem_economics import GemCosts, assess_gem
 from app.services.procurement_optimizer import ApprovedPart, optimise_bom
+from app.services.workshop_capacity import (
+    active_hold_count, capacity_evidence_is_current, latest_capacity_evidence, lock_build_week,
+)
 
 router = APIRouter(prefix="/commerce-intelligence", tags=["commerce-intelligence"], dependencies=[Depends(get_current_admin)])
 
@@ -132,18 +138,16 @@ async def create_quote_snapshot(
         if capacity is None:
             raise HTTPException(status_code=422, detail="Workshop capacity evidence record does not exist")
         now = datetime.now(timezone.utc)
-        age = now - capacity.observed_at
-        current_week = date.today().isocalendar()
-        capacity_week = _parse_iso_week(capacity.build_week)
+        latest = await latest_capacity_evidence(db, capacity.build_week)
+        active_holds = await active_hold_count(db, capacity.build_week, now)
         if (
-            capacity.available_builds < 1
-            or age.total_seconds() < 0
-            or age.total_seconds() > 24 * 60 * 60
-            or capacity_week < (current_week.year, current_week.week)
+            latest is None or latest.id != capacity.id
+            or not capacity_evidence_is_current(capacity, now)
+            or active_holds >= capacity.available_builds
         ):
             return await _save_quote_snapshot(
                 db, body, admin, rows, None,
-                {"offerable": False, "reason": "Workshop capacity evidence is stale, full, or for a past build week"},
+                {"offerable": False, "reason": "Workshop capacity evidence is superseded, stale, full, or for a past build week"},
                 capacity,
             )
     offers = [SupplierOffer(
@@ -253,6 +257,7 @@ async def capture_workshop_capacity(
     row = WorkshopCapacityEvidence(
         **body.model_dump(), captured_by_admin_id=admin.id,
     )
+    await lock_build_week(db, body.build_week)
     db.add(row)
     await db.commit()
     await db.refresh(row)
@@ -292,6 +297,142 @@ async def get_quote_snapshot(snapshot_id: int, db: AsyncSession = Depends(get_db
         "id": snapshot.id, "product_key": snapshot.product_key, "status": snapshot.status,
         "evidence": snapshot.evidence_json, "decision": snapshot.decision_json,
         "created_at": snapshot.created_at.isoformat(),
+    }
+
+
+def _timestamp_recent(value: str | None, now: datetime, maximum_age: timedelta) -> bool:
+    if not value:
+        return False
+    try:
+        observed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    if observed.tzinfo is None:
+        return False
+    return timedelta(0) <= now - observed <= maximum_age
+
+
+class ReserveCapacityRequest(BaseModel):
+    quote_snapshot_id: int = Field(gt=0)
+
+
+@router.post("/capacity-reservations", status_code=201)
+async def reserve_workshop_capacity(
+    body: ReserveCapacityRequest,
+    db: AsyncSession = Depends(get_db),
+    admin: AdminUser = Depends(get_current_admin),
+) -> dict:
+    quote_snapshot_id = body.quote_snapshot_id
+    snapshot = await db.get(PriceQuoteSnapshot, quote_snapshot_id)
+    if snapshot is None:
+        raise HTTPException(status_code=404, detail="Quote snapshot not found")
+    capacity_ref = (snapshot.evidence_json or {}).get("workshop_capacity")
+    if snapshot.status != "offerable" or not capacity_ref:
+        raise HTTPException(status_code=409, detail="A passing made-to-order assessment is required")
+    build_week = capacity_ref["build_week"]
+    await lock_build_week(db, build_week)
+    now = datetime.now(timezone.utc)
+
+    existing_result = await db.execute(
+        select(WorkshopCapacityReservation).where(
+            WorkshopCapacityReservation.quote_snapshot_id == quote_snapshot_id
+        )
+    )
+    existing = existing_result.scalar_one_or_none()
+    if existing is not None:
+        if existing.status == "held" and existing.expires_at > now:
+            return {"id": existing.id, "status": "held", "build_week": build_week, "expires_at": existing.expires_at.isoformat()}
+        raise HTTPException(status_code=409, detail="This assessment's hold has ended; create a new assessment")
+
+    if not _timestamp_recent(snapshot.created_at.isoformat(), now, timedelta(minutes=15)):
+        raise HTTPException(status_code=409, detail="Quote assessment has expired")
+    request_evidence = snapshot.evidence_json.get("request") or {}
+    market_time = (request_evidence.get("market") or {}).get("observed_at")
+    if not _timestamp_recent(market_time, now, timedelta(days=30)):
+        raise HTTPException(status_code=409, detail="Sold-market evidence has expired")
+    if any(
+        not offer.get("stock_confirmed")
+        or not _timestamp_recent(offer.get("observed_at"), now, timedelta(hours=24))
+        for offer in snapshot.evidence_json.get("supplier_offers") or []
+    ):
+        raise HTTPException(status_code=409, detail="Supplier evidence has expired")
+
+    capacity = await latest_capacity_evidence(db, build_week)
+    if (
+        capacity is None or capacity.id != capacity_ref.get("id")
+        or not capacity_evidence_is_current(capacity, now)
+        or await active_hold_count(db, build_week, now) >= capacity.available_builds
+    ):
+        raise HTTPException(status_code=409, detail="Workshop capacity is no longer available")
+
+    reservation = WorkshopCapacityReservation(
+        quote_snapshot_id=quote_snapshot_id, capacity_evidence_id=capacity.id,
+        build_week=build_week, status="held", expires_at=now + timedelta(minutes=15),
+        created_by_admin_id=admin.id, created_at=now,
+    )
+    db.add(reservation)
+    await db.flush()
+    db.add(WorkshopCapacityReservationEvent(
+        reservation_id=reservation.id, event_type="held", admin_id=admin.id, created_at=now,
+    ))
+    await db.commit()
+    return {
+        "id": reservation.id, "status": "held", "build_week": build_week,
+        "expires_at": reservation.expires_at.isoformat(),
+    }
+
+
+class ReleaseCapacityRequest(BaseModel):
+    reason: str = Field(min_length=1, max_length=500)
+
+
+@router.post("/capacity-reservations/{reservation_id}/release")
+async def release_workshop_capacity(
+    reservation_id: int,
+    body: ReleaseCapacityRequest,
+    db: AsyncSession = Depends(get_db),
+    admin: AdminUser = Depends(get_current_admin),
+) -> dict:
+    reservation = await db.get(WorkshopCapacityReservation, reservation_id)
+    if reservation is None:
+        raise HTTPException(status_code=404, detail="Capacity reservation not found")
+    await lock_build_week(db, reservation.build_week)
+    await db.refresh(reservation)
+    if reservation.status == "released":
+        return {"id": reservation.id, "status": "released"}
+    now = datetime.now(timezone.utc)
+    reservation.status = "released"
+    reservation.released_at = now
+    db.add(WorkshopCapacityReservationEvent(
+        reservation_id=reservation.id, event_type="released", reason=body.reason,
+        admin_id=admin.id, created_at=now,
+    ))
+    await db.commit()
+    return {"id": reservation.id, "status": "released"}
+
+
+@router.get("/capacity-reservations/{reservation_id}")
+async def get_workshop_capacity_reservation(
+    reservation_id: int,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    reservation = await db.get(WorkshopCapacityReservation, reservation_id)
+    if reservation is None:
+        raise HTTPException(status_code=404, detail="Capacity reservation not found")
+    events = await db.execute(
+        select(WorkshopCapacityReservationEvent)
+        .where(WorkshopCapacityReservationEvent.reservation_id == reservation_id)
+        .order_by(WorkshopCapacityReservationEvent.id)
+    )
+    return {
+        "id": reservation.id, "quote_snapshot_id": reservation.quote_snapshot_id,
+        "capacity_evidence_id": reservation.capacity_evidence_id, "build_week": reservation.build_week,
+        "status": "expired" if reservation.status == "held" and reservation.expires_at <= datetime.now(timezone.utc) else reservation.status,
+        "expires_at": reservation.expires_at.isoformat(),
+        "events": [{
+            "event_type": event.event_type, "reason": event.reason,
+            "admin_id": event.admin_id, "created_at": event.created_at.isoformat(),
+        } for event in events.scalars().all()],
     }
 
 
