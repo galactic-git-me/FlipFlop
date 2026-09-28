@@ -142,7 +142,10 @@ async def create_payment_intent(
             customer_id=request.customer_id,
             budget=amount,
             quote_data=quote_data,
-            metadata=checkout_metadata(choice),
+            metadata={
+                **checkout_metadata(choice),
+                "chosen_week": request.build_config.chosen_week or "" if request.build_config else "",
+            },
         )
 
         log.info(
@@ -267,9 +270,16 @@ async def confirm_payment(
         delivery_metadata = payment_data["metadata"]
         delivery_days = int(delivery_metadata.get("delivery_days") or 0)
         delivery_option = delivery_metadata.get("delivery_option", "standard")
-        promised_delivery_date = add_working_days(
-            datetime.now(ZoneInfo("Europe/London")).replace(tzinfo=None), delivery_days
-        ) if delivery_days > 0 else None
+        delivery_start = datetime.now(ZoneInfo("Europe/London")).replace(tzinfo=None)
+        chosen_week = delivery_metadata.get("chosen_week") or (request.build_config.chosen_week if request.build_config else None)
+        if chosen_week:
+            try:
+                year_text, week_text = chosen_week.split("-W", maxsplit=1)
+                scheduled_start = datetime.fromisocalendar(int(year_text), int(week_text), 1)
+                delivery_start = max(delivery_start, scheduled_start)
+            except (ValueError, TypeError):
+                pass
+        promised_delivery_date = add_working_days(delivery_start, delivery_days) if delivery_days > 0 else None
         specs.update({
             "delivery_option": delivery_option,
             "delivery_promise": delivery_metadata.get("delivery_promise"),

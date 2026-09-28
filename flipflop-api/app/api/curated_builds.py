@@ -15,6 +15,9 @@ from app.database import get_db
 from app.models.catalogue import CatalogueVariant, PlaybookSlot
 from app.models.curated_build_segment import CuratedBuildSegment
 from app.models.listing import Listing
+from app.models.flip import Flip, FlipStage
+from app.models.benchmark import HardwareBenchmark
+from app.services.benchmark_normaliser import normalise_cpu, normalise_gpu
 from app.routes.admin_auth import get_current_admin
 
 router = APIRouter(prefix="/curated-builds", tags=["curated-builds"], dependencies=[Depends(get_current_admin)])
@@ -185,6 +188,114 @@ async def match_budget(customer_type: str, budget_gbp: float, db: AsyncSession =
     if len(matches) != 1:
         raise HTTPException(status_code=404, detail="No unique budget segment found for this customer type and amount")
     return _segment_json(matches[0])
+
+
+@router.get("/segments/{segment_id}/flip-matches")
+async def match_potential_flips_to_segment(
+    segment_id: int,
+    delivery_mode: str = "flexible",
+    db: AsyncSession = Depends(get_db),
+):
+    """Find potential whole-PC flips that can meet a playbook cell's baseline.
+
+    This is a sourcing suggestion only: it does not allocate inventory,
+    publish a product, or mark a flip as ready for sale.
+    """
+    if delivery_mode not in {"flexible", "ready_to_ship"}:
+        raise HTTPException(status_code=422, detail="Flip sources are only allowed for Flexible or Ready-to-Ship builds")
+    segment = await db.get(CuratedBuildSegment, segment_id)
+    if not segment:
+        raise HTTPException(status_code=404, detail="Playbook segment not found")
+    if not segment.allow_flip_component_sources:
+        return {"segment_id": segment.id, "delivery_mode": delivery_mode, "matches": [], "reason": "Flip component sourcing is disabled for this playbook cell"}
+
+    selected = {key: int(value) for key, value in (segment.components or {}).items() if str(value).isdigit()}
+    target_rows = (await db.execute(
+        select(PlaybookSlot.slot_type, Listing)
+        .join(CatalogueVariant, CatalogueVariant.slot_id == PlaybookSlot.id)
+        .join(Listing, Listing.id == CatalogueVariant.listing_id)
+        .where(CatalogueVariant.id.in_(set(selected.values())))
+    )).all()
+    targets = {slot_type: listing for slot_type, listing in target_rows}
+    benchmark_rows = (await db.execute(select(HardwareBenchmark).where(
+        HardwareBenchmark.component_type.in_(["cpu", "gpu"]),
+        HardwareBenchmark.overall_score.is_not(None),
+    ))).scalars().all()
+    benchmark_index: dict[tuple[str, str], HardwareBenchmark] = {}
+    for row in benchmark_rows:
+        key = (row.component_type.casefold(), row.normalized_model)
+        current = benchmark_index.get(key)
+        if current is None or row.confidence_score > current.confidence_score:
+            benchmark_index[key] = row
+
+    use_case = (segment.customer_type or "").casefold()
+    metric = "gaming_score" if "gaming" in use_case else "workstation_score" if any(word in use_case for word in ("workstation", "creator", "ai")) else "overall_score"
+
+    def benchmark(kind: str, model: str | None):
+        if not model:
+            return None
+        normalised = normalise_cpu(model) if kind == "cpu" else normalise_gpu(model)
+        return benchmark_index.get((kind, normalised)) if normalised else None
+
+    flips = (await db.execute(
+        select(Flip, Listing).join(Listing, Listing.id == Flip.listing_id)
+        .where(Flip.stage.in_([FlipStage.selected, FlipStage.building, FlipStage.ready_for_sale]))
+        .order_by(Flip.created_at.desc()).limit(200)
+    )).all()
+    matches = []
+    for flip, candidate in flips:
+        checks = []
+        candidate_cost = (flip.current_estimated_resale or candidate.estimated_resale)
+        if candidate_cost is None or segment.budget_min is None:
+            checks.append({"slot": "budget", "status": "insufficient_evidence", "reason": "A resale estimate and segment budget range are required"})
+        elif candidate_cost < segment.budget_min or (segment.budget_max is not None and candidate_cost >= segment.budget_max):
+            checks.append({"slot": "budget", "status": "below_or_above_range", "candidate_gbp": round(candidate_cost, 2)})
+        else:
+            checks.append({"slot": "budget", "status": "matched", "candidate_gbp": round(candidate_cost, 2)})
+
+        for slot, kind in (("cpu", "cpu"), ("gpu", "gpu")):
+            if slot not in selected:
+                continue
+            target = targets.get(slot)
+            target_model = (target.cpu or target.title) if target else None
+            candidate_model = getattr(candidate, kind)
+            target_benchmark = benchmark(kind, target_model)
+            candidate_benchmark = benchmark(kind, candidate_model)
+            if not target_benchmark or not candidate_benchmark:
+                checks.append({"slot": slot, "status": "insufficient_evidence", "target_model": target_model, "candidate_model": candidate_model})
+                continue
+            target_score = getattr(target_benchmark, metric, None) or target_benchmark.overall_score
+            candidate_score = getattr(candidate_benchmark, metric, None) or candidate_benchmark.overall_score
+            checks.append({
+                "slot": slot,
+                "status": "matched" if candidate_score is not None and target_score is not None and candidate_score >= target_score else "below_target",
+                "target_model": target_benchmark.model,
+                "candidate_model": candidate_benchmark.model,
+                "metric": metric,
+                "target_score": target_score,
+                "candidate_score": candidate_score,
+            })
+
+        # The flip PC will receive a replacement case as part of refurbishment;
+        # other component slots not represented by measurable specs remain an
+        # explicit follow-up check instead of being assumed compatible.
+        for slot in selected.keys() - {"cpu", "gpu", "case"}:
+            checks.append({"slot": slot, "status": "manual_compatibility_check", "reason": "This component's fit/specs are not fully represented on the potential-flip listing"})
+        eligible = bool(checks) and all(check["status"] == "matched" for check in checks)
+        if eligible or any(check["status"] != "matched" for check in checks):
+            matches.append({
+                "flip_id": flip.id,
+                "listing_id": candidate.id,
+                "title": candidate.title,
+                "url": candidate.url,
+                "stage": flip.stage.value if hasattr(flip.stage, "value") else str(flip.stage),
+                "estimated_customer_price_gbp": round(candidate_cost, 2) if candidate_cost is not None else None,
+                "eligible": eligible,
+                "checks": checks,
+                "recovered_component_slots": [slot for slot, value in (("cpu", candidate.cpu), ("gpu", candidate.gpu), ("ram", candidate.ram_gb), ("storage", candidate.storage_gb), ("psu", candidate.psu_wattage)) if value],
+                "case_replacement_required": True,
+            })
+    return {"segment_id": segment.id, "delivery_mode": delivery_mode, "performance_metric": metric, "matches": matches}
 
 
 SLOT_BESTSELLER_CATEGORY = {

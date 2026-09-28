@@ -307,6 +307,7 @@ async def confirm_checkout(
             "delivery_option": payment_data["metadata"].get("delivery_option", "standard"),
             "delivery_promise": payment_data["metadata"].get("delivery_promise"),
             "delivery_estimate_source": "configured_fulfilment_default",
+            "delivery_days": payment_data["metadata"].get("delivery_days"),
         },
         customer_price=payment_data["amount"],
         fast_track_selected=payment_data["metadata"].get("delivery_option") == "fast_track",
