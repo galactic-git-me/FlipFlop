@@ -100,6 +100,10 @@ class MyOrderOut(BaseModel):
     promised_delivery_date: Optional[datetime] = None
     actual_delivery_date: Optional[datetime] = None
     estimated_delivery: Optional[datetime] = None
+    delivery_option: Optional[str] = None
+    delivery_promise: Optional[str] = None
+    delivery_estimate_source: Optional[str] = None
+    supplier_delivery_days: Optional[int] = None
     shipped_at: Optional[datetime] = None
     delivered_at: Optional[datetime] = None
     tracking_number: Optional[str] = None

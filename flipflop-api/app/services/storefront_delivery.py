@@ -8,6 +8,80 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.app_settings import AppSettings
 
 
+async def estimate_component_sourcing_days(db: AsyncSession, variant_ids: list[int]) -> tuple[int | None, str | None]:
+    """Return the slowest selected component's current, exact-URL delivery evidence."""
+    if not variant_ids:
+        return None, None
+
+    from app.models.catalogue import CatalogueVariant
+    from app.models.listing import Listing
+    from app.models.gem_radar_scored_listing import GemRadarScoredListing
+
+    rows = (await db.execute(
+        select(CatalogueVariant.id, Listing.url, Listing.source_name)
+        .join(Listing, Listing.id == CatalogueVariant.listing_id)
+        .where(CatalogueVariant.id.in_(set(variant_ids)))
+    )).all()
+    urls = list({str(row.url).strip() for row in rows if row.url})
+    scraped_by_url = {}
+    if urls:
+        cutoff = datetime.utcnow() - timedelta(days=14)
+        scraped = (await db.execute(
+            select(GemRadarScoredListing)
+            .where(GemRadarScoredListing.url.in_(urls), GemRadarScoredListing.scored_at >= cutoff)
+            .order_by(GemRadarScoredListing.scored_at.desc())
+        )).scalars().all()
+        for item in scraped:
+            key = (item.url or "").strip()
+            if key not in scraped_by_url:
+                scraped_by_url[key] = item
+
+    estimates: list[int] = []
+    used_scrape = False
+    for row in rows:
+        item = scraped_by_url.get((row.url or "").strip())
+        if item is not None and item.delivery_working_days is not None:
+            days = int(item.delivery_working_days)
+            used_scrape = True
+        else:
+            supplier = (row.source_name or "").casefold()
+            if "vinted" in supplier or "ebay" in supplier:
+                days = 7
+            elif "amazon" in supplier and item is not None and item.prime_eligible:
+                days = 1
+            else:
+                days = 3
+        estimates.append(max(0, days))
+    return max(estimates) if estimates else None, "scraped_listing" if used_scrape else "vendor_default"
+
+
+async def apply_component_delivery_estimate(db: AsyncSession, choice: dict, variant_ids: list[int]) -> dict:
+    """Apply sourcing evidence to a configured end-to-end customer promise."""
+    if not variant_ids or choice.get("fulfilment_type") not in {"curated", "custom"}:
+        return choice
+    from app.models.catalogue import CatalogueVariant
+    from app.models.listing import Listing
+
+    sources = (await db.execute(
+        select(Listing.source_name)
+        .join(CatalogueVariant, CatalogueVariant.listing_id == Listing.id)
+        .where(CatalogueVariant.id.in_(set(variant_ids)))
+    )).scalars().all()
+    if choice.get("delivery_option") != "flexible" and any(
+        name and any(v in name.casefold() for v in ("ebay", "vinted")) for name in sources
+    ):
+        raise ValueError("eBay and Vinted sourcing require Flexible delivery")
+
+    sourcing_days, source = await estimate_component_sourcing_days(db, variant_ids)
+    choice = dict(choice)
+    configured_days = int(choice.get("delivery_days") or 0)
+    choice["supplier_delivery_days"] = sourcing_days
+    choice["delivery_estimate_source"] = source or "configured_fulfilment_default"
+    choice["delivery_days"] = max(configured_days, sourcing_days or 0)
+    choice["promise"] = f"Estimated delivery within {choice['delivery_days']} working days."
+    return choice
+
+
 def add_working_days(start: datetime, days: int) -> datetime:
     current = start
     remaining = max(0, days)
@@ -62,4 +136,6 @@ def checkout_metadata(choice: dict) -> dict[str, str]:
         "delivery_promise": str(choice["promise"]),
         "delivery_days": "" if choice["delivery_days"] is None else str(choice["delivery_days"]),
         "same_day_dispatch": "true" if choice["same_day_dispatch"] else "false",
+        "delivery_estimate_source": str(choice.get("delivery_estimate_source", "configured_fulfilment_default")),
+        "supplier_delivery_days": "" if choice.get("supplier_delivery_days") is None else str(choice["supplier_delivery_days"]),
     }
