@@ -3187,6 +3187,10 @@ async def _submit_scan_body(
                 # separately so is_complete doesn't wait on a count that can
                 # never be reached this run.
                 pipeline_status.increment(payload.search_id, cpk_failed_count=1)
+    if payload.tags:
+        from app.services.catalogue_tag_sync import sync_search_tags_to_catalogue
+        await sync_search_tags_to_catalogue(db, payload.listings, payload.tags)
+
     log.info(
         "diag.scan.phase1_ingest_done",
         elapsed_s=round(_time.monotonic() - _t0, 1),

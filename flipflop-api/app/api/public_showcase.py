@@ -301,9 +301,15 @@ async def confirm_checkout(
         order_id=f"ORD-PROD-{body.intent_id[-12:]}",
         customer_id=customer.id,
         status=OrderStatus.READY_TO_PACKAGE,  # already built — nothing left to source/assemble
-        specs={"product_id": product.id, "build_title": product.title},
+        specs={
+            "product_id": product.id,
+            "build_title": product.title,
+            "delivery_option": payment_data["metadata"].get("delivery_option", "standard"),
+            "delivery_promise": payment_data["metadata"].get("delivery_promise"),
+            "delivery_estimate_source": "configured_fulfilment_default",
+        },
         customer_price=payment_data["amount"],
-        fast_track_selected=payment_data["metadata"].get("fast_track_selected") == "true",
+        fast_track_selected=payment_data["metadata"].get("delivery_option") == "fast_track",
         fast_track_fee=float(payment_data["metadata"].get("delivery_fee_gbp", 0)),
         promised_delivery_date=(
             add_working_days(
