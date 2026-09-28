@@ -281,7 +281,8 @@ async def match_potential_flips_to_segment(
         # explicit follow-up check instead of being assumed compatible.
         for slot in selected.keys() - {"cpu", "gpu", "case"}:
             checks.append({"slot": slot, "status": "manual_compatibility_check", "reason": "This component's fit/specs are not fully represented on the potential-flip listing"})
-        eligible = bool(checks) and all(check["status"] == "matched" for check in checks)
+        measurable = [check for check in checks if check["slot"] in {"budget", "cpu", "gpu"}]
+        eligible = bool(measurable) and all(check["status"] == "matched" for check in measurable)
         if eligible or any(check["status"] != "matched" for check in checks):
             matches.append({
                 "flip_id": flip.id,
@@ -290,7 +291,7 @@ async def match_potential_flips_to_segment(
                 "url": candidate.url,
                 "stage": flip.stage.value if hasattr(flip.stage, "value") else str(flip.stage),
                 "estimated_customer_price_gbp": round(candidate_cost, 2) if candidate_cost is not None else None,
-                "eligible": eligible,
+                "meets_measured_requirements": eligible,
                 "checks": checks,
                 "recovered_component_slots": [slot for slot, value in (("cpu", candidate.cpu), ("gpu", candidate.gpu), ("ram", candidate.ram_gb), ("storage", candidate.storage_gb), ("psu", candidate.psu_wattage)) if value],
                 "case_replacement_required": True,

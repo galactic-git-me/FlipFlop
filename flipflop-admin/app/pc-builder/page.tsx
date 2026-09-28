@@ -298,7 +298,7 @@ function ReviewedBestsellerChoices({ segment, build, builds, matches }: {
 
 function FlipMatchPanel({ segment }: { segment: Segment }) {
   const [deliveryMode, setDeliveryMode] = useState<"flexible" | "ready_to_ship">("flexible");
-  const [matches, setMatches] = useState<Array<{ flip_id: number; title: string; url: string; stage: string; eligible: boolean; checks: Array<{ slot: string; status: string; target_score?: number; candidate_score?: number }> }>>([]);
+  const [matches, setMatches] = useState<Array<{ flip_id: number; title: string; url: string; stage: string; meets_measured_requirements: boolean; checks: Array<{ slot: string; status: string; target_score?: number; candidate_score?: number }> }>>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const findMatches = async (mode: "flexible" | "ready_to_ship") => {
@@ -311,12 +311,12 @@ function FlipMatchPanel({ segment }: { segment: Segment }) {
     finally { setBusy(false); }
   };
   return <section className="mb-4 rounded-lg border border-amber-300/20 bg-amber-300/[.03] p-3">
-    <div className="flex flex-wrap items-center justify-between gap-3"><div><h3 className="text-sm font-semibold">Potential flip sourcing</h3><p className="mt-1 text-xs text-slate-400">Benchmark and budget matches are suggestions only; no inventory is allocated.</p></div>
+    <div className="flex flex-wrap items-center justify-between gap-3"><div><h3 className="text-sm font-semibold">Potential flip sourcing</h3><p className="mt-1 text-xs text-slate-400">Benchmark and budget fit is a sourcing suggestion; check remaining components before allocating inventory.</p></div>
       <div className="flex gap-2"><button type="button" disabled={busy || !segment.allow_flip_component_sources} onClick={() => void findMatches("flexible")} className={`rounded border px-3 py-1.5 text-xs ${deliveryMode === "flexible" ? "border-cyan-300/50 text-cyan-100" : "border-white/10 text-slate-300"}`}>Flexible</button><button type="button" disabled={busy || !segment.allow_flip_component_sources} onClick={() => void findMatches("ready_to_ship")} className={`rounded border px-3 py-1.5 text-xs ${deliveryMode === "ready_to_ship" ? "border-cyan-300/50 text-cyan-100" : "border-white/10 text-slate-300"}`}>Ready-to-Ship</button></div>
     </div>
     {!segment.allow_flip_component_sources && <p className="mt-2 text-xs text-slate-500">Enable flip sources above to run the matcher.</p>}
     {busy && <p className="mt-2 text-xs text-cyan-200">Checking benchmark and budget fit…</p>}{error && <p role="alert" className="mt-2 text-xs text-red-300">{error}</p>}
-    {matches.length > 0 && <div className="mt-3 space-y-2">{matches.map(match => <article key={match.flip_id} className="rounded border border-white/10 bg-black/20 p-3"><div className="flex flex-wrap items-center justify-between gap-2"><a className="text-sm font-medium text-cyan-200 underline" href={match.url} target="_blank" rel="noreferrer">{match.title}</a><span className={`text-xs ${match.eligible ? "text-emerald-300" : "text-amber-300"}`}>{match.eligible ? "Meets this cell" : "Review required"}</span></div><p className="mt-2 text-xs text-slate-400">Flip #{match.flip_id} · {match.stage.replaceAll("_", " ")} · {match.checks.map(check => `${check.slot}: ${check.status}${check.candidate_score != null && check.target_score != null ? ` (${check.candidate_score} / ${check.target_score})` : ""}`).join(" · ")}</p></article>)}</div>}
+    {matches.length > 0 && <div className="mt-3 space-y-2">{matches.map(match => <article key={match.flip_id} className="rounded border border-white/10 bg-black/20 p-3"><div className="flex flex-wrap items-center justify-between gap-2"><a className="text-sm font-medium text-cyan-200 underline" href={match.url} target="_blank" rel="noreferrer">{match.title}</a><span className={`text-xs ${match.meets_measured_requirements ? "text-emerald-300" : "text-amber-300"}`}>{match.meets_measured_requirements ? "Performance + budget fit" : "Review required"}</span></div><p className="mt-2 text-xs text-slate-400">Flip #{match.flip_id} · {match.stage.replaceAll("_", " ")} · {match.checks.map(check => `${check.slot}: ${check.status}${check.candidate_score != null && check.target_score != null ? ` (${check.candidate_score} / ${check.target_score})` : ""}`).join(" · ")}</p></article>)}</div>}
     {!busy && !error && matches.length === 0 && segment.allow_flip_component_sources && <p className="mt-2 text-xs text-slate-500">Run the matcher to see potential flip candidates.</p>}
   </section>;
 }
