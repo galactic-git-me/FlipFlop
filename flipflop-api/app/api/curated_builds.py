@@ -168,6 +168,7 @@ class SegmentInput(BaseModel):
     budget_min: float | None = None
     budget_max: float | None = None
     components: dict[str, int] | None = None
+    allow_flip_component_sources: bool | None = None
     selling_price: float | None = None
     is_live: bool | None = None
 
@@ -202,6 +203,7 @@ def _segment_json(segment: CuratedBuildSegment) -> dict:
         "budget_max": segment.budget_max,
         "components": segment.components or {},
         "bestseller_components": segment.bestseller_components or {},
+        "allow_flip_component_sources": segment.allow_flip_component_sources,
         "selling_price": segment.selling_price,
         "proposed_selling_price": segment.proposed_selling_price,
         "availability_status": segment.availability_status,
@@ -300,6 +302,8 @@ async def upsert_segment(body: SegmentInput, db: AsyncSession = Depends(get_db))
     segment.budget_max = body.budget_max
     if body.components is not None:
         segment.components = body.components
+    if body.allow_flip_component_sources is not None:
+        segment.allow_flip_component_sources = body.allow_flip_component_sources
     if body.selling_price is not None:
         segment.selling_price = body.selling_price
         ids = {int(value) for value in (body.components or segment.components or {}).values() if str(value).isdigit()}
