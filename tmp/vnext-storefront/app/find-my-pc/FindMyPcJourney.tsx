@@ -31,6 +31,12 @@ type PerformanceOption = {
   targets: Requirements;
   stretch_allowed: boolean;
 };
+type CatalogueBomCandidate = {
+  role: string;
+  catalogue_variant_id: number | null;
+  slot_id: number | null;
+  title: string | null;
+};
 type Envelope = {
   recommendation_session_id: number;
   envelope_version: string;
@@ -39,6 +45,21 @@ type Envelope = {
   hard_minimums: Requirements;
   preferred_targets: Requirements;
   performance_options: PerformanceOption[];
+  catalogue_bom_candidates: Array<{
+    option_id: string;
+    status: "candidate" | "suppressed";
+    reason_code: string | null;
+    bom?: { parts: CatalogueBomCandidate[] } | null;
+    availability: "not_checked";
+    price: "not_checked";
+  }>;
+  ready_to_ship_matches: Array<{
+    product_id: number;
+    title: string;
+    hero_photo_url: string | null;
+    href: string;
+    capabilities: Record<string, number | null>;
+  }>;
   budget_strategy: string[];
   status: string;
 };
@@ -117,9 +138,14 @@ export default function FindMyPcJourney() {
                 <h4 className="text-lg font-semibold">{option.label}</h4>
                 <p className="mt-2 text-sm text-slate-300">{option.summary}</p>
                 {Object.keys(option.targets).length > 0 && <dl className="mt-4 space-y-2 text-sm">{Object.entries(option.targets).map(([key, value]) => <div key={key} className="flex justify-between gap-3"><dt className="text-slate-400">{labels[key] ?? key}</dt><dd className="font-medium">{formatRequirement(key, value)}</dd></div>)}</dl>}
+                {(() => {
+                  const candidate = result.catalogue_bom_candidates.find((item) => item.option_id === option.id);
+                  return candidate?.status === "candidate" && candidate.bom ? <div className="mt-5 border-t border-white/10 pt-4"><p className="text-sm font-medium text-emerald-300">Compatibility checked catalogue candidate</p><ul className="mt-2 space-y-1 text-xs text-slate-300">{candidate.bom.parts.map((part) => <li key={`${part.role}-${part.catalogue_variant_id}`}>{labels[part.role] ?? part.role}: {part.title}</li>)}</ul><p className="mt-2 text-xs text-slate-400">Supplier stock, current price and delivery have not been checked.</p></div> : <p className="mt-4 border-t border-white/10 pt-3 text-xs text-slate-400">No complete catalogue build passed the required compatibility and evidence checks for this plan.</p>;
+                })()}
                 {option.id === "stretch" && <p className="mt-3 text-xs text-slate-400">Your answers allow us to consider a stretch, but we will show it only if the improvement is worthwhile.</p>}
               </article>
             ))}
+          {result.ready_to_ship_matches.length > 0 && <section className="mt-8"><h3 className="text-xl font-semibold">Ready to ship and suitable for your needs</h3><div className="mt-4 grid gap-3 sm:grid-cols-2">{result.ready_to_ship_matches.map((match) => <Link key={match.product_id} href={match.href} className="rounded-xl border border-emerald-400/30 bg-emerald-500/5 p-4 transition-colors hover:border-emerald-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-400"><span className="font-medium">{match.title}</span><span className="mt-2 block text-xs text-emerald-200">Listed prebuilt · capability evidence meets your minimums</span></Link>)}</div></section>}
           </div>
           <h3 className="mt-8 text-xl font-semibold">Why we would spend your money this way</h3>
           <ul className="mt-4 space-y-3 text-slate-200">{result.budget_strategy.map((reason) => <li key={reason}>• {reason}</li>)}</ul>

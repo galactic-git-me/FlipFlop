@@ -19,7 +19,7 @@ REQUIRED_ROLES = ("cpu", "motherboard", "ram", "storage", "psu", "cooling", "cas
 class ApprovedPart:
     sku: str
     role: str
-    offer: SupplierOffer
+    offer: SupplierOffer | None
     approved: bool
     cpu_cores: int | None = None
     cpu_socket: str | None = None
@@ -40,6 +40,9 @@ class ApprovedPart:
     case_form_factors: tuple[str, ...] = ()
     case_max_gpu_length_mm: int | None = None
     case_max_cooler_height_mm: int | None = None
+    catalogue_variant_id: int | None = None
+    slot_id: int | None = None
+    title: str | None = None
 
 
 def _meets_minimum(part: ApprovedPart, minimums: dict) -> bool:
@@ -91,6 +94,8 @@ def optimise_bom(
     for part in candidates:
         if part.role not in by_role or not part.approved or not _meets_minimum(part, minimums):
             continue
+        if part.offer is None:
+            continue
         if not eligible_offers([part.offer], mode, policy, consent, priority_capacity=priority_capacity):
             continue
         by_role[part.role].append(part)
@@ -123,3 +128,50 @@ def optimise_bom(
         "landed_parts_gbp": str(sum((part.offer.landed_gbp for part in best.values()), Decimal("0"))),
         "mode": mode.value,
     }
+
+
+def find_compatible_catalogue_bom(
+    minimums: dict,
+    candidates: list[ApprovedPart],
+    *,
+    limit: int = 1,
+) -> list[dict]:
+    """Return unpriced BOM candidates from reviewed catalogue specifications.
+
+    These are discovery candidates only. This function deliberately does not
+    check or claim supplier stock, landed cost, delivery, margin or offerability.
+    Missing compatibility evidence still rejects the combination.
+    """
+    roles = REQUIRED_ROLES + (("gpu",) if minimums.get("gpu_required") else ())
+    by_role: dict[str, list[ApprovedPart]] = {role: [] for role in roles}
+    for part in candidates:
+        if part.role in by_role and part.approved and _meets_minimum(part, minimums):
+            by_role[part.role].append(part)
+    if any(not values for values in by_role.values()):
+        return []
+
+    pools = [sorted(by_role[role], key=lambda part: (part.sku, part.title or "")) for role in roles]
+    combinations = prod(len(pool) for pool in pools)
+    if combinations > 100_000:
+        raise ValueError("Candidate set exceeds safe exhaustive search size")
+
+    results = []
+    for combination in product(*pools):
+        chosen = dict(zip(roles, combination))
+        if not _compatible(chosen):
+            continue
+        results.append({
+            "parts": [
+                {
+                    "role": role,
+                    "catalogue_variant_id": part.catalogue_variant_id,
+                    "slot_id": part.slot_id,
+                    "title": part.title,
+                }
+                for role, part in chosen.items()
+            ],
+            "evidence": "reviewed_catalogue_specs_and_compatibility_rules",
+        })
+        if len(results) >= limit:
+            break
+    return results
