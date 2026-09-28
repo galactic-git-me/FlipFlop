@@ -67,6 +67,39 @@ def estimate_listing_delivery_working_days(text: str | None) -> int | None:
     if "tomorrow" in value or "next day" in value:
         return 1
 
+    # Marketplace cards often show a concrete date (for example, "Delivery
+    # Tue, 14 Oct" or "Arrives October 14, 2026"). Convert that promise to
+    # working days from today; leave unrecognised wording to vendor defaults.
+    date_match = re.search(
+        r"\b(?:delivery|arrives?|get it)\b[^\n]{0,35}?"
+        r"((?:\d{1,2}(?:st|nd|rd|th)?\s+[a-z]{3,9}|[a-z]{3,9}\s+\d{1,2}(?:st|nd|rd|th)?))"
+        r"(?:,?\s+(\d{4}))?\b",
+        value,
+    )
+    if date_match:
+        date_text = re.sub(r"(\d)(st|nd|rd|th)\b", r"\1", date_match.group(1)).replace(",", "").strip()
+        parsed_date = None
+        for fmt in ("%d %B", "%d %b", "%B %d", "%b %d"):
+            try:
+                parsed_date = datetime.strptime(date_text, fmt).date()
+                break
+            except ValueError:
+                continue
+        if parsed_date:
+            today = datetime.now(ZoneInfo("Europe/London")).date()
+            year = int(date_match.group(2)) if date_match.group(2) else today.year
+            target = parsed_date.replace(year=year)
+            if not date_match.group(2) and target < today:
+                target = target.replace(year=year + 1)
+            if target >= today:
+                days = 0
+                current = today
+                while current < target:
+                    current += timedelta(days=1)
+                    if current.weekday() < 5:
+                        days += 1
+                return days
+
     matches = re.findall(
         r"\b(\d{1,2})(?:\s*[-–]\s*(\d{1,2}))?\s*(working|business|calendar)?\s*days?\b",
         value,

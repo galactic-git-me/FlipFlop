@@ -17,6 +17,7 @@ from app.models.curated_build_segment import CuratedBuildSegment
 from app.models.listing import Listing
 from app.models.flip import Flip, FlipStage
 from app.models.benchmark import HardwareBenchmark
+from app.models.part import Part
 from app.services.benchmark_normaliser import normalise_cpu, normalise_gpu
 from app.routes.admin_auth import get_current_admin
 
@@ -245,6 +246,19 @@ async def match_potential_flips_to_segment(
     matches = []
     for flip, candidate in flips:
         checks = []
+        upgrade_models: dict[str, str] = {}
+        upgrade_component_names: list[str] = []
+        for category, part_id in (flip.selected_upgrade_ids or {}).items():
+            try:
+                part = await db.get(Part, int(part_id))
+            except (TypeError, ValueError):
+                part = None
+            if not part:
+                continue
+            category_key = str(category).casefold().replace(" ", "_")
+            if category_key in {"cpu", "gpu", "graphics", "graphics_card"}:
+                upgrade_models["gpu" if category_key in {"graphics", "graphics_card"} else category_key] = part.model or part.name
+            upgrade_component_names.append(part.name)
         candidate_cost = (flip.current_estimated_resale or candidate.estimated_resale)
         if candidate_cost is None or segment.budget_min is None:
             checks.append({"slot": "budget", "status": "insufficient_evidence", "reason": "A resale estimate and segment budget range are required"})
@@ -258,7 +272,7 @@ async def match_potential_flips_to_segment(
                 continue
             target = targets.get(slot)
             target_model = ((target.cpu if kind == "cpu" else target.gpu) or target.title) if target else None
-            candidate_model = getattr(candidate, kind)
+            candidate_model = upgrade_models.get(kind) or getattr(candidate, kind)
             target_benchmark = benchmark(kind, target_model)
             candidate_benchmark = benchmark(kind, candidate_model)
             if not target_benchmark or not candidate_benchmark:
@@ -266,9 +280,12 @@ async def match_potential_flips_to_segment(
                 continue
             target_score = getattr(target_benchmark, metric, None) or target_benchmark.overall_score
             candidate_score = getattr(candidate_benchmark, metric, None) or candidate_benchmark.overall_score
+            if target_score is None or candidate_score is None:
+                checks.append({"slot": slot, "status": "insufficient_evidence", "target_model": target_benchmark.model, "candidate_model": candidate_benchmark.model, "metric": metric})
+                continue
             checks.append({
                 "slot": slot,
-                "status": "matched" if candidate_score is not None and target_score is not None and candidate_score >= target_score else "below_target",
+                "status": "matched" if candidate_score >= target_score else "below_target",
                 "target_model": target_benchmark.model,
                 "candidate_model": candidate_benchmark.model,
                 "metric": metric,
@@ -293,7 +310,8 @@ async def match_potential_flips_to_segment(
                 "estimated_customer_price_gbp": round(candidate_cost, 2) if candidate_cost is not None else None,
                 "meets_measured_requirements": eligible,
                 "checks": checks,
-                "recovered_component_slots": [slot for slot, value in (("cpu", candidate.cpu), ("gpu", candidate.gpu), ("ram", candidate.ram_gb), ("storage", candidate.storage_gb), ("psu", candidate.psu_wattage)) if value],
+                "recovered_component_slots": [slot for slot, value in (("cpu", upgrade_models.get("cpu") or candidate.cpu), ("gpu", upgrade_models.get("gpu") or candidate.gpu), ("ram", candidate.ram_gb), ("storage", candidate.storage_gb), ("psu", candidate.psu_wattage)) if value],
+                "selected_upgrade_components": upgrade_component_names,
                 "case_replacement_required": True,
             })
     return {"segment_id": segment.id, "delivery_mode": delivery_mode, "performance_metric": metric, "matches": matches}

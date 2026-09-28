@@ -42,7 +42,7 @@ async def estimate_component_sourcing_days(db: AsyncSession, variant_ids: list[i
         item = scraped_by_url.get((row.url or "").strip())
         if item is not None and item.delivery_working_days is not None:
             days = int(item.delivery_working_days)
-            used_scrape = True
+            used_scrape = used_scrape or item.delivery_estimate_source == "listing_estimate"
         else:
             supplier = (row.source_name or "").casefold()
             if "vinted" in supplier or "ebay" in supplier:

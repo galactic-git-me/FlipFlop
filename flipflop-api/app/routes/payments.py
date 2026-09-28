@@ -133,8 +133,6 @@ async def create_payment_intent(
         choice = await delivery_choice(db, "custom", delivery_option == "fast_track", delivery_option == "flexible")
         amount += choice["fee_gbp"]
         quote_data = checkout_metadata(choice)
-    promised_delivery_date = add_working_days(datetime.now(ZoneInfo("Europe/London")).replace(tzinfo=None), int(choice["delivery_days"] or 1))
-
     # Create payment intent using service
     try:
         payment_service = PaymentService()
