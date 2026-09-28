@@ -418,6 +418,15 @@ async def touch_observation(
             row.source or "", observed_delivery_days,
             prime_eligible if prime_eligible is not None else row.prime_eligible,
         )
+        if (
+            delivery_text is None
+            and row.delivery_estimate_source == "listing_estimate"
+            and row.delivery_working_days is not None
+        ):
+            # Some cards omit delivery wording on a later scan. Keep the last
+            # explicit promise instead of replacing it with a vendor default.
+            estimated_delivery_days = row.delivery_working_days
+            delivery_estimate_source = "listing_estimate"
         row.delivery_working_days = estimated_delivery_days
         row.delivery_estimate_source = delivery_estimate_source
         await db.execute(

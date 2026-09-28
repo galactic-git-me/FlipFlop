@@ -75,6 +75,8 @@ async def apply_component_delivery_estimate(db: AsyncSession, choice: dict, vari
     sourcing_days, source = await estimate_component_sourcing_days(db, variant_ids)
     choice = dict(choice)
     configured_days = int(choice.get("delivery_days") or 0)
+    if choice.get("delivery_option") == "fast_track" and sourcing_days is not None and sourcing_days > configured_days:
+        raise ValueError("Fast Track is unavailable because a selected supplier's delivery estimate exceeds its target")
     choice["supplier_delivery_days"] = sourcing_days
     choice["delivery_estimate_source"] = source or "configured_fulfilment_default"
     choice["delivery_days"] = max(configured_days, sourcing_days or 0)
