@@ -50,12 +50,12 @@ type Envelope = {
     status: "candidate" | "suppressed";
     reason_code: string | null;
     bom?: { parts: CatalogueBomCandidate[] } | null;
-    availability: "not_checked";
-    price: "not_checked";
+    availability?: "not_checked";
+    price?: "not_checked";
   }>;
   ready_to_ship_matches: Array<{
     product_id: number;
-    title: string;
+    title: string | null;
     hero_photo_url: string | null;
     href: string;
     capabilities: Record<string, number | null>;

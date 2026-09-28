@@ -8,11 +8,11 @@ stored component evidence meets every measurable hard minimum.
 from datetime import datetime, timedelta, timezone
 import re
 
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.build import Build
+from app.models.build import BuildStatus
 from app.models.catalogue import CatalogueVariant, PlaybookSlot
 from app.models.configurator import ConfiguratorCatalogueVisibility
 from app.models.listing import Listing, ListingStatus
@@ -205,7 +205,7 @@ async def find_catalogue_bom_candidates(
         tier_variant_ids = {variant.id for variant, _ in rows if variant.slot_id in tier_slots and variant.tier == tier}
         tier_candidates = [part for part in candidates if part.catalogue_variant_id in tier_variant_ids]
         try:
-            possible = find_compatible_catalogue_bom(option_minimums, tier_candidates, limit=10)
+            possible = find_compatible_catalogue_bom(option_minimums, tier_candidates, limit=3)
         except ValueError:
             output.append({"option_id": option["id"], "status": "suppressed", "reason_code": "candidate_search_limit"})
             continue
@@ -309,7 +309,11 @@ async def find_ready_to_ship_matches(db: AsyncSession, envelope: dict, condition
     products = list((await db.execute(
         select(Product)
         .options(selectinload(Product.build))
-        .where(Product.product_type == ProductType.PREBUILT, Product.status == ProductStatus.LISTED)
+        .where(
+            Product.product_type == ProductType.PREBUILT,
+            Product.status == ProductStatus.LISTED,
+            or_(Product.reserved_until.is_(None), Product.reserved_until < datetime.utcnow()),
+        )
         .order_by(Product.created_at.desc())
     )).scalars().all())
     manual_ids = {product.build.manual_build_id for product in products if product.build and product.build.manual_build_id}
@@ -324,7 +328,9 @@ async def find_ready_to_ship_matches(db: AsyncSession, envelope: dict, condition
     for product in products:
         build = product.build
         manual = manual_builds.get(build.manual_build_id) if build and build.manual_build_id else None
-        if not build or not manual or not _condition_matches_policy(manual.ebay_condition, policy):
+        if (not build or build.status != BuildStatus.FINALISED or not manual
+                or manual.status not in {"built", "listed"}
+                or not _condition_matches_policy(manual.ebay_condition, policy)):
             continue
         evidence = manual.evidence_data if isinstance(manual.evidence_data, dict) else {}
         performance_card = evidence.get("performance_card")

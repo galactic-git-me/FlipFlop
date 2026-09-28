@@ -23,11 +23,17 @@ The two vNext PRDs in `docs/prd/` set the product direction. This file records d
 - Each plan remains SKU-free and unpriced. The reveal states that stock, compatibility, cost and market checks are still required; this work does not make a recommendation purchasable.
 - Earlier Playbook version `1.0` remains selectable for session replay and does not apply the new workload overlays.
 
+## Slice 2 — Catalogue and Ready-to-Ship matching (implemented)
+
+- Recommendation sessions now search active customer-visible catalogue entries by plan tier. Component BOM candidates require fresh (24-hour) active listings, explicit condition eligibility, reviewed engineering specs, every required component role, and a full compatibility pass. Candidate search is bounded and fails closed.
+- The compatibility gate checks CPU/socket, memory generation, motherboard form factor, cooler support, case clearance, GPU fit and PSU reserve, then applies active catalogue compatibility rules. Missing specs or required slots suppress the BOM.
+- Listed Ready-to-Ship prebuilt units are matched only when the unit is not reserved, its build is finalised, the selected condition policy allows its condition, and explicit component/performance evidence meets the hard minimums.
+- Candidate results are saved with the recommendation session for replay. They do not include supplier stock, a price, delivery estimate or purchase authority.
+
 ## Next implementation slices
 
-1. Connect approved SKUs and compatibility rules; form compliant BOM candidates and ready-to-ship matches. Suppress recommendations when evidence is missing.
-2. Add supplier offers, condition policies, landed costs, full cost stack, contribution floors, market evidence and immutable quote snapshots.
-3. Gate Priority, Standard and Flexible by actual suppliers, stock, workshop capacity and sourcing policy. Add honest customer ETA ranges and approval events.
-4. Connect payment safe-to-procure state, refunds, upgrade assessment and the customer tracking portal. Extend Gem Hunter scoring with all-in cost and max-buy evidence.
+1. Connect current supplier offers and stock evidence; calculate landed cost, full cost stack, contribution floors and sold-market evidence, then persist immutable quote snapshots.
+2. Gate Priority, Standard and Flexible by actual suppliers, stock, workshop capacity and sourcing policy. Add honest customer ETA ranges and approval events.
+3. Connect payment safe-to-procure state, refunds, upgrade assessment and the customer tracking portal. Extend Gem Hunter scoring with all-in cost and max-buy evidence.
 
 No vNext recommendation should be sold until the procurement, market, margin, fulfilment and payment gates above are complete and verified.
