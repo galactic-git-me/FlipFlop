@@ -257,7 +257,7 @@ async def match_potential_flips_to_segment(
             if slot not in selected:
                 continue
             target = targets.get(slot)
-            target_model = (target.cpu or target.title) if target else None
+            target_model = ((target.cpu if kind == "cpu" else target.gpu) or target.title) if target else None
             candidate_model = getattr(candidate, kind)
             target_benchmark = benchmark(kind, target_model)
             candidate_benchmark = benchmark(kind, candidate_model)
