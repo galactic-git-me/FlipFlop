@@ -32,7 +32,17 @@ The two vNext PRDs in `docs/prd/` set the product direction. This file records d
 
 ## Next implementation slices
 
-1. Connect current supplier offers and stock evidence; calculate landed cost, full cost stack, contribution floors and sold-market evidence, then persist immutable quote snapshots.
+### Slice 3 — Supplier evidence and quote snapshots (admin-only foundation)
+
+- Admins can append supplier offer observations with explicit source/reference, stock state, condition, full landed-cost inputs, capture time and delivery estimate.
+- Quote assessment loads the persisted offer records, applies freshness, stock, supplier, delivery, condition-policy and fulfilment-mode gates, and requires exactly one eligible offer for every required BOM part.
+- Priority remains closed because workshop capacity does not yet have a persisted evidence source; an admin request cannot assert capacity to bypass the gate.
+- The calculation derives parts cost from the selected evidence, applies the full cost stack, contribution/margin floors and the existing sold-market freshness/sample/condition checks.
+- Every assessment persists an immutable evidence and decision snapshot, including failed assessments. This is review tooling only: supplier ingestion is still manual, market evidence is still submitted by an admin, and no storefront, checkout or payment path consumes these snapshots.
+
+### Remaining gates
+
+1. Connect live supplier offer and stock feeds plus trusted sold-market evidence; reconcile feed identity and provenance before using data in customer flows.
 2. Gate Priority, Standard and Flexible by actual suppliers, stock, workshop capacity and sourcing policy. Add honest customer ETA ranges and approval events.
 3. Connect payment safe-to-procure state, refunds, upgrade assessment and the customer tracking portal. Extend Gem Hunter scoring with all-in cost and max-buy evidence.
 
