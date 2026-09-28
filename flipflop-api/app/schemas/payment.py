@@ -44,6 +44,7 @@ class CreatePaymentIntentRequest(BaseModel):
     customer_id: int = Field(..., gt=0, description="Customer ID")
     build_config: Optional[PlaybookBuildConfig] = None
     speedy_delivery: bool = False
+    delivery_option: Optional[str] = Field(None, pattern="^(standard|fast_track|flexible)$")
 
     @model_validator(mode="after")
     def _require_budget_or_build_config(self) -> "CreatePaymentIntentRequest":

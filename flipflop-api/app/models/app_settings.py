@@ -47,6 +47,7 @@ class AppSettings(Base):
     speedy_delivery_price_gbp: Mapped[float] = mapped_column(Float, default=49.0)
     standard_curated_custom_days: Mapped[int] = mapped_column(Integer, default=5)
     speedy_curated_custom_days: Mapped[int] = mapped_column(Integer, default=3)
+    flexible_curated_custom_days: Mapped[int] = mapped_column(Integer, default=10)
     standard_prebuilt_days: Mapped[int] = mapped_column(Integer, default=3)
     speedy_prebuilt_cutoff_hour: Mapped[int] = mapped_column(Integer, default=14)
 

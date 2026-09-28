@@ -45,6 +45,7 @@ async def get_delivery_policy(db: AsyncSession = Depends(get_db)):
         "speedy_delivery_price_gbp": settings.speedy_delivery_price_gbp,
         "standard_curated_custom_days": settings.standard_curated_custom_days,
         "speedy_curated_custom_days": settings.speedy_curated_custom_days,
+        "flexible_curated_custom_days": settings.flexible_curated_custom_days,
         "standard_prebuilt_days": settings.standard_prebuilt_days,
         "speedy_prebuilt_cutoff_hour": settings.speedy_prebuilt_cutoff_hour,
     }

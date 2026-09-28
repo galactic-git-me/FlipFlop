@@ -46,6 +46,7 @@ class SettingsUpdate(BaseModel):
     speedy_delivery_price_gbp: float | None = None
     standard_curated_custom_days: int | None = None
     speedy_curated_custom_days: int | None = None
+    flexible_curated_custom_days: int | None = None
     standard_prebuilt_days: int | None = None
     speedy_prebuilt_cutoff_hour: int | None = None
     gem_radar_scan_interval_minutes: int | None = None
@@ -170,6 +171,7 @@ def _to_dict(s: AppSettings) -> dict:
         "speedy_delivery_price_gbp": s.speedy_delivery_price_gbp,
         "standard_curated_custom_days": s.standard_curated_custom_days,
         "speedy_curated_custom_days": s.speedy_curated_custom_days,
+        "flexible_curated_custom_days": s.flexible_curated_custom_days,
         "standard_prebuilt_days": s.standard_prebuilt_days,
         "speedy_prebuilt_cutoff_hour": s.speedy_prebuilt_cutoff_hour,
         "gem_radar_scan_interval_minutes": s.gem_radar_scan_interval_minutes,

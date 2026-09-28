@@ -96,7 +96,10 @@ async def create_payment_intent(
             log.warning("payment.invalid_build_config", error=str(e))
             raise HTTPException(status_code=400, detail=str(e))
         fulfilment_type = "curated" if request.build_config.curated_build_id or request.build_config.validation_mode == "curated" else "custom"
-        choice = await delivery_choice(db, fulfilment_type, request.speedy_delivery)
+        delivery_option = request.delivery_option or ("fast_track" if request.speedy_delivery else "standard")
+        if delivery_option == "flexible" and fulfilment_type not in {"curated", "custom"}:
+            raise HTTPException(status_code=422, detail="Flexible delivery is available for curated and custom builds")
+        choice = await delivery_choice(db, fulfilment_type, delivery_option == "fast_track", delivery_option == "flexible")
         amount = priced.total + choice["fee_gbp"]
         quote_data = {
             "playbook_id": priced.playbook_id,
@@ -122,7 +125,8 @@ async def create_payment_intent(
         }
     else:
         amount = request.budget
-        choice = await delivery_choice(db, "custom", request.speedy_delivery)
+        delivery_option = request.delivery_option or ("fast_track" if request.speedy_delivery else "standard")
+        choice = await delivery_choice(db, "custom", delivery_option == "fast_track", delivery_option == "flexible")
         amount += choice["fee_gbp"]
         quote_data = checkout_metadata(choice)
     promised_delivery_date = add_working_days(datetime.now(ZoneInfo("Europe/London")).replace(tzinfo=None), int(choice["delivery_days"] or 1))

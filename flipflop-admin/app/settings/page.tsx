@@ -32,6 +32,7 @@ interface AppSettings {
   speedy_delivery_price_gbp: number;
   standard_curated_custom_days: number;
   speedy_curated_custom_days: number;
+  flexible_curated_custom_days: number;
   standard_prebuilt_days: number;
   speedy_prebuilt_cutoff_hour: number;
   opportunity_super_profit_gbp: number;
@@ -102,6 +103,7 @@ const DEFAULTS: AppSettings = {
   speedy_delivery_price_gbp: 49,
   standard_curated_custom_days: 5,
   speedy_curated_custom_days: 3,
+  flexible_curated_custom_days: 10,
   standard_prebuilt_days: 3,
   speedy_prebuilt_cutoff_hour: 14,
   opportunity_super_profit_gbp: 50,
@@ -744,13 +746,14 @@ export default function SettingsPage() {
       {tab === "delivery" && (
         <div className="space-y-6">
           <Card>
-            <CardHeader><CardTitle>Storefront delivery promises</CardTitle><p className="text-xs text-slate-400">These values are shown at checkout. Speedy Delivery adds the configured fee to the customer’s order.</p></CardHeader>
+            <CardHeader><CardTitle>Storefront delivery targets</CardTitle><p className="text-xs text-slate-400">These values are shown at checkout. Fast Track adds the configured fee to the customer’s order.</p></CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-0">
-              <label className="text-sm text-slate-300">Speedy Delivery fee (£)<input type="number" min={0} step="0.01" value={settings.speedy_delivery_price_gbp} onChange={e => setSettings(p => ({ ...p, speedy_delivery_price_gbp: Math.max(0, Number(e.target.value)) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /></label>
+              <label className="text-sm text-slate-300">Fast Track fee (£)<input type="number" min={0} step="0.01" value={settings.speedy_delivery_price_gbp} onChange={e => setSettings(p => ({ ...p, speedy_delivery_price_gbp: Math.max(0, Number(e.target.value)) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /></label>
               <label className="text-sm text-slate-300">Standard curated/custom builds (working days)<input type="number" min={1} step="1" value={settings.standard_curated_custom_days} onChange={e => setSettings(p => ({ ...p, standard_curated_custom_days: Math.max(1, Number(e.target.value)) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /></label>
-              <label className="text-sm text-slate-300">Speedy curated/custom builds (working days)<input type="number" min={1} step="1" value={settings.speedy_curated_custom_days} onChange={e => setSettings(p => ({ ...p, speedy_curated_custom_days: Math.max(1, Number(e.target.value)) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /></label>
+              <label className="text-sm text-slate-300">Fast Track curated/custom builds (working days)<input type="number" min={1} step="1" value={settings.speedy_curated_custom_days} onChange={e => setSettings(p => ({ ...p, speedy_curated_custom_days: Math.max(1, Number(e.target.value)) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /></label>
+              <label className="text-sm text-slate-300">Flexible curated/custom builds (working days)<input type="number" min={1} step="1" value={settings.flexible_curated_custom_days} onChange={e => setSettings(p => ({ ...p, flexible_curated_custom_days: Math.max(1, Number(e.target.value)) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /></label>
               <label className="text-sm text-slate-300">Standard pre-built orders (working days)<input type="number" min={1} step="1" value={settings.standard_prebuilt_days} onChange={e => setSettings(p => ({ ...p, standard_prebuilt_days: Math.max(1, Number(e.target.value)) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /></label>
-              <label className="text-sm text-slate-300">Speedy pre-built same-day dispatch cutoff (24-hour UK time)<input type="number" min={0} max={23} step="1" value={settings.speedy_prebuilt_cutoff_hour} onChange={e => setSettings(p => ({ ...p, speedy_prebuilt_cutoff_hour: Math.max(0, Math.min(23, Number(e.target.value))) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /></label>
+              <label className="text-sm text-slate-300">Fast Track pre-built same-day dispatch cutoff (24-hour UK time)<input type="number" min={0} max={23} step="1" value={settings.speedy_prebuilt_cutoff_hour} onChange={e => setSettings(p => ({ ...p, speedy_prebuilt_cutoff_hour: Math.max(0, Math.min(23, Number(e.target.value))) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /></label>
               <p className="md:col-span-2 text-xs text-slate-500">Speedy pre-built orders dispatch the same day before the cutoff, otherwise the next working day.</p>
             </CardContent>
           </Card>
