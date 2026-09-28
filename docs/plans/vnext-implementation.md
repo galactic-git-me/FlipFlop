@@ -27,7 +27,7 @@ The two vNext PRDs in `docs/prd/` set the product direction. This file records d
 
 - Recommendation sessions now search active customer-visible catalogue entries by plan tier. Component BOM candidates require fresh (24-hour) active listings, explicit condition eligibility, reviewed engineering specs, every required component role, and a full compatibility pass. Candidate search is bounded and fails closed.
 - The compatibility gate checks CPU/socket, memory generation, motherboard form factor, cooler support, case clearance, GPU fit and PSU reserve, then applies active catalogue compatibility rules. Missing specs or required slots suppress the BOM.
-- Listed Ready-to-Ship prebuilt units are matched only when the unit is not reserved, its build is finalised, the selected condition policy allows its condition, and explicit component/performance evidence meets the hard minimums.
+- Listed Ready-to-Ship prebuilt units are matched only when the unit is not reserved, its build is finalised, the selected condition policy allows its condition, and explicit component or performance evidence meets the hard minimums.
 - Candidate results are saved with the recommendation session for replay. They do not include supplier stock, a price, delivery estimate or purchase authority.
 
 ## Next implementation slices

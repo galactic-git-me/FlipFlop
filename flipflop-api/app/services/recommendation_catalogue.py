@@ -21,6 +21,7 @@ from app.models.playbook import Playbook, PlaybookStatus
 from app.models.product import Product, ProductStatus, ProductType
 from app.services.configurator_compatibility import evaluate_configuration
 from app.services.procurement_optimizer import ApprovedPart, find_compatible_catalogue_bom
+from app.services.studio_fit import evaluate_fit
 from app.services.commerce_pricing import ConditionPolicy
 
 
@@ -36,7 +37,6 @@ _SEGMENT_NAMES = {
 }
 _ROLE_ALIASES = {"ssd": "storage", "cooler": "cooling"}
 _FRESHNESS = timedelta(hours=24)
-_MAX_BOM_CANDIDATES = 100_000
 
 
 def _recent(value: str | None, now: datetime) -> bool:
@@ -97,6 +97,7 @@ def _approved_part(variant: CatalogueVariant, slot: PlaybookSlot, listing: Listi
         "catalogue_variant_id": variant.id,
         "slot_id": slot.id,
         "title": listing.title,
+        "engineering_specs": spec,
     }
     if role == "cpu":
         return ApprovedPart(**common, cpu_cores=_integer(spec, "cpu_cores", "cores"),
@@ -114,7 +115,8 @@ def _approved_part(variant: CatalogueVariant, slot: PlaybookSlot, listing: Listi
     if role == "motherboard":
         return ApprovedPart(**common, motherboard_socket=(spec.get("socket") or "").lower() or None,
                             motherboard_ram_generation=(spec.get("ram_type") or "").lower() or None,
-                            motherboard_form_factor=(spec.get("form_factor") or "").lower() or None)
+                            motherboard_form_factor=(spec.get("form_factor") or "").lower() or None,
+                            motherboard_max_ram_gb=_integer(spec, "max_ram_gb", "maximum_ram_gb"))
     if role == "psu":
         return ApprovedPart(**common, psu_wattage=_integer(spec, "wattage", "psu_wattage") or listing.psu_wattage)
     if role == "cooling":
@@ -212,6 +214,26 @@ async def find_catalogue_bom_candidates(
         selected = None
         for bom in possible:
             selections = {part["slot_id"]: part["catalogue_variant_id"] for part in bom["parts"]}
+            engineering = {part["role"]: part["engineering_specs"] for part in bom["parts"]}
+            case_specs = engineering.pop("case", {})
+            case = {
+                "form_factor": case_specs.get("form_factor"),
+                "supported_form_factors": case_specs.get("supported_form_factors"),
+                "max_gpu_length_mm": case_specs.get("max_gpu_length_mm"),
+                "max_cooler_height_mm": case_specs.get("max_cooler_height_mm"),
+                "radiator_support": case_specs.get("radiator_support"),
+                "engineering": {
+                    "psu_form_factors": case_specs.get("psu_form_factors"),
+                    "max_psu_length_mm": case_specs.get("max_psu_length_mm"),
+                },
+            }
+            fit_checks = evaluate_fit(
+                engineering,
+                case,
+                gpu_required=bool(option_minimums.get("gpu_required")),
+            )
+            if any(check["severity"] in {"error", "unknown"} for check in fit_checks):
+                continue
             compatibility = await evaluate_configuration(db, playbook.id, selections)
             verdict_by_slot = {item["slot_id"]: item for item in compatibility.get("slots", [])}
             known_and_compatible = True
@@ -222,7 +244,13 @@ async def find_catalogue_bom_candidates(
                     known_and_compatible = False
                     break
             if known_and_compatible:
-                selected = bom
+                selected = {
+                    "parts": [
+                        {key: value for key, value in part.items() if key != "engineering_specs"}
+                        for part in bom["parts"]
+                    ],
+                    "evidence": bom["evidence"],
+                }
                 break
         output.append({
             "option_id": option["id"],
@@ -335,7 +363,7 @@ async def find_ready_to_ship_matches(db: AsyncSession, envelope: dict, condition
         evidence = manual.evidence_data if isinstance(manual.evidence_data, dict) else {}
         performance_card = evidence.get("performance_card")
         if not isinstance(performance_card, dict):
-            continue
+            performance_card = {}
         capabilities = _component_capabilities(build.spec_json or [], performance_card)
         required = ["cpu_cores", "ram_gb", "storage_gb"]
         if minimums.get("gpu_required"):

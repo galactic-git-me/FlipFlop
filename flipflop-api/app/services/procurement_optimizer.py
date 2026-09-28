@@ -3,7 +3,7 @@
 The caller owns stock ingestion. Missing compatibility attributes reject a
 combination instead of being silently treated as compatible.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from decimal import Decimal
 from itertools import product
 from math import prod
@@ -33,6 +33,7 @@ class ApprovedPart:
     motherboard_socket: str | None = None
     motherboard_ram_generation: str | None = None
     motherboard_form_factor: str | None = None
+    motherboard_max_ram_gb: int | None = None
     psu_wattage: int | None = None
     cooler_sockets: tuple[str, ...] = ()
     cooler_tdp_w: int | None = None
@@ -43,6 +44,7 @@ class ApprovedPart:
     catalogue_variant_id: int | None = None
     slot_id: int | None = None
     title: str | None = None
+    engineering_specs: dict = field(default_factory=dict)
 
 
 def _meets_minimum(part: ApprovedPart, minimums: dict) -> bool:
@@ -110,6 +112,11 @@ def optimise_bom(
         chosen = dict(zip(roles, combination))
         if not _compatible(chosen):
             continue
+        board = chosen["motherboard"]
+        ram = chosen["ram"]
+        if (board.motherboard_max_ram_gb is None or ram.ram_gb is None
+                or ram.ram_gb > board.motherboard_max_ram_gb):
+            continue
         landed = sum((part.offer.landed_gbp for part in combination), Decimal("0"))
         if parts_cost_ceiling_gbp is not None and landed > parts_cost_ceiling_gbp:
             continue
@@ -167,6 +174,7 @@ def find_compatible_catalogue_bom(
                     "catalogue_variant_id": part.catalogue_variant_id,
                     "slot_id": part.slot_id,
                     "title": part.title,
+                    "engineering_specs": part.engineering_specs,
                 }
                 for role, part in chosen.items()
             ],
