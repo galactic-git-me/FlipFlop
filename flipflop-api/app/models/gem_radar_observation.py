@@ -88,6 +88,9 @@ class GemRadarListingObservation(Base):
     # Delivery promise/location captured from the marketplace card.
     delivery_text: Mapped[str | None] = mapped_column(String(500), nullable=True)
     delivery_postcode: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    # Marketplace fulfilment signal captured from the visible listing card.
+    # None means the source did not expose enough evidence to determine it.
+    prime_eligible: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
 
     # Cross-search dedup / cost-control cache (PRD §24 "researched once,
     # referenced twice", §31 caching). Stores the full ScoredListing JSON so

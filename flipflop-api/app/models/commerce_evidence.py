@@ -23,6 +23,8 @@ class SupplierOfferEvidence(Base):
     observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     stock_confirmed: Mapped[bool] = mapped_column(Boolean, nullable=False)
     delivery_working_days: Mapped[int | None] = mapped_column(Integer)
+    prime_eligible: Mapped[bool | None] = mapped_column(Boolean)
+    delivery_estimate_source: Mapped[str] = mapped_column(String(32), nullable=False, default="vendor_default")
     supplier_confidence: Mapped[Decimal] = mapped_column(Numeric(5, 4), nullable=False)
     evidence_source: Mapped[str] = mapped_column(String(160), nullable=False)
     evidence_ref: Mapped[str] = mapped_column(String(500), nullable=False)

@@ -14,7 +14,7 @@ from app.models.commerce_evidence import (
     WorkshopCapacityReservation, WorkshopCapacityReservationEvent,
 )
 from app.routes.admin_auth import get_current_admin
-from app.services.commerce_pricing import Condition, ConditionPolicy, CostStack, FulfilmentMode, MarketEvidence, SupplierOffer, eligible_offers, evaluate_price
+from app.services.commerce_pricing import Condition, ConditionPolicy, CostStack, FulfilmentMode, MarketEvidence, SupplierOffer, eligible_offers, estimate_delivery_working_days, evaluate_price
 from app.services.gem_economics import GemCosts, assess_gem
 from app.services.procurement_optimizer import ApprovedPart, optimise_bom
 from app.services.workshop_capacity import (
@@ -66,6 +66,7 @@ class SupplierOfferEvidenceInput(BaseModel):
     observed_at: datetime
     stock_confirmed: bool
     delivery_working_days: int | None = Field(default=None, ge=0)
+    prime_eligible: bool | None = None
     supplier_confidence: Decimal = Field(default=Decimal("1"), ge=0, le=1)
     evidence_source: str = Field(min_length=1, max_length=160)
     evidence_ref: str = Field(min_length=1, max_length=500)
@@ -82,18 +83,22 @@ async def capture_supplier_offer(
         raise HTTPException(status_code=422, detail="observed_at must include a timezone")
     if observed_at > datetime.now(timezone.utc):
         raise HTTPException(status_code=422, detail="observed_at cannot be in the future")
+    delivery_days, delivery_source = estimate_delivery_working_days(
+        body.supplier, body.delivery_working_days, body.prime_eligible,
+    )
     row = SupplierOfferEvidence(
         part_key=body.part_key, supplier=body.supplier, channel=body.channel,
         condition=body.condition.value, item_gbp=body.item_gbp, delivery_gbp=body.delivery_gbp,
         fees_gbp=body.fees_gbp, risk_gbp=body.risk_gbp, observed_at=observed_at,
-        stock_confirmed=body.stock_confirmed, delivery_working_days=body.delivery_working_days,
+        stock_confirmed=body.stock_confirmed, delivery_working_days=delivery_days,
+        prime_eligible=body.prime_eligible, delivery_estimate_source=delivery_source,
         supplier_confidence=body.supplier_confidence, evidence_source=body.evidence_source,
         evidence_ref=body.evidence_ref, captured_by_admin_id=admin.id,
     )
     db.add(row)
     await db.commit()
     await db.refresh(row)
-    return {"id": row.id, "part_key": row.part_key, "status": "captured", "captured_at": row.captured_at.isoformat()}
+    return {"id": row.id, "part_key": row.part_key, "status": "captured", "captured_at": row.captured_at.isoformat(), "delivery_working_days": row.delivery_working_days, "delivery_estimate_source": row.delivery_estimate_source}
 
 
 class QuoteSnapshotRequest(BaseModel):
@@ -156,6 +161,7 @@ async def create_quote_snapshot(
         risk_gbp=Decimal(row.risk_gbp), observed_at=row.observed_at.isoformat(), stock_confirmed=row.stock_confirmed,
         approved=True, delivery_working_days=row.delivery_working_days,
         supplier_confidence=Decimal(row.supplier_confidence),
+        prime_eligible=row.prime_eligible,
     ) for row in rows]
     eligible = eligible_offers(
         offers, body.fulfilment_mode, body.condition_policy, body.nonnew_consent,

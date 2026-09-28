@@ -324,6 +324,7 @@ async def record_observation(
         scan_price=listing.scan_price,
         delivery_text=listing.delivery_text,
         delivery_postcode=listing.delivery_postcode,
+        prime_eligible=listing.prime_eligible,
     )
     db.add(row)
     await db.commit()

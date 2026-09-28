@@ -45,6 +45,7 @@ class SupplierOffer:
     approved: bool
     delivery_working_days: int | None = None
     supplier_confidence: Decimal = Decimal("1")
+    prime_eligible: bool | None = None
 
     @property
     def landed_gbp(self) -> Decimal:
@@ -102,8 +103,26 @@ def supplier_allowed(mode: FulfilmentMode, offer: SupplierOffer) -> bool:
     if mode == FulfilmentMode.PRIORITY:
         return offer.channel == "retail" and offer.supplier.strip().lower() in {"amazon", "overclockers uk", "overclockers"}
     if mode == FulfilmentMode.STANDARD:
-        return offer.channel == "retail"
+        return offer.channel == "retail" and offer.supplier.strip().lower() not in {"ebay", "ebay uk", "vinted"}
     return True
+
+
+def estimate_delivery_working_days(
+    supplier: str, observed_days: int | None, prime_eligible: bool | None = None,
+) -> tuple[int, str]:
+    """Prefer listing-specific evidence, otherwise apply the agreed vendor defaults.
+
+    Amazon Prime has a one-working-day default when no visible delivery estimate
+    is available. This is an estimate for internal eligibility, not a customer
+    delivery promise.
+    """
+    if observed_days is not None:
+        return observed_days, "listing_estimate"
+    if supplier.strip().lower() in {"amazon", "amazon uk", "amazon.co.uk"} and prime_eligible is True:
+        return 1, "prime_default"
+    if supplier.strip().lower() in {"ebay", "ebay uk", "vinted"}:
+        return 7, "vendor_default"
+    return 3, "vendor_default"
 
 
 def eligible_offers(

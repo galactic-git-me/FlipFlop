@@ -88,7 +88,7 @@ async def run_phase2_classification(
                 lo.delivered_price, lo.source, lo.observed_at,
                 cpk.cpk, cpk.cpk_data, lo.category AS observed_category, lo.bid_count, lo.watch_count,
                 lo.epid, lo.seller_feedback_percent, lo.seller_feedback_count,
-                lo.delivery_text, lo.delivery_postcode,
+                lo.delivery_text, lo.delivery_postcode, lo.prime_eligible,
                 lo.review_average_rating, lo.review_count
             FROM gem_radar_listing_observations lo
             LEFT JOIN gem_radar_listing_cpk cpk ON lo.listing_id = cpk.listing_id
@@ -190,7 +190,7 @@ async def run_phase2_classification(
             item_price, postage_price, delivered_price, source, observed_at,
             cpk, cpk_data, observed_category, bid_count, watch_count,
             epid, seller_feedback_percent, seller_feedback_count,
-            delivery_text, delivery_postcode, observed_review_average, observed_review_count,
+            delivery_text, delivery_postcode, prime_eligible, observed_review_average, observed_review_count,
         ) = row
 
         if source == "amazon" and observed_at >= datetime.utcnow() - timedelta(hours=24):
@@ -393,6 +393,7 @@ async def run_phase2_classification(
             delivered_price=delivered_price,
             delivery_text=delivery_text,
             delivery_postcode=delivery_postcode,
+            prime_eligible=prime_eligible,
             bid_count=bid_count,
             watch_count=watch_count,
             classification=classification,
