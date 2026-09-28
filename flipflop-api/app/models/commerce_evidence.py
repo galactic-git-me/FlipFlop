@@ -1,5 +1,6 @@
 """Append-only supplier evidence and commercial quote assessments."""
 from datetime import datetime, timezone
+from decimal import Decimal
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, JSON, Numeric, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
@@ -15,14 +16,14 @@ class SupplierOfferEvidence(Base):
     supplier: Mapped[str] = mapped_column(String(160), nullable=False)
     channel: Mapped[str] = mapped_column(String(40), nullable=False)
     condition: Mapped[str] = mapped_column(String(20), nullable=False)
-    item_gbp: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False)
-    delivery_gbp: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False)
-    fees_gbp: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False)
-    risk_gbp: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False)
+    item_gbp: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+    delivery_gbp: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+    fees_gbp: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+    risk_gbp: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
     observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     stock_confirmed: Mapped[bool] = mapped_column(Boolean, nullable=False)
     delivery_working_days: Mapped[int | None] = mapped_column(Integer)
-    supplier_confidence: Mapped[float] = mapped_column(Numeric(5, 4), nullable=False)
+    supplier_confidence: Mapped[Decimal] = mapped_column(Numeric(5, 4), nullable=False)
     evidence_source: Mapped[str] = mapped_column(String(160), nullable=False)
     evidence_ref: Mapped[str] = mapped_column(String(500), nullable=False)
     captured_by_admin_id: Mapped[int] = mapped_column(Integer, nullable=False)
