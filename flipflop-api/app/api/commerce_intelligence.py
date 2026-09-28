@@ -208,6 +208,9 @@ async def _save_quote_snapshot(db, body, admin, rows, costs, decision, capacity=
             "id": row.id, "part_key": row.part_key, "supplier": row.supplier, "channel": row.channel,
             "condition": row.condition, "item_gbp": str(row.item_gbp), "delivery_gbp": str(row.delivery_gbp),
             "fees_gbp": str(row.fees_gbp), "risk_gbp": str(row.risk_gbp), "observed_at": row.observed_at.isoformat(),
+            "delivery_working_days": row.delivery_working_days,
+            "delivery_estimate_source": row.delivery_estimate_source,
+            "prime_eligible": row.prime_eligible,
             "stock_confirmed": row.stock_confirmed, "evidence_source": row.evidence_source, "evidence_ref": row.evidence_ref,
         } for row in rows],
         "workshop_capacity": ({

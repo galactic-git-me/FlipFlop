@@ -3055,6 +3055,9 @@ async def _submit_scan_body(
                     search_query=payload.query,
                     image_url=listing.image_url,
                     search_tags=payload.tags,
+                    delivery_text=listing.delivery_text,
+                    delivery_postcode=listing.delivery_postcode,
+                    prime_eligible=listing.prime_eligible,
                 )
                 touched_unchanged_count += 1
             else:

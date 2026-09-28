@@ -363,11 +363,14 @@ async def touch_observation(
     search_query: str | None = None,
     image_url: str | None = None,
     search_tags: list[str] | None = None,
+    delivery_text: str | None = None,
+    delivery_postcode: str | None = None,
+    prime_eligible: bool | None = None,
 ) -> bool:
     """Lightweight "still here" update for a listing the 7-day dedup window
     skipped from full re-scoring: bumps its most recent observation's
-    observed_at/search_run_id/search_query WITHOUT creating a new row or
-    touching gem_radar_scored_listings. This is what lets
+    observed_at/search_run_id/search_query and refreshes visible delivery
+    evidence WITHOUT creating a new row or rescoring the listing. This is what lets
     get_active_listing_ids tell "still appearing in scrapes, just not novel
     enough to re-score" apart from "genuinely gone quiet" — without this, a
     still-live deduped listing would silently read as inactive within a
@@ -394,6 +397,22 @@ async def touch_observation(
         row.search_tags = list(dict.fromkeys([*(row.search_tags or []), *search_tags]))
     if image_url and (not row.image_url or row.image_url.endswith("._RC")):
         row.image_url = image_url
+    if delivery_text is not None:
+        row.delivery_text = delivery_text
+    if delivery_postcode is not None:
+        row.delivery_postcode = delivery_postcode
+    if prime_eligible is not None:
+        row.prime_eligible = prime_eligible
+    if prime_eligible is not None or delivery_text is not None or delivery_postcode is not None:
+        await db.execute(
+            update(GemRadarScoredListing)
+            .where(GemRadarScoredListing.listing_id == listing_id)
+            .values(
+                prime_eligible=row.prime_eligible,
+                delivery_text=delivery_text or row.delivery_text,
+                delivery_postcode=delivery_postcode or row.delivery_postcode,
+            )
+        )
     if row.source is None:
         # Deduped listings do not carry the full ExtractedListing payload, so
         # recover synthetic aggregator origins from the qualified listing ID.
