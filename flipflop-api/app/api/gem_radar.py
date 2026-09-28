@@ -1034,6 +1034,8 @@ async def get_scored_listings_current(
             "delivery_text": s.delivery_text,
             "delivery_postcode": s.delivery_postcode,
             "prime_eligible": s.prime_eligible,
+            "delivery_working_days": s.delivery_working_days,
+            "delivery_estimate_source": s.delivery_estimate_source,
             "market_new_price": s.market_new_price,
             "market_used_price": s.market_used_price,
             **cpk_price_fields.get(s.id, {}),

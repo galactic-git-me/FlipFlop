@@ -23,6 +23,8 @@ from app.models.gem_radar_observation import GemRadarListingObservation
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.models.app_settings import AppSettings
 from app.gem_radar.marketplace import infer_listing_source
+from app.services.commerce_pricing import estimate_delivery_working_days
+from app.services.delivery_filters import estimate_listing_delivery_working_days
 from app.gem_radar.schemas import ExtractedListing, Identity, PriceBundle, PriceObservation, WatchSignals
 
 # Fallbacks used only if the app_settings row doesn't exist yet (fresh
@@ -294,6 +296,11 @@ async def record_observation(
     search_run_id: str | None = None,
     search_query: str | None = None,
 ) -> GemRadarListingObservation:
+    source = infer_listing_source(listing.url, listing.listing_id)
+    observed_delivery_days = estimate_listing_delivery_working_days(listing.delivery_text)
+    estimated_delivery_days, delivery_estimate_source = estimate_delivery_working_days(
+        source or "", observed_delivery_days, listing.prime_eligible,
+    )
     row = GemRadarListingObservation(
         listing_id=listing.listing_id,
         seller_name=listing.seller,
@@ -314,7 +321,7 @@ async def record_observation(
         search_run_id=search_run_id,
         search_query=search_query,
         search_tags=listing.search_tags,
-        source=infer_listing_source(listing.url, listing.listing_id),
+        source=source,
         epid=listing.epid,
         gtin=listing.gtin,
         mpn=listing.mpn,
@@ -325,6 +332,8 @@ async def record_observation(
         delivery_text=listing.delivery_text,
         delivery_postcode=listing.delivery_postcode,
         prime_eligible=listing.prime_eligible,
+        delivery_working_days=estimated_delivery_days,
+        delivery_estimate_source=delivery_estimate_source,
     )
     db.add(row)
     await db.commit()
@@ -404,6 +413,13 @@ async def touch_observation(
     if prime_eligible is not None:
         row.prime_eligible = prime_eligible
     if prime_eligible is not None or delivery_text is not None or delivery_postcode is not None:
+        observed_delivery_days = estimate_listing_delivery_working_days(delivery_text)
+        estimated_delivery_days, delivery_estimate_source = estimate_delivery_working_days(
+            row.source or "", observed_delivery_days,
+            prime_eligible if prime_eligible is not None else row.prime_eligible,
+        )
+        row.delivery_working_days = estimated_delivery_days
+        row.delivery_estimate_source = delivery_estimate_source
         await db.execute(
             update(GemRadarScoredListing)
             .where(GemRadarScoredListing.listing_id == listing_id)
@@ -411,6 +427,8 @@ async def touch_observation(
                 prime_eligible=row.prime_eligible,
                 delivery_text=delivery_text or row.delivery_text,
                 delivery_postcode=delivery_postcode or row.delivery_postcode,
+                delivery_working_days=estimated_delivery_days,
+                delivery_estimate_source=delivery_estimate_source,
             )
         )
     if row.source is None:
