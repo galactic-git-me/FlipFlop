@@ -51,11 +51,12 @@ The two vNext PRDs in `docs/prd/` set the product direction. This file records d
 - A passing, recent made-to-order quote snapshot can acquire one 15-minute hold for its build week. Capture, hold and release operations serialize on that week in Postgres, and the active-hold count cannot exceed the latest evidenced capacity.
 - New capacity evidence supersedes earlier observations. The capacity value represents slots available to the quote-hold pool after existing booked work, before active quote holds are subtracted.
 - A hold rechecks the latest capacity observation and the saved supplier and sold-market timestamps. Repeated requests for the same snapshot return its active hold; an expired or released hold requires a new assessment. Admin release records a reason, and hold/release events are retained.
+- If a new capacity observation has fewer slots than active holds, the newest excess holds are released in the same locked transaction and the reason is recorded.
 - These holds are internal planning state. They are not connected to order assignment, checkout or payment, and expiry does not trigger procurement.
 
 ### Remaining gates
 
-1. Connect live supplier offer and stock feeds plus trusted sold-market evidence; reconcile feed identity and provenance before using data in customer flows.
+1. Connect live supplier offer and stock feeds plus trusted sold-market evidence; reconcile feed identity and provenance before using data in customer flows. Existing build sold observations are tied to manual builds, and their `sold_at` field can contain retrieval time rather than a confirmed sale date.
 2. Reconcile the legacy order slot model with current `Order` fields, then connect holds to payment-safe order assignment, approval events and honest customer ETA ranges.
 3. Connect payment safe-to-procure state, refunds, upgrade assessment and the customer tracking portal. Extend Gem Hunter scoring with all-in cost and max-buy evidence.
 

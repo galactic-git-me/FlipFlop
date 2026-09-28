@@ -15,8 +15,8 @@ from sqlalchemy.engine import make_url
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from app.api.commerce_intelligence import (
-    ReleaseCapacityRequest, ReserveCapacityRequest,
-    release_workshop_capacity, reserve_workshop_capacity,
+    ReleaseCapacityRequest, ReserveCapacityRequest, WorkshopCapacityEvidenceInput,
+    capture_workshop_capacity, release_workshop_capacity, reserve_workshop_capacity,
 )
 from app.database import Base
 from app.models.commerce_evidence import (
@@ -80,6 +80,10 @@ async def main() -> None:
         rejected = [result for result in results if isinstance(result, HTTPException)]
         assert len(held) == 1 and len(rejected) == 1 and rejected[0].status_code == 409, results
 
+        winner_id = snapshot_ids[0] if isinstance(results[0], dict) else snapshot_ids[1]
+        repeated = await hold(winner_id)
+        assert isinstance(repeated, dict) and repeated["id"] == held[0]["id"], repeated
+
         async with sessions() as db:
             count = await db.scalar(select(func.count(WorkshopCapacityReservation.id)))
             assert count == 1, count
@@ -88,13 +92,43 @@ async def main() -> None:
             )
             assert released["status"] == "released", released
 
+        ended = await hold(winner_id)
+        assert isinstance(ended, HTTPException) and ended.status_code == 409, ended
+
         loser_id = snapshot_ids[0] if results[0] is rejected[0] else snapshot_ids[1]
         second_hold = await hold(loser_id)
         assert isinstance(second_hold, dict) and second_hold["status"] == "held", second_hold
         async with sessions() as db:
             event_count = await db.scalar(select(func.count(WorkshopCapacityReservationEvent.id)))
             assert event_count == 3, event_count
-        print("PASS: one concurrent hold, release, retry, and three audit events")
+            stale_snapshot = PriceQuoteSnapshot(
+                product_key="stale-capacity", status="offerable",
+                evidence_json={
+                    "workshop_capacity": {"id": capacity.id, "build_week": week},
+                    "request": {"market": {"observed_at": now.isoformat()}},
+                    "supplier_offers": [{"stock_confirmed": True, "observed_at": now.isoformat()}],
+                },
+                decision_json={"offerable": True}, created_by_admin_id=1, created_at=now,
+            )
+            db.add(stale_snapshot)
+            await db.commit()
+            stale_snapshot_id = stale_snapshot.id
+
+        async with sessions() as db:
+            await capture_workshop_capacity(
+                WorkshopCapacityEvidenceInput(
+                    build_week=week, available_builds=0, observed_at=datetime.now(timezone.utc),
+                    evidence_source="isolated-check", evidence_ref="closed-week",
+                ),
+                db, admin,
+            )
+        superseded = await hold(stale_snapshot_id)
+        assert isinstance(superseded, HTTPException) and superseded.status_code == 409, superseded
+        async with sessions() as db:
+            revoked = await db.get(WorkshopCapacityReservation, second_hold["id"])
+            event_count = await db.scalar(select(func.count(WorkshopCapacityReservationEvent.id)))
+            assert revoked.status == "released" and event_count == 4, (revoked.status, event_count)
+        print("PASS: concurrent limit, idempotent retry, release, audit events, capacity reduction")
     finally:
         async with engine.begin() as connection:
             await connection.execute(text(f'DROP SCHEMA IF EXISTS "{schema}" CASCADE'))

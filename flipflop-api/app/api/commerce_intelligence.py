@@ -259,6 +259,26 @@ async def capture_workshop_capacity(
     )
     await lock_build_week(db, body.build_week)
     db.add(row)
+    await db.flush()
+    now = datetime.now(timezone.utc)
+    active_result = await db.execute(
+        select(WorkshopCapacityReservation)
+        .where(
+            WorkshopCapacityReservation.build_week == body.build_week,
+            WorkshopCapacityReservation.status == "held",
+            WorkshopCapacityReservation.expires_at > now,
+        )
+        .order_by(WorkshopCapacityReservation.created_at.desc(), WorkshopCapacityReservation.id.desc())
+        .with_for_update()
+    )
+    active = list(active_result.scalars().all())
+    for reservation in active[:max(0, len(active) - body.available_builds)]:
+        reservation.status = "released"
+        reservation.released_at = now
+        db.add(WorkshopCapacityReservationEvent(
+            reservation_id=reservation.id, event_type="released",
+            reason=f"Capacity reduced by evidence {row.id}", admin_id=admin.id, created_at=now,
+        ))
     await db.commit()
     await db.refresh(row)
     return {
@@ -329,7 +349,11 @@ async def reserve_workshop_capacity(
     capacity_ref = (snapshot.evidence_json or {}).get("workshop_capacity")
     if snapshot.status != "offerable" or not capacity_ref:
         raise HTTPException(status_code=409, detail="A passing made-to-order assessment is required")
-    build_week = capacity_ref["build_week"]
+    build_week = capacity_ref.get("build_week")
+    try:
+        _parse_iso_week(build_week)
+    except (TypeError, AttributeError, ValueError, OverflowError) as exc:
+        raise HTTPException(status_code=409, detail="Quote snapshot has invalid capacity evidence") from exc
     await lock_build_week(db, build_week)
     now = datetime.now(timezone.utc)
 
