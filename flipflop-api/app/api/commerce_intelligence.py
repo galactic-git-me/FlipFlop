@@ -1,15 +1,15 @@
 """Admin-only economic assessments; these do not create customer offers."""
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from decimal import Decimal
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.models.admin_user import AdminUser
-from app.models.commerce_evidence import PriceQuoteSnapshot, SupplierOfferEvidence
+from app.models.commerce_evidence import PriceQuoteSnapshot, SupplierOfferEvidence, WorkshopCapacityEvidence
 from app.routes.admin_auth import get_current_admin
 from app.services.commerce_pricing import Condition, ConditionPolicy, CostStack, FulfilmentMode, MarketEvidence, SupplierOffer, eligible_offers, evaluate_price
 from app.services.gem_economics import GemCosts, assess_gem
@@ -94,6 +94,7 @@ class QuoteSnapshotRequest(BaseModel):
     product_key: str = Field(min_length=1, max_length=160)
     required_part_keys: list[str] = Field(min_length=1)
     supplier_offer_ids: list[int] = Field(min_length=1)
+    capacity_evidence_id: int | None = Field(default=None, gt=0)
     costs: CostStackInput
     market: MarketEvidenceInput
     market_evidence_source: str = Field(min_length=1, max_length=160)
@@ -119,6 +120,32 @@ async def create_quote_snapshot(
     rows = list(result.scalars().all())
     if len(rows) != len(body.supplier_offer_ids):
         raise HTTPException(status_code=422, detail="One or more supplier offer evidence records do not exist")
+
+    capacity = None
+    if body.fulfilment_mode != FulfilmentMode.READY_TO_SHIP:
+        if body.capacity_evidence_id is None:
+            return await _save_quote_snapshot(
+                db, body, admin, rows, None,
+                {"offerable": False, "reason": "Current workshop capacity evidence is required"},
+            )
+        capacity = await db.get(WorkshopCapacityEvidence, body.capacity_evidence_id)
+        if capacity is None:
+            raise HTTPException(status_code=422, detail="Workshop capacity evidence record does not exist")
+        now = datetime.now(timezone.utc)
+        age = now - capacity.observed_at
+        current_week = date.today().isocalendar()
+        capacity_week = _parse_iso_week(capacity.build_week)
+        if (
+            capacity.available_builds < 1
+            or age.total_seconds() < 0
+            or age.total_seconds() > 24 * 60 * 60
+            or capacity_week < (current_week.year, current_week.week)
+        ):
+            return await _save_quote_snapshot(
+                db, body, admin, rows, None,
+                {"offerable": False, "reason": "Workshop capacity evidence is stale, full, or for a past build week"},
+                capacity,
+            )
     offers = [SupplierOffer(
         supplier=row.supplier, channel=row.channel, condition=Condition(row.condition),
         item_gbp=Decimal(row.item_gbp), delivery_gbp=Decimal(row.delivery_gbp), fees_gbp=Decimal(row.fees_gbp),
@@ -128,9 +155,7 @@ async def create_quote_snapshot(
     ) for row in rows]
     eligible = eligible_offers(
         offers, body.fulfilment_mode, body.condition_policy, body.nonnew_consent,
-        # Workshop capacity has no persisted evidence source yet. Keep
-        # Priority closed until that gate is connected to real capacity.
-        priority_capacity=False,
+        priority_capacity=capacity is not None,
     )
     part_keys = [row.part_key for row in rows]
     required_keys = body.required_part_keys
@@ -143,6 +168,7 @@ async def create_quote_snapshot(
         return await _save_quote_snapshot(
             db, body, admin, rows, None,
             {"offerable": False, "reason": "Supplier evidence is stale, incomplete, mismatched, or ineligible for this fulfilment mode"},
+            capacity,
         )
 
     costs_input = CostStack(**body.costs.model_dump())
@@ -162,10 +188,10 @@ async def create_quote_snapshot(
         "true_cost_gbp": str(costs.true_cost),
         "reason": decision.reason,
     }
-    return await _save_quote_snapshot(db, body, admin, rows, costs, result_json)
+    return await _save_quote_snapshot(db, body, admin, rows, costs, result_json, capacity)
 
 
-async def _save_quote_snapshot(db, body, admin, rows, costs, decision) -> dict:
+async def _save_quote_snapshot(db, body, admin, rows, costs, decision, capacity=None) -> dict:
     evidence = {
         "request": body.model_dump(mode="json"),
         "supplier_offers": [{
@@ -174,6 +200,14 @@ async def _save_quote_snapshot(db, body, admin, rows, costs, decision) -> dict:
             "fees_gbp": str(row.fees_gbp), "risk_gbp": str(row.risk_gbp), "observed_at": row.observed_at.isoformat(),
             "stock_confirmed": row.stock_confirmed, "evidence_source": row.evidence_source, "evidence_ref": row.evidence_ref,
         } for row in rows],
+        "workshop_capacity": ({
+            "id": capacity.id,
+            "build_week": capacity.build_week,
+            "available_builds": capacity.available_builds,
+            "observed_at": capacity.observed_at.isoformat(),
+            "evidence_source": capacity.evidence_source,
+            "evidence_ref": capacity.evidence_ref,
+        } if capacity else None),
         "calculated_costs": {key: str(value) for key, value in costs.__dict__.items()} if costs else None,
     }
     status = "offerable" if decision["offerable"] else "not_offerable"
@@ -185,6 +219,80 @@ async def _save_quote_snapshot(db, body, admin, rows, costs, decision) -> dict:
     await db.commit()
     await db.refresh(snapshot)
     return {"status": status, "quote_snapshot_id": snapshot.id, **decision}
+
+
+class WorkshopCapacityEvidenceInput(BaseModel):
+    build_week: str = Field(pattern=r"^\d{4}-W\d{2}$")
+    available_builds: int = Field(ge=0)
+    observed_at: datetime
+    evidence_source: str = Field(min_length=1, max_length=160)
+    evidence_ref: str = Field(min_length=1, max_length=500)
+
+
+def _parse_iso_week(value: str) -> tuple[int, int]:
+    year, week = value.split("-W", maxsplit=1)
+    parsed = date.fromisocalendar(int(year), int(week), 1)
+    iso = parsed.isocalendar()
+    return iso.year, iso.week
+
+
+@router.post("/workshop-capacity-evidence", status_code=201)
+async def capture_workshop_capacity(
+    body: WorkshopCapacityEvidenceInput,
+    db: AsyncSession = Depends(get_db),
+    admin: AdminUser = Depends(get_current_admin),
+) -> dict:
+    if body.observed_at.tzinfo is None:
+        raise HTTPException(status_code=422, detail="observed_at must include a timezone")
+    if body.observed_at > datetime.now(timezone.utc):
+        raise HTTPException(status_code=422, detail="observed_at cannot be in the future")
+    try:
+        _parse_iso_week(body.build_week)
+    except (ValueError, OverflowError) as exc:
+        raise HTTPException(status_code=422, detail="build_week must be a valid ISO week") from exc
+    row = WorkshopCapacityEvidence(
+        **body.model_dump(), captured_by_admin_id=admin.id,
+    )
+    db.add(row)
+    await db.commit()
+    await db.refresh(row)
+    return {
+        "id": row.id, "build_week": row.build_week, "available_builds": row.available_builds,
+        "status": "captured", "captured_at": row.captured_at.isoformat(),
+    }
+
+
+@router.get("/workshop-capacity-evidence")
+async def list_workshop_capacity_evidence(
+    build_week: str | None = None,
+    limit: int = Query(default=50, ge=1, le=200),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    query = select(WorkshopCapacityEvidence)
+    if build_week is not None:
+        try:
+            _parse_iso_week(build_week)
+        except (ValueError, OverflowError) as exc:
+            raise HTTPException(status_code=422, detail="build_week must be a valid ISO week") from exc
+        query = query.where(WorkshopCapacityEvidence.build_week == build_week)
+    result = await db.execute(query.order_by(WorkshopCapacityEvidence.captured_at.desc()).limit(limit))
+    return {"items": [{
+        "id": row.id, "build_week": row.build_week, "available_builds": row.available_builds,
+        "observed_at": row.observed_at.isoformat(), "evidence_source": row.evidence_source,
+        "evidence_ref": row.evidence_ref, "captured_at": row.captured_at.isoformat(),
+    } for row in result.scalars().all()]}
+
+
+@router.get("/quote-snapshots/{snapshot_id}")
+async def get_quote_snapshot(snapshot_id: int, db: AsyncSession = Depends(get_db)) -> dict:
+    snapshot = await db.get(PriceQuoteSnapshot, snapshot_id)
+    if snapshot is None:
+        raise HTTPException(status_code=404, detail="Quote snapshot not found")
+    return {
+        "id": snapshot.id, "product_key": snapshot.product_key, "status": snapshot.status,
+        "evidence": snapshot.evidence_json, "decision": snapshot.decision_json,
+        "created_at": snapshot.created_at.isoformat(),
+    }
 
 
 @router.post("/price-assessment")

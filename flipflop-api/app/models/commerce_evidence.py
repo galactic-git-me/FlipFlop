@@ -43,3 +43,18 @@ class PriceQuoteSnapshot(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc)
     )
+
+
+class WorkshopCapacityEvidence(Base):
+    __tablename__ = "workshop_capacity_evidence"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    build_week: Mapped[str] = mapped_column(String(8), nullable=False, index=True)
+    available_builds: Mapped[int] = mapped_column(Integer, nullable=False)
+    observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    evidence_source: Mapped[str] = mapped_column(String(160), nullable=False)
+    evidence_ref: Mapped[str] = mapped_column(String(500), nullable=False)
+    captured_by_admin_id: Mapped[int] = mapped_column(Integer, nullable=False)
+    captured_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc)
+    )

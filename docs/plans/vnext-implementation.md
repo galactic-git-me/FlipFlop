@@ -40,10 +40,17 @@ The two vNext PRDs in `docs/prd/` set the product direction. This file records d
 - The calculation derives parts cost from the selected evidence, applies the full cost stack, contribution/margin floors and the existing sold-market freshness/sample/condition checks.
 - Every assessment persists an immutable evidence and decision snapshot, including failed assessments. This is review tooling only: supplier ingestion is still manual, market evidence is still submitted by an admin, and no storefront, checkout or payment path consumes these snapshots.
 
+### Slice 4 — Workshop capacity evidence (admin-only foundation)
+
+- Admins can append week-specific capacity observations with a source/reference and observation time; historical evidence is retained.
+- Admin-only read endpoints expose the capacity history and each quote's saved evidence and decision for review.
+- Made-to-order quote assessments require a capacity record observed within 24 hours, with open slots for the current or a future ISO build week. Priority's supplier and delivery rules still apply on top of this gate.
+- The capacity observation is copied into each quote snapshot. Assessments do not reserve a slot, consume capacity, create an order, or promise an ETA.
+
 ### Remaining gates
 
 1. Connect live supplier offer and stock feeds plus trusted sold-market evidence; reconcile feed identity and provenance before using data in customer flows.
-2. Gate Priority, Standard and Flexible by actual suppliers, stock, workshop capacity and sourcing policy. Add honest customer ETA ranges and approval events.
+2. Add capacity reservations and change/approval events so concurrent quote or order flows cannot claim the same slot; derive honest customer ETA ranges.
 3. Connect payment safe-to-procure state, refunds, upgrade assessment and the customer tracking portal. Extend Gem Hunter scoring with all-in cost and max-buy evidence.
 
 No vNext recommendation should be sold until the procurement, market, margin, fulfilment and payment gates above are complete and verified.
