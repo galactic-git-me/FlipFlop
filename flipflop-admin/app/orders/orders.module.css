@@ -73,6 +73,36 @@
   font-size: 1rem;
 }
 
+.emptyState {
+  padding: 2rem;
+  text-align: center;
+  color: #6b7280;
+}
+
+.priorityBadge {
+  display: inline-block;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.prebuilt {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.fast_track {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.normal {
+  background: #e5e7eb;
+  color: #374151;
+}
+
 .tableWrapper {
   overflow-x: auto;
   border: 1px solid #e5e7eb;

@@ -6,9 +6,10 @@ from jose import jwt
 from datetime import timezone
 from app.config import get_settings
 from sqlalchemy.orm import Session
-from sqlalchemy import select, func, and_, or_
+from sqlalchemy import select, func, case
+from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
-from typing import Optional, List
+from typing import Optional
 from pydantic import BaseModel
 
 from app.database import get_db
@@ -16,6 +17,7 @@ from app.models.order import Order, OrderStatus
 from app.models.order_checklist import OrderChecklist
 from app.models.order_photo import OrderPhoto
 from app.models.customer import Customer
+from app.models.product import Product, ProductType
 from app.routes.admin_auth import get_current_admin
 from app.services.email_service import send_shipment_update_email, send_order_status_email
 
@@ -125,6 +127,52 @@ class MetricsResponse(BaseModel):
 
 
 # ─── Endpoints ──────────────────────────────────────────────────────────────
+
+@router.get("/order-priority")
+async def list_order_priority(
+    status: str | None = Query(None),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=100),
+    db: AsyncSession = Depends(get_db),
+):
+    """Active orders grouped by fulfilment urgency, then oldest first."""
+    prebuilt = select(Product.id).where(
+        Product.sold_order_id == Order.id,
+        Product.product_type == ProductType.PREBUILT,
+    ).exists()
+    rank = case((prebuilt, 0), (Order.fast_track_selected.is_(True), 1), else_=2)
+    criteria = [Order.status.notin_((OrderStatus.SHIPPED, OrderStatus.COMPLETED))]
+    if status:
+        try:
+            criteria.append(Order.status == OrderStatus(status))
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail="Unknown order status") from exc
+
+    total = await db.scalar(select(func.count(Order.id)).where(*criteria))
+    result = await db.execute(
+        select(Order, Customer.name, rank.label("priority_rank"))
+        .join(Customer, Customer.id == Order.customer_id)
+        .where(*criteria)
+        .order_by(rank, Order.created_at, Order.id)
+        .offset(skip)
+        .limit(limit)
+    )
+    now = datetime.utcnow()
+    labels = ("prebuilt", "fast_track", "normal")
+    return {
+        "total": total or 0,
+        "orders": [{
+            "id": order.id,
+            "order_id": order.order_id,
+            "customer_name": customer_name,
+            "status": order.status.value if isinstance(order.status, OrderStatus) else str(order.status),
+            "customer_price": order.customer_price,
+            "days_elapsed": max(0, (now - order.created_at).days),
+            "created_at": order.created_at,
+            "priority_kind": labels[priority_rank],
+            "priority_rank": priority_rank,
+        } for order, customer_name, priority_rank in result.all()],
+    }
 
 @router.get("/orders")
 async def list_orders(
@@ -460,7 +508,7 @@ async def get_metrics(db: Session = Depends(get_db)):
     # Average build time (completed orders only)
     completed = db.query(Order).filter(
         Order.status == OrderStatus.COMPLETED,
-        Order.delivered_at != None
+        Order.delivered_at.is_not(None)
     ).all()
 
     avg_build_time = 0.0
@@ -481,7 +529,7 @@ async def get_metrics(db: Session = Depends(get_db)):
     # Average customer rating (delivered orders with ratings)
     avg_rating = db.query(func.avg(Order.rating)).filter(
         Order.status == OrderStatus.COMPLETED,
-        Order.rating != None
+        Order.rating.is_not(None)
     ).scalar()
 
     return MetricsResponse(

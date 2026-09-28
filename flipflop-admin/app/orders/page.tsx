@@ -12,13 +12,14 @@ interface Order {
   customer_price: number;
   days_elapsed: number;
   created_at: string;
+  priority_kind: 'prebuilt' | 'fast_track' | 'normal';
 }
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('');
-  const [sortBy, setSortBy] = useState<string>('created_at');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
 
@@ -26,23 +27,25 @@ export default function OrdersPage() {
 
   useEffect(() => {
     fetchOrders();
-  }, [statusFilter, sortBy, page]);
+  }, [statusFilter, page]);
 
   const fetchOrders = async () => {
     setLoading(true);
+    setError(null);
     try {
       const params = new URLSearchParams();
       if (statusFilter) params.append('status', statusFilter);
-      params.append('sort_by', sortBy);
       params.append('skip', String(page * pageSize));
       params.append('limit', String(pageSize));
 
-      const res = await fetch(`/api/admin/orders?${params}`);
+      const res = await fetch(`/proxy-api/admin/order-priority?${params}`);
+      if (!res.ok) throw new Error(`Could not load the order queue (${res.status})`);
       const data = await res.json();
       setOrders(data.orders);
       setTotal(data.total);
     } catch (error) {
       console.error('Failed to fetch orders:', error);
+      setError(error instanceof Error ? error.message : 'Could not load the order queue');
     } finally {
       setLoading(false);
     }
@@ -72,11 +75,17 @@ export default function OrdersPage() {
       .join(' ');
   };
 
+  const priorityLabels = {
+    prebuilt: 'Pre-built',
+    fast_track: 'Fast Track',
+    normal: 'Normal',
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1>Order Queue</h1>
-        <p>Manage PC builds from sourcing to delivery</p>
+        <h1>Order Priority Queue</h1>
+        <p>Active orders grouped by fulfilment priority, oldest first within each group.</p>
       </div>
 
       <div className={styles.controls}>
@@ -101,26 +110,12 @@ export default function OrdersPage() {
           </select>
         </div>
 
-        <div className={styles.filterGroup}>
-          <label htmlFor="sort-by">Sort By:</label>
-          <select
-            id="sort-by"
-            value={sortBy}
-            onChange={(e) => {
-              setSortBy(e.target.value);
-              setPage(0);
-            }}
-          >
-            <option value="created_at">Created Date</option>
-            <option value="status">Status</option>
-            <option value="customer">Customer Name</option>
-            <option value="price">Price (High to Low)</option>
-          </select>
-        </div>
       </div>
 
       {loading ? (
         <div className={styles.loading}>Loading orders...</div>
+      ) : error ? (
+        <div className={styles.loading} role="alert">{error}</div>
       ) : (
         <>
           <div className={styles.tableWrapper}>
@@ -129,6 +124,7 @@ export default function OrdersPage() {
                 <tr>
                   <th>Order #</th>
                   <th>Customer</th>
+                  <th>Priority</th>
                   <th>Status</th>
                   <th>Price</th>
                   <th>Days Elapsed</th>
@@ -140,6 +136,11 @@ export default function OrdersPage() {
                   <tr key={order.id}>
                     <td className={styles.orderId}>#{order.order_id}</td>
                     <td>{order.customer_name}</td>
+                    <td>
+                      <span className={`${styles.priorityBadge} ${styles[order.priority_kind]}`}>
+                        {priorityLabels[order.priority_kind]}
+                      </span>
+                    </td>
                     <td>
                       <span
                         className={styles.statusBadge}
@@ -166,6 +167,9 @@ export default function OrdersPage() {
                     </td>
                   </tr>
                 ))}
+                {orders.length === 0 && (
+                  <tr><td colSpan={7} className={styles.emptyState}>No active orders match this filter.</td></tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -179,7 +183,7 @@ export default function OrdersPage() {
               Previous
             </button>
             <span className={styles.pageInfo}>
-              Page {page + 1} of {Math.ceil(total / pageSize)} ({total} total)
+              Page {page + 1} of {Math.max(1, Math.ceil(total / pageSize))} ({total} total)
             </span>
             <button
               onClick={() =>
