@@ -70,7 +70,24 @@ class Order(Base):
     fast_track_selected = Column(Boolean, default=False, nullable=False)
     fast_track_fee = Column(Float, default=0.0, nullable=False)
     packaging_playbook_id = Column(Integer, ForeignKey("packaging_playbooks.id"), nullable=True)  # snapshot, BR-2
-
+    
+    # Buying flow / curated journey data (Michael + AnalyticsBot requirements)
+    is_gift = Column(Boolean, default=False, nullable=False)  # For self vs gift
+    recipient_age_band = Column(String(20), nullable=True)  # If gift: child/teen/adult/senior
+    discreet_packaging = Column(Boolean, default=False, nullable=False)
+    urgency = Column(String(20), nullable=True)  # asap/this_week/flexible
+    is_first_pc = Column(Boolean, nullable=True)  # First PC vs upgrade
+    current_gpu = Column(String(100), nullable=True)  # If upgrade: rough current GPU or "don't_know"
+    is_business_buyer = Column(Boolean, default=False, nullable=False)  # VAT invoice needed
+    wants_vat_invoice = Column(Boolean, default=False, nullable=False)
+    aesthetic_preference = Column(String(20), nullable=True)  # quiet/rgb
+    
+    # Journey analytics (budget × type × tier from curated flow)
+    journey_budget_min = Column(Float, nullable=True)
+    journey_budget_max = Column(Float, nullable=True)
+    journey_customer_type = Column(String(50), nullable=True)  # e.g., "Great-value Gaming"
+    journey_tier = Column(String(20), nullable=True)  # budget/mid/high
+    
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

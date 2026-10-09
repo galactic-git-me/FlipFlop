@@ -75,8 +75,12 @@ def verify_token(token: str) -> int | None:
 async def signup(
     db: AsyncSession,
     email: str,
-    password: str,
     name: str,
+    password: str | None = None,
+    year_of_birth: int | None = None,
+    marketing_opt_in: bool = False,
+    acquisition_source: str | None = None,
+    acquisition_detail: str | None = None,
 ) -> tuple[Customer, str] | tuple[None, None]:
     """
     Create a new customer account.
@@ -93,11 +97,15 @@ async def signup(
         return None, None
 
     # Create new customer
-    password_hash = hash_password(password)
+    password_hash = hash_password(password) if password else None
     customer = Customer(
         email=email.lower(),
         password_hash=password_hash,
         name=name,
+        year_of_birth=year_of_birth,
+        marketing_opt_in=marketing_opt_in,
+        acquisition_source=acquisition_source,
+        acquisition_detail=acquisition_detail,
         created_at=datetime.now(timezone.utc),
         updated_at=datetime.now(timezone.utc),
     )
@@ -109,7 +117,8 @@ async def signup(
     access_token = create_access_token(customer.id)
 
     await db.commit()
-    log.info("auth.signup_success", customer_id=customer.id, email=email)
+    log.info("auth.signup_success", customer_id=customer.id, email=email, 
+             acquisition_source=acquisition_source, marketing_opt_in=marketing_opt_in)
 
     return customer, access_token
 

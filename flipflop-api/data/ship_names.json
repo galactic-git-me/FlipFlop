@@ -1,0 +1,91 @@
+{
+  "naming_scheme": "star_trek",
+  "tier_suffixes": {
+    "Budget": "",
+    "Mid-range": " Pro",
+    "High-end": " Ultra"
+  },
+  "ship_names": {
+    "AI Workstation": {
+      "base_name": "Enterprise",
+      "series": "TNG",
+      "description": "Flagship of Starfleet, premier exploration and diplomatic vessel"
+    },
+    "High-performance Gaming": {
+      "base_name": "Defiant",
+      "series": "DS9",
+      "description": "Tough little warship, first ship designed to fight the Borg"
+    },
+    "Great-value Gaming": {
+      "base_name": "Reliant",
+      "series": "TOS",
+      "description": "Miranda-class starship, NCC-1864, Khan's chosen vessel"
+    },
+    "Student Hybrid": {
+      "base_name": "Voyager",
+      "series": "VOY",
+      "description": "Intrepid-class explorer, resilient and resourceful"
+    },
+    "Business & Office": {
+      "base_name": "Excelsior",
+      "series": "TOS/TNG",
+      "description": "Powerful and dependable, backbone of the fleet"
+    },
+    "Content Creation": {
+      "base_name": "Galaxy",
+      "series": "TNG",
+      "description": "Largest and most capable ship class, ready for anything"
+    },
+    "Software Development": {
+      "base_name": "Titan",
+      "series": "Picard/Lower Decks",
+      "description": "Advanced Luna-class explorer, named for Saturn's moon"
+    },
+    "Family & Home": {
+      "base_name": "Stargazer",
+      "series": "TNG/Picard",
+      "description": "Picard's first command, a ship that felt like home"
+    }
+  },
+  "special_cases": {
+    "FF-AIW-03": {
+      "display_name": "Enterprise Ultra",
+      "subtitle": "Bespoke Configuration",
+      "note": "AI Workstation High-end (FF-AIW-03) is bespoke/consult-only, Ultra designation reserved for this tier"
+    }
+  },
+  "examples": {
+    "FF-GVG-01": {
+      "segment": "Great-value Gaming",
+      "tier": "Budget",
+      "ship_name": "Reliant",
+      "display_name": "Reliant"
+    },
+    "FF-GVG-02": {
+      "segment": "Great-value Gaming",
+      "tier": "Mid-range",
+      "ship_name": "Reliant Pro",
+      "display_name": "Reliant Pro"
+    },
+    "FF-GVG-03": {
+      "segment": "Great-value Gaming",
+      "tier": "High-end",
+      "ship_name": "Reliant Ultra",
+      "display_name": "Reliant Ultra"
+    },
+    "FF-HPG-02": {
+      "segment": "High-performance Gaming",
+      "tier": "Mid-range",
+      "ship_name": "Defiant Pro",
+      "display_name": "Defiant Pro",
+      "note": "Prometheus (pre-built) keeps its unique name"
+    },
+    "FF-AIW-03": {
+      "segment": "AI Workstation",
+      "tier": "High-end",
+      "ship_name": "Enterprise Ultra",
+      "display_name": "Enterprise Ultra",
+      "note": "Bespoke / Consult Only"
+    }
+  }
+}

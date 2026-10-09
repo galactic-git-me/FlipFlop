@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, Depends, Header, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
-from app.schemas.auth import SignupRequest, LoginRequest, TokenResponse, CustomerResponse
+from app.schemas.auth import SignupRequest, LoginRequest, TokenResponse, CustomerResponse, CustomerProfileUpdateRequest
 from app.services.auth_service import signup, login, get_customer_by_token
 from app.services.social_proof import record_login_event
 
@@ -47,8 +47,12 @@ async def signup_endpoint(
 
     **Request:**
     - `email`: Valid email address
-    - `password`: Password (minimum 8 characters)
+    - `password`: Password (minimum 8 characters, or null for magic link)
     - `name`: Customer full name
+    - `year_of_birth`: Optional - year of birth for age band & birthday offers
+    - `marketing_opt_in`: Optional - opt-in to marketing (default false)
+    - `acquisition_source`: Optional - how they found us (search/youtube/reddit/referral/ebay/other)
+    - `acquisition_detail`: Optional - additional detail (e.g., referral code)
 
     **Response:**
     - `access_token`: JWT token for authentication
@@ -57,8 +61,12 @@ async def signup_endpoint(
     customer, access_token = await signup(
         db=db,
         email=request.email,
-        password=request.password,
         name=request.name,
+        password=request.password,
+        year_of_birth=request.year_of_birth,
+        marketing_opt_in=request.marketing_opt_in,
+        acquisition_source=request.acquisition_source,
+        acquisition_detail=request.acquisition_detail,
     )
 
     if not customer:
@@ -129,6 +137,50 @@ async def get_current_user_endpoint(
     - `Authorization`: Bearer <access_token>
 
     **Response:**
-    - Customer profile information (id, email, name, last_login, created_at)
+    - Customer profile information (id, email, name, last_login, created_at, plus registration data)
     """
+    return CustomerResponse.model_validate(customer)
+
+
+@router.patch("/me", response_model=CustomerResponse)
+async def update_customer_profile(
+    request: CustomerProfileUpdateRequest,
+    customer: object = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> CustomerResponse:
+    """
+    Update customer profile (progressive disclosure).
+    
+    **Headers:**
+    - `Authorization`: Bearer <access_token>
+    
+    **Request:** All fields optional - only send fields you want to update
+    - `name`: Update full name
+    - `year_of_birth`: Year of birth for age band & birthday offers
+    - `marketing_opt_in`: Marketing preference
+    - `acquisition_source`: How they found us
+    - `acquisition_detail`: Additional acquisition detail
+    
+    **Response:**
+    - Updated customer profile
+    """
+    # Update only provided fields
+    if request.name is not None:
+        customer.name = request.name
+    if request.year_of_birth is not None:
+        customer.year_of_birth = request.year_of_birth
+    if request.marketing_opt_in is not None:
+        customer.marketing_opt_in = request.marketing_opt_in
+    if request.acquisition_source is not None:
+        customer.acquisition_source = request.acquisition_source
+    if request.acquisition_detail is not None:
+        customer.acquisition_detail = request.acquisition_detail
+    
+    customer.updated_at = datetime.now(timezone.utc)
+    db.add(customer)
+    await db.commit()
+    await db.refresh(customer)
+    
+    log.info("auth.profile_updated", customer_id=customer.id)
+    
     return CustomerResponse.model_validate(customer)
