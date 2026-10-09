@@ -29,6 +29,12 @@ interface AppSettings {
   listing_type_default: string;
   relist_interval_days: number;
   relist_enabled_default: boolean;
+  speedy_delivery_price_gbp: number;
+  standard_curated_custom_days: number;
+  speedy_curated_custom_days: number;
+  flexible_curated_custom_days: number;
+  standard_prebuilt_days: number;
+  speedy_prebuilt_cutoff_hour: number;
   opportunity_super_profit_gbp: number;
   opportunity_super_roi_pct: number;
   opportunity_super_confidence: number;
@@ -94,6 +100,12 @@ const DEFAULTS: AppSettings = {
   listing_type_default: "FixedPrice",
   relist_interval_days: 7,
   relist_enabled_default: true,
+  speedy_delivery_price_gbp: 49,
+  standard_curated_custom_days: 5,
+  speedy_curated_custom_days: 3,
+  flexible_curated_custom_days: 10,
+  standard_prebuilt_days: 3,
+  speedy_prebuilt_cutoff_hour: 14,
   opportunity_super_profit_gbp: 50,
   opportunity_super_roi_pct: 25,
   opportunity_super_confidence: 80,
@@ -133,7 +145,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
   );
 }
 
-type TabKey = "opportunity" | "seller-policies" | "sources" | "extension-logs" | "sold-logs" | "server-logs" | "price-evidence";
+type TabKey = "opportunity" | "seller-policies" | "delivery" | "sources" | "extension-logs" | "sold-logs" | "server-logs" | "price-evidence";
 
 export default function SettingsPage() {
   const [tab, setTab] = useState<TabKey>("opportunity");
@@ -411,7 +423,7 @@ export default function SettingsPage() {
           variant="primary"
           size="sm"
           onClick={saveSettings}
-          disabled={saving || (tab !== "opportunity" && tab !== "seller-policies")}
+          disabled={saving || (tab !== "opportunity" && tab !== "seller-policies" && tab !== "delivery")}
         >
           <Save className="w-3.5 h-3.5" />
           {saving ? "Savingâ€¦" : saved ? "Saved âœ“" : "Save"}
@@ -448,6 +460,7 @@ export default function SettingsPage() {
         {[
           { key: "opportunity", label: "Opportunity Scoring" },
           { key: "seller-policies", label: "Seller Policies" },
+          { key: "delivery", label: "Delivery" },
           { key: "sources", label: "Data Sources" },
           { key: "extension-logs", label: "Extension Logs" },
           { key: "sold-logs", label: "Sold Scraping" },
@@ -728,6 +741,22 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
           </div>
+        </div>
+      )}
+      {tab === "delivery" && (
+        <div className="space-y-6">
+          <Card>
+            <CardHeader><CardTitle>Storefront delivery targets</CardTitle><p className="text-xs text-slate-400">These values are shown at checkout. Fast Track adds the configured fee to the customer’s order.</p></CardHeader>
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-0">
+              <label className="text-sm text-slate-300">Fast Track fee (£)<input type="number" min={0} step="0.01" value={settings.speedy_delivery_price_gbp} onChange={e => setSettings(p => ({ ...p, speedy_delivery_price_gbp: Math.max(0, Number(e.target.value)) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /></label>
+              <label className="text-sm text-slate-300">Standard curated/custom builds (working days)<input type="number" min={1} step="1" value={settings.standard_curated_custom_days} onChange={e => setSettings(p => ({ ...p, standard_curated_custom_days: Math.max(1, Number(e.target.value)) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /></label>
+              <label className="text-sm text-slate-300">Fast Track curated/custom builds (working days)<input type="number" min={1} step="1" value={settings.speedy_curated_custom_days} onChange={e => setSettings(p => ({ ...p, speedy_curated_custom_days: Math.max(1, Number(e.target.value)) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /></label>
+              <label className="text-sm text-slate-300">Flexible curated/custom builds (working days)<input type="number" min={1} step="1" value={settings.flexible_curated_custom_days} onChange={e => setSettings(p => ({ ...p, flexible_curated_custom_days: Math.max(1, Number(e.target.value)) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /></label>
+              <label className="text-sm text-slate-300">Standard pre-built orders (working days)<input type="number" min={1} step="1" value={settings.standard_prebuilt_days} onChange={e => setSettings(p => ({ ...p, standard_prebuilt_days: Math.max(1, Number(e.target.value)) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /></label>
+              <label className="text-sm text-slate-300">Fast Track pre-built same-day dispatch cutoff (24-hour UK time)<input type="number" min={0} max={23} step="1" value={settings.speedy_prebuilt_cutoff_hour} onChange={e => setSettings(p => ({ ...p, speedy_prebuilt_cutoff_hour: Math.max(0, Math.min(23, Number(e.target.value))) }))} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /></label>
+              <p className="md:col-span-2 text-xs text-slate-500">Speedy pre-built orders dispatch the same day before the cutoff, otherwise the next working day.</p>
+            </CardContent>
+          </Card>
         </div>
       )}
 

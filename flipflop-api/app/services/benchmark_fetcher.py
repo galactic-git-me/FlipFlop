@@ -3,6 +3,7 @@ Fetches benchmark data from PassMark public rankings pages.
 Parses HTML tables and returns BenchmarkRecord lists.
 """
 from __future__ import annotations
+import asyncio
 import re
 from dataclasses import dataclass, field
 from typing import Optional
@@ -13,7 +14,8 @@ from app.services.benchmark_normaliser import normalise_cpu, normalise_gpu, norm
 
 log = structlog.get_logger(__name__)
 
-PASSMARK_CPU_URL  = "https://www.cpubenchmark.net/cpu_list.php"
+PASSMARK_CPU_URL  = "https://www.cpubenchmark.net/cpu-list/"
+PASSMARK_AMD_CPU_URL = "https://www.cpubenchmark.net/cpu-list/amd"
 PASSMARK_GPU_URL  = "https://www.videocardbenchmark.net/gpu_list.php"
 PASSMARK_DISK_URL = "https://www.harddrivebenchmark.net/hdd_list.php"
 
@@ -52,24 +54,61 @@ def _clean_score(raw: str) -> float:
     return float(re.sub(r'[^\d.]', '', raw) or "0")
 
 
-def _parse_generic_table(html: str, table_id: str, component_type: str) -> list[BenchmarkRecord]:
+def _parse_generic_table(
+    html: str, table_id: str | tuple[str, ...], component_type: str
+) -> list[BenchmarkRecord]:
     soup = BeautifulSoup(html, "html.parser")
-    table = soup.find("table", {"id": table_id})
-    if not table:
-        table = soup.find("table")
+    table_ids = (table_id,) if isinstance(table_id, str) else table_id
+    table = next(
+        (soup.find("table", {"id": candidate}) for candidate in table_ids if soup.find("table", {"id": candidate})),
+        None,
+    )
     if not table:
         return []
+
+    headers = [header.get_text(" ", strip=True).lower() for header in table.find_all("th")]
+    name_index = next(
+        (index for index, header in enumerate(headers) if "name" in header or "model" in header),
+        None,
+    )
+    score_index = next(
+        (
+            index
+            for index, header in enumerate(headers)
+            if "mark" in header and "rank" not in header and "value" not in header
+        ),
+        None,
+    )
 
     records: list[BenchmarkRecord] = []
     for row in table.find_all("tr"):
         cells = row.find_all("td")
         if len(cells) < 2:
             continue
-        name_cell = cells[1]
-        name = name_cell.get_text(strip=True)
-        if not name:
+        if name_index is not None and name_index < len(cells):
+            resolved_name_index = name_index
+        else:
+            resolved_name_index = next(
+                (index for index, cell in enumerate(cells) if cell.find("a")), None
+            )
+        if resolved_name_index is None:
             continue
-        score_raw = cells[-1].get_text(strip=True) if len(cells) >= 3 else "0"
+
+        name_cell = cells[resolved_name_index]
+        name = name_cell.get_text(strip=True)
+        if not name or not re.search(r"[A-Za-z]", name):
+            continue
+        if score_index is not None and score_index < len(cells):
+            score_raw = cells[score_index].get_text(strip=True)
+        else:
+            score_raw = next(
+                (
+                    cell.get_text(strip=True)
+                    for cell in cells[resolved_name_index + 1 :]
+                    if _clean_score(cell.get_text(strip=True)) > 0
+                ),
+                "0",
+            )
         try:
             score = _clean_score(score_raw)
         except ValueError:
@@ -101,7 +140,9 @@ def parse_passmark_cpu_table(html: str) -> list[BenchmarkRecord]:
 
 
 def parse_passmark_gpu_table(html: str) -> list[BenchmarkRecord]:
-    return _parse_generic_table(html, "gputable", "gpu")
+    # PassMark currently uses ``cputable`` on both CPU and GPU list pages;
+    # retain the historical ID for archived fixtures and older source pages.
+    return _parse_generic_table(html, ("cputable", "gputable"), "gpu")
 
 
 def parse_passmark_disk_table(html: str) -> list[BenchmarkRecord]:
@@ -117,8 +158,16 @@ async def fetch_html(url: str, timeout: int = 30) -> str:
 
 async def fetch_passmark_cpus() -> list[BenchmarkRecord]:
     try:
-        html = await fetch_html(PASSMARK_CPU_URL)
-        return parse_passmark_cpu_table(html)
+        intel_html, amd_html = await asyncio.gather(
+            fetch_html(PASSMARK_CPU_URL), fetch_html(PASSMARK_AMD_CPU_URL),
+        )
+        intel = parse_passmark_cpu_table(intel_html)
+        amd = parse_passmark_cpu_table(amd_html)
+        if not any(row.normalized_model.startswith("intel_") for row in intel):
+            raise ValueError("PassMark Intel CPU coverage missing")
+        if not any(row.normalized_model.startswith("amd_") for row in amd):
+            raise ValueError("PassMark AMD CPU coverage missing")
+        return intel + amd
     except Exception as exc:
         log.warning("benchmark_fetcher.cpu.failed", error=str(exc))
         return []

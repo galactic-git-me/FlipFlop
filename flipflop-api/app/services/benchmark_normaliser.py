@@ -34,7 +34,7 @@ _CPU_PATTERNS = [
     (re.compile(r'(?:intel\s+)?xeon\s+([a-z0-9-]+)', re.I),
      lambda m: f"intel_xeon_{_slug(m.group(1))}"),
     # AMD Ryzen with explicit series (e.g. "Ryzen 7 7800X3D", "R7 7800X3D")
-    (re.compile(r'(?:amd\s+)?(?:ryzen\s+|r)(\d)\s+(\d{4}[a-z0-9 ]*)', re.I),
+    (re.compile(r'(?:amd\s+)?(?:ryzen\s+|r)(\d)\s+(\d{4,5}(?:\s*(?:x3d|xt|x|ge|gt|g|kf|ks|k|hx|hs|h|u|f|t))?)\b', re.I),
      lambda m: f"amd_ryzen_{m.group(1)}_{_slug(m.group(2).strip())}"),
     (re.compile(r'(?:amd\s+)?(?:ryzen\s+)?threadripper\s+(?:pro\s+)?(\d{4}[a-z0-9]*)', re.I),
      lambda m: f"amd_threadripper_{_slug(m.group(1))}"),

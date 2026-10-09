@@ -127,9 +127,9 @@ def _manual_build_customer_hub(build: ManualBuild) -> dict:
         "downloads": ([{"title": "Exact build 3D model (GLB)", "url": build.model_3d_url, "kind": "3d_model"}] if build.model_3d_url else []),
         "driver_note": "No build-specific driver bundle has been published. Use the component manufacturer's support page for the exact part shown in the specification.",
         "policies": {
-            "returns": f"Returns are handled under the published {build.return_days}-day return policy for this listing, subject to its terms.",
-            "warranty": "Your statutory consumer rights remain in force. Any additional warranty coverage is limited to what is stated in your order documents.",
-            "delivery": f"Delivery is normally expected within {build.delivery_min_days}-{build.delivery_max_days} days after dispatch, subject to courier conditions.",
+            "returns": "For online purchases, notify us within 14 days of delivery and return the machine within the following 14 days. FlipFlop pays reasonable return costs for faulty, damaged, or misdescribed goods; change-of-mind return postage is paid by the customer.",
+            "warranty": "Your build includes a 12-month FlipFlop warranty. It does not replace or reduce your statutory consumer rights; see the full Warranty & Support policy.",
+            "delivery": f"Your order-specific estimate and courier tracking are shown below. The usual post-dispatch delivery window is {build.delivery_min_days}-{build.delivery_max_days} days, subject to courier conditions.",
             "support": "Use the private support form in this portal and include the build ID and any error message.",
         },
         "reviews": {
@@ -151,7 +151,7 @@ def _order_customer_hub(model_url: str | None, preview_image_url: str | None = N
         "troubleshooting": [{"title": "No display", "steps": ["Check power to the monitor and PC.", "Check the display cable is connected to the graphics card.", "Contact support if the issue remains."]}],
         "downloads": ([{"title": "Exact build 3D model (GLB)", "url": model_url, "kind": "3d_model"}] if model_url else []),
         "driver_note": "No build-specific driver bundle has been published. Use the component manufacturer's support page for the exact part shown in the specification.",
-        "policies": {"returns": "Returns are handled under the published order policy and its terms.", "warranty": "Your statutory consumer rights remain in force. Additional coverage is limited to your order documents.", "delivery": "Delivery updates are shown in the order tracking section.", "support": "Use the private support form in this portal."},
+        "policies": {"returns": "For online purchases, notify us within 14 days of delivery and return the machine within the following 14 days. FlipFlop pays reasonable return costs for faulty, damaged, or misdescribed goods; change-of-mind return postage is paid by the customer.", "warranty": "Your build includes a 12-month FlipFlop warranty. It does not replace or reduce your statutory consumer rights; see the full Warranty & Support policy.", "delivery": "Your saved order estimate and courier tracking are shown in the order tracking section.", "support": "Use the private support form in this portal."},
         "reviews": {
             "url": f"{PUBLIC_REVIEWS_URL}?order={order_id}" if order_id else PUBLIC_REVIEWS_URL,
             "label": "Leave a review",
@@ -235,6 +235,10 @@ def _order_to_my_order_out(order: Order, capture_3d: Capture3DAsset | None = Non
         promised_delivery_date=order.promised_delivery_date,
         actual_delivery_date=order.actual_delivery_date,
         estimated_delivery=order.estimated_delivery,
+        delivery_option=(order.specs or {}).get("delivery_option"),
+        delivery_promise=(order.specs or {}).get("delivery_promise"),
+        delivery_estimate_source=(order.specs or {}).get("delivery_estimate_source"),
+        supplier_delivery_days=(int((order.specs or {}).get("supplier_delivery_days")) if str((order.specs or {}).get("supplier_delivery_days") or "").isdigit() else None),
         shipped_at=order.shipped_at,
         delivered_at=order.delivered_at,
         tracking_number=order.tracking_number,

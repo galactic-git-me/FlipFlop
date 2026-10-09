@@ -2,8 +2,6 @@
 # Stops the local processes used by start-all-servers.ps1.
 
 param(
-    # Also stop the legacy local API, Gem Radar API, and local customer site.
-    [switch]$IncludeLegacyLocalApi = $false,
     # Optional because Ollama and the eBay browser are useful outside the app.
     [switch]$StopOllama = $false,
     [switch]$StopEbayCdp = $false
@@ -26,8 +24,7 @@ function Stop-PortListener {
 
 Write-Host "[*] Stopping FlipFlop local servers..." -ForegroundColor Cyan
 
-$ports = @(4312, 5173)
-if ($IncludeLegacyLocalApi) { $ports += @(4311, 18000, 4313) }
+$ports = @(4311, 4312, 4313, 18000)
 foreach ($port in $ports) { Stop-PortListener -Port $port }
 
 if ($StopOllama) {

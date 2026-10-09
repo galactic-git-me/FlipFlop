@@ -24,6 +24,7 @@ from app.models.component_3d_asset import (
     Component3DAsset,
     Component3DAssetStatus,
 )
+from app.models.catalogue import CatalogueVariant
 from app.routes.admin_auth import get_current_admin
 from pydantic import ValidationError as PydanticValidationError
 from app.schemas.case_mount import validate_case_mount_manifest
@@ -190,8 +191,12 @@ async def _serialize_many(db: AsyncSession, assets: list[Component3DAsset]) -> l
 async def list_assets(
     subject_type: str | None = None,
     status: str | None = None,
+    curated_only: bool = False,
+    custom_only: bool = False,
     db: AsyncSession = Depends(get_db),
 ):
+    if curated_only and custom_only:
+        raise HTTPException(status_code=422, detail="Choose either curated_only or custom_only")
     q = select(Component3DAsset).order_by(
         Component3DAsset.subject_type,
         Component3DAsset.subject_id,
@@ -207,6 +212,18 @@ async def list_assets(
             q = q.where(Component3DAsset.status == Component3DAssetStatus(status))
         except ValueError:
             raise HTTPException(status_code=422, detail=f"Unknown status '{status}'")
+    if curated_only:
+        q = q.join(
+            CatalogueVariant,
+            (Component3DAsset.subject_type == AssetSubjectType.VARIANT)
+            & (Component3DAsset.subject_id == CatalogueVariant.id),
+        ).where(CatalogueVariant.curated_for_builds.is_(True))
+    if custom_only:
+        q = q.join(
+            CatalogueVariant,
+            (Component3DAsset.subject_type == AssetSubjectType.VARIANT)
+            & (Component3DAsset.subject_id == CatalogueVariant.id),
+        ).where(CatalogueVariant.custom_for_builds.is_(True))
     rows = (await db.execute(q)).scalars().all()
     return await _serialize_many(db, rows)
 
@@ -214,6 +231,8 @@ async def list_assets(
 class ReviewBatchCreate(BaseModel):
     size: int = Field(default=10, ge=1, le=10)
     asset_ids: list[int] | None = Field(default=None, min_length=1, max_length=10)
+    curated_only: bool = False
+    custom_only: bool = False
 
 
 async def _batch_payload(batch_id: str, assets: list[Component3DAsset], db: AsyncSession) -> dict:
@@ -235,6 +254,8 @@ async def create_review_batch(
     body: ReviewBatchCreate,
     db: AsyncSession = Depends(get_db),
 ):
+    if body.curated_only and body.custom_only:
+        raise HTTPException(status_code=422, detail="Choose either curated_only or custom_only")
     """Claim the next unreviewed candidates, with a hard maximum of ten."""
     query = select(Component3DAsset).where(
         Component3DAsset.review_batch_id.is_(None),
@@ -251,6 +272,18 @@ async def create_review_batch(
         query = query.where(Component3DAsset.id.in_(requested_ids)).limit(len(requested_ids))
     else:
         query = query.limit(body.size)
+    if body.curated_only:
+        query = query.join(
+            CatalogueVariant,
+            (Component3DAsset.subject_type == AssetSubjectType.VARIANT)
+            & (Component3DAsset.subject_id == CatalogueVariant.id),
+        ).where(CatalogueVariant.curated_for_builds.is_(True))
+    if body.custom_only:
+        query = query.join(
+            CatalogueVariant,
+            (Component3DAsset.subject_type == AssetSubjectType.VARIANT)
+            & (Component3DAsset.subject_id == CatalogueVariant.id),
+        ).where(CatalogueVariant.custom_for_builds.is_(True))
     candidates = (
         await db.execute(
             query.order_by(Component3DAsset.created_at, Component3DAsset.id)

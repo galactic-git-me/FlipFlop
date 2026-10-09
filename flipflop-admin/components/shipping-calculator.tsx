@@ -69,7 +69,12 @@ Provide your response in JSON format ONLY (no markdown, no explanation):
 
 Be realistic with estimates - add 5-10cm padding for packaging on each dimension.`;
 
-      const response = await fetch("http://localhost:11434/api/generate", {
+      const ollamaBaseUrl = process.env.NEXT_PUBLIC_OLLAMA_BASE_URL?.trim().replace(/\/$/, "");
+      if (!ollamaBaseUrl) {
+        throw new Error("Ollama is not configured. Set NEXT_PUBLIC_OLLAMA_BASE_URL for this environment.");
+      }
+
+      const response = await fetch(`${ollamaBaseUrl}/api/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

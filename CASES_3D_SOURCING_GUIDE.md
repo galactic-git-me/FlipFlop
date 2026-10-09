@@ -163,6 +163,33 @@ and excellent airflow for budget gaming builds."
 
 ## Workflow
 
+### Reference-image search availability
+
+**Current implementation:** the 3D approval screen uses the Google
+Programmable Search Element, not the unavailable Custom Search JSON API.
+Configure the existing engine as a site-restricted image search (up to 50
+domains), enable Image Search, and add:
+
+- `*.aliexpress.co.uk/*`
+- `*.amazon.com/*`
+- `*.amazon.co.uk/*`
+- `*.newegg.co.uk/*`
+- `*.scan.co.uk/*`
+- `*.overclockers.co.uk/*`
+
+`*.manufacturer.com/*` is only a placeholder: add each real manufacturer
+domain (for example NZXT, Corsair and Lian Li) rather than relying on it. Open
+a result, then paste its direct image URL into the approval screen, or upload
+an image you are permitted to use.
+
+The legacy server-side endpoint uses Google's Custom Search JSON API. Google
+has announced that this product must be replaced by **1 January 2027**. For a
+search limited to 50 or fewer approved manufacturer/reviewer domains, migrate
+to Vertex AI Search. Whole-web search requires registering interest with
+Google's new full-web search offering. Until that access is provisioned, use
+the image-upload control in the 3D review screen to add owner-approved
+manufacturer images.
+
 ### Step 1: Visit /cases-3d-sourcing
 - Shows top 30 cases by Amazon bestseller rank
 - Geometry Green case at top

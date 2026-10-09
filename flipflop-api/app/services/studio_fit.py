@@ -26,7 +26,7 @@ def engineering_specs(raw):
     return {key: value[key] for key in SPEC_KEYS if key in value}
 
 
-def evaluate_fit(parts, case):
+def evaluate_fit(parts, case, *, gpu_required=True):
     """parts: {category: reviewed engineering dict}; case: catalogue fields.
 
     A result has stable code, severity, message and affected categories.
@@ -65,11 +65,12 @@ def evaluate_fit(parts, case):
     match('RAM_TYPE', ram.get('ram_type'), [board['ram_type']] if board.get('ram_type') else None, 'Memory generation', 'ram', 'motherboard')
     measured('RAM_SLOTS', ram.get('ram_modules'), board.get('ram_slots'), 'Memory modules / slots', 'ram', 'motherboard')
     factors = {'atx': ['atx', 'matx', 'itx'], 'matx': ['matx', 'itx'], 'itx': ['itx']}
-    match('BOARD_FIT', board.get('form_factor'), factors.get(str(case.get('form_factor', '')).lower()), 'Motherboard fit', 'motherboard', 'case')
-    gpu_limit = case.get('max_gpu_length_mm')
-    if number(gpu_limit) and number(cooler.get('front_radiator_depth_mm')):
-        gpu_limit -= cooler['front_radiator_depth_mm']
-    measured('GPU_LENGTH', gpu.get('length_mm'), gpu_limit, 'GPU length (mm)', 'gpu', 'case', 'cooling')
+    match('BOARD_FIT', board.get('form_factor'), case.get('supported_form_factors') or factors.get(str(case.get('form_factor', '')).lower()), 'Motherboard fit', 'motherboard', 'case')
+    if gpu_required:
+        gpu_limit = case.get('max_gpu_length_mm')
+        if number(gpu_limit) and number(cooler.get('front_radiator_depth_mm')):
+            gpu_limit -= cooler['front_radiator_depth_mm']
+        measured('GPU_LENGTH', gpu.get('length_mm'), gpu_limit, 'GPU length (mm)', 'gpu', 'case', 'cooling')
     if cooler.get('cooler_type') == 'aio':
         radiators = case.get('radiator_support')
         sizes = [size for values in radiators.values() if isinstance(values, list) for size in values] if isinstance(radiators, dict) else None
@@ -87,13 +88,15 @@ def evaluate_fit(parts, case):
     else:
         match('SSD_MOUNT', ssd.get('m2_length'), board.get('m2_lengths'), 'M.2 mounting', 'storage', 'motherboard')
     demand = None
-    if number(cpu.get('power_w')) and number(gpu.get('power_w')):
-        demand = (cpu['power_w'] + gpu['power_w'] + 75) * 1.25
-        if number(gpu.get('recommended_psu_w')):
+    if number(cpu.get('power_w')) and (number(gpu.get('power_w')) or not gpu_required):
+        demand = (cpu['power_w'] + (gpu.get('power_w') or 0) + 75) * 1.25
+        if gpu_required and number(gpu.get('recommended_psu_w')):
             demand = max(demand, gpu['recommended_psu_w'])
     measured('POWER', demand, psu.get('wattage'), 'PSU reserve (W)', 'cpu', 'gpu', 'psu')
     required, supplied = gpu.get('gpu_power_connectors'), psu.get('psu_connectors')
-    if isinstance(required, dict) and isinstance(supplied, dict):
+    if not gpu_required:
+        pass
+    elif isinstance(required, dict) and isinstance(supplied, dict):
         for name, count in required.items():
             measured('POWER_CONNECTOR_' + name, count, supplied.get(name, 0), f'{name} connectors', 'gpu', 'psu')
     else:

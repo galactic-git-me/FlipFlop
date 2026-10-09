@@ -11,6 +11,17 @@ from datetime import datetime, timedelta
 
 router = APIRouter(prefix="/settings", tags=["settings"])
 
+# These values are supplied per runtime by the service environment. Keep the
+# request fields for old clients, but never save them to app_settings.
+ENV_BACKED_SETTINGS = {
+    "ollama_base_url",
+    "ollama_model",
+    "openrouter_api_key",
+    "openrouter_primary_model",
+    "ebay_app_id",
+    "image_gen_provider",
+}
+
 
 class SettingsUpdate(BaseModel):
     max_concurrent_flips: int | None = None
@@ -32,6 +43,12 @@ class SettingsUpdate(BaseModel):
     listing_type_default: str | None = None
     relist_interval_days: int | None = None
     relist_enabled_default: bool | None = None
+    speedy_delivery_price_gbp: float | None = None
+    standard_curated_custom_days: int | None = None
+    speedy_curated_custom_days: int | None = None
+    flexible_curated_custom_days: int | None = None
+    standard_prebuilt_days: int | None = None
+    speedy_prebuilt_cutoff_hour: int | None = None
     gem_radar_scan_interval_minutes: int | None = None
     gem_radar_consecutive_misses_before_inactive: int | None = None
     gem_radar_scrape_artifacts_hours: int | None = None
@@ -76,7 +93,9 @@ async def get_settings(db: AsyncSession = Depends(get_db)):
 @router.put("/")
 async def update_settings(body: SettingsUpdate, db: AsyncSession = Depends(get_db)):
     settings = await _get_or_create(db)
-    for field, value in body.model_dump(exclude_none=True).items():
+    # API credentials, providers and model endpoints are runtime configuration,
+    # never user preferences. Ignore legacy fields so DB rows cannot shadow env.
+    for field, value in body.model_dump(exclude_none=True, exclude=ENV_BACKED_SETTINGS).items():
         setattr(settings, field, value)
     if body.relist_interval_days is not None:
         interval = max(1, body.relist_interval_days)
@@ -105,18 +124,6 @@ async def update_settings(body: SettingsUpdate, db: AsyncSession = Depends(get_d
     await db.flush()
     await db.refresh(settings)
 
-    # Propagate to live config cache so ai_service picks up changes without restart
-    from app.config import get_settings as get_cfg
-    cfg = get_cfg()
-    if body.openrouter_api_key:
-        cfg.openrouter_api_key = body.openrouter_api_key
-    if body.ollama_model:
-        cfg.ollama_model = body.ollama_model
-    if body.ollama_base_url:
-        cfg.ollama_base_url = body.ollama_base_url
-    if body.openrouter_primary_model:
-        cfg.openrouter_primary_model = body.openrouter_primary_model
-
     return _to_dict(settings)
 
 
@@ -132,18 +139,27 @@ async def _get_or_create(db: AsyncSession) -> AppSettings:
 
 
 def _to_dict(s: AppSettings) -> dict:
+    from app.config import get_settings as get_cfg
+
+    cfg = get_cfg()
     return {
         "max_concurrent_flips": s.max_concurrent_flips,
         "default_sell_platform": s.default_sell_platform,
         "auto_buy_autonomous": s.auto_buy_autonomous,
         "auto_buy_daily_limit": s.auto_buy_daily_limit,
-        "ollama_base_url": s.ollama_base_url,
-        "ollama_model": s.ollama_model,
-        "openrouter_api_key": "***" if s.openrouter_api_key else "",
-        "openrouter_primary_model": s.openrouter_primary_model,
-        "ebay_app_id": "***" if s.ebay_app_id else "",
+        "ollama_base_url": cfg.ollama_base_url,
+        "ollama_model": cfg.ollama_model,
+        "openrouter_api_key": "***" if cfg.openrouter_api_key else "",
+        "openrouter_primary_model": cfg.openrouter_primary_model,
+        "llm_model_hierarchy": [
+            {"tier": "primary", "provider": cfg.llm_primary_provider, "model": cfg.llm_primary_model},
+            {"tier": "secondary", "provider": cfg.llm_secondary_provider,
+             "model": cfg.llm_secondary_model or "google/gemma-4-31b-it:free"},
+            {"tier": "tertiary", "provider": cfg.llm_tertiary_provider, "model": cfg.llm_tertiary_model},
+        ],
+        "ebay_app_id": "***" if cfg.ebay_app_id else "",
         "image_gen_enabled": s.image_gen_enabled,
-        "image_gen_provider": s.image_gen_provider,
+        "image_gen_provider": cfg.image_gen_provider,
         "handling_time_days": s.handling_time_days,
         "returns_accepted": s.returns_accepted,
         "returns_window_days": s.returns_window_days,
@@ -152,6 +168,12 @@ def _to_dict(s: AppSettings) -> dict:
         "listing_type_default": s.listing_type_default,
         "relist_interval_days": s.relist_interval_days or 7,
         "relist_enabled_default": s.relist_enabled_default,
+        "speedy_delivery_price_gbp": s.speedy_delivery_price_gbp,
+        "standard_curated_custom_days": s.standard_curated_custom_days,
+        "speedy_curated_custom_days": s.speedy_curated_custom_days,
+        "flexible_curated_custom_days": s.flexible_curated_custom_days,
+        "standard_prebuilt_days": s.standard_prebuilt_days,
+        "speedy_prebuilt_cutoff_hour": s.speedy_prebuilt_cutoff_hour,
         "gem_radar_scan_interval_minutes": s.gem_radar_scan_interval_minutes,
         "gem_radar_consecutive_misses_before_inactive": s.gem_radar_consecutive_misses_before_inactive,
         "gem_radar_scrape_artifacts_hours": s.gem_radar_scrape_artifacts_hours,

@@ -52,3 +52,24 @@ def test_benchmark_record_normalised_model():
     records = parse_passmark_cpu_table(_CPU_HTML)
     r7 = next(r for r in records if "7800" in r.model)
     assert r7.normalized_model == "amd_ryzen_7_7800x3d"
+
+
+def test_parse_current_passmark_layout_uses_model_and_mark_columns():
+    html = """
+    <table id="cputable">
+      <tr><th>CPU Name</th><th>CPU Mark (higher is better)</th><th>Rank (lower is better)</th><th>CPU Value (higher is better)</th><th>Price (USD)</th></tr>
+      <tr><td>AMD Ryzen 7 7800X3D</td><td>34,212</td><td>245</td><td>127.6</td><td>$267.99</td></tr>
+    </table>
+    """
+
+    records = parse_passmark_cpu_table(html)
+
+    assert len(records) == 1
+    assert records[0].model == "AMD Ryzen 7 7800X3D"
+    assert records[0].overall_score == 34212
+
+
+def test_parser_does_not_fall_back_to_an_unrelated_table():
+    records = parse_passmark_cpu_table("<table><tr><td>41,609</td><td>14,898</td></tr></table>")
+
+    assert records == []

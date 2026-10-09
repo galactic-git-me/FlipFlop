@@ -21,6 +21,9 @@ from app.services.payment_service import PaymentService
 from app.services.email_service import send_order_confirmation_email
 from app.services.social_proof import record_order_event
 from app.services.playbook_pricing import InvalidBuildError, price_playbook_build
+from app.services.storefront_delivery import delivery_choice, checkout_metadata, add_working_days, apply_component_delivery_estimate
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 log = structlog.get_logger(__name__)
 
@@ -92,7 +95,16 @@ async def create_payment_intent(
         except InvalidBuildError as e:
             log.warning("payment.invalid_build_config", error=str(e))
             raise HTTPException(status_code=400, detail=str(e))
-        amount = priced.total
+        fulfilment_type = "curated" if request.build_config.curated_build_id or request.build_config.validation_mode == "curated" else "custom"
+        delivery_option = request.delivery_option or ("fast_track" if request.speedy_delivery else "standard")
+        if delivery_option == "flexible" and fulfilment_type not in {"curated", "custom"}:
+            raise HTTPException(status_code=422, detail="Flexible delivery is available for curated and custom builds")
+        choice = await delivery_choice(db, fulfilment_type, delivery_option == "fast_track", delivery_option == "flexible")
+        try:
+            choice = await apply_component_delivery_estimate(db, choice, [s.variant_id for s in priced.slots])
+        except ValueError as e:
+            raise HTTPException(status_code=422, detail=str(e)) from e
+        amount = priced.total + choice["fee_gbp"]
         quote_data = {
             "playbook_id": priced.playbook_id,
             "playbook_name": priced.playbook_name,
@@ -113,10 +125,14 @@ async def create_payment_intent(
             "parts_total": priced.parts_total,
             "labour": priced.labour,
             "overhead": priced.overhead,
+            **checkout_metadata(choice),
         }
     else:
         amount = request.budget
-
+        delivery_option = request.delivery_option or ("fast_track" if request.speedy_delivery else "standard")
+        choice = await delivery_choice(db, "custom", delivery_option == "fast_track", delivery_option == "flexible")
+        amount += choice["fee_gbp"]
+        quote_data = checkout_metadata(choice)
     # Create payment intent using service
     try:
         payment_service = PaymentService()
@@ -124,6 +140,10 @@ async def create_payment_intent(
             customer_id=request.customer_id,
             budget=amount,
             quote_data=quote_data,
+            metadata={
+                **checkout_metadata(choice),
+                "chosen_week": request.build_config.chosen_week or "" if request.build_config else "",
+            },
         )
 
         log.info(
@@ -245,6 +265,26 @@ async def confirm_payment(
                 "chosen_week": request.build_config.chosen_week,
             }
 
+        delivery_metadata = payment_data["metadata"]
+        delivery_days = int(delivery_metadata.get("delivery_days") or 0)
+        delivery_option = delivery_metadata.get("delivery_option", "standard")
+        delivery_start = datetime.now(ZoneInfo("Europe/London")).replace(tzinfo=None)
+        chosen_week = delivery_metadata.get("chosen_week") or (request.build_config.chosen_week if request.build_config else None)
+        if chosen_week:
+            try:
+                year_text, week_text = chosen_week.split("-W", maxsplit=1)
+                scheduled_start = datetime.fromisocalendar(int(year_text), int(week_text), 1)
+                delivery_start = max(delivery_start, scheduled_start)
+            except (ValueError, TypeError):
+                pass
+        promised_delivery_date = add_working_days(delivery_start, delivery_days) if delivery_days > 0 else None
+        specs.update({
+            "delivery_option": delivery_option,
+            "delivery_promise": delivery_metadata.get("delivery_promise"),
+            "delivery_estimate_source": delivery_metadata.get("delivery_estimate_source", "configured_fulfilment_default"),
+            "supplier_delivery_days": delivery_metadata.get("supplier_delivery_days") or None,
+        })
+
         # Create order
         order = Order(
             order_id=f"ORD-{payment_data['intent_id'][-12:]}",  # Use last 12 chars of intent ID
@@ -252,10 +292,12 @@ async def confirm_payment(
             status=OrderStatus.AWAITING_SOURCING,
             specs=specs,
             customer_price=payment_data["amount"],
+            fast_track_selected=delivery_option == "fast_track",
+            fast_track_fee=float(payment_data["metadata"].get("delivery_fee_gbp", 0)),
             component_costs=component_costs,
             overhead_amount=overhead_amount,
             playbook_id=playbook_id,
-            promised_delivery_date=None,  # No delivery estimation computed yet
+            promised_delivery_date=promised_delivery_date,
             stripe_payment_intent_id=request.intent_id,
             notes=f"Payment processed via Stripe. Intent: {request.intent_id}",
         )

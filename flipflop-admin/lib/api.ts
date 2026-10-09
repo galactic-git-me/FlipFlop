@@ -847,10 +847,13 @@ export const api = {
 
   gemRadar: {
     scoredListings: () => requestGemRadar<unknown[]>("/scored-listings"),
-    scoredListingsLatestRun: (environment?: "DEV" | "LIVE") =>
+    scoredListingsLatestRun: (environment?: "DEV" | "LIVE", limit = 500) =>
       requestGemRadar<unknown[]>(
         `/scored-listings-latest-run${
-          environment ? `?environment=${environment}` : ""
+          `?${new URLSearchParams({
+            ...(environment ? { environment } : {}),
+            limit: String(limit),
+          }).toString()}`
         }`
       ),
     listings: () => requestGemRadar<unknown[]>("/listings"),

@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:4311";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    console.log("Fetching from:", `${BACKEND_URL}/api/assets-3d/public`);
-    const response = await fetch(`${BACKEND_URL}/api/assets-3d/public`, {
+    const response = await fetch(`${BACKEND_URL}/api/assets-3d${new URL(request.url).search}`, {
       headers: {
         "Content-Type": "application/json",
+        "Authorization": request.headers.get("authorization") || "",
+        "Cookie": request.headers.get("cookie") || "",
       },
     });
 

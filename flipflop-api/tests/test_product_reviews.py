@@ -21,3 +21,11 @@ def test_cpk_reviews_do_not_mix_different_products():
         ("cpk-2", "amazon", 5.0, 20),
     ])
     assert result == {"cpk-1": (4.0, 10), "cpk-2": (5.0, 20)}
+
+
+def test_unrated_review_count_does_not_inflate_weighted_rating_volume():
+    result = aggregate_cpk_reviews([
+        ("cpk-1", "amazon", 4.8, 100),
+        ("cpk-1", "ebay", None, 100),
+    ])
+    assert result["cpk-1"] == (4.8, 100)

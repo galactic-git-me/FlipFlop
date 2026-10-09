@@ -34,8 +34,8 @@ from app.config import get_settings
 from app.database import engine, Base
 from app import models as _models  # noqa: F401  Ensures all ORM models are registered before create_all
 from app.workers.scheduler import start_scheduler, stop_scheduler, run_startup_bootstrap
-from app.api import listings, flips, parts, sources, chat, config, swarms, inventory, inventory_allocations, inventory_intelligence
-from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms, price_evidence
+from app.api import listings, flips, parts, sources, chat, config, swarms, inventory, inventory_allocations, inventory_intelligence, growth
+from app.api import intel, settings_router, debug, logs as logs_api, playbooks, demand, manual_submit, schedule, search_telemetry, source_search_terms, price_evidence, recommendations, commerce_intelligence, upgrades
 from app.api import alerts, reselling, ebay_listings, favourites
 from app.api import email_events
 from app.api import cross_listing
@@ -59,6 +59,8 @@ from app.api.benchmarks import router as benchmarks_router
 from app.api.companion import router as companion_router
 from app.api.price_benchmarks import router as price_benchmarks_router
 from app.api.catalogue import router as catalogue_router
+from app.api.curated_builds import router as curated_builds_router
+from app.api.custom_builds import router as custom_builds_router, public_router as custom_builds_public_router
 from app.api.configurator_admin import router as configurator_admin_router
 from app.api.public_catalogue import router as public_catalogue_router
 from app.api.public_configurator import router as public_configurator_router
@@ -403,6 +405,8 @@ async def _reap_zombie_children() -> None:
     SIGCHLD=SIG_IGN approach above.  Catches both ChildProcessError and
     the broader OSError so it never silently dies.
     """
+    if not hasattr(os, "WNOHANG"):
+        return
     while True:
         try:
             reaped = 0
@@ -524,7 +528,6 @@ async def lifespan(app: FastAPI):
     # if settings.app_env == "dev":
     #     await _wipe_dev_data()
     # await _seed_default_data()
-    await _load_db_settings_into_config()
     reaper = None
     gem_radar_retention = None
     queue_processor = None
@@ -605,40 +608,6 @@ async def _queue_unevaluated_gems():
         log.warning("startup.gem_queue_backfill_failed", error=str(exc))
 
 
-async def _load_db_settings_into_config():
-    """
-    Push DB-stored API keys and model config into the live Settings cache
-    so ai_service.py picks them up immediately on startup without requiring
-    a server restart after the user saves a key in the Settings UI.
-    """
-    from app.database import AsyncSessionLocal
-    from app.models.app_settings import AppSettings
-    from app.models.source_search_term import SourceSearchTerm
-    from sqlalchemy import select
-    try:
-        async with AsyncSessionLocal() as db:
-            result = await db.execute(select(AppSettings).where(AppSettings.name == "default"))
-            db_settings = result.scalar_one_or_none()
-            if not db_settings:
-                return
-            cfg = get_settings()
-            if db_settings.openrouter_api_key:
-                cfg.openrouter_api_key = db_settings.openrouter_api_key
-            if db_settings.openrouter_primary_model:
-                cfg.openrouter_primary_model = db_settings.openrouter_primary_model
-            if db_settings.ollama_model:
-                cfg.ollama_model = db_settings.ollama_model
-            if db_settings.ollama_base_url:
-                cfg.ollama_base_url = db_settings.ollama_base_url
-            log.info(
-                "config.loaded_from_db",
-                has_openrouter_key=bool(db_settings.openrouter_api_key),
-                model=cfg.openrouter_primary_model,
-            )
-    except Exception as exc:
-        log.warning("config.db_load_failed", error=str(exc))
-
-
 app = FastAPI(
     title="PC Flip Profit Maximizer API",
     version="5.0.0",
@@ -714,6 +683,11 @@ app.include_router(settings_router.router, prefix="/api")
 app.include_router(debug.router, prefix="/api")
 app.include_router(logs_api.router, prefix="/api")
 app.include_router(playbooks.router, prefix="/api")
+app.include_router(recommendations.router, prefix="/api")
+app.include_router(commerce_intelligence.router, prefix="/api")
+app.include_router(upgrades.router, prefix="/api")
+app.include_router(upgrades.admin_router, prefix="/api")
+app.include_router(growth.router, prefix="/api")
 # Keep the dashboard's legacy `/api/admin/orders` handlers ahead of the newer
 # async order-management router.  Both routers expose the same paths; route
 # registration order is therefore part of the API contract used by the admin
@@ -750,6 +724,9 @@ app.include_router(companion_router, prefix="/api")
 app.include_router(ram_watch_router, prefix="/api")
 app.include_router(price_benchmarks_router, prefix="/api")
 app.include_router(catalogue_router, prefix="/api")
+app.include_router(curated_builds_router, prefix="/api")
+app.include_router(custom_builds_router, prefix="/api")
+app.include_router(custom_builds_public_router, prefix="/api")
 app.include_router(configurator_admin_router, prefix="/api")
 app.include_router(public_catalogue_router, prefix="/api")
 app.include_router(public_configurator_router, prefix="/api")
@@ -1308,10 +1285,8 @@ async def _seed_default_data():
         if settings_count == 0:
             db.add(AppSettings(
                 name="default",
-                ollama_model=settings.ollama_model,
-                ollama_base_url=settings.ollama_base_url,
             ))
-            log.info("seeded.app_settings", model=settings.ollama_model)
+            log.info("seeded.app_settings")
 
         # ── Seed / migrate canonical playbooks ───────────────────────────────
         # Handled by playbook_seeder: retires old playbooks, renames, inserts

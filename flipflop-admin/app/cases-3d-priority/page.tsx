@@ -25,6 +25,7 @@ interface PriorityCaseItem {
   source_site?: string;
   source_url?: string;
   image_url?: string;
+  vendor_count?: number;
   bestseller_rank?: number;
   priority_3d_rank?: number;
   priority_3d_batch?: number;
@@ -37,12 +38,13 @@ interface PriorityCaseItem {
   is_preferred?: boolean;
   has_3d_model?: boolean;
   model_3d_url?: string;
+  overclockers_gallery?: string[];
   sourcing_3d_evidence?: {
     stages?: Record<string, SourcingStageEvidence>;
   };
 }
 
-type ReferenceSource = "amazon" | "manufacturer" | "google" | "retailer" | "manual";
+type ReferenceSource = "amazon" | "manufacturer" | "google" | "bing" | "retailer" | "manual";
 
 interface ReferenceCandidate {
   url: string;
@@ -54,13 +56,10 @@ interface ReferenceCandidate {
 interface ReferenceCandidateResponse {
   sourcing_ready: boolean;
   candidates: ReferenceCandidate[];
+  vendor_count?: number;
+  vendor_names?: string[];
   approved_selection?: { status?: string; images?: ReferenceCandidate[] };
 }
-
-interface ImageSearchResult extends ReferenceCandidate {
-  thumbnail_url?: string | null;
-}
-
 const DIRECT_BACKEND_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4311").replace(/\/$/, "");
 
 const sourcingLabels: Array<[string, string]> = [
@@ -131,6 +130,18 @@ function compactCaseName(caseItem: PriorityCaseItem) {
   const colour = caseColours.find(candidate => new RegExp(`\\b${candidate}\\b`, "i").test(lowerName));
 
   return [brand, model, colour].filter(Boolean).join("-").toLocaleUpperCase();
+}
+
+function shortCaseSearchName(caseItem: PriorityCaseItem) {
+  const name = caseItem.name.replace(/\s+/g, " ").trim();
+  const shortened = name.split(/\s+(?:ARGB|RGB|Panoramic|Tempered|Glass|Mid[- ]Tower|Gaming|PC Case|Computer Case)\b/i)[0].trim();
+  return shortened || name;
+}
+
+function candidateMatchesQuery(candidate: ReferenceCandidate, query: string) {
+  const terms = query.toLowerCase().split(/[^a-z0-9]+/).filter(term => term.length > 2);
+  const haystack = `${candidate.label || ""} ${candidate.source_page || ""} ${candidate.url}`.toLowerCase();
+  return terms.length > 0 && terms.filter(term => haystack.includes(term)).length >= Math.min(2, terms.length);
 }
 
 function hasIncludedFans(caseItem: PriorityCaseItem) {
@@ -221,6 +232,10 @@ function liveStatus(caseItem: PriorityCaseItem) {
 export default function Cases3DPriorityPage() {
   const router = useRouter();
   const [cases, setCases] = useState<PriorityCaseItem[]>([]);
+  const [caseScope, setCaseScope] = useState<"Campaign" | "Overclockers" | "Amazon">("Campaign");
+  const [casePage, setCasePage] = useState(1);
+  const [campaignFrozen, setCampaignFrozen] = useState(false);
+  const [hasNextCasePage, setHasNextCasePage] = useState(false);
   const [loading, setLoading] = useState(true);
   const [completedCases, setCompletedCases] = useState<PriorityCaseItem[]>([]);
   const [freezing, setFreezing] = useState(false);
@@ -232,10 +247,12 @@ export default function Cases3DPriorityPage() {
   const [referenceNotice, setReferenceNotice] = useState<string | null>(null);
   const [newReferenceUrl, setNewReferenceUrl] = useState("");
   const [newReferenceSource, setNewReferenceSource] = useState<ReferenceSource>("manufacturer");
-  const [imageSearchQuery, setImageSearchQuery] = useState("");
-  const [imageSearchResults, setImageSearchResults] = useState<ImageSearchResult[]>([]);
-  const [imageSearchBusy, setImageSearchBusy] = useState(false);
-  const [imageSearchError, setImageSearchError] = useState<string | null>(null);
+  const [overclockersResults, setOverclockersResults] = useState<ReferenceCandidate[]>([]);
+  const [overclockersError, setOverclockersError] = useState<string | null>(null);
+  const [overclockersBusy, setOverclockersBusy] = useState(false);
+  const [bingResults, setBingResults] = useState<ReferenceCandidate[]>([]);
+  const [bingError, setBingError] = useState<string | null>(null);
+  const [bingBusy, setBingBusy] = useState(false);
   const [generatedReviewUrl, setGeneratedReviewUrl] = useState<string | null>(null);
   const [generatingCaseId, setGeneratingCaseId] = useState<number | null>(null);
   const [evidenceReview, setEvidenceReview] = useState<{ caseItem: PriorityCaseItem; stage: "product_images" | "youtube_video" | "meshy_generation" } | null>(null);
@@ -317,23 +334,73 @@ export default function Cases3DPriorityPage() {
     }
   };
 
-  const searchGoogleImages = async (caseId: number) => {
-    const query = imageSearchQuery.trim();
-    if (query.length < 2) return;
-    setImageSearchBusy(true);
-    setImageSearchError(null);
+  const loadOverclockersGallery = async (caseId: number) => {
+    setOverclockersBusy(true);
+    setOverclockersError(null);
     try {
-      const response = await fetch(`/api/cases/${caseId}/3d-reference-image-search?query=${encodeURIComponent(query)}`, { cache: "no-store" });
-      const data = await readJsonResponse<{ results?: ImageSearchResult[]; detail?: string }>(response);
-      if (!response.ok) throw new Error(data.detail || "Could not search Google Images");
-      setImageSearchResults(data.results || []);
+      const response = await fetch(`/api/cases/${caseId}/3d-overclockers-gallery`, { cache: "no-store" });
+      const data = await readJsonResponse<{ results?: ReferenceCandidate[]; detail?: string; captured?: boolean }>(response);
+      if (!response.ok) throw new Error(data.detail || "Could not load Overclockers photos");
+      setOverclockersResults(data.results || []);
+      if (!data.captured) setOverclockersError("Open the Overclockers product in Chrome to capture its full gallery.");
     } catch (caught) {
-      setImageSearchError(caught instanceof Error ? caught.message : "Could not search Google Images");
-      setImageSearchResults([]);
+      setOverclockersError(caught instanceof Error ? caught.message : "Could not load Overclockers photos");
     } finally {
-      setImageSearchBusy(false);
+      setOverclockersBusy(false);
     }
   };
+
+  const sourceOverclockersInChrome = () => {
+    if (!evidenceReview) return;
+    const productUrl = referenceData?.candidates.find(candidate => candidate.label?.startsWith("Overclockers ·"))?.source_page;
+    if (!productUrl) {
+      setOverclockersError("No matching Overclockers product page is stored for this case.");
+      return;
+    }
+    window.open(`${productUrl.split("#")[0]}#flipflop-case-${evidenceReview.caseItem.id}`, "_blank", "noopener,noreferrer");
+    let attempts = 0;
+    const timer = window.setInterval(() => {
+      attempts += 1;
+      void loadOverclockersGallery(evidenceReview.caseItem.id);
+      if (attempts >= 20) window.clearInterval(timer);
+    }, 2000);
+  };
+
+  const loadBingImages = async (caseId: number) => {
+    setBingBusy(true);
+    setBingError(null);
+    try {
+      const response = await fetch(`/api/cases/${caseId}/3d-bing-images`, { cache: "no-store" });
+      const data = await readJsonResponse<{ results?: ReferenceCandidate[]; detail?: string }>(response);
+      if (!response.ok) throw new Error(data.detail || "Could not load Bing images");
+      setBingResults(data.results || []);
+    } catch (caught) {
+      setBingError(caught instanceof Error ? caught.message : "Could not load Bing images");
+    } finally {
+      setBingBusy(false);
+    }
+  };
+
+  const sourceBingInChrome = () => {
+    if (!evidenceReview) return;
+    const caseId = evidenceReview.caseItem.id;
+    const query = shortCaseSearchName(evidenceReview.caseItem);
+    window.open(`https://www.bing.com/images/search?q=${encodeURIComponent(query)}#flipflop-bing-case-${caseId}`, "_blank", "noopener,noreferrer");
+    let attempts = 0;
+    const timer = window.setInterval(() => {
+      attempts += 1;
+      void loadBingImages(caseId);
+      if (attempts >= 20) window.clearInterval(timer);
+    }, 2000);
+  };
+
+  useEffect(() => {
+    if (evidenceReview?.stage !== "product_images") return;
+    setOverclockersResults([]);
+    void loadOverclockersGallery(evidenceReview.caseItem.id);
+    setBingResults([]);
+    void loadBingImages(evidenceReview.caseItem.id);
+  }, [evidenceReview?.caseItem.id, evidenceReview?.stage]);
 
   const approveReferences = async (caseId: number) => {
     if (selectedReferences.length !== 4) return;
@@ -411,7 +478,11 @@ export default function Cases3DPriorityPage() {
       const response = await fetch("/api/cases/priority-for-3d", { method: "POST" });
       const data = await readJsonResponse<{ cases?: PriorityCaseItem[]; detail?: string; error?: string }>(response);
       if (!response.ok) throw new Error(data.detail || data.error || "Could not freeze campaign");
-      setCases(data.cases || []);
+      const refreshed = await fetch("/api/cases/priority-for-3d?limit=101", { cache: "no-store" });
+      const refreshedCases = refreshed.ok ? await readJsonResponse<PriorityCaseItem[]>(refreshed) : data.cases || [];
+      setCampaignFrozen(refreshedCases.some(caseItem => caseItem.priority_3d_rank != null));
+      setHasNextCasePage(refreshedCases.length > 100);
+      setCases(refreshedCases.slice(0, 100));
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not freeze campaign");
     } finally {
@@ -420,11 +491,6 @@ export default function Cases3DPriorityPage() {
   };
 
   const openEvidenceReview = async (caseItem: PriorityCaseItem, stage: "product_images" | "youtube_video" | "meshy_generation") => {
-    if (stage === "product_images") {
-      setImageSearchQuery(`${caseItem.name} PC case product photos`);
-      setImageSearchResults([]);
-      setImageSearchError(null);
-    }
     if (stage === "product_images" || stage === "meshy_generation") await openReferenceSelection(caseItem.id);
     setEvidenceReview({ caseItem, stage });
   };
@@ -463,12 +529,15 @@ export default function Cases3DPriorityPage() {
     const load = async () => {
       setLoading(true);
       try {
-        // Fetch priority cases for 3D modeling (top 30)
-        // Include explicitly-added priority exceptions (for example APNX C1 at
-        // rank 31) as well as the original frozen top-30 campaign.
-        const response = await fetch("/api/cases/priority-for-3d?limit=100");
+        // Fetch the frozen campaign plus Overclockers cases omitted when it
+        // was frozen, and preserve explicitly-added ranked exceptions.
+        const params = new URLSearchParams({ limit: "101", offset: String((casePage - 1) * 100) });
+        if (caseScope !== "Campaign") params.set("source_site", caseScope);
+        const response = await fetch(`/api/cases/priority-for-3d?${params}`, { cache: "no-store" });
         const data = await readJsonResponse<PriorityCaseItem[]>(response);
-        setCases(data.filter(caseItem => !/raspberry\s*pi|raspberrypi|\brpi\b/i.test(caseItem.name)));
+        if (caseScope === "Campaign") setCampaignFrozen(data.some(caseItem => caseItem.priority_3d_rank != null));
+        setHasNextCasePage(data.length > 100);
+        setCases(data.slice(0, 100).filter(caseItem => !/raspberry\s*pi|raspberrypi|\brpi\b/i.test(caseItem.name)));
 
         // Count how many already have models
         const withModels = await fetch("/api/cases/with-3d-models?limit=1000");
@@ -482,7 +551,24 @@ export default function Cases3DPriorityPage() {
     };
 
     void load();
-  }, []);
+  }, [caseScope, casePage]);
+
+  useEffect(() => {
+    const refreshGalleryPhotos = async () => {
+      try {
+        const params = new URLSearchParams({ limit: "101", offset: String((casePage - 1) * 100) });
+        if (caseScope !== "Campaign") params.set("source_site", caseScope);
+        const response = await fetch(`/api/cases/priority-for-3d?${params}`, { cache: "no-store" });
+        if (!response.ok) return;
+        const data = await readJsonResponse<PriorityCaseItem[]>(response);
+        setCases(data.slice(0, 100).filter(caseItem => !/raspberry\s*pi|raspberrypi|\brpi\b/i.test(caseItem.name)));
+      } catch {
+        // Keep the currently displayed cases if a background refresh fails.
+      }
+    };
+    const timer = window.setInterval(() => void refreshGalleryPhotos(), 60000);
+    return () => window.clearInterval(timer);
+  }, [caseScope, casePage]);
 
   const meshyQueueCount = cases.filter(caseItem => {
     const status = caseItem.sourcing_3d_evidence?.stages?.meshy_generation?.status || "not_started";
@@ -504,20 +590,24 @@ export default function Cases3DPriorityPage() {
             <Box className="w-6 h-6 text-purple-400" /> 3D Model Priority Queue
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Frozen priority cases plus manually added exceptions. Select four source pictures before generating a draft model.
+            The frozen campaign also includes available Overclockers cases that were outside its original ranking. Select four source pictures before generating a draft model.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button type="button" variant="outline" onClick={() => router.push("/components-3d-review")} className="cursor-pointer border-purple-500/40 text-purple-200">
             <Eye className="mr-2 h-4 w-4" /> Open 3D approval viewer
           </Button>
-          <Button onClick={freezeCampaign} disabled={freezing || cases.some(item => item.priority_3d_rank)} className="cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-300">
+          <Button onClick={freezeCampaign} disabled={freezing || caseScope !== "Campaign" || campaignFrozen || casePage > 1} className="cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-300">
             {freezing ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <LockKeyhole className="mr-2 h-4 w-4" />}
-            {cases.some(item => item.priority_3d_rank) ? "Top 30 frozen" : "Freeze top 30"}
+            {campaignFrozen ? "Top 30 frozen" : "Freeze top 30"}
           </Button>
         </div>
       </div>
       <ThreeDWorkflowNav />
+      <div className="flex flex-wrap items-center gap-2" aria-label="Case source">
+        {(["Campaign", "Overclockers", "Amazon"] as const).map(scope => <button key={scope} type="button" aria-pressed={caseScope === scope} onClick={() => { setCaseScope(scope); setCasePage(1); }} className={`rounded-lg border px-3 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-cyan-400 ${caseScope === scope ? "border-cyan-400 bg-cyan-950 text-cyan-100" : "border-slate-700 text-slate-300 hover:border-slate-500"}`}>{scope}</button>)}
+        {caseScope !== "Campaign" && <span className="text-xs text-slate-400">Showing page {casePage} of {caseScope} cases without 3D models</span>}
+      </div>
       {error && <div role="alert" className="rounded-md border border-red-500/60 bg-red-950/60 px-4 py-3 text-sm text-red-200">{error}</div>}
 
       {/* Progress summary */}
@@ -592,7 +682,7 @@ export default function Cases3DPriorityPage() {
         <div className="space-y-3">
           <div className="flex items-center justify-between gap-4">
             <p className="text-xs font-medium uppercase tracking-wider text-slate-500">Next to create, ordered by popularity</p>
-            <p className="text-xs text-slate-500">{cases.length} cases</p>
+            <div className="flex items-center gap-2 text-xs text-slate-400"><span>{cases.length} cases</span>{(casePage > 1 || hasNextCasePage) && <><button type="button" disabled={casePage === 1} onClick={() => setCasePage(page => page - 1)} className="rounded border border-slate-600 px-2 py-1 disabled:opacity-40">Previous</button><button type="button" disabled={!hasNextCasePage} onClick={() => setCasePage(page => page + 1)} className="rounded border border-slate-600 px-2 py-1 disabled:opacity-40">Next</button></>}</div>
           </div>
           <div className="overflow-x-auto rounded-xl border border-[#1e2d45] bg-[#0b121d]">
             <table className="w-full min-w-[1380px] border-collapse text-left text-sm">
@@ -621,7 +711,7 @@ export default function Cases3DPriorityPage() {
                   </td>
                   <td className="px-4 py-3 align-middle">
                     <div className="flex min-w-[260px] items-center gap-3">
-                      <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded-md border border-slate-700 bg-[#0a1119]">
+                      <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-md border border-slate-700 bg-[#0a1119]">
                         {caseItem.image_url ? (
                         <img
                           src={caseItem.image_url}
@@ -629,6 +719,7 @@ export default function Cases3DPriorityPage() {
                           className="h-full w-full object-cover"
                         />
                         ) : <Box className="m-4 h-5 w-5 text-slate-600" />}
+                        <span title="Matching vendors" className="absolute bottom-0 right-0 rounded-tl bg-cyan-950/90 px-1 text-[10px] font-bold text-cyan-100">{caseItem.vendor_count ?? 0} vendors</span>
                       </div>
                       <div className="min-w-0">
                         <p
@@ -652,6 +743,15 @@ export default function Cases3DPriorityPage() {
                             </span>
                           )}
                         </div>
+                        {!!caseItem.overclockers_gallery?.length && (
+                          <div className="mt-2 flex max-w-md gap-1 overflow-x-auto pb-1" aria-label={`${caseItem.overclockers_gallery.length} Overclockers product photos`}>
+                            {caseItem.overclockers_gallery.map((url, imageIndex) => (
+                              <a key={url} href={url} target="_blank" rel="noreferrer" title={`Overclockers photo ${imageIndex + 1}`} className="h-10 w-10 flex-none overflow-hidden rounded border border-slate-700 bg-white">
+                                <img src={url} alt={`${compactCaseName(caseItem)} photo ${imageIndex + 1}`} loading="lazy" className="h-full w-full object-contain" />
+                              </a>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </td>
@@ -868,79 +968,59 @@ export default function Cases3DPriorityPage() {
               {evidenceReview.stage === "product_images" && (
                 <>
                   <p className="mb-4 text-sm text-slate-300">Select exactly four images. The first selected image is the texture and colour master.</p>
-                  <section aria-label="Google Images search" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
-                    <label htmlFor="google-image-search" className="text-xs font-semibold uppercase tracking-wide text-cyan-200">Search Google Images</label>
-                    <p className="mt-1 text-xs text-slate-400">Find additional angles without leaving the approval screen. Check that all four pictures show the same chassis and that you have permission to use them.</p>
-                    <form
-                      className="mt-3 flex flex-col gap-2 sm:flex-row"
-                      onSubmit={event => {
-                        event.preventDefault();
-                        void searchGoogleImages(evidenceReview.caseItem.id);
-                      }}
-                    >
-                      <div className="relative min-w-0 flex-1">
-                        <Search aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-                        <input
-                          id="google-image-search"
-                          type="search"
-                          value={imageSearchQuery}
-                          onChange={event => setImageSearchQuery(event.target.value)}
-                          placeholder="Case model and colour"
-                          className="w-full rounded-md border border-slate-700 bg-slate-950 py-2.5 pl-9 pr-3 text-sm text-slate-100 outline-none transition-colors placeholder:text-slate-600 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
-                        />
-                      </div>
-                      <Button type="submit" disabled={imageSearchBusy || imageSearchQuery.trim().length < 2} className="cursor-pointer bg-cyan-700 hover:bg-cyan-600">
-                        {imageSearchBusy ? <RefreshCw className="mr-2 h-4 w-4 animate-spin motion-reduce:animate-none" /> : <Search className="mr-2 h-4 w-4" />}
-                        {imageSearchBusy ? "Searching…" : "Search images"}
-                      </Button>
-                    </form>
-                    {imageSearchError && <p role="alert" className="mt-3 text-xs text-red-300">{imageSearchError}</p>}
-                    {imageSearchResults.length > 0 && (
-                      <div className="mt-4">
-                        <p className="mb-2 text-xs text-slate-400">Google results · click a picture to add or remove it from your four selections</p>
-                        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
-                          {imageSearchResults.map(result => {
-                            const selectedIndex = selectedReferences.findIndex(item => item.url === result.url);
-                            return (
-                              <button
-                                key={result.url}
-                                type="button"
-                                onClick={() => toggleReference(result)}
-                                aria-pressed={selectedIndex >= 0}
-                                title={result.label || "Google Images result"}
-                                className={`relative cursor-pointer overflow-hidden rounded-md border bg-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700 hover:border-cyan-500/70"}`}
-                              >
-                                { }
-                                <img src={result.thumbnail_url || result.url} alt={result.label || "Google Images result"} className="h-28 w-full object-contain" loading="lazy" />
-                                {selectedIndex >= 0 && <span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{selectedIndex + 1}</span>}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
+                  <section aria-label="Overclockers gallery" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
+                    <div className="flex items-center justify-between gap-3"><h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">1. Overclockers product gallery</h3><div className="flex gap-2"><Button type="button" variant="outline" onClick={sourceOverclockersInChrome}>Source photos in Chrome</Button><Button type="button" variant="outline" disabled={overclockersBusy} onClick={() => void loadOverclockersGallery(evidenceReview.caseItem.id)}>Reload gallery</Button></div></div>
+                    {overclockersBusy && <p className="mt-3 text-xs text-slate-400">Loading all gallery thumbnails…</p>}
+                    {overclockersError && <p className="mt-3 text-xs text-amber-300">{overclockersError}</p>}
+                    {!overclockersBusy && !overclockersError && overclockersResults.length === 0 && <p className="mt-3 text-xs text-slate-400">No exact Overclockers product found.</p>}
+                    {overclockersResults.length > 0 && <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">{overclockersResults.map(candidate => {
+                      const selectedIndex = selectedReferences.findIndex(item => item.url === candidate.url);
+                      return <button key={candidate.url} type="button" onClick={() => toggleReference(candidate)} className={`relative cursor-pointer overflow-hidden rounded-md border bg-white ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700"}`}><img src={candidate.url} alt={candidate.label || "Overclockers case photo"} className="h-32 w-full object-contain" />{selectedIndex >= 0 && <span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{selectedIndex + 1}</span>}</button>;
+                    })}</div>}
                   </section>
+                  <section aria-label="Matching vendor main photos" className="mb-5">
+                    <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-cyan-200">2. Matching vendors ({referenceData?.vendor_count ?? 0})</h3>
                   {referenceBusy && !referenceData ? (
                     <div className="flex items-center justify-center py-16 text-slate-400"><RefreshCw className="mr-2 h-4 w-4 animate-spin" /> Loading images…</div>
                   ) : referenceData?.candidates.length ? (
                     <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
-                      {referenceData.candidates.map(candidate => {
+                      {referenceData.candidates.map((candidate, candidateIndex) => {
                         const selectedIndex = selectedReferences.findIndex(item => item.url === candidate.url);
                         return (
                           <button
-                            key={candidate.url}
+                            key={`${candidate.url}-${candidateIndex}`}
                             type="button"
                             onClick={() => toggleReference(candidate)}
                             className={`relative cursor-pointer overflow-hidden rounded-md border bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700 hover:border-slate-500"}`}
                           >
                             { }
                             <img src={candidate.url} alt={candidate.label || "Case reference"} className="h-44 w-full object-contain" />
+                            <span className="absolute inset-x-0 bottom-0 truncate bg-slate-950/85 px-2 py-1 text-[10px] text-white">{candidate.label?.split(" · ")[0] || "Vendor"}</span>
                             {selectedIndex >= 0 && <span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{selectedIndex + 1}</span>}
                           </button>
                         );
                       })}
                     </div>
-                  ) : <p className="py-12 text-center text-slate-500">No candidate images have been recorded.</p>}
+                  ) : <p className="py-12 text-center text-slate-500">No exact vendor matches are available for this case yet.</p>}
+                  </section>
+                  <section aria-label="Bing Images results" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">3. Bing Images results</h3>
+                      <div className="flex gap-2"><Button type="button" variant="outline" onClick={sourceBingInChrome}>Search Bing in Chrome</Button><Button type="button" variant="outline" disabled={bingBusy} onClick={() => void loadBingImages(evidenceReview.caseItem.id)}>Reload results</Button></div>
+                    </div>
+                    <p className="mt-2 text-xs text-slate-400">Searches {shortCaseSearchName(evidenceReview.caseItem)}. Review each result before selecting it.</p>
+                    {bingBusy && <p className="mt-3 text-xs text-slate-400">Loading Bing images…</p>}
+                    {bingError && <p className="mt-3 text-xs text-amber-300">{bingError}</p>}
+                    {!bingBusy && !bingError && bingResults.length === 0 && <p className="mt-3 text-xs text-slate-400">No matching Bing images captured yet. Open the search in Chrome to source them.</p>}
+                    {bingResults.length > 0 && <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">{bingResults.map(candidate => {
+                      const selectedIndex = selectedReferences.findIndex(item => item.url === candidate.url);
+                      return <button key={candidate.url} type="button" onClick={() => toggleReference(candidate)} className={`relative cursor-pointer overflow-hidden rounded-md border bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700 hover:border-slate-500"}`}><img src={candidate.url} alt={candidate.label || "Bing case image"} className="h-32 w-full object-contain" /><span className="absolute inset-x-0 bottom-0 truncate bg-slate-950/85 px-2 py-1 text-[10px] text-white">{candidate.label || "Bing Images"}</span>{selectedIndex >= 0 && <span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{selectedIndex + 1}</span>}</button>;
+                    })}</div>}
+                  </section>
+                  <section aria-label="Selected reference photos" className="rounded-lg border border-slate-700 p-4">
+                    <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-cyan-200">4. Selected photos ({selectedReferences.length}/4)</h3>
+                    <div className="grid grid-cols-2 gap-3 md:grid-cols-4">{selectedReferences.map((candidate, index) => <button key={candidate.url} type="button" onClick={() => toggleReference(candidate)} className="relative cursor-pointer overflow-hidden rounded-md border border-cyan-300 bg-white"><img src={candidate.url} alt={`Selected reference ${index + 1}`} className="h-32 w-full object-contain" /><span className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-1 text-xs font-bold text-slate-950">{index + 1}</span></button>)}</div>
+                  </section>
                 </>
               )}
 

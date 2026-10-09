@@ -1,16 +1,20 @@
 """PC Case sourcing and 3D model management endpoints."""
 from datetime import datetime
 import os
+import re
+from urllib.parse import quote_plus
 from pathlib import Path
 from uuid import uuid4
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 import httpx
 from pydantic import BaseModel, Field, HttpUrl
-from sqlalchemy import select, and_, func, update
+from sqlalchemy import select, and_, func, or_, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.case import Case
 from app.models.catalogue import CaseCatalogue
+from app.models.listing import Listing
+from app.services.case_product_key import case_product_key
 from app.models.gem_radar_intelligence import PreferredComponent
 from app.services.media_sync import sync_to_public_media
 
@@ -68,9 +72,11 @@ async def _preferred_case_names(db: AsyncSession) -> list[str]:
 
 
 def _priority_payload(case: Case, preferred_names: list[str] | None = None) -> dict:
+    product_images = (((case.sourcing_3d_evidence or {}).get("stages") or {}).get("product_images") or {})
     return {
         "id": case.id,
         "name": case.name,
+        "cpk": case_product_key(case.name, case.brand, case.model),
         "brand": case.brand,
         "model": case.model,
         "price": case.price_new or case.price or 0,
@@ -78,6 +84,7 @@ def _priority_payload(case: Case, preferred_names: list[str] | None = None) -> d
         "source_site": case.source_site,
         "source_url": case.source_url,
         "image_url": case.image_url,
+        "overclockers_gallery": product_images.get("overclockers_gallery") or [],
         "bestseller_rank": case.bestseller_rank,
         "priority_3d_rank": case.priority_3d_rank,
         "priority_3d_batch": case.priority_3d_batch,
@@ -146,7 +153,7 @@ class SourcingEvidencePatch(BaseModel):
 
 class CaseReferenceImage(BaseModel):
     url: HttpUrl
-    source: str = Field(pattern="^(amazon|manufacturer|google|retailer|manual)$")
+    source: str = Field(pattern="^(amazon|manufacturer|google|bing|retailer|manual)$")
     source_page: HttpUrl | None = None
     label: str | None = None
 
@@ -171,6 +178,43 @@ def _append_candidate(items: list[dict], seen: set[str], url: object, source: st
     items.append({"url": url, "source": _candidate_source(url, source), "source_page": source_page, "label": label})
 
 
+def _case_identity(case: Case) -> str:
+    name = f"{case.brand or ''} {case.model or ''}".strip() if case.model else case.name
+    return re.split(r"\s+(?:ARGB|RGB|Panoramic|Tempered|Glass|Mid[- ]Tower|PC Case)\b", name, maxsplit=1, flags=re.I)[0].strip()
+
+
+def _exact_case_match(case: Case, title: str) -> bool:
+    identity = _case_identity(case)
+    required = re.findall(r"[a-z0-9]+", identity.lower())
+    actual = re.findall(r"[a-z0-9]+", title.lower())
+    if not required or not all(token in actual for token in required):
+        return False
+    # Preserve the chassis colour when the catalogued product specifies it.
+    colours = {"black", "white", "silver", "pink", "red", "blue"}
+    expected_colour = next((token for token in re.findall(r"[a-z0-9]+", case.name.lower()) if token in colours), None)
+    actual_colours = colours.intersection(actual)
+    return not (expected_colour and actual_colours and expected_colour not in actual_colours)
+
+
+async def _matched_vendor_listings(case: Case, db: AsyncSession) -> list[Listing]:
+    identity = _case_identity(case)
+    distinctive = next((token for token in re.findall(r"[a-z0-9]+", identity.lower()) if any(c.isdigit() for c in token)), None)
+    if not distinctive:
+        return []
+    rows = (await db.execute(select(Listing).where(Listing.title.ilike(f"%{distinctive}%"), Listing.image_urls.isnot(None)).limit(500))).scalars().all()
+    cpk = case_product_key(case.name, case.brand, case.model)
+    return [row for row in rows if row.image_urls and case_product_key(row.title, row.case_brand, row.case_model) == cpk]
+
+
+async def _matched_case_offers(case: Case, db: AsyncSession) -> list[Case]:
+    distinctive = next((token for token in re.findall(r"[a-z0-9]+", _case_identity(case).lower()) if any(c.isdigit() for c in token)), None)
+    if not distinctive:
+        return [case]
+    rows = (await db.execute(select(Case).where(Case.name.ilike(f"%{distinctive}%")))).scalars().all()
+    cpk = case_product_key(case.name, case.brand, case.model)
+    return [row for row in rows if case_product_key(row.name, row.brand, row.model) == cpk]
+
+
 @router.get("/{case_id}/3d-reference-candidates")
 async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(get_db)):
     """Collate candidate photos without silently deciding which four are sent to Meshy."""
@@ -181,49 +225,136 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
     evidence = dict(case.sourcing_3d_evidence or {})
     stages = dict(evidence.get("stages") or {})
     product_stage = dict(stages.get("product_images") or {})
-    candidates: list[dict] = []
+    vendor_candidates: list[dict] = []
+    vendor_names: set[str] = set()
     seen: set[str] = set()
-    _append_candidate(candidates, seen, case.image_url, _candidate_source(case.image_url or ""), case.source_url, "Catalogue image")
-
-    for item in product_stage.get("candidate_images") or []:
-        if isinstance(item, dict):
-            _append_candidate(candidates, seen, item.get("url"), item.get("source") or "manual", item.get("source_page"), item.get("label"))
-    for url in product_stage.get("urls") or []:
-        _append_candidate(candidates, seen, url, "manual", case.source_url)
-    for attempt in product_stage.get("attempts") or []:
-        if not isinstance(attempt, dict):
-            continue
-        source = attempt.get("source") or attempt.get("provider") or "manual"
-        source_page = attempt.get("source_page") or attempt.get("source_url")
-        for key in ("image_urls", "urls", "source_image_urls"):
-            for url in attempt.get(key) or []:
-                _append_candidate(candidates, seen, url, str(source).lower(), source_page)
-        for assessment in attempt.get("image_assessments") or []:
-            if isinstance(assessment, dict):
-                _append_candidate(candidates, seen, assessment.get("url"), str(source).lower(), source_page)
-
-    # Amazon galleries captured by FlipflopXtension are stored on the case
-    # catalogue. Match conservatively by brand plus model/name tokens.
-    catalogue_rows = (await db.execute(select(CaseCatalogue).where(CaseCatalogue.brand.ilike(case.brand or "%")))).scalars().all()
-    model_tokens = [token.lower() for token in (case.model or "").replace("-", " ").split() if len(token) > 1]
-    for row in catalogue_rows:
-        haystack = row.name.lower()
-        if model_tokens and not all(token in haystack for token in model_tokens):
-            continue
-        for url in row.images or []:
-            _append_candidate(candidates, seen, url, "amazon", case.source_url, f"Stored Amazon gallery · {row.name}")
+    for offer in await _matched_case_offers(case, db):
+        if offer.image_url:
+            vendor_candidates.append({"url": offer.image_url, "source": "retailer", "source_page": offer.source_url, "label": f"{offer.source_site} · {offer.name}"})
+            seen.add(offer.image_url)
+        vendor_names.add(offer.source_site)
+    for listing in await _matched_vendor_listings(case, db):
+        vendor = listing.source_name or "Vendor listing"
+        main_image = next((url for url in listing.image_urls if isinstance(url, str) and url.startswith(("https://", "http://"))), None)
+        if main_image:
+            _append_candidate(vendor_candidates, seen, main_image, "retailer", listing.url, f"{vendor} · {listing.title}")
+            vendor_names.add(vendor)
 
     approved = product_stage.get("approved_selection") or {}
     return {
         "case_id": case.id,
         "case_name": case.name,
+        "cpk": case_product_key(case.name, case.brand, case.model),
         "sourcing_ready": (
             (stages.get("manufacturer_3d") or {}).get("status") in ("not_found", "complete")
             and (stages.get("third_party_3d") or {}).get("status") == "not_found"
         ),
-        "candidates": candidates,
+        "candidates": vendor_candidates,
+        "vendor_count": len(vendor_names),
+        "vendor_names": sorted(vendor_names),
         "approved_selection": approved,
     }
+
+
+def _priority_source_filter(source_site: str | None):
+    if source_site == "Overclockers":
+        # Imported case rows have historically used both "Overclockers" and
+        # "Overclockers UK". Keep the source tab inclusive of both spellings.
+        return Case.source_site.ilike("%overclockers%")
+    return Case.source_site == source_site if source_site else None
+
+
+def _priority_case_filter(source_site: str | None, frozen_exists: bool):
+    without_model = Case.has_3d_model == False  # noqa: E712
+    source_filter = _priority_source_filter(source_site)
+    if source_filter is not None:
+        return and_(without_model, source_filter)
+    if frozen_exists:
+        # Keep the frozen campaign intact while surfacing Overclockers stock
+        # that was excluded when the campaign was frozen. Rankless additions
+        # sort after frozen campaign rows below.
+        return and_(without_model, or_(Case.priority_3d_rank.isnot(None), Case.source_site.ilike("%overclockers%")))
+    return without_model
+
+
+@router.get("/{case_id}/3d-overclockers-gallery")
+async def get_3d_overclockers_gallery(case_id: int, db: AsyncSession = Depends(get_db)):
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    offer = next((row for row in await _matched_case_offers(case, db) if "overclockers" in (row.source_site or "").lower()), None)
+    gallery = ((case.sourcing_3d_evidence or {}).get("stages") or {}).get("product_images", {}).get("overclockers_gallery") or []
+    results = [{"url": url, "source": "retailer", "source_page": offer.source_url if offer else None, "label": f"Overclockers · {_case_identity(case)}"} for url in gallery]
+    if not results and offer and offer.image_url:
+        results = [{"url": offer.image_url, "source": "retailer", "source_page": offer.source_url, "label": f"Overclockers · {_case_identity(case)}"}]
+    return {"results": results, "source_page": offer.source_url if offer else None, "captured": bool(gallery)}
+
+
+@router.get("/{case_id}/3d-bing-images")
+async def get_3d_bing_images(case_id: int, db: AsyncSession = Depends(get_db)):
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    images = ((case.sourcing_3d_evidence or {}).get("stages") or {}).get("product_images", {}).get("bing_images") or []
+    return {"results": images, "captured": bool(images)}
+
+
+class BingImageCapture(BaseModel):
+    source_page: HttpUrl
+    images: list[dict] = Field(max_length=100)
+
+
+@router.post("/{case_id}/3d-bing-images")
+async def save_3d_bing_images(case_id: int, body: BingImageCapture, db: AsyncSession = Depends(get_db)):
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    if body.source_page.host not in {"www.bing.com", "bing.com"} or not body.source_page.path.startswith("/images/search"):
+        raise HTTPException(status_code=422, detail="Capture must come from Bing Images")
+    results = []
+    seen = set()
+    for image in body.images:
+        url = str(image.get("url") or "")
+        if not url.startswith(("https://", "http://")) or url in seen:
+            continue
+        seen.add(url)
+        source_page = str(image.get("source_page") or "")
+        if not source_page.startswith(("https://", "http://")):
+            source_page = str(body.source_page)
+        results.append({"url": url, "source": "bing", "source_page": source_page, "label": str(image.get("label") or "Bing Images")[:200]})
+    evidence = dict(case.sourcing_3d_evidence or {})
+    stages = dict(evidence.get("stages") or {})
+    product_stage = dict(stages.get("product_images") or {})
+    product_stage["bing_images"] = results
+    stages["product_images"] = product_stage
+    evidence["stages"] = stages
+    case.sourcing_3d_evidence = evidence
+    await db.commit()
+    return {"count": len(results)}
+
+
+class OverclockersGalleryCapture(BaseModel):
+    source_page: HttpUrl
+    images: list[HttpUrl] = Field(min_length=1, max_length=100)
+
+
+@router.post("/{case_id}/3d-overclockers-gallery")
+async def save_3d_overclockers_gallery(case_id: int, body: OverclockersGalleryCapture, db: AsyncSession = Depends(get_db)):
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    offer = next((row for row in await _matched_case_offers(case, db) if "overclockers" in (row.source_site or "").lower()), None)
+    if not offer or str(body.source_page).split("#", 1)[0].rstrip("/") != (offer.source_url or "").split("#", 1)[0].rstrip("/"):
+        raise HTTPException(status_code=422, detail="Page does not match this case's Overclockers product")
+    evidence = dict(case.sourcing_3d_evidence or {})
+    stages = dict(evidence.get("stages") or {})
+    product_stage = dict(stages.get("product_images") or {})
+    product_stage["overclockers_gallery"] = list(dict.fromkeys(str(url) for url in body.images))
+    stages["product_images"] = product_stage
+    evidence["stages"] = stages
+    case.sourcing_3d_evidence = evidence
+    await db.commit()
+    return {"count": len(product_stage["overclockers_gallery"])}
 
 
 @router.get("/{case_id}/3d-reference-image-search")
@@ -232,7 +363,11 @@ async def search_3d_reference_images(
     query: str = Query(min_length=2, max_length=180),
     db: AsyncSession = Depends(get_db),
 ):
-    """Search Google Images for owner-reviewed 3D reference candidates."""
+    """Search Google Images for owner-reviewed 3D reference candidates.
+
+    Custom Search JSON API is Google's legacy image-search product. It is
+    retained only while the configured project still has access.
+    """
     case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
@@ -268,6 +403,16 @@ async def search_3d_reference_images(
             detail = exc.response.json().get("error", {}).get("message") or detail
         except ValueError:
             pass
+        if exc.response.status_code == 403 and "Custom Search JSON API" in detail:
+            raise HTTPException(
+                status_code=503,
+                detail=(
+                    "Google Custom Search JSON API is not available to this project. "
+                    "Google is retiring it: use Vertex AI Search for a site-restricted "
+                    "search (up to 50 domains), or register interest with Google for "
+                    "whole-web search. Upload approved reference images manually in the meantime."
+                ),
+            ) from exc
         raise HTTPException(status_code=502, detail=detail) from exc
     except (httpx.HTTPError, ValueError) as exc:
         raise HTTPException(status_code=502, detail=f"Google Images search failed: {exc}") from exc
@@ -444,6 +589,8 @@ async def update_3d_sourcing_evidence(
 @router.get("/priority-for-3d")
 async def get_cases_priority_for_3d(
     limit: int = 100,
+    offset: int = 0,
+    source_site: str | None = None,
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -453,26 +600,34 @@ async def get_cases_priority_for_3d(
     """
     from sqlalchemy import case as sql_case
 
+    if source_site not in (None, "Amazon", "Overclockers"):
+        raise HTTPException(status_code=400, detail="Unsupported case source")
+    if limit < 1 or limit > 101 or offset < 0:
+        raise HTTPException(status_code=400, detail="Invalid case page")
     frozen_exists = (await db.execute(select(func.count()).select_from(Case).where(Case.priority_3d_rank.isnot(None)))).scalar_one()
-    priority_filter = (
-        and_(Case.has_3d_model == False, Case.priority_3d_rank.isnot(None))
-        if frozen_exists
-        else Case.has_3d_model == False
-    )
+    priority_filter = _priority_case_filter(source_site, bool(frozen_exists))
     result = await db.execute(
         select(Case)
         .where(priority_filter, ~Case.name.ilike("%raspberry%"))
         .order_by(
-            Case.priority_3d_rank.asc().nullslast() if frozen_exists else Case.bestseller_rank.asc().nullslast(),
+            Case.priority_3d_rank.asc().nullslast() if frozen_exists and not source_site else Case.bestseller_rank.asc().nullslast(),
             sql_case((Case.source_site == "Amazon", 0), else_=1),  # Amazon prioritized
             Case.price.asc(),  # Cheaper cases first
+            Case.id.asc(),
         )
         .limit(limit)
+        .offset(offset)
     )
     cases = result.scalars().all()
     preferred_names = await _preferred_case_names(db)
-
-    return [_priority_payload(case, preferred_names) for case in cases]
+    payloads = []
+    for case in cases:
+        payload = _priority_payload(case, preferred_names)
+        vendors = {row.source_name for row in await _matched_vendor_listings(case, db) if row.source_name}
+        vendors.update(row.source_site for row in await _matched_case_offers(case, db) if row.source_site)
+        payload["vendor_count"] = len(vendors)
+        payloads.append(payload)
+    return payloads
 
 
 @router.get("/with-3d-models")

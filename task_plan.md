@@ -1,30 +1,16 @@
-# PRD Gap Closure Implementation Plan
+# Active task — vNext commerce recommendations
 
-## Phase 1: Data reliability + observability (in progress)
-- [x] Add per-term search telemetry capture during scrape runs
-- [x] Add API endpoints to inspect telemetry by source and term
-- [x] Add frontend diagnostics panel for source/term result quality
-- [x] Add persistent telemetry storage (DB table + retention policy)
-- [x] Add source health scoring + auto backoff policy
+## Completed
+- [x] Version Playbook rules and preserve the selected version with recommendation sessions.
+- [x] Broaden the guided questions for secondary uses, relevant workloads, budget flexibility, practical needs and condition policy.
+- [x] Reveal only differentiated Save / Recommended / Stretch performance plans; omit Stretch for firm budgets.
+- [x] Keep the result requirements-only and clearly disclose that it is not a priced or purchasable build.
+- [x] Match public catalogue components only when current, reviewed technical evidence and compatibility rules support a complete BOM.
+- [x] Match listed Ready-to-Ship units only when unreserved, finalised and supported by explicit capability evidence.
+- [x] Keep supplier stock, price and delivery claims out of catalogue discovery results.
 
-## Phase 2: Demand intelligence
-- [x] Integrate external demand signals scaffold (Reddit live + Google Trends/Steam adapters stubbed)
-- [x] Build demand-normalized pricing multipliers per component tier
+## Next
+- [ ] Connect supplier offers and stock evidence to catalogue candidates.
+- [ ] Add landed costs, complete cost stacks, contribution floors, sold-market checks and immutable quote snapshots.
 
-## Phase 3: Compatibility intelligence
-- [x] Explicit compatibility rules engine foundation (socket/memory/PSU/headroom)
-- [x] Confidence score + hard-fail incompatibility reasons in wizard
-
-## Phase 4: Autonomous playbook evolution
-- [x] Nightly playbook proposal generation from sold-flip outcomes
-- [x] Human-approval lane with rollback + A/B experiment tagging/summary
-
-## Phase 5: Closed-loop orchestration
-- [x] End-to-end autonomous loop orchestration with checkpoints
-- [x] Outcome capture + retraining triggers
-
-## Current deliverables (this session)
-- Backend telemetry API:
-  - `GET /api/search-telemetry/recent`
-  - `GET /api/search-telemetry/by-source`
-- Telemetry includes term-level `found`, `new`, `error`, timestamp, source, run id.
+See `docs/plans/vnext-implementation.md` for the remaining delivery gates.

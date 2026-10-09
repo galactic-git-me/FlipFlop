@@ -1,0 +1,31 @@
+name: Pull request checks
+
+on:
+  pull_request:
+    branches: [main, dev]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    env:
+      OLLAMA_MODEL: disabled-in-ci
+      EBAY_TOKEN_ENCRYPTION_KEY: ci-only-ebay-token-encryption-test-key
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: flipflop-admin/package-lock.json
+      - name: Run repository checks
+        shell: bash
+        run: bash scripts/ci.sh

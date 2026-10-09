@@ -18,11 +18,54 @@ from app.models.component_3d_asset import (
     AssetSubjectType,
 )
 from app.models.catalogue import CatalogueVariant
+from app.models.catalogue import PlaybookSlot
+from app.models.curated_build_segment import CuratedBuildSegment
 from app.models.listing import Listing
 from app.services.configurator_compatibility import evaluate_configuration
 from app.services.component_family_classifier import classify_family
 
 router = APIRouter(prefix="/public", tags=["public-configurator"])
+
+
+@router.get("/curated-builds")
+async def public_curated_builds(db: AsyncSession = Depends(get_db)):
+    """Only serve published build segments with a complete, currently active component set."""
+    segments = (await db.execute(
+        select(CuratedBuildSegment).where(CuratedBuildSegment.is_live.is_(True)).order_by(
+            CuratedBuildSegment.customer_type, CuratedBuildSegment.budget_min,
+        )
+    )).scalars().all()
+    output = []
+    required = {"cpu", "gpu", "motherboard", "ram", "storage", "psu", "case"}
+    for segment in segments:
+        selected = segment.components or {}
+        if not required.issubset(selected):
+            continue
+        ids = {int(value) for value in selected.values() if str(value).isdigit()}
+        rows = (await db.execute(
+            select(CatalogueVariant, Listing, PlaybookSlot)
+            .join(Listing, Listing.id == CatalogueVariant.listing_id)
+            .join(PlaybookSlot, PlaybookSlot.id == CatalogueVariant.slot_id)
+            .where(CatalogueVariant.id.in_(ids), CatalogueVariant.curated_for_builds.is_(True))
+        )).all()
+        details = {
+            slot.slot_type: {"variant_id": variant.id, "title": listing.title, "price": listing.price,
+                             "image_url": listing.image_urls[0] if listing.image_urls else None}
+            for variant, listing, slot in rows
+            if listing.status.value == "active"
+        }
+        if len(details) != len(ids) or not required.issubset(details):
+            continue
+        output.append({
+            "id": segment.id,
+            "customer_type": segment.customer_type,
+            "budget_level": segment.budget_level,
+            "budget_min": segment.budget_min,
+            "budget_max": segment.budget_max,
+            "selling_price": segment.selling_price,
+            "components": details,
+        })
+    return output
 
 # Only these lifecycle states are ever served to customers.
 _SERVABLE = (Component3DAssetStatus.VALIDATED, Component3DAssetStatus.FINAL)

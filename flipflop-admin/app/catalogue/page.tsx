@@ -11,11 +11,13 @@ import { PriceHistorySparkline } from "../../components/listings/PriceHistorySpa
 import { VendorLogo } from "../../components/VendorLogo";
 
 type ViewMode = "table" | "listings" | "grid";
-type CatalogueScope = "all" | "curated";
+type CatalogueScope = "bestsellers" | "all" | "curated";
 type Variant = {
   id: number; listing_id?: number | string; listing_title: string; image_url?: string | null; slot_type: string;
-  playbook_id: number; status: string; tier: string; display_price: number;
+  playbook_id: number; status: string; tier: string; display_price: number | null;
   gem_score: number; consecutive_misses: number; last_seen_at: string;
+  isAmazonBestseller?: boolean; sales_velocity?: string | null;
+  cheapest_market_price?: number | null; cheapest_market_url?: string | null; cheapest_market_source?: string | null; marketplace_listing_count?: number | null;
   source_name?: string | null; channel_sources?: string[];
   price_history_listing_id?: string | null; market_lower_price?: number | null; market_median_price?: number | null; market_upper_price?: number | null;
   cpk?: string | null; watch_count?: number | null; offer_count?: number | null; sold_count?: number | null; active_count?: number | null; sell_through_rate?: number | null;
@@ -95,27 +97,23 @@ function MarketPrice({ variant: v }: { variant: Variant }) {
 }
 
 function ReviewSummary({ variant: v }: { variant: Variant }) {
-  if (v.review_average_rating == null && v.review_count == null) {
-    return <div className="text-[10px] text-slate-600">—</div>;
-  }
   return <div className="flex items-center gap-1.5 text-xs" title="Product review rating and review count">
     <Star className="h-3.5 w-3.5 fill-amber-300 text-amber-300" />
-    <span className="font-mono font-semibold text-amber-200">{v.review_average_rating == null ? "—" : v.review_average_rating.toFixed(1)}</span>
-    <span className="text-slate-500">({v.review_count == null ? "—" : v.review_count.toLocaleString()})</span>
+    <span className="font-mono font-semibold text-amber-200">{v.review_average_rating == null ? "Rating unavailable" : v.review_average_rating.toFixed(1)}</span>
+    <span className="text-slate-500">({v.review_count == null ? "count unavailable" : v.review_count.toLocaleString()} reviews)</span>
   </div>;
 }
 
 function RankSummary({ variant: v }: { variant: Variant }) {
-  return <div className="flex flex-wrap gap-x-3 gap-y-1 text-[10px]" title="Ranks are product/CPK-level and shared across marketplace listings">
-    <span className="text-amber-300">Amazon <b className="font-mono">{v.amazon_bestseller_rank == null ? "—" : `#${v.amazon_bestseller_rank.toLocaleString()}`}</b></span>
+  return <div className="flex flex-wrap gap-x-3 gap-y-1 text-[10px]" title="Amazon rank is from the product category bestseller list">
+    <span className="text-amber-300">Amazon <b className="font-mono">{v.amazon_bestseller_rank == null ? "—" : `#${v.amazon_bestseller_rank.toLocaleString()} - ${v.amazon_bestseller_list ?? v.slot_type}`}</b></span>
     <span className="text-violet-300">Performance <b className="font-mono">{v.performance_rank == null ? "—" : `#${v.performance_rank.toLocaleString()}`}</b></span>
   </div>;
 }
 
 function PerformanceSummary({ variant: v }: { variant: Variant }) {
-  return <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[10px]" title="Performance score and rank are product/CPK-level and shared across marketplace listings">
-    <span className="text-violet-300">Score <b className="font-mono">{v.performance_score == null ? "—" : v.performance_score.toFixed(1)}</b></span>
-    <span className="text-slate-500">Rank <b className="font-mono text-violet-200">{v.performance_rank == null ? "—" : `#${v.performance_rank.toLocaleString()}`}</b></span>
+  return <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[10px]" title="Relative performance rank among benchmarked products">
+    <span className="text-violet-300">Rank <b className="font-mono text-violet-200">{v.performance_rank == null ? "—" : `#${v.performance_rank.toLocaleString()}${v.performance_peer_count ? ` / ${v.performance_peer_count.toLocaleString()}` : ""}`}</b></span>
   </div>;
 }
 
@@ -139,7 +137,7 @@ function SourcingDetails({ variant: v }: { variant: Variant }) {
 export default function CataloguePage() {
   const [variants, setVariants] = useState<Variant[]>([]);
   const [view, setView] = useState<ViewMode>("grid");
-  const [scope, setScope] = useState<CatalogueScope>("all");
+  const [scope, setScope] = useState<CatalogueScope>("bestsellers");
   const [category, setCategory] = useState("All components");
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
@@ -150,13 +148,63 @@ export default function CataloguePage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      if (scope === "all") {
+      if (scope === "bestsellers") {
+        const bestsellerCategories: Record<string, string> = {
+          CPU: "cpu", GPU: "gpu", Memory: "ram", Storage: "storage",
+          "PC Cases": "case", Motherboard: "motherboard", "Power supply": "psu", Cooling: "cooler",
+        };
+        const categoryKeys = category === "All components"
+          ? Object.values(bestsellerCategories)
+          : [bestsellerCategories[category]].filter(Boolean);
+        const responses = await Promise.all(categoryKeys.map(async key => {
+          const response = await fetch(`/api/best-sellers?category=${encodeURIComponent(key)}`, { cache: "no-store" });
+          if (!response.ok) throw new Error(`Could not load ${key} bestseller data (${response.status})`);
+          return await response.json() as { products: Array<Record<string, unknown>> };
+        }));
+        const products = responses.flatMap(result => result.products);
+        setVariants(products.map((row, index) => ({
+          id: index + 1,
+          listing_id: String(row.asin ?? index),
+          listing_title: String(row.title ?? "Untitled Amazon product"),
+          image_url: (row.image_url as string | null) ?? null,
+          slot_type: String(row.category ?? "other"),
+          playbook_id: 0,
+          status: "active",
+          tier: "bestseller",
+          display_price: typeof row.price === "number" ? row.price : null,
+          gem_score: 0,
+          consecutive_misses: 0,
+          last_seen_at: String(row.captured_at ?? ""),
+          isAmazonBestseller: true,
+          sales_velocity: (row.sales_velocity as string | null) ?? null,
+          source_name: "Amazon",
+          channel_sources: ["Amazon", ...((row.marketplace_sources as string[] | undefined) ?? [])],
+          cpk: (row.cpk as string | null) ?? null,
+          amazon_bestseller_rank: Number(row.rank),
+          amazon_bestseller_list: String(row.list_name ?? row.category ?? "Amazon Best Sellers"),
+          amazon_bestseller_captured_at: String(row.captured_at ?? ""),
+          review_average_rating: (row.rating as number | null) ?? null,
+          review_count: (row.review_count as number | null) ?? null,
+          market_lower_price: (row.market_low as number | null) ?? null,
+          market_median_price: (row.market_median as number | null) ?? null,
+          market_upper_price: (row.market_high as number | null) ?? null,
+          cheapest_market_price: (row.cheapest_market_price as number | null) ?? null,
+          marketplace_listing_count: (row.marketplace_listing_count as number | null) ?? null,
+          cheapest_market_url: (row.cheapest_market_url as string | null) ?? null,
+          cheapest_market_source: (row.cheapest_market_source as string | null) ?? null,
+          performance_rank: (row.performance_rank as number | null) ?? null,
+          performance_peer_count: (row.performance_peer_count as number | null) ?? null,
+          url: (row.url as string | null) ?? null,
+          deal_score: null,
+          classification: "AMAZON BESTSELLER",
+        })));
+      } else if (scope === "all") {
         // Let the API select its own runtime environment. The admin can be
         // served locally while pointing at either the DEV API or the live
         // production API, so a browser-side env flag can be stale or belong
         // to a different process. The backend already resolves DEV/LIVE from
         // FLIPFLOP_RUNTIME_ENV at the point where the data is queried.
-        const raw = await api.gemRadar.scoredListingsLatestRun() as Array<Record<string, unknown>>;
+        const raw = await api.gemRadar.scoredListingsLatestRun(undefined, 500) as Array<Record<string, unknown>>;
         setVariants(raw.map((row, index) => ({
           id: Number(row.id ?? index), listing_id: String(row.listing_id ?? row.id ?? index),
           listing_title: String(row.title ?? "Untitled listing"), image_url: (row.image_url as string | null) ?? null,
@@ -186,26 +234,31 @@ export default function CataloguePage() {
     }
     catch { setVariants(fallback); }
     finally { setLoading(false); }
-  }, [scope, status]);
+  }, [scope, status, category]);
   useEffect(() => { void load(); }, [load]);
 
   const visible = useMemo(() => variants.filter(v => {
     const matchesQuery = !query || v.listing_title.toLowerCase().includes(query.toLowerCase());
-    const categoryKey = category === "PC Cases" ? "case" : category.toLowerCase().replace(" ", "_");
-    const matchesCategory = category === "All components" || v.slot_type.toLowerCase() === categoryKey;
+    const categoryKeys: Record<string, string[]> = { CPU: ["cpu"], GPU: ["gpu"], Memory: ["ram"], Storage: ["storage"], "PC Cases": ["case"], Motherboard: ["motherboard"], "Power supply": ["psu"], Cooling: ["cooler"] };
+    const categoryKey = categoryKeys[category] ?? [category.toLowerCase().replace(" ", "_")];
+    const matchesCategory = category === "All components" || categoryKey.includes(v.slot_type.toLowerCase());
     return matchesQuery && matchesCategory;
   }).sort((a, b) => {
+    if (scope === "bestsellers") {
+      return (a.amazon_bestseller_rank ?? Number.MAX_SAFE_INTEGER) - (b.amazon_bestseller_rank ?? Number.MAX_SAFE_INTEGER)
+        || a.listing_title.localeCompare(b.listing_title);
+    }
     const scoreA = a.deal_score ?? a.gem_score / 10;
     const scoreB = b.deal_score ?? b.gem_score / 10;
     return scoreB - scoreA || a.listing_title.localeCompare(b.listing_title);
-  }), [variants, query, category]);
+  }), [variants, query, category, scope]);
   const pageCount = Math.max(1, Math.ceil(visible.length / pageSize));
   const pagedVisible = visible.slice((page - 1) * pageSize, page * pageSize);
 
   return <div className="catalogue-page min-h-full overflow-x-clip bg-[#05080d] p-4 text-slate-100 sm:p-6">
     <div className="mx-auto max-w-[1500px]">
       <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-        <div><p className="mb-1 font-mono text-[10px] uppercase tracking-[0.24em] text-cyan-400">FlipFlop / Inventory intelligence</p><h1 className="text-2xl font-bold tracking-tight text-white">Catalogue</h1><p className="mt-1 text-sm text-slate-400">Browse, compare and manage your retained component opportunities.</p></div>
+        <div><p className="mb-1 font-mono text-[10px] uppercase tracking-[0.24em] text-cyan-400">FlipFlop / Inventory intelligence</p><h1 className="text-2xl font-bold tracking-tight text-white">Catalogue</h1><p className="mt-1 text-sm text-slate-400">Browse Amazon-ranked components with review evidence and market coverage.</p></div>
         <div className="flex flex-wrap items-center gap-2"><button onClick={() => void load()} className="inline-flex h-9 items-center gap-2 rounded-md border border-white/10 bg-white/5 px-3 text-xs text-slate-300 transition hover:border-cyan-400/40 hover:text-white"><RefreshCw className={loading ? "h-3.5 w-3.5 animate-spin" : "h-3.5 w-3.5"} /> Refresh</button><button className="inline-flex h-9 items-center gap-2 rounded-md bg-cyan-400 px-3 text-xs font-bold text-slate-950 transition hover:bg-cyan-300"><SlidersHorizontal className="h-3.5 w-3.5" /> Manage filters</button></div>
       </div>
 
@@ -213,25 +266,26 @@ export default function CataloguePage() {
         <aside className="rounded-lg border border-white/10 bg-[#0b1119] p-3 lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto">
           <div className="mb-3 flex items-center justify-between"><span className="text-xs font-bold uppercase tracking-wider text-white">Category</span><ChevronDown className="h-3.5 w-3.5 text-slate-500" /></div>
           <div className="space-y-1">{categories.map(item => <button key={item} onClick={() => setCategory(item)} className={`flex w-full items-center justify-between rounded px-2 py-2 text-left text-xs transition ${category === item ? "bg-cyan-400/10 font-semibold text-cyan-300" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}><span>{item}</span>{item === "All components" && <span className="text-[10px] text-slate-600">{variants.length}</span>}</button>)}</div>
-          <div className="my-4 border-t border-white/10" /><div className="mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">Listing health</div>
-          {[["Active", "active"], ["Needs review", "pending_review"], ["Hidden", "hidden"]].map(([label, value]) => <button key={value} onClick={() => setStatus(value)} className="flex w-full items-center gap-2 py-1.5 text-left text-xs text-slate-400 hover:text-white"><span className={`h-2 w-2 rounded-full ${value === "active" ? "bg-emerald-400" : value === "pending_review" ? "bg-amber-400" : "bg-slate-500"}`} />{label}</button>)}
+          {scope !== "bestsellers" && <><div className="my-4 border-t border-white/10" /><div className="mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">Listing health</div>
+          {[["Active", "active"], ["Needs review", "pending_review"], ["Hidden", "hidden"]].map(([label, value]) => <button key={value} onClick={() => setStatus(value)} className="flex w-full items-center gap-2 py-1.5 text-left text-xs text-slate-400 hover:text-white"><span className={`h-2 w-2 rounded-full ${value === "active" ? "bg-emerald-400" : value === "pending_review" ? "bg-amber-400" : "bg-slate-500"}`} />{label}</button>)}</>}
+
         </aside>
 
         <div className="min-w-0">
           <section className="sticky top-4 z-20 -mx-1 mb-3 min-w-0 rounded-lg bg-[#05080d]/95 px-1 pb-1 pt-1 backdrop-blur-md">
-            <div className="mb-2 flex items-center gap-2"><span className="text-xs font-semibold text-slate-400">Scope</span>{([['all','All listings'],['curated','Curated catalogue']] as const).map(([value,label]) => <button key={value} onClick={() => { setScope(value); setPage(1); }} className={`rounded-full border px-3 py-1 text-[10px] transition ${scope === value ? "border-cyan-400/50 bg-cyan-400/10 text-cyan-300" : "border-white/10 text-slate-500 hover:text-white"}`}>{label}</button>)}<span className="text-[10px] text-slate-600">{scope === "all" ? "Current active market listings" : "GEM/SUPER_GEM products mapped to build slots"}</span></div>
+          <div className="mb-2 flex items-center gap-2"><span className="text-xs font-semibold text-slate-400">Scope</span>{([['bestsellers','Amazon Best Sellers'],['all','All listings'],['curated','Curated catalogue']] as const).map(([value,label]) => <button key={value} onClick={() => { setScope(value); setPage(1); }} className={`rounded-full border px-3 py-1 text-[10px] transition ${scope === value ? "border-cyan-400/50 bg-cyan-400/10 text-cyan-300" : "border-white/10 text-slate-500 hover:text-white"}`}>{label}</button>)}<span className="text-[10px] text-slate-600">{scope === "bestsellers" ? "Official Amazon category ranks, review ratings and review counts" : scope === "all" ? "Current active market listings" : "GEM/SUPER_GEM products mapped to build slots"}</span></div>
             <div className="flex flex-col gap-3 rounded-lg border border-white/10 bg-[#0b1119] p-3 shadow-xl shadow-black/20 md:flex-row md:items-center">
             <label className="flex min-w-0 flex-1 items-center gap-2 rounded-md border border-white/10 bg-black/20 px-3 text-slate-500 focus-within:border-cyan-400/60"><Search className="h-4 w-4 shrink-0" /><span className="sr-only">Search catalogue</span><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search components, models or titles" className="h-9 min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-600" /></label>
-            <div className="flex items-center gap-2"><select value={status} onChange={e => setStatus(e.target.value)} className="h-9 rounded-md border border-white/10 bg-[#111923] px-2 text-xs text-slate-300 outline-none"><option value="all">All statuses</option><option value="active">Active</option><option value="pending_review">Needs review</option><option value="hidden">Hidden</option></select><button className="inline-flex h-9 items-center gap-2 rounded-md border border-white/10 px-3 text-xs text-slate-300 hover:border-cyan-400/40"><Filter className="h-3.5 w-3.5" /> Filters</button></div>
+            <div className="flex items-center gap-2">{scope !== "bestsellers" && <select value={status} onChange={e => setStatus(e.target.value)} className="h-9 rounded-md border border-white/10 bg-[#111923] px-2 text-xs text-slate-300 outline-none"><option value="all">All statuses</option><option value="active">Active</option><option value="pending_review">Needs review</option><option value="hidden">Hidden</option></select>}<button className="inline-flex h-9 items-center gap-2 rounded-md border border-white/10 px-3 text-xs text-slate-300 hover:border-cyan-400/40"><Filter className="h-3.5 w-3.5" /> Filters</button></div>
             </div>
             <div className="mt-3 flex flex-wrap items-center gap-2"><span className="mr-1 text-xs text-slate-500">Popular:</span>{["CPU", "GPU", "DDR4", "NVMe", "AM4"].map(chip => <button key={chip} onClick={() => setQuery(chip)} className="cursor-pointer rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[10px] text-slate-300 transition hover:border-cyan-400/50 hover:text-cyan-300">{chip}</button>)}</div>
           </section>
 
-          <div className="mb-3 flex flex-col gap-3 border-b border-white/10 pb-3 sm:flex-row sm:items-center sm:justify-between"><div><span className="text-sm font-semibold text-white">{visible.length.toLocaleString()} results</span><span className="ml-2 text-xs text-slate-500">Sorted by gem score · showing {pagedVisible.length.toLocaleString()}</span></div><div className="flex items-center gap-3"><span className="text-xs text-slate-500">View</span><div className="flex overflow-hidden rounded-md border border-white/10 bg-[#0b1119]">{([["table", Table2, "Table"], ["listings", List, "Listings"], ["grid", LayoutGrid, "Grid"]] as const).map(([value, Icon, label]) => <button key={value} onClick={() => setView(value)} aria-pressed={view === value} className={`inline-flex cursor-pointer items-center gap-1.5 px-3 py-2 text-[11px] transition ${view === value ? "bg-cyan-400 text-slate-950" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}><Icon className="h-3.5 w-3.5" />{label}</button>)}</div></div></div>
+          <div className="mb-3 flex flex-col gap-3 border-b border-white/10 pb-3 sm:flex-row sm:items-center sm:justify-between"><div><span className="text-sm font-semibold text-white">{visible.length.toLocaleString()} results</span><span className="ml-2 text-xs text-slate-500">Sorted by {scope === "bestsellers" ? "Amazon Best Sellers rank" : "deal score"} · showing {pagedVisible.length.toLocaleString()}</span></div><div className="flex items-center gap-3"><span className="text-xs text-slate-500">View</span><div className="flex overflow-hidden rounded-md border border-white/10 bg-[#0b1119]">{([["table", Table2, "Table"], ["listings", List, "Listings"], ["grid", LayoutGrid, "Grid"]] as const).map(([value, Icon, label]) => <button key={value} onClick={() => setView(value)} aria-pressed={view === value} className={`inline-flex cursor-pointer items-center gap-1.5 px-3 py-2 text-[11px] transition ${view === value ? "bg-cyan-400 text-slate-950" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}><Icon className="h-3.5 w-3.5" />{label}</button>)}</div></div></div>
 
-          {view === "table" ? <TableView variants={pagedVisible} /> : <div className={view === "grid" ? "grid gap-3 sm:grid-cols-2 xl:grid-cols-3" : "space-y-3"}>{pagedVisible.map((v, index) => <ListingCard key={v.id} variant={v} index={index} compact={view === "listings"} />)}</div>}
+          {scope === "bestsellers" ? (view === "table" ? <BestsellerTableView variants={pagedVisible} /> : <div className={view === "grid" ? "grid gap-3 sm:grid-cols-2 xl:grid-cols-3" : "space-y-3"}>{pagedVisible.map((v, index) => <BestsellerCard key={v.listing_id ?? v.id} variant={v} index={index} compact={view === "listings"} />)}</div>) : (view === "table" ? <TableView variants={pagedVisible} /> : <div className={view === "grid" ? "grid gap-3 sm:grid-cols-2 xl:grid-cols-3" : "space-y-3"}>{pagedVisible.map((v, index) => <ListingCard key={v.id} variant={v} index={index} compact={view === "listings"} />)}</div>)}
           {!loading && visible.length === 0 && <div className="rounded-lg border border-dashed border-white/10 py-16 text-center text-sm text-slate-500">No catalogue matches. Try clearing the search or filters.</div>}
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500"><span>Showing {visible.length ? ((page - 1) * pageSize + 1).toLocaleString() : 0}–{Math.min(page * pageSize, visible.length).toLocaleString()} of {visible.length.toLocaleString()} listings</span><div className="flex items-center gap-2"><label className="flex items-center gap-1.5">Per page<select aria-label="Listings per page" value={pageSize} onChange={e => { setPageSize(Number(e.target.value)); setPage(1); }} className="rounded border border-white/10 bg-[#111923] px-2 py-1 text-xs text-slate-300 outline-none"><option value={50}>50</option><option value={100}>100</option><option value={200}>200</option></select></label><div className="flex items-center gap-1"><button aria-label="Previous catalogue page" disabled={page <= 1} onClick={() => setPage(p => Math.max(1, p - 1))} className="cursor-pointer rounded border border-white/10 p-1.5 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"><ChevronLeft className="h-3.5 w-3.5" /></button><span className="px-2 text-slate-300">{page} / {pageCount}</span><button aria-label="Next catalogue page" disabled={page >= pageCount} onClick={() => setPage(p => Math.min(pageCount, p + 1))} className="cursor-pointer rounded border border-white/10 p-1.5 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"><ChevronRight className="h-3.5 w-3.5" /></button></div></div></div>
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500"><span>Showing {visible.length ? ((page - 1) * pageSize + 1).toLocaleString() : 0}–{Math.min(page * pageSize, visible.length).toLocaleString()} of {visible.length.toLocaleString()} {scope === "bestsellers" ? "products" : "listings"}</span><div className="flex items-center gap-2"><label className="flex items-center gap-1.5">Per page<select aria-label="Listings per page" value={pageSize} onChange={e => { setPageSize(Number(e.target.value)); setPage(1); }} className="rounded border border-white/10 bg-[#111923] px-2 py-1 text-xs text-slate-300 outline-none"><option value={50}>50</option><option value={100}>100</option><option value={200}>200</option></select></label><div className="flex items-center gap-1"><button aria-label="Previous catalogue page" disabled={page <= 1} onClick={() => setPage(p => Math.max(1, p - 1))} className="cursor-pointer rounded border border-white/10 p-1.5 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"><ChevronLeft className="h-3.5 w-3.5" /></button><span className="px-2 text-slate-300">{page} / {pageCount}</span><button aria-label="Next catalogue page" disabled={page >= pageCount} onClick={() => setPage(p => Math.min(pageCount, p + 1))} className="cursor-pointer rounded border border-white/10 p-1.5 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"><ChevronRight className="h-3.5 w-3.5" /></button></div></div></div>
         </div>
       </div>
     </div>
@@ -240,18 +294,57 @@ export default function CataloguePage() {
 
 function ListingCard({ variant: v, index, compact }: { variant: Variant; index: number; compact: boolean }) {
   const metric = (value: number | null | undefined) => value == null ? "—" : value.toLocaleString();
-  return <article className={`overflow-hidden rounded-lg border border-white/10 bg-[#0b1119] transition hover:border-cyan-400/40 hover:shadow-[0_0_24px_rgba(34,211,238,.08)] ${compact ? "flex flex-col sm:flex-row" : ""}`}>
-    <div className={compact ? "w-full shrink-0 sm:w-52" : ""}><ProductArt index={index} title={v.slot_type} imageUrl={v.image_url} channelSources={v.channel_sources} currentSource={v.source_name} /></div>
-    <div className="min-w-0 flex-1 p-3">
-      <div className="mb-2 flex items-start justify-between gap-3"><div className="min-w-0"><p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-400">{v.tier} tier · {v.slot_type}</p>{v.url ? <a href={v.url} target="_blank" rel="noopener noreferrer" className="line-clamp-2 text-sm font-semibold leading-snug text-white hover:text-cyan-300 hover:underline">{v.listing_title}</a> : <h2 className="line-clamp-2 text-sm font-semibold leading-snug text-white">{v.listing_title}</h2>}</div><Status value={v.status} /></div>
-      <div className="mt-3 flex flex-wrap items-end gap-x-6 gap-y-2"><div><p className="text-xl font-bold text-white">£{(v.delivered_price ?? v.display_price).toFixed(0)}</p><p className="text-[10px] text-slate-500">Listing price</p></div><MarketPrice variant={v} /><div><p className="font-mono text-sm font-bold text-emerald-300">{v.deal_score == null ? v.gem_score.toFixed(0) : v.deal_score.toFixed(1)}<span className="text-[10px] font-normal text-slate-500"> / {v.deal_score == null ? "100" : "10"}</span></p><p className="text-[10px] text-slate-500">Gem score</p></div><div><PerformanceSummary variant={v} /><p className="text-[10px] text-slate-500">Performance</p></div><div><RankSummary variant={v} /><p className="text-[10px] text-slate-500">Product ranks</p></div><div><ReviewSummary variant={v} /><p className="text-[10px] text-slate-500">Reviews</p></div></div>
-      <div className="mt-3"><SourcingDetails variant={v} /></div>
-      <div className="mt-3 flex min-w-0 flex-wrap items-center gap-4 rounded-md border border-blue-400/10 bg-blue-400/[0.03] px-3 py-2"><PriceHistorySparkline listingId={v.price_history_listing_id ?? String(v.listing_id ?? v.id)} listingTitle={v.listing_title} /><div className="grid min-w-[150px] flex-1 grid-cols-2 gap-3"><div title="Distinct matched sold comps observed in the last 90 days"><p className="font-mono text-sm font-semibold text-emerald-200">{metric(v.sold_count)}</p><p className="text-[10px] text-slate-500">Sold · 90d</p></div><div title="Sold divided by sold plus active comparable listings"><p className="font-mono text-sm font-semibold text-cyan-200">{v.sell_through_rate == null ? "—" : `${v.sell_through_rate.toFixed(1)}%`}</p><p className="text-[10px] text-slate-500">Sell-through</p></div></div></div>
+  return <article className={`overflow-hidden rounded-lg border border-cyan-400/25 bg-[#0b1119] transition hover:border-cyan-400/50 ${compact ? "flex flex-col sm:flex-row" : ""}`}>
+    <div className={`relative flex shrink-0 items-center justify-center overflow-hidden bg-gradient-to-br ${imageTones[index % imageTones.length]} ${compact ? "h-32 w-full sm:h-auto sm:min-h-full sm:w-52" : "h-36 w-full"}`}>
+      {v.image_url && <img src={v.image_url} alt="" className="absolute inset-0 h-full w-full object-contain mix-blend-screen" />}
+      {!v.image_url && <span className="text-xs uppercase tracking-widest text-white/50">No image captured</span>}
+      <span className="absolute left-2 top-2 rounded-md border border-amber-300/30 bg-slate-950/85 px-2 py-1 font-mono text-xs font-bold text-amber-300">{v.amazon_bestseller_rank == null ? v.source_name ?? "Listing" : `Amazon #${v.amazon_bestseller_rank.toLocaleString()}`}</span>
+    </div>
+    <div className="grid min-w-0 flex-1 gap-x-5 gap-y-3 p-3 sm:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-7">
+      <div className="min-w-0 sm:col-span-2 xl:col-span-4 2xl:col-span-7"><p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-400">{v.amazon_bestseller_list ?? v.slot_type} · {v.listing_id}</p>{v.url ? <a href={v.url} target="_blank" rel="noopener noreferrer" className="line-clamp-2 text-sm font-semibold leading-snug text-white hover:text-cyan-300 hover:underline">{v.listing_title}</a> : <p className="line-clamp-2 text-sm font-semibold text-white">{v.listing_title}</p>}</div>
+      <div><p className="text-base font-bold text-white">{v.display_price == null ? "—" : `£${v.display_price.toFixed(2)}`}</p><p className="text-[10px] text-slate-500">Price · {v.source_name ?? "—"}</p></div>
+      <div className="flex items-center gap-2"><PriceHistorySparkline listingId={v.price_history_listing_id ?? String(v.listing_id ?? v.id)} listingTitle={v.listing_title} /><span className="text-[10px] text-slate-500">History</span></div>
+      <div><MarketPrice variant={v} /><p className="text-[10px] text-slate-500">Low / median / high</p></div>
+      <div><p className="text-sm font-semibold text-orange-300">{v.classification?.replace(/_/g, " ") ?? "—"}</p><p className="text-[10px] text-slate-500">Class</p></div>
+      <div><p className="text-sm font-semibold text-amber-300">{v.evidence_status ?? "—"}</p><p className="text-[10px] text-slate-500">Evidence</p></div>
+      <div><p className="font-mono text-sm font-semibold">{v.deal_score == null ? "—" : v.deal_score.toFixed(1)}</p><p className="text-[10px] text-slate-500">Score</p></div>
+      <div><p className="font-mono text-sm font-semibold text-amber-300">{v.amazon_bestseller_rank == null ? "—" : `#${v.amazon_bestseller_rank.toLocaleString()} - ${v.amazon_bestseller_list ?? v.slot_type}`}</p><p className="text-[10px] text-slate-500">Amazon BSR</p></div>
+      <div><p className="font-mono text-sm text-violet-300">{v.performance_rank == null ? "—" : `#${v.performance_rank.toLocaleString()} / ${v.performance_peer_count?.toLocaleString() ?? "—"}`}</p><p className="text-[10px] text-slate-500">Performance</p></div>
+      <div><p className="font-mono text-sm">{metric(v.sold_count)}</p><p className="text-[10px] text-slate-500">Sold (90d)</p></div>
+      <div><p className="font-mono text-sm text-amber-200">{v.review_average_rating == null ? "—" : `★ ${v.review_average_rating.toFixed(1)}`} ({v.review_count?.toLocaleString() ?? "—"})</p><p className="text-[10px] text-slate-500">Stars (reviews)</p></div>
+      <div><p className="text-sm font-semibold text-slate-200">{v.condition ?? "—"}</p><p className="text-[10px] text-slate-500">Condition · {v.status}</p></div>
     </div>
   </article>;
 }
 
 function TableView({ variants }: { variants: Variant[] }) {
   const metric = (value: number | null | undefined) => value == null ? "—" : value.toLocaleString();
-  return <div className="overflow-x-auto rounded-lg border border-white/10 bg-[#0b1119]"><table className="w-full min-w-[1580px] text-left text-xs"><thead className="border-b border-white/10 bg-white/[0.03] text-[10px] uppercase tracking-wider text-slate-500"><tr><th className="px-4 py-3">Listing</th><th className="px-3 py-3">Category</th><th className="px-3 py-3">Status</th><th className="px-3 py-3">Classification</th><th className="px-3 py-3">Channels</th><th className="px-3 py-3 text-right">Price</th><th className="px-3 py-3 text-right">Gem score</th><th className="px-3 py-3 text-right" title="Amazon bestseller rank shared at product/CPK level">Amazon rank</th><th className="px-3 py-3 text-right" title="Performance score and rank shared at product/CPK level">Performance</th><th className="px-3 py-3 text-center">Price trend</th><th className="px-3 py-3 text-right" title="Market median">M/M</th><th className="px-3 py-3 text-right">Reviews</th><th className="px-3 py-3 text-right">Sold · 90d</th><th className="px-4 py-3" /></tr></thead><tbody>{variants.map(v => <tr key={v.id} className="border-b border-white/5 transition last:border-0 hover:bg-white/[0.03]"><td className="max-w-[420px] px-4 py-3"><p className="truncate font-medium text-white">{v.listing_title}</p><p className="mt-1 text-[10px] uppercase text-slate-600">{v.tier} tier · #{v.id}</p></td><td className="px-3 py-3 text-slate-400">{v.slot_type}</td><td className="px-3 py-3"><Status value={v.status} /></td><td className="px-3 py-3 text-[10px] font-semibold uppercase text-amber-200">{v.classification?.replace(/_/g, " ") ?? "—"}</td><td className="px-3 py-3"><ChannelLogos sources={v.channel_sources} current={v.source_name} /></td><td className="px-3 py-3 text-right font-semibold text-white">£{v.display_price.toFixed(0)}</td><td className="px-3 py-3 text-right font-mono font-bold text-emerald-300">{v.gem_score.toFixed(0)}</td><td className="px-3 py-3 text-right font-mono text-amber-300">{v.amazon_bestseller_rank == null ? "—" : `#${v.amazon_bestseller_rank.toLocaleString()}`}<span className="block text-[9px] text-slate-600">{v.amazon_bestseller_list ?? "Product / CPK"}</span></td><td className="px-3 py-3 text-right font-mono text-violet-300"><p>{v.performance_score == null ? "—" : v.performance_score.toFixed(1)}</p><p className="text-[9px] text-slate-500">{v.performance_rank == null ? "Rank —" : `Rank #${v.performance_rank.toLocaleString()}`}</p></td><td className="px-3 py-3"><PriceHistorySparkline listingId={v.price_history_listing_id ?? String(v.listing_id ?? v.id)} listingTitle={v.listing_title} /></td><td className="px-3 py-3 text-right"><MarketPrice variant={v} /></td><td className="px-3 py-3 text-right"><ReviewSummary variant={v} /></td><td className="px-3 py-3 text-right"><p className="font-mono text-emerald-200">{metric(v.sold_count)}</p><p className="text-[10px] text-cyan-200" title="Sold divided by sold plus active comparable listings">ST {v.sell_through_rate == null ? "—" : `${v.sell_through_rate.toFixed(1)}%`}</p></td><td className="px-3 py-3 text-right text-slate-500">{v.last_seen_at}</td><td className="px-4 py-3 text-right"><button aria-label={`Toggle visibility for ${v.listing_title}`} className="cursor-pointer rounded p-1.5 text-slate-500 hover:bg-white/10 hover:text-white">{v.status === "active" ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}</button></td></tr>)}</tbody></table></div>;
+  return <div className="overflow-x-auto rounded-lg border border-white/10 bg-[#0b1119]"><table className="w-full min-w-[1450px] table-fixed text-left text-xs [&_th]:px-1.5 [&_th]:py-2 [&_td]:overflow-hidden [&_td]:px-1.5 [&_td]:py-2"><colgroup><col className="w-10" /><col className="w-16" /><col /><col className="w-20" /><col className="w-20" /><col className="w-28" /><col className="w-20" /><col className="w-20" /><col className="w-20" /><col className="w-24" /><col className="w-20" /><col className="w-14" /><col className="w-20" /><col className="w-24" /><col className="w-20" /><col className="w-24" /></colgroup><thead className="sticky top-0 border-b border-slate-600 bg-slate-700 text-[10px] uppercase tracking-wide text-slate-200"><tr><th></th><th>Source</th><th>Title</th><th>Condition</th><th className="text-right">Price</th><th>History</th><th className="text-right">Low</th><th className="text-right">Median</th><th className="text-right">High</th><th>Class</th><th>Evidence</th><th className="text-right">Score</th><th className="text-right">Amazon BSR</th><th className="text-right">Performance</th><th className="text-right">Sold (90d)</th><th className="text-right">Stars (reviews)</th></tr></thead><tbody>{variants.map(v => <tr key={v.id} className="border-b border-slate-700 transition hover:bg-slate-700/70"><td><img src={v.image_url ?? undefined} alt="" className="h-8 w-8 rounded object-cover" /></td><td><ChannelLogos sources={v.channel_sources} current={v.source_name} /></td><td className="break-words text-slate-100"><a href={v.url ?? undefined} target="_blank" rel="noopener noreferrer" className="hover:text-blue-300 hover:underline">{v.listing_title}</a></td><td><span className="rounded bg-emerald-500/20 px-2 py-1 text-emerald-300">{v.condition ?? "—"}</span></td><td className="text-right font-semibold text-slate-100">{v.display_price == null ? "—" : `£${v.display_price.toFixed(2)}`}</td><td><PriceHistorySparkline listingId={v.price_history_listing_id ?? String(v.listing_id ?? v.id)} listingTitle={v.listing_title} /></td><td className="text-right font-mono">{v.scored_market_lower_price == null ? "—" : `£${v.scored_market_lower_price.toFixed(0)}`}</td><td className="text-right font-mono">{v.scored_market_median_price == null ? "—" : `£${v.scored_market_median_price.toFixed(0)}`}</td><td className="text-right font-mono">{v.scored_market_upper_price == null ? "—" : `£${v.scored_market_upper_price.toFixed(0)}`}</td><td><span className="rounded bg-orange-500/20 px-2 py-1 text-orange-300">{v.classification?.replace(/_/g, " ") ?? "—"}</span></td><td><span className="rounded bg-amber-500/10 px-2 py-1 text-amber-300">{v.evidence_status ?? "—"}</span></td><td className="text-right font-mono font-semibold">{v.deal_score == null ? "—" : v.deal_score.toFixed(1)}</td><td className="text-right font-mono text-amber-300">{v.amazon_bestseller_rank == null ? "—" : `#${v.amazon_bestseller_rank.toLocaleString()} - ${v.amazon_bestseller_list ?? v.slot_type}`}</td><td className="text-right font-mono text-violet-300">{v.performance_rank == null ? "—" : `#${v.performance_rank.toLocaleString()} / ${v.performance_peer_count?.toLocaleString() ?? "—"}`}</td><td className="text-right font-mono">{metric(v.sold_count)}</td><td className="text-right text-amber-200">{v.review_average_rating == null ? "—" : `★ ${v.review_average_rating.toFixed(1)}`} ({v.review_count?.toLocaleString() ?? "—"})</td></tr>)}</tbody></table></div>;
+}
+
+function BestsellerTableView({ variants }: { variants: Variant[] }) {
+  return <div className="overflow-x-auto rounded-lg border border-white/10 bg-[#0b1119]"><table className="w-full min-w-[1450px] table-fixed text-left text-xs [&_th]:px-1.5 [&_th]:py-2 [&_td]:overflow-hidden [&_td]:px-1.5 [&_td]:py-2"><colgroup><col className="w-10" /><col className="w-16" /><col /><col className="w-20" /><col className="w-20" /><col className="w-28" /><col className="w-20" /><col className="w-20" /><col className="w-20" /><col className="w-24" /><col className="w-20" /><col className="w-14" /><col className="w-20" /><col className="w-24" /><col className="w-20" /><col className="w-24" /></colgroup><thead className="sticky top-0 border-b border-slate-600 bg-slate-700 text-[10px] uppercase tracking-wide text-slate-200"><tr><th></th><th>Source</th><th>Title</th><th>Condition</th><th className="text-right">Price</th><th>History</th><th className="text-right">Low</th><th className="text-right">Median</th><th className="text-right">High</th><th>Class</th><th>Evidence</th><th className="text-right">Score</th><th className="text-right">Amazon BSR</th><th className="text-right">Performance</th><th className="text-right">Sold (90d)</th><th className="text-right">Stars (reviews)</th></tr></thead><tbody>{variants.map(v => <tr key={v.listing_id ?? v.id} className="border-b border-slate-700 transition hover:bg-slate-700/70"><td><img src={v.image_url ?? undefined} alt="" className="h-8 w-8 rounded object-cover" /></td><td><ChannelLogos sources={v.channel_sources} /></td><td className="break-words text-slate-100"><a href={v.cheapest_market_url ?? v.url ?? undefined} target="_blank" rel="noopener noreferrer" className="hover:text-blue-300 hover:underline">{v.listing_title}</a></td><td><span className="rounded bg-emerald-500/20 px-2 py-1 text-emerald-300">New</span></td><td className="text-right font-semibold text-slate-100">{v.cheapest_market_price == null ? "—" : `£${v.cheapest_market_price.toFixed(2)}`}<span className="block text-[9px] text-slate-500">{v.cheapest_market_source ?? "—"}</span></td><td><PriceHistorySparkline listingId={String(v.listing_id ?? v.id)} listingTitle={v.listing_title} /></td><td className="text-right font-mono">{v.market_lower_price == null ? "—" : `£${v.market_lower_price.toFixed(0)}`}</td><td className="text-right font-mono">{v.market_median_price == null ? "—" : `£${v.market_median_price.toFixed(0)}`}</td><td className="text-right font-mono">{v.market_upper_price == null ? "—" : `£${v.market_upper_price.toFixed(0)}`}</td><td><span className="rounded bg-orange-500/20 px-2 py-1 text-orange-300">AMAZON</span></td><td><span className="rounded bg-amber-500/10 px-2 py-1 text-amber-300">{v.cpk ? "Matched" : "Limited"}</span></td><td className="text-right font-mono">—</td><td className="text-right font-mono text-amber-300">#{v.amazon_bestseller_rank?.toLocaleString() ?? "—"}</td><td className="text-right font-mono text-violet-300">{v.performance_rank == null ? "—" : `#${v.performance_rank.toLocaleString()} / ${v.performance_peer_count?.toLocaleString() ?? "—"}`}</td><td className="text-right font-mono">—</td><td className="text-right text-amber-200">{v.review_average_rating == null ? "—" : `★ ${v.review_average_rating.toFixed(1)}`} ({v.review_count?.toLocaleString() ?? "—"})</td></tr>)}</tbody></table></div>;
+}
+
+function BestsellerCard({ variant: v, index, compact }: { variant: Variant; index: number; compact: boolean }) {
+  return <article className={`overflow-hidden rounded-lg border border-white/10 bg-[#0b1119] transition hover:border-cyan-400/40 ${compact ? "flex flex-col sm:flex-row" : ""}`}>
+    <div className={`relative flex items-center justify-center overflow-hidden bg-gradient-to-br ${imageTones[index % imageTones.length]} ${compact ? "h-32 w-full sm:h-auto sm:min-h-full sm:w-52" : "h-40"}`}>
+      {v.image_url && <img src={v.image_url} alt="" className="absolute inset-0 h-full w-full object-contain mix-blend-screen" />}
+      {!v.image_url && <span className="text-xs uppercase tracking-widest text-white/50">No image captured</span>}
+      <span className="absolute left-2 top-2 rounded-md border border-amber-300/30 bg-slate-950/85 px-2 py-1 font-mono text-xs font-bold text-amber-300">#{v.amazon_bestseller_rank?.toLocaleString() ?? "—"} - {v.amazon_bestseller_list ?? v.slot_type}</span>
+    </div>
+    <div className="grid min-w-0 flex-1 gap-x-5 gap-y-3 p-3 sm:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-7">
+      <div className="min-w-0 sm:col-span-2 xl:col-span-4 2xl:col-span-7"><p className="mb-1 text-[10px] uppercase tracking-wider text-cyan-400">{v.amazon_bestseller_list} · ASIN {v.listing_id}</p><a href={v.cheapest_market_url ?? v.url ?? undefined} target="_blank" rel="noopener noreferrer" className="line-clamp-2 text-sm font-semibold text-white hover:text-cyan-300 hover:underline">{v.listing_title}</a></div>
+      <div><p className="text-base font-bold text-white">{v.cheapest_market_price == null ? "—" : `£${v.cheapest_market_price.toFixed(2)}`}</p><p className="text-[10px] text-slate-500">Price · {v.cheapest_market_source ?? "no matched offer"}</p></div>
+      <div className="flex items-center gap-2"><PriceHistorySparkline listingId={String(v.listing_id ?? v.id)} listingTitle={v.listing_title} /><span className="text-[10px] text-slate-500">History</span></div>
+      <div><div className="flex gap-3"><span className="font-mono text-[10px]">{v.market_lower_price == null ? "—" : `£${v.market_lower_price.toFixed(0)}`}</span><span className="font-mono text-sm text-orange-200">{v.market_median_price == null ? "—" : `£${v.market_median_price.toFixed(0)}`}</span><span className="font-mono text-[10px]">{v.market_upper_price == null ? "—" : `£${v.market_upper_price.toFixed(0)}`}</span></div><p className="text-[10px] text-slate-500">Low / median / high</p></div>
+      <div><p className="text-sm font-semibold text-orange-300">AMAZON</p><p className="text-[10px] text-slate-500">Class</p></div>
+      <div><p className="text-sm font-semibold text-amber-300">{v.cpk ? "Matched" : "Limited"}</p><p className="text-[10px] text-slate-500">Evidence · {v.marketplace_listing_count?.toLocaleString() ?? "—"} listings</p></div>
+      <div><p className="font-mono text-sm text-slate-300">—</p><p className="text-[10px] text-slate-500">Score</p></div>
+      <div><p className="font-mono text-sm font-semibold text-amber-300">#{v.amazon_bestseller_rank?.toLocaleString() ?? "—"}</p><p className="text-[10px] text-slate-500">Amazon BSR</p></div>
+      <div><p className="font-mono text-sm text-violet-300">{v.performance_rank == null ? "—" : `#${v.performance_rank.toLocaleString()} / ${v.performance_peer_count?.toLocaleString() ?? "—"}`}</p><p className="text-[10px] text-slate-500">Performance</p></div>
+      <div><p className="font-mono text-sm text-slate-300">—</p><p className="text-[10px] text-slate-500">Sold (90d)</p></div>
+      <div><ReviewSummary variant={v} /><p className="text-[10px] text-slate-500">Stars (reviews)</p></div>
+    </div>
+  </article>;
 }

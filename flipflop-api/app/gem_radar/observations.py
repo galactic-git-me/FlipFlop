@@ -14,7 +14,7 @@ import json
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 
-from sqlalchemy import or_, select, update
+from sqlalchemy import or_, select, text, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from sqlalchemy import func
@@ -23,6 +23,8 @@ from app.models.gem_radar_observation import GemRadarListingObservation
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.models.app_settings import AppSettings
 from app.gem_radar.marketplace import infer_listing_source
+from app.services.commerce_pricing import estimate_delivery_working_days
+from app.services.delivery_filters import estimate_listing_delivery_working_days
 from app.gem_radar.schemas import ExtractedListing, Identity, PriceBundle, PriceObservation, WatchSignals
 
 # Fallbacks used only if the app_settings row doesn't exist yet (fresh
@@ -47,54 +49,39 @@ async def get_consecutive_misses_before_inactive(db: AsyncSession) -> int:
 
 
 async def get_active_listing_ids(db: AsyncSession) -> set[str]:
-    """Listing IDs observed within the last 24 hours. Simple time-based approach:
-    if a listing was seen in the last 24 hours, it's active. If it hasn't been
-    seen for 24+ hours, it's inactive (but never deleted — retained for historical
-    price benchmarking).
-
-    Based on GemRadarListingObservation.search_run_id, NOT
-    GemRadarScoredListing — this is the critical distinction. A listing that
-    keeps showing up in scrapes but hasn't changed price gets deduped out of
-    re-scoring for 7 days (see submit_scan), so gem_radar_scored_listings
-    only gets a new row when something is genuinely new or stale. If "active"
-    were based on that table, a listing would silently age out within hours
-    even though it never stopped appearing — it just wasn't novel enough to
-    re-score. Observations are different: every sighting touches its row
-    (see touch_observation for the deduped path, record_observation for the
-    fresh path), so observed_at genuinely means "still turning up in scrapes,"
-    which is what "active" is supposed to mean.
-
-    Everything in the app (dashboards, tables, charts) should filter through
-    this — but historical/inactive rows are NEVER deleted and remain fully
-    usable for market-price benchmarking (build_batch_price_index draws on
-    ALL historical observations regardless of active status)."""
-    cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
-
-    result = await db.execute(
-        select(GemRadarListingObservation.listing_id)
-        .where(GemRadarListingObservation.observed_at >= cutoff.replace(tzinfo=None))
-        .distinct()
-    )
+    """Listing IDs still active after the last completed sweep's lifecycle pass."""
+    result = await db.execute(text(_ACTIVE_LISTING_IDS_SQL))
     return {row[0] for row in result.all()}
 
 
 async def get_active_buy_it_now_listing_ids(db: AsyncSession) -> set[str]:
-    """Currently observed fixed-price listings suitable for sourcing cards.
-
-    Auction lots belong in Auction Intel, never Gem-of-Day/component cards.
-    This reads the sighting ledger because the scored table does not retain
-    listing_type and a bulk rescore can make an old row's scored_at look new.
-    """
-    cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
-    result = await db.execute(
-        select(GemRadarListingObservation.listing_id)
-        .where(
-            GemRadarListingObservation.observed_at >= cutoff.replace(tzinfo=None),
-            GemRadarListingObservation.listing_type == "buy_it_now",
-        )
-        .distinct()
-    )
+    """Active fixed-price listings suitable for sourcing cards."""
+    result = await db.execute(text(_ACTIVE_LISTING_IDS_SQL + " AND latest.listing_type = 'buy_it_now'"))
     return {row[0] for row in result.all()}
+
+
+_ACTIVE_LISTING_IDS_SQL = """
+    WITH latest AS (
+        SELECT DISTINCT ON (listing_id) listing_id, listing_type, observed_at
+        FROM gem_radar_listing_observations
+        ORDER BY listing_id, observed_at DESC, id DESC
+    )
+    SELECT latest.listing_id
+    FROM latest
+    LEFT JOIN gem_radar_listing_lifecycle lifecycle
+      ON lifecycle.listing_id = latest.listing_id
+    WHERE (lifecycle.status IS NULL OR lifecycle.status = 'active'
+           OR latest.observed_at > lifecycle.archived_at)
+      AND NOT EXISTS (
+        SELECT 1 FROM listing_archive archive
+        WHERE archive.external_id = latest.listing_id
+      )
+      AND NOT EXISTS (
+        SELECT 1 FROM listings listing
+        WHERE listing.external_id = latest.listing_id
+          AND listing.status <> 'active'
+      )
+"""
 
 # How similar two titles from the same seller must be (token-overlap ratio)
 # before a new listing_id is treated as a likely relisting of an old one.
@@ -309,6 +296,11 @@ async def record_observation(
     search_run_id: str | None = None,
     search_query: str | None = None,
 ) -> GemRadarListingObservation:
+    source = infer_listing_source(listing.url, listing.listing_id)
+    observed_delivery_days = estimate_listing_delivery_working_days(listing.delivery_text)
+    estimated_delivery_days, delivery_estimate_source = estimate_delivery_working_days(
+        source or "", observed_delivery_days, listing.prime_eligible,
+    )
     row = GemRadarListingObservation(
         listing_id=listing.listing_id,
         seller_name=listing.seller,
@@ -320,12 +312,16 @@ async def record_observation(
         item_price=listing.item_price,
         postage_price=listing.postage_price,
         delivered_price=listing.current_delivered_price,
+        review_average_rating=listing.review_average_rating,
+        review_count=listing.review_count,
+        review_url=listing.review_url,
         bid_count=listing.bid_count,
         best_offer_enabled=listing.best_offer_enabled,
         observed_at=listing.extracted_at.replace(tzinfo=None) if listing.extracted_at.tzinfo else listing.extracted_at,
         search_run_id=search_run_id,
         search_query=search_query,
-        source=infer_listing_source(listing.url, listing.listing_id),
+        search_tags=listing.search_tags,
+        source=source,
         epid=listing.epid,
         gtin=listing.gtin,
         mpn=listing.mpn,
@@ -335,6 +331,9 @@ async def record_observation(
         scan_price=listing.scan_price,
         delivery_text=listing.delivery_text,
         delivery_postcode=listing.delivery_postcode,
+        prime_eligible=listing.prime_eligible,
+        delivery_working_days=estimated_delivery_days,
+        delivery_estimate_source=delivery_estimate_source,
     )
     db.add(row)
     await db.commit()
@@ -371,11 +370,16 @@ async def touch_observation(
     search_run_id: str,
     observed_at: datetime,
     search_query: str | None = None,
+    image_url: str | None = None,
+    search_tags: list[str] | None = None,
+    delivery_text: str | None = None,
+    delivery_postcode: str | None = None,
+    prime_eligible: bool | None = None,
 ) -> bool:
     """Lightweight "still here" update for a listing the 7-day dedup window
     skipped from full re-scoring: bumps its most recent observation's
-    observed_at/search_run_id/search_query WITHOUT creating a new row or
-    touching gem_radar_scored_listings. This is what lets
+    observed_at/search_run_id/search_query and refreshes visible delivery
+    evidence WITHOUT creating a new row or rescoring the listing. This is what lets
     get_active_listing_ids tell "still appearing in scrapes, just not novel
     enough to re-score" apart from "genuinely gone quiet" — without this, a
     still-live deduped listing would silently read as inactive within a
@@ -398,6 +402,44 @@ async def touch_observation(
     row.search_run_id = search_run_id
     if search_query is not None:
         row.search_query = search_query
+    if search_tags:
+        row.search_tags = list(dict.fromkeys([*(row.search_tags or []), *search_tags]))
+    if image_url and (not row.image_url or row.image_url.endswith("._RC")):
+        row.image_url = image_url
+    if delivery_text is not None:
+        row.delivery_text = delivery_text
+    if delivery_postcode is not None:
+        row.delivery_postcode = delivery_postcode
+    if prime_eligible is not None:
+        row.prime_eligible = prime_eligible
+    if prime_eligible is not None or delivery_text is not None or delivery_postcode is not None:
+        observed_delivery_days = estimate_listing_delivery_working_days(delivery_text)
+        estimated_delivery_days, delivery_estimate_source = estimate_delivery_working_days(
+            row.source or "", observed_delivery_days,
+            prime_eligible if prime_eligible is not None else row.prime_eligible,
+        )
+        if (
+            delivery_text is None
+            and row.delivery_estimate_source == "listing_estimate"
+            and row.delivery_working_days is not None
+        ):
+            # Some cards omit delivery wording on a later scan. Keep the last
+            # explicit promise instead of replacing it with a vendor default.
+            estimated_delivery_days = row.delivery_working_days
+            delivery_estimate_source = "listing_estimate"
+        row.delivery_working_days = estimated_delivery_days
+        row.delivery_estimate_source = delivery_estimate_source
+        await db.execute(
+            update(GemRadarScoredListing)
+            .where(GemRadarScoredListing.listing_id == listing_id)
+            .values(
+                prime_eligible=row.prime_eligible,
+                delivery_text=delivery_text or row.delivery_text,
+                delivery_postcode=delivery_postcode or row.delivery_postcode,
+                delivery_working_days=estimated_delivery_days,
+                delivery_estimate_source=delivery_estimate_source,
+            )
+        )
     if row.source is None:
         # Deduped listings do not carry the full ExtractedListing payload, so
         # recover synthetic aggregator origins from the qualified listing ID.

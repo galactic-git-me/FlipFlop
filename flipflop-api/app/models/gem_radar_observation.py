@@ -6,7 +6,7 @@ DB storage is cheap enough that gating it to watched-only would trade real
 correctness for a marginal storage saving.
 """
 from datetime import datetime
-from sqlalchemy import String, Integer, Float, DateTime, Boolean, Text
+from sqlalchemy import String, Integer, Float, DateTime, Boolean, Text, JSON
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
@@ -25,6 +25,9 @@ class GemRadarListingObservation(Base):
     item_price: Mapped[float] = mapped_column(Float)
     postage_price: Mapped[float] = mapped_column(Float)
     delivered_price: Mapped[float] = mapped_column(Float)
+    review_average_rating: Mapped[float | None] = mapped_column(Float, nullable=True)
+    review_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    review_url: Mapped[str | None] = mapped_column(String(1000), nullable=True)
     bid_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
     watch_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
     best_offer_enabled: Mapped[bool] = mapped_column(Boolean, default=False)
@@ -48,6 +51,7 @@ class GemRadarListingObservation(Base):
     # still-fresh listings from "active" the moment a third distinct search
     # under the same category landed.
     search_query: Mapped[str | None] = mapped_column(String(500), index=True, nullable=True)
+    search_tags: Mapped[list[str]] = mapped_column(JSON, default=list, nullable=False)
     # Marketplace this sighting came from (ebay/vinted/overclockers/temu),
     # inferred from the listing URL at write time (see
     # app.gem_radar.marketplace.infer_marketplace) — ExtractedListing itself
@@ -84,6 +88,11 @@ class GemRadarListingObservation(Base):
     # Delivery promise/location captured from the marketplace card.
     delivery_text: Mapped[str | None] = mapped_column(String(500), nullable=True)
     delivery_postcode: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    # Marketplace fulfilment signal captured from the visible listing card.
+    # None means the source did not expose enough evidence to determine it.
+    prime_eligible: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    delivery_working_days: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    delivery_estimate_source: Mapped[str | None] = mapped_column(String(32), nullable=True)
 
     # Cross-search dedup / cost-control cache (PRD §24 "researched once,
     # referenced twice", §31 caching). Stores the full ScoredListing JSON so

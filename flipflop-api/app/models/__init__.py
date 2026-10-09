@@ -26,12 +26,15 @@ from app.models.manual_build import ManualBuild
 from app.models.pc_builder import PCBuild, PCBuildPurchasePlan
 from app.models.benchmark import HardwareBenchmark, ComponentPerformanceMetric, BenchmarkRefreshRun
 from app.models.catalogue import PlaybookSlot, CatalogueVariant, CaseCatalogue
+from app.models.curated_build_segment import CuratedBuildSegment
+from app.models.custom_build_settings import CustomBuildSettings
 from app.models.build_capacity import BuildCapacity
 from app.models.build_capacity_override import BuildCapacityOverride
 from app.models.inventory_allocation import InventoryAllocation
 from app.models.pricing_bias import PricingBias
 from app.models.draft_build import DraftBuild
 from app.models.gem_radar_observation import GemRadarListingObservation
+from app.models.gem_radar_listing_lifecycle import GemRadarListingLifecycle
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.models.gem_radar_seller_profile import GemRadarSellerProfile
 from app.models.gem_radar_sold_observation import GemRadarSoldObservation
@@ -57,6 +60,12 @@ from app.models.demand_metrics_snapshot import DemandMetricsSnapshot
 from app.models.demand_alert import DemandAlert
 from app.models.demand_export_audit import DemandExportAudit
 from app.models.customer_review import CustomerReview
+from app.models.recommendation_session import RecommendationSession
+from app.models.upgrade_assessment import UpgradeAssessment
+from app.models.commerce_evidence import (
+    SupplierOfferEvidence, PriceQuoteSnapshot, WorkshopCapacityEvidence,
+    WorkshopCapacityReservation, WorkshopCapacityReservationEvent,
+)
 
 __all__ = [
     "Listing", "ListingStatus",
@@ -91,6 +100,8 @@ __all__ = [
     "PlaybookSlot",
     "CatalogueVariant",
     "CaseCatalogue",
+    "CuratedBuildSegment",
+    "CustomBuildSettings",
     "Order",
     "BuildCapacity",
     "BuildCapacityOverride",
@@ -220,4 +231,6 @@ __all__ = [
     "CuratedComponentSKU",
     "CuratedBuildAvailability",
     "SKUSwapEvent",
+    "SupplierOfferEvidence", "PriceQuoteSnapshot", "WorkshopCapacityEvidence",
+    "WorkshopCapacityReservation", "WorkshopCapacityReservationEvent",
 ]

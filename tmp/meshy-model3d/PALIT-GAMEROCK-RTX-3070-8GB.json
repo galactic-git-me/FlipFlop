@@ -1,0 +1,15 @@
+{
+  "sku": "PALIT-GAMEROCK-RTX-3070-8GB",
+  "category": "component",
+  "glb_url": "https://assets.meshy.ai/b7d35f20-cae5-454f-80da-4abb3d48c6e8/tasks/01a0c373-a77d-758f-b27b-3b357969cb2e/output/model.glb?Expires=1790245024&Signature=T2ewn8BXN5mw4HGKqOoj46QTyEDXjlQ~HzNuTe2uKQevX2tlfsFIA3ofgyzRaatmzz34ngv8NvjIPSVTTWfDog~pUvxQV2Qt64MxLwDtQQRN3WIVFHaoHWwYnoXPKAcs00-Z6lqkDCySIRdqxxkIuz10Vj1iwh5RD6qnfRksRaumbMTPqRU0regLvv7A3sv32u-pzNpZ135EWz11SgyAuOTAa8~CCw5jGyuRti~5C0f79jeYYt6CEVsdlnbsI95pX4LO9s5VbNZ0lChtCksU~VsT1y8Ix4aSGjkmYeYfELEsPxxSn5oUcrFJoOQkqDDnbUaWT1mg0Y9vos2WdZRdXQ__&Key-Pair-Id=K1VGYTHIYLM9UM",
+  "preview_image_url": "https://assets.meshy.ai/b7d35f20-cae5-454f-80da-4abb3d48c6e8/tasks/01a0c373-a77d-758f-b27b-3b357969cb2e/output/preview.png?Expires=1790245024&Signature=WGJnCv5ROkjctJH5PQYFrORJR~AT9vrxBYvwxkX7F4DgEWU4RD1bDQMtSOJAzrIsS6Z0qtTeZDyph05YEwOzbe~111mGgfT-WlFqk-jZHw5efZDRPjtLrlz114ogdq2LofpkXJ62CfFjtE-zMtuqMh24v8qHiORYgYr~t2ug6EeuUwq79wB7EgHR7Jh1IwhKrCYpu4qyDkBJx4n7qIESjYgleKrezKTiDdvuvg4cco5GwfqCmGSkLQDHsEyMRF-KDqcOr4l7toCTkXQsiiPqCFciw0GUfnY0VbC1hLYwU1SeaOqbCbatmwQsZCIZZ95BLS3r7pIMXkz~c28DuNzbHw__&Key-Pair-Id=K1VGYTHIYLM9UM",
+  "poly_count": null,
+  "file_size_kb": 62257,
+  "source_image_refs": [
+    "https://www.palit.com/product/vga/picture/p03819/p03819_propng_10045f744e718eea5.png",
+    "https://www.palit.com/product/vga/picture/p03819/p03819_bigimage_11625f6d8c224ea57.png",
+    "https://www.palit.com/product/vga/picture/p03819/p03819_bigimage_2005f571cbbd6959.png",
+    "https://www.palit.com/product/vga/picture/p03819/p03819_bigimage_5915f744ea0ec501.png"
+  ],
+  "submitted_by": "MeshyBot"
+}

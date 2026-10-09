@@ -5,9 +5,11 @@ export async function GET(request: NextRequest) {
   // The campaign starts with 30 frozen cases, but curated exceptions may have
   // a later rank and must remain visible in the review UI.
   const limit = searchParams.get("limit") || "100";
+  const offset = searchParams.get("offset") || "0";
+  const sourceSite = searchParams.get("source_site");
 
   const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:18000";
-  const apiUrl = `${backendUrl}/api/cases/priority-for-3d?limit=${limit}`;
+  const apiUrl = `${backendUrl}/api/cases/priority-for-3d?limit=${encodeURIComponent(limit)}&offset=${encodeURIComponent(offset)}${sourceSite ? `&source_site=${encodeURIComponent(sourceSite)}` : ""}`;
 
   try {
     const response = await fetch(apiUrl);

@@ -32,7 +32,9 @@ services:
     image: alpine:3.20
     container_name: flipflop-production-ollama-tunnel
     restart: unless-stopped
-    command: ["/bin/sh", "-c", "apk add --no-cache openssh-client && exec ssh -N -T -g -o BatchMode=yes -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=yes -L 0.0.0.0:11434:127.0.0.1:11434 mclar@prometheus-ts"]
+    # Forward production traffic to the production-priority gateway listener
+    # on prometheus-ts, rather than bypassing the gateway and hitting Ollama.
+    command: ["/bin/sh", "-c", "apk add --no-cache openssh-client && exec ssh -N -T -g -o BatchMode=yes -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=yes -L 0.0.0.0:11434:127.0.0.1:11436 mclar@prometheus-ts"]
     volumes:
       - /home/mac/.ssh/id_ed25519:/root/.ssh/id_ed25519:ro
       - /home/mac/.ssh/known_hosts:/root/.ssh/known_hosts:ro
@@ -78,8 +80,8 @@ services:
       # Live listings must never silently fall back to the eBay sandbox when
       # the host env file omits this optional setting.
       EBAY_LISTING_ENVIRONMENT: production
-      # OAuth is completed by the local admin UI in the operator's browser.
-      ADMIN_FRONTEND_URL: http://localhost:4312
+      # OAuth is completed by the public production admin UI.
+      ADMIN_FRONTEND_URL: https://admin.theflipflop.shop
       EBAY_OAUTH_CALLBACK_URL: https://www.theflipflop.shop/api/ebay/oauth/callback
     ports:
       - "127.0.0.1:4311:4311"
@@ -134,6 +136,12 @@ services:
       REDIS_URL: redis://redis:6379/0
       OLLAMA_BASE_URL: http://ollama-tunnel:11434
       OLLAMA_MODEL: qwen2.5:7b-instruct
+      LLM_PRIMARY_PROVIDER: ollama
+      LLM_PRIMARY_MODEL: qwen2.5:7b-instruct
+      LLM_SECONDARY_PROVIDER: openrouter-free
+      LLM_SECONDARY_MODEL: google/gemma-4-31b-it:free
+      LLM_TERTIARY_PROVIDER: openrouter
+      LLM_TERTIARY_MODEL: auto:cheapest
       EBAY_LISTING_ENVIRONMENT: production
       # Was capped at 2 (config.py default) as an emergency throttle during a
       # past RAM-pressure incident. Confirmed 2026-09-07: 16GiB available,
@@ -158,6 +166,66 @@ services:
       timeout: 10s
       retries: 3
       start_period: 20s
+
+  storefront:
+    build:
+      context: ../../FlipFlop.shop
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: /api
+    container_name: flipflop-production-storefront
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      BACKEND_URL: http://api:4311
+      NEXT_PUBLIC_API_URL: /api
+    ports:
+      - "127.0.0.1:3020:3000"
+    networks:
+      - flipflop-network
+    volumes:
+      - ../runtime/public-media:/app/public/media
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  admin:
+    build:
+      context: ..
+      dockerfile: flipflop-admin/Dockerfile.prod
+      args:
+        NEXT_PUBLIC_API_URL: /api
+    container_name: flipflop-production-admin
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+      gemradar-worker:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      BACKEND_URL: http://api:4311
+      GEMRADAR_URL: http://gemradar-worker:8000
+      NEXT_PUBLIC_API_URL: /api
+      NEXT_PUBLIC_FLIPFLOP_ENV: live
+      PUBLIC_HOST: admin.theflipflop.shop
+      NEXT_PUBLIC_STOREFRONT_URL: https://www.theflipflop.shop
+    ports:
+      - "127.0.0.1:3021:3000"
+    networks:
+      - flipflop-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
 volumes:
   flipflop_production_postgres:

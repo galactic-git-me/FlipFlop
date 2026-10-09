@@ -48,6 +48,9 @@ class Phase2Result:
     classified_count: int
     unsettled_count: int
     classification_counts: dict[str, int] = field(default_factory=dict)
+    review_source_count: int = 0
+    review_saved_count: int = 0
+    coverage_errors: list[str] = field(default_factory=list)
 
 
 def component_alert_matches_listing(
@@ -71,7 +74,9 @@ def component_alert_matches_listing(
     )
 
 
-async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews: bool = True) -> Phase2Result:
+async def run_phase2_classification(
+    db: AsyncSession, *, enrich_product_reviews: bool = True, emit_side_effects: bool = True,
+) -> Phase2Result:
     policy = await load_opportunity_policy(db)
 
     result = await db.execute(
@@ -83,7 +88,9 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
                 lo.delivered_price, lo.source, lo.observed_at,
                 cpk.cpk, cpk.cpk_data, lo.category AS observed_category, lo.bid_count, lo.watch_count,
                 lo.epid, lo.seller_feedback_percent, lo.seller_feedback_count,
-                lo.delivery_text, lo.delivery_postcode
+                lo.delivery_text, lo.delivery_postcode, lo.prime_eligible,
+                lo.delivery_working_days, lo.delivery_estimate_source,
+                lo.review_average_rating, lo.review_count
             FROM gem_radar_listing_observations lo
             LEFT JOIN gem_radar_listing_cpk cpk ON lo.listing_id = cpk.listing_id
             ORDER BY lo.listing_id, lo.observed_at DESC, lo.id DESC
@@ -141,7 +148,7 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
     """))).all()
     velocities = {row[0]: (float(row[1]) if row[1] is not None else None, float(row[2]) if row[2] is not None else None) for row in velocity_rows}
 
-    favourites = (await db.execute(select(Favourite))).scalars().all()
+    favourites = (await db.execute(select(Favourite))).scalars().all() if emit_side_effects else []
     preferred_keys = set((await db.execute(select(PreferredComponent.component_key))).scalars().all())
     component_price_alerts = (await db.execute(select(PriceAlert).where(
         PriceAlert.alert_type == "component",
@@ -151,7 +158,7 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
         PriceAlert.monitoring_status.in_(("pending_evidence", "armed")),
     ))).scalars().all()
     alerts_by_cpk: dict[str, list[PriceAlert]] = defaultdict(list)
-    if is_enabled(FeatureFlags.PRICE_ALERTS_RULES_ENABLED):
+    if emit_side_effects and is_enabled(FeatureFlags.PRICE_ALERTS_RULES_ENABLED):
         for component_alert in component_price_alerts:
             alerts_by_cpk[component_alert.cpk].append(component_alert)
     triggered_component_alerts: list[tuple[PriceAlert, Money]] = []
@@ -174,6 +181,9 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
     classified_count = 0
     unsettled_count = 0
     classification_counts: dict[str, int] = {}
+    recent_amazon_count = 0
+    review_source_count = 0
+    review_saved_count = 0
 
     for row in listings:
         (
@@ -181,17 +191,20 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
             item_price, postage_price, delivered_price, source, observed_at,
             cpk, cpk_data, observed_category, bid_count, watch_count,
             epid, seller_feedback_percent, seller_feedback_count,
-            delivery_text, delivery_postcode,
+            delivery_text, delivery_postcode, prime_eligible, delivery_working_days,
+            delivery_estimate_source, observed_review_average, observed_review_count,
         ) = row
 
+        if source == "amazon" and observed_at >= datetime.utcnow() - timedelta(hours=24):
+            recent_amazon_count += 1
+        if observed_review_average is not None and observed_review_count is not None and observed_review_count > 0:
+            review_source_count += 1
+
         title_condition = (title or "").lower()
-        if (condition or "").lower() in {"parts_only", "for_parts", "untested"} or re.search(
+        unsuitable_condition = bool((condition or "").lower() in {"parts_only", "for_parts", "untested"} or re.search(
             r"\b(?:for\s*parts|parts\s*only|not\s*working|spares?\s*(?:or|/)\s*repair)\b",
             title_condition,
-        ):
-            # Parts-only/untested listings are not valid resale candidates and
-            # must never be normalised into the ordinary used cohort.
-            continue
+        ))
         title_marks_non_new = any(term in title_condition for term in ("b grade", "b-grade", "open box", "open-box", "refurbished", "renewed"))
         normalised_condition = "new" if (condition or "").lower() == "new" and not title_marks_non_new else "used"
         category = (cpk_data or {}).get("category") or observed_category
@@ -217,10 +230,11 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
                     unsettled_count += 1
 
         # Record demand snapshot for velocity tracking (Phase 2 enhancement).
-        await record_demand_snapshot(
-            db, listing_id, SEARCH_RUN_ID,
-            watch_count, bid_count, delivered_price
-        )
+        if emit_side_effects:
+            await record_demand_snapshot(
+                db, listing_id, SEARCH_RUN_ID,
+                watch_count, bid_count, delivered_price
+            )
         for alert in alerts_by_cpk.get(cpk, []):
             alert.last_evaluated_at = datetime.utcnow()
             if not component_alert_matches_listing(
@@ -273,7 +287,21 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
         sell_through_rate = sell_through_rate_pct(sold_count, active_count) if cpk else None
         preferred = cpk in preferred_keys
         watch_velocity, bid_velocity = velocities.get(listing_id, (None, None))
-        if cpk:
+        if unsuitable_condition:
+            # Persist a terminal result so these listings do not remain blank
+            # in the Scores gauge after the sweep finishes.
+            opportunity = OpportunityResult(
+                classification="INELIGIBLE", decision="IGNORE", score=0.0,
+                expected_profit=None, roi_pct=None, walk_away_price=None,
+                liquidity_score=None, desirability_score=None,
+                risk_score=0.0, market=None, eligible=False,
+                reasons=["Listing is for parts, repair, or untested."],
+                risk_flags=["parts_or_untested"],
+                evidence_status="INELIGIBLE",
+                evidence_reason="parts_or_untested",
+                evidence_confidence={},
+            )
+        elif cpk:
             opportunity = score_opportunity(
                 listing_price=delivered_price, title=title, cpk_data=cpk_data,
                 market=market, sold_count_90d=sold_count, active_count=active_count,
@@ -326,20 +354,15 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
         # silently discarded Amazon/Google Shopping/etc. review values before
         # they could be aggregated at CPK level.
         existing_average, existing_count = existing_reviews.get(listing_id, (None, None))
-        review_average_rating = (
-            existing_average
-            if existing_average is not None
-            else listing.review_average_rating
-        )
-        review_count = (
-            existing_count
-            if existing_count is not None
-            else listing.review_count
-        )
+        review_average_rating = observed_review_average if observed_review_average is not None else existing_average
+        review_count = observed_review_count if observed_review_count is not None else existing_count
         if enrich_product_reviews and classification in ("GEM", "SUPER_GEM") and epid:
             reviews = await get_product_reviews(epid)
-            review_average_rating = reviews.average_rating
-            review_count = reviews.review_count
+            if reviews.average_rating is not None and reviews.review_count is not None:
+                review_average_rating = reviews.average_rating
+                review_count = reviews.review_count
+        if review_average_rating is not None and review_count is not None and review_count > 0:
+            review_saved_count += 1
 
         decision = opportunity.decision
 
@@ -361,6 +384,7 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
             image_url=image_url,
             condition=condition,
             category=category,
+            canonical_model_id=(cpk_data or {}).get("model") if category in {"cpu", "gpu"} else None,
             epid=epid,
             seller_feedback_percent=seller_feedback_percent,
             seller_feedback_count=seller_feedback_count,
@@ -371,6 +395,9 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
             delivered_price=delivered_price,
             delivery_text=delivery_text,
             delivery_postcode=delivery_postcode,
+            prime_eligible=prime_eligible,
+            delivery_working_days=delivery_working_days,
+            delivery_estimate_source=delivery_estimate_source,
             bid_count=bid_count,
             watch_count=watch_count,
             classification=classification,
@@ -450,8 +477,8 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
                 .order_by(GemRadarDecisionEvent.created_at.desc())
                 .limit(1)
             )
-        ).scalar_one_or_none()
-        if (
+        ).scalar_one_or_none() if emit_side_effects else None
+        if emit_side_effects and (
             latest_decision is None
             or latest_decision.classification != classification
             or latest_decision.decision != decision
@@ -480,12 +507,19 @@ async def run_phase2_classification(db: AsyncSession, *, enrich_product_reviews:
 
     await db.commit()
 
-    for alert, trigger_price in triggered_component_alerts:
-        await send_price_alert_email(db, alert, trigger_price)
+    if emit_side_effects:
+        for alert, trigger_price in triggered_component_alerts:
+            await send_price_alert_email(db, alert, trigger_price)
 
     return Phase2Result(
         total_cpk_tagged=len(listings),
         classified_count=classified_count,
         unsettled_count=unsettled_count,
         classification_counts=classification_counts,
+        review_source_count=review_source_count,
+        review_saved_count=review_saved_count,
+        coverage_errors=(
+            ["Amazon listings are present but no rated review observations were captured"]
+            if recent_amazon_count and review_source_count == 0 else []
+        ) + (["Review observations were captured but none survived scoring"] if review_source_count and review_saved_count == 0 else []),
     )

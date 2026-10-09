@@ -39,11 +39,13 @@ from app.workers.cross_listing_recreate import run_cross_listing_recreate_job
 from app.workers.delivery_followup import run_delivery_followup_job
 from app.workers.message_poll import run_message_poll_job
 from app.workers.case_content_sourcing import run_case_content_sourcing
+from app.workers.overclockers_gallery import run_overclockers_gallery_sourcing
 from app.services.amazon_bestsellers import scrape_amazon_component_bestsellers
 from app.services.ai_build_generator import generate_ai_builds
 from app.services.email_monitor import EmailMonitor
 from app.services.ebay_sales_tracker import get_tracker as get_ebay_sales_tracker
 from app.database import get_db
+from app.services.growth_social import publish_due_posts
 import structlog
 
 log = structlog.get_logger(__name__)
@@ -193,6 +195,8 @@ async def _run_job_with_history(job_id: str, fn: Callable[[], Awaitable[dict]]) 
         result = await fn()
         finished = datetime.now(timezone.utc)
         took_ms = int((perf_counter() - t0) * 1000)
+        if job_id == "amazon_component_bestsellers" and isinstance(result, dict) and result.get("ok") is False:
+            raise RuntimeError(str(result.get("reason") or result.get("category_results") or "incomplete bestseller coverage"))
         if isinstance(result, dict) and result.get("ok") is False:
             reason = str(result.get("reason") or "not_ready")
             summary = f"Skipped ({reason}, {took_ms}ms)"
@@ -242,6 +246,13 @@ async def run_ebay_sales_tracker() -> dict:
 
     tracker = get_ebay_sales_tracker()
     return await tracker.poll_sales()
+
+
+async def run_growth_social_publisher() -> dict:
+    """Process only due posts that already passed the approval workflow."""
+    async for db in get_db():
+        result = await publish_due_posts(db)
+        return {"ok": True, **result}
 
 
 def get_scheduler() -> AsyncIOScheduler:
@@ -317,6 +328,16 @@ def start_scheduler():
         replace_existing=True,
         max_instances=1,
         next_run_time=now + timedelta(seconds=20),
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=30),
+        id="overclockers_gallery_sourcing",
+        name="Overclockers Product Galleries",
+        kwargs={"job_id": "overclockers_gallery_sourcing", "fn": run_overclockers_gallery_sourcing},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(seconds=30),
     )
     scheduler.add_job(
         _run_job_with_history,
@@ -647,6 +668,17 @@ def start_scheduler():
             max_instances=1,
             next_run_time=now + timedelta(minutes=1),
         )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=1),
+        id="growth_social_publisher",
+        name="Growth Engine Social Publisher",
+        kwargs={"job_id": "growth_social_publisher", "fn": run_growth_social_publisher},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(minutes=1),
+    )
 
     if settings.ebay_reselling_enabled:
         scheduler.add_job(

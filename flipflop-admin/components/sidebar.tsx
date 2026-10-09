@@ -15,23 +15,28 @@ import {
   ChartNoAxesCombined,
   Repeat2,
   Library,
+  Trophy,
   Bell,
   Truck,
+  Wrench,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ServiceHealthPanel } from "./service-health-panel";
 
 const PRIMARY_NAV = [
   { href: "/sourcing", icon: Search, label: "Sourcing" },
+  { href: "/best-sellers", icon: Trophy, label: "Best Sellers" },
   { href: "/catalogue", icon: Library, label: "Catalogue" },
   { href: "/builds", icon: Package, label: "Pre-Built" },
   { href: "/configurator-config", icon: Settings2, label: "Custom Builds" },
   { href: "/pc-builder", icon: Zap, label: "Curated Builds" },
+  { href: "/upgrade-desk", icon: Wrench, label: "Upgrade Desk" },
   { href: "/inventory", icon: Warehouse, label: "Inventory" },
   { href: "/demand", icon: ChartNoAxesCombined, label: "Demand" },
   { href: "/cross-listing", icon: Repeat2, label: "Cross-listing" },
   { href: "/dispatch-zone", icon: Truck, label: "Dispatch Zone" },
   { href: "/email-events", icon: Bell, label: "Email Events" },
+  { href: "/advertising-growth", icon: Bell, label: "Advertising & Growth" },
   { href: "/cases-3d-priority", icon: Box, label: "3D Assets" },
   { href: "/problems", icon: AlertTriangle, label: "Problems" },
 ];

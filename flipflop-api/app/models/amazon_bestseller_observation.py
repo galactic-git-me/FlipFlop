@@ -25,4 +25,7 @@ class AmazonBestsellerObservation(Base):
     cpk: Mapped[str | None] = mapped_column(String(64), index=True, nullable=True)
     rating: Mapped[float | None] = mapped_column(Float, nullable=True)
     review_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    price: Mapped[float | None] = mapped_column(Float, nullable=True)
+    rrp: Mapped[float | None] = mapped_column(Float, nullable=True)
+    sales_velocity: Mapped[str | None] = mapped_column(String(80), nullable=True)
     captured_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)

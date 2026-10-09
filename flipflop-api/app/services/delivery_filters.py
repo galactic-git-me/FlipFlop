@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import re
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 _UK_HINTS = (
     "uk warehouse",
@@ -49,6 +51,79 @@ def estimate_delivery_days(text: str | None) -> int | None:
         except Exception:
             continue
     return min(vals) if vals else None
+
+
+def estimate_listing_delivery_working_days(text: str | None) -> int | None:
+    """Extract a conservative working-day estimate from common listing-card text.
+
+    Uses the upper end of explicit ranges. Unsupported date wording returns
+    None so the caller can use a vendor default without guessing.
+    """
+    if not text:
+        return None
+    value = str(text).lower()
+    if "same day" in value or re.search(r"\btoday\b", value):
+        return 0
+    if "tomorrow" in value or "next day" in value:
+        return 1
+
+    # Marketplace cards often show a concrete date (for example, "Delivery
+    # Tue, 14 Oct" or "Arrives October 14, 2026"). Convert that promise to
+    # working days from today; leave unrecognised wording to vendor defaults.
+    date_match = re.search(
+        r"\b(?:delivery|arrives?|get it)\b[^\n]{0,35}?"
+        r"((?:\d{1,2}(?:st|nd|rd|th)?\s+[a-z]{3,9}|[a-z]{3,9}\s+\d{1,2}(?:st|nd|rd|th)?))"
+        r"(?:,?\s+(\d{4}))?\b",
+        value,
+    )
+    if date_match:
+        date_text = re.sub(r"(\d)(st|nd|rd|th)\b", r"\1", date_match.group(1)).replace(",", "").strip()
+        parsed_date = None
+        for fmt in ("%d %B", "%d %b", "%B %d", "%b %d"):
+            try:
+                parsed_date = datetime.strptime(date_text, fmt).date()
+                break
+            except ValueError:
+                continue
+        if parsed_date:
+            today = datetime.now(ZoneInfo("Europe/London")).date()
+            year = int(date_match.group(2)) if date_match.group(2) else today.year
+            target = parsed_date.replace(year=year)
+            if not date_match.group(2) and target < today:
+                target = target.replace(year=year + 1)
+            if target >= today:
+                days = 0
+                current = today
+                while current < target:
+                    current += timedelta(days=1)
+                    if current.weekday() < 5:
+                        days += 1
+                return days
+
+    matches = re.findall(
+        r"\b(\d{1,2})(?:\s*[-–]\s*(\d{1,2}))?\s*(working|business|calendar)?\s*days?\b",
+        value,
+    )
+    if matches:
+        upper = max(int(end or start) for start, end, _unit in matches)
+        # Calendar-day ranges are converted conservatively to working days.
+        calendar_days = any(unit == "calendar" for _start, _end, unit in matches)
+        return (upper * 5 + 6) // 7 if calendar_days else upper
+
+    weekday = re.search(r"\b(?:by|arrives?\s+by|delivery\s+by)\s+(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b", value)
+    if weekday:
+        day_index = {name: i for i, name in enumerate(("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"))}[weekday.group(1)]
+        today = datetime.now(ZoneInfo("Europe/London")).date()
+        delta = (day_index - today.weekday()) % 7 or 7
+        target = today + timedelta(days=delta)
+        days = 0
+        current = today
+        while current < target:
+            current += timedelta(days=1)
+            if current.weekday() < 5:
+                days += 1
+        return days
+    return None
 
 
 def has_uk_fulfilment_hint(text: str | None) -> bool:

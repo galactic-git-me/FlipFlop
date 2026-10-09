@@ -25,6 +25,8 @@ from app.gem_radar.cpk_market import upsert_listing_price, upsert_scan_price
 from app.gem_radar.benchmarks import normalize_match_key
 from app.gem_radar.opportunity_scoring import identity_gates
 from app.gem_radar.identity import resolve_identity
+from app.gem_radar.fan_category import correct_case_fan_cpk
+from app.gem_radar.product_identifiers import categories_compatible, extract_asin
 
 
 _ALIAS_CACHE: tuple[float, list[tuple[str, str, dict]]] | None = None
@@ -111,6 +113,7 @@ async def assign_cpk_and_accumulate_price(
     condition: str | None,
     price: float | None,
     scan_price: float | None = None,
+    source_url: str | None = None,
 ) -> str | None:
     """Looks up (or extracts, via one LLM call if genuinely new) this
     listing's CPK, persists it to gem_radar_listing_cpk, and folds its price
@@ -128,18 +131,57 @@ async def assign_cpk_and_accumulate_price(
     )
     row = existing.fetchone()
 
+    asin = extract_asin(source_url) or extract_asin(listing_id)
+    asin_identity = None
+    if row is None or not _valid_existing_cpk(row[1], title):
+        if row is not None:
+            # Quarantine stale/invalid identity before looking for a trusted
+            # identity from an exact marketplace product identifier.
+            await db.execute(text("DELETE FROM gem_radar_cpk_listing_price WHERE listing_id = :listing_id"), {"listing_id": listing_id})
+            await db.execute(text("DELETE FROM gem_radar_listing_cpk WHERE listing_id = :listing_id"), {"listing_id": listing_id})
+        if asin:
+            candidates = (await db.execute(text("""
+                SELECT listing_id, cpk, cpk_data, cpk_confidence
+                FROM gem_radar_listing_cpk
+                WHERE listing_id = :asin OR listing_id ILIKE :asin_pattern
+            """), {"asin": asin, "asin_pattern": f"%{asin}%"})).mappings().all()
+            valid_candidates = [
+                candidate for candidate in candidates
+                if extract_asin(candidate["listing_id"]) == asin
+                and candidate["listing_id"] != listing_id
+                and _valid_existing_cpk(candidate["cpk_data"], title)
+                and categories_compatible(category, (candidate["cpk_data"] or {}).get("category"))
+            ]
+            candidate_cpks = {candidate["cpk"] for candidate in valid_candidates}
+            if len(candidate_cpks) == 1:
+                candidate = valid_candidates[0]
+                asin_identity = (candidate["cpk"], candidate["cpk_data"], candidate["cpk_confidence"])
+
     if row is not None and _valid_existing_cpk(row[1], title):
         cpk = row[0]
         cpk_data = row[1] or {}
         brand = cpk_data.get("brand")
         model = cpk_data.get("model")
         extracted_category = cpk_data.get("category")
+    elif asin_identity is not None:
+        cpk, cpk_data, cpk_confidence = asin_identity
+        cpk_data = cpk_data or {}
+        brand = cpk_data.get("brand")
+        model = cpk_data.get("model")
+        extracted_category = cpk_data.get("category") or category
+        await db.execute(text("""
+            INSERT INTO gem_radar_listing_cpk (listing_id, cpk, cpk_data, cpk_confidence)
+            VALUES (:listing_id, :cpk, :cpk_data, :cpk_confidence)
+            ON CONFLICT (listing_id) DO UPDATE SET
+                cpk = EXCLUDED.cpk, cpk_data = EXCLUDED.cpk_data,
+                cpk_confidence = EXCLUDED.cpk_confidence, updated_at = CURRENT_TIMESTAMP
+        """), {
+            "listing_id": listing_id,
+            "cpk": cpk,
+            "cpk_data": json.dumps(cpk_data),
+            "cpk_confidence": cpk_confidence,
+        })
     else:
-        if row is not None:
-            # Quarantine stale/invalid identity before re-extraction; prices
-            # tied to it are removed so it cannot contaminate another cohort.
-            await db.execute(text("DELETE FROM gem_radar_cpk_listing_price WHERE listing_id = :listing_id"), {"listing_id": listing_id})
-            await db.execute(text("DELETE FROM gem_radar_listing_cpk WHERE listing_id = :listing_id"), {"listing_id": listing_id})
         alias = await _lookup_unique_catalog_alias(db, title)
         if alias is not None:
             cpk, alias_data = alias
@@ -209,6 +251,23 @@ async def assign_cpk_and_accumulate_price(
                 brand = extracted.brand
                 model = extracted.model
                 extracted_category = extracted.category
+
+    # Cached identities and catalogue aliases can predate the fan guard.
+    # Correct the persisted identity before assigning its market-price cohort.
+    if extracted_category == "case":
+        identity_row = (await db.execute(
+            text("SELECT cpk_data FROM gem_radar_listing_cpk WHERE listing_id = :listing_id"),
+            {"listing_id": listing_id},
+        )).scalar_one_or_none()
+        if identity_row:
+            corrected_cpk, corrected_data = correct_case_fan_cpk(title, identity_row)
+            if corrected_data.get("category") == "fan":
+                cpk, extracted_category = corrected_cpk, "fan"
+                await db.execute(text("""
+                    UPDATE gem_radar_listing_cpk
+                    SET cpk = :cpk, cpk_data = :data, updated_at = CURRENT_TIMESTAMP
+                    WHERE listing_id = :listing_id
+                """), {"cpk": cpk, "data": json.dumps(corrected_data), "listing_id": listing_id})
 
     match_key = normalize_match_key(title)
 
