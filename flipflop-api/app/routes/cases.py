@@ -73,6 +73,7 @@ async def _preferred_case_names(db: AsyncSession) -> list[str]:
 
 def _priority_payload(case: Case, preferred_names: list[str] | None = None) -> dict:
     product_images = (((case.sourcing_3d_evidence or {}).get("stages") or {}).get("product_images") or {})
+    gallery = _gallery_urls(product_images.get("overclockers_gallery"))
     return {
         "id": case.id,
         "name": case.name,
@@ -84,7 +85,7 @@ def _priority_payload(case: Case, preferred_names: list[str] | None = None) -> d
         "source_site": case.source_site,
         "source_url": case.source_url,
         "image_url": case.image_url,
-        "overclockers_gallery": product_images.get("overclockers_gallery") or [],
+        "overclockers_gallery": gallery,
         "bestseller_rank": case.bestseller_rank,
         "priority_3d_rank": case.priority_3d_rank,
         "priority_3d_batch": case.priority_3d_batch,
@@ -100,6 +101,18 @@ def _priority_payload(case: Case, preferred_names: list[str] | None = None) -> d
         "status": case.status,
         "sourcing_3d_evidence": case.sourcing_3d_evidence or {},
     }
+
+
+def _gallery_urls(value: object) -> list[str]:
+    """Accept legacy URL strings and candidate objects, returning safe image URLs."""
+    if not isinstance(value, list):
+        return []
+    urls: list[str] = []
+    for item in value:
+        raw_url = item if isinstance(item, str) else item.get("url") if isinstance(item, dict) else None
+        if isinstance(raw_url, str) and raw_url.startswith(("https://", "http://")) and raw_url not in urls:
+            urls.append(raw_url)
+    return urls
 
 
 @router.post("/priority-for-3d/freeze")
@@ -241,10 +254,9 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
             vendor_names.add(vendor)
 
     overclockers_offer = next((offer for offer in await _matched_case_offers(case, db) if "overclockers" in (offer.source_site or "").lower()), None)
-    product_gallery = product_stage.get("overclockers_gallery") or []
+    product_gallery = _gallery_urls(product_stage.get("overclockers_gallery"))
     for image_url in product_gallery:
-        if isinstance(image_url, str) and image_url.startswith(("https://", "http://")):
-            _append_candidate(vendor_candidates, seen, image_url, "retailer", overclockers_offer.source_url if overclockers_offer else None, f"Overclockers · {_case_identity(case)}")
+        _append_candidate(vendor_candidates, seen, image_url, "retailer", overclockers_offer.source_url if overclockers_offer else None, f"Overclockers · {_case_identity(case)}")
     if product_gallery and overclockers_offer:
         vendor_names.add("Overclockers")
 
@@ -291,7 +303,7 @@ async def get_3d_overclockers_gallery(case_id: int, db: AsyncSession = Depends(g
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
     offer = next((row for row in await _matched_case_offers(case, db) if "overclockers" in (row.source_site or "").lower()), None)
-    gallery = ((case.sourcing_3d_evidence or {}).get("stages") or {}).get("product_images", {}).get("overclockers_gallery") or []
+    gallery = _gallery_urls((((case.sourcing_3d_evidence or {}).get("stages") or {}).get("product_images") or {}).get("overclockers_gallery"))
     results = [{"url": url, "source": "retailer", "source_page": offer.source_url if offer else None, "label": f"Overclockers · {_case_identity(case)}"} for url in gallery]
     if not results and offer and offer.image_url:
         results = [{"url": offer.image_url, "source": "retailer", "source_page": offer.source_url, "label": f"Overclockers · {_case_identity(case)}"}]
