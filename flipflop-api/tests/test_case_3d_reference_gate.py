@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from types import SimpleNamespace
 
 import pytest
@@ -6,7 +7,8 @@ from pydantic import ValidationError
 
 from app.api.assets_admin import CaseMeshyGenerate, _owner_approved_case_images
 from app.models.gem_radar_scored_listing import GemRadarScoredListing
-from app.routes.cases import CaseReferenceApproval, _priority_case_filter, _priority_source_filter
+from app.routes.cases import CaseReferenceApproval, _priority_case_filter, _priority_source_filter, router
+from app.workers.overclockers_gallery import _gallery_cache_is_fresh
 
 
 def _image(index: int) -> dict[str, str]:
@@ -43,6 +45,25 @@ def test_overclockers_priority_filter_includes_uk_suffix_variants() -> None:
 
 def test_campaign_priority_filter_remains_unfiltered_by_source() -> None:
     assert _priority_source_filter(None) is None
+
+
+def test_overclockers_gallery_cache_expires_after_one_month() -> None:
+    now = datetime(2026, 10, 11, 12, 0, 0)
+    fresh = {"overclockers_gallery": ["https://img.example.test/case.jpg"], "overclockers_gallery_cached_at": (now - timedelta(days=29)).isoformat()}
+    expired = {"overclockers_gallery": ["https://img.example.test/case.jpg"], "overclockers_gallery_cached_at": (now - timedelta(days=31)).isoformat()}
+
+    assert _gallery_cache_is_fresh(fresh, now)
+    assert not _gallery_cache_is_fresh(expired, now)
+
+
+def test_overclockers_gallery_has_one_post_route() -> None:
+    routes = [
+        route for route in router.routes
+        if getattr(route, "path", None) == "/cases/{case_id}/3d-overclockers-gallery"
+        and "POST" in getattr(route, "methods", set())
+    ]
+
+    assert len(routes) == 1
 
 
 def test_frozen_campaign_also_includes_unranked_overclockers_cases() -> None:

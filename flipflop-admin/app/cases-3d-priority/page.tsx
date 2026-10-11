@@ -338,16 +338,22 @@ export default function Cases3DPriorityPage() {
     setOverclockersBusy(true);
     setOverclockersError(null);
     try {
-      const response = await fetch(`/api/cases/${caseId}/3d-overclockers-gallery`, { cache: "no-store" });
-      const data = await readJsonResponse<{ results?: ReferenceCandidate[]; detail?: string; captured?: boolean }>(response);
-      if (!response.ok) throw new Error(data.detail || "Could not load Overclockers photos");
+      let data: { results?: ReferenceCandidate[]; detail?: string; captured?: boolean; status?: string } = {};
+      for (let attempt = 0; attempt < 30; attempt += 1) {
+        const response = await fetch(`/api/cases/${caseId}/3d-overclockers-gallery`, { cache: "no-store" });
+        data = await readJsonResponse<typeof data & { detail?: string }>(response);
+        if (!response.ok) throw new Error(data.detail || "Could not load Overclockers photos");
+        if (data.status !== "retrieving") break;
+        await new Promise(resolve => window.setTimeout(resolve, 2000));
+      }
       const results = data.results || [];
       setOverclockersResults(results);
       setReferenceData(current => current ? {
         ...current,
         candidates: [...current.candidates, ...results.filter(candidate => !current.candidates.some(existing => existing.url === candidate.url))],
       } : current);
-      if (!data.captured && results.length === 0) setOverclockersError("No matching Overclockers photos were found for this product.");
+      if (data.status === "retrieving") setOverclockersError("Photo retrieval is taking longer than expected. Reload the gallery to check again.");
+      else if (!data.captured && results.length === 0) setOverclockersError("No matching Overclockers photos were found for this product.");
     } catch (caught) {
       setOverclockersError(caught instanceof Error ? caught.message : "Could not load Overclockers photos");
     } finally {
@@ -972,7 +978,7 @@ export default function Cases3DPriorityPage() {
                   <p className="mb-4 text-sm text-slate-300">Select exactly four images. The first selected image is the texture and colour master.</p>
                   <section aria-label="Overclockers gallery" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
                     <div className="flex items-center justify-between gap-3"><h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">1. Overclockers product gallery</h3><div className="flex gap-2"><Button type="button" variant="outline" disabled={overclockersBusy} onClick={() => void loadOverclockersGallery(evidenceReview.caseItem.id)}>Reload gallery</Button></div></div>
-                    {overclockersBusy && <p className="mt-3 text-xs text-slate-400">Loading all gallery thumbnails…</p>}
+                    {overclockersBusy && overclockersResults.length === 0 && <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4" aria-label="Loading Overclockers photos" role="status">{Array.from({ length: 4 }, (_, index) => <div key={index} className="relative aspect-[3/4] overflow-hidden rounded-md border border-slate-700 bg-slate-900"><div className="absolute inset-0 animate-pulse bg-gradient-to-br from-slate-800 via-slate-700/70 to-slate-900" /><Images className="absolute left-1/2 top-1/2 h-7 w-7 -translate-x-1/2 -translate-y-1/2 animate-pulse text-slate-500" aria-hidden="true" /></div>)}</div>}
                     {overclockersError && <p className="mt-3 text-xs text-amber-300">{overclockersError}</p>}
                     {!overclockersBusy && !overclockersError && overclockersResults.length === 0 && <p className="mt-3 text-xs text-slate-400">No exact Overclockers product found.</p>}
                     {overclockersResults.length > 0 && <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">{overclockersResults.map(candidate => {

@@ -16,6 +16,20 @@ from app.services.proxy import playwright_proxy_config
 
 log = structlog.get_logger(__name__)
 _RETRY_AFTER = timedelta(minutes=30)
+_CACHE_VALIDITY = timedelta(days=30)
+
+
+def _gallery_cache_is_fresh(product_stage: dict, now: datetime | None = None) -> bool:
+    """Keep successful retailer galleries for a month, including legacy captures."""
+    images = product_stage.get("overclockers_gallery")
+    if not isinstance(images, list) or not images:
+        return False
+    timestamp = product_stage.get("overclockers_gallery_cached_at") or product_stage.get("overclockers_gallery_attempted_at")
+    try:
+        captured_at = datetime.fromisoformat(timestamp)
+    except (TypeError, ValueError):
+        return False
+    return captured_at > (now or datetime.utcnow()) - _CACHE_VALIDITY
 
 
 async def _collect_gallery(context, product_url: str, retailer: str) -> list[str]:
@@ -60,10 +74,14 @@ async def _collect_gallery(context, product_url: str, retailer: str) -> list[str
 
 async def capture_case_gallery(case_id: int) -> dict:
     """Capture one case gallery on demand and persist it for the review UI."""
+    now = datetime.utcnow()
     async with AsyncSessionLocal() as db:
         case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
         if not case:
             return {"ok": False, "detail": "Case not found"}
+        product_stage = (((case.sourcing_3d_evidence or {}).get("stages") or {}).get("product_images") or {})
+        if _gallery_cache_is_fresh(product_stage, now):
+            return {"ok": True, "count": len(product_stage["overclockers_gallery"]), "cached": True}
         offers = (await db.execute(select(Case).where(Case.source_site.ilike("%overclockers%")))).scalars().all()
         key = case_product_key(case.name, case.brand, case.model)
         urls = list(dict.fromkeys(
@@ -72,42 +90,54 @@ async def capture_case_gallery(case_id: int) -> dict:
             and urlparse(offer.source_url).hostname in {"overclockers.co.uk", "www.overclockers.co.uk"}
         ))
     if not urls:
+        await _save_gallery_capture(case_id, [], "not_found")
         return {"ok": True, "count": 0}
 
     images: list[str] = []
-    async with managed_playwright(engine="patchright") as p:
-        browser = await p.chromium.launch(headless=True, proxy=playwright_proxy_config())
-        try:
-            context = await browser.new_context(viewport={"width": 1366, "height": 768}, locale="en-GB", timezone_id="Europe/London")
+    try:
+        async with managed_playwright(engine="patchright") as p:
+            browser = await p.chromium.launch(headless=True, proxy=playwright_proxy_config())
             try:
-                for url in urls:
-                    try:
-                        for image in await _collect_gallery(context, url, "overclockers"):
-                            if image not in images:
-                                images.append(image)
-                    except Exception as exc:
-                        log.info("overclockers_gallery.on_demand_offer_unavailable", case_id=case_id, error=str(exc))
+                context = await browser.new_context(viewport={"width": 1366, "height": 768}, locale="en-GB", timezone_id="Europe/London")
+                try:
+                    for url in urls:
+                        try:
+                            for image in await _collect_gallery(context, url, "overclockers"):
+                                if image not in images:
+                                    images.append(image)
+                        except Exception as exc:
+                            log.info("overclockers_gallery.on_demand_offer_unavailable", case_id=case_id, error=str(exc))
+                finally:
+                    await context.close()
             finally:
-                await context.close()
-        finally:
-            await browser.close()
+                await browser.close()
+    except Exception as exc:
+        log.warning("overclockers_gallery.on_demand_capture_failed", case_id=case_id, error=str(exc))
+        await _save_gallery_capture(case_id, [], "retry_pending")
+        return {"ok": True, "count": 0, "status": "retry_pending"}
 
+    await _save_gallery_capture(case_id, images, "found" if images else "not_found")
+    return {"ok": True, "count": len(images)}
+
+
+async def _save_gallery_capture(case_id: int, images: list[str], status: str) -> None:
+    attempted_at = datetime.utcnow().isoformat()
     async with AsyncSessionLocal() as db:
         case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
         if not case:
-            return {"ok": False, "detail": "Case not found"}
+            return
+        evidence = dict(case.sourcing_3d_evidence or {"schema_version": 1, "stages": {}})
+        stages = dict(evidence.get("stages") or {})
+        product_stage = dict(stages.get("product_images") or {})
         if images:
-            evidence = dict(case.sourcing_3d_evidence or {"schema_version": 1, "stages": {}})
-            stages = dict(evidence.get("stages") or {})
-            product_stage = dict(stages.get("product_images") or {})
             product_stage["overclockers_gallery"] = images
-            product_stage["overclockers_gallery_attempted_at"] = datetime.utcnow().isoformat()
-            product_stage["overclockers_gallery_status"] = "found"
-            stages["product_images"] = product_stage
-            evidence["stages"] = stages
-            case.sourcing_3d_evidence = evidence
-            await db.commit()
-    return {"ok": True, "count": len(images)}
+            product_stage["overclockers_gallery_cached_at"] = attempted_at
+        product_stage["overclockers_gallery_attempted_at"] = attempted_at
+        product_stage["overclockers_gallery_status"] = status
+        stages["product_images"] = product_stage
+        evidence["stages"] = stages
+        case.sourcing_3d_evidence = evidence
+        await db.commit()
 
 
 async def run_overclockers_gallery_sourcing() -> dict:
@@ -125,7 +155,9 @@ async def run_overclockers_gallery_sourcing() -> dict:
             product_stage = (((case.sourcing_3d_evidence or {}).get("stages") or {}).get("product_images") or {})
             attempted = product_stage.get("overclockers_gallery_attempted_at")
             try:
-                if attempted and datetime.fromisoformat(attempted) > now - _RETRY_AFTER:
+                if _gallery_cache_is_fresh(product_stage, now):
+                    continue
+                if not product_stage.get("overclockers_gallery") and attempted and datetime.fromisoformat(attempted) > now - _RETRY_AFTER:
                     continue
             except (TypeError, ValueError):
                 pass
@@ -176,6 +208,7 @@ async def run_overclockers_gallery_sourcing() -> dict:
                             product_stage["overclockers_gallery_attempted_at"] = datetime.utcnow().isoformat()
                             if all_images:
                                 product_stage["overclockers_gallery"] = all_images
+                                product_stage["overclockers_gallery_cached_at"] = datetime.utcnow().isoformat()
                                 product_stage["gallery_sources"] = gallery_sources
                                 product_stage["overclockers_gallery_status"] = "found"
                                 saved += 1

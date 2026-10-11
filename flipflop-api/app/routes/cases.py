@@ -1,11 +1,11 @@
 """PC Case sourcing and 3D model management endpoints."""
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 import re
 from urllib.parse import quote_plus
 from pathlib import Path
 from uuid import uuid4
-from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
+from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, Query, UploadFile
 import httpx
 from pydantic import BaseModel, Field, HttpUrl
 from sqlalchemy import select, and_, func, or_, update
@@ -303,28 +303,90 @@ def _priority_case_filter(source_site: str | None, frozen_exists: bool):
     return without_model
 
 
+class OverclockersGalleryCapture(BaseModel):
+    source_page: HttpUrl
+    images: list[HttpUrl] = Field(min_length=1, max_length=100)
+
+
 @router.get("/{case_id}/3d-overclockers-gallery")
 async def get_3d_overclockers_gallery(case_id: int, db: AsyncSession = Depends(get_db)):
     case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
     offer = next((row for row in await _matched_case_offers(case, db) if "overclockers" in (row.source_site or "").lower()), None)
-    gallery = _gallery_urls((((case.sourcing_3d_evidence or {}).get("stages") or {}).get("product_images") or {}).get("overclockers_gallery"))
+    product_stage = (((case.sourcing_3d_evidence or {}).get("stages") or {}).get("product_images") or {})
+    gallery = _gallery_urls(product_stage.get("overclockers_gallery"))
     results = [{"url": url, "source": "retailer", "source_page": offer.source_url if offer else None, "label": f"Overclockers · {_case_identity(case)}"} for url in gallery]
     if not results and offer and offer.image_url:
         results = [{"url": offer.image_url, "source": "retailer", "source_page": offer.source_url, "label": f"Overclockers · {_case_identity(case)}"}]
-    return {"results": results, "source_page": offer.source_url if offer else None, "captured": bool(gallery)}
+    from app.workers.overclockers_gallery import _gallery_cache_is_fresh
+
+    return {
+        "results": results,
+        "source_page": offer.source_url if offer else None,
+        "captured": bool(gallery),
+        "fresh": _gallery_cache_is_fresh(product_stage),
+        "status": product_stage.get("overclockers_gallery_status", "not_started"),
+    }
 
 
 @router.post("/{case_id}/3d-overclockers-gallery")
-async def capture_3d_overclockers_gallery(case_id: int):
-    """Refresh the product gallery when an owner opens the image review panel."""
-    from app.workers.overclockers_gallery import capture_case_gallery
+async def capture_3d_overclockers_gallery(
+    case_id: int,
+    background_tasks: BackgroundTasks,
+    body: OverclockersGalleryCapture | None = None,
+    db: AsyncSession = Depends(get_db),
+):
+    """Return cached photos or queue a retailer refresh without blocking the request."""
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
 
-    result = await capture_case_gallery(case_id)
-    if not result.get("ok"):
-        raise HTTPException(status_code=404, detail=result.get("detail", "Case not found"))
-    return result
+    if body is not None:
+        offer = next((row for row in await _matched_case_offers(case, db) if "overclockers" in (row.source_site or "").lower()), None)
+        if not offer or str(body.source_page).split("#", 1)[0].rstrip("/") != (offer.source_url or "").split("#", 1)[0].rstrip("/"):
+            raise HTTPException(status_code=422, detail="Page does not match this case's Overclockers product")
+        evidence = dict(case.sourcing_3d_evidence or {})
+        stages = dict(evidence.get("stages") or {})
+        product_stage = dict(stages.get("product_images") or {})
+        images = list(dict.fromkeys(str(url) for url in body.images))
+        captured_at = datetime.utcnow().isoformat()
+        product_stage.update({
+            "overclockers_gallery": images,
+            "overclockers_gallery_cached_at": captured_at,
+            "overclockers_gallery_attempted_at": captured_at,
+            "overclockers_gallery_status": "found",
+        })
+        stages["product_images"] = product_stage
+        evidence["stages"] = stages
+        case.sourcing_3d_evidence = evidence
+        await db.commit()
+        return {"ok": True, "count": len(images), "cached": False}
+
+    from app.workers.overclockers_gallery import _gallery_cache_is_fresh, capture_case_gallery
+
+    product_stage = (((case.sourcing_3d_evidence or {}).get("stages") or {}).get("product_images") or {})
+    if _gallery_cache_is_fresh(product_stage):
+        return {"ok": True, "count": len(_gallery_urls(product_stage.get("overclockers_gallery"))), "cached": True}
+    if product_stage.get("overclockers_gallery_status") == "retrieving":
+        try:
+            started_at = datetime.fromisoformat(product_stage.get("overclockers_gallery_attempted_at", ""))
+            if started_at > datetime.utcnow() - timedelta(minutes=30):
+                return {"ok": True, "queued": True, "status": "retrieving"}
+        except (TypeError, ValueError):
+            pass
+
+    evidence = dict(case.sourcing_3d_evidence or {"schema_version": 1, "stages": {}})
+    stages = dict(evidence.get("stages") or {})
+    product_stage = dict(stages.get("product_images") or {})
+    product_stage["overclockers_gallery_status"] = "retrieving"
+    product_stage["overclockers_gallery_attempted_at"] = datetime.utcnow().isoformat()
+    stages["product_images"] = product_stage
+    evidence["stages"] = stages
+    case.sourcing_3d_evidence = evidence
+    await db.commit()
+    background_tasks.add_task(capture_case_gallery, case_id)
+    return {"ok": True, "queued": True, "status": "retrieving"}
 
 
 @router.get("/{case_id}/3d-bing-images")
@@ -368,30 +430,6 @@ async def save_3d_bing_images(case_id: int, body: BingImageCapture, db: AsyncSes
     case.sourcing_3d_evidence = evidence
     await db.commit()
     return {"count": len(results)}
-
-
-class OverclockersGalleryCapture(BaseModel):
-    source_page: HttpUrl
-    images: list[HttpUrl] = Field(min_length=1, max_length=100)
-
-
-@router.post("/{case_id}/3d-overclockers-gallery")
-async def save_3d_overclockers_gallery(case_id: int, body: OverclockersGalleryCapture, db: AsyncSession = Depends(get_db)):
-    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
-    if not case:
-        raise HTTPException(status_code=404, detail="Case not found")
-    offer = next((row for row in await _matched_case_offers(case, db) if "overclockers" in (row.source_site or "").lower()), None)
-    if not offer or str(body.source_page).split("#", 1)[0].rstrip("/") != (offer.source_url or "").split("#", 1)[0].rstrip("/"):
-        raise HTTPException(status_code=422, detail="Page does not match this case's Overclockers product")
-    evidence = dict(case.sourcing_3d_evidence or {})
-    stages = dict(evidence.get("stages") or {})
-    product_stage = dict(stages.get("product_images") or {})
-    product_stage["overclockers_gallery"] = list(dict.fromkeys(str(url) for url in body.images))
-    stages["product_images"] = product_stage
-    evidence["stages"] = stages
-    case.sourcing_3d_evidence = evidence
-    await db.commit()
-    return {"count": len(product_stage["overclockers_gallery"])}
 
 
 @router.get("/{case_id}/3d-reference-image-search")
