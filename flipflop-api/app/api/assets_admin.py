@@ -577,7 +577,7 @@ async def decide_review_asset(
                 "status": "queued",
                 "asset_id": replacement.id,
                 "version": replacement.version,
-                "message": f"Replacement v{replacement.version} queued using your feedback.",
+                "message": f"Replacement v{replacement.version} queued from the approved case photos.",
             }
             background_tasks.add_task(
                 _run_rejected_asset_regeneration,
