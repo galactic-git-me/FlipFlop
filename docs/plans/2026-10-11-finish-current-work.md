@@ -22,7 +22,8 @@ This is a source baseline, not a release. The implementation register and indivi
 
 ### 2. Validate the baseline locally
 
-- Follow `docs/testing/platform-test-strategy.md` v4.29, approved 9 October 2026, for deterministic local validation.
+- Follow `docs/testing/platform-test-strategy.md` v4.29, approved 9 October 2026, for deterministic local validation. First repair the test harness so every database-backed test uses a dedicated disposable PostgreSQL database. Existing fixtures in `test_autonomous_notifications.py`, `test_demand_playbook_evolution.py`, and other worker suites issue broad table deletes through the configured application engine; those tests must not run against a developer or production database.
+- Do not rerun database-backed tests until the isolated database target is explicit, verified, and has a `_test` database name. Keep any required migrations and service startup inside that isolated environment.
 - Run the approved API regression suite, then admin type/lint/build checks and relevant storefront checks in their own repositories where applicable.
 - Validate Alembic history and apply migrations only to a disposable/local validation database; verify schema and startup separately.
 - Exercise the priority customer journeys in the strategy and record exact commands, outcomes and failures in the verification register.
@@ -53,3 +54,10 @@ Follow `docs/plans/vnext-implementation.md` in order:
 ## Completion record
 
 For each phase, record the commit, checks run, environment, result, known failures and external gates here or in the linked verification register. Do not describe source implementation as verified runtime behavior.
+
+### 11 October 2026 baseline validation
+
+- API command: `.venv\\Scripts\\python.exe -m pytest tests -q` from `flipflop-api`.
+- Result: **998 passed, 145 failed, 21 skipped, 21 errors**. This is a failed baseline; the failure output was not retained as a report, so capture a concise rerun report only after the database harness is isolated.
+- Safety finding: the test process connected to local PostgreSQL `127.0.0.1:5432/pcflipper`. Existing test fixtures performed table-wide cleanup through the application engine. Read-only inspection afterward showed `flips=0` and `flip_intelligence=0`; no pre-run counts exist, so prior contents and the full effect cannot be determined. No restoration was attempted because the available dump is not known to match the pre-run state.
+- Immediate action: preserve the current database, do not run more DB tests or attempt restoration, and review the test harness and any fresh backup with the owner before cleanup or recovery.
