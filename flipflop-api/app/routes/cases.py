@@ -240,6 +240,14 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
             _append_candidate(vendor_candidates, seen, main_image, "retailer", listing.url, f"{vendor} · {listing.title}")
             vendor_names.add(vendor)
 
+    overclockers_offer = next((offer for offer in await _matched_case_offers(case, db) if "overclockers" in (offer.source_site or "").lower()), None)
+    product_gallery = product_stage.get("overclockers_gallery") or []
+    for image_url in product_gallery:
+        if isinstance(image_url, str) and image_url.startswith(("https://", "http://")):
+            _append_candidate(vendor_candidates, seen, image_url, "retailer", overclockers_offer.source_url if overclockers_offer else None, f"Overclockers · {_case_identity(case)}")
+    if product_gallery and overclockers_offer:
+        vendor_names.add("Overclockers")
+
     approved = product_stage.get("approved_selection") or {}
     return {
         "case_id": case.id,
@@ -288,6 +296,17 @@ async def get_3d_overclockers_gallery(case_id: int, db: AsyncSession = Depends(g
     if not results and offer and offer.image_url:
         results = [{"url": offer.image_url, "source": "retailer", "source_page": offer.source_url, "label": f"Overclockers · {_case_identity(case)}"}]
     return {"results": results, "source_page": offer.source_url if offer else None, "captured": bool(gallery)}
+
+
+@router.post("/{case_id}/3d-overclockers-gallery")
+async def capture_3d_overclockers_gallery(case_id: int):
+    """Refresh the product gallery when an owner opens the image review panel."""
+    from app.workers.overclockers_gallery import capture_case_gallery
+
+    result = await capture_case_gallery(case_id)
+    if not result.get("ok"):
+        raise HTTPException(status_code=404, detail=result.get("detail", "Case not found"))
+    return result
 
 
 @router.get("/{case_id}/3d-bing-images")

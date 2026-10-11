@@ -58,6 +58,58 @@ async def _collect_gallery(context, product_url: str, retailer: str) -> list[str
         await page.close()
 
 
+async def capture_case_gallery(case_id: int) -> dict:
+    """Capture one case gallery on demand and persist it for the review UI."""
+    async with AsyncSessionLocal() as db:
+        case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+        if not case:
+            return {"ok": False, "detail": "Case not found"}
+        offers = (await db.execute(select(Case).where(Case.source_site.ilike("%overclockers%")))).scalars().all()
+        key = case_product_key(case.name, case.brand, case.model)
+        urls = list(dict.fromkeys(
+            offer.source_url for offer in offers
+            if offer.source_url and case_product_key(offer.name, offer.brand, offer.model) == key
+            and urlparse(offer.source_url).hostname in {"overclockers.co.uk", "www.overclockers.co.uk"}
+        ))
+    if not urls:
+        return {"ok": True, "count": 0}
+
+    images: list[str] = []
+    async with managed_playwright(engine="patchright") as p:
+        browser = await p.chromium.launch(headless=True, proxy=playwright_proxy_config())
+        try:
+            context = await browser.new_context(viewport={"width": 1366, "height": 768}, locale="en-GB", timezone_id="Europe/London")
+            try:
+                for url in urls:
+                    try:
+                        for image in await _collect_gallery(context, url, "overclockers"):
+                            if image not in images:
+                                images.append(image)
+                    except Exception as exc:
+                        log.info("overclockers_gallery.on_demand_offer_unavailable", case_id=case_id, error=str(exc))
+            finally:
+                await context.close()
+        finally:
+            await browser.close()
+
+    async with AsyncSessionLocal() as db:
+        case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+        if not case:
+            return {"ok": False, "detail": "Case not found"}
+        if images:
+            evidence = dict(case.sourcing_3d_evidence or {"schema_version": 1, "stages": {}})
+            stages = dict(evidence.get("stages") or {})
+            product_stage = dict(stages.get("product_images") or {})
+            product_stage["overclockers_gallery"] = images
+            product_stage["overclockers_gallery_attempted_at"] = datetime.utcnow().isoformat()
+            product_stage["overclockers_gallery_status"] = "found"
+            stages["product_images"] = product_stage
+            evidence["stages"] = stages
+            case.sourcing_3d_evidence = evidence
+            await db.commit()
+    return {"ok": True, "count": len(images)}
+
+
 async def run_overclockers_gallery_sourcing() -> dict:
     """Fetch galleries for every listed Overclockers case and refresh old captures."""
     now = datetime.utcnow()
