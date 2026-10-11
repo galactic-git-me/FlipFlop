@@ -394,7 +394,10 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
               model.scale.multiplyScalar(scale);
 
               const center = box.getCenter(new THREE.Vector3());
+              const centerY = center.y;
               model.position.sub(center.multiplyScalar(scale));
+              // Center the model horizontally and place its lowest point just above the grid.
+              model.position.y += gridHelper.position.y - (box.min.y - centerY) * scale + 0.03;
 
               modelRef.current = model;
 
