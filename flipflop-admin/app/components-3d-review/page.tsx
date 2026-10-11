@@ -499,6 +499,7 @@ export default function Components3DReviewPage() {
   const [customOnly, setCustomOnly] = useState(false);
   const [scaleConfirmed, setScaleConfirmed] = useState(false);
   const [regeneratingCaseId, setRegeneratingCaseId] = useState<number | null>(null);
+  const [regenerationProgress, setRegenerationProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -664,9 +665,28 @@ export default function Components3DReviewPage() {
       setActionError("Approve four reference photos for this case in Photos & generation before regenerating.");
       return;
     }
+    const requestId = crypto.randomUUID();
     setRegeneratingCaseId(caseId);
+    setRegenerationProgress(0);
     setActionError(null);
     setActionNotice("Generating a new draft from the four currently approved photos, including photo-guided texturing…");
+    const pollProgress = async () => {
+      try {
+        const statusResponse = await fetch(
+          `${DIRECT_BACKEND_URL}/api/assets-3d/cases/${caseId}/generate-status?request_id=${encodeURIComponent(requestId)}`,
+          { credentials: "include", cache: "no-store" },
+        );
+        if (!statusResponse.ok) return;
+        const status = await readJsonResponse<{ request_id: string; progress: number }>(statusResponse);
+        if (status.request_id === requestId) {
+          setRegenerationProgress(Math.max(0, Math.min(100, Math.round(status.progress))));
+        }
+      } catch {
+        // Keep the active generation moving if a status poll briefly fails.
+      }
+    };
+    void pollProgress();
+    const progressTimer = window.setInterval(() => void pollProgress(), 1500);
     try {
       const response = await fetch(`${DIRECT_BACKEND_URL}/api/assets-3d/cases/${caseId}/generate`, {
         method: "POST",
@@ -674,6 +694,7 @@ export default function Components3DReviewPage() {
         credentials: "include",
         body: JSON.stringify({
           image_urls: imageUrls,
+          request_id: requestId,
           notes: `Regenerated from the current owner-approved case photos after rejecting asset ${selectedAsset.id}.`,
         }),
       });
@@ -685,6 +706,7 @@ export default function Components3DReviewPage() {
       setActionNotice(null);
       setActionError(error instanceof Error ? error.message : "Could not regenerate the case model");
     } finally {
+      window.clearInterval(progressTimer);
       setRegeneratingCaseId(null);
     }
   };
@@ -979,17 +1001,40 @@ export default function Components3DReviewPage() {
                         )}
                         {selectedAsset.subject_type === "case" && selectedAsset.subject_id != null && selectedAsset.review_decision === "rejected" && (
                           approvedCasePhotoUrls(caseRecords.find(item => item.id === selectedAsset.subject_id)).length === 4 ? (
-                            <button
-                              type="button"
-                              onClick={() => void regenerateRejectedCase()}
-                              disabled={regeneratingCaseId === selectedAsset.subject_id}
-                              className="w-full cursor-pointer rounded border border-purple-400/60 bg-purple-700/40 px-2 py-2 text-xs font-semibold text-purple-100 hover:bg-purple-700/60 disabled:cursor-wait disabled:opacity-50"
-                            >
-                              <span className="inline-flex items-center gap-2">
-                                {regeneratingCaseId === selectedAsset.subject_id && <RefreshCw className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />}
-                                Regenerate with approved case photos
-                              </span>
-                            </button>
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => void regenerateRejectedCase()}
+                                disabled={regeneratingCaseId === selectedAsset.subject_id}
+                                className="w-full cursor-pointer rounded border border-purple-400/60 bg-purple-700/40 px-2 py-2 text-xs font-semibold text-purple-100 hover:bg-purple-700/60 disabled:cursor-wait disabled:opacity-50"
+                              >
+                                <span className="inline-flex items-center gap-2">
+                                  {regeneratingCaseId === selectedAsset.subject_id && <RefreshCw className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />}
+                                  Regenerate with approved case photos
+                                </span>
+                              </button>
+                              {regeneratingCaseId === selectedAsset.subject_id && (
+                                <div className="space-y-1.5" role="status" aria-live="polite">
+                                  <div className="flex justify-between text-[11px] text-slate-300">
+                                    <span>Meshy generation progress</span>
+                                    <span>{regenerationProgress}%</span>
+                                  </div>
+                                  <div
+                                    className="h-2 overflow-hidden rounded-full bg-slate-700"
+                                    role="progressbar"
+                                    aria-label="Meshy model generation progress"
+                                    aria-valuemin={0}
+                                    aria-valuemax={100}
+                                    aria-valuenow={regenerationProgress}
+                                  >
+                                    <div
+                                      className="h-full rounded-full bg-purple-400 transition-[width] duration-500"
+                                      style={{ width: `${regenerationProgress}%` }}
+                                    />
+                                  </div>
+                                </div>
+                              )}
+                            </>
                           ) : (
                             <a href="/cases-3d-priority" className="block text-xs text-cyan-200 underline underline-offset-2">
                               Approve four case photos to regenerate this model

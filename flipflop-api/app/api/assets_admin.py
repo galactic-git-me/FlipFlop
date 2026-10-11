@@ -668,6 +668,7 @@ class AssetCreate(BaseModel):
 class CaseMeshyGenerate(BaseModel):
     image_urls: list[str] = Field(min_length=4, max_length=4)
     notes: str | None = None
+    request_id: str = Field(min_length=1, max_length=100)
 
 
 _CASE_MESHY_IMAGE_REQUIREMENTS = (
@@ -693,6 +694,25 @@ def _owner_approved_case_images(case: Case, requested_urls: list[str]) -> list[s
     if requested_urls != approved:
         raise HTTPException(status_code=409, detail="Generation must use the four owner-approved pictures in their approved order")
     return approved
+
+
+@router.get("/cases/{case_id}/generate-status")
+async def get_case_generation_status(
+    case_id: int,
+    request_id: str,
+    db: AsyncSession = Depends(get_db),
+):
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    generation = (((case.sourcing_3d_evidence or {}).get("stages") or {}).get("meshy_generation") or {})
+    if generation.get("request_id") != request_id:
+        return {"request_id": request_id, "progress": 0, "task_status": "STARTING"}
+    return {
+        "request_id": request_id,
+        "progress": max(0, min(100, int(generation.get("progress") or 0))),
+        "task_status": generation.get("task_status", "STARTING"),
+    }
 
 
 @router.post("/cases/{case_id}/generate")
@@ -723,10 +743,40 @@ async def generate_case_asset(
         raise HTTPException(status_code=409, detail="An approved product image set is required")
 
     approved_image_urls = _owner_approved_case_images(case, body.image_urls)
-    result = await generate_multi_image_asset(approved_image_urls)
+    evidence = dict(case.sourcing_3d_evidence or {"schema_version": 1, "stages": {}})
+    evidence_stages = dict(evidence.get("stages") or {})
+    generation = dict(evidence_stages.get("meshy_generation") or {"attempts": []})
+    generation.update(
+        status="searching", request_id=body.request_id, progress=0,
+        task_status="STARTING", updated_at=datetime.utcnow().isoformat(),
+    )
+    evidence_stages["meshy_generation"] = generation
+    evidence["stages"] = evidence_stages
+    case.sourcing_3d_evidence = evidence
+    await db.commit()
+
+    async def record_meshy_progress(progress: int, task_status: str, task_id: str | None) -> None:
+        current_evidence = dict(case.sourcing_3d_evidence or {"schema_version": 1, "stages": {}})
+        current_stages = dict(current_evidence.get("stages") or {})
+        current_generation = dict(current_stages.get("meshy_generation") or {"attempts": []})
+        current_generation.update(
+            status="searching", request_id=body.request_id,
+            progress=max(0, min(100, int(progress))), task_status=task_status,
+            updated_at=datetime.utcnow().isoformat(),
+        )
+        if task_id:
+            current_generation["task_id"] = task_id
+        current_stages["meshy_generation"] = current_generation
+        current_evidence["stages"] = current_stages
+        case.sourcing_3d_evidence = current_evidence
+        await db.commit()
+
+    result = await generate_multi_image_asset(approved_image_urls, progress_callback=record_meshy_progress)
     if result is None:
+        await record_meshy_progress(0, "FAILED", None)
         raise HTTPException(status_code=502, detail="Meshy generation failed — check service configuration")
     if result.status != "SUCCEEDED" or not result.glb_url:
+        await record_meshy_progress(result.progress or 0, result.status, result.task_id)
         raise HTTPException(status_code=502, detail=f"Meshy task ended as {result.status}")
 
     prior_version = (
@@ -781,7 +831,10 @@ async def generate_case_asset(
         "requires_separate_model_approval": True,
         "recorded_at": datetime.utcnow().isoformat(),
     })
-    generation.update(status="found", attempts=attempts, updated_at=datetime.utcnow().isoformat())
+    generation.update(
+        status="found", attempts=attempts, request_id=body.request_id,
+        progress=100, task_status="SUCCEEDED", updated_at=datetime.utcnow().isoformat(),
+    )
     evidence_stages["meshy_generation"] = generation
     evidence["stages"] = evidence_stages
     case.sourcing_3d_evidence = evidence
