@@ -50,6 +50,9 @@ class Playbook(Base):
     upgrade_strategy = Column(JSON, nullable=True)
     upsell_strategy = Column(JSON, nullable=True)
     component_catalogue = Column(JSON, nullable=True)
+    # Recommended software is authored per customer-type/budget cell. Each
+    # item references the reviewed central catalogue by package_id.
+    software_profile = Column(JSON, nullable=True)
 
     # values_callable stores/queries the Postgres enum by .value ("active") not .name
     # ("ACTIVE"), matching how every query across the codebase filters this column

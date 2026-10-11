@@ -16,6 +16,7 @@ from app.models.catalogue import CaseCatalogue, CatalogueVariant, PlaybookSlot
 from app.models.configurator import ConfiguratorCatalogueVisibility
 from app.models.listing import Listing
 from app.models.playbook import Playbook
+from app.models.curated_build_segment import CuratedBuildSegment
 from app.models.case import Case
 from app.models.gem_radar_intelligence import PreferredComponent
 from app.services.playbook_pricing import LABOUR_COST, OVERHEAD_RATE
@@ -436,7 +437,51 @@ async def public_curated_slots(playbook_id: int, db: AsyncSession = Depends(get_
         name = (await db.execute(select(Playbook.name).where(Playbook.id == playbook_id))).scalar_one_or_none()
         if not definition or definition['segment'] != name:
             raise HTTPException(404, 'Curated build not found for this user type')
-    return curated_slots(await public_playbook_slots(playbook_id, db), definition)
+    slots = curated_slots(await public_playbook_slots(playbook_id, db), definition)
+    if definition:
+        segment = (await db.execute(select(CuratedBuildSegment).where(
+            CuratedBuildSegment.customer_type == definition["segment"],
+            CuratedBuildSegment.budget_level == definition["tier"],
+        ))).scalar_one_or_none()
+        approved = (segment.approved_upgrades or []) if segment and segment.is_live else []
+        target_ids = {int(item["target_variant_id"]) for item in approved if isinstance(item, dict) and item.get("target_variant_id")}
+        if target_ids:
+            targets = (await db.execute(
+                select(CatalogueVariant, Listing)
+                .join(Listing, Listing.id == CatalogueVariant.listing_id)
+                .where(
+                    CatalogueVariant.id.in_(target_ids),
+                    CatalogueVariant.curated_for_builds.is_(True),
+                    CatalogueVariant.status == "active",
+                    Listing.status == "active",
+                )
+            )).all()
+            slot_by_id = {slot["slot_id"]: slot for slot in slots}
+            for variant, listing in targets:
+                slot = slot_by_id.get(variant.slot_id)
+                if slot is None:
+                    continue
+                choices = slot["variants_by_tier"]["mid"]
+                if not any(item["id"] == variant.id for item in choices):
+                    choices.append({
+                        "id": variant.id,
+                        "playbook_upgrade_only": True,
+                        "title": listing.title,
+                        "display_price": variant.display_price,
+                        "gem_score": listing.gem_score,
+                        "images": listing.image_urls or [],
+                        "customer_option": {
+                            "capacity_gb": listing.ram_gb if slot["slot_type"] == "ram" else listing.storage_gb,
+                            "memory_type": listing.ram_type,
+                            "interface": ('NVMe' if 'nvme' in (listing.storage_type or '').lower() else 'SATA' if 'sata' in (listing.storage_type or '').lower() and 'hdd' not in (listing.storage_type or '').lower() else None),
+                        },
+                        "description": listing.description,
+                        "specifications": engineering_specs(listing.raw_specs),
+                        "price_updated_at": variant.updated_at,
+                        "last_seen_at": variant.last_seen_at,
+                        "availability": variant.status,
+                    })
+    return slots
 
 
 @router.get('/curated-builds')
@@ -447,6 +492,8 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
     by_name = {p['name']: p for p in playbooks}
     catalogue = {p['id']: await public_playbook_slots(p['id'], db) for p in playbooks}
     result = []
+    cell_segments = (await db.execute(select(CuratedBuildSegment))).scalars().all()
+    segment_by_cell = {(row.customer_type.casefold(), row.budget_level.casefold()): row for row in cell_segments}
     for definition in definitions()['builds']:
         pb = by_name.get(definition['segment'])
         slots = curated_slots(catalogue.get(pb['id'], []) if pb else [], definition)
@@ -459,15 +506,60 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
         if not cases:
             missing.append('case')
         parts = sum(float(v['display_price']) for v in chosen if v) + (min(float(c['rrp_gbp']) for c in cases) if cases else 0)
+        cell = segment_by_cell.get((definition['segment'].casefold(), definition['tier'].casefold()))
+        upgrade_options = (cell.approved_upgrades or []) if cell and cell.is_live and len(cell.approved_upgrades or []) == 2 else []
         result.append({**definition, 'playbook_id': pb['id'] if pb else None, 'missing_components': missing,
+                       'upgrade_options': upgrade_options,
                        'price_gbp': round((parts + LABOUR_COST) * (1 + OVERHEAD_RATE), 2) if not missing else None})
     return result
+
+
+@router.get('/software-options')
+async def public_software_options(
+    playbook_id: int,
+    curated_build_id: str | None = None,
+    budget_tier: str | None = None,
+    db: AsyncSession = Depends(get_db),
+):
+    """Return approved software choices and this build's Playbook recommendation."""
+    playbook = await db.get(Playbook, playbook_id)
+    if not playbook:
+        raise HTTPException(status_code=404, detail="Playbook not found")
+    from app.services.software_catalogue import (
+        SOFTWARE_CATALOGUE,
+        effective_software_profile_for_playbook,
+    )
+    from app.services.product_software import (
+        software_profile_for_curated_cell_from_db,
+        software_profile_for_playbook_cell_from_db,
+    )
+    try:
+        if curated_build_id:
+            profile = await software_profile_for_curated_cell_from_db(
+                db, curated_build_id, playbook.name, playbook.software_profile
+            )
+        elif budget_tier:
+            profile = await software_profile_for_playbook_cell_from_db(
+                db, playbook.name, budget_tier, playbook.software_profile
+            )
+        else:
+            profile = effective_software_profile_for_playbook(playbook.name, playbook.software_profile)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return {
+        "profile": profile,
+        "apps": SOFTWARE_CATALOGUE,
+        "estimate_basis": "Indicative internal minutes saved by avoiding app search and setup; not benchmarked or guaranteed.",
+    }
 
 
 @router.get('/playbooks/{playbook_id}/custom-slots')
 async def public_custom_slots(playbook_id: int, db: AsyncSession = Depends(get_db)):
     """Full selection from the same published component base as curated builds."""
     base = await public_playbook_slots(playbook_id, db)
+    playbook = await db.get(Playbook, playbook_id)
+    requirements = playbook.requirements if playbook and isinstance(playbook.requirements, dict) else {}
+    gpu_optional = requirements.get("gpu_required") is False
     pool = {}
     for pb in await public_list_playbooks(db):
         for slot in await public_playbook_slots(pb['id'], db):
@@ -475,4 +567,8 @@ async def public_custom_slots(playbook_id: int, db: AsyncSession = Depends(get_d
             for values in slot['variants_by_tier'].values():
                 for variant in values:
                     bucket[variant['id']] = variant
-    return [{**slot, 'variants_by_tier': {'budget': [], 'mid': list(pool.get(slot['slot_type'], {}).values()), 'high': []}} for slot in base]
+    return [{
+        **slot,
+        "is_required": not (gpu_optional and slot["slot_type"] == "gpu"),
+        'variants_by_tier': {'budget': [], 'mid': list(pool.get(slot['slot_type'], {}).values()), 'high': []},
+    } for slot in base]

@@ -129,7 +129,12 @@ class ModelSelectionService:
             if not self.settings.ollama_base_url:
                 raise ModelSelectionError("OLLAMA_BASE_URL is empty for this runtime")
             api_messages = _ollama_messages(messages, system_prompt, images)
-            payload: dict[str, Any] = {"model": model, "messages": api_messages, "stream": False}
+            payload: dict[str, Any] = {
+                "model": model,
+                "messages": api_messages,
+                "stream": False,
+                "options": {"num_predict": max_tokens},
+            }
             if json_mode:
                 payload["format"] = "json"
             if tools:

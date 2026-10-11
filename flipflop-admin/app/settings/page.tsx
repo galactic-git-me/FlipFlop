@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Settings, Save, RefreshCw, Database, Plus, Trash2, Link2, Unlink, Terminal, Circle, Search } from "lucide-react";
+import { Settings, Save, RefreshCw, Database, Plus, Trash2, Link2, Unlink, Terminal, Circle, Search, Upload } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { api, API_BASE_URL } from "@/lib/api";
@@ -145,7 +145,9 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
   );
 }
 
-type TabKey = "opportunity" | "seller-policies" | "delivery" | "sources" | "extension-logs" | "sold-logs" | "server-logs" | "price-evidence";
+type TabKey = "opportunity" | "seller-policies" | "delivery" | "getting-ready" | "sources" | "extension-logs" | "sold-logs" | "server-logs" | "price-evidence";
+type ComponentManual = {id: number; component_key: string; component_name: string; source_url: string; filename: string; sha256: string; size_bytes: number; is_active: boolean};
+type AISetupOffer = {id: string; name: string; description: string; requires_vram_gb: number | null; enabled: boolean; price_gbp: number | null; commercial_scope_reviewed: boolean};
 
 export default function SettingsPage() {
   const [tab, setTab] = useState<TabKey>("opportunity");
@@ -180,6 +182,21 @@ export default function SettingsPage() {
     refresh_token_expires_at: string | null;
   } | null>(null);
   const [connectingEbay, setConnectingEbay] = useState(false);
+  const [guideStatus, setGuideStatus] = useState<{ uploaded: boolean; filename: string | null; sha256: string | null; size_bytes?: number }>({ uploaded: false, filename: null, sha256: null });
+  const [guideUploading, setGuideUploading] = useState(false);
+  const [guideMessage, setGuideMessage] = useState("");
+  const [componentManuals, setComponentManuals] = useState<ComponentManual[]>([]);
+  const [manualKey, setManualKey] = useState("");
+  const [manualName, setManualName] = useState("");
+  const [manualSourceUrl, setManualSourceUrl] = useState("");
+  const [manualFile, setManualFile] = useState<File | null>(null);
+  const [manualSourceConfirmed, setManualSourceConfirmed] = useState(false);
+  const [manualSaving, setManualSaving] = useState(false);
+  const [manualMessage, setManualMessage] = useState("");
+  const [aiSetupOffers, setAISetupOffers] = useState<AISetupOffer[]>([]);
+  const [aiSetupSaving, setAISetupSaving] = useState(false);
+  const [aiSetupMessage, setAISetupMessage] = useState("");
+  const [aiScopeReviewConfirmed, setAIScopeReviewConfirmed] = useState(false);
 
   const ebaySellerScopes = new Set(ebayStatus?.scopes ?? []);
   const hasSellerApiAccess = [
@@ -235,6 +252,7 @@ export default function SettingsPage() {
       } else {
         setSources([]);
       }
+      try { setGuideStatus(await api.settings.gettingStartedGuide()); } catch { setGuideStatus({ uploaded: false, filename: null, sha256: null }); }
     } finally {
       setLoading(false);
     }
@@ -279,7 +297,63 @@ export default function SettingsPage() {
       setLogsLoading(true);
       void api.logs.soldScraping(200).then(result => { setSoldLogs(result.items ?? []); setSoldLogNote(result.note ?? ""); }).catch(() => { setSoldLogs([]); setSoldLogNote(""); }).finally(() => setLogsLoading(false));
     }
+    if (tab === "getting-ready") {
+      void api.settings.componentManuals().then(result => setComponentManuals(result.items ?? [])).catch(error => setManualMessage(error instanceof Error ? error.message : "Could not load the manual library."));
+      void api.settings.aiSetupOffers().then(result => setAISetupOffers(result.offers ?? [])).catch(error => setAISetupMessage(error instanceof Error ? error.message : "Could not load AI setup offers."));
+    }
   }, [tab]);
+
+  async function saveComponentManual(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!manualFile || !manualSourceConfirmed) return;
+    setManualSaving(true);
+    setManualMessage("");
+    try {
+      await api.settings.uploadComponentManual({
+        component_key: manualKey,
+        component_name: manualName,
+        source_url: manualSourceUrl,
+        file: manualFile,
+        confirm_official_source: manualSourceConfirmed,
+      });
+      const result = await api.settings.componentManuals();
+      setComponentManuals(result.items ?? []);
+      setManualKey(""); setManualName(""); setManualSourceUrl(""); setManualFile(null); setManualSourceConfirmed(false);
+      setManualMessage("Official manual saved. New manifests will match its exact model key against build components.");
+    } catch (error) {
+      setManualMessage(error instanceof Error ? error.message : "Could not save the component manual.");
+    } finally {
+      setManualSaving(false);
+    }
+  }
+
+  async function toggleComponentManual(item: ComponentManual) {
+    try {
+      await api.settings.setComponentManualActive(item.id, !item.is_active);
+      setComponentManuals(items => items.map(current => current.id === item.id ? {...current, is_active: !item.is_active} : current));
+    } catch (error) {
+      setManualMessage(error instanceof Error ? error.message : "Could not update the manual.");
+    }
+  }
+
+  async function saveAISetupOffers() {
+    if (aiSetupOffers.some(item => item.enabled) && !aiScopeReviewConfirmed) {
+      setAISetupMessage("Confirm the commercial scope review before enabling customer purchases.");
+      return;
+    }
+    setAISetupSaving(true);
+    setAISetupMessage("");
+    try {
+      const result = await api.settings.updateAISetupOffers(aiSetupOffers.map(({id, enabled, price_gbp}) => ({id, enabled, price_gbp})), aiScopeReviewConfirmed);
+      setAISetupOffers(result.offers);
+      setAIScopeReviewConfirmed(false);
+      setAISetupMessage("AI setup prices and availability saved. Changes affect new purchases; existing payment intents retain their saved price.");
+    } catch (error) {
+      setAISetupMessage(error instanceof Error ? error.message : "Could not save AI setup offers.");
+    } finally {
+      setAISetupSaving(false);
+    }
+  }
 
   // eBay returns here with a result flag. Keep the user on the relevant tab
   // and refresh the authoritative status from the eBay-operations backend.
@@ -461,6 +535,7 @@ export default function SettingsPage() {
           { key: "opportunity", label: "Opportunity Scoring" },
           { key: "seller-policies", label: "Seller Policies" },
           { key: "delivery", label: "Delivery" },
+          { key: "getting-ready", label: "Getting Ready" },
           { key: "sources", label: "Data Sources" },
           { key: "extension-logs", label: "Extension Logs" },
           { key: "sold-logs", label: "Sold Scraping" },
@@ -478,6 +553,64 @@ export default function SettingsPage() {
           </button>
         ))}
       </div>
+
+      {tab === "getting-ready" && (
+        <div className="space-y-4">
+          <Card>
+            <CardHeader><CardTitle>Optional AI setup services</CardTitle><p className="text-xs text-slate-400">Set a one-off price and explicitly enable an offer before customers can buy it. New payment amounts are calculated from these server-side settings. Local model setup is shown as eligible only when the build has confirmed GPU VRAM evidence of at least 12 GB.</p></CardHeader>
+            <CardContent className="space-y-3 pt-0">
+              {aiSetupOffers.map(offer => (
+                <div key={offer.id} className="grid gap-3 rounded-lg border border-[#1e2d45] bg-[#0a1119] p-4 md:grid-cols-[minmax(0,1fr)_150px_120px] md:items-center">
+                  <div><p className="text-sm font-semibold text-slate-100">{offer.name}</p><p className="mt-1 text-xs text-slate-400">{offer.description}</p>{offer.requires_vram_gb !== null && <p className="mt-1 text-xs text-amber-300">Requires at least {offer.requires_vram_gb} GB confirmed GPU VRAM.</p>}</div>
+                  <label className="grid gap-1 text-xs text-slate-400">One-off price (GBP)<input type="number" min="0.01" max="5000" step="0.01" value={offer.price_gbp ?? ""} onChange={event => { const value = event.target.value; setAISetupOffers(items => items.map(item => item.id === offer.id ? {...item, price_gbp: value === "" ? null : Number(value)} : item)); }} className="rounded-lg border border-[#1e2d45] bg-[#07101a] px-3 py-2 text-sm text-slate-100" placeholder="Not set" /></label>
+                  <label className="flex items-center gap-2 text-xs text-slate-300"><input type="checkbox" checked={offer.enabled} disabled={offer.price_gbp === null || offer.price_gbp <= 0} onChange={event => setAISetupOffers(items => items.map(item => item.id === offer.id ? {...item, enabled: event.target.checked} : item))} />Offer enabled</label>
+                </div>
+              ))}
+              {aiSetupOffers.length === 0 && <p className="text-xs text-amber-300">AI setup offer settings could not be loaded. Customer purchasing remains unavailable unless the API returns configured offers.</p>}
+              {aiSetupOffers.some(item => item.enabled) && <label className="flex max-w-4xl items-start gap-2 rounded-lg border border-amber-300/20 bg-amber-300/5 p-3 text-xs leading-5 text-amber-100"><input type="checkbox" checked={aiScopeReviewConfirmed} onChange={event => setAIScopeReviewConfirmed(event.target.checked)} className="mt-1" />I have reviewed the included setup scope, application/model licensing, customer account and data needs, any ongoing third-party charges, support boundary, and cancellation/refund terms for every enabled offer.</label>}
+              <div className="flex flex-wrap items-center gap-3"><Button onClick={() => void saveAISetupOffers()} disabled={aiSetupSaving || aiSetupOffers.length === 0}>{aiSetupSaving ? "Saving…" : "Save AI service offers"}</Button>{aiSetupMessage && <p role="status" className="text-sm text-slate-300">{aiSetupMessage}</p>}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader><CardTitle>Customer Getting Started guide</CardTitle></CardHeader>
+            <CardContent className="space-y-4 pt-0">
+              <p className="text-sm text-slate-400">Upload the generic guide included in each build’s Getting Ready ZIP. Use a UTF-8 Markdown (.md) or text (.txt) file up to 1 MB. The guide is applied to new package generations.</p>
+              <div className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-4 text-sm">
+                <p className={guideStatus.uploaded ? "text-emerald-300" : "text-amber-300"}>{guideStatus.uploaded ? "Guide configured" : "No guide uploaded"}</p>
+                {guideStatus.uploaded && <p className="mt-1 text-xs text-slate-400">{guideStatus.filename} · {guideStatus.size_bytes ?? 0} bytes · SHA-256 {guideStatus.sha256}</p>}
+              </div>
+              <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-[#00dc82] px-4 py-2 text-sm font-semibold text-slate-950 opacity-90 hover:opacity-100">
+                <Upload className="h-4 w-4" /> {guideUploading ? "Uploading…" : "Upload guide"}
+                <input type="file" accept=".md,.txt,text/markdown,text/plain" className="sr-only" disabled={guideUploading} onChange={async event => {
+                  const file = event.currentTarget.files?.[0]; event.currentTarget.value = ""; if (!file) return;
+                  setGuideUploading(true); setGuideMessage("");
+                  try { setGuideStatus(await api.settings.uploadGettingStartedGuide(file)); setGuideMessage("Guide uploaded. New Getting Ready packages will use this version."); }
+                  catch (error) { setGuideMessage(error instanceof Error ? error.message : "Could not upload guide."); }
+                  finally { setGuideUploading(false); }
+                }} />
+              </label>
+              {guideMessage && <p role="status" className="text-sm text-slate-300">{guideMessage}</p>}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader><CardTitle>Component instruction manual cache</CardTitle><p className="text-xs text-slate-400">Add a PDF from the manufacturer’s official support site. A build receives a cached manual only when its full model key occurs in a component record.</p></CardHeader>
+            <CardContent className="space-y-4 pt-0">
+              <form onSubmit={saveComponentManual} className="grid gap-3 md:grid-cols-2">
+                <label className="grid gap-1 text-xs text-slate-300">Exact model key<input required minLength={8} maxLength={240} value={manualKey} onChange={event => setManualKey(event.target.value)} placeholder="MSI MAG B650 TOMAHAWK WIFI" className="rounded-lg border border-[#1e2d45] bg-[#0a1119] px-3 py-2 text-sm" /></label>
+                <label className="grid gap-1 text-xs text-slate-300">Component name<input required minLength={2} maxLength={300} value={manualName} onChange={event => setManualName(event.target.value)} placeholder="MSI MAG B650 TOMAHAWK WIFI motherboard" className="rounded-lg border border-[#1e2d45] bg-[#0a1119] px-3 py-2 text-sm" /></label>
+                <label className="grid gap-1 text-xs text-slate-300 md:col-span-2">Official manufacturer support URL<input required type="url" pattern="https://.*" value={manualSourceUrl} onChange={event => setManualSourceUrl(event.target.value)} placeholder="https://www.msi.com/..." className="rounded-lg border border-[#1e2d45] bg-[#0a1119] px-3 py-2 text-sm" /></label>
+                <label className="grid gap-1 text-xs text-slate-300">Manual PDF<input required type="file" accept="application/pdf,.pdf" onChange={event => setManualFile(event.target.files?.[0] ?? null)} className="rounded-lg border border-[#1e2d45] bg-[#0a1119] px-3 py-2 text-sm" /></label>
+                <label className="flex items-center gap-2 self-end text-xs text-slate-300"><input type="checkbox" checked={manualSourceConfirmed} onChange={event => setManualSourceConfirmed(event.target.checked)} />I verified this is the manufacturer’s official manual for this model.</label>
+                <button type="submit" disabled={manualSaving || !manualFile || !manualSourceConfirmed} className="inline-flex w-fit items-center gap-2 rounded-lg bg-[#00dc82] px-4 py-2 text-sm font-semibold text-slate-950 disabled:opacity-50"><Upload className="h-4 w-4" />{manualSaving ? "Saving…" : "Save to manual cache"}</button>
+              </form>
+              {manualMessage && <p role="status" className="text-sm text-slate-300">{manualMessage}</p>}
+              <div className="space-y-2 border-t border-[#1e2d45] pt-3">
+                {componentManuals.length === 0 ? <p className="text-xs text-slate-500">No manuals cached yet.</p> : componentManuals.map(item => <div key={item.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#1e2d45] p-3"><div className="min-w-0"><p className="text-sm font-medium text-slate-200">{item.component_name}</p><p className="break-all text-[11px] text-slate-500">Exact key: {item.component_key} · {item.filename} · {Math.ceil(item.size_bytes / 1024)} KB · SHA-256 {item.sha256}</p><a href={item.source_url} target="_blank" rel="noreferrer" className="text-[11px] text-cyan-300 underline">Official source</a></div><button type="button" onClick={() => void toggleComponentManual(item)} className={`rounded border px-3 py-1.5 text-xs ${item.is_active ? "border-emerald-400/30 text-emerald-200" : "border-slate-700 text-slate-400"}`}>{item.is_active ? "Active" : "Inactive"}</button></div>)}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {tab === "opportunity" && (
         <div className="space-y-6">

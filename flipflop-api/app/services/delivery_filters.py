@@ -88,10 +88,15 @@ def estimate_listing_delivery_working_days(text: str | None) -> int | None:
         if parsed_date:
             today = datetime.now(ZoneInfo("Europe/London")).date()
             year = int(date_match.group(2)) if date_match.group(2) else today.year
-            target = parsed_date.replace(year=year)
-            if not date_match.group(2) and target < today:
-                target = target.replace(year=year + 1)
-            if target >= today:
+            try:
+                target = parsed_date.replace(year=year)
+                if not date_match.group(2) and target < today:
+                    target = target.replace(year=year + 1)
+            except ValueError:
+                # A parsed 29 February may not exist in the selected year.
+                # Treat that wording as unsupported and use the vendor default.
+                target = None
+            if target and target >= today:
                 days = 0
                 current = today
                 while current < target:

@@ -70,6 +70,7 @@ class AdminOrderOut(BaseModel):
     status: str
     assigned_build_week: Optional[str]
     delivery_at_risk: bool
+    change_request: Optional[Dict[str, Any]] = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
@@ -104,12 +105,20 @@ class MyOrderOut(BaseModel):
     delivery_promise: Optional[str] = None
     delivery_estimate_source: Optional[str] = None
     supplier_delivery_days: Optional[int] = None
+    fulfilment_type: Optional[str] = None
+    build_status: Optional[str] = None
     shipped_at: Optional[datetime] = None
     delivered_at: Optional[datetime] = None
+    cancellation_status: Optional[str] = None
+    cancelled_at: Optional[datetime] = None
+    change_request: Optional[Dict[str, Any]] = None
+    can_cancel: bool = False
     tracking_number: Optional[str] = None
     carrier: Optional[str] = None
     tracking_url: Optional[str] = None
     live_tracking_available: bool = False
+    live_map_url: Optional[str] = None
+    tracking_events: list[Dict[str, Any]] = Field(default_factory=list)
     capture_3d: Optional[Dict[str, Any]] = None
     # Direct URL for the completed build GLB.  Keep this alongside the
     # capture metadata so storefront clients can render the viewer without
@@ -118,6 +127,7 @@ class MyOrderOut(BaseModel):
     # Build-scoped customer portal content.  This is returned only after the
     # order/build has passed the customer or admin access check.
     customer_hub: Optional[Dict[str, Any]] = None
+    portal_support_case_create_allowed: bool = False
     # Public review destination for the customer-facing build website.
     review_url: Optional[str] = None
     created_at: datetime
@@ -126,5 +136,5 @@ class MyOrderOut(BaseModel):
 
 
 class AdminOrderUpdateIn(BaseModel):
-    status: Optional[str] = Field(None, pattern=r'^(pending_payment|confirmed|building|shipped|cancelled)$')
+    status: Optional[str] = Field(None, pattern=r'^(pending_payment|confirmed|awaiting_sourcing|parts_ordered|building|qa|ready_to_package|packaging_in_progress|ready_to_ship|shipped|completed|cancelled)$')
     note: Optional[str] = Field(None, max_length=500)

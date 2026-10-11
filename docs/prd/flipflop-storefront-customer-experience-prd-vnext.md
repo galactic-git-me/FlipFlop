@@ -1,6 +1,6 @@
 # FlipFlop Storefront & Customer Experience --- PRD vNext
 
-**Status:** Proposed customer-experience update\
+**Status:** Current strategic experience input; policy and delivery rules are canonical under [`../product/`](../product/README.md)\
 **Site:** theflipflop.shop\
 **Brand:** *Beautiful machines, built to be admired.*\
 **Functional promise:** **The right PC. Without needing to become a PC
@@ -9,6 +9,8 @@ expert.**
 This PRD consumes the Playbook, Recommendation, Procurement, Pricing,
 Ready-to-Ship/Gem, Order and Upgrade services defined by the Core
 Commerce & Intelligence PRD.
+
+**2026-09-29 decision update:** Customer accounts begin as empty portals and may link to multiple personalized build portals. Ready-to-Ship portals may exist before sale and link to the customer at `Sold`; made-to-order portals link at sale and fill in benchmark/tracking data later. Software selection, workshop USB preparation, generated documents, delivery evidence, and portal publication are specified in [`getting-ready-service-prd.md`](./getting-ready-service-prd.md). Customer return/warranty wording comes from [`../product/customer-policies.md`](../product/customer-policies.md).
 
 ## 1. Experience vision
 

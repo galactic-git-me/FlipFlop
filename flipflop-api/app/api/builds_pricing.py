@@ -32,6 +32,7 @@ from app.gem_radar.adapters.sold_comps import LiveSoldCompsAdapter, PlaywrightSo
 from app.services.ebay_browse import search_active_listings
 from app.services.sold_comps_cache import get_sold_comps_cache
 from app.services.figural_insurance import FiguralError, get_insurance_quote
+from app.services.warranty_service import DEFAULT_RESERVE_PCT
 
 log = structlog.get_logger(__name__)
 router = APIRouter(prefix="/api/builds", tags=["builds"])
@@ -370,6 +371,24 @@ def _weighted_median(comps: list[SoldCompDetail]) -> float:
 
 def _round_price(value: float, step: int = 10) -> float:
     return float(round(value / step) * step)
+
+
+def _sale_based_warranty_reserve(expected_sale_price: float, reserve_pct: float) -> float:
+    return max(0.0, expected_sale_price) * (reserve_pct / 100.0)
+
+
+def _observed_warranty_rate(claim_cost: float | None, sale_price: float | None) -> float | None:
+    if claim_cost is None or sale_price is None or sale_price <= 0:
+        return None
+    return max(0.0, claim_cost) / sale_price * 100.0
+
+
+def _sale_based_reserve_floor(
+    base_cost: float, fee_rate: float, reserve_pct: float, *, target_margin: float = 0.10,
+) -> float:
+    reserve_rate = reserve_pct / 100.0
+    denominator = 1 - fee_rate - (1 + target_margin) * reserve_rate
+    return (base_cost * (1 + target_margin)) / max(0.01, denominator)
 
 
 async def _component_valuations(components: list[dict]) -> list[ComponentValuation]:
@@ -886,12 +905,13 @@ async def get_build_pricing(
         for row in outcome_rows if row.sale_price_actual and row.marketplace_fees_actual is not None
     ]
     warranty_rates = [
-        ((row.warranty_claim_cost or 0) / row.total_cost) * 100
-        for row in outcome_rows if row.total_cost and row.warranty_claim_cost is not None
+        rate
+        for row in outcome_rows
+        if (rate := _observed_warranty_rate(row.warranty_claim_cost, row.sale_price_actual)) is not None
     ]
     calibrated_headroom = min(15.0, max(4.0, statistics.median(realised_discounts))) if len(realised_discounts) >= 3 else (10.0 if build.allow_offers else 4.0)
-    configured_warranty_pct = build.warranty_reserve_pct if build.warranty_reserve_pct is not None else 3.0
-    warranty_reserve_pct = min(10.0, max(1.0, statistics.mean(warranty_rates))) if len(warranty_rates) >= 5 else configured_warranty_pct
+    configured_warranty_pct = min(25.0, max(DEFAULT_RESERVE_PCT, build.warranty_reserve_pct if build.warranty_reserve_pct is not None else DEFAULT_RESERVE_PCT))
+    warranty_reserve_pct = min(10.0, max(DEFAULT_RESERVE_PCT, statistics.mean(warranty_rates))) if len(warranty_rates) >= 5 else configured_warranty_pct
     configured_fee_rate = float(get_settings().ebay_final_value_fee_pct)
     fee_rate = statistics.median(observed_fee_rates) if len(observed_fee_rates) >= 3 else configured_fee_rate
     if build.promoted_enabled and build.promoted_ad_rate_pct:
@@ -907,7 +927,7 @@ async def get_build_pricing(
     delivery_cost = build.shipping_cost or 0.0
     insurance_cost = build.shipping_insurance_cost or 0.0
     packaging_cost = build.packaging_cost or 0.0
-    warranty_reserve = component_cost * (warranty_reserve_pct / 100.0)
+    base_cost = component_cost + delivery_cost + insurance_cost + packaging_cost
 
     if market_data["sold"]["available"]:
         estimated_price = market_data["sold"]["average_price"]
@@ -918,9 +938,6 @@ async def get_build_pricing(
     else:
         estimated_price = component_cost
         resale_source = "component_estimate"
-
-    total_cost = component_cost + delivery_cost + insurance_cost + packaging_cost + warranty_reserve
-    estimated_profit = round(estimated_price - total_cost, 2)
 
     primary_reasoning = PricingDetail(
         type=resale_source,
@@ -966,14 +983,20 @@ async def get_build_pricing(
     else:
         # A sum-of-parts value is context, not proof of what a complete PC will
         # sell for. Apply a modest assembly/warranty premium and label it low confidence.
-        market_mid = max(component_resale_total * 1.10, total_cost * 1.10)
+        market_mid = max(component_resale_total * 1.10, base_cost * 1.10)
         market_low, market_high = market_mid * 0.92, market_mid * 1.10
         confidence = "low"
         rationale = "No comparable-build evidence is available; provisional range uses component values plus a modest complete-build premium"
 
-    # Floor is the sale price required to net a 10% return after configured
-    # marketplace fees and delivery, not merely the cash component total.
-    floor_price = (total_cost * 1.10) / max(0.01, 1 - fee_rate)
+    # The reserve is a percentage of the expected sale price, matching the
+    # amount held when delivery starts the actual warranty period.
+    warranty_reserve = _sale_based_warranty_reserve(market_mid, warranty_reserve_pct)
+    total_cost = base_cost + warranty_reserve
+    estimated_profit = round(estimated_price - total_cost, 2)
+
+    # Solve for the floor with both marketplace fees and the sale-based reserve
+    # applied to the sale price itself.
+    floor_price = _sale_based_reserve_floor(base_cost, fee_rate, warranty_reserve_pct)
     # Leave deliberate negotiating room above the protected floor when offers
     # are enabled; otherwise every non-full-price offer would be rejected.
     negotiation_headroom_pct = calibrated_headroom if build.allow_offers else 4.0
@@ -985,9 +1008,11 @@ async def get_build_pricing(
     try:
         quote = await get_insurance_quote(recommended_price)
         if abs(quote.price_gbp - insurance_cost) >= 0.01:
-            total_cost += quote.price_gbp - insurance_cost
+            insurance_delta = quote.price_gbp - insurance_cost
+            base_cost += insurance_delta
+            total_cost += insurance_delta
             insurance_cost = quote.price_gbp
-            floor_price = (total_cost * 1.10) / max(0.01, 1 - fee_rate)
+            floor_price = _sale_based_reserve_floor(base_cost, fee_rate, warranty_reserve_pct)
             recommended_price = max(market_launch_price, floor_price)
             async with AsyncSessionLocal() as db:
                 persisted = await db.get(ManualBuild, build_id)
@@ -996,6 +1021,7 @@ async def get_build_pricing(
                     await db.commit()
     except FiguralError as exc:
         log.info("builds_pricing.insurance_quote_unavailable", build_id=build_id, reason=str(exc))
+    estimated_profit = round(estimated_price - total_cost, 2)
     recommended_price = _round_price(recommended_price)
     floor_price = _round_price(floor_price)
     auto_accept_at = _round_price(max(floor_price, recommended_price * 0.96))

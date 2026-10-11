@@ -16,7 +16,7 @@ from typing import Literal
 import structlog
 from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
-from sqlalchemy import func, select, update
+from sqlalchemy import func, select, text, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import require_operator
@@ -2923,7 +2923,7 @@ async def _submit_scan_body(
                 candidate_model = " ".join((candidate.brand or "", candidate.model or "")).casefold().strip()
                 for target_cpk, expected in expected_identities:
                     expected_model = " ".join((expected.brand or "", expected.model or "")).casefold().strip()
-                    if target_model and candidate_model == expected_model:
+                    if expected_model and candidate_model == expected_model:
                         candidate_cpk = target_cpk
                         break
             if candidate_cpk in target_cpks:

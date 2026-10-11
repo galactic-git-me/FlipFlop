@@ -287,6 +287,7 @@ export interface CourierQuote {
   tracked: boolean;
   estimated_days: number | null;
   service_slug: string | null;
+  signature_tracking: boolean;
   protection_scope: "loss_only" | "loss_and_damage" | "unknown";
   full_value_damage_cover: boolean;
   protection_warning: string;
@@ -558,10 +559,11 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   // NOTE: the old regex /([^/])(\?|$)/ was corrupting query params like status=active → status=active/
   const url = apiUrl(path).replace(/([^/])(\?)/, "$1/$2");
   const token = getAdminToken();
+  const isMultipart = typeof FormData !== "undefined" && init?.body instanceof FormData;
   const res = await fetch(url, {
     credentials: "include",
     headers: {
-      "Content-Type": "application/json",
+      ...(!isMultipart ? { "Content-Type": "application/json" } : {}),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...init?.headers,
     },
@@ -677,7 +679,13 @@ export const api = {
         Array<{
           id: number;
           name: string;
+          status: "built" | "listed" | "sold";
           dispatch_status: string;
+          has_physical_handover: boolean;
+          portal_order_id?: number | null;
+          portal_grant_id?: number | null;
+          portal_claim_email_status?: "pending" | "sent" | "failed" | null;
+          playbook_assignment?: {playbook_id: number; curated_build_id: string; customer_type: string; budget_tier: string; cell_name: string; software_profile: {recommended_package_ids: string[]; rationale: string}} | null;
           sale_price?: number | null;
           buyer_name?: string | null;
           customer_email?: string | null;
@@ -685,8 +693,51 @@ export const api = {
           collection_date?: string | null;
           tracking_number?: string | null;
           shipping_label_url?: string | null;
+          parcel2go_order_id?: string | null;
+          parcel2go_order_line_id?: string | null;
+          shipment_booked_at?: string | null;
+          shipment_booking_state?: string;
+          insurance_status?: string;
+          insurance_policy_id?: string | null;
+          insurance_cost_gbp?: number | null;
+          insurance_provider_response?: {
+            policy_id?: string | null;
+            invoice_id?: string | null;
+            insured_value_gbp?: number | null;
+            price_gbp?: number | null;
+            currency?: string | null;
+            mode?: string | null;
+            received_at?: string | null;
+            mismatches: string[];
+          } | null;
+          getting_started?: {
+            status: string;
+            order_id?: number | null;
+            software_selections: string[];
+            purchased_ai_services: Record<string, unknown>[];
+            checklist: Record<string, unknown>;
+            shipment_evidence?: Array<{id: string; category: "working_pc" | "package_contents" | "sealed_package"; filename: string; content_type: string; size_bytes: number; sha256: string; uploaded_at: string; uploaded_by_admin_name?: string; review_status?: "needs_review" | "approved" | "rejected"; reviewed_by_admin_name?: string; reviewed_at?: string; review_note?: string}>;
+            manifest?: Record<string, unknown> | null;
+            cached_component_manuals?: Array<{manual_id: number; component_key: string; component_name: string; source_url: string; filename: string; sha256: string; size_bytes: number}>;
+            approved_research_bundle?: Record<string, unknown>[];
+            latest_package?: {version: number; filename: string; size_bytes: number; sha256: string; workshop_filename?: string; workshop_size_bytes?: number; workshop_sha256?: string; windows_license_helper_required?: boolean} | null;
+            generated_at?: string | null;
+          } | null;
         }>
       >("/manual-builds/dispatch-zone"),
+    reconcileShipmentBooking: (id: number, payload: {
+      resolution: "no_active_booking" | "paid_booking" | "attach_tracking_reference";
+      provider_order_id?: string;
+      provider_order_line_id?: string;
+      tracking_number?: string;
+      shipping_label_url?: string;
+      note: string;
+    }) =>
+      request<{success: boolean; shipment_booking_state: string}>(`/manual-builds/${id}/shipment-booking/reconcile`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ provider_checked: true, ...payload }),
+      }),
     setCollectionDate: (id: number, collection_date: string) =>
       request<{
         ok: boolean;
@@ -696,6 +747,129 @@ export const api = {
         method: "PATCH",
         body: JSON.stringify({ collection_date }),
       }),
+    generateGettingReady: (id: number, payload: {
+      playbook_id?: number;
+      curated_build_id?: string;
+      playbook_segment?: string;
+      customer_software_selections?: string[];
+      approved_research_bundle?: Record<string, unknown>[];
+      approved_component_manuals?: Record<string, unknown>[];
+    }) => request<Record<string, unknown>>(`/manual-builds/${id}/getting-ready/generate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    }),
+    suggestGettingReadySources: (id: number, component_name: string, topic: "driver_firmware" | "manual" | "rgb" | "software" | "compatibility") =>
+      request<{
+        build_id: number;
+        component_name: string;
+        topic: typeof topic;
+        suggestions: Array<{title: string; source_url: string; publisher: string}>;
+        cached_manual_matches: Array<{manual_id: number; component_key: string; component_name: string; source_url: string; filename: string; sha256: string; size_bytes: number}>;
+        cache_checked: boolean;
+        review_required: true;
+        saved: false;
+        downloaded: false;
+      }>(`/manual-builds/${id}/getting-ready/source-suggestions`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ component_name, topic }),
+      }),
+    approveGettingReadyPackage: (id: number, reviewer_notes?: string, confirm_playbook_defaults_for_indirect_customer = false) =>
+      request<{filename: string; version: number; size_bytes: number; sha256: string; workshop_filename: string; workshop_size_bytes: number; workshop_sha256: string; windows_license_helper_required: boolean; download_url: string}>(`/manual-builds/${id}/getting-ready/approve-and-package`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          confirm_manifest_reviewed: true,
+          confirm_customer_details_checked: true,
+          confirm_windows_license_handling: true,
+          confirm_playbook_defaults_for_indirect_customer,
+          reviewer_notes: reviewer_notes || null,
+        }),
+      }),
+    packageDownloadUrl: (id: number, version: number) => apiUrl(`/manual-builds/${id}/getting-ready/package/${version}`),
+    downloadSoftwareInstallScript: async (id: number) => {
+      const token = getAdminToken();
+      const response = await fetch(apiUrl(`/manual-builds/${id}/getting-ready/software-script`), {
+        credentials: "include",
+        cache: "no-store",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (!response.ok) {
+        const message = await response.text();
+        throw new Error(message || "Could not download the reviewed software script.");
+      }
+      const blobUrl = URL.createObjectURL(await response.blob());
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = `FlipFlop-Build-${id}-software-install.ps1`;
+      link.click();
+      window.setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+    },
+    dispatchChecklistDownloadUrl: (id: number) => apiUrl(`/manual-builds/${id}/getting-ready/dispatch-checklist`),
+    downloadWindowsLicenseHelper: async (id: number) => {
+      const token = getAdminToken();
+      const response = await fetch(apiUrl(`/manual-builds/${id}/getting-ready/windows-license-helper`), {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ confirm_private_key_release: true }),
+      });
+      if (!response.ok) {
+        const message = await response.text();
+        throw new Error(message || "Could not download the Windows licence helper.");
+      }
+      const blobUrl = URL.createObjectURL(await response.blob());
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = `FlipFlop-Build-${id}-install-windows-license.ps1`;
+      link.click();
+      window.setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+    },
+    updateChecklist: (id: number, action: string, status: string, note?: string, windows_deployment_evidence?: Record<string, unknown>, confirm_paid_ai_scope = false, windows_target?: Record<string, unknown>, driver_firmware_outcomes?: Array<{component_id: string; component_name: string; outcome: "updated" | "no_update_applicable"; source_url?: string | null; details: string}>) =>
+      request<{action: string; status: string; checklist: Record<string, unknown>}>(`/manual-builds/${id}/getting-ready/checklist/${encodeURIComponent(action)}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status, note: note || null, evidence_ref: null, windows_deployment_evidence: windows_deployment_evidence || null, windows_target: windows_target || null, confirm_paid_ai_scope, driver_firmware_outcomes: driver_firmware_outcomes || null }),
+      }),
+    markDispatched: (id: number) =>
+      request<{success: boolean; dispatch_status: string; tracking_number?: string; email_sent?: boolean; portal_claim_email_sent?: boolean | null; portal_grant_id?: number | null; portal_claim_email_status?: "pending" | "sent" | "failed" | null; ebay_marked_shipped?: boolean; warning?: string | null}>(`/manual-builds/${id}/dispatch`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ confirm_physical_handover: true }),
+      }),
+    createGuestPortalClaim: (id: number, orderId: number | null, contact_email: string | null, channel: "direct_guest" | "ebay" | "vinted" | "marketplace" | "printed_insert") =>
+      request<{id: number; claim_url: string | null; expires_at: string; delivery_guidance: string; leaflet_download_url: string; email_sent: boolean; email_status: "pending" | "sent" | "failed" | null}>("/admin/portal-access-grants", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...(channel === "direct_guest" ? { order_id: orderId } : { manual_build_id: id }), contact_email, channel, expires_in_days: 400 }),
+      }),
+    portalLeafletDownloadUrl: (grantId: number) => apiUrl(`/admin/portal-access-grants/${grantId}/leaflet`),
+    softwareCatalogue: () => request<{items: Array<{package_id: string; name: string; category: string; estimated_minutes_saved: number; license_note: string}>; estimate_basis: string}>("/playbooks/software-catalogue"),
+    uploadEvidence: (id: number, category: "working_pc" | "package_contents" | "sealed_package", file: File) => {
+      const form = new FormData(); form.set("category", category); form.set("file", file);
+      return request<{id: string; category: string; content_type: string; size_bytes: number}>(`/manual-builds/${id}/getting-ready/evidence`, { method: "POST", body: form });
+    },
+    reviewEvidence: (id: number, artifactId: string, approved: boolean, note: string) =>
+      request<{id: string; category: string; review_status: string; reviewed_at: string; reviewed_by_admin_id: number}>(`/manual-builds/${id}/getting-ready/evidence/${encodeURIComponent(artifactId)}/review`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ approved, note }),
+      }),
+    getEvidenceFile: async (id: number, artifactId: string) => {
+      const token = getAdminToken();
+      const response = await fetch(apiUrl(`/manual-builds/${id}/getting-ready/evidence/${encodeURIComponent(artifactId)}`), {
+        credentials: "include",
+        cache: "no-store",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (!response.ok) throw new Error(`Could not retrieve evidence (${response.status})`);
+      return response.blob();
+    },
   },
   crossListing: {
     amazonStatus: () =>
@@ -1080,11 +1254,11 @@ export const api = {
           }),
         }
       ),
-    create: (name: string) =>
+    create: (name: string, playbookCell?: { playbook_id: number; curated_build_id: string }) =>
       request<ManualBuild>("/manual-builds/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ name, ...playbookCell }),
       }),
     patch: (
       id: number,
@@ -1218,7 +1392,7 @@ export const api = {
     // eBay. Spends real money — only call from an explicit user confirmation.
     bookShipment: (
       id: number,
-      data: { service_slug: string; price_gbp: number }
+      data: { service_slug: string; price_gbp: number; signed_for_delivery_confirmed?: boolean; confirm_live_purchase: boolean }
     ) =>
       request<BookShipmentResult>(`/manual-builds/${id}/book-shipment`, {
         method: "POST",
@@ -1253,6 +1427,16 @@ export const api = {
           listingValueGbp
         )}`,
         { method: "POST" }
+      ),
+    createInsurancePolicy: (id: number, quotedPriceGbp: number, confirmations: { signedForDelivery: boolean; doublePackaging: boolean; discreetPackaging: boolean; rigidOuterContainer: boolean; contentsNotDeducible: boolean; directSignature: boolean; officialCarrierHandover: boolean }) =>
+      request<{status: string; policy_id?: string; invoice_id?: string | null; cost_gbp?: number; idempotent?: boolean}>(
+        `/manual-builds/${id}/insurance-policy`,
+        { method: "POST", body: JSON.stringify({ confirm_terms: true, confirm_live_purchase: true, confirm_customer_data_share: true, confirm_signed_for_delivery: confirmations.signedForDelivery, confirm_double_packaging: confirmations.doublePackaging, confirm_discreet_packaging: confirmations.discreetPackaging, confirm_rigid_outer_container: confirmations.rigidOuterContainer, confirm_contents_not_deducible: confirmations.contentsNotDeducible, confirm_direct_signature: confirmations.directSignature, confirm_official_carrier_handover: confirmations.officialCarrierHandover, quoted_price_gbp: quotedPriceGbp }) }
+      ),
+    reconcileInsurancePolicy: (id: number, payload: {resolution: "policy_exists" | "no_policy"; provider_checked: true; note: string; policy_id?: string; invoice_id?: string; provider_tracking_number?: string; insured_value_gbp?: number; cost_gbp?: number}) =>
+      request<{status: string; policy_id?: string | null; cost_gbp?: number | null; idempotent: boolean}>(
+        `/manual-builds/${id}/insurance-policy/reconcile`,
+        {method: "POST", body: JSON.stringify(payload)}
       ),
     endEbayListing: (id: number) =>
       request<ManualBuild>(`/manual-builds/${id}/ebay-listing`, {
@@ -1439,6 +1623,25 @@ export const api = {
 
   settings: {
     get: () => request<unknown>("/settings"),
+    aiSetupOffers: () => request<{offers: Array<{id: string; name: string; description: string; requires_vram_gb: number | null; enabled: boolean; price_gbp: number | null; commercial_scope_reviewed: boolean}>}>("/settings/ai-setup-offers"),
+    updateAISetupOffers: (offers: Array<{id: string; enabled: boolean; price_gbp: number | null}>, confirm_commercial_scope_review: boolean) => request<{offers: Array<{id: string; name: string; description: string; requires_vram_gb: number | null; enabled: boolean; price_gbp: number | null; commercial_scope_reviewed: boolean}>}>("/settings/ai-setup-offers", {method: "PUT", body: JSON.stringify({offers, confirm_commercial_scope_review})}),
+    gettingStartedGuide: () => request<{ uploaded: boolean; filename: string | null; sha256: string | null; size_bytes?: number }>("/settings/getting-started-guide"),
+    uploadGettingStartedGuide: (file: File) => {
+      const form = new FormData();
+      form.append("file", file);
+      return request<{ uploaded: boolean; filename: string; sha256: string; size_bytes: number }>("/settings/getting-started-guide", { method: "PUT", body: form });
+    },
+    componentManuals: () => request<{items: Array<{id: number; component_key: string; component_name: string; source_url: string; filename: string; sha256: string; size_bytes: number; is_active: boolean}>}>("/settings/component-manuals"),
+    uploadComponentManual: (data: {component_key: string; component_name: string; source_url: string; file: File; confirm_official_source: boolean}) => {
+      const form = new FormData();
+      form.set("component_key", data.component_key);
+      form.set("component_name", data.component_name);
+      form.set("source_url", data.source_url);
+      form.set("confirm_official_source", String(data.confirm_official_source));
+      form.set("file", data.file);
+      return request<{id: number; component_key: string; component_name: string; source_url: string; filename: string; sha256: string; size_bytes: number; is_active: boolean}>("/settings/component-manuals", {method: "POST", body: form});
+    },
+    setComponentManualActive: (id: number, active: boolean) => request<{id: number; is_active: boolean}>(`/settings/component-manuals/${id}/active?active=${active}`, {method: "PATCH"}),
     update: (data: Record<string, unknown>) =>
       request<unknown>("/settings", {
         method: "PUT",
@@ -1788,6 +1991,7 @@ export const api = {
   },
 
   playbooks: {
+    curatedCells: () => request<{items: Array<{id: string; name: string; segment: string; tier: string; playbook_id: number | null}>}>("/curated-builds/definitions"),
     list: (status?: string) =>
       request<import("./types").Playbook[]>(
         `/playbooks${status ? `?status=${status}` : ""}`

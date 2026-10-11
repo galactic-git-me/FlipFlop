@@ -26,6 +26,7 @@ async def _price_draft(db: AsyncSession, draft: DraftBuild) -> DraftBuildOut:
         playbook_id=draft.playbook_id,
         slot_selections={int(k): v for k, v in config.get("slot_selections", {}).items()},
         case_id=config.get("case_id"),
+        require_complete=False,
     )
     return DraftBuildOut(
         id=draft.id,
@@ -62,6 +63,7 @@ async def create_draft(
             playbook_id=request.playbook_id,
             slot_selections=request.slot_selections,
             case_id=request.case_id,
+            require_complete=False,
         )
     except InvalidBuildError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -140,6 +142,7 @@ async def update_draft(
             playbook_id=request.playbook_id,
             slot_selections=request.slot_selections,
             case_id=request.case_id,
+            require_complete=False,
         )
     except InvalidBuildError as e:
         raise HTTPException(status_code=400, detail=str(e))

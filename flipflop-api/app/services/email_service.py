@@ -3,6 +3,7 @@ import smtplib
 from html import escape
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from urllib.parse import urlsplit
 from app.config import get_settings
 from app.services.feature_flags import is_enabled, FeatureFlags
 import structlog
@@ -119,7 +120,70 @@ STATUS_EMAIL_COPY = {
     "ready_to_ship": ("Built and ready to dispatch", "Your machine has passed the build stage and is being prepared for dispatch."),
     "shipped": ("Dispatched", "Your FlipFlop machine has been handed to the courier."),
     "completed": ("Delivered", "Your order is marked as delivered. Your private portal contains the latest support and build information."),
+    "cancellation_pending": ("Cancellation requested", "We have paused sourcing and are reconciling the full refund for your order. Your private portal will show the latest status."),
+    "cancelled": ("Order cancelled", "Your order has been cancelled and the full refund has been issued to your original payment method. Your bank may take additional time to display it."),
 }
+
+CASE_STATUS_EMAIL_COPY = {
+    "received": ("Case received", "We have received your support case."),
+    "claim_opened": ("Warranty claim opened", "Your warranty claim has been opened for review."),
+    "reviewing": ("Case under review", "Our team is reviewing your case."),
+    "approved": ("Warranty work approved", "The proposed warranty work has been approved. Please check your private portal for the latest details."),
+    "awaiting_customer_return": ("Return needed for your repair", "We are waiting for your machine to be returned to us. Please check your private portal for the next steps."),
+    "return_in_transit": ("Repair return on its way", "Your machine is on its way to us for inspection or repair."),
+    "received_for_inspection": ("Machine received for inspection", "We have recorded your machine as received for inspection."),
+    "repair_in_progress": ("Repair in progress", "Work on your repair is now in progress."),
+    "waiting_for_parts": ("Repair update", "Your repair is waiting for parts. We will update your private portal as the case progresses."),
+    "replacement_ordered": ("Replacement arranged", "A replacement has been arranged for your case."),
+    "replacement_dispatched": ("Replacement dispatched", "Your replacement has been dispatched. Open your private portal for the latest delivery details."),
+    "resolved": ("Case resolved", "Your support or warranty case has been marked as resolved."),
+    "rejected": ("Warranty claim decision", "A decision has been recorded for your warranty claim. Please open your private portal or contact us if you need clarification."),
+    "closed": ("Case closed", "Your support or warranty case has been closed."),
+}
+
+
+async def send_customer_case_status_email(
+    customer_email: str,
+    customer_name: str,
+    case_reference: str,
+    status: str,
+    order_id: int,
+    repair_tracking: dict | None = None,
+) -> bool:
+    """Send a minimal status notice for a direct-storefront aftercare case."""
+    if not smtp_is_configured():
+        log.warning("Email not configured, skipping customer case update", reference=case_reference, status=status)
+        return False
+    title, message = CASE_STATUS_EMAIL_COPY.get(
+        status,
+        ("Case update", f"Your case status is now {status.replace('_', ' ')}."),
+    )
+    portal_base = settings.frontend_url.rstrip("/")
+    portal = f"{portal_base}/my-builds/{order_id}#support"
+    tracking_html = ""
+    tracking_url = str((repair_tracking or {}).get("tracking_url") or "").strip()
+    parsed_tracking_url = urlsplit(tracking_url)
+    if (
+        parsed_tracking_url.scheme == "https"
+        and parsed_tracking_url.netloc
+        and not parsed_tracking_url.username
+        and not parsed_tracking_url.password
+        and (repair_tracking or {}).get("tracking_number")
+        and (repair_tracking or {}).get("carrier")
+    ):
+        purpose = "replacement shipment" if repair_tracking.get("purpose") == "replacement" else "return shipment"
+        tracking_html = (
+            f"<p><strong>{escape(purpose.title())}:</strong> {escape(str(repair_tracking['carrier']))} · "
+            f"{escape(str(repair_tracking['tracking_number']))}<br>"
+            f"<a href=\"{escape(tracking_url, quote=True)}\">Track with the carrier</a></p>"
+        )
+    html = f"""<!doctype html><html><body style="margin:0;background:#f3f6fb;font-family:Arial,sans-serif;color:#152238"><div style="max-width:640px;margin:32px auto;background:#fff;border:1px solid #dce5f0;border-radius:18px;overflow:hidden"><div style="padding:26px 32px;background:#07152d;color:#fff"><div style="font-size:12px;letter-spacing:3px;color:#68d7ff">FLIPFLOP</div><h1>{escape(title)}</h1></div><div style="padding:30px 32px;line-height:1.6"><p>Hello {escape(customer_name or 'there')},</p><p>{escape(message)}</p><p><strong>Case:</strong> {escape(case_reference)}</p>{tracking_html}<p><a href="{escape(portal, quote=True)}">View your private customer portal</a></p><p style="font-size:12px;color:#66758a">This update does not change your statutory rights or the terms of your warranty.</p></div></div></body></html>"""
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = f"{title}: {case_reference}"
+    msg["From"] = settings.smtp_from or "noreply@flipflop.co.uk"
+    msg["To"] = customer_email
+    msg.attach(MIMEText(html, "html"))
+    return _send(msg, f"customer-case-{case_reference}-{status}")
 
 
 def render_build_status_email(
@@ -196,6 +260,37 @@ async def send_order_status_email(customer_email: str, customer_name: str, order
     return await send_build_status_email(customer_email, customer_name, order_reference, status, order_id)
 
 
+async def send_courier_event_email(
+    customer_email: str,
+    customer_name: str,
+    order_reference: str,
+    description: str,
+    *,
+    order_id: int | None = None,
+    tracking_url: str | None = None,
+    live_map_url: str | None = None,
+) -> bool:
+    """Send one evidence-backed material courier update."""
+    if not smtp_is_configured():
+        log.warning("Email not configured, skipping courier event email", reference=order_reference)
+        return False
+    portal_base = settings.frontend_url.rstrip("/")
+    portal = f"{portal_base}/my-builds/{order_id}" if order_id else f"{portal_base}/my-builds"
+    links = []
+    if tracking_url:
+        links.append(f'<a href="{escape(tracking_url, quote=True)}">Track with the courier</a>')
+    if live_map_url:
+        links.append(f'<a href="{escape(live_map_url, quote=True)}">Open the courier live map</a>')
+    link_html = " · ".join(links)
+    html = f"""<!doctype html><html><body style="margin:0;background:#f3f6fb;font-family:Arial,sans-serif;color:#152238"><div style="max-width:640px;margin:32px auto;background:#fff;border:1px solid #dce5f0;border-radius:18px;overflow:hidden"><div style="padding:26px 32px;background:#07152d;color:#fff"><div style="font-size:12px;letter-spacing:3px;color:#68d7ff">FLIPFLOP</div><h1>Courier update</h1></div><div style="padding:30px 32px;line-height:1.6"><p>Hello {escape(customer_name or 'there')},</p><p>{escape(description)}</p><p><strong>Order:</strong> {escape(order_reference)}</p>{f'<p>{link_html}</p>' if link_html else ''}<p><a href="{escape(portal, quote=True)}">Open your private build portal</a></p></div></div></body></html>"""
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = f"Courier update: {order_reference}"
+    msg["From"] = settings.smtp_from or "noreply@flipflop.co.uk"
+    msg["To"] = customer_email
+    msg.attach(MIMEText(html, "html"))
+    return _send(msg, f"courier-event-{order_reference}")
+
+
 async def send_delivery_followup_email(customer_email: str, customer_name: str, build_id: int, *, review_url: str, feedback_url: str | None = None) -> bool:
     """Send the post-delivery onboarding, support and review request."""
     if not smtp_is_configured():
@@ -212,6 +307,108 @@ async def send_delivery_followup_email(customer_email: str, customer_name: str, 
     msg["To"] = customer_email
     msg.attach(MIMEText(html, "html"))
     return _send(msg, f"delivery-followup-build-{build_id}")
+
+
+async def send_guest_portal_claim_email(
+    customer_email: str,
+    customer_name: str,
+    build_name: str,
+    claim_url: str,
+    expires_at: object,
+    order_reference: str,
+) -> bool:
+    """Send a one-time portal claim link to the verified direct-order email."""
+    if not smtp_is_configured():
+        log.warning("Email not configured, skipping portal claim email", order_reference=order_reference)
+        return False
+    expiry = escape(str(expires_at))
+    url = escape(claim_url, quote=True)
+    safe_name = escape(customer_name or "there")
+    safe_build = escape(build_name or "your FlipFlop build")
+    html = (
+        '<!doctype html><html><body style="margin:0;background:#f3f6fb;font-family:Arial,sans-serif;color:#152238">'
+        '<div style="max-width:640px;margin:32px auto;background:#fff;border:1px solid #dce5f0;border-radius:18px;overflow:hidden">'
+        '<div style="padding:26px 32px;background:#07152d;color:#fff"><div style="font-size:12px;letter-spacing:3px;color:#68d7ff">FLIPFLOP</div>'
+        '<h1>Your personal build portal is ready</h1></div><div style="padding:30px 32px;line-height:1.6">'
+        f'<p>Hello {safe_name},</p><p>We have prepared a private portal for <strong>{safe_build}</strong>. '
+        'Use the secure button below to open your order, build updates, delivery tracking and support information.</p>'
+        f'<p><a href="{url}" style="display:inline-block;padding:13px 20px;background:#1267e8;color:#fff;text-decoration:none;border-radius:8px">Open my build portal</a></p>'
+        '<p>On the page that opens, press “Open my build portal” to activate access. This extra step prevents email security scanners from using your one-time link.</p>'
+        f'<p>This one-time link expires on {expiry}. You can then use the portal access created for this order.</p>'
+        '<p>If you did not make this purchase, contact FlipFlop through your order confirmation.</p>'
+        '</div></div></body></html>'
+    )
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = f"Your FlipFlop build portal — {order_reference}"
+    msg["From"] = settings.smtp_from or "noreply@flipflop.co.uk"
+    msg["To"] = customer_email
+    msg.attach(MIMEText(html, "html"))
+    return _send(msg, f"portal-claim-{order_reference}")
+
+
+async def send_dispatched_guest_portal_email(
+    customer_email: str,
+    customer_name: str,
+    build_name: str,
+    claim_url: str,
+    expires_at: object,
+    order_reference: str,
+    carrier: str | None,
+    tracking_number: str | None,
+    tracking_url: str | None,
+) -> bool:
+    """Send the direct guest's one-time portal link with dispatch details."""
+    if not smtp_is_configured():
+        log.warning("Email not configured, skipping dispatched portal email", order_reference=order_reference)
+        return False
+    settings = get_settings()
+    safe_name = escape(customer_name or "there")
+    safe_build = escape(build_name or "your FlipFlop build")
+    safe_reference = escape(order_reference)
+    safe_expiry = escape(str(expires_at))
+    safe_url = escape(claim_url, quote=True)
+    tracking = ""
+    safe_tracking_url = False
+    if tracking_url:
+        try:
+            parsed_tracking_url = urlsplit(tracking_url)
+            safe_tracking_url = (
+                parsed_tracking_url.scheme == "https"
+                and bool(parsed_tracking_url.hostname)
+                and not parsed_tracking_url.username
+                and not parsed_tracking_url.password
+            )
+        except ValueError:
+            safe_tracking_url = False
+    if tracking_number:
+        tracking_value = escape(tracking_number)
+        if safe_tracking_url:
+            tracking_value = f'<a href="{escape(tracking_url, quote=True)}">{tracking_value}</a>'
+        tracking = (
+            f'<p><strong>Carrier:</strong> {escape(carrier or "Courier")}<br>'
+            f'<strong>Tracking:</strong> {tracking_value}</p>'
+        )
+    portal_base = settings.frontend_url.rstrip("/")
+    html = (
+        '<!doctype html><html><body style="margin:0;background:#f3f6fb;font-family:Arial,sans-serif;color:#152238">'
+        '<div style="max-width:640px;margin:32px auto;background:#fff;border:1px solid #dce5f0;border-radius:18px;overflow:hidden">'
+        '<div style="padding:26px 32px;background:#07152d;color:#fff"><div style="font-size:12px;letter-spacing:3px;color:#68d7ff">FLIPFLOP</div>'
+        '<h1>Your build is on its way</h1></div><div style="padding:30px 32px;line-height:1.6">'
+        f'<p>Hello {safe_name},</p><p>Your <strong>{safe_build}</strong> has been handed to the courier. '
+        f'Order reference: <strong>{safe_reference}</strong>.</p>{tracking}'
+        f'<p><a href="{safe_url}" style="display:inline-block;padding:13px 20px;background:#1267e8;color:#fff;text-decoration:none;border-radius:8px">Open my private build portal</a></p>'
+        '<p>On the page that opens, press “Open my build portal” to activate access. This extra step prevents email security scanners from using your one-time link.</p>'
+        f'<p>The one-time access link expires on {safe_expiry}. Your portal includes build documents, delivery updates and support information.</p>'
+        f'<p><a href="{escape(portal_base + "/getting-started", quote=True)}">Getting started help</a></p>'
+        '<p style="font-size:12px;color:#66758a">If you did not make this purchase, contact FlipFlop using your order details.</p>'
+        '</div></div></body></html>'
+    )
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = f"Your FlipFlop build is on its way — {safe_reference}"
+    msg["From"] = settings.smtp_from or "noreply@flipflop.co.uk"
+    msg["To"] = customer_email
+    msg.attach(MIMEText(html, "html"))
+    return _send(msg, f"portal-dispatch-{order_reference}")
 
 async def send_email_async(to: str, subject: str, body: str, reference: str = "generic") -> bool:
     """Generic async email sender for transactional emails."""

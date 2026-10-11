@@ -1,0 +1,49 @@
+{
+  "schema_version": 2,
+  "knowledge_base": "flipflop-customer-support",
+  "reviewed_at": "2026-09-29",
+  "default_locale": "en-GB",
+  "sources": [
+    {
+      "path": "docs/support/customer-support-knowledge-base.md",
+      "priority": 100,
+      "customer_safe": true,
+      "use": "primary_general_support"
+    },
+    {
+      "path": "docs/playbook/software-playbook.md",
+      "section": "Customer-safe: software recommendations and choice",
+      "version": "1.1",
+      "priority": 90,
+      "customer_safe": true,
+      "use": "software_recommendations"
+    }
+  ],
+  "excluded_globs": [
+    "PRD.md",
+    "docs/prd/*.md",
+    "docs/plans/*.md",
+    "docs/superpowers/**/*.md",
+    "docs/product/implementation-status.md",
+    "docs/product/customer-policies.md"
+  ],
+  "live_data_required_for": [
+    "order_status",
+    "delivery_estimate",
+    "tracking",
+    "stock",
+    "price",
+    "payment_or_refund_status",
+    "warranty_eligibility",
+    "claim_outcome"
+  ],
+  "human_escalation_topics": [
+    "electrical_or_fire_safety",
+    "delivery_damage",
+    "data_loss_or_reinstallation",
+    "payment_dispute",
+    "legal_threat_or_legal_interpretation",
+    "identity_or_ownership_failure",
+    "ambiguous_warranty_or_return"
+  ]
+}

@@ -45,10 +45,15 @@ const COMPONENT_SLOTS = [
   { slot: "case", label: "PC Case", icon: "📦", required: false },
 ];
 
+type ReadyToShipCell = { id: string; name: string; segment: string; tier: string; playbook_id: number | null };
+
 export default function AddBuildPage() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [buildName, setBuildName] = useState("");
+  const [playbookCells, setPlaybookCells] = useState<ReadyToShipCell[]>([]);
+  const [selectedCellId, setSelectedCellId] = useState("");
+  const [cellLoadError, setCellLoadError] = useState<string | null>(null);
   const [components, setComponents] = useState<ComponentEntry[]>([
     { slot: "cpu", name: "", price_paid: 0, source: "eBay", condition: "used", notes: "" },
     { slot: "motherboard", name: "", price_paid: 0, source: "eBay", condition: "used", notes: "" },
@@ -65,6 +70,12 @@ export default function AddBuildPage() {
   const [jsonCopied, setJsonCopied] = useState(false);
   const [showCaseSelector, setShowCaseSelector] = useState(false);
   const [selectedCase, setSelectedCase] = useState<Part | null>(null);
+
+  useEffect(() => {
+    api.playbooks.curatedCells()
+      .then(result => setPlaybookCells(result.items.filter(cell => cell.playbook_id !== null)))
+      .catch(error => setCellLoadError(error instanceof Error ? error.message : "Could not load Playbook cells."));
+  }, []);
 
   const JSON_EXAMPLE = {
     buildName: "Gaming PC #1",
@@ -222,6 +233,7 @@ export default function AddBuildPage() {
     const required = COMPONENT_SLOTS.filter(s => s.required).map(s => s.slot);
     return (
       buildName.trim() &&
+      selectedCellId &&
       required.every(slot => components.find(c => c.slot === slot && c.name.trim()))
     );
   };
@@ -240,7 +252,12 @@ export default function AddBuildPage() {
           part_id: c.part_id,
         }));
 
-      const build = await api.manualBuilds.create(buildName);
+      const selectedCell = playbookCells.find(cell => cell.id === selectedCellId);
+      if (!selectedCell?.playbook_id) throw new Error("Choose a valid Playbook cell before saving this Ready-to-Ship build.");
+      const build = await api.manualBuilds.create(buildName, {
+        playbook_id: selectedCell.playbook_id,
+        curated_build_id: selectedCell.id,
+      });
       await api.manualBuilds.patch(build.id, { components: buildComponents });
 
       // Auto-evaluate (non-blocking - if it fails, still continue)
@@ -319,9 +336,9 @@ export default function AddBuildPage() {
           {/* Build Name */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm">Build Name</CardTitle>
+              <CardTitle className="text-sm">Build name and Playbook cell</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <input
                 type="text"
                 value={buildName}
@@ -329,6 +346,14 @@ export default function AddBuildPage() {
                 placeholder="e.g., Gaming PC #1, Office Workstation, Budget Build"
                 className="w-full px-4 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-300 outline-none focus:border-[#00dc82]/50 placeholder-slate-600"
               />
+              <label className="block text-xs text-slate-400">Customer type × budget range
+                <select value={selectedCellId} onChange={event => setSelectedCellId(event.target.value)} className="mt-1 w-full rounded-lg border border-[#1e2d45] bg-[#0a1119] px-3 py-2 text-sm text-slate-200">
+                  <option value="">Select the Playbook cell this build is designed for</option>
+                  {playbookCells.map(cell => <option key={cell.id} value={cell.id}>{cell.segment} · {cell.tier} · {cell.name}</option>)}
+                </select>
+              </label>
+              {cellLoadError && <p role="alert" className="text-xs text-red-300">{cellLoadError}</p>}
+              <p className="text-xs text-slate-500">This cell is saved with the build and used for its software recommendations and customer explanation.</p>
             </CardContent>
           </Card>
 
@@ -647,6 +672,9 @@ export default function AddBuildPage() {
                   <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
                   <span>Enter a build name</span>
                 </div>
+              )}
+              {!selectedCellId && (
+                <div className="flex items-start gap-2 text-xs text-yellow-400"><AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" /><span>Choose a customer type and budget cell</span></div>
               )}
               {COMPONENT_SLOTS.filter(s => s.required)
                 .filter(s => !components.find(c => c.slot === s.slot && c.name.trim()))

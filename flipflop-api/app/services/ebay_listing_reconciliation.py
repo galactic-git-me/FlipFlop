@@ -100,9 +100,18 @@ async def reconcile_manual_build_listing(
     elif state == "sold":
         build.status = "sold"
         build.ebay_listing_end_reason = "sold"
+        from app.services.getting_started_jobs import ensure_manual_build_job
+        await ensure_manual_build_job(db, manual_build_id=build.id)
         from app.services.inventory_lifecycle import record_sale
         from app.services.cross_channel_guard import withdraw_storefront_for_sold_build
         await record_sale(db, build, build.sale_price_actual)
+        if build.warranty_started_at or build.delivered_at:
+            from app.services.warranty_service import ensure_manual_build_reserve, recalculate_reserve_status
+            reserve = await ensure_manual_build_reserve(
+                db, build, build.warranty_started_at or build.delivered_at
+            )
+            if reserve is not None:
+                await recalculate_reserve_status(db, reserve)
         await withdraw_storefront_for_sold_build(build, db)
     elif state in {"ended", "missing"}:
         if build.status == "listed":

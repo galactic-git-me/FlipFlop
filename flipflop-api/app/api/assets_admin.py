@@ -11,7 +11,7 @@ from pathlib import Path
 import shutil
 from uuid import uuid4
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, UploadFile
 import httpx
 from pydantic import BaseModel, Field
 from sqlalchemy import select, update
@@ -24,7 +24,8 @@ from app.models.component_3d_asset import (
     Component3DAsset,
     Component3DAssetStatus,
 )
-from app.models.catalogue import CatalogueVariant
+from app.models.catalogue import CatalogueVariant, PlaybookSlot
+from app.models.listing import Listing
 from app.routes.admin_auth import get_current_admin
 from pydantic import ValidationError as PydanticValidationError
 from app.schemas.case_mount import validate_case_mount_manifest
@@ -39,6 +40,7 @@ _WORKSPACE_ROOT = Path(__file__).resolve().parents[3]
 _REFERENCE_ROOT = _WORKSPACE_ROOT / "assets" / "3d-reference-images" / "catalogue"
 _PUBLIC_MEDIA_ROOT = _WORKSPACE_ROOT.parent / "FlipFlop.shop" / "public" / "media"
 _PUBLIC_MEDIA_URL = "https://theflipflop.shop/media"
+_MAX_GLB_UPLOAD_BYTES = 100 * 1024 * 1024
 _REFERENCE_ALIASES = {
     "cpu_amd": "cpu_amd_am4_am5",
     "cpu_intel": "cpu_intel_lga1700",
@@ -49,6 +51,43 @@ _REFERENCE_ALIASES = {
     "gpu_amd": "gpu_large_triple_fan",
     "gpu_intel": "gpu_compact_dual_fan",
 }
+
+
+def _validate_uploaded_glb(content: bytes) -> None:
+    """Reject malformed binary glTF v2 containers before making them public."""
+    if len(content) < 20 or content[:4] != b"glTF":
+        raise ValueError("The selected file is not a valid binary GLB")
+    version = int.from_bytes(content[4:8], byteorder="little")
+    declared_length = int.from_bytes(content[8:12], byteorder="little")
+    if version != 2:
+        raise ValueError("Only GLB version 2 files are supported")
+    if declared_length != len(content):
+        raise ValueError("The GLB header size does not match the uploaded file")
+
+    offset = 12
+    chunk_index = 0
+    while offset < declared_length:
+        if offset + 8 > declared_length:
+            raise ValueError("The GLB contains a truncated chunk header")
+        chunk_length = int.from_bytes(content[offset:offset + 4], byteorder="little")
+        chunk_type = int.from_bytes(content[offset + 4:offset + 8], byteorder="little")
+        chunk_start = offset + 8
+        chunk_end = chunk_start + chunk_length
+        if chunk_length % 4 or chunk_end > declared_length:
+            raise ValueError("The GLB contains an invalid chunk length")
+        if chunk_index == 0:
+            if chunk_type != 0x4E4F534A:
+                raise ValueError("The first GLB chunk must contain JSON")
+            try:
+                document = json.loads(content[chunk_start:chunk_end].decode("utf-8").rstrip(" "))
+            except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+                raise ValueError("The GLB JSON chunk is invalid") from exc
+            if not isinstance(document, dict) or not isinstance(document.get("asset"), dict) or document["asset"].get("version") != "2.0":
+                raise ValueError("The GLB JSON chunk is missing valid glTF 2.0 asset metadata")
+        offset = chunk_end
+        chunk_index += 1
+    if offset != declared_length or chunk_index == 0:
+        raise ValueError("The GLB chunks do not match the declared container size")
 
 
 def _reference_family(category: str, family_key: str) -> dict | None:
@@ -226,6 +265,46 @@ async def list_assets(
         ).where(CatalogueVariant.custom_for_builds.is_(True))
     rows = (await db.execute(q)).scalars().all()
     return await _serialize_many(db, rows)
+
+
+@router.get("/catalogue-queue")
+async def list_catalogue_asset_queue(
+    catalogue: str,
+    db: AsyncSession = Depends(get_db),
+):
+    """Return selected catalogue variants, including variants with no asset yet."""
+    if catalogue not in {"curated", "custom"}:
+        raise HTTPException(status_code=422, detail="catalogue must be curated or custom")
+    membership = CatalogueVariant.curated_for_builds if catalogue == "curated" else CatalogueVariant.custom_for_builds
+    rows = (await db.execute(
+        select(CatalogueVariant, PlaybookSlot, Listing)
+        .join(PlaybookSlot, PlaybookSlot.id == CatalogueVariant.slot_id)
+        .join(Listing, Listing.id == CatalogueVariant.listing_id)
+        .where(CatalogueVariant.status == "active", membership.is_(True))
+        .order_by(PlaybookSlot.slot_type, Listing.title, CatalogueVariant.id)
+    )).all()
+    variant_ids = [variant.id for variant, _, _ in rows]
+    assets = (await db.execute(
+        select(Component3DAsset).where(
+            Component3DAsset.subject_type == AssetSubjectType.VARIANT,
+            Component3DAsset.subject_id.in_(variant_ids) if variant_ids else False,
+        ).order_by(Component3DAsset.version.desc(), Component3DAsset.id.desc())
+    )).scalars().all()
+    latest_by_variant = {}
+    for asset in assets:
+        latest_by_variant.setdefault(asset.subject_id, asset)
+    return [
+        {
+            "variant_id": variant.id,
+            "title": listing.title,
+            "category": slot.slot_type,
+            "display_price": variant.custom_display_price if catalogue == "custom" and variant.custom_display_price is not None else variant.display_price,
+            "curated_for_builds": bool(variant.curated_for_builds),
+            "custom_for_builds": bool(variant.custom_for_builds),
+            "asset": _serialize(latest_by_variant[variant.id]) if variant.id in latest_by_variant else None,
+        }
+        for variant, slot, listing in rows
+    ]
 
 
 class ReviewBatchCreate(BaseModel):
@@ -746,6 +825,76 @@ async def create_asset(body: AssetCreate, db: AsyncSession = Depends(get_db)):
         anchor_manifest_json=body.anchor_manifest_json,
         notes=body.notes,
         created_by=body.created_by,
+    )
+    db.add(asset)
+    await db.commit()
+    await db.refresh(asset)
+    return _serialize(asset)
+
+
+@router.post("/variants/{variant_id}/upload-glb")
+async def upload_variant_glb(
+    variant_id: int,
+    file: UploadFile = File(...),
+    admin=Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    """Upload one shared catalogue-variant GLB for Curated and Custom use.
+
+    Catalogue membership is deliberately absent from the asset identity: when
+    the same variant belongs to both catalogues, both screens resolve this one
+    versioned asset row.
+    """
+    if not (file.filename or "").lower().endswith(".glb"):
+        raise HTTPException(status_code=415, detail="Upload a self-contained .glb model")
+
+    row = (await db.execute(
+        select(CatalogueVariant, PlaybookSlot)
+        .join(PlaybookSlot, CatalogueVariant.slot_id == PlaybookSlot.id)
+        .where(CatalogueVariant.id == variant_id)
+    )).one_or_none()
+    if row is None:
+        raise HTTPException(status_code=404, detail="Catalogue component not found")
+    _variant, slot = row
+
+    content = await file.read(_MAX_GLB_UPLOAD_BYTES + 1)
+    await file.close()
+    if len(content) > _MAX_GLB_UPLOAD_BYTES:
+        raise HTTPException(status_code=413, detail="GLB files must be 100 MB or smaller")
+    try:
+        _validate_uploaded_glb(content)
+    except ValueError as exc:
+        raise HTTPException(status_code=415, detail=str(exc)) from exc
+
+    prior_version = (await db.execute(
+        select(Component3DAsset.version)
+        .where(
+            Component3DAsset.subject_type == AssetSubjectType.VARIANT,
+            Component3DAsset.subject_id == variant_id,
+        )
+        .order_by(Component3DAsset.version.desc())
+        .limit(1)
+    )).scalar_one_or_none()
+    version = (prior_version or 0) + 1
+    filename = f"catalogue-variant-{variant_id}-v{version}-{uuid4().hex[:8]}.glb"
+    _PUBLIC_MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
+    public_path = _PUBLIC_MEDIA_ROOT / filename
+    public_path.write_bytes(content)
+    if not await sync_to_public_media(public_path):
+        public_path.unlink(missing_ok=True)
+        raise HTTPException(status_code=502, detail="The GLB was valid but could not be published to shared media")
+
+    asset = Component3DAsset(
+        subject_type=AssetSubjectType.VARIANT,
+        subject_id=variant_id,
+        category=slot.slot_type,
+        status=Component3DAssetStatus.CLEANED,
+        version=version,
+        glb_ref=f"{_PUBLIC_MEDIA_URL}/{filename}",
+        file_size_kb=max(1, len(content) // 1024),
+        notes="Operator-uploaded GLB; validate scale, orientation, geometry and provenance before activation.",
+        created_by=getattr(admin, "email", None) or "admin-upload",
+        provenance_status="metadata-only",
     )
     db.add(asset)
     await db.commit()

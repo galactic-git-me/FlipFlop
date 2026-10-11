@@ -3070,14 +3070,21 @@ function SourcingPageInner() {
       // its initial loading state forever. Each poll gets a bounded lifetime;
       // the next scheduled refresh can recover normally.
       const signal = AbortSignal.timeout(15_000);
-      const [listingsRes, componentRes, queueRes] = await Promise.all([
-        fetch(`/api/gem-radar/scored-listings-latest-run?environment=${process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV"}&limit=100&offset=${(listingPage - 1) * 100}&paged=true&category=${listingFilters.component.toLowerCase()}&classification=${listingFilters.classification}&stock_lane=${listingFilters.stockLane}&title_query=${encodeURIComponent(listingFilters.title)}&sort_key=${listingFilters.sortKey}&sort_dir=${listingFilters.sortDir}`, { cache: "no-store", signal }),
-        fetch(`/api/gem-radar/gem-by-component`, { cache: "no-store", signal }),
-        fetch(`/api/gem-radar/queue-status`, { cache: "no-store", signal }),
+      const fetchCritical = async (url: string) => {
+        try {
+          return await fetch(url, { cache: "no-store", signal });
+        } catch (error) {
+          console.warn(`Gem Radar request failed: ${url}`, error);
+          return null;
+        }
+      };
+      const [listingsRes, queueRes] = await Promise.all([
+        fetchCritical(`/api/gem-radar/scored-listings-latest-run?environment=${process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV"}&limit=100&offset=${(listingPage - 1) * 100}&paged=true&category=${listingFilters.component.toLowerCase()}&classification=${listingFilters.classification}&stock_lane=${listingFilters.stockLane}&title_query=${encodeURIComponent(listingFilters.title)}&sort_key=${listingFilters.sortKey}&sort_dir=${listingFilters.sortDir}`),
+        fetchCritical(`/api/gem-radar/queue-status`),
       ]);
-      setBackendConnected(listingsRes.ok || componentRes.ok || queueRes.ok);
+      setBackendConnected(Boolean(listingsRes?.ok || queueRes?.ok));
 
-      if (listingsRes.ok) {
+      if (listingsRes?.ok) {
         const data = normalizeScoredListingsResponse<Listing>(await listingsRes.json());
         setListings(data.items);
         setListingHasMore(data.hasMore);
@@ -3090,22 +3097,17 @@ function SourcingPageInner() {
           const superGems = data.items.filter((l: Listing) => l.classification === "SUPER_GEM").length;
           console.debug(`scored-listings page ${listingPage}: ${data.items.length} rows, ${superGems} SUPER_GEM, ${gems} GEM`);
         }
-      } else {
+      } else if (listingsRes) {
         console.warn(`scored-listings returned ${listingsRes.status}`);
       }
-      if (componentRes.ok) {
-        const data = await componentRes.json();
-        setComponentGems(data);
-      }
-      if (queueRes.ok) {
+      if (queueRes?.ok) {
         const data = await queueRes.json();
         setQueueStatus(data);
       }
 
-      if (listingsRes.ok || componentRes.ok || queueRes.ok) setLastUpdate(new Date());
+      if (listingsRes?.ok || queueRes?.ok) setLastUpdate(new Date());
       setNextRefreshIn(5);
     } catch (error) {
-      setBackendConnected(false);
       console.error("Error fetching data:", error);
     } finally {
       dataRequestInFlight.current = false;
@@ -3127,6 +3129,28 @@ function SourcingPageInner() {
       clearInterval(countdown);
     };
   }, [listingPage, listingFilters]);
+
+  useEffect(() => {
+    let active = true;
+    const fetchComponentGems = async () => {
+      try {
+        const response = await fetch("/api/gem-radar/gem-by-component", {
+          cache: "no-store",
+          signal: AbortSignal.timeout(30_000),
+        });
+        if (response.ok && active) setComponentGems(await response.json());
+      } catch (error) {
+        console.warn("Error fetching component gem summary:", error);
+      }
+    };
+
+    void fetchComponentGems();
+    const interval = setInterval(fetchComponentGems, 60_000);
+    return () => {
+      active = false;
+      clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     fetchScanSchedule();
@@ -3190,9 +3214,9 @@ function SourcingPageInner() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="hidden rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2 text-xs text-slate-200 lg:block" title={lastUpdate ? `Last successful API response: ${lastUpdate.toLocaleString()}. This does not verify the browser extension is online.` : "No successful API response yet. Browser extension connection is not independently verified."}>
+          <div className="hidden rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2 text-xs text-slate-200 lg:block" title={lastUpdate ? `Last successful API response: ${lastUpdate.toLocaleString()}. Browser extension online status is not tracked here.` : "No successful API response yet. Browser extension online status is not tracked here."}>
             <span className={backendConnected ? "text-emerald-400" : "text-amber-300"}>●</span> API {backendConnected ? "connected" : "unavailable"}
-            <span className="ml-2 text-slate-400">· Extension connection unverified</span>
+            <span className="ml-2 text-slate-400">· Extension status not tracked</span>
           </div>
           {/* Next scan countdown — estimate only, see fetchScanSchedule's comment */}
           <div

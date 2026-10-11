@@ -12,6 +12,9 @@ from app.models.order import Order, OrderStatus
 from app.models.order_checklist import OrderChecklist
 from app.models.customer import Customer
 from app.models.admin_user import AdminUser
+from app.models.warranty import WarrantyReserve
+from app.models.manual_build import ManualBuild
+from app.models.build import Build, BuildType
 from app.routes.admin_auth import get_current_admin
 
 
@@ -194,6 +197,70 @@ class TestAdminOrderStatus:
             json={"status": "invalid_status"}
         )
         assert response.status_code == 400
+
+    def test_order_cannot_be_completed_before_delivery_is_recorded(
+        self, client: TestClient, db: Session, sample_order: Order
+    ):
+        response = client.patch(
+            f"/api/admin/orders/{sample_order.id}",
+            json={"status": "completed"},
+        )
+
+        assert response.status_code == 409
+        assert "confirmed delivery event" in response.json()["detail"]
+        db.refresh(sample_order)
+        assert sample_order.status != OrderStatus.COMPLETED
+        assert sample_order.delivered_at is None
+        assert db.query(WarrantyReserve).filter_by(order_id=sample_order.id).first() is None
+
+    def test_completion_reconciles_linked_physical_build_delivery(
+        self, client: TestClient, db: Session, sample_order: Order
+    ):
+        delivered_at = datetime.utcnow() - timedelta(minutes=10)
+        sample_order.delivered_at = delivered_at
+        physical_build = ManualBuild(
+            name="Order-linked physical build",
+            status="sold",
+            sale_price_actual=sample_order.customer_price,
+        )
+        db.add(physical_build)
+        db.flush()
+        db.add(Build(
+            build_type=BuildType.PREBUILT,
+            order_id=sample_order.id,
+            manual_build_id=physical_build.id,
+        ))
+        db.commit()
+
+        response = client.patch(
+            f"/api/admin/orders/{sample_order.id}",
+            json={"status": "completed"},
+        )
+
+        assert response.status_code == 200
+        db.refresh(physical_build)
+        assert physical_build.delivered_at == delivered_at
+        assert physical_build.warranty_started_at == delivered_at
+        assert physical_build.dispatch_status == "delivered"
+        assert db.query(WarrantyReserve).filter_by(order_id=sample_order.id).count() == 1
+        assert db.query(WarrantyReserve).filter_by(manual_build_id=physical_build.id).count() == 0
+
+    def test_sourcing_milestone_rejects_order_with_cancellation_hold(
+        self, client: TestClient, db: Session, sample_order: Order
+    ):
+        """A cancellation hold committed first must block component procurement."""
+        sample_order.cancellation_requested_at = datetime.utcnow()
+        sample_order.cancellation_status = "refund_pending"
+        db.commit()
+
+        response = client.patch(
+            f"/api/admin/orders/{sample_order.id}",
+            json={"status": "parts_ordered"},
+        )
+
+        assert response.status_code == 409
+        db.refresh(sample_order)
+        assert sample_order.status == OrderStatus.AWAITING_SOURCING
 
     def test_update_order_status_sets_timestamps(self, client: TestClient, db: Session, sample_order: Order):
         """Test that status update sets proper timestamps."""

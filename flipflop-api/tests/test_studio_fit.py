@@ -30,6 +30,24 @@ def test_complete_reviewed_build_and_exact_boundaries(build):
     assert status(build,'COOLER_HEIGHT')=='pass'
 
 
+def test_playbook_may_allow_a_build_without_a_dedicated_gpu(build):
+    build[0].pop('gpu')
+
+    checks = evaluate_fit(*build, gpu_required=False)
+
+    assert not any(check['code'].startswith('GPU_') for check in checks)
+    assert next(check for check in checks if check['code'] == 'POWER')['severity'] == 'pass'
+    assert not [check for check in checks if check['severity'] in ('error', 'unknown')]
+
+
+def test_optional_gpu_is_still_checked_when_customer_selects_one(build):
+    build[0]['gpu']['length_mm'] = 301
+
+    checks = evaluate_fit(*build, gpu_required=False)
+
+    assert next(check for check in checks if check['code'] == 'GPU_LENGTH')['severity'] == 'error'
+
+
 @pytest.mark.parametrize('category,key,value,code',[
     ('cpu','socket','AM4','CPU_SOCKET'), ('gpu','length_mm',301,'GPU_LENGTH'),
     ('ram','ram_type','DDR4','RAM_TYPE'), ('ram','ram_height_mm',41,'RAM_CLEARANCE'),

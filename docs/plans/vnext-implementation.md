@@ -1,5 +1,7 @@
 # vNext implementation status
 
+Canonical product decisions, policies, lifecycle, and support-grounding documents now live under [`../product/`](../product/README.md). The bounded Getting Ready requirements are in [`../prd/getting-ready-service-prd.md`](../prd/getting-ready-service-prd.md). This plan tracks delivery and must not be used as customer-facing policy.
+
 The two vNext PRDs in `docs/prd/` set the product direction. This file records delivered work and the remaining gates. Existing order, payment, catalogue, playbook, and MES data remain authoritative.
 
 ## Delivered foundation

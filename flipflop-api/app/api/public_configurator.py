@@ -64,6 +64,9 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
             "budget_max": segment.budget_max,
             "selling_price": segment.selling_price,
             "components": details,
+            # Only the reviewed, cell-level pair is customer-visible; raw
+            # Playbook candidates never leak into the catalogue.
+            "upgrade_options": segment.approved_upgrades or [],
         })
     return output
 
