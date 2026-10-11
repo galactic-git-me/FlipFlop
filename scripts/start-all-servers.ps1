@@ -105,6 +105,29 @@ function Ensure-OllamaPriorityGateway {
     Write-Host '[OK] Ollama: engine 11433; other 11434; DEV 11435; PROD 11436.' -ForegroundColor Green
 }
 
+function Warm-OllamaModel([string]$BaseUrl, [string]$Model) {
+    if ($NoOllamaGateway) { return }
+
+    $uri = "$($BaseUrl.TrimEnd('/'))/api/chat"
+    $payload = @{
+        model = $Model
+        messages = @(@{ role = 'user'; content = 'Reply OK.' })
+        stream = $false
+        keep_alive = -1
+        options = @{ num_predict = 1 }
+    } | ConvertTo-Json -Depth 5 -Compress
+
+    Write-Host "[*] Loading Ollama model '$Model' and keeping it resident..." -ForegroundColor Cyan
+    try {
+        Invoke-RestMethod -Uri $uri -Method Post -ContentType 'application/json' `
+            -Body $payload -TimeoutSec 180 | Out-Null
+        Write-Host "[OK] Ollama model '$Model' is loaded and will stay resident until Ollama stops." -ForegroundColor Green
+    } catch {
+        Write-Host "[WARN] Could not warm Ollama model '$Model': $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-Host '[WARN] The API can still use its configured cloud fallback; check the model name and Ollama logs.' -ForegroundColor Yellow
+    }
+}
+
 function Start-DevelopmentServer {
     param(
         [string]$Name,
@@ -162,6 +185,7 @@ $ollamaBaseUrl = Get-ApiEnvironmentValue 'OLLAMA_BASE_URL'
 $ollamaModel = Get-ApiEnvironmentValue 'OLLAMA_MODEL'
 $env:OLLAMA_BASE_URL = $ollamaBaseUrl
 $env:OLLAMA_MODEL = $ollamaModel
+Warm-OllamaModel -BaseUrl $ollamaBaseUrl -Model $ollamaModel
 
 $servers = @()
 $apiUrl = 'http://127.0.0.1:4311'
