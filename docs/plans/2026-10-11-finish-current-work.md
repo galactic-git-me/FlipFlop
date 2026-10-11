@@ -2,6 +2,7 @@
 
 **Status:** Active baseline and completion plan  
 **Date:** 11 October 2026  
+**Source baseline:** `8286096df` (`chore: establish current implementation baseline`)  
 **Scope:** Current uncommitted API, admin, data-model, migration, product-documentation and validation work in this repository.
 
 ## Baseline

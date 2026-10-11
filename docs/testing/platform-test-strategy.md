@@ -17,14 +17,14 @@ The suite must detect broken contracts between the three repositories, prevent d
 
 ## 2. Approval boundary
 
-This document is the pre-test plan requested by the product owner. Until it is approved:
+This document was approved on 9 October 2026 for local deterministic validation. The following boundaries remain in force:
 
 - do not run the existing test suites;
 - do not start browsers, containers, migrations, workers, or local services for testing;
 - do not call live marketplace, courier, insurer, email, social, analytics, payment, LLM, or scraping providers;
 - do not create listings, orders, charges, bookings, policies, posts, messages, or customer records.
 
-Repository inspection and preparation of this plan are not test execution.
+Live provider actions and production data changes require their separate documented gates and approvals.
 
 ## 3. Source-of-truth hierarchy
 
@@ -427,7 +427,7 @@ ZIP tests inspect entries, checksums, MIME types, path traversal protection, siz
 - New code works during the intended rolling-deployment window where applicable.
 - Extension DEV/LIVE builds carry exact source attribution and API schema compatibility.
 
-## 14. Execution sequence after approval
+## 14. Execution sequence
 
 ### Phase A — baseline and gap report
 
