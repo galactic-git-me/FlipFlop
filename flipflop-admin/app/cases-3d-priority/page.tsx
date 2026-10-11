@@ -272,6 +272,7 @@ export default function Cases3DPriorityPage() {
   const [selectedReferences, setSelectedReferences] = useState<ReferenceCandidate[]>([]);
   const [referenceBusy, setReferenceBusy] = useState(false);
   const [referenceNotice, setReferenceNotice] = useState<string | null>(null);
+  const [autoOpenedCaseId, setAutoOpenedCaseId] = useState<number | null>(null);
   const [newReferenceUrl, setNewReferenceUrl] = useState("");
   const [newReferenceSource, setNewReferenceSource] = useState<ReferenceSource>("manufacturer");
   const [overclockersResults, setOverclockersResults] = useState<ReferenceCandidate[]>([]);
@@ -533,6 +534,16 @@ export default function Cases3DPriorityPage() {
     if (stage === "product_images" || stage === "meshy_generation") await openReferenceSelection(caseItem.id);
     setEvidenceReview({ caseItem, stage });
   };
+
+  useEffect(() => {
+    if (loading || autoOpenedCaseId !== null) return;
+    const requestedCaseId = Number(new URLSearchParams(window.location.search).get("case"));
+    if (!Number.isFinite(requestedCaseId) || requestedCaseId < 1) return;
+    const caseItem = cases.find(item => item.id === requestedCaseId);
+    if (!caseItem) return;
+    setAutoOpenedCaseId(requestedCaseId);
+    void openEvidenceReview(caseItem, "product_images");
+  }, [loading, cases, autoOpenedCaseId]);
 
   const closeEvidenceReview = () => {
     if (evidenceReview?.stage === "product_images" || evidenceReview?.stage === "meshy_generation") setReferenceCaseId(null);
@@ -1117,7 +1128,13 @@ export default function Cases3DPriorityPage() {
                     type="button"
                     disabled={referenceBusy || !referenceData?.sourcing_ready || selectedReferences.length !== 4}
                     onClick={async () => {
-                      if (await approveReferences(evidenceReview.caseItem.id)) closeEvidenceReview();
+                      if (await approveReferences(evidenceReview.caseItem.id)) {
+                        const query = new URLSearchParams({ case: String(evidenceReview.caseItem.id) });
+                        const returnBatch = new URLSearchParams(window.location.search).get("returnBatch");
+                        if (returnBatch) query.set("batch", returnBatch);
+                        closeEvidenceReview();
+                        router.push(`/components-3d-review?${query.toString()}`);
+                      }
                     }}
                     className="cursor-pointer bg-cyan-700 hover:bg-cyan-600"
                   >

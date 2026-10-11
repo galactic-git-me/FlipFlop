@@ -512,6 +512,7 @@ export default function Components3DReviewPage() {
       setLoading(true);
       try {
         const batchId = new URLSearchParams(window.location.search).get("batch");
+        const focusCaseId = Number(new URLSearchParams(window.location.search).get("case"));
         const isCuratedOnly = new URLSearchParams(window.location.search).get("curatedOnly") === "1";
         const isCustomOnly = new URLSearchParams(window.location.search).get("customOnly") === "1";
         setCuratedOnly(isCuratedOnly);
@@ -557,7 +558,11 @@ export default function Components3DReviewPage() {
           }
         }
         setAssets(loadedAssets);
-        setSelectedAsset(loadedAssets[0] || null);
+        const caseAsset = Number.isFinite(focusCaseId) && focusCaseId > 0
+          ? loadedAssets.find(asset => asset.subject_type === "case" && asset.subject_id === focusCaseId && asset.review_decision === "rejected")
+            || loadedAssets.find(asset => asset.subject_type === "case" && asset.subject_id === focusCaseId)
+          : undefined;
+        setSelectedAsset(caseAsset || loadedAssets[0] || null);
       } catch (error) {
         console.error("Error loading assets:", error);
         setAssets([]);
@@ -1036,7 +1041,10 @@ export default function Components3DReviewPage() {
                               )}
                             </>
                           ) : (
-                            <a href="/cases-3d-priority" className="block text-xs text-cyan-200 underline underline-offset-2">
+                            <a
+                              href={`/cases-3d-priority?case=${selectedAsset.subject_id}${batch?.batch_id ? `&returnBatch=${encodeURIComponent(batch.batch_id)}` : ""}`}
+                              className="block text-xs text-cyan-200 underline underline-offset-2"
+                            >
                               Approve four case photos to regenerate this model
                             </a>
                           )
@@ -1061,9 +1069,13 @@ export default function Components3DReviewPage() {
                   </span>
                 </div>
 
-                {selectedAsset.source_image_refs?.length ? (
+                {(selectedAsset.subject_type === "case" && selectedAsset.review_decision === "rejected"
+                  ? approvedCasePhotoUrls(caseRecords.find(item => item.id === selectedAsset.subject_id))
+                  : selectedAsset.source_image_refs || []).length ? (
                   <div className="space-y-3">
-                    {selectedAsset.source_image_refs.map((imageUrl, index) => (
+                    {(selectedAsset.subject_type === "case" && selectedAsset.review_decision === "rejected"
+                      ? approvedCasePhotoUrls(caseRecords.find(item => item.id === selectedAsset.subject_id))
+                      : selectedAsset.source_image_refs || []).map((imageUrl, index) => (
                       <a
                         key={`${imageUrl}-${index}`}
                         href={imageUrl}
