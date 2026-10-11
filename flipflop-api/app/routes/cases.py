@@ -243,9 +243,15 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
     seen: set[str] = set()
     for offer in await _matched_case_offers(case, db):
         if offer.image_url:
-            vendor_candidates.append({"url": offer.image_url, "source": "retailer", "source_page": offer.source_url, "label": f"{offer.source_site} · {offer.name}"})
-            seen.add(offer.image_url)
-        vendor_names.add(offer.source_site)
+            _append_candidate(
+                vendor_candidates,
+                seen,
+                offer.image_url,
+                "retailer",
+                offer.source_url,
+                f"{offer.source_site or 'Vendor listing'} · {offer.name}",
+            )
+        vendor_names.add(offer.source_site or "Vendor listing")
     for listing in await _matched_vendor_listings(case, db):
         vendor = listing.source_name or "Vendor listing"
         main_image = next((url for url in listing.image_urls if isinstance(url, str) and url.startswith(("https://", "http://"))), None)

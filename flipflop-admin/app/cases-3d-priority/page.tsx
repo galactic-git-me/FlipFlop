@@ -864,11 +864,11 @@ export default function Cases3DPriorityPage() {
                         </div>
                       )}
                       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-                        {referenceData.candidates.map(candidate => {
+                        {referenceData.candidates.map((candidate, candidateIndex) => {
                           const selectedIndex = selectedReferences.findIndex(item => item.url === candidate.url);
                           return (
                             <button
-                              key={candidate.url}
+                              key={`${candidate.url}-${candidateIndex}`}
                               type="button"
                               onClick={() => toggleReference(candidate)}
                               className={`group relative cursor-pointer overflow-hidden rounded-md border text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700 hover:border-slate-500"}`}
