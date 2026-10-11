@@ -2900,7 +2900,6 @@ async def _submit_scan_body(
         """), {"asins": list(tagged_asins)})).mappings().all()
         target_cpks = {row["cpk"] for row in asin_rows}
         expected_identities = []
-        from app.gem_radar.marketplace import infer_marketplace
         from app.gem_radar.identity import resolve_identity
         for row in asin_rows:
             identity = resolve_identity(row["title"])

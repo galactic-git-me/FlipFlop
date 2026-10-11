@@ -16,6 +16,8 @@ from fastapi.responses import JSONResponse, StreamingResponse
 
 UPSTREAM = os.getenv("OLLAMA_UPSTREAM_URL", "http://127.0.0.1:11433").rstrip("/")
 MAX_QUEUE = int(os.getenv("OLLAMA_GATEWAY_MAX_QUEUE", "100"))
+GENERATION_CONCURRENCY = max(1, int(os.getenv("OLLAMA_GATEWAY_CONCURRENCY", "4")))
+OLLAMA_NUM_PARALLEL = max(1, int(os.getenv("OLLAMA_NUM_PARALLEL", "1")))
 GENERATION_PATHS = {"/api/chat", "/api/generate", "/api/embed", "/api/embeddings"}
 READ_ONLY_PATHS = {"/api/tags", "/api/version", "/api/ps"}
 
@@ -36,17 +38,22 @@ class PriorityForwarder:
     def __init__(self) -> None:
         self._queue: asyncio.PriorityQueue[tuple[int, int, QueuedRequest]] = asyncio.PriorityQueue()
         self._sequence = itertools.count()
-        self._worker_task: asyncio.Task[None] | None = None
+        self._worker_tasks: list[asyncio.Task[None]] = []
         self._client: httpx.AsyncClient | None = None
+        self._generation_slots = asyncio.Semaphore(GENERATION_CONCURRENCY)
 
     async def start(self) -> None:
         self._client = httpx.AsyncClient(timeout=None)
-        self._worker_task = asyncio.create_task(self._worker(), name="ollama-priority-worker")
+        self._worker_tasks = [
+            asyncio.create_task(self._worker(), name=f"ollama-priority-worker-{index + 1}")
+            for index in range(GENERATION_CONCURRENCY)
+        ]
 
     async def stop(self) -> None:
-        if self._worker_task:
-            self._worker_task.cancel()
-            await asyncio.gather(self._worker_task, return_exceptions=True)
+        for task in self._worker_tasks:
+            task.cancel()
+        if self._worker_tasks:
+            await asyncio.gather(*self._worker_tasks, return_exceptions=True)
         if self._client:
             await self._client.aclose()
 
@@ -85,11 +92,14 @@ class PriorityForwarder:
     async def _worker(self) -> None:
         while True:
             _, _, request = await self._queue.get()
-            if request.result.cancelled():
-                self._queue.task_done()
-                continue
-
+            slot_acquired = False
+            slot_transferred_to_stream = False
             try:
+                await self._generation_slots.acquire()
+                slot_acquired = True
+                if request.result.cancelled():
+                    continue
+
                 assert self._client is not None
                 upstream_request = self._client.build_request(
                     request.method,
@@ -104,8 +114,11 @@ class PriorityForwarder:
                         async for chunk in upstream.aiter_raw():
                             yield chunk
                     finally:
-                        await upstream.aclose()
-                        self._queue.task_done()
+                        try:
+                            await upstream.aclose()
+                        finally:
+                            self._generation_slots.release()
+                            self._queue.task_done()
 
                 response_headers = {
                     key: value
@@ -113,12 +126,17 @@ class PriorityForwarder:
                     if key.lower() in {"content-type", "content-encoding", "cache-control"}
                 }
                 request.result.set_result((upstream.status_code, response_headers, body_stream()))
+                slot_transferred_to_stream = True
             except Exception as exc:  # noqa: BLE001 - forwarded to the caller
                 if not request.result.done():
                     request.result.set_exception(
                         HTTPException(status_code=502, detail=f"Ollama upstream unavailable: {exc}")
                     )
-                self._queue.task_done()
+            finally:
+                if not slot_transferred_to_stream:
+                    if slot_acquired:
+                        self._generation_slots.release()
+                    self._queue.task_done()
 
 
 forwarder = PriorityForwarder()
@@ -131,7 +149,7 @@ def create_app(priority: int, name: str) -> FastAPI:
     @app.on_event("startup")
     async def startup() -> None:
         async with _forwarder_start_lock:
-            if forwarder._worker_task is None:
+            if not forwarder._worker_tasks:
                 await forwarder.start()
 
     @app.on_event("shutdown")
@@ -142,7 +160,13 @@ def create_app(priority: int, name: str) -> FastAPI:
 
     @app.get("/health")
     async def health() -> JSONResponse:
-        return JSONResponse({"status": "ok", "queue_depth": forwarder._queue.qsize(), "priority": name})
+        return JSONResponse({
+            "status": "ok",
+            "queue_depth": forwarder._queue.qsize(),
+            "priority": name,
+            "generation_concurrency": GENERATION_CONCURRENCY,
+            "ollama_num_parallel": OLLAMA_NUM_PARALLEL,
+        })
 
     @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"])
     async def proxy(request: Request, path: str):

@@ -7,8 +7,9 @@ This service is the single access point to the Ollama instance on
 - Other local programs use `127.0.0.1:11434` (third priority).
 - FlipFlop development clients use `127.0.0.1:11435` (second priority).
 - Production reaches `prometheus-ts:11436` over Tailscale/SSH (first priority).
-- Only one generation request is forwarded at a time. Waiting production
-  requests are always selected before development, then other applications.
+- Up to four generation requests are forwarded concurrently, matching
+  `OLLAMA_NUM_PARALLEL=4`. Waiting production requests are selected before
+  development, then other applications, whenever a slot becomes available.
 
 The gateway does not pre-empt a request that is already running. This is
 intentional: interrupting a streamed Ollama response would make callers fail
@@ -23,8 +24,9 @@ python services/ollama-priority-gateway/server.py
 
 On the current Windows development machine, use
 `start-prometheus-services.ps1` at login. It moves Ollama to `11433`, starts
-the gateway, and leaves the standard `11434` address available for other
-programs. On Omarchy, run the equivalent two processes under systemd.
+the gateway with four generation slots, and leaves the standard `11434`
+address available for other programs. On Omarchy, run the equivalent two
+processes under systemd.
 
 All listeners bind to loopback. Production reaches `11436` through the SSH
 tunnel, so the gateway is never exposed directly to the LAN or tailnet.
@@ -41,6 +43,12 @@ tunnel, so the gateway is never exposed directly to the LAN or tailnet.
 | `PROD_LISTEN_HOST` | `127.0.0.1` | Production bind address |
 | `PROD_LISTEN_PORT` | `11436` | Production listener |
 | `OLLAMA_GATEWAY_MAX_QUEUE` | `100` | Maximum waiting requests per listener |
+| `OLLAMA_GATEWAY_CONCURRENCY` | `4` | Maximum Ollama generation requests forwarded at once |
+
+`start-all-servers.ps1` checks the live gateway health values and restarts the
+local Ollama/gateway processes when either side is not configured for four.
+That reconfiguration interrupts any inference currently in flight, so start
+the development stack after the active scan queue has drained.
 
 Health and read-only Ollama endpoints (`/api/tags`, `/api/version`, and
 `/api/ps`) bypass the generation queue. Generation endpoints are streamed
