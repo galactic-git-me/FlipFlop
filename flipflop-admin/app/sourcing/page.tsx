@@ -1687,13 +1687,20 @@ function StatTile({ label, value }: { label: string; value: string }) {
 }
 
 function TopListingTile({ label, listing }: { label: string; listing: Listing | null }) {
+  const currency = (value: number | null | undefined) =>
+    value == null || !Number.isFinite(value) ? "—" : `£${Math.round(value)}`;
+
   return (
     <div className="bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 min-w-0">
       <div className="text-xs text-slate-400 uppercase tracking-wide truncate">{label}</div>
       {listing ? (
         <>
           <div className="text-sm font-semibold text-slate-100 truncate" title={listing.title}>{listing.title}</div>
-          <div className="text-xs text-slate-400">score {listing.deal_score.toFixed(1)} · £{listing.delivered_price.toFixed(2)}</div>
+          <div className="text-xs text-slate-400 truncate">
+            {currency(listing.delivered_price)} buy · {currency(listing.market_median_price)} median
+            {listing.sold_listing_count != null && ` · ${listing.sold_listing_count} sold`}
+            {listing.review_average_rating != null && ` · ★ ${listing.review_average_rating.toFixed(1)}${listing.review_count != null ? ` (${listing.review_count})` : ""}`}
+          </div>
         </>
       ) : (
         <div className="text-lg font-semibold text-slate-500">—</div>
