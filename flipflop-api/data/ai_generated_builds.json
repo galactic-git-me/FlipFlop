@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-11T07:50:14.858638+00:00",
+  "generated_at": "2026-10-11T08:29:14.973196+00:00",
   "builds": [
     {
       "components": [
@@ -560,18 +560,18 @@
     {
       "components": [
         {
-          "id": 44438504,
-          "listing_id": "google-shopping:Intel%20Pentium%20Intel%20Pentium%20Processor%20G620:1.99:eBay%20-%20pcupgradeuk",
+          "id": 44436600,
+          "listing_id": "google-shopping:Intel%20Core%20i5%20Quad-Core%20i5-4430%203GHz%20Desktop%20Processor:3:CeX",
           "category": "cpu",
-          "title": "Intel Pentium Intel Pentium Processor G620",
-          "seller": "eBay - pcupgradeuk",
+          "title": "Intel Core i5 Quad-Core i5-4430 3GHz Desktop Processor",
+          "seller": "CeX",
           "image_url": null,
-          "delivered_price": 1.99,
+          "delivered_price": 3.0,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -1.99,
-          "url": "https://www.google.com/search?tbm=shop&q=Intel+Pentium+Intel+Pentium+Processor+G620"
+          "estimated_profit": -3.0,
+          "url": "https://www.google.com/search?tbm=shop&q=Intel+Core+i5+Quad-Core+i5-4430+3GHz+Desktop+Processor"
         },
         {
           "id": 44413077,
@@ -674,9 +674,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 32.33,
+      "build_cost": 33.34,
       "market": {
-        "query": "gaming pc Intel Pentium Intel Pentium Pr Nvidia 12VHPWR 12+4 pin to 4x  8gb",
+        "query": "gaming pc Core i5-4430 Nvidia 12VHPWR 12+4 pin to 4x  8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -685,15 +685,15 @@
         },
         "bin": {
           "available": true,
-          "count": 8,
-          "min_price": 74.54,
-          "max_price": 640.0,
-          "average_price": 243.25
+          "count": 2,
+          "min_price": 269.0,
+          "max_price": 301.99,
+          "average_price": 285.5
         }
       },
-      "resale_estimate": 243.25,
+      "resale_estimate": 285.5,
       "resale_source": "bin_average",
-      "estimated_profit": 210.92,
+      "estimated_profit": 252.16,
       "rank": 5
     },
     {
@@ -713,18 +713,18 @@
           "url": "https://www.google.com/search?tbm=shop&q=Intel+Pentium+Intel+Pentium+Processor+G620"
         },
         {
-          "id": 44413078,
-          "listing_id": "bargain_hardware:lenovo-thinkstation-p520c-workstation",
+          "id": 44412316,
+          "listing_id": "bargain_hardware:dell-precision-t3600-workstation-configure-to-order",
           "category": "motherboard",
-          "title": "Lenovo ThinkStation P520c Workstation",
+          "title": "Dell Precision T3600 Workstation",
           "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/200716c227/lenovo-thinkstation-p520c-workstation.webp?width=300&height=300&store=default_uk&image-type=small_image",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/2007107f63/dell-precision-t3600-workstation.webp?width=300&height=300&store=default_uk&image-type=small_image",
           "delivered_price": 1.0,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -1.0,
-          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Lenovo+ThinkStation+P520c+Workstation"
+          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Dell+Precision+T3600+Workstation"
         },
         {
           "id": 44415832,
@@ -827,12 +827,12 @@
           "count": 8,
           "min_price": 74.54,
           "max_price": 640.0,
-          "average_price": 243.25
+          "average_price": 243.88
         }
       },
-      "resale_estimate": 243.25,
+      "resale_estimate": 243.88,
       "resale_source": "bin_average",
-      "estimated_profit": 210.92,
+      "estimated_profit": 211.55,
       "rank": 6
     }
   ],
