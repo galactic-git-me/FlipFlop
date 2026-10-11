@@ -233,7 +233,7 @@ function ProductThumbnail({ src, alt, large = false }: { src?: string | null; al
     {src && !failed ? <img src={src} alt={alt} loading="lazy" onError={() => setFailed(true)} className="h-full w-full object-contain" /> : <ImageIcon aria-label="Image unavailable" className="h-6 w-6 text-slate-400" />}
   </div>;
 }
-function Badge({children,tone,title}:{children:ReactNode;tone:"green"|"red"|"amber";title?:string}) { return <span title={title} aria-label={title} className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase ${tone==="green"?"border-emerald-400/20 bg-emerald-400/10 text-emerald-300":tone==="red"?"border-rose-400/20 bg-rose-400/10 text-rose-300":"border-amber-400/20 bg-amber-400/10 text-amber-300"}`}>{children}</span>; }
+function Badge({children,tone,title}:{children:ReactNode;tone:"green"|"red"|"amber";title?:string}) { return <span title={title} aria-label={title} tabIndex={title ? 0 : undefined} className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase ${tone==="green"?"border-emerald-400/20 bg-emerald-400/10 text-emerald-300":tone==="red"?"border-rose-400/20 bg-rose-400/10 text-rose-300":"border-amber-400/20 bg-amber-400/10 text-amber-300"}`}>{children}</span>; }
 function AvailabilityBadge({segment}:{segment:Segment}) {
   const assigned = Object.entries(segment.components ?? {});
   const unavailable = assigned.filter(([slot]) => segment.component_details?.[slot]?.status !== "active");
