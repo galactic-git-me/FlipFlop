@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-11T06:38:37.837516+00:00",
+  "generated_at": "2026-10-11T07:50:14.858638+00:00",
   "builds": [
     {
       "components": [
@@ -560,18 +560,18 @@
     {
       "components": [
         {
-          "id": 44436600,
-          "listing_id": "google-shopping:Intel%20Core%20i5%20Quad-Core%20i5-4430%203GHz%20Desktop%20Processor:3:CeX",
+          "id": 44438504,
+          "listing_id": "google-shopping:Intel%20Pentium%20Intel%20Pentium%20Processor%20G620:1.99:eBay%20-%20pcupgradeuk",
           "category": "cpu",
-          "title": "Intel Core i5 Quad-Core i5-4430 3GHz Desktop Processor",
-          "seller": "CeX",
+          "title": "Intel Pentium Intel Pentium Processor G620",
+          "seller": "eBay - pcupgradeuk",
           "image_url": null,
-          "delivered_price": 3.0,
+          "delivered_price": 1.99,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -3.0,
-          "url": "https://www.google.com/search?tbm=shop&q=Intel+Core+i5+Quad-Core+i5-4430+3GHz+Desktop+Processor"
+          "estimated_profit": -1.99,
+          "url": "https://www.google.com/search?tbm=shop&q=Intel+Pentium+Intel+Pentium+Processor+G620"
         },
         {
           "id": 44413077,
@@ -674,9 +674,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 33.34,
+      "build_cost": 32.33,
       "market": {
-        "query": "gaming pc Core i5-4430 Nvidia 12VHPWR 12+4 pin to 4x  8gb",
+        "query": "gaming pc Intel Pentium Intel Pentium Pr Nvidia 12VHPWR 12+4 pin to 4x  8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -685,15 +685,15 @@
         },
         "bin": {
           "available": true,
-          "count": 2,
-          "min_price": 269.0,
-          "max_price": 301.99,
-          "average_price": 285.5
+          "count": 8,
+          "min_price": 74.54,
+          "max_price": 640.0,
+          "average_price": 243.25
         }
       },
-      "resale_estimate": 285.5,
+      "resale_estimate": 243.25,
       "resale_source": "bin_average",
-      "estimated_profit": 252.16,
+      "estimated_profit": 210.92,
       "rank": 5
     },
     {
@@ -827,12 +827,12 @@
           "count": 8,
           "min_price": 74.54,
           "max_price": 640.0,
-          "average_price": 246.33
+          "average_price": 243.25
         }
       },
-      "resale_estimate": 246.33,
+      "resale_estimate": 243.25,
       "resale_source": "bin_average",
-      "estimated_profit": 214.0,
+      "estimated_profit": 210.92,
       "rank": 6
     }
   ],
