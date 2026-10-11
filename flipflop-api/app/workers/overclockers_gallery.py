@@ -17,12 +17,13 @@ from app.services.proxy import playwright_proxy_config
 log = structlog.get_logger(__name__)
 _RETRY_AFTER = timedelta(minutes=30)
 _CACHE_VALIDITY = timedelta(days=30)
+_GALLERY_CACHE_VERSION = 2
 
 
 def _gallery_cache_is_fresh(product_stage: dict, now: datetime | None = None) -> bool:
     """Keep successful retailer galleries for a month, including legacy captures."""
     images = product_stage.get("overclockers_gallery")
-    if not isinstance(images, list) or not images:
+    if not isinstance(images, list) or not images or product_stage.get("overclockers_gallery_cache_version") != _GALLERY_CACHE_VERSION:
         return False
     timestamp = product_stage.get("overclockers_gallery_cached_at") or product_stage.get("overclockers_gallery_attempted_at")
     try:
@@ -36,24 +37,41 @@ async def _collect_gallery(context, product_url: str, retailer: str) -> list[str
     page = await context.new_page()
     try:
         await page.goto(product_url, wait_until="domcontentloaded", timeout=60000)
-        await asyncio.sleep(2)
+        gallery_selector = "img.zoom-image" if retailer == "overclockers" else "img"
         try:
-            await page.wait_for_selector("img", timeout=12000)
+            await page.wait_for_function(
+                "selector => document.querySelectorAll(selector).length > 1",
+                gallery_selector,
+                timeout=12000,
+            )
         except Exception:
             pass
         # Scroll in increments so lazy-loaded gallery images are all requested.
         for fraction in (0.35, 0.7, 1):
             await page.evaluate("fraction => window.scrollTo(0, document.body.scrollHeight * fraction)", fraction)
             await asyncio.sleep(0.4)
-        return await page.evaluate("""(retailer) => {
+        return await page.evaluate(r"""(retailer) => {
+          // OcUK's main product carousel uses zoom-image; the thumbnail strip
+          // and related-product carousels use separate Swiper wrappers.
+          const mainCarousel = retailer === 'overclockers'
+            ? [...document.querySelectorAll('.swiper-wrapper img.zoom-image')]
+            : [];
           const roots = [...document.querySelectorAll(
             '[class*=gallery], [id*=gallery], [data-gallery], [class*=product-image], [class*=product__media], #altImages, #main-image-container'
           )];
           const nodes = roots.flatMap(root => [...root.querySelectorAll('img')]);
-          const images = nodes.length ? nodes : [...document.querySelectorAll('img')];
+          const images = mainCarousel.length ? mainCarousel : (nodes.length ? nodes : [...document.querySelectorAll('img')]);
           const values = [];
           for (const img of images) {
-            const raw = img.currentSrc || img.src || img.dataset.src || img.dataset.lazySrc || img.dataset.original;
+            const srcsetCandidates = (img.getAttribute('srcset') || '')
+              .split(',')
+              .map(candidate => {
+                const match = candidate.trim().match(/^(\S+)\s+(\d+)w$/);
+                return match ? { url: match[1], width: Number(match[2]) } : null;
+              })
+              .filter(Boolean)
+              .sort((a, b) => b.width - a.width);
+            const raw = srcsetCandidates[0]?.url || img.currentSrc || img.src || img.dataset.src || img.dataset.lazySrc || img.dataset.original;
             if (!raw) continue;
             let url;
             try { url = new URL(raw, location.href); } catch { continue; }
@@ -132,6 +150,7 @@ async def _save_gallery_capture(case_id: int, images: list[str], status: str) ->
         if images:
             product_stage["overclockers_gallery"] = images
             product_stage["overclockers_gallery_cached_at"] = attempted_at
+            product_stage["overclockers_gallery_cache_version"] = _GALLERY_CACHE_VERSION
         product_stage["overclockers_gallery_attempted_at"] = attempted_at
         product_stage["overclockers_gallery_status"] = status
         stages["product_images"] = product_stage
@@ -209,6 +228,7 @@ async def run_overclockers_gallery_sourcing() -> dict:
                             if all_images:
                                 product_stage["overclockers_gallery"] = all_images
                                 product_stage["overclockers_gallery_cached_at"] = datetime.utcnow().isoformat()
+                                product_stage["overclockers_gallery_cache_version"] = _GALLERY_CACHE_VERSION
                                 product_stage["gallery_sources"] = gallery_sources
                                 product_stage["overclockers_gallery_status"] = "found"
                                 saved += 1

@@ -350,10 +350,13 @@ async def capture_3d_overclockers_gallery(
         stages = dict(evidence.get("stages") or {})
         product_stage = dict(stages.get("product_images") or {})
         images = list(dict.fromkeys(str(url) for url in body.images))
+        from app.workers.overclockers_gallery import _GALLERY_CACHE_VERSION
+
         captured_at = datetime.utcnow().isoformat()
         product_stage.update({
             "overclockers_gallery": images,
             "overclockers_gallery_cached_at": captured_at,
+            "overclockers_gallery_cache_version": _GALLERY_CACHE_VERSION,
             "overclockers_gallery_attempted_at": captured_at,
             "overclockers_gallery_status": "found",
         })

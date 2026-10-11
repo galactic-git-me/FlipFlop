@@ -50,11 +50,12 @@ def test_campaign_priority_filter_remains_unfiltered_by_source() -> None:
 
 def test_overclockers_gallery_cache_expires_after_one_month() -> None:
     now = datetime(2026, 10, 11, 12, 0, 0)
-    fresh = {"overclockers_gallery": ["https://img.example.test/case.jpg"], "overclockers_gallery_cached_at": (now - timedelta(days=29)).isoformat()}
-    expired = {"overclockers_gallery": ["https://img.example.test/case.jpg"], "overclockers_gallery_cached_at": (now - timedelta(days=31)).isoformat()}
+    fresh = {"overclockers_gallery": ["https://img.example.test/case.jpg"], "overclockers_gallery_cached_at": (now - timedelta(days=29)).isoformat(), "overclockers_gallery_cache_version": 2}
+    expired = {"overclockers_gallery": ["https://img.example.test/case.jpg"], "overclockers_gallery_cached_at": (now - timedelta(days=31)).isoformat(), "overclockers_gallery_cache_version": 2}
 
     assert _gallery_cache_is_fresh(fresh, now)
     assert not _gallery_cache_is_fresh(expired, now)
+    assert not _gallery_cache_is_fresh({**fresh, "overclockers_gallery_cache_version": 1}, now)
 
 
 def test_overclockers_gallery_has_one_post_route() -> None:
@@ -100,6 +101,7 @@ async def test_overclockers_gallery_post_returns_fresh_cache_without_queueing() 
         "stages": {"product_images": {
             "overclockers_gallery": ["https://img.example.test/case.jpg"],
             "overclockers_gallery_cached_at": datetime.utcnow().isoformat(),
+            "overclockers_gallery_cache_version": 2,
         }}
     })
 
