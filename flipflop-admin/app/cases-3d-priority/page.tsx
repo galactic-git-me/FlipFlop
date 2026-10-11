@@ -60,7 +60,34 @@ interface ReferenceCandidateResponse {
   vendor_names?: string[];
   approved_selection?: { status?: string; images?: ReferenceCandidate[] };
 }
+interface GeneratedReviewLink {
+  version: 1;
+  url: string;
+  imageUrls: string[];
+}
 const DIRECT_BACKEND_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4311").replace(/\/$/, "");
+
+function sameImageOrder(first: string[], second: string[]) {
+  return first.length === second.length && first.every((url, index) => url === second[index]);
+}
+
+function readGeneratedReviewLink(caseId: number, approvedImages: ReferenceCandidate[]): GeneratedReviewLink | null {
+  const key = `case-3d-review-${caseId}`;
+  const raw = window.localStorage.getItem(key);
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw) as Partial<GeneratedReviewLink>;
+    const currentImageUrls = approvedImages.map(image => image.url);
+    if (parsed.version === 1 && typeof parsed.url === "string" && Array.isArray(parsed.imageUrls)
+      && sameImageOrder(parsed.imageUrls, currentImageUrls)) {
+      return parsed as GeneratedReviewLink;
+    }
+  } catch {
+    // Old versions stored a URL without the image set that produced it.
+  }
+  window.localStorage.removeItem(key);
+  return null;
+}
 
 const sourcingLabels: Array<[string, string]> = [
   ["product_images", "Images"],
@@ -253,7 +280,7 @@ export default function Cases3DPriorityPage() {
   const [bingResults, setBingResults] = useState<ReferenceCandidate[]>([]);
   const [bingError, setBingError] = useState<string | null>(null);
   const [bingBusy, setBingBusy] = useState(false);
-  const [generatedReviewUrl, setGeneratedReviewUrl] = useState<string | null>(null);
+  const [generatedReviewLink, setGeneratedReviewLink] = useState<GeneratedReviewLink | null>(null);
   const [generatingCaseId, setGeneratingCaseId] = useState<number | null>(null);
   const [evidenceReview, setEvidenceReview] = useState<{ caseItem: PriorityCaseItem; stage: "product_images" | "youtube_video" | "meshy_generation" } | null>(null);
 
@@ -272,7 +299,7 @@ export default function Cases3DPriorityPage() {
       setReferenceCaseId(caseId);
       setReferenceData(data);
       setSelectedReferences(data.approved_selection?.images || []);
-      setGeneratedReviewUrl(window.localStorage.getItem(`case-3d-review-${caseId}`));
+      setGeneratedReviewLink(readGeneratedReviewLink(caseId, data.approved_selection?.images || []));
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not load reference pictures");
     } finally {
@@ -281,6 +308,8 @@ export default function Cases3DPriorityPage() {
   };
 
   const toggleReference = (candidate: ReferenceCandidate) => {
+    setGeneratedReviewLink(null);
+    if (referenceCaseId !== null) window.localStorage.removeItem(`case-3d-review-${referenceCaseId}`);
     setReferenceData(current => current ? { ...current, approved_selection: undefined } : current);
     setReferenceNotice(null);
     setSelectedReferences(current => {
@@ -440,6 +469,7 @@ export default function Cases3DPriorityPage() {
     setGeneratingCaseId(caseId);
     setError(null);
     setReferenceNotice("Generating the textured model. Keep this page open — Meshy can take up to 10 minutes. You will be taken to the approval viewer when it finishes.");
+    const requestedImageUrls = selectedReferences.map(item => item.url);
     try {
       // Meshy can take up to ten minutes. Calling the backend directly avoids
       // Next's rewrite proxy terminating the long-lived connection.
@@ -448,7 +478,7 @@ export default function Cases3DPriorityPage() {
         headers: { "content-type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
-          image_urls: selectedReferences.map(item => item.url),
+          image_urls: requestedImageUrls,
           notes: "Generated only from the separately owner-approved four-picture set. Preserve the first picture as the texture and colour master; match case finish and illuminated RGB faithfully.",
         }),
       });
@@ -466,8 +496,9 @@ export default function Cases3DPriorityPage() {
         batchId = batch.batch_id;
       }
       const reviewUrl = `/components-3d-review?batch=${batchId}`;
-      setGeneratedReviewUrl(reviewUrl);
-      window.localStorage.setItem(`case-3d-review-${caseId}`, reviewUrl);
+      const generatedLink: GeneratedReviewLink = { version: 1, url: reviewUrl, imageUrls: requestedImageUrls };
+      setGeneratedReviewLink(generatedLink);
+      window.localStorage.setItem(`case-3d-review-${caseId}`, JSON.stringify(generatedLink));
       setReferenceNotice("Draft generated successfully. Opening the 3D approval viewer…");
       router.push(reviewUrl);
     } catch (caught) {
@@ -930,8 +961,8 @@ export default function Cases3DPriorityPage() {
                           {generatingCaseId === caseItem.id ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
                           {generatingCaseId === caseItem.id ? "Generating — keep this page open" : "Generate draft model"}
                         </Button>
-                        {generatedReviewUrl && (
-                          <Button type="button" variant="outline" onClick={() => router.push(generatedReviewUrl)} className="cursor-pointer border-emerald-500/50 text-emerald-200">
+                        {generatedReviewLink && sameImageOrder(generatedReviewLink.imageUrls, selectedReferences.map(item => item.url)) && (
+                          <Button type="button" variant="outline" onClick={() => router.push(generatedReviewLink.url)} className="cursor-pointer border-emerald-500/50 text-emerald-200">
                             <Eye className="mr-2 h-4 w-4" /> View and approve generated model
                           </Button>
                         )}
@@ -1070,7 +1101,7 @@ export default function Cases3DPriorityPage() {
                         {generatingCaseId === evidenceReview.caseItem.id ? "Generating model…" : "Create Meshy draft from approved pictures"}
                       </Button>
                     )}
-                    <Button type="button" variant="outline" onClick={() => router.push(generatedReviewUrl || "/components-3d-review")} className="cursor-pointer border-purple-500/40 text-purple-200">
+                    <Button type="button" variant="outline" onClick={() => router.push(generatedReviewLink?.url || "/components-3d-review")} className="cursor-pointer border-purple-500/40 text-purple-200">
                       <Eye className="mr-2 h-4 w-4" /> Open 3D approval viewer
                     </Button>
                   </div>

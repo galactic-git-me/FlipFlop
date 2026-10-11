@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { ChevronLeft, ChevronRight, CirclePlay, Images } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ChevronLeft, ChevronRight, CirclePlay, Images, RefreshCw } from "lucide-react";
 import { ThreeDWorkflowNav } from "@/components/three-d-workflow-nav";
 import { readJsonResponse } from "@/lib/read-json-response";
 
@@ -123,6 +124,7 @@ const gradientStyle = `
 
 interface Component3DAsset {
   id: number;
+  subject_type?: "case" | "variant" | "category_generic";
   subject_id?: number | null;
   category: string;
   family_key: string;
@@ -185,6 +187,20 @@ interface PriorityCaseItem {
   brand?: string | null;
   model?: string | null;
   priority_3d_rank?: number | null;
+  sourcing_3d_evidence?: {
+    stages?: Record<string, { approved_selection?: unknown }>;
+  };
+}
+
+const DIRECT_BACKEND_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4311").replace(/\/$/, "");
+
+function approvedCasePhotoUrls(item: PriorityCaseItem | undefined) {
+  const selection = item?.sourcing_3d_evidence?.stages?.product_images?.approved_selection as {
+    status?: string;
+    images?: Array<{ url?: unknown }>;
+  } | undefined;
+  const urls = (selection?.images || []).map(image => image.url).filter((url): url is string => typeof url === "string");
+  return selection?.status === "approved" && urls.length === 4 ? urls : [];
 }
 
 const CASE_BRANDS = ["Fractal Design", "Cooler Master", "be quiet!", "Thermaltake", "SilverStone", "Phanteks", "Corsair", "NZXT", "Lian Li", "Montech", "DeepCool", "Antec", "Hyte", "MSI", "ASUS", "APNX", "PCZZOI"];
@@ -467,7 +483,9 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
 }
 
 export default function Components3DReviewPage() {
+  const router = useRouter();
   const [assets, setAssets] = useState<Component3DAsset[]>([]);
+  const [caseRecords, setCaseRecords] = useState<PriorityCaseItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedAsset, setSelectedAsset] = useState<Component3DAsset | null>(null);
   const [filter, setFilter] = useState<"meshy_draft" | "all">("all");
@@ -480,6 +498,7 @@ export default function Components3DReviewPage() {
   const [curatedOnly, setCuratedOnly] = useState(false);
   const [customOnly, setCustomOnly] = useState(false);
   const [scaleConfirmed, setScaleConfirmed] = useState(false);
+  const [regeneratingCaseId, setRegeneratingCaseId] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -502,6 +521,7 @@ export default function Components3DReviewPage() {
         ]);
         const data = await readJsonResponse<Component3DAsset[] | { detail?: string; error?: string; data?: Component3DAsset[]; assets?: Component3DAsset[] }>(response);
         const priorityCases = casesResponse.ok ? await readJsonResponse<PriorityCaseItem[]>(casesResponse) : [];
+        setCaseRecords(priorityCases);
 
         if (!Array.isArray(data) && data.detail) {
           console.error("API Error:", data.detail);
@@ -633,6 +653,39 @@ export default function Components3DReviewPage() {
       setActionError(error instanceof Error ? error.message : "Could not save decision");
     } finally {
       setActionBusy(false);
+    }
+  };
+
+  const regenerateRejectedCase = async () => {
+    if (!selectedAsset || selectedAsset.subject_type !== "case" || selectedAsset.subject_id == null) return;
+    const caseId = selectedAsset.subject_id;
+    const imageUrls = approvedCasePhotoUrls(caseRecords.find(item => item.id === caseId));
+    if (imageUrls.length !== 4) {
+      setActionError("Approve four reference photos for this case in Photos & generation before regenerating.");
+      return;
+    }
+    setRegeneratingCaseId(caseId);
+    setActionError(null);
+    setActionNotice("Generating a new draft from the four currently approved photos, including photo-guided texturing…");
+    try {
+      const response = await fetch(`${DIRECT_BACKEND_URL}/api/assets-3d/cases/${caseId}/generate`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          image_urls: imageUrls,
+          notes: `Regenerated from the current owner-approved case photos after rejecting asset ${selectedAsset.id}.`,
+        }),
+      });
+      const result = await readJsonResponse<{ id: number; review_batch_id?: string | null; detail?: string }>(response);
+      if (!response.ok) throw new Error(result.detail || "Could not regenerate the case model");
+      if (!result.review_batch_id) throw new Error("The draft was created, but its review batch is missing.");
+      router.push(`/components-3d-review?batch=${encodeURIComponent(result.review_batch_id)}`);
+    } catch (error) {
+      setActionNotice(null);
+      setActionError(error instanceof Error ? error.message : "Could not regenerate the case model");
+    } finally {
+      setRegeneratingCaseId(null);
     }
   };
 
@@ -923,6 +976,25 @@ export default function Components3DReviewPage() {
                           <p className={selectedAsset.regeneration.status === "queued" ? "text-xs text-sky-300" : "text-xs text-amber-300"}>
                             {selectedAsset.regeneration.message}
                           </p>
+                        )}
+                        {selectedAsset.subject_type === "case" && selectedAsset.subject_id != null && selectedAsset.review_decision === "rejected" && (
+                          approvedCasePhotoUrls(caseRecords.find(item => item.id === selectedAsset.subject_id)).length === 4 ? (
+                            <button
+                              type="button"
+                              onClick={() => void regenerateRejectedCase()}
+                              disabled={regeneratingCaseId === selectedAsset.subject_id}
+                              className="w-full cursor-pointer rounded border border-purple-400/60 bg-purple-700/40 px-2 py-2 text-xs font-semibold text-purple-100 hover:bg-purple-700/60 disabled:cursor-wait disabled:opacity-50"
+                            >
+                              <span className="inline-flex items-center gap-2">
+                                {regeneratingCaseId === selectedAsset.subject_id && <RefreshCw className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />}
+                                Regenerate with approved case photos
+                              </span>
+                            </button>
+                          ) : (
+                            <a href="/cases-3d-priority" className="block text-xs text-cyan-200 underline underline-offset-2">
+                              Approve four case photos to regenerate this model
+                            </a>
+                          )
                         )}
                       </div>
                     </div>

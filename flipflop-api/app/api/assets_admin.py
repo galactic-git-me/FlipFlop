@@ -429,10 +429,22 @@ def _approved_case_image_urls(evidence: dict | None) -> set[str]:
     return approved
 
 
+def _owner_approved_case_image_order(evidence: dict | None) -> list[str]:
+    """Return the current owner-approved four photos in their chosen order."""
+    stages = (evidence or {}).get("stages") or {}
+    selection = (stages.get("product_images") or {}).get("approved_selection") or {}
+    images = selection.get("images") or []
+    urls = [
+        item["url"]
+        for item in images
+        if isinstance(item, dict) and isinstance(item.get("url"), str)
+    ]
+    return urls if selection.get("status") == "approved" and len(urls) == 4 else []
+
+
 async def _run_rejected_asset_regeneration(
     replacement_id: int,
     source_image_refs: list[str],
-    feedback: str,
     file_key: str,
 ) -> None:
     """Finish a queued replacement using a fresh DB session.
@@ -441,7 +453,7 @@ async def _run_rejected_asset_regeneration(
     fails, leaving a visible, retryable audit record instead of losing the
     owner's rejection feedback.
     """
-    result = await generate_multi_image_asset(source_image_refs, texture_prompt=feedback)
+    result = await generate_multi_image_asset(source_image_refs)
     async with AsyncSessionLocal() as task_db:
         replacement = (
             await task_db.execute(
@@ -511,17 +523,20 @@ async def decide_review_asset(
         source_images = [url for url in (asset.source_image_refs or []) if isinstance(url, str)][:4]
         if asset.subject_type == AssetSubjectType.CASE and asset.subject_id is not None:
             case = (await db.execute(select(Case).where(Case.id == asset.subject_id))).scalar_one_or_none()
-            approved_case_urls = _approved_case_image_urls(case.sourcing_3d_evidence if case else None)
-            source_images = [url for url in source_images if url in approved_case_urls]
+            evidence = case.sourcing_3d_evidence if case else None
+            current_owner_selection = _owner_approved_case_image_order(evidence)
+            if current_owner_selection:
+                # The case's latest approved selection is authoritative, even
+                # when the rejected legacy asset has no (or stale) references.
+                source_images = current_owner_selection
+            else:
+                approved_case_urls = _approved_case_image_urls(evidence)
+                source_images = [url for url in source_images if url in approved_case_urls]
         if source_images:
             feedback = (body.notes or "").strip() or (
                 "Recreate the object more faithfully from the source photographs. "
                 "Correct the rejected model's shape, materials, colours, lighting details and proportions."
             )
-            prompt = (
-                "Match the source photographs closely. Preserve distinctive product colours, "
-                f"including illuminated fan and ARGB colours. Owner feedback: {feedback}"
-            )[:600]
             prior_version = (
                 await db.execute(
                     select(Component3DAsset.version)
@@ -568,7 +583,6 @@ async def decide_review_asset(
                 _run_rejected_asset_regeneration,
                 replacement.id,
                 source_images,
-                prompt,
                 _regeneration_file_key(asset),
             )
         else:
@@ -761,6 +775,8 @@ async def generate_case_asset(
         "asset_version": version,
         "source_image_urls": approved_image_urls,
         "reference_selection_approved": True,
+        "texture_reference_urls": approved_image_urls,
+        # Retain the original primary-view field for existing readers.
         "texture_reference_url": approved_image_urls[0],
         "requires_separate_model_approval": True,
         "recorded_at": datetime.utcnow().isoformat(),

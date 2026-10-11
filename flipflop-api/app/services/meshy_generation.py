@@ -113,15 +113,13 @@ async def generate_family_asset(prompt: str) -> MeshyGenerationResult | None:
 
 async def generate_multi_image_asset(
     image_urls: list[str],
-    texture_prompt: str | None = None,
     progress_callback: Callable[[int, str, str | None], Awaitable[None]] | None = None,
 ) -> MeshyGenerationResult | None:
     """Generate one textured GLB from one to four views of the same object.
 
-    ``texture_prompt`` is used for owner-requested regeneration guidance. Meshy
-    limits it to 600 characters and does not allow it alongside
-    ``texture_image_urls``, so the latter is only sent for first-pass jobs.
-    The source ``image_urls`` still drive geometry generation in both cases.
+    Every supplied view drives geometry and is also explicitly sent as texture
+    guidance. Meshy only supports multi-view texture references on Meshy 7.1;
+    ``texture_image_urls`` cannot be combined with ``texture_prompt``.
     """
     settings = get_settings()
     if not settings.meshy_api_key:
@@ -134,10 +132,10 @@ async def generate_multi_image_asset(
         async with httpx.AsyncClient(timeout=30) as client:
             payload = {
                 "image_urls": image_urls,
-                # Meshy 6 retains an emission map in GLB output. That matters
-                # for illuminated PC parts: Meshy 7/latest currently omits it,
-                # which made vivid ARGB fan rings render flat and grey.
-                "ai_model": "meshy-6",
+                # Multi-view texture references require Meshy 7.1. Meshy 6
+                # supports only one texture image and cannot honor all chosen
+                # photos when rebuilding a model.
+                "ai_model": "meshy-7.1",
                 "should_texture": True,
                 "enable_pbr": True,
                 # 2K is the right default for the interactive storefront
@@ -149,14 +147,7 @@ async def generate_multi_image_asset(
                 "should_remesh": False,
                 "target_formats": ["glb"],
             }
-            cleaned_texture_prompt = (texture_prompt or "").strip()[:600]
-            if cleaned_texture_prompt:
-                payload["texture_prompt"] = cleaned_texture_prompt
-            # Meshy 6 accepts one explicit texture reference (multi-view
-            # texture references require Meshy 7, which has no emission map).
-            # The complete image list still drives geometry and appearance.
-            if not cleaned_texture_prompt:
-                payload["texture_image_url"] = image_urls[0]
+            payload["texture_image_urls"] = image_urls
             response = await client.post(
                 _MESHY_MULTI_IMAGE_BASE,
                 headers=_headers(),
