@@ -647,6 +647,12 @@ function qs(params?: Record<string, string | undefined>): string {
 }
 
 export const api = {
+  marketingCopy: {
+    status: () => request<{ total: number; ready: number; remaining: number }>("/catalogue/marketing-copy/status"),
+    generateBatch: (limit = 4) => request<{ total: number; ready: number; remaining: number; attempted: number; generated: number; failed: { task_key: string; error: string }[] }>(
+      "/catalogue/marketing-copy/generate-batch", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ limit }) },
+    ),
+  },
   emailEvents: {
     list: () =>
       request<
@@ -2536,6 +2542,7 @@ export const api = {
     status: () =>
       request<{
         connected: boolean;
+        environment: string;
         connected_at: string | null;
         username: string | null;
         email: string | null;

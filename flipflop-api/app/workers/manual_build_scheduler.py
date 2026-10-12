@@ -67,7 +67,7 @@ async def run_deferred_manual_build_publish_job() -> dict:
 async def _publish_due_build(build, db) -> str:
     """Returns 'published', 'not_ready', or 'no_token'. Mutates `build`
     in place on success — caller commits."""
-    outcome = await post_build_to_ebay(build)
+    outcome = await post_build_to_ebay(build, db=db)
     if outcome == "published":
         build.status = "listed"
         build.deferred_publish_at = None
@@ -90,7 +90,7 @@ async def _publish_due_build(build, db) -> str:
     return outcome
 
 
-async def post_build_to_ebay(build) -> str:
+async def post_build_to_ebay(build, db=None) -> str:
     """
     Shared eBay-publish logic for a ManualBuild — used by the deferred
     first-publish job above and by the recreate-cycle end-and-republish job
@@ -132,7 +132,7 @@ async def post_build_to_ebay(build) -> str:
     listing_environment = settings.ebay_listing_environment
 
     try:
-        oauth_token = await get_valid_ebay_access_token(listing_environment)
+        oauth_token = await get_valid_ebay_access_token(listing_environment, db=db)
     except ValueError:
         log.info("manual_build_scheduler.skip_no_token", build_id=build.id)
         return "no_token"

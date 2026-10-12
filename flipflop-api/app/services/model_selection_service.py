@@ -74,10 +74,14 @@ class ModelSelectionService:
         require_vision: bool = False,
         require_tools: bool = False,
         tool_choice: dict[str, Any] | str | None = None,
+        free_only: bool = False,
     ) -> ModelResult:
         errors: list[str] = []
         for tier in self.tiers():
             if not tier.provider or not tier.model:
+                continue
+            if free_only and tier.provider not in {"ollama", "local", "openrouter-free"}:
+                errors.append(f"{tier.name}: paid provider skipped because this task is restricted to local/free tiers")
                 continue
             if require_vision and tier.provider in {"ollama", "local"} and not _vision_capable(tier.model):
                 errors.append(f"{tier.name}: configured Ollama model is not vision-capable")

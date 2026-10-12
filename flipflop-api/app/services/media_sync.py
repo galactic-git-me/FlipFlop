@@ -8,6 +8,7 @@ remote end.
 """
 
 import asyncio
+import math
 import subprocess
 from pathlib import Path
 
@@ -26,6 +27,10 @@ async def sync_to_public_media(local_path: Path) -> bool:
     sync hiccup never blocks the upload response the user is waiting on.
     """
     def _scp() -> subprocess.CompletedProcess:
+        # Meshy 2K textures can produce GLBs well over 100 MB. The old fixed
+        # 30-second limit aborted valid transfers (case 340 v6 was 157 MB).
+        # Budget 0.5 MiB/s plus connection overhead, capped at ten minutes.
+        timeout = min(600, max(30, 30 + math.ceil(local_path.stat().st_size / (512 * 1024))))
         return subprocess.run(
             [
                 "scp",
@@ -36,7 +41,7 @@ async def sync_to_public_media(local_path: Path) -> bool:
             ],
             capture_output=True,
             text=True,
-            timeout=30,
+            timeout=timeout,
         )
 
     try:

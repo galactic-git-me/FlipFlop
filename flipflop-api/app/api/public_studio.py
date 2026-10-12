@@ -6,9 +6,11 @@ from dataclasses import asdict
 from typing import Literal
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.playbook import Playbook
+from app.models.benchmark import HardwareBenchmark
 from app.api.public_catalogue import public_playbook_slots, public_list_cases
 from app.services.configurator_compatibility import evaluate_configuration
 from app.services.playbook_pricing import price_playbook_build, InvalidBuildError
@@ -23,7 +25,7 @@ class StudioSelection(BaseModel):
     case_id: int | None = None
     build_mode: Literal['custom', 'curated'] = 'custom'
     curated_build_id: str | None = None
-    upgrade_candidate_indexes: list[int] = Field(default_factory=list, max_length=2)
+    upgrade_candidate_indexes: list[int] = Field(default_factory=list, max_length=30)
 
 
 @router.post('/evaluate')
@@ -76,8 +78,13 @@ async def evaluate_studio(body: StudioSelection, db: AsyncSession = Depends(get_
         missing.append('case')
     for category in missing:
         checks.append(dict(code='MISSING_' + category.upper(), severity='error', message=f'Select {category} to complete this build.', affected=[category]))
-    legacy = {'slots': []} if not is_curated else await evaluate_configuration(db, body.playbook_id, effective_selections, body.case_id,
-                                          catalogue_variant_ids=[v for variants in lookup.values() for v in variants])
+    legacy = (
+        {'slots': []}
+        if not is_curated
+        else await evaluate_configuration(
+            db, body.playbook_id, effective_selections, body.case_id
+        )
+    )
     for slot in legacy['slots']:
         verdict = next((v for v in slot['variants'] if v['variant_id'] == effective_selections.get(slot['slot_id'])), None)
         if verdict and not verdict['is_compatible']:
@@ -107,3 +114,62 @@ async def evaluate_studio(body: StudioSelection, db: AsyncSession = Depends(get_
     return dict(checks=checks, recommendations=recommendations, gpu_required=gpu_required,
                 price=price, verdicts=legacy['slots'],
                 can_checkout=price is not None and not any(c['severity'] in ('error', 'unknown') for c in checks))
+
+
+@router.post('/performance')
+async def curated_performance(body: StudioSelection, db: AsyncSession = Depends(get_db)):
+    """Resolve component benchmark evidence for this exact live selection.
+
+    These are component scores, not measured whole-PC results or predicted
+    game frame rates. The storefront keeps that distinction visible.
+    """
+    if body.build_mode != 'curated' or not body.curated_build_id:
+        raise HTTPException(400, 'A curated build selection is required')
+    from app.api.public_catalogue import public_curated_slots
+    from app.services.benchmark_normaliser import normalise_cpu, normalise_gpu
+
+    slots = await public_curated_slots(body.playbook_id, db, body.curated_build_id)
+    selected_parts = []
+    for slot in slots:
+        variant_id = body.selections.get(slot['slot_id'])
+        variant = next((item for tier in slot['variants_by_tier'].values() for item in tier
+                        if item['id'] == variant_id), None)
+        if variant is None:
+            raise HTTPException(409, 'Refresh the page; a selected component is no longer available.')
+        selected_parts.append({
+            'slot': slot['slot_type'],
+            'title': variant['title'],
+            'specifications': variant.get('specifications') or {},
+            'customer_option': variant.get('customer_option') or {},
+        })
+
+    benchmarks = {}
+    for category, normalise in (('cpu', normalise_cpu), ('gpu', normalise_gpu)):
+        part = next((item for item in selected_parts if item['slot'] == category), None)
+        if not part:
+            benchmarks[category] = None
+            continue
+        normalized = normalise(part['title'])
+        rows = (await db.execute(select(HardwareBenchmark).where(
+            HardwareBenchmark.component_type == category,
+            HardwareBenchmark.normalized_model == normalized,
+        ))).scalars().all()
+        best = max(rows, key=lambda row: row.confidence_score or 0, default=None)
+        benchmarks[category] = ({
+            'model': best.model,
+            'overall_score': best.overall_score,
+            'gaming_score': best.gaming_score,
+            'workstation_score': best.workstation_score,
+            'source': best.benchmark_source,
+            'source_url': best.source_url,
+            'confidence': best.confidence_score,
+            'refreshed_at': best.last_refreshed_at,
+        } if best else None)
+
+    return {
+        'build_name': body.curated_build_id,
+        'parts': selected_parts,
+        'component_benchmarks': benchmarks,
+        'evidence_kind': 'component_benchmarks',
+        'notice': 'Component benchmark data only. This is not a measured whole-PC result or an in-game FPS estimate.',
+    }

@@ -3763,7 +3763,7 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
     settings = get_settings()
     try:
         order = await find_order_for_listing(
-            build.ebay_listing_id, environment=settings.ebay_listing_environment
+            build.ebay_listing_id, environment=settings.ebay_listing_environment, db=db
         )
     except EbayOrderSyncError as e:
         raise HTTPException(e.status_code or 502, str(e))

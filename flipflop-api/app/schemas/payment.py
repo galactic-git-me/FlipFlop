@@ -21,9 +21,9 @@ class PlaybookBuildConfig(BaseModel):
     # The configured Playbook cell IDs (for example FF-GVG-01) are stable
     # string keys from curated_build_definitions.json, not database row IDs.
     curated_build_id: Optional[str] = Field(default=None, min_length=1, max_length=120)
-    # Candidate indexes refer only to the two evidence-reviewed options saved
-    # on this curated cell. The server resolves their current catalogue IDs.
-    upgrade_candidate_indexes: list[int] = Field(default_factory=list, max_length=2)
+    # Legacy candidate indexes remain accepted. New storefronts submit the
+    # reviewed component variant directly in slot_selections.
+    upgrade_candidate_indexes: list[int] = Field(default_factory=list, max_length=30)
     # Made-by-you asks the customer to declare their matrix tier; never infer
     # this from a final price after component choices and upgrades.
     budget_tier: Optional[Literal["Budget", "Mid-range", "High-end"]] = None

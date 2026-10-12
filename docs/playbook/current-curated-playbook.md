@@ -4,7 +4,7 @@
 **Coverage:** 24 cells across 8 customer types × 3 budget tiers.
 **Use:** Current source-backed component reference for the curated catalogue and 3D asset planning.
 
-> This file reflects the selected component specifications in the current definitions file. It does not prove live stock, vendor eligibility, benchmark-tier equivalence, compatibility validation, current landed cost, selling price, margin, or approval to publish. Check the live admin quote and catalogue before offering a build. The current definitions do not contain the approved two-upgrade pair; use the curated-cell admin record for those offers.
+> This file reflects the selected component specifications in the current definitions file. It does not prove live stock, vendor eligibility, benchmark-tier equivalence, compatibility validation, current landed cost, selling price, margin, or approval to publish. Check the live admin quote and catalogue before offering a build. Reviewed component offers are stored on the curated-cell admin record.
 
 ## Matrix
 

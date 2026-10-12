@@ -2,9 +2,10 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, ChevronRight, CirclePlay, Images, RefreshCw } from "lucide-react";
+import { ChevronLeft, ChevronRight, CirclePlay, Images, RefreshCw, ScanSearch, Plus, Trash2, Save } from "lucide-react";
 import { ThreeDWorkflowNav } from "@/components/three-d-workflow-nav";
 import { readJsonResponse } from "@/lib/read-json-response";
+import { detectRgbFans } from "./fan-detection";
 
 interface Star {
   x: number;
@@ -140,6 +141,8 @@ interface Component3DAsset {
   rank?: number | null;
   subject_name?: string | null;
   source_image_refs?: string[];
+  dimensions_mm?: { width?: number; height?: number; depth?: number } | null;
+  fan_layout_json?: FanLayout | null;
   source_video_refs?: Array<{
     url: string;
     title: string;
@@ -147,6 +150,7 @@ interface Component3DAsset {
   }>;
   review_batch_id?: string | null;
   review_decision?: "approved" | "rejected" | null;
+  is_active?: boolean;
   commercial_use_approved?: boolean;
   redistribution_approved?: boolean;
   scale_validated?: boolean;
@@ -156,6 +160,28 @@ interface Component3DAsset {
     version?: number;
     message: string;
   } | null;
+}
+
+type RGBMode = "rainbow" | "static" | "breathing" | "color-cycle" | "off";
+type FanFace = "+z" | "-z" | "+x" | "-x";
+
+interface ProceduralFan {
+  id: string;
+  x: number;
+  y: number;
+  diameter_mm: number;
+  confidence?: number;
+  source_image_index?: number;
+  source_image_url?: string;
+}
+
+interface FanLayout {
+  version: 1;
+  face: FanFace;
+  mode: RGBMode;
+  color: string;
+  speed: number;
+  fans: ProceduralFan[];
 }
 
 function youtubeEmbedUrl(url: string) {
@@ -200,7 +226,7 @@ function approvedCasePhotoUrls(item: PriorityCaseItem | undefined) {
     images?: Array<{ url?: unknown }>;
   } | undefined;
   const urls = (selection?.images || []).map(image => image.url).filter((url): url is string => typeof url === "string");
-  return selection?.status === "approved" && urls.length === 4 ? urls : [];
+  return selection?.status === "approved" && urls.length >= 1 && urls.length <= 4 ? urls : [];
 }
 
 const CASE_BRANDS = ["Fractal Design", "Cooler Master", "be quiet!", "Thermaltake", "SilverStone", "Phanteks", "Corsair", "NZXT", "Lian Li", "Montech", "DeepCool", "Antec", "Hyte", "MSI", "ASUS", "APNX", "PCZZOI"];
@@ -258,7 +284,7 @@ function preserveAssetLabels(items: Component3DAsset[], existing: Component3DAss
   }));
 }
 
-function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
+function Viewer3D({ glbUrl, fanLayout, caseHeightMm }: { glbUrl: string | null; fanLayout: FanLayout | null; caseHeightMm: number }) {
   // 3D Viewer Configuration:
   // - Camera position: (5, 6, 9) — controls zoom/perspective from the model
   // - Model scale: 10.5 — scales loaded GLB to viewport size
@@ -272,11 +298,43 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
   const modelRef = useRef<any>(null);
   const cameraRef = useRef<any>(null);
   const zoomRef = useRef(1);
+  const initialModelRotationRef = useRef<{ x: number; y: number; z: number } | null>(null);
+  const fanLayoutRef = useRef<FanLayout | null>(fanLayout);
+  const applyFanLayoutRef = useRef<((layout: FanLayout | null) => void) | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fanLayoutRef.current = fanLayout;
+    applyFanLayoutRef.current?.(fanLayout);
+  }, [fanLayout]);
+
+  const changeZoom = (factor: number) => {
+    const camera = cameraRef.current;
+    if (!camera) return;
+    zoomRef.current = Math.min(4, Math.max(0.4, zoomRef.current * factor));
+    camera.zoom = zoomRef.current;
+    camera.updateProjectionMatrix();
+  };
+
+  const resetView = () => {
+    zoomRef.current = 1;
+    if (cameraRef.current) {
+      cameraRef.current.zoom = 1;
+      cameraRef.current.updateProjectionMatrix();
+    }
+    const initialRotation = initialModelRotationRef.current;
+    if (modelRef.current && initialRotation) {
+      modelRef.current.rotation.set(initialRotation.x, initialRotation.y, initialRotation.z);
+    }
+  };
 
   useEffect(() => {
     if (!containerRef.current || !glbUrl) return;
     setLoadError(null);
+    cameraRef.current = null;
+    modelRef.current = null;
+    initialModelRotationRef.current = null;
+    zoomRef.current = 1;
     let disposed = false;
     let disposeViewer: (() => void) | undefined;
 
@@ -388,6 +446,16 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
               scene.add(model);
 
               const box = new THREE.Box3().setFromObject(model);
+              model.updateMatrixWorld(true);
+              const inverseModelMatrix = model.matrixWorld.clone().invert();
+              const localBounds = new THREE.Box3();
+              for (const x of [box.min.x, box.max.x]) {
+                for (const y of [box.min.y, box.max.y]) {
+                  for (const z of [box.min.z, box.max.z]) {
+                    localBounds.expandByPoint(new THREE.Vector3(x, y, z).applyMatrix4(inverseModelMatrix));
+                  }
+                }
+              }
               const size = box.getSize(new THREE.Vector3());
               const maxDim = Math.max(size.x, size.y, size.z);
               const scale = 10.5 / maxDim;
@@ -399,11 +467,128 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
               // Center the model horizontally and place its lowest point just above the grid.
               model.position.y += gridHelper.position.y - (box.min.y - centerY) * scale + 0.03;
 
+              // Fit the full asset in view so tall cases and their top/bottom fans aren't cropped.
+              const fittedBounds = new THREE.Box3().setFromObject(model);
+              const fittedSphere = fittedBounds.getBoundingSphere(new THREE.Sphere());
+              const verticalHalfFov = THREE.MathUtils.degToRad(camera.fov / 2);
+              const horizontalHalfFov = Math.atan(Math.tan(verticalHalfFov) * camera.aspect);
+              const limitingHalfFov = Math.min(verticalHalfFov, horizontalHalfFov);
+              const cameraDistance = (fittedSphere.radius / Math.sin(limitingHalfFov)) * 1.15;
+              const viewDirection = camera.position.clone().normalize();
+              camera.position.copy(fittedSphere.center).add(viewDirection.multiplyScalar(cameraDistance));
+              camera.lookAt(fittedSphere.center);
+              camera.updateProjectionMatrix();
+
               modelRef.current = model;
+              initialModelRotationRef.current = {
+                x: model.rotation.x,
+                y: model.rotation.y,
+                z: model.rotation.z,
+              };
+
+              const fanAnimations: Array<{ group: any; ring: any; blades: any; phase: number }> = [];
+              const applyFanLayout = (layout: FanLayout | null) => {
+                const previous = model.getObjectByName("procedural-rgb-fans");
+                if (previous) {
+                  previous.traverse((child: any) => {
+                    child.geometry?.dispose?.();
+                    if (Array.isArray(child.material)) child.material.forEach((material: any) => material.dispose?.());
+                    else child.material?.dispose?.();
+                  });
+                  model.remove(previous);
+                }
+                fanAnimations.length = 0;
+                if (!layout?.fans.length) return;
+
+                const root = new THREE.Group();
+                root.name = "procedural-rgb-fans";
+                const localSize = localBounds.getSize(new THREE.Vector3());
+                const localUnitsPerMm = localSize.y / Math.max(1, caseHeightMm);
+                const faceOffset = Math.max(0.004, 0.018 / scale);
+
+                for (const fan of layout.fans) {
+                  const radius = Math.max(0.025, fan.diameter_mm * localUnitsPerMm * 0.5);
+                  const fanGroup = new THREE.Group();
+                  fanGroup.name = `fan-${fan.id}`;
+                  const emissiveMaterial = new THREE.MeshStandardMaterial({
+                    color: 0x18131b,
+                    metalness: 0.45,
+                    roughness: 0.35,
+                    emissive: new THREE.Color(layout.color),
+                    emissiveIntensity: layout.mode === "off" ? 0 : 1.6,
+                  });
+                  const housingMaterial = new THREE.MeshStandardMaterial({ color: 0x10141a, metalness: 0.65, roughness: 0.52 });
+                  const ring = new THREE.Mesh(new THREE.TorusGeometry(radius * 0.9, radius * 0.055, 8, 48), emissiveMaterial);
+                  fanGroup.add(ring);
+                  fanGroup.add(new THREE.Mesh(new THREE.TorusGeometry(radius * 0.76, radius * 0.025, 6, 40), emissiveMaterial));
+                  fanGroup.add(new THREE.Mesh(new THREE.CircleGeometry(radius * 0.72, 40), housingMaterial));
+
+                  const bladeGroup = new THREE.Group();
+                  const bladeShape = new THREE.Shape();
+                  bladeShape.moveTo(radius * 0.16, radius * 0.1);
+                  bladeShape.quadraticCurveTo(radius * 0.62, radius * 0.05, radius * 0.67, radius * 0.34);
+                  bladeShape.quadraticCurveTo(radius * 0.43, radius * 0.58, radius * 0.24, radius * 0.39);
+                  bladeShape.quadraticCurveTo(radius * 0.13, radius * 0.27, radius * 0.16, radius * 0.1);
+                  const bladeGeometry = new THREE.ShapeGeometry(bladeShape, 8);
+                  const bladeMaterial = new THREE.MeshStandardMaterial({ color: 0x687080, metalness: 0.35, roughness: 0.38, side: THREE.DoubleSide });
+                  for (let bladeIndex = 0; bladeIndex < 7; bladeIndex += 1) {
+                    const blade = new THREE.Mesh(bladeGeometry, bladeMaterial);
+                    blade.rotation.z = (bladeIndex / 7) * Math.PI * 2;
+                    blade.position.z = radius * 0.025;
+                    bladeGroup.add(blade);
+                  }
+                  fanGroup.add(bladeGroup);
+                  const hub = new THREE.Mesh(new THREE.CircleGeometry(radius * 0.2, 32), housingMaterial);
+                  hub.position.z = radius * 0.06;
+                  fanGroup.add(hub);
+
+                  if (layout.face === "+z" || layout.face === "-z") {
+                    fanGroup.position.set(
+                      localBounds.min.x + (fan.x + 1) * 0.5 * localSize.x,
+                      localBounds.min.y + (fan.y + 1) * 0.5 * localSize.y,
+                      layout.face === "+z" ? localBounds.max.z + faceOffset : localBounds.min.z - faceOffset,
+                    );
+                    if (layout.face === "-z") fanGroup.rotation.y = Math.PI;
+                  } else {
+                    fanGroup.position.set(
+                      layout.face === "+x" ? localBounds.max.x + faceOffset : localBounds.min.x - faceOffset,
+                      localBounds.min.y + (fan.y + 1) * 0.5 * localSize.y,
+                      localBounds.min.z + (fan.x + 1) * 0.5 * localSize.z,
+                    );
+                    fanGroup.rotation.y = layout.face === "+x" ? Math.PI / 2 : -Math.PI / 2;
+                  }
+                  root.add(fanGroup);
+                  fanAnimations.push({ group: fanGroup, ring: emissiveMaterial, blades: bladeGroup, phase: fanAnimations.length * 0.37 });
+                }
+                model.add(root);
+              };
+              applyFanLayoutRef.current = applyFanLayout;
+              applyFanLayout(fanLayoutRef.current);
 
               let isAutoRotating = true;
               const animate = () => {
                 animationId = requestAnimationFrame(animate);
+                const layout = fanLayoutRef.current;
+                const elapsed = performance.now() / 1000;
+                for (const fan of fanAnimations) {
+                  fan.blades.rotation.z += 0.025 * (layout?.speed || 1);
+                  if (!layout || layout.mode === "off") {
+                    fan.ring.emissiveIntensity = 0;
+                  } else if (layout.mode === "rainbow") {
+                    fan.ring.emissive.setHSL((elapsed * 0.16 * layout.speed + fan.phase) % 1, 0.95, 0.55);
+                    fan.ring.emissiveIntensity = 1.8;
+                  } else if (layout.mode === "color-cycle") {
+                    const colors = ["#ff3158", "#ffbd2e", "#36ef86", "#3ca8ff", "#c849ff"];
+                    const color = colors[Math.floor((elapsed * layout.speed + fan.phase * 4) % colors.length)];
+                    fan.ring.emissive.set(color);
+                    fan.ring.emissiveIntensity = 1.8;
+                  } else {
+                    fan.ring.emissive.set(layout.color);
+                    fan.ring.emissiveIntensity = layout.mode === "breathing"
+                      ? 0.2 + (0.8 + Math.sin(elapsed * layout.speed * 2.4 + fan.phase) * 0.7)
+                      : 1.8;
+                  }
+                }
 
                 if (isAutoRotating) {
                   model.rotation.y += 0.005;
@@ -448,13 +633,17 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
           renderer.render(scene, camera);
           disposeViewer = () => {
             window.cancelAnimationFrame(animationId);
+            applyFanLayoutRef.current = null;
             renderer.setAnimationLoop(null);
             renderer.dispose();
             renderer.forceContextLoss();
           };
         } catch (error) {
           console.error("Error setting up 3D viewer:", error);
-          if (!disposed) setLoadError("The 3D viewer could not initialise for this asset.");
+          if (!disposed) {
+            const detail = error instanceof Error ? error.message : String(error);
+            setLoadError(`The 3D viewer could not initialise for this asset: ${detail}`);
+          }
         }
       };
       void setupViewer();
@@ -479,7 +668,17 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
 
   return (
     <div ref={containerRef} className="relative h-full w-full rounded border border-slate-700/50 bg-[#080d12]">
-      <canvas ref={canvasRef} className="absolute inset-0 z-10 h-full w-full" aria-label="3D model viewer" />
+      <canvas key={glbUrl ?? "no-model"} ref={canvasRef} className="absolute inset-0 z-10 h-full w-full" aria-label="3D model viewer" />
+      <div
+        className="absolute right-3 top-3 z-30 flex items-center gap-1 rounded-lg border border-slate-600 bg-slate-950/90 p-1 shadow-lg"
+        aria-label="3D view controls"
+        onMouseDown={event => event.stopPropagation()}
+        onPointerDown={event => event.stopPropagation()}
+      >
+        <button type="button" aria-label="Zoom in" title="Zoom in" onClick={() => changeZoom(1.25)} className="h-9 w-9 rounded text-xl font-semibold text-slate-100 hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-400">+</button>
+        <button type="button" aria-label="Zoom out" title="Zoom out" onClick={() => changeZoom(0.8)} className="h-9 w-9 rounded text-xl font-semibold text-slate-100 hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-400">−</button>
+        <button type="button" aria-label="Reset view" title="Reset view" onClick={resetView} className="h-9 min-w-9 rounded px-2 text-sm font-semibold text-slate-100 hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-400">Reset</button>
+      </div>
       {loadError && <div role="alert" className="absolute inset-x-4 top-20 z-50 rounded border border-red-400/50 bg-red-950/90 p-3 text-sm text-red-100">{loadError}</div>}
     </div>
   );
@@ -491,6 +690,12 @@ export default function Components3DReviewPage() {
   const [caseRecords, setCaseRecords] = useState<PriorityCaseItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedAsset, setSelectedAsset] = useState<Component3DAsset | null>(null);
+  const [fanLayout, setFanLayout] = useState<FanLayout | null>(null);
+  const [selectedFanId, setSelectedFanId] = useState<string | null>(null);
+  const [fanPhotoChoice, setFanPhotoChoice] = useState("asset:0");
+  const [fanDetectionBusy, setFanDetectionBusy] = useState(false);
+  const [fanSaveBusy, setFanSaveBusy] = useState(false);
+  const [fanEditorMessage, setFanEditorMessage] = useState<string | null>(null);
   const [filter, setFilter] = useState<"meshy_draft" | "all">("all");
   const [batch, setBatch] = useState<ReviewBatch | null>(null);
   const [reviewNotes, setReviewNotes] = useState("");
@@ -504,6 +709,13 @@ export default function Components3DReviewPage() {
   const [regeneratingCaseId, setRegeneratingCaseId] = useState<number | null>(null);
   const [regenerationProgress, setRegenerationProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setFanLayout(selectedAsset?.fan_layout_json || null);
+    setSelectedFanId(selectedAsset?.fan_layout_json?.fans[0]?.id || null);
+    setFanPhotoChoice("asset:0");
+    setFanEditorMessage(null);
+  }, [selectedAsset?.id, selectedAsset?.fan_layout_json]);
 
   useEffect(() => {
     setRightsConfirmed(Boolean(selectedAsset?.commercial_use_approved && selectedAsset?.redistribution_approved));
@@ -549,7 +761,12 @@ export default function Components3DReviewPage() {
         } else {
           // Resume an already-claimed review batch automatically. Previously
           // these assets looked reviewable but both decision buttons remained disabled.
-          const pendingBatchId = loadedAssets.find(asset => asset.review_batch_id && !asset.review_decision)?.review_batch_id;
+          // Resume batches that still need publication as well as batches with
+          // undecided assets. An approved draft has a decision, but remains
+          // inactive until Publish approved models is clicked.
+          const pendingBatchId = loadedAssets.find(asset =>
+            asset.review_batch_id && !asset.is_active && asset.review_decision !== "rejected"
+          )?.review_batch_id;
           if (pendingBatchId) {
             const batchResponse = await fetch(`/api/assets-3d/review-batches/${pendingBatchId}`);
             if (batchResponse.ok) {
@@ -665,19 +882,116 @@ export default function Components3DReviewPage() {
     }
   };
 
+  const detectFansFromPhoto = async () => {
+    if (!selectedAsset || selectedAsset.subject_type !== "case") return;
+    const [sourceSet, sourceIndexText] = fanPhotoChoice.split(":");
+    const sourceIndex = Number(sourceIndexText);
+    const sourceUrls = sourceSet === "approved"
+      ? approvedCasePhotoUrls(caseRecords.find(item => item.id === selectedAsset.subject_id))
+      : selectedAsset.source_image_refs || [];
+    const imageUrl = sourceUrls[sourceIndex];
+    if (!imageUrl) {
+      setFanEditorMessage("This asset has no source photo at that position.");
+      return;
+    }
+    setFanDetectionBusy(true);
+    setFanEditorMessage(null);
+    try {
+      const detections = await detectRgbFans(imageUrl);
+      if (!detections.length) {
+        setFanEditorMessage("No clear RGB rings detected. Choose a front-facing photo or add fans manually.");
+        return;
+      }
+      const caseHeightMm = selectedAsset.dimensions_mm?.height || 500;
+      const fans: ProceduralFan[] = detections.map((detection, index) => ({
+        id: crypto.randomUUID(),
+        // Detection coordinates are normalized to the selected photo. Map that
+        // photo frame directly onto the model face; the prior 2.2 multiplier
+        // pushed detections near the image edge outside the case bounds.
+        x: Math.max(-1, Math.min(1, (detection.centerX - 0.5) * 2)),
+        y: Math.max(-1, Math.min(1, (0.5 - detection.centerY) * 2)),
+        diameter_mm: Math.max(60, Math.min(200, Math.round((detection.radius * 2 * caseHeightMm) / 10) * 10)),
+        confidence: Number(detection.confidence.toFixed(2)),
+        source_image_index: sourceIndex,
+        source_image_url: imageUrl,
+      }));
+      setFanLayout(current => ({
+        version: 1,
+        face: current?.face || "+z",
+        mode: current?.mode || "rainbow",
+        color: current?.color || "#ff4fb3",
+        speed: current?.speed || 1,
+        fans,
+      }));
+      setSelectedFanId(fans[0]?.id || null);
+      setFanEditorMessage(`Found ${fans.length} RGB fan candidate${fans.length === 1 ? "" : "s"}. Review their placement and size in the 3D view before saving.`);
+    } catch (error) {
+      setFanEditorMessage(error instanceof Error ? error.message : "Could not analyse this reference photo.");
+    } finally {
+      setFanDetectionBusy(false);
+    }
+  };
+
+  const updateFanLayout = (update: (current: FanLayout) => FanLayout) => {
+    setFanLayout(current => current ? update(current) : {
+      version: 1,
+      face: "+z",
+      mode: "rainbow",
+      color: "#ff4fb3",
+      speed: 1,
+      fans: [],
+    });
+  };
+
+  const addManualFan = () => {
+    const fan: ProceduralFan = {
+      id: crypto.randomUUID(),
+      x: 0,
+      y: 0,
+      diameter_mm: 120,
+    };
+    updateFanLayout(current => ({ ...current, fans: [...current.fans, fan] }));
+    setSelectedFanId(fan.id);
+    setFanEditorMessage("Fan added at the centre of the selected case face. Adjust its position and size, then save.");
+  };
+
+  const saveFanLayout = async () => {
+    if (!selectedAsset || selectedAsset.subject_type !== "case" || !fanLayout) return;
+    setFanSaveBusy(true);
+    setFanEditorMessage(null);
+    try {
+      const response = await fetch(`/api/assets-3d/${selectedAsset.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fan_layout_json: fanLayout }),
+      });
+      const data = await readJsonResponse<Component3DAsset & { detail?: string; error?: string }>(response);
+      if (!response.ok) throw new Error(data.detail || data.error || "Could not save the fan layout");
+      const updatedAssets = assets.map(asset => asset.id === data.id ? { ...asset, ...data } : asset);
+      setAssets(updatedAssets);
+      setSelectedAsset(current => current?.id === data.id ? { ...current, ...data } : current);
+      setBatch(current => current ? { ...current, assets: current.assets.map(asset => asset.id === data.id ? { ...asset, ...data } : asset) } : current);
+      setFanEditorMessage("Fan layout saved with this model version.");
+    } catch (error) {
+      setFanEditorMessage(error instanceof Error ? error.message : "Could not save the fan layout");
+    } finally {
+      setFanSaveBusy(false);
+    }
+  };
+
   const regenerateRejectedCase = async () => {
     if (!selectedAsset || selectedAsset.subject_type !== "case" || selectedAsset.subject_id == null) return;
     const caseId = selectedAsset.subject_id;
     const imageUrls = approvedCasePhotoUrls(caseRecords.find(item => item.id === caseId));
-    if (imageUrls.length !== 4) {
-      setActionError("Approve four reference photos for this case in Photos & generation before regenerating.");
+    if (imageUrls.length < 1 || imageUrls.length > 4) {
+      setActionError("Approve between one and four reference photos for this case in Photos & generation before regenerating.");
       return;
     }
     const requestId = crypto.randomUUID();
     setRegeneratingCaseId(caseId);
     setRegenerationProgress(0);
     setActionError(null);
-    setActionNotice("Generating a new draft from the four currently approved photos, including photo-guided texturing…");
+    setActionNotice(`Generating a new draft from the ${imageUrls.length} currently approved photo${imageUrls.length === 1 ? "" : "s"}, including photo-guided texturing…`);
     const pollProgress = async () => {
       try {
         const statusResponse = await fetch(
@@ -906,7 +1220,11 @@ export default function Components3DReviewPage() {
             <div className="border border-[#1e2d45] rounded-lg overflow-hidden flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] relative z-30 bg-[#050b12]/80">
               <section className="min-h-[420px] lg:min-h-0 relative" ref={containerRef} aria-label="Interactive 3D model">
                 <StarfieldBackground containerRef={containerRef} />
-                <Viewer3D glbUrl={selectedAsset.glb_ref} />
+                <Viewer3D
+                  glbUrl={selectedAsset.glb_ref}
+                  fanLayout={selectedAsset.subject_type === "case" ? fanLayout : null}
+                  caseHeightMm={selectedAsset.dimensions_mm?.height || 500}
+                />
 
                 <button
                   type="button"
@@ -1008,7 +1326,7 @@ export default function Components3DReviewPage() {
                           </p>
                         )}
                         {selectedAsset.subject_type === "case" && selectedAsset.subject_id != null && selectedAsset.review_decision === "rejected" && (
-                          approvedCasePhotoUrls(caseRecords.find(item => item.id === selectedAsset.subject_id)).length === 4 ? (
+                          approvedCasePhotoUrls(caseRecords.find(item => item.id === selectedAsset.subject_id)).length > 0 ? (
                             <>
                               <button
                                 type="button"
@@ -1072,13 +1390,9 @@ export default function Components3DReviewPage() {
                   </span>
                 </div>
 
-                {(selectedAsset.subject_type === "case" && selectedAsset.review_decision === "rejected"
-                  ? approvedCasePhotoUrls(caseRecords.find(item => item.id === selectedAsset.subject_id))
-                  : selectedAsset.source_image_refs || []).length ? (
+                {(selectedAsset.source_image_refs || []).length ? (
                   <div className="space-y-3">
-                    {(selectedAsset.subject_type === "case" && selectedAsset.review_decision === "rejected"
-                      ? approvedCasePhotoUrls(caseRecords.find(item => item.id === selectedAsset.subject_id))
-                      : selectedAsset.source_image_refs || []).map((imageUrl, index) => (
+                    {(selectedAsset.source_image_refs || []).map((imageUrl, index) => (
                       <a
                         key={`${imageUrl}-${index}`}
                         href={imageUrl}
@@ -1103,6 +1417,101 @@ export default function Components3DReviewPage() {
                   <div className="rounded-md border border-amber-500/40 bg-amber-950/30 p-4 text-sm text-amber-200" role="note">
                     No source pictures are attached. This item should not be approved until comparison images are supplied.
                   </div>
+                )}
+
+                {selectedAsset.subject_type === "case" && (
+                  <section className="my-4 rounded-md border border-cyan-500/30 bg-slate-900/70 p-3" aria-label="RGB fan layout editor">
+                    <div className="mb-3 flex items-center justify-between gap-2">
+                      <div>
+                        <h2 className="text-sm font-bold text-slate-100">RGB fan layout</h2>
+                        <p className="mt-1 text-xs text-slate-400">Detect candidates from an asset source photo, then check their position on the model.</p>
+                      </div>
+                      <span className="rounded bg-slate-800 px-2 py-1 text-xs text-cyan-200">{fanLayout?.fans.length || 0} fans</span>
+                    </div>
+
+                    <div className="mb-3 grid grid-cols-[1fr_auto] gap-2">
+                      <label className="text-xs text-slate-300">
+                        Detection photo
+                        <select
+                          value={fanPhotoChoice}
+                          onChange={event => setFanPhotoChoice(event.target.value)}
+                          className="mt-1 w-full rounded border border-slate-600 bg-slate-950 px-2 py-2 text-sm text-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-400"
+                          disabled={!selectedAsset.source_image_refs?.length && !approvedCasePhotoUrls(caseRecords.find(item => item.id === selectedAsset.subject_id)).length}
+                        >
+                          {(selectedAsset.source_image_refs || []).map((_, index) => <option key={`asset-${index}`} value={`asset:${index}`}>This model · Reference {index + 1}</option>)}
+                          {approvedCasePhotoUrls(caseRecords.find(item => item.id === selectedAsset.subject_id)).map((_, index) => <option key={`approved-${index}`} value={`approved:${index}`}>Current approved set · Reference {index + 1}</option>)}
+                        </select>
+                        {fanPhotoChoice.startsWith("approved:") && <span className="mt-1 block text-[11px] text-amber-200">These photos are newer than this model and were not its generation inputs.</span>}
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => void detectFansFromPhoto()}
+                        disabled={fanDetectionBusy || (!selectedAsset.source_image_refs?.length && !approvedCasePhotoUrls(caseRecords.find(item => item.id === selectedAsset.subject_id)).length)}
+                        className="mt-5 inline-flex cursor-pointer items-center gap-1.5 rounded border border-cyan-500/50 bg-cyan-950/50 px-2 py-2 text-xs font-semibold text-cyan-100 hover:bg-cyan-900/70 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-400"
+                      >
+                        <ScanSearch className={`h-3.5 w-3.5 ${fanDetectionBusy ? "animate-pulse" : ""}`} aria-hidden="true" />
+                        {fanDetectionBusy ? "Detecting…" : "Detect RGB fans"}
+                      </button>
+                    </div>
+
+                    {fanLayout && (
+                      <>
+                        <div className="mb-3 grid grid-cols-2 gap-2">
+                          <label className="text-xs text-slate-300">Face
+                            <select value={fanLayout.face} onChange={event => updateFanLayout(current => ({ ...current, face: event.target.value as FanFace }))} className="mt-1 w-full rounded border border-slate-600 bg-slate-950 px-2 py-2 text-sm text-slate-100">
+                              <option value="+z">Front +Z</option><option value="-z">Front -Z</option><option value="+x">Side +X</option><option value="-x">Side -X</option>
+                            </select>
+                          </label>
+                          <label className="text-xs text-slate-300">RGB program
+                            <select value={fanLayout.mode} onChange={event => updateFanLayout(current => ({ ...current, mode: event.target.value as RGBMode }))} className="mt-1 w-full rounded border border-slate-600 bg-slate-950 px-2 py-2 text-sm text-slate-100">
+                              <option value="rainbow">Rainbow</option><option value="color-cycle">Colour cycle</option><option value="breathing">Breathing</option><option value="static">Static colour</option><option value="off">Off</option>
+                            </select>
+                          </label>
+                        </div>
+                        {fanLayout.mode === "static" && <label className="mb-3 flex items-center justify-between text-xs text-slate-300">Static colour<input type="color" value={fanLayout.color} onChange={event => updateFanLayout(current => ({ ...current, color: event.target.value }))} className="h-8 w-12 cursor-pointer rounded border border-slate-600 bg-slate-950" /></label>}
+                        <label className="mb-3 block text-xs text-slate-300">Program speed · {fanLayout.speed.toFixed(1)}×
+                          <input type="range" min="0.1" max="3" step="0.1" value={fanLayout.speed} onChange={event => updateFanLayout(current => ({ ...current, speed: Number(event.target.value) }))} className="mt-2 w-full accent-cyan-400" />
+                        </label>
+
+                        <div className="mb-2 flex items-center justify-between">
+                          <span className="text-xs font-semibold text-slate-200">Fans</span>
+                          <button type="button" onClick={addManualFan} className="inline-flex cursor-pointer items-center gap-1 rounded border border-slate-600 px-2 py-1 text-xs text-slate-200 hover:border-cyan-400 hover:text-cyan-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-400"><Plus className="h-3 w-3" aria-hidden="true" />Add fan</button>
+                        </div>
+                        <div className="mb-3 flex flex-wrap gap-1.5">
+                          {fanLayout.fans.map((fan, index) => (
+                            <button key={fan.id} type="button" onClick={() => setSelectedFanId(fan.id)} aria-pressed={selectedFanId === fan.id} className={`cursor-pointer rounded border px-2 py-1 text-xs focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-400 ${selectedFanId === fan.id ? "border-cyan-300 bg-cyan-900/60 text-white" : "border-slate-600 bg-slate-950 text-slate-300"}`}>
+                              Fan {index + 1}{fan.confidence != null ? ` · signal ${Math.round(fan.confidence * 100)}%` : ""}
+                            </button>
+                          ))}
+                        </div>
+
+                        {fanLayout.fans.find(fan => fan.id === selectedFanId) && (() => {
+                          const selectedFan = fanLayout.fans.find(fan => fan.id === selectedFanId)!;
+                          const updateSelectedFan = (patch: Partial<ProceduralFan>) => updateFanLayout(current => ({
+                            ...current,
+                            fans: current.fans.map(fan => fan.id === selectedFan.id ? { ...fan, ...patch } : fan),
+                          }));
+                          return (
+                            <div className="mb-3 rounded border border-slate-700 bg-slate-950/70 p-2">
+                              <div className="mb-2 flex items-center justify-between text-xs text-slate-300"><span>Fan position & size</span><button type="button" aria-label="Remove selected fan" title="Remove selected fan" onClick={() => { const remaining = fanLayout.fans.filter(fan => fan.id !== selectedFan.id); updateFanLayout(current => ({ ...current, fans: remaining })); setSelectedFanId(remaining[0]?.id || null); }} className="cursor-pointer rounded p-1 text-red-300 hover:bg-red-950/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-400"><Trash2 className="h-3.5 w-3.5" aria-hidden="true" /></button></div>
+                              <label className="mb-2 block text-xs text-slate-400">Horizontal · {selectedFan.x.toFixed(2)}
+                                <input type="range" min="-1" max="1" step="0.01" value={selectedFan.x} onChange={event => updateSelectedFan({ x: Number(event.target.value) })} className="mt-1 w-full accent-cyan-400" />
+                              </label>
+                              <label className="mb-2 block text-xs text-slate-400">Vertical · {selectedFan.y.toFixed(2)}
+                                <input type="range" min="-1" max="1" step="0.01" value={selectedFan.y} onChange={event => updateSelectedFan({ y: Number(event.target.value) })} className="mt-1 w-full accent-cyan-400" />
+                              </label>
+                              <label className="block text-xs text-slate-400">Diameter
+                                <input type="number" min="60" max="200" step="10" value={selectedFan.diameter_mm} onChange={event => updateSelectedFan({ diameter_mm: Math.max(60, Math.min(200, Number(event.target.value) || 120)) })} className="mt-1 w-full rounded border border-slate-600 bg-slate-900 px-2 py-1.5 text-sm text-slate-100" />
+                              </label>
+                            </div>
+                          );
+                        })()}
+
+                        <button type="button" onClick={() => void saveFanLayout()} disabled={fanSaveBusy || fanDetectionBusy} className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded border border-cyan-400/50 bg-cyan-700/40 px-3 py-2 text-sm font-semibold text-cyan-50 hover:bg-cyan-700/60 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300"><Save className="h-4 w-4" aria-hidden="true" />{fanSaveBusy ? "Saving…" : "Save fan layout"}</button>
+                      </>
+                    )}
+                    {fanEditorMessage && <p role="status" className="mt-2 text-xs leading-relaxed text-cyan-100">{fanEditorMessage}</p>}
+                  </section>
                 )}
 
                 <div className="my-4 border-t border-[#1e2d45] pt-4">

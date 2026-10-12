@@ -17,6 +17,10 @@ Each queue includes variants waiting for an asset, existing assets, and a per-pr
 
 The live queue—not this static candidate inventory—is authoritative for which exact variants already have a model. The upload endpoint checks GLB v2 container length, chunk boundaries, and first-chunk glTF 2.0 asset metadata before storing an upload.
 
+## Case fan reconstruction in review
+
+The 3D asset review page shows the source photos saved on the selected asset version. For case assets, **RGB fan layout** can scan one saved source photo or the case's separately labelled current approved photo set for bright coloured ring candidates. Detection is a visual starting point: reviewers can change the case face, fan positions, sizes, and RGB program in the Three.js preview, add or remove fans, and save the layout to that asset version. Saved fan layout metadata drives the review editor's procedural fan overlay; it does not edit the source GLB file. The asset still requires the normal model, scale, provenance, and publication checks.
+
 ## Candidate list
 
 See the **Distinct 3D asset candidates from selected builds** table in [`current-curated-playbook.md`](current-curated-playbook.md). It deduplicates the component specifications by type and name and lists how many cells use each one.

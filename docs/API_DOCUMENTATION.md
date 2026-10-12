@@ -70,6 +70,33 @@ Error responses:
 
 ---
 
+## Curated Playbook inventory (admin)
+
+### POST /api/curated-builds/auto-link-bestseller-components
+
+Resolve each saved Playbook slot's Amazon bestseller identity to an active supplier listing in the same Playbook slot. Matching uses the product ASIN associated with its CPK first, then an exact listing CPK. If a matching listing is not yet marked for the Curated Catalogue, it is linked for stock and price visibility but still requires Curated approval before publishing. Among equivalent active offers, an already-curated listing is preferred, followed by the lowest price.
+
+**Response (200):**
+
+```json
+{
+  "linked": 11,
+  "unmatched": 176,
+  "linked_needs_curation": 11,
+  "segments_updated": 6
+}
+```
+
+This endpoint requires admin authentication. It does not curate new listings or publish Playbook segments.
+
+### GET /api/public/playbooks/{playbook_id}/curated-slots?build_id={curated_build_id}
+
+Returns the Playbook recommendation and customer-selectable options for each component slot. RAM and storage capacity choices come from the curated catalogue; additional substitutions are returned only when the curated cell is live and the offer was reviewed by an administrator.
+
+Reviewed alternatives include `approved_upgrade` evidence (candidate, price delta, approved bestseller match, and CPU/GPU benchmark comparison where available). Customers submit the selected `variant_id` in `slot_selections`; checkout revalidates the variant against the active curated catalogue and prices it from the current listing. The legacy `upgrade_candidate_indexes` field remains accepted for existing clients.
+
+Publishing a curated cell requires at least one reviewed offer for every component category that has a drafted upgrade. Each offer must match an active curated target and approved exact-model popularity evidence; CPU/GPU offers also need equal-or-better use-case benchmark evidence.
+
 ## Auth Endpoints
 
 ### POST /auth/signup
@@ -549,6 +576,14 @@ Stripe-Signature: t=timestamp,v1=signature
 
 ## Admin Endpoints
 
+### POST /api/cases/{case_id}/3d-reference-selection
+
+Approve 1–4 distinct product photos for a case, in the order Meshy should use them. The first photo is the primary colour and texture reference. At least one photo is required; Meshy's multi-image endpoint supports at most four.
+
+### POST /api/assets-3d/cases/{case_id}/generate
+
+Create a review-only Meshy draft from the exact currently approved photo selection. The request body includes `image_urls` (1–4 URLs in approved order), a `request_id`, and optional `notes`. One photo is submitted to Meshy's Image-to-3D endpoint; two to four are submitted to Multi-Image-to-3D. Texture generation and PBR are enabled in both modes. The result remains a draft requiring separate model approval.
+
 ### GET /admin/orders
 
 List all orders (admin only).
@@ -812,3 +847,10 @@ curl -X GET https://api.flipflop.example.com/api/guides/orders/1/download \
 
 *Last Updated: 2026-06-29*
 *API Version: v1.0*
+
+## Catalogue product guides
+
+- `POST /api/public/product-copy` accepts one of `variant_id` or `case_id`. For an upgrade-specific guide, pass `baseline_variant_id`, or pass `curated_build_id` with `candidate_index` for an approved offer. It returns structured `copy`, its context key, and whether the content is upgrade-specific.
+- Copy is generated from the supplier title, scraped description and available specifications, then cached against a source hash. Supplier text is treated as untrusted input; the generated text is plain text and does not invent absent technical claims.
+- Missing or changed content is generated on demand through configured local/free model tiers only. A generation failure returns HTTP 503; there is no paid-tier fallback.
+- Admin-only `GET /api/catalogue/marketing-copy/status` reports sweep coverage. `POST /api/catalogue/marketing-copy/generate-batch` accepts `{"limit":1..4}` and generates a resumable batch. The admin page is `/catalogue/copy`.

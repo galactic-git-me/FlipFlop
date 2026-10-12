@@ -15,6 +15,51 @@ def matches_spec(title, specification):
     return bool(specification) and normalize(specification) == normalize(title)
 
 
+def _capacity_gb(value):
+    match = re.search(r'(?<!\d)(\d+(?:\.\d+)?)\s*(TB|GB)\b', str(value or ''), re.I)
+    if not match:
+        return None
+    amount = float(match.group(1))
+    return amount * 1024 if match.group(2).upper() == 'TB' else amount
+
+
+def _customer_option(category, title, option):
+    option = dict(option or {})
+    if category not in ('ram', 'storage'):
+        return option
+    capacity = option.get('capacity_gb') or _capacity_gb(title)
+    if capacity and not option.get('capacity_gb'):
+        option['capacity_gb'] = capacity
+    if category == 'ram':
+        generation = re.search(r'\bDDR\s*([345])\b', str(title), re.I)
+        if generation and not option.get('memory_type'):
+            option['memory_type'] = 'DDR' + generation.group(1)
+    else:
+        name = str(title).lower()
+        interface = 'NVMe' if 'nvme' in name else ('SATA' if 'sata' in name and ('ssd' in name or 'solid state' in name) else None)
+        if interface and not option.get('interface'):
+            option['interface'] = interface
+    return option
+
+
+def _matches_curated_spec(category, variant, specification):
+    title = variant['title']
+    if matches_spec(title, specification):
+        return True
+    if category not in ('ram', 'storage'):
+        return False
+    wanted = _customer_option(category, specification, {})
+    actual = _customer_option(category, title, variant.get('customer_option'))
+    keys = ('capacity_gb', 'memory_type') if category == 'ram' else ('capacity_gb', 'interface')
+    return all(wanted.get(key) is not None and wanted.get(key) == actual.get(key) for key in keys)
+
+
+def _capacity_label(capacity):
+    if capacity >= 1024:
+        return f'{capacity / 1024:g} TB'
+    return f'{capacity:g} GB'
+
+
 def curated_slots(slots, definition=None):
     result = deepcopy(slots)
     for slot in result:
@@ -24,23 +69,31 @@ def curated_slots(slots, definition=None):
         default = ranked[0] if ranked else None
         if definition and slot['slot_type'] in definition['components']:
             specification = definition['components'][slot['slot_type']]
-            default = next((v for v in ranked if matches_spec(v['title'], specification)), None)
+            default = next((v for v in ranked if _matches_curated_spec(slot['slot_type'], v, specification)), None)
         slot['default_variant_id'] = default['id'] if default else None
         slot['customization'] = {'ram': 'capacity', 'storage': 'ssd_type_capacity'}.get(slot['slot_type'], 'fixed')
         choices = {}
         for variant in ranked if default else []:
-            option = variant.get('customer_option') or {}
+            option = _customer_option(slot['slot_type'], variant['title'], variant.get('customer_option'))
+            if option:
+                variant['customer_option'] = option
             capacity = option.get('capacity_gb')
             if slot['slot_type'] == 'ram' and isinstance(capacity, (int, float)) and capacity > 0:
                 # Memory generation remains the curated platform's generation.
                 baseline = (default.get('customer_option') or {}).get('memory_type')
+                baseline_capacity = _customer_option('ram', default['title'], default.get('customer_option')).get('capacity_gb')
                 if not baseline or option.get('memory_type') != baseline:
+                    continue
+                if baseline_capacity and capacity < baseline_capacity:
                     continue
                 key = (capacity,)
                 variant['choice_label'] = f'{capacity:g} GB RAM'
             elif slot['slot_type'] == 'storage' and isinstance(capacity, (int, float)) and capacity > 0 and option.get('interface') in ('SATA', 'NVMe'):
+                baseline_capacity = _customer_option('storage', default['title'], default.get('customer_option')).get('capacity_gb')
+                if baseline_capacity and capacity < baseline_capacity:
+                    continue
                 key = (option['interface'], capacity)
-                variant['choice_label'] = f"{option['interface']} SSD · {capacity:g} GB"
+                variant['choice_label'] = _capacity_label(capacity)
             else:
                 continue
             choices.setdefault(key, variant)

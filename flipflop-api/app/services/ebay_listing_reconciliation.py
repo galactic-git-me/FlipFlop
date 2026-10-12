@@ -42,6 +42,14 @@ async def reconcile_manual_build_listing(
         build.ebay_listing_status = "never_listed"
         build.ebay_listing_status_checked_at = datetime.utcnow()
         return build.ebay_listing_status
+    if not str(build.ebay_listing_id).isdecimal():
+        # Trading API GetItem and Fulfillment legacyItemId lookups require
+        # eBay's numeric legacy listing ID; placeholder/local IDs are not live listings.
+        build.ebay_listing_status = "unknown"
+        build.ebay_listing_status_checked_at = datetime.utcnow()
+        log.info("manual_build.ebay_listing_check_skipped", build_id=build.id, reason="invalid_legacy_item_id")
+        await db.flush()
+        return build.ebay_listing_status
     if (
         not force
         and build.ebay_listing_status_checked_at
@@ -56,7 +64,14 @@ async def reconcile_manual_build_listing(
 
     settings = get_settings()
     target_environment = environment or settings.ebay_listing_environment
-    token = access_token or await get_valid_ebay_access_token(target_environment)
+    try:
+        token = access_token or await get_valid_ebay_access_token(target_environment, db=db)
+    except ValueError:
+        build.ebay_listing_status = "unknown"
+        build.ebay_listing_status_checked_at = datetime.utcnow()
+        log.info("manual_build.ebay_listing_check_skipped", build_id=build.id, reason="seller_oauth_unavailable")
+        await db.flush()
+        return build.ebay_listing_status
     checked_at = datetime.utcnow()
     remote: dict | None = None
     remote_error: Exception | None = None
@@ -83,6 +98,7 @@ async def reconcile_manual_build_listing(
                 build.ebay_listing_id,
                 environment=target_environment,
                 lookback_days=90,
+                db=db,
             )
         except EbayOrderSyncError as exc:
             log.warning("manual_build.ebay_order_reconcile_failed", build_id=build.id, error=str(exc))

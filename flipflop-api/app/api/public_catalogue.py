@@ -18,6 +18,8 @@ from app.models.listing import Listing
 from app.models.playbook import Playbook
 from app.models.curated_build_segment import CuratedBuildSegment
 from app.models.case import Case
+from app.models.gem_radar_scored_listing import GemRadarScoredListing
+from app.models.component_3d_asset import AssetSubjectType, Component3DAsset, Component3DAssetStatus
 from app.models.gem_radar_intelligence import PreferredComponent
 from app.services.playbook_pricing import LABOUR_COST, OVERHEAD_RATE
 from app.services.studio_fit import engineering_specs
@@ -338,6 +340,55 @@ async def public_list_cases(db: AsyncSession = Depends(get_db)):
         (Case.status.in_(("active", "approved", "completed", "sourcing")))
         | (Case.bestseller_rank.is_not(None))
     ))).scalars().all()
+    # A rights-cleared, scale-validated final case model is also a signal that
+    # its sourced case can be offered in the configurator. Keep its catalogue
+    # ID for price/evaluation, and expose the sourcing-case ID separately for
+    # resolving the matching 3D asset.
+    final_case_assets = (await db.execute(select(Component3DAsset).where(
+        Component3DAsset.subject_type == AssetSubjectType.CASE,
+        Component3DAsset.status == Component3DAssetStatus.FINAL,
+        Component3DAsset.is_active.is_(True),
+        Component3DAsset.subject_id.is_not(None),
+    ))).scalars().all()
+    asset_case_ids = {int(asset.subject_id) for asset in final_case_assets}
+    final_asset_by_case_id = {int(asset.subject_id): asset for asset in final_case_assets if asset.subject_id is not None}
+    final_cases = (await db.execute(select(Case).where(Case.id.in_(asset_case_ids)))).scalars().all() if asset_case_ids else []
+    known_live_ids = {item.id for item in live_cases}
+    live_cases.extend(item for item in final_cases if item.id not in known_live_ids)
+
+    def norm(value: str) -> str:
+        return "".join(ch.lower() for ch in (value or "") if ch.isalnum())
+
+    existing_names = {norm(c.name) for c in cases}
+    for sourced_case in final_cases:
+        case_name = (sourced_case.name or "").strip()
+        name_key = norm(case_name)
+        if not name_key or name_key in existing_names:
+            continue
+        words_in_name = [part for part in case_name.replace("-", " ").split() if part]
+        brand = (sourced_case.brand or (words_in_name[0].title() if words_in_name else "Unknown")).strip()
+        model_tokens = [part.lower() for part in words_in_name if any(ch.isdigit() for ch in part)]
+        matching_case = next((item for item in cases if norm(item.brand) == norm(brand) and any(token in norm(item.name) for token in model_tokens)), None)
+        if matching_case:
+            existing_names.add(name_key)
+            continue
+        price = sourced_case.price_new or sourced_case.price or sourced_case.rrp
+        if not price or float(price) <= 0:
+            continue
+        asset = final_asset_by_case_id.get(sourced_case.id)
+        images = [url for url in (asset.source_image_refs if asset else []) if isinstance(url, str) and url.startswith(("https://", "http://"))]
+        if not images and sourced_case.image_url:
+            images = [sourced_case.image_url]
+        factors = sourced_case.form_factors or ["atx"]
+        promoted = CaseCatalogue(
+            name=case_name[:200], brand=brand[:100], form_factor=str(factors[0]).lower()[:10],
+            images=images, rrp_gbp=float(price), status="active",
+            notes=f"Automatically listed from final 3D case asset {asset.id if asset else ''}".strip(),
+        )
+        db.add(promoted)
+        await db.flush()
+        cases.append(promoted)
+        existing_names.add(name_key)
     preferred_names = set((await db.execute(select(PreferredComponent.component_key).where(
         PreferredComponent.component_slot == "case", PreferredComponent.status == "preferred"
     ))).scalars().all())
@@ -345,7 +396,6 @@ async def public_list_cases(db: AsyncSession = Depends(get_db)):
     # Admin preferences are production data too. Promote a preferred case from
     # the operational `cases` table when the catalogue seed missed it, so it
     # is immediately available to the customer configurator.
-    existing_names = {"".join(ch.lower() for ch in (c.name or "") if ch.isalnum()) for c in cases}
     for preferred_name in preferred_names:
         preferred = next((row for row in live_cases if "".join(ch.lower() for ch in (preferred_name or "") if ch.isalnum()) in "".join(ch.lower() for ch in (row.name or "") if ch.isalnum())), None)
         source_name = preferred.name if preferred else preferred_name
@@ -364,9 +414,6 @@ async def public_list_cases(db: AsyncSession = Depends(get_db)):
         cases.append(promoted)
         existing_names.add(key)
 
-    def norm(value: str) -> str:
-        return "".join(ch.lower() for ch in (value or "") if ch.isalnum())
-
     def words(value: str) -> list[str]:
         return [part.lower() for part in (value or "").replace("-", " ").replace("/", " ").split() if len(part) > 3]
 
@@ -380,10 +427,27 @@ async def public_list_cases(db: AsyncSession = Depends(get_db)):
         tokens = words(catalogue_case.name)
         return next((row for row in live_cases if all(t in " ".join(words(row.name)) for t in tokens[-3:])), None)
 
+    def asset_case_for(catalogue_case):
+        live = live_for(catalogue_case)
+        if live and live.id in asset_case_ids:
+            return live
+        catalogue_brand = norm(catalogue_case.brand)
+        catalogue_name = norm(catalogue_case.name)
+        for candidate in final_cases:
+            source_words = [part for part in (candidate.name or "").replace("-", " ").split() if part]
+            source_brand = norm(candidate.brand or (source_words[0] if source_words else ""))
+            model_tokens = [norm(part) for part in source_words if any(ch.isdigit() for ch in part)]
+            if catalogue_brand == source_brand and any(token and token in catalogue_name for token in model_tokens):
+                return candidate
+        return None
+
     output = []
     for c in cases:
+        live = live_for(c)
+        asset_case = asset_case_for(c)
         supplier_offer = None
         case_engineering = {}
+        fallback_price = None
         if c.notes:
             try:
                 notes = json.loads(c.notes)
@@ -391,23 +455,39 @@ async def public_list_cases(db: AsyncSession = Depends(get_db)):
                 case_engineering = engineering_specs(notes)
             except (ValueError, TypeError, AttributeError):
                 pass
-        # Supplier availability is deliberately short-lived; never sell from
-        # an old delivery promise just because its catalogue row still exists.
+        # Supplier availability is deliberately short-lived. A final-model
+        # case may still be selectable when its vendor offer has gone stale,
+        # but only when the operational case record has a sourced price. In
+        # that case hide the stale offer and use the sourced case price.
         if supplier_offer:
             try:
                 observed = datetime.fromisoformat(supplier_offer["observed_at"])
                 if datetime.utcnow() - observed > timedelta(hours=8):
-                    continue
+                    live_price = (asset_case.price_new or asset_case.price or asset_case.rrp) if asset_case else None
+                    if live_price and float(live_price) > 0:
+                        supplier_offer = None
+                        fallback_price = float(live_price)
+                    else:
+                        continue
             except (KeyError, TypeError, ValueError):
-                continue
-        live = live_for(c)
+                live_price = (asset_case.price_new or asset_case.price or asset_case.rrp) if asset_case else None
+                if live_price and float(live_price) > 0:
+                    supplier_offer = None
+                    fallback_price = float(live_price)
+                else:
+                    continue
+        case_images = c.images or ([live.image_url] if live and live.image_url else [])
+        if not case_images and asset_case:
+            published_asset = final_asset_by_case_id.get(asset_case.id)
+            case_images = [url for url in (published_asset.source_image_refs if published_asset else []) if isinstance(url, str) and url.startswith(("https://", "http://"))]
         output.append({
             "id": c.id,
+            "asset_subject_id": asset_case.id if asset_case else None,
             "name": c.name,
             "brand": c.brand,
             "form_factor": c.form_factor,
-            "images": c.images,
-            "rrp_gbp": c.rrp_gbp,
+            "images": case_images,
+            "rrp_gbp": fallback_price or c.rrp_gbp,
             "bestseller_rank": live.bestseller_rank if live else None,
             "is_preferred": any(norm(name) in norm(c.name) or norm(c.name) in norm(name) for name in preferred_names) or bool(live and any(norm(name) in norm(live.name) for name in preferred_names)),
             "is_transparent_panel": c.is_transparent_panel,
@@ -418,7 +498,7 @@ async def public_list_cases(db: AsyncSession = Depends(get_db)):
             "max_gpu_length_mm": c.max_gpu_length_mm,
             "max_cooler_height_mm": c.max_cooler_height_mm,
             "radiator_support": c.radiator_support,
-            "price_updated_at": c.updated_at,
+            "price_updated_at": asset_case.updated_at if fallback_price and asset_case else c.updated_at,
             "engineering": case_engineering if case_engineering.get("reviewed") is True else {},
         })
     # Preferred cases must remain selectable even if they were never present in
@@ -443,29 +523,57 @@ async def public_curated_slots(playbook_id: int, db: AsyncSession = Depends(get_
             CuratedBuildSegment.customer_type == definition["segment"],
             CuratedBuildSegment.budget_level == definition["tier"],
         ))).scalar_one_or_none()
-        approved = (segment.approved_upgrades or []) if segment and segment.is_live else []
-        target_ids = {int(item["target_variant_id"]) for item in approved if isinstance(item, dict) and item.get("target_variant_id")}
-        if target_ids:
-            targets = (await db.execute(
-                select(CatalogueVariant, Listing)
-                .join(Listing, Listing.id == CatalogueVariant.listing_id)
-                .where(
-                    CatalogueVariant.id.in_(target_ids),
-                    CatalogueVariant.curated_for_builds.is_(True),
-                    CatalogueVariant.status == "active",
-                    Listing.status == "active",
-                )
-            )).all()
-            slot_by_id = {slot["slot_id"]: slot for slot in slots}
-            for variant, listing in targets:
-                slot = slot_by_id.get(variant.slot_id)
-                if slot is None:
-                    continue
-                choices = slot["variants_by_tier"]["mid"]
-                if not any(item["id"] == variant.id for item in choices):
+        # Automatic upsells are drawn from the active curated catalogue. A
+        # candidate must have a current market median above the cell's default
+        # component; compatibility and the live build budget are checked again
+        # when the customer selects it and when pricing the build.
+        slot_by_id = {slot["slot_id"]: slot for slot in slots}
+        defaults = {slot["slot_id"]: slot.get("default_variant_id") for slot in slots}
+        rows = (await db.execute(
+            select(CatalogueVariant, Listing)
+            .join(Listing, Listing.id == CatalogueVariant.listing_id)
+            .where(
+                CatalogueVariant.slot_id.in_(slot_by_id),
+                CatalogueVariant.curated_for_builds.is_(True),
+                CatalogueVariant.status == "active",
+                Listing.status == "active",
+            )
+        )).all() if slot_by_id else []
+        def scorer_listing_id(listing: Listing) -> str:
+            external_id = listing.external_id or ""
+            return external_id.split("|")[1] if external_id.startswith("ebay_v1|") and "|" in external_id else external_id
+
+        listing_ids = {scorer_listing_id(listing) for _, listing in rows}
+        score_rows = (await db.execute(
+            select(GemRadarScoredListing.listing_id, GemRadarScoredListing.market_median_price)
+            .where(GemRadarScoredListing.listing_id.in_(listing_ids))
+            .order_by(GemRadarScoredListing.scored_at.desc(), GemRadarScoredListing.id.desc())
+        )).all() if listing_ids else []
+        medians = {}
+        for listing_id, median in score_rows:
+            medians.setdefault(listing_id, median)
+        by_variant = {variant.id: listing for variant, listing in rows}
+        median_by_variant = {variant.id: medians.get(scorer_listing_id(listing)) for variant, listing in rows}
+        for slot in slots:
+            slot["upgrade_budget_ceiling"] = round(float(segment.budget_max) * 1.2, 2) if segment and segment.budget_max else None
+            base_id = defaults.get(slot["slot_id"])
+            base_median = median_by_variant.get(base_id)
+            baseline = next((item for values in slot["variants_by_tier"].values() for item in values if item["id"] == base_id), None)
+            if baseline is None:
+                continue
+            choices = [baseline]
+            if base_median is not None and float(base_median) > 0:
+                for variant, listing in rows:
+                    if variant.slot_id != slot["slot_id"] or variant.id == base_id:
+                        continue
+                    median = median_by_variant.get(variant.id)
+                    if median is None or float(median) <= float(base_median):
+                        continue
                     choices.append({
                         "id": variant.id,
-                        "playbook_upgrade_only": True,
+                        "automatic_upsell": True,
+                        "market_median_price": float(median),
+                        "baseline_market_median_price": float(base_median),
                         "title": listing.title,
                         "display_price": variant.display_price,
                         "gem_score": listing.gem_score,
@@ -481,7 +589,32 @@ async def public_curated_slots(playbook_id: int, db: AsyncSession = Depends(get_
                         "last_seen_at": variant.last_seen_at,
                         "availability": variant.status,
                     })
+            slot["variants_by_tier"] = {"budget": [], "mid": choices, "high": []}
     return slots
+
+
+class ProductCopyRequest(BaseModel):
+    variant_id: int | None = Field(default=None, gt=0)
+    case_id: int | None = Field(default=None, gt=0)
+    baseline_variant_id: int | None = Field(default=None, gt=0)
+    curated_build_id: str | None = Field(default=None, max_length=120)
+    candidate_index: int | None = Field(default=None, ge=0, le=100)
+
+
+@router.post("/product-copy")
+async def public_product_copy(body: ProductCopyRequest, db: AsyncSession = Depends(get_db)):
+    """Return cached, grounded sales copy; generate once on first request if missing."""
+    from app.services.catalogue_marketing_copy import ensure_product_copy
+    try:
+        return await ensure_product_copy(
+            db, variant_id=body.variant_id, case_id=body.case_id,
+            baseline_variant_id=body.baseline_variant_id,
+            curated_build_id=body.curated_build_id, candidate_index=body.candidate_index,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail="Product details are temporarily unavailable. Please try again.") from exc
 
 
 @router.get('/curated-builds')
@@ -507,7 +640,7 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
             missing.append('case')
         parts = sum(float(v['display_price']) for v in chosen if v) + (min(float(c['rrp_gbp']) for c in cases) if cases else 0)
         cell = segment_by_cell.get((definition['segment'].casefold(), definition['tier'].casefold()))
-        upgrade_options = (cell.approved_upgrades or []) if cell and cell.is_live and len(cell.approved_upgrades or []) == 2 else []
+        upgrade_options = (cell.approved_upgrades or []) if cell and cell.is_live else []
         result.append({**definition, 'playbook_id': pb['id'] if pb else None, 'missing_components': missing,
                        'upgrade_options': upgrade_options,
                        'price_gbp': round((parts + LABOUR_COST) * (1 + OVERHEAD_RATE), 2) if not missing else None})

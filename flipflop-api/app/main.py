@@ -64,6 +64,7 @@ from app.api.custom_builds import router as custom_builds_router, public_router 
 from app.api.configurator_admin import router as configurator_admin_router
 from app.api.public_catalogue import router as public_catalogue_router
 from app.api.public_configurator import router as public_configurator_router
+from app.api.public_studio import router as public_studio_router
 from app.api.public_support import router as public_support_router
 
 
@@ -728,6 +729,7 @@ app.include_router(custom_builds_public_router, prefix="/api")
 app.include_router(configurator_admin_router, prefix="/api")
 app.include_router(public_catalogue_router, prefix="/api")
 app.include_router(public_configurator_router, prefix="/api")
+app.include_router(public_studio_router, prefix="/api")
 app.include_router(public_support_router, prefix="/api")
 app.include_router(public_products_router, prefix="/api")
 app.include_router(public_showcase_router, prefix="/api")
