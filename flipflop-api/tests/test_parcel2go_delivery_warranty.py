@@ -465,6 +465,7 @@ async def test_delivered_direct_repair_return_email_retries_until_confirmed(
     async with session_factory() as db:
         event = await db.get(ShipmentTrackingEvent, event_id)
         assert await notify_parcel2go_tracking_event_impl(db, event) is True
+        await db.refresh(event)
         assert event.customer_notified_at is not None
     assert email_sender.await_count == 2
 

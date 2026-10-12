@@ -78,6 +78,9 @@ def _admin_tests_use_their_isolated_database(request, db):
             def add(self, instance):
                 self.session.add(instance)
 
+            def __getattr__(self, name):
+                return getattr(self.session, name)
+
         async def override_get_db():
             yield AsyncSessionAdapter(db)
 

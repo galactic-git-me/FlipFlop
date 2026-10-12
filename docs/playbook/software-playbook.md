@@ -23,12 +23,12 @@ FlipFlop includes an optional software setup service with a PC. The starting rec
 |---|---|
 | Great-value gaming | Steam, Discord, VLC media player, 7-Zip |
 | High-performance gaming | Steam, Discord, OBS Studio, VLC media player, 7-Zip |
-| Student hybrid | Firefox, Notepad++, VLC media player, 7-Zip |
-| Business & office | Firefox, Notepad++, ShareX, 7-Zip |
+| Student hybrid | Mozilla Firefox, Notepad++, VLC media player, 7-Zip |
+| Business & office | Mozilla Firefox, Notepad++, ShareX, 7-Zip |
 | Content creation | GIMP, Blender, OBS Studio, VLC media player, 7-Zip |
 | AI workstation | Visual Studio Code, Git, Python, Blender, 7-Zip |
 | Software development | Visual Studio Code, Git, Python, 7-Zip |
-| Family & home | Firefox, VLC media player, ShareX, 7-Zip |
+| Family & home | Mozilla Firefox, VLC media player, ShareX, 7-Zip |
 
 These are optional starting points, not requirements. The software selection saved for the customer's own build is authoritative if it differs from this general list. The setup is included with the PC; third-party account, publisher and licence terms still apply. Some applications finish installing at the customer's first Windows sign-in, as described in that build's Getting Started guide. WinGet may ask the customer to review source or app licence terms at first sign-in. FlipFlop does not accept package terms for the customer; they should accept only agreements they have reviewed and agree to. FlipFlop's setup-time figure is an estimate, not a measured result or guarantee.
 
@@ -55,13 +55,13 @@ Minutes are the sum of the current catalogue's per-application estimates. They a
 |---|---|---:|---|
 | Great-value gaming | Steam, Discord, VLC media player, 7-Zip | 17 | Game library client, optional gaming communication, common media playback, and archive handling. Accounts remain optional and customer-controlled. |
 | High-performance gaming | Steam, Discord, OBS Studio, VLC media player, 7-Zip | 23 | Gaming starter set plus optional recording/streaming tools. |
-| Student hybrid | Firefox, Notepad++, VLC media player, 7-Zip | 17 | Research, plain-text notes or code snippets, media playback, and archive handling without assuming a paid productivity licence or school account. |
-| Business & office | Firefox, Notepad++, ShareX, 7-Zip | 18 | Browser, plain-text notes, screenshots, and archive handling without assuming a paid office suite or work account. |
+| Student hybrid | Mozilla Firefox, Notepad++, VLC media player, 7-Zip | 17 | Research, plain-text notes or code snippets, media playback, and archive handling without assuming a paid productivity licence or school account. |
+| Business & office | Mozilla Firefox, Notepad++, ShareX, 7-Zip | 18 | Browser, plain-text notes, screenshots, and archive handling without assuming a paid office suite or work account. |
 | Content creation | GIMP, Blender, OBS Studio, VLC media player, 7-Zip | 28 | Free creative tools for image editing, 3D, recording/streaming, media review, and archives. |
 | AI workstation | Visual Studio Code, Git, Python 3.12, Blender, 7-Zip | 32 | Code editing, source control, Python workflows, 3D tasks, and archives. These apps do not install a local model or connect to cloud AI. |
 | Software development | Visual Studio Code, Git, Python 3.12, 7-Zip | 24 | Code editing, source control, Python projects, and archives. Does not install project dependencies or connect to a code-hosting account. |
-| Family & home | Firefox, VLC media player, ShareX, 7-Zip | 17 | General browsing, media, screenshots, and downloaded archives without adding communication or gaming accounts by default. |
-| General-purpose fallback | 7-Zip, Firefox, VLC media player | 12 | Small baseline for archive handling, web browsing, and media playback. |
+| Family & home | Mozilla Firefox, VLC media player, ShareX, 7-Zip | 17 | General browsing, media, screenshots, and downloaded archives without adding communication or gaming accounts by default. |
+| General-purpose fallback | 7-Zip, Mozilla Firefox, VLC media player | 12 | Small baseline for archive handling, web browsing, and media playback. |
 
 ## Approved application catalogue
 
