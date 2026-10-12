@@ -98,4 +98,3 @@ The catalogue and WinGet manifests can change. Review package availability, publ
 ## Updating this Playbook
 
 Change the executable allow-list and use-case defaults in `flipflop-api/app/services/software_catalogue.py`. Cell-specific recommendation profiles are managed in the applicable admin catalogue/Playbook workflow. Update this document in the same change whenever package identifiers, default lists, rationale, estimated minutes, or customer-visible licensing notes change. Record package provenance and review date in the implementation change before making a new app selectable.
-
