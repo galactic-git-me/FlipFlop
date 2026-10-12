@@ -173,7 +173,7 @@ class TestStorefrontValidation:
         assert result.valid is False
         assert any("product id not set" in error.lower() for error in result.errors)
         assert len(result.warnings) > 0
-        assert any("storefront" in w.lower() for w in result.warnings)
+        assert any("photos" in warning.lower() for warning in result.warnings)
 
     async def test_storefront_with_product_id(self, db: AsyncSession):
         """Storefront passes with product ID."""

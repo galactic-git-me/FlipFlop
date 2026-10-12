@@ -8,6 +8,7 @@ get_current_admin override since app/api/manual_builds.py's router requires
 an admin JWT.
 """
 from datetime import datetime, timedelta
+from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -240,11 +241,8 @@ async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, t
     ), patch(
         "app.workers.manual_build_lifecycle.post_build_to_ebay", new=AsyncMock(return_value="not_ready")
     ), patch(
-        "app.services.ai_service.generate_ebay_listing",
-        new=AsyncMock(return_value=(
-            "B. Three eBay titles\nNew Title 1\n\nC. Other details\nD. Complete branded HTML description\n<p>new</p>\nE. End",
-            "openrouter/model",
-        )),
+        "app.api.manual_builds.generate_listing",
+        new=AsyncMock(return_value=SimpleNamespace(titles=["New Title 1", "Alternative Title"])),
     ):
         result = await run_manual_build_recreate_cycle_job()
 

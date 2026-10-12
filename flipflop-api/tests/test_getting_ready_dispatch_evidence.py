@@ -2440,6 +2440,7 @@ async def test_sold_build_component_changes_cannot_bypass_order_change_flow(evid
         build = ManualBuild(
             name="Sold build component lock",
             status="sold",
+            shipping_insurance_status="creation_uncertain",
             components=original_components,
             dispatch_status="dispatched",
             shipment_booking_state="booked",
