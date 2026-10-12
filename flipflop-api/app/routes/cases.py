@@ -172,7 +172,7 @@ class CaseReferenceImage(BaseModel):
 
 
 class CaseReferenceApproval(BaseModel):
-    selected_images: list[CaseReferenceImage] = Field(min_length=1, max_length=4)
+    selected_images: list[CaseReferenceImage] = Field(min_length=4, max_length=4)
 
 
 def _candidate_source(url: str, fallback: str = "manual") -> str:

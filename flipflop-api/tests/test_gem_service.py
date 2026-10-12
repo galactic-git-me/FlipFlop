@@ -275,8 +275,12 @@ async def test_enrich_recommendation_financial(db_with_orders):
 
     # Verify profit calculation
     assert rec["actual_cost_to_build"] > 0
-    assert rec["actual_margin_gbp"] > 0
-    assert rec["actual_margin_percent"] > 0
+    assert rec["actual_margin_gbp"] == pytest.approx(
+        rec["estimated_market_price_gbp"] - rec["actual_cost_to_build"], abs=0.01
+    )
+    assert rec["actual_margin_percent"] == pytest.approx(
+        rec["actual_margin_gbp"] / rec["estimated_market_price_gbp"] * 100, abs=0.01
+    )
     assert rec["actual_margin_percent"] <= 100
 
     # Verify cost breakdown includes components
@@ -415,15 +419,14 @@ async def test_delete_recommendation(db_with_orders):
 
 
 @pytest.mark.asyncio
-@patch('app.services.gem_service.Anthropic')
-async def test_call_claude_for_recommendations(mock_anthropic_class, db_with_orders):
-    """Test Claude API integration (mocked)."""
+async def test_call_model_for_recommendations(monkeypatch, db_with_orders):
+    """Test the configured model routing integration (mocked)."""
+    from types import SimpleNamespace
+    from unittest.mock import AsyncMock
+    import app.services.gem_service as gem_service
+
     db, _ = db_with_orders
     service = GemRecommendationService(db)
-
-    # Mock the Claude response
-    mock_client = MagicMock()
-    mock_anthropic_class.return_value = mock_client
 
     claude_response = {
         "recommendations": [
@@ -451,14 +454,15 @@ async def test_call_claude_for_recommendations(mock_anthropic_class, db_with_ord
         ]
     }
 
-    mock_message = MagicMock()
-    mock_message.content = [MagicMock(text=json.dumps(claude_response))]
-    mock_client.messages.create.return_value = mock_message
+    completion = AsyncMock(return_value=SimpleNamespace(
+        text=json.dumps(claude_response), model="test-model", provider="test-provider"
+    ))
+    monkeypatch.setattr(gem_service.model_selection_service, "complete", completion)
 
     demand_analysis = await service._analyze_demand(30)
     market_prices = service._get_market_prices()
 
-    recommendations = await service._call_claude_for_recommendations(
+    recommendations = await service._call_model_for_recommendations(
         demand_analysis,
         market_prices,
         30

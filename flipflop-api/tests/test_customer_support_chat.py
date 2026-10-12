@@ -35,8 +35,8 @@ def test_support_knowledge_loads_only_approved_customer_sections():
         "FlipFlop first-line support knowledge base",
         "FlipFlop Software Playbook",
     ]
-    assert sources[0]["version"] == "1.3"
-    assert sources[1]["version"] == "1.0"
+    assert sources[0]["version"] == "1.4"
+    assert sources[1]["version"] == "1.1"
 
 
 def test_support_knowledge_uses_packaged_sources_when_repository_docs_are_absent(monkeypatch):
@@ -55,7 +55,7 @@ def test_support_knowledge_uses_packaged_sources_when_repository_docs_are_absent
 
     assert "Great-value gaming" in knowledge
     assert "The ingestion pipeline should store" not in knowledge
-    assert [source["version"] for source in sources] == ["1.3", "1.0"]
+    assert [source["version"] for source in sources] == ["1.4", "1.1"]
 
 
 @pytest.mark.asyncio

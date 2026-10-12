@@ -344,9 +344,9 @@ async def approve_proposal(
         # Capture a rollback snapshot before applying update.
         rollback_snapshot = {
             "name": pb.name,
-            "description": pb.description,
+            "description": pb.what_they_use_it_for or pb.what_they_want_from_build,
             "emoji": pb.emoji,
-            "status": pb.status,
+            "status": pb.status.value if hasattr(pb.status, "value") else pb.status,
             "target_use_case": pb.target_use_case,
             "requirements": pb.requirements,
             "component_catalogue": pb.component_catalogue,

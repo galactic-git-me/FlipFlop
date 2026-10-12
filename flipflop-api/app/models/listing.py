@@ -141,5 +141,14 @@ class Listing(Base):
     claude_main_risk:          Mapped[Optional[str]]      = mapped_column(Text)
     claude_judged_at:          Mapped[Optional[datetime]] = mapped_column(DateTime)
 
+    @property
+    def has_psu(self) -> bool:
+        """Compatibility alias for the persisted PSU inclusion field."""
+        return bool(self.psu_included)
+
+    @has_psu.setter
+    def has_psu(self, value: bool) -> None:
+        self.psu_included = bool(value)
+
     def __repr__(self):
         return f"<Listing {self.id} {self.title[:40]!r} £{self.price}>"

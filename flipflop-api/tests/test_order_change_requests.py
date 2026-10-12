@@ -78,7 +78,7 @@ async def test_change_request_pauses_sourcing_and_quote_is_customer_visible(chan
     assert requested.json()["change_request"]["status"] == "requested"
 
     sourcing = client.patch(
-        f"/api/orders/{order_id}",
+        f"/api/admin/orders/{order_id}",
         json={"status": "parts_ordered"},
     )
     assert sourcing.status_code == 409
@@ -165,7 +165,7 @@ async def test_declining_revised_quote_preserves_original_order_and_releases_sou
     assert response.status_code == 200
     assert response.json()["change_request"]["status"] == "declined"
 
-    sourcing = client.patch(f"/api/orders/{order_id}", json={"status": "parts_ordered"})
+    sourcing = client.patch(f"/api/admin/orders/{order_id}", json={"status": "parts_ordered"})
     assert sourcing.status_code == 200
     async with session_factory() as db:
         persisted = await db.get(Order, order_id)

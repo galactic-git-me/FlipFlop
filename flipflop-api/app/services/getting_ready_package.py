@@ -811,7 +811,7 @@ def assemble_getting_ready_package(
         guide = (
             str(guide).rstrip()
             + "\n\n## Finishing your selected apps\n\n"
-            + f"Your selected app setup includes {deferred_names}. These apps install into your Windows profile at sign-in, so they are available in your account instead of the workshop account. Connect the PC to the internet, sign in to Windows, and leave the startup installer open until it finishes. WinGet may ask you to review source or app licence terms; FlipFlop does not accept package terms for you. Review each prompt and accept only if you agree. If you decline a required agreement, that app will not install and the setup may ask again at your next sign-in. If setup reports another problem, contact FlipFlop through your build portal.\n"
+            + f"Your selected app setup includes {deferred_names}. These apps install into your Windows profile at your first sign-in, so they are available in your account instead of the workshop account. Connect the PC to the internet, sign in to Windows, and leave the startup installer open until it finishes. WinGet may ask you to review source or app licence terms; FlipFlop does not accept package terms for you. Review each prompt and accept only if you agree. If you decline a required agreement, that app will not install and the setup may ask again at your next sign-in. If setup reports another problem, contact FlipFlop through your build portal.\n"
         )
 
     manual_matches = manifest.get("manual_library_matches") or []

@@ -48,7 +48,9 @@ async def _notify_parcel2go_tracking_event(db: AsyncSession, event: ShipmentTrac
     if not event.material or event.customer_notified_at:
         return True
     result = await deliver_parcel2go_tracking_notification(event.id)
-    return result["status"] in {"sent", "not_pending", "not_customer_visible", "channel_suppressed", "exhausted", "failed"}
+    # A pending status means the event is safely persisted and scheduled for
+    # retry; it is not a failed webhook delivery.
+    return result["status"] in {"sent", "pending", "not_pending", "not_customer_visible", "channel_suppressed", "exhausted", "failed"}
 
 
 @router.post("/parcel2go", status_code=200)

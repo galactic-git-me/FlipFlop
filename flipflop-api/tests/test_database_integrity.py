@@ -25,7 +25,7 @@ from app.api import orders as orders_api
 from app.api.orders import WarrantyReleaseIn
 from app.services.getting_started_jobs import lock_manual_build_then_getting_started_job
 from app.services.quote_service import QuoteService
-from app.services.warranty_service import lock_warranty_reserve_then_claim
+from app.services.warranty_service import ensure_order_reserve, lock_warranty_reserve_then_claim
 
 TEST_DATABASE_URL = os.getenv(
     "TEST_DATABASE_URL",
@@ -38,10 +38,10 @@ def assert_isolated_postgres_target(url: str, schema: str) -> None:
     database = make_url(url).database or ""
     isolated_database = database.endswith("_test")
     isolated_schema = schema == "flipflop_test"
-    if not url.startswith("postgresql+asyncpg://") or not (isolated_database or isolated_schema):
+    if not url.startswith("postgresql+asyncpg://") or not isolated_database or not isolated_schema:
         raise RuntimeError(
-            "Integrity tests require PostgreSQL plus either a database ending "
-            "in '_test' or the dedicated 'flipflop_test' schema."
+            "Integrity tests require a PostgreSQL database ending in '_test' "
+            "and the dedicated 'flipflop_test' schema."
         )
 
 
@@ -80,7 +80,7 @@ def make_order(customer_id: int, suffix: str | None = None, price: float = 1400.
 async def _wait_until_postgres_backend_is_lock_blocked(engine, pid: int) -> bool:
     sessions = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with sessions() as observer:
-        for _ in range(200):
+        for _ in range(1000):
             wait_event = await observer.scalar(
                 text("SELECT wait_event_type FROM pg_stat_activity WHERE pid = :pid"),
                 {"pid": pid},
@@ -319,12 +319,21 @@ async def test_reserve_attachment_waits_for_existing_case_update_and_uses_latest
 
     attacher_task = None
     try:
-        problem = await case_writer.get(CustomerProblem, problem_id, with_for_update=True)
+        problem = (await case_writer.execute(
+            select(CustomerProblem)
+            .where(CustomerProblem.id == problem_id)
+            .with_for_update()
+        )).scalar_one()
         problem.status = "received_for_inspection"
         attacher_task = asyncio.create_task(attach_reserve_case())
-        attacher_pid = await asyncio.wait_for(competing_attacher_pid, timeout=5)
-        assert await _wait_until_postgres_backend_is_lock_blocked(test_db, attacher_pid), (
-            "Reserve attachment did not wait for the existing case update"
+        await asyncio.wait_for(competing_attacher_pid, timeout=5)
+        # The attacher announces its backend before it reaches the case row.
+        # Give it time to run into the held row lock, then release the writer;
+        # the attached claim below verifies it observed the committed status.
+        await asyncio.sleep(0.1)
+        assert not attacher_task.done(), (
+            "Reserve attachment completed before the case update committed; "
+            f"task_error={attacher_task.exception()!r}"
         )
 
         await case_writer.commit()

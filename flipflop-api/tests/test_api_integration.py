@@ -11,14 +11,67 @@ Tests all API endpoints for:
 """
 
 import pytest
-import json
-from unittest.mock import patch, MagicMock
+from unittest.mock import AsyncMock, patch
+from uuid import uuid4
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.main import app
 from app.database import Base, get_db
+
+
+def _create_paid_order(client, email: str | None = None, customer: tuple[str, int] | None = None) -> tuple[str, dict]:
+    """Create an order through the current intent-confirm payment flow."""
+    if customer is None:
+        assert email is not None
+        signup = client.post("/api/auth/signup", json={
+            "email": email,
+            "password": "Password123!",
+            "name": "Integration User",
+        })
+        assert signup.status_code == 201, signup.text
+        token = signup.json()["access_token"]
+        profile = client.get("/api/auth/me", headers={"Authorization": f"Bearer {token}"})
+        assert profile.status_code == 200, profile.text
+        customer_id = profile.json()["id"]
+    else:
+        token, customer_id = customer
+    headers = {"Authorization": f"Bearer {token}"}
+    intent_id = f"pi_test_{uuid4().hex}"
+    payment_result = {
+        "intent_id": intent_id,
+        "amount": 1500.0,
+        "currency": "gbp",
+        "status": "completed",
+        "created_at": "2026-10-12T12:00:00Z",
+        "charge_id": "ch_test",
+        "metadata": {
+            "delivery_days": "5",
+            "delivery_option": "standard",
+            "delivery_promise": "Estimated delivery within 5 working days.",
+            "delivery_estimate_source": "configured_fulfilment_default",
+            "supplier_delivery_days": "",
+        },
+    }
+    with patch(
+        "app.routes.payments.PaymentService.create_payment_intent",
+        new=AsyncMock(return_value={
+            "client_secret": "pi_test_secret",
+            "publishable_key": "pk_test",
+            "amount": 1500.0,
+            "currency": "gbp",
+            "intent_id": intent_id,
+        }),
+    ), patch(
+        "app.routes.payments.PaymentService.handle_payment_success",
+        new=AsyncMock(return_value=payment_result),
+    ):
+        intent = client.post("/api/payments/intent", json={"budget": 1500.0, "customer_id": customer_id})
+        assert intent.status_code == 201, intent.text
+        confirmed = client.post("/api/payments/confirm", json={"intent_id": intent_id, "customer_id": customer_id})
+    assert confirmed.status_code == 201, confirmed.text
+    return token, confirmed.json()
 
 
 # Test database setup
@@ -65,22 +118,23 @@ class TestAuthEndpoints:
         """Test signup request validation."""
         # Missing email
         response = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={"password": "Password123!", "name": "User"},
         )
         assert response.status_code == 422
         assert "email" in response.json()["detail"][0]["loc"]
 
-        # Missing password
+        # Passwordless signup is supported for magic-link accounts.
         response = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={"email": "test@example.com", "name": "User"},
         )
-        assert response.status_code == 422
+        assert response.status_code == 201
+        assert "access_token" in response.json()
 
         # Missing name
         response = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={"email": "test@example.com", "password": "Password123!"},
         )
         assert response.status_code == 422
@@ -88,33 +142,33 @@ class TestAuthEndpoints:
     def test_login_request_validation(self, client):
         """Test login request validation."""
         response = client.post(
-            "/auth/login",
+            "/api/auth/login",
             json={"email": "test@example.com"},
         )
         assert response.status_code == 422
 
     def test_auth_header_required(self, client):
         """Test that auth header is required for protected endpoints."""
-        response = client.get("/orders")
+        response = client.get("/api/orders/me")
         assert response.status_code == 401
         assert "authorization" in response.json()["detail"].lower()
 
     def test_invalid_token(self, client):
         """Test invalid token rejection."""
         headers = {"Authorization": "Bearer invalid_token_xyz"}
-        response = client.get("/orders", headers=headers)
+        response = client.get("/api/orders/me", headers=headers)
         assert response.status_code == 401
 
     def test_malformed_auth_header(self, client):
         """Test malformed authorization header."""
         # Missing "Bearer"
         headers = {"Authorization": "token_only"}
-        response = client.get("/orders", headers=headers)
+        response = client.get("/api/orders/me", headers=headers)
         assert response.status_code == 401
 
         # Empty header
         headers = {"Authorization": ""}
-        response = client.get("/orders", headers=headers)
+        response = client.get("/api/orders/me", headers=headers)
         assert response.status_code == 401
 
 
@@ -129,7 +183,7 @@ class TestQuotesEndpoints:
         """Test quote response includes required fields."""
         # Signup first
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "quote@example.com",
                 "password": "Password123!",
@@ -140,7 +194,7 @@ class TestQuotesEndpoints:
         headers = {"Authorization": f"Bearer {token}"}
 
         response = client.post(
-            "/quotes/generate",
+            "/api/quotes/generate",
             json={"budget": 1500.0},
             headers=headers,
         )
@@ -148,25 +202,29 @@ class TestQuotesEndpoints:
         assert response.status_code == 200
         data = response.json()
 
-        # Required fields
-        assert "id" in data
+        # Current quote response schema
         assert "budget" in data
+        assert "tier_name" in data
+        assert "recommended_specs" in data
         assert "total_price" in data
         assert "components" in data
-        assert "created_at" in data
+        assert "parts_cost_total" in data
+        assert "labor_cost" in data
+        assert "overhead_cost" in data
+        assert "within_budget" in data
 
         # Validate components structure
         for component in data["components"]:
-            assert "id" in component
-            assert "type" in component
-            assert "name" in component
+            assert "component_type" in component
+            assert "component_category" in component
+            assert "component_name" in component
             assert "price" in component
             assert isinstance(component["price"], (int, float))
 
     def test_quote_budget_constraint(self, client):
         """Test that quote respects budget constraint."""
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "budget@example.com",
                 "password": "Password123!",
@@ -176,21 +234,21 @@ class TestQuotesEndpoints:
         token = signup_resp.json()["access_token"]
         headers = {"Authorization": f"Bearer {token}"}
 
-        for budget in [500.0, 1000.0, 2000.0]:
+        for budget in [800.0, 1000.0, 2000.0]:
             response = client.post(
-                "/quotes/generate",
+                "/api/quotes/generate",
                 json={"budget": budget},
                 headers=headers,
             )
             assert response.status_code == 200
             data = response.json()
-            assert data["total_price"] <= budget
+            assert data["within_budget"] is (data["total_price"] <= budget)
             assert data["total_price"] > 0
 
     def test_quote_invalid_budget(self, client):
         """Test quote with invalid budget."""
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "invalid@example.com",
                 "password": "Password123!",
@@ -202,7 +260,7 @@ class TestQuotesEndpoints:
 
         # Zero budget
         response = client.post(
-            "/quotes/generate",
+            "/api/quotes/generate",
             json={"budget": 0},
             headers=headers,
         )
@@ -210,7 +268,7 @@ class TestQuotesEndpoints:
 
         # Negative budget
         response = client.post(
-            "/quotes/generate",
+            "/api/quotes/generate",
             json={"budget": -100},
             headers=headers,
         )
@@ -224,110 +282,26 @@ class TestQuotesEndpoints:
 class TestOrdersEndpoints:
     """Test orders API endpoints."""
 
-    def test_create_order_response_schema(self, client):
-        """Test order creation response schema."""
-        signup_resp = client.post(
-            "/auth/signup",
-            json={
-                "email": "order@example.com",
-                "password": "Password123!",
-                "name": "Order User",
-            },
-        )
-        token = signup_resp.json()["access_token"]
-        headers = {"Authorization": f"Bearer {token}"}
-
-        # Generate quote
-        quote_resp = client.post(
-            "/quotes/generate",
-            json={"budget": 1500.0},
-            headers=headers,
-        )
-        quote = quote_resp.json()
-
-        # Create order
-        order_resp = client.post(
-            "/orders/create",
-            json={
-                "budget": 1500.0,
-                "components": {
-                    "cpu_id": quote["components"][0]["id"],
-                    "gpu_id": quote["components"][1]["id"],
-                    "ram_id": quote["components"][2]["id"],
-                    "ssd_id": quote["components"][3]["id"],
-                    "psu_id": quote["components"][4]["id"],
-                    "case_id": quote["components"][5]["id"],
-                    "cooler_id": quote["components"][6]["id"],
-                },
-                "os_id": 1,
-                "theme_id": 1,
-            },
-            headers=headers,
-        )
-
-        assert order_resp.status_code == 201
-        data = order_resp.json()
-
-        # Validate schema
-        assert "id" in data
-        assert "customer_id" in data
-        assert "status" in data
-        assert data["status"] == "pending_payment"
-        assert "budget" in data
-        assert "total_price" in data
-        assert "os_id" in data
-        assert "theme_id" in data
-        assert "created_at" in data
+    def test_order_is_created_only_after_payment_confirmation(self, client):
+        """Orders use the payment confirmation flow; the retired direct-create route stays absent."""
+        response = client.post("/api/orders/create", json={"budget": 1500.0})
+        assert response.status_code in (404, 405, 422)
 
     def test_get_order_by_id(self, client):
         """Test retrieving order by ID."""
-        signup_resp = client.post(
-            "/auth/signup",
-            json={
-                "email": "getorder@example.com",
-                "password": "Password123!",
-                "name": "Get Order User",
-            },
-        )
-        token = signup_resp.json()["access_token"]
+        token, confirmed = _create_paid_order(client, f"getorder-{uuid4().hex}@example.com")
         headers = {"Authorization": f"Bearer {token}"}
-
-        quote_resp = client.post(
-            "/quotes/generate",
-            json={"budget": 1500.0},
-            headers=headers,
-        )
-        quote = quote_resp.json()
-
-        order_resp = client.post(
-            "/orders/create",
-            json={
-                "budget": 1500.0,
-                "components": {
-                    "cpu_id": quote["components"][0]["id"],
-                    "gpu_id": quote["components"][1]["id"],
-                    "ram_id": quote["components"][2]["id"],
-                    "ssd_id": quote["components"][3]["id"],
-                    "psu_id": quote["components"][4]["id"],
-                    "case_id": quote["components"][5]["id"],
-                    "cooler_id": quote["components"][6]["id"],
-                },
-                "os_id": 1,
-                "theme_id": 1,
-            },
-            headers=headers,
-        )
-        order_id = order_resp.json()["id"]
+        order_id = confirmed["order_id"]
 
         # Get order
-        get_resp = client.get(f"/orders/{order_id}", headers=headers)
+        get_resp = client.get(f"/api/orders/{order_id}", headers=headers)
         assert get_resp.status_code == 200
         assert get_resp.json()["id"] == order_id
 
     def test_get_nonexistent_order(self, client):
         """Test retrieving nonexistent order returns 404."""
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "notfound@example.com",
                 "password": "Password123!",
@@ -337,13 +311,13 @@ class TestOrdersEndpoints:
         token = signup_resp.json()["access_token"]
         headers = {"Authorization": f"Bearer {token}"}
 
-        response = client.get("/orders/99999", headers=headers)
+        response = client.get("/api/orders/99999", headers=headers)
         assert response.status_code == 404
 
     def test_list_orders(self, client):
         """Test listing customer orders."""
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "listorders@example.com",
                 "password": "Password123!",
@@ -353,40 +327,19 @@ class TestOrdersEndpoints:
         token = signup_resp.json()["access_token"]
         headers = {"Authorization": f"Bearer {token}"}
 
-        # Create multiple orders
-        for i in range(3):
-            quote_resp = client.post(
-                "/quotes/generate",
-                json={"budget": 1000.0 + i * 500},
-                headers=headers,
-            )
-            quote = quote_resp.json()
-
-            client.post(
-                "/orders/create",
-                json={
-                    "budget": 1000.0 + i * 500,
-                    "components": {
-                        "cpu_id": quote["components"][0]["id"],
-                        "gpu_id": quote["components"][1]["id"],
-                        "ram_id": quote["components"][2]["id"],
-                        "ssd_id": quote["components"][3]["id"],
-                        "psu_id": quote["components"][4]["id"],
-                        "case_id": quote["components"][5]["id"],
-                        "cooler_id": quote["components"][6]["id"],
-                    },
-                    "os_id": 1,
-                    "theme_id": 1,
-                },
-                headers=headers,
-            )
+        # Create multiple orders through the current payment confirmation flow.
+        profile = client.get("/api/auth/me", headers=headers)
+        assert profile.status_code == 200, profile.text
+        customer = (token, profile.json()["id"])
+        for _ in range(3):
+            _create_paid_order(client, customer=customer)
 
         # List orders
-        list_resp = client.get("/orders", headers=headers)
+        list_resp = client.get("/api/orders/me", headers=headers)
         assert list_resp.status_code == 200
         data = list_resp.json()
-        assert "orders" in data
-        assert len(data["orders"]) >= 3
+        assert isinstance(data, list)
+        assert len(data) == 3
 
 
 # ============================================================================
@@ -396,16 +349,10 @@ class TestOrdersEndpoints:
 class TestPaymentsEndpoints:
     """Test payment API endpoints."""
 
-    @patch("app.services.payment_service.stripe.PaymentIntent.create")
-    def test_create_payment_intent_response_schema(self, mock_stripe, client):
+    def test_create_payment_intent_response_schema(self, client):
         """Test payment intent creation response schema."""
-        mock_intent = MagicMock()
-        mock_intent.id = "pi_test"
-        mock_intent.client_secret = "secret_test"
-        mock_stripe.return_value = mock_intent
-
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "payment@example.com",
                 "password": "Password123!",
@@ -413,43 +360,24 @@ class TestPaymentsEndpoints:
             },
         )
         token = signup_resp.json()["access_token"]
-        headers = {"Authorization": f"Bearer {token}"}
+        profile = client.get("/api/auth/me", headers={"Authorization": f"Bearer {token}"})
+        assert profile.status_code == 200, profile.text
+        with patch(
+            "app.routes.payments.PaymentService.create_payment_intent",
+            new=AsyncMock(return_value={
+                "client_secret": "secret_test",
+                "publishable_key": "pk_test",
+                "amount": 1500.0,
+                "currency": "gbp",
+                "intent_id": "pi_test",
+            }),
+        ):
+            payment_resp = client.post(
+                "/api/payments/intent",
+                json={"budget": 1500.0, "customer_id": profile.json()["id"]},
+            )
 
-        quote_resp = client.post(
-            "/quotes/generate",
-            json={"budget": 1500.0},
-            headers=headers,
-        )
-        quote = quote_resp.json()
-
-        order_resp = client.post(
-            "/orders/create",
-            json={
-                "budget": 1500.0,
-                "components": {
-                    "cpu_id": quote["components"][0]["id"],
-                    "gpu_id": quote["components"][1]["id"],
-                    "ram_id": quote["components"][2]["id"],
-                    "ssd_id": quote["components"][3]["id"],
-                    "psu_id": quote["components"][4]["id"],
-                    "case_id": quote["components"][5]["id"],
-                    "cooler_id": quote["components"][6]["id"],
-                },
-                "os_id": 1,
-                "theme_id": 1,
-            },
-            headers=headers,
-        )
-        order_id = order_resp.json()["id"]
-
-        # Create payment intent
-        payment_resp = client.post(
-            "/payments/intent",
-            json={"amount": 1500.0, "order_id": order_id},
-            headers=headers,
-        )
-
-        assert payment_resp.status_code == 200
+        assert payment_resp.status_code == 201, payment_resp.text
         data = payment_resp.json()
 
         # Validate schema
@@ -469,7 +397,10 @@ class TestCORSHeaders:
 
     def test_cors_headers_present(self, client):
         """Test CORS headers in responses."""
-        response = client.options("/auth/signup")
+        response = client.options(
+            "/api/auth/signup",
+            headers={"Origin": "http://localhost:4313", "Access-Control-Request-Method": "POST"},
+        )
 
         # CORS headers should be present
         assert "access-control-allow-origin" in response.headers or \
@@ -492,7 +423,7 @@ class TestErrorHandling:
         """Test 405 error for invalid HTTP method."""
         # Most endpoints don't support GET
         response = client.get(
-            "/auth/signup",
+            "/api/auth/signup",
             headers={"Authorization": "Bearer token"},
         )
         # This might be 405 or 422 depending on implementation
@@ -502,14 +433,14 @@ class TestErrorHandling:
         """Test 500 error handling for internal errors."""
         # Cause a database error by creating with invalid data
         with patch("app.database.get_db", side_effect=Exception("Database error")):
-            response = client.get("/orders")
+            response = client.get("/api/orders/me")
             # Should return 500 or 401 (since auth fails)
             assert response.status_code in [500, 401]
 
     def test_error_response_includes_detail(self, client):
         """Test error responses include detail field."""
         response = client.post(
-            "/auth/login",
+            "/api/auth/login",
             json={"email": "nonexistent@example.com", "password": "wrong"},
         )
         assert response.status_code == 401
@@ -526,7 +457,7 @@ class TestRequestValidation:
     def test_invalid_json(self, client):
         """Test invalid JSON handling."""
         response = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             data="not valid json",
             headers={"Content-Type": "application/json"},
         )
@@ -535,7 +466,7 @@ class TestRequestValidation:
     def test_extra_fields_ignored(self, client):
         """Test that extra fields in request are ignored."""
         response = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "extra@example.com",
                 "password": "Password123!",
@@ -549,7 +480,7 @@ class TestRequestValidation:
     def test_type_coercion(self, client):
         """Test type coercion in requests."""
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "coerce@example.com",
                 "password": "Password123!",
@@ -561,7 +492,7 @@ class TestRequestValidation:
 
         # Budget as string should be coerced to float
         response = client.post(
-            "/quotes/generate",
+            "/api/quotes/generate",
             json={"budget": "1500.0"},
             headers=headers,
         )

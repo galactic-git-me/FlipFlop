@@ -51,7 +51,7 @@ async def test_expiry_eligibility_and_admin_alert_commit_together(monkeypatch):
 
     monkeypatch.setattr(warranty_reserve, "lock_warranty_owner_then_reserve", lock_reserve)
 
-    async def mark_eligible(_db, current):
+    async def mark_eligible(_db, current, *, now=None):
         current.status = "eligible_for_release"
         return current.status
 
@@ -89,7 +89,7 @@ async def test_open_claim_does_not_create_expiry_alert(monkeypatch):
 
     monkeypatch.setattr(warranty_reserve, "lock_warranty_owner_then_reserve", lock_reserve)
 
-    async def retain_claim_hold(_db, current):
+    async def retain_claim_hold(_db, current, *, now=None):
         current.status = "claim_open"
         return current.status
 

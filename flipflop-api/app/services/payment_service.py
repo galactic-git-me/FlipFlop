@@ -1,6 +1,7 @@
 """Stripe payment processing service for quote-to-order conversion."""
 
 import stripe
+from stripe import SignatureVerificationError, StripeError
 import structlog
 from typing import Optional
 from datetime import datetime
@@ -91,7 +92,7 @@ class PaymentService:
                 "intent_id": intent.id,
             }
 
-        except stripe.error.StripeError as e:
+        except StripeError as e:
             log.error(
                 "payment_intent.creation_failed",
                 error=str(e),
@@ -143,7 +144,7 @@ class PaymentService:
                 "metadata": dict(intent.metadata or {}),
             }
 
-        except stripe.error.StripeError as e:
+        except StripeError as e:
             log.error(
                 "payment_intent.retrieval_failed",
                 error=str(e),
@@ -185,7 +186,7 @@ class PaymentService:
         except ValueError as e:
             log.error("webhook.invalid_payload", error=str(e))
             raise ValueError(f"Invalid webhook payload: {str(e)}")
-        except stripe.error.SignatureVerificationError as e:
+        except SignatureVerificationError as e:
             log.error("webhook.signature_verification_failed", error=str(e))
             raise ValueError(f"Invalid signature: {str(e)}")
 
@@ -236,7 +237,7 @@ class PaymentService:
                 "reason": stripe_reason,
             }
 
-        except stripe.error.StripeError as e:
+        except StripeError as e:
             log.error(
                 "payment.refund_failed",
                 error=str(e),
@@ -254,7 +255,7 @@ class PaymentService:
                 "status": refund.status,
                 "reason": refund.reason,
             }
-        except stripe.error.StripeError as error:
+        except StripeError as error:
             log.error("payment.refund_status_failed", refund_id=refund_id, error=str(error))
             raise ValueError("Could not reconcile the existing refund") from error
 
@@ -283,7 +284,7 @@ class PaymentService:
                 "created_at": datetime.utcfromtimestamp(intent.created),
             }
 
-        except stripe.error.StripeError as e:
+        except StripeError as e:
             log.error("payment_intent.retrieval_failed", error=str(e))
             raise ValueError(f"Failed to retrieve payment intent: {str(e)}")
 
@@ -297,6 +298,6 @@ class PaymentService:
                 return {"intent_id": intent.id, "status": intent.status}
             intent = stripe.PaymentIntent.cancel(intent_id)
             return {"intent_id": intent.id, "status": intent.status}
-        except stripe.error.StripeError as e:
+        except StripeError as e:
             log.error("payment_intent.cancellation_failed", error=str(e), intent_id=intent_id)
             raise ValueError(f"Failed to cancel payment intent: {str(e)}")

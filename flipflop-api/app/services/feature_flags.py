@@ -112,8 +112,5 @@ def set_flag_for_testing(flag_name: str, enabled: bool) -> None:
     """
     # Clear cache so next call rebuilds
     get_feature_flags.cache_clear()
-    # Set/unset environment variable
-    if enabled:
-        os.environ[flag_name] = "true"
-    else:
-        os.environ.pop(flag_name, None)
+    # Store both values explicitly so a test can override a True safe default.
+    os.environ[flag_name] = "true" if enabled else "false"

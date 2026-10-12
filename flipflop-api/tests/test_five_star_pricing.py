@@ -14,6 +14,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import ManualBuild
 from app.services.five_star_pricing import FiveStarPricingService
 from app.services.money import Money
+from app.services.feature_flags import FeatureFlags, set_flag_for_testing
+
+
+@pytest.fixture(autouse=True)
+def enable_five_star_auto_pricing_for_tests():
+    set_flag_for_testing(FeatureFlags.PRICE_ALERTS_FIVE_STAR_AUTO, True)
+    yield
+    set_flag_for_testing(FeatureFlags.PRICE_ALERTS_FIVE_STAR_AUTO, False)
 
 
 @pytest.mark.unit

@@ -16,7 +16,7 @@ import pytest
 import hmac
 import hashlib
 import json
-from unittest.mock import patch, MagicMock
+from unittest.mock import AsyncMock, patch, MagicMock
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
@@ -100,7 +100,7 @@ class TestSecretsManagement:
 
             # Make a request that includes sensitive data
             response = client.post(
-                "/auth/login",
+                "/api/auth/login",
                 json={
                     "email": "test@example.com",
                     "password": "SecretPassword123!",
@@ -129,13 +129,13 @@ class TestSQLInjectionPrevention:
             "name": "SQL Injection Test",
         }
 
-        response = client.post("/auth/signup", json=payload)
+        response = client.post("/api/auth/signup", json=payload)
 
         # Should handle safely (either reject or sanitize)
         assert response.status_code in [201, 422]
         # Table should still exist
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "normal@example.com",
                 "password": "Password123!",
@@ -147,7 +147,7 @@ class TestSQLInjectionPrevention:
     def test_quote_generation_safe_input(self, client):
         """Test quote generation with special characters."""
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "sqltest@example.com",
                 "password": "Password123!",
@@ -159,7 +159,7 @@ class TestSQLInjectionPrevention:
 
         # Special characters in quote
         response = client.post(
-            "/quotes/generate",
+            "/api/quotes/generate",
             json={"budget": 1500.0},
             headers=headers,
         )
@@ -183,7 +183,7 @@ class TestXSSPrevention:
             "name": "<script>alert('xss')</script>",
         }
 
-        response = client.post("/auth/signup", json=payload)
+        response = client.post("/api/auth/signup", json=payload)
 
         if response.status_code == 201:
             # If signup succeeds, get the customer back
@@ -191,16 +191,18 @@ class TestXSSPrevention:
             headers = {"Authorization": f"Bearer {token}"}
 
             # Get user profile
-            profile_resp = client.get("/profile", headers=headers)
+            profile_resp = client.get("/api/auth/me", headers=headers)
             if profile_resp.status_code == 200:
                 profile_data = profile_resp.json()
-                # Name should be escaped or sanitized
-                assert "<script>" not in str(profile_data)
+                # Profile data is JSON; preserve the name and rely on the UI's
+                # HTML-context escaping when it renders user-controlled text.
+                assert profile_resp.headers["content-type"].startswith("application/json")
+                assert profile_data["name"] == payload["name"]
 
     def test_user_input_sanitization_in_quotes(self, client):
         """Test user input is sanitized in quote responses."""
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "sanitize@example.com",
                 "password": "Password123!",
@@ -211,7 +213,7 @@ class TestXSSPrevention:
         headers = {"Authorization": f"Bearer {token}"}
 
         response = client.post(
-            "/quotes/generate",
+            "/api/quotes/generate",
             json={"budget": 1500.0},
             headers=headers,
         )
@@ -234,7 +236,7 @@ class TestCSRFProtection:
         """Test that POST endpoints validate requests properly."""
         # Legitimate request should work
         response = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "csrf@example.com",
                 "password": "Password123!",
@@ -245,7 +247,7 @@ class TestCSRFProtection:
 
         # Malformed request should be rejected
         response = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json=None,
         )
         assert response.status_code == 422
@@ -277,7 +279,7 @@ class TestAuthenticationSecurity:
     def test_token_expiration(self, client):
         """Test that tokens expire."""
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "expire@example.com",
                 "password": "Password123!",
@@ -288,14 +290,14 @@ class TestAuthenticationSecurity:
 
         # Token should be valid
         headers = {"Authorization": f"Bearer {token}"}
-        response = client.get("/orders", headers=headers)
+        response = client.get("/api/orders/me", headers=headers)
         assert response.status_code in [200, 401]  # Could be 401 if token logic not fully implemented
 
     def test_authorization_cross_customer(self, client):
         """Test that customers can't access other customers' data."""
         # Create customer 1
         customer1_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "customer1@example.com",
                 "password": "Password123!",
@@ -307,7 +309,7 @@ class TestAuthenticationSecurity:
 
         # Create customer 2
         customer2_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "customer2@example.com",
                 "password": "Password123!",
@@ -317,35 +319,51 @@ class TestAuthenticationSecurity:
         token2 = customer2_resp.json()["access_token"]
         headers2 = {"Authorization": f"Bearer {token2}"}
 
-        # Customer 1 creates order
-        quote1 = client.post(
-            "/quotes/generate",
-            json={"budget": 1500.0},
-            headers=headers1,
-        ).json()
+        # Create a real order through the current intent-confirm flow.
+        from unittest.mock import AsyncMock, patch
+        from uuid import uuid4
 
-        order1 = client.post(
-            "/orders/create",
-            json={
-                "budget": 1500.0,
-                "components": {
-                    "cpu_id": quote1["components"][0]["id"],
-                    "gpu_id": quote1["components"][1]["id"],
-                    "ram_id": quote1["components"][2]["id"],
-                    "ssd_id": quote1["components"][3]["id"],
-                    "psu_id": quote1["components"][4]["id"],
-                    "case_id": quote1["components"][5]["id"],
-                    "cooler_id": quote1["components"][6]["id"],
-                },
-                "os_id": 1,
-                "theme_id": 1,
-            },
-            headers=headers1,
-        ).json()
-        order1_id = order1["id"]
+        from app.routes.payments import PaymentService
+
+        customer1_id = client.get("/api/auth/me", headers=headers1).json()["id"]
+        intent_id = f"pi_security_{uuid4().hex}"
+        with patch.object(
+            PaymentService,
+            "create_payment_intent",
+            new=AsyncMock(return_value={
+                "client_secret": "pi_security_secret",
+                "publishable_key": "pk_test",
+                "amount": 1500.0,
+                "currency": "gbp",
+                "intent_id": intent_id,
+            }),
+        ), patch.object(
+            PaymentService,
+            "handle_payment_success",
+            new=AsyncMock(return_value={
+                "intent_id": intent_id,
+                "amount": 1500.0,
+                "currency": "gbp",
+                "status": "completed",
+                "metadata": {"delivery_days": "5", "delivery_option": "standard"},
+            }),
+        ):
+            intent = client.post(
+                "/api/payments/intent",
+                json={"budget": 1500.0, "customer_id": customer1_id},
+                headers=headers1,
+            )
+            assert intent.status_code == 201, intent.text
+            order1 = client.post(
+                "/api/payments/confirm",
+                json={"intent_id": intent_id, "customer_id": customer1_id},
+                headers=headers1,
+            )
+            assert order1.status_code == 201, order1.text
+        order1_id = order1.json()["order_id"]
 
         # Customer 2 tries to access customer 1's order
-        response = client.get(f"/orders/{order1_id}", headers=headers2)
+        response = client.get(f"/api/orders/{order1_id}", headers=headers2)
 
         # Should be forbidden or not found
         assert response.status_code in [403, 404]
@@ -363,7 +381,7 @@ class TestRateLimiting:
         # Make multiple failed login attempts
         for i in range(10):
             response = client.post(
-                "/auth/login",
+                "/api/auth/login",
                 json={
                     "email": f"user{i}@example.com",
                     "password": "WrongPassword",
@@ -378,7 +396,7 @@ class TestRateLimiting:
         # Make multiple signup attempts from same IP (simulated)
         for i in range(5):
             response = client.post(
-                "/auth/signup",
+                "/api/auth/signup",
                 json={
                     "email": f"ratelimit{i}@example.com",
                     "password": "Password123!",
@@ -401,20 +419,20 @@ class TestStripeWebhookSecurity:
         """Test that webhook signatures are validated."""
         webhook_event = {
             "id": "evt_test",
-            "type": "payment_intent.succeeded",
-            "data": {"object": {"id": "pi_test"}},
+            "type": "customer.updated",
+            "data": {"object": {}},
         }
         mock_construct.return_value = webhook_event
 
         # Valid signature
         response = client.post(
-            "/webhooks/stripe",
+            "/api/webhooks/stripe",
             json=webhook_event,
             headers={"stripe-signature": "valid_signature"},
         )
 
         # Should handle valid signature
-        assert response.status_code in [200, 401, 400]
+        assert response.status_code == 200
 
     def test_webhook_without_signature(self, client):
         """Test that webhooks without signature are rejected."""
@@ -424,7 +442,7 @@ class TestStripeWebhookSecurity:
         }
 
         response = client.post(
-            "/webhooks/stripe",
+            "/api/webhooks/stripe",
             json=webhook_event,
         )
 
@@ -445,14 +463,14 @@ class TestOAuth2Security:
         # This would be validated in the OAuth callback handler
         pass
 
-    @patch("app.services.oauth_service.verify_google_token")
-    def test_oauth_token_validation(self, mock_verify, client):
+    @patch("app.routes.oauth.OAuthService.exchange_google_code", new_callable=AsyncMock)
+    def test_oauth_token_validation(self, mock_exchange, client):
         """Test that OAuth tokens are validated."""
         # Mock invalid token
-        mock_verify.side_effect = Exception("Invalid token")
+        mock_exchange.side_effect = ValueError("Invalid authorization code")
 
         response = client.post(
-            "/oauth/google/callback",
+            "/api/auth/oauth/google/callback",
             json={"code": "invalid_code"},
         )
 
@@ -479,7 +497,7 @@ class TestDataValidation:
 
         for email in invalid_emails:
             response = client.post(
-                "/auth/signup",
+                "/api/auth/signup",
                 json={
                     "email": email,
                     "password": "Password123!",
@@ -500,7 +518,7 @@ class TestDataValidation:
 
         for password in weak_passwords:
             response = client.post(
-                "/auth/signup",
+                "/api/auth/signup",
                 json={
                     "email": f"user{password}@example.com",
                     "password": password,
@@ -513,7 +531,7 @@ class TestDataValidation:
     def test_budget_validation(self, client):
         """Test budget value validation."""
         signup_resp = client.post(
-            "/auth/signup",
+            "/api/auth/signup",
             json={
                 "email": "budget@example.com",
                 "password": "Password123!",
@@ -528,13 +546,13 @@ class TestDataValidation:
         for budget in invalid_budgets:
             if budget is None or budget == "":
                 response = client.post(
-                    "/quotes/generate",
+                    "/api/quotes/generate",
                     json={"budget": budget},
                     headers=headers,
                 )
             else:
                 response = client.post(
-                    "/quotes/generate",
+                    "/api/quotes/generate",
                     json={"budget": budget},
                     headers=headers,
                 )

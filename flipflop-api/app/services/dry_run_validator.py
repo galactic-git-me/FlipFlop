@@ -93,7 +93,7 @@ class DryRunValidator:
 
             elif channel == "storefront":
                 if not build.storefront_product_id:
-                    warnings.append("Storefront product ID not set")
+                    errors.append("Storefront product ID not set")
                 metadata["channel"] = "storefront"
 
             else:

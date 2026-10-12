@@ -6,6 +6,7 @@ import os
 import io
 import html
 import hashlib
+from copy import deepcopy
 from zipfile import ZipFile, ZIP_DEFLATED
 from pathlib import Path
 from datetime import date, datetime, timedelta, timezone
@@ -266,7 +267,8 @@ def _insurance_provider_response_summary(evidence_data: dict | None) -> dict | N
 
 def _manual_build_has_physical_handover(build: ManualBuild) -> bool:
     """Treat recorded handover, carrier delivery, and later states as irreversible."""
-    evidence = build.evidence_data if isinstance(build.evidence_data, dict) else {}
+    evidence_data = getattr(build, "evidence_data", None)
+    evidence = evidence_data if isinstance(evidence_data, dict) else {}
     handover = evidence.get("physical_handover_confirmation")
     return bool(
         build.dispatch_status in {"dispatched", "delivered"}
@@ -700,7 +702,7 @@ def _missing_verified_dispatch_evidence(
     categories: tuple[str, ...],
 ) -> list[str]:
     """Require approved evidence files to still match their build-bound checksum and size."""
-    artifacts = list(job.artifact_index or []) if job else []
+    artifacts = deepcopy(job.artifact_index or []) if job else []
     root = _PRIVATE_DISPATCH_ROOT.resolve()
     build_dir = (root / str(build_id)).resolve()
     allowed_media = {
@@ -1078,7 +1080,13 @@ async def create_build(body: ManualBuildCreate, db: AsyncSession = Depends(get_d
             "software_profile": profile,
             "assigned_at": datetime.utcnow().isoformat(),
         }
-    build = ManualBuild(name=body.name, components=[], total_cost=None, evidence_data=evidence_data)
+    build = ManualBuild(
+        name=body.name,
+        components=[],
+        total_cost=None,
+        evidence_data=evidence_data,
+        warranty_reserve_pct=body.warranty_reserve_pct,
+    )
     db.add(build)
     await db.flush()
     await db.refresh(build)
@@ -2545,7 +2553,7 @@ async def review_dispatch_evidence(
         raise HTTPException(409, "Shipment evidence can be reviewed only after the build is sold")
     if _manual_build_has_physical_handover(build):
         raise HTTPException(409, "Shipment evidence cannot be reviewed after courier handover")
-    artifacts = list(job.artifact_index or []) if job else []
+    artifacts = deepcopy(job.artifact_index or []) if job else []
     artifact = next((item for item in artifacts if item.get("id") == artifact_id), None)
     if not artifact or artifact.get("category") not in {"working_pc", "package_contents", "sealed_package"}:
         raise HTTPException(404, "Shipment evidence not found")

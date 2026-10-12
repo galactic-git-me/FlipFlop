@@ -14,6 +14,14 @@ from app.models.listing import Classification, Listing, ListingStatus
 from app.models.playbook import Playbook, PlaybookProposal
 from app.services import external_demand as ext
 from app.services import playbook_evolution as pe
+from app.services.feature_flags import FeatureFlags, set_flag_for_testing
+
+
+@pytest.fixture(autouse=True)
+def enable_demand_intelligence_for_tests():
+    set_flag_for_testing(FeatureFlags.DEMAND_INTEL_ENABLED, True)
+    yield
+    set_flag_for_testing(FeatureFlags.DEMAND_INTEL_ENABLED, False)
 
 pytestmark = pytest.mark.asyncio(loop_scope="module")
 

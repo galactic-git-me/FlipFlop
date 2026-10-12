@@ -24,6 +24,7 @@ from app.models.order import Order, OrderStatus
 from app.models.shipment_tracking_event import ShipmentTrackingEvent
 from app.models.warranty import WarrantyReserve
 from app.routes import webhooks
+from app.services import parcel2go_notifications
 from app.api.orders import _customer_problem_outputs
 
 notify_parcel2go_tracking_event_impl = webhooks._notify_parcel2go_tracking_event
@@ -39,6 +40,7 @@ async def delivery_webhook_client(monkeypatch):
     async with engine.begin() as connection:
         await connection.run_sync(Base.metadata.create_all)
     session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    monkeypatch.setattr(parcel2go_notifications, "AsyncSessionLocal", session_factory)
 
     async def override_get_db():
         async with session_factory() as session:
@@ -115,20 +117,20 @@ async def test_delivery_and_late_earlier_delivery_event_start_one_backdated_warr
     first_delivery = datetime.now(timezone.utc).replace(tzinfo=None, microsecond=0) - timedelta(hours=3)
     earlier_delivery = first_delivery - timedelta(hours=2)
     first = client.post(
-        "/webhooks/parcel2go",
+        "/api/webhooks/parcel2go",
         json=_signed_event(secret, event_id="delivery-event-1", occurred_at=first_delivery),
     )
     assert first.status_code == 200
     assert first.json()["status"] == "processed"
 
     second = client.post(
-        "/webhooks/parcel2go",
+        "/api/webhooks/parcel2go",
         json=_signed_event(secret, event_id="delivery-event-2", occurred_at=earlier_delivery),
     )
     assert second.status_code == 200
 
     duplicate = client.post(
-        "/webhooks/parcel2go",
+        "/api/webhooks/parcel2go",
         json=_signed_event(secret, event_id="delivery-event-2", occurred_at=earlier_delivery),
     )
     assert duplicate.status_code == 200
@@ -173,7 +175,7 @@ async def test_marketplace_delivery_starts_build_scoped_warranty_without_creatin
 
     delivered_at = datetime.now(timezone.utc).replace(tzinfo=None, microsecond=0) - timedelta(minutes=30)
     response = client.post(
-        "/webhooks/parcel2go",
+        "/api/webhooks/parcel2go",
         json=_signed_event(secret, event_id="marketplace-delivery-event", occurred_at=delivered_at),
     )
     assert response.status_code == 200
@@ -214,7 +216,7 @@ async def test_future_provider_delivery_timestamp_cannot_postpone_warranty_start
     before_received_at = datetime.now(timezone.utc).replace(tzinfo=None)
     future_stage_at = datetime.now(timezone.utc) + timedelta(days=1)
     response = client.post(
-        "/webhooks/parcel2go",
+        "/api/webhooks/parcel2go",
         json=_signed_event(secret, event_id="future-delivery-event", occurred_at=future_stage_at),
     )
     after_received_at = datetime.now(timezone.utc).replace(tzinfo=None)
@@ -284,10 +286,10 @@ async def test_repair_return_webhook_updates_case_timeline_without_restarting_bu
     payload = _signed_event(secret, event_id="repair-return-delivered", occurred_at=delivered_at)
     payload["Payload"]["OrderLineId"] = "P2G-REPAIR-LINE-1"
     payload["Payload"]["StatusDescription"] = "Repair return delivered to FlipFlop"
-    response = client.post("/webhooks/parcel2go", json=payload)
+    response = client.post("/api/webhooks/parcel2go", json=payload)
 
     assert response.status_code == 200
-    duplicate = client.post("/webhooks/parcel2go", json=payload)
+    duplicate = client.post("/api/webhooks/parcel2go", json=payload)
     assert duplicate.status_code == 200
     assert duplicate.json()["status"] == "duplicate"
     async with session_factory() as db:
@@ -363,7 +365,7 @@ async def test_repair_case_retains_separate_inbound_and_outbound_tracking_timeli
     inbound_payload = _signed_event(secret, event_id="two-leg-inbound-delivered", occurred_at=inbound_time)
     inbound_payload["Payload"]["OrderLineId"] = "P2G-INBOUND-LINE-1"
     inbound_payload["Payload"]["StatusDescription"] = "Returned PC delivered to FlipFlop"
-    assert client.post("/webhooks/parcel2go", json=inbound_payload).status_code == 200
+    assert client.post("/api/webhooks/parcel2go", json=inbound_payload).status_code == 200
 
     async with session_factory() as db:
         problem = await db.get(CustomerProblem, problem_id)
@@ -374,7 +376,7 @@ async def test_repair_case_retains_separate_inbound_and_outbound_tracking_timeli
     outbound_payload = _signed_event(secret, event_id="two-leg-outbound-delivered", occurred_at=outbound_time)
     outbound_payload["Payload"]["OrderLineId"] = "P2G-OUTBOUND-LINE-1"
     outbound_payload["Payload"]["StatusDescription"] = "Repaired PC delivered to customer"
-    assert client.post("/webhooks/parcel2go", json=outbound_payload).status_code == 200
+    assert client.post("/api/webhooks/parcel2go", json=outbound_payload).status_code == 200
 
     async with session_factory() as db:
         problem = await db.get(CustomerProblem, problem_id)
@@ -451,16 +453,19 @@ async def test_delivered_direct_repair_return_email_retries_until_confirmed(
         event_id = event.id
 
     email_sender = AsyncMock(return_value=False)
-    monkeypatch.setattr(webhooks, "send_customer_case_status_email", email_sender)
+    monkeypatch.setattr(parcel2go_notifications, "send_customer_case_status_email", email_sender)
     async with session_factory() as db:
         event = await db.get(ShipmentTrackingEvent, event_id)
-        assert await notify_parcel2go_tracking_event_impl(db, event) is False
+        assert await notify_parcel2go_tracking_event_impl(db, event) is True
         assert event.customer_notified_at is None
+        event.customer_notification_attempted_at = datetime.utcnow() - timedelta(minutes=5)
+        await db.commit()
 
     email_sender.return_value = True
     async with session_factory() as db:
         event = await db.get(ShipmentTrackingEvent, event_id)
         assert await notify_parcel2go_tracking_event_impl(db, event) is True
+        await db.refresh(event)
         assert event.customer_notified_at is not None
     assert email_sender.await_count == 2
 
@@ -517,7 +522,7 @@ async def test_delivered_repair_shipment_notifies_direct_customer_without_resolv
         event_id = event.id
 
     email_sender = AsyncMock(return_value=True)
-    monkeypatch.setattr(webhooks, "send_customer_case_status_email", email_sender)
+    monkeypatch.setattr(parcel2go_notifications, "send_customer_case_status_email", email_sender)
     async with session_factory() as db:
         event = await db.get(ShipmentTrackingEvent, event_id)
         assert await notify_parcel2go_tracking_event_impl(db, event) is True

@@ -31,6 +31,12 @@ async def test_custom_catalogue_marks_only_playbook_optional_gpu_slot(monkeypatc
 
 @pytest.mark.asyncio
 async def test_curated_price_rejects_variant_outside_selected_cell(monkeypatch):
+    from app.services import playbook_pricing
+    monkeypatch.setattr(
+        playbook_pricing,
+        "apply_curated_cell_upgrades",
+        AsyncMock(side_effect=lambda _db, _playbook_id, _cell_id, selections, _indexes: (selections, [])),
+    )
     curated_slots = AsyncMock(return_value=[{
         "slot_id": 11,
         "slot_type": "cpu",

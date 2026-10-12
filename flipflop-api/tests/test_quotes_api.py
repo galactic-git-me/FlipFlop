@@ -141,15 +141,13 @@ class TestQuoteEndpoints:
         """Test POST /api/quotes/generate with budget below minimum."""
         response = client.post("/api/quotes/generate", json={"budget": 500})
 
-        assert response.status_code == 400
-        assert "Budget must be between" in response.json()["detail"]
+        assert response.status_code == 422
 
     def test_generate_quote_budget_above_maximum(self, client):
         """Test POST /api/quotes/generate with budget above maximum."""
         response = client.post("/api/quotes/generate", json={"budget": 5000})
 
-        assert response.status_code == 400
-        assert "Budget must be between" in response.json()["detail"]
+        assert response.status_code == 422
 
     @patch("app.routes.quotes.QuoteService.generate_quote")
     def test_generate_quote_service_returns_none(self, mock_generate, client):

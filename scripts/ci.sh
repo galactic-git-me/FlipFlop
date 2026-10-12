@@ -21,6 +21,7 @@ require_test_database() {
 
 require_test_database DATABASE_URL
 require_test_database SYNC_DATABASE_URL
+require_test_database TEST_DATABASE_URL
 
 log "Installing API dependencies"
 python -m pip install --disable-pip-version-check -q \
@@ -56,12 +57,16 @@ PY
 log "Running API tests"
 (
   cd "$ROOT_DIR/flipflop-api"
-  python -m pytest -q \
-    tests/test_curated_availability_public.py \
-    tests/test_curated_build_policy.py \
-    tests/test_curated_upgrade_benchmarks.py \
-    tests/test_public_playbook_fit.py \
-    tests/test_public_catalogue_api.py::test_analytics_event_does_not_trust_caller_customer_id
+  if [[ "${FLIPFLOP_CI_FULL_API_TESTS:-0}" == "1" ]]; then
+    python -m pytest -q tests
+  else
+    python -m pytest -q \
+      tests/test_curated_availability_public.py \
+      tests/test_curated_build_policy.py \
+      tests/test_curated_upgrade_benchmarks.py \
+      tests/test_public_playbook_fit.py \
+      tests/test_public_catalogue_api.py::test_analytics_event_does_not_trust_caller_customer_id
+  fi
 )
 
 log "Building admin"

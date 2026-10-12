@@ -408,6 +408,11 @@ async def ensure_order_job(
             build.spec_json = build_spec
         build.status = build_status
 
+    # Callers use the returned job's identifier immediately (including when
+    # retrying the sale hook in the same transaction), so materialize both
+    # the job and its linked portal shell before returning.
+    await db.flush()
+
     if playbook_id and not (job.checklist or {}).get("software_selection_submitted"):
         order_specs = (order.specs or {}) if order else {}
         snapshot = order_specs.get("software_profile")
