@@ -331,7 +331,10 @@ async def test_reserve_attachment_waits_for_existing_case_update_and_uses_latest
         # Give it time to run into the held row lock, then release the writer;
         # the attached claim below verifies it observed the committed status.
         await asyncio.sleep(0.1)
-        assert not attacher_task.done(), "Reserve attachment completed before the case update committed"
+        assert not attacher_task.done(), (
+            "Reserve attachment completed before the case update committed; "
+            f"task_error={attacher_task.exception()!r}"
+        )
 
         await case_writer.commit()
         attached_reserve = await asyncio.wait_for(attacher_task, timeout=5)
