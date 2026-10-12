@@ -44,7 +44,7 @@ def test_gaming_cell_accepts_equal_or_better_gpu_and_returns_evidence(monkeypatc
 
 def test_creator_cell_rejects_worse_cpu_even_if_overall_is_higher(monkeypatch):
     monkeypatch.setattr("app.api.curated_builds.normalise_cpu", lambda value: value.casefold())
-    with pytest.raises(ValueError, match="scores below this PlayBook cell's baseline"):
+    with pytest.raises(ValueError, match="scores below this Playbook cell's baseline"):
         _upgrade_performance_evidence(
             component_type="cpu",
             baseline_model="Baseline CPU",
