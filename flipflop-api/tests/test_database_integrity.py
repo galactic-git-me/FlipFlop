@@ -25,7 +25,7 @@ from app.api import orders as orders_api
 from app.api.orders import WarrantyReleaseIn
 from app.services.getting_started_jobs import lock_manual_build_then_getting_started_job
 from app.services.quote_service import QuoteService
-from app.services.warranty_service import lock_warranty_reserve_then_claim
+from app.services.warranty_service import ensure_order_reserve, lock_warranty_reserve_then_claim
 
 TEST_DATABASE_URL = os.getenv(
     "TEST_DATABASE_URL",
