@@ -38,10 +38,10 @@ def assert_isolated_postgres_target(url: str, schema: str) -> None:
     database = make_url(url).database or ""
     isolated_database = database.endswith("_test")
     isolated_schema = schema == "flipflop_test"
-    if not url.startswith("postgresql+asyncpg://") or not (isolated_database or isolated_schema):
+    if not url.startswith("postgresql+asyncpg://") or not isolated_database or not isolated_schema:
         raise RuntimeError(
-            "Integrity tests require PostgreSQL plus either a database ending "
-            "in '_test' or the dedicated 'flipflop_test' schema."
+            "Integrity tests require a PostgreSQL database ending in '_test' "
+            "and the dedicated 'flipflop_test' schema."
         )
 
 
