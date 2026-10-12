@@ -16,9 +16,25 @@ concurrency:
 jobs:
   checks:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: flipflop_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d flipflop_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
       OLLAMA_MODEL: disabled-in-ci
       EBAY_TOKEN_ENCRYPTION_KEY: ci-only-ebay-token-encryption-test-key
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/flipflop_test
+      SYNC_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/flipflop_test
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4

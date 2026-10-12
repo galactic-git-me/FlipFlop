@@ -7,7 +7,14 @@ only cpu/gpu/ram had model-extraction logic at all. That silently forced
 these categories onto a generic category-wide benchmark instead of their own
 product line's real market price.
 """
-from app.gem_radar.identity import is_likely_accessory, resolve_identity
+from app.gem_radar.identity import is_full_system_listing, is_likely_accessory, resolve_identity
+
+
+def test_complete_pc_titles_are_identified_without_flagging_standalone_parts():
+    assert is_full_system_listing("Gaming PC Ryzen 9 9950X3D 32GB DDR5 RTX 5090")
+    assert is_full_system_listing("Custom build with Ryzen 9 9950X3D and Windows 11")
+    assert not is_full_system_listing("AMD Ryzen 9 9950X3D Sixteen Core Processor Retail")
+    assert not is_full_system_listing("Desktop PC Case Fan 120mm ARGB")
 
 
 def test_explicit_product_type_beats_compatibility_specs():

@@ -29,6 +29,7 @@ from app.models.listing import Listing
 from app.routes.admin_auth import get_current_admin
 from pydantic import ValidationError as PydanticValidationError
 from app.schemas.case_mount import validate_case_mount_manifest
+from app.schemas.fan_layout import FanLayout
 from app.services.component_family_classifier import KNOWN_FAMILY_BUCKETS
 from app.services.media_sync import sync_to_public_media
 from app.services.meshy_generation import build_prompt, generate_multi_image_asset
@@ -170,6 +171,7 @@ def _serialize(a: Component3DAsset, source_video_refs: list[dict] | None = None)
         "dimensions_mm": a.dimensions_mm,
         "scale_validated": a.scale_validated,
         "anchor_manifest_json": a.anchor_manifest_json,
+        "fan_layout_json": a.fan_layout_json,
         "notes": a.notes,
         "created_by": a.created_by,
         "review_batch_id": a.review_batch_id,
@@ -430,7 +432,7 @@ def _approved_case_image_urls(evidence: dict | None) -> set[str]:
 
 
 def _owner_approved_case_image_order(evidence: dict | None) -> list[str]:
-    """Return the current owner-approved four photos in their chosen order."""
+    """Return one to four current owner-approved photos in their chosen order."""
     stages = (evidence or {}).get("stages") or {}
     selection = (stages.get("product_images") or {}).get("approved_selection") or {}
     images = selection.get("images") or []
@@ -439,7 +441,7 @@ def _owner_approved_case_image_order(evidence: dict | None) -> list[str]:
         for item in images
         if isinstance(item, dict) and isinstance(item.get("url"), str)
     ]
-    return urls if selection.get("status") == "approved" and len(urls) == 4 else []
+    return urls if selection.get("status") == "approved" and 1 <= len(urls) <= 4 else []
 
 
 async def _run_rejected_asset_regeneration(
@@ -666,7 +668,7 @@ class AssetCreate(BaseModel):
 
 
 class CaseMeshyGenerate(BaseModel):
-    image_urls: list[str] = Field(min_length=4, max_length=4)
+    image_urls: list[str] = Field(min_length=1, max_length=4)
     notes: str | None = None
     request_id: str = Field(min_length=1, max_length=100)
 
@@ -689,10 +691,10 @@ def _owner_approved_case_images(case: Case, requested_urls: list[str]) -> list[s
         .get("approved_selection", {})
     )
     approved = [item.get("url") for item in selection.get("images") or [] if isinstance(item, dict)]
-    if selection.get("status") != "approved" or len(approved) != 4:
-        raise HTTPException(status_code=409, detail="Approve exactly four reference pictures before generating the model")
+    if selection.get("status") != "approved" or not 1 <= len(approved) <= 4:
+        raise HTTPException(status_code=409, detail="Approve between one and four reference pictures before generating the model")
     if requested_urls != approved:
-        raise HTTPException(status_code=409, detail="Generation must use the four owner-approved pictures in their approved order")
+        raise HTTPException(status_code=409, detail="Generation must use the owner-approved pictures in their approved order")
     return approved
 
 
@@ -743,12 +745,38 @@ async def generate_case_asset(
         raise HTTPException(status_code=409, detail="An approved product image set is required")
 
     approved_image_urls = _owner_approved_case_images(case, body.image_urls)
+    prior_version = (
+        await db.execute(
+            select(Component3DAsset.version)
+            .where(
+                Component3DAsset.subject_type == AssetSubjectType.CASE,
+                Component3DAsset.subject_id == case.id,
+            )
+            .order_by(Component3DAsset.version.desc())
+            .limit(1)
+        )
+    ).scalar_one_or_none()
+    version = (prior_version or 0) + 1
+    local_glb = _PUBLIC_MEDIA_ROOT / f"catalogue-3d-case-{case.id}-v{version}.glb"
     evidence = dict(case.sourcing_3d_evidence or {"schema_version": 1, "stages": {}})
     evidence_stages = dict(evidence.get("stages") or {})
     generation = dict(evidence_stages.get("meshy_generation") or {"attempts": []})
+    prior_task_id = generation.get("task_id")
+    retrying_publish = (
+        generation.get("task_status") in ("SUCCEEDED", "PUBLISH_FAILED")
+        and bool(prior_task_id)
+        and local_glb.is_file()
+    )
+    if retrying_publish:
+        try:
+            _validate_uploaded_glb(local_glb.read_bytes())
+        except (OSError, ValueError):
+            retrying_publish = False
     generation.update(
-        status="searching", request_id=body.request_id, progress=0,
-        task_status="STARTING", updated_at=datetime.utcnow().isoformat(),
+        status="searching", request_id=body.request_id,
+        progress=100 if retrying_publish else 0,
+        task_status="PUBLISHING" if retrying_publish else "STARTING",
+        updated_at=datetime.utcnow().isoformat(),
     )
     evidence_stages["meshy_generation"] = generation
     evidence["stages"] = evidence_stages
@@ -771,27 +799,45 @@ async def generate_case_asset(
         case.sourcing_3d_evidence = current_evidence
         await db.commit()
 
-    result = await generate_multi_image_asset(approved_image_urls, progress_callback=record_meshy_progress)
-    if result is None:
-        await record_meshy_progress(0, "FAILED", None)
-        raise HTTPException(status_code=502, detail="Meshy generation failed — check service configuration")
-    if result.status != "SUCCEEDED" or not result.glb_url:
-        await record_meshy_progress(result.progress or 0, result.status, result.task_id)
-        raise HTTPException(status_code=502, detail=f"Meshy task ended as {result.status}")
+    if retrying_publish:
+        # Meshy already succeeded, but media sync failed. Reuse the local GLB
+        # on retry instead of starting and paying for another generation.
+        result_task_id = str(prior_task_id)
+        thumbnail_url = None
+        try:
+            if not await sync_to_public_media(local_glb):
+                raise HTTPException(status_code=502, detail="media sync failed")
+        except Exception as exc:
+            await record_meshy_progress(100, "PUBLISH_FAILED", result_task_id)
+            if isinstance(exc, HTTPException):
+                raise HTTPException(
+                    status_code=502,
+                    detail="Meshy already generated this model and its GLB is saved locally. Publishing still failed; retry Generate draft model to resume the saved GLB without running Meshy again.",
+                ) from exc
+            raise
+        stable_glb_url = f"{_PUBLIC_MEDIA_URL}/{local_glb.name}"
+        file_size_kb = max(1, local_glb.stat().st_size // 1024)
+    else:
+        result = await generate_multi_image_asset(approved_image_urls, progress_callback=record_meshy_progress)
+        if result is None:
+            await record_meshy_progress(0, "FAILED", None)
+            raise HTTPException(status_code=502, detail="Meshy generation failed — check service configuration")
+        if result.status != "SUCCEEDED" or not result.glb_url:
+            await record_meshy_progress(result.progress or 0, result.status, result.task_id)
+            raise HTTPException(status_code=502, detail=f"Meshy task ended as {result.status}")
 
-    prior_version = (
-        await db.execute(
-            select(Component3DAsset.version)
-            .where(
-                Component3DAsset.subject_type == AssetSubjectType.CASE,
-                Component3DAsset.subject_id == case.id,
-            )
-            .order_by(Component3DAsset.version.desc())
-            .limit(1)
-        )
-    ).scalar_one_or_none()
-    version = (prior_version or 0) + 1
-    stable_glb_url, file_size_kb = await _store_generated_glb(f"case-{case.id}", version, result.glb_url)
+        result_task_id = result.task_id
+        thumbnail_url = result.thumbnail_url
+        await record_meshy_progress(100, "PUBLISHING", result_task_id)
+        try:
+            stable_glb_url, file_size_kb = await _store_generated_glb(f"case-{case.id}", version, result.glb_url)
+        except HTTPException as exc:
+            await record_meshy_progress(100, "PUBLISH_FAILED", result_task_id)
+            raise HTTPException(
+                status_code=502,
+                detail="Meshy generated the model, but publishing its GLB failed. The local GLB was kept; retry Generate draft model to resume publication without running Meshy again.",
+            ) from exc
+
     asset = Component3DAsset(
         subject_type=AssetSubjectType.CASE,
         subject_id=case.id,
@@ -799,13 +845,13 @@ async def generate_case_asset(
         status=Component3DAssetStatus.MESHY_DRAFT,
         version=version,
         glb_ref=stable_glb_url,
-        preview_image_ref=result.thumbnail_url,
+        preview_image_ref=thumbnail_url,
         source_image_refs=approved_image_urls,
         file_size_kb=file_size_kb,
-        notes=body.notes or f"Top-30 rank {case.priority_3d_rank}; Meshy task {result.task_id}",
+        notes=body.notes or f"Top-30 rank {case.priority_3d_rank}; Meshy task {result_task_id}",
         created_by=getattr(admin, "email", None),
         provenance_status="original-recreation",
-        source_name=f"Meshy AI multi-image recreation (task {result.task_id})",
+        source_name=f"Meshy AI {'single-image' if len(approved_image_urls) == 1 else 'multi-image'} recreation (task {result_task_id})",
         commercial_use_approved=False,
         redistribution_approved=False,
         # Create the one-model review batch atomically with the asset. The
@@ -821,11 +867,13 @@ async def generate_case_asset(
     attempts = list(generation.get("attempts") or [])
     attempts.append({
         "provider": "Meshy",
-        "task_id": result.task_id,
+        "task_id": result_task_id,
         "asset_version": version,
         "source_image_urls": approved_image_urls,
+        "generation_mode": "image-to-3d" if len(approved_image_urls) == 1 else "multi-image-to-3d",
+        "endpoint": "/openapi/v1/image-to-3d" if len(approved_image_urls) == 1 else "/openapi/v1/multi-image-to-3d",
         "reference_selection_approved": True,
-        "texture_reference_urls": approved_image_urls,
+        "texture_reference_urls": approved_image_urls if len(approved_image_urls) > 1 else [],
         # Retain the original primary-view field for existing readers.
         "texture_reference_url": approved_image_urls[0],
         "requires_separate_model_approval": True,
@@ -1057,6 +1105,7 @@ class AssetPatch(BaseModel):
     dimensions_mm: dict | None = None
     scale_validated: bool | None = None
     anchor_manifest_json: dict | None = None
+    fan_layout_json: dict | None = None
     notes: str | None = None
     provenance_status: str | None = None
     source_name: str | None = None
@@ -1079,6 +1128,14 @@ async def patch_asset(asset_id: int, body: AssetPatch, admin=Depends(get_current
     if not asset:
         raise HTTPException(status_code=404, detail="Asset not found")
 
+    if body.fan_layout_json is not None:
+        if asset.subject_type != AssetSubjectType.CASE:
+            raise HTTPException(status_code=422, detail="Procedural fan layouts can only be saved on case assets")
+        try:
+            body.fan_layout_json = FanLayout.model_validate(body.fan_layout_json).model_dump(mode="json")
+        except PydanticValidationError as exc:
+            raise HTTPException(status_code=422, detail=f"Invalid fan layout: {exc}") from exc
+
     if (
         asset.subject_type == AssetSubjectType.CASE
         and body.anchor_manifest_json is not None
@@ -1090,7 +1147,7 @@ async def patch_asset(asset_id: int, body: AssetPatch, admin=Depends(get_current
 
     for field in (
         "glb_ref", "preview_image_ref", "poly_count", "file_size_kb",
-        "dimensions_mm", "scale_validated", "anchor_manifest_json", "notes",
+        "dimensions_mm", "scale_validated", "anchor_manifest_json", "fan_layout_json", "notes",
         "provenance_status", "source_name", "source_url", "licence", "licence_url",
         "commercial_use_approved", "redistribution_approved", "attribution",
     ):

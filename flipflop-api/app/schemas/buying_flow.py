@@ -78,9 +78,6 @@ class SessionAnalyticsEvent(BaseModel):
     # Buying flow context (carried through session)
     buying_flow: Optional[BuyingFlowData] = Field(None, description="Buying flow preferences")
     
-    # Customer context (if authenticated)
-    customer_id: Optional[int] = Field(None, description="Customer ID if logged in")
-    
     class Config:
         json_schema_extra = {
             "example": {
@@ -98,6 +95,5 @@ class SessionAnalyticsEvent(BaseModel):
                     "journey_tier": "mid",
                     "aesthetic_preference": "rgb"
                 },
-                "customer_id": 123
             }
         }

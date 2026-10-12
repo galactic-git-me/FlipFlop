@@ -114,7 +114,6 @@ class SwapSKURequest(BaseModel):
 @public_router.get("/build/{build_id}")
 async def get_build_availability(
     build_id: str,
-    check_live: bool = Query(False, description="Check live vendor availability"),
     db: AsyncSession = Depends(get_db)
 ):
     """
@@ -132,7 +131,8 @@ async def get_build_availability(
     """
     service = CuratedAvailabilityService(db)
     
-    bom = await service.get_build_bom_with_availability(build_id, check_live)
+    # Public reads use cached inventory only; live vendor checks are admin-only.
+    bom = await service.get_build_bom_with_availability(build_id, check_live=False)
     
     return bom
 
@@ -141,7 +141,6 @@ async def get_build_availability(
 async def get_available_builds(
     segment: Optional[str] = None,
     tier: Optional[str] = None,
-    check_live: bool = Query(False, description="Check live availability"),
     db: AsyncSession = Depends(get_db)
 ):
     """
@@ -157,19 +156,13 @@ async def get_available_builds(
     result = await db.execute(stmt)
     availabilities = result.scalars().all()
     
-    # If check_live, refresh each build's availability
-    if check_live:
-        service = CuratedAvailabilityService(db)
-        for avail in availabilities:
-            await service.update_build_availability(avail.curated_build_id, check_live=True)
-    
     # Filter by segment/tier if provided (would need to join with build definitions)
     # For now, return all available builds
     
     return {
         "available_builds": [a.curated_build_id for a in availabilities],
         "count": len(availabilities),
-        "checked_live": check_live
+        "checked_live": False
     }
 
 

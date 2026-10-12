@@ -122,37 +122,4 @@ export async function updateProfile(
   return response.json()
 }
 
-/**
- * Store auth token in localStorage
- */
-export function storeToken(token: string) {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('flipflop_auth_token', token)
-  }
-}
-
-/**
- * Get auth token from localStorage
- */
-export function getToken(): string | null {
-  if (typeof window !== 'undefined') {
-    return localStorage.getItem('flipflop_auth_token')
-  }
-  return null
-}
-
-/**
- * Remove auth token from localStorage
- */
-export function clearToken() {
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem('flipflop_auth_token')
-  }
-}
-
-/**
- * Check if user is authenticated
- */
-export function isAuthenticated(): boolean {
-  return getToken() !== null
-}
+// Keep returned access tokens in memory. Do not persist them in browser storage.

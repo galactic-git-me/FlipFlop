@@ -9,6 +9,7 @@ import { api } from "@/lib/api";
 type ViewMode = "table" | "listings" | "grid";
 type Tab = "segments" | "catalogue" | "playbook" | "inventory" | "assets" | "live";
 type Component = { id: number; slot_type: string; title: string; price: number; status: string; last_seen_at?: string; image_url?: string | null; url?: string; curated_for_builds: boolean };
+type CurationCandidate = Component & { segment_label: string; reference_image_url: string | null };
 type BestsellerMatch = { category: string; rank: number; asin: string; cpk: string; title: string; url: string | null; image_url: string | null; price: number | null; marketplace_listing_id: string; marketplace_source: string; marketplace_title: string; marketplace_url: string | null; marketplace_image_url: string | null; marketplace_image_is_reference: boolean; marketplace_is_self_capture: boolean; marketplace_price: number | null; marketplace_condition: string | null; marketplace_seen_at: string; review_status: "pending" | "approved" | "rejected" };
 type DraftBuild = { playbook_id: string; customer_type: string; budget_tier: string; name: string; status: string; est_component_cost_gbp: number; indicative_sell_gbp: number; note: string; core_components: { category: string; sku_name: string; cost_gbp: number }[]; upsells: { category: string; from_sku: string; to_sku: string; delta_cost_gbp: number; delta_sell_gbp: number | null }[] };
 type ApprovedUpgrade = { candidate_index: number; category: string; from_sku: string; to_sku: string; delta_cost_gbp: number; slot_id: number; target_variant_id: number; target_title: string; target_display_price: number; popularity_evidence: { source: string; category: string; cpk: string; rank: number; observed_price_gbp: number; title: string; url: string | null; captured_at: string | null } };
@@ -23,9 +24,27 @@ const TABS: { id: Tab; label: string }[] = [
 const SLOT_LABELS: Record<string, string> = { cpu: "CPU", gpu: "GPU", motherboard: "Motherboard", ram: "RAM", storage: "Storage", psu: "Power supply", cooling: "Cooling", case: "Case", os: "Operating system" };
 const CATEGORY_LABELS: Record<string, string> = { cpu: "CPUs", gpu: "Graphics cards", motherboard: "Motherboards", ram: "Memory", storage: "Storage", psu: "Power supplies", cooler: "CPU coolers", case: "Cases", os: "Operating systems" };
 const categoryForSlot = (slot: string) => slot === "cooling" ? "cooler" : slot;
+const DRAFT_CATEGORY_SLOT: Record<string, string> = {
+  "CPU / APU": "cpu", Motherboard: "motherboard", Memory: "ram", Graphics: "gpu",
+  "Primary storage": "storage", "Power supply": "psu", "CPU cooling": "cooling",
+  Case: "case", "Operating system": "os",
+};
 const normalizeModel = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
 const BUDGET_LEVELS = ["Budget", "Mid-range", "High-end"] as const;
 const formatBudgetRange = (segment: Segment) => segment.budget_min == null ? "Range needed" : segment.budget_max == null ? `£${segment.budget_min.toLocaleString()}+` : `£${segment.budget_min.toLocaleString()}–£${(segment.budget_max - 1).toLocaleString()}`;
+
+function collectCurationCandidates(segments: Segment[], matches: BestsellerMatch[]): CurationCandidate[] {
+  const seen = new Set<number>();
+  return segments.flatMap(segment => Object.entries(segment.component_details ?? {}).flatMap(([slot, component]) => {
+    if (!component || component.curated_for_builds || component.status !== "active" || seen.has(component.id)) return [];
+    seen.add(component.id);
+    const identity = segment.bestseller_components?.[slot];
+    const referenceImage = identity
+      ? matches.find(match => match.category === identity.category && match.cpk === identity.cpk)?.image_url ?? null
+      : null;
+    return [{ ...component, segment_label: `${segment.customer_type} · ${segment.budget_level}`, reference_image_url: referenceImage }];
+  }));
+}
 
 export default function CuratedBuildsPage() {
   const [tab, setTab] = useState<Tab>("segments");
@@ -42,6 +61,8 @@ export default function CuratedBuildsPage() {
   const [filter, setFilter] = useState("");
   const [reviewFilter, setReviewFilter] = useState<"all" | BestsellerMatch["review_status"]>("pending");
   const [reviewMatchIndex, setReviewMatchIndex] = useState<number | null>(null);
+  const [curationQueue, setCurationQueue] = useState<CurationCandidate[] | null>(null);
+  const [curationQueueIndex, setCurationQueueIndex] = useState(0);
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -100,16 +121,39 @@ export default function CuratedBuildsPage() {
       if (!response.ok) throw new Error((await response.json()).detail || "Could not save review");
       const result = await response.json();
       setBestsellerMatches(old => old.map(candidate => candidate.category === item.category && candidate.cpk === item.cpk ? { ...candidate, review_status: status } : candidate));
-      if (result.invalidated_cells) setMessage(`${result.invalidated_cells} Playbook cell(s) were unpublished and their upgrade pair removed because its popularity evidence is no longer approved.`);
+      if (result.invalidated_cells) setMessage(`${result.invalidated_cells} Playbook cell(s) were unpublished and their reviewed component offers removed because popularity evidence is no longer approved.`);
       if (result.invalidated_cells) await load();
     } catch (e) { setError(e instanceof Error ? e.message : "Could not save review"); }
     finally { setBusy(false); }
   };
-  const updateChoice = async (slot: string, value: string) => {
-    if (!selected) return;
-    const choices = { ...selected.components };
-    if (value) choices[slot] = Number(value); else delete choices[slot];
-    await saveSegment({ ...selected, components: choices });
+  const autoLinkBestsellerComponents = async () => {
+    setBusy(true); setError(""); setMessage("");
+    try {
+      const response = await fetch("/api/curated-builds/auto-link-bestseller-components", { method: "POST" });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail || "Could not auto-link Playbook products");
+      setMessage(`Linked ${data.linked} active supplier listing${data.linked === 1 ? "" : "s"} by Amazon ASIN/CPK. ${data.linked_needs_curation} need Curated Catalogue approval before publishing; ${data.unmatched} have no exact active supplier match.`);
+      await load();
+    } catch (e) { setError(e instanceof Error ? e.message : "Could not auto-link Playbook products"); }
+    finally { setBusy(false); }
+  };
+  const approveCurationCandidate = async () => {
+    const item = curationQueue?.[curationQueueIndex];
+    if (!item) return;
+    setBusy(true); setError("");
+    try {
+      const response = await fetch(`/api/curated-builds/variants/${item.id}/curated`, {
+        method: "PATCH", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ curated_for_builds: true }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail || "Could not approve supplier listing");
+      setMessage(`Approved ${item.title} for the Curated Catalogue.`);
+      if (curationQueueIndex + 1 >= curationQueue.length) setCurationQueue(null);
+      else setCurationQueueIndex(index => index + 1);
+      await load();
+    } catch (e) { setError(e instanceof Error ? e.message : "Could not approve supplier listing"); }
+    finally { setBusy(false); }
   };
   const generate = async (segment: Segment) => {
     setBusy(true); setError(""); setMessage("");
@@ -132,6 +176,7 @@ export default function CuratedBuildsPage() {
     (categoryFilter === "all" || c.category === categoryFilter) &&
     `${c.title} ${c.category} ${c.asin} ${c.marketplace_title}`.toLowerCase().includes(filter.toLowerCase())
   ), [bestsellerMatches, filter, categoryFilter]);
+  const pendingCurationCandidates = useMemo(() => collectCurationCandidates(segments, bestsellerMatches), [segments, bestsellerMatches]);
   const reviewMatch = reviewMatchIndex == null ? null : reviewCandidates[reviewMatchIndex] ?? null;
   useEffect(() => {
     if (reviewMatchIndex == null) return;
@@ -170,11 +215,43 @@ export default function CuratedBuildsPage() {
       {tab === "playbook" && <PlaybookGrid builds={draftBuilds} segments={segments} matches={bestsellerMatches} selectedId={selectedId} onSelect={setSelectedId} />}
       {tab === "playbook" && selectedId !== null && selected && <div role="dialog" aria-modal="true" aria-label={`${selected.customer_type} ${selected.budget_level} build`} className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-3 sm:p-6" onClick={() => setSelectedId(null)}><div className="max-h-[94vh] w-full max-w-6xl overflow-y-auto rounded-2xl border border-white/15 bg-[#0b1119] p-4 shadow-2xl sm:p-6" onClick={event => event.stopPropagation()}><div className="mb-4 flex items-start justify-between gap-4"><div><p className="text-xs uppercase tracking-widest text-cyan-300">Playbook build</p><h2 className="mt-1 text-2xl font-semibold">{draftBuilds.find(build => build.customer_type === selected.customer_type && build.budget_tier === selected.budget_level)?.name ?? selected.customer_type}</h2><p className="mt-1 text-sm text-slate-400">{selected.customer_type} · {selected.budget_level} · customer budget {formatBudgetRange(selected)}</p></div><button type="button" onClick={() => setSelectedId(null)} aria-label="Close build details" className="rounded-lg border border-white/10 p-2 text-slate-300 hover:bg-white/10"><X className="h-5 w-5"/></button></div><section className="mb-4 rounded-xl border border-white/10 bg-[#101924] p-4"><div className="flex flex-wrap items-start justify-between gap-3"><div><h3 className="font-semibold">Recommended software for this Playbook cell</h3><p className="mt-1 text-xs text-slate-400">Choose the recommended free applications for this customer type and budget. Customers can add or remove available apps before setup.</p></div><div className="flex gap-2"><button type="button" disabled={busy} onClick={() => void saveSegment({ ...selected, software_profile: null })} className="rounded-lg border border-white/10 px-3 py-2 text-xs text-slate-300 disabled:opacity-50">Restore inherited default</button><button type="button" disabled={busy} onClick={() => void saveSegment({ ...selected, software_profile: { recommended_package_ids: softwareDraft, rationale: softwareRationale } })} className="rounded-lg bg-cyan-400 px-3 py-2 text-xs font-semibold text-slate-950 disabled:opacity-50">Save software recommendations</button></div></div><label className="mt-3 block text-xs text-slate-400">Why these apps suit the segment</label><textarea value={softwareRationale} maxLength={2000} onChange={event => setSoftwareRationale(event.target.value)} rows={2} className="mt-1 w-full rounded-lg border border-white/10 bg-[#0b1119] p-2 text-sm"/><div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">{softwareApps.map(app => <label key={app.package_id} className="flex items-start gap-2 rounded-lg border border-white/5 p-2 text-xs"><input type="checkbox" checked={softwareDraft.includes(app.package_id)} onChange={event => setSoftwareDraft(current => event.target.checked ? [...current, app.package_id] : current.filter(id => id !== app.package_id))}/><span><span className="font-medium">{app.name}</span><span className="block text-slate-500">{app.category} · indicative {app.estimated_minutes_saved} min saved</span></span></label>)}</div>{softwareApps.length === 0 && <p className="mt-3 text-xs text-amber-300">Reviewed software catalogue unavailable; recommendations cannot be edited.</p>}</section><label className="mb-4 flex items-start gap-3 rounded-lg border border-white/10 bg-white/[.03] p-3 text-sm"><input type="checkbox" className="mt-1" checked={selected.allow_flip_component_sources} disabled={busy} onChange={event => void saveSegment({ ...selected, allow_flip_component_sources: event.target.checked })}/><span><span className="font-medium">Allow components recovered from potential flips</span><span className="mt-1 block text-xs text-slate-400">Candidates must meet or exceed this cell&apos;s benchmarks. Sources are for Flexible delivery or Ready-to-Ship builds.</span></span></label><FlipMatchPanel segment={selected}/><ReviewedBestsellerChoices segment={selected} build={draftBuilds.find(b => b.customer_type === selected.customer_type && b.budget_tier === selected.budget_level)} matches={bestsellerMatches} components={components} onSave={saveSegment} /><div className="mt-4 flex justify-end"><button disabled={busy} onClick={() => void generate(selected)} className="inline-flex items-center gap-2 rounded-lg bg-violet-500 px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50"><Sparkles className="h-4 w-4"/>{selected.regeneration_status === "queued" ? "Generation queued" : "Generate Build with Hermes"}</button></div></div></div>}
 
-      {tab === "inventory" && <section className="space-y-4"><div><h2 className="text-xl font-semibold">Price and Inventory</h2><p className="text-sm text-slate-400">Playbook parts are loaded automatically from the draft. Supplier stock and prices appear when catalogue listings are linked.</p></div>{segments.length === 0 ? <Empty title="No playbook segments" text="Create playbook segments to see pricing and availability."/> : <div className="overflow-x-auto rounded-xl border border-white/10"><table className="w-full text-left text-sm"><thead className="bg-[#14202d] text-xs text-slate-400"><tr>{["Build segment", "Components", "Supplier cost", "Selling price", "Availability", "State"].map(x=><th className="px-4 py-3" key={x}>{x}</th>)}</tr></thead><tbody>{segments.map(s=>{const build=draftBuilds.find(item=>item.customer_type===s.customer_type&&item.budget_tier===s.budget_level);const linkedCount=Object.values(s.component_details??{}).filter(Boolean).length;return <tr key={s.id} className="border-t border-white/5"><td className="px-4 py-3 font-medium">{s.customer_type} · {s.budget_level}</td><td className="max-w-md px-4 py-3 text-xs text-slate-400"><PlannedPartsDisclosure segment={s} build={build}/></td><td className="px-4 py-3">{linkedCount>0?`£${s.component_cost.toFixed(2)}`:"—"}</td><td className="px-4 py-3">{s.proposed_selling_price != null ? <span>£{s.selling_price?.toFixed(2) ?? "—"} <span className="text-amber-300">→ £{s.proposed_selling_price.toFixed(2)}</span> <button onClick={()=>void applyPrice(s)} className="ml-2 text-cyan-300 underline">Apply</button></span> : s.selling_price == null ? "—" : `£${s.selling_price.toFixed(2)}`}</td><td className="px-4 py-3"><AvailabilityBadge segment={s} plannedCount={build?.core_components.length ?? 0}/></td><td className="px-4 py-3 text-xs">{s.is_live ? "Live" : "Draft"}</td></tr>})}</tbody></table></div>}</section>}
+      {tab === "inventory" && <section className="space-y-4">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+          <h2 className="text-xl font-semibold">Price and Inventory</h2>
+          <p className="text-sm text-slate-400">Supplier listings are matched automatically to the Playbook’s Amazon ASIN/CPK identities. Only active Curated Catalogue listings are eligible.</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" disabled={busy} onClick={() => { setCurationQueue(pendingCurationCandidates); setCurationQueueIndex(0); }} className="inline-flex items-center gap-2 rounded-lg border border-emerald-400/30 px-3 py-2 text-sm font-semibold text-emerald-200 disabled:opacity-50">Review linked matches ({pendingCurationCandidates.length})</button>
+            <button type="button" disabled={busy} onClick={() => void autoLinkBestsellerComponents()} className="inline-flex items-center gap-2 rounded-lg bg-cyan-400 px-3 py-2 text-sm font-semibold text-slate-950 disabled:opacity-50"><RefreshCw className={`h-4 w-4 ${busy ? "animate-spin" : ""}`}/>Auto-link by ASIN / CPK</button>
+          </div>
+        </div>
+        {segments.length === 0 ? <Empty title="No playbook segments" text="Create playbook segments to see pricing and availability."/> : <div className="overflow-x-auto rounded-xl border border-white/10">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-[#14202d] text-xs text-slate-400"><tr>{["Build segment", "Components", "Supplier cost", "Selling price", "Availability", "State"].map(x=><th className="px-4 py-3" key={x}>{x}</th>)}</tr></thead>
+            <tbody>{segments.map(segment => {
+              const build = draftBuilds.find(item => item.customer_type === segment.customer_type && item.budget_tier === segment.budget_level);
+              const linkedCount = Object.values(segment.component_details ?? {}).filter(Boolean).length;
+              const stockTrackedCount = build?.core_components.filter(part => DRAFT_CATEGORY_SLOT[part.category] !== "os").length ?? 0;
+              return <tr key={segment.id} className="border-t border-white/5">
+                <td className="px-4 py-3 font-medium">{segment.customer_type} · {segment.budget_level}</td>
+                <td className="max-w-md px-4 py-3 text-xs text-slate-400">
+                  <PlannedPartsDisclosure segment={segment} build={build} matches={bestsellerMatches}/>
+                </td>
+                <td className="px-4 py-3">{linkedCount > 0 ? `£${segment.component_cost.toFixed(2)}` : "—"}</td>
+                <td className="px-4 py-3">{segment.proposed_selling_price != null ? <span>£{segment.selling_price?.toFixed(2) ?? "—"} <span className="text-amber-300">→ £{segment.proposed_selling_price.toFixed(2)}</span> <button onClick={() => void applyPrice(segment)} className="ml-2 text-cyan-300 underline">Apply</button></span> : segment.selling_price == null ? "—" : `£${segment.selling_price.toFixed(2)}`}</td>
+                <td className="px-4 py-3"><AvailabilityBadge segment={segment} plannedCount={stockTrackedCount}/></td>
+                <td className="px-4 py-3 text-xs">{segment.is_live ? "Live" : "Draft"}</td>
+              </tr>;
+            })}</tbody>
+          </table>
+        </div>}
+      </section>}
 
       {tab === "assets" && <section className="space-y-4"><div className="flex flex-wrap items-end justify-between gap-3"><div><h2 className="text-xl font-semibold">Shared 3D Assets</h2><p className="text-sm text-slate-400">Every Curated Catalogue component appears here, including products still waiting for a model. Assets are shared with the Custom Catalogue for the same product.</p></div><a href="/components-3d-review?curatedOnly=1" className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-200 hover:bg-white/5">Review curated images and models</a></div><Shared3DAssetGrid items={curatedComponents} assets={assets} onUploaded={recordUploadedAsset} onMessage={setMessage} onError={setError}/></section>}
 
       {tab === "live" && <section className="space-y-4"><div><h2 className="text-xl font-semibold">Go Live</h2><p className="text-sm text-slate-400">Final checks for publishing curated builds to the customer storefront.</p></div>{segments.length === 0 ? <Empty title="No builds ready for review" text="Add customer segments and assign curated components first."/> : <div className="space-y-3">{segments.map(s=>{const chosen=Object.values(s.component_details).filter(Boolean) as Component[];const required=["cpu","gpu","motherboard","ram","storage","psu","case"];const complete=required.every(slot=>s.component_details[slot] && s.component_details[slot]?.status === "active");const available=s.availability_status !== "out_of_stock";const priced=s.selling_price != null;const ready=complete&&available&&priced;return <article key={s.id} className="rounded-xl border border-white/10 bg-[#101924] p-4"><div className="flex flex-wrap items-center justify-between gap-3"><div><p className="font-semibold">{s.customer_type} · {s.budget_level}</p><p className="mt-1 text-xs text-slate-400">{chosen.length} components assigned</p></div><Badge tone={ready ? "green" : "amber"}>{ready ? "Ready for go live" : "Checks required"}</Badge></div><div className="mt-4 grid gap-2 sm:grid-cols-3 text-xs"><CheckRow ok={complete} label="CPU, GPU, motherboard, RAM, storage, PSU and case assigned"/><CheckRow ok={available} label="All selected listings available"/><CheckRow ok={priced} label="Selling price set"/></div><button onClick={()=>void publish(s)} disabled={!ready && !s.is_live} className="mt-4 rounded-lg bg-cyan-500 px-3 py-2 text-xs font-semibold text-slate-950 disabled:cursor-not-allowed disabled:opacity-40">{s.is_live ? "Take offline" : "Publish segment"}</button></article>})}<p className="text-xs text-slate-500">{totalChecks} segment{totalChecks===1?"":"s"} · Live availability follows the latest captured supplier listing status.</p></div>}</section>}
+      {curationQueue?.[curationQueueIndex] && <SupplierCurationModal item={curationQueue[curationQueueIndex]} index={curationQueueIndex} count={curationQueue.length} busy={busy} onClose={() => setCurationQueue(null)} onApprove={() => void approveCurationCandidate()} onNext={() => setCurationQueueIndex(index => index + 1)} />}
       {reviewMatch && reviewMatchIndex != null && <MatchReviewModal
         match={reviewMatch} index={reviewMatchIndex} count={reviewCandidates.length}
         busy={busy} error={error} onClose={() => setReviewMatchIndex(null)}
@@ -187,18 +264,31 @@ export default function CuratedBuildsPage() {
   </main>;
 }
 
+function SupplierCurationModal({ item, index, count, busy, onClose, onApprove, onNext }: {
+  item: CurationCandidate; index: number; count: number; busy: boolean;
+  onClose: () => void; onApprove: () => void; onNext: () => void;
+}) {
+  return <div role="dialog" aria-modal="true" aria-labelledby="supplier-curation-title" className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/80 p-4">
+    <section className="max-h-[90dvh] w-full max-w-xl overflow-y-auto rounded-2xl border border-white/15 bg-[#0b1119] shadow-2xl">
+      <header className="border-b border-white/10 px-5 py-4"><p className="text-xs font-semibold uppercase tracking-widest text-cyan-300">Supplier match review · {index + 1} of {count}</p><h2 id="supplier-curation-title" className="mt-1 text-lg font-semibold">{item.segment_label} · {SLOT_LABELS[item.slot_type] ?? item.slot_type}</h2></header>
+      <div className="space-y-4 p-5"><div><ProductThumbnail src={item.image_url} fallbackSrc={item.reference_image_url} alt={item.title} large/><p className="mt-1 text-[11px] text-slate-500">{item.image_url && item.reference_image_url ? "Supplier listing photo · Amazon product reference fallback" : item.image_url ? "Supplier listing photo" : item.reference_image_url ? "Amazon product reference · supplier photo unavailable" : "No product image available"}</p></div><div className="min-w-0"><p className="font-semibold">{item.title}</p><p className="mt-2 text-sm text-slate-300">£{item.price.toFixed(2)} · {item.status}</p><p className="mt-1 text-xs text-slate-500">Last seen {item.last_seen_at ? new Date(item.last_seen_at).toLocaleDateString("en-GB") : "unknown"}</p>{item.url && <a href={item.url} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-1 text-sm text-cyan-200 hover:underline">Open supplier listing <ExternalLink className="h-3.5 w-3.5"/></a>}<p className="mt-3 text-xs text-slate-400">Approving adds this supplier listing to the Curated Catalogue and allows it to be used in curated builds.</p></div></div>
+      <footer className="flex justify-between gap-2 border-t border-white/10 px-5 py-4"><button type="button" disabled={busy} onClick={onClose} className="rounded-lg border border-white/15 px-3 py-2 text-sm text-slate-300 disabled:opacity-50">Close</button><div className="flex gap-2"><button type="button" disabled={busy || index >= count - 1} onClick={onNext} className="rounded-lg border border-white/15 px-3 py-2 text-sm text-slate-300 disabled:opacity-40">Skip</button><button type="button" disabled={busy} onClick={onApprove} className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-bold text-slate-950 disabled:opacity-50"><Check className="h-4 w-4"/>{index < count - 1 ? "Approve & next" : "Approve"}</button></div></footer>
+    </section>
+  </div>;
+}
+
 function MatchReviewModal({ match, index, count, busy, error, onClose, onPrevious, onNext, onReview }: {
   match: BestsellerMatch; index: number; count: number; busy: boolean; error: string;
   onClose: () => void; onPrevious: () => void; onNext: () => void;
   onReview: (status: BestsellerMatch["review_status"]) => void;
 }) {
-  return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-2 backdrop-blur-sm sm:p-5" onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}>
-    <div role="dialog" aria-modal="true" aria-labelledby="match-review-title" className="flex h-[min(96vh,1100px)] w-full max-w-[1800px] flex-col overflow-hidden rounded-2xl border border-white/15 bg-[#0b1119] shadow-2xl">
+  return <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/85 p-2 backdrop-blur-sm sm:p-5" onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}>
+    <div role="dialog" aria-modal="true" aria-labelledby="match-review-title" className="flex h-[min(96dvh,1100px)] w-[min(96vw,1800px)] min-w-0 flex-col overflow-hidden rounded-2xl border border-white/15 bg-[#0b1119] shadow-2xl">
       <header className="flex shrink-0 items-center justify-between gap-3 border-b border-white/10 px-4 py-3 sm:px-6">
         <div className="min-w-0"><p className="text-xs font-semibold uppercase tracking-widest text-cyan-300">Match review · {index + 1} of {count}</p><h2 id="match-review-title" className="truncate text-base font-semibold sm:text-xl">{CATEGORY_LABELS[match.category] ?? match.category} · Amazon rank #{match.rank}</h2></div>
         <div className="flex shrink-0 items-center gap-2"><Badge tone={match.review_status === "approved" ? "green" : match.review_status === "rejected" ? "red" : "amber"}>{match.review_status}</Badge><button type="button" onClick={onClose} aria-label="Close comparison" className="rounded-lg border border-white/10 p-2 text-slate-300 hover:bg-white/10"><X className="h-5 w-5" /></button></div>
       </header>
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-px overflow-y-auto bg-white/10 md:grid-cols-2 md:overflow-hidden">
+      <div className="grid min-h-0 min-w-0 flex-1 grid-cols-1 gap-px overflow-y-auto bg-white/10 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:overflow-hidden">
         <MatchImagePanel key={`amazon-${match.asin}`} label="Amazon bestseller" title={match.title} price={match.price} imageUrl={match.image_url} url={match.url} detail={`ASIN ${match.asin}`} />
         <MatchImagePanel key={`market-${match.marketplace_listing_id}`} label={match.marketplace_image_is_reference ? `${match.marketplace_source} · product reference photo` : match.marketplace_is_self_capture ? "Amazon bestseller capture · ASIN self-match" : `${match.marketplace_source} listing`} title={match.marketplace_title} price={match.marketplace_price} imageUrl={match.marketplace_image_url} url={match.marketplace_url} detail={match.marketplace_condition ?? "Condition unknown"} />
       </div>
@@ -215,7 +305,7 @@ function MatchReviewModal({ match, index, count, busy, error, onClose, onPreviou
 
 function MatchImagePanel({ label, title, price, imageUrl, url, detail }: { label: string; title: string; price: number | null; imageUrl: string | null; url: string | null; detail: string }) {
   const [failed, setFailed] = useState(false);
-  return <div className="relative flex min-h-[360px] flex-col overflow-hidden bg-white md:min-h-0">
+  return <div className="relative flex min-h-[360px] min-w-0 flex-col overflow-hidden bg-white md:min-h-0">
     <div className="absolute left-4 top-4 z-10 rounded-full bg-slate-950/85 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-white shadow-lg">{label}</div>
     {imageUrl && !failed ? <img src={imageUrl} alt={title} onError={() => setFailed(true)} className="min-h-0 h-full w-full flex-1 object-contain p-4 pb-28" /> : <div className="flex flex-1 flex-col items-center justify-center gap-3 text-slate-500"><ImageIcon className="h-12 w-12" /><span className="text-sm">Picture unavailable</span></div>}
     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/95 to-transparent px-5 pb-5 pt-14 text-white sm:px-7">
@@ -226,21 +316,30 @@ function MatchImagePanel({ label, title, price, imageUrl, url, detail }: { label
 }
 
 function Empty({title,text}:{title:string;text:string}) { return <div className="rounded-xl border border-dashed border-white/10 bg-white/[.02] px-6 py-12 text-center"><Cpu className="mx-auto h-8 w-8 text-slate-600"/><p className="mt-3 font-semibold text-slate-300">{title}</p><p className="mt-1 text-sm text-slate-500">{text}</p></div>; }
-function ProductThumbnail({ src, alt, large = false }: { src?: string | null; alt: string; large?: boolean }) {
+function ProductThumbnail({ src, alt, large = false, fallbackSrc }: { src?: string | null; alt: string; large?: boolean; fallbackSrc?: string | null }) {
   const [failed, setFailed] = useState(false);
+  const [fallbackFailed, setFallbackFailed] = useState(false);
+  useEffect(() => { setFailed(false); setFallbackFailed(false); }, [src, fallbackSrc]);
   const size = large ? "h-36 w-full" : "h-16 w-16";
+  const imageSrc = failed ? fallbackSrc : src ?? fallbackSrc;
+  const imageFailed = fallbackFailed && (failed || !src);
   return <div className={`flex shrink-0 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-white ${size}`}>
-    {src && !failed ? <img src={src} alt={alt} loading="lazy" onError={() => setFailed(true)} className="h-full w-full object-contain" /> : <ImageIcon aria-label="Image unavailable" className="h-6 w-6 text-slate-400" />}
+    {imageSrc && !imageFailed ? <img src={imageSrc} alt={alt} loading="lazy" onError={() => { if (!failed && src && fallbackSrc && fallbackSrc !== src) setFailed(true); else setFallbackFailed(true); }} className="h-full w-full object-contain" /> : <ImageIcon aria-label="Image unavailable" className="h-6 w-6 text-slate-400" />}
   </div>;
 }
 function Badge({children,tone,title}:{children:ReactNode;tone:"green"|"red"|"amber";title?:string}) { return <span title={title} aria-label={title} tabIndex={title ? 0 : undefined} className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase ${tone==="green"?"border-emerald-400/20 bg-emerald-400/10 text-emerald-300":tone==="red"?"border-rose-400/20 bg-rose-400/10 text-rose-300":"border-amber-400/20 bg-amber-400/10 text-amber-300"}`}>{children}</span>; }
 function AvailabilityBadge({segment,plannedCount}:{segment:Segment;plannedCount:number}) {
   const assigned = Object.entries(segment.components ?? {});
+  const resolvedCount = assigned.filter(([slot]) => Boolean(segment.component_details?.[slot])).length;
   const unavailable = assigned.filter(([slot]) => segment.component_details?.[slot]?.status !== "active");
   if (segment.availability_status === "not_configured" || assigned.length === 0) {
     return plannedCount > 0
       ? <Badge tone="amber" title={`The Playbook has ${plannedCount} planned parts, but none are linked to supplier catalogue listings yet. Stock is unknown.`}>Not sourced</Badge>
       : <Badge tone="amber" title="No planned parts or supplier listings are assigned to this build segment.">Not configured</Badge>;
+  }
+  if (assigned.length !== plannedCount || resolvedCount !== assigned.length) {
+    const unknownCount = Math.max(0, plannedCount - resolvedCount);
+    return <Badge tone="amber" title={`${resolvedCount} of ${plannedCount} stock-tracked parts have resolved catalogue listings. Stock for the remaining parts is unknown.`}>Partially sourced</Badge>;
   }
   if (segment.availability_status === "out_of_stock") {
     const details = unavailable.map(([slot]) => {
@@ -252,17 +351,35 @@ function AvailabilityBadge({segment,plannedCount}:{segment:Segment;plannedCount:
   }
   return <Badge tone="green">In stock</Badge>;
 }
-function PlannedPartsDisclosure({segment,build}:{segment:Segment;build?:DraftBuild}) {
+function PlannedPartsDisclosure({segment,build,matches}:{
+  segment:Segment;
+  build?:DraftBuild;
+  matches:BestsellerMatch[];
+}) {
   const planned = build?.core_components ?? [];
   const linked = Object.values(segment.component_details ?? {}).filter((component): component is Component => Boolean(component));
   const assignedCount = Object.keys(segment.components ?? {}).length;
   if (planned.length === 0 && linked.length === 0 && assignedCount === 0) return <span>No components assigned</span>;
   const summary = planned.length > 0
-    ? `${planned.length} planned · ${assignedCount} linked`
+    ? `${planned.length} planned · ${linked.length} linked`
     : `${assignedCount} assigned component${assignedCount === 1 ? "" : "s"}`;
   return <details className="text-xs">
     <summary className="cursor-pointer text-cyan-200 hover:text-cyan-100">{summary}</summary>
-    {planned.length > 0 && <div className="mt-2"><p className="font-medium text-slate-300">Playbook plan · indicative costs</p><ul className="mt-1 space-y-1 text-slate-400">{planned.map((part, index) => <li key={`${part.category}-${part.sku_name}-${index}`}>{part.category}: {part.sku_name} · £{part.cost_gbp.toLocaleString("en-GB")}</li>)}</ul></div>}
+    {planned.length > 0 && <div className="mt-2 space-y-3"><p className="font-medium text-slate-300">Playbook plan · indicative costs</p>{planned.map((part, index) => {
+      const slot = DRAFT_CATEGORY_SLOT[part.category];
+      const partKey = `${part.category}-${part.sku_name}-${index}`;
+      if (slot === "os") return <div key={partKey} className="rounded-md border border-white/5 bg-white/[.02] p-2"><p className="text-slate-300">{part.category}: {part.sku_name}</p><p className="mt-1 text-[11px] text-slate-500">Software choice is managed in The Playbook tab; it is not supplier stock.</p></div>;
+      const selectedListing = slot ? segment.component_details?.[slot] : undefined;
+      const identity = slot ? segment.bestseller_components?.[slot] : undefined;
+      const amazonProduct = identity ? matches.find(match => match.category === identity.category && match.cpk === identity.cpk) : undefined;
+      return <div key={partKey} className="rounded-md border border-white/5 bg-white/[.02] p-2">
+        <p className="text-slate-300">{part.category}: {part.sku_name} <span className="text-slate-500">· indicative £{part.cost_gbp.toLocaleString("en-GB")}</span></p>
+        {!slot ? <p className="mt-1 text-amber-300">No catalogue slot mapping exists for this draft category.</p> : slot === "os" ? null : <p className="mt-1 text-[11px] text-slate-500">Amazon ASIN: {amazonProduct?.asin ?? "not found"} · CPK: {identity?.cpk ?? "not assigned"}</p>}
+        {selectedListing ? <p className={`mt-1 text-[11px] ${selectedListing.status === "active" ? "text-emerald-300" : "text-amber-300"}`}>
+          Matched supplier listing: {selectedListing.title} · £{selectedListing.price.toFixed(2)} · {selectedListing.status}{selectedListing.curated_for_builds ? " · curated" : " · needs Curated approval before publishing"}
+        </p> : slot !== "os" && <p className="mt-1 text-[11px] text-amber-300">No active curated supplier listing matched this Amazon identity yet.</p>}
+      </div>;
+    })}</div>}
     {linked.length > 0 && <div className="mt-2"><p className="font-medium text-slate-300">Linked supplier listings</p><ul className="mt-1 space-y-1 text-slate-400">{linked.map(component => <li key={component.id}>{component.title} · {component.status}</li>)}</ul></div>}
     {assignedCount > linked.length && <p className="mt-2 text-amber-300">{assignedCount - linked.length} assigned listing link{assignedCount - linked.length === 1 ? "" : "s"} could not be found in the catalogue.</p>}
   </details>;
@@ -312,7 +429,7 @@ function ReviewedBestsellerChoices({ segment, build, matches, components, onSave
   onSave: (segment: Partial<Segment> & { customer_type: string; budget_level: string }) => Promise<void>;
 }) {
   const slotCategory: Record<string, string> = { cpu: "cpu", gpu: "gpu", motherboard: "motherboard", ram: "ram", storage: "storage", psu: "psu", cooling: "cooler", case: "case" };
-  const draftCategorySlot: Record<string, string> = { "CPU / APU": "cpu", Motherboard: "motherboard", Memory: "ram", Graphics: "gpu", "Primary storage": "storage", "Power supply": "psu", "CPU cooling": "cooling", Case: "case" };
+  const draftCategorySlot = DRAFT_CATEGORY_SLOT;
   const choices = segment.bestseller_components ?? {};
   const integratedGraphics = /integrated/i.test(build?.core_components.find(item => item.category === "Graphics")?.sku_name ?? "");
   const selectedMatches = Object.values(choices).map(ref => matches.find(item => item.category === ref.category && item.cpk === ref.cpk)).filter((item): item is BestsellerMatch => Boolean(item));
@@ -326,7 +443,7 @@ function ReviewedBestsellerChoices({ segment, build, matches, components, onSave
       targetVariantId: String(item.target_variant_id),
     }])));
   }, [segment.id, segment.approved_upgrades]);
-  const suggestUpgradePair = () => {
+  const suggestComponentOffers = () => {
     const budgetAnchor = Math.max(segment.budget_min ?? 1, 1);
     const eligible = upgradeCandidates.flatMap((item, index) => {
       const slot = draftCategorySlot[item.category];
@@ -356,28 +473,20 @@ function ReviewedBestsellerChoices({ segment, build, matches, components, onSave
         label: `${item.category}: ${item.to_sku}`,
       }];
     }).sort((left, right) => right.score - left.score || left.index - right.index);
-    const pair: typeof eligible = [];
-    const usedCategories = new Set<string>();
-    for (const candidate of eligible) {
-      if (usedCategories.has(candidate.category)) continue;
-      pair.push(candidate);
-      usedCategories.add(candidate.category);
-      if (pair.length === 2) break;
-    }
-    if (pair.length !== 2) {
-      setUpgradeSuggestion("No two different upgrade categories currently have both approved exact-model popularity evidence and an active curated target.");
+    if (!eligible.length) {
+      setUpgradeSuggestion("No component upgrade currently has both approved exact-model popularity evidence and an active curated target.");
       return;
     }
-    setUpgradeSelections(Object.fromEntries(pair.map(candidate => [candidate.index, {
+    setUpgradeSelections(Object.fromEntries(eligible.map(candidate => [candidate.index, {
       cpk: candidate.cpk,
       category: candidate.category,
       targetVariantId: candidate.targetVariantId,
     }])));
-    setUpgradeSuggestion(`Suggested: ${pair.map(candidate => `${candidate.label} (Amazon #${candidate.rank}, about £${candidate.priceIncrease.toFixed(2)} above the current catalogue default)`).join("; ")}. Popularity and price point are weighted equally; review the evidence and targets before saving.`);
+    setUpgradeSuggestion(`Found ${eligible.length} component offer(s): ${eligible.map(candidate => `${candidate.label} (Amazon #${candidate.rank}, about £${candidate.priceIncrease.toFixed(2)} above the current catalogue default)`).join("; ")}. Review each evidence match and catalogue target before saving.`);
   };
   return <section className="rounded-xl border border-emerald-400/20 bg-[#101924] p-5">
     <h2 className="text-lg font-semibold">Playbook defaults and cell upgrades</h2>
-    <p className="mt-1 text-sm text-slate-400">The Playbook should offer two reviewed upgrades in total for this customer type and budget cell. Component-by-component possibilities below are draft candidates, not separate customer offers.</p>
+    <p className="mt-1 text-sm text-slate-400">Choose reviewed offers by component. Customers will see the Playbook default alongside every offer approved here; offers require an approved exact-model bestseller match and an active curated catalogue target.</p>
     <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">{Object.entries(slotCategory).map(([slot, category]) => {
       if (slot === "gpu" && integratedGraphics) return <div key={slot} className="space-y-1.5 text-xs text-slate-400">GPU<div className="rounded-lg border border-white/10 bg-[#0b1119] px-3 py-2.5 text-sm text-emerald-200">Integrated with CPU</div></div>;
       const ref = choices[slot];
@@ -388,8 +497,8 @@ function ReviewedBestsellerChoices({ segment, build, matches, components, onSave
       </div>;
     })}</div>
     <div className="mt-4 rounded-lg border border-violet-400/20 bg-violet-400/[.04] p-4">
-      <div className="flex flex-wrap items-center justify-between gap-2"><div><h3 className="font-semibold text-violet-200">Upgrade selection</h3><span className="text-xs text-slate-400">{upgradeCandidates.length} draft possibilities · 2 required</span></div><button type="button" onClick={suggestUpgradePair} disabled={upgradeCandidates.length < 2} className="rounded border border-violet-300/40 px-3 py-1.5 text-xs text-violet-200 disabled:opacity-40">Suggest best pair</button></div>
-      <p className="mt-2 text-[11px] leading-5 text-slate-400">Suggestion ranks only exact-model candidates with approved Amazon evidence and an active curated target. It weights the bestseller rank equally with the current catalogue price increase relative to this cell’s budget floor. The suggestion is not saved or published until you review and save it below.</p>
+      <div className="flex flex-wrap items-center justify-between gap-2"><div><h3 className="font-semibold text-violet-200">Component offer review</h3><span className="text-xs text-slate-400">{upgradeCandidates.length} draft possibilities · {Object.keys(upgradeSelections).length} selected</span></div><button type="button" onClick={suggestComponentOffers} disabled={!upgradeCandidates.length} className="rounded border border-violet-300/40 px-3 py-1.5 text-xs text-violet-200 disabled:opacity-40">Find available offers</button></div>
+      <p className="mt-2 text-[11px] leading-5 text-slate-400">This selects every draft possibility with an approved exact-model bestseller match and an active curated target. The selection is not saved or published until you review and save it below.</p>
       {upgradeSuggestion && <p role="status" className="mt-2 rounded border border-violet-300/20 bg-violet-300/5 p-2 text-xs text-violet-100">{upgradeSuggestion}</p>}
       {upgradeCandidates.length ? <div className="mt-3 space-y-2">{upgradeCandidates.map((item, index) => {
         const category = categoryForSlot(draftCategorySlot[item.category] ?? "");
@@ -406,7 +515,7 @@ function ReviewedBestsellerChoices({ segment, build, matches, components, onSave
           {picked && <span className="mt-2 grid gap-2 sm:grid-cols-2"><select aria-label={`${item.to_sku} curated target component`} value={picked.targetVariantId} onChange={event => setUpgradeSelections(current => ({ ...current, [index]: { ...current[index], targetVariantId: event.target.value } }))} className="rounded border border-white/10 bg-[#111a26] p-2 text-xs"><option value="">Choose active curated catalogue target</option>{targets.map(target => <option key={target.id} value={target.id}>{target.title} · £{target.price.toFixed(2)}</option>)}</select><select aria-label={`${item.to_sku} bestseller evidence`} value={picked.cpk} onChange={event => setUpgradeSelections(current => ({ ...current, [index]: { ...current[index], cpk: event.target.value } }))} className="rounded border border-white/10 bg-[#111a26] p-2 text-xs"><option value="">Choose approved exact-model bestseller</option>{matches.filter(candidate => candidate.category === category && candidate.review_status === "approved" && normalizeModel(candidate.title).includes(normalizeModel(item.to_sku))).map(candidate => <option key={candidate.cpk} value={candidate.cpk}>#{candidate.rank} · {candidate.title} · {candidate.marketplace_price == null ? "price unavailable" : `£${candidate.marketplace_price.toFixed(2)}`}</option>)}</select></span>}
         </label>;
       })}</div> : <p className="mt-2 text-sm text-slate-400">No upgrade possibilities are present in this draft.</p>}
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-3"><p className="text-xs text-slate-400">Save exactly two different upgrades with active curated catalogue targets and approved exact-model bestseller evidence. Checkout will use the current catalogue prices for selected components.</p><div className="flex gap-2"><button type="button" disabled={!segment.approved_upgrades?.length} onClick={() => void onSave({ ...segment, approved_upgrades: [] })} className="rounded-lg border border-white/10 px-3 py-2 text-xs text-slate-300 disabled:opacity-50">Remove saved pair</button><button type="button" disabled={Object.keys(upgradeSelections).length !== 2 || Object.values(upgradeSelections).some(item => !item.cpk || !item.targetVariantId)} onClick={() => void onSave({ ...segment, approved_upgrades: Object.entries(upgradeSelections).map(([candidate_index, item]) => ({ candidate_index: Number(candidate_index), popularity_cpk: item.cpk, evidence_category: item.category, target_variant_id: Number(item.targetVariantId) })) as unknown as ApprovedUpgrade[] })} className="rounded-lg bg-violet-400 px-3 py-2 text-xs font-semibold text-slate-950 disabled:opacity-50">Save selected pair</button></div></div>
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-3"><p className="text-xs text-slate-400">Save the reviewed component offers. Publishing requires an approved offer for each component category with a drafted upgrade. Checkout validates the selected active catalogue item and uses its current price.{segment.is_live ? " Unpublish this cell before removing saved offers." : ""}</p><div className="flex gap-2"><button type="button" disabled={segment.is_live || !segment.approved_upgrades?.length} onClick={() => void onSave({ ...segment, approved_upgrades: [] })} className="rounded-lg border border-white/10 px-3 py-2 text-xs text-slate-300 disabled:opacity-50">Remove saved offers</button><button type="button" disabled={!Object.keys(upgradeSelections).length || Object.values(upgradeSelections).some(item => !item.cpk || !item.targetVariantId)} onClick={() => void onSave({ ...segment, approved_upgrades: Object.entries(upgradeSelections).map(([candidate_index, item]) => ({ candidate_index: Number(candidate_index), popularity_cpk: item.cpk, evidence_category: item.category, target_variant_id: Number(item.targetVariantId) })) as unknown as ApprovedUpgrade[] })} className="rounded-lg bg-violet-400 px-3 py-2 text-xs font-semibold text-slate-950 disabled:opacity-50">Save reviewed offers</button></div></div>
     </div>
     <p className="mt-4 text-xs text-amber-300">{selectedMatches.length}/{integratedGraphics ? 7 : 8} hardware defaults selected · marketplace comparison total £{observedTotal.toFixed(2)}. Compatibility, delivery, procurement cost and PricingBot selling price still need validation before launch.</p>
   </section>;

@@ -133,6 +133,48 @@ async def price_playbook_build(
             catalogue_name = "curated" if mode == "curated" else "custom"
             raise InvalidBuildError(f"Variant {variant_id} is not available in the {catalogue_name} catalogue for slot {slot_id}")
 
+    curated_budget_ceiling = None
+    if mode == "curated":
+        defaults = {int(slot["slot_id"]): slot.get("default_variant_id") for slot in selectable}
+        choices_by_slot = {
+            int(slot["slot_id"]): {
+                int(item["id"]): item
+                for variants in (slot.get("variants_by_tier") or {}).values()
+                for item in variants
+            }
+            for slot in selectable
+        }
+        non_default = {
+            slot_id: variant_id for slot_id, variant_id in slot_selections.items()
+            if defaults.get(int(slot_id)) != int(variant_id)
+        }
+        for slot_id, variant_id in non_default.items():
+            choice = choices_by_slot.get(int(slot_id), {}).get(int(variant_id), {})
+            if not choice.get("automatic_upsell"):
+                raise InvalidBuildError("Curated upgrades must be available, compatible, and have a higher market median than the recommended part")
+        if non_default:
+            from app.services.curated_build_policy import definitions
+            cell = next((item for item in definitions().get("builds", []) if item.get("id") == curated_build_id), None)
+            segment = (await db.execute(select(CuratedBuildSegment).where(
+                CuratedBuildSegment.customer_type == (cell or {}).get("segment"),
+                CuratedBuildSegment.budget_level == (cell or {}).get("tier"),
+            ))).scalar_one_or_none()
+            if not segment or segment.budget_max is None:
+                raise InvalidBuildError("This curated segment has no budget ceiling for component upgrades")
+            curated_budget_ceiling = round(float(segment.budget_max) * 1.2, 2)
+            from app.services.configurator_compatibility import evaluate_configuration
+            compatibility = await evaluate_configuration(db, playbook_id, slot_selections, case_id)
+            verdicts = {
+                (int(slot["slot_id"]), int(verdict["variant_id"])): verdict
+                for slot in compatibility.get("slots", [])
+                for verdict in slot.get("variants", [])
+            }
+            for slot_id, variant_id in non_default.items():
+                verdict = verdicts.get((int(slot_id), int(variant_id)))
+                if not verdict or not verdict.get("is_compatible", True):
+                    reason = verdict.get("reason") if verdict else None
+                    raise InvalidBuildError(reason or "This component is incompatible with the selected system")
+
     build = PricedBuild(playbook_id=playbook_id, applied_upgrades=applied_upgrades)
 
     pb_result = await db.execute(select(Playbook.name).where(Playbook.id == playbook_id))
@@ -203,6 +245,10 @@ async def price_playbook_build(
     subtotal = build.parts_total + LABOUR_COST
     build.overhead = subtotal * OVERHEAD_RATE
     build.total = round(subtotal + build.overhead, 2)
+    if curated_budget_ceiling is not None and build.total > curated_budget_ceiling:
+        raise InvalidBuildError(
+            f"This upgrade would take the build above the segment budget limit of £{curated_budget_ceiling:,.2f}"
+        )
     return build
 
 
@@ -213,13 +259,13 @@ async def apply_curated_cell_upgrades(
     slot_selections: dict[int, int],
     candidate_indexes: list[int],
 ) -> tuple[dict[int, int], list[dict]]:
-    """Apply only the saved, cell-approved component substitutions."""
+    """Validate customer-selected substitutions against reviewed cell offers."""
     if not candidate_indexes and not curated_build_id:
         return slot_selections, []
     if not curated_build_id:
         raise InvalidBuildError("Playbook upgrades are available only for a curated cell")
-    if len(candidate_indexes) > 2 or len(set(candidate_indexes)) != len(candidate_indexes):
-        raise InvalidBuildError("Choose at most two distinct Playbook upgrades")
+    if len(set(candidate_indexes)) != len(candidate_indexes):
+        raise InvalidBuildError("A reviewed component offer was selected more than once")
     from app.services.curated_build_policy import definitions
     cell = next((item for item in definitions().get("builds", []) if item.get("id") == curated_build_id), None)
     if not cell:
@@ -232,25 +278,34 @@ async def apply_curated_cell_upgrades(
         CuratedBuildSegment.budget_level == cell["tier"],
     ))).scalar_one_or_none()
     approved = (segment.approved_upgrades or []) if segment and segment.is_live else []
-    if len(approved) != 2:
+    if not approved:
         if candidate_indexes:
-            raise InvalidBuildError("This curated cell has no complete approved upgrade pair")
+            raise InvalidBuildError("This curated cell has no approved component offers")
         return slot_selections, []
     approved_by_index = {int(item["candidate_index"]): item for item in approved if isinstance(item, dict) and item.get("candidate_index") is not None}
     if any(index not in approved_by_index for index in candidate_indexes):
         raise InvalidBuildError("A selected upgrade is no longer approved for this Playbook cell")
-    chosen = [approved_by_index[index] for index in candidate_indexes]
-    target_ids = {int(item["target_variant_id"]) for item in approved if item.get("target_variant_id")}
-    submitted_targets = {value for value in slot_selections.values() if value in target_ids}
+    approved_by_target = {
+        int(item["target_variant_id"]): item
+        for item in approved
+        if isinstance(item, dict) and item.get("target_variant_id") is not None
+    }
+    submitted_targets = {value for value in slot_selections.values() if value in approved_by_target}
+    chosen = (
+        [approved_by_index[index] for index in candidate_indexes]
+        if candidate_indexes
+        else [approved_by_target[target] for target in submitted_targets]
+    )
     chosen_targets = {int(item["target_variant_id"]) for item in chosen}
     if submitted_targets - chosen_targets:
-        raise InvalidBuildError("A Playbook upgrade component was supplied without selecting its approved upgrade")
+        raise InvalidBuildError("A Playbook upgrade component was supplied without selecting its reviewed offer")
     resolved = dict(slot_selections)
-    occupied_slots: set[int] = set()
+    chosen_by_slot: dict[int, int] = {}
     for item in chosen:
         slot_id = int(item["slot_id"])
-        if slot_id in occupied_slots:
-            raise InvalidBuildError("Selected Playbook upgrades conflict in the same component slot")
-        occupied_slots.add(slot_id)
-        resolved[slot_id] = int(item["target_variant_id"])
+        target_id = int(item["target_variant_id"])
+        if slot_id in chosen_by_slot and chosen_by_slot[slot_id] != target_id:
+            raise InvalidBuildError("Choose only one reviewed offer per component")
+        chosen_by_slot[slot_id] = target_id
+        resolved[slot_id] = target_id
     return resolved, chosen

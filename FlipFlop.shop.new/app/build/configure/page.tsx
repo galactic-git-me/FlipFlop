@@ -37,6 +37,18 @@ function BuildConfigureContent() {
     'high': 'High-end',
   }
 
+  const customerType = CUSTOMER_TYPE_MAP[typeId]
+  const tierName = TIER_MAP[tierId]
+  const matchingBuilds = builds.filter((build) => {
+    const segmentMatch = build.segment === customerType
+    const tierMatch = build.tier.toLowerCase() === tierName?.toLowerCase()
+    const withinBudget = build.price_gbp ? build.price_gbp <= budget : false
+    return segmentMatch && tierMatch && withinBudget
+  })
+  const isBespoke = typeId === 'ai' && tierId === 'high'
+  const bespokeBuilds = builds.filter((build) => isBespokeOnly(build.id))
+  const recommended = [...matchingBuilds].sort((a, b) => (b.price_gbp || 0) - (a.price_gbp || 0))[0]
+
   useEffect(() => {
     async function loadBuilds() {
       try {
@@ -50,6 +62,17 @@ function BuildConfigureContent() {
     }
     loadBuilds()
   }, [])
+
+  useEffect(() => {
+    if (recommended) {
+      trackEvent('playbook_tier_shown', recommended.id, {
+        segment: customerType,
+        tier: tierName,
+        budget,
+        customer_type: typeId,
+      })
+    }
+  }, [recommended?.id, customerType, tierName, budget, typeId])
 
   if (!budget || !typeId || !tierId) {
     return (
@@ -91,36 +114,6 @@ function BuildConfigureContent() {
       </div>
     )
   }
-
-  const customerType = CUSTOMER_TYPE_MAP[typeId]
-  const tierName = TIER_MAP[tierId]
-
-  // Filter builds matching customer type and tier
-  const matchingBuilds = builds.filter((build) => {
-    const segmentMatch = build.segment === customerType
-    const tierMatch = build.tier.toLowerCase() === tierName.toLowerCase()
-    const withinBudget = build.price_gbp ? build.price_gbp <= budget : false
-    return segmentMatch && tierMatch && withinBudget
-  })
-
-  // Handle bespoke AI Workstation High
-  const isBespoke = typeId === 'ai' && tierId === 'high'
-  const bespokeBuilds = builds.filter(b => isBespokeOnly(b.id))
-
-  // Find the recommended build (highest price within budget)
-  const recommended = matchingBuilds.sort((a, b) => (b.price_gbp || 0) - (a.price_gbp || 0))[0]
-
-  // Track analytics event for the recommended build
-  useEffect(() => {
-    if (recommended) {
-      trackEvent('playbook_tier_shown', recommended.id, {
-        segment: recommended.segment,
-        tier: recommended.tier,
-        budget,
-        customer_type: typeId,
-      })
-    }
-  }, [recommended, budget, typeId])
 
   const BuildCard = ({ build, badge }: { build: CuratedBuild; badge?: string }) => {
     const memGen = getMemoryGeneration(build.id)

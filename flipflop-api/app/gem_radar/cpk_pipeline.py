@@ -24,7 +24,7 @@ from app.gem_radar.cpk_extractor import extract_cpk
 from app.gem_radar.cpk_market import upsert_listing_price, upsert_scan_price
 from app.gem_radar.benchmarks import normalize_match_key
 from app.gem_radar.opportunity_scoring import identity_gates
-from app.gem_radar.identity import resolve_identity
+from app.gem_radar.identity import is_full_system_listing, resolve_identity
 from app.gem_radar.fan_category import correct_case_fan_cpk
 from app.gem_radar.product_identifiers import categories_compatible, extract_asin
 
@@ -97,7 +97,7 @@ def _identity_match_keys(brand: str | None, model: str | None) -> set[str]:
 
 
 def _valid_existing_cpk(data: dict | None, title: str) -> bool:
-    if not data or not data.get("category") or not data.get("brand") or not data.get("model"):
+    if is_full_system_listing(title) or not data or not data.get("category") or not data.get("brand") or not data.get("model"):
         return False
     return not any(
         flag in {"identity_incomplete", "accessory_or_parts_listing", "bundle_listing"}
@@ -125,6 +125,12 @@ async def assign_cpk_and_accumulate_price(
     observation row regardless via the caller, it just never gets folded into
     any CPK's market price.
     """
+    # A complete PC can mention a CPU model in its title, but its system price
+    # must never become a component benchmark. Keep historical identity rows
+    # intact; the price aggregation excludes these titles by source observation.
+    if is_full_system_listing(title):
+        return None
+
     existing = await db.execute(
         text("SELECT cpk, cpk_data FROM gem_radar_listing_cpk WHERE listing_id = :listing_id"),
         {"listing_id": listing_id},

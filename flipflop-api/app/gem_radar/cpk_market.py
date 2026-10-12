@@ -97,7 +97,7 @@ async def get_robust_active_market(
     normalised = "new" if (condition or "").lower() == "new" else "used"
     result = await db.execute(text("""
         WITH latest AS (
-            SELECT DISTINCT ON (listing_id) listing_id, condition_normalised, source
+            SELECT DISTINCT ON (listing_id) listing_id, condition_normalised, source, title
             FROM gem_radar_listing_observations
             ORDER BY listing_id, observed_at DESC, id DESC
         )
@@ -108,6 +108,7 @@ async def get_robust_active_market(
           AND p.listing_id <> :subject
           AND p.updated_at >= CURRENT_TIMESTAMP - INTERVAL '14 days'
           AND CASE WHEN LOWER(COALESCE(l.condition_normalised, '')) = 'new' THEN 'new' ELSE 'used' END = :condition
+          AND l.title !~* '\\m(laptop|notebook|chromebook|ultrabook|macbook|gaming[[:space:]]*pc|desktop[[:space:]]*pc|workstation[[:space:]]*pc|tower[[:space:]]*pc|pre-?built|all-in-one|aio[[:space:]]*pc|mini[[:space:]]*pc|complete[[:space:]]*(pc|system|build)|full[[:space:]]*(pc|system|build)|windows?[[:space:]]*(10|11))\\M'
           AND p.price > 0
     """), {"cpk": cpk, "subject": subject_listing_id, "condition": normalised})
     comps = [
@@ -245,15 +246,22 @@ async def upsert_listing_price(
                 MAX(price) AS max_price,
                 PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY price) AS median_price
             FROM (
-                SELECT price FROM gem_radar_cpk_listing_price
-                WHERE cpk = :cpk
-                  AND price > 0
-                  AND updated_at >= CURRENT_TIMESTAMP - INTERVAL '{MARKET_PRICE_WINDOW_DAYS} days'
+                SELECT p.price FROM gem_radar_cpk_listing_price p
+                JOIN LATERAL (
+                    SELECT title FROM gem_radar_listing_observations o
+                    WHERE o.listing_id = p.listing_id
+                    ORDER BY o.observed_at DESC, o.id DESC LIMIT 1
+                ) latest ON TRUE
+                WHERE p.cpk = :cpk
+                  AND p.price > 0
+                  AND p.updated_at >= CURRENT_TIMESTAMP - INTERVAL '{MARKET_PRICE_WINDOW_DAYS} days'
+                  AND latest.title !~* '\\m(laptop|notebook|chromebook|ultrabook|macbook|((desktop|gaming|workstation|tower)[[:space:]]*pc(?![[:space:]]*(case([[:space:]]*fan)?|cooler|fan|psu|power[[:space:]]*supply)))|pre-?built|all-in-one|aio[[:space:]]*pc|mini[[:space:]]*pc|complete[[:space:]]*(pc|system|build)|full[[:space:]]*(pc|system|build)|windows?[[:space:]]*(10|11))\\M'
                 UNION ALL
                 SELECT price + COALESCE(postage, 0) FROM gem_radar_sold_observations
                 WHERE cpk = :cpk
                   AND price > 0
                   AND observed_at >= CURRENT_TIMESTAMP - INTERVAL '{MARKET_PRICE_WINDOW_DAYS} days'
+                  AND COALESCE(title, '') !~* '\\m(laptop|notebook|chromebook|ultrabook|macbook|((desktop|gaming|workstation|tower)[[:space:]]*pc(?![[:space:]]*(case([[:space:]]*fan)?|cooler|fan|psu|power[[:space:]]*supply)))|pre-?built|all-in-one|aio[[:space:]]*pc|mini[[:space:]]*pc|complete[[:space:]]*(pc|system|build)|full[[:space:]]*(pc|system|build)|windows?[[:space:]]*(10|11))\\M'
                 UNION ALL
                 SELECT price FROM gem_radar_amazon_observations
                 WHERE cpk = :cpk
@@ -326,15 +334,22 @@ async def get_market_price(db: AsyncSession, cpk: str) -> CPKMarketPrice | None:
                 PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY price) AS median_price,
                 COUNT(*) AS listing_count
             FROM (
-                SELECT price FROM gem_radar_cpk_listing_price
-                WHERE cpk = :cpk
-                  AND price > 0
-                  AND updated_at >= CURRENT_TIMESTAMP - INTERVAL '{MARKET_PRICE_WINDOW_DAYS} days'
+                SELECT p.price FROM gem_radar_cpk_listing_price p
+                JOIN LATERAL (
+                    SELECT title FROM gem_radar_listing_observations o
+                    WHERE o.listing_id = p.listing_id
+                    ORDER BY o.observed_at DESC, o.id DESC LIMIT 1
+                ) latest ON TRUE
+                WHERE p.cpk = :cpk
+                  AND p.price > 0
+                  AND p.updated_at >= CURRENT_TIMESTAMP - INTERVAL '{MARKET_PRICE_WINDOW_DAYS} days'
+                  AND latest.title !~* '\\m(laptop|notebook|chromebook|ultrabook|macbook|((desktop|gaming|workstation|tower)[[:space:]]*pc(?![[:space:]]*(case([[:space:]]*fan)?|cooler|fan|psu|power[[:space:]]*supply)))|pre-?built|all-in-one|aio[[:space:]]*pc|mini[[:space:]]*pc|complete[[:space:]]*(pc|system|build)|full[[:space:]]*(pc|system|build)|windows?[[:space:]]*(10|11))\\M'
                 UNION ALL
                 SELECT price + COALESCE(postage, 0) FROM gem_radar_sold_observations
                 WHERE cpk = :cpk
                   AND price > 0
                   AND observed_at >= CURRENT_TIMESTAMP - INTERVAL '{MARKET_PRICE_WINDOW_DAYS} days'
+                  AND COALESCE(title, '') !~* '\\m(laptop|notebook|chromebook|ultrabook|macbook|((desktop|gaming|workstation|tower)[[:space:]]*pc(?![[:space:]]*(case([[:space:]]*fan)?|cooler|fan|psu|power[[:space:]]*supply)))|pre-?built|all-in-one|aio[[:space:]]*pc|mini[[:space:]]*pc|complete[[:space:]]*(pc|system|build)|full[[:space:]]*(pc|system|build)|windows?[[:space:]]*(10|11))\\M'
                 UNION ALL
                 SELECT price FROM gem_radar_amazon_observations
                 WHERE cpk = :cpk

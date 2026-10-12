@@ -1,6 +1,7 @@
 # Dev requirements — no strict pins, resolves cleanly
 fastapi
 uvicorn[standard]
+watchfiles>=1.0,<2.0
 python-dotenv
 
 # Database — SQLite for local dev, PostgreSQL for prod
@@ -42,3 +43,7 @@ reportlab
 
 # Payment Processing
 stripe
+
+# Test runner
+pytest
+pytest-asyncio

@@ -19,7 +19,7 @@ interface AppSettings {
   image_gen_provider: string;
   default_sell_platform: string;
   ebay_app_id: string;
-  // Seller Policies (playbook rows 11-15, 43, 44) â€” configured once, applied
+  // Seller Policies (playbook rows 11-15, 43, 44) — configured once, applied
   // to every listing, not re-entered per build (see build details Dispatch tab).
   handling_time_days: number;
   returns_accepted: boolean;
@@ -71,11 +71,11 @@ interface DataSource {
 }
 
 const SCORE_COMPONENTS = [
-  { label: "Economic return Â· 45%", description: "How attractive the resale economics are after purchase and selling costs.", calculation: "Compares the listing price with the median same-condition market price, subtracts delivery, fees, packaging, testing and reserve costs, then normalises expected profit and ROI against the configured GEM and SUPER GEM floors. It contributes 45% of the final score." },
-  { label: "Desirability Â· 15%", description: "How strongly buyers are likely to want the identified product.", calculation: "Uses product and category demand signals, preferred-product fit and inventory fit. It contributes 15%." },
-  { label: "Market confidence Â· 15%", description: "How trustworthy the market-price estimate is.", calculation: "Combines comparable sample size, source diversity and identity confidence. It contributes 15%." },
-  { label: "Risk safety Â· 5%", description: "How few risks or warnings were found for the listing.", calculation: "Starts from a safe score and deducts for identity, condition, seller and evidence risks. It contributes 5%." },
-  { label: "Liquidity Â· 20%", description: "How likely the item is to sell within a reasonable time.", calculation: "Uses sold volume, active competition and available watch or bid velocity. It contributes 20%." },
+  { label: "Economic return · 45%", description: "How attractive the resale economics are after purchase and selling costs.", calculation: "Compares the listing price with the median same-condition market price, subtracts delivery, fees, packaging, testing and reserve costs, then normalises expected profit and ROI against the configured GEM and SUPER GEM floors. It contributes 45% of the final score." },
+  { label: "Desirability · 15%", description: "How strongly buyers are likely to want the identified product.", calculation: "Uses product and category demand signals, preferred-product fit and inventory fit. It contributes 15%." },
+  { label: "Market confidence · 15%", description: "How trustworthy the market-price estimate is.", calculation: "Combines comparable sample size, source diversity and identity confidence. It contributes 15%." },
+  { label: "Risk safety · 5%", description: "How few risks or warnings were found for the listing.", calculation: "Starts from a safe score and deducts for identity, condition, seller and evidence risks. It contributes 5%." },
+  { label: "Liquidity · 20%", description: "How likely the item is to sell within a reasonable time.", calculation: "Uses sold volume, active competition and available watch or bid velocity. It contributes 20%." },
 ] as const;
 
 const CLASSIFICATION_COLORS = ["#f97316", "#3b82f6", "#a78bfa", "#22c55e", "#eab308", "#ef4444", "#64748b", "#94a3b8"];
@@ -174,6 +174,7 @@ export default function SettingsPage() {
 
   const [ebayStatus, setEbayStatus] = useState<{
     connected: boolean;
+    environment?: string;
     connected_at: string | null;
     username: string | null;
     email: string | null;
@@ -182,6 +183,7 @@ export default function SettingsPage() {
     refresh_token_expires_at: string | null;
   } | null>(null);
   const [connectingEbay, setConnectingEbay] = useState(false);
+  const [ebayConnectionMessage, setEbayConnectionMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [guideStatus, setGuideStatus] = useState<{ uploaded: boolean; filename: string | null; sha256: string | null; size_bytes?: number }>({ uploaded: false, filename: null, sha256: null });
   const [guideUploading, setGuideUploading] = useState(false);
   const [guideMessage, setGuideMessage] = useState("");
@@ -218,7 +220,10 @@ export default function SettingsPage() {
       const { url } = await api.ebayOAuth.authorizeUrl();
       window.location.href = url;
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Could not start eBay connection.");
+      setEbayConnectionMessage({
+        type: "error",
+        text: err instanceof Error ? err.message : "Could not start eBay connection.",
+      });
     } finally {
       setConnectingEbay(false);
     }
@@ -364,7 +369,21 @@ export default function SettingsPage() {
     if (!result) return;
 
     setTab("seller-policies");
-    void loadEbayStatus();
+    if (result === "1") {
+      setEbayConnectionMessage({ type: "success", text: "eBay connected successfully." });
+      void loadEbayStatus();
+    } else {
+      const reason = params.get("reason");
+      const message = reason === "access_denied"
+        ? "eBay connection was cancelled. You can connect again when ready."
+        : reason === "exchange_failed"
+          ? "eBay consent returned, but the server could not complete the token exchange. Check the API logs and callback configuration."
+          : reason === "no_code"
+            ? "eBay returned without an authorization code. Check the registered callback URL (RuName)."
+            : `eBay connection failed${reason ? ` (${reason})` : ""}. Check the callback configuration and API logs.`;
+      setEbayConnectionMessage({ type: "error", text: message });
+      void loadEbayStatus();
+    }
 
     // The flag is only a one-time navigation result; removing it prevents a
     // later refresh from looking like a new OAuth completion.
@@ -479,7 +498,7 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20 text-slate-500 text-sm gap-2">
-        <RefreshCw className="w-4 h-4 animate-spin" /> Loading settingsâ€¦
+        <RefreshCw className="w-4 h-4 animate-spin" /> Loading settings…
       </div>
     );
   }
@@ -500,7 +519,7 @@ export default function SettingsPage() {
           disabled={saving || (tab !== "opportunity" && tab !== "seller-policies" && tab !== "delivery")}
         >
           <Save className="w-3.5 h-3.5" />
-          {saving ? "Savingâ€¦" : saved ? "Saved âœ“" : "Save"}
+          {saving ? "Saving…" : saved ? "Saved ✓" : "Save"}
         </Button>
       </div>
 
@@ -624,7 +643,7 @@ export default function SettingsPage() {
                 const values = [100, opportunityAnalysis.average("desirability_score"), opportunityAnalysis.average("market_confidence"), opportunityAnalysis.average("risk_score"), opportunityAnalysis.average("liquidity_score")];
                 const weights = [settings.opportunity_weight_economic_pct, settings.opportunity_weight_desirability_pct, settings.opportunity_weight_market_confidence_pct, settings.opportunity_weight_risk_safety_pct, settings.opportunity_weight_liquidity_pct];
                 const tooltipId = `score-component-${index}`;
-                return <div key={component.label} className="group relative rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3"><div tabIndex={0} aria-describedby={tooltipId} className="rounded outline-none focus-visible:ring-2 focus-visible:ring-[#00dc82]/70"><p className="text-xs font-semibold text-slate-300">{component.label.replace(/ Â· \d+%$/, "")} Â· {weights[index]}% <span className="text-[#00dc82]" aria-hidden="true">â“˜</span></p><p className="mt-2 text-lg font-bold text-slate-100">{values[index].toFixed(0)}<span className="text-xs font-semibold text-slate-300">/100 avg</span></p><div className="mt-2 h-1.5 rounded-full bg-slate-800"><div className="h-full rounded-full bg-[#00dc82]" style={{ width: `${Math.max(0, Math.min(100, values[index]))}%` }} /></div></div><div id={tooltipId} role="tooltip" className="pointer-events-none absolute left-2 right-2 top-full z-30 mt-2 rounded-lg border border-[#00dc82]/40 bg-[#07101a] p-3 text-xs text-slate-200 opacity-0 shadow-xl transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"><p className="font-bold text-[#00dc82]">{component.label.replace(/ Â· \d+%$/, "")} Â· {weights[index]}%</p><p className="mt-1 font-semibold">{component.description}</p><p className="mt-1 text-slate-300">{component.calculation.replace(/It contributes \d+%/, `It contributes ${weights[index]}%`)}</p></div></div>;
+                return <div key={component.label} className="group relative rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3"><div tabIndex={0} aria-describedby={tooltipId} className="rounded outline-none focus-visible:ring-2 focus-visible:ring-[#00dc82]/70"><p className="text-xs font-semibold text-slate-300">{component.label.replace(/ · \d+%$/, "")} · {weights[index]}% <span className="text-[#00dc82]" aria-hidden="true">ℹ</span></p><p className="mt-2 text-lg font-bold text-slate-100">{values[index].toFixed(0)}<span className="text-xs font-semibold text-slate-300">/100 avg</span></p><div className="mt-2 h-1.5 rounded-full bg-slate-800"><div className="h-full rounded-full bg-[#00dc82]" style={{ width: `${Math.max(0, Math.min(100, values[index]))}%` }} /></div></div><div id={tooltipId} role="tooltip" className="pointer-events-none absolute left-2 right-2 top-full z-30 mt-2 rounded-lg border border-[#00dc82]/40 bg-[#07101a] p-3 text-xs text-slate-200 opacity-0 shadow-xl transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"><p className="font-bold text-[#00dc82]">{component.label.replace(/ · \d+%$/, "")} · {weights[index]}%</p><p className="mt-1 font-semibold">{component.description}</p><p className="mt-1 text-slate-300">{component.calculation.replace(/It contributes \d+%/, `It contributes ${weights[index]}%`)}</p></div></div>;
               })}
             </CardContent>
           </Card>
@@ -632,17 +651,17 @@ export default function SettingsPage() {
             <CardHeader><CardTitle>Score component weights</CardTitle><p className="text-xs font-semibold text-slate-300">Choose how much each component contributes to the final score. Values are percentages; the scorer normalises them to their total. Set a component to 0 to remove its influence.</p></CardHeader>
             <CardContent className="grid grid-cols-2 md:grid-cols-5 gap-3 pt-0">
               {[["opportunity_weight_economic_pct", "Economic return"], ["opportunity_weight_desirability_pct", "Desirability"], ["opportunity_weight_market_confidence_pct", "Market confidence"], ["opportunity_weight_risk_safety_pct", "Risk safety"], ["opportunity_weight_liquidity_pct", "Liquidity"]].map(([field, label]) => { const key = field as keyof AppSettings; return <label key={field} className="text-xs font-semibold text-slate-300">{label}<div className="relative mt-1"><input type="number" min={0} max={100} step="1" aria-label={`${label} weight`} value={settings[key] as number} onChange={e => { setOpportunityPreviewDirty(true); setSettings(p => ({ ...p, [key]: Math.max(0, Math.min(100, Number(e.target.value))) })); }} className="w-full px-3 py-2 pr-8 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm font-bold text-slate-100" /><span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-500">%</span></div></label>; })}
-              <p className="col-span-full text-xs font-semibold text-slate-400">Total weight: <strong className={Math.abs(settings.opportunity_weight_economic_pct + settings.opportunity_weight_desirability_pct + settings.opportunity_weight_market_confidence_pct + settings.opportunity_weight_risk_safety_pct + settings.opportunity_weight_liquidity_pct - 100) < 0.01 ? "text-emerald-400" : "text-amber-300"}>{(settings.opportunity_weight_economic_pct + settings.opportunity_weight_desirability_pct + settings.opportunity_weight_market_confidence_pct + settings.opportunity_weight_risk_safety_pct + settings.opportunity_weight_liquidity_pct).toFixed(0)}%</strong> Â· the scorer normalises the total automatically.</p>
+              <p className="col-span-full text-xs font-semibold text-slate-400">Total weight: <strong className={Math.abs(settings.opportunity_weight_economic_pct + settings.opportunity_weight_desirability_pct + settings.opportunity_weight_market_confidence_pct + settings.opportunity_weight_risk_safety_pct + settings.opportunity_weight_liquidity_pct - 100) < 0.01 ? "text-emerald-400" : "text-amber-300"}>{(settings.opportunity_weight_economic_pct + settings.opportunity_weight_desirability_pct + settings.opportunity_weight_market_confidence_pct + settings.opportunity_weight_risk_safety_pct + settings.opportunity_weight_liquidity_pct).toFixed(0)}%</strong> · the scorer normalises the total automatically.</p>
             </CardContent>
           </Card>
           <Card>
-            <CardHeader><CardTitle>Current classifications and live preview</CardTitle><p className="text-xs font-semibold text-slate-300">{opportunityLoading ? "Loading active scored listingsâ€¦" : `Showing ${opportunityCounts.active} active scored listings${opportunityCounts.total > opportunityCounts.active ? ` Â· ${opportunityCounts.total} scored listings retained in the database (${opportunityCounts.historical} historical)` : ""}`}. Current total: <strong className="text-orange-300">{opportunityAnalysis.currentTotal}</strong> Â· Preview total: <strong className="text-blue-300">{opportunityAnalysis.previewTotal}</strong>. Change a value below to see the estimated split before saving. Historical rows are retained for evidence and price history but are excluded from this current inventory preview. Below-market price is calculated as <strong className="text-slate-200">(market median âˆ’ listing price) Ã· market median</strong>.</p></CardHeader>
+            <CardHeader><CardTitle>Current classifications and live preview</CardTitle><p className="text-xs font-semibold text-slate-300">{opportunityLoading ? "Loading active scored listings…" : `Showing ${opportunityCounts.active} active scored listings${opportunityCounts.total > opportunityCounts.active ? ` · ${opportunityCounts.total} scored listings retained in the database (${opportunityCounts.historical} historical)` : ""}`}. Current total: <strong className="text-orange-300">{opportunityAnalysis.currentTotal}</strong> · Preview total: <strong className="text-blue-300">{opportunityAnalysis.previewTotal}</strong>. Change a value below to see the estimated split before saving. Historical rows are retained for evidence and price history but are excluded from this current inventory preview. Below-market price is calculated as <strong className="text-slate-200">(market median − listing price) ÷ market median</strong>.</p></CardHeader>
             <CardContent className="pt-0 space-y-3">
               {opportunityError && <p className="rounded-lg border border-rose-500/30 bg-rose-500/5 p-3 text-xs text-rose-300">Could not load the scored listings: {opportunityError}</p>}
               {!opportunityLoading && !opportunityError && opportunityItems.length === 0 && <p className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-xs text-amber-300">No active scored listings are available for this environment yet. The preview is empty; the zero values are not a scoring result. Run a scan and wait for listings to be scored, then refresh this tab.</p>}
               <div className="opportunity-classification-strip rounded-xl p-2">
                 <p className="mb-2 px-1 text-[10px] font-semibold text-slate-500">Cards resize to fit the available width and wrap only on smaller screens.</p><div className="grid grid-cols-[repeat(auto-fit,minmax(118px,1fr))] gap-2">
-                  {opportunityAnalysis.order.map(classification => { const current = opportunityItems.length ? (opportunityAnalysis.current[classification] ?? 0) : null; const next = opportunityItems.length ? (opportunityAnalysis.preview[classification] ?? 0) : null; const delta = current !== null && next !== null ? next - current : 0; return <div key={classification} className="min-w-0 rounded-lg border border-[#1e2d45] bg-[#0a1119]/95 p-2.5"><p className="break-words text-[9px] font-semibold uppercase leading-tight tracking-wide text-slate-300">{classification.replaceAll("_", " ")}</p><p className="mt-1 text-lg font-bold text-slate-100">{current ?? "â€”"}</p><p className={`text-[11px] font-semibold ${delta > 0 ? "text-emerald-400" : delta < 0 ? "text-rose-400" : "text-slate-300"}`}>{next === null ? "Preview unavailable" : `Preview ${next}${delta ? ` (${delta > 0 ? "+" : ""}${delta})` : ""}`}</p></div>; })}
+                  {opportunityAnalysis.order.map(classification => { const current = opportunityItems.length ? (opportunityAnalysis.current[classification] ?? 0) : null; const next = opportunityItems.length ? (opportunityAnalysis.preview[classification] ?? 0) : null; const delta = current !== null && next !== null ? next - current : 0; return <div key={classification} className="min-w-0 rounded-lg border border-[#1e2d45] bg-[#0a1119]/95 p-2.5"><p className="break-words text-[9px] font-semibold uppercase leading-tight tracking-wide text-slate-300">{classification.replaceAll("_", " ")}</p><p className="mt-1 text-lg font-bold text-slate-100">{current ?? "—"}</p><p className={`text-[11px] font-semibold ${delta > 0 ? "text-emerald-400" : delta < 0 ? "text-rose-400" : "text-slate-300"}`}>{next === null ? "Preview unavailable" : `Preview ${next}${delta ? ` (${delta > 0 ? "+" : ""}${delta})` : ""}`}</p></div>; })}
                 </div>
               </div>
               <div className="rounded-lg border border-[#1e2d45] bg-[#07101a] p-3">
@@ -653,10 +672,10 @@ export default function SettingsPage() {
                 <div className="mt-3 grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-6">
                   {[["Eligible", opportunityAnalysis.diagnostics.eligible, "Listings without a hard identity or policy veto. These rows are allowed to continue through the opportunity gates."], ["Evidence", opportunityAnalysis.diagnostics.evidence, "Eligible listings with enough same-condition market evidence and sold comparables to calculate a reliable deal."], ["Economics", opportunityAnalysis.diagnostics.economics, "Listings that meet the selected tier's minimum profit and ROI requirements."], ["Market threshold", opportunityAnalysis.diagnostics.market, "Listings that also meet the tier's required percentage below the same-condition market price."], ["Confidence + liquidity", opportunityAnalysis.diagnostics.confidenceLiquidity, "Listings that pass the minimum market-confidence and demand/liquidity requirements."], ["Score gate", opportunityAnalysis.diagnostics.final, "Listings whose weighted final score reaches the Super Gem score threshold. The preview's five weight controls affect this gate."]].map(([label, value, explanation]) => <div key={label as string} title={explanation as string} className="cursor-help rounded border border-[#1e2d45] bg-[#0a1119] p-2"><p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">{label}</p><p className="mt-1 text-lg font-bold text-slate-100">{(value as number).toLocaleString()}</p></div>)}
                 </div>
-               <p className="mt-2 text-[11px] font-semibold text-slate-500">Identity failed ({opportunityAnalysis.identityFailedCount.toLocaleString()}) and insufficient data ({opportunityAnalysis.insufficientDataCount.toLocaleString()}) are excluded before these gates. Current scored rows: {opportunityAnalysis.currentTotal.toLocaleString()}; market snapshot rows: {marketSnapshotCount?.toLocaleString() ?? "â€”"}{marketSnapshotCount != null && marketSnapshotCount !== opportunityAnalysis.currentTotal ? ` Â· ${Math.abs(marketSnapshotCount - opportunityAnalysis.currentTotal).toLocaleString()} snapshot rows are outside the active buy-now scored dataset (for example auctions or rows not scored yet).` : ""}</p>
+               <p className="mt-2 text-[11px] font-semibold text-slate-500">Identity failed ({opportunityAnalysis.identityFailedCount.toLocaleString()}) and insufficient data ({opportunityAnalysis.insufficientDataCount.toLocaleString()}) are excluded before these gates. Current scored rows: {opportunityAnalysis.currentTotal.toLocaleString()}; market snapshot rows: {marketSnapshotCount?.toLocaleString() ?? "—"}{marketSnapshotCount != null && marketSnapshotCount !== opportunityAnalysis.currentTotal ? ` · ${Math.abs(marketSnapshotCount - opportunityAnalysis.currentTotal).toLocaleString()} snapshot rows are outside the active buy-now scored dataset (for example auctions or rows not scored yet).` : ""}</p>
               </div>
               <div className="rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3">
-                <div className="mb-2 flex flex-wrap items-center justify-between gap-2"><div><p className="text-sm font-bold text-slate-200">Current vs preview split</p><p className="text-[11px] text-slate-500">Coloured segments show the classifications affected by scoring controls. Excluded statuses are shown as counts beside the chart.</p></div><div className="flex flex-wrap gap-2"><span title="The listing could not be matched confidently to a specific product identity, so the scoring gates cannot be trusted yet." className="cursor-help rounded-full border border-slate-500/30 bg-slate-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-300">Identity failed Â· {opportunityAnalysis.identityFailedCount} â†’ {opportunityAnalysis.identityFailedPreviewCount} <span aria-hidden="true">â“˜</span></span><span title="The listing does not have enough comparable pricing or sold-evidence data to recalculate a reliable opportunity score." className="cursor-help rounded-full border border-slate-500/30 bg-slate-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-300">Insufficient data Â· {opportunityAnalysis.insufficientDataCount} â†’ {opportunityAnalysis.insufficientDataPreviewCount} <span aria-hidden="true">â“˜</span></span></div></div>
+                <div className="mb-2 flex flex-wrap items-center justify-between gap-2"><div><p className="text-sm font-bold text-slate-200">Current vs preview split</p><p className="text-[11px] text-slate-500">Coloured segments show the classifications affected by scoring controls. Excluded statuses are shown as counts beside the chart.</p></div><div className="flex flex-wrap gap-2"><span title="The listing could not be matched confidently to a specific product identity, so the scoring gates cannot be trusted yet." className="cursor-help rounded-full border border-slate-500/30 bg-slate-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-300">Identity failed · {opportunityAnalysis.identityFailedCount} → {opportunityAnalysis.identityFailedPreviewCount} <span aria-hidden="true">ℹ</span></span><span title="The listing does not have enough comparable pricing or sold-evidence data to recalculate a reliable opportunity score." className="cursor-help rounded-full border border-slate-500/30 bg-slate-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-300">Insufficient data · {opportunityAnalysis.insufficientDataCount} → {opportunityAnalysis.insufficientDataPreviewCount} <span aria-hidden="true">ℹ</span></span></div></div>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={opportunityAnalysis.splitChart} layout="vertical" margin={{ top: 8, right: 18, bottom: 8, left: 8 }} barCategoryGap="35%" reverseStackOrder={false}>
                     <CartesianGrid stroke="#17304a" strokeDasharray="3 3" vertical={false} />
@@ -667,7 +686,7 @@ export default function SettingsPage() {
                   </BarChart>
                 </ResponsiveContainer>
                 <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[10px] font-semibold uppercase tracking-wide text-slate-300">
-                  {opportunityAnalysis.chartOrder.map((classification, index) => <span key={classification}><span className="mr-1" style={{ color: CLASSIFICATION_COLORS[index % CLASSIFICATION_COLORS.length] }}>â– </span>{classification.replaceAll("_", " ")}</span>)}
+                  {opportunityAnalysis.chartOrder.map((classification, index) => <span key={classification}><span className="mr-1" style={{ color: CLASSIFICATION_COLORS[index % CLASSIFICATION_COLORS.length] }}>■</span>{classification.replaceAll("_", " ")}</span>)}
                 </div>
               </div>
                 {breakdownRows.length > 0 && <div className="mt-3 rounded border border-slate-500/20 bg-[#0a1119] p-3"><p className="text-[10px] font-bold uppercase tracking-wide text-slate-200">Data quality and evidence breakdown</p><p className="mt-1 text-[11px] font-semibold text-slate-400">These are the reasons listings are held out of normal opportunity scoring. Counts are within each category; hover the category or reason for context.</p><div className="mt-2 overflow-x-auto"><table className="w-full min-w-[920px] text-left text-[11px]"><thead className="text-[10px] uppercase tracking-wide text-slate-500"><tr><th className="py-1 pr-3">Category</th><th className="py-1 pr-3">Recorded reason</th><th className="py-1 pr-3">Listings</th><th className="py-1 pr-3">Share</th><th className="py-1 pr-3">What it means</th><th className="py-1">Impact</th></tr></thead><tbody>{breakdownRows.map(row => <tr key={`${row.category}-${row.reason}`} className="border-t border-slate-500/10"><td className="py-1.5 pr-3 font-bold text-slate-200">{row.category}</td><td className="py-1.5 pr-3 font-semibold text-slate-300">{row.reason.replaceAll("_", " ")}</td><td className="py-1.5 pr-3 font-bold text-slate-100">{row.count.toLocaleString()}</td><td className="py-1.5 pr-3 text-slate-300">{row.total ? `${((row.count / row.total) * 100).toFixed(1)}%` : "—"}</td><td className="py-1.5 pr-3 text-slate-400">{row.meaning}</td><td className="py-1.5 text-slate-400">{row.impact}</td></tr>)}</tbody></table></div></div>}
@@ -683,7 +702,7 @@ export default function SettingsPage() {
                 <div className="grid grid-cols-[1.35fr_repeat(6,minmax(95px,1fr))] gap-2 px-3 pb-2 text-[10px] font-bold uppercase tracking-wide text-slate-500">
                   <span>Tier</span><span>Profit</span><span>ROI</span><span className="text-[#00dc82]">Below market</span><span>Confidence</span><span>Liquidity</span><span>Score</span>
                 </div>
-                {[{ title: "SUPER GEM", prefix: "opportunity_super", tone: "text-amber-300", fields: [["profit_gbp", "Â£"], ["roi_pct", "%"], ["market_discount_pct", "%"], ["confidence", "/100"], ["liquidity", "/100"], ["score", "/100"]] }, { title: "GEM", prefix: "opportunity_gem", tone: "text-cyan-300", fields: [["profit_gbp", "Â£"], ["roi_pct", "%"], ["market_discount_pct", "%"], ["confidence", "/100"], ["liquidity", "/100"], ["score", "/100"]] }].map(group => (
+                {[{ title: "SUPER GEM", prefix: "opportunity_super", tone: "text-amber-300", fields: [["profit_gbp", "£"], ["roi_pct", "%"], ["market_discount_pct", "%"], ["confidence", "/100"], ["liquidity", "/100"], ["score", "/100"]] }, { title: "GEM", prefix: "opportunity_gem", tone: "text-cyan-300", fields: [["profit_gbp", "£"], ["roi_pct", "%"], ["market_discount_pct", "%"], ["confidence", "/100"], ["liquidity", "/100"], ["score", "/100"]] }].map(group => (
                   <div key={group.prefix} className="grid grid-cols-[1.35fr_repeat(6,minmax(95px,1fr))] items-center gap-2 rounded-lg border border-[#1e2d45] bg-[#0a1119] p-3 mb-2">
                     <div><p className={`text-sm font-bold ${group.tone}`}>{group.title}</p><p className="text-[10px] text-slate-500">All gates required</p></div>
                     {group.fields.map(([suffix, unit]) => { const key = `${group.prefix}_${suffix}` as keyof AppSettings; const fallback = DEFAULTS[key]; return <label key={key} className={`text-xs font-semibold ${suffix === "market_discount_pct" ? "text-[#00dc82]" : "text-slate-300"}`}><span className="sr-only">{group.title} {suffix}</span><div className="relative"><input type="number" min={0} step="0.1" aria-label={`${group.title} ${suffix}`} value={typeof settings[key] === "number" && Number.isFinite(settings[key] as number) ? settings[key] as number : typeof fallback === "number" ? fallback : 0} onChange={e => { setOpportunityPreviewDirty(true); setSettings(p => ({ ...p, [key]: Number(e.target.value) })); }} className="w-full px-2 py-2 pr-9 bg-[#07101a] border border-[#1e2d45] rounded-lg text-sm font-bold text-slate-100" /><span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-500">{unit}</span></div></label>; })}
@@ -692,7 +711,7 @@ export default function SettingsPage() {
               </div>
             </CardContent>
           </Card>
-          <Card><CardHeader><CardTitle>Cost stack and evidence gates</CardTitle><p className="text-xs font-semibold text-slate-300">These values recalculate estimated profit, ROI and evidence eligibility in the preview. Component items use their category rules.</p></CardHeader><CardContent className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-0">{[["opportunity_delivery_fallback_gbp", "Delivery fallback (Â£)"], ["opportunity_ebay_fee_pct", "eBay fee (%)"], ["opportunity_packaging_gbp", "Packaging (Â£)"], ["opportunity_testing_refurbishment_gbp", "Testing/refurb (Â£)"], ["opportunity_returns_warranty_pct", "Returns/warranty reserve (%)"], ["opportunity_minimum_sold_comps", "Minimum sold comps"], ["opportunity_minimum_source_diversity", "Minimum source diversity"]].map(([field, label]) => { const key = field as keyof AppSettings; return <label key={field} className="text-xs font-semibold text-slate-300">{label}<input type="number" min={0} step="0.1" value={settings[key] as number} onChange={e => { setOpportunityPreviewDirty(true); setSettings(p => ({ ...p, [key]: Number(e.target.value) })); }} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-200" /></label>; })}</CardContent></Card>
+          <Card><CardHeader><CardTitle>Cost stack and evidence gates</CardTitle><p className="text-xs font-semibold text-slate-300">These values recalculate estimated profit, ROI and evidence eligibility in the preview. Component items use their category rules.</p></CardHeader><CardContent className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-0">{[["opportunity_delivery_fallback_gbp", "Delivery fallback (£)"], ["opportunity_ebay_fee_pct", "eBay fee (%)"], ["opportunity_packaging_gbp", "Packaging (£)"], ["opportunity_testing_refurbishment_gbp", "Testing/refurb (£)"], ["opportunity_returns_warranty_pct", "Returns/warranty reserve (%)"], ["opportunity_minimum_sold_comps", "Minimum sold comps"], ["opportunity_minimum_source_diversity", "Minimum source diversity"]].map(([field, label]) => { const key = field as keyof AppSettings; return <label key={field} className="text-xs font-semibold text-slate-300">{label}<input type="number" min={0} step="0.1" value={settings[key] as number} onChange={e => { setOpportunityPreviewDirty(true); setSettings(p => ({ ...p, [key]: Number(e.target.value) })); }} className="mt-1 w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm text-slate-200" /></label>; })}</CardContent></Card>
         </div>
       )}
       {tab === "seller-policies" && (
@@ -700,16 +719,26 @@ export default function SettingsPage() {
           <Card>
             <CardHeader><CardTitle className="flex items-center gap-2"><Link2 className="w-4 h-4" /> eBay Connection</CardTitle></CardHeader>
             <CardContent className="pt-0 space-y-3">
+              {ebayConnectionMessage && (
+                <p role="status" className={`rounded-lg border px-3 py-2 text-sm ${
+                  ebayConnectionMessage.type === "success"
+                    ? "border-emerald-500/30 bg-emerald-500/5 text-emerald-300"
+                    : "border-rose-500/30 bg-rose-500/5 text-rose-300"
+                }`}>
+                  {ebayConnectionMessage.text}
+                </p>
+              )}
               <p className="text-xs text-slate-500">
-                Every live eBay write this app makes â€” posting/ending/republishing listings,
-                pushing these Seller Policies, creating Promoted Listings campaigns â€” needs a
+                Every live eBay write this app makes — posting/ending/republishing listings,
+                pushing these Seller Policies, creating Promoted Listings campaigns — needs a
                 one-time eBay seller consent. Without it, everything below still runs
                 internally (pricing, scheduling, rules) but doesn&apos;t reach eBay itself.
               </p>
-              {!ebayStatus?.connected && typeof window !== "undefined" && window.location.hostname === "localhost" && (
+              {!ebayStatus?.connected && typeof window !== "undefined" && window.location.hostname === "localhost" && ebayStatus?.environment === "production" && (
                 <p className="text-xs text-amber-300/80">
-                  This is the local development instance. eBay consent is stored by the backend/database,
-                  so consent completed on the deployed FlipFlop app will not appear here.
+                  This local backend uses production eBay consent, but its registered callback returns to the
+                  deployed app and stores the connection in the production database. Connect from the deployed
+                  admin so you land in the same environment: <a className="underline text-amber-200" href="https://admin.theflipflop.shop/settings">open production eBay settings</a>.
                 </p>
               )}
               {ebayStatus?.connected ? (
@@ -736,9 +765,9 @@ export default function SettingsPage() {
                       )}
                     </div>
                     <p className="text-xs text-slate-500">
-                      Since {ebayStatus.connected_at ? new Date(ebayStatus.connected_at).toLocaleDateString() : "â€”"}
+                      Since {ebayStatus.connected_at ? new Date(ebayStatus.connected_at).toLocaleDateString() : "—"}
                       {ebayStatus.refresh_token_expires_at && (
-                        <> Â· re-consent needed by {new Date(ebayStatus.refresh_token_expires_at).toLocaleDateString()}</>
+                        <> · re-consent needed by {new Date(ebayStatus.refresh_token_expires_at).toLocaleDateString()}</>
                       )}
                     </p>
                   </div>
@@ -747,21 +776,21 @@ export default function SettingsPage() {
                         Refresh details
                       </Button>
                       <Button variant="outline" size="sm" onClick={connectEbay} disabled={connectingEbay}>
-                      <Link2 className="w-3.5 h-3.5" /> {connectingEbay ? "Redirectingâ€¦" : "Reconnect"}
+                      <Link2 className="w-3.5 h-3.5" /> {connectingEbay ? "Redirecting…" : "Reconnect"}
                     </Button>
                     <Button variant="outline" size="sm" onClick={disconnectEbay}>
                       <Unlink className="w-3.5 h-3.5" /> Disconnect
                     </Button>
                   </div>
                 </div>
-              ) : (
+              ) : typeof window !== "undefined" && window.location.hostname === "localhost" && ebayStatus?.environment === "production" ? null : (
                 <Button variant="primary" size="sm" onClick={connectEbay} disabled={connectingEbay}>
-                  <Link2 className="w-3.5 h-3.5" /> {connectingEbay ? "Redirectingâ€¦" : "Connect eBay"}
+                  <Link2 className="w-3.5 h-3.5" /> {connectingEbay ? "Redirecting…" : "Connect eBay"}
                 </Button>
               )}
               <p className="text-[11px] text-slate-600">
                 Requires <code>ebay_app_id</code> and a registered redirect URL (RuName) in the
-                eBay Developer Portal to be configured first â€” this is a one-time external setup
+                eBay Developer Portal to be configured first — this is a one-time external setup
                 step, not something this app can do for you.
               </p>
             </CardContent>
@@ -772,7 +801,7 @@ export default function SettingsPage() {
             <CardHeader><CardTitle>Handling &amp; Returns</CardTitle></CardHeader>
             <CardContent className="space-y-3 pt-0">
               <label className="text-xs text-slate-500 block">
-                Handling time (business days) â€” default proposed, confirm once
+                Handling time (business days) — default proposed, confirm once
               </label>
               <input
                 type="number"
@@ -783,7 +812,7 @@ export default function SettingsPage() {
                 className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm"
               />
               <p className="text-xs text-slate-600">
-                Row 11/12: fastest you can realistically hit, factoring in burn-in/QA â€” never
+                Row 11/12: fastest you can realistically hit, factoring in burn-in/QA — never
                 padded "just in case", since eBay's Money Back Guarantee already covers late orders.
               </p>
 
@@ -864,10 +893,10 @@ export default function SettingsPage() {
                 className="w-full px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm"
               >
                 <option value="FixedPrice">Fixed Price</option>
-                <option value="Auction">Auction (not recommended â€” see row 44)</option>
+                <option value="Auction">Auction (not recommended — see row 44)</option>
               </select>
               <p className="text-xs text-slate-600">
-                Applied once here via the eBay Business Policies API to every listing â€” not
+                Applied once here via the eBay Business Policies API to every listing — not
                 re-entered per build. Per-build overrides live on the Dispatch &amp; Delivery
                 tab, only for builds that genuinely can&apos;t hit the global default.
               </p>
@@ -954,10 +983,10 @@ export default function SettingsPage() {
           <CardHeader><CardTitle className="flex items-center gap-2"><Terminal className="w-4 h-4" /> Extension Logs</CardTitle></CardHeader>
           <CardContent className="space-y-3 pt-0">
             <p className="text-xs text-slate-500">Search-run telemetry from FlipFlopXtension. The detailed live progress grid remains in the extension; these durable rows show what reached the backend.</p>
-            {logsLoading ? <p className="text-sm text-slate-500">Loadingâ€¦</p> : extensionLogs.length === 0 ? <p className="text-sm text-slate-600">No extension scan telemetry has arrived yet.</p> : (
+            {logsLoading ? <p className="text-sm text-slate-500">Loading…</p> : extensionLogs.length === 0 ? <p className="text-sm text-slate-600">No extension scan telemetry has arrived yet.</p> : (
               <div className="max-h-[520px] overflow-auto rounded-lg border border-[#1e2d45]">
                 <table className="w-full text-xs"><thead className="sticky top-0 bg-[#0a1119] text-slate-500"><tr><th className="text-left p-2">Time</th><th className="text-left p-2">Source</th><th className="text-left p-2">Search term</th><th className="text-right p-2">Found</th><th className="text-right p-2">New</th><th className="text-left p-2">Result</th></tr></thead><tbody>
-                  {extensionLogs.map((row, i) => <tr key={`${row.ts}-${i}`} className="border-t border-[#1e2d45]"><td className="p-2 text-slate-500 whitespace-nowrap">{new Date(row.ts).toLocaleString()}</td><td className="p-2 text-slate-300">{row.source || "â€”"}</td><td className="p-2 text-slate-300">{row.term}</td><td className="p-2 text-right text-slate-300">{row.found}</td><td className="p-2 text-right text-emerald-300">{row.new}</td><td className={`p-2 ${row.error ? "text-red-300" : "text-emerald-300"}`}>{row.error || "completed"}</td></tr>)}
+                  {extensionLogs.map((row, i) => <tr key={`${row.ts}-${i}`} className="border-t border-[#1e2d45]"><td className="p-2 text-slate-500 whitespace-nowrap">{new Date(row.ts).toLocaleString()}</td><td className="p-2 text-slate-300">{row.source || "—"}</td><td className="p-2 text-slate-300">{row.term}</td><td className="p-2 text-right text-slate-300">{row.found}</td><td className="p-2 text-right text-emerald-300">{row.new}</td><td className={`p-2 ${row.error ? "text-red-300" : "text-emerald-300"}`}>{row.error || "completed"}</td></tr>)}
                 </tbody></table>
               </div>
             )}
@@ -971,9 +1000,9 @@ export default function SettingsPage() {
           <CardContent className="space-y-3 pt-0">
             <p className="text-xs text-slate-500">Completed-sale observations persisted by the sold scraper. These are deduplicated and reused by price benchmarks and demand analysis.</p>
             {soldLogNote && <p className="text-[11px] text-slate-600">{soldLogNote}</p>}
-            {logsLoading ? <p className="text-sm text-slate-500">Loadingâ€¦</p> : soldLogs.length === 0 ? <p className="text-sm text-slate-600">No sold scraping results have been stored yet.</p> : (
+            {logsLoading ? <p className="text-sm text-slate-500">Loading…</p> : soldLogs.length === 0 ? <p className="text-sm text-slate-600">No sold scraping results have been stored yet.</p> : (
               <div className="max-h-[520px] overflow-auto rounded-lg border border-[#1e2d45]"><table className="w-full text-xs"><thead className="sticky top-0 bg-[#0a1119] text-slate-500"><tr><th className="text-left p-2">Observed</th><th className="text-left p-2">Item</th><th className="text-left p-2">Condition</th><th className="text-right p-2">Price</th><th className="text-left p-2">Identity</th></tr></thead><tbody>
-                {soldLogs.map(row => <tr key={row.id} className="border-t border-[#1e2d45]"><td className="p-2 text-slate-500 whitespace-nowrap">{row.observed_at ? new Date(row.observed_at).toLocaleString() : "â€”"}</td><td className="p-2 text-slate-300">{row.title}</td><td className="p-2 text-slate-400">{row.condition}</td><td className="p-2 text-right text-emerald-300">Â£{row.price.toFixed(2)}</td><td className="p-2 text-slate-500">{row.cpk || row.match_key}</td></tr>)}
+                {soldLogs.map(row => <tr key={row.id} className="border-t border-[#1e2d45]"><td className="p-2 text-slate-500 whitespace-nowrap">{row.observed_at ? new Date(row.observed_at).toLocaleString() : "—"}</td><td className="p-2 text-slate-300">{row.title}</td><td className="p-2 text-slate-400">{row.condition}</td><td className="p-2 text-right text-emerald-300">£{row.price.toFixed(2)}</td><td className="p-2 text-slate-500">{row.cpk || row.match_key}</td></tr>)}
               </tbody></table></div>
             )}
           </CardContent>
@@ -1164,7 +1193,7 @@ function ServerLogPanel() {
     es.onmessage = event => { try { setLines(prev => [...prev, JSON.parse(event.data)].slice(-500)); } catch {} };
     return () => es.close();
   }, [target, mode]);
-  return <div className="space-y-3"><div className="flex flex-wrap items-center gap-2"><label className="text-xs text-slate-500">Server<select value={target} onChange={e => setTarget(e.target.value)} className="ml-2 px-2 py-1 rounded bg-[#0a1119] border border-[#1e2d45] text-xs text-slate-200">{targets.length ? targets.map(item => <option key={item.id} value={item.id}>{item.label}{item.available ? "" : " (unavailable)"}</option>) : <option value="api">API server</option>}</select></label><label className="text-xs text-slate-500">Mode<select value={mode} onChange={e => setMode(e.target.value as "live" | "dev")} className="ml-2 px-2 py-1 rounded bg-[#0a1119] border border-[#1e2d45] text-xs text-slate-200"><option value="live">Live / production</option><option value="dev">Development</option></select></label><span className="text-[10px] text-slate-600">{targets.find(item => item.id === target)?.available === false ? "No log file is mounted for this service in the selected environment." : "Streaming selected service"}</span></div><div className="rounded-lg border border-[#1e2d45] bg-black p-3 font-mono text-[11px] max-h-[560px] overflow-auto"><div className="mb-2 text-slate-600"><Circle className={`inline w-2 h-2 mr-1 fill-current ${connected ? "text-emerald-500" : "text-red-500"}`} />{connected ? "LIVE" : "OFFLINE"} Â· {target} Â· {mode}</div>{lines.length === 0 ? <span className="text-slate-700">$ waiting for server eventsâ€¦_</span> : lines.map((line, i) => <div key={i} className="leading-6"><span className="text-slate-600">{new Date(line.ts).toLocaleTimeString()}</span> <span className="text-emerald-400">[{line.level}]</span> <span className="text-slate-300">{line.msg}</span></div>)}</div></div>;
+  return <div className="space-y-3"><div className="flex flex-wrap items-center gap-2"><label className="text-xs text-slate-500">Server<select value={target} onChange={e => setTarget(e.target.value)} className="ml-2 px-2 py-1 rounded bg-[#0a1119] border border-[#1e2d45] text-xs text-slate-200">{targets.length ? targets.map(item => <option key={item.id} value={item.id}>{item.label}{item.available ? "" : " (unavailable)"}</option>) : <option value="api">API server</option>}</select></label><label className="text-xs text-slate-500">Mode<select value={mode} onChange={e => setMode(e.target.value as "live" | "dev")} className="ml-2 px-2 py-1 rounded bg-[#0a1119] border border-[#1e2d45] text-xs text-slate-200"><option value="live">Live / production</option><option value="dev">Development</option></select></label><span className="text-[10px] text-slate-600">{targets.find(item => item.id === target)?.available === false ? "No log file is mounted for this service in the selected environment." : "Streaming selected service"}</span></div><div className="rounded-lg border border-[#1e2d45] bg-black p-3 font-mono text-[11px] max-h-[560px] overflow-auto"><div className="mb-2 text-slate-600"><Circle className={`inline w-2 h-2 mr-1 fill-current ${connected ? "text-emerald-500" : "text-red-500"}`} />{connected ? "LIVE" : "OFFLINE"} · {target} · {mode}</div>{lines.length === 0 ? <span className="text-slate-700">$ waiting for server events…_</span> : lines.map((line, i) => <div key={i} className="leading-6"><span className="text-slate-600">{new Date(line.ts).toLocaleTimeString()}</span> <span className="text-emerald-400">[{line.level}]</span> <span className="text-slate-300">{line.msg}</span></div>)}</div></div>;
 }
 
 function PriceEvidencePanel() {
@@ -1186,9 +1215,9 @@ function PriceEvidencePanel() {
     <Card><CardHeader><CardTitle className="flex items-center gap-2"><Search className="w-4 h-4" /> Product price evidence</CardTitle></CardHeader><CardContent className="space-y-3 pt-0">
       <p className="text-xs text-slate-500">Search canonical products and inspect every active or sold observation contributing to the displayed market range.</p>
       <form className="flex gap-2" onSubmit={e => { e.preventDefault(); void search(); }}><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search product, brand, model or CPK" className="flex-1 px-3 py-2 bg-[#0a1119] border border-[#1e2d45] rounded-lg text-sm" /><Button variant="primary" size="sm" type="submit"><Search className="w-3.5 h-3.5" /> Search</Button></form>
-      {loading ? <p className="text-sm text-slate-500">Loading productsâ€¦</p> : <div className="grid grid-cols-1 lg:grid-cols-[minmax(220px,0.8fr)_minmax(0,2fr)] gap-4">
-        <div className="max-h-[560px] overflow-auto rounded-lg border border-[#1e2d45]">{products.length === 0 ? <p className="p-3 text-sm text-slate-600">No products found.</p> : products.map(product => <button key={product.cpk} onClick={() => void choose(product)} className={`w-full text-left p-3 border-b border-[#1e2d45] hover:bg-[#0a1119] ${selected?.cpk === product.cpk ? "bg-[#00dc82]/10" : ""}`}><div className="text-sm text-slate-200">{product.label}</div><div className="text-[10px] text-slate-500">{product.category || "uncategorised"} Â· {product.listing_count} active contributors</div><div className="text-xs text-emerald-300 mt-1">Â£{product.min_price?.toFixed(2) ?? "â€”"} â€“ Â£{product.max_price?.toFixed(2) ?? "â€”"}</div></button>)}</div>
-        <div className="rounded-lg border border-[#1e2d45] overflow-auto">{!selected ? <p className="p-4 text-sm text-slate-600">Select a product to see its price evidence.</p> : <><div className="p-3 border-b border-[#1e2d45]"><div className="text-sm text-slate-200">{selected.label}</div><div className="text-xs text-slate-500">Market range Â£{selected.min_price?.toFixed(2) ?? "â€”"} â€“ Â£{selected.max_price?.toFixed(2) ?? "â€”"} Â· median Â£{selected.median_price?.toFixed(2) ?? "â€”"}</div></div><table className="w-full text-xs"><thead className="text-slate-500 bg-[#0a1119]"><tr><th className="text-left p-2">Type</th><th className="text-left p-2">Price</th><th className="text-left p-2">Observed</th><th className="text-left p-2">Source</th><th className="text-left p-2">Item</th></tr></thead><tbody>{observations.map((row, i) => <tr key={`${row.kind}-${row.observed_at}-${i}`} className="border-t border-[#1e2d45]"><td className="p-2 text-slate-400">{row.kind}</td><td className="p-2 text-emerald-300">Â£{row.price.toFixed(2)}</td><td className="p-2 text-slate-400 whitespace-nowrap">{row.observed_at ? new Date(row.observed_at).toLocaleString() : "â€”"}</td><td className="p-2 text-slate-400 max-w-[220px] truncate" title={row.source_url || row.source || ""}>{row.source_url || row.source || "â€”"}</td><td className="p-2 text-slate-300">{row.title}</td></tr>)}</tbody></table></>}</div>
+      {loading ? <p className="text-sm text-slate-500">Loading products…</p> : <div className="grid grid-cols-1 lg:grid-cols-[minmax(220px,0.8fr)_minmax(0,2fr)] gap-4">
+        <div className="max-h-[560px] overflow-auto rounded-lg border border-[#1e2d45]">{products.length === 0 ? <p className="p-3 text-sm text-slate-600">No products found.</p> : products.map(product => <button key={product.cpk} onClick={() => void choose(product)} className={`w-full text-left p-3 border-b border-[#1e2d45] hover:bg-[#0a1119] ${selected?.cpk === product.cpk ? "bg-[#00dc82]/10" : ""}`}><div className="text-sm text-slate-200">{product.label}</div><div className="text-[10px] text-slate-500">{product.category || "uncategorised"} · {product.listing_count} active contributors</div><div className="text-xs text-emerald-300 mt-1">£{product.min_price?.toFixed(2) ?? "—"} – £{product.max_price?.toFixed(2) ?? "—"}</div></button>)}</div>
+        <div className="rounded-lg border border-[#1e2d45] overflow-auto">{!selected ? <p className="p-4 text-sm text-slate-600">Select a product to see its price evidence.</p> : <><div className="p-3 border-b border-[#1e2d45]"><div className="text-sm text-slate-200">{selected.label}</div><div className="text-xs text-slate-500">Market range £{selected.min_price?.toFixed(2) ?? "—"} – £{selected.max_price?.toFixed(2) ?? "—"} · median £{selected.median_price?.toFixed(2) ?? "—"}</div></div><table className="w-full text-xs"><thead className="text-slate-500 bg-[#0a1119]"><tr><th className="text-left p-2">Type</th><th className="text-left p-2">Price</th><th className="text-left p-2">Observed</th><th className="text-left p-2">Source</th><th className="text-left p-2">Item</th></tr></thead><tbody>{observations.map((row, i) => <tr key={`${row.kind}-${row.observed_at}-${i}`} className="border-t border-[#1e2d45]"><td className="p-2 text-slate-400">{row.kind}</td><td className="p-2 text-emerald-300">£{row.price.toFixed(2)}</td><td className="p-2 text-slate-400 whitespace-nowrap">{row.observed_at ? new Date(row.observed_at).toLocaleString() : "—"}</td><td className="p-2 text-slate-400 max-w-[220px] truncate" title={row.source_url || row.source || ""}>{row.source_url || row.source || "—"}</td><td className="p-2 text-slate-300">{row.title}</td></tr>)}</tbody></table></>}</div>
       </div>}
     </CardContent></Card>
   </div>;

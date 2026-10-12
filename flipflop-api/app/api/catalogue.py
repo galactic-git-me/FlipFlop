@@ -7,6 +7,7 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel, Field
 from sqlalchemy import or_, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -561,3 +562,22 @@ async def update_slot(slot_id: int, body: PlaybookSlotUpdate, db: AsyncSession =
     slot.updated_at = datetime.utcnow().isoformat()
     await db.commit()
     return {"id": slot.id, "slot_type": slot.slot_type, "updated": True}
+
+
+@router.get("/marketing-copy/status")
+async def marketing_copy_status_endpoint(db: AsyncSession = Depends(get_db)):
+    from app.services.catalogue_marketing_copy import marketing_copy_status
+    return await marketing_copy_status(db)
+
+
+class MarketingCopyBatchInput(BaseModel):
+    limit: int = Field(default=4, ge=1, le=4)
+
+
+@router.post("/marketing-copy/generate-batch")
+async def generate_marketing_copy_batch_endpoint(body: MarketingCopyBatchInput, db: AsyncSession = Depends(get_db)):
+    from app.services.catalogue_marketing_copy import generate_next_marketing_copy_batch
+    try:
+        return await generate_next_marketing_copy_batch(db, body.limit)
+    except Exception as exc:
+        raise HTTPException(status_code=503, detail="Catalogue copy batch could not be completed") from exc

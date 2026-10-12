@@ -172,7 +172,7 @@ class CaseReferenceImage(BaseModel):
 
 
 class CaseReferenceApproval(BaseModel):
-    selected_images: list[CaseReferenceImage] = Field(min_length=4, max_length=4)
+    selected_images: list[CaseReferenceImage] = Field(min_length=1, max_length=4)
 
 
 def _candidate_source(url: str, fallback: str = "manual") -> str:
@@ -259,6 +259,27 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
             _append_candidate(vendor_candidates, seen, main_image, "retailer", listing.url, f"{vendor} · {listing.title}")
             vendor_names.add(vendor)
 
+    # The sourcing worker stores the full product-page image gallery here.
+    # Listing.image_urls often contains only the search-result thumbnail, so
+    # include the reviewed, exact-product candidates as well.
+    for candidate in product_stage.get("candidate_images") or []:
+        if not isinstance(candidate, dict):
+            continue
+        image_url = candidate.get("url")
+        source = str(candidate.get("source") or "retailer")
+        source_page = candidate.get("source_page")
+        label = candidate.get("label") or f"{source} · {_case_identity(case)}"
+        _append_candidate(
+            vendor_candidates,
+            seen,
+            image_url,
+            source,
+            source_page if isinstance(source_page, str) else None,
+            label,
+        )
+        if isinstance(image_url, str) and _candidate_source(image_url, source) == "amazon":
+            vendor_names.add("Amazon")
+
     overclockers_offer = next((offer for offer in await _matched_case_offers(case, db) if "overclockers" in (offer.source_site or "").lower()), None)
     product_gallery = _gallery_urls(product_stage.get("overclockers_gallery"))
     for image_url in product_gallery:
@@ -283,6 +304,10 @@ async def get_3d_reference_candidates(case_id: int, db: AsyncSession = Depends(g
 
 
 def _priority_source_filter(source_site: str | None):
+    if source_site == "Campaign":
+        return Case.priority_3d_rank.isnot(None)
+    if source_site == "Retailers":
+        return or_(Case.source_site == "Amazon", Case.source_site.ilike("%overclockers%"))
     if source_site == "Overclockers":
         # Imported case rows have historically used both "Overclockers" and
         # "Overclockers UK". Keep the source tab inclusive of both spellings.
@@ -581,13 +606,13 @@ async def upload_3d_reference_candidates(
 
 @router.post("/{case_id}/3d-reference-selection")
 async def approve_3d_reference_selection(case_id: int, body: CaseReferenceApproval, db: AsyncSession = Depends(get_db)):
-    """Persist the owner's four-photo approval as a gate separate from generation."""
+    """Persist the owner's one-to-four-photo approval as a gate separate from generation."""
     case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
     urls = [str(item.url) for item in body.selected_images]
-    if len(set(urls)) != 4:
-        raise HTTPException(status_code=422, detail="Choose four different reference pictures")
+    if len(set(urls)) != len(urls):
+        raise HTTPException(status_code=422, detail="Choose different reference pictures")
 
     evidence = dict(case.sourcing_3d_evidence or {"schema_version": 1, "stages": {}})
     stages = dict(evidence.get("stages") or {})
@@ -610,6 +635,7 @@ async def approve_3d_reference_selection(case_id: int, body: CaseReferenceApprov
             "images": selected,
             "approved_at": now,
             "texture_reference_url": urls[0],
+            "generation_mode": "image-to-3d" if len(urls) == 1 else "multi-image-to-3d",
             "requires_separate_model_approval": True,
         },
         "updated_at": now,
@@ -678,7 +704,7 @@ async def get_cases_priority_for_3d(
     """
     from sqlalchemy import case as sql_case
 
-    if source_site not in (None, "Amazon", "Overclockers"):
+    if source_site not in (None, "Campaign", "Retailers", "Amazon", "Overclockers"):
         raise HTTPException(status_code=400, detail="Unsupported case source")
     if limit < 1 or limit > 101 or offset < 0:
         raise HTTPException(status_code=400, detail="Invalid case page")
@@ -688,7 +714,7 @@ async def get_cases_priority_for_3d(
         select(Case)
         .where(priority_filter, ~Case.name.ilike("%raspberry%"))
         .order_by(
-            Case.priority_3d_rank.asc().nullslast() if frozen_exists and not source_site else Case.bestseller_rank.asc().nullslast(),
+            Case.priority_3d_rank.asc().nullslast() if frozen_exists and source_site in (None, "Campaign") else Case.bestseller_rank.asc().nullslast(),
             sql_case((Case.source_site == "Amazon", 0), else_=1),  # Amazon prioritized
             Case.price.asc(),  # Cheaper cases first
             Case.id.asc(),

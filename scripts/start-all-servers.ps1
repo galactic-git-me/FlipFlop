@@ -238,13 +238,25 @@ foreach ($server in $servers) {
 Write-Host "[INFO] DEV uses production marketplace reads, sandbox eBay listing writes, and Ollama gateway $ollamaBaseUrl (second priority: after production, before other apps)." -ForegroundColor Yellow
 Write-Host '[INFO] Press Ctrl+C to stop the development servers started here.' -ForegroundColor Gray
 
+$serverListeningState = @{}
+foreach ($server in $servers) {
+    $serverListeningState[$server.Name] = Test-ListeningPort $server.Port
+}
+
 try {
     while ($true) {
         Start-Sleep -Seconds 5
         foreach ($server in $servers) {
-            if (-not (Test-ListeningPort $server.Port)) {
+            $isListening = Test-ListeningPort $server.Port
+            $wasListening = $serverListeningState[$server.Name]
+
+            if (-not $isListening -and $wasListening) {
                 Write-Host "[WARN] $($server.Name) is not listening; see $($server.LogFile)" -ForegroundColor Yellow
+            } elseif ($isListening -and -not $wasListening) {
+                Write-Host "[RUNNING] $($server.Name) is listening again at http://127.0.0.1:$($server.Port)" -ForegroundColor $server.Color
             }
+
+            $serverListeningState[$server.Name] = $isListening
         }
     }
 } finally {

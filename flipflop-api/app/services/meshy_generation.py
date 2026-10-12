@@ -24,6 +24,7 @@ from app.config import get_settings
 log = structlog.get_logger(__name__)
 
 _MESHY_BASE = "https://api.meshy.ai/openapi/v2/text-to-3d"
+_MESHY_IMAGE_BASE = "https://api.meshy.ai/openapi/v1/image-to-3d"
 _MESHY_MULTI_IMAGE_BASE = "https://api.meshy.ai/openapi/v1/multi-image-to-3d"
 _POLL_INTERVAL_SECONDS = 5
 _MAX_POLL_ATTEMPTS = 120  # ~10 minutes ceiling — Meshy generations typically finish well inside this
@@ -117,21 +118,22 @@ async def generate_multi_image_asset(
 ) -> MeshyGenerationResult | None:
     """Generate one textured GLB from one to four views of the same object.
 
-    Every supplied view drives geometry and is also explicitly sent as texture
-    guidance. Meshy only supports multi-view texture references on Meshy 7.1;
-    ``texture_image_urls`` cannot be combined with ``texture_prompt``.
+    A single view uses Meshy's Image-to-3D endpoint. Two to four views use
+    Multi-Image-to-3D, with every supplied view also sent as texture guidance.
     """
     settings = get_settings()
     if not settings.meshy_api_key:
         log.warning("meshy_generation.no_api_key")
         return None
     if not 1 <= len(image_urls) <= 4:
-        raise ValueError("Meshy multi-image generation requires 1 to 4 images")
+        raise ValueError("Meshy image generation requires 1 to 4 images")
+
+    is_single_image = len(image_urls) == 1
+    endpoint = _MESHY_IMAGE_BASE if is_single_image else _MESHY_MULTI_IMAGE_BASE
 
     try:
         async with httpx.AsyncClient(timeout=30) as client:
             payload = {
-                "image_urls": image_urls,
                 # Multi-view texture references require Meshy 7.1. Meshy 6
                 # supports only one texture image and cannot honor all chosen
                 # photos when rebuilding a model.
@@ -147,9 +149,20 @@ async def generate_multi_image_asset(
                 "should_remesh": False,
                 "target_formats": ["glb"],
             }
-            payload["texture_image_urls"] = image_urls
+            if is_single_image:
+                payload = {
+                    "image_url": image_urls[0],
+                    "texture_image_url": image_urls[0],
+                    "ai_model": "meshy-7.1",
+                    "should_texture": True,
+                    "enable_pbr": True,
+                    "target_formats": ["glb"],
+                }
+            else:
+                payload["image_urls"] = image_urls
+                payload["texture_image_urls"] = image_urls
             response = await client.post(
-                _MESHY_MULTI_IMAGE_BASE,
+                endpoint,
                 headers=_headers(),
                 json=payload,
             )
@@ -158,7 +171,7 @@ async def generate_multi_image_asset(
             if not task_id:
                 return None
     except httpx.HTTPError as exc:
-        log.warning("meshy_generation.multi_image_submit_failed", error=str(exc))
+        log.warning("meshy_generation.image_submit_failed", single_image=is_single_image, error=str(exc))
         return None
 
     # Persist a visible state as soon as Meshy accepts the task. Without this
@@ -175,11 +188,11 @@ async def generate_multi_image_asset(
         await asyncio.sleep(_POLL_INTERVAL_SECONDS)
         try:
             async with httpx.AsyncClient(timeout=30) as client:
-                response = await client.get(f"{_MESHY_MULTI_IMAGE_BASE}/{task_id}", headers=_headers())
+                response = await client.get(f"{endpoint}/{task_id}", headers=_headers())
                 response.raise_for_status()
                 data = response.json()
         except httpx.HTTPError as exc:
-            log.warning("meshy_generation.multi_image_poll_failed", attempt=attempt, error=str(exc))
+            log.warning("meshy_generation.image_poll_failed", single_image=is_single_image, attempt=attempt, error=str(exc))
             continue
         status = data.get("status", "")
         progress = max(0, min(100, int(data.get("progress") or 0)))

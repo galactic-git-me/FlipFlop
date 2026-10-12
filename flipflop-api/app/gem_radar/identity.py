@@ -320,6 +320,11 @@ _FULL_SYSTEM_KEYWORDS = re.compile(
     re.IGNORECASE,
 )
 
+
+def is_full_system_listing(title: str) -> bool:
+    """True when a listing is a complete computer rather than a component."""
+    return bool(_FULL_SYSTEM_KEYWORDS.search(_strip_scrape_artifacts(title)))
+
 # Backstop for full systems that don't use any of the keywords above (e.g. a
 # custom build sold as "Asus X870 Motherboard + Ryzen 9 + 32GB RAM bundle,
 # cash on collection" with no single word flagging it as "a system"): if a
@@ -456,7 +461,7 @@ def _detect_category(title: str) -> Optional[str]:
     if is_likely_accessory(title):
         return None
     clean_title = _strip_scrape_artifacts(title)
-    if _FULL_SYSTEM_KEYWORDS.search(clean_title):
+    if is_full_system_listing(clean_title):
         return None
 
     # Prefer phrases which say what the item *is* over secondary components

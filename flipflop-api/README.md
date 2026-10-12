@@ -38,8 +38,12 @@ python -m venv .venv
 .venv\Scripts\activate      # Windows
 source .venv/bin/activate   # Mac/Linux
 pip install -r requirements.txt
-python run_dev.py           # defaults to port 4311 — matches Docker and every consumer's config
+python run_dev.py           # defaults to port 4311; restarts the API when Python files change
 ```
+
+The Windows launcher watches `app/` and restarts the API process after Python
+source changes. It keeps Uvicorn's built-in reload disabled so the API retains
+the Proactor event loop required by Playwright.
 
 ## AI Setup
 

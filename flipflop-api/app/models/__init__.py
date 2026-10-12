@@ -27,6 +27,7 @@ from app.models.getting_started_job import GettingStartedJob
 from app.models.pc_builder import PCBuild, PCBuildPurchasePlan
 from app.models.benchmark import HardwareBenchmark, ComponentPerformanceMetric, BenchmarkRefreshRun
 from app.models.catalogue import PlaybookSlot, CatalogueVariant, CaseCatalogue
+from app.models.catalogue_marketing_copy import CatalogueMarketingCopy
 from app.models.curated_build_segment import CuratedBuildSegment
 from app.models.custom_build_settings import CustomBuildSettings
 from app.models.build_capacity import BuildCapacity
@@ -101,6 +102,7 @@ __all__ = [
     "PlaybookSlot",
     "CatalogueVariant",
     "CaseCatalogue",
+    "CatalogueMarketingCopy",
     "CuratedBuildSegment",
     "CustomBuildSettings",
     "Order",

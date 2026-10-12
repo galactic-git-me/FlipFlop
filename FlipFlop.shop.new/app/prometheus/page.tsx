@@ -2,9 +2,7 @@ import { formatPrice } from '@/lib/utils'
 import Link from 'next/link'
 
 export default function PrometheusPage() {
-  const productionCost = 944.74
   const sellPrice = 1449
-  const margin = sellPrice - productionCost
 
   return (
     <div className="min-h-screen bg-[var(--background)] py-12 px-4">
@@ -97,15 +95,6 @@ export default function PrometheusPage() {
             <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-6 mb-6">
               <div className="flex items-baseline justify-between mb-4">
                 <span className="text-4xl font-bold">{formatPrice(sellPrice)}</span>
-                <span className="text-sm text-[var(--muted)]">
-                  Production cost: {formatPrice(productionCost)}
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-sm mb-4 pb-4 border-b border-[var(--card-border)]">
-                <span className="text-[var(--muted)]">Margin</span>
-                <span className="text-green-400 font-medium">
-                  +{formatPrice(margin)} ({Math.round((margin / productionCost) * 100)}%)
-                </span>
               </div>
               
               <button className="w-full py-4 bg-[var(--accent)] hover:bg-[var(--accent-hover)] rounded-lg font-bold text-lg transition-colors mb-3">

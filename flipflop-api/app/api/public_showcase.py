@@ -78,6 +78,24 @@ def _twin_ref(cap: Capture3DAsset | None) -> dict | None:
     }
 
 
+def _public_build_photos(photos: list | None, hero_photo_url: str | None) -> list[dict[str, str]]:
+    """Expose only uploaded, customer-facing build photos; never listing cards or internal media."""
+    gallery: list[dict[str, str]] = []
+    seen: set[str] = set()
+    if hero_photo_url:
+        gallery.append({"url": hero_photo_url, "title": "Completed build"})
+        seen.add(hero_photo_url)
+    for photo in photos or []:
+        if not isinstance(photo, dict) or photo.get("kind") != "photo":
+            continue
+        url = photo.get("url")
+        if not isinstance(url, str) or not url or url in seen:
+            continue
+        seen.add(url)
+        gallery.append({"url": url, "title": f"Build photo {len(gallery) + 1}"})
+    return gallery
+
+
 @router.get("/showcase-builds")
 async def public_list_showcase_builds(db: AsyncSession = Depends(get_db)):
     """Completed FlipFlop builds for the Previous Builds hangar."""
@@ -94,6 +112,14 @@ async def public_list_showcase_builds(db: AsyncSession = Depends(get_db)):
         )
     ).scalars().all()
 
+    manual_build_ids = [p.build.manual_build_id for p in products if p.build and p.build.manual_build_id]
+    photos_by_build_id: dict[int, list] = {}
+    if manual_build_ids:
+        photo_rows = await db.execute(
+            select(ManualBuild.id, ManualBuild.photos).where(ManualBuild.id.in_(manual_build_ids))
+        )
+        photos_by_build_id = {row.id: row.photos or [] for row in photo_rows}
+
     twin_ids = [p.capture_3d_asset_id for p in products if p.capture_3d_asset_id]
     twins_by_id: dict[int, Capture3DAsset] = {}
     if twin_ids:
@@ -107,7 +133,12 @@ async def public_list_showcase_builds(db: AsyncSession = Depends(get_db)):
             "id": p.id,
             "title": p.title,
             "hero_photo_url": p.hero_photo_url,
+            "photos": _public_build_photos(
+                photos_by_build_id.get(p.build.manual_build_id, []) if p.build and p.build.manual_build_id else [],
+                p.hero_photo_url,
+            ),
             "spec_highlights": (p.build.spec_json if p.build else None),
+            "playbook_id": p.playbook_id or (p.build.playbook_id if p.build else None),
             "twin_3d": _twin_ref(twins_by_id.get(p.capture_3d_asset_id))
             if p.capture_3d_asset_id
             else ({"optimized_asset_ref": p.model_3d_url, "preview_image_ref": None, "ar_ready": False} if p.model_3d_url else None),
@@ -139,6 +170,12 @@ async def public_showcase_build_detail(product_id: int, db: AsyncSession = Depen
     ):
         raise HTTPException(status_code=404, detail="Build not found")
 
+    manual_build = None
+    if product.build and product.build.manual_build_id:
+        manual_build = (
+            await db.execute(select(ManualBuild).where(ManualBuild.id == product.build.manual_build_id))
+        ).scalar_one_or_none()
+
     benchmark = None
     if product.benchmark_report_document_id:
         doc = (
@@ -167,6 +204,7 @@ async def public_showcase_build_detail(product_id: int, db: AsyncSession = Depen
         "title": product.title,
         "description": product.description,
         "hero_photo_url": product.hero_photo_url,
+        "photos": _public_build_photos(manual_build.photos if manual_build else [], product.hero_photo_url),
         "model_3d_url": product.model_3d_url,
         "fulfilment": {
             "type": product.fulfilment_type,

@@ -1,5 +1,6 @@
 """Admin API for the curated-build playbook and catalogue subset."""
 import json
+import re
 from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
@@ -14,7 +15,9 @@ from app.config import get_settings
 from app.database import get_db
 from app.models.catalogue import CatalogueVariant, PlaybookSlot
 from app.models.curated_build_segment import CuratedBuildSegment
-from app.models.listing import Listing
+from app.models.listing import Listing, ListingStatus
+from app.models.amazon_bestseller_observation import AmazonBestsellerObservation
+from app.models.gem_radar_listing_cpk import GemRadarListingCpk
 from app.models.flip import Flip, FlipStage
 from app.models.benchmark import HardwareBenchmark
 from app.models.part import Part
@@ -386,11 +389,9 @@ def _segment_json(segment: CuratedBuildSegment) -> dict:
 async def _validate_approved_upgrades(
     db: AsyncSession, customer_type: str, budget_level: str, upgrades: list[dict]
 ) -> list[dict]:
-    """Bind a reviewed pair to draft candidates and approved market evidence."""
+    """Bind reviewed component offers to draft candidates and market evidence."""
     if not upgrades:
         return []
-    if len(upgrades) != 2:
-        raise ValueError("Select exactly two customer upgrades for this Playbook cell")
     draft_path = Path(__file__).resolve().parents[3] / "tmp" / "curated-playbooks-v1-stub.json"
     if not draft_path.is_file():
         raise ValueError("The source Playbook draft is unavailable")
@@ -403,7 +404,7 @@ async def _validate_approved_upgrades(
     candidates = cell.get("upsells", [])
     selected: list[dict] = []
     candidate_indexes: set[int] = set()
-    categories: set[str] = set()
+    target_ids: set[int] = set()
     playbook_id = (await db.execute(
         select(Playbook.id).where(Playbook.name.ilike(customer_type))
     )).scalar_one_or_none()
@@ -456,10 +457,9 @@ async def _validate_approved_upgrades(
         if not target:
             raise ValueError("Upgrade target must be active in this Playbook cell's curated catalogue")
         target_variant, target_listing, target_slot = target
-        category_key = str(candidate.get("category", "")).casefold()
-        if category_key in categories:
-            raise ValueError("Choose upgrades for two different component categories")
-        categories.add(category_key)
+        if target_variant.id in target_ids:
+            raise ValueError("A curated component can only be approved once for this Playbook cell")
+        target_ids.add(target_variant.id)
         evidence = (await db.execute(text("""
             SELECT a.rank, a.price, a.title, a.url, a.captured_at
             FROM amazon_bestseller_observations a
@@ -604,6 +604,118 @@ async def _component_context(db: AsyncSession, ids: set[int]) -> dict[int, dict]
     }
 
 
+def _listing_asin(listing: Listing) -> str | None:
+    """Read an ASIN only from an exact Amazon identifier or product URL."""
+    for key, value in (listing.raw_specs or {}).items():
+        if str(key).casefold() not in {"asin", "amazon_asin"}:
+            continue
+        candidate = str(value or "").strip().upper()
+        if len(candidate) == 10 and candidate.isalnum():
+            return candidate
+    external_id = str(listing.external_id or "").strip().upper()
+    if len(external_id) == 10 and external_id.isalnum():
+        return external_id
+    match = re.search(r"/(?:dp|gp/product)/([A-Z0-9]{10})(?:[/?]|$)", listing.url or "", re.I)
+    return match.group(1).upper() if match else None
+
+
+@router.post("/auto-link-bestseller-components")
+async def auto_link_bestseller_components(db: AsyncSession = Depends(get_db)):
+    """Link Playbook CPK/ASIN identities to matching active curated listings."""
+    segments = (await db.execute(select(CuratedBuildSegment))).scalars().all()
+    identities = {
+        (slot, str(choice.get("category") or SLOT_BESTSELLER_CATEGORY.get(slot) or ""), str(choice.get("cpk") or ""))
+        for segment in segments
+        for slot, choice in (segment.bestseller_components or {}).items()
+        if isinstance(choice, dict) and choice.get("cpk")
+    }
+    cpks = {cpk for _, _, cpk in identities}
+    if not cpks:
+        return {"linked": 0, "unmatched": 0, "segments_updated": 0, "message": "No saved Amazon CPK identities were found."}
+
+    categories = {category for _, category, _ in identities if category}
+    asin_rows = (await db.execute(
+        select(AmazonBestsellerObservation.category, AmazonBestsellerObservation.cpk, AmazonBestsellerObservation.asin)
+        .where(
+            AmazonBestsellerObservation.cpk.in_(cpks),
+            AmazonBestsellerObservation.category.in_(categories),
+        )
+        .order_by(AmazonBestsellerObservation.captured_at.desc())
+    )).all()
+    asins_by_identity: dict[tuple[str, str], set[str]] = {}
+    for category, cpk, asin in asin_rows:
+        if cpk and asin:
+            asins_by_identity.setdefault((str(category), str(cpk)), set()).add(str(asin).upper())
+
+    variants = (await db.execute(
+        select(CatalogueVariant, Listing, PlaybookSlot)
+        .join(Listing, Listing.id == CatalogueVariant.listing_id)
+        .join(PlaybookSlot, PlaybookSlot.id == CatalogueVariant.slot_id)
+        .where(Listing.status == ListingStatus.active)
+    )).all()
+    listing_cpks = (await db.execute(
+        select(GemRadarListingCpk.listing_id, GemRadarListingCpk.cpk)
+        .where(GemRadarListingCpk.cpk.in_(cpks))
+    )).all()
+    cpk_by_listing = {str(listing_id): str(cpk) for listing_id, cpk in listing_cpks}
+    candidates_by_slot: dict[str, list[tuple[int, int, str, str | None, float, bool]]] = {}
+    for variant, listing, slot in variants:
+        candidate_cpk = cpk_by_listing.get(str(listing.external_id))
+        candidate_asin = _listing_asin(listing)
+        candidates_by_slot.setdefault(slot.slot_type, []).append((
+            slot.playbook_id, variant.id, candidate_cpk or "", candidate_asin,
+            float(listing.price or variant.display_price or 0), variant.curated_for_builds,
+        ))
+
+    linked = unmatched = segments_updated = 0
+    linked_needs_curation = 0
+    playbooks = (await db.execute(
+        select(Playbook.id, Playbook.name).where(
+            func.lower(Playbook.name).in_({segment.customer_type.casefold() for segment in segments})
+        )
+    )).all()
+    playbook_ids = {name.casefold(): playbook_id for playbook_id, name in playbooks}
+    for segment in segments:
+        components = dict(segment.components or {})
+        segment_changed = False
+        for slot, choice in (segment.bestseller_components or {}).items():
+            if not isinstance(choice, dict) or not choice.get("cpk"):
+                continue
+            cpk = str(choice["cpk"])
+            expected_category = SLOT_BESTSELLER_CATEGORY.get(slot)
+            if not expected_category or choice.get("category") != expected_category:
+                unmatched += 1
+                continue
+            asin_set = asins_by_identity.get((expected_category, cpk), set())
+            matches = [
+                candidate for candidate in candidates_by_slot.get(slot, [])
+                if candidate[0] == playbook_ids.get(segment.customer_type.casefold())
+                and (candidate[2] == cpk or (candidate[3] and candidate[3] in asin_set))
+            ]
+            if not matches:
+                unmatched += 1
+                continue
+            # Keep already-curated offers first; then prefer an exact ASIN and
+            # the lowest active price among equivalent supplier offers.
+            matches.sort(key=lambda candidate: (not candidate[5], candidate[3] not in asin_set, candidate[4], candidate[1]))
+            components[slot] = matches[0][1]
+            if not matches[0][5]:
+                linked_needs_curation += 1
+            linked += 1
+            segment_changed = True
+        if segment_changed:
+            segment.components = components
+            segments_updated += 1
+
+    await db.commit()
+    return {
+        "linked": linked,
+        "unmatched": unmatched,
+        "linked_needs_curation": linked_needs_curation,
+        "segments_updated": segments_updated,
+    }
+
+
 @router.get("")
 async def get_curated_builds(db: AsyncSession = Depends(get_db)):
     segments = (await db.execute(select(CuratedBuildSegment).order_by(
@@ -700,7 +812,7 @@ async def upsert_segment(body: SegmentInput, db: AsyncSession = Depends(get_db))
                 raise HTTPException(status_code=422, detail=str(exc)) from exc
     if "approved_upgrades" in body.model_fields_set:
         if segment.is_live and not body.approved_upgrades:
-            raise HTTPException(status_code=409, detail="Unpublish this Playbook cell before removing its customer upgrade pair")
+            raise HTTPException(status_code=409, detail="Unpublish this Playbook cell before removing its reviewed component offers")
         try:
             segment.approved_upgrades = await _validate_approved_upgrades(
                 db, segment.customer_type, segment.budget_level, body.approved_upgrades or []
@@ -838,8 +950,57 @@ async def publish_segment(segment_id: int, body: dict, db: AsyncSession = Depend
         raise HTTPException(status_code=409, detail="Assign CPU, GPU, motherboard, RAM, storage, PSU and case before publishing")
     if segment.selling_price is None or segment.selling_price <= 0:
         raise HTTPException(status_code=409, detail="Set a valid selling price before publishing")
-    if len(segment.approved_upgrades or []) != 2:
-        raise HTTPException(status_code=409, detail="Select and save exactly two evidence-backed customer upgrades before publishing")
+    draft_path = Path(__file__).resolve().parents[3] / "tmp" / "curated-playbooks-v1-stub.json"
+    if not draft_path.is_file():
+        raise HTTPException(status_code=409, detail="The source Playbook draft is unavailable; component offers cannot be verified")
+    draft = json.loads(draft_path.read_text(encoding="utf-8"))
+    draft_cell = next((item for item in draft.get("playbooks", [])
+                       if str(item.get("customer_type", "")).casefold() == segment.customer_type.casefold()
+                       and str(item.get("budget_tier", "")).casefold() == segment.budget_level.casefold()), None)
+    if draft_cell is None:
+        raise HTTPException(status_code=409, detail="No source Playbook cell is available to verify component offers")
+    slot_categories = {"cpu / apu", "motherboard", "memory", "graphics", "primary storage", "power supply", "cpu cooling"}
+    draft_upsells = draft_cell.get("upsells", [])
+    required_offer_categories = {
+        str(item.get("category", "")).casefold()
+        for item in draft_upsells
+        if isinstance(item, dict) and str(item.get("category", "")).casefold() in slot_categories
+    }
+    approved_indexes = {
+        int(item["candidate_index"])
+        for item in (segment.approved_upgrades or [])
+        if isinstance(item, dict) and item.get("candidate_index") is not None
+    }
+    approved_offer_categories = {
+        str(draft_upsells[index].get("category", "")).casefold()
+        for index in approved_indexes
+        if 0 <= index < len(draft_upsells) and isinstance(draft_upsells[index], dict)
+    }
+    missing_offer_count = len(required_offer_categories - approved_offer_categories)
+    if missing_offer_count:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Review and save an offer for every component category with a drafted upgrade ({missing_offer_count} still missing)",
+        )
+    approved_target_ids = {
+        int(item["target_variant_id"])
+        for item in (segment.approved_upgrades or [])
+        if isinstance(item, dict) and item.get("target_variant_id") is not None
+    }
+    active_approved_targets = set()
+    if approved_target_ids:
+        active_approved_targets = set((await db.execute(
+            select(CatalogueVariant.id)
+            .join(Listing, Listing.id == CatalogueVariant.listing_id)
+            .where(
+                CatalogueVariant.id.in_(approved_target_ids),
+                CatalogueVariant.curated_for_builds.is_(True),
+                CatalogueVariant.status == "active",
+                Listing.status == "active",
+            )
+        )).scalars().all())
+    if active_approved_targets != approved_target_ids:
+        raise HTTPException(status_code=409, detail="One or more reviewed upgrade targets are no longer active in the curated catalogue")
     ids = {int(value) for value in selected.values() if str(value).isdigit()}
     context = await _component_context(db, ids)
     if len(context) != len(ids) or any(not item["curated_for_builds"] or item["status"] != "active" for item in context.values()):

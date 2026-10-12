@@ -1,38 +1,38 @@
 {
-  "generated_at": "2026-10-11T19:25:56.029479+00:00",
+  "generated_at": "2026-10-12T19:08:00.725606+00:00",
   "builds": [
     {
       "components": [
         {
-          "id": 44577436,
-          "listing_id": "google-shopping:Intel%20Core%20i5%20Quad-Core%20i5-4430%203GHz%20Desktop%20Processor:3:CeX",
+          "id": 44653602,
+          "listing_id": "google-shopping:PC%20CPU%20Intel%20Pentium%20E2160%201.80GHZ%20SLA8Z%20LGA775%20Processor%20Socket%20Computer.%20Intel.%20CPUs%2FProcessors.%204053162224476:2.23:eBay%20-%20merseyelectonics",
           "category": "cpu",
-          "title": "Intel Core i5 Quad-Core i5-4430 3GHz Desktop Processor",
-          "seller": "CeX",
+          "title": "PC CPU Intel Pentium E2160 1.80GHZ SLA8Z LGA775 Processor Socket Computer. Intel. CPUs/Processors. 4053162224476",
+          "seller": "eBay - merseyelectonics",
           "image_url": null,
-          "delivered_price": 3.0,
+          "delivered_price": 2.23,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -3.0,
-          "url": "https://www.google.com/search?tbm=shop&q=Intel+Core+i5+Quad-Core+i5-4430+3GHz+Desktop+Processor"
+          "estimated_profit": -2.23,
+          "url": "https://www.google.com/search?tbm=shop&q=PC+CPU+Intel+Pentium+E2160+1.80GHZ+SLA8Z+LGA775+Processor+Socket+Computer.+Intel.+CPUs%2FProcessors.+4053162224476"
         },
         {
-          "id": 44554338,
-          "listing_id": "bargain_hardware:dell-precision-t3600-workstation-configure-to-order",
+          "id": 44624525,
+          "listing_id": "bargain_hardware:dell-22y99-poweredge-r620-ram-cpu-vented-slot-cover-022y99",
           "category": "motherboard",
-          "title": "Dell Precision T3600 Workstation",
+          "title": "Dell PowerEdge R620 RAM/CPU Vented Slot Cover",
           "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/2007107f63/dell-precision-t3600-workstation.webp?width=300&height=300&store=default_uk&image-type=small_image",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/placeholder/default/image-coming-soon-new_1.jpg",
           "delivered_price": 1.0,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
           "estimated_profit": -1.0,
-          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Dell+Precision+T3600+Workstation"
+          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Dell+PowerEdge+R620+RAM%2FCPU+Vented+Slot+Cover"
         },
         {
-          "id": 44573543,
+          "id": 44643316,
           "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F227492813999%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:AMD%20FirePr:80b4dd3b391d139a2cdc00816c2a3677962b51f167931696a65589f5d0549eef",
           "category": "gpu",
           "title": "AMD FirePro W7100 8GB GDDR5 Workstation Graphics Card 4x DisplayPort GPU. AMD. Graphics/Video Cards.",
@@ -46,21 +46,21 @@
           "url": "https://www.ebay.co.uk/itm/227492813999?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
         },
         {
-          "id": 44572850,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
+          "id": 44641514,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.alibaba.com%2Fproduct-detail%2FWholesale-OEM-Laptop-DDR3-RAM-2GB_1601643218873.html%3Fmark%3Dgoogle_shopping%26pcy%3Dgb_en:Wholesale%20memoria%20ram%20ddr4%:524a714783859d7e484fedc38f1289d9e07c4905e6bd9ecc2e56b3fdcbbc7764",
           "category": "ram",
-          "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
-          "seller": "www.ebay.co.uk",
+          "title": "Wholesale memoria ram ddr4 8gb ddr4 ram ram ddr3 memorias ram memoria ram ddr3 8gb ddr3 4gb ram ram 8gb ddr4 ddr 3 ram ddr ram ddr4 8gb ram ddr4 8gb",
+          "seller": "Alibaba.com",
           "image_url": null,
-          "delivered_price": 6.95,
+          "delivered_price": 3.93,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -6.95,
-          "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
+          "estimated_profit": -3.93,
+          "url": "https://www.alibaba.com/product-detail/Wholesale-OEM-Laptop-DDR3-RAM-2GB_1601643218873.html?mark=google_shopping&pcy=gb_en"
         },
         {
-          "id": 44554512,
+          "id": 44624924,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -74,7 +74,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
         },
         {
-          "id": 44586225,
+          "id": 44655655,
           "listing_id": "google-shopping:WD%20Blue%20SN5100%201TB%20M.2%20NVMe%20Solid%20State%20Drive%20%2F%20SSD:1:Novatech.co.uk",
           "category": "ssd",
           "title": "WD Blue SN5100 1TB M.2 NVMe Solid State Drive / SSD",
@@ -88,7 +88,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=WD+Blue+SN5100+1TB+M.2+NVMe+Solid+State+Drive+%2F+SSD"
         },
         {
-          "id": 44562167,
+          "id": 44632460,
           "listing_id": "google-shopping:Antec%20T120%20Fan%20CPU%20Cooler:4.39:AWD-IT",
           "category": "cooler",
           "title": "Antec T120 Fan CPU Cooler",
@@ -102,7 +102,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=Antec+T120+Fan+CPU+Cooler"
         },
         {
-          "id": 44549273,
+          "id": 44619539,
           "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
           "category": "case",
           "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
@@ -118,9 +118,9 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 40.84,
+      "build_cost": 37.05,
       "market": {
-        "query": "gaming pc Core i5-4430 AMD FirePro W7100 8GB GDDR5 Wo 8gb",
+        "query": "gaming pc Intel Pentium E2160 AMD FirePro W7100 8GB GDDR5 Wo 8gb",
         "sold": {
           "available": false,
           "count": 0,
@@ -129,160 +129,21 @@
         },
         "bin": {
           "available": true,
-          "count": 48,
-          "min_price": 68.98,
-          "max_price": 1427.25,
-          "average_price": 349.79
+          "count": 2,
+          "min_price": 120.0,
+          "max_price": 222.74,
+          "average_price": 171.37
         }
       },
-      "resale_estimate": 349.79,
+      "resale_estimate": 171.37,
       "resale_source": "bin_average",
-      "estimated_profit": 308.95,
+      "estimated_profit": 134.32,
       "rank": 1
     },
     {
       "components": [
         {
-          "id": 44577436,
-          "listing_id": "google-shopping:Intel%20Core%20i5%20Quad-Core%20i5-4430%203GHz%20Desktop%20Processor:3:CeX",
-          "category": "cpu",
-          "title": "Intel Core i5 Quad-Core i5-4430 3GHz Desktop Processor",
-          "seller": "CeX",
-          "image_url": null,
-          "delivered_price": 3.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -3.0,
-          "url": "https://www.google.com/search?tbm=shop&q=Intel+Core+i5+Quad-Core+i5-4430+3GHz+Desktop+Processor"
-        },
-        {
-          "id": 44554109,
-          "listing_id": "bargain_hardware:dell-22y99-poweredge-r620-ram-cpu-vented-slot-cover-022y99",
-          "category": "motherboard",
-          "title": "Dell PowerEdge R620 RAM/CPU Vented Slot Cover",
-          "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/placeholder/default/image-coming-soon-new_1.jpg",
-          "delivered_price": 1.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.0,
-          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Dell+PowerEdge+R620+RAM%2FCPU+Vented+Slot+Cover"
-        },
-        {
-          "id": 44573543,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F227492813999%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:AMD%20FirePr:80b4dd3b391d139a2cdc00816c2a3677962b51f167931696a65589f5d0549eef",
-          "category": "gpu",
-          "title": "AMD FirePro W7100 8GB GDDR5 Workstation Graphics Card 4x DisplayPort GPU. AMD. Graphics/Video Cards.",
-          "seller": "www.ebay.co.uk",
-          "image_url": null,
-          "delivered_price": 19.5,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -19.5,
-          "url": "https://www.ebay.co.uk/itm/227492813999?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
-        },
-        {
-          "id": 44572850,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
-          "category": "ram",
-          "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
-          "seller": "www.ebay.co.uk",
-          "image_url": null,
-          "delivered_price": 6.95,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -6.95,
-          "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
-        },
-        {
-          "id": 44554512,
-          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
-          "category": "psu",
-          "title": "HP Common Slot HS PSU 460W Gold",
-          "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
-          "delivered_price": 4.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -4.0,
-          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
-        },
-        {
-          "id": 44586225,
-          "listing_id": "google-shopping:WD%20Blue%20SN5100%201TB%20M.2%20NVMe%20Solid%20State%20Drive%20%2F%20SSD:1:Novatech.co.uk",
-          "category": "ssd",
-          "title": "WD Blue SN5100 1TB M.2 NVMe Solid State Drive / SSD",
-          "seller": "Novatech.co.uk",
-          "image_url": null,
-          "delivered_price": 1.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INELIGIBLE",
-          "estimated_profit": -1.0,
-          "url": "https://www.google.com/search?tbm=shop&q=WD+Blue+SN5100+1TB+M.2+NVMe+Solid+State+Drive+%2F+SSD"
-        },
-        {
-          "id": 44562167,
-          "listing_id": "google-shopping:Antec%20T120%20Fan%20CPU%20Cooler:4.39:AWD-IT",
-          "category": "cooler",
-          "title": "Antec T120 Fan CPU Cooler",
-          "seller": "AWD-IT",
-          "image_url": null,
-          "delivered_price": 4.39,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -4.39,
-          "url": "https://www.google.com/search?tbm=shop&q=Antec+T120+Fan+CPU+Cooler"
-        },
-        {
-          "id": 44549273,
-          "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
-          "category": "case",
-          "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
-          "seller": "AWD-IT",
-          "image_url": null,
-          "delivered_price": 1.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INELIGIBLE",
-          "estimated_profit": -1.0,
-          "url": "https://www.awd-it.co.uk/catalogsearch/result/?q=Fractal+Design+Pop+Air+Mid+Tower+Case+Black+No+Window+-+FD-C-POA1A-01"
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 4,
-      "build_cost": 40.84,
-      "market": {
-        "query": "gaming pc Core i5-4430 AMD FirePro W7100 8GB GDDR5 Wo 8gb",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "eBay sign-in is required for sold prices, but SOLD_COMPS_HEADLESS is enabled. Run it headed so the eBay login window can be completed."
-        },
-        "bin": {
-          "available": true,
-          "count": 48,
-          "min_price": 68.98,
-          "max_price": 1427.25,
-          "average_price": 346.53
-        }
-      },
-      "resale_estimate": 346.53,
-      "resale_source": "bin_average",
-      "estimated_profit": 305.69,
-      "rank": 2
-    },
-    {
-      "components": [
-        {
-          "id": 44584095,
+          "id": 44653602,
           "listing_id": "google-shopping:PC%20CPU%20Intel%20Pentium%20E2160%201.80GHZ%20SLA8Z%20LGA775%20Processor%20Socket%20Computer.%20Intel.%20CPUs%2FProcessors.%204053162224476:2.23:eBay%20-%20merseyelectonics",
           "category": "cpu",
           "title": "PC CPU Intel Pentium E2160 1.80GHZ SLA8Z LGA775 Processor Socket Computer. Intel. CPUs/Processors. 4053162224476",
@@ -296,146 +157,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=PC+CPU+Intel+Pentium+E2160+1.80GHZ+SLA8Z+LGA775+Processor+Socket+Computer.+Intel.+CPUs%2FProcessors.+4053162224476"
         },
         {
-          "id": 44554109,
-          "listing_id": "bargain_hardware:dell-22y99-poweredge-r620-ram-cpu-vented-slot-cover-022y99",
-          "category": "motherboard",
-          "title": "Dell PowerEdge R620 RAM/CPU Vented Slot Cover",
-          "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/placeholder/default/image-coming-soon-new_1.jpg",
-          "delivered_price": 1.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -1.0,
-          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Dell+PowerEdge+R620+RAM%2FCPU+Vented+Slot+Cover"
-        },
-        {
-          "id": 44573543,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F227492813999%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:AMD%20FirePr:80b4dd3b391d139a2cdc00816c2a3677962b51f167931696a65589f5d0549eef",
-          "category": "gpu",
-          "title": "AMD FirePro W7100 8GB GDDR5 Workstation Graphics Card 4x DisplayPort GPU. AMD. Graphics/Video Cards.",
-          "seller": "www.ebay.co.uk",
-          "image_url": null,
-          "delivered_price": 19.5,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -19.5,
-          "url": "https://www.ebay.co.uk/itm/227492813999?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
-        },
-        {
-          "id": 44572850,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
-          "category": "ram",
-          "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
-          "seller": "www.ebay.co.uk",
-          "image_url": null,
-          "delivered_price": 6.95,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -6.95,
-          "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
-        },
-        {
-          "id": 44554512,
-          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
-          "category": "psu",
-          "title": "HP Common Slot HS PSU 460W Gold",
-          "seller": "Bargain Hardware",
-          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
-          "delivered_price": 4.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -4.0,
-          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
-        },
-        {
-          "id": 44586225,
-          "listing_id": "google-shopping:WD%20Blue%20SN5100%201TB%20M.2%20NVMe%20Solid%20State%20Drive%20%2F%20SSD:1:Novatech.co.uk",
-          "category": "ssd",
-          "title": "WD Blue SN5100 1TB M.2 NVMe Solid State Drive / SSD",
-          "seller": "Novatech.co.uk",
-          "image_url": null,
-          "delivered_price": 1.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INELIGIBLE",
-          "estimated_profit": -1.0,
-          "url": "https://www.google.com/search?tbm=shop&q=WD+Blue+SN5100+1TB+M.2+NVMe+Solid+State+Drive+%2F+SSD"
-        },
-        {
-          "id": 44562167,
-          "listing_id": "google-shopping:Antec%20T120%20Fan%20CPU%20Cooler:4.39:AWD-IT",
-          "category": "cooler",
-          "title": "Antec T120 Fan CPU Cooler",
-          "seller": "AWD-IT",
-          "image_url": null,
-          "delivered_price": 4.39,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INSUFFICIENT_DATA",
-          "estimated_profit": -4.39,
-          "url": "https://www.google.com/search?tbm=shop&q=Antec+T120+Fan+CPU+Cooler"
-        },
-        {
-          "id": 44549273,
-          "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
-          "category": "case",
-          "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
-          "seller": "AWD-IT",
-          "image_url": null,
-          "delivered_price": 1.0,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "INELIGIBLE",
-          "estimated_profit": -1.0,
-          "url": "https://www.awd-it.co.uk/catalogsearch/result/?q=Fractal+Design+Pop+Air+Mid+Tower+Case+Black+No+Window+-+FD-C-POA1A-01"
-        }
-      ],
-      "compatibility_confidence": "unknown",
-      "super_gem_count": 4,
-      "build_cost": 40.07,
-      "market": {
-        "query": "gaming pc Intel Pentium E2160 AMD FirePro W7100 8GB GDDR5 Wo 8gb",
-        "sold": {
-          "available": false,
-          "count": 0,
-          "average_price": null,
-          "unavailable_reason": "eBay sign-in is required for sold prices, but SOLD_COMPS_HEADLESS is enabled. Run it headed so the eBay login window can be completed."
-        },
-        "bin": {
-          "available": true,
-          "count": 2,
-          "min_price": 120.0,
-          "max_price": 222.74,
-          "average_price": 171.37
-        }
-      },
-      "resale_estimate": 171.37,
-      "resale_source": "bin_average",
-      "estimated_profit": 131.3,
-      "rank": 3
-    },
-    {
-      "components": [
-        {
-          "id": 44584095,
-          "listing_id": "google-shopping:PC%20CPU%20Intel%20Pentium%20E2160%201.80GHZ%20SLA8Z%20LGA775%20Processor%20Socket%20Computer.%20Intel.%20CPUs%2FProcessors.%204053162224476:2.23:eBay%20-%20merseyelectonics",
-          "category": "cpu",
-          "title": "PC CPU Intel Pentium E2160 1.80GHZ SLA8Z LGA775 Processor Socket Computer. Intel. CPUs/Processors. 4053162224476",
-          "seller": "eBay - merseyelectonics",
-          "image_url": null,
-          "delivered_price": 2.23,
-          "market_new_price": null,
-          "market_used_price": null,
-          "classification": "SUPER_GEM",
-          "estimated_profit": -2.23,
-          "url": "https://www.google.com/search?tbm=shop&q=PC+CPU+Intel+Pentium+E2160+1.80GHZ+SLA8Z+LGA775+Processor+Socket+Computer.+Intel.+CPUs%2FProcessors.+4053162224476"
-        },
-        {
-          "id": 44554338,
+          "id": 44624752,
           "listing_id": "bargain_hardware:dell-precision-t3600-workstation-configure-to-order",
           "category": "motherboard",
           "title": "Dell Precision T3600 Workstation",
@@ -449,7 +171,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Dell+Precision+T3600+Workstation"
         },
         {
-          "id": 44573543,
+          "id": 44643316,
           "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F227492813999%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:AMD%20FirePr:80b4dd3b391d139a2cdc00816c2a3677962b51f167931696a65589f5d0549eef",
           "category": "gpu",
           "title": "AMD FirePro W7100 8GB GDDR5 Workstation Graphics Card 4x DisplayPort GPU. AMD. Graphics/Video Cards.",
@@ -463,21 +185,21 @@
           "url": "https://www.ebay.co.uk/itm/227492813999?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
         },
         {
-          "id": 44572850,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
+          "id": 44641514,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.alibaba.com%2Fproduct-detail%2FWholesale-OEM-Laptop-DDR3-RAM-2GB_1601643218873.html%3Fmark%3Dgoogle_shopping%26pcy%3Dgb_en:Wholesale%20memoria%20ram%20ddr4%:524a714783859d7e484fedc38f1289d9e07c4905e6bd9ecc2e56b3fdcbbc7764",
           "category": "ram",
-          "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
-          "seller": "www.ebay.co.uk",
+          "title": "Wholesale memoria ram ddr4 8gb ddr4 ram ram ddr3 memorias ram memoria ram ddr3 8gb ddr3 4gb ram ram 8gb ddr4 ddr 3 ram ddr ram ddr4 8gb ram ddr4 8gb",
+          "seller": "Alibaba.com",
           "image_url": null,
-          "delivered_price": 6.95,
+          "delivered_price": 3.93,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -6.95,
-          "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
+          "estimated_profit": -3.93,
+          "url": "https://www.alibaba.com/product-detail/Wholesale-OEM-Laptop-DDR3-RAM-2GB_1601643218873.html?mark=google_shopping&pcy=gb_en"
         },
         {
-          "id": 44554512,
+          "id": 44624924,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -491,7 +213,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
         },
         {
-          "id": 44586225,
+          "id": 44655655,
           "listing_id": "google-shopping:WD%20Blue%20SN5100%201TB%20M.2%20NVMe%20Solid%20State%20Drive%20%2F%20SSD:1:Novatech.co.uk",
           "category": "ssd",
           "title": "WD Blue SN5100 1TB M.2 NVMe Solid State Drive / SSD",
@@ -505,7 +227,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=WD+Blue+SN5100+1TB+M.2+NVMe+Solid+State+Drive+%2F+SSD"
         },
         {
-          "id": 44562167,
+          "id": 44632460,
           "listing_id": "google-shopping:Antec%20T120%20Fan%20CPU%20Cooler:4.39:AWD-IT",
           "category": "cooler",
           "title": "Antec T120 Fan CPU Cooler",
@@ -519,7 +241,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=Antec+T120+Fan+CPU+Cooler"
         },
         {
-          "id": 44549273,
+          "id": 44619539,
           "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
           "category": "case",
           "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
@@ -535,7 +257,7 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 40.07,
+      "build_cost": 37.05,
       "market": {
         "query": "gaming pc Intel Pentium E2160 AMD FirePro W7100 8GB GDDR5 Wo 8gb",
         "sold": {
@@ -554,13 +276,13 @@
       },
       "resale_estimate": 171.37,
       "resale_source": "bin_average",
-      "estimated_profit": 131.3,
-      "rank": 4
+      "estimated_profit": 134.32,
+      "rank": 2
     },
     {
       "components": [
         {
-          "id": 44584095,
+          "id": 44653602,
           "listing_id": "google-shopping:PC%20CPU%20Intel%20Pentium%20E2160%201.80GHZ%20SLA8Z%20LGA775%20Processor%20Socket%20Computer.%20Intel.%20CPUs%2FProcessors.%204053162224476:2.23:eBay%20-%20merseyelectonics",
           "category": "cpu",
           "title": "PC CPU Intel Pentium E2160 1.80GHZ SLA8Z LGA775 Processor Socket Computer. Intel. CPUs/Processors. 4053162224476",
@@ -574,7 +296,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=PC+CPU+Intel+Pentium+E2160+1.80GHZ+SLA8Z+LGA775+Processor+Socket+Computer.+Intel.+CPUs%2FProcessors.+4053162224476"
         },
         {
-          "id": 44555091,
+          "id": 44625499,
           "listing_id": "bargain_hardware:lenovo-thinkstation-p520-workstation-configure-to-order",
           "category": "motherboard",
           "title": "Lenovo ThinkStation P520 Workstation",
@@ -588,7 +310,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Lenovo+ThinkStation+P520+Workstation"
         },
         {
-          "id": 44573543,
+          "id": 44643316,
           "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F227492813999%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:AMD%20FirePr:80b4dd3b391d139a2cdc00816c2a3677962b51f167931696a65589f5d0549eef",
           "category": "gpu",
           "title": "AMD FirePro W7100 8GB GDDR5 Workstation Graphics Card 4x DisplayPort GPU. AMD. Graphics/Video Cards.",
@@ -602,21 +324,21 @@
           "url": "https://www.ebay.co.uk/itm/227492813999?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
         },
         {
-          "id": 44572850,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
+          "id": 44641514,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.alibaba.com%2Fproduct-detail%2FWholesale-OEM-Laptop-DDR3-RAM-2GB_1601643218873.html%3Fmark%3Dgoogle_shopping%26pcy%3Dgb_en:Wholesale%20memoria%20ram%20ddr4%:524a714783859d7e484fedc38f1289d9e07c4905e6bd9ecc2e56b3fdcbbc7764",
           "category": "ram",
-          "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
-          "seller": "www.ebay.co.uk",
+          "title": "Wholesale memoria ram ddr4 8gb ddr4 ram ram ddr3 memorias ram memoria ram ddr3 8gb ddr3 4gb ram ram 8gb ddr4 ddr 3 ram ddr ram ddr4 8gb ram ddr4 8gb",
+          "seller": "Alibaba.com",
           "image_url": null,
-          "delivered_price": 6.95,
+          "delivered_price": 3.93,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -6.95,
-          "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
+          "estimated_profit": -3.93,
+          "url": "https://www.alibaba.com/product-detail/Wholesale-OEM-Laptop-DDR3-RAM-2GB_1601643218873.html?mark=google_shopping&pcy=gb_en"
         },
         {
-          "id": 44554512,
+          "id": 44624924,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -630,7 +352,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
         },
         {
-          "id": 44586225,
+          "id": 44655655,
           "listing_id": "google-shopping:WD%20Blue%20SN5100%201TB%20M.2%20NVMe%20Solid%20State%20Drive%20%2F%20SSD:1:Novatech.co.uk",
           "category": "ssd",
           "title": "WD Blue SN5100 1TB M.2 NVMe Solid State Drive / SSD",
@@ -644,7 +366,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=WD+Blue+SN5100+1TB+M.2+NVMe+Solid+State+Drive+%2F+SSD"
         },
         {
-          "id": 44562167,
+          "id": 44632460,
           "listing_id": "google-shopping:Antec%20T120%20Fan%20CPU%20Cooler:4.39:AWD-IT",
           "category": "cooler",
           "title": "Antec T120 Fan CPU Cooler",
@@ -658,7 +380,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=Antec+T120+Fan+CPU+Cooler"
         },
         {
-          "id": 44549273,
+          "id": 44619539,
           "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
           "category": "case",
           "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
@@ -674,7 +396,7 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 40.07,
+      "build_cost": 37.05,
       "market": {
         "query": "gaming pc Intel Pentium E2160 AMD FirePro W7100 8GB GDDR5 Wo 8gb",
         "sold": {
@@ -693,13 +415,13 @@
       },
       "resale_estimate": 171.37,
       "resale_source": "bin_average",
-      "estimated_profit": 131.3,
-      "rank": 5
+      "estimated_profit": 134.32,
+      "rank": 3
     },
     {
       "components": [
         {
-          "id": 44584095,
+          "id": 44653602,
           "listing_id": "google-shopping:PC%20CPU%20Intel%20Pentium%20E2160%201.80GHZ%20SLA8Z%20LGA775%20Processor%20Socket%20Computer.%20Intel.%20CPUs%2FProcessors.%204053162224476:2.23:eBay%20-%20merseyelectonics",
           "category": "cpu",
           "title": "PC CPU Intel Pentium E2160 1.80GHZ SLA8Z LGA775 Processor Socket Computer. Intel. CPUs/Processors. 4053162224476",
@@ -713,7 +435,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=PC+CPU+Intel+Pentium+E2160+1.80GHZ+SLA8Z+LGA775+Processor+Socket+Computer.+Intel.+CPUs%2FProcessors.+4053162224476"
         },
         {
-          "id": 44555092,
+          "id": 44625500,
           "listing_id": "bargain_hardware:lenovo-thinkstation-p520c-workstation",
           "category": "motherboard",
           "title": "Lenovo ThinkStation P520c Workstation",
@@ -727,7 +449,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Lenovo+ThinkStation+P520c+Workstation"
         },
         {
-          "id": 44573543,
+          "id": 44643316,
           "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F227492813999%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:AMD%20FirePr:80b4dd3b391d139a2cdc00816c2a3677962b51f167931696a65589f5d0549eef",
           "category": "gpu",
           "title": "AMD FirePro W7100 8GB GDDR5 Workstation Graphics Card 4x DisplayPort GPU. AMD. Graphics/Video Cards.",
@@ -741,21 +463,21 @@
           "url": "https://www.ebay.co.uk/itm/227492813999?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
         },
         {
-          "id": 44572850,
-          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F127879433363%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:Kingston%208:4c5e3d66c95b1d35ae6df6088511ee39684463f0938d57eee7693f0210302167",
+          "id": 44641514,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.alibaba.com%2Fproduct-detail%2FWholesale-OEM-Laptop-DDR3-RAM-2GB_1601643218873.html%3Fmark%3Dgoogle_shopping%26pcy%3Dgb_en:Wholesale%20memoria%20ram%20ddr4%:524a714783859d7e484fedc38f1289d9e07c4905e6bd9ecc2e56b3fdcbbc7764",
           "category": "ram",
-          "title": "Kingston 8GB DDR4 2400MT CL17 1x8 RDIMM ECC Server RAM KSM24RS8/8MAI, DAMAGED. Kingston. Memory RAM. KSM24RS8.",
-          "seller": "www.ebay.co.uk",
+          "title": "Wholesale memoria ram ddr4 8gb ddr4 ram ram ddr3 memorias ram memoria ram ddr3 8gb ddr3 4gb ram ram 8gb ddr4 ddr 3 ram ddr ram ddr4 8gb ram ddr4 8gb",
+          "seller": "Alibaba.com",
           "image_url": null,
-          "delivered_price": 6.95,
+          "delivered_price": 3.93,
           "market_new_price": null,
           "market_used_price": null,
           "classification": "SUPER_GEM",
-          "estimated_profit": -6.95,
-          "url": "https://www.ebay.co.uk/itm/127879433363?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
+          "estimated_profit": -3.93,
+          "url": "https://www.alibaba.com/product-detail/Wholesale-OEM-Laptop-DDR3-RAM-2GB_1601643218873.html?mark=google_shopping&pcy=gb_en"
         },
         {
-          "id": 44554512,
+          "id": 44624924,
           "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
           "category": "psu",
           "title": "HP Common Slot HS PSU 460W Gold",
@@ -769,7 +491,7 @@
           "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
         },
         {
-          "id": 44586225,
+          "id": 44655655,
           "listing_id": "google-shopping:WD%20Blue%20SN5100%201TB%20M.2%20NVMe%20Solid%20State%20Drive%20%2F%20SSD:1:Novatech.co.uk",
           "category": "ssd",
           "title": "WD Blue SN5100 1TB M.2 NVMe Solid State Drive / SSD",
@@ -783,7 +505,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=WD+Blue+SN5100+1TB+M.2+NVMe+Solid+State+Drive+%2F+SSD"
         },
         {
-          "id": 44562167,
+          "id": 44632460,
           "listing_id": "google-shopping:Antec%20T120%20Fan%20CPU%20Cooler:4.39:AWD-IT",
           "category": "cooler",
           "title": "Antec T120 Fan CPU Cooler",
@@ -797,7 +519,7 @@
           "url": "https://www.google.com/search?tbm=shop&q=Antec+T120+Fan+CPU+Cooler"
         },
         {
-          "id": 44549273,
+          "id": 44619539,
           "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
           "category": "case",
           "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
@@ -813,7 +535,7 @@
       ],
       "compatibility_confidence": "unknown",
       "super_gem_count": 4,
-      "build_cost": 40.07,
+      "build_cost": 37.05,
       "market": {
         "query": "gaming pc Intel Pentium E2160 AMD FirePro W7100 8GB GDDR5 Wo 8gb",
         "sold": {
@@ -832,10 +554,288 @@
       },
       "resale_estimate": 171.37,
       "resale_source": "bin_average",
-      "estimated_profit": 131.3,
+      "estimated_profit": 134.32,
+      "rank": 4
+    },
+    {
+      "components": [
+        {
+          "id": 44649005,
+          "listing_id": "google-shopping:Intel%20Pentium%20Intel%20Pentium%20Processor%20G620:1.99:eBay%20-%20pcupgradeuk",
+          "category": "cpu",
+          "title": "Intel Pentium Intel Pentium Processor G620",
+          "seller": "eBay - pcupgradeuk",
+          "image_url": null,
+          "delivered_price": 1.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.99,
+          "url": "https://www.google.com/search?tbm=shop&q=Intel+Pentium+Intel+Pentium+Processor+G620"
+        },
+        {
+          "id": 44624525,
+          "listing_id": "bargain_hardware:dell-22y99-poweredge-r620-ram-cpu-vented-slot-cover-022y99",
+          "category": "motherboard",
+          "title": "Dell PowerEdge R620 RAM/CPU Vented Slot Cover",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/placeholder/default/image-coming-soon-new_1.jpg",
+          "delivered_price": 1.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.0,
+          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Dell+PowerEdge+R620+RAM%2FCPU+Vented+Slot+Cover"
+        },
+        {
+          "id": 44643316,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F227492813999%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:AMD%20FirePr:80b4dd3b391d139a2cdc00816c2a3677962b51f167931696a65589f5d0549eef",
+          "category": "gpu",
+          "title": "AMD FirePro W7100 8GB GDDR5 Workstation Graphics Card 4x DisplayPort GPU. AMD. Graphics/Video Cards.",
+          "seller": "www.ebay.co.uk",
+          "image_url": null,
+          "delivered_price": 19.5,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -19.5,
+          "url": "https://www.ebay.co.uk/itm/227492813999?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
+        },
+        {
+          "id": 44641514,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.alibaba.com%2Fproduct-detail%2FWholesale-OEM-Laptop-DDR3-RAM-2GB_1601643218873.html%3Fmark%3Dgoogle_shopping%26pcy%3Dgb_en:Wholesale%20memoria%20ram%20ddr4%:524a714783859d7e484fedc38f1289d9e07c4905e6bd9ecc2e56b3fdcbbc7764",
+          "category": "ram",
+          "title": "Wholesale memoria ram ddr4 8gb ddr4 ram ram ddr3 memorias ram memoria ram ddr3 8gb ddr3 4gb ram ram 8gb ddr4 ddr 3 ram ddr ram ddr4 8gb ram ddr4 8gb",
+          "seller": "Alibaba.com",
+          "image_url": null,
+          "delivered_price": 3.93,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -3.93,
+          "url": "https://www.alibaba.com/product-detail/Wholesale-OEM-Laptop-DDR3-RAM-2GB_1601643218873.html?mark=google_shopping&pcy=gb_en"
+        },
+        {
+          "id": 44624924,
+          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
+          "category": "psu",
+          "title": "HP Common Slot HS PSU 460W Gold",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
+          "delivered_price": 4.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -4.0,
+          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
+        },
+        {
+          "id": 44655655,
+          "listing_id": "google-shopping:WD%20Blue%20SN5100%201TB%20M.2%20NVMe%20Solid%20State%20Drive%20%2F%20SSD:1:Novatech.co.uk",
+          "category": "ssd",
+          "title": "WD Blue SN5100 1TB M.2 NVMe Solid State Drive / SSD",
+          "seller": "Novatech.co.uk",
+          "image_url": null,
+          "delivered_price": 1.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INELIGIBLE",
+          "estimated_profit": -1.0,
+          "url": "https://www.google.com/search?tbm=shop&q=WD+Blue+SN5100+1TB+M.2+NVMe+Solid+State+Drive+%2F+SSD"
+        },
+        {
+          "id": 44632460,
+          "listing_id": "google-shopping:Antec%20T120%20Fan%20CPU%20Cooler:4.39:AWD-IT",
+          "category": "cooler",
+          "title": "Antec T120 Fan CPU Cooler",
+          "seller": "AWD-IT",
+          "image_url": null,
+          "delivered_price": 4.39,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -4.39,
+          "url": "https://www.google.com/search?tbm=shop&q=Antec+T120+Fan+CPU+Cooler"
+        },
+        {
+          "id": 44619539,
+          "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
+          "category": "case",
+          "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
+          "seller": "AWD-IT",
+          "image_url": null,
+          "delivered_price": 1.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INELIGIBLE",
+          "estimated_profit": -1.0,
+          "url": "https://www.awd-it.co.uk/catalogsearch/result/?q=Fractal+Design+Pop+Air+Mid+Tower+Case+Black+No+Window+-+FD-C-POA1A-01"
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 36.81,
+      "market": {
+        "query": "gaming pc Intel Pentium Intel Pentium Pr AMD FirePro W7100 8GB GDDR5 Wo 8gb",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "eBay sign-in is required for sold prices, but SOLD_COMPS_HEADLESS is enabled. Run it headed so the eBay login window can be completed."
+        },
+        "bin": {
+          "available": true,
+          "count": 2,
+          "min_price": 79.99,
+          "max_price": 89.89,
+          "average_price": 84.94
+        }
+      },
+      "resale_estimate": 84.94,
+      "resale_source": "bin_average",
+      "estimated_profit": 48.13,
+      "rank": 5
+    },
+    {
+      "components": [
+        {
+          "id": 44649005,
+          "listing_id": "google-shopping:Intel%20Pentium%20Intel%20Pentium%20Processor%20G620:1.99:eBay%20-%20pcupgradeuk",
+          "category": "cpu",
+          "title": "Intel Pentium Intel Pentium Processor G620",
+          "seller": "eBay - pcupgradeuk",
+          "image_url": null,
+          "delivered_price": 1.99,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.99,
+          "url": "https://www.google.com/search?tbm=shop&q=Intel+Pentium+Intel+Pentium+Processor+G620"
+        },
+        {
+          "id": 44624752,
+          "listing_id": "bargain_hardware:dell-precision-t3600-workstation-configure-to-order",
+          "category": "motherboard",
+          "title": "Dell Precision T3600 Workstation",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/2007107f63/dell-precision-t3600-workstation.webp?width=300&height=300&store=default_uk&image-type=small_image",
+          "delivered_price": 1.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -1.0,
+          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=Dell+Precision+T3600+Workstation"
+        },
+        {
+          "id": 44643316,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F227492813999%3Fvar%3D0%26mkevt%3D1%26mkcid%3D1%26mkrid%3D710-53481-19255-0%26campid%3D5338749390%26toolid%3D20006%26_ul%3DGB:AMD%20FirePr:80b4dd3b391d139a2cdc00816c2a3677962b51f167931696a65589f5d0549eef",
+          "category": "gpu",
+          "title": "AMD FirePro W7100 8GB GDDR5 Workstation Graphics Card 4x DisplayPort GPU. AMD. Graphics/Video Cards.",
+          "seller": "www.ebay.co.uk",
+          "image_url": null,
+          "delivered_price": 19.5,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -19.5,
+          "url": "https://www.ebay.co.uk/itm/227492813999?var=0&mkevt=1&mkcid=1&mkrid=710-53481-19255-0&campid=5338749390&toolid=20006&_ul=GB"
+        },
+        {
+          "id": 44641514,
+          "listing_id": "google-shopping:https%3A%2F%2Fwww.alibaba.com%2Fproduct-detail%2FWholesale-OEM-Laptop-DDR3-RAM-2GB_1601643218873.html%3Fmark%3Dgoogle_shopping%26pcy%3Dgb_en:Wholesale%20memoria%20ram%20ddr4%:524a714783859d7e484fedc38f1289d9e07c4905e6bd9ecc2e56b3fdcbbc7764",
+          "category": "ram",
+          "title": "Wholesale memoria ram ddr4 8gb ddr4 ram ram ddr3 memorias ram memoria ram ddr3 8gb ddr3 4gb ram ram 8gb ddr4 ddr 3 ram ddr ram ddr4 8gb ram ddr4 8gb",
+          "seller": "Alibaba.com",
+          "image_url": null,
+          "delivered_price": 3.93,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "SUPER_GEM",
+          "estimated_profit": -3.93,
+          "url": "https://www.alibaba.com/product-detail/Wholesale-OEM-Laptop-DDR3-RAM-2GB_1601643218873.html?mark=google_shopping&pcy=gb_en"
+        },
+        {
+          "id": 44624924,
+          "listing_id": "bargain_hardware:hp-511777-001-common-slot-hs-psu-460w-gold-503296-b21",
+          "category": "psu",
+          "title": "HP Common Slot HS PSU 460W Gold",
+          "seller": "Bargain Hardware",
+          "image_url": "https://www.bargainhardware.co.uk/media/catalog/product/image/19822dd63/hp-common-slot-hs-psu-460w-gold.webp?width=300&height=300&store=default_uk&image-type=small_image",
+          "delivered_price": 4.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -4.0,
+          "url": "https://www.bargainhardware.co.uk/catalogsearch/result/?q=HP+Common+Slot+HS+PSU+460W+Gold"
+        },
+        {
+          "id": 44655655,
+          "listing_id": "google-shopping:WD%20Blue%20SN5100%201TB%20M.2%20NVMe%20Solid%20State%20Drive%20%2F%20SSD:1:Novatech.co.uk",
+          "category": "ssd",
+          "title": "WD Blue SN5100 1TB M.2 NVMe Solid State Drive / SSD",
+          "seller": "Novatech.co.uk",
+          "image_url": null,
+          "delivered_price": 1.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INELIGIBLE",
+          "estimated_profit": -1.0,
+          "url": "https://www.google.com/search?tbm=shop&q=WD+Blue+SN5100+1TB+M.2+NVMe+Solid+State+Drive+%2F+SSD"
+        },
+        {
+          "id": 44632460,
+          "listing_id": "google-shopping:Antec%20T120%20Fan%20CPU%20Cooler:4.39:AWD-IT",
+          "category": "cooler",
+          "title": "Antec T120 Fan CPU Cooler",
+          "seller": "AWD-IT",
+          "image_url": null,
+          "delivered_price": 4.39,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INSUFFICIENT_DATA",
+          "estimated_profit": -4.39,
+          "url": "https://www.google.com/search?tbm=shop&q=Antec+T120+Fan+CPU+Cooler"
+        },
+        {
+          "id": 44619539,
+          "listing_id": "awd_it:fractal-design-pop-air-mid-tower-case-black-no-window-fd-c-poa1a-01.html",
+          "category": "case",
+          "title": "Fractal Design Pop Air Mid Tower Case Black No Window - FD-C-POA1A-01",
+          "seller": "AWD-IT",
+          "image_url": null,
+          "delivered_price": 1.0,
+          "market_new_price": null,
+          "market_used_price": null,
+          "classification": "INELIGIBLE",
+          "estimated_profit": -1.0,
+          "url": "https://www.awd-it.co.uk/catalogsearch/result/?q=Fractal+Design+Pop+Air+Mid+Tower+Case+Black+No+Window+-+FD-C-POA1A-01"
+        }
+      ],
+      "compatibility_confidence": "unknown",
+      "super_gem_count": 4,
+      "build_cost": 36.81,
+      "market": {
+        "query": "gaming pc Intel Pentium Intel Pentium Pr AMD FirePro W7100 8GB GDDR5 Wo 8gb",
+        "sold": {
+          "available": false,
+          "count": 0,
+          "average_price": null,
+          "unavailable_reason": "eBay sign-in is required for sold prices, but SOLD_COMPS_HEADLESS is enabled. Run it headed so the eBay login window can be completed."
+        },
+        "bin": {
+          "available": true,
+          "count": 2,
+          "min_price": 79.99,
+          "max_price": 89.89,
+          "average_price": 84.94
+        }
+      },
+      "resale_estimate": 84.94,
+      "resale_source": "bin_average",
+      "estimated_profit": 48.13,
       "rank": 6
     }
   ],
   "candidates_evaluated": 10,
-  "total_compatible_combinations": 2861
+  "total_compatible_combinations": 3058
 }

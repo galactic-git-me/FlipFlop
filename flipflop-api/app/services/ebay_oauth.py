@@ -260,6 +260,7 @@ async def disconnect(db: AsyncSession) -> None:
 
 
 async def get_connection_status(db: AsyncSession) -> dict:
+    environment = get_settings().ebay_environment
     from app.models.app_settings import AppSettings
     from sqlalchemy import select
 
@@ -268,6 +269,7 @@ async def get_connection_status(db: AsyncSession) -> dict:
     if not settings_row or not settings_row.ebay_seller_refresh_token:
         return {
             "connected": False,
+            "environment": environment,
             "connected_at": None,
             "username": None,
             "email": None,
@@ -277,6 +279,7 @@ async def get_connection_status(db: AsyncSession) -> dict:
         }
     return {
         "connected": True,
+        "environment": environment,
         "connected_at": settings_row.ebay_seller_connected_at.isoformat() if settings_row.ebay_seller_connected_at else None,
         "scopes": settings_row.ebay_seller_scopes.split(" ") if settings_row.ebay_seller_scopes else [],
         **(await get_connected_identity(db)),

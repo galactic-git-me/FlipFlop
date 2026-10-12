@@ -64,8 +64,6 @@ export function trackEvent(
     
     // Send to backend with buying flow context
     const buyingFlow = getBuyingFlowData()
-    const customerId = localStorage.getItem('flipflop_customer_id')
-    
     fetch('/api/public/analytics/event', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -74,7 +72,6 @@ export function trackEvent(
         curated_build_id: event.curated_build_id,
         metadata: event.metadata,
         buying_flow: buyingFlow,
-        customer_id: customerId ? parseInt(customerId) : null,
       }),
     }).catch(err => console.warn('Failed to send analytics event:', err))
   }
