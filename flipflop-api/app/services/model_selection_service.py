@@ -188,7 +188,11 @@ class ModelSelectionService:
 
 
 def _vision_capable(model: str) -> bool:
-    return any(tag in model.lower() for tag in ("vl", "vision", "llava", "minicpm-v", "gemma3"))
+    model_name = model.lower()
+    return any(tag in model_name for tag in (
+        "vl", "vision", "llava", "minicpm-v", "gemma3", "gemma4",
+        "qwen3.5", "ministral-3",
+    ))
 
 
 def _ollama_messages(messages: list[dict[str, Any]], system_prompt: str | None,
