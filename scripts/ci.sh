@@ -27,10 +27,30 @@ python -m pip install --disable-pip-version-check -q \
   -r "$ROOT_DIR/flipflop-api/requirements.txt" \
   -r "$ROOT_DIR/flipflop-api/requirements-dev.txt"
 
-log "Applying migrations to disposable test database"
+log "Checking Alembic revision graph"
 (
   cd "$ROOT_DIR/flipflop-api"
-  alembic upgrade head
+  heads="$(alembic heads)"
+  head_count="$(printf '%s\n' "$heads" | awk 'NF { count += 1 } END { print count + 0 }')"
+  if [[ "$head_count" -ne 1 ]]; then
+    log "Expected one Alembic head, found $head_count"
+    printf '%s\n' "$heads"
+    exit 1
+  fi
+  printf '%s\n' "$heads"
+)
+
+log "Initializing disposable test database from current ORM schema"
+(
+  cd "$ROOT_DIR/flipflop-api"
+  python - <<'PY'
+import asyncio
+
+import app.models  # noqa: F401 — register every table with SQLAlchemy metadata
+from app.database import init_db
+
+asyncio.run(init_db())
+PY
 )
 
 log "Running API tests"
