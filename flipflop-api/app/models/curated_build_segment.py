@@ -21,6 +21,10 @@ class CuratedBuildSegment(Base):
     budget_max: Mapped[float | None] = mapped_column(Float)
     components: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
     bestseller_components: Mapped[dict] = mapped_column(JSON, default=dict, nullable=False)
+    software_profile: Mapped[dict | None] = mapped_column(JSON)
+    # Exactly two explicitly reviewed customer upgrades, each with market and
+    # customer-price evidence. Draft suggestions remain non-customer-facing.
+    approved_upgrades: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
     # Controls whether recovered components from a potential flip may be
     # considered as inventory sources for this customer type x budget cell.
     allow_flip_component_sources: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false", nullable=False)

@@ -1,6 +1,6 @@
 """Single-row settings table — keyed by name='default'."""
 from datetime import datetime
-from sqlalchemy import String, Integer, Float, Boolean, DateTime, Text
+from sqlalchemy import String, Integer, Float, Boolean, DateTime, Text, JSON
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
@@ -27,6 +27,10 @@ class AppSettings(Base):
 
     image_gen_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     image_gen_provider: Mapped[str] = mapped_column(String(50), default="pollinations")
+
+    # Paid Getting Ready AI offers are disabled and unpriced until reviewed by
+    # an administrator. These are commercial settings, not runtime secrets.
+    ai_setup_offers: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
 
     # ── Seller Policies (playbook rows 11-15, 43, 44) — configured once here,
     # applied to every listing via the eBay Business Policies API, not

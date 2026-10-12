@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { ChevronLeft, ChevronRight, CirclePlay, Images } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ChevronLeft, ChevronRight, CirclePlay, Images, RefreshCw } from "lucide-react";
 import { ThreeDWorkflowNav } from "@/components/three-d-workflow-nav";
 import { readJsonResponse } from "@/lib/read-json-response";
 
@@ -123,6 +124,7 @@ const gradientStyle = `
 
 interface Component3DAsset {
   id: number;
+  subject_type?: "case" | "variant" | "category_generic";
   subject_id?: number | null;
   category: string;
   family_key: string;
@@ -185,6 +187,20 @@ interface PriorityCaseItem {
   brand?: string | null;
   model?: string | null;
   priority_3d_rank?: number | null;
+  sourcing_3d_evidence?: {
+    stages?: Record<string, { approved_selection?: unknown }>;
+  };
+}
+
+const DIRECT_BACKEND_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4311").replace(/\/$/, "");
+
+function approvedCasePhotoUrls(item: PriorityCaseItem | undefined) {
+  const selection = item?.sourcing_3d_evidence?.stages?.product_images?.approved_selection as {
+    status?: string;
+    images?: Array<{ url?: unknown }>;
+  } | undefined;
+  const urls = (selection?.images || []).map(image => image.url).filter((url): url is string => typeof url === "string");
+  return selection?.status === "approved" && urls.length === 4 ? urls : [];
 }
 
 const CASE_BRANDS = ["Fractal Design", "Cooler Master", "be quiet!", "Thermaltake", "SilverStone", "Phanteks", "Corsair", "NZXT", "Lian Li", "Montech", "DeepCool", "Antec", "Hyte", "MSI", "ASUS", "APNX", "PCZZOI"];
@@ -378,7 +394,10 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
               model.scale.multiplyScalar(scale);
 
               const center = box.getCenter(new THREE.Vector3());
+              const centerY = center.y;
               model.position.sub(center.multiplyScalar(scale));
+              // Center the model horizontally and place its lowest point just above the grid.
+              model.position.y += gridHelper.position.y - (box.min.y - centerY) * scale + 0.03;
 
               modelRef.current = model;
 
@@ -467,7 +486,9 @@ function Viewer3D({ glbUrl }: { glbUrl: string | null }) {
 }
 
 export default function Components3DReviewPage() {
+  const router = useRouter();
   const [assets, setAssets] = useState<Component3DAsset[]>([]);
+  const [caseRecords, setCaseRecords] = useState<PriorityCaseItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedAsset, setSelectedAsset] = useState<Component3DAsset | null>(null);
   const [filter, setFilter] = useState<"meshy_draft" | "all">("all");
@@ -480,6 +501,8 @@ export default function Components3DReviewPage() {
   const [curatedOnly, setCuratedOnly] = useState(false);
   const [customOnly, setCustomOnly] = useState(false);
   const [scaleConfirmed, setScaleConfirmed] = useState(false);
+  const [regeneratingCaseId, setRegeneratingCaseId] = useState<number | null>(null);
+  const [regenerationProgress, setRegenerationProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -492,6 +515,7 @@ export default function Components3DReviewPage() {
       setLoading(true);
       try {
         const batchId = new URLSearchParams(window.location.search).get("batch");
+        const focusCaseId = Number(new URLSearchParams(window.location.search).get("case"));
         const isCuratedOnly = new URLSearchParams(window.location.search).get("curatedOnly") === "1";
         const isCustomOnly = new URLSearchParams(window.location.search).get("customOnly") === "1";
         setCuratedOnly(isCuratedOnly);
@@ -502,6 +526,7 @@ export default function Components3DReviewPage() {
         ]);
         const data = await readJsonResponse<Component3DAsset[] | { detail?: string; error?: string; data?: Component3DAsset[]; assets?: Component3DAsset[] }>(response);
         const priorityCases = casesResponse.ok ? await readJsonResponse<PriorityCaseItem[]>(casesResponse) : [];
+        setCaseRecords(priorityCases);
 
         if (!Array.isArray(data) && data.detail) {
           console.error("API Error:", data.detail);
@@ -536,7 +561,11 @@ export default function Components3DReviewPage() {
           }
         }
         setAssets(loadedAssets);
-        setSelectedAsset(loadedAssets[0] || null);
+        const caseAsset = Number.isFinite(focusCaseId) && focusCaseId > 0
+          ? loadedAssets.find(asset => asset.subject_type === "case" && asset.subject_id === focusCaseId && asset.review_decision === "rejected")
+            || loadedAssets.find(asset => asset.subject_type === "case" && asset.subject_id === focusCaseId)
+          : undefined;
+        setSelectedAsset(caseAsset || loadedAssets[0] || null);
       } catch (error) {
         console.error("Error loading assets:", error);
         setAssets([]);
@@ -633,6 +662,60 @@ export default function Components3DReviewPage() {
       setActionError(error instanceof Error ? error.message : "Could not save decision");
     } finally {
       setActionBusy(false);
+    }
+  };
+
+  const regenerateRejectedCase = async () => {
+    if (!selectedAsset || selectedAsset.subject_type !== "case" || selectedAsset.subject_id == null) return;
+    const caseId = selectedAsset.subject_id;
+    const imageUrls = approvedCasePhotoUrls(caseRecords.find(item => item.id === caseId));
+    if (imageUrls.length !== 4) {
+      setActionError("Approve four reference photos for this case in Photos & generation before regenerating.");
+      return;
+    }
+    const requestId = crypto.randomUUID();
+    setRegeneratingCaseId(caseId);
+    setRegenerationProgress(0);
+    setActionError(null);
+    setActionNotice("Generating a new draft from the four currently approved photos, including photo-guided texturing…");
+    const pollProgress = async () => {
+      try {
+        const statusResponse = await fetch(
+          `${DIRECT_BACKEND_URL}/api/assets-3d/cases/${caseId}/generate-status?request_id=${encodeURIComponent(requestId)}`,
+          { credentials: "include", cache: "no-store" },
+        );
+        if (!statusResponse.ok) return;
+        const status = await readJsonResponse<{ request_id: string; progress: number }>(statusResponse);
+        if (status.request_id === requestId) {
+          setRegenerationProgress(Math.max(0, Math.min(100, Math.round(status.progress))));
+        }
+      } catch {
+        // Keep the active generation moving if a status poll briefly fails.
+      }
+    };
+    void pollProgress();
+    const progressTimer = window.setInterval(() => void pollProgress(), 1500);
+    try {
+      const response = await fetch(`${DIRECT_BACKEND_URL}/api/assets-3d/cases/${caseId}/generate`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          image_urls: imageUrls,
+          request_id: requestId,
+          notes: `Regenerated from the current owner-approved case photos after rejecting asset ${selectedAsset.id}.`,
+        }),
+      });
+      const result = await readJsonResponse<{ id: number; review_batch_id?: string | null; detail?: string }>(response);
+      if (!response.ok) throw new Error(result.detail || "Could not regenerate the case model");
+      if (!result.review_batch_id) throw new Error("The draft was created, but its review batch is missing.");
+      router.push(`/components-3d-review?batch=${encodeURIComponent(result.review_batch_id)}`);
+    } catch (error) {
+      setActionNotice(null);
+      setActionError(error instanceof Error ? error.message : "Could not regenerate the case model");
+    } finally {
+      window.clearInterval(progressTimer);
+      setRegeneratingCaseId(null);
     }
   };
 
@@ -924,6 +1007,51 @@ export default function Components3DReviewPage() {
                             {selectedAsset.regeneration.message}
                           </p>
                         )}
+                        {selectedAsset.subject_type === "case" && selectedAsset.subject_id != null && selectedAsset.review_decision === "rejected" && (
+                          approvedCasePhotoUrls(caseRecords.find(item => item.id === selectedAsset.subject_id)).length === 4 ? (
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => void regenerateRejectedCase()}
+                                disabled={regeneratingCaseId === selectedAsset.subject_id}
+                                className="w-full cursor-pointer rounded border border-purple-400/60 bg-purple-700/40 px-2 py-2 text-xs font-semibold text-purple-100 hover:bg-purple-700/60 disabled:cursor-wait disabled:opacity-50"
+                              >
+                                <span className="inline-flex items-center gap-2">
+                                  {regeneratingCaseId === selectedAsset.subject_id && <RefreshCw className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />}
+                                  Regenerate with approved case photos
+                                </span>
+                              </button>
+                              {regeneratingCaseId === selectedAsset.subject_id && (
+                                <div className="space-y-1.5" role="status" aria-live="polite">
+                                  <div className="flex justify-between text-[11px] text-slate-300">
+                                    <span>Meshy generation progress</span>
+                                    <span>{regenerationProgress}%</span>
+                                  </div>
+                                  <div
+                                    className="h-2 overflow-hidden rounded-full bg-slate-700"
+                                    role="progressbar"
+                                    aria-label="Meshy model generation progress"
+                                    aria-valuemin={0}
+                                    aria-valuemax={100}
+                                    aria-valuenow={regenerationProgress}
+                                  >
+                                    <div
+                                      className="h-full rounded-full bg-purple-400 transition-[width] duration-500"
+                                      style={{ width: `${regenerationProgress}%` }}
+                                    />
+                                  </div>
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <a
+                              href={`/cases-3d-priority?case=${selectedAsset.subject_id}${batch?.batch_id ? `&returnBatch=${encodeURIComponent(batch.batch_id)}` : ""}`}
+                              className="block text-xs text-cyan-200 underline underline-offset-2"
+                            >
+                              Approve four case photos to regenerate this model
+                            </a>
+                          )
+                        )}
                       </div>
                     </div>
                   </div>
@@ -944,9 +1072,13 @@ export default function Components3DReviewPage() {
                   </span>
                 </div>
 
-                {selectedAsset.source_image_refs?.length ? (
+                {(selectedAsset.subject_type === "case" && selectedAsset.review_decision === "rejected"
+                  ? approvedCasePhotoUrls(caseRecords.find(item => item.id === selectedAsset.subject_id))
+                  : selectedAsset.source_image_refs || []).length ? (
                   <div className="space-y-3">
-                    {selectedAsset.source_image_refs.map((imageUrl, index) => (
+                    {(selectedAsset.subject_type === "case" && selectedAsset.review_decision === "rejected"
+                      ? approvedCasePhotoUrls(caseRecords.find(item => item.id === selectedAsset.subject_id))
+                      : selectedAsset.source_image_refs || []).map((imageUrl, index) => (
                       <a
                         key={`${imageUrl}-${index}`}
                         href={imageUrl}

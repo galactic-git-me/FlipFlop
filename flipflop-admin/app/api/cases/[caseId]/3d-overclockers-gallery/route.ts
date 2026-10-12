@@ -10,3 +10,12 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
     headers: { "content-type": response.headers.get("content-type") || "application/json" },
   });
 }
+
+export async function POST(_request: NextRequest, { params }: { params: Promise<{ caseId: string }> }) {
+  const { caseId } = await params;
+  const response = await fetch(`${API_URL}/api/cases/${encodeURIComponent(caseId)}/3d-overclockers-gallery`, { method: "POST", cache: "no-store" });
+  return new NextResponse(await response.text(), {
+    status: response.status,
+    headers: { "content-type": response.headers.get("content-type") || "application/json" },
+  });
+}

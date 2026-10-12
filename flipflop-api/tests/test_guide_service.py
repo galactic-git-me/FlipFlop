@@ -139,16 +139,18 @@ class TestGuideServiceEdgeCases:
         assert isinstance(content, list)
         assert len(content) > 0
 
-    def test_license_key_formatting_25_chars(self):
-        """Test license key formatting with 25 characters."""
+    def test_license_page_does_not_disclose_product_key(self):
+        """The customer guide explains activation without printing the key."""
         db_mock = MagicMock()
         service = GuideService(db_mock)
 
         mock_order = MagicMock()
         mock_order.os_component = MagicMock()
-        # Create a 25 character key (5 groups of 5)
-        mock_order.os_component.license_key = "ABCDE" * 5
+        mock_order.os_component.license_key = "SENTINEL-SECRET-PRODUCT-KEY"
 
         content = service._create_license_page(mock_order)
         assert isinstance(content, list)
         assert len(content) > 0
+        rendered_text = " ".join(getattr(item, "text", "") for item in content)
+        assert "Windows Activation" in rendered_text
+        assert "SENTINEL-SECRET-PRODUCT-KEY" not in rendered_text

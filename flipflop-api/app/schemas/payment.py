@@ -1,7 +1,7 @@
 """Pydantic schemas for payment requests and responses."""
 
 from pydantic import BaseModel, Field, model_validator
-from typing import Optional
+from typing import Literal, Optional
 from datetime import datetime
 
 
@@ -17,8 +17,16 @@ class PlaybookBuildConfig(BaseModel):
     slot_selections: dict[int, int] = Field(default_factory=dict)
     case_id: Optional[int] = None
     chosen_week: Optional[str] = None
-    validation_mode: Optional[str] = None
-    curated_build_id: Optional[int] = None
+    validation_mode: Optional[Literal["curated", "custom", "studio"]] = None
+    # The configured Playbook cell IDs (for example FF-GVG-01) are stable
+    # string keys from curated_build_definitions.json, not database row IDs.
+    curated_build_id: Optional[str] = Field(default=None, min_length=1, max_length=120)
+    # Candidate indexes refer only to the two evidence-reviewed options saved
+    # on this curated cell. The server resolves their current catalogue IDs.
+    upgrade_candidate_indexes: list[int] = Field(default_factory=list, max_length=2)
+    # Made-by-you asks the customer to declare their matrix tier; never infer
+    # this from a final price after component choices and upgrades.
+    budget_tier: Optional[Literal["Budget", "Mid-range", "High-end"]] = None
 
     class Config:
         json_schema_extra = {
@@ -29,6 +37,20 @@ class PlaybookBuildConfig(BaseModel):
                 "chosen_week": "2026-W30",
             }
         }
+
+
+class CheckoutAddress(BaseModel):
+    full_name: str = Field(..., min_length=2, max_length=160)
+    line1: str = Field(..., min_length=2, max_length=200)
+    line2: Optional[str] = Field(None, max_length=200)
+    city: str = Field(..., min_length=2, max_length=100)
+    postcode: str = Field(..., min_length=3, max_length=20)
+    country: str = Field(default="GB", min_length=2, max_length=2)
+
+
+class CheckoutAddresses(BaseModel):
+    delivery: CheckoutAddress
+    billing: CheckoutAddress
 
 
 class CreatePaymentIntentRequest(BaseModel):
@@ -43,13 +65,17 @@ class CreatePaymentIntentRequest(BaseModel):
     budget: Optional[float] = Field(None, gt=0, description="Total quote price in GBP")
     customer_id: int = Field(..., gt=0, description="Customer ID")
     build_config: Optional[PlaybookBuildConfig] = None
+    software_package_ids: Optional[list[str]] = Field(None, max_length=14)
     speedy_delivery: bool = False
     delivery_option: Optional[str] = Field(None, pattern="^(standard|fast_track|flexible)$")
+    checkout_addresses: Optional[CheckoutAddresses] = None
 
     @model_validator(mode="after")
     def _require_budget_or_build_config(self) -> "CreatePaymentIntentRequest":
         if self.budget is None and self.build_config is None:
             raise ValueError("Either budget or build_config must be provided")
+        if self.build_config is not None and self.checkout_addresses is None:
+            raise ValueError("Delivery and billing addresses are required for build checkout")
         return self
 
     class Config:
@@ -69,6 +95,10 @@ class PaymentIntentResponse(BaseModel):
     amount: float = Field(..., description="Payment amount in GBP")
     currency: str = Field(default="gbp", description="Currency code")
     intent_id: str = Field(..., description="Stripe PaymentIntent ID")
+    delivery_option: Optional[str] = None
+    delivery_days: Optional[int] = None
+    delivery_promise: Optional[str] = None
+    delivery_estimate_source: Optional[str] = None
 
     class Config:
         json_schema_extra = {

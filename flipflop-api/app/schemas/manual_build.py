@@ -1,7 +1,7 @@
 # pc-flipper-backend/app/schemas/manual_build.py
 from datetime import datetime
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Literal, Optional
 
 
 class BuildComponent(BaseModel):
@@ -22,6 +22,8 @@ class BuildComponent(BaseModel):
 
 class ManualBuildCreate(BaseModel):
     name: str = "Untitled Build"
+    playbook_id: int | None = None
+    curated_build_id: str | None = None
 
 
 class ManualBuildPatch(BaseModel):
@@ -85,7 +87,7 @@ class ManualBuildOut(BaseModel):
     shipping_cost: float = 0.0
     shipping_insurance_cost: float = 0.0
     packaging_cost: float = 0.0
-    warranty_reserve_pct: float = 3.0
+    warranty_reserve_pct: float = Field(default=5.0, allow_inf_nan=False)
     handling_time_days: int = 1
     delivery_min_days: int = 1
     delivery_max_days: int = 2
@@ -109,6 +111,8 @@ class ManualBuildOut(BaseModel):
     warranty_claim_cost: Optional[float] = None
     parcel2go_order_id: Optional[str] = None
     parcel2go_service_slug: Optional[str] = None
+    shipment_booking_state: str = "not_started"
+    shipment_booking_attempted_at: Optional[datetime] = None
     tracking_number: Optional[str] = None
     shipping_label_url: Optional[str] = None
     shipment_booked_at: Optional[datetime] = None
@@ -240,7 +244,7 @@ class UpdateEbayListingConfigRequest(BaseModel):
     shipping_cost: Optional[float] = None
     shipping_insurance_cost: Optional[float] = None
     packaging_cost: Optional[float] = None
-    warranty_reserve_pct: Optional[float] = None
+    warranty_reserve_pct: Optional[float] = Field(default=None, allow_inf_nan=False)
     marketplace_fees_actual: Optional[float] = None
     promotion_cost_actual: Optional[float] = None
     refund_amount: Optional[float] = None
@@ -254,7 +258,6 @@ class UpdateEbayListingConfigRequest(BaseModel):
     package_width_cm: Optional[float] = None
     package_height_cm: Optional[float] = None
     deferred_publish_at: Optional[datetime] = None
-    shipping_damage_cover_confirmed: Optional[bool] = None
     # Recreate-cycle/markdown/promoted-visibility engine settings (see
     # app/models/manual_build.py) — configured once per build, then run
     # unattended by the scheduled jobs in app/workers/manual_build_lifecycle.py.
@@ -271,6 +274,7 @@ class CourierQuoteOut(BaseModel):
     price_gbp: float
     tracked: bool
     service_slug: Optional[str] = None
+    signature_tracking: bool = False
     estimated_days: Optional[int] = None
     protection_scope: str
     full_value_damage_cover: bool
@@ -305,7 +309,9 @@ class SyncEbayOrderResult(BaseModel):
 
 class BookShipmentRequest(BaseModel):
     service_slug: str  # from a CourierQuoteOut fetched against the real buyer address
-    price_gbp: float   # the quoted price the seller confirmed — logged for audit, not re-validated server-side
+    price_gbp: float   # the displayed quote; the API re-fetches and compares it before purchase
+    signed_for_delivery_confirmed: bool = False
+    confirm_live_purchase: bool = False
 
 
 class BookShipmentResult(BaseModel):
@@ -317,3 +323,13 @@ class BookShipmentResult(BaseModel):
     warning: Optional[str] = None
     error: Optional[str] = None
     estimated_days: Optional[int] = None
+
+
+class ShipmentBookingReconciliationRequest(BaseModel):
+    resolution: Literal["no_active_booking", "paid_booking", "attach_tracking_reference"]
+    provider_checked: bool = False
+    note: str = Field(min_length=10, max_length=1000)
+    provider_order_id: Optional[str] = Field(default=None, max_length=100)
+    provider_order_line_id: Optional[str] = Field(default=None, min_length=1, max_length=100)
+    tracking_number: Optional[str] = Field(default=None, max_length=100)
+    shipping_label_url: Optional[str] = Field(default=None, max_length=500)

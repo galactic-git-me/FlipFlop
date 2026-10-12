@@ -11,7 +11,7 @@ from pathlib import Path
 import shutil
 from uuid import uuid4
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, UploadFile
 import httpx
 from pydantic import BaseModel, Field
 from sqlalchemy import select, update
@@ -24,7 +24,8 @@ from app.models.component_3d_asset import (
     Component3DAsset,
     Component3DAssetStatus,
 )
-from app.models.catalogue import CatalogueVariant
+from app.models.catalogue import CatalogueVariant, PlaybookSlot
+from app.models.listing import Listing
 from app.routes.admin_auth import get_current_admin
 from pydantic import ValidationError as PydanticValidationError
 from app.schemas.case_mount import validate_case_mount_manifest
@@ -39,6 +40,7 @@ _WORKSPACE_ROOT = Path(__file__).resolve().parents[3]
 _REFERENCE_ROOT = _WORKSPACE_ROOT / "assets" / "3d-reference-images" / "catalogue"
 _PUBLIC_MEDIA_ROOT = _WORKSPACE_ROOT.parent / "FlipFlop.shop" / "public" / "media"
 _PUBLIC_MEDIA_URL = "https://theflipflop.shop/media"
+_MAX_GLB_UPLOAD_BYTES = 100 * 1024 * 1024
 _REFERENCE_ALIASES = {
     "cpu_amd": "cpu_amd_am4_am5",
     "cpu_intel": "cpu_intel_lga1700",
@@ -49,6 +51,43 @@ _REFERENCE_ALIASES = {
     "gpu_amd": "gpu_large_triple_fan",
     "gpu_intel": "gpu_compact_dual_fan",
 }
+
+
+def _validate_uploaded_glb(content: bytes) -> None:
+    """Reject malformed binary glTF v2 containers before making them public."""
+    if len(content) < 20 or content[:4] != b"glTF":
+        raise ValueError("The selected file is not a valid binary GLB")
+    version = int.from_bytes(content[4:8], byteorder="little")
+    declared_length = int.from_bytes(content[8:12], byteorder="little")
+    if version != 2:
+        raise ValueError("Only GLB version 2 files are supported")
+    if declared_length != len(content):
+        raise ValueError("The GLB header size does not match the uploaded file")
+
+    offset = 12
+    chunk_index = 0
+    while offset < declared_length:
+        if offset + 8 > declared_length:
+            raise ValueError("The GLB contains a truncated chunk header")
+        chunk_length = int.from_bytes(content[offset:offset + 4], byteorder="little")
+        chunk_type = int.from_bytes(content[offset + 4:offset + 8], byteorder="little")
+        chunk_start = offset + 8
+        chunk_end = chunk_start + chunk_length
+        if chunk_length % 4 or chunk_end > declared_length:
+            raise ValueError("The GLB contains an invalid chunk length")
+        if chunk_index == 0:
+            if chunk_type != 0x4E4F534A:
+                raise ValueError("The first GLB chunk must contain JSON")
+            try:
+                document = json.loads(content[chunk_start:chunk_end].decode("utf-8").rstrip(" "))
+            except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+                raise ValueError("The GLB JSON chunk is invalid") from exc
+            if not isinstance(document, dict) or not isinstance(document.get("asset"), dict) or document["asset"].get("version") != "2.0":
+                raise ValueError("The GLB JSON chunk is missing valid glTF 2.0 asset metadata")
+        offset = chunk_end
+        chunk_index += 1
+    if offset != declared_length or chunk_index == 0:
+        raise ValueError("The GLB chunks do not match the declared container size")
 
 
 def _reference_family(category: str, family_key: str) -> dict | None:
@@ -228,6 +267,46 @@ async def list_assets(
     return await _serialize_many(db, rows)
 
 
+@router.get("/catalogue-queue")
+async def list_catalogue_asset_queue(
+    catalogue: str,
+    db: AsyncSession = Depends(get_db),
+):
+    """Return selected catalogue variants, including variants with no asset yet."""
+    if catalogue not in {"curated", "custom"}:
+        raise HTTPException(status_code=422, detail="catalogue must be curated or custom")
+    membership = CatalogueVariant.curated_for_builds if catalogue == "curated" else CatalogueVariant.custom_for_builds
+    rows = (await db.execute(
+        select(CatalogueVariant, PlaybookSlot, Listing)
+        .join(PlaybookSlot, PlaybookSlot.id == CatalogueVariant.slot_id)
+        .join(Listing, Listing.id == CatalogueVariant.listing_id)
+        .where(CatalogueVariant.status == "active", membership.is_(True))
+        .order_by(PlaybookSlot.slot_type, Listing.title, CatalogueVariant.id)
+    )).all()
+    variant_ids = [variant.id for variant, _, _ in rows]
+    assets = (await db.execute(
+        select(Component3DAsset).where(
+            Component3DAsset.subject_type == AssetSubjectType.VARIANT,
+            Component3DAsset.subject_id.in_(variant_ids) if variant_ids else False,
+        ).order_by(Component3DAsset.version.desc(), Component3DAsset.id.desc())
+    )).scalars().all()
+    latest_by_variant = {}
+    for asset in assets:
+        latest_by_variant.setdefault(asset.subject_id, asset)
+    return [
+        {
+            "variant_id": variant.id,
+            "title": listing.title,
+            "category": slot.slot_type,
+            "display_price": variant.custom_display_price if catalogue == "custom" and variant.custom_display_price is not None else variant.display_price,
+            "curated_for_builds": bool(variant.curated_for_builds),
+            "custom_for_builds": bool(variant.custom_for_builds),
+            "asset": _serialize(latest_by_variant[variant.id]) if variant.id in latest_by_variant else None,
+        }
+        for variant, slot, listing in rows
+    ]
+
+
 class ReviewBatchCreate(BaseModel):
     size: int = Field(default=10, ge=1, le=10)
     asset_ids: list[int] | None = Field(default=None, min_length=1, max_length=10)
@@ -350,10 +429,22 @@ def _approved_case_image_urls(evidence: dict | None) -> set[str]:
     return approved
 
 
+def _owner_approved_case_image_order(evidence: dict | None) -> list[str]:
+    """Return the current owner-approved four photos in their chosen order."""
+    stages = (evidence or {}).get("stages") or {}
+    selection = (stages.get("product_images") or {}).get("approved_selection") or {}
+    images = selection.get("images") or []
+    urls = [
+        item["url"]
+        for item in images
+        if isinstance(item, dict) and isinstance(item.get("url"), str)
+    ]
+    return urls if selection.get("status") == "approved" and len(urls) == 4 else []
+
+
 async def _run_rejected_asset_regeneration(
     replacement_id: int,
     source_image_refs: list[str],
-    feedback: str,
     file_key: str,
 ) -> None:
     """Finish a queued replacement using a fresh DB session.
@@ -362,7 +453,7 @@ async def _run_rejected_asset_regeneration(
     fails, leaving a visible, retryable audit record instead of losing the
     owner's rejection feedback.
     """
-    result = await generate_multi_image_asset(source_image_refs, texture_prompt=feedback)
+    result = await generate_multi_image_asset(source_image_refs)
     async with AsyncSessionLocal() as task_db:
         replacement = (
             await task_db.execute(
@@ -432,17 +523,20 @@ async def decide_review_asset(
         source_images = [url for url in (asset.source_image_refs or []) if isinstance(url, str)][:4]
         if asset.subject_type == AssetSubjectType.CASE and asset.subject_id is not None:
             case = (await db.execute(select(Case).where(Case.id == asset.subject_id))).scalar_one_or_none()
-            approved_case_urls = _approved_case_image_urls(case.sourcing_3d_evidence if case else None)
-            source_images = [url for url in source_images if url in approved_case_urls]
+            evidence = case.sourcing_3d_evidence if case else None
+            current_owner_selection = _owner_approved_case_image_order(evidence)
+            if current_owner_selection:
+                # The case's latest approved selection is authoritative, even
+                # when the rejected legacy asset has no (or stale) references.
+                source_images = current_owner_selection
+            else:
+                approved_case_urls = _approved_case_image_urls(evidence)
+                source_images = [url for url in source_images if url in approved_case_urls]
         if source_images:
             feedback = (body.notes or "").strip() or (
                 "Recreate the object more faithfully from the source photographs. "
                 "Correct the rejected model's shape, materials, colours, lighting details and proportions."
             )
-            prompt = (
-                "Match the source photographs closely. Preserve distinctive product colours, "
-                f"including illuminated fan and ARGB colours. Owner feedback: {feedback}"
-            )[:600]
             prior_version = (
                 await db.execute(
                     select(Component3DAsset.version)
@@ -483,13 +577,12 @@ async def decide_review_asset(
                 "status": "queued",
                 "asset_id": replacement.id,
                 "version": replacement.version,
-                "message": f"Replacement v{replacement.version} queued using your feedback.",
+                "message": f"Replacement v{replacement.version} queued from the approved case photos.",
             }
             background_tasks.add_task(
                 _run_rejected_asset_regeneration,
                 replacement.id,
                 source_images,
-                prompt,
                 _regeneration_file_key(asset),
             )
         else:
@@ -575,6 +668,7 @@ class AssetCreate(BaseModel):
 class CaseMeshyGenerate(BaseModel):
     image_urls: list[str] = Field(min_length=4, max_length=4)
     notes: str | None = None
+    request_id: str = Field(min_length=1, max_length=100)
 
 
 _CASE_MESHY_IMAGE_REQUIREMENTS = (
@@ -600,6 +694,25 @@ def _owner_approved_case_images(case: Case, requested_urls: list[str]) -> list[s
     if requested_urls != approved:
         raise HTTPException(status_code=409, detail="Generation must use the four owner-approved pictures in their approved order")
     return approved
+
+
+@router.get("/cases/{case_id}/generate-status")
+async def get_case_generation_status(
+    case_id: int,
+    request_id: str,
+    db: AsyncSession = Depends(get_db),
+):
+    case = (await db.execute(select(Case).where(Case.id == case_id))).scalar_one_or_none()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    generation = (((case.sourcing_3d_evidence or {}).get("stages") or {}).get("meshy_generation") or {})
+    if generation.get("request_id") != request_id:
+        return {"request_id": request_id, "progress": 0, "task_status": "STARTING"}
+    return {
+        "request_id": request_id,
+        "progress": max(0, min(100, int(generation.get("progress") or 0))),
+        "task_status": generation.get("task_status", "STARTING"),
+    }
 
 
 @router.post("/cases/{case_id}/generate")
@@ -630,10 +743,40 @@ async def generate_case_asset(
         raise HTTPException(status_code=409, detail="An approved product image set is required")
 
     approved_image_urls = _owner_approved_case_images(case, body.image_urls)
-    result = await generate_multi_image_asset(approved_image_urls)
+    evidence = dict(case.sourcing_3d_evidence or {"schema_version": 1, "stages": {}})
+    evidence_stages = dict(evidence.get("stages") or {})
+    generation = dict(evidence_stages.get("meshy_generation") or {"attempts": []})
+    generation.update(
+        status="searching", request_id=body.request_id, progress=0,
+        task_status="STARTING", updated_at=datetime.utcnow().isoformat(),
+    )
+    evidence_stages["meshy_generation"] = generation
+    evidence["stages"] = evidence_stages
+    case.sourcing_3d_evidence = evidence
+    await db.commit()
+
+    async def record_meshy_progress(progress: int, task_status: str, task_id: str | None) -> None:
+        current_evidence = dict(case.sourcing_3d_evidence or {"schema_version": 1, "stages": {}})
+        current_stages = dict(current_evidence.get("stages") or {})
+        current_generation = dict(current_stages.get("meshy_generation") or {"attempts": []})
+        current_generation.update(
+            status="searching", request_id=body.request_id,
+            progress=max(0, min(100, int(progress))), task_status=task_status,
+            updated_at=datetime.utcnow().isoformat(),
+        )
+        if task_id:
+            current_generation["task_id"] = task_id
+        current_stages["meshy_generation"] = current_generation
+        current_evidence["stages"] = current_stages
+        case.sourcing_3d_evidence = current_evidence
+        await db.commit()
+
+    result = await generate_multi_image_asset(approved_image_urls, progress_callback=record_meshy_progress)
     if result is None:
+        await record_meshy_progress(0, "FAILED", None)
         raise HTTPException(status_code=502, detail="Meshy generation failed — check service configuration")
     if result.status != "SUCCEEDED" or not result.glb_url:
+        await record_meshy_progress(result.progress or 0, result.status, result.task_id)
         raise HTTPException(status_code=502, detail=f"Meshy task ended as {result.status}")
 
     prior_version = (
@@ -682,11 +825,16 @@ async def generate_case_asset(
         "asset_version": version,
         "source_image_urls": approved_image_urls,
         "reference_selection_approved": True,
+        "texture_reference_urls": approved_image_urls,
+        # Retain the original primary-view field for existing readers.
         "texture_reference_url": approved_image_urls[0],
         "requires_separate_model_approval": True,
         "recorded_at": datetime.utcnow().isoformat(),
     })
-    generation.update(status="found", attempts=attempts, updated_at=datetime.utcnow().isoformat())
+    generation.update(
+        status="found", attempts=attempts, request_id=body.request_id,
+        progress=100, task_status="SUCCEEDED", updated_at=datetime.utcnow().isoformat(),
+    )
     evidence_stages["meshy_generation"] = generation
     evidence["stages"] = evidence_stages
     case.sourcing_3d_evidence = evidence
@@ -746,6 +894,76 @@ async def create_asset(body: AssetCreate, db: AsyncSession = Depends(get_db)):
         anchor_manifest_json=body.anchor_manifest_json,
         notes=body.notes,
         created_by=body.created_by,
+    )
+    db.add(asset)
+    await db.commit()
+    await db.refresh(asset)
+    return _serialize(asset)
+
+
+@router.post("/variants/{variant_id}/upload-glb")
+async def upload_variant_glb(
+    variant_id: int,
+    file: UploadFile = File(...),
+    admin=Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    """Upload one shared catalogue-variant GLB for Curated and Custom use.
+
+    Catalogue membership is deliberately absent from the asset identity: when
+    the same variant belongs to both catalogues, both screens resolve this one
+    versioned asset row.
+    """
+    if not (file.filename or "").lower().endswith(".glb"):
+        raise HTTPException(status_code=415, detail="Upload a self-contained .glb model")
+
+    row = (await db.execute(
+        select(CatalogueVariant, PlaybookSlot)
+        .join(PlaybookSlot, CatalogueVariant.slot_id == PlaybookSlot.id)
+        .where(CatalogueVariant.id == variant_id)
+    )).one_or_none()
+    if row is None:
+        raise HTTPException(status_code=404, detail="Catalogue component not found")
+    _variant, slot = row
+
+    content = await file.read(_MAX_GLB_UPLOAD_BYTES + 1)
+    await file.close()
+    if len(content) > _MAX_GLB_UPLOAD_BYTES:
+        raise HTTPException(status_code=413, detail="GLB files must be 100 MB or smaller")
+    try:
+        _validate_uploaded_glb(content)
+    except ValueError as exc:
+        raise HTTPException(status_code=415, detail=str(exc)) from exc
+
+    prior_version = (await db.execute(
+        select(Component3DAsset.version)
+        .where(
+            Component3DAsset.subject_type == AssetSubjectType.VARIANT,
+            Component3DAsset.subject_id == variant_id,
+        )
+        .order_by(Component3DAsset.version.desc())
+        .limit(1)
+    )).scalar_one_or_none()
+    version = (prior_version or 0) + 1
+    filename = f"catalogue-variant-{variant_id}-v{version}-{uuid4().hex[:8]}.glb"
+    _PUBLIC_MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
+    public_path = _PUBLIC_MEDIA_ROOT / filename
+    public_path.write_bytes(content)
+    if not await sync_to_public_media(public_path):
+        public_path.unlink(missing_ok=True)
+        raise HTTPException(status_code=502, detail="The GLB was valid but could not be published to shared media")
+
+    asset = Component3DAsset(
+        subject_type=AssetSubjectType.VARIANT,
+        subject_id=variant_id,
+        category=slot.slot_type,
+        status=Component3DAssetStatus.CLEANED,
+        version=version,
+        glb_ref=f"{_PUBLIC_MEDIA_URL}/{filename}",
+        file_size_kb=max(1, len(content) // 1024),
+        notes="Operator-uploaded GLB; validate scale, orientation, geometry and provenance before activation.",
+        created_by=getattr(admin, "email", None) or "admin-upload",
+        provenance_status="metadata-only",
     )
     db.add(asset)
     await db.commit()

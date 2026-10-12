@@ -2,10 +2,10 @@
 import imaplib
 import email
 from email.header import decode_header
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 import re
-import secrets
+import math
 from email.utils import parseaddr
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -13,14 +13,19 @@ from app.config import get_settings
 from app.models.inventory import InventoryItem
 from app.models.build import Build
 from app.models.product import Product
+from app.models.order import Order, OrderStatus
 from app.models.email_event import EmailEvent
 from app.models.manual_build import ManualBuild
 from app.models.channel_listing import ChannelListing
 from app.models.customer_review import CustomerReview
 from app.models.customer import Customer
+from app.models.shipment_tracking_event import ShipmentTrackingEvent
+from app.services.warranty_service import (
+    ensure_manual_build_reserve,
+    ensure_order_reserve,
+    recalculate_reserve_status,
+)
 from app.services.alerts import emit_alert
-from app.services.auth_service import hash_password
-from app.services.email_service import send_email_async
 import logging
 
 log = logging.getLogger(__name__)
@@ -323,6 +328,7 @@ class EmailMonitor:
     async def process_message(self, msg: dict, db: AsyncSession):
         """Process a single email message."""
         log.info(f"Processing email: {msg['subject']}")
+        notification_event_id = None
 
         body = msg["body"]
 
@@ -376,6 +382,8 @@ class EmailMonitor:
                     await self.process_sale_detection(sale, db)
                     build = await self._match_manual_build_sale(sale, db)
                     if build:
+                        from app.services.getting_started_jobs import ensure_manual_build_job
+                        await ensure_manual_build_job(db, manual_build_id=build.id)
                         event.event_type = "sold"
                         event.manual_build_id = build.id
                         event.marketplace = sale.get("marketplace") or event.marketplace
@@ -386,16 +394,130 @@ class EmailMonitor:
         # this is idempotent and becomes Day 1 of the warranty clock.
         if self._is_delivery_confirmation(msg["subject"], body):
             event.event_type = "delivered"
+            delivery_at = self._delivery_timestamp(body, fallback=datetime.utcnow())
             # Match by a known tracking number when possible. The operator can
             # still review unmatched confirmations from the email event page.
             builds = (await db.execute(select(ManualBuild).where(ManualBuild.tracking_number.is_not(None)))).scalars().all()
-            matched = next((b for b in builds if b.tracking_number and b.tracking_number.lower() in body.lower()), None)
+            matched_ref = next((b for b in builds if b.tracking_number and b.tracking_number.lower() in body.lower()), None)
+            matched = None
+            if matched_ref:
+                matched = (await db.execute(
+                    select(ManualBuild)
+                    .where(ManualBuild.id == matched_ref.id)
+                    .with_for_update()
+                    .execution_options(populate_existing=True)
+                )).scalar_one_or_none()
             if matched:
-                matched.delivered_at = datetime.utcnow()
-                matched.warranty_started_at = matched.delivered_at
+                delivery_at = min(
+                    value for value in (matched.delivered_at, matched.warranty_started_at, delivery_at)
+                    if value is not None
+                )
+                matched.delivered_at = delivery_at
+                matched.warranty_started_at = delivery_at
                 matched.dispatch_status = "delivered"
+                linked_order = None
+                linked_order_ids = set((await db.execute(
+                    select(Order.id)
+                    .join(Build, Build.order_id == Order.id)
+                    .where(Build.manual_build_id == matched.id)
+                )).scalars().all())
+                linked_order_ids.update((await db.execute(
+                    select(Order.id)
+                    .join(Product, Product.sold_order_id == Order.id)
+                    .join(Build, Product.build_id == Build.id)
+                    .where(Build.manual_build_id == matched.id)
+                )).scalars().all())
+                if len(linked_order_ids) > 1:
+                    log.error(
+                        "Delivery email matched build %s with multiple linked orders; "
+                        "warranty reserve requires manual reconciliation",
+                        matched.id,
+                    )
+                    event.summary = (
+                        f"Delivery confirmed for {matched.name}; multiple linked orders need "
+                        "manual warranty reconciliation."
+                    )
+                elif linked_order_ids:
+                    linked_order = (await db.execute(
+                        select(Order)
+                        .where(Order.id == next(iter(linked_order_ids)))
+                        .with_for_update()
+                        .execution_options(populate_existing=True)
+                    )).scalar_one()
+                    delivery_at = min(
+                        value for value in (
+                            matched.delivered_at,
+                            matched.warranty_started_at,
+                            linked_order.delivered_at,
+                            linked_order.actual_delivery_date,
+                            delivery_at,
+                        ) if value is not None
+                    )
+                    matched.delivered_at = delivery_at
+                    matched.warranty_started_at = delivery_at
+                    linked_order.delivered_at = min(
+                        value for value in (linked_order.delivered_at, delivery_at) if value is not None
+                    )
+                    linked_order.actual_delivery_date = min(
+                        value for value in (linked_order.actual_delivery_date, linked_order.delivered_at) if value is not None
+                    )
+                    linked_order.status = OrderStatus.COMPLETED
+                    reserve = await ensure_order_reserve(db, linked_order, linked_order.delivered_at)
+                    await recalculate_reserve_status(db, reserve)
+                elif not linked_order_ids:
+                    reserve = await ensure_manual_build_reserve(db, matched, matched.warranty_started_at)
+                    if reserve is not None:
+                        await recalculate_reserve_status(db, reserve)
                 event.manual_build_id = matched.id
-                event.summary = f"Delivered: {matched.name}. Warranty Day 1 starts {matched.warranty_started_at.date().isoformat()}."
+                if len(linked_order_ids) <= 1:
+                    event.summary = f"Delivered: {matched.name}. Warranty Day 1 starts {matched.warranty_started_at.date().isoformat()}."
+
+                # A delivery event is customer-visible in the portal. Only a
+                # direct storefront order may trigger off-platform email; do
+                # not send external-channel buyers a FlipFlop message.
+                direct_storefront = bool(
+                    linked_order and linked_order.customer_id and not matched.ebay_order_id
+                )
+                if direct_storefront and matched.storefront_product_id:
+                    sold_product = await db.get(Product, matched.storefront_product_id)
+                    if sold_product is None:
+                        direct_storefront = False
+                    elif sold_product.sold_via_channel is not None:
+                        channel = getattr(sold_product.sold_via_channel, "value", sold_product.sold_via_channel)
+                        direct_storefront = channel == "storefront"
+
+                if linked_order_ids:
+                    event_order_id = next(iter(linked_order_ids)) if len(linked_order_ids) == 1 else None
+                else:
+                    event_order_id = None
+                existing_delivery_event = await db.scalar(
+                    select(ShipmentTrackingEvent.id)
+                    .where(
+                        ShipmentTrackingEvent.status_code.in_(
+                            {"delivered", "delivery_confirmed", "proof_of_delivery"}
+                        ),
+                        ShipmentTrackingEvent.order_id == event_order_id
+                        if event_order_id is not None
+                        else ShipmentTrackingEvent.manual_build_id == matched.id,
+                    )
+                    .limit(1)
+                )
+                if existing_delivery_event is None:
+                    booking = (matched.evidence_data or {}).get("shipment_booking_confirmation") or {}
+                    tracking_event = ShipmentTrackingEvent(
+                        order_id=event_order_id,
+                        manual_build_id=None if event_order_id is not None else matched.id,
+                        provider="email_monitor",
+                        provider_event_id=f"email-event:{event.id}",
+                        status_code="delivered",
+                        description="The courier confirmed delivery.",
+                        tracking_url=booking.get("tracking_url"),
+                        material=direct_storefront and event_order_id is not None,
+                        occurred_at=delivery_at,
+                    )
+                    db.add(tracking_event)
+                    await db.flush()
+                    notification_event_id = tracking_event.id
             else:
                 event.summary = "Delivery confirmation received; no tracking number matched a build."
 
@@ -422,6 +544,9 @@ class EmailMonitor:
                 await emit_alert(code="customer_review_published", source=review["source"], severity="info", message=event.summary, link_url="/reviews")
 
         await db.commit()
+        if notification_event_id is not None:
+            from app.services.parcel2go_notifications import deliver_tracking_event_notification
+            await deliver_tracking_event_notification(notification_event_id)
 
     @staticmethod
     def detect_customer_review(subject: str, sender: str, body: str) -> Optional[dict]:
@@ -454,21 +579,22 @@ class EmailMonitor:
             return None
         build.status = "sold"
         build.dispatch_status = "awaiting_dispatch"
-        build.sale_price_actual = sale.get("price") or build.ebay_price
+        sale_price = sale.get("price")
+        try:
+            parsed_sale_price = float(sale_price) if sale_price is not None else 0.0
+        except (TypeError, ValueError):
+            parsed_sale_price = 0.0
+        build.sale_price_actual = parsed_sale_price if math.isfinite(parsed_sale_price) and parsed_sale_price > 0 else None
         build.updated_at = datetime.utcnow()
-        if sale.get("customer_email"):
-            customer = (await db.execute(select(Customer).where(Customer.email == sale["customer_email"]))).scalars().first()
-            temporary_password = None
-            if not customer:
-                temporary_password = secrets.token_urlsafe(12)
-                customer = Customer(email=sale["customer_email"], name=sale.get("customer_name") or "FlipFlop customer", password_hash=hash_password(temporary_password))
-                db.add(customer)
-                await db.flush()
-            build.customer_id = customer.id
-            build.customer_email = customer.email
-            build.buyer_name = build.buyer_name or customer.name
-            if temporary_password:
-                await send_email_async(customer.email, "Your FlipFlop customer account", f"<p>Hello {customer.name},</p><p>We created your secure FlipFlop customer account for Build {build.id}.</p><p>Email: <strong>{customer.email}</strong><br>Temporary password: <strong>{temporary_password}</strong></p><p>Please sign in and change this password at <a href=\"https://theflipflop.shop/my-builds/{build.id}\">your My Builds page</a>.</p>", f"customer-account-build-{build.id}")
+        # Marketplace email is not proof that the buyer owns a FlipFlop
+        # account. Keep this sale build-scoped; the private printed claim is
+        # how an indirect buyer gains portal access.
+        build.customer_id = None
+        buyer_email = str(sale.get("customer_email") or "").strip().lower()
+        build.customer_email = buyer_email if len(buyer_email) <= 320 and "@" in buyer_email else None
+        buyer_name = str(sale.get("customer_name") or "").strip()
+        if buyer_name and buyer_name.lower() != "flipflop customer":
+            build.buyer_name = buyer_name[:200]
         # Mark every local cross-listing withdrawn immediately. Provider API
         # withdrawal is channel-specific and is retried/handled by its adapter.
         listings = (await db.execute(select(ChannelListing).where(ChannelListing.manual_build_id == build.id, ChannelListing.status.in_(["published", "scheduled"])))) .scalars().all()
@@ -498,6 +624,34 @@ class EmailMonitor:
     def _is_delivery_confirmation(subject: str, body: str) -> bool:
         text = f"{subject} {body}".lower()
         return any(term in text for term in ("delivered", "delivery confirmed", "has been delivered", "parcel delivered"))
+
+    @staticmethod
+    def _delivery_timestamp(body: str, *, fallback: datetime) -> datetime:
+        """Use an explicit timezone-qualified ISO timestamp on a delivery line."""
+        timestamp_pattern = re.compile(
+            r"(?<!\d)(20\d{2}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}"
+            r"(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2}))(?![\w:])",
+            re.IGNORECASE,
+        )
+        for line in body.splitlines():
+            if "deliver" not in line.lower():
+                continue
+            match = timestamp_pattern.search(line)
+            if not match:
+                continue
+            try:
+                raw_timestamp = match.group(1)
+                if raw_timestamp[-1:].lower() == "z":
+                    raw_timestamp = raw_timestamp[:-1] + "+00:00"
+                parsed = datetime.fromisoformat(raw_timestamp)
+            except ValueError:
+                continue
+            if parsed.tzinfo is None:
+                continue
+            parsed_utc = parsed.astimezone(timezone.utc).replace(tzinfo=None)
+            if parsed_utc <= fallback:
+                return parsed_utc
+        return fallback
 
     def detect_generic_marketplace_sale(self, body: str) -> Optional[dict]:
         """Conservative fallback for Facebook/other channel sale emails."""

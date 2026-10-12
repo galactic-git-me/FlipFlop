@@ -132,6 +132,8 @@ class Settings(BaseSettings):
     # the production account equivalent.
     parcel2go_client_id: str = ""
     parcel2go_client_secret: str = ""
+    # Set only after configuring the matching webhook secret in Parcel2Go.
+    parcel2go_webhook_secret: str = ""
     # "sandbox" (default, no real charges) | "production"
     parcel2go_environment: str = "sandbox"
 
@@ -140,6 +142,9 @@ class Settings(BaseSettings):
     # The pre-sale flow only calls /v2/parcel/get_price.
     secursus_api_identifier: str = ""
     secursus_api_secret_key: str = ""
+    # Must remain false until the production account and PC-shipment use are
+    # approved by the insurer. Quote calls remain available with this off.
+    secursus_live_parcel_creation_enabled: bool = False
     # Seller's own collection address — used as every booking's
     # CollectionAddress (where the courier picks up from) and as the
     # Parcel2Go order's CustomerDetails. Constant across all shipments,

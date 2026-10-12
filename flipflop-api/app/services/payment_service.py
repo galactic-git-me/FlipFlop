@@ -4,6 +4,7 @@ import stripe
 import structlog
 from typing import Optional
 from datetime import datetime
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 
 from app.config import get_settings
 
@@ -33,6 +34,8 @@ class PaymentService:
         budget: float,
         quote_data: dict,
         metadata: dict | None = None,
+        description: str | None = None,
+        idempotency_key: str | None = None,
     ) -> dict:
         """
         Create a Stripe payment intent for a quote.
@@ -52,8 +55,13 @@ class PaymentService:
             raise ValueError("STRIPE_SECRET_KEY not configured")
 
         try:
-            # Convert GBP to pence (Stripe expects smallest currency unit)
-            amount_pence = int(budget * 100)
+            # Convert decimal GBP to integer pence without binary-float
+            # truncation (for example, 29.99 * 100 can be 2998.999...).
+            try:
+                normalized_budget = Decimal(str(budget)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            except (InvalidOperation, ValueError) as error:
+                raise ValueError("Payment amount must be a valid GBP amount") from error
+            amount_pence = int(normalized_budget * 100)
 
             # Create payment intent
             intent = stripe.PaymentIntent.create(
@@ -61,23 +69,24 @@ class PaymentService:
                 currency="gbp",
                 metadata={
                     "customer_id": str(customer_id),
-                    "budget": str(budget),
+                    "budget": str(normalized_budget),
                     **{str(k): str(v) for k, v in (metadata or {}).items()},
                 },
-                description=f"Custom PC Build Quote - £{budget}",
+                description=description or f"Custom PC Build Quote - £{normalized_budget}",
+                idempotency_key=idempotency_key,
             )
 
             log.info(
                 "payment_intent.created",
                 intent_id=intent.id,
                 customer_id=customer_id,
-                amount_gbp=budget,
+                amount_gbp=float(normalized_budget),
             )
 
             return {
                 "client_secret": intent.client_secret,
                 "publishable_key": self.config.publishable_key,
-                "amount": budget,
+                "amount": float(normalized_budget),
                 "currency": "gbp",
                 "intent_id": intent.id,
             }
@@ -183,7 +192,8 @@ class PaymentService:
     async def refund_payment(
         self,
         intent_id: str,
-        reason: str = "customer_request",
+        reason: str = "requested_by_customer",
+        idempotency_key: str | None = None,
     ) -> dict:
         """
         Refund a successful payment.
@@ -204,9 +214,12 @@ class PaymentService:
             if not intent.latest_charge:
                 raise ValueError("No charge found to refund")
 
+            stripe_reason = "requested_by_customer" if reason == "customer_request" else reason
+            refund_options = {"idempotency_key": idempotency_key} if idempotency_key else {}
             refund = stripe.Refund.create(
                 charge=intent.latest_charge,
-                reason=reason,
+                reason=stripe_reason,
+                **refund_options,
             )
 
             log.info(
@@ -220,7 +233,7 @@ class PaymentService:
                 "refund_id": refund.id,
                 "amount": refund.amount / 100,
                 "status": refund.status,
-                "reason": reason,
+                "reason": stripe_reason,
             }
 
         except stripe.error.StripeError as e:
@@ -230,6 +243,20 @@ class PaymentService:
                 intent_id=intent_id,
             )
             raise ValueError(f"Failed to refund payment: {str(e)}")
+
+    async def get_refund_status(self, refund_id: str) -> dict:
+        """Retrieve a previously created Stripe refund for reconciliation."""
+        try:
+            refund = stripe.Refund.retrieve(refund_id)
+            return {
+                "refund_id": refund.id,
+                "amount": refund.amount / 100,
+                "status": refund.status,
+                "reason": refund.reason,
+            }
+        except stripe.error.StripeError as error:
+            log.error("payment.refund_status_failed", refund_id=refund_id, error=str(error))
+            raise ValueError("Could not reconcile the existing refund") from error
 
     async def get_payment_intent(self, intent_id: str) -> dict:
         """
@@ -252,9 +279,24 @@ class PaymentService:
                 "status": intent.status,
                 "amount": intent.amount / 100,
                 "currency": intent.currency,
+                "client_secret": intent.client_secret,
                 "created_at": datetime.utcfromtimestamp(intent.created),
             }
 
         except stripe.error.StripeError as e:
             log.error("payment_intent.retrieval_failed", error=str(e))
             raise ValueError(f"Failed to retrieve payment intent: {str(e)}")
+
+    async def cancel_payment_intent(self, intent_id: str) -> dict:
+        """Cancel an unpaid PaymentIntent and return its authoritative status."""
+        try:
+            intent = stripe.PaymentIntent.retrieve(intent_id)
+            if intent.status == "canceled":
+                return {"intent_id": intent.id, "status": intent.status}
+            if intent.status == "succeeded" or intent.status == "processing":
+                return {"intent_id": intent.id, "status": intent.status}
+            intent = stripe.PaymentIntent.cancel(intent_id)
+            return {"intent_id": intent.id, "status": intent.status}
+        except stripe.error.StripeError as e:
+            log.error("payment_intent.cancellation_failed", error=str(e), intent_id=intent_id)
+            raise ValueError(f"Failed to cancel payment intent: {str(e)}")

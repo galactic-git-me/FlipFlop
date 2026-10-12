@@ -37,6 +37,10 @@ from app.workers.manual_build_lifecycle import (
 )
 from app.workers.cross_listing_recreate import run_cross_listing_recreate_job
 from app.workers.delivery_followup import run_delivery_followup_job
+from app.workers.warranty_reserve import run_warranty_reserve_job
+from app.services.shipment_notifications import retry_pending_dispatch_notifications
+from app.services.customer_problem_notifications import retry_pending_customer_problem_notifications
+from app.services.parcel2go_notifications import retry_pending_tracking_notifications
 from app.workers.message_poll import run_message_poll_job
 from app.workers.case_content_sourcing import run_case_content_sourcing
 from app.workers.overclockers_gallery import run_overclockers_gallery_sourcing
@@ -84,6 +88,10 @@ _job_history: dict[str, deque[dict]] = {
     "ai_build_generator": deque(maxlen=50),
     "email_monitor": deque(maxlen=50),
     "ebay_sales_tracker": deque(maxlen=50),
+    "warranty_reserve": deque(maxlen=50),
+    "dispatch_notification_retry": deque(maxlen=50),
+    "customer_problem_notification_retry": deque(maxlen=50),
+    "parcel2go_notification_retry": deque(maxlen=50),
 }
 _running_jobs: set[str] = set()
 _STATE_FILE = Path(__file__).resolve().parents[2] / "data" / "scheduler_state.json"
@@ -582,6 +590,16 @@ def start_scheduler():
     scheduler.add_job(
         _run_job_with_history,
         trigger=IntervalTrigger(hours=24),
+        id="warranty_reserve",
+        name="Warranty Reserve Expiry Review",
+        kwargs={"job_id": "warranty_reserve", "fn": run_warranty_reserve_job},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(minutes=10),
+    )
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=24),
         id="manual_build_markdown_event_scan",
         name="Manual Build Markdown Event Candidate Scan",
         kwargs={"job_id": "manual_build_markdown_event_scan", "fn": run_manual_build_markdown_event_scan_job},
@@ -678,6 +696,39 @@ def start_scheduler():
         replace_existing=True,
         max_instances=1,
         next_run_time=now + timedelta(minutes=1),
+    )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=5),
+        id="dispatch_notification_retry",
+        name="Retry direct-storefront dispatch notifications",
+        kwargs={"job_id": "dispatch_notification_retry", "fn": retry_pending_dispatch_notifications},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(minutes=5),
+    )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=5),
+        id="customer_problem_notification_retry",
+        name="Retry direct customer aftercare notifications",
+        kwargs={"job_id": "customer_problem_notification_retry", "fn": retry_pending_customer_problem_notifications},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(minutes=5),
+    )
+
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=5),
+        id="parcel2go_notification_retry",
+        name="Retry direct-customer courier tracking notifications",
+        kwargs={"job_id": "parcel2go_notification_retry", "fn": retry_pending_tracking_notifications},
+        replace_existing=True,
+        max_instances=1,
+        next_run_time=now + timedelta(minutes=5),
     )
 
     if settings.ebay_reselling_enabled:

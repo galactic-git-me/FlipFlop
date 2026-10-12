@@ -60,7 +60,34 @@ interface ReferenceCandidateResponse {
   vendor_names?: string[];
   approved_selection?: { status?: string; images?: ReferenceCandidate[] };
 }
+interface GeneratedReviewLink {
+  version: 1;
+  url: string;
+  imageUrls: string[];
+}
 const DIRECT_BACKEND_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4311").replace(/\/$/, "");
+
+function sameImageOrder(first: string[], second: string[]) {
+  return first.length === second.length && first.every((url, index) => url === second[index]);
+}
+
+function readGeneratedReviewLink(caseId: number, approvedImages: ReferenceCandidate[]): GeneratedReviewLink | null {
+  const key = `case-3d-review-${caseId}`;
+  const raw = window.localStorage.getItem(key);
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw) as Partial<GeneratedReviewLink>;
+    const currentImageUrls = approvedImages.map(image => image.url);
+    if (parsed.version === 1 && typeof parsed.url === "string" && Array.isArray(parsed.imageUrls)
+      && sameImageOrder(parsed.imageUrls, currentImageUrls)) {
+      return parsed as GeneratedReviewLink;
+    }
+  } catch {
+    // Old versions stored a URL without the image set that produced it.
+  }
+  window.localStorage.removeItem(key);
+  return null;
+}
 
 const sourcingLabels: Array<[string, string]> = [
   ["product_images", "Images"],
@@ -245,6 +272,7 @@ export default function Cases3DPriorityPage() {
   const [selectedReferences, setSelectedReferences] = useState<ReferenceCandidate[]>([]);
   const [referenceBusy, setReferenceBusy] = useState(false);
   const [referenceNotice, setReferenceNotice] = useState<string | null>(null);
+  const [autoOpenedCaseId, setAutoOpenedCaseId] = useState<number | null>(null);
   const [newReferenceUrl, setNewReferenceUrl] = useState("");
   const [newReferenceSource, setNewReferenceSource] = useState<ReferenceSource>("manufacturer");
   const [overclockersResults, setOverclockersResults] = useState<ReferenceCandidate[]>([]);
@@ -253,7 +281,7 @@ export default function Cases3DPriorityPage() {
   const [bingResults, setBingResults] = useState<ReferenceCandidate[]>([]);
   const [bingError, setBingError] = useState<string | null>(null);
   const [bingBusy, setBingBusy] = useState(false);
-  const [generatedReviewUrl, setGeneratedReviewUrl] = useState<string | null>(null);
+  const [generatedReviewLink, setGeneratedReviewLink] = useState<GeneratedReviewLink | null>(null);
   const [generatingCaseId, setGeneratingCaseId] = useState<number | null>(null);
   const [evidenceReview, setEvidenceReview] = useState<{ caseItem: PriorityCaseItem; stage: "product_images" | "youtube_video" | "meshy_generation" } | null>(null);
 
@@ -272,7 +300,7 @@ export default function Cases3DPriorityPage() {
       setReferenceCaseId(caseId);
       setReferenceData(data);
       setSelectedReferences(data.approved_selection?.images || []);
-      setGeneratedReviewUrl(window.localStorage.getItem(`case-3d-review-${caseId}`));
+      setGeneratedReviewLink(readGeneratedReviewLink(caseId, data.approved_selection?.images || []));
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not load reference pictures");
     } finally {
@@ -281,6 +309,8 @@ export default function Cases3DPriorityPage() {
   };
 
   const toggleReference = (candidate: ReferenceCandidate) => {
+    setGeneratedReviewLink(null);
+    if (referenceCaseId !== null) window.localStorage.removeItem(`case-3d-review-${referenceCaseId}`);
     setReferenceData(current => current ? { ...current, approved_selection: undefined } : current);
     setReferenceNotice(null);
     setSelectedReferences(current => {
@@ -338,32 +368,27 @@ export default function Cases3DPriorityPage() {
     setOverclockersBusy(true);
     setOverclockersError(null);
     try {
-      const response = await fetch(`/api/cases/${caseId}/3d-overclockers-gallery`, { cache: "no-store" });
-      const data = await readJsonResponse<{ results?: ReferenceCandidate[]; detail?: string; captured?: boolean }>(response);
-      if (!response.ok) throw new Error(data.detail || "Could not load Overclockers photos");
-      setOverclockersResults(data.results || []);
-      if (!data.captured) setOverclockersError("Open the Overclockers product in Chrome to capture its full gallery.");
+      let data: { results?: ReferenceCandidate[]; detail?: string; captured?: boolean; status?: string } = {};
+      for (let attempt = 0; attempt < 30; attempt += 1) {
+        const response = await fetch(`/api/cases/${caseId}/3d-overclockers-gallery`, { cache: "no-store" });
+        data = await readJsonResponse<typeof data & { detail?: string }>(response);
+        if (!response.ok) throw new Error(data.detail || "Could not load Overclockers photos");
+        if (data.status !== "retrieving") break;
+        await new Promise(resolve => window.setTimeout(resolve, 2000));
+      }
+      const results = data.results || [];
+      setOverclockersResults(results);
+      setReferenceData(current => current ? {
+        ...current,
+        candidates: [...current.candidates, ...results.filter(candidate => !current.candidates.some(existing => existing.url === candidate.url))],
+      } : current);
+      if (data.status === "retrieving") setOverclockersError("Photo retrieval is taking longer than expected. Reload the gallery to check again.");
+      else if (!data.captured && results.length === 0) setOverclockersError("No matching Overclockers photos were found for this product.");
     } catch (caught) {
       setOverclockersError(caught instanceof Error ? caught.message : "Could not load Overclockers photos");
     } finally {
       setOverclockersBusy(false);
     }
-  };
-
-  const sourceOverclockersInChrome = () => {
-    if (!evidenceReview) return;
-    const productUrl = referenceData?.candidates.find(candidate => candidate.label?.startsWith("Overclockers ·"))?.source_page;
-    if (!productUrl) {
-      setOverclockersError("No matching Overclockers product page is stored for this case.");
-      return;
-    }
-    window.open(`${productUrl.split("#")[0]}#flipflop-case-${evidenceReview.caseItem.id}`, "_blank", "noopener,noreferrer");
-    let attempts = 0;
-    const timer = window.setInterval(() => {
-      attempts += 1;
-      void loadOverclockersGallery(evidenceReview.caseItem.id);
-      if (attempts >= 20) window.clearInterval(timer);
-    }, 2000);
   };
 
   const loadBingImages = async (caseId: number) => {
@@ -397,7 +422,20 @@ export default function Cases3DPriorityPage() {
   useEffect(() => {
     if (evidenceReview?.stage !== "product_images") return;
     setOverclockersResults([]);
-    void loadOverclockersGallery(evidenceReview.caseItem.id);
+    setOverclockersBusy(true);
+    setOverclockersError(null);
+    void (async () => {
+      try {
+        const response = await fetch(`/api/cases/${evidenceReview.caseItem.id}/3d-overclockers-gallery`, { method: "POST" });
+        const data = await readJsonResponse<{ detail?: string }>(response);
+        if (!response.ok) throw new Error(data.detail || "Could not automatically source product photos");
+        await loadOverclockersGallery(evidenceReview.caseItem.id);
+      } catch (caught) {
+        setOverclockersError(caught instanceof Error ? caught.message : "Could not automatically source product photos");
+      } finally {
+        setOverclockersBusy(false);
+      }
+    })();
     setBingResults([]);
     void loadBingImages(evidenceReview.caseItem.id);
   }, [evidenceReview?.caseItem.id, evidenceReview?.stage]);
@@ -432,6 +470,7 @@ export default function Cases3DPriorityPage() {
     setGeneratingCaseId(caseId);
     setError(null);
     setReferenceNotice("Generating the textured model. Keep this page open — Meshy can take up to 10 minutes. You will be taken to the approval viewer when it finishes.");
+    const requestedImageUrls = selectedReferences.map(item => item.url);
     try {
       // Meshy can take up to ten minutes. Calling the backend directly avoids
       // Next's rewrite proxy terminating the long-lived connection.
@@ -440,7 +479,7 @@ export default function Cases3DPriorityPage() {
         headers: { "content-type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
-          image_urls: selectedReferences.map(item => item.url),
+          image_urls: requestedImageUrls,
           notes: "Generated only from the separately owner-approved four-picture set. Preserve the first picture as the texture and colour master; match case finish and illuminated RGB faithfully.",
         }),
       });
@@ -458,8 +497,9 @@ export default function Cases3DPriorityPage() {
         batchId = batch.batch_id;
       }
       const reviewUrl = `/components-3d-review?batch=${batchId}`;
-      setGeneratedReviewUrl(reviewUrl);
-      window.localStorage.setItem(`case-3d-review-${caseId}`, reviewUrl);
+      const generatedLink: GeneratedReviewLink = { version: 1, url: reviewUrl, imageUrls: requestedImageUrls };
+      setGeneratedReviewLink(generatedLink);
+      window.localStorage.setItem(`case-3d-review-${caseId}`, JSON.stringify(generatedLink));
       setReferenceNotice("Draft generated successfully. Opening the 3D approval viewer…");
       router.push(reviewUrl);
     } catch (caught) {
@@ -494,6 +534,16 @@ export default function Cases3DPriorityPage() {
     if (stage === "product_images" || stage === "meshy_generation") await openReferenceSelection(caseItem.id);
     setEvidenceReview({ caseItem, stage });
   };
+
+  useEffect(() => {
+    if (loading || autoOpenedCaseId !== null) return;
+    const requestedCaseId = Number(new URLSearchParams(window.location.search).get("case"));
+    if (!Number.isFinite(requestedCaseId) || requestedCaseId < 1) return;
+    const caseItem = cases.find(item => item.id === requestedCaseId);
+    if (!caseItem) return;
+    setAutoOpenedCaseId(requestedCaseId);
+    void openEvidenceReview(caseItem, "product_images");
+  }, [loading, cases, autoOpenedCaseId]);
 
   const closeEvidenceReview = () => {
     if (evidenceReview?.stage === "product_images" || evidenceReview?.stage === "meshy_generation") setReferenceCaseId(null);
@@ -862,11 +912,11 @@ export default function Cases3DPriorityPage() {
                         </div>
                       )}
                       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-                        {referenceData.candidates.map(candidate => {
+                        {referenceData.candidates.map((candidate, candidateIndex) => {
                           const selectedIndex = selectedReferences.findIndex(item => item.url === candidate.url);
                           return (
                             <button
-                              key={candidate.url}
+                              key={`${candidate.url}-${candidateIndex}`}
                               type="button"
                               onClick={() => toggleReference(candidate)}
                               className={`group relative cursor-pointer overflow-hidden rounded-md border text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${selectedIndex >= 0 ? "border-cyan-300 ring-2 ring-cyan-400/40" : "border-slate-700 hover:border-slate-500"}`}
@@ -922,8 +972,8 @@ export default function Cases3DPriorityPage() {
                           {generatingCaseId === caseItem.id ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
                           {generatingCaseId === caseItem.id ? "Generating — keep this page open" : "Generate draft model"}
                         </Button>
-                        {generatedReviewUrl && (
-                          <Button type="button" variant="outline" onClick={() => router.push(generatedReviewUrl)} className="cursor-pointer border-emerald-500/50 text-emerald-200">
+                        {generatedReviewLink && sameImageOrder(generatedReviewLink.imageUrls, selectedReferences.map(item => item.url)) && (
+                          <Button type="button" variant="outline" onClick={() => router.push(generatedReviewLink.url)} className="cursor-pointer border-emerald-500/50 text-emerald-200">
                             <Eye className="mr-2 h-4 w-4" /> View and approve generated model
                           </Button>
                         )}
@@ -969,8 +1019,8 @@ export default function Cases3DPriorityPage() {
                 <>
                   <p className="mb-4 text-sm text-slate-300">Select exactly four images. The first selected image is the texture and colour master.</p>
                   <section aria-label="Overclockers gallery" className="mb-5 rounded-lg border border-cyan-500/25 bg-cyan-500/[0.04] p-4">
-                    <div className="flex items-center justify-between gap-3"><h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">1. Overclockers product gallery</h3><div className="flex gap-2"><Button type="button" variant="outline" onClick={sourceOverclockersInChrome}>Source photos in Chrome</Button><Button type="button" variant="outline" disabled={overclockersBusy} onClick={() => void loadOverclockersGallery(evidenceReview.caseItem.id)}>Reload gallery</Button></div></div>
-                    {overclockersBusy && <p className="mt-3 text-xs text-slate-400">Loading all gallery thumbnails…</p>}
+                    <div className="flex items-center justify-between gap-3"><h3 className="text-xs font-semibold uppercase tracking-wide text-cyan-200">1. Overclockers product gallery</h3><div className="flex gap-2"><Button type="button" variant="outline" disabled={overclockersBusy} onClick={() => void loadOverclockersGallery(evidenceReview.caseItem.id)}>Reload gallery</Button></div></div>
+                    {overclockersBusy && overclockersResults.length === 0 && <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4" aria-label="Loading Overclockers photos" role="status">{Array.from({ length: 4 }, (_, index) => <div key={index} className="relative aspect-[3/4] overflow-hidden rounded-md border border-slate-700 bg-slate-900"><div className="absolute inset-0 animate-pulse bg-gradient-to-br from-slate-800 via-slate-700/70 to-slate-900" /><Images className="absolute left-1/2 top-1/2 h-7 w-7 -translate-x-1/2 -translate-y-1/2 animate-pulse text-slate-500" aria-hidden="true" /></div>)}</div>}
                     {overclockersError && <p className="mt-3 text-xs text-amber-300">{overclockersError}</p>}
                     {!overclockersBusy && !overclockersError && overclockersResults.length === 0 && <p className="mt-3 text-xs text-slate-400">No exact Overclockers product found.</p>}
                     {overclockersResults.length > 0 && <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">{overclockersResults.map(candidate => {
@@ -1062,7 +1112,7 @@ export default function Cases3DPriorityPage() {
                         {generatingCaseId === evidenceReview.caseItem.id ? "Generating model…" : "Create Meshy draft from approved pictures"}
                       </Button>
                     )}
-                    <Button type="button" variant="outline" onClick={() => router.push(generatedReviewUrl || "/components-3d-review")} className="cursor-pointer border-purple-500/40 text-purple-200">
+                    <Button type="button" variant="outline" onClick={() => router.push(generatedReviewLink?.url || "/components-3d-review")} className="cursor-pointer border-purple-500/40 text-purple-200">
                       <Eye className="mr-2 h-4 w-4" /> Open 3D approval viewer
                     </Button>
                   </div>
@@ -1078,7 +1128,13 @@ export default function Cases3DPriorityPage() {
                     type="button"
                     disabled={referenceBusy || !referenceData?.sourcing_ready || selectedReferences.length !== 4}
                     onClick={async () => {
-                      if (await approveReferences(evidenceReview.caseItem.id)) closeEvidenceReview();
+                      if (await approveReferences(evidenceReview.caseItem.id)) {
+                        const query = new URLSearchParams({ case: String(evidenceReview.caseItem.id) });
+                        const returnBatch = new URLSearchParams(window.location.search).get("returnBatch");
+                        if (returnBatch) query.set("batch", returnBatch);
+                        closeEvidenceReview();
+                        router.push(`/components-3d-review?${query.toString()}`);
+                      }
                     }}
                     className="cursor-pointer bg-cyan-700 hover:bg-cyan-600"
                   >

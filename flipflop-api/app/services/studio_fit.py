@@ -51,6 +51,8 @@ def evaluate_fit(parts, case, *, gpu_required=True):
 
     p = {key: value if value.get('reviewed') is True else {} for key, value in parts.items()}
     cpu, board, gpu, ram, cooler, psu, ssd = [p.get(key, {}) for key in ('cpu', 'motherboard', 'gpu', 'ram', 'cooling', 'psu', 'storage')]
+    gpu_selected = 'gpu' in parts
+    gpu_checks_required = gpu_required or gpu_selected
     case = case or {}
     def match(code, actual, allowed, label, *affected):
         if not actual or not isinstance(allowed, list):
@@ -66,7 +68,7 @@ def evaluate_fit(parts, case, *, gpu_required=True):
     measured('RAM_SLOTS', ram.get('ram_modules'), board.get('ram_slots'), 'Memory modules / slots', 'ram', 'motherboard')
     factors = {'atx': ['atx', 'matx', 'itx'], 'matx': ['matx', 'itx'], 'itx': ['itx']}
     match('BOARD_FIT', board.get('form_factor'), case.get('supported_form_factors') or factors.get(str(case.get('form_factor', '')).lower()), 'Motherboard fit', 'motherboard', 'case')
-    if gpu_required:
+    if gpu_checks_required:
         gpu_limit = case.get('max_gpu_length_mm')
         if number(gpu_limit) and number(cooler.get('front_radiator_depth_mm')):
             gpu_limit -= cooler['front_radiator_depth_mm']
@@ -88,13 +90,13 @@ def evaluate_fit(parts, case, *, gpu_required=True):
     else:
         match('SSD_MOUNT', ssd.get('m2_length'), board.get('m2_lengths'), 'M.2 mounting', 'storage', 'motherboard')
     demand = None
-    if number(cpu.get('power_w')) and (number(gpu.get('power_w')) or not gpu_required):
+    if number(cpu.get('power_w')) and (number(gpu.get('power_w')) or not gpu_checks_required):
         demand = (cpu['power_w'] + (gpu.get('power_w') or 0) + 75) * 1.25
-        if gpu_required and number(gpu.get('recommended_psu_w')):
+        if gpu_checks_required and number(gpu.get('recommended_psu_w')):
             demand = max(demand, gpu['recommended_psu_w'])
     measured('POWER', demand, psu.get('wattage'), 'PSU reserve (W)', 'cpu', 'gpu', 'psu')
     required, supplied = gpu.get('gpu_power_connectors'), psu.get('psu_connectors')
-    if not gpu_required:
+    if not gpu_checks_required:
         pass
     elif isinstance(required, dict) and isinstance(supplied, dict):
         for name, count in required.items():

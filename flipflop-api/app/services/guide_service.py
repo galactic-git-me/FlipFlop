@@ -4,7 +4,9 @@ import os
 from datetime import datetime, timedelta
 from typing import Optional
 from pathlib import Path
-from sqlalchemy.orm import Session
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
@@ -25,7 +27,7 @@ log = structlog.get_logger(__name__)
 class GuideService:
     """Service for generating personalized Welcome Guide PDFs."""
 
-    def __init__(self, db: Session, output_dir: str = "/tmp/guides"):
+    def __init__(self, db: AsyncSession, output_dir: str = "/tmp/guides"):
         """Initialize guide service.
 
         Args:
@@ -115,7 +117,7 @@ class GuideService:
 
         return styles
 
-    def generate_welcome_guide(self, order_id: int) -> str:
+    async def generate_welcome_guide(self, order_id: int) -> str:
         """Generate welcome guide PDF for an order.
 
         Args:
@@ -127,7 +129,16 @@ class GuideService:
         Raises:
             ValueError: If order not found
         """
-        order = self.db.query(Order).filter(Order.id == order_id).first()
+        result = await self.db.execute(
+            select(Order)
+            .options(
+                selectinload(Order.customer),
+                selectinload(Order.playbook),
+                selectinload(Order.os_component),
+            )
+            .where(Order.id == order_id)
+        )
+        order = result.scalar_one_or_none()
         if not order:
             raise ValueError(f"Order {order_id} not found")
 
@@ -180,21 +191,23 @@ class GuideService:
         log.info("pdf_generated", filepath=filepath)
 
         # Save metadata to database
-        self._save_guide_metadata(order_id, filepath)
+        await self._save_guide_metadata(order_id, filepath)
 
         return filepath
 
-    def _save_guide_metadata(self, order_id: int, filepath: str) -> None:
+    async def _save_guide_metadata(self, order_id: int, filepath: str) -> None:
         """Save welcome guide metadata to database."""
         # Check if guide already exists
-        existing = self.db.query(WelcomeGuide).filter(
-            WelcomeGuide.order_id == order_id
-        ).first()
+        result = await self.db.execute(
+            select(WelcomeGuide).where(WelcomeGuide.order_id == order_id)
+        )
+        existing = result.scalar_one_or_none()
 
         if existing:
             existing.generated_at = datetime.utcnow()
             existing.content_json = {
                 "order_id": order_id,
+                "schema_version": 2,
                 "generated_at": datetime.utcnow().isoformat(),
                 "file_path": filepath,
             }
@@ -204,13 +217,14 @@ class GuideService:
                 generated_at=datetime.utcnow(),
                 content_json={
                     "order_id": order_id,
+                    "schema_version": 2,
                     "generated_at": datetime.utcnow().isoformat(),
                     "file_path": filepath,
                 },
             )
             self.db.add(guide)
 
-        self.db.commit()
+        await self.db.flush()
 
     def _create_cover_page(self, order: Order) -> list:
         """Create welcome cover page."""
@@ -309,7 +323,7 @@ class GuideService:
             story.append(Paragraph("Windows Setup Next Steps", self.styles['CustomHeading2']))
             steps = [
                 "1. Complete Windows 11 initial setup (language, region, timezone)",
-                "2. Go to Settings → System → Activation and activate with license key",
+                "2. Open Settings → System → Activation and confirm Windows is activated",
                 "3. Download and install chipset drivers from your motherboard manufacturer",
                 "4. Install GPU drivers: NVIDIA (nvidia.com) or AMD (amd.com)",
                 "5. Run Windows Update to ensure all drivers and patches are current",
@@ -508,16 +522,16 @@ class GuideService:
 
         if order.os_component and 'windows' in order.os_component.os_type.lower():
             story.append(Paragraph(
-                "Windows 11 is pre-installed. See the License Key page for activation instructions.",
+                "Windows 11 is pre-installed. See the Windows Activation page to check activation status.",
                 self.styles['CustomBody']
             ))
             story.append(Spacer(1, 0.2*inch))
 
             story.append(Paragraph("<b>Initial Setup Steps:</b>", self.styles['CustomHeading2']))
             setup_steps = [
-                "1. Complete Windows 11 welcome screens (language, region, Microsoft account)",
+                "1. Complete Windows 11 first-run setup and create your local Windows account",
                 "2. Allow Windows Update to run (important for security and drivers)",
-                "3. Go to Settings → System → Activation and activate with your license key",
+                "3. Go to Settings → System → Activation and confirm Windows is activated",
                 "4. Download chipset drivers from motherboard manufacturer website",
                 "5. Install GPU drivers from NVIDIA (nvidia.com) or AMD (amd.com)",
                 "6. Install RGB software if your cooler/case/GPU supports it",
@@ -560,29 +574,14 @@ class GuideService:
         return story
 
     def _create_license_page(self, order: Order) -> list:
-        """Create Windows license key page."""
+        """Explain activation without disclosing the order's product key."""
         story = []
 
-        story.append(Paragraph("Windows License Key", self.styles['CustomHeading1']))
-        story.append(Spacer(1, 0.3*inch))
-
-        license_key = order.os_component.license_key if order.os_component else ""
-
-        # Format key for readability
-        if len(license_key) == 25:
-            formatted_key = f"{license_key[0:5]}-{license_key[5:10]}-{license_key[10:15]}-{license_key[15:20]}-{license_key[20:25]}"
-        else:
-            formatted_key = license_key
-
-        story.append(Spacer(1, 0.2*inch))
-        story.append(Paragraph(
-            f"<font size=22><b>{formatted_key}</b></font>",
-            ParagraphStyle('license', alignment=TA_CENTER, textColor=colors.HexColor('#d4af37'))
-        ))
+        story.append(Paragraph("Windows Activation", self.styles['CustomHeading1']))
         story.append(Spacer(1, 0.3*inch))
 
         story.append(Paragraph(
-            "Keep this key safe. You'll need it to activate Windows.",
+            "FlipFlop prepares Windows activation as part of your build. No product key is printed in this guide.",
             ParagraphStyle('normal', alignment=TA_CENTER, fontSize=10)
         ))
 
@@ -591,28 +590,15 @@ class GuideService:
 
         activation_steps = [
             "1. Go to Settings → System → Activation",
-            "2. Click 'Change Product Key'",
-            "3. Copy the license key above (without dashes) and paste it",
-            "4. Click 'Next' and follow the activation wizard",
-            "5. Once activated, you'll see 'Windows is activated' with a checkmark",
+            "1. Open Settings → System → Activation",
+            "2. Confirm that Windows shows as activated",
+            "3. If activation is incomplete, contact FlipFlop using the support details in your customer portal",
         ]
 
         for step in activation_steps:
             story.append(Paragraph(step, self.styles['BulletList']))
 
         story.append(Spacer(1, 0.2*inch))
-        story.append(Paragraph(
-            "💾 <b>Save this key in a secure location:</b> password manager, email draft, or physical backup.",
-            self.styles['Warning']
-        ))
-
-        story.append(Spacer(1, 0.2*inch))
-        story.append(Paragraph(
-            "This is a retail license key and can be transferred to another PC if needed. "
-            "Microsoft activation servers will validate the key automatically.",
-            self.styles['CustomBody']
-        ))
-
         return story
 
     def _create_troubleshooting(self, order: Order) -> list:

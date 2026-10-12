@@ -15,6 +15,7 @@ class OrderStatus(enum.Enum):
     READY_TO_SHIP = "ready_to_ship"
     SHIPPED = "shipped"
     COMPLETED = "completed"
+    CANCELLED = "cancelled"
 
 
 class Order(Base):
@@ -36,6 +37,13 @@ class Order(Base):
     # Stripe PaymentIntent id — the real idempotency/lookup key for payment
     # confirmation, replacing the old approach of grepping it out of `notes`.
     stripe_payment_intent_id = Column(String, nullable=True, index=True)
+    cancellation_requested_at = Column(DateTime, nullable=True)
+    cancellation_status = Column(String(32), nullable=True)
+    refund_id = Column(String(100), nullable=True)
+    cancelled_at = Column(DateTime, nullable=True)
+    # Current customer-requested build change and its approval/quote state.
+    # The request pauses sourcing until it is declined or fully implemented.
+    change_request = Column(JSON, nullable=True)
 
     # Nullable: real delivery estimation isn't computed yet at order-creation
     # time (payments.py / webhooks.py both used to pass None here, which

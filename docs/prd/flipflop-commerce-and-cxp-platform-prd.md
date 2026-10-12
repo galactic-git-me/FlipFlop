@@ -1,6 +1,8 @@
 # FlipFlopOS — Unified Commerce & Customer Experience Platform
 ## Implementation PRD (Extension to the Existing System)
 
+> **Documentation status (2026-09-29): Superseded platform proposal/reference.** Current strategy and lifecycle rules live under [`../product/`](../product/README.md); the current fulfilment sub-PRD is [`getting-ready-service-prd.md`](./getting-ready-service-prd.md). Retain this document for detailed design rationale, not as proof of implementation or published policy.
+
 **Document status:** Draft v1.0 — Engineering Source of Truth
 **Extends:** [`flipflop-master-prd.md`](./flipflop-master-prd.md) (as-built system) and supersedes/absorbs [`customer-experience-platform-prd.md`](./customer-experience-platform-prd.md) (prior CXP-only draft — its schema for Packaging Playbooks, Procurement, Documents, USB, Photography, 3D, Final QC and Cost Engine is retained and referenced here rather than repeated in full; this document adds the commerce architecture that sits above it)
 **Do not redesign:** Authentication, Dashboard, Marketplace Search, Auction Analysis, Component Catalogue, Inventory, Build Playbooks, MES, Build Tracking, Listing Generator, Customer Portal, Profit Calculator, Reporting & Analytics — all extended, none rebuilt.

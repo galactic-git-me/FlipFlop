@@ -1,10 +1,12 @@
 # FlipFlop Core Commerce & Intelligence Platform --- PRD vNext
 
-**Status:** Proposed architecture update\
+**Status:** Current strategic input; canonical operational rules live under [`../product/`](../product/README.md)\
 **Purpose:** Extend the existing FlipFlop platform. Existing inventory,
 catalogue, playbooks, builds, pricing, MES and customer data remain
 sources of truth; this PRD evolves curated builds from fixed BOMs into a
 dynamic Playbook-led service.
+
+**2026-09-29 decision update:** A Playbook segment is one customer/use-case × Budget/Mid-range/High-end cell. Curated-for-you and Ready-to-Ship candidates match the cell through equal-or-better benchmark tiers rather than exact CPU/GPU models. The three catalogue/tag rules, supplier ETA precedence, flip-component restrictions, and current delivery targets are canonical in [`../product/catalogues-playbooks-and-fulfilment.md`](../product/catalogues-playbooks-and-fulfilment.md). The Getting Ready workflow is specified separately in [`getting-ready-service-prd.md`](./getting-ready-service-prd.md).
 
 ## 1. Product thesis
 
@@ -94,7 +96,7 @@ Do not manufacture three options if only one is sensible.
 ### Priority / Fast Track
 
 **Customer target:** 3 working days for eligible made-to-order builds.\
-**Supplier pool:** Amazon + Overclockers UK only.\
+**Supplier pool:** listings supported by reliable rapid-arrival evidence; Amazon Prime may receive the rapid default.\
 **Default premium:** +£49, configurable.
 
 Show only when stock, delivery cutoffs, supplier confidence and workshop
@@ -104,7 +106,7 @@ build-queue priority**.
 ### Standard
 
 **Customer target:** 5 working days for eligible made-to-order builds.\
-**Supplier pool:** all approved retail suppliers.\
+**Supplier pool:** approved retail suppliers supported by listing ETA or the standard vendor default.\
 Optimise landed cost while maintaining quality and delivery confidence.
 
 ### Flexible
@@ -112,7 +114,8 @@ Optimise landed cost while maintaining quality and delivery confidence.
 **Customer promise:** no false fixed delivery date. Customer sees
 sourcing progress and an evolving estimated delivery range.\
 **Supplier pool:** all approved sources, including retail plus eBay,
-Vinted and Gumtree where integration/terms permit.
+Vinted and auctions where integration/terms permit. Flip-derived components
+are permitted only in Flexible customer builds and Ready-to-Ship stock.
 
 Condition policies: - `NEW_ONLY` - `NEW_OR_REFURBISHED` - `USED_ALLOWED`
 

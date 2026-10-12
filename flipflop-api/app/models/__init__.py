@@ -23,6 +23,7 @@ from app.models.market_ingestion import SourceRun, ListingRaw, ListingNormalized
 from app.models.source_search_term import SourceSearchTerm
 from app.models.listing_archive import ListingArchive
 from app.models.manual_build import ManualBuild
+from app.models.getting_started_job import GettingStartedJob
 from app.models.pc_builder import PCBuild, PCBuildPurchasePlan
 from app.models.benchmark import HardwareBenchmark, ComponentPerformanceMetric, BenchmarkRefreshRun
 from app.models.catalogue import PlaybookSlot, CatalogueVariant, CaseCatalogue
@@ -188,6 +189,14 @@ from .social_proof_event import SocialProofEvent
 from .customer_problem import CustomerProblem
 from .curated_promotion import CuratedPromotion
 from .curated_component_sku import CuratedComponentSKU, CuratedBuildAvailability, SKUSwapEvent
+from .customer_problem_notification import CustomerProblemNotification
+from .customer_problem_shipment import CustomerProblemShipment
+from .warranty import WarrantyReserve, WarrantyClaim
+from .shipment_tracking_event import ShipmentTrackingEvent
+from .portal_access_grant import PortalAccessGrant
+from .component_manual import ComponentManual
+from .order_checkout_snapshot import OrderCheckoutSnapshot
+from .ai_setup_purchase import AISetupPurchase
 
 __all__ = [
     "Customer",
@@ -231,6 +240,14 @@ __all__ = [
     "CuratedComponentSKU",
     "CuratedBuildAvailability",
     "SKUSwapEvent",
+    "CustomerProblemNotification",
+    "CustomerProblemShipment",
+    "WarrantyReserve", "WarrantyClaim",
+    "ShipmentTrackingEvent",
+    "PortalAccessGrant",
+    "ComponentManual",
+    "OrderCheckoutSnapshot",
+    "AISetupPurchase",
     "SupplierOfferEvidence", "PriceQuoteSnapshot", "WorkshopCapacityEvidence",
     "WorkshopCapacityReservation", "WorkshopCapacityReservationEvent",
 ]

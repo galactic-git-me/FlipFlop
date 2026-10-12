@@ -1,10 +1,10 @@
 # FlipFlopOS — Master Product Requirements Document (As-Built)
 
-**Document status:** Living document — reflects the actual current state of the codebase
-**Last synced to codebase:** 2026-07-01
+**Document status:** Historical as-built survey; superseded as the live product/status source
+**Last full codebase survey:** 2026-07-01
 **Scope:** `flipflop-api` (FastAPI backend), `flipflop-admin` (Next.js internal dashboard), `flipflop-storefront` (Next.js customer site)
 
-> This document describes what is **actually implemented** today, not a future roadmap. For proposed/future modules see [`customer-experience-platform-prd.md`](./customer-experience-platform-prd.md) (Customer Experience Platform — not yet built) and [`../superpowers/plans/2026-06-28-flipflop-made-to-order-prd.md`](../superpowers/plans/2026-06-28-flipflop-made-to-order-prd.md) (Made-to-Order flow). Update this document whenever a feature ships.
+> This document describes the codebase as surveyed on 2026-07-01 and contains stale implementation claims. For current product rules start at [`../product/README.md`](../product/README.md); for evidence-based delivery status use [`../product/implementation-status.md`](../product/implementation-status.md); for the current fulfilment sub-PRD use [`getting-ready-service-prd.md`](./getting-ready-service-prd.md).
 
 ---
 
@@ -282,12 +282,12 @@ System prompts inject live market context (current GPU/RAM/SSD prices, eBay fee 
 
 ## 12. Known Gaps / Not Yet Implemented
 
-These are referenced by other planning docs but confirmed **not present** in the current codebase as of this survey:
+These were confirmed **not present at the time of the 2026-07-01 survey**. Several now have partial implementations; consult the current status register before relying on this list:
 
 - No password-reset / forgot-password flow
-- No Customer Experience Platform module (Packaging Playbooks, Procurement, Photography/QC gates, USB Builder, per-order 3D asset publish) — full spec exists at [`customer-experience-platform-prd.md`](./customer-experience-platform-prd.md), zero implementation yet
+- No complete Customer Experience Platform module at the survey date. Getting Ready jobs, software selection, private dispatch evidence, insurance foundations, and portal summaries have since been partially implemented; full ZIP/USB/portal publication remains incomplete.
 - No AR viewer
-- No carrier/shipping-label API integration (tracking numbers are manually entered)
+- No carrier/shipping-label API integration at the survey date. Parcel2Go quote/booking foundations have since been added but are not yet a fully verified end-to-end dispatch/tracking experience.
 - No multi-warehouse/multi-currency procurement
 - No automated social-sharing/posting integration
 - Admin nav is a flat, ungrouped list (23 top-level items) not yet organized around any specific operator workflow — pending optimization

@@ -7,7 +7,7 @@ from uuid import uuid4
 import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
-from sqlalchemy import select, text
+from sqlalchemy import func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import get_settings
@@ -18,6 +18,7 @@ from app.models.listing import Listing
 from app.models.flip import Flip, FlipStage
 from app.models.benchmark import HardwareBenchmark
 from app.models.part import Part
+from app.models.playbook import Playbook
 from app.services.benchmark_normaliser import normalise_cpu, normalise_gpu
 from app.routes.admin_auth import get_current_admin
 
@@ -31,6 +32,24 @@ async def draft_playbook():
     if not path.exists():
         raise HTTPException(status_code=404, detail="Draft playbook file is unavailable")
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+@router.get("/definitions")
+async def curated_cell_definitions(db: AsyncSession = Depends(get_db)):
+    """Return the curated customer-type × budget cells for Ready-to-Ship assignment."""
+    from app.services.curated_build_policy import definitions
+
+    cells = definitions().get("builds", [])
+    names = {str(cell.get("segment") or "") for cell in cells}
+    playbooks = (await db.execute(select(Playbook).where(Playbook.name.in_(names)))).scalars().all()
+    playbooks_by_name = {playbook.name.casefold(): playbook for playbook in playbooks}
+    return {
+        "items": [
+            {**cell, "playbook_id": (playbooks_by_name.get(str(cell.get("segment") or "").casefold()).id
+                                      if playbooks_by_name.get(str(cell.get("segment") or "").casefold()) else None)}
+            for cell in cells
+        ]
+    }
 
 
 @router.get("/bestseller-catalogue")
@@ -125,6 +144,19 @@ async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depe
     """), {"category": body.category, "cpk": body.cpk})).scalar()
     if not exists:
         raise HTTPException(status_code=404, detail="Matched bestseller product not found")
+    invalidated_cells = 0
+    if body.status != "approved":
+        segments = (await db.execute(select(CuratedBuildSegment))).scalars().all()
+        for segment in segments:
+            pair = segment.approved_upgrades or []
+            if any(
+                item.get("popularity_evidence", {}).get("category") == body.category
+                and item.get("popularity_evidence", {}).get("cpk") == body.cpk
+                for item in pair if isinstance(item, dict)
+            ):
+                segment.approved_upgrades = []
+                segment.is_live = False
+                invalidated_cells += 1
     if body.status == "approved":
         has_image = (await db.execute(text("""
             SELECT EXISTS (
@@ -163,7 +195,7 @@ async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depe
             ON CONFLICT (category, cpk) DO UPDATE
             SET status = EXCLUDED.status, reviewed_at = EXCLUDED.reviewed_at
         """), {"category": body.category, "cpk": body.cpk, "status": body.status})
-    return {"category": body.category, "cpk": body.cpk, "review_status": body.status}
+    return {"category": body.category, "cpk": body.cpk, "review_status": body.status, "invalidated_cells": invalidated_cells}
 
 
 class SegmentInput(BaseModel):
@@ -172,6 +204,8 @@ class SegmentInput(BaseModel):
     budget_min: float | None = None
     budget_max: float | None = None
     components: dict[str, int] | None = None
+    software_profile: dict | None = None
+    approved_upgrades: list[dict] | None = None
     allow_flip_component_sources: bool | None = None
     selling_price: float | None = None
     is_live: bool | None = None
@@ -226,7 +260,7 @@ async def match_potential_flips_to_segment(
     for row in benchmark_rows:
         key = (row.component_type.casefold(), row.normalized_model)
         current = benchmark_index.get(key)
-        if current is None or row.confidence_score > current.confidence_score:
+        if current is None or (row.confidence_score or 0) > (current.confidence_score or 0):
             benchmark_index[key] = row
 
     use_case = (segment.customer_type or "").casefold()
@@ -259,7 +293,7 @@ async def match_potential_flips_to_segment(
             if category_key in {"cpu", "gpu", "graphics", "graphics_card"}:
                 upgrade_models["gpu" if category_key in {"graphics", "graphics_card"} else category_key] = part.model or part.name
             upgrade_component_names.append(part.name)
-        candidate_cost = (flip.current_estimated_resale or candidate.estimated_resale)
+        candidate_cost = (flip.listing_price or flip.current_estimated_resale or candidate.estimated_resale)
         if candidate_cost is None or segment.budget_min is None:
             checks.append({"slot": "budget", "status": "insufficient_evidence", "reason": "A resale estimate and segment budget range are required"})
         elif candidate_cost < segment.budget_min or (segment.budget_max is not None and candidate_cost >= segment.budget_max):
@@ -269,6 +303,8 @@ async def match_potential_flips_to_segment(
 
         for slot, kind in (("cpu", "cpu"), ("gpu", "gpu")):
             if slot not in selected:
+                if slot == "cpu":
+                    checks.append({"slot": slot, "status": "insufficient_evidence", "reason": "The playbook cell has no selected CPU baseline"})
                 continue
             target = targets.get(slot)
             target_model = ((target.cpu if kind == "cpu" else target.gpu) or target.title) if target else None
@@ -332,6 +368,8 @@ def _segment_json(segment: CuratedBuildSegment) -> dict:
         "budget_min": segment.budget_min,
         "budget_max": segment.budget_max,
         "components": segment.components or {},
+        "software_profile": segment.software_profile,
+        "approved_upgrades": segment.approved_upgrades or [],
         "bestseller_components": segment.bestseller_components or {},
         "allow_flip_component_sources": segment.allow_flip_component_sources,
         "selling_price": segment.selling_price,
@@ -342,6 +380,202 @@ def _segment_json(segment: CuratedBuildSegment) -> dict:
         "regeneration_request_id": segment.regeneration_request_id,
         "regeneration_error": segment.regeneration_error,
         "updated_at": segment.updated_at.isoformat() if segment.updated_at else None,
+    }
+
+
+async def _validate_approved_upgrades(
+    db: AsyncSession, customer_type: str, budget_level: str, upgrades: list[dict]
+) -> list[dict]:
+    """Bind a reviewed pair to draft candidates and approved market evidence."""
+    if not upgrades:
+        return []
+    if len(upgrades) != 2:
+        raise ValueError("Select exactly two customer upgrades for this Playbook cell")
+    draft_path = Path(__file__).resolve().parents[3] / "tmp" / "curated-playbooks-v1-stub.json"
+    if not draft_path.is_file():
+        raise ValueError("The source Playbook draft is unavailable")
+    draft = json.loads(draft_path.read_text(encoding="utf-8"))
+    cell = next((item for item in draft.get("playbooks", [])
+                 if str(item.get("customer_type", "")).casefold() == customer_type.casefold()
+                 and str(item.get("budget_tier", "")).casefold() == budget_level.casefold()), None)
+    if cell is None:
+        raise ValueError("No matching source Playbook cell exists")
+    candidates = cell.get("upsells", [])
+    selected: list[dict] = []
+    candidate_indexes: set[int] = set()
+    categories: set[str] = set()
+    playbook_id = (await db.execute(
+        select(Playbook.id).where(Playbook.name.ilike(customer_type))
+    )).scalar_one_or_none()
+    if playbook_id is None:
+        raise ValueError("The customer type does not have a Playbook catalogue")
+    for item in upgrades:
+        try:
+            index = int(item["candidate_index"])
+            saved_evidence = item.get("popularity_evidence") or {}
+            cpk = str(item.get("popularity_cpk") or saved_evidence.get("cpk") or "").strip()
+            evidence_category = str(item.get("evidence_category") or saved_evidence.get("category") or "").strip()
+            target_variant_id = int(item.get("target_variant_id") or (item.get("target_variant") or {}).get("id"))
+        except (KeyError, TypeError, ValueError) as exc:
+            raise ValueError("Each upgrade needs a candidate, approved bestseller match and curated catalogue component") from exc
+        if index < 0 or index >= len(candidates) or index in candidate_indexes:
+            raise ValueError("Selected upgrade does not identify a unique source candidate")
+        if not cpk:
+            raise ValueError("The popularity match must be identified")
+        candidate = candidates[index]
+        if item.get("to_sku") and (
+            item.get("to_sku") != candidate.get("to_sku")
+            or item.get("from_sku") != candidate.get("from_sku")
+            or item.get("category") != candidate.get("category")
+        ):
+            raise ValueError("The source Playbook candidate changed; review the selected pair again")
+        expected_category = {
+            "cpu / apu": "cpu", "motherboard": "motherboard", "memory": "ram",
+            "graphics": "gpu", "primary storage": "storage", "power supply": "psu",
+            "cpu cooling": "cooler",
+        }.get(str(candidate.get("category", "")).casefold())
+        if expected_category is None:
+            raise ValueError("Case upgrades are not supported by the component catalogue")
+        if evidence_category != expected_category:
+            raise ValueError("Bestseller evidence must be from the selected component category")
+        expected_slot = {"cpu": "cpu", "gpu": "gpu", "motherboard": "motherboard", "ram": "ram",
+                         "storage": "storage", "psu": "psu", "cooler": "cooling", "case": "case"}[expected_category]
+        target = (await db.execute(
+            select(CatalogueVariant, Listing, PlaybookSlot)
+            .join(Listing, Listing.id == CatalogueVariant.listing_id)
+            .join(PlaybookSlot, PlaybookSlot.id == CatalogueVariant.slot_id)
+            .where(
+                CatalogueVariant.id == target_variant_id,
+                CatalogueVariant.curated_for_builds.is_(True),
+                CatalogueVariant.status == "active",
+                Listing.status == "active",
+                PlaybookSlot.playbook_id == playbook_id,
+                PlaybookSlot.slot_type == expected_slot,
+            )
+        )).first()
+        if not target:
+            raise ValueError("Upgrade target must be active in this Playbook cell's curated catalogue")
+        target_variant, target_listing, target_slot = target
+        category_key = str(candidate.get("category", "")).casefold()
+        if category_key in categories:
+            raise ValueError("Choose upgrades for two different component categories")
+        categories.add(category_key)
+        evidence = (await db.execute(text("""
+            SELECT a.rank, a.price, a.title, a.url, a.captured_at
+            FROM amazon_bestseller_observations a
+            JOIN curated_bestseller_reviews r ON r.category = a.category
+                AND r.cpk = COALESCE(a.cpk, 'asin:' || a.asin)
+                AND r.status = 'approved'
+            WHERE a.category = :category
+              AND COALESCE(a.cpk, 'asin:' || a.asin) = :cpk
+            ORDER BY a.captured_at DESC LIMIT 1
+        """), {"category": evidence_category, "cpk": cpk})).mappings().first()
+        if not evidence or not evidence["rank"] or not evidence["price"] or evidence["price"] <= 0:
+            raise ValueError("Popularity evidence must be an approved bestseller with a rank and price")
+        normalize = lambda value: "".join(char.casefold() for char in str(value) if char.isalnum())
+        if normalize(candidate.get("to_sku", "")) not in normalize(evidence["title"]):
+            raise ValueError("Approved bestseller evidence does not identify the selected upgrade model")
+        if normalize(candidate.get("to_sku", "")) not in normalize(target_listing.title):
+            raise ValueError("Curated catalogue target does not identify the selected upgrade model")
+        performance_evidence = None
+        if expected_category in {"cpu", "gpu"}:
+            normalize_model = normalise_cpu if expected_category == "cpu" else normalise_gpu
+            benchmark_models = {
+                value for value in (
+                    normalize_model(str(candidate.get("from_sku") or "")),
+                    normalize_model(str(candidate.get("to_sku") or "")),
+                ) if value
+            }
+            benchmark_rows = (await db.execute(
+                select(HardwareBenchmark).where(
+                    HardwareBenchmark.component_type == expected_category,
+                    HardwareBenchmark.normalized_model.in_(benchmark_models),
+                )
+            )).scalars().all() if benchmark_models else []
+            performance_evidence = _upgrade_performance_evidence(
+                component_type=expected_category,
+                baseline_model=str(candidate.get("from_sku") or ""),
+                candidate_model=str(candidate.get("to_sku") or ""),
+                customer_type=customer_type,
+                benchmark_rows=benchmark_rows,
+            )
+        candidate_indexes.add(index)
+        selected.append({
+            "candidate_index": index,
+            "category": candidate["category"],
+            "from_sku": candidate["from_sku"],
+            "to_sku": candidate["to_sku"],
+            "delta_cost_gbp": float(candidate["delta_cost_gbp"]),
+            "slot_id": target_slot.id,
+            "target_variant_id": target_variant.id,
+            "target_title": target_listing.title,
+            "target_display_price": float(target_variant.display_price),
+            "performance_evidence": performance_evidence,
+            "popularity_evidence": {
+                "source": "approved_amazon_bestseller",
+                "category": evidence_category,
+                "cpk": cpk,
+                "rank": int(evidence["rank"]),
+                "observed_price_gbp": float(evidence["price"]),
+                "title": evidence["title"],
+                "url": evidence["url"],
+                "captured_at": evidence["captured_at"].isoformat() if evidence["captured_at"] else None,
+            },
+        })
+    return selected
+
+
+def _upgrade_performance_evidence(
+    *,
+    component_type: str,
+    baseline_model: str,
+    candidate_model: str,
+    customer_type: str,
+    benchmark_rows: list[HardwareBenchmark],
+) -> dict:
+    """Require benchmark-backed, equal-or-better CPU/GPU upgrades per cell."""
+    metric = (
+        "gaming_score" if "gaming" in customer_type.casefold()
+        else "workstation_score"
+        if any(word in customer_type.casefold() for word in ("workstation", "creator", "ai"))
+        else "overall_score"
+    )
+    normalize = normalise_cpu if component_type == "cpu" else normalise_gpu
+    baseline_key = normalize(baseline_model)
+    candidate_key = normalize(candidate_model)
+
+    def best_match(model_key: str) -> HardwareBenchmark | None:
+        matches = [
+            row for row in benchmark_rows
+            if row.component_type.casefold() == component_type
+            and row.normalized_model == model_key
+        ]
+        return max(matches, key=lambda row: row.confidence_score or 0, default=None)
+
+    baseline = best_match(baseline_key) if baseline_key else None
+    candidate = best_match(candidate_key) if candidate_key else None
+    if baseline is None or candidate is None:
+        raise ValueError(
+            f"Cannot approve this {component_type.upper()} upgrade: current benchmark evidence is missing for the baseline or proposed model"
+        )
+    baseline_score = getattr(baseline, metric, None) or baseline.overall_score
+    candidate_score = getattr(candidate, metric, None) or candidate.overall_score
+    if baseline_score is None or candidate_score is None:
+        raise ValueError(
+            f"Cannot approve this {component_type.upper()} upgrade: benchmark scores are missing for the baseline or proposed model"
+        )
+    if candidate_score < baseline_score:
+        raise ValueError(
+            f"The proposed {component_type.upper()} upgrade scores below this Playbook cell's baseline ({candidate_score:g} < {baseline_score:g})"
+        )
+    return {
+        "metric": metric,
+        "baseline_model": baseline.model,
+        "baseline_score": float(baseline_score),
+        "candidate_model": candidate.model,
+        "candidate_score": float(candidate_score),
+        "benchmark_source": candidate.benchmark_source,
+        "baseline_benchmark_source": baseline.benchmark_source,
     }
 
 
@@ -376,11 +610,23 @@ async def get_curated_builds(db: AsyncSession = Depends(get_db)):
         CuratedBuildSegment.customer_type, CuratedBuildSegment.budget_min,
         CuratedBuildSegment.budget_level,
     ))).scalars().all()
+    customer_types = {segment.customer_type for segment in segments}
+    playbooks = (await db.execute(select(Playbook).where(Playbook.name.in_(customer_types)))).scalars().all() if customer_types else []
+    playbooks_by_name = {playbook.name.casefold(): playbook for playbook in playbooks}
     ids = {int(value) for segment in segments for value in (segment.components or {}).values() if str(value).isdigit()}
     context = await _component_context(db, ids)
     payload = []
     for segment in segments:
         row = _segment_json(segment)
+        if segment.software_profile is None:
+            from app.services.software_catalogue import effective_software_profile_for_playbook
+            playbook = playbooks_by_name.get(segment.customer_type.casefold())
+            row["effective_software_profile"] = effective_software_profile_for_playbook(
+                segment.customer_type,
+                playbook.software_profile if playbook else None,
+            )
+        else:
+            row["effective_software_profile"] = segment.software_profile
         component_rows = {key: context.get(int(value)) for key, value in (segment.components or {}).items()}
         row["component_details"] = component_rows
         selected = [item for item in component_rows.values() if item]
@@ -391,8 +637,11 @@ async def get_curated_builds(db: AsyncSession = Depends(get_db)):
             if abs(delta) >= 0.01 and segment.proposed_selling_price is None:
                 row["proposed_selling_price"] = round(max(0, segment.selling_price + delta), 2)
         assigned_count = len(segment.components or {})
-        row["availability_status"] = "out_of_stock" if assigned_count == 0 or len(selected) != assigned_count or any(item["status"] != "active" for item in selected) else "in_stock"
-        if row["availability_status"] == "out_of_stock" and segment.is_live:
+        if assigned_count == 0:
+            row["availability_status"] = "not_configured"
+        else:
+            row["availability_status"] = "out_of_stock" if len(selected) != assigned_count or any(item["status"] != "active" for item in selected) else "in_stock"
+        if row["availability_status"] != "in_stock" and segment.is_live:
             segment.is_live = False
         payload.append(row)
     return {"segments": payload, "components": list((await _component_context(db, {
@@ -411,6 +660,14 @@ async def upsert_segment(body: SegmentInput, db: AsyncSession = Depends(get_db))
         raise HTTPException(status_code=422, detail="Minimum budget must be zero or greater")
     if body.budget_max is not None and (body.budget_min is None or body.budget_max <= body.budget_min):
         raise HTTPException(status_code=422, detail="Maximum budget must be greater than minimum budget")
+    # Curated-cell software profiles are consumed by Getting Ready package
+    # generation. Lock the owning Playbook before reading/upserting the cell
+    # so generation can serialize against both edits and first-time inserts.
+    (await db.execute(
+        select(Playbook.id)
+        .where(func.lower(func.trim(Playbook.name)) == body.customer_type.strip().casefold())
+        .with_for_update()
+    )).scalar_one_or_none()
     segment = (await db.execute(select(CuratedBuildSegment).where(
         CuratedBuildSegment.customer_type == body.customer_type,
         CuratedBuildSegment.budget_level == body.budget_level,
@@ -432,6 +689,24 @@ async def upsert_segment(body: SegmentInput, db: AsyncSession = Depends(get_db))
     segment.budget_max = body.budget_max
     if body.components is not None:
         segment.components = body.components
+    if "software_profile" in body.model_fields_set:
+        if body.software_profile is None:
+            segment.software_profile = None
+        else:
+            from app.services.software_catalogue import normalize_software_profile
+            try:
+                segment.software_profile = normalize_software_profile(body.software_profile)
+            except ValueError as exc:
+                raise HTTPException(status_code=422, detail=str(exc)) from exc
+    if "approved_upgrades" in body.model_fields_set:
+        if segment.is_live and not body.approved_upgrades:
+            raise HTTPException(status_code=409, detail="Unpublish this Playbook cell before removing its customer upgrade pair")
+        try:
+            segment.approved_upgrades = await _validate_approved_upgrades(
+                db, segment.customer_type, segment.budget_level, body.approved_upgrades or []
+            )
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
     if body.allow_flip_component_sources is not None:
         segment.allow_flip_component_sources = body.allow_flip_component_sources
     if body.selling_price is not None:
@@ -563,6 +838,8 @@ async def publish_segment(segment_id: int, body: dict, db: AsyncSession = Depend
         raise HTTPException(status_code=409, detail="Assign CPU, GPU, motherboard, RAM, storage, PSU and case before publishing")
     if segment.selling_price is None or segment.selling_price <= 0:
         raise HTTPException(status_code=409, detail="Set a valid selling price before publishing")
+    if len(segment.approved_upgrades or []) != 2:
+        raise HTTPException(status_code=409, detail="Select and save exactly two evidence-backed customer upgrades before publishing")
     ids = {int(value) for value in selected.values() if str(value).isdigit()}
     context = await _component_context(db, ids)
     if len(context) != len(ids) or any(not item["curated_for_builds"] or item["status"] != "active" for item in context.values()):

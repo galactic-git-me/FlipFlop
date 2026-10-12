@@ -78,11 +78,16 @@ class ManualBuild(Base):
     shipping_cost: Mapped[float] = mapped_column(Float, default=0.0)
     shipping_insurance_cost: Mapped[float] = mapped_column(Float, default=0.0)
     packaging_cost: Mapped[float] = mapped_column(Float, default=0.0)
-    warranty_reserve_pct: Mapped[float] = mapped_column(Float, default=3.0)
+    warranty_reserve_pct: Mapped[float] = mapped_column(Float, default=5.0)
     handling_time_days: Mapped[int] = mapped_column(Integer, default=1)  # 1-3 typical
     delivery_min_days: Mapped[int] = mapped_column(Integer, default=1)
     delivery_max_days: Mapped[int] = mapped_column(Integer, default=2)
     shipping_damage_cover_confirmed: Mapped[bool] = mapped_column(default=False)
+    shipping_insurance_policy_id: Mapped[str | None] = mapped_column(String(120))
+    shipping_insurance_invoice_id: Mapped[str | None] = mapped_column(String(120))
+    shipping_insurance_cost_gbp: Mapped[float | None] = mapped_column(Float)
+    shipping_insurance_status: Mapped[str] = mapped_column(String(40), default="not_created")
+    shipping_insurance_created_at: Mapped[datetime | None] = mapped_column(DateTime)
     ships_to_countries: Mapped[list] = mapped_column(JSON, default=lambda: ["GB"])  # ["GB", "EU", "WORLD"]
     domestic_only: Mapped[bool] = mapped_column(default=True)
     # Per-build override of which real eBay fulfillment policy (shipping
@@ -160,7 +165,15 @@ class ManualBuild(Base):
     # financial transaction, so this only happens on explicit user
     # confirmation, never automatically.
     parcel2go_order_id: Mapped[str | None] = mapped_column(String(100))
+    # Parcel2Go tracking callbacks use the shipment line reference, separate
+    # from the parent OrderId stored above.
+    parcel2go_order_line_id: Mapped[str | None] = mapped_column(String(100), index=True)
     parcel2go_service_slug: Mapped[str | None] = mapped_column(String(100))
+    # Durable guard around the two remote Parcel2Go calls. Ambiguous provider
+    # outcomes block retries until an operator reconciles the provider state.
+    shipment_booking_state: Mapped[str] = mapped_column(String(40), default="not_started", server_default="not_started")
+    shipment_booking_attempted_at: Mapped[datetime | None] = mapped_column(DateTime)
+    shipment_booking_error_code: Mapped[str | None] = mapped_column(String(80))
     tracking_number: Mapped[str | None] = mapped_column(String(100))
     shipping_label_url: Mapped[str | None] = mapped_column(String(500))
     shipment_booked_at: Mapped[datetime | None] = mapped_column(DateTime)

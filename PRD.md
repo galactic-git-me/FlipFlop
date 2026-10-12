@@ -1,5 +1,7 @@
 # PC FLIP PROFIT MAXIMIZER — PRD v6
 
+> **Documentation status (2026-09-29): Legacy implementation/reference PRD.** Current product strategy, customer policy, fulfilment rules, and implementation status are maintained under [`docs/product/`](./docs/product/README.md). Preserve this document for sourcing and flipping history; do not use it alone for customer-support answers.
+
 *A programmable, AI-powered PC flipping intelligence platform*
 
 Last updated: 2026-06-17

@@ -42,6 +42,26 @@ def test_workbook_definitions_preserve_all_builds_without_prices():
     assert all(set(b)=={'id','segment','tier','name','description','use','components'} for b in data['builds'])
 
 
+def test_curated_playbook_covers_each_canonical_segment_at_all_three_tiers():
+    expected_segments = {
+        "Great-value Gaming",
+        "High-performance Gaming",
+        "Student Hybrid",
+        "Business & Office",
+        "Content Creation",
+        "AI Workstation",
+        "Software Development",
+        "Family & Home",
+    }
+    expected_tiers = {"Budget", "Mid-range", "High-end"}
+    builds = definitions()["builds"]
+
+    assert {build["segment"] for build in builds} == expected_segments
+    assert len({(build["segment"], build["tier"]) for build in builds}) == 24
+    for segment in expected_segments:
+        assert {build["tier"] for build in builds if build["segment"] == segment} == expected_tiers
+
+
 def test_database_price_is_preserved():
     result=curated_slots([slot('cpu',variant(1,'AMD Ryzen 5 5600'))],{'components':{'cpu':'AMD Ryzen 5 5600'}})
     assert result[0]['variants_by_tier']['mid'][0]['display_price']==101

@@ -28,6 +28,20 @@ interface OrderDetail {
     tracking_number: string | null;
     carrier: string | null;
     estimated_delivery: string | null;
+    cancellation_requested_at: string | null;
+    cancellation_status: string | null;
+    refund_id: string | null;
+    cancelled_at: string | null;
+    benchmark_results: Record<string, unknown> | null;
+    change_request?: {
+      status: string;
+      request_text?: string;
+      requested_at?: string;
+      proposed_specs?: Record<string, unknown> | null;
+      proposed_customer_price?: number | null;
+      customer_message?: string | null;
+      internal_note?: string | null;
+    } | null;
   };
   checklist: {
     build: Array<{ item: string; completed: boolean; notes: string | null; updated_at: string | null }>;
@@ -70,6 +84,13 @@ export default function OrderDetailPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [updating, setUpdating] = useState(false);
+  const [benchmarkJson, setBenchmarkJson] = useState('');
+  const [benchmarkConfirmed, setBenchmarkConfirmed] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [changeSpecs, setChangeSpecs] = useState('');
+  const [changePrice, setChangePrice] = useState('');
+  const [changeMessage, setChangeMessage] = useState('');
+  const [changeInternalNote, setChangeInternalNote] = useState('');
 
   useEffect(() => {
     fetchOrder();
@@ -81,6 +102,11 @@ export default function OrderDetailPage() {
       const res = await fetch(`/api/admin/orders/${orderId}`);
       const data = await res.json();
       setOrder(data);
+      setBenchmarkJson(JSON.stringify(data.order?.benchmark_results ?? { test_date: '', test_setup: '', results: [] }, null, 2));
+      setChangeSpecs(JSON.stringify(data.order?.change_request?.proposed_specs ?? {}, null, 2));
+      setChangePrice(data.order?.change_request?.proposed_customer_price != null ? String(data.order.change_request.proposed_customer_price) : '');
+      setChangeMessage(data.order?.change_request?.customer_message ?? '');
+      setChangeInternalNote(data.order?.change_request?.internal_note ?? '');
     } catch (error) {
       console.error('Failed to fetch order:', error);
     } finally {
@@ -91,6 +117,7 @@ export default function OrderDetailPage() {
   const handleStatusChange = async (newStatus: string) => {
     if (!order) return;
     setUpdating(true);
+    setActionError(null);
     try {
       const res = await fetch(`/api/admin/orders/${order.order.id}`, {
         method: 'PATCH',
@@ -98,11 +125,76 @@ export default function OrderDetailPage() {
         body: JSON.stringify({ status: newStatus }),
       });
 
-      if (res.ok) {
-        await fetchOrder();
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.detail || `Could not update status (${res.status})`);
       }
+      await fetchOrder();
     } catch (error) {
-      console.error('Failed to update status:', error);
+      setActionError(error instanceof Error ? error.message : 'Failed to update status.');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const reviewBuildChange = async (action: 'quote' | 'reject') => {
+    if (!order) return;
+    setUpdating(true);
+    setActionError(null);
+    try {
+      if (changeMessage.trim().length < 12) throw new Error('Write a customer-facing explanation of at least 12 characters.');
+      let proposed_specs: Record<string, unknown> | undefined;
+      if (action === 'quote') {
+        const parsed = JSON.parse(changeSpecs);
+        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('Revised specification must be a JSON object.');
+        proposed_specs = parsed as Record<string, unknown>;
+        if (!changePrice || !Number.isFinite(Number(changePrice)) || Number(changePrice) <= 0) throw new Error('Enter a valid revised customer price.');
+      }
+      const response = await fetch(`/api/admin/orders/${order.order.id}/change-request`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, proposed_specs, proposed_customer_price: action === 'quote' ? Number(changePrice) : undefined, customer_message: changeMessage, internal_note: changeInternalNote }),
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.detail || `Could not ${action} this request.`);
+      await fetchOrder();
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : 'Could not review this request.');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const saveBenchmarkEvidence = async () => {
+    if (!order || !benchmarkConfirmed) return;
+    setUpdating(true);
+    setActionError(null);
+    try {
+      const benchmark_results = JSON.parse(benchmarkJson);
+      const res = await fetch(`/api/admin/orders/${order.order.id}/build-evidence`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ benchmark_results, confirm_measured_results: true }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.detail || `Could not save build evidence (${res.status})`);
+      setBenchmarkConfirmed(false);
+      await fetchOrder();
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : 'Enter valid benchmark JSON and try again.');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const reconcileRefund = async () => {
+    if (!order) return;
+    setUpdating(true);
+    try {
+      const res = await fetch(`/api/admin/orders/${order.order.id}/refund/reconcile`, { method: 'POST' });
+      if (res.ok) await fetchOrder();
+    } catch (error) {
+      console.error('Failed to reconcile refund:', error);
     } finally {
       setUpdating(false);
     }
@@ -179,6 +271,7 @@ export default function OrderDetailPage() {
       </div>
 
       <div className={styles.content}>
+        {actionError && <div role="alert" className={styles.alert}>{actionError}</div>}
         {activeTab === 'overview' && (
           <div className={styles.section}>
             <h2>Order Overview</h2>
@@ -196,7 +289,7 @@ export default function OrderDetailPage() {
                 <select
                   value={o.status}
                   onChange={(e) => handleStatusChange(e.target.value)}
-                  disabled={updating}
+                  disabled={updating || !!o.cancellation_requested_at || o.status === 'cancelled'}
                   className={styles.select}
                 >
                   <option value="awaiting_sourcing">Awaiting Sourcing</option>
@@ -204,7 +297,6 @@ export default function OrderDetailPage() {
                   <option value="building">Building</option>
                   <option value="qa">QA</option>
                   <option value="ready_to_ship">Ready to Ship</option>
-                  <option value="shipped">Shipped</option>
                   <option value="completed">Completed</option>
                 </select>
               </div>
@@ -221,6 +313,70 @@ export default function OrderDetailPage() {
                 <p>{o.actual_delivery_date ? new Date(o.actual_delivery_date).toLocaleDateString() : 'Not yet'}</p>
               </div>
             </div>
+
+            {o.cancellation_requested_at && (
+              <div className={styles.alert}>
+                <strong>Cancellation / refund: {o.cancellation_status || 'pending'}</strong>
+                <p>Requested {new Date(o.cancellation_requested_at).toLocaleString()}</p>
+                {o.refund_id && <p>Provider refund: {o.refund_id}</p>}
+                {o.cancelled_at && <p>Cancelled {new Date(o.cancelled_at).toLocaleString()}</p>}
+                {o.refund_id && o.status !== 'cancelled' && (
+                  <button onClick={reconcileRefund} disabled={updating} className={styles.button}>
+                    Recheck existing refund
+                  </button>
+                )}
+                {!o.refund_id && <p>No provider refund ID is recorded. Check Stripe before taking any manual action.</p>}
+              </div>
+            )}
+
+            {o.change_request && <div className={styles.alert}>
+              <strong>Customer build-change request: {o.change_request.status.replace(/_/g, ' ')}</strong>
+              {o.change_request.requested_at && <p>Received {new Date(o.change_request.requested_at).toLocaleString()}</p>}
+              {o.change_request.request_text && <p className={styles.sectionHint}>{o.change_request.request_text}</p>}
+              {o.change_request.status === 'requested' && <div className={styles.section}>
+                <label className={styles.gridItem}>Revised specification JSON
+                  <textarea value={changeSpecs} onChange={event => setChangeSpecs(event.target.value)} rows={8} spellCheck={false} className={styles.textarea} aria-label="Revised specification JSON" />
+                </label>
+                <label className={styles.gridItem}>Revised total price (£)
+                  <input type="number" min="0.01" step="0.01" value={changePrice} onChange={event => setChangePrice(event.target.value)} className={styles.textarea} />
+                </label>
+                <label className={styles.gridItem}>Message to customer
+                  <textarea value={changeMessage} onChange={event => setChangeMessage(event.target.value)} rows={3} className={styles.textarea} />
+                </label>
+                <label className={styles.gridItem}>Internal review note
+                  <textarea value={changeInternalNote} onChange={event => setChangeInternalNote(event.target.value)} rows={2} className={styles.textarea} />
+                </label>
+                <p className={styles.sectionHint}>Quoting pauses sourcing. This records a proposal only; it does not update the paid order or settle a price difference.</p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  <button type="button" onClick={() => void reviewBuildChange('quote')} disabled={updating} className={styles.button}>Prepare customer quote</button>
+                  <button type="button" onClick={() => void reviewBuildChange('reject')} disabled={updating} className={styles.button}>Decline request</button>
+                </div>
+              </div>}
+              {o.change_request.customer_message && <p>{o.change_request.customer_message}</p>}
+              {o.change_request.proposed_customer_price != null && <p>Proposed customer total: £{o.change_request.proposed_customer_price.toFixed(2)}</p>}
+            </div>}
+
+            {['building', 'qa', 'ready_to_ship'].includes(o.status) && (
+              <div className={styles.alert}>
+                <strong>Measured build benchmarks</strong>
+                <p>Enter results measured on this physical build. Include the test date, test setup, and results; these are required before the order can enter Ready to Ship.</p>
+                <textarea
+                  value={benchmarkJson}
+                  onChange={(event) => { setBenchmarkJson(event.target.value); setBenchmarkConfirmed(false); }}
+                  rows={10}
+                  spellCheck={false}
+                  aria-label="Measured benchmark results as JSON"
+                  className={styles.textarea}
+                />
+                <label className={styles.checkboxLabel}>
+                  <input type="checkbox" checked={benchmarkConfirmed} onChange={(event) => setBenchmarkConfirmed(event.target.checked)} />
+                  I confirm these results were measured on this build.
+                </label>
+                <button onClick={saveBenchmarkEvidence} disabled={updating || !benchmarkConfirmed} className={styles.button}>
+                  {updating ? 'Saving…' : 'Save measured results'}
+                </button>
+              </div>
+            )}
 
             <div className={styles.timeline}>
               <h3>Order Timeline</h3>
@@ -261,7 +417,7 @@ export default function OrderDetailPage() {
               <div className={styles.alert}>
                 <button
                   onClick={() => handleStatusChange('parts_ordered')}
-                  disabled={updating}
+                  disabled={updating || !!o.cancellation_requested_at || o.status === 'cancelled'}
                   className={styles.button}
                 >
                   Approve Sourcing & Start Building
@@ -410,15 +566,7 @@ export default function OrderDetailPage() {
               <p className={styles.noData}>Shipping info not yet added</p>
             )}
 
-            {!o.delivered_at && o.tracking_number && (
-              <button
-                onClick={() => handleStatusChange('shipped')}
-                disabled={updating}
-                className={styles.button + ' ' + styles.primary}
-              >
-                Mark as Shipped
-              </button>
-            )}
+            {!o.delivered_at && !o.shipped_at && <p className={styles.sectionHint}>Record physical handover in Dispatch Centre after courier, insurance, and evidence checks are complete.</p>}
           </div>
         )}
       </div>

@@ -11,15 +11,21 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
 from typing import Optional
 from pydantic import BaseModel
+import json
 
 from app.database import get_db
 from app.models.order import Order, OrderStatus
+from app.models.build import Build, BuildStatus, BuildType
+from app.models.manual_build import ManualBuild
+from app.models.getting_started_job import GettingStartedJob
 from app.models.order_checklist import OrderChecklist
 from app.models.order_photo import OrderPhoto
 from app.models.customer import Customer
+from app.models.shipment_tracking_event import ShipmentTrackingEvent
 from app.models.product import Product, ProductType
 from app.routes.admin_auth import get_current_admin
 from app.services.email_service import send_shipment_update_email, send_order_status_email
+from app.services.warranty_service import ensure_order_reserve_sync
 
 router = APIRouter(prefix="/api/admin", tags=["admin"], dependencies=[Depends(get_current_admin)])
 
@@ -83,6 +89,12 @@ class OrderDetailResponse(BaseModel):
     tracking_number: Optional[str]
     carrier: Optional[str]
     estimated_delivery: Optional[datetime]
+    cancellation_requested_at: Optional[datetime] = None
+    cancellation_status: Optional[str] = None
+    refund_id: Optional[str] = None
+    cancelled_at: Optional[datetime] = None
+    benchmark_results: Optional[dict] = None
+    change_request: Optional[dict] = None
 
     class Config:
         from_attributes = True
@@ -104,6 +116,162 @@ class OrderListResponse(BaseModel):
 class OrderStatusUpdateRequest(BaseModel):
     status: str  # 'awaiting_sourcing', 'parts_ordered', 'building', 'qa', 'ready_to_ship', 'shipped', 'completed'
     notes: Optional[str] = None
+
+
+class OrderBenchmarkEvidenceUpdate(BaseModel):
+    benchmark_results: dict
+    confirm_measured_results: bool
+
+
+def _ensure_order_dispatch_build(db: Session, order: Order, admin) -> ManualBuild:
+    """Attach an order-owned preparation job to the shared physical dispatch workflow."""
+    specs = dict(order.specs or {})
+    benchmark_results = specs.get("benchmark_results")
+    review = specs.get("benchmark_evidence_review")
+    if (
+        not isinstance(benchmark_results, dict)
+        or not benchmark_results
+        or not isinstance(review, dict)
+        or review.get("confirmed_measured_results") is not True
+    ):
+        raise HTTPException(409, "Record the completed build's measured benchmark results before moving it to Ready to Ship")
+    raw_slots = specs.get("slots")
+    if not isinstance(raw_slots, list) or not raw_slots:
+        raise HTTPException(409, "This order has no persisted component specification. Restore and verify the exact built components before dispatch preparation")
+    if not specs.get("case_id") or not specs.get("case_name"):
+        raise HTTPException(409, "This order has no verified case in its paid specification. Record the exact built case before dispatch preparation")
+
+    component_rows = []
+    for slot in raw_slots:
+        if not isinstance(slot, dict) or not slot.get("title") or not slot.get("slot_type"):
+            raise HTTPException(409, "The order component specification is incomplete; verify each component before dispatch preparation")
+        component_rows.append({
+            "slot": str(slot["slot_type"]),
+            "name": str(slot["title"]),
+            "variant_id": slot.get("variant_id"),
+            "source": "paid_order_specification",
+            "purchased": True,
+        })
+    delivery_address = dict(specs.get("delivery_address") or {})
+    if delivery_address.get("full_name") and not delivery_address.get("contact_name"):
+        delivery_address["contact_name"] = delivery_address["full_name"]
+    if delivery_address.get("line1") and not delivery_address.get("address_line1"):
+        delivery_address["address_line1"] = delivery_address["line1"]
+    if delivery_address.get("line2") and not delivery_address.get("address_line2"):
+        delivery_address["address_line2"] = delivery_address["line2"]
+    if delivery_address.get("postcode") and not delivery_address.get("postal_code"):
+        delivery_address["postal_code"] = delivery_address["postcode"]
+    if delivery_address.get("country") and not delivery_address.get("country_code"):
+        delivery_address["country_code"] = delivery_address["country"]
+    if order.customer and order.customer.phone and not delivery_address.get("phone"):
+        delivery_address["phone"] = order.customer.phone
+    if specs.get("case_name"):
+        component_rows.append({
+            "slot": "PC Case",
+            "name": str(specs["case_name"]),
+            "variant_id": specs.get("case_id"),
+            "source": "paid_order_specification",
+            "purchased": True,
+        })
+
+    orchestration = db.query(Build).filter(Build.order_id == order.id).with_for_update().first()
+    manual_build = db.query(ManualBuild).filter(ManualBuild.id == orchestration.manual_build_id).with_for_update().first() if orchestration and orchestration.manual_build_id else None
+    if not manual_build:
+        from app.models.playbook import Playbook
+        playbook = db.query(Playbook).filter(Playbook.id == order.playbook_id).first() if order.playbook_id else None
+        build_name = str(specs.get("build_name") or (f"{playbook.name} PC" if playbook else order.order_id))[:300]
+        manual_build = ManualBuild(
+            name=build_name,
+            components=component_rows,
+            total_cost=float(order.component_costs or 0),
+            status="sold",
+            customer_id=order.customer_id,
+            customer_email=order.customer.email if order.customer else None,
+            buyer_name=order.customer.name if order.customer else None,
+            buyer_address_json=delivery_address or None,
+            sale_price_actual=float(order.customer_price or 0),
+            evidence_data={
+                "fulfilment_type": specs.get("fulfilment_type", "made_by_you"),
+                "order_id": order.id,
+                "benchmark_results": benchmark_results,
+                "playbook_assignment": {
+                    "playbook_id": order.playbook_id,
+                    "software_profile": specs.get("software_profile"),
+                    "curated_build_id": specs.get("curated_build_id"),
+                    "cell_name": specs.get("playbook_cell"),
+                },
+            },
+        )
+        db.add(manual_build)
+        db.flush()
+    else:
+        manual_build.name = str(specs.get("build_name") or manual_build.name)[:300]
+        manual_build.components = component_rows
+        manual_build.total_cost = float(order.component_costs or 0)
+        manual_build.status = "sold"
+        manual_build.customer_id = order.customer_id
+        manual_build.customer_email = order.customer.email if order.customer else manual_build.customer_email
+        manual_build.buyer_name = order.customer.name if order.customer else manual_build.buyer_name
+        manual_build.buyer_address_json = delivery_address or manual_build.buyer_address_json
+        manual_build.sale_price_actual = float(order.customer_price or 0)
+        manual_build.evidence_data = {
+            **(manual_build.evidence_data or {}),
+            "fulfilment_type": specs.get("fulfilment_type", "made_by_you"),
+            "order_id": order.id,
+            "benchmark_results": benchmark_results,
+            "playbook_assignment": {
+                "playbook_id": order.playbook_id,
+                "software_profile": specs.get("software_profile"),
+                "curated_build_id": specs.get("curated_build_id"),
+                "cell_name": specs.get("playbook_cell"),
+            },
+        }
+
+    if orchestration is None:
+        orchestration = Build(
+            build_type=BuildType.MADE_TO_ORDER,
+            order_id=order.id,
+            manual_build_id=manual_build.id,
+            playbook_id=order.playbook_id,
+            spec_json={"components": component_rows, "benchmark_results": benchmark_results},
+            status=BuildStatus.FINALISED,
+        )
+        db.add(orchestration)
+    else:
+        orchestration.manual_build_id = manual_build.id
+        orchestration.playbook_id = orchestration.playbook_id or order.playbook_id
+        orchestration.spec_json = {"components": component_rows, "benchmark_results": benchmark_results}
+        orchestration.status = BuildStatus.FINALISED
+
+    job = db.query(GettingStartedJob).filter(GettingStartedJob.order_id == order.id).with_for_update().first()
+    if job and job.manual_build_id not in (None, manual_build.id):
+        raise HTTPException(409, "This order's Getting Ready job is already linked to another physical build")
+    if job:
+        job.manual_build_id = manual_build.id
+        job.status = "awaiting_admin_review"
+        job.checklist = {**(job.checklist or {}), "benchmark_results_recorded": True}
+        job.updated_at = datetime.utcnow()
+    else:
+        from app.services.getting_started_jobs import DEFAULT_CHECKLIST, normalize_source_type
+        selections = specs.get("software_package_ids") or []
+        initial_checklist = {
+            **DEFAULT_CHECKLIST,
+            "components_ordered": True,
+            "software_selection_submitted": isinstance(selections, list),
+            "benchmark_results_recorded": True,
+        }
+        db.add(GettingStartedJob(
+            order_id=order.id,
+            manual_build_id=manual_build.id,
+            customer_id=order.customer_id,
+            playbook_id=order.playbook_id,
+            source_type=normalize_source_type(str(specs.get("fulfilment_type") or "made_by_you")),
+            status="awaiting_admin_review",
+            checklist=initial_checklist,
+            customer_software_selections=[value for value in selections if isinstance(value, str)],
+        ))
+    manual_build.evidence_data = {**(manual_build.evidence_data or {}), "benchmark_verified_by": getattr(admin, "email", None) or "admin", "benchmark_verified_at": datetime.utcnow().isoformat()}
+    return manual_build
 
 
 class ChecklistUpdateRequest(BaseModel):
@@ -140,7 +308,10 @@ async def list_order_priority(
         Product.sold_order_id == Order.id,
         Product.product_type == ProductType.PREBUILT,
     ).exists()
-    criteria = [Order.status.notin_((OrderStatus.SHIPPED, OrderStatus.COMPLETED))]
+    criteria = [
+        Order.status.notin_((OrderStatus.SHIPPED, OrderStatus.COMPLETED, OrderStatus.CANCELLED)),
+        Order.cancellation_requested_at.is_(None),
+    ]
     if status:
         try:
             criteria.append(Order.status == OrderStatus(status))
@@ -331,7 +502,13 @@ async def get_order_detail(order_id: int, db: Session = Depends(get_db)):
         delivered_at=order.delivered_at,
         tracking_number=order.tracking_number,
         carrier=order.carrier,
-        estimated_delivery=order.estimated_delivery
+        estimated_delivery=order.estimated_delivery,
+        cancellation_requested_at=order.cancellation_requested_at,
+        cancellation_status=order.cancellation_status,
+        refund_id=order.refund_id,
+        cancelled_at=order.cancelled_at,
+        benchmark_results=(order.specs or {}).get("benchmark_results"),
+        change_request=order.change_request if isinstance(order.change_request, dict) else None,
     )
 
     return {
@@ -366,15 +543,56 @@ async def get_order_detail(order_id: int, db: Session = Depends(get_db)):
     }
 
 
+@router.put("/orders/{order_id}/build-evidence")
+def save_order_benchmark_evidence(
+    order_id: int,
+    body: OrderBenchmarkEvidenceUpdate,
+    admin=Depends(get_current_admin),
+    db: Session = Depends(get_db),
+):
+    if not body.confirm_measured_results:
+        raise HTTPException(409, "Confirm these are measured results from this physical build")
+    results = body.benchmark_results
+    if not isinstance(results, dict) or not results.get("test_date") or not results.get("test_setup") or not results.get("results"):
+        raise HTTPException(422, "Include test_date, test_setup, and measured results")
+    try:
+        encoded = json.dumps(results, ensure_ascii=False, allow_nan=False)
+    except (TypeError, ValueError) as error:
+        raise HTTPException(422, "Benchmark results must be valid JSON values") from error
+    if len(encoded.encode("utf-8")) > 64 * 1024:
+        raise HTTPException(413, "Benchmark evidence must be no larger than 64 KB")
+
+    order = db.query(Order).filter(Order.id == order_id).with_for_update().first()
+    if not order:
+        raise HTTPException(404, "Order not found")
+    if order.status in {OrderStatus.SHIPPED, OrderStatus.COMPLETED, OrderStatus.CANCELLED}:
+        raise HTTPException(409, "Build evidence is locked after dispatch or cancellation")
+    specs = dict(order.specs or {})
+    specs["benchmark_results"] = results
+    specs["benchmark_evidence_review"] = {
+        "confirmed_measured_results": True,
+        "reviewed_by": getattr(admin, "email", None) or "admin",
+        "recorded_at": datetime.utcnow().isoformat(),
+    }
+    order.specs = specs
+    order.updated_at = datetime.utcnow()
+    db.commit()
+    return {"success": True, "order_id": order.id, "benchmark_results": results}
+
+
 @router.patch("/orders/{order_id}")
 async def update_order_status(
     order_id: int,
     update: OrderStatusUpdateRequest,
     background_tasks: BackgroundTasks,
+    admin=Depends(get_current_admin),
     db: Session = Depends(get_db)
 ):
     """Update order status and set relevant timing fields."""
-    order = db.query(Order).filter(Order.id == order_id).first()
+    # Serialize sourcing milestones with customer cancellation. The customer
+    # cancellation endpoint locks this same row before recording its sourcing
+    # hold, so only one transition can pass its eligibility check at a time.
+    order = db.query(Order).filter(Order.id == order_id).with_for_update().first()
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
 
@@ -387,7 +605,39 @@ async def update_order_status(
     except KeyError:
         raise HTTPException(status_code=400, detail=f"Invalid status: {update.status}")
 
+    if new_status == OrderStatus.CANCELLED:
+        raise HTTPException(status_code=409, detail="Use the owner-verified cancellation and refund action; do not change cancellation status manually")
+    if order.status == OrderStatus.CANCELLED or order.cancellation_requested_at:
+        raise HTTPException(status_code=409, detail="This order is cancelled or has a refund pending reconciliation")
+    change_request_status = (order.change_request or {}).get("status") if isinstance(order.change_request, dict) else None
+    if change_request_status in {"requested", "quote_ready", "customer_approved"} and new_status != OrderStatus.AWAITING_SOURCING:
+        raise HTTPException(status_code=409, detail="Sourcing is paused while the customer build-change request is open")
+    if new_status == OrderStatus.SHIPPED:
+        raise HTTPException(status_code=409, detail="Use Dispatch Centre's booked-shipment handover action after evidence and insurance checks")
+
+    if new_status == OrderStatus.READY_TO_SHIP:
+        fulfilment_type = str((order.specs or {}).get("fulfilment_type") or "").lower().replace("-", "_")
+        if fulfilment_type in {"curated", "curated_for_you", "custom", "made_by_you"} and order.status != OrderStatus.QA:
+            raise HTTPException(409, "Curated and Made-by-you builds must complete QA before moving to Ready to Ship")
+        _ensure_order_dispatch_build(db, order, admin)
+
     order.status = new_status
+    if new_status in {
+        OrderStatus.PARTS_ORDERED,
+        OrderStatus.BUILDING,
+        OrderStatus.QA,
+        OrderStatus.READY_TO_PACKAGE,
+        OrderStatus.PACKAGING_IN_PROGRESS,
+        OrderStatus.READY_TO_SHIP,
+        OrderStatus.SHIPPED,
+        OrderStatus.COMPLETED,
+    }:
+        getting_started_job = db.query(GettingStartedJob).filter(GettingStartedJob.order_id == order.id).first()
+        if getting_started_job:
+            getting_started_job.checklist = {
+                **(getting_started_job.checklist or {}),
+                "components_ordered": True,
+            }
     if update.notes:
         order.notes = update.notes
 
@@ -409,10 +659,31 @@ async def update_order_status(
 
     elif new_status == OrderStatus.SHIPPED:
         order.shipped_at = order.shipped_at or now
+        if not db.query(ShipmentTrackingEvent).filter(ShipmentTrackingEvent.provider_event_id == f"admin-dispatch:{order.id}").first():
+            db.add(ShipmentTrackingEvent(
+                order_id=order.id,
+                provider=order.carrier or "operator",
+                provider_event_id=f"admin-dispatch:{order.id}",
+                status_code="dispatched",
+                description="Your order has been handed to the courier.",
+                material=True,
+                occurred_at=order.shipped_at,
+            ))
 
     elif new_status == OrderStatus.COMPLETED:
-        order.delivered_at = now
-        order.actual_delivery_date = now
+        order.delivered_at = order.delivered_at or now
+        order.actual_delivery_date = order.actual_delivery_date or order.delivered_at
+        ensure_order_reserve_sync(db, order, order.delivered_at)
+        if not db.query(ShipmentTrackingEvent).filter(ShipmentTrackingEvent.provider_event_id == f"admin-delivered:{order.id}").first():
+            db.add(ShipmentTrackingEvent(
+                order_id=order.id,
+                provider=order.carrier or "operator",
+                provider_event_id=f"admin-delivered:{order.id}",
+                status_code="delivered",
+                description="Your courier delivery has been recorded as delivered.",
+                material=True,
+                occurred_at=order.delivered_at,
+            ))
 
     db.commit()
     db.refresh(order)
@@ -528,7 +799,8 @@ async def get_metrics(db: Session = Depends(get_db)):
             OrderStatus.QA,
             OrderStatus.READY_TO_SHIP,
             OrderStatus.SHIPPED
-        ])
+        ]),
+        Order.cancellation_requested_at.is_(None),
     ).scalar() or 0
 
     # Orders by status
@@ -556,7 +828,8 @@ async def get_metrics(db: Session = Depends(get_db)):
     cutoff = datetime.utcnow() - timedelta(days=14)
     late_count = db.query(func.count(Order.id)).filter(
         Order.created_at <= cutoff,
-        Order.status != OrderStatus.COMPLETED
+        Order.status.notin_((OrderStatus.COMPLETED, OrderStatus.CANCELLED)),
+        Order.cancellation_requested_at.is_(None),
     ).scalar() or 0
 
     # Average customer rating (delivered orders with ratings)

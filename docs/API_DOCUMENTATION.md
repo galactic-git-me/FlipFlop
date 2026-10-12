@@ -1,10 +1,44 @@
-# FlipFlop API Documentation
+@'@'@'@@@@# FlipFlop API Documentation
 
 ## Base URL
 
 ```
 https://api.flipflop.example.com
 ```
+
+## Public customer support assistant
+
+### POST /api/public/support/chat
+
+Answer general customer questions from the approved support knowledge base and the labelled customer-safe Software Playbook section. This endpoint does not access customer accounts, orders, tracking, payments or warranty cases. Order-specific information belongs in the authenticated customer portal.
+
+**Request:**
+
+```json
+{
+  "message": "Are the recommended software apps required?",
+  "history": [
+    { "role": "user", "content": "I am choosing a new PC." },
+    { "role": "assistant", "content": "What will you use it for?" }
+  ]
+}
+```
+
+The message is limited to 1,600 characters; history is limited to eight user/assistant messages of at most 1,200 characters each.
+
+**Response (200):**
+
+```json
+{
+  "answer": "The recommended apps are optional. You can add or remove approved apps before your software choices lock.",
+  "sources": [
+    { "name": "FlipFlop first-line support knowledge base", "version": "1.4", "reviewed_at": "2026-09-29", "section": "Approved customer support guidance" },
+    { "name": "FlipFlop Software Playbook", "version": "1.1", "reviewed_at": "2026-09-29", "section": "Customer-safe software recommendations" }
+  ]
+}
+```
+
+**Errors:** `422` for invalid input; `503` if the approved sources or configured LLM are unavailable.
 
 ## Authentication
 
@@ -382,9 +416,16 @@ Get order details.
 
 ---
 
-### GET /orders/{order_id}/welcome-guide
+### Welcome Guide — `/api/guides/orders/{order_id}`
 
-Download welcome guide PDF.
+Guide generation (`POST .../generate`), download (`GET .../download`) and status (`GET .../status`) require a Bearer token. Account tokens must belong to the order's customer; guest portal tokens are limited to their granted order. Guest tokens can read/download an existing guide but cannot regenerate it. Downloads are private/no-store. Legacy guide PDFs are regenerated before serving so an older PDF cannot disclose a Windows product key.
+
+Example download:
+
+```http
+GET /api/guides/orders/{order_id}/download
+Authorization: Bearer <customer-or-order-scoped-guest-token>
+```
 
 **Response (200):**
 
@@ -393,9 +434,10 @@ Download welcome guide PDF.
 
 **Errors:**
 
-- `401`: Unauthorized
-- `404`: Order not found
-- `503`: PDF generation failed
+- `401`: Missing or invalid access token
+- `403`: Guest token attempted document regeneration
+- `404`: Order does not belong to the account, guide not found, or guide unavailable
+- `500`: PDF generation failed
 
 ---
 
@@ -744,7 +786,7 @@ curl -X POST https://api.flipflop.example.com/orders/create \
   }'
 
 # 4. Get Welcome Guide
-curl -X GET https://api.flipflop.example.com/orders/1/welcome-guide \
+curl -X GET https://api.flipflop.example.com/api/guides/orders/1/download \
   -H "Authorization: Bearer $TOKEN" \
   --output welcome-guide.pdf
 ```

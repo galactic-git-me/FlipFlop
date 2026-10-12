@@ -72,6 +72,12 @@ Once all servers are running, access them at:
 ✅ Supports selective server startup  
 ✅ Uses hot reload for API and frontend development
 ✅ Routes DEV AI requests through Ollama priority port 11435
+✅ Loads the configured Ollama model at startup and keeps it resident until Ollama stops
+
+The warm-up uses a one-token request with Ollama's `keep_alive: -1`. This avoids
+first-request model-load delays and keeps the model's memory allocated while
+the Ollama service is running. If warm-up fails, startup continues and the API
+can use its configured cloud fallback.
 
 ## Logs
 

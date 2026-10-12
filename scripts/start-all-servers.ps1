@@ -87,9 +87,18 @@ function Ensure-OllamaPriorityGateway {
 
     $requiredPorts = @(11433, 11434, 11435, 11436)
     $missingPorts = @($requiredPorts | Where-Object { -not (Test-ListeningPort $_) })
-    if ($missingPorts.Count -gt 0) {
-        Write-Host "[*] Starting Ollama and its priority gateway (missing ports: $($missingPorts -join ', '))..." -ForegroundColor Cyan
-        & (Join-Path $projectRoot 'services\ollama-priority-gateway\start-prometheus-services.ps1')
+    $needsRestart = $missingPorts.Count -gt 0
+    if (-not $needsRestart) {
+        try {
+            $health = Invoke-RestMethod -Uri 'http://127.0.0.1:11435/health' -TimeoutSec 3
+            $needsRestart = $health.generation_concurrency -ne 4 -or $health.ollama_num_parallel -ne 4
+        } catch {
+            $needsRestart = $true
+        }
+    }
+    if ($needsRestart) {
+        Write-Host "[*] Starting/reconfiguring Ollama for four concurrent requests (missing ports: $($missingPorts -join ', '))..." -ForegroundColor Cyan
+        & (Join-Path $projectRoot 'services\ollama-priority-gateway\start-prometheus-services.ps1') -ForceRestart
     }
 
     $deadline = [DateTime]::UtcNow.AddSeconds(20)
@@ -102,7 +111,30 @@ function Ensure-OllamaPriorityGateway {
     if ($missingPorts.Count -gt 0) {
         throw "Ollama priority services did not become ready. Missing ports: $($missingPorts -join ', ')"
     }
-    Write-Host '[OK] Ollama: engine 11433; other 11434; DEV 11435; PROD 11436.' -ForegroundColor Green
+    Write-Host '[OK] Ollama: engine 11433; DEV gateway and Ollama each allow four concurrent generations.' -ForegroundColor Green
+}
+
+function Warm-OllamaModel([string]$BaseUrl, [string]$Model) {
+    if ($NoOllamaGateway) { return }
+
+    $uri = "$($BaseUrl.TrimEnd('/'))/api/chat"
+    $payload = @{
+        model = $Model
+        messages = @(@{ role = 'user'; content = 'Reply OK.' })
+        stream = $false
+        keep_alive = -1
+        options = @{ num_predict = 1 }
+    } | ConvertTo-Json -Depth 5 -Compress
+
+    Write-Host "[*] Loading Ollama model '$Model' and keeping it resident..." -ForegroundColor Cyan
+    try {
+        Invoke-RestMethod -Uri $uri -Method Post -ContentType 'application/json' `
+            -Body $payload -TimeoutSec 180 | Out-Null
+        Write-Host "[OK] Ollama model '$Model' is loaded and will stay resident until Ollama stops." -ForegroundColor Green
+    } catch {
+        Write-Host "[WARN] Could not warm Ollama model '$Model': $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-Host '[WARN] The API can still use its configured cloud fallback; check the model name and Ollama logs.' -ForegroundColor Yellow
+    }
 }
 
 function Start-DevelopmentServer {
@@ -162,6 +194,7 @@ $ollamaBaseUrl = Get-ApiEnvironmentValue 'OLLAMA_BASE_URL'
 $ollamaModel = Get-ApiEnvironmentValue 'OLLAMA_MODEL'
 $env:OLLAMA_BASE_URL = $ollamaBaseUrl
 $env:OLLAMA_MODEL = $ollamaModel
+Warm-OllamaModel -BaseUrl $ollamaBaseUrl -Model $ollamaModel
 
 $servers = @()
 $apiUrl = 'http://127.0.0.1:4311'

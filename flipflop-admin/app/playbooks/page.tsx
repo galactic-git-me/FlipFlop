@@ -59,6 +59,8 @@ interface PlaybookFormData {
   target_margin: string;
   flip_structure: string;
   profit_notes: string;
+  software_package_ids: string;
+  software_rationale: string;
 }
 
 const BLANK_FORM: PlaybookFormData = {
@@ -68,6 +70,7 @@ const BLANK_FORM: PlaybookFormData = {
   upgrade_required: "", upgrade_optional: "",
   target_profit: "100", target_margin: "40",
   flip_structure: "buy_upgrade_sell", profit_notes: "",
+  software_package_ids: "", software_rationale: "",
 };
 
 function formToPlaybook(f: PlaybookFormData): Record<string, unknown> {
@@ -105,6 +108,10 @@ function formToPlaybook(f: PlaybookFormData): Record<string, unknown> {
       flip_structure: f.flip_structure,
       notes: f.profit_notes.trim() || null,
     },
+    software_profile: {
+      recommended_package_ids: f.software_package_ids.split("\n").map(id => id.trim()).filter(Boolean),
+      rationale: f.software_rationale.trim(),
+    },
   };
 }
 
@@ -113,6 +120,7 @@ function playbookToForm(pb: Playbook): PlaybookFormData {
   const ss = pb.search_strategy || {};
   const us = pb.upgrade_strategy || {};
   const ps = pb.profit_strategy || {};
+  const sw = pb.software_profile || {};
   return {
     name: pb.name,
     description: pb.description || "",
@@ -131,6 +139,8 @@ function playbookToForm(pb: Playbook): PlaybookFormData {
     target_margin: String(ps.target_margin_pct || 40),
     flip_structure: ps.flip_structure || "buy_upgrade_sell",
     profit_notes: ps.notes || "",
+    software_package_ids: (sw.recommended_package_ids || []).join("\n"),
+    software_rationale: sw.rationale || "",
   };
 }
 
@@ -314,6 +324,26 @@ function PlaybookFormModal({
               <textarea value={form.profit_notes} onChange={e => set("profit_notes", e.target.value)}
                 rows={2} placeholder="Listing tips, pricing guidance…"
                 className="w-full bg-[#111c2e] border border-[#1e2d45] rounded-lg px-3 py-2 text-sm text-slate-100 placeholder:text-slate-600 focus:border-[#00dc82]/50 focus:outline-none resize-none" />
+            </div>
+          </section>
+
+          {/* Software */}
+          <section>
+            <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">Getting Started Software</h3>
+            <p className="text-xs text-slate-400 mb-3">Choose package IDs from the reviewed software catalogue. These are free pre-install options; customers can change the selection before checkout.</p>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Recommended package IDs (one per line)</label>
+                <textarea value={form.software_package_ids} onChange={e => set("software_package_ids", e.target.value)} rows={5}
+                  placeholder="VideoLAN.VLC&#10;7zip.7zip"
+                  className="w-full bg-[#111c2e] border border-[#1e2d45] rounded-lg px-3 py-2 text-xs font-mono text-slate-100 placeholder:text-slate-600 focus:border-[#00dc82]/50 focus:outline-none resize-y" />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Why these suit this segment</label>
+                <textarea value={form.software_rationale} onChange={e => set("software_rationale", e.target.value)} rows={5}
+                  placeholder="Explain the use-case fit; avoid promising compatibility without verification."
+                  className="w-full bg-[#111c2e] border border-[#1e2d45] rounded-lg px-3 py-2 text-sm text-slate-100 placeholder:text-slate-600 focus:border-[#00dc82]/50 focus:outline-none resize-y" />
+              </div>
             </div>
           </section>
 

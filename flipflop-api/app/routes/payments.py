@@ -8,6 +8,9 @@ from sqlalchemy import select
 from app.database import get_db
 from app.models.customer import Customer
 from app.models.order import Order, OrderStatus
+from app.models.playbook import Playbook
+from app.models.order_checkout_snapshot import OrderCheckoutSnapshot
+from app.routes.admin_auth import get_current_admin
 from app.schemas.payment import (
     CreatePaymentIntentRequest,
     PaymentIntentResponse,
@@ -21,11 +24,37 @@ from app.services.payment_service import PaymentService
 from app.services.email_service import send_order_confirmation_email
 from app.services.social_proof import record_order_event
 from app.services.playbook_pricing import InvalidBuildError, price_playbook_build
+from app.services.software_catalogue import (
+    effective_software_profile_for_playbook,
+    serialize_customer_software_selection,
+    validate_package_ids,
+)
+from app.services.product_software import (
+    software_profile_for_curated_cell_from_db,
+    software_profile_for_playbook_cell_from_db,
+)
 from app.services.storefront_delivery import delivery_choice, checkout_metadata, add_working_days, apply_component_delivery_estimate
-from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 log = structlog.get_logger(__name__)
+
+
+def _checkout_build_mode(build_config) -> str:
+    """Translate the storefront's flow marker into the server pricing mode."""
+    mode = build_config.validation_mode
+    curated = bool(build_config.curated_build_id)
+    if curated:
+        if mode not in (None, "curated"):
+            raise HTTPException(status_code=422, detail="A curated cell cannot use the Made-by-you checkout mode")
+        return "curated"
+    if mode == "curated":
+        raise HTTPException(status_code=422, detail="Choose a curated Playbook cell before using Curated-for-you checkout")
+    if mode not in (None, "custom", "studio"):
+        raise HTTPException(status_code=422, detail="Unsupported build checkout mode")
+    if not build_config.budget_tier:
+        raise HTTPException(status_code=422, detail="Choose a Playbook budget tier before ordering a Made-by-you build")
+    return "custom"
 
 
 router = APIRouter(prefix="/payments", tags=["payments"])
@@ -68,6 +97,9 @@ async def create_payment_intent(
     }
     ```
     """
+    if request.build_config is not None and request.build_config.case_id is None:
+        raise HTTPException(status_code=422, detail="Select a verified case or chassis before paying for this build")
+
     # Validate customer exists
     result = await db.execute(
         select(Customer).where(Customer.id == request.customer_id)
@@ -85,17 +117,47 @@ async def create_payment_intent(
     # amount for a real catalogue build.
     quote_data: dict = {}
     if request.build_config is not None:
+        checkout_build_mode = _checkout_build_mode(request.build_config)
         try:
             priced = await price_playbook_build(
                 db,
                 playbook_id=request.build_config.playbook_id,
                 slot_selections=request.build_config.slot_selections,
                 case_id=request.build_config.case_id,
+                build_mode=checkout_build_mode,
+                curated_build_id=request.build_config.curated_build_id,
+                upgrade_candidate_indexes=request.build_config.upgrade_candidate_indexes,
             )
         except InvalidBuildError as e:
             log.warning("payment.invalid_build_config", error=str(e))
             raise HTTPException(status_code=400, detail=str(e))
-        fulfilment_type = "curated" if request.build_config.curated_build_id or request.build_config.validation_mode == "curated" else "custom"
+        fulfilment_type = "curated" if checkout_build_mode == "curated" else "custom"
+        playbook = await db.get(Playbook, priced.playbook_id)
+        authored_profile = playbook.software_profile if playbook else None
+        try:
+            if request.build_config.curated_build_id:
+                software_profile = await software_profile_for_curated_cell_from_db(
+                    db,
+                    request.build_config.curated_build_id,
+                    priced.playbook_name,
+                    authored_profile,
+                )
+            elif request.build_config.budget_tier:
+                software_profile = await software_profile_for_playbook_cell_from_db(
+                    db,
+                    priced.playbook_name,
+                    request.build_config.budget_tier,
+                    authored_profile,
+                )
+            else:
+                software_profile = effective_software_profile_for_playbook(priced.playbook_name, authored_profile)
+            selected_software_ids = validate_package_ids(
+                request.software_package_ids
+                if request.software_package_ids is not None
+                else software_profile["recommended_package_ids"]
+            )
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
         delivery_option = request.delivery_option or ("fast_track" if request.speedy_delivery else "standard")
         if delivery_option == "flexible" and fulfilment_type not in {"curated", "custom"}:
             raise HTTPException(status_code=422, detail="Flexible delivery is available for curated and custom builds")
@@ -106,8 +168,10 @@ async def create_payment_intent(
             raise HTTPException(status_code=422, detail=str(e)) from e
         amount = priced.total + choice["fee_gbp"]
         quote_data = {
+            "fulfilment_type": fulfilment_type,
             "playbook_id": priced.playbook_id,
             "playbook_name": priced.playbook_name,
+            "curated_build_id": request.build_config.curated_build_id,
             "slots": [
                 {
                     "slot_id": s.slot_id,
@@ -122,9 +186,11 @@ async def create_payment_intent(
             "case_name": priced.case_name,
             "case_price": priced.case_price,
             "chosen_week": request.build_config.chosen_week,
+            "budget_tier": request.build_config.budget_tier,
             "parts_total": priced.parts_total,
             "labour": priced.labour,
             "overhead": priced.overhead,
+            "playbook_upgrades": priced.applied_upgrades,
             **checkout_metadata(choice),
         }
     else:
@@ -135,6 +201,11 @@ async def create_payment_intent(
         quote_data = checkout_metadata(choice)
     # Create payment intent using service
     try:
+        # Opportunistically purge abandoned checkout PII; paid snapshots are
+        # consumed by confirm/webhook in the order-creation transaction.
+        from sqlalchemy import delete
+        await db.execute(delete(OrderCheckoutSnapshot).where(OrderCheckoutSnapshot.expires_at < datetime.utcnow()))
+
         payment_service = PaymentService()
         intent_data = await payment_service.create_payment_intent(
             customer_id=request.customer_id,
@@ -142,9 +213,37 @@ async def create_payment_intent(
             quote_data=quote_data,
             metadata={
                 **checkout_metadata(choice),
+                "fulfilment_type": fulfilment_type if request.build_config is not None else "custom",
+                "playbook_id": str(request.build_config.playbook_id) if request.build_config is not None else "",
+                "curated_build_id": request.build_config.curated_build_id or "" if request.build_config else "",
+                "slot_selections": ",".join(
+                    f"{slot_id}:{variant_id}"
+                    for slot_id, variant_id in sorted(request.build_config.slot_selections.items())
+                ) if request.build_config else "",
+                "case_id": str(request.build_config.case_id or "") if request.build_config else "",
+                "validation_mode": request.build_config.validation_mode or "" if request.build_config else "",
+                "software_package_ids": serialize_customer_software_selection(selected_software_ids) if request.build_config is not None else "",
                 "chosen_week": request.build_config.chosen_week or "" if request.build_config else "",
+                "upgrade_candidate_indexes": ",".join(map(str, request.build_config.upgrade_candidate_indexes)) if request.build_config else "",
+                "budget_tier": request.build_config.budget_tier or "" if request.build_config else "",
             },
         )
+
+        if request.build_config is not None:
+            addresses = request.checkout_addresses
+            db.add(OrderCheckoutSnapshot(
+                payment_intent_id=intent_data["intent_id"],
+                customer_id=request.customer_id,
+                delivery_address=addresses.delivery.model_dump(),
+                billing_address=addresses.billing.model_dump(),
+                build_snapshot={
+                    **quote_data,
+                    "software_profile": software_profile,
+                    "software_package_ids": selected_software_ids,
+                },
+                expires_at=datetime.utcnow() + timedelta(days=30),
+            ))
+            await db.flush()
 
         log.info(
             "payment.intent_created",
@@ -152,7 +251,13 @@ async def create_payment_intent(
             amount_gbp=amount,
         )
 
-        return PaymentIntentResponse(**intent_data)
+        return PaymentIntentResponse(
+            **intent_data,
+            delivery_option=choice.get("delivery_option"),
+            delivery_days=choice.get("delivery_days"),
+            delivery_promise=choice.get("promise"),
+            delivery_estimate_source=choice.get("delivery_estimate_source", "configured_fulfilment_default"),
+        )
 
     except ValueError as e:
         log.error(
@@ -218,6 +323,22 @@ async def confirm_payment(
             detail="Customer not found",
         )
 
+    existing_order = (await db.execute(
+        select(Order).where(
+            Order.stripe_payment_intent_id == request.intent_id,
+            Order.customer_id == request.customer_id,
+        )
+    )).scalar_one_or_none()
+    if existing_order is not None:
+        return PaymentConfirmation(
+            order_id=existing_order.id,
+            status=existing_order.status.value,
+            amount=float(existing_order.customer_price),
+            currency="gbp",
+            payment_intent_id=request.intent_id,
+            created_at=existing_order.created_at,
+        )
+
     try:
         # Verify payment succeeded
         payment_service = PaymentService()
@@ -227,6 +348,24 @@ async def confirm_payment(
             quote_data={},
         )
 
+        if request.build_config is not None:
+            metadata = payment_data["metadata"]
+            submitted_selection = ",".join(
+                f"{slot_id}:{variant_id}"
+                for slot_id, variant_id in sorted(request.build_config.slot_selections.items())
+            )
+            if (
+                str(metadata.get("playbook_id") or "") != str(request.build_config.playbook_id)
+                or str(metadata.get("curated_build_id") or "") != str(request.build_config.curated_build_id or "")
+                or str(metadata.get("slot_selections") or "") != submitted_selection
+                or str(metadata.get("case_id") or "") != str(request.build_config.case_id or "")
+                or str(metadata.get("validation_mode") or "") != str(request.build_config.validation_mode or "")
+                or str(metadata.get("chosen_week") or "") != str(request.build_config.chosen_week or "")
+                or str(metadata.get("upgrade_candidate_indexes") or "") != ",".join(map(str, request.build_config.upgrade_candidate_indexes))
+                or str(metadata.get("budget_tier") or "") != str(request.build_config.budget_tier or "")
+            ):
+                raise HTTPException(status_code=409, detail="The paid build configuration does not match this order confirmation.")
+
         # Populate real specs + playbook link from the build config the
         # customer actually configured (re-validated against the catalogue,
         # not trusted as-is) instead of the old hardcoded specs={}.
@@ -234,35 +373,35 @@ async def confirm_payment(
         component_costs = 0.0
         overhead_amount = 0.0
         playbook_id = None
+        address_snapshot = (await db.execute(
+            select(OrderCheckoutSnapshot).where(
+                OrderCheckoutSnapshot.payment_intent_id == request.intent_id,
+                OrderCheckoutSnapshot.customer_id == request.customer_id,
+            ).with_for_update()
+        )).scalar_one_or_none()
+        if request.build_config is not None and (address_snapshot is None or not address_snapshot.build_snapshot):
+            raise HTTPException(status_code=409, detail="The checkout build snapshot is missing. Please restart checkout.")
         if request.build_config is not None:
-            try:
-                priced = await price_playbook_build(
-                    db,
-                    playbook_id=request.build_config.playbook_id,
-                    slot_selections=request.build_config.slot_selections,
-                    case_id=request.build_config.case_id,
-                )
-            except InvalidBuildError as e:
-                log.error("payment.confirm_invalid_build_config", error=str(e))
-                raise HTTPException(status_code=400, detail=str(e))
-            playbook_id = priced.playbook_id
-            component_costs = priced.parts_total
-            overhead_amount = priced.overhead
+            snapshot = address_snapshot.build_snapshot
+            playbook_id = request.build_config.playbook_id
+            component_costs = float(snapshot.get("parts_total") or 0)
+            overhead_amount = float(snapshot.get("overhead") or 0)
             specs = {
-                "slots": [
-                    {
-                        "slot_id": s.slot_id,
-                        "slot_type": s.slot_type,
-                        "variant_id": s.variant_id,
-                        "title": s.title,
-                        "price": s.price,
-                    }
-                    for s in priced.slots
-                ],
-                "case_id": priced.case_id,
-                "case_name": priced.case_name,
-                "case_price": priced.case_price,
-                "chosen_week": request.build_config.chosen_week,
+                "fulfilment_type": snapshot.get("fulfilment_type"),
+                "playbook_id": snapshot.get("playbook_id"),
+                "playbook_name": snapshot.get("playbook_name"),
+                "curated_build_id": snapshot.get("curated_build_id"),
+                "slots": snapshot.get("slots", []),
+                "case_id": snapshot.get("case_id"),
+                "case_name": snapshot.get("case_name"),
+                "case_price": snapshot.get("case_price"),
+                "chosen_week": snapshot.get("chosen_week"),
+                "budget_tier": snapshot.get("budget_tier"),
+                "software_profile": snapshot.get("software_profile"),
+                "software_package_ids": snapshot.get("software_package_ids", []),
+                "playbook_upgrades": snapshot.get("playbook_upgrades", []),
+                "delivery_address": address_snapshot.delivery_address,
+                "billing_address": address_snapshot.billing_address,
             }
 
         delivery_metadata = payment_data["metadata"]
@@ -303,8 +442,21 @@ async def confirm_payment(
         )
 
         db.add(order)
+        if address_snapshot is not None:
+            await db.delete(address_snapshot)
         await db.flush()  # Get the ID before commit
         order_id = order.id
+
+        from app.services.getting_started_jobs import ensure_order_job
+        order_build_type = str(specs.get("fulfilment_type") or "custom").lower().replace("-", "_")
+        source_type = "curated_for_you" if order_build_type in {"curated", "curated_for_you"} else "made_by_you"
+        await ensure_order_job(
+            db,
+            order_id=order.id,
+            customer_id=request.customer_id,
+            playbook_id=playbook_id,
+            source_type=source_type,
+        )
 
         await db.commit()
 
@@ -424,7 +576,7 @@ async def get_payment_status(intent_id: str) -> PaymentStatusResponse:
 
 
 @router.post("/refund", response_model=RefundResponse)
-async def refund_payment(request: RefundRequest) -> RefundResponse:
+async def refund_payment(request: RefundRequest, admin=Depends(get_current_admin)) -> RefundResponse:
     """
     Refund a successful payment.
 

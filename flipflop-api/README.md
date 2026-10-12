@@ -15,6 +15,20 @@ docker-compose up -d
 API available at `http://localhost:4311`  
 Docs at `http://localhost:4311/docs`
 
+### API-image Getting Ready sources
+
+The API-only Docker build context includes packaged copies of the reviewed Getting Ready prompt, dispatch checklist, Rainmeter skin, customer-support guide, and customer-safe Software Playbook section. The repository-level templates/docs are canonical. After changing one of those sources, sync the API copies from the repository root before building or deploying:
+
+```powershell
+.\scripts\sync-api-package-sources.ps1
+```
+
+To check for drift without changing files:
+
+```powershell
+.\scripts\sync-api-package-sources.ps1 -Check
+```
+
 ### Option B — Local Python
 
 ```bash

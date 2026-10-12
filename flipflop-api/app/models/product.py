@@ -56,6 +56,7 @@ class Product(Base):
     profit_calculation_id = Column(Integer, ForeignKey("profit_calculations.id"), nullable=True)
 
     reserved_until = Column(DateTime, nullable=True)  # soft basket-add reservation window, Ch.9.6
+    checkout_addresses = Column(JSON, nullable=True)  # delivery and billing snapshots for a reserved direct sale
 
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
