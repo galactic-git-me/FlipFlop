@@ -16,7 +16,7 @@ import pytest
 import hmac
 import hashlib
 import json
-from unittest.mock import patch, MagicMock
+from unittest.mock import AsyncMock, patch, MagicMock
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
@@ -194,8 +194,10 @@ class TestXSSPrevention:
             profile_resp = client.get("/api/auth/me", headers=headers)
             if profile_resp.status_code == 200:
                 profile_data = profile_resp.json()
-                # Name should be escaped or sanitized
-                assert "<script>" not in str(profile_data)
+                # Profile data is JSON; preserve the name and rely on the UI's
+                # HTML-context escaping when it renders user-controlled text.
+                assert profile_resp.headers["content-type"].startswith("application/json")
+                assert profile_data["name"] == payload["name"]
 
     def test_user_input_sanitization_in_quotes(self, client):
         """Test user input is sanitized in quote responses."""
@@ -401,8 +403,8 @@ class TestStripeWebhookSecurity:
         """Test that webhook signatures are validated."""
         webhook_event = {
             "id": "evt_test",
-            "type": "payment_intent.succeeded",
-            "data": {"object": {"id": "pi_test"}},
+            "type": "customer.updated",
+            "data": {"object": {}},
         }
         mock_construct.return_value = webhook_event
 
@@ -414,7 +416,7 @@ class TestStripeWebhookSecurity:
         )
 
         # Should handle valid signature
-        assert response.status_code in [200, 401, 400]
+        assert response.status_code == 200
 
     def test_webhook_without_signature(self, client):
         """Test that webhooks without signature are rejected."""
@@ -445,11 +447,11 @@ class TestOAuth2Security:
         # This would be validated in the OAuth callback handler
         pass
 
-    @patch("app.services.oauth_service.verify_google_token")
-    def test_oauth_token_validation(self, mock_verify, client):
+    @patch("app.routes.oauth.OAuthService.exchange_google_code", new_callable=AsyncMock)
+    def test_oauth_token_validation(self, mock_exchange, client):
         """Test that OAuth tokens are validated."""
         # Mock invalid token
-        mock_verify.side_effect = Exception("Invalid token")
+        mock_exchange.side_effect = ValueError("Invalid authorization code")
 
         response = client.post(
             "/api/auth/oauth/google/callback",

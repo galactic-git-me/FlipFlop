@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
 from datetime import datetime
 from typing import Optional
 
@@ -13,6 +13,15 @@ class SignupRequest(BaseModel):
     marketing_opt_in: bool = Field(default=False, description="Opt-in to marketing communications (separate from account)")
     acquisition_source: str | None = Field(None, description="How did you find us? (search/youtube/reddit/referral/ebay/other)")
     acquisition_detail: str | None = Field(None, max_length=255, description="Additional detail (e.g., referral code)")
+
+    @field_validator("password")
+    @classmethod
+    def validate_password_strength(cls, value: str | None) -> str | None:
+        if value is None:
+            return None  # Passwordless signup is used for magic-link accounts.
+        if not any(char.isalpha() for char in value) or not any(char.isdigit() for char in value):
+            raise ValueError("Password must include at least one letter and one number")
+        return value
 
     class Config:
         json_schema_extra = {
