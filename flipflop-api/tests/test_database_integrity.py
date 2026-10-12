@@ -319,7 +319,11 @@ async def test_reserve_attachment_waits_for_existing_case_update_and_uses_latest
 
     attacher_task = None
     try:
-        problem = await case_writer.get(CustomerProblem, problem_id, with_for_update=True)
+        problem = (await case_writer.execute(
+            select(CustomerProblem)
+            .where(CustomerProblem.id == problem_id)
+            .with_for_update()
+        )).scalar_one()
         problem.status = "received_for_inspection"
         attacher_task = asyncio.create_task(attach_reserve_case())
         await asyncio.wait_for(competing_attacher_pid, timeout=5)
