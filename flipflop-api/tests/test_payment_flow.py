@@ -192,6 +192,9 @@ class TestPaymentService:
 
 
 @pytest.mark.integration
+@pytest.mark.skip(
+    reason="Endpoint and webhook cases are empty placeholders with no assertions; implement them against the current isolated API fixtures before enabling."
+)
 class TestPaymentEndpoints:
     """Tests for payment API endpoints."""
 
@@ -221,6 +224,9 @@ class TestPaymentEndpoints:
 
 
 @pytest.mark.integration
+@pytest.mark.skip(
+    reason="Endpoint and webhook cases are empty placeholders with no assertions; implement them against the current isolated API fixtures before enabling."
+)
 class TestPaymentWebhooks:
     """Tests for Stripe webhook handlers."""
 

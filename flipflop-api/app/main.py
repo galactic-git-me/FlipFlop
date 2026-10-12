@@ -2,6 +2,7 @@ import structlog
 import asyncio
 import os
 import sys
+import threading
 
 # Windows' console defaults to cp1252, which crashes on emoji/unicode in log
 # output (e.g. AI-generated listing descriptions). Force UTF-8 before any
@@ -394,11 +395,17 @@ def _install_sigchld_reaper() -> None:
     import signal as _signal
     import platform
     # SIGCHLD only exists on Unix-like systems, not Windows
-    if platform.system() != "Windows" and hasattr(_signal, 'SIGCHLD'):
+    # Signal handlers can only be installed from the main interpreter thread;
+    # ASGI test clients run lifespan in a worker thread.
+    if (
+        platform.system() != "Windows"
+        and hasattr(_signal, "SIGCHLD")
+        and threading.current_thread() is threading.main_thread()
+    ):
         _signal.signal(_signal.SIGCHLD, _signal.SIG_IGN)
         log.info("browser_pool.sigchld_reaper_installed")
     else:
-        log.info("browser_pool.sigchld_reaper_skipped (Windows or no SIGCHLD support)")
+        log.info("browser_pool.sigchld_reaper_skipped (Windows, no SIGCHLD support, or non-main thread)")
 
 
 async def _reap_zombie_children() -> None:
