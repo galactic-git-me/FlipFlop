@@ -113,9 +113,6 @@ def _unlinked_warranty_cases_query(*, order_id: int | None = None, manual_build_
     query = (
         select(CustomerProblem)
         .where(
-            ~select(WarrantyClaim.id)
-            .where(WarrantyClaim.customer_problem_id == CustomerProblem.id)
-            .exists(),
             func.lower(func.trim(CustomerProblem.category)).in_(WARRANTY_CASE_CATEGORIES),
         )
     )
@@ -160,14 +157,22 @@ def _attach_unlinked_cases_sync(db: Session, reserve: WarrantyReserve) -> None:
     query = _unlinked_warranty_cases_query(order_id=reserve.order_id) if reserve.order_id else _unlinked_warranty_cases_query(manual_build_id=reserve.manual_build_id)
     query = query.with_for_update()
     for problem in db.execute(query).scalars().all():
-        _attach_case_to_reserve(db, reserve, problem)
+        linked_claim = db.execute(
+            select(WarrantyClaim.id).where(WarrantyClaim.customer_problem_id == problem.id)
+        ).scalar_one_or_none()
+        if linked_claim is None:
+            _attach_case_to_reserve(db, reserve, problem)
 
 
 async def _attach_unlinked_cases(db: AsyncSession, reserve: WarrantyReserve) -> None:
     query = _unlinked_warranty_cases_query(order_id=reserve.order_id) if reserve.order_id else _unlinked_warranty_cases_query(manual_build_id=reserve.manual_build_id)
     query = query.with_for_update()
     for problem in (await db.execute(query)).scalars().all():
-        _attach_case_to_reserve(db, reserve, problem)
+        linked_claim = (await db.execute(
+            select(WarrantyClaim.id).where(WarrantyClaim.customer_problem_id == problem.id)
+        )).scalar_one_or_none()
+        if linked_claim is None:
+            _attach_case_to_reserve(db, reserve, problem)
 
 
 def warranty_expiry(started_at: datetime) -> datetime:

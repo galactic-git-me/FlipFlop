@@ -50,10 +50,7 @@ async def db(request) -> AsyncSession | Session:
 @pytest.fixture(autouse=True)
 def _admin_tests_use_their_isolated_database(request, db):
     """Keep synchronous admin TestClient calls off the configured Postgres DB."""
-    if (
-        request.module.__name__.endswith("test_admin_dashboard")
-        and getattr(request.cls, "__name__", None) == "TestAdminOrderStatus"
-    ):
+    if request.module.__name__.endswith("test_admin_dashboard"):
         class AsyncSessionAdapter:
             """Expose the sync fixture session through the async route contract."""
 
@@ -66,11 +63,19 @@ def _admin_tests_use_their_isolated_database(request, db):
             async def get(self, *args, **kwargs):
                 return self.session.get(*args, **kwargs)
 
-            async def commit(self):
-                self.session.commit()
+            class _Completed:
+                def __await__(self):
+                    if False:
+                        yield None
+                    return None
 
-            async def refresh(self, *args, **kwargs):
+            def commit(self):
+                self.session.commit()
+                return self._Completed()
+
+            def refresh(self, *args, **kwargs):
                 self.session.refresh(*args, **kwargs)
+                return self._Completed()
 
             async def flush(self):
                 self.session.flush()
