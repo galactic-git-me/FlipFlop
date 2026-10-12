@@ -8,6 +8,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import ManualBuild, DemandMetricsSnapshot, GemRadarListingDemandHistory
 from app.services.demand_metrics_calculator import DemandMetricsCalculator
 from datetime import datetime, timedelta
+from app.services.feature_flags import FeatureFlags, set_flag_for_testing
+
+
+@pytest.fixture(autouse=True)
+def enable_demand_metrics_for_tests():
+    set_flag_for_testing(FeatureFlags.DEMAND_INTEL_ENABLED, True)
+    yield
+    set_flag_for_testing(FeatureFlags.DEMAND_INTEL_ENABLED, False)
 
 
 @pytest.mark.asyncio

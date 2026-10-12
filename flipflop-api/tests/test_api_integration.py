@@ -124,12 +124,13 @@ class TestAuthEndpoints:
         assert response.status_code == 422
         assert "email" in response.json()["detail"][0]["loc"]
 
-        # Missing password
+        # Passwordless signup is supported for magic-link accounts.
         response = client.post(
             "/api/auth/signup",
             json={"email": "test@example.com", "name": "User"},
         )
-        assert response.status_code == 422
+        assert response.status_code == 201
+        assert "access_token" in response.json()
 
         # Missing name
         response = client.post(
@@ -398,7 +399,7 @@ class TestCORSHeaders:
         """Test CORS headers in responses."""
         response = client.options(
             "/api/auth/signup",
-            headers={"Origin": "http://localhost:3000", "Access-Control-Request-Method": "POST"},
+            headers={"Origin": "http://localhost:4313", "Access-Control-Request-Method": "POST"},
         )
 
         # CORS headers should be present
