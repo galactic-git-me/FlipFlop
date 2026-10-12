@@ -121,6 +121,7 @@ class TestPaymentService:
         with patch("app.services.payment_service.stripe.Webhook.construct_event") as mock_construct:
             # Mock valid event
             mock_event = {
+                "id": "evt_test123",
                 "type": "payment_intent.succeeded",
                 "data": {"object": {"id": "pi_test123"}},
             }

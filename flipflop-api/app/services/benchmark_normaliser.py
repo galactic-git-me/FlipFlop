@@ -68,6 +68,9 @@ def _ti_super_suffix(raw: str) -> str:
 _GPU_PATTERNS = [
     (re.compile(r'(?:nvidia\s+)?(?:geforce\s+)?(?:rtx|gtx)\s*(\d{4})(?:\s*ti)?(?:\s*super)?', re.I),
      lambda m, raw: f"nvidia_geforce_{'rtx' if 'rtx' in raw.lower() else 'gtx'}_{m.group(1)}{_ti_super_suffix(raw)}"),
+    # Older GTX 700/900 cards use three digit model numbers.
+    (re.compile(r'(?:nvidia\s+)?(?:geforce\s+)?gtx\s*(\d{3})(?:\s*ti)?', re.I),
+     lambda m, raw: f"nvidia_geforce_gtx_{m.group(1)}{_ti_super_suffix(raw)}"),
     (re.compile(r'(?:amd\s+)?(?:radeon\s+)?rx\s*(\d{4})(?:\s*xt)?', re.I),
      lambda m, raw: f"amd_radeon_rx_{m.group(1)}{'_xt' if 'xt' in raw.lower() else ''}"),
     # Bare NVIDIA number (e.g. "3070 8GB") — match before AMD bare number

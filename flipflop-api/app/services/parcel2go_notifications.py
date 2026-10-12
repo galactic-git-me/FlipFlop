@@ -175,7 +175,7 @@ async def deliver_tracking_event_notification(event_id: int) -> dict[str, str]:
                 tracking_url=tracking_url, live_map_url=live_map_url,
             )
     except Exception:
-        log.exception("parcel2go_notification.send_failed", event_id=event_id)
+        log.exception("parcel2go_notification.send_failed: %s", event_id)
         sent = False
 
     if sent:

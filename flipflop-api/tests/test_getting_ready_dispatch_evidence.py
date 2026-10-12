@@ -879,7 +879,7 @@ async def test_insurer_success_response_mismatch_keeps_dispatch_blocked(
             shipment_booking_state="booked",
             shipment_booked_at=datetime.utcnow(),
             parcel2go_service_slug="signed-service",
-            evidence_data={},
+            evidence_data={"shipment_booking_confirmation": {"signature_extra_included": True}},
         )
         db.add(build)
         await db.commit()
@@ -1577,7 +1577,7 @@ async def _seed_parcel2go_order_event(
             ))
         event = ShipmentTrackingEvent(
             order_id=None if manual_build else order.id,
-            manual_build_id=build.id if build else None,
+            manual_build_id=build.id if manual_build else None,
             provider=provider,
             provider_event_id=f"P2G-EVENT-{manual_build}",
             status_code="dispatched",
@@ -2439,7 +2439,10 @@ async def test_sold_build_component_changes_cannot_bypass_order_change_flow(evid
             name="Sold build component lock",
             status="sold",
             components=original_components,
-            dispatch_status="booked",
+            dispatch_status="dispatched",
+            shipment_booking_state="booked",
+            tracking_number="TRACK-HANDED-OVER",
+            shipment_booked_at=datetime.utcnow(),
         )
         db.add(build)
         await db.commit()
@@ -2588,7 +2591,11 @@ async def test_direct_guest_dispatch_reuses_preissued_claim_and_sends_tracking(e
             shipping_insurance_status="created",
             shipping_insurance_policy_id="POLICY-DIRECT-1",
             parcel2go_service_slug="royal-mail-signed-for",
-            evidence_data={"shipment_booking_confirmation": {"signed_for_delivery_confirmed": True, "signature_extra_included": True}},
+            evidence_data={"shipment_booking_confirmation": {
+                "signed_for_delivery_confirmed": True,
+                "signature_extra_included": True,
+                "tracking_url": "https://tracking.example.test/track/ABC123",
+            }},
         )
         db.add_all([order, build])
         await db.flush()

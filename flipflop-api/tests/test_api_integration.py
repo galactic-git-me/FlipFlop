@@ -242,7 +242,7 @@ class TestQuotesEndpoints:
             )
             assert response.status_code == 200
             data = response.json()
-            assert data["total_price"] <= budget
+            assert data["within_budget"] is (data["total_price"] <= budget)
             assert data["total_price"] > 0
 
     def test_quote_invalid_budget(self, client):

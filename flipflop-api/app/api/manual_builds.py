@@ -6,6 +6,7 @@ import os
 import io
 import html
 import hashlib
+from copy import deepcopy
 from zipfile import ZipFile, ZIP_DEFLATED
 from pathlib import Path
 from datetime import date, datetime, timedelta, timezone
@@ -266,7 +267,8 @@ def _insurance_provider_response_summary(evidence_data: dict | None) -> dict | N
 
 def _manual_build_has_physical_handover(build: ManualBuild) -> bool:
     """Treat recorded handover, carrier delivery, and later states as irreversible."""
-    evidence = build.evidence_data if isinstance(build.evidence_data, dict) else {}
+    evidence_data = getattr(build, "evidence_data", None)
+    evidence = evidence_data if isinstance(evidence_data, dict) else {}
     handover = evidence.get("physical_handover_confirmation")
     return bool(
         build.dispatch_status in {"dispatched", "delivered"}
@@ -700,7 +702,7 @@ def _missing_verified_dispatch_evidence(
     categories: tuple[str, ...],
 ) -> list[str]:
     """Require approved evidence files to still match their build-bound checksum and size."""
-    artifacts = list(job.artifact_index or []) if job else []
+    artifacts = deepcopy(job.artifact_index or []) if job else []
     root = _PRIVATE_DISPATCH_ROOT.resolve()
     build_dir = (root / str(build_id)).resolve()
     allowed_media = {

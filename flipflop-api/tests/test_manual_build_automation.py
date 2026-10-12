@@ -41,7 +41,7 @@ async def _dispose_real_engine_pool():
 
 
 @pytest.fixture
-async def test_db():
+async def test_db(monkeypatch):
     engine = create_async_engine(
         TEST_DATABASE_URL, echo=False,
         connect_args={"check_same_thread": False},
@@ -62,6 +62,14 @@ async def test_db():
 
     app.dependency_overrides[get_db] = override_get_db
     app.dependency_overrides[get_current_admin] = override_get_current_admin
+    from types import SimpleNamespace
+    from unittest.mock import AsyncMock
+    import app.api.manual_builds as manual_builds
+    monkeypatch.setattr(
+        manual_builds,
+        "list_fulfillment_policies",
+        AsyncMock(return_value=[SimpleNamespace(policy_id="test-fulfillment-policy", marketplace_id="EBAY_GB")]),
+    )
     yield SessionLocal
     app.dependency_overrides.clear()
     await engine.dispose()
@@ -182,7 +190,7 @@ async def _clean_real_manual_builds():
 
 @pytest.mark.asyncio
 async def test_manual_build_offer_poll_counters_and_persists(client, test_db):
-    build_id = await _real_db_build(status="listed", ebay_listing_id="item-123", ebay_price=320.0)
+    build_id = await _real_db_build(status="listed", ebay_listing_id="188805793027", ebay_price=320.0)
 
     from app.workers.manual_build_lifecycle import run_manual_build_offer_poll_job
 
@@ -210,7 +218,7 @@ async def test_manual_build_offer_poll_counters_and_persists(client, test_db):
 async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, test_db):
     build_id = await _real_db_build(
         status="listed",
-        ebay_listing_id="item-123",
+        ebay_listing_id="188805793027",
         ebay_listing_url="https://ebay.co.uk/itm/item-123",
         ebay_price=400.0,
         price_floor=352.0,
@@ -221,6 +229,7 @@ async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, t
         photos=[{"url": "https://x/1.jpg", "kind": "photo"}, {"url": "https://x/2.jpg", "kind": "photo"}],
         listed_at=datetime.utcnow() - timedelta(days=8),
         next_recreate_at=datetime.utcnow() - timedelta(minutes=5),
+        relist_enabled=True,
     )
 
     from app.workers.manual_build_lifecycle import run_manual_build_recreate_cycle_job
@@ -231,7 +240,7 @@ async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, t
     ), patch(
         "app.workers.manual_build_lifecycle.post_build_to_ebay", new=AsyncMock(return_value="not_ready")
     ), patch(
-        "app.api.manual_builds.ai_service.chat",
+        "app.services.ai_service.generate_listing_content",
         new=AsyncMock(return_value=(
             '{"titles": ["New Title 1", "New Title 2"], "description": "<p>new</p>", '
             '"aspects": {"Brand": "FlipFlop", "Type": "Desktop"}}',

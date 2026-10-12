@@ -106,7 +106,7 @@ async def retry_pending_dispatch_notifications() -> dict[str, int]:
                     order_id,
                 )
             except Exception:
-                log.exception("dispatch_notification.retry_failed", event_id=notification_event_id)
+                log.exception("dispatch_notification.retry_failed: %s", notification_event_id)
                 was_sent = False
 
             if was_sent:

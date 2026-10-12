@@ -314,7 +314,7 @@ async def test_admin_repair_tracking_is_stage_bound_and_audited(tracking_client)
         headers={"Authorization": f"Bearer {guest_token}"},
     )
     assert customer_cases.status_code == 200
-    portal_case = customer_cases.json()[0]
+    portal_case = next(item for item in customer_cases.json() if item["id"] == problem_id)
     assert portal_case["repair_tracking"]["tracking_number"] == "TRACK-123"
     assert portal_case["repair_shipments"][0]["purpose"] == "customer_return"
     assert "provider_reference" not in portal_case["repair_shipments"][0]

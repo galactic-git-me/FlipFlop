@@ -29,7 +29,7 @@ Complete and record each item in Dispatch Centre. Add a meaningful operator note
 
 - [ ] Delivery name/address and declared sale value verified
 - [ ] Dimensions and weight measured
-- [ ] Eligible courier quoted with Parcel2Go's Signature extra included; immediately before payment, explicitly confirm the exact service and current total; confirm the unpaid created-order total matches before paying, then save the tracking number before shipment evidence is uploaded
+- [ ] Eligible courier quoted with Parcel2Go's Signature extra included; immediately before payment, explicitly confirm the exact selected service and current price; confirm the unpaid created-order total matches before paying, then save the tracking number before shipment evidence is uploaded
 - [ ] Working-build photo or video captured
 - [ ] Package-contents still photo captured before sealing
 - [ ] Sealed-parcel still photo captured

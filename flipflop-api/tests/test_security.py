@@ -319,32 +319,48 @@ class TestAuthenticationSecurity:
         token2 = customer2_resp.json()["access_token"]
         headers2 = {"Authorization": f"Bearer {token2}"}
 
-        # Customer 1 creates order
-        quote1 = client.post(
-            "/api/quotes/generate",
-            json={"budget": 1500.0},
-            headers=headers1,
-        ).json()
+        # Create a real order through the current intent-confirm flow.
+        from unittest.mock import AsyncMock, patch
+        from uuid import uuid4
 
-        order1 = client.post(
-            "/api/orders/create",
-            json={
-                "budget": 1500.0,
-                "components": {
-                    "cpu_id": quote1["components"][0]["id"],
-                    "gpu_id": quote1["components"][1]["id"],
-                    "ram_id": quote1["components"][2]["id"],
-                    "ssd_id": quote1["components"][3]["id"],
-                    "psu_id": quote1["components"][4]["id"],
-                    "case_id": quote1["components"][5]["id"],
-                    "cooler_id": quote1["components"][6]["id"],
-                },
-                "os_id": 1,
-                "theme_id": 1,
-            },
-            headers=headers1,
-        ).json()
-        order1_id = order1["id"]
+        from app.routes.payments import PaymentService
+
+        customer1_id = client.get("/api/auth/me", headers=headers1).json()["id"]
+        intent_id = f"pi_security_{uuid4().hex}"
+        with patch.object(
+            PaymentService,
+            "create_payment_intent",
+            new=AsyncMock(return_value={
+                "client_secret": "pi_security_secret",
+                "publishable_key": "pk_test",
+                "amount": 1500.0,
+                "currency": "gbp",
+                "intent_id": intent_id,
+            }),
+        ), patch.object(
+            PaymentService,
+            "handle_payment_success",
+            new=AsyncMock(return_value={
+                "intent_id": intent_id,
+                "amount": 1500.0,
+                "currency": "gbp",
+                "status": "completed",
+                "metadata": {"delivery_days": "5", "delivery_option": "standard"},
+            }),
+        ):
+            intent = client.post(
+                "/api/payments/intent",
+                json={"budget": 1500.0, "customer_id": customer1_id},
+                headers=headers1,
+            )
+            assert intent.status_code == 201, intent.text
+            order1 = client.post(
+                "/api/payments/confirm",
+                json={"intent_id": intent_id, "customer_id": customer1_id},
+                headers=headers1,
+            )
+            assert order1.status_code == 201, order1.text
+        order1_id = order1.json()["order_id"]
 
         # Customer 2 tries to access customer 1's order
         response = client.get(f"/api/orders/{order1_id}", headers=headers2)
