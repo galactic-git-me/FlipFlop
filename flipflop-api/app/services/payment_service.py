@@ -1,7 +1,7 @@
 """Stripe payment processing service for quote-to-order conversion."""
 
 import stripe
-from stripe.error import SignatureVerificationError, StripeError
+from stripe import SignatureVerificationError, StripeError
 import structlog
 from typing import Optional
 from datetime import datetime
@@ -284,7 +284,7 @@ class PaymentService:
                 "created_at": datetime.utcfromtimestamp(intent.created),
             }
 
-        except stripe.error.StripeError as e:
+        except StripeError as e:
             log.error("payment_intent.retrieval_failed", error=str(e))
             raise ValueError(f"Failed to retrieve payment intent: {str(e)}")
 
@@ -298,6 +298,6 @@ class PaymentService:
                 return {"intent_id": intent.id, "status": intent.status}
             intent = stripe.PaymentIntent.cancel(intent_id)
             return {"intent_id": intent.id, "status": intent.status}
-        except stripe.error.StripeError as e:
+        except StripeError as e:
             log.error("payment_intent.cancellation_failed", error=str(e), intent_id=intent_id)
             raise ValueError(f"Failed to cancel payment intent: {str(e)}")

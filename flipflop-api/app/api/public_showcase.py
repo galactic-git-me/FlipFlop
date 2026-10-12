@@ -323,7 +323,7 @@ async def update_checkout_options(
     import stripe
     try:
         current = stripe.PaymentIntent.retrieve(body.intent_id)
-    except stripe.error.StripeError as exc:
+    except stripe.StripeError as exc:
         raise HTTPException(400, "Could not retrieve this payment session.") from exc
     metadata = dict(current.metadata or {})
     if (metadata.get("purchase_type") != "product" or metadata.get("product_id") != str(product_id)
@@ -353,7 +353,7 @@ async def update_checkout_options(
                       "software_profile_curated_build_id": str(profile.get("curated_build_id") or ""),
                       **checkout_metadata(choice)},
         )
-    except stripe.error.StripeError as exc:
+    except stripe.StripeError as exc:
         raise HTTPException(400, "Could not update this payment session.") from exc
     # Keep the durable order snapshot aligned with the active PaymentIntent;
     # a failed Stripe update must not silently change the eventual address.
@@ -401,7 +401,7 @@ async def confirm_checkout(
         payment_data = await payment_service.handle_payment_success(
             intent_id=body.intent_id, customer_id=customer.id, quote_data={},
         )
-    except stripe.error.StripeError as e:
+    except stripe.StripeError as e:
         raise HTTPException(400, "Could not verify this payment session.") from e
     except ValueError as e:
         raise HTTPException(400, str(e))

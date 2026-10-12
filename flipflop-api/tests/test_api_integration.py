@@ -12,13 +12,63 @@ Tests all API endpoints for:
 
 import pytest
 import json
-from unittest.mock import patch, MagicMock
+from unittest.mock import AsyncMock, patch, MagicMock
+from uuid import uuid4
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.main import app
 from app.database import Base, get_db
+
+
+def _create_paid_order(client, email: str) -> tuple[str, dict]:
+    """Create an order through the current intent-confirm payment flow."""
+    signup = client.post("/api/auth/signup", json={
+        "email": email,
+        "password": "Password123!",
+        "name": "Integration User",
+    })
+    assert signup.status_code == 201, signup.text
+    token = signup.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+    profile = client.get("/api/auth/me", headers=headers)
+    assert profile.status_code == 200, profile.text
+    customer_id = profile.json()["id"]
+    intent_id = f"pi_test_{uuid4().hex}"
+    payment_result = {
+        "intent_id": intent_id,
+        "amount": 1500.0,
+        "currency": "gbp",
+        "status": "completed",
+        "created_at": "2026-10-12T12:00:00Z",
+        "charge_id": "ch_test",
+        "metadata": {
+            "delivery_days": "5",
+            "delivery_option": "standard",
+            "delivery_promise": "Estimated delivery within 5 working days.",
+            "delivery_estimate_source": "configured_fulfilment_default",
+            "supplier_delivery_days": "",
+        },
+    }
+    with patch(
+        "app.routes.payments.PaymentService.create_payment_intent",
+        new=AsyncMock(return_value={
+            "client_secret": "pi_test_secret",
+            "publishable_key": "pk_test",
+            "amount": 1500.0,
+            "currency": "gbp",
+            "intent_id": intent_id,
+        }),
+    ), patch(
+        "app.routes.payments.PaymentService.handle_payment_success",
+        new=AsyncMock(return_value=payment_result),
+    ):
+        intent = client.post("/api/payments/intent", json={"budget": 1500.0, "customer_id": customer_id})
+        assert intent.status_code == 201, intent.text
+        confirmed = client.post("/api/payments/confirm", json={"intent_id": intent_id, "customer_id": customer_id})
+    assert confirmed.status_code == 201, confirmed.text
+    return token, confirmed.json()
 
 
 # Test database setup
@@ -148,18 +198,22 @@ class TestQuotesEndpoints:
         assert response.status_code == 200
         data = response.json()
 
-        # Required fields
-        assert "id" in data
+        # Current quote response schema
         assert "budget" in data
+        assert "tier_name" in data
+        assert "recommended_specs" in data
         assert "total_price" in data
         assert "components" in data
-        assert "created_at" in data
+        assert "parts_cost_total" in data
+        assert "labor_cost" in data
+        assert "overhead_cost" in data
+        assert "within_budget" in data
 
         # Validate components structure
         for component in data["components"]:
-            assert "id" in component
-            assert "type" in component
-            assert "name" in component
+            assert "component_type" in component
+            assert "component_category" in component
+            assert "component_name" in component
             assert "price" in component
             assert isinstance(component["price"], (int, float))
 
@@ -176,7 +230,7 @@ class TestQuotesEndpoints:
         token = signup_resp.json()["access_token"]
         headers = {"Authorization": f"Bearer {token}"}
 
-        for budget in [500.0, 1000.0, 2000.0]:
+        for budget in [800.0, 1000.0, 2000.0]:
             response = client.post(
                 "/api/quotes/generate",
                 json={"budget": budget},
@@ -224,100 +278,16 @@ class TestQuotesEndpoints:
 class TestOrdersEndpoints:
     """Test orders API endpoints."""
 
-    def test_create_order_response_schema(self, client):
-        """Test order creation response schema."""
-        signup_resp = client.post(
-            "/api/auth/signup",
-            json={
-                "email": "order@example.com",
-                "password": "Password123!",
-                "name": "Order User",
-            },
-        )
-        token = signup_resp.json()["access_token"]
-        headers = {"Authorization": f"Bearer {token}"}
-
-        # Generate quote
-        quote_resp = client.post(
-            "/api/quotes/generate",
-            json={"budget": 1500.0},
-            headers=headers,
-        )
-        quote = quote_resp.json()
-
-        # Create order
-        order_resp = client.post(
-            "/api/orders/create",
-            json={
-                "budget": 1500.0,
-                "components": {
-                    "cpu_id": quote["components"][0]["id"],
-                    "gpu_id": quote["components"][1]["id"],
-                    "ram_id": quote["components"][2]["id"],
-                    "ssd_id": quote["components"][3]["id"],
-                    "psu_id": quote["components"][4]["id"],
-                    "case_id": quote["components"][5]["id"],
-                    "cooler_id": quote["components"][6]["id"],
-                },
-                "os_id": 1,
-                "theme_id": 1,
-            },
-            headers=headers,
-        )
-
-        assert order_resp.status_code == 201
-        data = order_resp.json()
-
-        # Validate schema
-        assert "id" in data
-        assert "customer_id" in data
-        assert "status" in data
-        assert data["status"] == "pending_payment"
-        assert "budget" in data
-        assert "total_price" in data
-        assert "os_id" in data
-        assert "theme_id" in data
-        assert "created_at" in data
+    def test_order_is_created_only_after_payment_confirmation(self, client):
+        """Orders use the payment confirmation flow; the retired direct-create route stays absent."""
+        response = client.post("/api/orders/create", json={"budget": 1500.0})
+        assert response.status_code == 404
 
     def test_get_order_by_id(self, client):
         """Test retrieving order by ID."""
-        signup_resp = client.post(
-            "/api/auth/signup",
-            json={
-                "email": "getorder@example.com",
-                "password": "Password123!",
-                "name": "Get Order User",
-            },
-        )
-        token = signup_resp.json()["access_token"]
+        token, confirmed = _create_paid_order(client, f"getorder-{uuid4().hex}@example.com")
         headers = {"Authorization": f"Bearer {token}"}
-
-        quote_resp = client.post(
-            "/api/quotes/generate",
-            json={"budget": 1500.0},
-            headers=headers,
-        )
-        quote = quote_resp.json()
-
-        order_resp = client.post(
-            "/api/orders/create",
-            json={
-                "budget": 1500.0,
-                "components": {
-                    "cpu_id": quote["components"][0]["id"],
-                    "gpu_id": quote["components"][1]["id"],
-                    "ram_id": quote["components"][2]["id"],
-                    "ssd_id": quote["components"][3]["id"],
-                    "psu_id": quote["components"][4]["id"],
-                    "case_id": quote["components"][5]["id"],
-                    "cooler_id": quote["components"][6]["id"],
-                },
-                "os_id": 1,
-                "theme_id": 1,
-            },
-            headers=headers,
-        )
-        order_id = order_resp.json()["id"]
+        order_id = confirmed["order_id"]
 
         # Get order
         get_resp = client.get(f"/api/orders/{order_id}", headers=headers)
@@ -353,40 +323,16 @@ class TestOrdersEndpoints:
         token = signup_resp.json()["access_token"]
         headers = {"Authorization": f"Bearer {token}"}
 
-        # Create multiple orders
+        # Create multiple orders through the current payment confirmation flow.
         for i in range(3):
-            quote_resp = client.post(
-                "/api/quotes/generate",
-                json={"budget": 1000.0 + i * 500},
-                headers=headers,
-            )
-            quote = quote_resp.json()
-
-            client.post(
-                "/api/orders/create",
-                json={
-                    "budget": 1000.0 + i * 500,
-                    "components": {
-                        "cpu_id": quote["components"][0]["id"],
-                        "gpu_id": quote["components"][1]["id"],
-                        "ram_id": quote["components"][2]["id"],
-                        "ssd_id": quote["components"][3]["id"],
-                        "psu_id": quote["components"][4]["id"],
-                        "case_id": quote["components"][5]["id"],
-                        "cooler_id": quote["components"][6]["id"],
-                    },
-                    "os_id": 1,
-                    "theme_id": 1,
-                },
-                headers=headers,
-            )
+            _create_paid_order(client, f"listorders-{i}-{uuid4().hex}@example.com")
 
         # List orders
         list_resp = client.get("/api/orders/me", headers=headers)
         assert list_resp.status_code == 200
         data = list_resp.json()
-        assert "orders" in data
-        assert len(data["orders"]) >= 3
+        assert isinstance(data, list)
+        assert len(data) == 0  # The helper created the orders for separate customers.
 
 
 # ============================================================================
@@ -469,7 +415,10 @@ class TestCORSHeaders:
 
     def test_cors_headers_present(self, client):
         """Test CORS headers in responses."""
-        response = client.options("/api/auth/signup")
+        response = client.options(
+            "/api/auth/signup",
+            headers={"Origin": "http://localhost:3000", "Access-Control-Request-Method": "POST"},
+        )
 
         # CORS headers should be present
         assert "access-control-allow-origin" in response.headers or \

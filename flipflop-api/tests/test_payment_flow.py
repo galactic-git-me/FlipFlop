@@ -9,7 +9,7 @@ from app.schemas.payment import (
     CreatePaymentIntentRequest,
     ConfirmPaymentRequest,
 )
-from stripe.error import SignatureVerificationError, StripeError
+from stripe import SignatureVerificationError, StripeError
 
 
 @pytest.mark.unit
