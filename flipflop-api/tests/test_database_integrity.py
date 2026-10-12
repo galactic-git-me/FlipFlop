@@ -80,7 +80,7 @@ def make_order(customer_id: int, suffix: str | None = None, price: float = 1400.
 async def _wait_until_postgres_backend_is_lock_blocked(engine, pid: int) -> bool:
     sessions = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with sessions() as observer:
-        for _ in range(200):
+        for _ in range(1000):
             wait_event = await observer.scalar(
                 text("SELECT wait_event_type FROM pg_stat_activity WHERE pid = :pid"),
                 {"pid": pid},

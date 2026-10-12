@@ -40,6 +40,7 @@ async def delivery_webhook_client(monkeypatch):
     async with engine.begin() as connection:
         await connection.run_sync(Base.metadata.create_all)
     session_factory = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    monkeypatch.setattr(parcel2go_notifications, "AsyncSessionLocal", session_factory)
 
     async def override_get_db():
         async with session_factory() as session:
@@ -455,8 +456,10 @@ async def test_delivered_direct_repair_return_email_retries_until_confirmed(
     monkeypatch.setattr(parcel2go_notifications, "send_customer_case_status_email", email_sender)
     async with session_factory() as db:
         event = await db.get(ShipmentTrackingEvent, event_id)
-        assert await notify_parcel2go_tracking_event_impl(db, event) is False
+        assert await notify_parcel2go_tracking_event_impl(db, event) is True
         assert event.customer_notified_at is None
+        event.customer_notification_attempted_at = datetime.utcnow() - timedelta(minutes=5)
+        await db.commit()
 
     email_sender.return_value = True
     async with session_factory() as db:

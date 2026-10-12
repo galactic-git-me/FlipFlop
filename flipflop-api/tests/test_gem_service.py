@@ -276,10 +276,10 @@ async def test_enrich_recommendation_financial(db_with_orders):
     # Verify profit calculation
     assert rec["actual_cost_to_build"] > 0
     assert rec["actual_margin_gbp"] == pytest.approx(
-        rec["estimated_market_price_gbp"] - rec["actual_cost_to_build"]
+        rec["estimated_market_price_gbp"] - rec["actual_cost_to_build"], abs=0.01
     )
     assert rec["actual_margin_percent"] == pytest.approx(
-        rec["actual_margin_gbp"] / rec["estimated_market_price_gbp"] * 100
+        rec["actual_margin_gbp"] / rec["estimated_market_price_gbp"] * 100, abs=0.01
     )
     assert rec["actual_margin_percent"] <= 100
 

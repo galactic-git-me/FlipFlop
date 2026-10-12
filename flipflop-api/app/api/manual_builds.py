@@ -2553,7 +2553,7 @@ async def review_dispatch_evidence(
         raise HTTPException(409, "Shipment evidence can be reviewed only after the build is sold")
     if _manual_build_has_physical_handover(build):
         raise HTTPException(409, "Shipment evidence cannot be reviewed after courier handover")
-    artifacts = list(job.artifact_index or []) if job else []
+    artifacts = deepcopy(job.artifact_index or []) if job else []
     artifact = next((item for item in artifacts if item.get("id") == artifact_id), None)
     if not artifact or artifact.get("category") not in {"working_pc", "package_contents", "sealed_package"}:
         raise HTTPException(404, "Shipment evidence not found")

@@ -258,6 +258,8 @@ async def test_recreate_cycle_exception_rollback_prevents_repeated_drops():
 
     # Second run: flip should be reselected and retried successfully
     async def mock_publish_flip_success(flip, db):
+        nonlocal call_count
+        call_count += 1
         flip.ebay_listing_id = f"listing-{flip.id}-retry"
         return True
 

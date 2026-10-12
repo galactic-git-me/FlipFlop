@@ -119,9 +119,9 @@ async def retry_pending_dispatch_notifications() -> dict[str, int]:
                 failed_count += 1
                 if event.customer_notification_attempts >= _MAX_ATTEMPTS:
                     log.error(
-                        "dispatch_notification.retry_limit_reached",
-                        event_id=notification_event_id,
-                        attempts=event.customer_notification_attempts,
+                        "dispatch_notification.retry_limit_reached event_id=%s attempts=%s",
+                        notification_event_id,
+                        event.customer_notification_attempts,
                     )
                     await emit_alert(
                         code="dispatch_notification_delivery_failed",

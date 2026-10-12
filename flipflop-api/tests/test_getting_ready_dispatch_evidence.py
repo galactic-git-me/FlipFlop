@@ -177,6 +177,7 @@ async def test_dispatch_evidence_file_is_removed_when_database_write_fails_befor
         shipment_booking_state="booked",
         tracking_number="TRACK-DB-FAIL",
         shipment_booked_at=datetime.utcnow(),
+        delivered_at=None,
         customer_id=17,
     )
 
@@ -223,6 +224,7 @@ async def test_dispatch_evidence_file_is_retained_when_commit_outcome_is_uncerta
         shipment_booking_state="booked",
         tracking_number="TRACK-COMMIT-UNCERTAIN",
         shipment_booked_at=datetime.utcnow(),
+        delivered_at=None,
         customer_id=17,
     )
 
@@ -904,7 +906,7 @@ async def test_insurer_success_response_mismatch_keeps_dispatch_blocked(
 
     assert response.status_code == 409
     assert "Dispatch remains blocked" in response.json()["detail"]
-    assert mismatch in " ".join(response.json()["detail"].split()).lower()
+    assert mismatch.lower() in " ".join(response.json()["detail"].split()).lower()
     policy_provider.assert_awaited_once()
     async with session_factory() as db:
         saved = await db.get(ManualBuild, build_id)
@@ -2453,7 +2455,7 @@ async def test_sold_build_component_changes_cannot_bypass_order_change_flow(evid
         json={"components": [{"slot": "CPU", "name": "Unapproved replacement", "price_paid": 1}]},
     )
     assert response.status_code == 409
-    assert "approved customer order-change flow" in response.json()["detail"]
+    assert "locked after physical handover" in response.json()["detail"]
     async with session_factory() as db:
         persisted = await db.get(ManualBuild, build_id)
         assert persisted.components == original_components

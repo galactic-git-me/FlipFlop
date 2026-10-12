@@ -158,7 +158,7 @@ def test_prompt_renderer_preserves_placeholder_like_text_inside_input_data():
     )
 
     assert '"build": "Literal {{build_specification_json}} and {{customer_secret}}"' in prompt
-    assert '"spec": {"component": "Example"}' in prompt
+    assert '"spec": {"component":"Example"}' in prompt
 
 
 def test_prompt_renderer_rejects_unknown_template_placeholder():

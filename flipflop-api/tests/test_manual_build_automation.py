@@ -240,11 +240,10 @@ async def test_manual_build_recreate_cycle_steps_price_and_reschedules(client, t
     ), patch(
         "app.workers.manual_build_lifecycle.post_build_to_ebay", new=AsyncMock(return_value="not_ready")
     ), patch(
-        "app.services.ai_service.generate_listing_content",
+        "app.services.ai_service.generate_ebay_listing",
         new=AsyncMock(return_value=(
-            '{"titles": ["New Title 1", "New Title 2"], "description": "<p>new</p>", '
-            '"aspects": {"Brand": "FlipFlop", "Type": "Desktop"}}',
-            "claude",
+            "B. Three eBay titles\nNew Title 1\n\nC. Other details\nD. Complete branded HTML description\n<p>new</p>\nE. End",
+            "openrouter/model",
         )),
     ):
         result = await run_manual_build_recreate_cycle_job()
@@ -381,8 +380,8 @@ async def test_post_to_ebay_creates_remote_draft(client, test_db):
     with patch(
         "app.services.ebay_token_manager.get_valid_ebay_access_token", new=AsyncMock(return_value="TOKEN")
     ), patch(
-        "app.api.manual_builds.post_flip_to_ebay",
-        new=AsyncMock(return_value={"success": True, "offer_id": "offer-1", "sku": "sku-1", "status": "DRAFT"}),
+        "app.api.manual_builds.EbayListingPoster.create_item_draft",
+        new=AsyncMock(return_value={"success": True, "draft_id": "draft-1", "draft_url": "https://ebay.example/draft-1"}),
     ) as mock_post:
         resp = client.post(
             f"/api/manual-builds/{build_id}/post-to-ebay",
@@ -392,14 +391,13 @@ async def test_post_to_ebay_creates_remote_draft(client, test_db):
     assert resp.status_code == 200
     response_body = resp.json()
     assert response_body["success"] is True
-    assert response_body["offer_id"] == "offer-1"
+    assert response_body["draft_id"] == "draft-1"
     assert response_body["action"] == "drafted"
-    assert mock_post.await_args.kwargs["publish"] is False
+    assert mock_post.await_args.kwargs["title"] == "Title"
 
     async with test_db() as db:
         refreshed = await db.get(ManualBuild, build_id)
-        assert refreshed.ebay_offer_id == "offer-1"
-        assert refreshed.ebay_sku == "sku-1"
+        assert refreshed.ebay_draft_id == "draft-1"
         assert refreshed.ebay_listing_status == "draft"
 
 

@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, BackgroundTasks
 from jose import jwt
 from datetime import timezone
 from app.config import get_settings
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
@@ -25,7 +25,7 @@ from app.models.shipment_tracking_event import ShipmentTrackingEvent
 from app.models.product import Product, ProductType
 from app.routes.admin_auth import get_current_admin
 from app.services.email_service import send_shipment_update_email, send_order_status_email
-from app.services.warranty_service import ensure_order_reserve_sync
+from app.services.warranty_service import ensure_order_reserve
 
 router = APIRouter(prefix="/api/admin", tags=["admin"], dependencies=[Depends(get_current_admin)])
 
@@ -586,13 +586,15 @@ async def update_order_status(
     update: OrderStatusUpdateRequest,
     background_tasks: BackgroundTasks,
     admin=Depends(get_current_admin),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     """Update order status and set relevant timing fields."""
     # Serialize sourcing milestones with customer cancellation. The customer
     # cancellation endpoint locks this same row before recording its sourcing
     # hold, so only one transition can pass its eligibility check at a time.
-    order = db.query(Order).filter(Order.id == order_id).with_for_update().first()
+    order = (await db.execute(
+        select(Order).options(selectinload(Order.customer)).where(Order.id == order_id).with_for_update()
+    )).scalar_one_or_none()
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
 
@@ -621,7 +623,7 @@ async def update_order_status(
         fulfilment_type = str((order.specs or {}).get("fulfilment_type") or "").lower().replace("-", "_")
         if fulfilment_type in {"curated", "curated_for_you", "custom", "made_by_you"} and order.status != OrderStatus.QA:
             raise HTTPException(409, "Curated and Made-by-you builds must complete QA before moving to Ready to Ship")
-        _ensure_order_dispatch_build(db, order, admin)
+        await db.run_sync(lambda sync_db: _ensure_order_dispatch_build(sync_db, order, admin))
 
     order.status = new_status
     if new_status in {
@@ -634,7 +636,9 @@ async def update_order_status(
         OrderStatus.SHIPPED,
         OrderStatus.COMPLETED,
     }:
-        getting_started_job = db.query(GettingStartedJob).filter(GettingStartedJob.order_id == order.id).first()
+        getting_started_job = (await db.execute(
+            select(GettingStartedJob).where(GettingStartedJob.order_id == order.id)
+        )).scalar_one_or_none()
         if getting_started_job:
             getting_started_job.checklist = {
                 **(getting_started_job.checklist or {}),
@@ -661,7 +665,12 @@ async def update_order_status(
 
     elif new_status == OrderStatus.SHIPPED:
         order.shipped_at = order.shipped_at or now
-        if not db.query(ShipmentTrackingEvent).filter(ShipmentTrackingEvent.provider_event_id == f"admin-dispatch:{order.id}").first():
+        existing_dispatch_event = (await db.execute(
+            select(ShipmentTrackingEvent.id).where(
+                ShipmentTrackingEvent.provider_event_id == f"admin-dispatch:{order.id}"
+            )
+        )).scalar_one_or_none()
+        if not existing_dispatch_event:
             db.add(ShipmentTrackingEvent(
                 order_id=order.id,
                 provider=order.carrier or "operator",
@@ -675,20 +684,23 @@ async def update_order_status(
     elif new_status == OrderStatus.COMPLETED:
         order.delivered_at = order.delivered_at or now
         order.actual_delivery_date = order.actual_delivery_date or order.delivered_at
-        ensure_order_reserve_sync(db, order, order.delivered_at)
-        linked_build = db.query(Build).filter(
+        await ensure_order_reserve(db, order, order.delivered_at)
+        linked_build = (await db.execute(select(Build).where(
             Build.order_id == order.id,
             Build.manual_build_id.is_not(None),
-        ).first()
+        ))).scalar_one_or_none()
         if linked_build:
-            physical_build = db.query(ManualBuild).filter(
-                ManualBuild.id == linked_build.manual_build_id
-            ).first()
+            physical_build = await db.get(ManualBuild, linked_build.manual_build_id)
             if physical_build:
                 physical_build.delivered_at = physical_build.delivered_at or order.delivered_at
                 physical_build.warranty_started_at = physical_build.warranty_started_at or order.delivered_at
                 physical_build.dispatch_status = "delivered"
-        if not db.query(ShipmentTrackingEvent).filter(ShipmentTrackingEvent.provider_event_id == f"admin-delivered:{order.id}").first():
+        existing_delivery_event = (await db.execute(
+            select(ShipmentTrackingEvent.id).where(
+                ShipmentTrackingEvent.provider_event_id == f"admin-delivered:{order.id}"
+            )
+        )).scalar_one_or_none()
+        if not existing_delivery_event:
             db.add(ShipmentTrackingEvent(
                 order_id=order.id,
                 provider=order.carrier or "operator",
@@ -699,8 +711,8 @@ async def update_order_status(
                 occurred_at=order.delivered_at,
             ))
 
-    db.commit()
-    db.refresh(order)
+    await db.commit()
+    await db.refresh(order)
 
     # Every customer-visible lifecycle transition gets the same branded,
     # centralised status email template.
