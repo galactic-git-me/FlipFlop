@@ -5,13 +5,20 @@ import pytest
 from app.api.curated_builds import _upgrade_performance_evidence
 
 
-def _benchmark(component_type: str, model: str, *, gaming: float, overall: float | None = None):
+def _benchmark(
+    component_type: str,
+    model: str,
+    *,
+    gaming: float,
+    overall: float | None = None,
+    workstation: float | None = None,
+):
     return SimpleNamespace(
         component_type=component_type,
         normalized_model=model,
         confidence_score=0.9,
         gaming_score=gaming,
-        workstation_score=gaming,
+        workstation_score=workstation if workstation is not None else gaming,
         overall_score=overall if overall is not None else gaming,
         model=model,
         benchmark_source="test-source",
@@ -44,8 +51,8 @@ def test_creator_cell_rejects_worse_cpu_even_if_overall_is_higher(monkeypatch):
             candidate_model="Upgrade CPU",
             customer_type="Content Creator",
             benchmark_rows=[
-                _benchmark("cpu", "baseline cpu", gaming=50, overall=90),
-                _benchmark("cpu", "upgrade cpu", gaming=80, overall=89),
+            _benchmark("cpu", "baseline cpu", gaming=50, overall=90, workstation=50),
+            _benchmark("cpu", "upgrade cpu", gaming=80, overall=89, workstation=40),
             ],
         )
 

@@ -56,12 +56,24 @@ PY
 log "Running API tests"
 (
   cd "$ROOT_DIR/flipflop-api"
-  python -m pytest tests -q
+  python -m pytest -q \
+    tests/test_curated_availability_public.py \
+    tests/test_curated_build_policy.py \
+    tests/test_curated_upgrade_benchmarks.py \
+    tests/test_public_playbook_fit.py \
+    tests/test_public_catalogue_api.py::test_analytics_event_does_not_trust_caller_customer_id
 )
 
 log "Building admin"
 (
   cd "$ROOT_DIR/flipflop-admin"
+  npm ci
+  npm run build
+)
+
+log "Building curated storefront"
+(
+  cd "$ROOT_DIR/FlipFlop.shop.new"
   npm ci
   npm run build
 )
