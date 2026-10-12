@@ -1,6 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
 from app.main import app
+from app.schemas.buying_flow import SessionAnalyticsEvent
 
 @pytest.fixture(scope="module")
 def client():
@@ -30,3 +31,12 @@ def test_public_playbook_slots_nonexistent_returns_not_200(client):
 def test_budget_recommendation_validates_budget(client):
     resp = client.post("/api/public/recommendation", json={"purpose": "Great-value Gaming", "budget_gbp": 0})
     assert resp.status_code == 422
+
+
+def test_analytics_event_does_not_trust_caller_customer_id():
+    event = SessionAnalyticsEvent.model_validate({
+        "event_type": "playbook_tier_shown",
+        "customer_id": 123,
+    })
+
+    assert "customer_id" not in event.model_dump()

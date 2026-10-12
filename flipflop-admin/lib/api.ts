@@ -876,6 +876,11 @@ export const api = {
       if (!response.ok) throw new Error(`Could not retrieve evidence (${response.status})`);
       return response.blob();
     },
+    reconcileInsurancePolicy: (id: number, payload: {resolution: "policy_exists" | "no_policy"; provider_checked: true; note: string; policy_id?: string; invoice_id?: string; provider_tracking_number?: string; insured_value_gbp?: number; cost_gbp?: number}) =>
+      request<{status: string; policy_id?: string | null; cost_gbp?: number | null; idempotent: boolean}>(
+        `/manual-builds/${id}/insurance-policy/reconcile`,
+        {method: "POST", body: JSON.stringify(payload)}
+      ),
   },
   crossListing: {
     amazonStatus: () =>

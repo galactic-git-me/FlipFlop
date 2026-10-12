@@ -43,3 +43,7 @@ reportlab
 
 # Payment Processing
 stripe
+
+# Test runner
+pytest
+pytest-asyncio
