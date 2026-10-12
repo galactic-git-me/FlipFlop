@@ -35,7 +35,7 @@ def test_support_knowledge_loads_only_approved_customer_sections():
         "FlipFlop first-line support knowledge base",
         "FlipFlop Software Playbook",
     ]
-    assert sources[0]["version"] == "1.3"
+    assert sources[0]["version"] == "1.4"
     assert sources[1]["version"] == "1.0"
 
 

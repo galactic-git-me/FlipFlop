@@ -81,6 +81,8 @@ class CourierQuote:
 
 def _parse_tracked_quotes(data: dict) -> list[CourierQuote]:
     """Keep malformed or unbookable provider rows out of operator choices."""
+    if not isinstance(data, dict):
+        return []
     raw_quotes = data.get("Quotes", data.get("quotes", []))
     if not isinstance(raw_quotes, list):
         return []

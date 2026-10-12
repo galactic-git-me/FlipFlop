@@ -13,6 +13,7 @@ from sqlalchemy import select
 
 from app.database import AsyncSessionLocal
 from app.models.flip import Flip, FlipStage
+from app.models.flip_intelligence import FlipIntelligence
 from app.models.listing import Listing
 from app.workers.recreate_cycle import run_deferred_publish_job, run_recreate_cycle_job
 from app.workers.markdown_event import run_markdown_event_scan_job
@@ -21,6 +22,7 @@ from app.workers.markdown_event import run_markdown_event_scan_job
 @pytest.fixture(autouse=True)
 async def _clean_tables():
     async with AsyncSessionLocal() as db:
+        await db.execute(FlipIntelligence.__table__.delete())
         await db.execute(Flip.__table__.delete())
         await db.execute(Listing.__table__.delete())
         await db.commit()

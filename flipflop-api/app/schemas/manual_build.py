@@ -1,6 +1,6 @@
 # pc-flipper-backend/app/schemas/manual_build.py
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, FiniteFloat
 from typing import Literal, Optional
 
 
@@ -24,6 +24,7 @@ class ManualBuildCreate(BaseModel):
     name: str = "Untitled Build"
     playbook_id: int | None = None
     curated_build_id: str | None = None
+    warranty_reserve_pct: FiniteFloat = 5.0
 
 
 class ManualBuildPatch(BaseModel):
@@ -87,7 +88,7 @@ class ManualBuildOut(BaseModel):
     shipping_cost: float = 0.0
     shipping_insurance_cost: float = 0.0
     packaging_cost: float = 0.0
-    warranty_reserve_pct: float = Field(default=5.0, allow_inf_nan=False)
+    warranty_reserve_pct: FiniteFloat = 5.0
     handling_time_days: int = 1
     delivery_min_days: int = 1
     delivery_max_days: int = 2
@@ -244,7 +245,7 @@ class UpdateEbayListingConfigRequest(BaseModel):
     shipping_cost: Optional[float] = None
     shipping_insurance_cost: Optional[float] = None
     packaging_cost: Optional[float] = None
-    warranty_reserve_pct: Optional[float] = Field(default=None, allow_inf_nan=False)
+    warranty_reserve_pct: Optional[FiniteFloat] = None
     marketplace_fees_actual: Optional[float] = None
     promotion_cost_actual: Optional[float] = None
     refund_amount: Optional[float] = None

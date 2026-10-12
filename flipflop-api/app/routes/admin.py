@@ -607,6 +607,8 @@ async def update_order_status(
 
     if new_status == OrderStatus.CANCELLED:
         raise HTTPException(status_code=409, detail="Use the owner-verified cancellation and refund action; do not change cancellation status manually")
+    if new_status == OrderStatus.COMPLETED and not order.delivered_at:
+        raise HTTPException(status_code=409, detail="Order completion requires a confirmed delivery event")
     if order.status == OrderStatus.CANCELLED or order.cancellation_requested_at:
         raise HTTPException(status_code=409, detail="This order is cancelled or has a refund pending reconciliation")
     change_request_status = (order.change_request or {}).get("status") if isinstance(order.change_request, dict) else None
@@ -674,6 +676,18 @@ async def update_order_status(
         order.delivered_at = order.delivered_at or now
         order.actual_delivery_date = order.actual_delivery_date or order.delivered_at
         ensure_order_reserve_sync(db, order, order.delivered_at)
+        linked_build = db.query(Build).filter(
+            Build.order_id == order.id,
+            Build.manual_build_id.is_not(None),
+        ).first()
+        if linked_build:
+            physical_build = db.query(ManualBuild).filter(
+                ManualBuild.id == linked_build.manual_build_id
+            ).first()
+            if physical_build:
+                physical_build.delivered_at = physical_build.delivered_at or order.delivered_at
+                physical_build.warranty_started_at = physical_build.warranty_started_at or order.delivered_at
+                physical_build.dispatch_status = "delivered"
         if not db.query(ShipmentTrackingEvent).filter(ShipmentTrackingEvent.provider_event_id == f"admin-delivered:{order.id}").first():
             db.add(ShipmentTrackingEvent(
                 order_id=order.id,

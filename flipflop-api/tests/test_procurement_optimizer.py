@@ -16,7 +16,7 @@ def offer(price: str, *, stock: bool = True, condition: Condition = Condition.NE
 def parts() -> list[ApprovedPart]:
     return [
         ApprovedPart("cpu-a", "cpu", offer("180"), True, cpu_cores=6, cpu_socket="AM5", cpu_tdp_w=65),
-        ApprovedPart("board-a", "motherboard", offer("130"), True, motherboard_socket="AM5", motherboard_ram_generation="DDR5", motherboard_form_factor="ATX"),
+        ApprovedPart("board-a", "motherboard", offer("130"), True, motherboard_socket="AM5", motherboard_ram_generation="DDR5", motherboard_form_factor="ATX", motherboard_max_ram_gb=128),
         ApprovedPart("ram-a", "ram", offer("90"), True, ram_gb=16, ram_generation="DDR5"),
         ApprovedPart("ssd-a", "storage", offer("70"), True, storage_gb=1000),
         ApprovedPart("psu-a", "psu", offer("100"), True, psu_wattage=650),

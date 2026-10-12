@@ -1078,7 +1078,13 @@ async def create_build(body: ManualBuildCreate, db: AsyncSession = Depends(get_d
             "software_profile": profile,
             "assigned_at": datetime.utcnow().isoformat(),
         }
-    build = ManualBuild(name=body.name, components=[], total_cost=None, evidence_data=evidence_data)
+    build = ManualBuild(
+        name=body.name,
+        components=[],
+        total_cost=None,
+        evidence_data=evidence_data,
+        warranty_reserve_pct=body.warranty_reserve_pct,
+    )
     db.add(build)
     await db.flush()
     await db.refresh(build)
