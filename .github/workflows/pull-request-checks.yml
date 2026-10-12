@@ -34,6 +34,8 @@ jobs:
       OLLAMA_MODEL: disabled-in-ci
       FLIPFLOP_CI_FULL_API_TESTS: "1"
       EBAY_TOKEN_ENCRYPTION_KEY: ci-only-ebay-token-encryption-test-key
+      STRIPE_SECRET_KEY: sk_test_flipflop_ci_only
+      STRIPE_WEBHOOK_SECRET: whsec_flipflop_ci_only
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/flipflop_test
       SYNC_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/flipflop_test
       TEST_DATABASE_URL: postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/flipflop_test

@@ -9,6 +9,7 @@ from app.schemas.payment import (
     CreatePaymentIntentRequest,
     ConfirmPaymentRequest,
 )
+from stripe.error import SignatureVerificationError, StripeError
 
 
 @pytest.mark.unit
@@ -55,7 +56,7 @@ class TestPaymentService:
     ):
         """Test payment intent creation with Stripe error."""
         # Mock Stripe error
-        mock_stripe.PaymentIntent.create.side_effect = Exception(
+        mock_stripe.PaymentIntent.create.side_effect = StripeError(
             "Stripe API Error"
         )
 
@@ -137,7 +138,9 @@ class TestPaymentService:
         """Test webhook signature verification with invalid signature."""
         with patch("app.services.payment_service.stripe.Webhook.construct_event") as mock_construct:
             # Mock signature error
-            mock_construct.side_effect = Exception("Invalid signature")
+            mock_construct.side_effect = SignatureVerificationError(
+                "Invalid signature", "invalid_signature"
+            )
 
             # Should raise ValueError
             with pytest.raises(ValueError) as exc_info:
@@ -146,7 +149,7 @@ class TestPaymentService:
                     signature="invalid_signature",
                 )
 
-            assert "Invalid webhook payload" in str(exc_info.value)
+            assert "Invalid signature" in str(exc_info.value)
 
     @patch("app.services.payment_service.stripe")
     async def test_refund_payment_success(self, mock_stripe, payment_service):
@@ -173,7 +176,7 @@ class TestPaymentService:
         assert result["refund_id"] == "re_test123"
         assert result["amount"] == 1200.00
         assert result["status"] == "succeeded"
-        assert result["reason"] == "customer_request"
+        assert result["reason"] == "requested_by_customer"
 
     @patch("app.services.payment_service.stripe")
     async def test_refund_payment_no_charge(self, mock_stripe, payment_service):
