@@ -56,7 +56,7 @@ PY
 log "Running API tests"
 (
   cd "$ROOT_DIR/flipflop-api"
-  python -m pytest -q
+  python -m pytest tests -q
 )
 
 log "Building admin"
