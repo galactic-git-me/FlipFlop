@@ -40,7 +40,10 @@ async def _make_listing(db) -> int:
     return listing.id
 
 
-async def test_deferred_publish_skips_without_seller_token_but_still_reschedules_check():
+async def test_deferred_publish_skips_without_seller_token_but_still_reschedules_check(monkeypatch):
+    from app.services import ebay_oauth
+    from unittest.mock import AsyncMock
+    monkeypatch.setattr(ebay_oauth, "get_valid_access_token", AsyncMock(return_value=None))
     async with AsyncSessionLocal() as db:
         listing_id = await _make_listing(db)
         flip = Flip(
@@ -62,7 +65,10 @@ async def test_deferred_publish_skips_without_seller_token_but_still_reschedules
         assert refreshed.listed_at is None  # not marked listed since it never actually posted
 
 
-async def test_recreate_cycle_advances_state_without_seller_token():
+async def test_recreate_cycle_advances_state_without_seller_token(monkeypatch):
+    from app.services import ebay_oauth
+    from unittest.mock import AsyncMock
+    monkeypatch.setattr(ebay_oauth, "get_valid_access_token", AsyncMock(return_value=None))
     async with AsyncSessionLocal() as db:
         listing_id = await _make_listing(db)
         flip = Flip(
