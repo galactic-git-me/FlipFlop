@@ -688,15 +688,17 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
             approved_images_by_match[pair].append({"url": url, "title": title, "source": source, "href": href})
     if listing_match:
         media_rows = (await db.execute(text("""
-            SELECT listing_id, image_url, image_urls, video_urls
-            FROM gem_radar_listing_observations
-            WHERE listing_id = ANY(:listing_ids)
+            SELECT o.listing_id, o.image_url, o.image_urls, o.video_urls, l.image_urls AS catalogue_image_urls
+            FROM gem_radar_listing_observations o
+            LEFT JOIN listings l ON l.external_id = o.listing_id
+            WHERE o.listing_id = ANY(:listing_ids)
         """), {"listing_ids": list(listing_match)})).mappings().all()
         for media_row in media_rows:
             pair = listing_match.get(str(media_row["listing_id"]))
             if not pair:
                 continue
             images = list(media_row["image_urls"] or [])
+            images.extend(media_row["catalogue_image_urls"] or [])
             if media_row["image_url"]:
                 images.append(media_row["image_url"])
             for url in dict.fromkeys(images):

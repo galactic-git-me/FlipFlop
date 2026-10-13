@@ -256,6 +256,20 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
             continue
 
         image = item.get("image") or {}
+        image_url = image.get("imageUrl")
+        if not image_url:
+            # Browse search can omit the primary `image` while still returning
+            # product thumbnails/additional images. Preserve a real photo
+            # rather than persisting an image-less listing.
+            image_candidates = [
+                *(item.get("thumbnailImages") or []),
+                *(item.get("additionalImages") or []),
+            ]
+            image_url = next(
+                (candidate.get("imageUrl") for candidate in image_candidates
+                 if isinstance(candidate, dict) and candidate.get("imageUrl")),
+                None,
+            )
         # Extract canonical identifiers from productSummary if available. These are stable,
         # canonical identifiers that consolidate the same product across title
         # variants ("9800X3D" vs "Ryzen 9 9800X3D" vs "AMD Ryzen 9 9800X3D" all
@@ -285,7 +299,7 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
             "price": price,
             "condition": condition,
             "url": item_url,
-            "image_url": image.get("imageUrl"),
+            "image_url": image_url,
             "epid": item.get("epid"),
             "gtin": gtin,
             "mpn": mpn,
