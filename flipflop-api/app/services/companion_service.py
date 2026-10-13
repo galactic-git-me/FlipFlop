@@ -33,12 +33,12 @@ SEARCH_TOOL_SCHEMA = {
                 },
                 "max_price": {
                     "type": "number",
-                    "description": "Maximum price in GBP (optional)",
+                    "description": "Optional maximum price in GBP. Include only when the user explicitly states a price limit; otherwise omit this argument.",
                 },
                 "classification": {
                     "type": "string",
                     "enum": ["gem", "watch", "ok", "overpriced"],
-                    "description": "Filter by listing classification (optional)",
+                    "description": "Optional exact listing-classification filter. Include only when the user explicitly asks for a classification such as gems or overpriced listings; never infer it from general interest or a request for good deals.",
                 },
             },
             "required": ["query"],
@@ -58,6 +58,7 @@ Live catalogue state:
 {snapshot}
 
 You have a search_listings tool. When the user asks to find, show, or search for listings or hardware, call it — don't make up listings.
+Only pass optional filters the user explicitly requested. Do not infer max_price or classification from context, product prices, or phrases like “best deals”; omit those arguments unless stated.
 When showing search results, briefly comment on the best option(s) after the results.
 Keep replies short unless the user asks for detail. Use markdown sparingly."""
 
