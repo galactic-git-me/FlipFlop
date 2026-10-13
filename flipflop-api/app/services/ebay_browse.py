@@ -55,6 +55,20 @@ def _is_accessory(title: str) -> bool:
     tl = title.lower()
     return any(tok in tl for tok in _ACCESSORY_TOKENS)
 
+
+def _extract_listing_image_url(item: dict) -> str | None:
+    image = item.get("image") or {}
+    if isinstance(image, dict) and image.get("imageUrl"):
+        return image["imageUrl"]
+    # Browse search can omit the primary `image` while still returning
+    # product thumbnails/additional images.
+    candidates = [*(item.get("thumbnailImages") or []), *(item.get("additionalImages") or [])]
+    return next(
+        (candidate.get("imageUrl") for candidate in candidates
+         if isinstance(candidate, dict) and candidate.get("imageUrl")),
+        None,
+    )
+
 # Global semaphore — Browse API has per-app rate limits
 _API_SEM = asyncio.Semaphore(1)
 
@@ -255,21 +269,7 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
         if any(x in condition for x in defect_conditions):
             continue
 
-        image = item.get("image") or {}
-        image_url = image.get("imageUrl")
-        if not image_url:
-            # Browse search can omit the primary `image` while still returning
-            # product thumbnails/additional images. Preserve a real photo
-            # rather than persisting an image-less listing.
-            image_candidates = [
-                *(item.get("thumbnailImages") or []),
-                *(item.get("additionalImages") or []),
-            ]
-            image_url = next(
-                (candidate.get("imageUrl") for candidate in image_candidates
-                 if isinstance(candidate, dict) and candidate.get("imageUrl")),
-                None,
-            )
+        image_url = _extract_listing_image_url(item)
         # Extract canonical identifiers from productSummary if available. These are stable,
         # canonical identifiers that consolidate the same product across title
         # variants ("9800X3D" vs "Ryzen 9 9800X3D" vs "AMD Ryzen 9 9800X3D" all

@@ -134,6 +134,74 @@ class BestsellerReviewInput(BaseModel):
     status: str
 
 
+class BestsellerBulkReviewItem(BaseModel):
+    category: str = Field(min_length=1, max_length=40)
+    cpk: str = Field(min_length=1, max_length=255)
+
+
+class BestsellerBulkReviewInput(BaseModel):
+    items: list[BestsellerBulkReviewItem] = Field(min_length=1, max_length=5000)
+
+
+@router.put("/bestseller-catalogue/review/bulk")
+async def review_bestsellers_bulk(body: BestsellerBulkReviewInput, db: AsyncSession = Depends(get_db)):
+    """Approve selected bestseller matches, returning item-level validation failures."""
+    # Deduplicate before validation and writes so Select all cannot create repeated work.
+    requested = list({(item.category, item.cpk) for item in body.items})
+    payload = json.dumps([{"category": category, "cpk": cpk} for category, cpk in requested])
+    rows = (await db.execute(text("""
+        WITH requested AS (
+            SELECT * FROM jsonb_to_recordset(CAST(:items AS jsonb)) AS x(category text, cpk text)
+        )
+        SELECT r.category, r.cpk,
+            EXISTS (
+                SELECT 1 FROM amazon_bestseller_observations a
+                WHERE a.category = r.category
+                  AND COALESCE(a.cpk, 'asin:' || a.asin) = r.cpk
+            ) AS found_match,
+            EXISTS (
+                SELECT 1 FROM amazon_bestseller_observations a
+                WHERE a.category = r.category
+                  AND COALESCE(a.cpk, 'asin:' || a.asin) = r.cpk
+                  AND a.image_url ~* '^https?://'
+                  AND a.image_url NOT LIKE '%._RC'
+            ) OR EXISTS (
+                SELECT 1 FROM gem_radar_scored_listings s
+                WHERE s.cpk = r.cpk AND s.delivered_price > 0
+                  AND s.category IN (
+                      CASE r.category WHEN 'storage' THEN 'ssd'
+                          WHEN 'cooler' THEN 'cooling' ELSE r.category END,
+                      r.category
+                  )
+                  AND ((s.image_url ~* '^https?://' AND s.image_url NOT LIKE '%._RC') OR EXISTS (
+                      SELECT 1 FROM gem_radar_listing_observations o
+                      WHERE o.listing_id = s.listing_id
+                        AND ((o.image_url ~* '^https?://' AND o.image_url NOT LIKE '%._RC')
+                          OR jsonb_array_length(COALESCE(o.image_urls::jsonb, '[]'::jsonb)) > 0)
+                  ))
+            ) AS has_image
+        FROM requested r
+    """), {"items": payload})).mappings().all()
+    eligible = []
+    failed = []
+    for row in rows:
+        if not row["found_match"]:
+            failed.append({"category": row["category"], "cpk": row["cpk"], "detail": "Matched bestseller product not found"})
+        elif not row["has_image"]:
+            failed.append({"category": row["category"], "cpk": row["cpk"], "detail": "Capture a product picture before approving this match"})
+        else:
+            eligible.append({"category": row["category"], "cpk": row["cpk"]})
+    if eligible:
+        await db.execute(text("""
+            INSERT INTO curated_bestseller_reviews (category, cpk, status, reviewed_at)
+            SELECT x.category, x.cpk, 'approved', now()
+            FROM jsonb_to_recordset(CAST(:items AS jsonb)) AS x(category text, cpk text)
+            ON CONFLICT (category, cpk) DO UPDATE
+            SET status = EXCLUDED.status, reviewed_at = EXCLUDED.reviewed_at
+        """), {"items": json.dumps(eligible)})
+    return {"approved": len(eligible), "failed": failed}
+
+
 @router.put("/bestseller-catalogue/review")
 async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depends(get_db)):
     if body.status not in {"approved", "rejected", "pending"}:
