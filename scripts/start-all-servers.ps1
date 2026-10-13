@@ -42,7 +42,7 @@ function Get-ApiEnvironmentValue([string]$Name) {
         if (-not [string]::IsNullOrWhiteSpace($processValue)) { return $processValue.Trim() }
         return 'http://127.0.0.1:11435'
     }
-    if ($Name -eq 'OLLAMA_MODEL') { return 'qwen2.5:7b-instruct' }
+    if ($Name -eq 'OLLAMA_MODEL') { return 'qwen3.5:4b' }
     throw "$Name must be set in the process environment or flipflop-api/.env.local/.env."
 }
 

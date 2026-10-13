@@ -160,13 +160,13 @@ The scripts automatically set required environment variables:
 | `BACKEND_URL` | `http://127.0.0.1:4311` |
 | `FLIPFLOP_RUNTIME_ENV` | `development` |
 | `OLLAMA_BASE_URL` | `http://127.0.0.1:11435` |
-| `OLLAMA_MODEL` | `qwen2.5:7b-instruct` (default) |
+| `OLLAMA_MODEL` | `qwen3.5:4b` (default) |
 | `EBAY_ENVIRONMENT` | `production` (read/sourcing) |
 | `EBAY_LISTING_ENVIRONMENT` | `sandbox` (writes/listing) |
 
 All backend LLM workflows use `app/services/model_selection_service.py`.
 The default hierarchy is `LLM_PRIMARY_PROVIDER=ollama` with
-`LLM_PRIMARY_MODEL=qwen2.5:7b-instruct`, then the configured OpenRouter free
+`LLM_PRIMARY_MODEL=qwen3.5:4b`, then the configured OpenRouter free
 model (`LLM_SECONDARY_PROVIDER=openrouter-free` and
 `LLM_SECONDARY_MODEL=google/gemma-4-31b-it:free`), then
 `LLM_TERTIARY_PROVIDER=openrouter` with `LLM_TERTIARY_MODEL=auto:cheapest`.
