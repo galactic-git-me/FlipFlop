@@ -139,6 +139,11 @@ class ModelSelectionService:
                 "stream": False,
                 "options": {"num_predict": max_tokens},
             }
+            # Qwen3.5's reasoning mode can consume the small output budgets
+            # used by extraction and classification tasks before returning
+            # the answer. Keep local FlipFlop responses in instruction mode.
+            if model.lower().startswith("qwen3.5"):
+                payload["think"] = False
             if json_mode:
                 payload["format"] = "json"
             if tools:
