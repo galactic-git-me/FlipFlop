@@ -49,6 +49,8 @@ class ExtractedListing(CamelModel):
     watch_count: Optional[int] = None
     auction_end_at: Optional[datetime]
     image_url: Optional[str]
+    image_urls: Optional[list[str]] = None
+    video_urls: Optional[list[str]] = None
     # Populated by FlipflopXtension only for Amazon PC-case searches. Keeping
     # this optional preserves the existing payload for every other category.
     image_urls: Optional[list[str]] = None

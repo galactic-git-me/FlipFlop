@@ -179,8 +179,8 @@ async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depe
                   AND ((s.image_url ~* '^https?://' AND s.image_url NOT LIKE '%._RC') OR EXISTS (
                       SELECT 1 FROM gem_radar_listing_observations o
                       WHERE o.listing_id = s.listing_id
-                        AND o.image_url ~* '^https?://'
-                        AND o.image_url NOT LIKE '%._RC'
+                        AND ((o.image_url ~* '^https?://' AND o.image_url NOT LIKE '%._RC')
+                          OR jsonb_array_length(COALESCE(o.image_urls::jsonb, '[]'::jsonb)) > 0)
                   ))
             )
         """), {"category": body.category, "cpk": body.cpk})).scalar()

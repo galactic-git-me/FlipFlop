@@ -19,6 +19,8 @@ class GemRadarListingObservation(Base):
     seller_name: Mapped[str | None] = mapped_column(String(200), index=True)
     title: Mapped[str] = mapped_column(String(500))
     image_url: Mapped[str | None] = mapped_column(String(1000), nullable=True)
+    image_urls: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
+    video_urls: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
     category: Mapped[str | None] = mapped_column(String(50))
     condition_normalised: Mapped[str] = mapped_column(String(20))
     listing_type: Mapped[str] = mapped_column(String(20))

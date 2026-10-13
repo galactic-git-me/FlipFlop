@@ -639,6 +639,7 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
         )
         SELECT a.category, COALESCE(a.cpk, 'asin:' || a.asin) AS cpk,
             a.title, a.url, a.image_url AS reference_image_url,
+            m.listing_id,
             COALESCE(m.title, a.title) AS listing_title,
             COALESCE(m.url, a.url) AS listing_url,
             COALESCE(m.image_url, a.image_url) AS listing_image_url,
@@ -648,7 +649,7 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
             ON r.category = a.category AND r.cpk = COALESCE(a.cpk, 'asin:' || a.asin)
             AND r.status = 'approved'
         LEFT JOIN LATERAL (
-            SELECT s.source, s.title, s.url, COALESCE(
+            SELECT s.listing_id, s.source, s.title, s.url, COALESCE(
                 CASE WHEN s.image_url ~* '^https?://' AND s.image_url NOT LIKE '%._RC' THEN s.image_url END,
                 o.image_url
             ) AS image_url
@@ -672,8 +673,12 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
         ) m ON true
     """))).mappings().all()
     approved_images_by_match: dict[tuple[str, str], list[dict]] = defaultdict(list)
+    approved_videos_by_match: dict[tuple[str, str], list[dict]] = defaultdict(list)
+    listing_match: dict[str, tuple[str, str]] = {}
     for row in approved_rows:
         pair = (str(row["category"]), str(row["cpk"]))
+        if row["listing_id"]:
+            listing_match[str(row["listing_id"])] = pair
         for url, title, source, href in (
             (row["reference_image_url"], row["title"], "Amazon product image", row["url"]),
             (row["listing_image_url"], row["listing_title"], f"Approved {row['listing_source']} listing", row["listing_url"]),
@@ -681,6 +686,25 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
             if not url or any(item["url"] == url for item in approved_images_by_match[pair]):
                 continue
             approved_images_by_match[pair].append({"url": url, "title": title, "source": source, "href": href})
+    if listing_match:
+        media_rows = (await db.execute(text("""
+            SELECT listing_id, image_url, image_urls, video_urls
+            FROM gem_radar_listing_observations
+            WHERE listing_id = ANY(:listing_ids)
+        """), {"listing_ids": list(listing_match)})).mappings().all()
+        for media_row in media_rows:
+            pair = listing_match.get(str(media_row["listing_id"]))
+            if not pair:
+                continue
+            images = list(media_row["image_urls"] or [])
+            if media_row["image_url"]:
+                images.append(media_row["image_url"])
+            for url in dict.fromkeys(images):
+                if isinstance(url, str) and url.startswith(("https://", "http://")) and not any(item["url"] == url for item in approved_images_by_match[pair]):
+                    approved_images_by_match[pair].append({"url": url, "title": "Product listing photo", "source": "Approved marketplace listing", "href": None})
+            for url in dict.fromkeys(media_row["video_urls"] or []):
+                if isinstance(url, str) and url.startswith(("https://", "http://")) and not any(item["url"] == url for item in approved_videos_by_match[pair]):
+                    approved_videos_by_match[pair].append({"url": url, "title": "Product listing video", "source": "Approved marketplace listing", "href": None})
     for definition in definitions()['builds']:
         pb = by_name.get(definition['segment'])
         slots = curated_slots(catalogue.get(pb['id'], []) if pb else [], definition)
@@ -709,6 +733,8 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
                     continue
                 listing_images.extend(approved_images_by_match.get((str(identity.get('category') or ''), str(identity.get('cpk') or '')), []))
         build_data['listing_images'] = list({image['url']: image for image in listing_images}.values())
+        build_data['listing_videos'] = [video for identity in (cell.bestseller_components or {}).values() if isinstance(identity, dict)
+            for video in approved_videos_by_match.get((str(identity.get('category') or ''), str(identity.get('cpk') or '')), [])] if cell else []
         result.append(enrich_curated_build_with_ship_name(build_data))
     return result
 

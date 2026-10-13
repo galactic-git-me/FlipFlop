@@ -306,6 +306,8 @@ async def record_observation(
         seller_name=listing.seller,
         title=listing.title,
         image_url=listing.image_url,
+        image_urls=list(dict.fromkeys([*(listing.image_urls or []), *([listing.image_url] if listing.image_url else [])])),
+        video_urls=list(dict.fromkeys(listing.video_urls or [])),
         category=category,
         condition_normalised=listing.condition_normalised,
         listing_type=listing.listing_type,
@@ -371,6 +373,8 @@ async def touch_observation(
     observed_at: datetime,
     search_query: str | None = None,
     image_url: str | None = None,
+    image_urls: list[str] | None = None,
+    video_urls: list[str] | None = None,
     search_tags: list[str] | None = None,
     delivery_text: str | None = None,
     delivery_postcode: str | None = None,
@@ -406,6 +410,12 @@ async def touch_observation(
         row.search_tags = list(dict.fromkeys([*(row.search_tags or []), *search_tags]))
     if image_url and (not row.image_url or row.image_url.endswith("._RC")):
         row.image_url = image_url
+    if image_urls:
+        row.image_urls = list(dict.fromkeys([*(row.image_urls or []), *image_urls]))
+        if not row.image_url and row.image_urls:
+            row.image_url = row.image_urls[0]
+    if video_urls:
+        row.video_urls = list(dict.fromkeys([*(row.video_urls or []), *video_urls]))
     if delivery_text is not None:
         row.delivery_text = delivery_text
     if delivery_postcode is not None:

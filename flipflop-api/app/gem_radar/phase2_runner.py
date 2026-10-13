@@ -83,7 +83,7 @@ async def run_phase2_classification(
         text(
             """
             SELECT DISTINCT ON (lo.listing_id)
-                lo.listing_id, lo.title, lo.seller_name, lo.image_url,
+                lo.listing_id, lo.title, lo.seller_name, lo.image_url, lo.image_urls, lo.video_urls,
                 lo.condition_normalised AS condition, lo.item_price, lo.postage_price,
                 lo.delivered_price, lo.source, lo.observed_at,
                 cpk.cpk, cpk.cpk_data, lo.category AS observed_category, lo.bid_count, lo.watch_count,
@@ -187,7 +187,7 @@ async def run_phase2_classification(
 
     for row in listings:
         (
-            listing_id, title, seller_name, image_url, condition,
+            listing_id, title, seller_name, image_url, image_urls, video_urls, condition,
             item_price, postage_price, delivered_price, source, observed_at,
             cpk, cpk_data, observed_category, bid_count, watch_count,
             epid, seller_feedback_percent, seller_feedback_count,
@@ -382,6 +382,8 @@ async def run_phase2_classification(
             title=title,
             seller_name=seller_name,
             image_url=image_url,
+            image_urls=image_urls or ([image_url] if image_url else []),
+            video_urls=video_urls or [],
             condition=condition,
             category=category,
             canonical_model_id=(cpk_data or {}).get("model") if category in {"cpu", "gpu"} else None,
