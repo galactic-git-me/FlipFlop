@@ -8,7 +8,7 @@ import json
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
-from sqlalchemy import or_, select
+from sqlalchemy import or_, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -483,6 +483,7 @@ async def public_list_cases(db: AsyncSession = Depends(get_db)):
         output.append({
             "id": c.id,
             "asset_subject_id": asset_case.id if asset_case else None,
+            "asset_subject_name": asset_case.name if asset_case else None,
             "name": c.name,
             "brand": c.brand,
             "form_factor": c.form_factor,
@@ -629,6 +630,57 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
     result = []
     cell_segments = (await db.execute(select(CuratedBuildSegment))).scalars().all()
     segment_by_cell = {(row.customer_type.casefold(), row.budget_level.casefold()): row for row in cell_segments}
+    approved_rows = (await db.execute(text("""
+        WITH latest AS (
+            SELECT DISTINCT ON (category, asin) category, asin, title, url,
+                image_url, rank, cpk, captured_at
+            FROM amazon_bestseller_observations
+            ORDER BY category, asin, captured_at DESC
+        )
+        SELECT a.category, COALESCE(a.cpk, 'asin:' || a.asin) AS cpk,
+            a.title, a.url, a.image_url AS reference_image_url,
+            COALESCE(m.title, a.title) AS listing_title,
+            COALESCE(m.url, a.url) AS listing_url,
+            COALESCE(m.image_url, a.image_url) AS listing_image_url,
+            COALESCE(m.source, 'amazon') AS listing_source
+        FROM latest a
+        JOIN curated_bestseller_reviews r
+            ON r.category = a.category AND r.cpk = COALESCE(a.cpk, 'asin:' || a.asin)
+            AND r.status = 'approved'
+        LEFT JOIN LATERAL (
+            SELECT s.source, s.title, s.url, COALESCE(
+                CASE WHEN s.image_url ~* '^https?://' AND s.image_url NOT LIKE '%._RC' THEN s.image_url END,
+                o.image_url
+            ) AS image_url
+            FROM gem_radar_scored_listings s
+            LEFT JOIN LATERAL (
+                SELECT image_url FROM gem_radar_listing_observations
+                WHERE listing_id = s.listing_id
+                  AND image_url ~* '^https?://' AND image_url NOT LIKE '%._RC'
+                ORDER BY observed_at DESC, id DESC LIMIT 1
+            ) o ON true
+            WHERE s.delivered_price > 0 AND s.cpk = a.cpk AND s.category IN (
+                CASE a.category WHEN 'storage' THEN 'ssd'
+                    WHEN 'cooler' THEN 'cooling' ELSE a.category END,
+                a.category
+            )
+            ORDER BY (COALESCE(
+                CASE WHEN s.image_url ~* '^https?://' AND s.image_url NOT LIKE '%._RC' THEN s.image_url END,
+                o.image_url
+            ) IS NOT NULL) DESC, s.scored_at DESC
+            LIMIT 1
+        ) m ON true
+    """))).mappings().all()
+    approved_images_by_match: dict[tuple[str, str], list[dict]] = defaultdict(list)
+    for row in approved_rows:
+        pair = (str(row["category"]), str(row["cpk"]))
+        for url, title, source, href in (
+            (row["reference_image_url"], row["title"], "Amazon product image", row["url"]),
+            (row["listing_image_url"], row["listing_title"], f"Approved {row['listing_source']} listing", row["listing_url"]),
+        ):
+            if not url or any(item["url"] == url for item in approved_images_by_match[pair]):
+                continue
+            approved_images_by_match[pair].append({"url": url, "title": title, "source": source, "href": href})
     for definition in definitions()['builds']:
         pb = by_name.get(definition['segment'])
         slots = curated_slots(catalogue.get(pb['id'], []) if pb else [], definition)
@@ -650,6 +702,13 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
         cell = segment_by_cell.get((definition['segment'].casefold(), definition['tier'].casefold()))
         upgrade_options = (cell.approved_upgrades or []) if cell and cell.is_live else []
         build_data['upgrade_options'] = upgrade_options
+        listing_images = []
+        if cell:
+            for identity in (cell.bestseller_components or {}).values():
+                if not isinstance(identity, dict):
+                    continue
+                listing_images.extend(approved_images_by_match.get((str(identity.get('category') or ''), str(identity.get('cpk') or '')), []))
+        build_data['listing_images'] = list({image['url']: image for image in listing_images}.values())
         result.append(enrich_curated_build_with_ship_name(build_data))
     return result
 
