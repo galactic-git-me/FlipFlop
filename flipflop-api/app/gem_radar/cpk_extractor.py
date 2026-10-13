@@ -1,7 +1,7 @@
 """
-Canonical Product Key (CPK) extraction via local LLM.
+Canonical Product Key (CPK) extraction via the configured local LLM.
 
-Extracts structured product data from marketplace listings using Qwen2:7b,
+Extracts structured product data from marketplace listings using Ollama,
 creates a deterministic product consolidation key, and stores metadata for
 cross-vendor price aggregation.
 
@@ -24,8 +24,8 @@ from app.services.case_product_key import case_product_key
 
 log = structlog.get_logger(__name__)
 
-# Limit concurrent Ollama requests to 4 (optimal for Qwen2:7b on GPU)
-# Tested 5 but hit VRAM exhaustion — 4 is the sweet spot
+# Limit concurrent Ollama requests to 4. The prior Qwen2:7b setup hit VRAM
+# exhaustion at 5; keep this conservative until concurrency is benchmarked again.
 _CPK_EXTRACTOR_SEMAPHORE = asyncio.Semaphore(4)
 
 # The only categories the prompt's own schema comment offers the model — a
@@ -148,7 +148,7 @@ async def extract_cpk(
     condition: Optional[str] = None,
 ) -> ExtractedProductData | None:
     """
-    Extract structured product data from a listing title using Qwen2:7b.
+    Extract structured product data from a listing title using the configured local model.
 
     Args:
         title: Listing title (e.g., "AMD Ryzen 7 3800X 8-Core Processor")

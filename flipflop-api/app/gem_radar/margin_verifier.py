@@ -1,4 +1,4 @@
-"""Asynchronous margin verification using local Qwen2:7b.
+"""Asynchronous margin verification using the configured local Ollama model.
 
 Scored listings are checked against actual resale prices to verify profit margin
 exists. Runs in background queue—does not block main screening pipeline.
@@ -201,7 +201,7 @@ async def start_verification_worker() -> None:
 
 
 async def _downgrade_unviable_listing(result: VerificationResult) -> None:
-    """Retroactively corrects the DB row once Qwen2's margin check comes
+    """Retroactively corrects the DB row once the local model's margin check comes
     back negative — this is the actual gate the deterministic scorer can't
     provide on its own (it only ever compares against a benchmark price, not
     real buy-vs-resale profit, which is what let something like a £332
@@ -241,7 +241,7 @@ async def _downgrade_unviable_listing(result: VerificationResult) -> None:
             return
 
         note = (
-            f"[Margin verification, qwen2.5:7b] NOT a viable flip: buy £{result.actual_buy_price_gbp:.2f} "
+            f"[Margin verification] NOT a viable flip: buy £{result.actual_buy_price_gbp:.2f} "
             f"vs realistic resale £{result.realistic_resale_price_gbp:.2f} "
             f"(margin £{result.profit_margin_gbp:.2f}). {result.reasoning}"
         )

@@ -582,7 +582,7 @@ async def score_listing(
         seller_intelligence=None,
     )
 
-    # Queue high-scoring listings for async margin verification via Qwen2:7b.
+    # Queue high-scoring listings for async margin verification via the configured local model.
     # This ensures only truly profitable flips reach the sourcing page, without
     # blocking the main scoring pipeline.
     _s = _time.monotonic()
