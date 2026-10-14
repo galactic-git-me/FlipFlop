@@ -13,10 +13,9 @@ if sys.platform == "win32":
 
 # Load .env files FIRST, before any config imports
 from pathlib import Path
-from dotenv import load_dotenv
+from app.environment import load_application_environment
 _app_dir = Path(__file__).parent.parent
-load_dotenv(_app_dir / ".env")
-load_dotenv(_app_dir / ".env.local")
+load_application_environment(_app_dir)
 
 # Playwright requires ProactorEventLoop on Windows to launch browser subprocesses.
 # Must be set before any asyncio usage.
@@ -569,7 +568,7 @@ async def lifespan(app: FastAPI):
         cache = await get_sold_comps_cache()
         log.info("app.ready", note="full pipeline enabled - ingest/eval/build workers + scheduler + queue processor + margin verifier + sold comps cache running")
     else:
-        log.info("app.ready", note="web-only production API enabled; background and AI workers disabled")
+        log.info("app.ready", note="web-only API enabled; background and AI workers disabled")
     yield
     # Cleanup Redis cache connection
     if cache is not None:
@@ -794,6 +793,13 @@ async def health():
         "status": "ok",
         "version": "5.0.0",
         "app_env": settings.app_env,
+        "web_only": settings.web_only,
+        "provider_modes": {
+            "ebay_listing": settings.ebay_listing_environment,
+            "amazon_listing": settings.amazon_sp_api_environment,
+            "courier": settings.parcel2go_environment,
+            "stripe": "test" if settings.stripe_secret_key.startswith("sk_test_") else "live" if settings.stripe_secret_key.startswith("sk_live_") else "unconfigured",
+        },
         "started_at": _startup_time.isoformat(),
     }
 

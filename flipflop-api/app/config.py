@@ -261,7 +261,7 @@ class Settings(BaseSettings):
     web_only: bool = False
 
     class Config:
-        env_file = (".env.local", ".env")
+        env_file = (".env", ".env.local")
         extra = "ignore"
 
     @field_validator("ebay_environment", "ebay_listing_environment", "parcel2go_environment", mode="before")
