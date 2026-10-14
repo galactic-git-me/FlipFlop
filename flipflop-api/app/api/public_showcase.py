@@ -227,7 +227,10 @@ async def public_showcase_build_detail(product_id: int, db: AsyncSession = Depen
 
 
 async def _load_buyable_product(product_id: int, db: AsyncSession) -> Product:
-    result = await db.execute(select(Product).where(Product.id == product_id))
+    # The availability check and reservation write share one transaction.
+    # Refresh a previously loaded ORM instance after waiting for another buyer.
+    result = await db.execute(select(Product).where(Product.id == product_id)
+                              .with_for_update().execution_options(populate_existing=True))
     product = result.scalar_one_or_none()
     if not product or product.product_type != ProductType.PREBUILT:
         raise HTTPException(404, "Build not found")
@@ -239,6 +242,8 @@ async def _load_buyable_product(product_id: int, db: AsyncSession) -> Product:
         raise HTTPException(409, "This build is no longer available.")
     if product.status == ProductStatus.RESERVED and not reservation_stale:
         raise HTTPException(409, "Someone else is currently checking out with this build — try again shortly.")
+    if product.status not in (ProductStatus.LISTED, ProductStatus.RESERVED):
+        raise HTTPException(409, "This build is not available for checkout.")
     if product.price is None or product.price <= 0:
         raise HTTPException(400, "This build has no price set yet.")
     return product
@@ -460,6 +465,7 @@ async def confirm_checkout(
         specs={
             "product_id": product.id,
             "build_title": product.title,
+            "payment_evidence": payment_data.get("payment_evidence", {}),
             "delivery_address": (product.checkout_addresses or {}).get("delivery"),
             "billing_address": (product.checkout_addresses or {}).get("billing"),
             "fulfilment_type": product.fulfilment_type or "prebuilt",

@@ -8,7 +8,8 @@ param(
     [switch]$GemRadarStandalone,
     [switch]$NoOllamaGateway,
     [switch]$BuildExtension,
-    [switch]$CheckOnly
+    [switch]$CheckOnly,
+    [switch]$CustomerTesting
 )
 
 $ErrorActionPreference = 'Stop'
@@ -66,10 +67,29 @@ function Assert-DevelopmentPrerequisites {
 }
 
 function Stop-PortListener([int]$Port) {
+    # During hot reload there may be no listener for a moment. Still stop all
+    # verified supervisors for this exact dev port before starting another one.
+    $apiProcesses = @(Get-CimInstance Win32_Process | Where-Object {
+        $_.Name -match '^python.*\.exe$' -and $_.CommandLine -like '*run_dev.py*' -and
+        $_.CommandLine -match "--port\s+$Port(?:\s|$)"
+    } | Sort-Object { $_.CommandLine -like '*--_serve*' })
+    foreach ($apiProcess in $apiProcesses) { Stop-Process -Id $apiProcess.ProcessId -ErrorAction SilentlyContinue }
     $listeners = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue
     foreach ($ownerPid in @($listeners | Select-Object -ExpandProperty OwningProcess -Unique)) {
         if ($ownerPid -and $ownerPid -ne 0) {
-            & taskkill.exe /PID $ownerPid /T /F 2>&1 | Out-Null
+            $stopIds = @($ownerPid)
+            $currentProcess = Get-CimInstance Win32_Process -Filter "ProcessId=$ownerPid"
+            # Stop the verified API watcher as well as its listener, otherwise
+            # it can resurrect the old configuration after a launcher restart.
+            while ($currentProcess -and $currentProcess.ParentProcessId) {
+                $parentProcess = Get-CimInstance Win32_Process -Filter "ProcessId=$($currentProcess.ParentProcessId)"
+                if (-not $parentProcess -or $parentProcess.Name -notmatch '^python.*\.exe$' -or
+                    $parentProcess.CommandLine -notlike '*run_dev.py*' -or
+                    $parentProcess.CommandLine -notmatch "--port\s+$Port(?:\s|$)") { break }
+                $stopIds = @($parentProcess.ProcessId) + $stopIds
+                $currentProcess = $parentProcess
+            }
+            foreach ($stopId in $stopIds) { Stop-Process -Id $stopId -ErrorAction SilentlyContinue }
             Write-Host "  [OK] Freed development port $Port" -ForegroundColor Green
         }
     }
@@ -155,6 +175,10 @@ function Start-DevelopmentServer {
 }
 
 Assert-DevelopmentPrerequisites
+if ($CustomerTesting) {
+    & (Join-Path $apiRoot '.venv\Scripts\python.exe') (Join-Path $apiRoot 'scripts\check_customer_testing.py')
+    if ($LASTEXITCODE -ne 0) { throw 'Customer-test configuration failed; existing services were left running.' }
+}
 
 if ($CheckOnly) {
     Write-Host '[OK] Development launcher syntax and prerequisites are valid.' -ForegroundColor Green
@@ -173,7 +197,7 @@ if ($BuildExtension) {
     & (Join-Path $PSScriptRoot 'prepare-extension.ps1') -Mode development -ProjectRoot $projectRoot
 }
 
-Ensure-OllamaPriorityGateway
+if (-not $CustomerTesting) { Ensure-OllamaPriorityGateway }
 New-Item -ItemType Directory -Path $logsDir -Force | Out-Null
 
 $portsToClean = @()
@@ -188,19 +212,33 @@ foreach ($port in $portsToClean) { Stop-PortListener $port }
 $env:FLIPFLOP_RUNTIME_ENV = 'development'
 $env:EBAY_ENVIRONMENT = 'production'
 $env:EBAY_LISTING_ENVIRONMENT = 'sandbox'
+$env:PARCEL2GO_ENVIRONMENT = 'sandbox'
+$env:APP_ENV = 'dev'
+if ($CustomerTesting) {
+    $env:WEB_ONLY = 'true'
+    $env:EMAIL_MONITOR_ENABLED = 'false'
+    $env:SECURSUS_LIVE_PARCEL_CREATION_ENABLED = 'false'
+    Write-Host '[*] Customer testing: sandbox writes; sourcing/scheduler workers disabled.' -ForegroundColor Cyan
+} else {
+    $env:WEB_ONLY = 'false'
+}
 $env:AMAZON_SP_API_ENVIRONMENT = 'production'
 $env:AMAZON_SP_API_ENDPOINT = 'https://sellingpartnerapi-eu.amazon.com'
+if ($CustomerTesting) {
+    $env:AMAZON_SP_API_ENVIRONMENT = 'sandbox'
+    $env:AMAZON_SP_API_ENDPOINT = 'https://sandbox.sellingpartnerapi-eu.amazon.com'
+}
 $ollamaBaseUrl = Get-ApiEnvironmentValue 'OLLAMA_BASE_URL'
 $ollamaModel = Get-ApiEnvironmentValue 'OLLAMA_MODEL'
 $env:OLLAMA_BASE_URL = $ollamaBaseUrl
 $env:OLLAMA_MODEL = $ollamaModel
-Warm-OllamaModel -BaseUrl $ollamaBaseUrl -Model $ollamaModel
+if (-not $CustomerTesting) { Warm-OllamaModel -BaseUrl $ollamaBaseUrl -Model $ollamaModel }
 
 $servers = @()
 $apiUrl = 'http://127.0.0.1:4311'
 
 if (-not $NoBackend) {
-    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"EBAY_ENVIRONMENT=production`" && set `"EBAY_LISTING_ENVIRONMENT=sandbox`" && set `"AMAZON_SP_API_ENVIRONMENT=production`" && set `"AMAZON_SP_API_ENDPOINT=https://sellingpartnerapi-eu.amazon.com`" && set `"ADMIN_FRONTEND_URL=http://localhost:4312`" && set `"FRONTEND_URL=http://localhost:4313`" && .venv\Scripts\python.exe run_dev.py --host 127.0.0.1 --port 4311"
+    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"EBAY_ENVIRONMENT=production`" && set `"EBAY_LISTING_ENVIRONMENT=sandbox`" && set `"PARCEL2GO_ENVIRONMENT=sandbox`" && set `"APP_ENV=dev`" && set `"AMAZON_SP_API_ENVIRONMENT=$env:AMAZON_SP_API_ENVIRONMENT`" && set `"AMAZON_SP_API_ENDPOINT=$env:AMAZON_SP_API_ENDPOINT`" && set `"ADMIN_FRONTEND_URL=http://localhost:4312`" && set `"FRONTEND_URL=http://localhost:4313`" && .venv\Scripts\python.exe run_dev.py --host 127.0.0.1 --port 4311"
     $servers += Start-DevelopmentServer -Name 'backend' -WorkingDirectory (Join-Path $projectRoot 'flipflop-api') -Command $command -Port 4311 -Color Yellow
 }
 
@@ -235,7 +273,11 @@ foreach ($server in $servers) {
         Write-Host "[FAILED]  $($server.Name.PadRight(14)) See $($server.LogFile)" -ForegroundColor Red
     }
 }
-Write-Host "[INFO] DEV uses production marketplace reads, sandbox eBay listing writes, and Ollama gateway $ollamaBaseUrl (second priority: after production, before other apps)." -ForegroundColor Yellow
+if ($CustomerTesting) {
+    Write-Host '[INFO] Customer testing: Stripe test mode, eBay/Amazon listing sandboxes, courier sandbox; automatic sourcing and AI workers off.' -ForegroundColor Yellow
+} else {
+    Write-Host "[INFO] DEV uses production marketplace reads, sandbox eBay listing writes, courier sandbox, and Ollama gateway $ollamaBaseUrl (second priority: after production, before other apps)." -ForegroundColor Yellow
+}
 Write-Host '[INFO] Press Ctrl+C to stop the development servers started here.' -ForegroundColor Gray
 
 $serverListeningState = @{}
