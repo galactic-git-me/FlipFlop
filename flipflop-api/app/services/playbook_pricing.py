@@ -245,6 +245,15 @@ async def price_playbook_build(
     subtotal = build.parts_total + LABOUR_COST
     build.overhead = subtotal * OVERHEAD_RATE
     build.total = round(subtotal + build.overhead, 2)
+    if mode == 'curated':
+        from app.services.curated_publication import curated_total, PublicationError
+        baseline = next((slot for slot in selectable if slot.get('approved_build_price') is not None), {})
+        try:
+            build.total = curated_total(baseline.get('approved_build_price'),
+                baseline.get('baseline_parts_total'), build.parts_total, OVERHEAD_RATE)
+        except PublicationError as exc:
+            raise InvalidBuildError(str(exc)) from exc
+        build.overhead = round(build.total - subtotal, 2)
     if curated_budget_ceiling is not None and build.total > curated_budget_ceiling:
         raise InvalidBuildError(
             f"This upgrade would take the build above the segment budget limit of £{curated_budget_ceiling:,.2f}"

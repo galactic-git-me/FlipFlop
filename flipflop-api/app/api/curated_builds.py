@@ -896,6 +896,22 @@ async def upsert_segment(body: SegmentInput, db: AsyncSession = Depends(get_db))
         segment.component_cost_snapshot = sum(item["price"] or 0 for item in context.values())
     if body.is_live is not None:
         segment.is_live = body.is_live
+    if segment.is_live:
+        from app.api.public_catalogue import public_playbook_slots, public_list_cases
+        from app.services.curated_build_policy import definitions
+        from app.services.curated_publication import publication_snapshot, PublicationError
+        definition = next((item for item in definitions()['builds']
+            if item['segment'].casefold() == segment.customer_type.casefold()
+            and item['tier'].casefold() == segment.budget_level.casefold()), None)
+        playbook_id = (await db.execute(select(Playbook.id).where(
+            func.lower(Playbook.name) == segment.customer_type.casefold()))).scalar_one_or_none()
+        if not definition or not playbook_id:
+            raise HTTPException(409, 'This Playbook cell has no matching storefront definition')
+        try:
+            publication_snapshot(definition, segment, await public_playbook_slots(playbook_id, db),
+                await public_list_cases(db), require_live=False)
+        except PublicationError as exc:
+            raise HTTPException(409, str(exc)) from exc
     await db.flush()
     return _segment_json(segment)
 
@@ -1073,6 +1089,21 @@ async def publish_segment(segment_id: int, body: dict, db: AsyncSession = Depend
     context = await _component_context(db, ids)
     if len(context) != len(ids) or any(not item["curated_for_builds"] or item["status"] != "active" for item in context.values()):
         raise HTTPException(status_code=409, detail="Every selected component must remain curated and currently available")
+    from app.api.public_catalogue import public_playbook_slots, public_list_cases
+    from app.services.curated_build_policy import definitions
+    from app.services.curated_publication import publication_snapshot, PublicationError
+    definition = next((item for item in definitions()['builds']
+        if item['segment'].casefold() == segment.customer_type.casefold()
+        and item['tier'].casefold() == segment.budget_level.casefold()), None)
+    playbook_id = (await db.execute(select(Playbook.id).where(
+        func.lower(Playbook.name) == segment.customer_type.casefold()))).scalar_one_or_none()
+    if not definition or not playbook_id:
+        raise HTTPException(409, 'This Playbook cell has no matching storefront definition')
+    try:
+        publication_snapshot(definition, segment, await public_playbook_slots(playbook_id, db),
+            await public_list_cases(db), require_live=False)
+    except PublicationError as exc:
+        raise HTTPException(409, str(exc)) from exc
     segment.is_live = True
     segment.availability_status = "in_stock"
     return _segment_json(segment)

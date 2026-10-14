@@ -64,7 +64,7 @@ async def evaluate_studio(body: StudioSelection, db: AsyncSession = Depends(get_
              for slot in slots if slot['slot_id'] in effective_selections}
     checks = evaluate_fit(parts, case, gpu_required=gpu_required)
     missing = [slot['slot_type'] for slot in slots
-               if slot['slot_id'] not in effective_selections
+               if slot['slot_type'] != 'case' and slot['slot_id'] not in effective_selections
                and not (slot['slot_type'] == 'gpu' and not gpu_required)]
     # A desktop studio build requires every physical category, even when an
     # incomplete playbook has not published that slot yet.

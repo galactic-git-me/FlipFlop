@@ -250,20 +250,18 @@ async def public_playbook_slots(playbook_id: int, db: AsyncSession = Depends(get
             r.catalogue_variant_id for r in vis_rows if r.is_publicly_visible
         }
 
-    # Active catalogue candidates plus explicitly curated fixed choices.
+    # Visibility grants permission to display a product, never availability.
+    # Hidden, sold or removed offers cannot enter a purchasable catalogue.
     if slot_ids:
         status_filter = CatalogueVariant.status == "active"
-        if visible_variant_ids:
-            status_filter = or_(
-                status_filter,
-                CatalogueVariant.id.in_(visible_variant_ids),
-            )
         variants_result = await db.execute(
             select(CatalogueVariant, Listing)
             .join(Listing, CatalogueVariant.listing_id == Listing.id)
             .where(
                 CatalogueVariant.slot_id.in_(slot_ids),
                 status_filter,
+                Listing.status == "active",
+                CatalogueVariant.display_price > 0,
             )
             .order_by(CatalogueVariant.slot_id, CatalogueVariant.display_price)
         )
@@ -518,12 +516,23 @@ async def public_curated_slots(playbook_id: int, db: AsyncSession = Depends(get_
         name = (await db.execute(select(Playbook.name).where(Playbook.id == playbook_id))).scalar_one_or_none()
         if not definition or definition['segment'] != name:
             raise HTTPException(404, 'Curated build not found for this user type')
-    slots = curated_slots(await public_playbook_slots(playbook_id, db), definition)
+    segment = None
     if definition:
         segment = (await db.execute(select(CuratedBuildSegment).where(
             CuratedBuildSegment.customer_type == definition["segment"],
             CuratedBuildSegment.budget_level == definition["tier"],
         ))).scalar_one_or_none()
+        from app.services.curated_publication import publication_snapshot, PublicationError
+        try:
+            snapshot = publication_snapshot(definition, segment,
+                await public_playbook_slots(playbook_id, db), await public_list_cases(db))
+        except PublicationError as exc:
+            raise HTTPException(404, str(exc)) from exc
+        slots = snapshot['slots']
+    else:
+        # Unscoped curated catalogues must not bypass the cell publication gate.
+        raise HTTPException(404, 'Choose a published curated Playbook cell')
+    if definition:
         # Automatic upsells are drawn from the active curated catalogue. A
         # candidate must have a current market median above the cell's default
         # component; compatibility and the live build budget are checked again
@@ -623,12 +632,14 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
     from app.services.curated_build_policy import definitions, curated_slots
     from app.services.ship_naming import enrich_curated_build_with_ship_name
     
+    cell_segments = (await db.execute(select(CuratedBuildSegment).where(CuratedBuildSegment.is_live.is_(True)))).scalars().all()
+    if not cell_segments:
+        return []
     playbooks = await public_list_playbooks(db)
     cases = await public_list_cases(db)
     by_name = {p['name']: p for p in playbooks}
     catalogue = {p['id']: await public_playbook_slots(p['id'], db) for p in playbooks}
     result = []
-    cell_segments = (await db.execute(select(CuratedBuildSegment))).scalars().all()
     segment_by_cell = {(row.customer_type.casefold(), row.budget_level.casefold()): row for row in cell_segments}
     approved_rows = (await db.execute(text("""
         WITH latest AS (
@@ -709,23 +720,18 @@ async def public_curated_builds(db: AsyncSession = Depends(get_db)):
                     approved_videos_by_match[pair].append({"url": url, "title": "Product listing video", "source": "Approved marketplace listing", "href": None})
     for definition in definitions()['builds']:
         pb = by_name.get(definition['segment'])
-        slots = curated_slots(catalogue.get(pb['id'], []) if pb else [], definition)
-        chosen = [next((v for values in s['variants_by_tier'].values() for v in values if v['id'] == s['default_variant_id']), None) for s in slots]
-        # Cases are resolved from case_catalogue below, not from component
-        # variants. The playbook slot is retained for the configurator shape,
-        # but an empty case variant list must not make every curated build
-        # appear incomplete.
-        missing = [s['slot_type'] for s, v in zip(slots, chosen) if v is None and s['slot_type'] != 'case']
-        if not cases:
-            missing.append('case')
-        parts = sum(float(v['display_price']) for v in chosen if v) + (min(float(c['rrp_gbp']) for c in cases) if cases else 0)
-        build_data = {
-            **definition, 
-            'playbook_id': pb['id'] if pb else None, 
-            'missing_components': missing,
-            'price_gbp': round((parts + LABOUR_COST) * (1 + OVERHEAD_RATE), 2) if not missing else None
-        }
         cell = segment_by_cell.get((definition['segment'].casefold(), definition['tier'].casefold()))
+        if not pb or not cell:
+            continue
+        from app.services.curated_publication import publication_snapshot, PublicationError
+        try:
+            snapshot = publication_snapshot(definition, cell, catalogue.get(pb['id'], []), cases)
+        except PublicationError:
+            continue
+        build_data = {**definition, 'components': snapshot['components'],
+            'playbook_id': pb['id'], 'missing_components': [],
+            'price_gbp': snapshot['price_gbp'], 'default_case_id': snapshot['default_case_id'],
+            'default_slot_selections': snapshot['default_slot_selections']}
         upgrade_options = (cell.approved_upgrades or []) if cell and cell.is_live else []
         build_data['upgrade_options'] = upgrade_options
         listing_images = []

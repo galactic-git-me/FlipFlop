@@ -60,7 +60,7 @@ def _capacity_label(capacity):
     return f'{capacity:g} GB'
 
 
-def curated_slots(slots, definition=None):
+def curated_slots(slots, definition=None, selected_variant_ids=None):
     result = deepcopy(slots)
     for slot in result:
         tiers = slot['variants_by_tier']
@@ -70,6 +70,9 @@ def curated_slots(slots, definition=None):
         if definition and slot['slot_type'] in definition['components']:
             specification = definition['components'][slot['slot_type']]
             default = next((v for v in ranked if _matches_curated_spec(slot['slot_type'], v, specification)), None)
+        if selected_variant_ids is not None:
+            selected_id = selected_variant_ids.get(slot['slot_type'])
+            default = next((variant for variant in ranked if variant['id'] == selected_id), None)
         slot['default_variant_id'] = default['id'] if default else None
         slot['customization'] = {'ram': 'capacity', 'storage': 'ssd_type_capacity'}.get(slot['slot_type'], 'fixed')
         choices = {}
