@@ -48,7 +48,7 @@ SEARCH_TOOL_SCHEMA = {
 
 
 def build_system_prompt(snapshot: str, page_context: str) -> str:
-    return f"""You are Hermes, a sharp and helpful companion AI embedded in FlipFlop — a PC flipping intelligence platform.
+    return f"""You are Flip, a sharp and helpful companion AI embedded in FlipFlop — a PC flipping intelligence platform.
 
 Personality: dry British wit, genuinely useful, concise. You know PC hardware, resale markets, and flipping inside-out.
 

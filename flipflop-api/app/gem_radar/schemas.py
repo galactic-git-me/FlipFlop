@@ -31,6 +31,14 @@ ConfidenceBand = Literal["high", "medium", "low"]
 
 
 class ExtractedListing(CamelModel):
+    source_currency: Optional[Literal['EUR', 'GBP']] = None
+    source_item_price: Optional[float] = Field(default=None, gt=0)
+    exchange_rate: Optional[float] = Field(default=None, gt=0)
+    exchange_rate_date: Optional[str] = None
+    exchange_rate_source: Optional[str] = None
+    price_is_range: bool = False
+    stock_status: Literal['available', 'unavailable', 'unknown'] = 'unknown'
+    stock_evidence: Optional[str] = Field(default=None, max_length=1000)
     listing_id: str
     url: str
     title: str
@@ -71,6 +79,7 @@ class ExtractedListing(CamelModel):
     # "Ryzen 9 9800X3D" vs "AMD Ryzen 9 9800X3D" all have the same GTIN).
     # Only populated for listings sourced via eBay Browse API with productSummary.
     gtin: Optional[str] = None
+    brand: Optional[str] = None
     # Manufacturer Part Number — another stable, canonical identifier for the
     # same product across title variants. Used alongside GTIN for consolidating
     # listings into a single price bucket. Only populated via eBay Browse API.
@@ -92,6 +101,9 @@ class ExtractedListing(CamelModel):
     delivery_text: Optional[str] = None
     delivery_postcode: Optional[str] = None
     search_tags: list[str] = Field(default_factory=list)
+    delivery_cost_known: Optional[bool] = None
+    sold_confirmed: Optional[bool] = None
+    sold_date_text: Optional[str] = None
 
     @field_validator("listing_id", mode="before")
     @classmethod

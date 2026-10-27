@@ -48,8 +48,9 @@ class ModelSelectionError(RuntimeError):
 class ModelSelectionService:
     """Selects the first configured compatible model that completes a request."""
 
-    def __init__(self, settings: Settings | None = None):
+    def __init__(self, settings: Settings | None = None, *, ollama_options: dict[str, Any] | None = None):
         self.settings = settings or get_settings()
+        self.ollama_options = dict(ollama_options or {})
 
     def tiers(self) -> list[ModelTier]:
         s = self.settings
@@ -75,10 +76,15 @@ class ModelSelectionService:
         require_tools: bool = False,
         tool_choice: dict[str, Any] | str | None = None,
         free_only: bool = False,
+        local_only: bool = False,
+        streaming: bool = False,
     ) -> ModelResult:
         errors: list[str] = []
         for tier in self.tiers():
             if not tier.provider or not tier.model:
+                continue
+            if local_only and tier.provider not in {"ollama", "local"}:
+                errors.append(f"{tier.name}: non-local provider skipped for local-only task")
                 continue
             if free_only and tier.provider not in {"ollama", "local", "openrouter-free"}:
                 errors.append(f"{tier.name}: paid provider skipped because this task is restricted to local/free tiers")
@@ -108,6 +114,7 @@ class ModelSelectionService:
                     json_mode=json_mode,
                     images=images or [],
                     tool_choice=tool_choice,
+                    streaming=streaming,
                 )
                 if result.text.strip() or result.tool_calls:
                     log.info(
@@ -128,7 +135,8 @@ class ModelSelectionService:
                        max_tokens: int, timeout: float,
                        tools: list[dict[str, Any]] | None, json_mode: bool,
                        images: list[tuple[bytes, str]],
-                       tool_choice: dict[str, Any] | str | None) -> ModelResult:
+                       tool_choice: dict[str, Any] | str | None,
+                       streaming: bool = False) -> ModelResult:
         if provider in {"ollama", "local"}:
             if not self.settings.ollama_base_url:
                 raise ModelSelectionError("OLLAMA_BASE_URL is empty for this runtime")
@@ -136,23 +144,40 @@ class ModelSelectionService:
             payload: dict[str, Any] = {
                 "model": model,
                 "messages": api_messages,
-                "stream": False,
-                "options": {"num_predict": max_tokens},
+                "stream": streaming,
+                "options": {**self.ollama_options, "num_predict": max_tokens},
             }
-            # Qwen3.5's reasoning mode can consume the small output budgets
+            # Qwen3-family reasoning can consume the small output budgets
             # used by extraction and classification tasks before returning
             # the answer. Keep local FlipFlop responses in instruction mode.
-            if model.lower().startswith("qwen3.5"):
+            if model.lower().startswith("qwen3"):
                 payload["think"] = False
             if json_mode:
                 payload["format"] = "json"
             if tools:
                 payload["tools"] = [_to_ollama_tool(t) for t in tools]
             async with httpx.AsyncClient(timeout=timeout) as client:
-                resp = await client.post(f"{self.settings.ollama_base_url.rstrip('/')}/api/chat", json=payload)
-                resp.raise_for_status()
-                data = resp.json()
-            message = data.get("message") or {}
+                if streaming:
+                    chunks: list[str] = []
+                    data: dict[str, Any] = {}
+                    async with client.stream(
+                        "POST", f"{self.settings.ollama_base_url.rstrip('/')}/api/chat", json=payload
+                    ) as resp:
+                        resp.raise_for_status()
+                        async for line in resp.aiter_lines():
+                            if not line:
+                                continue
+                            item = json.loads(line)
+                            message = item.get("message") or {}
+                            chunks.append(message.get("content") or "")
+                            if item.get("done"):
+                                data = item
+                    message = {"content": "".join(chunks)}
+                else:
+                    resp = await client.post(f"{self.settings.ollama_base_url.rstrip('/')}/api/chat", json=payload)
+                    resp.raise_for_status()
+                    data = resp.json()
+                    message = data.get("message") or {}
             return ModelResult(
                 text=message.get("content") or "", model=model, provider="ollama",
                 tool_calls=message.get("tool_calls") or [], assistant_message=message, raw=data,

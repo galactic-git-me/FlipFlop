@@ -43,6 +43,8 @@ class SoldComp:
     sold_at: str
     url: str | None = None
     title: str | None = None  # eBay listing title (for build description & RAM filtering)
+    delivery_cost_known: bool = False
+    sold_date_text: str | None = None
 
 
 @dataclass
@@ -70,7 +72,7 @@ class UnavailableSoldCompsAdapter(SoldCompsAdapter):
     here when available, and swap this out in benchmarks.py.
     """
 
-    async def fetch(self, query: str, condition: str) -> SoldCompsResult:
+    async def fetch(self, query: str, condition: str, *, automated_access_approved: bool = False) -> SoldCompsResult:
         return SoldCompsResult(
             available=False,
             unavailable_reason=(
@@ -98,7 +100,7 @@ class LiveSoldCompsAdapter(SoldCompsAdapter):
     _MAX_PRICE = 3000.0
     _MIN_COMPS_BEFORE_BREAK = 5  # stop searching after finding this many
 
-    async def fetch(self, query: str, condition: str) -> SoldCompsResult:
+    async def fetch(self, query: str, condition: str, *, automated_access_approved: bool = False) -> SoldCompsResult:
         try:
             comps = await self._fetch_sold_comps(query, condition)
             if not comps:
@@ -152,7 +154,11 @@ class LiveSoldCompsAdapter(SoldCompsAdapter):
         return comps
 
     def _extract_comps_from_html(self, html: str, condition: str) -> list[SoldComp]:
-        """Extract sold prices from eBay HTML, skipping auctions and price ranges."""
+        """Extract fixed displayed sold prices with matching observed condition.
+
+        Hidden offers, ranges and unknown conditions cannot establish a price.
+        Listing-detail review is still required before complete-build approval.
+        """
         comps: list[SoldComp] = []
         soup = BeautifulSoup(html, "lxml")
 
@@ -171,6 +177,29 @@ class LiveSoldCompsAdapter(SoldCompsAdapter):
                     "[aria-label='Sold item']"
                 ):
                     continue
+                if 's-card' not in (item.get('class') or []) and not re.search(
+                    r'\bsold\b', ' '.join(el.get_text(' ', strip=True) for el in item.select(
+                        '.s-item__title--tagblock, .s-item__caption, .s-item__ended-date')), re.I):
+                    continue
+
+                # Current cards put condition, delivery and offer labels in
+                # attribute rows rather than the historical dedicated classes.
+                card_text = item.get_text(' ', strip=True)
+                if re.search(r'\bbest offer\b', card_text, re.I):
+                    continue
+                condition_nodes = item.select('.s-card__subtitle, .s-item__subtitle, .SECONDARY_INFO')
+                condition_text = ' '.join(node.get_text(' ', strip=True) for node in condition_nodes)
+                # Read only text outside the title, whose marketing words may
+                # say "new" even when the actual condition is pre-owned.
+                if not condition_text:
+                    condition_text = ' '.join(node.get_text(' ', strip=True) for node in item.select(
+                        '.s-card__attribute-row, .s-card__attribute-row--primary'))
+                if re.search(r'opened|refurbished|for parts|not working', condition_text, re.I):
+                    continue
+                actual_condition = ('used' if re.search(r'pre[- ]owned|\bused\b', condition_text, re.I)
+                                    else 'new' if re.search(r'brand new|\bnew\b', condition_text, re.I) else None)
+                if actual_condition != condition:
+                    continue
 
                 # Extract price
                 price_el = (
@@ -181,7 +210,14 @@ class LiveSoldCompsAdapter(SoldCompsAdapter):
                 if not price_el:
                     continue
 
-                price_text = price_el.get_text(strip=True)
+                price_nodes = item.select('.s-card__price')
+                price_text = (' '.join(node.get_text(' ', strip=True) for node in price_nodes)
+                              if price_nodes else price_el.get_text(' ', strip=True))
+                # Multiple distinct card prices may be a range, not one variant.
+                if len(set(re.findall(r'£\s*[\d,]+(?:\.\d{2})?', price_text))) > 1:
+                    continue
+                if '£' not in price_text:
+                    continue
 
                 # Skip price ranges
                 if re.search(r"\bto\b|–|—", price_text, re.I):
@@ -201,11 +237,23 @@ class LiveSoldCompsAdapter(SoldCompsAdapter):
                 url = link_el["href"].split("?")[0] if link_el else None
                 title = title_el.get_text(strip=True) if title_el else (link_el.get_text(strip=True) if link_el else None)
 
+                shipping_el = item.select_one('.s-item__shipping, .s-item__logisticsCost, [class*="s-card__shipping"]')
+                shipping_text = shipping_el.get_text(' ', strip=True) if shipping_el else ''
+                if not shipping_text:
+                    shipping_text = ' '.join(node.get_text(' ', strip=True) for node in item.select(
+                        '.s-card__attribute-row, .s-card__attribute-row--primary')
+                        if re.search(r'postage|delivery|shipping', node.get_text(' ', strip=True), re.I))
+                delivery_known = bool(re.search(r'free (?:postage|delivery)|£\s*[\d,.]+', shipping_text, re.I))
+                postage = self._parse_price(shipping_text) if '£' in shipping_text else 0.0
+                sold_date_el = item.select_one('.s-item__title--tagblock, .s-item__caption, [aria-label="Sold item"]')
+                sold_date_text = sold_date_el.get_text(' ', strip=True) if sold_date_el else None
                 comps.append(
                     SoldComp(
                         price=price,
-                        postage=0.0,  # eBay sold-search cards don't separate postage
-                        condition=condition,
+                        postage=postage,
+                        delivery_cost_known=delivery_known,
+                        sold_date_text=sold_date_text,
+                        condition=actual_condition,
                         sold_at=datetime.now(timezone.utc).isoformat(),
                         url=url,
                         title=title,
@@ -268,13 +316,7 @@ class PlaywrightSoldCompsAdapter(SoldCompsAdapter):
         '"pagename":"signin',
     )
 
-    _STEALTH_JS = """
-Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
-Object.defineProperty(navigator, 'plugins', {get: () => [1,2,3]});
-Object.defineProperty(navigator, 'languages', {get: () => ['en-GB','en']});
-"""
-
-    async def fetch(self, query: str, condition: str) -> SoldCompsResult:
+    async def fetch(self, query: str, condition: str, *, automated_access_approved: bool = False) -> SoldCompsResult:
         try:
             comps = await self._fetch_sold_comps(query, condition)
             if not comps:
@@ -596,7 +638,7 @@ class FixtureSoldCompsAdapter(SoldCompsAdapter):
     def __init__(self, fixtures: dict[str, list[SoldComp]]):
         self._fixtures = fixtures
 
-    async def fetch(self, query: str, condition: str) -> SoldCompsResult:
+    async def fetch(self, query: str, condition: str, *, automated_access_approved: bool = False) -> SoldCompsResult:
         comps = [c for c in self._fixtures.get(query, []) if c.condition == condition]
         if not comps:
             return SoldCompsResult(available=False, unavailable_reason="No fixture data for this query/condition")

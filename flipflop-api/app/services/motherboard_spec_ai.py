@@ -71,13 +71,56 @@ class MotherboardSpecAIResult:
     raw: dict
 
 
-async def extract_motherboard_spec(title: str) -> MotherboardSpecAIResult | None:
+def title_verified_motherboard_facts(title: str) -> dict:
+    """Extract only compatibility fields literally stated in a listing title.
+
+    LLM output can suggest a model identity, but it cannot turn remembered or
+    inferred specifications into source evidence. Unstated fields stay absent.
+    """
+    text = re.sub(r"[^a-z0-9]+", " ", (title or "").casefold())
+    facts = {}
+    socket = re.search(r"\b(am4|am5|lga\s?\d{4})\b", text)
+    if socket:
+        facts['socket'] = re.sub(r"\s+", "", socket.group(1))
+    memory = re.search(r"\bddr\s?([45])\b", text)
+    if memory:
+        facts['ram_type'] = f"ddr{memory.group(1)}"
+    chipset = re.search(r"\b([abxzh]\d{3,4}e?)[a-z]?\b", text)
+    if chipset:
+        facts['chipset'] = chipset.group(1)
+    if re.search(r"\b(micro\s?atx|m\s?atx|matx)\b", text):
+        facts['form_factor'] = 'matx'
+    elif re.search(r"\batx\b", text):
+        facts['form_factor'] = 'atx'
+    elif re.search(r"\bitx\b", text):
+        facts['form_factor'] = 'itx'
+    slot_count = re.search(r"\b(2|4|6|8)\s*(?:x\s*)?(?:dimm|memory|ram)\s*slots?\b", text)
+    if slot_count:
+        facts['ram_slots'] = int(slot_count.group(1))
+    maximum = re.search(r"\b(?:max(?:imum)?\s*)?(\d{2,3})\s*gb\s*(?:max(?:imum)?\s*)?(?:memory|ram)\b", text)
+    if maximum:
+        facts['max_ram_gb'] = int(maximum.group(1))
+    pcie_count = re.search(r"\b(\d+)\s*x\s*(?:pcie|pci express)(?:\s*\d+){0,2}\s*x\s*16\b", text)
+    if pcie_count:
+        facts['pcie_x16_slots'] = int(pcie_count.group(1))
+    m2_count = re.search(r"\b(\d+)\s*x\s*m\s*2\b", text)
+    if m2_count:
+        facts['m2_slots'] = int(m2_count.group(1))
+    sata_count = re.search(r"\b(\d+)\s*x\s*sata\b", text)
+    if sata_count:
+        facts['sata_ports'] = int(sata_count.group(1))
+    if re.search(r"\bwi\s?fi\d*\b", text):
+        facts['wifi'] = True
+    return facts
+
+
+async def extract_motherboard_spec(title: str, *, free_only: bool = True) -> MotherboardSpecAIResult | None:
     user_content = f"Motherboard listing title: {title}"
     try:
         result = await model_selection_service.complete(
             task="Motherboard specification extraction",
             messages=[{"role": "user", "content": user_content}],
-            system_prompt=_SYSTEM_PROMPT, max_tokens=400,
+            system_prompt=_SYSTEM_PROMPT, max_tokens=400, free_only=free_only,
         )
         raw_text = result.text
     except Exception as exc:
@@ -110,6 +153,6 @@ async def extract_motherboard_spec(title: str) -> MotherboardSpecAIResult | None
         form_factor=(d.get("form_factor") or None) and str(d.get("form_factor")).lower(),
         wifi=d.get("wifi"),
         confidence=float(d.get("confidence") or 0.0),
-        reasoning=str(d.get("reasoning") or ""),
+        reasoning=str(d.get("reasoning") or "")[:500],
         raw=d,
     )

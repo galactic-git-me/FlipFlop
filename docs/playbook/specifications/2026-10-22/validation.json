@@ -1,0 +1,22 @@
+{
+  "schema_validation": "passed",
+  "coverage": 24,
+  "source_reference_validation": "passed",
+  "constraint_validation": "socket/RAM class, internal storage, dedicated VRAM and power gate consistency passed; exact SKU fit and physical tests not verified",
+  "commercial_ceiling_arithmetic": "passed; approximate analysis only, not production penny-rounded quote",
+  "existing_snapshot_inversions": [
+    [
+      "FF-STU-01",
+      "FF-STU-02",
+      "4492.88",
+      "2649.04"
+    ]
+  ],
+  "proposed_price_envelope_overlap": [],
+  "capability_mapping": "24 stable IDs, unique ranked benefit labels per use case and unchanged legacy mappings passed",
+  "history_validation": "0.1.0 and 0.2.0 pass their archived schemas; archive hashes and preserved snapshot/floor mappings passed",
+  "ai_profile_validation": "explicit modalities, context, concurrency, quality/latency gates present; no measured or frontier claims",
+  "tier_progression": "capability ranks and proposed benefits checked; workload performance unverified; no price ordering inferred from capability rank",
+  "sale_ready_cells": 0,
+  "spec_sha256": "41888f08250434351cdf0266c90593f44dfe0d5b8c14f75443a4a0d8e1605b27"
+}

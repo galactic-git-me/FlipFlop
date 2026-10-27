@@ -1,0 +1,36 @@
+{
+  "listing_ids": [
+    16815,
+    16929,
+    17048,
+    17063,
+    17066,
+    17068
+  ],
+  "attempted": 6,
+  "captured": 6,
+  "retained": 0,
+  "unresolved": 0,
+  "by_host": {
+    "www.amazon.co.uk": {
+      "attempted": 6,
+      "captured": 6,
+      "retained": 0,
+      "unresolved": 0,
+      "capture_seconds_total": 97.872,
+      "capture_seconds_max": 17.046,
+      "queue_wait_seconds_total": 47.17,
+      "queue_wait_seconds_max": 16.405,
+      "unresolved_reasons": {}
+    }
+  },
+  "amazon_catalogue_attributes": {
+    "attempted": 6,
+    "captured": 0,
+    "unresolved": 0,
+    "unavailable": 6,
+    "cached_unavailable": 0,
+    "status": "partial"
+  },
+  "published": false
+}

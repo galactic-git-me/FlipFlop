@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from html import unescape
 from datetime import datetime
 from typing import Any
 
@@ -45,6 +46,58 @@ def _safe_specs(value: Any) -> dict[str, Any]:
             if isinstance(v, (str, int, float, bool)) and str(v).strip()[:300]}
 
 
+def product_specs(raw: Any) -> dict[str, Any]:
+    from app.services.studio_fit import engineering_specs
+    raw = raw if isinstance(raw, dict) else {}
+    capture = raw.get("playbook_product_capture") or {}
+    properties = capture.get("product_properties") if isinstance(capture, dict) and capture.get("status") == "captured" else {}
+    return {**_safe_specs(raw), **_safe_specs(properties), **_safe_specs(engineering_specs(raw))}
+
+
+def source_fact_copy(source: dict[str, Any]) -> dict[str, Any]:
+    """An immediate factual guide while optional language enrichment is queued."""
+    title = str(source.get("title") or "Catalogue component")
+    description = unescape(re.sub(r"<[^>]+>", " ", source.get("vendor_description") or ""))
+    description = re.sub(r"\s+", " ", description).strip()
+    facts = {**source.get("specifications", {}), **source.get("parsed", {})}
+    details = [{"label": key.replace("_", " ").capitalize(), "value": str(value)[:120]}
+               for key, value in facts.items() if value is not None][:6]
+    context = source.get("upgrade_context") or {}
+    summary = description[:500] or f"{title[:350]}. Additional manufacturer details have not yet been captured."
+    benefits = []
+    if context:
+        baseline = context.get("baseline_title") or context.get("baseline_model") or "the selected component"
+        summary = f"Alternative to {str(baseline)[:180]}: {title[:220]}. Compare the recorded specifications below; a performance improvement has not been verified."
+        previous = context.get("baseline_specifications") or {}
+        benefits = [{"title": key.replace("_", " ").capitalize(),
+                     "description": f"{str(value)[:80]} instead of {str(previous[key])[:80]}."}
+                    for key, value in facts.items() if key in previous and value != previous[key]][:4]
+    return {"headline": title[:90], "summary": summary[:500], "benefits": benefits, "key_details": details}
+
+
+async def cache_source_guide(db: AsyncSession, task: dict[str, Any]) -> CatalogueMarketingCopy:
+    # Cached reads must not wait behind a slow enrichment transaction's lock.
+    cached = await _load_cached(db, task)
+    if cached and cached.source_hash == task["source_hash"]:
+        return cached
+    await db.execute(text("SELECT pg_advisory_xact_lock(:lock_id)"), {
+        "lock_id": _lock_id(task["subject_type"], task["subject_id"], task["context_key"]),
+    })
+    cached = await _load_cached(db, task)
+    if cached and cached.source_hash == task["source_hash"]:
+        return cached
+    if cached is None:
+        cached = CatalogueMarketingCopy(subject_type=task["subject_type"], subject_id=task["subject_id"], context_key=task["context_key"])
+        db.add(cached)
+    cached.copy = source_fact_copy(task["source"])
+    cached.source_hash = task["source_hash"]
+    cached.provider, cached.model = "source-facts", "deterministic-v1"
+    cached.last_error = None
+    cached.generated_at = datetime.utcnow()
+    await db.flush()
+    return cached
+
+
 async def _listing_source(db: AsyncSession, listing_id: int, *, baseline_variant_id: int | None = None,
                           upgrade_context: dict[str, Any] | None = None) -> dict[str, Any]:
     listing = await db.get(Listing, listing_id)
@@ -52,7 +105,7 @@ async def _listing_source(db: AsyncSession, listing_id: int, *, baseline_variant
         raise ValueError("Catalogue product was not found")
     data: dict[str, Any] = {
         "type": "component", "title": listing.title, "vendor_description": (listing.description or "")[:5000],
-        "vendor": listing.source_name, "specifications": _safe_specs(listing.raw_specs),
+        "vendor": listing.source_name, "specifications": product_specs(listing.raw_specs),
         "parsed": {key: getattr(listing, key) for key in (
             "cpu", "gpu", "ram_gb", "ram_type", "ram_speed", "storage_gb", "storage_type",
             "storage_brand", "psu_brand", "psu_wattage", "psu_rating", "case_brand", "case_model",
@@ -62,13 +115,13 @@ async def _listing_source(db: AsyncSession, listing_id: int, *, baseline_variant
     if upgrade_context:
         context = dict(upgrade_context)
         baseline_model = str(context.get("baseline_model") or "").strip()
-        if baseline_model:
+        if baseline_model and not context.get("baseline_specifications") and not context.get("baseline_description"):
             baseline = (await db.execute(select(Listing.title, Listing.description, Listing.raw_specs)
-                                         .where(Listing.status == "active", Listing.title.ilike(f"%{baseline_model[:120]}%"))
+                                         .where(Listing.status == "active", Listing.title == baseline_model)
                                          .order_by(Listing.last_seen_at.desc()).limit(1))).first()
             if baseline:
                 context["baseline_description"] = (baseline.description or "")[:3000]
-                context["baseline_specifications"] = _safe_specs(baseline.raw_specs)
+                context["baseline_specifications"] = product_specs(baseline.raw_specs)
         data["upgrade_context"] = context
     elif baseline_variant_id:
         baseline = (await db.execute(
@@ -81,7 +134,7 @@ async def _listing_source(db: AsyncSession, listing_id: int, *, baseline_variant
         data["upgrade_context"] = {
             "baseline_title": baseline.title,
             "baseline_description": (baseline.description or "")[:3000],
-            "baseline_specifications": _safe_specs(baseline.raw_specs),
+            "baseline_specifications": product_specs(baseline.raw_specs),
         }
     return data
 
@@ -116,7 +169,7 @@ async def _validate_public_subject(db: AsyncSession, variant_id: int) -> int:
             CatalogueVariant.id == variant_id,
             CatalogueVariant.status == "active",
             Listing.status == "active",
-            (CatalogueVariant.curated_for_builds.is_(True) | CatalogueVariant.custom_for_builds.is_(True)),
+            CatalogueVariant.curated_for_builds.is_(True),
         )
     )).first()
     if not row:
@@ -177,7 +230,7 @@ async def generate_copy_batch(db: AsyncSession, tasks: list[dict[str, Any]]) -> 
     tasks = tasks[:4]
     if not tasks:
         return [], []
-    for task in tasks:
+    for task in sorted(tasks, key=lambda item: (item["subject_type"], item["subject_id"], item["context_key"])):
         await db.execute(text("SELECT pg_advisory_xact_lock(:lock_id)"), {
             "lock_id": _lock_id(task["subject_type"], task["subject_id"], task["context_key"]),
         })
@@ -185,7 +238,7 @@ async def generate_copy_batch(db: AsyncSession, tasks: list[dict[str, Any]]) -> 
     pending = []
     for task in tasks:
         cached = await _load_cached(db, task)
-        if cached and cached.source_hash == task["source_hash"]:
+        if cached and cached.source_hash == task["source_hash"] and cached.provider != "source-facts":
             already.append({"task_key": task["task_key"], "copy": cached.copy})
         else:
             pending.append(task)
@@ -203,6 +256,11 @@ async def generate_copy_batch(db: AsyncSession, tasks: list[dict[str, Any]]) -> 
         rows = parsed.get("items") if isinstance(parsed, dict) else None
         by_key = {item.get("task_key"): item.get("copy") for item in rows or [] if isinstance(item, dict)}
     except (ModelSelectionError, json.JSONDecodeError, TypeError, ValueError) as exc:
+        for task in pending:
+            cached = await _load_cached(db, task)
+            if cached:
+                cached.last_error = str(exc)[:300]
+                cached.generated_at = datetime.utcnow()
         return already, [{"task_key": task["task_key"], "error": str(exc)[:300]} for task in pending]
 
     generated = list(already)
@@ -228,6 +286,10 @@ async def generate_copy_batch(db: AsyncSession, tasks: list[dict[str, Any]]) -> 
                 ))
             generated.append({"task_key": task["task_key"], "copy": copy})
         except (ValueError, TypeError, AttributeError) as exc:
+            cached = await _load_cached(db, task)
+            if cached:
+                cached.last_error = str(exc)[:300]
+                cached.generated_at = datetime.utcnow()
             failed.append({"task_key": task["task_key"], "error": str(exc)[:300]})
     await db.flush()
     return generated, failed
@@ -268,20 +330,19 @@ async def ensure_product_copy(db: AsyncSession, *, variant_id: int | None = None
                                          .where(Listing.id == baseline_listing_id))).first()
             context_key = f"upgrade:baseline:{baseline_variant_id}"
             upgrade_context = {"baseline_model": baseline.title, "baseline_description": (baseline.description or "")[:3000],
-                               "baseline_specifications": _safe_specs(baseline.raw_specs), "upgraded_model": None}
+                               "baseline_specifications": product_specs(baseline.raw_specs), "upgraded_model": None}
         task = await _make_task(db, subject_type="listing", subject_id=listing_id, context_key=context_key,
                                 upgrade_context=upgrade_context)
-    generated, failed = await generate_copy_batch(db, [task])
-    if failed or not generated:
-        raise RuntimeError((failed[0]["error"] if failed else "Product description is temporarily unavailable"))
-    return {"copy": generated[0]["copy"], "context": task["context_key"], "generated": task["context_key"] != "product"}
+    cached = await cache_source_guide(db, task)
+    return {"copy": cached.copy, "context": task["context_key"], "generated": cached.provider != "source-facts",
+            "specifications": {**task["source"].get("specifications", {}), **task["source"].get("parsed", {})},
+            "vendor_description": re.sub(r"<[^>]+>", " ", task["source"].get("vendor_description") or "")}
 
 
 async def _batch_tasks(db: AsyncSession) -> list[dict[str, Any]]:
     rows = (await db.execute(
         select(Listing.id).join(CatalogueVariant, CatalogueVariant.listing_id == Listing.id)
-        .where(Listing.status == "active", CatalogueVariant.status == "active",
-               (CatalogueVariant.curated_for_builds.is_(True) | CatalogueVariant.custom_for_builds.is_(True)))
+        .where(Listing.status == "active", CatalogueVariant.status == "active")
         .distinct().order_by(Listing.id)
     )).scalars().all()
     tasks = [await _make_task(db, subject_type="listing", subject_id=int(listing_id), context_key="product") for listing_id in rows]
@@ -290,7 +351,7 @@ async def _batch_tasks(db: AsyncSession) -> list[dict[str, Any]]:
     from app.services.curated_build_policy import definitions
     definitions_by_cell = {(item["segment"].casefold(), item["tier"].casefold()): item
                            for item in definitions().get("builds", [])}
-    segments = (await db.execute(select(CuratedBuildSegment).where(CuratedBuildSegment.is_live.is_(True)))).scalars().all()
+    segments = (await db.execute(select(CuratedBuildSegment))).scalars().all()
     for segment in segments:
         build = definitions_by_cell.get((segment.customer_type.casefold(), segment.budget_level.casefold()))
         if not build:
@@ -307,25 +368,77 @@ async def _batch_tasks(db: AsyncSession) -> list[dict[str, Any]]:
             source = {"use_case": segment.customer_type, "tier": segment.budget_level,
                       "baseline_model": offer.get("from_sku"), "upgraded_model": offer.get("to_sku")}
             tasks.append(await _make_task(db, subject_type="listing", subject_id=int(row.id), context_key=key, upgrade_context=source))
+    # Comparisons discovered through customer choices join the same enrichment
+    # queue without precomputing every possible catalogue pairing.
+    comparisons = (await db.execute(select(CatalogueMarketingCopy).where(
+        CatalogueMarketingCopy.subject_type == "listing",
+        CatalogueMarketingCopy.context_key.like("upgrade:baseline:%"),
+    ))).scalars().all()
+    for comparison in comparisons:
+        try:
+            baseline_id = int(comparison.context_key.rsplit(":", 1)[1])
+            baseline_listing_id = await _validate_public_subject(db, baseline_id)
+            subject = await db.get(Listing, comparison.subject_id)
+            if not subject or subject.status != "active":
+                continue
+            baseline = await db.get(Listing, baseline_listing_id)
+            context = {"baseline_model": baseline.title, "baseline_description": (baseline.description or "")[:3000],
+                       "baseline_specifications": product_specs(baseline.raw_specs), "upgraded_model": None}
+            tasks.append(await _make_task(db, subject_type="listing", subject_id=comparison.subject_id,
+                                          context_key=comparison.context_key, upgrade_context=context))
+        except ValueError:
+            continue
     return tasks
 
 
 async def marketing_copy_status(db: AsyncSession) -> dict[str, int]:
     tasks = await _batch_tasks(db)
     existing = (await db.execute(select(CatalogueMarketingCopy.subject_type, CatalogueMarketingCopy.subject_id,
-                                        CatalogueMarketingCopy.context_key, CatalogueMarketingCopy.source_hash))).all()
+                                        CatalogueMarketingCopy.context_key, CatalogueMarketingCopy.source_hash, CatalogueMarketingCopy.provider))).all()
     saved = {(row.subject_type, row.subject_id, row.context_key): row.source_hash for row in existing}
     ready = sum(saved.get((task["subject_type"], task["subject_id"], task["context_key"])) == task["source_hash"] for task in tasks)
-    return {"total": len(tasks), "ready": ready, "remaining": len(tasks) - ready}
+    enriched = {(row.subject_type, row.subject_id, row.context_key) for row in existing if row.provider != "source-facts"}
+    enriched_ready = sum((task["subject_type"], task["subject_id"], task["context_key"]) in enriched
+                         and saved.get((task["subject_type"], task["subject_id"], task["context_key"])) == task["source_hash"] for task in tasks)
+    return {"total": len(tasks), "ready": ready, "remaining": len(tasks) - ready,
+            "enriched": enriched_ready, "source_guides": ready - enriched_ready,
+            "stored_upgrade_guides": sum(row.context_key.startswith("upgrade:") for row in existing)}
 
 
 async def generate_next_marketing_copy_batch(db: AsyncSession, limit: int = 4) -> dict[str, Any]:
     tasks = await _batch_tasks(db)
-    existing = (await db.execute(select(CatalogueMarketingCopy.subject_type, CatalogueMarketingCopy.subject_id,
-                                        CatalogueMarketingCopy.context_key, CatalogueMarketingCopy.source_hash))).all()
-    saved = {(row.subject_type, row.subject_id, row.context_key): row.source_hash for row in existing}
-    pending = [task for task in tasks if saved.get((task["subject_type"], task["subject_id"], task["context_key"])) != task["source_hash"]]
+    existing = (await db.execute(select(CatalogueMarketingCopy))).scalars().all()
+    saved = {(row.subject_type, row.subject_id, row.context_key): row for row in existing}
+    pending = [task for task in tasks if (row := saved.get((task["subject_type"], task["subject_id"], task["context_key"]))) is None
+               or row.source_hash != task["source_hash"] or row.provider == "source-facts"]
+    pending.sort(key=lambda task: (
+        bool((row := saved.get((task["subject_type"], task["subject_id"], task["context_key"]))) and row.last_error),
+        row.generated_at if row and row.generated_at else datetime.min,
+    ))
     batch = pending[:max(1, min(limit, 4))]
     generated, failed = await generate_copy_batch(db, batch)
     status = await marketing_copy_status(db)
     return {**status, "attempted": len(batch), "generated": len(generated), "failed": failed}
+
+
+async def backfill_source_guides(db: AsyncSession) -> dict[str, int]:
+    tasks = await _batch_tasks(db)
+    for task in sorted(tasks, key=lambda item: (item["subject_type"], item["subject_id"], item["context_key"])):
+        await cache_source_guide(db, task)
+    return await marketing_copy_status(db)
+
+
+async def run_marketing_copy_maintenance() -> dict[str, Any]:
+    from app.database import AsyncSessionLocal
+    # Source guides are saved first, independently of LLM availability/timeouts.
+    async with AsyncSessionLocal() as db:
+        coverage = await backfill_source_guides(db)
+        await db.commit()
+    async with AsyncSessionLocal() as db:
+        # One shared advisory lock prevents overlapping maintenance processes.
+        locked = (await db.execute(text("SELECT pg_try_advisory_xact_lock(731502611)"))).scalar()
+        if not locked:
+            return {"ok": True, **coverage, "skipped": "enrichment already running"}
+        result = await generate_next_marketing_copy_batch(db)
+        await db.commit()
+    return {"ok": True, **result}

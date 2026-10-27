@@ -1,0 +1,16 @@
+{
+  "overall": {
+    "products_with_cross_source_links": 158,
+    "products_with_all_observed_sources_linked": 157,
+    "listings_in_cross_source_groups": 556,
+    "cross_source_listing_pairs": 678,
+    "amazon_products_linked_to_another_source": 52
+  },
+  "direct": {
+    "products_with_cross_source_links": 49,
+    "products_with_all_observed_sources_linked": 49,
+    "listings_in_cross_source_groups": 110,
+    "cross_source_listing_pairs": 73,
+    "amazon_products_linked_to_another_source": 27
+  }
+}

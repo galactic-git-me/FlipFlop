@@ -1,7 +1,7 @@
 """Payment endpoints for Stripe integration."""
 
 import structlog
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Header
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
@@ -12,6 +12,7 @@ from app.models.playbook import Playbook
 from app.models.order_checkout_snapshot import OrderCheckoutSnapshot
 from app.routes.admin_auth import get_current_admin
 from app.schemas.payment import (
+    PlaybookBuildConfig,
     CreatePaymentIntentRequest,
     PaymentIntentResponse,
     ConfirmPaymentRequest,
@@ -20,10 +21,17 @@ from app.schemas.payment import (
     RefundRequest,
     RefundResponse,
 )
+from app.services.playbook_delivery import _checkout_build_mode, quote_playbook_delivery
 from app.services.payment_service import PaymentService
 from app.services.email_service import send_order_confirmation_email
 from app.services.social_proof import record_order_event
 from app.services.playbook_pricing import InvalidBuildError, price_playbook_build
+from app.services.commercial_checkout import (
+    load_checkout_policy, create_checkout_quote, accept_checkout_quote,
+    accepted_summary, accepted_delivery,
+    commercial_order_snapshot,
+    checkout_snapshot_for_payment,
+)
 from app.services.software_catalogue import (
     effective_software_profile_for_playbook,
     serialize_customer_software_selection,
@@ -40,30 +48,23 @@ from zoneinfo import ZoneInfo
 log = structlog.get_logger(__name__)
 
 
-def _checkout_build_mode(build_config) -> str:
-    """Translate the storefront's flow marker into the server pricing mode."""
-    mode = build_config.validation_mode
-    curated = bool(build_config.curated_build_id)
-    if curated:
-        if mode not in (None, "curated"):
-            raise HTTPException(status_code=422, detail="A curated cell cannot use the Made-by-you checkout mode")
-        return "curated"
-    if mode == "curated":
-        raise HTTPException(status_code=422, detail="Choose a curated Playbook cell before using Curated-for-you checkout")
-    if mode not in (None, "custom", "studio"):
-        raise HTTPException(status_code=422, detail="Unsupported build checkout mode")
-    if not build_config.budget_tier:
-        raise HTTPException(status_code=422, detail="Choose a Playbook budget tier before ordering a Made-by-you build")
-    return "custom"
 
 
 router = APIRouter(prefix="/payments", tags=["payments"])
+
+
+@router.post("/delivery-quotes")
+async def delivery_quotes(
+    build_config: PlaybookBuildConfig, db: AsyncSession = Depends(get_db),
+) -> dict:
+    return await quote_playbook_delivery(db, build_config)
 
 
 @router.post("/intent", response_model=PaymentIntentResponse, status_code=201)
 async def create_payment_intent(
     request: CreatePaymentIntentRequest,
     db: AsyncSession = Depends(get_db),
+    authorization: str | None = Header(default=None),
 ) -> PaymentIntentResponse:
     """
     Create a Stripe payment intent for a quote.
@@ -132,6 +133,12 @@ async def create_payment_intent(
             log.warning("payment.invalid_build_config", error=str(e))
             raise HTTPException(status_code=400, detail=str(e))
         fulfilment_type = "curated" if checkout_build_mode == "curated" else "custom"
+        commercial_policy = await load_checkout_policy(db, request.build_config)
+        if commercial_policy is not None:
+            from app.routes.auth import get_current_user
+            owner = await get_current_user(authorization if isinstance(authorization, str) else None, db)
+            if owner.id != request.customer_id:
+                raise HTTPException(403, "This checkout belongs to a different customer")
         playbook = await db.get(Playbook, priced.playbook_id)
         authored_profile = playbook.software_profile if playbook else None
         try:
@@ -163,7 +170,8 @@ async def create_payment_intent(
             raise HTTPException(status_code=422, detail="Flexible delivery is available for curated and custom builds")
         choice = await delivery_choice(db, fulfilment_type, delivery_option == "fast_track", delivery_option == "flexible")
         try:
-            choice = await apply_component_delivery_estimate(db, choice, [s.variant_id for s in priced.slots])
+            if commercial_policy is None:
+                choice = await apply_component_delivery_estimate(db, choice, [s.variant_id for s in priced.slots])
         except ValueError as e:
             raise HTTPException(status_code=422, detail=str(e)) from e
         amount = priced.total + choice["fee_gbp"]
@@ -193,6 +201,18 @@ async def create_payment_intent(
             "playbook_upgrades": priced.applied_upgrades,
             **checkout_metadata(choice),
         }
+        if commercial_policy is not None:
+            accepted = await accept_checkout_quote(db, request.build_config, request.commercial_quote_id,
+                delivery_option, request.customer_id, commercial_policy, quote_data)
+            choice = accepted_delivery(accepted)
+            amount = accepted.decision_json["quote"]["price_gbp"]
+            quote_data.update(checkout_metadata(choice))
+            quote_data["commercial_quote"] = accepted_summary(accepted)
+            quote_data["parts_total"] = float(accepted.decision_json["quote"]["fixed_costs_gbp"]["landed_parts_including_risk"])
+            quote_data["labour"] = float(accepted.decision_json["quote"]["fixed_costs_gbp"]["build_labour"])
+            quote_data["overhead"] = float(accepted.decision_json["quote"]["fixed_costs_gbp"]["allocated_overhead"])
+        elif request.commercial_quote_id is not None:
+            raise HTTPException(409, "This build no longer has an enabled commercial pricing policy")
     else:
         amount = request.budget
         delivery_option = request.delivery_option or ("fast_track" if request.speedy_delivery else "standard")
@@ -205,6 +225,25 @@ async def create_payment_intent(
         # consumed by confirm/webhook in the order-creation transaction.
         from sqlalchemy import delete
         await db.execute(delete(OrderCheckoutSnapshot).where(OrderCheckoutSnapshot.expires_at < datetime.utcnow()))
+
+        if quote_data.get("commercial_quote"):
+            # Retain the accepted contract even if provider creation succeeds
+            # but a later checkout-address transaction fails.
+            accepted_id = quote_data["commercial_quote"]["quote_snapshot_id"]
+            pending = (await db.execute(select(OrderCheckoutSnapshot).where(
+                OrderCheckoutSnapshot.customer_id == request.customer_id,
+                OrderCheckoutSnapshot.build_snapshot["commercial_quote"]["quote_snapshot_id"].as_integer() == accepted_id,
+            ).with_for_update())).scalar_one_or_none()
+            if pending is None:
+                db.add(OrderCheckoutSnapshot(
+                    payment_intent_id=f"commercial:{accepted_id}", customer_id=request.customer_id,
+                    delivery_address=request.checkout_addresses.delivery.model_dump(),
+                    billing_address=request.checkout_addresses.billing.model_dump(),
+                    build_snapshot={**quote_data, "software_profile": software_profile,
+                                    "software_package_ids": selected_software_ids},
+                    expires_at=datetime.utcnow() + timedelta(days=30),
+                ))
+            await db.commit()
 
         payment_service = PaymentService()
         intent_data = await payment_service.create_payment_intent(
@@ -226,23 +265,33 @@ async def create_payment_intent(
                 "chosen_week": request.build_config.chosen_week or "" if request.build_config else "",
                 "upgrade_candidate_indexes": ",".join(map(str, request.build_config.upgrade_candidate_indexes)) if request.build_config else "",
                 "budget_tier": request.build_config.budget_tier or "" if request.build_config else "",
+                "commercial_quote_snapshot_id": str(quote_data.get("commercial_quote", {}).get("quote_snapshot_id", "")),
             },
+            idempotency_key=(f"commercial:{request.customer_id}:{request.commercial_quote_id}:{delivery_option}"
+                             if quote_data.get("commercial_quote") else None),
         )
 
         if request.build_config is not None:
             addresses = request.checkout_addresses
-            db.add(OrderCheckoutSnapshot(
-                payment_intent_id=intent_data["intent_id"],
-                customer_id=request.customer_id,
-                delivery_address=addresses.delivery.model_dump(),
-                billing_address=addresses.billing.model_dump(),
-                build_snapshot={
-                    **quote_data,
-                    "software_profile": software_profile,
-                    "software_package_ids": selected_software_ids,
-                },
-                expires_at=datetime.utcnow() + timedelta(days=30),
-            ))
+            existing_snapshot = await checkout_snapshot_for_payment(db, intent_data["intent_id"],
+                request.customer_id, {"commercial_quote_snapshot_id": quote_data.get("commercial_quote", {}).get("quote_snapshot_id", "")})
+            if existing_snapshot is not None and existing_snapshot.customer_id != request.customer_id:
+                raise HTTPException(409, "Payment checkout owner does not match")
+            if existing_snapshot is None:
+                db.add(OrderCheckoutSnapshot(
+                    payment_intent_id=intent_data["intent_id"],
+                    customer_id=request.customer_id,
+                    delivery_address=addresses.delivery.model_dump(),
+                    billing_address=addresses.billing.model_dump(),
+                    build_snapshot={
+                        **quote_data,
+                        "software_profile": software_profile,
+                        "software_package_ids": selected_software_ids,
+                    },
+                    expires_at=datetime.utcnow() + timedelta(days=30),
+                ))
+            elif existing_snapshot.payment_intent_id.startswith("commercial:"):
+                existing_snapshot.payment_intent_id = intent_data["intent_id"]
             await db.flush()
 
         log.info(
@@ -333,6 +382,8 @@ async def confirm_payment(
         return PaymentConfirmation(
             order_id=existing_order.id,
             status=existing_order.status.value,
+            fulfilment_status=existing_order.fulfilment_status.value,
+            payment_status=existing_order.payment_status,
             amount=float(existing_order.customer_price),
             currency="gbp",
             payment_intent_id=request.intent_id,
@@ -373,12 +424,8 @@ async def confirm_payment(
         component_costs = 0.0
         overhead_amount = 0.0
         playbook_id = None
-        address_snapshot = (await db.execute(
-            select(OrderCheckoutSnapshot).where(
-                OrderCheckoutSnapshot.payment_intent_id == request.intent_id,
-                OrderCheckoutSnapshot.customer_id == request.customer_id,
-            ).with_for_update()
-        )).scalar_one_or_none()
+        address_snapshot = await checkout_snapshot_for_payment(db, request.intent_id,
+            request.customer_id, payment_data["metadata"])
         if request.build_config is not None and (address_snapshot is None or not address_snapshot.build_snapshot):
             raise HTTPException(status_code=409, detail="The checkout build snapshot is missing. Please restart checkout.")
         if request.build_config is not None:
@@ -400,16 +447,30 @@ async def confirm_payment(
                 "software_profile": snapshot.get("software_profile"),
                 "software_package_ids": snapshot.get("software_package_ids", []),
                 "playbook_upgrades": snapshot.get("playbook_upgrades", []),
+                **({"commercial_quote": snapshot["commercial_quote"]} if snapshot.get("commercial_quote") else {}),
                 "delivery_address": address_snapshot.delivery_address,
                 "billing_address": address_snapshot.billing_address,
             }
 
+        accepted_specs = await commercial_order_snapshot(db, payment_data["metadata"],
+                                                        request.customer_id, payment_data["amount"])
+        if accepted_specs is not None:
+            if address_snapshot is not None and address_snapshot.build_snapshot:
+                specs = {**address_snapshot.build_snapshot, **specs,
+                    "delivery_address": address_snapshot.delivery_address,
+                    "billing_address": address_snapshot.billing_address}
+            specs = {**specs, **accepted_specs}
+            playbook_id = accepted_specs["playbook_id"]
+            component_costs = accepted_specs["parts_total"]
+            overhead_amount = float(accepted_specs.get("overhead") or 0)
         delivery_metadata = payment_data["metadata"]
         delivery_days = int(delivery_metadata.get("delivery_days") or 0)
         delivery_option = delivery_metadata.get("delivery_option", "standard")
         delivery_start = datetime.now(ZoneInfo("Europe/London")).replace(tzinfo=None)
         chosen_week = delivery_metadata.get("chosen_week") or (request.build_config.chosen_week if request.build_config else None)
-        if chosen_week:
+        if accepted_specs is not None:
+            delivery_start = datetime.fromisoformat(accepted_specs["commercial_quote"]["accepted_at"]).astimezone(ZoneInfo("Europe/London")).replace(tzinfo=None)
+        elif chosen_week:
             try:
                 year_text, week_text = chosen_week.split("-W", maxsplit=1)
                 scheduled_start = datetime.fromisocalendar(int(year_text), int(week_text), 1)
@@ -418,6 +479,7 @@ async def confirm_payment(
                 pass
         promised_delivery_date = add_working_days(delivery_start, delivery_days) if delivery_days > 0 else None
         specs.update({
+            "payment_evidence": payment_data.get("payment_evidence", {}),
             "delivery_option": delivery_option,
             "delivery_promise": delivery_metadata.get("delivery_promise"),
             "delivery_estimate_source": delivery_metadata.get("delivery_estimate_source", "configured_fulfilment_default"),
@@ -429,6 +491,9 @@ async def confirm_payment(
             order_id=f"ORD-{payment_data['intent_id'][-12:]}",  # Use last 12 chars of intent ID
             customer_id=request.customer_id,
             status=OrderStatus.AWAITING_SOURCING,
+            payment_status="paid",
+            customer_name=customer.name,
+            customer_email=customer.email,
             specs=specs,
             customer_price=payment_data["amount"],
             fast_track_selected=delivery_option == "fast_track",
@@ -498,6 +563,8 @@ async def confirm_payment(
         return PaymentConfirmation(
             order_id=order_id,
             status=order.status.value,
+            fulfilment_status=order.fulfilment_status.value,
+            payment_status=order.payment_status,
             amount=payment_data["amount"],
             currency=payment_data["currency"],
             payment_intent_id=request.intent_id,

@@ -69,6 +69,7 @@ class CreatePaymentIntentRequest(BaseModel):
     speedy_delivery: bool = False
     delivery_option: Optional[str] = Field(None, pattern="^(standard|fast_track|flexible)$")
     checkout_addresses: Optional[CheckoutAddresses] = None
+    commercial_quote_id: Optional[int] = Field(default=None, gt=0)
 
     @model_validator(mode="after")
     def _require_budget_or_build_config(self) -> "CreatePaymentIntentRequest":
@@ -76,6 +77,8 @@ class CreatePaymentIntentRequest(BaseModel):
             raise ValueError("Either budget or build_config must be provided")
         if self.build_config is not None and self.checkout_addresses is None:
             raise ValueError("Delivery and billing addresses are required for build checkout")
+        if self.commercial_quote_id is not None and self.build_config is None:
+            raise ValueError("A commercial quote requires its selected build configuration")
         return self
 
     class Config:
@@ -129,10 +132,12 @@ class ConfirmPaymentRequest(BaseModel):
 
 
 class PaymentConfirmation(BaseModel):
-    """Response confirming successful payment and order creation."""
+    """Response separating confirmed payment from the fulfilment workflow."""
 
     order_id: int = Field(..., description="Created Order ID")
     status: str = Field(..., description="Order status")
+    fulfilment_status: str = Field(..., description="Current order fulfilment status")
+    payment_status: str = Field(..., description="Current payment/refund status")
     amount: float = Field(..., description="Payment amount in GBP")
     currency: str = Field(..., description="Currency code")
     payment_intent_id: str = Field(..., description="Stripe PaymentIntent ID")
@@ -143,6 +148,8 @@ class PaymentConfirmation(BaseModel):
             "example": {
                 "order_id": 42,
                 "status": "awaiting_sourcing",
+                "fulfilment_status": "awaiting_sourcing",
+                "payment_status": "paid",
                 "amount": 1200.00,
                 "currency": "gbp",
                 "payment_intent_id": "pi_1234567890",

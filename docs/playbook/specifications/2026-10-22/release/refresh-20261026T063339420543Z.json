@@ -1,0 +1,49 @@
+{
+  "listing_ids": [
+    15611,
+    15898,
+    15936,
+    15950,
+    15975,
+    16002
+  ],
+  "attempted": 6,
+  "captured": 3,
+  "retained": 1,
+  "unresolved": 2,
+  "by_host": {
+    "royalcdkeys.com": {
+      "attempted": 1,
+      "captured": 0,
+      "retained": 1,
+      "unresolved": 0,
+      "capture_seconds_total": 0.315,
+      "capture_seconds_max": 0.315,
+      "queue_wait_seconds_total": 7.084,
+      "queue_wait_seconds_max": 7.084,
+      "unresolved_reasons": {}
+    },
+    "www.amazon.co.uk": {
+      "attempted": 5,
+      "captured": 3,
+      "retained": 0,
+      "unresolved": 2,
+      "capture_seconds_total": 44.067,
+      "capture_seconds_max": 18.506,
+      "queue_wait_seconds_total": 6.91,
+      "queue_wait_seconds_max": 4.598,
+      "unresolved_reasons": {
+        "The exact Amazon ASIN page did not expose one selected GBP price": 2
+      }
+    }
+  },
+  "amazon_catalogue_attributes": {
+    "attempted": 2,
+    "captured": 0,
+    "unresolved": 0,
+    "unavailable": 5,
+    "cached_unavailable": 3,
+    "status": "partial"
+  },
+  "published": false
+}

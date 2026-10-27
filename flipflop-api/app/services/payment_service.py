@@ -68,6 +68,9 @@ class PaymentService:
             intent = stripe.PaymentIntent.create(
                 amount=amount_pence,
                 currency="gbp",
+                # Stripe selects account-enabled methods eligible for this
+                # customer, amount, currency and payment flow.
+                automatic_payment_methods={"enabled": True},
                 metadata={
                     "customer_id": str(customer_id),
                     "budget": str(normalized_budget),
@@ -142,6 +145,11 @@ class PaymentService:
                 "created_at": datetime.utcfromtimestamp(intent.created),
                 "charge_id": intent.latest_charge,
                 "metadata": dict(intent.metadata or {}),
+                "payment_evidence": {
+                    "provider": "stripe", "status": "succeeded",
+                    "livemode": intent.get("livemode") is True,
+                    "currency": intent.currency,
+                },
             }
 
         except StripeError as e:

@@ -1,0 +1,269 @@
+{
+  "query": "ASRock A620M HDV M.2 motherboard",
+  "observed_at": "2026-10-22T20:00:39.100591+00:00",
+  "source": "amazon_search",
+  "commercially_verified": false,
+  "parser": "linked_product_heading",
+  "products": [
+    {
+      "external_id": "https://www.amazon.co.uk/ASRock-AMD-AM5-A620M-RS/dp/B0C39YS8DD/ref=sr_1_1",
+      "title": "A620M Pro RS AMD A620 Emplacement AM5 micro ATX",
+      "price": 110.99,
+      "url": "https://www.amazon.co.uk/ASRock-AMD-AM5-A620M-RS/dp/B0C39YS8DD/ref=sr_1_1",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61kZsToibDL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 28
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Gaming-Motherboard-A620M-HDV-Supports-Processors/dp/B0GTRH5BH3/ref=sr_1_2",
+      "title": "Gaming Motherboard Fit For ASROCK A620M-HDV/M.2 Motherboard, LGA 1718, A620,Micro ATX, DDR5,Supports Socket AM5 Ryzen 8000 And 7000 Series Processors",
+      "price": 174.63,
+      "url": "https://www.amazon.co.uk/Gaming-Motherboard-A620M-HDV-Supports-Processors/dp/B0GTRH5BH3/ref=sr_1_2",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/715S4AmC6hL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 14
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Gaming-Motherboard-A620M-HDV-Supports-Processors/dp/B0GCX9T5X8/ref=sr_1_3",
+      "title": "Gaming Motherboard Fit For ASROCK A620M-HDV/M.2 Motherboard, LGA 1718, A620,Micro ATX, DDR5,Supports Socket AM5 Ryzen 8000 And 7000 Series Processors",
+      "price": 208.84,
+      "url": "https://www.amazon.co.uk/Gaming-Motherboard-A620M-HDV-Supports-Processors/dp/B0GCX9T5X8/ref=sr_1_3",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71M81gS4blL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 14
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Gaming-Motherboard-A620M-HDV-Supports-Processors/dp/B0GWY14THS/ref=sr_1_4",
+      "title": "Gaming Motherboard Fit For ASROCK A620M-HDV/M.2 Motherboard, LGA 1718,A620,Micro ATX, DDR5,Supports Socket AM5 Ryzen 8000 And 7000 Series Processors",
+      "price": 192.29,
+      "url": "https://www.amazon.co.uk/Gaming-Motherboard-A620M-HDV-Supports-Processors/dp/B0GWY14THS/ref=sr_1_4",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/711vwZrF2iL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 14
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Motherboard-ASROCK-A620M-HDV-Supports-Processors-One-Color/dp/B0H46NN2SH/ref=sr_1_6",
+      "title": "Motherboard Fit For ASROCK A620M-HDV/M.2 Motherboard, LGA 1718,A620,Micro ATX, DDR5,Supports Socket AM5 Ryzen 8000 And 7000 Series Processors",
+      "price": 384.23,
+      "url": "https://www.amazon.co.uk/Motherboard-ASROCK-A620M-HDV-Supports-Processors-One-Color/dp/B0H46NN2SH/ref=sr_1_6",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71zxQL-2S-L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 13
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Motherboard-ASROCK-A620M-HDV-Supports-Processors-One-Color/dp/B0H2ZTLN5G/ref=sr_1_7",
+      "title": "Motherboard Fit For ASROCK A620M-HDV/M.2 Motherboard, LGA 1718,A620,Micro ATX, DDR5,Supports Socket AM5 Ryzen 8000 And 7000 Series Processors",
+      "price": 392.76,
+      "url": "https://www.amazon.co.uk/Motherboard-ASROCK-A620M-HDV-Supports-Processors-One-Color/dp/B0H2ZTLN5G/ref=sr_1_7",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/711vwZrF2iL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 13
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASRock-B650M-HDV-Micro-ATX-Motherboard-Type-C/dp/B0FK78ZZ6S/ref=sr_1_8",
+      "title": "B650M-HDV M.2 White Micro-ATX AM5 Motherboard, AMD Ryzen 9000/8000/7000, PCIe 5.0 x16, DDR5 8200+(OC), Dual M.2 (Gen5/Gen4), USB 3.2 Type-C, 2.5G LAN",
+      "price": 128.54,
+      "url": "https://www.amazon.co.uk/ASRock-B650M-HDV-Micro-ATX-Motherboard-Type-C/dp/B0FK78ZZ6S/ref=sr_1_8",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61p37+ESwkL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 30
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/gaming-A620M-HDV-Motherboard-Supports-Processors/dp/B0HGD9XS7W/ref=sr_1_9",
+      "title": "pc gaming mobo Fit For ASROCK A620M-HDV/M.2 Motherboard, LGA 1718,A620,Micro ATX, DDR5,Supports Socket AM5 Ryzen 8000 And 7000 Series Processors",
+      "price": 466.13,
+      "url": "https://www.amazon.co.uk/gaming-A620M-HDV-Motherboard-Supports-Processors/dp/B0HGD9XS7W/ref=sr_1_9",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/711vwZrF2iL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 9
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASRock-B550M-HDV-Supports-Processors-motherboard/dp/B089W26FCB/ref=sr_1_10",
+      "title": "B550M-HDV Supports 3rd Gen AMD AM4 Ryzen\u2122 / Future AMD Ryzen\u2122 Processors motherboard",
+      "price": 74.08,
+      "url": "https://www.amazon.co.uk/ASRock-B550M-HDV-Supports-Processors-motherboard/dp/B089W26FCB/ref=sr_1_10",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71ScBhEOb3L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 30
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASRock-B760M-HDV-M-2-D4-Intel/dp/B0BQWPKCTP/ref=sr_1_11",
+      "title": "B760M-HDV/M.2 D4, Intel B760, 1700, Micro ATX, 2 DDR4, VGA, HDMI, DP, GB LAN, PCIe4, 2x M.2",
+      "price": 78.1,
+      "url": "https://www.amazon.co.uk/ASRock-B760M-HDV-M-2-D4-Intel/dp/B0BQWPKCTP/ref=sr_1_11",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71LDSV9DokL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Asrock-A620AM-Socket-Motherboard-Slots/dp/B0FY71695L/ref=sr_1_12",
+      "title": "A620AM PRO RS WIFI Amd Socket Am5 Motherboard 4 X Ddr5 Dimm Slots 1 X M.2",
+      "price": 105.16,
+      "url": "https://www.amazon.co.uk/Asrock-A620AM-Socket-Motherboard-Slots/dp/B0FY71695L/ref=sr_1_12",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/719PdnvByRL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/gaming-A620M-HDV-Motherboard-Supports-Processors/dp/B0HHXL77N8/ref=sr_1_13",
+      "title": "pc gaming mobo Fit For ASROCK A620M-HDV/M.2 Motherboard, LGA 1718,A620,Micro ATX, DDR5,Supports Socket AM5 Ryzen 8000 And 7000 Series Processors",
+      "price": 458.29,
+      "url": "https://www.amazon.co.uk/gaming-A620M-HDV-Motherboard-Supports-Processors/dp/B0HHXL77N8/ref=sr_1_13",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71zxQL-2S-L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 9
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Motherboard-ASRock-B650M-Desktop-A620M-HDV/dp/B0GZY6HL28/ref=sr_1_14",
+      "title": "Motherboard Fit For ASRock A620 / B650M PG Black Tide Storm DDR5 Desktop Motherboard 7500 F / 7800X 3D(A620M-HDV)",
+      "price": 297.59,
+      "url": "https://www.amazon.co.uk/Motherboard-ASRock-B650M-Desktop-A620M-HDV/dp/B0GZY6HL28/ref=sr_1_14",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61a0ROaTz2L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 13
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASRock-A620AM-Socket-Motherboard-Slots/dp/B0FXCVHKBS/ref=sr_1_15",
+      "title": "A620AM PRO-A Amd Socket Am5 Motherboard 4 X Ddr5 Dimm Slots 1 X M.2 Socke",
+      "price": 94.99,
+      "url": "https://www.amazon.co.uk/ASRock-A620AM-Socket-Motherboard-Slots/dp/B0FXCVHKBS/ref=sr_1_15",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71cuQxjrP2L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Asrock-A620AM-Socket-Motherboard-Slots/dp/B0FY7H5S21/ref=sr_1_16",
+      "title": "A620AM PRO RS Amd Socket Am5 Motherboard 4 X Ddr5 Dimm Slots 1 X M.2 Sock",
+      "price": 84.6,
+      "url": "https://www.amazon.co.uk/Asrock-A620AM-Socket-Motherboard-Slots/dp/B0FY7H5S21/ref=sr_1_16",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61CjJQRBVPL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Carte-M%C3%A8re-ASRock-A520M-HDV-Micro-ATX/dp/B08G1Y95SZ/ref=sr_1_17_mod_primary_new",
+      "title": "A520M-HDV, AMD A520, AM4, Micro ATX, 2 DDR4, VGA, DVI, HDMI, M.2",
+      "price": 55.45,
+      "url": "https://www.amazon.co.uk/Carte-M%C3%A8re-ASRock-A520M-HDV-Micro-ATX/dp/B08G1Y95SZ/ref=sr_1_17_mod_primary_new",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71eSGWQWz0L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/GBT-AMD-AM5-A620M-rev/dp/B0C9R3VLW4/ref=sr_1_19",
+      "title": "A620M H Motherboard - Supports AMD Ryzen 8000 CPUs, 5+2+2 Phases Digital VRM, up to 7200MHz DDR5 (OC), 1xPCIe 4.0 M.2, GbE LAN, USB 3.2 Gen 1",
+      "price": 71.99,
+      "url": "https://www.amazon.co.uk/GBT-AMD-AM5-A620M-rev/dp/B0C9R3VLW4/ref=sr_1_19",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61CJLl9Q+XL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Carte-ASRock-H610M-HDV-Intel-Micro/dp/B0CK774991/ref=sr_1_20",
+      "title": "Carte M\u00e8re ASRock H610M-HDV/M.2 R2.0 (Intel LGA 1700) Micro ATX",
+      "price": 65.42,
+      "url": "https://www.amazon.co.uk/Carte-ASRock-H610M-HDV-Intel-Micro/dp/B0CK774991/ref=sr_1_20",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71zNXJVIzXL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Asrock-A620AM-HVS-A620a-Micro-Ddr5/dp/B0FHJ3QF6Y/ref=sr_1_22",
+      "title": "MB ASRock AMD AM5 A620AM-HVS - AMD Sockel AM5 (Ryzen Zen4) - Micro/Mini/Flex-ATX (90-MXBSR0-A0UAYZ)",
+      "price": 74.33,
+      "url": "https://www.amazon.co.uk/Asrock-A620AM-HVS-A620a-Micro-Ddr5/dp/B0FHJ3QF6Y/ref=sr_1_22",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61cRUmZ2nLL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASRock-A620AI-WIFI-A620a-Wi-Fi/dp/B0FJHMGM7N/ref=sr_1_23",
+      "title": "A620AI WIFI Amd A620a Am5 Mini Itx 2 Ddr5 Hdmi Wi-Fi 6E 2.5G & Gb Lan 2X",
+      "price": 133.0,
+      "url": "https://www.amazon.co.uk/ASRock-A620AI-WIFI-A620a-Wi-Fi/dp/B0FJHMGM7N/ref=sr_1_23",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61KXhMNLQRL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock A620M HDV M.2 motherboard",
+      "estimated_delivery_days": 26
+    }
+  ]
+}

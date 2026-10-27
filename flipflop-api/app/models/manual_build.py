@@ -9,6 +9,7 @@ class ManualBuild(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(300), default="Untitled Build")
+    creation_method: Mapped[str] = mapped_column(String(20), default="manual", server_default="manual")
     components: Mapped[list] = mapped_column(JSON, default=list)
     total_cost: Mapped[float | None] = mapped_column(Float)
     last_evaluation: Mapped[dict | None] = mapped_column(JSON)
@@ -96,7 +97,7 @@ class ManualBuild(Base):
     # EBAY_*_FULFILLMENT_POLICY_ID env setting every listing used before —
     # see app/services/ebay_fulfillment_policies.py for how the choices are
     # fetched and app/api/manual_builds.py's post_to_ebay for the fallback.
-    fulfillment_policy_id: Mapped[str | None] = mapped_column(String(60))
+    fulfillment_policy_id: Mapped[str | None] = mapped_column(String(100))
     # Deferred-listing scheduler — mirrors Flip.deferred_publish_at (see
     # app/models/flip.py and app/workers/manual_build_scheduler.py). NULL
     # means "no scheduled time set"; publishing via the "List on eBay"
@@ -116,6 +117,8 @@ class ManualBuild(Base):
     # address is only known after purchase, never at listing time, so
     # these stay NULL until then.
     ebay_order_id: Mapped[str | None] = mapped_column(String(100))
+    # Exact marketplace ship-by deadline returned by the order API.
+    ebay_ship_by_date: Mapped[datetime | None] = mapped_column(DateTime)
     buyer_name: Mapped[str | None] = mapped_column(String(200))
     buyer_address_json: Mapped[dict | None] = mapped_column(JSON)
     sale_price_actual: Mapped[float | None] = mapped_column(Float)

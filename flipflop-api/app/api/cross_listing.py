@@ -17,6 +17,57 @@ router = APIRouter(prefix="/cross-listing", tags=["cross-listing"], dependencies
 INDIRECT_CHANNELS = {"onbuy", "amazon", "facebook_catalog", "vinted"}
 
 
+class ChannelImagesIn(BaseModel):
+    build_id: int
+    channel: str = Field(min_length=1, max_length=40)
+    urls: list[str] = Field(default_factory=list, max_length=24)
+    white_background: bool = False
+    clean_photographs: bool = False
+    image_ids: list[str] = Field(default_factory=list, max_length=24)
+    policy_version: int | None = None
+
+
+async def _channel_image_previews(body: ChannelImagesIn, db: AsyncSession):
+    from app.services.channel_images import image_manifest, profile_for
+    build = await db.get(ManualBuild, body.build_id)
+    if not build:
+        raise HTTPException(404, "Build not found")
+    allowed = {p.get("url") for p in build.photos or [] if isinstance(p, dict) and p.get("kind", "photo") == "photo"}
+    urls = body.urls or [p["url"] for p in build.photos or [] if isinstance(p, dict) and p.get("url") in allowed]
+    if not urls or any(url not in allowed for url in urls):
+        raise HTTPException(422, "Choose original product photographs from this build; promotional cards belong on the website separately")
+    try:
+        profile = profile_for(body.channel)
+        images = []
+        for url in urls:
+            manifest = await image_manifest(url)
+            images.append({"id": manifest["id"], "policy_version": manifest["policy_version"], "source_url": url, "original_url": manifest["original_url"], **manifest["variants"][profile]})
+        return images
+    except (ValueError, OSError) as exc:
+        raise HTTPException(422, str(exc)) from exc
+
+
+@router.post("/images/preview")
+async def preview_channel_images(body: ChannelImagesIn, db: AsyncSession = Depends(get_db)):
+    return {"channel": body.channel, "images": await _channel_image_previews(body, db)}
+
+
+@router.post("/images/approve")
+async def approve_channel_images(body: ChannelImagesIn, db: AsyncSession = Depends(get_db)):
+    from app.services.channel_images import approve_variant, POLICY_VERSION
+    images = await _channel_image_previews(body, db)
+    if body.image_ids != [image["id"] for image in images] or body.policy_version != POLICY_VERSION:
+        raise HTTPException(409, "The source photographs or format policy changed. Preview the current images before approving.")
+    if not body.clean_photographs:
+        raise HTTPException(422, "Confirm these are clean product photographs without promotional stickers, branding overlays or watermarks")
+    try:
+        for image in images:
+            approve_variant(image["id"], body.channel, white_background=body.white_background)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    return {"approved": True, "channel": body.channel, "images": [image["url"] for image in images]}
+
+
 class RecreateScheduleIn(BaseModel):
     build_id: int
     channel: str = Field(min_length=2, max_length=30)
@@ -83,6 +134,24 @@ async def amazon_status():
             "message": f"{str(exc)} The production Amazon account or app authorization does not currently permit marketplace {client.marketplace_id}.",
             "status_code": exc.status_code,
         }
+
+
+@router.get("/ebay/status")
+async def ebay_listing_status(db: AsyncSession = Depends(get_db)):
+    """Verify credentials for the actual listing target, not sourcing OAuth."""
+    import httpx
+    from app.config import get_settings
+    from app.services.ebay_token_manager import get_valid_ebay_access_token
+    environment = get_settings().ebay_listing_environment
+    root = "https://api.sandbox.ebay.com" if environment == "sandbox" else "https://api.ebay.com"
+    try:
+        token = await get_valid_ebay_access_token(environment, db=db)
+        async with httpx.AsyncClient(timeout=20) as client:
+            response = await client.get(f"{root}/sell/inventory/v1/location", params={"limit": 1}, headers={"Authorization": f"Bearer {token}"})
+        return {"connected": response.status_code == 200, "environment": environment,
+                "message": f"eBay {environment} listing connection {'verified' if response.status_code == 200 else 'returned HTTP ' + str(response.status_code)}"}
+    except (ValueError, httpx.HTTPError):
+        return {"connected": False, "environment": environment, "message": f"eBay {environment} listing credentials could not be verified"}
 
 
 @router.post("/amazon/publish/{build_id}")

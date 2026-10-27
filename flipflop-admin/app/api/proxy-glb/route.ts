@@ -12,10 +12,13 @@ export async function GET(request: Request) {
       return new Response('Failed to fetch GLB', { status: response.status });
     }
 
-    const buffer = await response.arrayBuffer();
-    return new Response(buffer, {
+    // Pass the upstream body through as a stream. Catalogue models can be
+    // hundreds of megabytes; buffering the whole GLB here needlessly doubles
+    // memory use before the browser's GLTFLoader can read it.
+    return new Response(response.body, {
       headers: {
-        'Content-Type': 'application/octet-stream',
+        'Content-Type': response.headers.get('content-type') || 'model/gltf-binary',
+        ...(response.headers.get('content-length') ? { 'Content-Length': response.headers.get('content-length')! } : {}),
         'Access-Control-Allow-Origin': '*',
       },
     });

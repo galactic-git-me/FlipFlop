@@ -18,8 +18,12 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     for table in ("gem_radar_listing_observations", "gem_radar_scored_listings"):
-        op.add_column(table, sa.Column("image_urls", sa.JSON(), nullable=False, server_default=sa.text("'[]'")))
-        op.add_column(table, sa.Column("video_urls", sa.JSON(), nullable=False, server_default=sa.text("'[]'")))
+        # A targeted additive repair may already have restored these fields
+        # before the full migration chain can be reconciled.
+        existing = {column['name'] for column in sa.inspect(op.get_bind()).get_columns(table)}
+        for name in ('image_urls', 'video_urls'):
+            if name not in existing:
+                op.add_column(table, sa.Column(name, sa.JSON(), nullable=False, server_default=sa.text("'[]'")))
     op.execute("UPDATE gem_radar_listing_observations SET image_urls = json_build_array(image_url) WHERE image_url IS NOT NULL AND image_urls::text = '[]'")
     op.execute("UPDATE gem_radar_scored_listings SET image_urls = json_build_array(image_url) WHERE image_url IS NOT NULL AND image_urls::text = '[]'")
 

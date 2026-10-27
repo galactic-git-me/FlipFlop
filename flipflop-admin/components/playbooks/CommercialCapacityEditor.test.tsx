@@ -1,0 +1,20 @@
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, expect, it, vi } from 'vitest';
+import CommercialCapacityEditor from './CommercialCapacityEditor';
+const { saveCapacity }=vi.hoisted(()=>({saveCapacity:vi.fn()}));
+vi.mock('@/lib/api',()=>({api:{commercialReadiness:{saveCapacity}}}));
+afterEach(()=>{cleanup();vi.clearAllMocks();});
+it('requires an explicit capacity and basis, including zero to pause offers',async()=>{
+  saveCapacity.mockResolvedValue({id:7,build_week:'2026-W42',available_builds:0});
+  const onComplete=vi.fn();render(<CommercialCapacityEditor onComplete={onComplete}/>);
+  fireEvent.click(screen.getByText('Configure workshop capacity'));
+  expect(screen.getByRole('button')).toBeDisabled();
+  fireEvent.change(screen.getByLabelText('Build week'),{target:{value:'2026-W42'}});
+  fireEvent.change(screen.getByLabelText('Available builds'),{target:{value:'0'}});
+  expect(screen.getByRole('button')).toBeDisabled();
+  fireEvent.change(screen.getByLabelText('Basis for this capacity'),{target:{value:'No workshop time available'}});
+  fireEvent.click(screen.getByRole('button'));
+  expect(await screen.findByRole('status')).toHaveTextContent('Saved 0 builds');
+  expect(saveCapacity).toHaveBeenCalledWith(expect.objectContaining({available_builds:0,build_week:'2026-W42',evidence_ref:'No workshop time available'}));
+  expect(onComplete).toHaveBeenCalledOnce();
+});

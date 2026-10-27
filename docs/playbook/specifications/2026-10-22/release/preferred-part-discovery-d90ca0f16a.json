@@ -1,0 +1,346 @@
+{
+  "role": "cpu",
+  "specification": "Ryzen 5 8600G",
+  "observed_at": "2026-10-22T20:10:08.541758+00:00",
+  "commercially_verified": false,
+  "exact_search_candidates": [
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-8600G-Threads-Cache-Speicher/dp/B0D1CKCKD9/ref=sr_1_5",
+      "title": "Ryzen 5 8600G - 4.3 GHz - 6 Cores - 12 Threads - 16 MB Cache Memory - Socket AM5 - OEM",
+      "price": 172.08,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-8600G-Threads-Cache-Speicher/dp/B0D1CKCKD9/ref=sr_1_5?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-5",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51DvKGXqFKL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 5
+    }
+  ],
+  "all_search_candidates": [
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-8500G-Retail-Stealth/dp/B0CQ4JV8D5/ref=sr_1_2",
+      "title": "Ryzensets 5 8500G Processor (integrated Radeon graphics, 6 Cores/12 Threads, 65W TDP, AM5 Socket, 22MB Cache , up to 5 GHz max boost frequency, wraith stealth cooler)",
+      "price": 129.0,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-8500G-Retail-Stealth/dp/B0CQ4JV8D5/ref=sr_1_2?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-2",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51193NWpmHL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-7600X-Processeur-Architecture-Fr%C3%A9quence/dp/B0BBJDS62N/ref=sr_1_4",
+      "title": "Ryzensets 5 7600X Processor (integrated radeon graphics, 6 cores/12 threads, 105W TDP, AM5 socket, 38MB cache, up to 5.3 GHz max boost, no cooler)",
+      "price": 135.19,
+      "url": "https://www.amazon.co.uk/AMD-7600X-Processeur-Architecture-Fr%C3%A9quence/dp/B0BBJDS62N/ref=sr_1_4?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-4",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51m7L9bQI8L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-8600G-Threads-Cache-Speicher/dp/B0D1CKCKD9/ref=sr_1_5",
+      "title": "Ryzen 5 8600G - 4.3 GHz - 6 Cores - 12 Threads - 16 MB Cache Memory - Socket AM5 - OEM",
+      "price": 172.08,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-8600G-Threads-Cache-Speicher/dp/B0D1CKCKD9/ref=sr_1_5?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-5",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51DvKGXqFKL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 5
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5600-Processor-12-thread/dp/B09VCHR1VH/ref=sr_1_6",
+      "title": "Ryzensets 5 5600 processor ( 6 Cores/12 Threads, 65W TDP, AM4 Socket, up to 4.4 Ghz max boost, wraith stealth cooler)",
+      "price": 121.98,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5600-Processor-12-thread/dp/B09VCHR1VH/ref=sr_1_6?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-6",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51So7GoGvxL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5500-Processor-12-thread/dp/B09VCJ171S/ref=sr_1_8",
+      "title": "AMD Ryzen 5 5500 Processor (6 cores/12 threads, 65W DTP, AM4 socket, 19 MB cache, up to 4.2 GHz max boost, wraith stealth cooler)",
+      "price": 79.99,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5500-Processor-12-thread/dp/B09VCJ171S/ref=sr_1_8?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-8",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51So7GoGvxL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5600X-Processor-Cache/dp/B08166SLDF/ref=sr_1_9",
+      "title": "Ryzensets 5 5600X Processor (6 Cores/12Threads, 65W TDP, AM4 Socket, 35MB Cache, up to 4.6 GHz Max Boost, Wraith Stealth Cooler)",
+      "price": 145.99,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5600X-Processor-Cache/dp/B08166SLDF/ref=sr_1_9?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-9",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51ld6RR8IrL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-TM-Desktop-Processor-16-thread/dp/B0DKFMSMYK/ref=sr_1_10",
+      "title": "RYZEN \u2122 7 9800X 3D Desktop Processor (8-core/16-thread, 104MB cache, up to 5.2 GHz max boost)",
+      "price": 374.99,
+      "url": "https://www.amazon.co.uk/AMD-TM-Desktop-Processor-16-thread/dp/B0DKFMSMYK/ref=sr_1_10?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-10",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71NMFO0iUhL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-RyzenTM-7600-Processor-12-thread/dp/B0BMQJWBDM/ref=sr_1_11",
+      "title": "Ryzensets 5 7600 Processor (radeon graphics integrated, 6 cores/12 threads, 65W TDP, AM5 Socket, 38MB cache, up to 5.1 GHz max boost, Wraith Stealth Cooler)",
+      "price": 157.99,
+      "url": "https://www.amazon.co.uk/AMD-RyzenTM-7600-Processor-12-thread/dp/B0BMQJWBDM/ref=sr_1_11?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-11",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61h39mKsSBL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-RYZEN-5-5500F/dp/B0HGMTDZM7/ref=sr_1_12",
+      "title": "RYZEN 5 5500F",
+      "price": 99.99,
+      "url": "https://www.amazon.co.uk/AMD-RYZEN-5-5500F/dp/B0HGMTDZM7/ref=sr_1_12?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-12",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/518SuEZSsuL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-7500F-Threads-Memory/dp/B0D1CK42PV/ref=sr_1_13",
+      "title": "Ryzen 5 7500F - 3.7 GHz - 6 Cores - 12 Threads - 32 MB Cache Memory - Socket AM5 - OEM",
+      "price": 122.51,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-7500F-Threads-Memory/dp/B0D1CK42PV/ref=sr_1_13?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-13",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71SwhaQlpAL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 4
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5700X-Processor-16-thread/dp/B09VCHQHZ6/ref=sr_1_14",
+      "title": "Ryzensets 7 5700X Processor (8 cores/16 threads, 65W DTP, Socket AM4, 36 MB cache, up to 4.6 GHz max boost, no cooler)",
+      "price": 180.0,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5700X-Processor-16-thread/dp/B09VCHQHZ6/ref=sr_1_14?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-14",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51gRv8z+K6L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-3400G-Processor-Graphics/dp/B07SXNDKNM/ref=sr_1_15",
+      "title": "Ryzen 5 3400G Processor (4C/8T, 6 MB cache, 4.2 GHz Max Boost) with Radeon RX Vega 11 Graphics",
+      "price": 74.95,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-3400G-Processor-Graphics/dp/B07SXNDKNM/ref=sr_1_15?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-15",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71rKDRYq77L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzensets-9700X-Processor-frequency/dp/B0D6NMDNNX/ref=sr_1_16",
+      "title": "Ryzensets 7 9700X Processor (8 Cores/16 Threads) 65W DTP, AM5 socket, 40MB Cache, Up to 5.5 GHz max boost frequency, no cooler",
+      "price": 252.99,
+      "url": "https://www.amazon.co.uk/AMD-Ryzensets-9700X-Processor-frequency/dp/B0D6NMDNNX/ref=sr_1_16?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-16",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61F3ZChalyL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-5800X3D-Processeur-ANNIVERSARY-Frequency/dp/B0H41D4KFT/ref=sr_1_17",
+      "title": "Ryzen 7 5800X3D Processeur 10TH ANNIVERSARY (8 Cores/16 Threads, Socket AM4, 105W TDP, 100 Mo Cache, up to 4.5 GHz Frequency Boost, no heatsink)",
+      "price": 299.99,
+      "url": "https://www.amazon.co.uk/AMD-5800X3D-Processeur-ANNIVERSARY-Frequency/dp/B0H41D4KFT/ref=sr_1_17?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-17",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61vkFq7H9tL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Processor-3D-V-CacheTM-Technology/dp/B0DVZSG8D5/ref=sr_1_18_mod_primary_new",
+      "title": "Ryzen\u2122 9 9950X3D Processor With 3D V-Cache\u2122 Technology, 16 Cores/32 Threads, 144MB Cache, 170W TDP, AM5 Socket, Up To 5.7 GHz Boost Frequency, DDR5 & PCIe 5.0",
+      "price": 508.98,
+      "url": "https://www.amazon.co.uk/AMD-Processor-3D-V-CacheTM-Technology/dp/B0DVZSG8D5/ref=sr_1_18_mod_primary_new?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sbo=RZvfv%2F%2FHxDF%2BO5021pAnSA%3D%3D&sr=1-18",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71hZfMZNZuL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5-7500X3D-BOX/dp/B0FT8X951Z/ref=sr_1_19",
+      "title": "Ryzen 5 7500X3D BOX",
+      "price": 205.99,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5-7500X3D-BOX/dp/B0FT8X951Z/ref=sr_1_19?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-19",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61C3fZUbFNL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-8700G-Retail-Stealth/dp/B0CQ4JBKW3/ref=sr_1_20",
+      "title": "Ryzensets 7 8700G processor (integrated Radeon Graphics,Ryzensets AI, 8 cores/16 threads, 65W TDP, AM5 Socket, Cache 24MB, up to 5,1Ghz max booth, with wraith stealth cooler)",
+      "price": 245.47,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-8700G-Retail-Stealth/dp/B0CQ4JBKW3/ref=sr_1_20?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-20",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61nRX0W6fhL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-9850X3D-100-100001973WOF-RYZENTM/dp/B0G8JMLXNQ/ref=sr_1_21",
+      "title": "RYZEN\u2122 7 9850X3D",
+      "price": 389.99,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-9850X3D-100-100001973WOF-RYZENTM/dp/B0G8JMLXNQ/ref=sr_1_21?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-21",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71KDfkysoeL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-7-5700G-RyzenTM/dp/B091J3NYVF/ref=sr_1_23",
+      "title": "Ryzen 7 5700G 8-core, 16-Thread Processor with Wraith Stealth Cooler, up to 4.6GHz",
+      "price": 191.98,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-7-5700G-RyzenTM/dp/B091J3NYVF/ref=sr_1_23?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-23",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51D3DrDmwkL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-8400F-processor-threads-frequency/dp/B0D2JD6P86/ref=sr_1_24",
+      "title": "Ryzen 5 8400F processor (6 Core/12 threads, 65W TDP, AM5 Socket, 22MB Cache, up to 4.7GHz max boost frequency, with wraith stealth cooler)",
+      "price": 130.99,
+      "url": "https://www.amazon.co.uk/AMD-8400F-processor-threads-frequency/dp/B0D2JD6P86/ref=sr_1_24?dib=eyJ2IjoiMSJ9.lSRGbroRMIs8CJ2N12VaI7oygZxlx_I-Yju7G9P72Ry2WjWFk9CYqCKpbhXST2U_y7e_IxnbfxDGlhSHH2Zc3fuDb4Pc7mdqXFFIy0fBpSvaCHm0CEVKwThQf8EDcm7UIAguF9DOcckgvUVoNSecvSxpDxZnS8RfTBXBFy4FglA79Pep9Ul-Kz7N_KOtu47fsTjxFwjuEMhtVsr6rElVwVzI0yjBA97OA7eKWWmaEp_DAFXV-a2qUDMkfJkCc0X7gAdWqx-C19QRzleksqjcMaOhJBGB10P9hGxxMdMV49g.MFo6HHkPS4AmOKig4tnyuDxPREmXcWk2xd54_xvmblI&dib_tag=se&keywords=Ryzen+5+8600G+processor&qid=1792699804&s=computers&sr=1-24",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51drz0yDCJL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "Ryzen 5 8600G processor",
+      "estimated_delivery_days": 26
+    }
+  ],
+  "exact_offer": {
+    "status": "captured",
+    "url": "https://www.amazon.co.uk/dp/B0D1CKCKD9",
+    "observed_at": "2026-10-22T20:10:10.658523+00:00",
+    "title": "AMD Ryzen 5 8600G - 4.3 GHz - 6 Cores - 12 Threads - 16 MB Cache Memory - Socket AM5 - OEM",
+    "sku": "B0D1CKCKD9",
+    "mpn": null,
+    "merchant_name": "MemoryC",
+    "condition": "new",
+    "item_gbp": "172.08",
+    "delivery_gbp": null,
+    "postage_verified": false,
+    "delivery_calendar_days": 13,
+    "delivery_working_days": 10,
+    "delivery_estimate_source": "amazon_displayed_default_destination",
+    "prime_eligible": null,
+    "delivery_destination": "TW12",
+    "stock_status": "available",
+    "stock_evidence": "Usually dispatched within 6 to 7 days",
+    "product_properties": {
+      "Brand": "AMD",
+      "CPU manufacturer": "AMD",
+      "CPU model": "Ryzen 5",
+      "CPU speed": "4.3 GHz",
+      "CPU socket": "Socket AM5",
+      "Secondary cache": "16 MB",
+      "Cache size": "16",
+      "Processor count": "6",
+      "Processor Core Count": "6",
+      "Number of items": "1",
+      "Processor Series": "Ryzen 5",
+      "Processor Speed": "4.3 GHz",
+      "Processor Socket": "Socket AM5",
+      "Secondary Cache": "16 MB",
+      "Cache Memory Installed Size": "16",
+      "Processor Count": "6",
+      "Platform": "Windows",
+      "Software Update Supported to Date": "unknown",
+      "Brand Name": "AMD",
+      "Processor Brand": "AMD",
+      "Model Number": "100-000001237",
+      "Number of Items": "1",
+      "Manufacturer": "AMD",
+      "Country of Origin": "Taiwan",
+      "Item Weight": "40 Grams",
+      "Manufacturer Part Number": "100-000001237",
+      "Product Warranty": "Manufacturer Guarantee",
+      "ASIN": "B0D1CKCKD9",
+      "Customer Reviews": "4.5 4.5 out of 5 stars (2) 4.5 out of 5 stars"
+    },
+    "product_image_urls": [
+      "https://m.media-amazon.com/images/I/310Yoe-QKuL._AC_US40_.jpg",
+      "https://m.media-amazon.com/images/I/51DvKGXqFKL._AC_SY355_.jpg",
+      "https://m.media-amazon.com/images/I/51DvKGXqFKL._AC_SY450_.jpg",
+      "https://m.media-amazon.com/images/I/51DvKGXqFKL._AC_SX425_.jpg",
+      "https://m.media-amazon.com/images/I/51DvKGXqFKL._AC_SX466_.jpg",
+      "https://m.media-amazon.com/images/I/51DvKGXqFKL._AC_SX522_.jpg",
+      "https://m.media-amazon.com/images/I/51DvKGXqFKL._AC_SX569_.jpg",
+      "https://m.media-amazon.com/images/I/51DvKGXqFKL._AC_SX679_.jpg"
+    ],
+    "engineering_reviewed": false,
+    "merchant_text": null
+  }
+}

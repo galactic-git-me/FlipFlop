@@ -1,0 +1,455 @@
+- generic [ref=f4e2]:
+  - complementary [ref=f4e4]:
+    - link [ref=f4e6] [cursor=pointer]:
+      - /url: /
+      - img "SoldComps" [ref=f4e7]
+    - navigation [ref=f4e8]:
+      - link "Overview" [ref=f4e9] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Search" [ref=f4e15] [cursor=pointer]:
+        - /url: /dashboard/search
+      - link "Bulk Search" [ref=f4e21] [cursor=pointer]:
+        - /url: /dashboard/bulk-search
+      - link "API Keys" [ref=f4e26] [cursor=pointer]:
+        - /url: /dashboard/api-keys
+      - link "Subscription" [ref=f4e31] [cursor=pointer]:
+        - /url: /dashboard/subscription
+      - link "Usage" [ref=f4e34] [cursor=pointer]:
+        - /url: /dashboard/usage
+      - link "Account" [ref=f4e36] [cursor=pointer]:
+        - /url: /dashboard/account
+      - link "Contact" [ref=f4e40] [cursor=pointer]:
+        - /url: /dashboard/contact
+      - generic [ref=f4e43]:
+        - link "Documentation" [ref=f4e44] [cursor=pointer]:
+          - /url: /docs
+        - link "Changelog" [ref=f4e47] [cursor=pointer]:
+          - /url: /changelog
+    - generic [ref=f4e52]:
+      - generic [ref=f4e53]: F
+      - generic [ref=f4e54]:
+        - paragraph [ref=f4e55]: flipflop
+        - paragraph [ref=f4e56]: mac@theflipflop.shop
+      - button "Sign out" [ref=f4e57] [cursor=pointer]
+  - generic [ref=f4e61]:
+    - banner [ref=f4e62]:
+      - button "Open menu" [ref=f4e63] [cursor=pointer]
+      - generic [ref=f4e65]: Search
+      - button "What's new" [ref=f4e66] [cursor=pointer]
+    - main [ref=f4e71]:
+      - generic [ref=f4e72]:
+        - generic [ref=f4e73]:
+          - heading "Search" [level=1] [ref=f4e74]
+          - paragraph [ref=f4e75]: Search eBay sold listings using your account quota.
+        - generic [ref=f4e76]: 0 / 100 requests this month
+        - generic [ref=f4e78]:
+          - generic [ref=f4e79]:
+            - textbox "e.g. vintage omega seamaster" [ref=f4e81]: gaming PC RTX 4060
+            - button "Search" [ref=f4e82]
+            - button "Filters" [ref=f4e83]
+          - generic [ref=f4e87]:
+            - generic [ref=f4e88]:
+              - generic [ref=f4e89]: Results per page
+              - combobox [ref=f4e90] [cursor=pointer]:
+                - option "60"
+                - option "120"
+                - option "240" [selected]
+            - generic [ref=f4e91]:
+              - generic [ref=f4e92]: eBay site
+              - combobox [ref=f4e93] [cursor=pointer]:
+                - option "ebay.com (US)"
+                - option "ebay.co.uk (UK)" [selected]
+                - option "ebay.de (Germany)"
+                - option "ebay.fr (France)"
+                - option "ebay.it (Italy)"
+                - option "ebay.es (Spain)"
+                - option "ebay.ca (Canada)"
+                - option "ebay.com.au (Australia)"
+            - generic [ref=f4e94]:
+              - generic [ref=f4e95]: Sort order
+              - combobox [ref=f4e96] [cursor=pointer]:
+                - option "Ended recently" [selected]
+                - option "Newly listed"
+                - 'option "Price: lowest first"'
+                - 'option "Price: highest first"'
+            - generic [ref=f4e97]:
+              - generic [ref=f4e98]: Condition
+              - combobox [ref=f4e99] [cursor=pointer]:
+                - option "Any condition" [selected]
+                - option "New"
+                - option "Used"
+            - generic [ref=f4e100]:
+              - generic [ref=f4e101]:
+                - generic [ref=f4e102]: Min price
+                - spinbutton "—" [ref=f4e103]
+              - generic [ref=f4e104]:
+                - generic [ref=f4e105]: Max price
+                - spinbutton "—" [ref=f4e106]
+        - generic [ref=f4e107]:
+          - generic [ref=f4e108]:
+            - generic [ref=f4e109]:
+              - generic [ref=f4e110]:
+                - text: 240 results
+                - generic [ref=f4e111]: of 400 on eBay
+              - generic [ref=f4e112]: page 1
+              - generic [ref=f4e113]: 4885ms
+            - generic [ref=f4e114]:
+              - generic [ref=f4e115]:
+                - button "Table" [ref=f4e116]
+                - button "JSON" [ref=f4e117]
+              - button "Export" [ref=f4e119]
+          - generic [ref=f4e125]:
+            - table [ref=f4e127]:
+              - rowgroup [ref=f4e128]:
+                - row [ref=f4e129]:
+                  - columnheader "Title" [ref=f4e130]
+                  - columnheader [ref=f4e131]:
+                    - button "Condition" [ref=f4e132]
+                  - columnheader [ref=f4e136]:
+                    - button "Sold" [ref=f4e137]
+                  - columnheader [ref=f4e141]:
+                    - button "Shipping" [ref=f4e142]
+                  - columnheader [ref=f4e146]:
+                    - button "Total" [ref=f4e147]
+                  - columnheader [ref=f4e151]:
+                    - button "Date" [ref=f4e152]
+                  - columnheader "Seller" [ref=f4e156]
+              - rowgroup [ref=f4e157]:
+                - row [ref=f4e158]:
+                  - cell [ref=f4e159]:
+                    - link "Gaming Desktop PC i7 8700K CPU, GEFORCE RTX 4060 GPU, 16GB DDR4 RAM, 1…" [ref=f4e160] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/940020477458?nordt=true
+                  - cell "Pre-owned" [ref=f4e161]
+                  - cell "£600.00" [ref=f4e163]
+                  - cell "£13.63" [ref=f4e164]
+                  - cell "£613.63" [ref=f4e165]
+                  - cell "2026-10-23" [ref=f4e166]
+                  - cell "jack_eli(100%)" [ref=f4e167]:
+                    - generic [ref=f4e168]:
+                      - text: jack_eli
+                      - generic [ref=f4e169]: (100%)
+                - row [ref=f4e170]:
+                  - cell [ref=f4e171]:
+                    - link "PCSPECIALIST - Icon 240 Gaming PC - AMD Ryzen 5, RTX 4060, 1 TB SSD" [ref=f4e172] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/168811915304?nordt=true
+                  - cell "Pre-owned" [ref=f4e173]
+                  - cell "£414.70" [ref=f4e175]
+                  - cell "£5.88" [ref=f4e176]
+                  - cell "£420.58" [ref=f4e177]
+                  - cell "2026-10-23" [ref=f4e178]
+                  - cell "god-8745(100%)" [ref=f4e179]:
+                    - generic [ref=f4e180]:
+                      - text: god-8745
+                      - generic [ref=f4e181]: (100%)
+                - row [ref=f4e182]:
+                  - cell [ref=f4e183]:
+                    - link "Ultra Fast White Gaming PC RTX 4060 Ti I5 10600KF 2TB SSD 16GB Ram" [ref=f4e184] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/147646277141?nordt=true
+                  - cell "Pre-owned" [ref=f4e185]
+                  - cell "£719.95" [ref=f4e187]
+                  - cell "£13.63" [ref=f4e188]
+                  - cell "£733.58" [ref=f4e189]
+                  - cell "2026-10-23" [ref=f4e190]
+                  - cell "wngamingcomputers(100%)" [ref=f4e191]:
+                    - generic [ref=f4e192]:
+                      - text: wngamingcomputers
+                      - generic [ref=f4e193]: (100%)
+                - row [ref=f4e194]:
+                  - cell [ref=f4e195]:
+                    - link "RTX 4060 Gaming PC Intel I5 12400F, 16GB DDR4 RAM, 1TB SSD" [ref=f4e196] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/336858969241?nordt=true
+                  - cell "Pre-owned" [ref=f4e197]
+                  - cell "£537.10" [ref=f4e199]
+                  - cell "£11.76" [ref=f4e200]
+                  - cell "£548.86" [ref=f4e201]
+                  - cell "2026-10-23" [ref=f4e202]
+                  - cell "ebinl_74(0%)" [ref=f4e203]:
+                    - generic [ref=f4e204]:
+                      - text: ebinl_74
+                      - generic [ref=f4e205]: (0%)
+                - row [ref=f4e206]:
+                  - cell [ref=f4e207]:
+                    - link "RTX 5060 Liquid Cooled Gaming PC i7-12700KF 32GB DDR5 RAM 1TB SSD" [ref=f4e208] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/198734448788?nordt=true
+                  - cell "Pre-owned" [ref=f4e209]
+                  - cell "£970.00" [ref=f4e211]
+                  - cell "Free" [ref=f4e212]
+                  - cell "£970.00" [ref=f4e213]
+                  - cell "2026-10-22" [ref=f4e214]
+                  - cell "cambridgecomputerserviceltd(100%)" [ref=f4e215]:
+                    - generic [ref=f4e216]:
+                      - text: cambridgecomputerserviceltd
+                      - generic [ref=f4e217]: (100%)
+                - row [ref=f4e218]:
+                  - cell [ref=f4e219]:
+                    - link "HP OMEN 25L Gaming PC i7-14700F RTX 4060 Ti 16GB RAM 1TB SSD" [ref=f4e220] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/377589371516?nordt=true
+                  - cell "Pre-owned" [ref=f4e221]
+                  - cell "£923.68" [ref=f4e223]
+                  - cell "Free" [ref=f4e224]
+                  - cell "£923.68" [ref=f4e225]
+                  - cell "2026-10-22" [ref=f4e226]
+                  - cell "mrsamjrae(100%)" [ref=f4e227]:
+                    - generic [ref=f4e228]:
+                      - text: mrsamjrae
+                      - generic [ref=f4e229]: (100%)
+                - row [ref=f4e230]:
+                  - cell [ref=f4e231]:
+                    - link "RTX 4060 Gaming PC / Intel I7 900KF / 16GB RAM / 3+ TB Storage / Windo…" [ref=f4e232] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/900030436604?nordt=true
+                  - cell "Pre-owned" [ref=f4e233]
+                  - cell "£618.70" [ref=f4e235]
+                  - cell "£18.00" [ref=f4e236]
+                  - cell "£636.70" [ref=f4e237]
+                  - cell "2026-10-22" [ref=f4e238]
+                  - cell "grcr-8363(100%)" [ref=f4e239]:
+                    - generic [ref=f4e240]:
+                      - text: grcr-8363
+                      - generic [ref=f4e241]: (100%)
+                - row [ref=f4e242]:
+                  - cell [ref=f4e243]:
+                    - link "I7 Killer Gaming PC Computer AMD Ryzen 5 3600 RTX 2060 Super NVME SSD …" [ref=f4e244] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/235995595436?nordt=true
+                  - cell "Opened – never u…" [ref=f4e245]:
+                    - generic "Opened – never used" [ref=f4e246]: Opened – never u…
+                  - cell "£569.00" [ref=f4e247]
+                  - cell "Free" [ref=f4e248]
+                  - cell "£569.00" [ref=f4e249]
+                  - cell "2026-10-21" [ref=f4e250]
+                  - cell "tech-replay(100%)" [ref=f4e251]:
+                    - generic [ref=f4e252]:
+                      - text: tech-replay
+                      - generic [ref=f4e253]: (100%)
+                - row [ref=f4e254]:
+                  - cell [ref=f4e255]:
+                    - link "RTX 4060 Gaming PC Intel i5 8400 16GB RAM 250GB SSD 1TB HDD" [ref=f4e256] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/198722772937?nordt=true
+                  - cell "Pre-owned" [ref=f4e257]
+                  - cell "£590.00" [ref=f4e259]
+                  - cell "Free" [ref=f4e260]
+                  - cell "£590.00" [ref=f4e261]
+                  - cell "2026-10-21" [ref=f4e262]
+                  - cell "cambridgecomputerserviceltd(100%)" [ref=f4e263]:
+                    - generic [ref=f4e264]:
+                      - text: cambridgecomputerserviceltd
+                      - generic [ref=f4e265]: (100%)
+                - row [ref=f4e266]:
+                  - cell [ref=f4e267]:
+                    - link "Acer Gaming PC - i7 13700F - RTX 4060 - 16GB DDR5 - 2TB SSD NNMe - Win…" [ref=f4e268] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/820255668779?nordt=true
+                  - cell "Pre-owned" [ref=f4e269]
+                  - cell "£749.99" [ref=f4e271]
+                  - cell "Free" [ref=f4e272]
+                  - cell "£749.99" [ref=f4e273]
+                  - cell "2026-10-21" [ref=f4e274]
+                  - cell "techar-computers(100%)" [ref=f4e275]:
+                    - generic [ref=f4e276]:
+                      - text: techar-computers
+                      - generic [ref=f4e277]: (100%)
+                - row [ref=f4e278]:
+                  - cell [ref=f4e279]:
+                    - link "Gaming PC Desktop i7 i5 i3 2TB+480GB SSD 16GB RAM NVIDIA RTX 4060 Wind…" [ref=f4e280] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/115957040827?nordt=true
+                  - cell "Opened – never u…" [ref=f4e281]:
+                    - generic "Opened – never used" [ref=f4e282]: Opened – never u…
+                  - cell "£480.00" [ref=f4e283]
+                  - cell "Free" [ref=f4e284]
+                  - cell "£480.00" [ref=f4e285]
+                  - cell "2026-10-21" [ref=f4e286]
+                  - cell "birmingham-av(99.1%)" [ref=f4e287]:
+                    - generic [ref=f4e288]:
+                      - text: birmingham-av
+                      - generic [ref=f4e289]: (99.1%)
+                - row [ref=f4e290]:
+                  - cell [ref=f4e291]:
+                    - link "ALL-WHITE GAMING PC | RTX 4060 | RYZEN 5 7600X | 32GB DDR5" [ref=f4e292] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/377577728980?nordt=true
+                  - cell "Pre-owned" [ref=f4e293]
+                  - cell "£899.00" [ref=f4e295]
+                  - cell "Free" [ref=f4e296]
+                  - cell "£899.00" [ref=f4e297]
+                  - cell "2026-10-20" [ref=f4e298]
+                  - cell "thebarginbase4(100%)" [ref=f4e299]:
+                    - generic [ref=f4e300]:
+                      - text: thebarginbase4
+                      - generic [ref=f4e301]: (100%)
+                - row [ref=f4e302]:
+                  - cell [ref=f4e303]:
+                    - link "Gaming PC Ryzen 5 5600X / 32GB RAM / 1TB SSD / Nvidia RTX 4060 RTX 50…" [ref=f4e304] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/116664986813?nordt=true
+                  - cell "Brand new" [ref=f4e305]
+                  - cell "£900.00" [ref=f4e307]
+                  - cell "Free" [ref=f4e308]
+                  - cell "£900.00" [ref=f4e309]
+                  - cell "2026-10-20" [ref=f4e310]
+                  - cell "birmingham-av(99.1%)" [ref=f4e311]:
+                    - generic [ref=f4e312]:
+                      - text: birmingham-av
+                      - generic [ref=f4e313]: (99.1%)
+                - row [ref=f4e314]:
+                  - cell [ref=f4e315]:
+                    - link "Gaming PC, i7 12700K, RTX 4060, 2TB SSD, 32GB DDR4 3600, Wi-Fi 6, 850W…" [ref=f4e316] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/237132643102?nordt=true
+                  - cell "Pre-owned" [ref=f4e317]
+                  - cell "£751.30" [ref=f4e319]
+                  - cell "Free" [ref=f4e320]
+                  - cell "£751.30" [ref=f4e321]
+                  - cell "2026-10-20" [ref=f4e322]
+                  - cell "agatonart(100%)" [ref=f4e323]:
+                    - generic [ref=f4e324]:
+                      - text: agatonart
+                      - generic [ref=f4e325]: (100%)
+                - row [ref=f4e326]:
+                  - cell [ref=f4e327]:
+                    - link "Gaming Pc I9 11th Gen RTX4060 32GB Ram 1TB NVME White Windows 11" [ref=f4e328] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/168805608506?nordt=true
+                  - cell "Pre-owned" [ref=f4e329]
+                  - cell "£650.00" [ref=f4e331]
+                  - cell "£13.63" [ref=f4e332]
+                  - cell "£663.63" [ref=f4e333]
+                  - cell "2026-10-20" [ref=f4e334]
+                  - cell "squiddy_uk(100%)" [ref=f4e335]:
+                    - generic [ref=f4e336]:
+                      - text: squiddy_uk
+                      - generic [ref=f4e337]: (100%)
+                - row [ref=f4e338]:
+                  - cell [ref=f4e339]:
+                    - link "MSI MAG Infinite S3 14NUC5-1605UK Gaming PC Desktop i5 14th 16GB 1TB R…" [ref=f4e340] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/267808726952?nordt=true
+                  - cell "Very Good - Refu…" [ref=f4e341]:
+                    - generic "Very Good - Refurbished" [ref=f4e342]: Very Good - Refu…
+                  - cell "£929.99" [ref=f4e343]
+                  - cell "Free" [ref=f4e344]
+                  - cell "£929.99" [ref=f4e345]
+                  - cell "2026-10-20" [ref=f4e346]
+                  - cell "tekshop(99.9%)" [ref=f4e347]:
+                    - generic [ref=f4e348]:
+                      - text: tekshop
+                      - generic [ref=f4e349]: (99.9%)
+                - row [ref=f4e350]:
+                  - cell [ref=f4e351]:
+                    - link "Gaming PC i5 9400F RTX 4060 8GB 16GB RAM 512GB SSD WiFi Windows 11" [ref=f4e352] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/307189413539?nordt=true
+                  - cell "Opened – never u…" [ref=f4e353]:
+                    - generic "Opened – never used" [ref=f4e354]: Opened – never u…
+                  - cell "£449.99" [ref=f4e355]
+                  - cell "Free" [ref=f4e356]
+                  - cell "£449.99" [ref=f4e357]
+                  - cell "2026-09-26" [ref=f4e358]
+                  - cell "culsepcs(97.8%)" [ref=f4e359]:
+                    - generic [ref=f4e360]:
+                      - text: culsepcs
+                      - generic [ref=f4e361]: (97.8%)
+                - row [ref=f4e362]:
+                  - cell [ref=f4e363]:
+                    - link "RTX 4060 Ti Gaming PC Intel i7-9700K 16GB RAM 500GB SSD" [ref=f4e364] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/198720920231?nordt=true
+                  - cell "Pre-owned" [ref=f4e365]
+                  - cell "£700.00" [ref=f4e367]
+                  - cell "Free" [ref=f4e368]
+                  - cell "£700.00" [ref=f4e369]
+                  - cell "2026-10-20" [ref=f4e370]
+                  - cell "cambridgecomputerserviceltd(100%)" [ref=f4e371]:
+                    - generic [ref=f4e372]:
+                      - text: cambridgecomputerserviceltd
+                      - generic [ref=f4e373]: (100%)
+                - row [ref=f4e374]:
+                  - cell [ref=f4e375]:
+                    - link "Stormforce Gaming Desktop PC Ryzen 5500 32GB 1TB RTX 4060Ti WiFi Pink" [ref=f4e376] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/267748562110?nordt=true
+                  - cell "Brand new" [ref=f4e377]
+                  - cell "£972.99" [ref=f4e379]
+                  - cell "Free" [ref=f4e380]
+                  - cell "£972.99" [ref=f4e381]
+                  - cell "2026-10-20" [ref=f4e382]
+                  - cell "zoostorm-sales(100%)" [ref=f4e383]:
+                    - generic [ref=f4e384]:
+                      - text: zoostorm-sales
+                      - generic [ref=f4e385]: (100%)
+                - row [ref=f4e386]:
+                  - cell [ref=f4e387]:
+                    - link "Gaming Pc Set up Ryzen 5 5600x RTX 4060 including monitor mouse and ke…" [ref=f4e388] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/920053880737?nordt=true
+                  - cell "Pre-owned" [ref=f4e389]
+                  - cell "£800.00" [ref=f4e391]
+                  - cell "£15.00" [ref=f4e392]
+                  - cell "£815.00" [ref=f4e393]
+                  - cell "2026-10-20" [ref=f4e394]
+                  - cell "polom2191(98.6%)" [ref=f4e395]:
+                    - generic [ref=f4e396]:
+                      - text: polom2191
+                      - generic [ref=f4e397]: (98.6%)
+                - row [ref=f4e398]:
+                  - cell [ref=f4e399]:
+                    - link "Gaming PC RTX 4060 Ti | 16GB | 1TB | 12th Intel i5 12400 | W11" [ref=f4e400] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/820258276931?nordt=true
+                  - cell "Pre-owned" [ref=f4e401]
+                  - cell "£499.00" [ref=f4e403]
+                  - cell "Free" [ref=f4e404]
+                  - cell "£499.00" [ref=f4e405]
+                  - cell "2026-10-20" [ref=f4e406]
+                  - cell "ms_buyback(99.2%)" [ref=f4e407]:
+                    - generic [ref=f4e408]:
+                      - text: ms_buyback
+                      - generic [ref=f4e409]: (99.2%)
+                - row [ref=f4e410]:
+                  - cell [ref=f4e411]:
+                    - link "RTX 5060 Ryzen 7 3800X Gaming PC 16GB RAM 500GB SSD" [ref=f4e412] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/198728904819?nordt=true
+                  - cell "Pre-owned" [ref=f4e413]
+                  - cell "£800.00" [ref=f4e415]
+                  - cell "Free" [ref=f4e416]
+                  - cell "£800.00" [ref=f4e417]
+                  - cell "2026-10-20" [ref=f4e418]
+                  - cell "cambridgecomputerserviceltd(100%)" [ref=f4e419]:
+                    - generic [ref=f4e420]:
+                      - text: cambridgecomputerserviceltd
+                      - generic [ref=f4e421]: (100%)
+                - row [ref=f4e422]:
+                  - cell [ref=f4e423]:
+                    - link "Custom built 1080p/1440p gaming PC - RTX 4060, i3-10105, 16gb DDR4, 1t…" [ref=f4e424] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/117135943003?nordt=true
+                  - cell "Pre-owned" [ref=f4e425]
+                  - cell "£542.20" [ref=f4e427]
+                  - cell "£11.76" [ref=f4e428]
+                  - cell "£553.96" [ref=f4e429]
+                  - cell "2026-10-20" [ref=f4e430]
+                  - cell "worsd.richa(100%)" [ref=f4e431]:
+                    - generic [ref=f4e432]:
+                      - text: worsd.richa
+                      - generic [ref=f4e433]: (100%)
+                - row [ref=f4e434]:
+                  - cell [ref=f4e435]:
+                    - link "gaming pc rtx 4060" [ref=f4e436] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/137567966860?nordt=true
+                  - cell "Pre-owned" [ref=f4e437]
+                  - cell "£618.70" [ref=f4e439]
+                  - cell "Free" [ref=f4e440]
+                  - cell "£618.70" [ref=f4e441]
+                  - cell "2026-10-19" [ref=f4e442]
+                  - cell "ja-657387(0%)" [ref=f4e443]:
+                    - generic [ref=f4e444]:
+                      - text: ja-657387
+                      - generic [ref=f4e445]: (0%)
+                - row [ref=f4e446]:
+                  - cell [ref=f4e447]:
+                    - link "Custom Ryzen 5 5500 Gaming PC 16GB RTX 4060 1TB SSD Win 11 RGB" [ref=f4e448] [cursor=pointer]:
+                      - /url: https://www.ebay.co.uk/itm/407297273297?nordt=true
+                  - cell "Pre-owned" [ref=f4e449]
+                  - cell "£580.00" [ref=f4e451]
+                  - cell "£22.95" [ref=f4e452]
+                  - cell "£602.95" [ref=f4e453]
+                  - cell "2026-10-19" [ref=f4e454]
+                  - cell "roksdigitaldeals(99.4%)" [ref=f4e455]:
+                    - generic [ref=f4e456]:
+                      - text: roksdigitaldeals
+                      - generic [ref=f4e457]: (99.4%)
+            - generic [ref=f4e458]:
+              - generic [ref=f4e459]: 1–25 of 240
+              - generic [ref=f4e460]:
+                - button [disabled] [ref=f4e461]
+                - generic [ref=f4e464]: 1 / 10
+                - button [ref=f4e465]
+          - button "Fetch page 2 (uses 1 request)" [ref=f4e469]:
+            - text: Fetch page 2
+            - generic [ref=f4e470]: (uses 1 request)

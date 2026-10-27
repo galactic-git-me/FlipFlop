@@ -11,7 +11,7 @@ class ShipmentTrackingEvent(Base):
 
     __tablename__ = "shipment_tracking_events"
     __table_args__ = (
-        UniqueConstraint("provider", "provider_event_id", name="uq_shipment_event_provider_event_id"),
+        UniqueConstraint("provider_event_id", name="uq_shipment_event_provider_event_id"),
         CheckConstraint(
             "(order_id IS NOT NULL AND manual_build_id IS NULL AND customer_problem_id IS NULL AND customer_problem_shipment_id IS NULL) OR "
             "(order_id IS NULL AND manual_build_id IS NOT NULL AND customer_problem_id IS NULL AND customer_problem_shipment_id IS NULL) OR "

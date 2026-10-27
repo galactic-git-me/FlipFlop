@@ -1,0 +1,46 @@
+- generic [active] [ref=e1]:
+  - complementary [ref=e2]:
+    - generic [ref=e3]:
+      - img "FlipFlop" [ref=e5]
+      - navigation [ref=e6]:
+        - link "Sourcing" [ref=e7] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Best Sellers" [ref=e12] [cursor=pointer]:
+          - /url: /best-sellers
+        - link "Catalogue" [ref=e20] [cursor=pointer]:
+          - /url: /catalogue
+        - link "Builds" [ref=e24] [cursor=pointer]:
+          - /url: /build-hub
+        - link "Workshop Calendar" [ref=e30] [cursor=pointer]:
+          - /url: /orders
+        - link "Upgrade Desk" [ref=e34] [cursor=pointer]:
+          - /url: /upgrade-desk
+        - link "Inventory" [ref=e38] [cursor=pointer]:
+          - /url: /inventory
+        - link "Demand" [ref=e43] [cursor=pointer]:
+          - /url: /demand
+        - link "Demand Intelligence" [ref=e47] [cursor=pointer]:
+          - /url: /demand/intelligence
+        - link "Cross-listing" [ref=e51] [cursor=pointer]:
+          - /url: /cross-listing
+        - link "Dispatch Zone" [ref=e58] [cursor=pointer]:
+          - /url: /dispatch-zone
+        - link "Email Events" [ref=e65] [cursor=pointer]:
+          - /url: /email-events
+        - link "Advertising & Growth" [ref=e70] [cursor=pointer]:
+          - /url: /advertising-growth
+        - link "Photos & 3D models" [ref=e75] [cursor=pointer]:
+          - /url: /catalogue/3d-assets
+        - link "Problems" [ref=e80] [cursor=pointer]:
+          - /url: /problems
+      - region "Service health" [ref=e84]:
+        - generic [ref=e85]:
+          - 'generic "API: checking" [ref=e86]': API
+          - 'generic "DB: checking" [ref=e90]': DB
+          - 'generic "Gem: checking" [ref=e95]': Gem
+          - link "Shop" [ref=e99] [cursor=pointer]:
+            - /url: http://localhost:4313
+  - main [ref=e104]:
+    - button "Chat with Flip" [ref=e108]
+  - button "Open Next.js Dev Tools" [ref=e114] [cursor=pointer]
+  - alert [ref=e118]

@@ -34,6 +34,7 @@ from app.models.build import Build, BuildType, BuildStatus
 from app.models.product import Product, ProductType, ProductStatus
 from app.models.order import Order, OrderStatus
 from app.models.playbook import Playbook
+from app.models.gem_radar_scored_listing import GemRadarScoredListing
 from app.models.inventory import InventoryItem
 from app.models.inventory_allocation import InventoryAllocation
 from app.models.price_alert import PriceAlert
@@ -52,6 +53,7 @@ from app.schemas.manual_build import (
     BookShipmentResult, ShipmentBookingReconciliationRequest, UpdateEvidenceDataRequest, UpdateListingTitleRequest,
 )
 from app.services import ai_service
+from app.services.model_selection_service import model_selection_service, ModelSelectionError
 from app.services.getting_started_service import (
     invalidate_ready_to_ship_reviewed_package,
     generate_getting_ready_manifest,
@@ -356,6 +358,27 @@ class ComponentRatingsInput(BaseModel):
 class ComponentPurchaseInput(BaseModel):
     price_paid: float | None = Field(default=None, ge=0)
     source: str | None = None
+
+
+class AIBuildCreateInput(BaseModel):
+    component_ids: list[int] = Field(min_length=4, max_length=8)
+    playbook_id: int
+    curated_build_id: str = Field(min_length=1, max_length=80)
+    build_name: str = Field(min_length=2, max_length=300)
+    rationale: str = Field(default="", max_length=1600)
+    playbook_rationale: str = Field(default="", max_length=1200)
+
+
+_AI_BUILD_CATEGORY_SLOTS = {
+    "cpu": "cpu",
+    "motherboard": "motherboard",
+    "ram": "ram",
+    "gpu": "gpu",
+    "ssd": "ssd",
+    "psu": "psu",
+    "cooler": "cooler",
+    "case": "case",
+}
 
 
 class FaqSelectionInput(BaseModel):
@@ -1093,6 +1116,162 @@ async def create_build(body: ManualBuildCreate, db: AsyncSession = Depends(get_d
     return build
 
 
+@router.post("/ai-generate")
+async def generate_ai_ready_to_ship_build(db: AsyncSession = Depends(get_db)):
+    """Ask the configured LLM to assemble a build from active GEM listings."""
+    from app.gem_radar.observations import get_active_buy_it_now_listing_ids
+    from app.services.curated_build_policy import definitions
+
+    active_ids = await get_active_buy_it_now_listing_ids(db)
+    if not active_ids:
+        raise HTTPException(409, "Gem Radar has no active buy-it-now listings to build from")
+    rows = (await db.execute(
+        select(GemRadarScoredListing)
+        .where(
+            GemRadarScoredListing.listing_id.in_(active_ids),
+            GemRadarScoredListing.classification.in_(("SUPER_GEM", "GEM")),
+            GemRadarScoredListing.category.in_(tuple(_AI_BUILD_CATEGORY_SLOTS)),
+            GemRadarScoredListing.delivered_price > 0,
+        )
+        .order_by(GemRadarScoredListing.deal_score.desc())
+    )).scalars().all()
+
+    candidates_by_category: dict[str, list[GemRadarScoredListing]] = {key: [] for key in _AI_BUILD_CATEGORY_SLOTS}
+    seen_listing_ids: set[str] = set()
+    for row in rows:
+        if row.listing_id in seen_listing_ids:
+            continue
+        seen_listing_ids.add(row.listing_id)
+        candidates_by_category[row.category].append(row)
+    required = ("cpu", "motherboard", "ram", "gpu", "ssd", "psu")
+    missing = [category for category in required if not candidates_by_category[category]]
+    if missing:
+        raise HTTPException(409, "Active GEM/SUPER_GEM listings are missing for: " + ", ".join(missing))
+
+    candidates = [item for category in _AI_BUILD_CATEGORY_SLOTS for item in candidates_by_category[category][:18]]
+    playbooks = (await db.execute(select(Playbook))).scalars().all()
+    playbook_ids = {playbook.name.casefold(): playbook.id for playbook in playbooks}
+    segments = [
+        {"id": cell["id"], "name": cell["name"], "segment": cell["segment"], "tier": cell["tier"],
+         "use": cell.get("use", ""), "playbook_id": playbook_ids.get(str(cell.get("segment", "")).casefold())}
+        for cell in definitions().get("builds", [])
+        if playbook_ids.get(str(cell.get("segment", "")).casefold())
+    ]
+    if not segments:
+        raise HTTPException(409, "No configured Playbook segments are available for recommendation")
+    candidate_payload = [
+        {"id": item.id, "category": item.category, "title": item.title, "classification": item.classification,
+         "delivered_price_gbp": round(float(item.delivered_price), 2), "deal_score": round(float(item.deal_score or 0), 1)}
+        for item in candidates
+    ]
+    try:
+        result = await model_selection_service.complete(
+            task="AI Ready-to-Ship build recommendation",
+            messages=[{"role": "user", "content": json.dumps({"candidates": candidate_payload, "playbook_cells": segments})}],
+            system_prompt=(
+                "You are an expert PC build curator. Select one listing per required category: CPU, motherboard, RAM, GPU, SSD, PSU. "
+                "You may add a cooler or case. Use only supplied candidate IDs. Prioritize SUPER_GEM, then GEM. Avoid obvious socket/DDR "
+                "mismatches from titles. Recommend one supplied Playbook cell that best matches performance, use and total parts budget. "
+                "Return JSON with keys build_name, rationale, components (array of {id, slot}), playbook_cell_id, playbook_rationale, "
+                "compatibility_notes. Do not invent IDs or claim compatibility is verified when it is unclear."
+            ),
+            max_tokens=1300,
+            timeout=90,
+            json_mode=True,
+        )
+        proposal = json.loads(result.text)
+    except (ModelSelectionError, json.JSONDecodeError, TypeError, ValueError) as exc:
+        log.warning("manual_build.ai_generation_failed", error=str(exc))
+        raise HTTPException(502, "The AI could not produce a valid build recommendation. Try again.") from exc
+
+    allowed = {item.id: item for item in candidates}
+    selected_items = []
+    selected_categories: set[str] = set()
+    try:
+        for choice in proposal["components"]:
+            item = allowed[int(choice["id"])]
+            if item.category in selected_categories or choice.get("slot") != _AI_BUILD_CATEGORY_SLOTS[item.category]:
+                raise ValueError("duplicate or mismatched component slot")
+            selected_categories.add(item.category)
+            selected_items.append(item)
+        if not set(required).issubset(selected_categories):
+            raise ValueError("required component missing")
+        cell = next(item for item in segments if item["id"] == proposal["playbook_cell_id"])
+    except (KeyError, TypeError, ValueError, StopIteration) as exc:
+        raise HTTPException(502, "The AI returned an invalid recommendation. Generate another build.") from exc
+
+    return {
+        "build_name": str(proposal.get("build_name") or "AI Sourced Build")[:300],
+        "rationale": str(proposal.get("rationale") or "")[:1600],
+        "components": [
+            {"id": item.id, "slot": _AI_BUILD_CATEGORY_SLOTS[item.category], "name": item.title,
+             "classification": item.classification, "deal_score": float(item.deal_score or 0),
+             "price": round(float(item.delivered_price), 2),
+             "listing_url": item.url or f"https://www.ebay.co.uk/itm/{item.listing_id}", "image_url": item.image_url}
+            for item in selected_items
+        ],
+        "estimated_parts_cost": round(sum(float(item.delivered_price) for item in selected_items), 2),
+        "playbook_recommendation": {**cell, "rationale": str(proposal.get("playbook_rationale") or "")[:1200]},
+        "compatibility_notes": [str(note)[:300] for note in proposal.get("compatibility_notes", []) if isinstance(note, str)][:8],
+        "model": result.model,
+    }
+
+
+@router.post("/ai-create", response_model=ManualBuildOut, status_code=201)
+async def create_ai_ready_to_ship_build(body: AIBuildCreateInput, db: AsyncSession = Depends(get_db)):
+    """Persist selected AI candidates as an in-progress, unpaid sourcing draft."""
+    from app.gem_radar.observations import get_active_buy_it_now_listing_ids
+    from app.services.curated_build_policy import definitions
+
+    if len(set(body.component_ids)) != len(body.component_ids):
+        raise HTTPException(422, "A sourcing listing may only be selected once")
+    active_ids = await get_active_buy_it_now_listing_ids(db)
+    items = (await db.execute(select(GemRadarScoredListing).where(
+        GemRadarScoredListing.id.in_(body.component_ids),
+        GemRadarScoredListing.listing_id.in_(active_ids),
+        GemRadarScoredListing.classification.in_(("SUPER_GEM", "GEM")),
+    ))).scalars().all()
+    if len(items) != len(body.component_ids):
+        raise HTTPException(409, "A selected listing is no longer active. Generate a fresh recommendation.")
+    by_category = {item.category: item for item in items}
+    if len(by_category) != len(items) or not {"cpu", "motherboard", "ram", "gpu", "ssd", "psu"}.issubset(by_category):
+        raise HTTPException(422, "The selection must include one CPU, motherboard, RAM, GPU, SSD, and PSU")
+    if any(category not in _AI_BUILD_CATEGORY_SLOTS for category in by_category):
+        raise HTTPException(422, "The selection includes an unsupported component category")
+    cell = next((item for item in definitions().get("builds", []) if item["id"] == body.curated_build_id), None)
+    playbook = await db.get(Playbook, body.playbook_id)
+    if not cell or not playbook or playbook.name.casefold() != str(cell.get("segment", "")).casefold():
+        raise HTTPException(422, "Choose a valid Playbook cell and matching segment")
+    try:
+        profile = await software_profile_for_curated_cell_from_db(db, body.curated_build_id, playbook.name, playbook.software_profile)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    components = [
+        {"slot": _AI_BUILD_CATEGORY_SLOTS[item.category], "name": item.title,
+         "price_paid": round(float(item.delivered_price), 2), "source": "manual",
+         "listing_url": item.url or f"https://www.ebay.co.uk/itm/{item.listing_id}", "image_url": item.image_url,
+         "purchased": False, "condition": item.condition or "unknown", "sourcing_candidate": True,
+         "gem_classification": item.classification, "gem_radar_listing_id": item.id}
+        for item in items
+    ]
+    evidence_data = {
+        "playbook_assignment": {"playbook_id": playbook.id, "curated_build_id": body.curated_build_id,
+            "customer_type": cell["segment"], "budget_tier": cell["tier"], "cell_name": cell["name"],
+            "software_profile": profile, "assigned_at": datetime.utcnow().isoformat()},
+        "ai_sourcing": {"created_at": datetime.utcnow().isoformat(), "status": "candidate_listings_not_purchased",
+            "candidate_listing_ids": [item.listing_id for item in items]},
+    }
+    playbook_assignment = evidence_data["playbook_assignment"]
+    playbook_assignment["ai_recommendation_rationale"] = body.playbook_rationale
+    evidence_data["ai_sourcing"]["build_rationale"] = body.rationale
+    build = ManualBuild(name=body.build_name, creation_method="ai", components=components, total_cost=0,
+                        evidence_data=evidence_data, warranty_reserve_pct=5.0)
+    db.add(build)
+    await db.flush()
+    await db.refresh(build)
+    return build
+
+
 @router.get("/", response_model=list[ManualBuildSummary])
 async def list_builds(include_archived: bool = False, db: AsyncSession = Depends(get_db)):
     query = select(ManualBuild).order_by(ManualBuild.updated_at.desc())
@@ -1138,7 +1317,9 @@ async def list_builds(include_archived: bool = False, db: AsyncSession = Depends
             ManualBuildSummary(
                 id=build.id,
                 name=build.name,
+                creation_method=build.creation_method or "manual",
                 total_cost=build.total_cost,
+                ebay_price=build.ebay_price,
                 component_count=len(build.components or []),
                 status=live_status,
                 updated_at=build.updated_at,
@@ -2687,8 +2868,23 @@ async def patch_build(build_id: int, body: ManualBuildPatch, db: AsyncSession = 
     if body.name is not None:
         build.name = body.name
     if body.components is not None:
-        build.components = [c.model_dump() for c in body.components]
-        build.total_cost = sum(c.price_paid for c in body.components)
+        if build.creation_method == "ai":
+            existing_components = list(build.components or [])
+            if len(body.components) != len(existing_components):
+                raise HTTPException(422, "AI sourcing draft component slots cannot be added or removed through manual editing")
+            if any(component.slot != existing.get("slot") for component, existing in zip(body.components, existing_components)):
+                raise HTTPException(422, "AI sourcing draft slots cannot be changed through manual editing")
+            build.components = [
+                {**component.model_dump(), **{
+                    key: existing.get(key)
+                    for key in ("sourcing_candidate", "gem_classification", "gem_radar_listing_id")
+                    if key in existing
+                }, "purchased": existing.get("purchased", False)}
+                for component, existing in zip(body.components, existing_components)
+            ]
+        else:
+            build.components = [c.model_dump() for c in body.components]
+            build.total_cost = sum(c.price_paid for c in body.components)
     build.updated_at = datetime.utcnow()
     await db.flush()
     await db.refresh(build)
@@ -2715,6 +2911,19 @@ async def purchase_build_component(
     if index is None:
         raise HTTPException(404, f"Component slot {slot} not found")
     component = dict(components[index])
+    if component.get("sourcing_candidate") and not component.get("purchased"):
+        if body.price_paid is None or body.price_paid == component.get("price_paid"):
+            raise HTTPException(409, "Enter the confirmed purchase price before recording this sourcing candidate as purchased.")
+        component["price_paid"] = body.price_paid
+        component["source"] = body.source or "Confirmed purchase"
+        component["purchased"] = True
+        component["sourcing_candidate"] = False
+        components[index] = component
+        build.components = components
+        build.total_cost = sum(float(item.get("price_paid") or 0) for item in components)
+        await db.flush()
+        await db.refresh(build)
+        return build
     if component.get("inventory_item_id"):
         component["purchased"] = True
         components[index] = component
@@ -2759,7 +2968,11 @@ async def purchase_build_component(
     component["inventory_item_id"] = item.id
     components[index] = component
     build.components = components
-    build.total_cost = sum(float(existing.get("price_paid") or 0) for existing in components)
+    build.total_cost = sum(
+        float(existing.get("price_paid") or 0)
+        for existing in components
+        if build.creation_method != "ai" or existing.get("purchased")
+    )
     add_event(db, inventory_item_id=item.id, manual_build_id=build.id, event_type="purchased", quantity=1,
               detail={"source": item.source, "listing_url": item.listing_url})
     add_event(db, inventory_item_id=item.id, manual_build_id=build.id, event_type="reserved", quantity=1,
@@ -3797,6 +4010,8 @@ async def sync_ebay_order(build_id: int, db: AsyncSession = Depends(get_db)):
         raise HTTPException(404, "Build not found")
 
     build.ebay_order_id = order.order_id
+    if order.ship_by_date is not None:
+        build.ebay_ship_by_date = order.ship_by_date
     build.buyer_name = order.buyer_address.contact_name
     # line_item_id is embedded here (not its own column) since it's only
     # ever needed alongside the address, to push tracking back in
@@ -4714,6 +4929,8 @@ async def post_to_ebay(build_id: int, body: PostToEbayRequest, db: AsyncSession 
     if not image_urls and build.photos:
         for photo in build.photos:
             # Photo is stored as {"url": "https://www.theflipflop.shop/api/uploads/...", "kind": "photo"}
+            if isinstance(photo, dict) and photo.get("kind", "photo") != "photo":
+                continue
             photo_url = photo.get("url") if isinstance(photo, dict) else photo
             if photo_url:
                 image_urls.append(photo_url)
@@ -5045,7 +5262,14 @@ async def upload_photos(
         local_path.write_bytes(image_bytes)
 
         # Served directly from the build-owned Media directory.
-        photos.append({"url": public_url, "kind": kind, "original_filename": Path(file.filename or "photo").name[:120]})
+        entry = {"url": public_url, "kind": kind, "original_filename": Path(file.filename or "photo").name[:120]}
+        if kind == "photo":
+            from app.services.channel_images import save_master
+            try:
+                entry["channel_images"] = await asyncio.to_thread(save_master, image_bytes)
+            except (ValueError, OSError) as exc:
+                raise HTTPException(422, f"Cannot prepare product photograph: {exc}") from exc
+        photos.append(entry)
         uploaded_urls.append(public_url)
 
     build.photos = photos

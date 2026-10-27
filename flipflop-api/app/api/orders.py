@@ -3,6 +3,7 @@ from fastapi.responses import FileResponse, Response
 from sqlalchemy import func, select, and_, or_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from datetime import datetime, timedelta, date, timezone
 from io import BytesIO
 from pathlib import Path, PurePosixPath
@@ -18,7 +19,7 @@ from app.database import get_db, AsyncSessionLocal
 from app.models import Order, BuildCapacity, BuildCapacityOverride, CustomerProblem, CXDocument, Capture3DAsset, Capture3DStatus, Product, Build, WarrantyReserve, WarrantyClaim, ShipmentTrackingEvent, PortalAccessGrant
 from app.models.customer_problem_shipment import CustomerProblemShipment
 from app.models.customer_problem_notification import CustomerProblemNotification
-from app.models.order import OrderStatus
+from app.models.order import OrderStatus, PaymentStatus
 from app.models.build import BuildStatus
 from app.models.manual_build import ManualBuild
 from app.models.alert_event import AlertEvent
@@ -1185,6 +1186,8 @@ def _manual_build_to_portal_out(build: ManualBuild, getting_started_job: Getting
         id=build.id,
         order_id=f"BUILD-{build.id}",
         status=build.status,
+        fulfilment_status=build.status,
+        payment_status="not_applicable",
         customer_price=asking_price,
         component_costs=float(build.total_cost or 0),
         slots=slots,
@@ -1321,10 +1324,16 @@ def _order_to_my_order_out(
             )
             if key in raw_change_request
         }
+    fulfilment_status = (
+        "cancelled" if order.cancelled_at or order.status == OrderStatus.CANCELLED
+        else order.status.value if hasattr(order.status, "value") else str(order.status)
+    )
     return MyOrderOut(
         id=order.id,
         order_id=order.order_id,
-        status=("cancelled" if order.cancelled_at or order.status == OrderStatus.CANCELLED else order.status.value if hasattr(order.status, "value") else str(order.status)),
+        status=fulfilment_status,
+        fulfilment_status=fulfilment_status,
+        payment_status=order.payment_status,
         customer_price=order.customer_price,
         component_costs=order.component_costs,
         slots=slots,
@@ -1563,6 +1572,7 @@ async def cancel_my_order(
             raise HTTPException(409, "This order has no online payment reference; contact support to arrange cancellation")
         order.cancellation_requested_at = datetime.utcnow()
         order.cancellation_status = "refund_pending"
+        order.payment_status = PaymentStatus.REFUND_PENDING.value
         # Commit the sourcing hold before contacting Stripe. Repeating the
         # request uses the same provider idempotency key after any interruption.
         await db.commit()
@@ -1606,6 +1616,7 @@ async def cancel_my_order(
     order.refund_id = refund.get("refund_id")
     if refund.get("status") == "succeeded":
         order.status = OrderStatus.CANCELLED
+        order.payment_status = PaymentStatus.REFUNDED.value
         order.cancelled_at = datetime.utcnow()
         order.cancellation_status = "succeeded"
         await _mark_cancelled_order_build_records(db, order)
@@ -2299,6 +2310,7 @@ async def reconcile_order_refund(
     provider_status = refund.get("status")
     if provider_status == "succeeded":
         order.status = OrderStatus.CANCELLED
+        order.payment_status = PaymentStatus.REFUNDED.value
         order.cancelled_at = order.cancelled_at or datetime.utcnow()
         order.cancellation_status = "succeeded"
         await _mark_cancelled_order_build_records(db, order)
@@ -2962,7 +2974,7 @@ async def list_orders(
     db: AsyncSession = Depends(get_db),
 ):
     """List orders with optional filtering"""
-    query = select(Order)
+    query = select(Order).options(selectinload(Order.playbook))
 
     if status:
         query = query.where(Order.status == status)

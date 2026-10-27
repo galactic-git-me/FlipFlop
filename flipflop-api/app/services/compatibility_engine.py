@@ -104,6 +104,8 @@ def _extract_ram_type(text: str) -> str | None:
 
 def _infer_cpu_socket(text: str) -> str | None:
     t = _norm(text)
+    if 'str5' in t or re.search(r'\b79\d{2}wx\b',t):
+        return 'str5'
     if "lga1851" in t:
         return "lga1851"
     if "lga1700" in t:

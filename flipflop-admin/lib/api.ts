@@ -112,6 +112,9 @@ export interface BuildComponent {
   part_id?: number;
   listing_url?: string;
   image_url?: string;
+  sourcing_candidate?: boolean;
+  gem_classification?: "SUPER_GEM" | "GEM";
+  gem_radar_listing_id?: number;
   purchased?: boolean;
   inventory_item_id?: number;
   condition?: "new" | "new_other" | "refurbished" | "used" | "unknown";
@@ -194,6 +197,7 @@ export interface PriceAlertList {
 export interface ManualBuild {
   id: number;
   name: string;
+  creation_method?: "manual" | "ai";
   components: BuildComponent[];
   total_cost: number | null;
   last_evaluation: ManualBuildEvaluation | null;
@@ -399,10 +403,39 @@ export interface ScanScheduleStatus {
 export interface ManualBuildSummary {
   id: number;
   name: string;
+  creation_method?: "manual" | "ai";
   total_cost: number | null;
+  ebay_price?: number | null;
   component_count: number;
   status: ManualBuildStatus;
   updated_at: string;
+}
+
+export interface AiReadyToShipProposal {
+  build_name: string;
+  rationale: string;
+  components: Array<{
+    id: number;
+    slot: string;
+    name: string;
+    classification: "SUPER_GEM" | "GEM";
+    deal_score: number;
+    price: number;
+    listing_url: string;
+    image_url: string | null;
+  }>;
+  estimated_parts_cost: number;
+  playbook_recommendation: {
+    id: string;
+    name: string;
+    segment: string;
+    tier: string;
+    use: string;
+    playbook_id: number;
+    rationale: string;
+  };
+  compatibility_notes: string[];
+  model: string;
 }
 
 export interface EvaluationSuggestion {
@@ -648,8 +681,8 @@ function qs(params?: Record<string, string | undefined>): string {
 
 export const api = {
   marketingCopy: {
-    status: () => request<{ total: number; ready: number; remaining: number }>("/catalogue/marketing-copy/status"),
-    generateBatch: (limit = 4) => request<{ total: number; ready: number; remaining: number; attempted: number; generated: number; failed: { task_key: string; error: string }[] }>(
+    status: () => request<{ total: number; ready: number; remaining: number; enriched: number; source_guides: number }>("/catalogue/marketing-copy/status"),
+    generateBatch: (limit = 4) => request<{ total: number; ready: number; remaining: number; enriched: number; source_guides: number; attempted: number; generated: number; failed: { task_key: string; error: string }[] }>(
       "/catalogue/marketing-copy/generate-batch", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ limit }) },
     ),
   },
@@ -1086,6 +1119,10 @@ export const api = {
     marketSnapshot: () =>
       requestGemRadar<MarketSnapshot>("/market-snapshot", {
         cache: "no-store",
+        // The whole-market aggregation can be slower than the interactive
+        // dashboard reads. Bound it independently so it can fail and refresh
+        // later without leaving page loading dependent on this endpoint.
+        signal: AbortSignal.timeout(30_000),
       }),
     // Real scan cadence derived from actual observation activity, since
     // there's no backend-scheduled "next scan" job (scanning happens
@@ -1247,6 +1284,13 @@ export const api = {
   manualBuilds: {
     list: () => request<ManualBuildSummary[]>("/manual-builds/"),
     get: (id: number) => request<ManualBuild>(`/manual-builds/${id}`),
+    generateAi: () => request<AiReadyToShipProposal>("/manual-builds/ai-generate", { method: "POST" }),
+    createAi: (data: { component_ids: number[]; playbook_id: number; curated_build_id: string; build_name: string; rationale: string; playbook_rationale: string }) =>
+      request<ManualBuild>("/manual-builds/ai-create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }),
     getFaqs: (id: number) =>
       request<BuildFaqSelection>(`/manual-builds/${id}/faqs`),
     updateFaqs: (
@@ -1999,6 +2043,55 @@ export const api = {
         method: "POST",
         body: JSON.stringify(body),
       }),
+  },
+
+  commercialReadiness: {
+    mvpRules: () => request<import('@/components/playbooks/PlaybookOperatingRules').MvpRules>('/commerce-intelligence/playbook-service/mvp-rules'),
+    saveMvpRules: (body: {enabled:boolean;budget_ceilings:Record<string,number>;max_price_change_fraction:number}) => request<{enabled:boolean;job:unknown}>('/commerce-intelligence/playbook-service/mvp-rules', {method:'PUT',body:JSON.stringify(body)}),
+    market: (parent: number, cell: string) => request<import('@/components/playbooks/PlaybookMarketReview').MarketReview>(`/commerce-intelligence/playbook-service/market/${parent}/${encodeURIComponent(cell)}`),
+    collectMarket: (parent: number, cell: string) => request<import('@/components/playbooks/PlaybookMarketReview').MarketReview>(`/commerce-intelligence/playbook-service/market/${parent}/${encodeURIComponent(cell)}/collect`, {method:'POST'}),
+    reviewMarket: (parent: number, cell: string, body: {batch_id:number;decision:'approve'|'reject';candidate_ids:string[];exact_build_confirmed:boolean}) => request<import('@/components/playbooks/PlaybookMarketReview').MarketReview>(`/commerce-intelligence/playbook-service/market/${parent}/${encodeURIComponent(cell)}/review`, {method:'POST',body:JSON.stringify(body)}),
+    book: () => request<import('./playbook-book').PlaybookBook>('/commerce-intelligence/playbook-service/book'),
+    refreshPricingGuidance: () => request<{queued:boolean;checkout_changed:false;published:false}>('/commerce-intelligence/playbook-service/pricing-guidance/refresh', {method:'POST'}),
+    proposals: () => request<{items:import('./playbook-proposals').PlaybookOffer[]}>('/commerce-intelligence/playbook-service/proposals', {cache:'no-store'}),
+    supplierLicences: () => request<{items:import('./playbook-proposals').SupplierLicenceCandidate[]}>('/commerce-intelligence/playbook-service/supplier-licences'),
+    approveSupplierLicence: (candidate:import('./playbook-proposals').SupplierLicenceCandidate) =>
+      request<{listing_id:number;reviewed:true;reused:boolean;category:'os'|'office'|'ai_subscription';activated_catalogue_links:number;prices_published:false;checkout_changed:false;customer_offering_enabled:false}>(`/commerce-intelligence/playbook-service/supplier-licences/${candidate.listing_id}/approve`,{method:'POST',body:JSON.stringify({licence_review_fingerprint:candidate.licence_review_fingerprint})}),
+    engineeringSuggestions: () => request<{items:import('./playbook-proposals').MotherboardEngineeringSuggestion[]}>('/commerce-intelligence/playbook-service/engineering-suggestions'),
+    productEngineeringSuggestions: () => request<{items:import('./playbook-proposals').ProductEngineeringSuggestion[]}>('/commerce-intelligence/playbook-service/product-engineering-suggestions'),
+    approveProductEngineeringSuggestion: (item:import('./playbook-proposals').ProductEngineeringSuggestion,replaceReviewedValues=false) =>
+      request<{listing_id:number;role:string;approved_specs:Record<string,unknown>;reviewed:true;published:false}>(`/commerce-intelligence/playbook-service/product-engineering-suggestions/${item.listing_id}/approve`,{method:'POST',body:JSON.stringify({fingerprint:item.fingerprint,...(replaceReviewedValues?{replace_reviewed_values:true}:{})})}),
+    researchEngineeringSuggestions: () => request<{created_count:number;created:{canonical_model:string;source_title:string}[];skipped:number;unresolved:string[];reviewed:false;published:false}>('/commerce-intelligence/playbook-service/engineering-suggestions/research',{method:'POST'}),
+    approveEngineeringSuggestion: (id:number) => request<{id:number;canonical_model:string;reviewed:true;published:false}>(`/commerce-intelligence/playbook-service/engineering-suggestions/${id}/approve`,{method:'POST'}),
+    refreshProposals: () => request<{job_id:string;status:'queued'|'running'|'succeeded'|'failed';phase:string;started:boolean}>('/commerce-intelligence/playbook-service/refresh',{method:'POST'}),
+    rebuildProposals: () => request<{job_id:string;mode:'rebuild';status:'queued'|'running'|'succeeded'|'failed';phase:string;started:boolean}>('/commerce-intelligence/playbook-service/rebuild',{method:'POST'}),
+    automation: () => request<{setting_enabled:boolean;registered:boolean;enabled:boolean;next_run_at:string|null;scheduled_latest:import('./playbook-proposals').PlaybookRefreshRun|null;scheduled_rebuild_latest:import('./playbook-proposals').PlaybookRefreshRun|null;manual_latest:import('./playbook-proposals').PlaybookRefreshRun|null}>('/commerce-intelligence/playbook-service/automation'),
+    refreshStatus: (jobId:string) => request<{job_id:string;mode?:'refresh'|'rebuild';status:'queued'|'running'|'succeeded'|'failed';phase:string;error:string|null;result?:{cells:number;complete_hardware:number;ready_for_approval:number;published?:false;catalogue_sync?:{source_products:number;created_listings:number;created_variants:number;new_products_published:0};bestseller_refresh?:{scraped:number;matched:number;categories:number;errors:number};gamers_outlet_refresh?:{attempted:number;captured:number;retained:number;unresolved:number;published:false;reason?:string};product_capture?:{attempted:number;captured:number;retained:number;unresolved:number;amazon_catalogue_attributes?:{attempted:number;captured:number;unresolved:number;unavailable:number;cached_unavailable:number;status:string};published:false}}}>(`/commerce-intelligence/playbook-service/refresh/${encodeURIComponent(jobId)}`),
+    reviewProposal: (offer:import('./playbook-proposals').PlaybookOffer,decision:'approve'|'reject') =>
+      request<{status:string}>(`/commerce-intelligence/playbook-service/proposals/${offer.proposal_id}/${decision}`,{method:'POST',body:JSON.stringify({revision_sha256:offer.revision_sha256})}),
+    compatibilitySecondOpinion: (offer:import('./playbook-proposals').PlaybookOffer) =>
+      request<import('./playbook-proposals').CompatibilitySecondOpinion>(`/commerce-intelligence/playbook-service/proposals/${offer.proposal_id}/compatibility-second-opinion`,{method:'POST',body:JSON.stringify({revision_sha256:offer.revision_sha256})}),
+    approveSupplierSources: (offer:import('./playbook-proposals').PlaybookOffer,source_evidence:Array<{role:string;listing_id:number;fingerprint:string}>) =>
+      request<{imported:number;reused:number;pending_roles:string[];checkout_changed:false;prices_published:false}>(`/commerce-intelligence/playbook-service/proposals/${offer.proposal_id}/approve-supplier-sources`,{method:'POST',body:JSON.stringify({revision_sha256:offer.revision_sha256,source_evidence})}),
+    approveAllSupplierSources: (offers:Array<import('./playbook-proposals').PlaybookOffer & {source_evidence:Array<{role:string;listing_id:number;fingerprint:string}>}>) =>
+      request<{proposals:number;skipped_proposals:number;imported:number;reused:number;pending_roles:{cell_id:string;role:string}[];prices_published:false}>('/commerce-intelligence/playbook-service/supplier-sources/approve-all',{method:'POST',body:JSON.stringify({proposals:offers.map(offer=>({proposal_id:offer.proposal_id,revision_sha256:offer.revision_sha256,source_evidence:offer.source_evidence}))})}),
+    configurations: () => request<{items:import('./commercial-readiness').ConfigurationReview[]}>('/commerce-intelligence/configurations'),
+    configuration: (id:number) => request<import('./commercial-readiness').ConfigurationDetail>(`/commerce-intelligence/configurations/${id}`),
+    approveConfiguration: (id:number,reviewSha?:string|null) =>
+      request<{checkout_enabled:boolean;policy_version:number;assessment:unknown}>(`/commerce-intelligence/configurations/${id}/policy`,{method:'PUT',body:JSON.stringify({review_sha256:reviewSha})}),
+    importConfiguration: (detail:import('./commercial-readiness').ConfigurationDetail,entries:import('./commercial-readiness').ConfigurationEvidenceSelection[]) =>
+      request<{imported:number;reused:number;blocked:string[];checkout_changed:false}>(`/commerce-intelligence/configurations/${detail.request_id}/import-evidence`,{method:'POST',body:JSON.stringify({definition_sha256:detail.definition_sha256,case_id:detail.parts.find(part=>part.role==='case')?.case_id??null,entries})}),
+    saveCapacity: (body:{build_week:string;available_builds:number;observed_at:string;evidence_source:string;evidence_ref:string}) =>
+      request<{id:number;build_week:string;available_builds:number}>('/commerce-intelligence/workshop-capacity-evidence',{method:'POST',body:JSON.stringify(body)}),
+    health: () => request<import('./commercial-readiness').ReconciliationHealth>('/commerce-intelligence/reconciliation/health'),
+    reconcile: () => request<{audit_id:number;status:string;imported?:number;reused?:number}>('/commerce-intelligence/reconciliation/run',{method:'POST'}),
+    list: () => request<import('./commercial-readiness').ReadinessIndex>('/commerce-intelligence/readiness'),
+    detail: (playbookId:number,cellId:string,caseId?:number,resetDraft=false) => {
+      const query=new URLSearchParams();
+      if(caseId) query.set('case_id',String(caseId));
+      if(resetDraft) query.set('reset_draft','true');
+      return request<import('./commercial-readiness').ReadinessDetail>(`/commerce-intelligence/playbooks/${playbookId}/cells/${encodeURIComponent(cellId)}/readiness${query.size?'?'+query:''}`);
+    },
   },
 
   playbooks: {

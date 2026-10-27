@@ -1,0 +1,49 @@
+{
+  "listing_ids": [
+    17253,
+    17254,
+    17255,
+    17256,
+    17257,
+    17258
+  ],
+  "attempted": 6,
+  "captured": 5,
+  "retained": 0,
+  "unresolved": 1,
+  "by_host": {
+    "www.amazon.co.uk": {
+      "attempted": 1,
+      "captured": 1,
+      "retained": 0,
+      "unresolved": 0,
+      "capture_seconds_total": 2.652,
+      "capture_seconds_max": 2.652,
+      "queue_wait_seconds_total": 0.0,
+      "queue_wait_seconds_max": 0.0,
+      "unresolved_reasons": {}
+    },
+    "www.overclockers.co.uk": {
+      "attempted": 5,
+      "captured": 4,
+      "retained": 0,
+      "unresolved": 1,
+      "capture_seconds_total": 4.887,
+      "capture_seconds_max": 1.179,
+      "queue_wait_seconds_total": 3.056,
+      "queue_wait_seconds_max": 1.485,
+      "unresolved_reasons": {
+        "Retailer returned HTTP 404": 1
+      }
+    }
+  },
+  "amazon_catalogue_attributes": {
+    "attempted": 0,
+    "captured": 0,
+    "unresolved": 0,
+    "unavailable": 1,
+    "cached_unavailable": 1,
+    "status": "cached_access_denied"
+  },
+  "published": false
+}

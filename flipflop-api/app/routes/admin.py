@@ -301,6 +301,7 @@ async def list_order_priority(
     status: str | None = Query(None),
     skip: int = Query(0, ge=0),
     limit: int = Query(50, ge=1, le=100),
+    all_rows: bool = Query(False, include_in_schema=False),
     db: AsyncSession = Depends(get_db),
 ):
     """Active orders sorted by delivery commitment and component readiness."""
@@ -362,6 +363,9 @@ async def list_order_priority(
             "customer_price": order.customer_price,
             "days_elapsed": max(0, (now - order.created_at).days),
             "created_at": order.created_at,
+            "promised_delivery_date": order.promised_delivery_date,
+            "delivery_option": mode or ("fast_track" if order.fast_track_selected else "standard"),
+            "channel": specs.get("sales_channel") or specs.get("channel") or "FlipFlop Store",
             "priority_kind": labels[rank],
             "priority_rank": rank + 1,
             "components_ready_at": ready_at,
@@ -375,8 +379,77 @@ async def list_order_priority(
     ))
     return {
         "total": total or 0,
-        "orders": rows[skip:skip + limit],
+        "orders": rows if all_rows else rows[skip:skip + limit],
     }
+
+
+@router.get("/workshop-calendar")
+async def workshop_calendar(
+    start_date: str | None = Query(None),
+    days: int = Query(14, ge=7, le=31),
+    db: AsyncSession = Depends(get_db),
+):
+    """Live work obligations from paid storefront orders and synced eBay sales."""
+    from datetime import date
+    from zoneinfo import ZoneInfo
+
+    workshop_today = datetime.now(ZoneInfo("Europe/London")).date()
+    try:
+        start = date.fromisoformat(start_date) if start_date else workshop_today
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail="start_date must be YYYY-MM-DD") from exc
+    end = start + timedelta(days=days - 1)
+    priority = await list_order_priority(status=None, skip=0, limit=100,
+                                         all_rows=True, db=db)
+    order_rows = priority["orders"]
+    entries = []
+    for order in order_rows:
+        due = order.get("promised_delivery_date")
+        due_day = due.date() if due else None
+        ready = order.get("components_ready_at")
+        ready_day = ready.date() if ready else None
+        entries.append({
+            "key": f"storefront:{order['id']}", "kind": "customer_build",
+            "id": order["id"], "reference": order["order_id"],
+            "customer": order["customer_name"], "channel": order["channel"],
+            "status": order["status"], "delivery_option": order["delivery_option"],
+            "priority_kind": order["priority_kind"], "priority_rank": order["priority_rank"],
+            "due_date": due_day.isoformat() if due_day else None,
+            "due_label": "Customer delivery", "components_ready_date": ready_day.isoformat() if ready_day else None,
+            "date_evidence": "promised_delivery_date" if due_day else None,
+            "href": f"/orders/{order['id']}",
+        })
+
+    channel_builds = (await db.execute(
+        select(ManualBuild).where(
+            ManualBuild.status == "sold",
+            ManualBuild.ebay_order_id.is_not(None),
+            ManualBuild.dispatch_status.not_in(("shipped", "delivered", "collected")),
+        ).order_by(ManualBuild.ebay_ship_by_date, ManualBuild.updated_at)
+    )).scalars().all()
+    for build in channel_builds:
+        due_day = build.ebay_ship_by_date.date() if build.ebay_ship_by_date else None
+        entries.append({
+            "key": f"ebay:{build.id}", "kind": "channel_dispatch", "id": build.id,
+            "reference": f"eBay {build.ebay_order_id}", "customer": build.buyer_name or "eBay buyer",
+            "channel": "eBay", "status": build.dispatch_status,
+            "delivery_option": "marketplace_dispatch", "priority_kind": "channel_dispatch",
+            "priority_rank": 0 if due_day and due_day <= workshop_today else 2,
+            "due_date": due_day.isoformat() if due_day else None,
+            "due_label": "eBay ship-by" if due_day else "Ship-by date not synced",
+            "components_ready_date": None,
+            "date_evidence": "eBay order shipByDate" if due_day else None,
+            "href": "/dispatch-zone",
+        })
+
+    entries.sort(key=lambda item: (
+        item["due_date"] is None,
+        item["due_date"] or "9999-12-31",
+        item["priority_rank"], item["reference"],
+    ))
+    visible = [item for item in entries if item["due_date"] is None or item["due_date"] <= end.isoformat()]
+    return {"start_date": start.isoformat(), "end_date": end.isoformat(),
+            "as_of": datetime.now(timezone.utc).isoformat(), "entries": visible}
 
 @router.get("/orders")
 async def list_orders(

@@ -100,6 +100,20 @@ def condition_allowed(policy: ConditionPolicy, condition: Condition, consent: bo
 def supplier_allowed(mode: FulfilmentMode, offer: SupplierOffer) -> bool:
     if not offer.approved or offer.supplier_confidence < Decimal("0.8"):
         return False
+    if offer.channel == "software":
+        supplier=offer.supplier.strip().casefold()
+        if supplier == "ubuntu":
+            # An official Ubuntu download is a zero-cost, non-physical
+            # Playbook component. Never let a positive-cost offer use this route.
+            return offer.item_gbp == offer.delivery_gbp == offer.fees_gbp == offer.risk_gbp == Decimal("0")
+        if supplier in {"royalcdkeys", "gamers_outlet", "gamers outlet"}:
+            # Reviewed digital products enter this evidence channel only
+            # after the exact licence offer was source-reviewed. A digital key
+            # has no postage and must be available without supplier delay so
+            # it cannot undermine Fast Track's physical-build commitment.
+            return (offer.item_gbp > Decimal("0") and offer.delivery_gbp == Decimal("0")
+                and offer.fees_gbp == Decimal("0") and offer.delivery_working_days == 0)
+        return False
     if mode == FulfilmentMode.PRIORITY:
         return offer.channel == "retail" and offer.supplier.strip().lower() in {"amazon", "overclockers uk", "overclockers"}
     if mode == FulfilmentMode.STANDARD:

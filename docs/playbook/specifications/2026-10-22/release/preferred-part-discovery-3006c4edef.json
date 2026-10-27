@@ -1,0 +1,442 @@
+{
+  "role": "gpu",
+  "specification": "RTX 5060 Ti 16GB",
+  "observed_at": "2026-10-22T20:09:54.174950+00:00",
+  "commercially_verified": false,
+  "exact_search_candidates": [
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-DisplayPort-2-5-slot-Axial-tech-technology/dp/B0F4DX2GLY/ref=sr_1_2",
+      "title": "Dual GeForce RTX 5060 Ti 16GB GDDR7 OC Edition (PCIe 5.0, 16GB GDDR7, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2.5-slot design, Axial-tech fan design, 0dB technology, and more)",
+      "price": 638.99,
+      "url": "https://www.amazon.co.uk/ASUS-DisplayPort-2-5-slot-Axial-tech-technology/dp/B0F4DX2GLY/ref=sr_1_2?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-2",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81kYKB0Aj5L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-NVIDIA-GeForce-Blackwell-Graphics/dp/B0F4DVKSZ4/ref=sr_1_3",
+      "title": "NVIDIA GeForce RTX 5060 Ti DUAL OC 16GB Blackwell Graphics Card",
+      "price": 638.99,
+      "url": "https://www.amazon.co.uk/ASUS-NVIDIA-GeForce-Blackwell-Graphics/dp/B0F4DVKSZ4/ref=sr_1_3?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-3",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81kYKB0Aj5L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 28
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-Graphics-SFF-Ready-2-5-slot-Axial-tech/dp/B0F4DQYLP5/ref=sr_1_5",
+      "title": "Prime GeForce RTX 5060 Ti 16GB GDDR7 OC Edition Graphics Card (PCIe 5.0, 16GB GDDR7, HDMI/DP 2.1, 2.5 slot, Axial tech fans, Dual BIOS)",
+      "price": 722.99,
+      "url": "https://www.amazon.co.uk/ASUS-Graphics-SFF-Ready-2-5-slot-Axial-tech/dp/B0F4DQYLP5/ref=sr_1_5?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-5",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81DUf-juX8L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-GeForce-5060-SHADOW-Graphics/dp/B0F8BR2H6Z/ref=sr_1_4",
+      "title": "GeForce RTX 5060 Ti 16G SHADOW 2X OC PLUS Graphics Card",
+      "price": 729.99,
+      "url": "https://www.amazon.co.uk/MSI-GeForce-5060-SHADOW-Graphics/dp/B0F8BR2H6Z/ref=sr_1_4?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-4",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71ChfNCaoIL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/GIGABYTE-AORUS-5060-Graphics-GV-N506TIXEB-16GD/dp/B0GF9LX5ZK/ref=sr_1_7",
+      "title": "AORUS RTX 5060 Ti AI BOX Graphics Card - 16GB GDDR7, 128bit, PCI-E 5.0, 2572MHz Core Clock, 3 x DP 2.1, 1 x HDMI 2.1, GV-N506TIXEB-16GD",
+      "price": 874.99,
+      "url": "https://www.amazon.co.uk/GIGABYTE-AORUS-5060-Graphics-GV-N506TIXEB-16GD/dp/B0GF9LX5ZK/ref=sr_1_7?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-7",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71TeC9BJmOL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Gigabyte-GeForce-5060-WINDFORCE-Graphics/dp/B0FDQXHYFW/ref=sr_1_18",
+      "title": "GeForce RTX 5060 Ti WINDFORCE MAX OC 16G Graphics Card - 16GB GDDR7, 128bit, PCI-E 5.0, 2587MHz Core Clock, 3 x DP, 1 x HDMI, NVIDIA DLSS 4, GV-N506TWF2MAX OC-16GD",
+      "price": 908.28,
+      "url": "https://www.amazon.co.uk/Gigabyte-GeForce-5060-WINDFORCE-Graphics/dp/B0FDQXHYFW/ref=sr_1_18?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-18",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71AuwpBRRoL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-GeForce-GAMING-WHITE-Graphics/dp/B0F38FFXDP/ref=sr_1_13",
+      "title": "GeForce RTX 5060 Ti 16G GAMING TRIO OC WHITE Graphics Card",
+      "price": 941.33,
+      "url": "https://www.amazon.co.uk/MSI-GeForce-GAMING-WHITE-Graphics/dp/B0F38FFXDP/ref=sr_1_13?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-13",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71MtPxJ8DgL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 6
+    }
+  ],
+  "all_search_candidates": [
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-DisplayPort-2-5-slot-Axial-tech-technology/dp/B0F4DX2GLY/ref=sr_1_2",
+      "title": "Dual GeForce RTX 5060 Ti 16GB GDDR7 OC Edition (PCIe 5.0, 16GB GDDR7, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2.5-slot design, Axial-tech fan design, 0dB technology, and more)",
+      "price": 638.99,
+      "url": "https://www.amazon.co.uk/ASUS-DisplayPort-2-5-slot-Axial-tech-technology/dp/B0F4DX2GLY/ref=sr_1_2?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-2",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81kYKB0Aj5L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-NVIDIA-GeForce-Blackwell-Graphics/dp/B0F4DVKSZ4/ref=sr_1_3",
+      "title": "NVIDIA GeForce RTX 5060 Ti DUAL OC 16GB Blackwell Graphics Card",
+      "price": 638.99,
+      "url": "https://www.amazon.co.uk/ASUS-NVIDIA-GeForce-Blackwell-Graphics/dp/B0F4DVKSZ4/ref=sr_1_3?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-3",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81kYKB0Aj5L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 28
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-GeForce-5060-SHADOW-Graphics/dp/B0F8BR2H6Z/ref=sr_1_4",
+      "title": "GeForce RTX 5060 Ti 16G SHADOW 2X OC PLUS Graphics Card",
+      "price": 729.99,
+      "url": "https://www.amazon.co.uk/MSI-GeForce-5060-SHADOW-Graphics/dp/B0F8BR2H6Z/ref=sr_1_4?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-4",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71ChfNCaoIL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-Graphics-SFF-Ready-2-5-slot-Axial-tech/dp/B0F4DQYLP5/ref=sr_1_5",
+      "title": "Prime GeForce RTX 5060 Ti 16GB GDDR7 OC Edition Graphics Card (PCIe 5.0, 16GB GDDR7, HDMI/DP 2.1, 2.5 slot, Axial tech fans, Dual BIOS)",
+      "price": 722.99,
+      "url": "https://www.amazon.co.uk/ASUS-Graphics-SFF-Ready-2-5-slot-Axial-tech/dp/B0F4DQYLP5/ref=sr_1_5?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-5",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81DUf-juX8L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-8G-GAMING-TRIO-OC/dp/B096Z886F8/ref=sr_1_6",
+      "title": "GeForce RTX 5060 Ti 8G GAMING TRIO OC Graphics Card - RTX 5060 Ti GPU",
+      "price": 429.99,
+      "url": "https://www.amazon.co.uk/MSI-8G-GAMING-TRIO-OC/dp/B096Z886F8/ref=sr_1_6?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-6",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71WCqRmZYmL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/GIGABYTE-AORUS-5060-Graphics-GV-N506TIXEB-16GD/dp/B0GF9LX5ZK/ref=sr_1_7",
+      "title": "AORUS RTX 5060 Ti AI BOX Graphics Card - 16GB GDDR7, 128bit, PCI-E 5.0, 2572MHz Core Clock, 3 x DP 2.1, 1 x HDMI 2.1, GV-N506TIXEB-16GD",
+      "price": 874.99,
+      "url": "https://www.amazon.co.uk/GIGABYTE-AORUS-5060-Graphics-GV-N506TIXEB-16GD/dp/B0GF9LX5ZK/ref=sr_1_7?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-7",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71TeC9BJmOL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-GeForce-Axial-Tech-DisplayPort-DUAL-RTX5060-O8G/dp/B0F7HZ9QSZ/ref=sr_1_10",
+      "title": "Dual GeForce RTX 5060 8GB GDDR7 OC Edition (PCIe 5.0, 8GB GDDR7, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2.5 slot design, Axial tech fan design, 0dB technology, and more)",
+      "price": 374.99,
+      "url": "https://www.amazon.co.uk/ASUS-GeForce-Axial-Tech-DisplayPort-DUAL-RTX5060-O8G/dp/B0F7HZ9QSZ/ref=sr_1_10?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-10",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81i5KcFKysL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Gigabyte-GeForce-5060-AERO-Graphics/dp/B0F4ZGWSPJ/ref=sr_1_11",
+      "title": "GeForce RTX 5060 Ti AERO OC 8G Graphics Card - 8GB GDDR7, 128bit, PCI-E 5.0, 2647MHz Core Clock, 3 x DisplayPort, 1 x HDMI, GV-N506TAERO OC-8GD",
+      "price": 449.99,
+      "url": "https://www.amazon.co.uk/Gigabyte-GeForce-5060-AERO-Graphics/dp/B0F4ZGWSPJ/ref=sr_1_11?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-11",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/713i93WqAML._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/PNY-GeForce-RTXTM-5060-Overclocked/dp/B0F4Y6N6PW/ref=sr_1_12",
+      "title": "GEFORCE RTX\u2122 5060 Ti 16GB Overclocked Dual Fan DLSS 4",
+      "price": 785.62,
+      "url": "https://www.amazon.co.uk/PNY-GeForce-RTXTM-5060-Overclocked/dp/B0F4Y6N6PW/ref=sr_1_12?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-12",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61S-uoEpvcL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-GeForce-GAMING-WHITE-Graphics/dp/B0F38FFXDP/ref=sr_1_13",
+      "title": "GeForce RTX 5060 Ti 16G GAMING TRIO OC WHITE Graphics Card",
+      "price": 941.33,
+      "url": "https://www.amazon.co.uk/MSI-GeForce-GAMING-WHITE-Graphics/dp/B0F38FFXDP/ref=sr_1_13?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-13",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71MtPxJ8DgL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 6
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-GeForce-5060-VENTUS-Graphics/dp/B0F32ND24S/ref=sr_1_16_mod_primary_new",
+      "title": "GeForce RTX 5060 Ti 8G VENTUS 2X OC PLUS Graphics Card",
+      "price": 472.0,
+      "url": "https://www.amazon.co.uk/MSI-GeForce-5060-VENTUS-Graphics/dp/B0F32ND24S/ref=sr_1_16_mod_primary_new?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sbo=RZvfv%2F%2FHxDF%2BO5021pAnSA%3D%3D&sr=1-16",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71yZ+zHNPxL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-DisplayPort-2-5-slot-Axial-tech-technology/dp/B0F4DWKRBQ/ref=sr_1_17",
+      "title": "Dual GeForce RTX 5060 Ti 8GB GDDR7 OC Edition (PCIe 5.0, 8GB GDDR7, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2.5-slot design, Axial-tech fan design, 0dB technology, and more)",
+      "price": 479.99,
+      "url": "https://www.amazon.co.uk/ASUS-DisplayPort-2-5-slot-Axial-tech-technology/dp/B0F4DWKRBQ/ref=sr_1_17?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-17",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81-KEx-lGSL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 28
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Gigabyte-GeForce-5060-WINDFORCE-Graphics/dp/B0FDQXHYFW/ref=sr_1_18",
+      "title": "GeForce RTX 5060 Ti WINDFORCE MAX OC 16G Graphics Card - 16GB GDDR7, 128bit, PCI-E 5.0, 2587MHz Core Clock, 3 x DP, 1 x HDMI, NVIDIA DLSS 4, GV-N506TWF2MAX OC-16GD",
+      "price": 908.28,
+      "url": "https://www.amazon.co.uk/Gigabyte-GeForce-5060-WINDFORCE-Graphics/dp/B0FDQXHYFW/ref=sr_1_18?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-18",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71AuwpBRRoL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-Graphics-DisplayPort-2-5-Slot-Technology/dp/B0BSHD2SQ5/ref=sr_1_19",
+      "title": "Dual NVIDIA GeForce RTX 5060 Ti 8GB GDDR7 Graphics Card (PCIe 5.0, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2.5-Slot, Axial Fans, 0dB Technology, Dual BIOS)",
+      "price": 509.0,
+      "url": "https://www.amazon.co.uk/ASUS-Graphics-DisplayPort-2-5-Slot-Technology/dp/B0BSHD2SQ5/ref=sr_1_19?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-19",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81MNpj2q4IL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 28
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Gigabyte-Radeon-9060-GAMING-Graphics/dp/B0F7HTR8DQ/ref=sr_1_20",
+      "title": "Radeon RX 9060 XT GAMING OC 16G Graphics Card - 16GB GDDR6, 128bit, PCI-E 5.0, 3320 MHz Core Clock, 2 x DisplayPort, 1 x HDMI, GV-R9060XTGAMING OC-16GD",
+      "price": 539.99,
+      "url": "https://www.amazon.co.uk/Gigabyte-Radeon-9060-GAMING-Graphics/dp/B0F7HTR8DQ/ref=sr_1_20?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-20",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71DKs53RKNL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-GeForce-5070-GAMING-Graphics/dp/B0F1NJF1K4/ref=sr_1_21",
+      "title": "GeForce RTX 5070 Ti 16G GAMING TRIO OC Graphics Card - RTX 5070 Ti GPU",
+      "price": 1209.75,
+      "url": "https://www.amazon.co.uk/MSI-GeForce-5070-GAMING-Graphics/dp/B0F1NJF1K4/ref=sr_1_21?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-21",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71YnD7X0ijL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Gigabyte-GeForce-5060-EAGLE-Graphics/dp/B0F4Z91V5S/ref=sr_1_22",
+      "title": "GeForce RTX 5060 Ti EAGLE OC ICE 8G Graphics Card - 8GB GDDR7, 128bit, PCI-E 5.0, 2617MHz Core Clock, 3 x DisplayPort, 1 x HDMI, GV-N506TEAGLEOC ICE-8GD",
+      "price": 449.99,
+      "url": "https://www.amazon.co.uk/Gigabyte-GeForce-5060-EAGLE-Graphics/dp/B0F4Z91V5S/ref=sr_1_22?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-22",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71vFci6hXeL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/PNY-GeForce-RTXTM-5060-Overclocked/dp/B0F4YRNHSJ/ref=sr_1_24",
+      "title": "GEFORCE RTX\u2122 5060 Ti 8GB Overclocked Dual Fan DLSS 4",
+      "price": 489.99,
+      "url": "https://www.amazon.co.uk/PNY-GeForce-RTXTM-5060-Overclocked/dp/B0F4YRNHSJ/ref=sr_1_24?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-24",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61T3vqv9bpL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 29
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Gigabyte-GeForce-5060-EAGLE-Graphics/dp/B0F4Z6ZDWF/ref=sr_1_25",
+      "title": "GeForce RTX 5060 Ti EAGLE OC 8G Graphics Card - 8GB GDDR7, 128bit, PCI-E 5.0, 2617MHz Core Clock, 3 x DisplayPort, 1 x HDMI, GV-N506TEAGLE OC-8GD",
+      "price": 439.99,
+      "url": "https://www.amazon.co.uk/Gigabyte-GeForce-5060-EAGLE-Graphics/dp/B0F4Z6ZDWF/ref=sr_1_25?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-25",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/716mTKqA0cL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-GeForce-PRIME-GDDR7-Graphics/dp/B0DVGVZZYY/ref=sr_1_26",
+      "title": "GeForce RTX 5070 Ti PRIME 16GB GDDR7 OC Graphics Card",
+      "price": 1129.99,
+      "url": "https://www.amazon.co.uk/ASUS-GeForce-PRIME-GDDR7-Graphics/dp/B0DVGVZZYY/ref=sr_1_26?dib=eyJ2IjoiMSJ9.4_TBI6tj-IYiaYTHExNFBAVfRma0MMjKA8ixUSRrIaaVWU7jYW5g6-v-y3Z10KLwEO4QpLNTm7YdDbFmc2OnY-rRsxnX5gMWDg1CutUbnQRZsKkq9Llt4UPZ1HTd0MPk10SuB2DlJJcikI8qu75c-EcLoZ0LfXF0Xjo3hal3H1oEJ9RirAOct_8O1pPPqXiWzLXsguYSwJjYm7GNFv3Kgck23GpqO3sjte4gJ7QrNwPDuhwHpDf9FAccI9qT468bWzFKE0uJ9bGTpwuG1sBh8sJ6qighcFixOch1Vm34cLk.BmmVdwIeAhx7N4OT8ksXf9MFvy_1bt7fW4vwgT_T2VA&dib_tag=se&keywords=RTX+5060+Ti+16GB+graphics+card&qid=1792699790&s=computers&sr=1-26",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81PfcRFvKTL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "RTX 5060 Ti 16GB graphics card",
+      "estimated_delivery_days": 26
+    }
+  ],
+  "exact_offer": {
+    "status": "captured",
+    "url": "https://www.amazon.co.uk/dp/B0F4DX2GLY",
+    "observed_at": "2026-10-22T20:09:56.359437+00:00",
+    "title": "ASUS Dual GeForce RTX 5060 Ti 16GB GDDR7 OC Edition (PCIe 5.0, 16GB GDDR7, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2.5-slot design, Axial-tech fan design, 0dB technology, and more)",
+    "sku": "B0F4DX2GLY",
+    "mpn": null,
+    "merchant_name": null,
+    "condition": "new",
+    "item_gbp": "638.99",
+    "delivery_gbp": "0",
+    "postage_verified": true,
+    "delivery_calendar_days": 4,
+    "delivery_working_days": 4,
+    "delivery_estimate_source": "amazon_displayed_default_destination",
+    "prime_eligible": null,
+    "delivery_destination": "TW12",
+    "stock_status": "available",
+    "stock_evidence": "In stock",
+    "product_properties": {
+      "Graphics co-processor": "Nvidia RTX 5060 Ti",
+      "Brand": "ASUS",
+      "Graphics RAM size": "16 GB",
+      "GPU clock speed": "2572 MHz",
+      "Video output interface": "DisplayPort, HDMI",
+      "Graphics processor manufacturer": "NVIDIA",
+      "Graphics RAM type": "GDDR7",
+      "Recommended uses for product": "Gaming",
+      "Included components": "1 x Speedsetup Manual, 1 x TUF Gaming Certificate, 1 x TUF Graphics Card Holder, 1 x TUF Velcro Hook & Loop, Graphics Cards See more",
+      "Compatible devices": "Desktop",
+      "Graphics Coprocessor": "Nvidia RTX 5060 Ti",
+      "Graphics Card Ram": "16 GB",
+      "GPU Clock Speed": "2572 MHz",
+      "Video Output Interface": "DisplayPort, HDMI",
+      "Graphics Ram Type": "GDDR7",
+      "Compatible Devices": "Desktop",
+      "Graphics Card Interface": "PCI Express",
+      "Memory Clock Speed": "2662 MHz",
+      "Number of Fans": "3",
+      "GPU Series": "NVIDIA RTX 50 Series",
+      "Display Maximum Resolution": "3840 x 2160",
+      "Maximum Display Resolution": "7680x4320",
+      "Item Dimensions L x W": "30.2L x 13.3W centimetres",
+      "Brand Name": "ASUS",
+      "Video Processor": "NVIDIA",
+      "Antenna Location": "Gaming",
+      "Box Contents": "1 x Speedsetup Manual, 1 x TUF Gaming Certificate, 1 x TUF Graphics Card Holder, 1 x TUF Velcro Hook & Loop, Graphics Cards",
+      "Model Name": "TUF GAMING RTX5060 Ti OC",
+      "Graphics Description": "NVIDIA GeForce RTX5060 Ti with 16GB GDDR7 and 2662 MHz core clock speed",
+      "Global Trade Identification Number": "04711387994382",
+      "Number of Packs": "1",
+      "Manufacturer": "ASUS",
+      "Number of Items": "1",
+      "Country of Origin": "China",
+      "Item Weight": "1 Kilograms",
+      "Model Number": "90YV0MG0-M0NA00",
+      "Manufacturer Part Number": "90YV0MG0-M0NA00",
+      "Product Warranty": "3 Years Manufacturer",
+      "Best Sellers Rank": "3,422 in Computers & Accessories ( See Top 100 in Computers & Accessories ) 9 in Graphics Cards",
+      "ASIN": "B0F4DX2GLY",
+      "Customer Reviews": "4.4 4.4 out of 5 stars (114) 4.4 out of 5 stars"
+    },
+    "product_image_urls": [
+      "https://m.media-amazon.com/images/I/41i3L5tbxpL._AC_US40_.jpg",
+      "https://m.media-amazon.com/images/I/41w9nl2vxGL._AC_US40_.jpg",
+      "https://m.media-amazon.com/images/I/51Cwq11PJaL._AC_US40_.jpg",
+      "https://m.media-amazon.com/images/I/41sEWMgr8CL._AC_US40_.jpg",
+      "https://m.media-amazon.com/images/I/41d2tW7ogeL._AC_US40_.jpg",
+      "https://m.media-amazon.com/images/I/51TT4DQqgRL._AC_US40_.jpg",
+      "https://m.media-amazon.com/images/I/51dHWFKkVNL.SS40_BG85,85,85_BR-120_PKdp-play-icon-overlay__.jpg",
+      "https://m.media-amazon.com/images/I/81kYKB0Aj5L._AC_SY355_.jpg",
+      "https://m.media-amazon.com/images/I/81kYKB0Aj5L._AC_SY450_.jpg",
+      "https://m.media-amazon.com/images/I/81kYKB0Aj5L._AC_SX425_.jpg",
+      "https://m.media-amazon.com/images/I/81kYKB0Aj5L._AC_SX466_.jpg",
+      "https://m.media-amazon.com/images/I/81kYKB0Aj5L._AC_SX522_.jpg",
+      "https://m.media-amazon.com/images/I/81kYKB0Aj5L._AC_SX569_.jpg",
+      "https://m.media-amazon.com/images/I/81kYKB0Aj5L._AC_SX679_.jpg"
+    ],
+    "engineering_reviewed": false,
+    "merchant_text": null
+  }
+}

@@ -324,6 +324,9 @@ async def approve_proposal(
     if proposal.status != "pending":
         raise HTTPException(409, detail=f"Proposal is already {proposal.status}")
 
+    if (proposal.demand_signals or {}).get("source") == "catalogue_playbook_service_v1":
+        raise HTTPException(409, "Review this generated build through the Playbook service approval endpoint")
+
     now = datetime.utcnow()
 
     if proposal.action == "CREATE":
@@ -456,6 +459,8 @@ async def reject_proposal(
     db: AsyncSession = Depends(get_db),
 ):
     proposal = await _get_proposal_or_404(proposal_id, db)
+    if (proposal.demand_signals or {}).get("source") == "catalogue_playbook_service_v1":
+        raise HTTPException(409, "Review this generated build through the Playbook service approval endpoint")
     if proposal.status != "pending":
         raise HTTPException(409, detail=f"Proposal is already {proposal.status}")
 

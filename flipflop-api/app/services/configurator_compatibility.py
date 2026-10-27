@@ -16,6 +16,7 @@ positive signal of conflict).
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import re
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -79,6 +80,7 @@ RULE_CPU_SOCKET_MISMATCH = "CPU_SOCKET_MISMATCH"
 RULE_COOLER_SOCKET_MISMATCH = "COOLER_SOCKET_MISMATCH"
 RULE_PSU_INSUFFICIENT = "PSU_INSUFFICIENT"
 RULE_GPU_CLEARANCE = "GPU_CLEARANCE"
+RULE_M2_SLOT_COUNT = "M2_SLOT_COUNT"
 RULE_DB_RULE = "CUSTOM_RULE"  # from a CompatibilityRule DB row — see rule.id for specifics
 
 
@@ -263,6 +265,20 @@ def _judge_variant(
                         "is tight for a card this size — check the exact card length before ordering",
                         RULE_GPU_CLEARANCE,
                     )
+
+    if slot_type == 'storage' or slot_type.startswith('storage_'):
+        board_spec=match_motherboard_spec(mobo_text,mobo_specs) if mobo_text else None
+        if board_spec and board_spec.reviewed and isinstance(board_spec.m2_slots,int):
+            is_nvme=lambda value: bool(re.search(r'\b(?:nvme|m\.2)\b',value,re.I))
+            required_nvme=int(is_nvme(candidate_title))+sum(
+                1 for key,value in selected.items()
+                if (key=='storage' or key.startswith('storage_')) and key!=slot_type and is_nvme(value))
+            if required_nvme>board_spec.m2_slots:
+                return verdict.fail(
+                    f'This configuration needs {required_nvme} M.2 drives but '
+                    f'{board_spec.canonical_model} has {board_spec.m2_slots} reviewed M.2 slots',
+                    RULE_M2_SLOT_COUNT,
+                )
 
     return verdict
 

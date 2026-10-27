@@ -8,6 +8,10 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.api.playbook_commercial_quotes import router as playbook_quote_router
+from app.api.commercial_readiness import router as commercial_readiness_router
+from app.api.playbook_service import router as playbook_service_router
+from app.api.configuration_commercial_quotes import router as configuration_quote_router
 from app.models.admin_user import AdminUser
 from app.models.commerce_evidence import (
     PriceQuoteSnapshot, SupplierOfferEvidence, WorkshopCapacityEvidence,
@@ -22,6 +26,11 @@ from app.services.workshop_capacity import (
 )
 
 router = APIRouter(prefix="/commerce-intelligence", tags=["commerce-intelligence"], dependencies=[Depends(get_current_admin)])
+
+router.include_router(playbook_quote_router)
+router.include_router(commercial_readiness_router)
+router.include_router(playbook_service_router)
+router.include_router(configuration_quote_router)
 
 
 class CostStackInput(BaseModel):
@@ -78,27 +87,7 @@ async def capture_supplier_offer(
     db: AsyncSession = Depends(get_db),
     admin: AdminUser = Depends(get_current_admin),
 ) -> dict:
-    observed_at = body.observed_at
-    if observed_at.tzinfo is None:
-        raise HTTPException(status_code=422, detail="observed_at must include a timezone")
-    if observed_at > datetime.now(timezone.utc):
-        raise HTTPException(status_code=422, detail="observed_at cannot be in the future")
-    delivery_days, delivery_source = estimate_delivery_working_days(
-        body.supplier, body.delivery_working_days, body.prime_eligible,
-    )
-    row = SupplierOfferEvidence(
-        part_key=body.part_key, supplier=body.supplier, channel=body.channel,
-        condition=body.condition.value, item_gbp=body.item_gbp, delivery_gbp=body.delivery_gbp,
-        fees_gbp=body.fees_gbp, risk_gbp=body.risk_gbp, observed_at=observed_at,
-        stock_confirmed=body.stock_confirmed, delivery_working_days=delivery_days,
-        prime_eligible=body.prime_eligible, delivery_estimate_source=delivery_source,
-        supplier_confidence=body.supplier_confidence, evidence_source=body.evidence_source,
-        evidence_ref=body.evidence_ref, captured_by_admin_id=admin.id,
-    )
-    db.add(row)
-    await db.commit()
-    await db.refresh(row)
-    return {"id": row.id, "part_key": row.part_key, "status": "captured", "captured_at": row.captured_at.isoformat(), "delivery_working_days": row.delivery_working_days, "delivery_estimate_source": row.delivery_estimate_source}
+    raise HTTPException(status_code=409, detail="Supplier prices and stock must come from captured catalogue listings; manual offer entry is disabled.")
 
 
 class QuoteSnapshotRequest(BaseModel):
@@ -134,27 +123,15 @@ async def create_quote_snapshot(
 
     capacity = None
     if body.fulfilment_mode != FulfilmentMode.READY_TO_SHIP:
-        if body.capacity_evidence_id is None:
-            return await _save_quote_snapshot(
-                db, body, admin, rows, None,
-                {"offerable": False, "reason": "Current workshop capacity evidence is required"},
-            )
-        capacity = await db.get(WorkshopCapacityEvidence, body.capacity_evidence_id)
-        if capacity is None:
-            raise HTTPException(status_code=422, detail="Workshop capacity evidence record does not exist")
-        now = datetime.now(timezone.utc)
-        latest = await latest_capacity_evidence(db, capacity.build_week)
-        active_holds = await active_hold_count(db, capacity.build_week, now)
-        if (
-            latest is None or latest.id != capacity.id
-            or not capacity_evidence_is_current(capacity, now)
-            or active_holds >= capacity.available_builds
-        ):
-            return await _save_quote_snapshot(
-                db, body, admin, rows, None,
-                {"offerable": False, "reason": "Workshop capacity evidence is superseded, stale, full, or for a past build week"},
-                capacity,
-            )
+        if body.capacity_evidence_id is not None:
+            capacity = await db.get(WorkshopCapacityEvidence, body.capacity_evidence_id)
+            if capacity is None:
+                raise HTTPException(status_code=422, detail="Workshop planning evidence record does not exist")
+            latest = await latest_capacity_evidence(db, capacity.build_week)
+            if (latest is None or latest.id != capacity.id
+                    or not capacity_evidence_is_current(capacity, datetime.now(timezone.utc))):
+                # Stale planning evidence is ignored; it does not stop an offer.
+                capacity = None
     offers = [SupplierOffer(
         supplier=row.supplier, channel=row.channel, condition=Condition(row.condition),
         item_gbp=Decimal(row.item_gbp), delivery_gbp=Decimal(row.delivery_gbp), fees_gbp=Decimal(row.fees_gbp),
@@ -165,7 +142,9 @@ async def create_quote_snapshot(
     ) for row in rows]
     eligible = eligible_offers(
         offers, body.fulfilment_mode, body.condition_policy, body.nonnew_consent,
-        priority_capacity=capacity is not None,
+        # Fast Track eligibility comes from exact supplier delivery evidence,
+        # not from a manually entered number of workshop slots.
+        priority_capacity=True,
     )
     part_keys = [row.part_key for row in rows]
     required_keys = body.required_part_keys
@@ -391,12 +370,9 @@ async def reserve_workshop_capacity(
         raise HTTPException(status_code=409, detail="Supplier evidence has expired")
 
     capacity = await latest_capacity_evidence(db, build_week)
-    if (
-        capacity is None or capacity.id != capacity_ref.get("id")
-        or not capacity_evidence_is_current(capacity, now)
-        or await active_hold_count(db, build_week, now) >= capacity.available_builds
-    ):
-        raise HTTPException(status_code=409, detail="Workshop capacity is no longer available")
+    if (capacity is None or capacity.id != capacity_ref.get("id")
+            or not capacity_evidence_is_current(capacity, now)):
+        raise HTTPException(status_code=409, detail="Workshop planning evidence changed; refresh the schedule")
 
     reservation = WorkshopCapacityReservation(
         quote_snapshot_id=quote_snapshot_id, capacity_evidence_id=capacity.id,
