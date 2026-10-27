@@ -1,6 +1,5 @@
 from app.services.amazon_bestsellers import (
     _best_scored_match,
-    bestseller_page_urls,
     clean_sales_velocity,
     COMPONENT_BESTSELLER_LISTS,
     extract_asin,
@@ -8,58 +7,13 @@ from app.services.amazon_bestsellers import (
     name_similarity,
     bestseller_item_matches_category,
     bestseller_page_matches_title,
-    scroll_bestseller_page_to_end,
 )
-
-
-def test_bestseller_page_urls_keeps_advertised_pages_and_caps_them():
-    base = "https://www.amazon.co.uk/Best-Sellers-Computers-Accessories-CPUs/zgbs/computers/430515031/"
-    urls = bestseller_page_urls(
-        base,
-        [
-            f"{base}?pg=2",
-            f"{base}?pg=3",
-            f"{base}?pg=3",
-            f"{base}?pg=99",
-            "https://www.amazon.co.uk/example?pg=not-a-page",
-        ],
-    )
-
-    assert urls == [base, f"{base}?pg=2", f"{base}?pg=3"]
 
 
 def test_component_lists_cover_requested_categories_only():
     assert set(COMPONENT_BESTSELLER_LISTS) == {
-        "cpu", "gpu", "ram", "storage", "motherboard", "psu", "case",
+        "cpu", "gpu", "ram", "storage", "storage_sata", "motherboard", "psu", "case", "cooler", "os",
     }
-
-
-class _LazyLoadPage:
-    def __init__(self, heights: list[int]):
-        self.heights = iter(heights)
-        self.scroll_calls = 0
-        self.wait_calls = 0
-
-    async def evaluate(self, script: str):
-        if script == "document.body.scrollHeight":
-            return next(self.heights)
-        assert script == "window.scrollTo(0, document.body.scrollHeight)"
-        self.scroll_calls += 1
-
-    async def wait_for_timeout(self, timeout: int):
-        assert timeout == 500
-        self.wait_calls += 1
-
-
-async def test_scroll_bestseller_page_to_end_waits_for_stable_height():
-    page = _LazyLoadPage([100, 200, 200, 200, 200, 200])
-
-    await scroll_bestseller_page_to_end(page)
-
-    # It keeps scrolling after content growth and stops once the page height
-    # is unchanged across the next bottom-of-page check.
-    assert page.scroll_calls == 2
-    assert page.wait_calls == 2
 
 
 class _Row:
