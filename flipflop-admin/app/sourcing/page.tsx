@@ -863,13 +863,17 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
   const avgSuperGemScore = status?.avgSuperGemScore ?? 0;
   const avgGemScore = status?.avgGemScore ?? 0;
   const hasActiveRun = displayedScans.length > 0 || Boolean(status?.activeScans?.length);
-  const displayedListingCount = hasActiveRun ? (status?.totalsAcrossActive.ingestedCount ?? 0) : 0;
-  const displayedSuperGemCount = hasActiveRun ? superGemCount : 0;
-  const displayedAvgSuperGemScore = hasActiveRun ? avgSuperGemScore : 0;
-  const displayedGemCount = hasActiveRun ? gemCount : 0;
-  const displayedAvgGemScore = hasActiveRun ? avgGemScore : 0;
-  const displayedBinPricesCount = hasActiveRun ? (status?.binPricesCount ?? 0) : 0;
-  const displayedSoldPricesCount = hasActiveRun ? (status?.soldPricesCount ?? 0) : 0;
+  const displayedListingCount = hasActiveRun
+    ? (status?.totalsAcrossActive.ingestedCount ?? 0)
+    : latestRun?.metricsKnown
+      ? (latestRun.ingestedCount || latestRun.totalListingsFound)
+      : latestRun?.totalListingsFound ?? 0;
+  const displayedSuperGemCount = hasActiveRun ? superGemCount : latestRun?.superGemCount ?? 0;
+  const displayedAvgSuperGemScore = hasActiveRun ? avgSuperGemScore : latestRun?.avgSuperGemScore ?? 0;
+  const displayedGemCount = hasActiveRun ? gemCount : latestRun?.gemCount ?? 0;
+  const displayedAvgGemScore = hasActiveRun ? avgGemScore : latestRun?.avgGemScore ?? 0;
+  const displayedBinPricesCount = hasActiveRun ? (status?.binPricesCount ?? 0) : latestRun?.binPricesCount ?? 0;
+  const displayedSoldPricesCount = hasActiveRun ? (status?.soldPricesCount ?? 0) : latestRun?.soldPricesCount ?? 0;
 
   return (
     <div className="mb-6 p-4 rounded-lg glass-panel">
@@ -2701,6 +2705,17 @@ interface ScanRunHistory {
   runBy: string;
   durationSeconds: number;
   occurredAt: string;
+  metricsKnown?: boolean;
+  ingestedCount?: number;
+  cpkAssignedCount?: number;
+  marketPricedCount?: number;
+  classifiedCount?: number;
+  gemCount?: number;
+  superGemCount?: number;
+  avgGemScore?: number;
+  avgSuperGemScore?: number;
+  binPricesCount?: number;
+  soldPricesCount?: number;
 }
 
 type ScanChartMetric = "processed" | "observations";
@@ -2915,21 +2930,7 @@ const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
   );
 });
 
-const AnalyticsTab = memo(function AnalyticsTab() {
-  const [analytics, setAnalytics] = useState<{ items: AnalyticsListing[]; total: number; classification_counts: Record<string, number> } | null>(null);
-  const [analyticsError, setAnalyticsError] = useState<string | null>(null);
-  useEffect(() => {
-    const controller = new AbortController();
-    fetch("/api/gem-radar/sourcing-analytics", { cache: "no-store", signal: controller.signal })
-      .then(async response => {
-        if (!response.ok) throw new Error(`Analytics API returned ${response.status}`);
-        return response.json();
-      })
-      .then(data => { setAnalytics(data); setAnalyticsError(null); })
-      .catch(error => { if (!controller.signal.aborted) setAnalyticsError(String(error)); });
-    return () => controller.abort();
-  }, []);
-  const listings = analytics?.items ?? [];
+const AnalyticsTab = memo(function AnalyticsTab({ listings }: { listings: Listing[] }) {
   return (
     <div className="space-y-6">
       <ScanRunsOverTimeChart />

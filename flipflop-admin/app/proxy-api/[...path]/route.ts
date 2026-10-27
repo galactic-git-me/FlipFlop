@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const backendUrl = (process.env.BACKEND_URL ?? "http://localhost:4311").replace(/\/$/, "");
+const backendUrl = (process.env.BACKEND_URL ?? "http://localhost:4314").replace(/\/$/, "");
 const ebayOpsBackendUrl = (process.env.EBAY_OPS_BACKEND_URL ?? "").replace(/\/$/, "");
 
 function backendForPath(path: string[]): string {

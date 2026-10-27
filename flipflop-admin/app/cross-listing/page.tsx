@@ -1,5 +1,12 @@
 "use client";
 
+// This page is an interactive cross-listing tool with no meaningful static
+// content -- it has no reason to be prerendered at build time, and static
+// prerendering of this route hits a Next.js build bug producing a missing
+// "default-stylesheet.css" ENOENT during `next build`. Forcing dynamic
+// rendering skips prerendering entirely and avoids the bug.
+export const dynamic = "force-dynamic";
+
 import { useCallback, useEffect, useMemo, useState } from "react";
 import JSZip from "jszip";
 import DOMPurify from "dompurify";
@@ -135,7 +142,10 @@ function isLocalDevelopment() {
 }
 
 function isDevelopmentMode() {
-  return process.env.NEXT_PUBLIC_APP_MODE !== "live";
+  // Fake /dev-listings pages are a development-only escape hatch. Treat
+  // every value other than the explicit dev mode as live so a missing,
+  // stale, or differently named production value cannot create fake links.
+  return process.env.NEXT_PUBLIC_APP_MODE === "dev";
 }
 
 function devListingUrl(source: CrossListingSource, channel: ChannelCapability) {

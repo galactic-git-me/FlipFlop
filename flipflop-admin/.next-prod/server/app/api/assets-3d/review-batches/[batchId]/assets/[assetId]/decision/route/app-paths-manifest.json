@@ -1,0 +1,3 @@
+{
+  "/api/assets-3d/review-batches/[batchId]/assets/[assetId]/decision/route": "app/api/assets-3d/review-batches/[batchId]/assets/[assetId]/decision/route.js"
+}

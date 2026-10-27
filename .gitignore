@@ -48,6 +48,8 @@ flipflop-api/data/ebay_playwright_state.json
 flipflop-api/data/ebay_sandbox_token_cache.json
 tmp/pdfs/
 policies/.~lock.policies.ods#
+flipflop-api/data/scheduler_state.json
+flipflop-api/data/term_cycle_state.json
 
 # env files
 .env*
