@@ -52,10 +52,10 @@ def values(table,row):
     return result
 
 async def upsert(db,table,row,identity):
-    query=select(table.c.id)
-    for key in identity:query=query.where(table.c[key]==row[key])
-    found=(await db.execute(query)).scalar_one_or_none()
     data=values(table,row)
+    query=select(table.c.id)
+    for key in identity:query=query.where(table.c[key]==data[key])
+    found=(await db.execute(query.order_by(table.c.id.desc()).limit(1))).scalar_one_or_none()
     if found is None:
         return (await db.execute(table.insert().values(**data).returning(table.c.id))).scalar_one()
     await db.execute(table.update().where(table.c.id==found).values(**data))
@@ -90,13 +90,13 @@ async def main(bundle_path,apply=False):
             if row['subject_type'] in {'variant','case'} and row['subject_id'] is None:continue
             for key in ('glb_ref','preview_image_ref'):
                 if isinstance(row.get(key),str):row[key]=row[key].replace('http://127.0.0.1:4311','https://www.theflipflop.shop')
-            await upsert(db,tables['component_3d_assets'],row,['subject_type','subject_id','category','family_key','version'])
+            await upsert(db,tables['component_3d_assets'],row,['subject_type','subject_id','category','family_key','version','glb_ref'])
         for original in bundle['supplier_evidence']:
             row=deepcopy(original);kind,old=row['part_key'].split(':',1)
             mapping=MAPS['variants' if kind=='variant' else 'cases'];row['part_key']=f'{kind}:{mapping[int(old)]}'
             await upsert(db,tables['supplier_offer_evidence'],row,['part_key','evidence_source','evidence_ref'])
         for row in bundle['benchmarks']:
-            await upsert(db,tables['hardware_benchmarks'],row,['component_type','normalized_model','benchmark_source'])
+            await upsert(db,tables['hardware_benchmarks'],row,['component_type','normalized_model','model','benchmark_source'])
         from app.models.playbook import PlaybookProposal
         from app.services.playbook_service import fingerprint
         from app.services.playbook_mvp import commercial_revision_payload
