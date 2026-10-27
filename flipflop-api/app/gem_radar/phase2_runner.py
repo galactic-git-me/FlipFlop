@@ -90,7 +90,8 @@ async def run_phase2_classification(
                 lo.epid, lo.seller_feedback_percent, lo.seller_feedback_count,
                 lo.delivery_text, lo.delivery_postcode, lo.prime_eligible,
                 lo.delivery_working_days, lo.delivery_estimate_source,
-                lo.review_average_rating, lo.review_count
+                lo.review_average_rating, lo.review_count,
+                lo.commercial_source_evidence->>'url' AS captured_url
             FROM gem_radar_listing_observations lo
             LEFT JOIN gem_radar_listing_cpk cpk ON lo.listing_id = cpk.listing_id
             ORDER BY lo.listing_id, lo.observed_at DESC, lo.id DESC
@@ -192,7 +193,7 @@ async def run_phase2_classification(
             cpk, cpk_data, observed_category, bid_count, watch_count,
             epid, seller_feedback_percent, seller_feedback_count,
             delivery_text, delivery_postcode, prime_eligible, delivery_working_days,
-            delivery_estimate_source, observed_review_average, observed_review_count,
+            delivery_estimate_source, observed_review_average, observed_review_count, captured_url,
         ) = row
 
         if source == "amazon" and observed_at >= datetime.utcnow() - timedelta(hours=24):
@@ -260,7 +261,7 @@ async def run_phase2_classification(
                 # Search-page fallbacks are evidence discovery, not listings.
                 if source not in {"ebay", "amazon", "vinted"}:
                     continue
-                exact_url = fallback_listing_url(listing_id, source, title)
+                exact_url = captured_url or fallback_listing_url(listing_id, source, title)
                 if not exact_url:
                     continue
                 alert.triggered_at = datetime.utcnow()
@@ -378,7 +379,7 @@ async def run_phase2_classification(
             listing_id=listing_id,
             search_run_id=SEARCH_RUN_ID,
             source=source,
-            url=fallback_listing_url(listing_id, source, title),
+            url=captured_url or fallback_listing_url(listing_id, source, title),
             title=title,
             seller_name=seller_name,
             image_url=image_url,

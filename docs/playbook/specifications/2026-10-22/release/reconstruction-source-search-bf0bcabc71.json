@@ -1,0 +1,268 @@
+{
+  "query": "AMD Ryzen 5 5600G processor",
+  "observed_at": "2026-10-22T19:47:05.284868+00:00",
+  "source": "amazon_search",
+  "commercially_verified": false,
+  "products": [
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5600-Processor-12-thread/dp/B09VCHR1VH/ref=sr_1_1",
+      "title": "AMD",
+      "price": 121.98,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5600-Processor-12-thread/dp/B09VCHR1VH/ref=sr_1_1?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-1",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51So7GoGvxL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5500-Processor-12-thread/dp/B09VCJ171S/ref=sr_1_3",
+      "title": "AMD Ryzen 5 5500 Processor (6 cores/12 threads, 65W DTP, AM4 socket, 19 MB cache, up to 4.2 GHz max boost, wraith stealth cooler)",
+      "price": 79.99,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5500-Processor-12-thread/dp/B09VCJ171S/ref=sr_1_3?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-3",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51So7GoGvxL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-8500G-Retail-Stealth/dp/B0CQ4JV8D5/ref=sr_1_5",
+      "title": "AMD",
+      "price": 129.0,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-8500G-Retail-Stealth/dp/B0CQ4JV8D5/ref=sr_1_5?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-5",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51193NWpmHL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-4500-MPK-units/dp/B09XN6XJ27/ref=sr_1_6",
+      "title": "AMD",
+      "price": 145.35,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-4500-MPK-units/dp/B09XN6XJ27/ref=sr_1_6?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-6",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/11BE1OvJZtL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5600X-Processor-Cache/dp/B08166SLDF/ref=sr_1_8",
+      "title": "AMD",
+      "price": 145.99,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5600X-Processor-Cache/dp/B08166SLDF/ref=sr_1_8?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-8",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51ld6RR8IrL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Six-Core-Twelve-Thread-100-000000252-Support-Desktop/dp/B0GSX868JL/ref=sr_1_9",
+      "title": "R 5 5600G N R5 3.9GHz Six-Core Twelve-Thread 65W L3=16M 100-000000252 Support Desktop CPU Gaming Socket AM4",
+      "price": 254.45,
+      "url": "https://www.amazon.co.uk/Six-Core-Twelve-Thread-100-000000252-Support-Desktop/dp/B0GSX868JL/ref=sr_1_9?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-9",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/510cunqCa+L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Veno-Scorp-Gaming-Processor-Integrated/dp/B0D4MDKKDW/ref=sr_1_10",
+      "title": "Veno Scorp",
+      "price": 459.0,
+      "url": "https://www.amazon.co.uk/Veno-Scorp-Gaming-Processor-Integrated/dp/B0D4MDKKDW/ref=sr_1_10?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-10",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71UYLWtVn9L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/3-9GHz-Six-Core-Twelve-Thread-Processor-100-000000252/dp/B0GTMTPH6V/ref=sr_1_12",
+      "title": "R 5 5600G R5 3.9GHz Six-Core Twelve-Thread 65W CPU Processor L3=16M 100-000000252 Socket AM4 N But No Fan",
+      "price": 237.46,
+      "url": "https://www.amazon.co.uk/3-9GHz-Six-Core-Twelve-Thread-Processor-100-000000252/dp/B0GTMTPH6V/ref=sr_1_12?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-12",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71Sd5fXiuKL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Veno-Scorp-Gaming-PC-Graphics/dp/B0C8VC377Z/ref=sr_1_13",
+      "title": "Veno Scorp",
+      "price": 591.5,
+      "url": "https://www.amazon.co.uk/Veno-Scorp-Gaming-PC-Graphics/dp/B0C8VC377Z/ref=sr_1_13?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-13",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71krzLp7ZwL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Processor-3D-V-CacheTM-Technology/dp/B0DVZSG8D5/ref=sr_1_14_mod_primary_new",
+      "title": "AMD",
+      "price": 508.98,
+      "url": "https://www.amazon.co.uk/AMD-Processor-3D-V-CacheTM-Technology/dp/B0DVZSG8D5/ref=sr_1_14_mod_primary_new?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sbo=RZvfv%2F%2FHxDF%2BO5021pAnSA%3D%3D&sr=1-14",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71hZfMZNZuL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-7600X-Processeur-Architecture-Fr%C3%A9quence/dp/B0BBJDS62N/ref=sr_1_15",
+      "title": "AMD",
+      "price": 135.19,
+      "url": "https://www.amazon.co.uk/AMD-7600X-Processeur-Architecture-Fr%C3%A9quence/dp/B0BBJDS62N/ref=sr_1_15?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-15",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51m7L9bQI8L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-TM-Desktop-Processor-16-thread/dp/B0DKFMSMYK/ref=sr_1_16",
+      "title": "AMD",
+      "price": 374.99,
+      "url": "https://www.amazon.co.uk/AMD-TM-Desktop-Processor-16-thread/dp/B0DKFMSMYK/ref=sr_1_16?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-16",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71NMFO0iUhL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Veno-Scorp-Gaming-Ryzen-Graphics/dp/B0CLP9RP7X/ref=sr_1_17",
+      "title": "Veno Scorp",
+      "price": 599.0,
+      "url": "https://www.amazon.co.uk/Veno-Scorp-Gaming-Ryzen-Graphics/dp/B0CLP9RP7X/ref=sr_1_17?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-17",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61Fot4S6gpL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-7-5700G-RyzenTM/dp/B091J3NYVF/ref=sr_1_18",
+      "title": "AMD",
+      "price": 191.98,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-7-5700G-RyzenTM/dp/B091J3NYVF/ref=sr_1_18?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-18",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51D3DrDmwkL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-3400G-Processor-Graphics/dp/B07SXNDKNM/ref=sr_1_19",
+      "title": "AMD",
+      "price": 74.95,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-3400G-Processor-Graphics/dp/B07SXNDKNM/ref=sr_1_19?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-19",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71rKDRYq77L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/3-9GHz-Benang-Prosesor-100-000000252-Memiliki/dp/B0GT1WSC6T/ref=sr_1_20",
+      "title": "R 5 5600G R5 3.9GHz Enam Dua Belas Benang Prosesor CPU 65W L3 = 16M 100-000000252 Soket AM4 Baru Dan Memiliki Kipas",
+      "price": 267.24,
+      "url": "https://www.amazon.co.uk/3-9GHz-Benang-Prosesor-100-000000252-Memiliki/dp/B0GT1WSC6T/ref=sr_1_20?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-20",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51VP0PaQo+L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Veno-Scorp-Gaming-PC-Graphics/dp/B0D5M7BQZK/ref=sr_1_21",
+      "title": "Veno Scorp",
+      "price": 509.0,
+      "url": "https://www.amazon.co.uk/Veno-Scorp-Gaming-PC-Graphics/dp/B0D5M7BQZK/ref=sr_1_21?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-21",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71c1nE9yeHL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5700X-Processor-16-thread/dp/B09VCHQHZ6/ref=sr_1_22",
+      "title": "AMD",
+      "price": 180.0,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5700X-Processor-16-thread/dp/B09VCHQHZ6/ref=sr_1_22?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-22",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51gRv8z+K6L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-7800X3D-Desk-top-Processor-16-thread/dp/B0BTZB7F88/ref=sr_1_23",
+      "title": "AMD",
+      "price": 317.02,
+      "url": "https://www.amazon.co.uk/AMD-7800X3D-Desk-top-Processor-16-thread/dp/B0BTZB7F88/ref=sr_1_23?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-23",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51HqC0rU9HL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Processor-Integrated-RadeonTM-Graphics/dp/B0FQPCWY2C/ref=sr_1_24",
+      "title": "AMD",
+      "price": 86.22,
+      "url": "https://www.amazon.co.uk/AMD-Processor-Integrated-RadeonTM-Graphics/dp/B0FQPCWY2C/ref=sr_1_24?dib=eyJ2IjoiMSJ9.DKyoOECCN77Vzoa28pH6paxqKH0ZolzY3zh7C5_6wD33Ok-Ee1iowmcinoP_opZSWg-E5SfWLVljJMhIt4lq-v99FvZEYwHZYzpmE2TFnuDYUfPn0oAJRn2jen8MZG9nUPgkP12R-yCFnARjLaGZcoT0dOE5e9eT-Qe2W7EckkQP3VG8LluMUJ0HoiBHVPhgqo6UdM_IMCzAxO09yI01Xihnxk-BhIo7S60QUeb2G9tUu5wfeUSQtfjN3M0KDGXNdCgO3qJYPfSbLblX-HF7mJaNoLS8yTmy1iUz7aR1q5A.N8DBhAOEhHdFdgqavsJfbuVOnDEujmE2spURoktmWhM&dib_tag=se&keywords=AMD+Ryzen+5+5600G+processor&qid=1792698421&s=computers&sr=1-24",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61Th3HXRxsL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 24
+    }
+  ]
+}

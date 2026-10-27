@@ -1,0 +1,52 @@
+- generic [ref=e1]:
+  - complementary [ref=e2]:
+    - generic [ref=e3]:
+      - img "FlipFlop" [ref=e5]
+      - navigation [ref=e6]:
+        - link "Sourcing" [ref=e7] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Best Sellers" [ref=e11] [cursor=pointer]:
+          - /url: /best-sellers
+        - link "Catalogue" [ref=e18] [cursor=pointer]:
+          - /url: /catalogue
+        - link "Builds" [ref=e21] [cursor=pointer]:
+          - /url: /build-hub
+        - link "Workshop Calendar" [ref=e26] [cursor=pointer]:
+          - /url: /orders
+        - link "Upgrade Desk" [ref=e29] [cursor=pointer]:
+          - /url: /upgrade-desk
+        - link "Inventory" [ref=e32] [cursor=pointer]:
+          - /url: /inventory
+        - link "Demand" [ref=e36] [cursor=pointer]:
+          - /url: /demand
+        - link "Cross-listing" [ref=e39] [cursor=pointer]:
+          - /url: /cross-listing
+        - link "Dispatch Zone" [ref=e45] [cursor=pointer]:
+          - /url: /dispatch-zone
+        - link "Email Events" [ref=e51] [cursor=pointer]:
+          - /url: /email-events
+        - link "Advertising & Growth" [ref=e55] [cursor=pointer]:
+          - /url: /advertising-growth
+        - link "3D Assets" [ref=e59] [cursor=pointer]:
+          - /url: /catalogue/3d-assets?catalogue=curated
+        - link "Problems" [ref=e63] [cursor=pointer]:
+          - /url: /problems
+      - region "Service health" [ref=e66]:
+        - generic [ref=e67]:
+          - 'generic "API: checking" [ref=e68]': API
+          - 'generic "DB: checking" [ref=e72]': DB
+          - 'generic "Gem: checking" [ref=e77]': Gem
+          - link "Shop" [ref=e81] [cursor=pointer]:
+            - /url: http://localhost:4313
+  - main [ref=e86]:
+    - generic [ref=e88]:
+      - heading "FlipFlop Admin" [level=1] [ref=e89]
+      - paragraph [ref=e90]: Sign in to continue
+      - generic [ref=e91]: Email
+      - textbox [active] [ref=e92]
+      - generic [ref=e93]: Password
+      - textbox [ref=e94]
+      - button "Sign in" [ref=e95]
+      - paragraph [ref=e96]
+    - button "Chat with Hermes" [ref=e97]
+  - button "Open Next.js Dev Tools" [ref=e103] [cursor=pointer]

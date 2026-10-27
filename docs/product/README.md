@@ -1,5 +1,8 @@
 # FlipFlop product documentation
 
+- [The Playbook operational book](./playbook-operations-book.md) — central matrix,
+  operational pages, evidence semantics, approvals, history and distribution.
+
 **Status:** Canonical documentation map  
 **Last reviewed:** 2026-09-29  
 **Applies to:** FlipFlop, FlipFlop.shop, FlipFlopXtension, and customer support content
@@ -26,7 +29,9 @@ The implementation status register never overrides product intent. It prevents u
 | Document | Purpose | Primary audience |
 |---|---|---|
 | [Product strategy](./product-strategy.md) | Propositions, commercial model, customer promise | Product, engineering, marketing |
+| [Product image standard](./product-image-standard.md) | Originals, channel formats, review and publishing rules | Product, engineering, marketing |
 | [Playbooks, catalogues and fulfilment](./catalogues-playbooks-and-fulfilment.md) | Recommendation, tagging, sourcing, and delivery rules | Product, engineering, operations |
+| [Playbook commercial engine](./playbook-commercial-engine.md) | Delivery value proposition, complete segment economics, autonomous maintenance and learning requirements | Product, engineering, marketing |
 | [Order and build lifecycle](./order-and-build-lifecycle.md) | State and portal behaviour from registration to aftercare | Engineering, operations, support |
 | [Customer policies](./customer-policies.md) | Returns, cancellations, warranty, postage, delivery, insurance | Operations, storefront, support |
 | [Implementation status](./implementation-status.md) | Evidence-based delivery status and remaining gates | Product, engineering |

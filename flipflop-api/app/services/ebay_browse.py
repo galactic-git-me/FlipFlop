@@ -157,7 +157,7 @@ class ComponentPrices(TypedDict):
     new_min: float | None
 
 
-async def _search(token: str, query: str, condition_filter: str, limit: int = 50, min_price: float = 10.0, offset: int = 0) -> list[EbayListing]:
+async def _search(token: str, query: str, condition_filter: str, limit: int = 50, min_price: float = 10.0, offset: int = 0, category_id: str | None = None) -> list[EbayListing]:
     """
     Search eBay Buy Browse API for BIN listings of a given condition.
     condition_filter examples: 'NEW|LIKE_NEW', 'USED|EXCELLENT|VERY_GOOD|GOOD|ACCEPTABLE'
@@ -177,6 +177,8 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
         "fieldgroups": "MATCHING_ITEMS",
     }
 
+    if category_id:
+        params['category_ids'] = category_id
     global _consecutive_429_failures, _circuit_open_until
 
     if time.time() < _circuit_open_until:
@@ -241,12 +243,14 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
         # checkout with no value yet; both default to 0 (best-effort — this
         # will slightly favour listings with unstated/calculated shipping).
         shipping_cost = 0.0
+        shipping_cost_known = False
         for option in item.get("shippingOptions") or []:
             cost = (option or {}).get("shippingCost") or {}
             if cost.get("currency", "GBP") != "GBP":
                 continue
             try:
                 shipping_cost = float(cost.get("value") or 0)
+                shipping_cost_known = cost.get('value') is not None
             except (ValueError, TypeError):
                 shipping_cost = 0.0
             break  # first shipping option is eBay's default/cheapest one
@@ -297,6 +301,7 @@ async def _search(token: str, query: str, condition_filter: str, limit: int = 50
         results.append({
             "title": title,
             "price": price,
+            "delivery_cost_known": shipping_cost_known,
             "condition": condition,
             "url": item_url,
             "image_url": image_url,
@@ -376,7 +381,7 @@ async def get_component_prices(model_name: str, force_refresh: bool = False, min
 
 
 async def search_active_listings(
-    query: str, condition_filter: str = "USED|EXCELLENT|VERY_GOOD|GOOD|ACCEPTABLE", limit: int = 50, min_price: float = 20.0, offset: int = 0
+    query: str, condition_filter: str = "USED|EXCELLENT|VERY_GOOD|GOOD|ACCEPTABLE", limit: int = 50, min_price: float = 20.0, offset: int = 0, category_id: str | None = None
 ) -> list[EbayListing]:
     """Public entry point for a raw free-text active-BIN-listing search (e.g.
     a whole finished-PC query like "gaming pc ryzen 5 5600x rtx 3070 32gb"),
@@ -387,7 +392,7 @@ async def search_active_listings(
     if not token:
         log.warning("ebay_browse.no_token")
         return []
-    return await _search(token, query, condition_filter, limit=limit, min_price=min_price, offset=offset)
+    return await _search(token, query, condition_filter, limit=limit, min_price=min_price, offset=offset, category_id=category_id)
 
 
 def _empty() -> ComponentPrices:

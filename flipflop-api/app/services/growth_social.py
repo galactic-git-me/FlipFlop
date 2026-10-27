@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import secrets
 from urllib.parse import urlencode, urlparse, urlunparse, parse_qsl
 
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.growth import (
@@ -120,11 +120,13 @@ def serialize_account(row: SocialAccount) -> dict:
 
 
 def serialize_asset(row: ContentAsset) -> dict:
+    from app.services.channel_images import cached_variant_url
     return {
         "id": row.id,
         "kind": row.kind,
         "title": row.title,
-        "url": row.url,
+        "url": cached_variant_url(row.url, "social") or row.url,
+        "original_url": row.url,
         "alt_text": row.alt_text,
         "approved": row.approved,
         "provenance": row.provenance,
@@ -359,6 +361,15 @@ async def publish_post(db: AsyncSession, post: SocialPost, actor: str = "system"
     revision = await latest_revision(db, post.id)
     if not revision:
         raise ValueError("Post has no revision")
+    from app.services.channel_images import prepare_channel_urls
+    assets = await _assets_for(db, revision.media_asset_ids or [])
+    media_urls = []
+    for asset in assets:
+        if asset.kind == "image" and (post.source_type in {"build", "manual_build", "product", "ready_to_ship"}
+                                     or "/api/builds/" in asset.url or "/api/uploads/manual_builds/" in asset.url):
+            media_urls.extend(await prepare_channel_urls([asset.url], "social"))
+        else:
+            media_urls.append(asset.url)
     post.status = "publishing"
     accounts = (
         await db.execute(select(SocialAccount).where(SocialAccount.platform.in_(post.platforms or [])))
@@ -383,7 +394,7 @@ async def publish_post(db: AsyncSession, post: SocialPost, actor: str = "system"
             any_unknown = True
             continue
         copy = (revision.platform_variants or {}).get(platform) or revision.copy
-        result = publish_fixture(platform=platform, account_id=account.id, copy=copy, idempotency_key=key)
+        result = publish_fixture(platform=platform, account_id=account.id, copy=copy, idempotency_key=key, media_urls=media_urls)
         publication = existing or SocialPublication(
             post_id=post.id,
             revision_id=revision.id,
@@ -419,7 +430,7 @@ async def publish_post(db: AsyncSession, post: SocialPost, actor: str = "system"
                 action="publish",
                 idempotency_key=key,
                 status=publication.status,
-                request_payload={"copy": copy, "account_id": account.id},
+                request_payload={"copy": copy, "account_id": account.id, "media_urls": media_urls},
                 response_payload=result,
             )
         )
@@ -529,6 +540,17 @@ async def analytics_summary(db: AsyncSession) -> dict:
         "source": "internal_ingestion",
         "label": "Organic metrics and website sessions only",
     }
+
+
+async def run_curated_analytics_retention() -> dict:
+    """Delete consented first-party journey events after the published 90-day window."""
+    from app.database import AsyncSessionLocal
+    cutoff=_now()-timedelta(days=90)
+    async with AsyncSessionLocal() as db:
+        result=await db.execute(delete(AnalyticsEvent).where(
+            AnalyticsEvent.source=='curated_journey',AnalyticsEvent.occurred_at<cutoff))
+        await db.commit()
+        return {'ok':True,'deleted':result.rowcount or 0,'retention_days':90}
 
 
 async def command_centre(db: AsyncSession) -> dict:

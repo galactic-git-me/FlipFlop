@@ -25,12 +25,14 @@ def upgrade() -> None:
     )
     op.create_index("ix_customer_problems_manual_build_id", "customer_problems", ["manual_build_id"])
     op.create_index("ix_customer_problems_portal_grant_id", "customer_problems", ["portal_grant_id"])
-    op.create_check_constraint(
-        "ck_customer_problem_one_source",
-        "customer_problems",
-        "(order_id IS NOT NULL AND manual_build_id IS NULL) OR "
-        "(order_id IS NULL AND manual_build_id IS NOT NULL)",
-    )
+    existing_checks = {check["name"] for check in sa.inspect(op.get_bind()).get_check_constraints("customer_problems")}
+    if "ck_customer_problem_one_source" not in existing_checks:
+        op.create_check_constraint(
+            "ck_customer_problem_one_source",
+            "customer_problems",
+            "(order_id IS NOT NULL AND manual_build_id IS NULL) OR "
+            "(order_id IS NULL AND manual_build_id IS NOT NULL)",
+        )
 
 
 def downgrade() -> None:

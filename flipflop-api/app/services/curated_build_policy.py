@@ -67,9 +67,30 @@ def curated_slots(slots, definition=None, selected_variant_ids=None):
         ranked = [v for tier in ('mid', 'budget', 'high')
                   for v in sorted(tiers.get(tier, []), key=lambda v: (-(v.get('gem_score') or 0), v['id']))]
         default = ranked[0] if ranked else None
-        if definition and slot['slot_type'] in definition['components']:
-            specification = definition['components'][slot['slot_type']]
-            default = next((v for v in ranked if _matches_curated_spec(slot['slot_type'], v, specification)), None)
+        if definition:
+            operating_system=str(definition.get('components',{}).get('os') or '')
+            windows=re.search(r'windows\s+11\s+(home|pro)',operating_system,re.I)
+            ubuntu=re.search(r'ubuntu\s+(\d{2}\.\d{2})',operating_system,re.I)
+            dual_boot=bool(windows and ubuntu)
+            if slot['slot_type']=='os':
+                if windows:
+                    edition=windows.group(1)
+                    default=next((v for v in ranked if re.search(
+                        rf'\bwindows\s+11\s+{edition}\b',v['title'],re.I)),None)
+                elif operating_system:
+                    default=next((v for v in ranked if _matches_curated_spec(
+                        'os',v,operating_system)),None)
+            elif slot['slot_type']=='os_secondary':
+                default=(next((v for v in ranked if 'ubuntu' in v['title'].casefold()
+                    and ubuntu.group(1) in v['title']),None) if dual_boot else None)
+            elif slot['slot_type']=='wireless_adapter':
+                # Wireless is a required extra only for cells whose selected
+                # motherboard lacks verified Wi-Fi or Bluetooth. Never add it
+                # to another cell's baseline by choosing an arbitrary default.
+                default=None
+            elif slot['slot_type'] in definition.get('components',{}):
+                specification = definition['components'][slot['slot_type']]
+                default = next((v for v in ranked if _matches_curated_spec(slot['slot_type'], v, specification)), None)
         if selected_variant_ids is not None:
             selected_id = selected_variant_ids.get(slot['slot_type'])
             default = next((variant for variant in ranked if variant['id'] == selected_id), None)

@@ -1,0 +1,43 @@
+{
+  "listing_ids": [
+    18294,
+    17229
+  ],
+  "attempted": 2,
+  "captured": 2,
+  "retained": 0,
+  "unresolved": 0,
+  "by_host": {
+    "www.awd-it.co.uk": {
+      "attempted": 1,
+      "captured": 1,
+      "retained": 0,
+      "unresolved": 0,
+      "capture_seconds_total": 1.383,
+      "capture_seconds_max": 1.383,
+      "queue_wait_seconds_total": 0.0,
+      "queue_wait_seconds_max": 0.0,
+      "unresolved_reasons": {}
+    },
+    "www.overclockers.co.uk": {
+      "attempted": 1,
+      "captured": 1,
+      "retained": 0,
+      "unresolved": 0,
+      "capture_seconds_total": 1.17,
+      "capture_seconds_max": 1.17,
+      "queue_wait_seconds_total": 0.0,
+      "queue_wait_seconds_max": 0.0,
+      "unresolved_reasons": {}
+    }
+  },
+  "amazon_catalogue_attributes": {
+    "attempted": 0,
+    "captured": 0,
+    "unresolved": 0,
+    "unavailable": 0,
+    "cached_unavailable": 0,
+    "status": "completed"
+  },
+  "published": false
+}

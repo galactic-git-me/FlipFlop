@@ -43,7 +43,7 @@ function Get-ApiEnvironmentValue([string]$Name) {
         if (-not [string]::IsNullOrWhiteSpace($processValue)) { return $processValue.Trim() }
         return 'http://127.0.0.1:11435'
     }
-    if ($Name -eq 'OLLAMA_MODEL') { return 'qwen3.5:4b' }
+    if ($Name -eq 'OLLAMA_MODEL') { return 'qwen3:4b' }
     throw "$Name must be set in the process environment or flipflop-api/.env.local/.env."
 }
 
@@ -111,13 +111,13 @@ function Ensure-OllamaPriorityGateway {
     if (-not $needsRestart) {
         try {
             $health = Invoke-RestMethod -Uri 'http://127.0.0.1:11435/health' -TimeoutSec 3
-            $needsRestart = $health.generation_concurrency -ne 4 -or $health.ollama_num_parallel -ne 4
+            $needsRestart = $health.generation_concurrency -ne 4 -or $health.ollama_num_parallel -ne 4 -or $health.gpu_only -ne $true
         } catch {
             $needsRestart = $true
         }
     }
     if ($needsRestart) {
-        Write-Host "[*] Starting/reconfiguring Ollama for four concurrent requests (missing ports: $($missingPorts -join ', '))..." -ForegroundColor Cyan
+        Write-Host "[*] Starting/reconfiguring Ollama for four simultaneous GPU-only requests (missing ports: $($missingPorts -join ', '))..." -ForegroundColor Cyan
         & (Join-Path $projectRoot 'services\ollama-priority-gateway\start-prometheus-services.ps1') -ForceRestart
     }
 
@@ -131,7 +131,7 @@ function Ensure-OllamaPriorityGateway {
     if ($missingPorts.Count -gt 0) {
         throw "Ollama priority services did not become ready. Missing ports: $($missingPorts -join ', ')"
     }
-    Write-Host '[OK] Ollama: engine 11433; DEV gateway and Ollama each allow four concurrent generations.' -ForegroundColor Green
+    Write-Host '[OK] Ollama: engine 11433; DEV gateway and Ollama allow four simultaneous GPU-only generations.' -ForegroundColor Green
 }
 
 function Warm-OllamaModel([string]$BaseUrl, [string]$Model) {
@@ -143,13 +143,18 @@ function Warm-OllamaModel([string]$BaseUrl, [string]$Model) {
         messages = @(@{ role = 'user'; content = 'Reply OK.' })
         stream = $false
         keep_alive = -1
-        options = @{ num_predict = 1 }
+        options = @{ num_predict = 1; num_gpu = 999 }
+        think = $false
     } | ConvertTo-Json -Depth 5 -Compress
 
     Write-Host "[*] Loading Ollama model '$Model' and keeping it resident..." -ForegroundColor Cyan
     try {
         Invoke-RestMethod -Uri $uri -Method Post -ContentType 'application/json' `
             -Body $payload -TimeoutSec 180 | Out-Null
+        $resident = (Invoke-RestMethod -Uri "$($BaseUrl.TrimEnd('/'))/api/ps" -TimeoutSec 10).models | Where-Object { $_.name -eq $Model -or $_.name -eq "$($Model):latest" } | Select-Object -First 1
+        if (-not $resident -or $resident.size_vram -lt $resident.size -or $resident.size_vram -le 0) {
+            throw 'GPU-only warm-up failed: model is not fully on GPU.'
+        }
         Write-Host "[OK] Ollama model '$Model' is loaded and will stay resident until Ollama stops." -ForegroundColor Green
     } catch {
         Write-Host "[WARN] Could not warm Ollama model '$Model': $($_.Exception.Message)" -ForegroundColor Yellow
@@ -232,18 +237,20 @@ $ollamaBaseUrl = Get-ApiEnvironmentValue 'OLLAMA_BASE_URL'
 $ollamaModel = Get-ApiEnvironmentValue 'OLLAMA_MODEL'
 $env:OLLAMA_BASE_URL = $ollamaBaseUrl
 $env:OLLAMA_MODEL = $ollamaModel
+$env:LLM_PRIMARY_MODEL = $ollamaModel
 if (-not $CustomerTesting) { Warm-OllamaModel -BaseUrl $ollamaBaseUrl -Model $ollamaModel }
 
 $servers = @()
 $apiUrl = 'http://127.0.0.1:4311'
+$playbookRefreshEnabled = if ($CustomerTesting) { 'false' } else { 'true' }
 
 if (-not $NoBackend) {
-    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"EBAY_ENVIRONMENT=production`" && set `"EBAY_LISTING_ENVIRONMENT=sandbox`" && set `"PARCEL2GO_ENVIRONMENT=sandbox`" && set `"APP_ENV=dev`" && set `"AMAZON_SP_API_ENVIRONMENT=$env:AMAZON_SP_API_ENVIRONMENT`" && set `"AMAZON_SP_API_ENDPOINT=$env:AMAZON_SP_API_ENDPOINT`" && set `"ADMIN_FRONTEND_URL=http://localhost:4312`" && set `"FRONTEND_URL=http://localhost:4313`" && .venv\Scripts\python.exe run_dev.py --host 127.0.0.1 --port 4311"
+    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"LLM_PRIMARY_MODEL=$ollamaModel`" && set `"COMMERCIAL_RECONCILIATION_ENABLED=$playbookRefreshEnabled`" && set `"EBAY_ENVIRONMENT=production`" && set `"EBAY_LISTING_ENVIRONMENT=sandbox`" && set `"PARCEL2GO_ENVIRONMENT=sandbox`" && set `"APP_ENV=dev`" && set `"AMAZON_SP_API_ENVIRONMENT=$env:AMAZON_SP_API_ENVIRONMENT`" && set `"AMAZON_SP_API_ENDPOINT=$env:AMAZON_SP_API_ENDPOINT`" && set `"ADMIN_FRONTEND_URL=http://localhost:4312`" && set `"FRONTEND_URL=http://localhost:4313`" && .venv\Scripts\python.exe run_dev.py --host 127.0.0.1 --port 4311"
     $servers += Start-DevelopmentServer -Name 'backend' -WorkingDirectory (Join-Path $projectRoot 'flipflop-api') -Command $command -Port 4311 -Color Yellow
 }
 
 if ($GemRadarStandalone) {
-    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"PYTHONUNBUFFERED=1`" && .venv\Scripts\python.exe -m uvicorn app.gem_radar_standalone:app --host 127.0.0.1 --port 18000 --reload --reload-dir app"
+    $command = "set `"FLIPFLOP_RUNTIME_ENV=development`" && set `"OLLAMA_BASE_URL=$ollamaBaseUrl`" && set `"OLLAMA_MODEL=$ollamaModel`" && set `"LLM_PRIMARY_MODEL=$ollamaModel`" && set `"PYTHONUNBUFFERED=1`" && .venv\Scripts\python.exe -m uvicorn app.gem_radar_standalone:app --host 127.0.0.1 --port 18000 --reload --reload-dir app"
     $servers += Start-DevelopmentServer -Name 'gemradar-api' -WorkingDirectory (Join-Path $projectRoot 'flipflop-api') -Command $command -Port 18000 -Color Blue
 }
 

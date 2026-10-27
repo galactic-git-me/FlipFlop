@@ -1,4 +1,4 @@
-"""Custom component catalogue administration and storefront availability."""
+"""Legacy from-scratch builder API backed by the single Curated catalogue."""
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -31,12 +31,12 @@ def _item(variant: CatalogueVariant, listing: Listing, slot: PlaybookSlot) -> di
         "listing_id": variant.listing_id,
         "slot_type": slot.slot_type,
         "title": listing.title,
-        "image_url": listing.image_urls[0] if listing.image_urls else None,
-        "source_price": listing.price,
-        "price": variant.custom_display_price if variant.custom_display_price is not None else variant.display_price,
-        "proposed_price": variant.custom_proposed_price,
+        "image_url": (variant.asset_media_review or {}).get("main_photo_approved_url") or (listing.image_urls[0] if listing.image_urls else None),
+        "source_price": listing.price or 0,
+        "price": variant.display_price,
+        "proposed_price": None,
         "custom_cost_snapshot": variant.custom_cost_snapshot,
-        "custom_for_builds": variant.custom_for_builds,
+        "custom_for_builds": variant.curated_for_builds,
         "sale_status": variant.custom_sale_status,
         "listing_status": listing.status.value if hasattr(listing.status, "value") else listing.status,
         "catalogue_status": variant.status,
@@ -50,18 +50,9 @@ async def _rows(db: AsyncSession):
         select(CatalogueVariant, Listing, PlaybookSlot)
         .join(Listing, CatalogueVariant.listing_id == Listing.id)
         .join(PlaybookSlot, CatalogueVariant.slot_id == PlaybookSlot.id)
-        .where(or_(
-            CatalogueVariant.custom_for_builds.is_(True),
-            and_(
-                Listing.classification.in_((Classification.gem, Classification.amazing_gem)),
-                Listing.listing_type == "buy_it_now",
-                or_(Listing.condition.is_(None), Listing.condition.notin_(("for_parts", "parts_only", "untested"))),
-                ~Listing.title.ilike("%for parts%"), ~Listing.title.ilike("%parts only%"),
-                ~Listing.title.ilike("%not working%"), ~Listing.title.ilike("%spares or repair%"),
-                ~Listing.external_id.ilike("%206450130546%"),
-                CatalogueVariant.status != "hidden",
-            ),
-        )).order_by(CatalogueVariant.auto_published_at.desc())
+        .where(CatalogueVariant.curated_for_builds.is_(True),
+            CatalogueVariant.status.in_(("active", "pending_review")),
+        ).order_by(CatalogueVariant.auto_published_at.desc())
     )).all()
 
 
@@ -75,35 +66,35 @@ async def _settings(db: AsyncSession) -> CustomBuildSettings:
 
 
 def _refresh_availability(variant: CatalogueVariant, listing: Listing) -> None:
+    from app.services.shared_variant_assets import approved_model_photos
     title = (listing.title or "").lower()
     clean_listing = (
         listing.listing_type == "buy_it_now"
-        and listing.classification in (Classification.gem, Classification.amazing_gem)
+        and variant.curated_for_builds
         and listing.condition not in ("for_parts", "parts_only", "untested")
         and not any(term in title for term in ("for parts", "parts only", "not working", "spares or repair"))
     )
-    available = variant.status == "active" and listing.status.value == "active" and clean_listing
+    available = (variant.status == "active" and getattr(listing.status, "value", listing.status) == "active"
+        and clean_listing and (listing.price or 0) > 0 and variant.display_price > 0
+        and not (listing.raw_specs or {}).get("catalogue_deleted")
+        and (listing_is_software(listing) or bool(approved_model_photos(variant))))
     variant.custom_sale_status = "on_sale" if available else "out_of_stock"
+
+
+def listing_is_software(listing):
+    specs = listing.raw_specs or {}
+    return bool(specs.get("gamers_outlet") or specs.get("royalcdkeys") or specs.get("playbook_free_software"))
 
 
 @router.get("")
 async def get_custom_catalogue(db: AsyncSession = Depends(get_db)):
     items = []
     seen_listings: set[int] = set()
-    for variant, listing, slot in sorted(await _rows(db), key=lambda row: (not row[0].custom_for_builds, -row[0].id)):
+    for variant, listing, slot in sorted(await _rows(db), key=lambda row: (not row[0].curated_for_builds, -row[0].id)):
         if listing.id in seen_listings:
             continue
         seen_listings.add(listing.id)
-        if variant.custom_for_builds:
-            _refresh_availability(variant, listing)
-            if variant.custom_cost_snapshot is None:
-                variant.custom_cost_snapshot = listing.price
-                if variant.custom_display_price is None:
-                    variant.custom_display_price = variant.display_price
-            elif variant.custom_display_price is not None:
-                delta = listing.price - variant.custom_cost_snapshot
-                proposed = round(max(0, variant.custom_display_price + delta), 2)
-                variant.custom_proposed_price = proposed if abs(proposed - variant.custom_display_price) >= 0.01 else None
+        _refresh_availability(variant, listing)
         items.append(_item(variant, listing, slot))
     settings = await _settings(db)
     return {"items": items, "is_live": settings.is_live}
@@ -111,42 +102,17 @@ async def get_custom_catalogue(db: AsyncSession = Depends(get_db)):
 
 @router.patch("/variants/{variant_id}/catalogue")
 async def set_custom_membership(variant_id: int, body: MembershipBody, db: AsyncSession = Depends(get_db)):
-    variant = await db.get(CatalogueVariant, variant_id)
-    if not variant:
-        raise HTTPException(status_code=404, detail="Catalogue component not found")
-    variant.custom_for_builds = body.custom_for_builds
-    variant.updated_at = datetime.utcnow().isoformat()
-    listing = await db.get(Listing, variant.listing_id)
-    if body.custom_for_builds and listing:
-        variant.custom_cost_snapshot = listing.price
-        variant.custom_display_price = variant.custom_display_price if variant.custom_display_price is not None else variant.display_price
-        _refresh_availability(variant, listing)
-    elif not body.custom_for_builds:
-        variant.custom_sale_status = "out_of_stock"
-    return {"id": variant.id, "custom_for_builds": variant.custom_for_builds, "sale_status": variant.custom_sale_status}
+    raise HTTPException(410, "There is one Curated catalogue. Its range is managed from Amazon rankings and Playbook requirements.")
 
 
 @router.post("/variants/{variant_id}/approve-price")
 async def approve_component_price(variant_id: int, db: AsyncSession = Depends(get_db)):
-    variant = await db.get(CatalogueVariant, variant_id)
-    if not variant or variant.custom_proposed_price is None:
-        raise HTTPException(status_code=409, detail="No proposed custom-build price is available")
-    listing = await db.get(Listing, variant.listing_id)
-    variant.custom_display_price = variant.custom_proposed_price
-    variant.custom_proposed_price = None
-    variant.custom_cost_snapshot = listing.price if listing else variant.custom_cost_snapshot
-    return {"id": variant.id, "price": variant.custom_display_price, "custom_cost_snapshot": variant.custom_cost_snapshot}
+    raise HTTPException(410, "Separate Custom catalogue prices have been retired. Use the Curated catalogue.")
 
 
 @router.post("/variants/{variant_id}/dismiss-price")
 async def dismiss_component_price(variant_id: int, db: AsyncSession = Depends(get_db)):
-    variant = await db.get(CatalogueVariant, variant_id)
-    if not variant or variant.custom_proposed_price is None:
-        raise HTTPException(status_code=409, detail="No proposed custom-build price is available")
-    listing = await db.get(Listing, variant.listing_id)
-    variant.custom_proposed_price = None
-    variant.custom_cost_snapshot = listing.price if listing else variant.custom_cost_snapshot
-    return {"id": variant.id, "dismissed": True, "custom_cost_snapshot": variant.custom_cost_snapshot}
+    raise HTTPException(410, "Separate Custom catalogue prices have been retired. Use the Curated catalogue.")
 
 
 @router.post("/go-live")
@@ -156,9 +122,9 @@ async def set_custom_catalogue_live(body: LiveBody, db: AsyncSession = Depends(g
         available_by_slot: set[str] = set()
         has_pending_prices = False
         for variant, listing, slot in await _rows(db):
-            if variant.custom_for_builds:
+            if variant.curated_for_builds:
                 _refresh_availability(variant, listing)
-                has_pending_prices = has_pending_prices or variant.custom_proposed_price is not None
+                has_pending_prices = False
                 if variant.custom_sale_status == "on_sale":
                     available_by_slot.add(slot.slot_type)
         missing = sorted(REQUIRED_SLOTS - available_by_slot)
@@ -178,8 +144,8 @@ async def public_custom_catalogue(db: AsyncSession = Depends(get_db)):
         return {"is_live": False, "components": []}
     components = []
     seen_listings: set[int] = set()
-    for variant, listing, slot in sorted(await _rows(db), key=lambda row: (not row[0].custom_for_builds, -row[0].id)):
-        if not variant.custom_for_builds:
+    for variant, listing, slot in sorted(await _rows(db), key=lambda row: (not row[0].curated_for_builds, -row[0].id)):
+        if not variant.curated_for_builds:
             continue
         if listing.id in seen_listings:
             continue
@@ -191,7 +157,7 @@ async def public_custom_catalogue(db: AsyncSession = Depends(get_db)):
             "id": variant.id,
             "category": slot.slot_type,
             "title": listing.title,
-            "price": variant.custom_display_price if variant.custom_display_price is not None else variant.display_price,
-            "image_url": listing.image_urls[0] if listing.image_urls else None,
+            "price": variant.display_price,
+            "image_url": (variant.asset_media_review or {}).get("main_photo_approved_url") or (listing.image_urls[0] if listing.image_urls else None),
         })
     return {"is_live": True, "components": components}

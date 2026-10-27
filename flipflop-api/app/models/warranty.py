@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import CheckConstraint, DateTime, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import CheckConstraint, DateTime, Float, ForeignKey, Integer, String, Text, Index
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database import Base
@@ -20,11 +20,13 @@ class WarrantyReserve(Base):
             "(order_id IS NULL AND manual_build_id IS NOT NULL)",
             name="ck_warranty_reserve_one_sale_source",
         ),
+        Index("ix_warranty_reserves_order_id", "order_id"),
+        Index("ix_warranty_reserves_manual_build_id", "manual_build_id"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    order_id: Mapped[int | None] = mapped_column(ForeignKey("orders.id"), unique=True, index=True)
-    manual_build_id: Mapped[int | None] = mapped_column(ForeignKey("manual_builds.id"), unique=True, index=True)
+    order_id: Mapped[int | None] = mapped_column(ForeignKey("orders.id"), unique=True)
+    manual_build_id: Mapped[int | None] = mapped_column(ForeignKey("manual_builds.id"), unique=True)
     sale_value_gbp: Mapped[float] = mapped_column(Float, nullable=False)
     reserve_pct: Mapped[float] = mapped_column(Float, nullable=False)
     reserved_amount_gbp: Mapped[float] = mapped_column(Float, nullable=False)
@@ -46,10 +48,11 @@ class WarrantyClaim(Base):
     """One warranty case and its approved draw against a reserve."""
 
     __tablename__ = "warranty_claims"
+    __table_args__ = (Index("ix_warranty_claims_customer_problem_id", "customer_problem_id"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     reserve_id: Mapped[int] = mapped_column(ForeignKey("warranty_reserves.id"), nullable=False, index=True)
-    customer_problem_id: Mapped[int | None] = mapped_column(ForeignKey("customer_problems.id"), unique=True, index=True)
+    customer_problem_id: Mapped[int | None] = mapped_column(ForeignKey("customer_problems.id"), unique=True)
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="open", index=True)
     issue_summary: Mapped[str] = mapped_column(Text, nullable=False)
     approved_cost_gbp: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)

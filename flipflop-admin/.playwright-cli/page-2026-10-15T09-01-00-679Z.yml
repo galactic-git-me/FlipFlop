@@ -1,0 +1,42 @@
+- generic [active] [ref=e1]:
+  - complementary [ref=e2]:
+    - generic [ref=e3]:
+      - img "FlipFlop" [ref=e5]
+      - navigation [ref=e6]:
+        - link "Sourcing" [ref=e7] [cursor=pointer]:
+          - /url: /sourcing
+        - link "Best Sellers" [ref=e11] [cursor=pointer]:
+          - /url: /best-sellers
+        - link "Catalogue" [ref=e18] [cursor=pointer]:
+          - /url: /catalogue
+        - link "Builds" [ref=e21] [cursor=pointer]:
+          - /url: /build-hub
+        - link "Upgrade Desk" [ref=e26] [cursor=pointer]:
+          - /url: /upgrade-desk
+        - link "Inventory" [ref=e29] [cursor=pointer]:
+          - /url: /inventory
+        - link "Demand" [ref=e33] [cursor=pointer]:
+          - /url: /demand
+        - link "Cross-listing" [ref=e36] [cursor=pointer]:
+          - /url: /cross-listing
+        - link "Dispatch Zone" [ref=e42] [cursor=pointer]:
+          - /url: /dispatch-zone
+        - link "Email Events" [ref=e48] [cursor=pointer]:
+          - /url: /email-events
+        - link "Advertising & Growth" [ref=e52] [cursor=pointer]:
+          - /url: /advertising-growth
+        - link "3D Assets" [ref=e56] [cursor=pointer]:
+          - /url: /cases-3d-priority
+        - link "Problems" [ref=e60] [cursor=pointer]:
+          - /url: /problems
+      - region "Service health" [ref=e63]:
+        - generic [ref=e64]:
+          - 'generic "API: checking" [ref=e65]': API
+          - 'generic "DB: checking" [ref=e69]': DB
+          - 'generic "Gem: checking" [ref=e74]': Gem
+          - link "Shop" [ref=e78] [cursor=pointer]:
+            - /url: http://localhost:4313
+  - main [ref=e83]:
+    - button [ref=e87]:
+      - img "Hermes" [ref=e88]
+  - button "Open Next.js Dev Tools" [ref=e94] [cursor=pointer]

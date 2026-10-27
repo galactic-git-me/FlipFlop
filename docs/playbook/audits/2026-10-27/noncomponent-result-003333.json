@@ -1,0 +1,100 @@
+{
+  "at": "2026-10-27T00:33:48.293456+00:00",
+  "examined": 45690,
+  "candidates": 734,
+  "by_source": {
+    "awd_it": 81,
+    "ebay": 242,
+    "ebuyer": 12,
+    "scan": 36,
+    "computer_orbit": 8,
+    "bargain_hardware": 10,
+    "google_shopping": 55,
+    "newegg_uk": 86,
+    "overclockers": 36,
+    "amazon": 168
+  },
+  "applied": true,
+  "examples": [
+    {
+      "source": "awd_it",
+      "title": "AWD-IT Lian Li A3 Intel Core Ultra 225F Nvidia GeForce RTX 5070 12GB White Gaming PC",
+      "cpk": "4ac872ac2957aafc"
+    },
+    {
+      "source": "ebay",
+      "title": "Workstation PC Ryzen 9 9950X3D 64GB DDR5 4TB SSD RTX or Radeon GPU",
+      "cpk": "697b6ce5c65f97d7"
+    },
+    {
+      "source": "awd_it",
+      "title": "AWD-IT G370A Mesh Intel Core I5 14400F Ten Core Intel ARC B580 12GB Desktop PC for Gaming",
+      "cpk": "3ff0ded6bb1ba53c"
+    },
+    {
+      "source": "ebuyer",
+      "title": "PCSpecialist\nWraith 180 Gaming PC - Core Ultra 7 265KF RTX 5060 Ti 16GB RAM 1TB SSD - 1440p Gaming",
+      "cpk": "b5a170c500fec69e"
+    },
+    {
+      "source": "awd_it",
+      "title": "AWD-IT Dark Xpanse Ryzen 7 7700 NVIDIA RTX 5070 12GB AI Desktop PC for Gaming",
+      "cpk": "f138eb3a060b8417"
+    },
+    {
+      "source": "awd_it",
+      "title": "AWD-IT A31 PLUS White AMD Ryzen 5 9600X Nvidia Geforce RTX 5070 12GB Gaming PC",
+      "cpk": "deef458356e09110"
+    },
+    {
+      "source": "awd_it",
+      "title": "AWD-IT M120R AMD Ryzen 5500 RTX 5050 8GB Desktop PC for Gaming",
+      "cpk": "3231c72c02c457cc"
+    },
+    {
+      "source": "ebuyer",
+      "title": "PCSpecialist\nWraith 181 Gaming PC - Ryzen 7 7700X RTX 5060 Ti 16GB RAM 1TB SSD - 1440p Gaming",
+      "cpk": "f52d5cafc9b231c4"
+    },
+    {
+      "source": "awd_it",
+      "title": "AWD-IT FRAME 4000D RGB AMD Ryzen 9600X Nvidia RTX 5090 32GB Desktop PC for Gaming",
+      "cpk": "447ace3c185f923a"
+    },
+    {
+      "source": "awd_it",
+      "title": "AWD-IT Pure Black Ryzen 5 8400F 6 Core Nvidia GeForce RTX 5060 8GB Desktop PC for Gaming",
+      "cpk": "4503407925f88112"
+    },
+    {
+      "source": "awd_it",
+      "title": "AWD-IT FRAME 4000D Ryzen 7 5700X Eight Core NVIDIA RTX 5070 12GB - AI Next Day Gaming PC",
+      "cpk": "f138eb3a060b8417"
+    },
+    {
+      "source": "awd_it",
+      "title": "AWD-IT Vision Compact White AMD Ryzen 9600X RTX 5070 12GB AI Desktop PC for Gaming",
+      "cpk": "bd6804da7d418dc2"
+    },
+    {
+      "source": "ebuyer",
+      "title": "PCSpecialist\nWraith 200 Gaming PC - Intel i7 14700KF RTX 5070 Ti 32GB RAM 1TB SSD - 4K Gaming",
+      "cpk": "c7ecdad8de10c872"
+    },
+    {
+      "source": "awd_it",
+      "title": "AWD-IT Hemera AMD Ryzen 5, NVIDIA RTX 5060 Ti 8GB, 16GB RAM & 1TB SSD - Windows 11 PreBuilt Gaming PC",
+      "cpk": "f57b6882171707f8"
+    },
+    {
+      "source": "awd_it",
+      "title": "AWD-IT Charger Ryzen 5 5500 6 Core NVIDIA RTX 5060 8GB - Next Day Gaming PC",
+      "cpk": "3c88a8c44bcf1320"
+    }
+  ],
+  "unlinked": 733,
+  "skipped": 1,
+  "aggregates_recomputed": 240,
+  "backup": "C:\\Users\\mclar\\CODING\\FlipFlop\\docs\\playbook\\audits\\2026-10-27\\noncomponent-backup-003333.json",
+  "remaining_links": 0
+}

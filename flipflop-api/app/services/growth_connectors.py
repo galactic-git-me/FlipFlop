@@ -30,6 +30,7 @@ def publish_fixture(
     copy: str,
     idempotency_key: str,
     fail: bool = False,
+    media_urls: list[str] | None = None,
 ) -> dict:
     """Deterministic sandbox publisher. Same key always returns the same post id."""
     if fail:
@@ -46,6 +47,7 @@ def publish_fixture(
         "error": "",
         "confirmed_at": datetime.utcnow().isoformat(),
         "metrics_available": ["impressions", "likes", "comments", "shares", "link_clicks"],
+        "media_urls": media_urls or [],
     }
 
 

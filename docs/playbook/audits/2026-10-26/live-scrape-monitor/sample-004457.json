@@ -1,0 +1,772 @@
+{
+  "sampled_at": "2026-10-27T00:44:57.916262+00:00",
+  "since": "2026-10-26T23:55:00",
+  "distinct_observed_listings": 1570,
+  "by_source": {
+    "ebay": {
+      "listings": 215,
+      "mpn_field": 32,
+      "cpk": 163,
+      "validated_v3": 161,
+      "mpn_anchored_identity": 94,
+      "linked_2plus_direct_retailers": 100
+    },
+    "awd_it": {
+      "listings": 41,
+      "mpn_field": 1,
+      "cpk": 33,
+      "validated_v3": 33,
+      "mpn_anchored_identity": 2,
+      "linked_2plus_direct_retailers": 22
+    },
+    "amazon": {
+      "listings": 259,
+      "mpn_field": 17,
+      "cpk": 240,
+      "validated_v3": 240,
+      "mpn_anchored_identity": 88,
+      "linked_2plus_direct_retailers": 126
+    },
+    "bargain_hardware": {
+      "listings": 127,
+      "mpn_field": 0,
+      "cpk": 107,
+      "validated_v3": 101,
+      "mpn_anchored_identity": 0,
+      "linked_2plus_direct_retailers": 1
+    },
+    "overclockers": {
+      "listings": 235,
+      "mpn_field": 0,
+      "cpk": 162,
+      "validated_v3": 120,
+      "mpn_anchored_identity": 26,
+      "linked_2plus_direct_retailers": 97
+    },
+    "computer_orbit": {
+      "listings": 228,
+      "mpn_field": 18,
+      "cpk": 221,
+      "validated_v3": 220,
+      "mpn_anchored_identity": 18,
+      "linked_2plus_direct_retailers": 104
+    },
+    "google_shopping": {
+      "listings": 66,
+      "mpn_field": 16,
+      "cpk": 61,
+      "validated_v3": 61,
+      "mpn_anchored_identity": 34,
+      "linked_2plus_direct_retailers": 37
+    },
+    "aliexpress": {
+      "listings": 4,
+      "mpn_field": 0,
+      "cpk": 4,
+      "validated_v3": 4,
+      "mpn_anchored_identity": 0,
+      "linked_2plus_direct_retailers": 4
+    },
+    "ebuyer": {
+      "listings": 3,
+      "mpn_field": 0,
+      "cpk": 3,
+      "validated_v3": 3,
+      "mpn_anchored_identity": 1,
+      "linked_2plus_direct_retailers": 2
+    },
+    "scan": {
+      "listings": 392,
+      "mpn_field": 0,
+      "cpk": 379,
+      "validated_v3": 377,
+      "mpn_anchored_identity": 3,
+      "linked_2plus_direct_retailers": 172
+    }
+  },
+  "examples": [
+    {
+      "title": "APNX Creator C1 White Mid Tower Case",
+      "vendors": [
+        "amazon",
+        "ebuyer",
+        "scan"
+      ],
+      "cpk": "a313b2e7ae09f8d2"
+    },
+    {
+      "title": "AMD Ryzensets 5 9600X Processor (radeon graphics included 6 Cores/12 Threads 65W",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "ebuyer",
+        "overclockers",
+        "scan"
+      ],
+      "cpk": "2c25d135a0bb5f24"
+    },
+    {
+      "title": "AMD Ryzensets 7 7800X3D Processor with 3D V Cache technology (integrated Radeon",
+      "vendors": [
+        "awd_it",
+        "computer_orbit",
+        "overclockers",
+        "scan"
+      ],
+      "cpk": "ca6b4aa7569851bf"
+    },
+    {
+      "title": "AMD Ryzen 7 9800X3D 8-Core AM5 4.7GHz 96MB L3 Cache CPU Brand New No Fan",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "ebuyer",
+        "newegg_uk",
+        "overclockers",
+        "scan"
+      ],
+      "cpk": "17f0f6a336174b115a2ff33e6048a844"
+    },
+    {
+      "title": "APNX Creator C1 ChromaFlair Mid Tower Case",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "overclockers",
+        "scan"
+      ],
+      "cpk": "205ebca72cf63e4c"
+    },
+    {
+      "title": "AMD Ryzen 5 5600 3.6 GHz None Integrated Graphics Gaming CPU for MSI B550M PRO",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "computer_orbit",
+        "overclockers"
+      ],
+      "cpk": "1ce1c181be57c022fecf49e7935eb959"
+    },
+    {
+      "title": "AMD Ryzen 7 9850X3D processor 4.7 GHz 96 MB L3 Box",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "computer_orbit",
+        "newegg_uk",
+        "overclockers",
+        "scan"
+      ],
+      "cpk": "de72929b677e911319f046bfa94ab0b4"
+    },
+    {
+      "title": "Ryzen 7 9850X3D Gaming PC RX 9060 XT 16GB 1440p 1TB 2TB 4TB NVMe SSD",
+      "vendors": [
+        "awd_it",
+        "newegg_uk"
+      ],
+      "cpk": "16275be9d5dfb62e"
+    },
+    {
+      "title": "Amd Ryzen 7 9700X + Cooler Max 5.50GHz Processor Cpu Am5 Integrated Gpu",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "computer_orbit",
+        "ebuyer",
+        "newegg_uk",
+        "overclockers",
+        "scan"
+      ],
+      "cpk": "2b6c499c69a158cf37d08cc079676ea0"
+    },
+    {
+      "title": "Gaming Pc- Rtx 5080 16GB, Ryzen 9850X3D, 64GB DDR5, 2TB M.2 SSD",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "newegg_uk",
+        "overclockers",
+        "scan"
+      ],
+      "cpk": "66f5f178e2ccd6f1"
+    },
+    {
+      "title": "APNX V1 ATX Mid-Tower Gaming Case Panoramic Glass 10 Fan Slots Superior Cooling",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "newegg_uk",
+        "scan"
+      ],
+      "cpk": "9bc00f3573dd170d"
+    },
+    {
+      "title": "AMD 100-100000457BOX CPU II price incl VAT 3 yr warranty* B2B",
+      "vendors": [
+        "amazon",
+        "awd_it",
+        "computer_orbit",
+        "ebuyer",
+        "newegg_uk",
+        "overclockers",
+        "scan"
+      ],
+      "cpk": "fd96e8fee4f3f36e9b50c435f6670bb9"
+    }
+  ],
+  "missing_identity_examples": [
+    {
+      "source": "ebay",
+      "title": "Gaming PC RTX 5080 Ryzen 9850X3D 32GB DDR5 2TB NVME SSD",
+      "mpn": null
+    },
+    {
+      "source": "ebay",
+      "title": "Gaming PC Ryzen 7 9850X3D RTX 5080 32GB DDR5 2TB NVME SSD",
+      "mpn": null
+    },
+    {
+      "source": "ebay",
+      "title": "Gaming PC RTX 5080 Ryzen 7 9850X3D 32GB DDR5 2TB NVME SSD",
+      "mpn": null
+    },
+    {
+      "source": "ebay",
+      "title": "Gaming PC Ryzen 7 9850X3D RTX 5060 8GB 16GB 32GB 64GB DDR5 Desktop",
+      "mpn": null
+    },
+    {
+      "source": "ebay",
+      "title": "Gaming PC RTX 5070 12GB Ryzen 7 9850X3D 1440p 16GB 32GB 64GB DDR5",
+      "mpn": null
+    },
+    {
+      "source": "ebay",
+      "title": "RX 9060 XT 8GB Gaming PC Ryzen 7 9850X3D 1440p 16GB DDR5 1TB NVMe SSD",
+      "mpn": null
+    },
+    {
+      "source": "ebay",
+      "title": "RTX 5070 Ti 16GB Gaming PC Ryzen 7 9850X3D 1440p 32GB DDR5 1TB NVMe SSD",
+      "mpn": null
+    },
+    {
+      "source": "ebay",
+      "title": "Gaming PC Ryzen 7 9850X3D RTX 5060 Ti 8GB 1440p 32GB 64GB DDR5 Liquid Cooled",
+      "mpn": null
+    },
+    {
+      "source": "ebay",
+      "title": "Gaming PC RX 9060 XT 8GB Ryzen 7 9850X3D 1440p 32GB 64GB DDR5 X870 Liquid Cooled",
+      "mpn": null
+    },
+    {
+      "source": "ebay",
+      "title": "Gaming PC RX 9060 XT 16GB Ryzen 7 9850X3D 1440p 32GB 64GB DDR5 Liquid Cooled",
+      "mpn": null
+    },
+    {
+      "source": "ebay",
+      "title": "High End Gaming Pc! Nearly New! Ryzen 9850X3D + 9070 XT + 32GB DDR5! 2TB SSD",
+      "mpn": null
+    },
+    {
+      "source": "ebay",
+      "title": "GAMING PC / AMD Ryzen 7 9850X3D / NVIDIA RTX 5080 / 2TB NVMe SSD / 64GB DDR5",
+      "mpn": null
+    }
+  ],
+  "queue": {
+    "pending": 364,
+    "processing": 4,
+    "completed": 4061,
+    "failed": 0
+  },
+  "pipeline": {
+    "runId": "9fa91b33e973436ba274b0bfc6cbca51",
+    "activeScans": [
+      {
+        "searchId": "catalogue-component-dc6e0bd855336f0a90a4",
+        "query": "AMD Ryzensets 5 9600X Processor (radeon graphics included",
+        "elapsedSeconds": 434.4,
+        "activeSubmissions": 0,
+        "totalListings": 175,
+        "discoveredCount": 157,
+        "eligibleCount": 175,
+        "ingestedCount": 175,
+        "ingestedNewCount": 67,
+        "cpkAssignedCount": 151,
+        "cpkFailedCount": 24,
+        "classifiedCount": 104,
+        "eligibleScoreCount": 44,
+        "ineligibleScoreCount": 43,
+        "gemCount": 1,
+        "superGemCount": 1,
+        "marketPricedCount": 134,
+        "processedPercent": 86.3,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "aliexpress": 4,
+          "amazon": 246,
+          "ebay": 27,
+          "ebuyer": 2,
+          "google_shopping": 32,
+          "scan": 2,
+          "awd_it": 4
+        },
+        "discoveredByVendor": {
+          "amazon": 94,
+          "google_shopping": 63
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "catalogue-component-1ae6aa3080d37e6b0ee6",
+        "query": "AMD Ryzensets 7 9700X Processor (8 Cores/16 Threads) 65W DTP",
+        "elapsedSeconds": 434.4,
+        "activeSubmissions": 0,
+        "totalListings": 1,
+        "discoveredCount": 1,
+        "eligibleCount": 1,
+        "ingestedCount": 1,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 1,
+        "cpkFailedCount": 0,
+        "classifiedCount": 0,
+        "eligibleScoreCount": 0,
+        "ineligibleScoreCount": 0,
+        "gemCount": 0,
+        "superGemCount": 0,
+        "marketPricedCount": 0,
+        "processedPercent": 0.0,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "ebay": 1
+        },
+        "discoveredByVendor": {
+          "ebay": 1
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "catalogue-component-94a42489f84a6b2920e5",
+        "query": "AMD Ryzensets 9 9950X Processor (integrated radeon graphics",
+        "elapsedSeconds": 434.4,
+        "activeSubmissions": 0,
+        "totalListings": 116,
+        "discoveredCount": 116,
+        "eligibleCount": 116,
+        "ingestedCount": 116,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 48,
+        "cpkFailedCount": 68,
+        "classifiedCount": 48,
+        "eligibleScoreCount": 23,
+        "ineligibleScoreCount": 5,
+        "gemCount": 1,
+        "superGemCount": 3,
+        "marketPricedCount": 28,
+        "processedPercent": 41.4,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "overclockers": 142,
+          "awd_it": 14
+        },
+        "discoveredByVendor": {
+          "awd_it": 14,
+          "overclockers": 102
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "amd-cpu",
+        "query": "AMD CPU -bundle -combo -laptop -\"cooler only\" -\"box only\" -\"heatsink only\" -bracket -mount -sticker -keychain -\"cooling fan\" -\"replacement fan\" -\"motherboard set\" -\"processor cooler\"",
+        "elapsedSeconds": 434.3,
+        "activeSubmissions": 0,
+        "totalListings": 8,
+        "discoveredCount": 8,
+        "eligibleCount": 8,
+        "ingestedCount": 8,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 8,
+        "cpkFailedCount": 0,
+        "classifiedCount": 8,
+        "eligibleScoreCount": 2,
+        "ineligibleScoreCount": 2,
+        "gemCount": 0,
+        "superGemCount": 0,
+        "marketPricedCount": 4,
+        "processedPercent": 100.0,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "bargain_hardware": 97
+        },
+        "discoveredByVendor": {
+          "bargain_hardware": 8
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "catalogue-component-4b972ea8300fb65ff095",
+        "query": "AMD RYZEN\u2122 7 9850X3D",
+        "elapsedSeconds": 426.7,
+        "activeSubmissions": 0,
+        "totalListings": 144,
+        "discoveredCount": 144,
+        "eligibleCount": 144,
+        "ingestedCount": 144,
+        "ingestedNewCount": 15,
+        "cpkAssignedCount": 95,
+        "cpkFailedCount": 49,
+        "classifiedCount": 71,
+        "eligibleScoreCount": 45,
+        "ineligibleScoreCount": 8,
+        "gemCount": 0,
+        "superGemCount": 0,
+        "marketPricedCount": 74,
+        "processedPercent": 63.9,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "ebay": 96,
+          "overclockers": 12,
+          "awd_it": 35
+        },
+        "discoveredByVendor": {
+          "ebay": 97,
+          "awd_it": 35,
+          "overclockers": 12
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "catalogue-component-915c1c8b275f544ff9f9",
+        "query": "ARCTIC Freezer 36 (Black)- Single-tower CPU cooler with push-pull",
+        "elapsedSeconds": 423.0,
+        "activeSubmissions": 1,
+        "totalListings": 89,
+        "discoveredCount": 89,
+        "eligibleCount": 89,
+        "ingestedCount": 51,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 47,
+        "cpkFailedCount": 2,
+        "classifiedCount": 47,
+        "eligibleScoreCount": 10,
+        "ineligibleScoreCount": 7,
+        "gemCount": 0,
+        "superGemCount": 1,
+        "marketPricedCount": 17,
+        "processedPercent": 52.8,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "ebay": 2,
+          "awd_it": 14,
+          "computer_orbit": 118
+        },
+        "discoveredByVendor": {
+          "computer_orbit": 35,
+          "awd_it": 14,
+          "ebay": 40
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "catalogue-component-ce62fc4a4f7ddda913fb",
+        "query": "Asus GeForce RTX 5050 Dual OC 8GB GDDR6 PCI-Express Graphics Card",
+        "elapsedSeconds": 345.7,
+        "activeSubmissions": 0,
+        "totalListings": 104,
+        "discoveredCount": 104,
+        "eligibleCount": 104,
+        "ingestedCount": 104,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 101,
+        "cpkFailedCount": 3,
+        "classifiedCount": 101,
+        "eligibleScoreCount": 75,
+        "ineligibleScoreCount": 12,
+        "gemCount": 0,
+        "superGemCount": 0,
+        "marketPricedCount": 93,
+        "processedPercent": 97.1,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "scan": 92,
+          "computer_orbit": 12
+        },
+        "discoveredByVendor": {
+          "scan": 92,
+          "computer_orbit": 12
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "catalogue-component-7fe36812770c214e6191",
+        "query": "AMD Ryzensets 7 7800X3D Processor with 3D V Cache technology (integrated Radeon Graphics",
+        "elapsedSeconds": 257.2,
+        "activeSubmissions": 1,
+        "totalListings": 188,
+        "discoveredCount": 188,
+        "eligibleCount": 188,
+        "ingestedCount": 188,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 176,
+        "cpkFailedCount": 9,
+        "classifiedCount": 172,
+        "eligibleScoreCount": 84,
+        "ineligibleScoreCount": 69,
+        "gemCount": 3,
+        "superGemCount": 4,
+        "marketPricedCount": 157,
+        "processedPercent": 93.6,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "amazon": 177
+        },
+        "discoveredByVendor": {
+          "amazon": 188
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "catalogue-component-1fc0c481de4c8766db70",
+        "query": "ASUS Dual GeForce RTX 5060 Ti 16GB GDDR7 OC Edition (PCIe 5.0",
+        "elapsedSeconds": 178.1,
+        "activeSubmissions": 0,
+        "totalListings": 23,
+        "discoveredCount": 23,
+        "eligibleCount": 23,
+        "ingestedCount": 23,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 19,
+        "cpkFailedCount": 4,
+        "classifiedCount": 19,
+        "eligibleScoreCount": 13,
+        "ineligibleScoreCount": 1,
+        "gemCount": 0,
+        "superGemCount": 0,
+        "marketPricedCount": 14,
+        "processedPercent": 82.6,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "computer_orbit": 23
+        },
+        "discoveredByVendor": {
+          "computer_orbit": 23
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "intel-cpu",
+        "query": "Intel CPU -bundle -combo -laptop -\"cooler only\" -\"box only\" -\"heatsink only\" -bracket -mount -sticker -keychain -\"cooling fan\" -\"replacement fan\" -\"motherboard set\" -\"processor cooler\"",
+        "elapsedSeconds": 154.4,
+        "activeSubmissions": 0,
+        "totalListings": 38,
+        "discoveredCount": 38,
+        "eligibleCount": 38,
+        "ingestedCount": 38,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 37,
+        "cpkFailedCount": 1,
+        "classifiedCount": 37,
+        "eligibleScoreCount": 10,
+        "ineligibleScoreCount": 2,
+        "gemCount": 0,
+        "superGemCount": 1,
+        "marketPricedCount": 12,
+        "processedPercent": 97.4,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "bargain_hardware": 38
+        },
+        "discoveredByVendor": {
+          "bargain_hardware": 38
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "catalogue-component-cc94d7001f40cb08629d",
+        "query": "Asus Pro WS WRX90E-SAGE SE AMD sTR5 EEB Workstation Motherboard",
+        "elapsedSeconds": 143.1,
+        "activeSubmissions": 0,
+        "totalListings": 160,
+        "discoveredCount": 160,
+        "eligibleCount": 160,
+        "ingestedCount": 160,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 157,
+        "cpkFailedCount": 3,
+        "classifiedCount": 157,
+        "eligibleScoreCount": 87,
+        "ineligibleScoreCount": 26,
+        "gemCount": 1,
+        "superGemCount": 4,
+        "marketPricedCount": 113,
+        "processedPercent": 98.1,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "computer_orbit": 63,
+          "scan": 97
+        },
+        "discoveredByVendor": {
+          "scan": 97,
+          "computer_orbit": 63
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "catalogue-component-a41b0af1134565159d13",
+        "query": "APNX Creator C1 ChromaFlair Mid Tower Case",
+        "elapsedSeconds": 135.0,
+        "activeSubmissions": 1,
+        "totalListings": 97,
+        "discoveredCount": 97,
+        "eligibleCount": 97,
+        "ingestedCount": 97,
+        "ingestedNewCount": 5,
+        "cpkAssignedCount": 62,
+        "cpkFailedCount": 2,
+        "classifiedCount": 56,
+        "eligibleScoreCount": 27,
+        "ineligibleScoreCount": 1,
+        "gemCount": 2,
+        "superGemCount": 3,
+        "marketPricedCount": 31,
+        "processedPercent": 60.8,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "overclockers": 80,
+          "ebay": 6,
+          "awd_it": 11
+        },
+        "discoveredByVendor": {
+          "overclockers": 80,
+          "ebay": 6,
+          "awd_it": 11
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "catalogue-component-7d11d6dbf5340bf9cd4a",
+        "query": "ASUS ProArt X870E-Creator WiFi AMD AM5 ATX Content Creator Motherboard",
+        "elapsedSeconds": 118.7,
+        "activeSubmissions": 0,
+        "totalListings": 128,
+        "discoveredCount": 128,
+        "eligibleCount": 128,
+        "ingestedCount": 128,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 128,
+        "cpkFailedCount": 0,
+        "classifiedCount": 128,
+        "eligibleScoreCount": 70,
+        "ineligibleScoreCount": 21,
+        "gemCount": 1,
+        "superGemCount": 1,
+        "marketPricedCount": 91,
+        "processedPercent": 100.0,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "computer_orbit": 2,
+          "scan": 107
+        },
+        "discoveredByVendor": {
+          "scan": 107,
+          "computer_orbit": 21
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "catalogue-component-9c67b8c051e692ee1752",
+        "query": "Asus Radeon RX 9070 Prime OC 16GB GDDR6 PCI-Express Graphics Card",
+        "elapsedSeconds": 84.8,
+        "activeSubmissions": 0,
+        "totalListings": 93,
+        "discoveredCount": 93,
+        "eligibleCount": 93,
+        "ingestedCount": 93,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 92,
+        "cpkFailedCount": 1,
+        "classifiedCount": 92,
+        "eligibleScoreCount": 76,
+        "ineligibleScoreCount": 12,
+        "gemCount": 0,
+        "superGemCount": 0,
+        "marketPricedCount": 88,
+        "processedPercent": 98.9,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "scan": 93
+        },
+        "discoveredByVendor": {
+          "scan": 93
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      },
+      {
+        "searchId": "catalogue-component-b6c53088c8a87ddf837a",
+        "query": "Asus Radeon RX 9070 XT Prime OC 16GB GDDR6 PCI-Express Graphics Card",
+        "elapsedSeconds": 54.6,
+        "activeSubmissions": 0,
+        "totalListings": 93,
+        "discoveredCount": 93,
+        "eligibleCount": 93,
+        "ingestedCount": 93,
+        "ingestedNewCount": 0,
+        "cpkAssignedCount": 92,
+        "cpkFailedCount": 1,
+        "classifiedCount": 92,
+        "eligibleScoreCount": 76,
+        "ineligibleScoreCount": 12,
+        "gemCount": 0,
+        "superGemCount": 0,
+        "marketPricedCount": 88,
+        "processedPercent": 98.9,
+        "excludedAuctionCount": 0,
+        "byVendor": {
+          "scan": 93
+        },
+        "discoveredByVendor": {
+          "scan": 93
+        },
+        "configuredVendors": null,
+        "isComplete": false
+      }
+    ],
+    "recentHistory": [],
+    "binPricesCount": 811,
+    "soldPricesCount": 6934,
+    "superGemCount": 18,
+    "gemCount": 9,
+    "avgGemScore": 8.2,
+    "avgSuperGemScore": 9.5,
+    "totalsAcrossActive": {
+      "listings": 1457,
+      "ingestedCount": 1419,
+      "cpkAssignedCount": 1214,
+      "classifiedInternalCount": 1132,
+      "marketPricedCount": 944,
+      "processedCount": 1171.8
+    },
+    "completedSweepRequestedAt": null,
+    "pendingSweepRequestedAt": "2026-10-27T00:11:32.480638Z"
+  }
+}

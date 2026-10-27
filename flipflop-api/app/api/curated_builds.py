@@ -23,7 +23,9 @@ from app.models.benchmark import HardwareBenchmark
 from app.models.part import Part
 from app.models.playbook import Playbook
 from app.services.benchmark_normaliser import normalise_cpu, normalise_gpu
+from app.services.playbook_book import cell_state, record_segment_event
 from app.routes.admin_auth import get_current_admin
+from app.models.admin_user import AdminUser
 
 router = APIRouter(prefix="/curated-builds", tags=["curated-builds"], dependencies=[Depends(get_current_admin)])
 
@@ -75,6 +77,7 @@ async def bestseller_catalogue(db: AsyncSession = Depends(get_db)):
             COALESCE(a.cpk, 'asin:' || a.asin) AS cpk, a.price,
             a.rating, a.review_count, a.captured_at,
             COALESCE(r.status, 'pending') AS review_status,
+            r.selected_media->'identity_reviews'->a.asin AS identity_review,
             COALESCE(m.listing_id, 'amazon-bestseller:' || a.asin) AS marketplace_listing_id,
             COALESCE(m.source, 'amazon') AS marketplace_source,
             COALESCE(m.title, a.title) AS marketplace_title,
@@ -125,13 +128,75 @@ async def bestseller_catalogue(db: AsyncSession = Depends(get_db)):
         )
         ORDER BY a.category, a.rank
     """))).mappings().all()
-    return {"items": [dict(row) for row in rows]}
+    from app.services.bestseller_identity_review import identity_fingerprint
+    items = [dict(row) for row in rows]
+    for item in items:
+        review = item.get('identity_review')
+        if review and review.get('fingerprint') != identity_fingerprint(item):
+            item['identity_review'] = None
+    from app.services.curated_media import captured_media, media_urls
+    for item in items:
+        image_url = next(iter(media_urls([item.get('image_url')])), None)
+        if image_url is None:
+            gallery = await captured_media(db, item['category'], item['cpk'], item['asin'])
+            image_url = next(iter(media_urls([photo.get('url') for photo in gallery['images']])), None)
+        item['image_url'] = image_url
+        marketplace_image = next(iter(media_urls([item.get('marketplace_image_url')])), None)
+        if item.get('marketplace_is_self_capture') or marketplace_image is None:
+            item['marketplace_image_url'] = image_url
+            if not item.get('marketplace_is_self_capture'):
+                item['marketplace_image_is_reference'] = True
+        else:
+            item['marketplace_image_url'] = marketplace_image
+
+    return {"items": items}
 
 
 class BestsellerReviewInput(BaseModel):
     category: str = Field(min_length=1, max_length=40)
     cpk: str = Field(min_length=1, max_length=255)
     status: str
+
+
+class CuratedMediaInput(BaseModel):
+    category: str = Field(min_length=1, max_length=40)
+    cpk: str = Field(min_length=1, max_length=255)
+    images: list[str] = Field(min_length=1, max_length=5000)
+    videos: list[str] = Field(default_factory=list, max_length=5000)
+
+
+@router.get("/bestseller-catalogue/media")
+async def get_curated_media(category: str, cpk: str, db: AsyncSession = Depends(get_db)):
+    from app.services.curated_media import captured_media
+    captured = await captured_media(db, category, cpk)
+    selection = (await db.execute(text("""
+        SELECT selected_media FROM curated_bestseller_reviews WHERE category = :category AND cpk = :cpk
+    """), {"category": category, "cpk": cpk})).scalar()
+    return {**captured, "selected_media": selection}
+
+
+@router.put("/bestseller-catalogue/media")
+async def save_curated_media(body: CuratedMediaInput, db: AsyncSession = Depends(get_db)):
+    from app.services.curated_media import captured_media, validate_selection
+    exists = (await db.execute(text("""
+        SELECT EXISTS (SELECT 1 FROM amazon_bestseller_observations
+        WHERE category = :category AND COALESCE(cpk, 'asin:' || asin) = :cpk)
+    """), {"category": body.category, "cpk": body.cpk})).scalar()
+    if not exists:
+        raise HTTPException(status_code=404, detail="Matched bestseller product not found")
+    selection = {"images": body.images, "videos": body.videos}
+    try:
+        validate_selection(selection, await captured_media(db, body.category, body.cpk))
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    await db.execute(text("""
+        INSERT INTO curated_bestseller_reviews (category, cpk, status, reviewed_at, selected_media)
+        VALUES (:category, :cpk, 'pending', now(), CAST(:selection AS jsonb))
+        ON CONFLICT (category, cpk) DO UPDATE
+        SET selected_media = COALESCE(curated_bestseller_reviews.selected_media::jsonb, '{}'::jsonb)
+            || EXCLUDED.selected_media::jsonb, reviewed_at = EXCLUDED.reviewed_at
+    """), {"category": body.category, "cpk": body.cpk, "selection": json.dumps(selection)})
+    return {"selected_media": selection}
 
 
 class BestsellerBulkReviewItem(BaseModel):
@@ -193,17 +258,18 @@ async def review_bestsellers_bulk(body: BestsellerBulkReviewInput, db: AsyncSess
             eligible.append({"category": row["category"], "cpk": row["cpk"]})
     if eligible:
         await db.execute(text("""
-            INSERT INTO curated_bestseller_reviews (category, cpk, status, reviewed_at)
-            SELECT x.category, x.cpk, 'approved', now()
+            INSERT INTO curated_bestseller_reviews (category, cpk, status, reviewed_at, selected_media)
+            SELECT x.category, x.cpk, 'approved', now(), '{"images":[],"videos":[]}'::jsonb
             FROM jsonb_to_recordset(CAST(:items AS jsonb)) AS x(category text, cpk text)
             ON CONFLICT (category, cpk) DO UPDATE
-            SET status = EXCLUDED.status, reviewed_at = EXCLUDED.reviewed_at
+            SET status = EXCLUDED.status, reviewed_at = EXCLUDED.reviewed_at,
+                selected_media = COALESCE(curated_bestseller_reviews.selected_media, EXCLUDED.selected_media)
         """), {"items": json.dumps(eligible)})
     return {"approved": len(eligible), "failed": failed}
 
 
 @router.put("/bestseller-catalogue/review")
-async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depends(get_db)):
+async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depends(get_db), admin: AdminUser = Depends(get_current_admin)):
     if body.status not in {"approved", "rejected", "pending"}:
         raise HTTPException(status_code=422, detail="Invalid review status")
     exists = (await db.execute(text("""
@@ -225,8 +291,10 @@ async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depe
                 and item.get("popularity_evidence", {}).get("cpk") == body.cpk
                 for item in pair if isinstance(item, dict)
             ):
+                before = cell_state(segment)
                 segment.approved_upgrades = []
                 segment.is_live = False
+                record_segment_event(db, segment, "taken_offline", "Reviewed upsell evidence was withdrawn", before, getattr(admin,"id",0))
                 invalidated_cells += 1
     if body.status == "approved":
         has_image = (await db.execute(text("""
@@ -261,10 +329,11 @@ async def review_bestseller(body: BestsellerReviewInput, db: AsyncSession = Depe
         """), {"category": body.category, "cpk": body.cpk})
     else:
         await db.execute(text("""
-            INSERT INTO curated_bestseller_reviews (category, cpk, status, reviewed_at)
-            VALUES (:category, :cpk, :status, now())
+            INSERT INTO curated_bestseller_reviews (category, cpk, status, reviewed_at, selected_media)
+            VALUES (:category, :cpk, :status, now(), '{"images":[],"videos":[]}'::jsonb)
             ON CONFLICT (category, cpk) DO UPDATE
-            SET status = EXCLUDED.status, reviewed_at = EXCLUDED.reviewed_at
+            SET status = EXCLUDED.status, reviewed_at = EXCLUDED.reviewed_at,
+                selected_media = COALESCE(curated_bestseller_reviews.selected_media, EXCLUDED.selected_media)
         """), {"category": body.category, "cpk": body.cpk, "status": body.status})
     return {"category": body.category, "cpk": body.cpk, "review_status": body.status, "invalidated_cells": invalidated_cells}
 
@@ -650,6 +719,7 @@ def _upgrade_performance_evidence(
 async def _component_context(db: AsyncSession, ids: set[int]) -> dict[int, dict]:
     if not ids:
         return {}
+    from app.services.curated_media import media_urls
     rows = (await db.execute(
         select(CatalogueVariant, Listing, PlaybookSlot)
         .join(Listing, Listing.id == CatalogueVariant.listing_id)
@@ -664,7 +734,7 @@ async def _component_context(db: AsyncSession, ids: set[int]) -> dict[int, dict]
             "price": listing.price,
             "status": listing.status.value if hasattr(listing.status, "value") else listing.status,
             "last_seen_at": listing.last_seen_at.isoformat() if listing.last_seen_at else None,
-            "image_url": listing.image_urls[0] if listing.image_urls else None,
+            "image_url": (variant.asset_media_review or {}).get("main_photo_approved_url") or next(iter(media_urls(listing.image_urls or [])), None),
             "url": listing.url,
             "curated_for_builds": variant.curated_for_builds,
         }
@@ -822,7 +892,10 @@ async def get_curated_builds(db: AsyncSession = Depends(get_db)):
         else:
             row["availability_status"] = "out_of_stock" if len(selected) != assigned_count or any(item["status"] != "active" for item in selected) else "in_stock"
         if row["availability_status"] != "in_stock" and segment.is_live:
+            before = cell_state(segment)
             segment.is_live = False
+            row["is_live"] = False
+            record_segment_event(db, segment, "taken_offline", "Selected catalogue listings are unavailable", before)
         payload.append(row)
     return {"segments": payload, "components": list((await _component_context(db, {
         row[0].id for row in (await db.execute(
@@ -835,7 +908,7 @@ async def get_curated_builds(db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/segments")
-async def upsert_segment(body: SegmentInput, db: AsyncSession = Depends(get_db)):
+async def upsert_segment(body: SegmentInput, db: AsyncSession = Depends(get_db), admin: AdminUser = Depends(get_current_admin)):
     if body.budget_min is not None and body.budget_min < 0:
         raise HTTPException(status_code=422, detail="Minimum budget must be zero or greater")
     if body.budget_max is not None and (body.budget_min is None or body.budget_max <= body.budget_min):
@@ -865,6 +938,7 @@ async def upsert_segment(body: SegmentInput, db: AsyncSession = Depends(get_db))
     if segment is None:
         segment = CuratedBuildSegment(customer_type=body.customer_type, budget_level=body.budget_level)
         db.add(segment)
+    before = cell_state(segment)
     segment.budget_min = body.budget_min
     segment.budget_max = body.budget_max
     if body.components is not None:
@@ -913,6 +987,7 @@ async def upsert_segment(body: SegmentInput, db: AsyncSession = Depends(get_db))
         except PublicationError as exc:
             raise HTTPException(409, str(exc)) from exc
     await db.flush()
+    record_segment_event(db, segment, "cell_edited", "Operator edited the cell definition", before, getattr(admin,"id",0))
     return _segment_json(segment)
 
 
@@ -923,7 +998,7 @@ class BestsellerComponentInput(BaseModel):
 
 @router.put("/segments/{segment_id}/bestseller-component")
 async def set_segment_bestseller_component(
-    segment_id: int, body: BestsellerComponentInput, db: AsyncSession = Depends(get_db)
+    segment_id: int, body: BestsellerComponentInput, db: AsyncSession = Depends(get_db), admin: AdminUser = Depends(get_current_admin)
 ):
     segment = await db.get(CuratedBuildSegment, segment_id)
     if not segment:
@@ -965,19 +1040,16 @@ async def set_segment_bestseller_component(
         choices[body.slot] = {"category": category, "cpk": body.cpk}
     else:
         choices.pop(body.slot, None)
+    before = cell_state(segment)
     segment.bestseller_components = choices
     segment.is_live = False
+    record_segment_event(db, segment, "component_selection_changed", "Operator changed a linked product; publication requires rechecking", before, getattr(admin,"id",0))
     return _segment_json(segment)
 
 
 @router.patch("/variants/{variant_id}/curated")
 async def set_curated_variant(variant_id: int, body: dict, db: AsyncSession = Depends(get_db)):
-    variant = await db.get(CatalogueVariant, variant_id)
-    if not variant:
-        raise HTTPException(status_code=404, detail="Catalogue item not found")
-    variant.curated_for_builds = bool(body.get("curated_for_builds"))
-    variant.updated_at = datetime.utcnow().isoformat()
-    return {"id": variant.id, "curated_for_builds": variant.curated_for_builds}
+    raise HTTPException(410, "Catalogue membership follows Amazon rankings and recorded Playbook requirements. Use the photo grid to review or delete products.")
 
 
 @router.post("/segments/{segment_id}/generate")
@@ -1008,12 +1080,14 @@ async def generate_segment(segment_id: int, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/segments/{segment_id}/apply-price")
-async def apply_proposed_price(segment_id: int, db: AsyncSession = Depends(get_db)):
+async def apply_proposed_price(segment_id: int, db: AsyncSession = Depends(get_db), admin: AdminUser = Depends(get_current_admin)):
     segment = await db.get(CuratedBuildSegment, segment_id)
     if not segment or segment.proposed_selling_price is None:
         raise HTTPException(status_code=409, detail="No proposed price is available")
+    before = cell_state(segment)
     segment.selling_price = segment.proposed_selling_price
     segment.proposed_selling_price = None
+    record_segment_event(db, segment, "price_applied", "Operator applied the proposed selling price", before, getattr(admin,"id",0))
     ids = {int(value) for value in (segment.components or {}).values() if str(value).isdigit()}
     context = await _component_context(db, ids)
     segment.component_cost_snapshot = sum(item["price"] or 0 for item in context.values())
@@ -1021,12 +1095,14 @@ async def apply_proposed_price(segment_id: int, db: AsyncSession = Depends(get_d
 
 
 @router.post("/segments/{segment_id}/publish")
-async def publish_segment(segment_id: int, body: dict, db: AsyncSession = Depends(get_db)):
+async def publish_segment(segment_id: int, body: dict, db: AsyncSession = Depends(get_db), admin: AdminUser = Depends(get_current_admin)):
     segment = await db.get(CuratedBuildSegment, segment_id)
     if not segment:
         raise HTTPException(status_code=404, detail="Playbook segment not found")
     if not body.get("is_live", True):
+        before = cell_state(segment)
         segment.is_live = False
+        record_segment_event(db, segment, "taken_offline", "Operator requested publication withdrawal", before, getattr(admin,"id",0))
         return _segment_json(segment)
     required = {"cpu", "gpu", "motherboard", "ram", "storage", "psu", "case"}
     selected = segment.components or {}
@@ -1104,6 +1180,8 @@ async def publish_segment(segment_id: int, body: dict, db: AsyncSession = Depend
             await public_list_cases(db), require_live=False)
     except PublicationError as exc:
         raise HTTPException(409, str(exc)) from exc
+    before = cell_state(segment)
     segment.is_live = True
     segment.availability_status = "in_stock"
+    record_segment_event(db, segment, "published", "Operator publication passed the existing storefront checks", before, getattr(admin,"id",0))
     return _segment_json(segment)

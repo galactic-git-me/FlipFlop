@@ -1,0 +1,2266 @@
+- generic [ref=e1]:
+  - dialog "All Offers Display" [ref=e2]:
+    - generic [ref=e3]:
+      - button "Close" [active] [ref=e6] [cursor=pointer]
+      - generic [ref=e10]:
+        - separator [aria-hidden] [ref=e12]
+        - generic [ref=e13]:
+          - generic [ref=e14]:
+            - generic [ref=e18]:
+              - generic [ref=e19]:
+                - heading "MSI B550M PRO-VDH WIFI Motherboard, mATX, AM4 | AMD Ryzen 5000 CPU, DDR4 Boost (4400MHz/OC), PCIe 4.0 x16, 3 x PCIe 3.0 x16, M.2 Gen4, M.2 Gen3, Gigabit LAN, Wi-Fi 6" [level=5] [ref=e21]
+                - generic [ref=e22]:
+                  - generic [ref=e23]: 4.4 out of 5 stars
+                  - generic [ref=e26]: 1,429 ratings
+              - generic [ref=e27]: New
+              - generic [ref=e33]:
+                - generic [ref=e35]:
+                  - generic [ref=e40]:
+                    - generic [ref=e41]:
+                      - generic [ref=e42]: £99.95 with 9 percent savings
+                      - generic [ref=e43]: "-9%"
+                      - generic [aria-hidden] [ref=e45]:
+                        - text: £
+                        - generic [ref=e46]:
+                          - text: "99"
+                          - generic [ref=e47]: .
+                        - text: "95"
+                    - generic [ref=e49]:
+                      - generic [ref=e50]:
+                        - generic [ref=e51]: "RRP: £109.99"
+                        - generic [aria-hidden] [ref=e52]:
+                          - text: "RRP:"
+                          - generic [ref=e53]:
+                            - generic [ref=e54]: £109.99
+                            - text: £109.99
+                      - link [ref=e57] [cursor=pointer]:
+                        - /url: "#"
+                        - img "Learn more about Amazon pricing and savings" [ref=e58]
+                  - generic [ref=e66]:
+                    - text: FREE delivery Thursday, 29 October.
+                    - link "Details about delivery costs and delivery methods" [ref=e67] [cursor=pointer]:
+                      - /url: /gp/help/customer/display.html/?nodeId=492868
+                      - text: Details
+                - generic [ref=e74] [cursor=pointer]:
+                  - button "Add to basket from seller Amazon and price £99.95" [ref=e75]
+                  - generic [aria-hidden] [ref=e76]: Add to Basket
+            - link "See more details about this offer" [ref=e79] [cursor=pointer]:
+              - /url: "#"
+              - text: See more
+          - separator [aria-hidden] [ref=e81]
+        - generic [ref=e82]:
+          - generic [ref=e84]:
+            - heading "3 other options" [level=5] [ref=e85]
+            - paragraph [ref=e86]: "sorted by price + delivery: low to high"
+          - button "Filter" [ref=e89]:
+            - generic [aria-hidden] [ref=e93] [cursor=pointer]: Filter
+        - list [ref=e95]:
+          - listitem [ref=e96]:
+            - generic [ref=e97]: Used - Very Good
+            - generic [ref=e104]:
+              - generic [ref=e110]:
+                - generic [ref=e111]: £85.78
+                - generic [aria-hidden] [ref=e113]:
+                  - text: £
+                  - generic [ref=e114]:
+                    - text: "85"
+                    - generic [ref=e115]: .
+                  - text: "78"
+              - generic [ref=e118]:
+                - generic [ref=e120]:
+                  - generic [ref=e126]:
+                    - text: FREE delivery Thursday, 29 October.
+                    - link "Details about delivery costs and delivery methods" [ref=e127] [cursor=pointer]:
+                      - /url: /gp/help/customer/display.html/?nodeId=492868
+                      - text: Details
+                  - generic [ref=e128]:
+                    - text: ...
+                    - link "More. about delivery" [ref=e130] [cursor=pointer]:
+                      - /url: "#"
+                      - text: More
+                - generic [ref=e137] [cursor=pointer]:
+                  - button "Add to basket from seller Amazon Resale and price £85.78" [ref=e138]
+                  - generic [aria-hidden] [ref=e139]: Add to Basket
+            - list [ref=e140]:
+              - listitem [ref=e141]:
+                - generic [ref=e143]:
+                  - heading "Condition" [ref=e145]
+                  - generic [ref=e146]:
+                    - generic [ref=e147]: Minor cosmetic imperfection on bottom or back of the item. Item will come in original packaging. Packag...
+                    - link "More" [ref=e150] [cursor=pointer]:
+                      - /url: "#"
+              - listitem [ref=e151]:
+                - generic [ref=e153]:
+                  - generic [ref=e154]: Dispatches from
+                  - generic [ref=e155]: Amazon
+              - listitem [ref=e156]:
+                - generic [ref=e158]:
+                  - generic [ref=e159]: Sold by
+                  - link "Amazon Resale. Opens a new page" [ref=e161] [cursor=pointer]:
+                    - /url: /Amazon-Warehouse-Deals/b?ie=UTF8&node=3581866031
+                    - text: Amazon Resale
+          - separator [aria-hidden] [ref=e162]
+          - listitem [ref=e163]:
+            - generic [ref=e164]: New
+            - generic [ref=e171]:
+              - generic [ref=e177]:
+                - generic [ref=e178]: £126.36
+                - generic [aria-hidden] [ref=e180]:
+                  - text: £
+                  - generic [ref=e181]:
+                    - text: "126"
+                    - generic [ref=e182]: .
+                  - text: "36"
+              - generic [ref=e185]:
+                - generic [ref=e193]:
+                  - text: FREE delivery 31 October - 3 November on your first order to UK or Ireland. Order within 1 hr 44 mins.
+                  - link "Details about delivery costs and delivery methods" [ref=e194] [cursor=pointer]:
+                    - /url: /gp/aag/details/?seller=A33NOGDIP8BLNP&sshmPath=shipping-rates
+                    - text: Details
+                - generic [ref=e201] [cursor=pointer]:
+                  - button "Add to basket from seller trendyConnect and price £126.36" [ref=e202]
+                  - generic [aria-hidden] [ref=e203]: Add to Basket
+            - list [ref=e204]:
+              - listitem [ref=e205]:
+                - generic [ref=e207]:
+                  - generic [ref=e208]: Dispatches from
+                  - generic [ref=e209]: trendyConnect
+              - listitem [ref=e210]:
+                - generic [ref=e212]:
+                  - generic [ref=e213]: Sold by
+                  - generic [ref=e214]:
+                    - link "trendyConnect. Opens a new page" [ref=e215] [cursor=pointer]:
+                      - /url: /gp/aag/main?ie=UTF8&seller=A33NOGDIP8BLNP&isAmazonFulfilled=0&asin=B08BCR4ZRS&ref_=olp_merch_name_2
+                      - text: trendyConnect
+                    - generic [ref=e216]:
+                      - generic [ref=e217]: Seller rating is 3.5 out of 5 stars
+                      - generic [ref=e219]: (54 ratings) 60% positive over last 12 months
+          - separator [aria-hidden] [ref=e221]
+          - listitem [ref=e222]:
+            - generic [ref=e223]: New
+            - generic [ref=e230]:
+              - generic [ref=e236]:
+                - generic [ref=e237]: £150.97
+                - generic [aria-hidden] [ref=e239]:
+                  - text: £
+                  - generic [ref=e240]:
+                    - text: "150"
+                    - generic [ref=e241]: .
+                  - text: "97"
+              - generic [ref=e244]:
+                - generic [ref=e252]:
+                  - text: £17.22 delivery 9 - 13 November.
+                  - link "Details about delivery costs and delivery methods" [ref=e253] [cursor=pointer]:
+                    - /url: /gp/aag/details/?seller=A3M9Q4C4UQBDMF&sshmPath=shipping-rates
+                    - text: Details
+                - generic [ref=e260] [cursor=pointer]:
+                  - button "Add to basket from seller VANDIN and price £150.97" [ref=e261]
+                  - generic [aria-hidden] [ref=e262]: Add to Basket
+            - list [ref=e263]:
+              - listitem [ref=e264]:
+                - generic [ref=e266]:
+                  - generic [ref=e267]: Dispatches from
+                  - generic [ref=e268]: VANDIN
+              - listitem [ref=e269]:
+                - generic [ref=e271]:
+                  - generic [ref=e272]: Sold by
+                  - generic [ref=e273]:
+                    - link "VANDIN. Opens a new page" [ref=e274] [cursor=pointer]:
+                      - /url: /gp/aag/main?ie=UTF8&seller=A3M9Q4C4UQBDMF&isAmazonFulfilled=0&asin=B08BCR4ZRS&ref_=olp_merch_name_3
+                      - text: VANDIN
+                    - generic [ref=e275]:
+                      - generic [ref=e276]: Seller rating is 2 out of 5 stars
+                      - generic [ref=e278]: (20 ratings) 31% positive over last 12 months
+          - separator [aria-hidden] [ref=e280]
+  - generic [ref=e282] [cursor=pointer]
+  - generic [aria-hidden] [ref=e283]:
+    - dialog [ref=e284]:
+      - generic [ref=e285]:
+        - heading [level=4] [ref=e286]: Select your cookie preferences
+        - paragraph [ref=e287]:
+          - text: We use cookies and similar tools that are necessary to enable you to make purchases, to enhance your shopping experiences and to provide our services, as detailed in our
+          - link [ref=e288] [cursor=pointer]:
+            - /url: /gp/help/customer/display.html/?nodeId=201890250
+            - text: Cookie notice
+          - text: . We also use these cookies to understand how customers use our services (for example, by measuring site visits) so we can make improvements.
+        - paragraph [ref=e289]:
+          - text: If you agree, we'll also use cookies to complement your shopping experience across the Amazon stores as described in our
+          - link [ref=e290] [cursor=pointer]:
+            - /url: /gp/help/customer/display.html/?nodeId=201890250
+            - text: Cookie notice
+          - text: . Your choice applies to using first-party and third-party advertising cookies on this service. Cookies store or access standard device information such as a unique identifier. The
+          - link [ref=e291] [cursor=pointer]:
+            - /url: /privacyprefs/retail/partners
+            - text: 129 third parties
+          - text: who use cookies on this service do so for their purposes of displaying and measuring personalized ads, generating audience insights, and developing and improving products. Click "Decline" to reject, or "Customise" to make more detailed advertising choices, or learn more. You can change your choices at any time by visiting
+          - link [ref=e292] [cursor=pointer]:
+            - /url: /cookieprefs?ref_=portal_banner_cpp
+            - text: Cookie preferences
+          - text: ", as described in the Cookie notice. To learn more about how and for what purposes Amazon uses personal information (such as Amazon Store order history), please visit our"
+          - link [ref=e293] [cursor=pointer]:
+            - /url: /gp/help/customer/display.html?nodeId=201909010
+            - text: Privacy notice
+          - text: .
+        - paragraph [ref=e294]:
+          - text: Since you're not signed in, your choice will only apply to this device or this browser. Once you sign in, we'll remember your preferences across your devices and browsers and, if a conflict is detected between your account preferences and the choices you made while browsing without being signed in, your account preferences will apply. You can update your preferences at any time by visiting the
+          - link [ref=e295] [cursor=pointer]:
+            - /url: /privacyprefs/retail?ref_=portal_banner_cpp
+            - text: Cookie and advertising choices
+          - text: .
+      - generic [ref=e297]:
+        - generic [ref=e300] [cursor=pointer]:
+          - button [ref=e301]: Accept
+          - generic [aria-hidden] [ref=e302]: Accept
+        - generic [ref=e305] [cursor=pointer]:
+          - button [ref=e306]: Decline
+          - generic [aria-hidden] [ref=e307]: Decline
+        - link [ref=e309] [cursor=pointer]:
+          - /url: /privacyprefs/retail?ref_=portal_banner_cpp
+          - text: Customise
+    - navigation [ref=e310]:
+      - heading [level=2] [ref=e311]: Skip to
+      - list [ref=e312]:
+        - listitem [ref=e313]:
+          - link [ref=e314] [cursor=pointer]:
+            - /url: "#skippedLink"
+            - text: Main content
+        - listitem [ref=e315]:
+          - link [ref=e316] [cursor=pointer]:
+            - /url: "#featurebullets_feature_div"
+            - text: About this item
+        - listitem [ref=e317]:
+          - link [ref=e318] [cursor=pointer]:
+            - /url: "#buybox"
+            - text: Buying options
+        - listitem [ref=e319]:
+          - link [ref=e320] [cursor=pointer]:
+            - /url: "#customerReviews"
+            - text: Reviews
+      - separator [aria-hidden] [ref=e321]
+      - heading [level=2] [ref=e322]: Keyboard shortcuts
+      - list [ref=e323]:
+        - listitem [ref=e324]:
+          - link [ref=e325] [cursor=pointer]:
+            - /url: javascript:void(0)
+            - generic [aria-hidden] [ref=e326]:
+              - generic [ref=e327]: Search
+              - generic [ref=e328]:
+                - generic [ref=e329]: ALT
+                - generic [ref=e330]: +
+                - generic [ref=e331]: /
+        - listitem [ref=e332]:
+          - link [ref=e333] [cursor=pointer]:
+            - /url: javascript:void(0)
+            - generic [aria-hidden] [ref=e334]:
+              - generic [ref=e335]: Basket
+              - generic [ref=e336]:
+                - generic [ref=e337]: shift
+                - generic [ref=e338]: +
+                - generic [ref=e339]: ALT
+                - generic [ref=e340]: +
+                - generic [ref=e341]: C
+        - listitem [ref=e342]:
+          - link [ref=e343] [cursor=pointer]:
+            - /url: javascript:void(0)
+            - generic [aria-hidden] [ref=e344]:
+              - generic [ref=e345]: Home
+              - generic [ref=e346]:
+                - generic [ref=e347]: shift
+                - generic [ref=e348]: +
+                - generic [ref=e349]: ALT
+                - generic [ref=e350]: +
+                - generic [ref=e351]: H
+        - listitem [ref=e352]:
+          - link [ref=e353] [cursor=pointer]:
+            - /url: javascript:void(0)
+            - generic [aria-hidden] [ref=e354]:
+              - generic [ref=e355]: Orders
+              - generic [ref=e356]:
+                - generic [ref=e357]: shift
+                - generic [ref=e358]: +
+                - generic [ref=e359]: ALT
+                - generic [ref=e360]: +
+                - generic [ref=e361]: O
+        - listitem [ref=e362]:
+          - button [ref=e363] [cursor=pointer]:
+            - generic [aria-hidden] [ref=e364]:
+              - generic [ref=e365]: Add to basket
+              - generic [ref=e366]:
+                - generic [ref=e367]: shift
+                - generic [ref=e368]: +
+                - generic [ref=e369]: ALT
+                - generic [ref=e370]: +
+                - generic [ref=e371]: K
+        - listitem [ref=e372]:
+          - button [ref=e373] [cursor=pointer]:
+            - generic [aria-hidden] [ref=e374]:
+              - generic [ref=e375]: Show/Hide shortcuts
+              - generic [ref=e376]:
+                - generic [ref=e377]: shift
+                - generic [ref=e378]: +
+                - generic [ref=e379]: ALT
+                - generic [ref=e380]: +
+                - generic [ref=e381]: Z
+      - generic [ref=e384]:
+        - generic [ref=e385] [cursor=pointer]
+        - generic [ref=e387]: To move between items, use your keyboard's up or down arrows.
+    - banner [ref=e388]:
+      - navigation [ref=e389]:
+        - generic [ref=e390]:
+          - generic [ref=e391]:
+            - link [ref=e393] [cursor=pointer]:
+              - /url: /ref=nav_logo
+              - generic: .co.uk
+            - button [ref=e396] [cursor=pointer]:
+              - generic [ref=e398]:
+                - generic [ref=e399]: Delivering to Hampton TW12
+                - generic [ref=e400]: Update location
+          - search [ref=e403]:
+            - generic [ref=e406]:
+              - generic [ref=e407]: Computers & Accessories
+              - combobox [ref=e410] [cursor=pointer]
+            - searchbox [ref=e413]
+            - button [ref=e417] [cursor=pointer]: Go
+          - generic [ref=e419]:
+            - generic [ref=e420]:
+              - link [ref=e421] [cursor=pointer]:
+                - /url: /customer-preferences/edit?ie=UTF8&preferencesReturnUrl=%2F&ref_=topnav_lang
+              - button [ref=e426] [cursor=pointer]
+            - generic [ref=e427]:
+              - link [ref=e428] [cursor=pointer]:
+                - /url: https://www.amazon.co.uk/ap/signin?openid.return_to=https%3A%2F%2Fwww.amazon.co.uk%2Fdp%2FB08BCR4ZRS%2Fref%3Dnav_ya_signin%3Faod%3D1%26condition%3DNEW&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.assoc_handle=gbflex&openid.mode=checkid_setup&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0
+                - generic [ref=e429]: Hello, sign in
+                - generic [ref=e431]: Account & Lists
+              - button [ref=e432] [cursor=pointer]
+            - link [ref=e433] [cursor=pointer]:
+              - /url: /gp/css/order-history?ref_=nav_orders_first
+              - generic [ref=e434]: Returns
+              - generic [ref=e435]: "& Orders"
+            - link [ref=e436] [cursor=pointer]:
+              - /url: /gp/cart/view.html?ref_=nav_cart
+              - generic [aria-hidden] [ref=e438]: "0"
+              - generic [aria-hidden] [ref=e441]: Basket
+        - generic [ref=e442]:
+          - button [ref=e444] [cursor=pointer]:
+            - generic [ref=e446]: All
+          - list [ref=e450]:
+            - listitem [ref=e451]:
+              - link [ref=e453] [cursor=pointer]:
+                - /url: /haul/store?ref_=nav_cs_hul_disb
+                - text: Amazon Haul
+            - listitem [ref=e454]:
+              - link [ref=e456] [cursor=pointer]:
+                - /url: /gp/video/storefront?ref_=nav_cs_prime_video
+                - text: Prime Video
+            - listitem [ref=e457]:
+              - link [ref=e459] [cursor=pointer]:
+                - /url: /deals?ref_=nav_cs_gb
+                - text: Today's Deals
+            - listitem [ref=e460]:
+              - link [ref=e462] [cursor=pointer]:
+                - /url: /coupons?ref_=nav_cs_coupons
+                - text: Vouchers
+            - listitem [ref=e463]:
+              - link [ref=e465] [cursor=pointer]:
+                - /url: /gp/browse.html?node=22758010031&ref_=nav_cs_registry
+                - text: Wish Lists
+            - listitem [ref=e466]:
+              - link [ref=e468] [cursor=pointer]:
+                - /url: /music/player?ref_=nav_cs_music
+                - text: Music
+            - listitem [ref=e469]:
+              - link [ref=e471] [cursor=pointer]:
+                - /url: /books-used-books-textbooks/b/?ie=UTF8&node=266239&ref_=nav_cs_books
+                - text: Books
+            - listitem [ref=e472]:
+              - link [ref=e474] [cursor=pointer]:
+                - /url: /Kindle-eBooks-books/b/?ie=UTF8&node=341689031&ref_=nav_cs_kindle_books
+                - text: Kindle Books
+            - listitem [ref=e475]:
+              - link [ref=e477] [cursor=pointer]:
+                - /url: /PC-Video-Games-Consoles-Accessories/b/?ie=UTF8&node=300703&ref_=nav_cs_video_games
+                - text: PC & Video Games
+            - listitem [ref=e478]:
+              - link [ref=e480] [cursor=pointer]:
+                - /url: /auto-deliveries/landing?ref_=nav_cs_sns
+                - text: Subscribe & Save
+            - listitem [ref=e481]:
+              - link [ref=e483] [cursor=pointer]:
+                - /url: /gp/new-releases/?ref_=nav_cs_newreleases
+                - text: New Releases
+            - listitem [ref=e484]:
+              - link [ref=e486] [cursor=pointer]:
+                - /url: /Amazon-Custom/b/?ie=UTF8&node=14578036031&ref_=nav_cs_custom
+                - text: Custom Products
+            - listitem [ref=e487]:
+              - generic [ref=e488]:
+                - link [ref=e489] [cursor=pointer]:
+                  - /url: /prime?ref_=nav_cs_primelink_nonmember
+                  - text: Prime
+                - button [ref=e490] [cursor=pointer]
+            - listitem [ref=e491]:
+              - link [ref=e493] [cursor=pointer]:
+                - /url: /gp/browse.html?node=84908660031&ref_=nav_cs_sports
+                - text: Sports & Outdoors
+            - listitem [ref=e494]:
+              - link [ref=e496] [cursor=pointer]:
+                - /url: /Car-Motorbike-Accessories-Parts/b/?ie=UTF8&node=248877031&ref_=nav_cs_automotive
+                - text: Car & Motorbike
+            - listitem [ref=e497]:
+              - link [ref=e499] [cursor=pointer]:
+                - /url: /home-and-garden-store/b/?ie=UTF8&node=11052591&ref_=nav_cs_home_garden
+                - text: Home & Garden
+            - listitem [ref=e500]:
+              - link [ref=e502] [cursor=pointer]:
+                - /url: /gp/browse.html?node=7424513031&ref_=nav_cs_hi
+                - text: Home Improvement
+            - listitem [ref=e503]:
+              - link [ref=e505] [cursor=pointer]:
+                - /url: /gp/bestsellers/?ref_=nav_cs_bestsellers
+                - text: Best Sellers
+            - listitem [ref=e506]:
+              - link [ref=e508] [cursor=pointer]:
+                - /url: /gp/browse.html?node=95501532031&ref_=nav_cs_wwa
+                - text: Works with Alexa
+            - listitem [ref=e509]:
+              - link [ref=e511] [cursor=pointer]:
+                - /url: /b/?node=15418328031&ref_=nav_cs_shoppertoolkit
+                - text: Shopper Toolkit
+            - listitem [ref=e512]:
+              - link [ref=e514] [cursor=pointer]:
+                - /url: /fmc/everyday-essentials?ref_=nav_cs_ee
+                - text: Everyday
+            - listitem [ref=e515]:
+              - link [ref=e517] [cursor=pointer]:
+                - /url: /toys/b/?ie=UTF8&node=468292&ref_=nav_cs_toys
+                - text: Toys & Games
+            - listitem [ref=e518]:
+              - link [ref=e520] [cursor=pointer]:
+                - /url: /gp/help/customer/display.html?nodeId=508510&ref_=nav_cs_help
+                - text: Customer Service
+            - listitem [ref=e521]:
+              - link [ref=e523] [cursor=pointer]:
+                - /url: /health-beauty-haircare-wellbeing-dentalcare-shaving-hairremoval/b/?ie=UTF8&node=65801031&ref_=nav_cs_hpc
+                - text: Health & Personal Care
+            - listitem [ref=e524]:
+              - link [ref=e526] [cursor=pointer]:
+                - /url: /electronics-camera-mp3-ipod-tv/b/?ie=UTF8&node=560798&ref_=nav_cs_electronics
+                - text: Electronics
+            - listitem [ref=e527]:
+              - link [ref=e529] [cursor=pointer]:
+                - /url: /Pet-Supplies-Food-Animals/b/?ie=UTF8&node=340840031&ref_=nav_cs_pets
+                - text: Pet Supplies
+            - listitem [ref=e530]:
+              - link [ref=e532] [cursor=pointer]:
+                - /url: /computers-accessories/b/?ie=UTF8&node=340831031&ref_=nav_cs_pc
+                - text: PC
+            - listitem [ref=e533]:
+              - generic [ref=e534]:
+                - link [ref=e535] [cursor=pointer]:
+                  - /url: /Amazon-Gift-Voucher-Greeting-Card-Birthday-Christmas-Top-Up/b/?ie=UTF8&node=1571304031&ref_=nav_cs_gc
+                  - text: Gift Cards & Top Up
+                - button [ref=e536] [cursor=pointer]
+            - listitem [ref=e537]:
+              - link [ref=e539] [cursor=pointer]:
+                - /url: /Baby-Car-Seats-Prams-Nursery/b/?ie=UTF8&node=59624031&ref_=nav_cs_baby
+                - text: Baby
+            - listitem [ref=e540]:
+              - link [ref=e542] [cursor=pointer]:
+                - /url: /beauty-cosmetics/b/?ie=UTF8&node=117332031&ref_=nav_cs_beauty
+                - text: Beauty
+          - link [ref=e546] [cursor=pointer]:
+            - /url: /dp/B0HLLKYQF4/ref=dvm_crs_nav_uk_s_dt_swm_l_al_llhs1_tp/?_encoding=UTF8&ref_=nav_swm_dvm_crs_nav_uk_s_dt_swm_l_al_llhs1_tp&pf_rd_p=930bffeb-2265-480b-a656-08ad72979c31&pf_rd_s=nav-sitewide-msg&pf_rd_t=4201&pf_rd_i=navbar-4201&pf_rd_m=A1F83G8C2ARO7P&pf_rd_r=JBX39FKW4ERSE08PM3C6
+        - list [ref=e550]:
+          - listitem [ref=e551]:
+            - link [ref=e553] [cursor=pointer]:
+              - /url: /computers-accessories/b/?ie=UTF8&node=340831031&ref_=topnav_storetab_computers
+              - text: Computers & Accessories
+          - listitem [ref=e554]:
+            - link [ref=e556] [cursor=pointer]:
+              - /url: /gp/bestsellers/computers/ref=sv_computers_1/?ie=UTF8&ref_=sv_computers_1
+              - text: Best Sellers
+          - listitem [ref=e557]:
+            - link [ref=e559] [cursor=pointer]:
+              - /url: /discounts-offers-pc-electronics/b/?ie=UTF8&node=590987031&ref_=sv_computers_2
+              - text: Deals
+          - listitem [ref=e560]:
+            - generic [ref=e561]:
+              - link [ref=e562] [cursor=pointer]:
+                - /url: /laptops/b/?ie=UTF8&node=429886031&ref_=sv_computers_3
+                - text: Laptops
+              - button [ref=e563] [cursor=pointer]
+          - listitem [ref=e564]:
+            - generic [ref=e565]:
+              - link [ref=e566] [cursor=pointer]:
+                - /url: /desktop-computers/b/?ie=UTF8&node=428651031&ref_=sv_computers_4
+                - text: Desktops
+              - button [ref=e567] [cursor=pointer]
+          - listitem [ref=e568]:
+            - link [ref=e570] [cursor=pointer]:
+              - /url: /Printers/b/?ie=UTF8&node=428653031&ref_=sv_computers_5
+              - text: Printers
+          - listitem [ref=e571]:
+            - generic [ref=e572]:
+              - link [ref=e573] [cursor=pointer]:
+                - /url: /Tablets/b/?ie=UTF8&node=429892031&ref_=sv_computers_6
+                - text: Tablets
+              - button [ref=e574] [cursor=pointer]
+          - listitem [ref=e575]:
+            - link [ref=e577] [cursor=pointer]:
+              - /url: /Tablet-Accessories/b/?ie=UTF8&node=1499980031&ref_=sv_computers_7
+              - text: Tablet Accessories
+          - listitem [ref=e578]:
+            - generic [ref=e579]:
+              - link [ref=e580] [cursor=pointer]:
+                - /url: /Monitors/b/?ie=UTF8&node=428652031&ref_=sv_computers_8
+                - text: Monitors
+              - button [ref=e581] [cursor=pointer]
+          - listitem [ref=e582]:
+            - generic [ref=e583]:
+              - link [ref=e584] [cursor=pointer]:
+                - /url: /Accessories/b/?ie=UTF8&node=428654031&ref_=sv_computers_9
+                - text: Computer Accessories
+              - button [ref=e585] [cursor=pointer]
+          - listitem [ref=e586]:
+            - generic [ref=e587]:
+              - link [ref=e588] [cursor=pointer]:
+                - /url: /Computer-Components/b/?ie=UTF8&node=428655031&ref_=sv_computers_10
+                - text: Components
+              - button [ref=e589] [cursor=pointer]
+          - listitem [ref=e590]:
+            - link [ref=e592] [cursor=pointer]:
+              - /url: /connected-home-networking-routers/b/?ie=UTF8&node=429888031&ref_=sv_computers_11
+              - text: Networking
+          - listitem [ref=e593]:
+            - generic [ref=e594]:
+              - link [ref=e595] [cursor=pointer]:
+                - /url: /b/?ie=UTF8&node=17477985031&ref_=sv_computers_12
+                - text: Memory & Storage
+              - button [ref=e596] [cursor=pointer]
+          - listitem [ref=e597]:
+            - link [ref=e599] [cursor=pointer]:
+              - /url: /b/?ie=UTF8&node=17542459031&ref_=sv_computers_13
+              - text: Gaming Store
+          - listitem [ref=e600]:
+            - link [ref=e602] [cursor=pointer]:
+              - /url: /business/register/org/landing/?_encoding=UTF8&ref=ab_reg_uk_subnav_pc_d_0623_T1&ref_=sv_computers_14
+              - text: Amazon Business
+        - dialog [ref=e603]
+    - main [ref=e606]:
+      - generic [ref=e607]:
+        - link [ref=e611] [cursor=pointer]:
+          - /url: /gp/product//dp/B0HLLKYQF4/ref=dvm_crs_gat_uk_s_dmt_ilm_l_al_llhs1_tp/?ie=UTF8&pd_rd_w=ZIINm&content-id=amzn1.sym.06ae4544-bde9-49a7-97d9-8aafcef3a46b&pf_rd_p=06ae4544-bde9-49a7-97d9-8aafcef3a46b&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=nnZbZ&pd_rd_r=739a1561-897f-4796-ac4a-128c4b5f2543
+        - list [ref=e617]:
+          - listitem [ref=e618]:
+            - link [ref=e620] [cursor=pointer]:
+              - /url: /computers-accessories/b/ref=dp_bc_1?ie=UTF8&node=340831031
+              - text: Computers & Accessories
+          - listitem [aria-hidden] [ref=e621]: ›
+          - listitem [ref=e622]:
+            - link [ref=e624] [cursor=pointer]:
+              - /url: /Computer-Components/b/ref=dp_bc_2?ie=UTF8&node=428655031
+              - text: Components & Replacement Parts
+          - listitem [aria-hidden] [ref=e625]: ›
+          - listitem [ref=e626]:
+            - link [ref=e628] [cursor=pointer]:
+              - /url: /Motherboards/b/ref=dp_bc_3?ie=UTF8&node=430512031
+              - text: Motherboards
+      - generic [ref=e629]:
+        - generic [ref=e630]:
+          - generic [ref=e634]:
+            - generic [ref=e637]: Enjoy fast, free delivery, exclusive deals and award-winning movies and TV shows.
+            - button [ref=e639] [cursor=pointer]: Join Prime
+          - generic [ref=e643]:
+            - group [ref=e646]:
+              - generic [ref=e648]:
+                - button [expanded] [ref=e649]:
+                  - heading [level=5] [ref=e651]:
+                    - generic [ref=e652]: Buy New
+                    - generic [ref=e660]:
+                      - generic [ref=e661]: £99.95
+                      - generic [aria-hidden] [ref=e662]:
+                        - text: £
+                        - generic [ref=e663]:
+                          - text: "99"
+                          - generic [ref=e664]: .
+                        - text: "95"
+                - generic [ref=e669]:
+                  - generic [ref=e670]:
+                    - button [ref=e677] [cursor=pointer]: FREE Returns
+                    - generic [ref=e679]:
+                      - generic [ref=e682]:
+                        - generic [ref=e684]:
+                          - text: FREE delivery Thursday, 29 October.
+                          - link [ref=e685] [cursor=pointer]:
+                            - /url: /gp/help/customer/display.html/?nodeId=492868
+                            - text: Details
+                        - generic [ref=e687]:
+                          - text: Or fastest delivery Wednesday, 28 October. Order within 10 hrs 29 mins.
+                          - link [ref=e688] [cursor=pointer]:
+                            - /url: /gp/help/customer/display.html/?nodeId=492868
+                            - text: Details
+                      - button [ref=e691] [cursor=pointer]:
+                        - generic [ref=e693]: Delivering to Hampton TW12 – Update location
+                  - generic [ref=e698]: In stock
+                  - generic [ref=e705] [cursor=pointer]:
+                    - button [ref=e706]: Add to basket
+                    - generic [aria-hidden] [ref=e707]: Add to basket
+                  - generic [ref=e712] [cursor=pointer]:
+                    - button [ref=e713]
+                    - generic [aria-hidden] [ref=e714]: Buy Now
+                  - generic [ref=e717]:
+                    - group [ref=e719]:
+                      - generic [ref=e720]:
+                        - heading [level=4] [ref=e721]:
+                          - generic [ref=e722]: Shipper / Seller
+                        - generic [ref=e723]: Amazon
+                      - generic [ref=e726]:
+                        - heading [level=4] [ref=e727]:
+                          - generic [ref=e728]: Returns
+                        - button [ref=e731] [cursor=pointer]:
+                          - generic [ref=e732]: Returnable within 30 days of receipt
+                      - generic [ref=e734]:
+                        - generic [ref=e735]:
+                          - heading [level=4] [ref=e736]:
+                            - generic [ref=e737]: Payment
+                          - button [ref=e740] [cursor=pointer]:
+                            - generic [ref=e741]: Secure transaction
+                        - generic [ref=e742]:
+                          - heading [level=4] [ref=e743]:
+                            - generic [ref=e744]: Insurance plans
+                          - button [ref=e747] [cursor=pointer]:
+                            - generic [ref=e748]: Available
+                    - button [ref=e750] [cursor=pointer]: See more
+              - button [ref=e754] [cursor=pointer]:
+                - heading [level=5] [ref=e756]:
+                  - generic [ref=e757]: Used – Very Good
+                  - generic [ref=e766]:
+                    - generic [ref=e767]: £85.78
+                    - generic [aria-hidden] [ref=e768]:
+                      - text: £
+                      - generic [ref=e769]:
+                        - text: "85"
+                        - generic [ref=e770]: .
+                      - text: "78"
+                  - generic [ref=e771]: FREE delivery Thursday, 29 October
+                  - generic [ref=e789]:
+                    - generic [ref=e790]: "Dispatches from: Amazon"
+                    - generic [ref=e792]: "Sold by: Amazon Resale"
+            - generic [ref=e797]:
+              - separator [aria-hidden] [ref=e798]
+              - link [ref=e803] [cursor=pointer]:
+                - /url: https://www.amazon.co.uk/ap/signin?openid.return_to=https%3A%2F%2Fwww.amazon.co.uk%2Fgp%2Faw%2Fd%2FB08BCR4ZRS&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.assoc_handle=gbamazon&openid.mode=checkid_setup&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&
+                - text: Add to List
+          - generic [ref=e807]:
+            - generic [ref=e808]: Other sellers on Amazon
+            - separator [aria-hidden] [ref=e809]
+            - button [expanded] [ref=e812] [cursor=pointer]:
+              - text: New & Used (4) from
+              - generic [ref=e813]:
+                - generic [ref=e814]: £85.78
+                - generic [aria-hidden] [ref=e815]:
+                  - text: £
+                  - generic [ref=e816]:
+                    - text: "85"
+                    - generic [ref=e817]: .
+                  - text: "78"
+              - generic [ref=e818]:
+                - text: "&"
+                - strong [ref=e819]: FREE Delivery
+                - text: .
+        - generic [ref=e820]:
+          - generic [ref=e822]:
+            - button [ref=e823]:
+              - button [ref=e824] [cursor=pointer]
+            - generic [ref=e827]:
+              - radiogroup [ref=e829]:
+                - listitem [ref=e830]:
+                  - radio [ref=e835] [cursor=pointer]
+                - listitem [ref=e837]:
+                  - radio [ref=e842] [cursor=pointer]
+                - listitem [ref=e844]:
+                  - radio [ref=e849] [cursor=pointer]
+                - listitem [ref=e851]:
+                  - radio [ref=e856] [cursor=pointer]
+                - listitem [ref=e858]:
+                  - radio [ref=e863] [cursor=pointer]
+                - listitem [ref=e865]:
+                  - generic [ref=e867]:
+                    - radio [ref=e870] [cursor=pointer]
+                    - generic [ref=e872]: VIDEO
+              - generic [ref=e873]:
+                - list [ref=e876]:
+                  - listitem [ref=e877] [cursor=pointer]:
+                    - button [ref=e880]
+                  - text:           
+                - link [ref=e885] [cursor=pointer]:
+                  - /url: "#"
+                  - text: Click to see full view
+            - text:           
+          - generic [ref=e891]:
+            - heading [level=2] [ref=e892]: Safety and product resources
+            - list [ref=e895]:
+              - listitem [ref=e896]:
+                - link [ref=e898] [cursor=pointer]:
+                  - /url: https://www.amazon.co.uk/gp/help/customer/display.html?ref_=hp_bc_nav&nodeId=GLZVW8G3XF3KG2E9
+                  - text: Want to recycle your product FREE of charge?
+        - generic [ref=e899]:
+          - generic [ref=e900]:
+            - generic [ref=e902]:
+              - link [ref=e905] [cursor=pointer]:
+                - /url: /stores/MSI/page/5A5E5C39-1C20-400F-9DB5-958AF75B4378?lp_asin=B08BCR4ZRS&ref_=ast_bln&store_ref=bl_ast_dp_brandlogo_sto
+              - link [ref=e909] [cursor=pointer]:
+                - /url: /stores/MSI/page/5A5E5C39-1C20-400F-9DB5-958AF75B4378?lp_asin=B08BCR4ZRS&ref_=ast_bln&store_ref=bl_ast_dp_brandlogo_sto
+                - text: Visit the MSI Store
+            - generic [ref=e911]:
+              - heading [level=1] [ref=e912]: MSI B550M PRO-VDH WIFI Motherboard, mATX, AM4
+              - generic [ref=e913]: AMD Ryzen 5000 CPU, DDR4 Boost (4400MHz/OC), PCIe 4.0 x16, 3 x PCIe 3.0 x16, M.2 Gen4, M.2 Gen3, Gigabit LAN, Wi-Fi 6
+            - generic [ref=e915]:
+              - button [ref=e919] [cursor=pointer]:
+                - text: "4.4"
+                - generic [ref=e920]: 4.4 out of 5 stars
+              - link [ref=e924] [cursor=pointer]:
+                - /url: "#averageCustomerReviewsAnchor"
+                - text: (1,429)
+            - generic [ref=e925]: Amazon's Choice
+            - generic [ref=e930]: 50+ bought in past month
+            - separator [ref=e934]
+          - generic [ref=e939]:
+            - generic [ref=e941]:
+              - generic [ref=e942]:
+                - generic [ref=e943]: £99.95 with 9 percent savings
+                - generic [ref=e944]: "-9%"
+                - generic [aria-hidden] [ref=e946]:
+                  - text: £
+                  - generic [ref=e947]:
+                    - text: "99"
+                    - generic [ref=e948]: .
+                  - text: "95"
+              - generic [ref=e951]:
+                - generic [ref=e952]:
+                  - generic [ref=e953]: "RRP: £109.99"
+                  - generic [aria-hidden] [ref=e954]:
+                    - text: "RRP:"
+                    - generic [ref=e955]:
+                      - generic [ref=e956]: £109.99
+                      - text: £109.99
+                - link [ref=e959] [cursor=pointer]:
+                  - /url: "#"
+            - link [ref=e966] [cursor=pointer]:
+              - /url: /dp/product/B0BH98211K?pr=ukccbarc&inc=1a2dac12-d040-4a48-b229-ae1950d6114b&ts=8dke2gipanl7me0put3mn5skc7soiwv&place=priceblock&plattr=BPBDU001&imp=04e05f2d-fd09-4aa6-86b3-8ff500873e4e&dasin=B08BCR4ZRS&mru=%2Fdp%2Fproduct%2FB08BCR4ZRS
+              - generic [ref=e971]:
+                - generic [ref=e972]: Get a £20 Amazon Gift Card if approved for
+                - generic [ref=e973]: The Amazon Barclaycard
+                - text: .
+                - generic [ref=e974]: "Representative 28.9% APR variable. Credit broker: Amazon EU S.A.R.L. Lender: Barclays. T&Cs apply."
+            - button [ref=e980] [cursor=pointer]: FREE Returns
+          - generic [ref=e986]:
+            - text: Available at a lower price from
+            - link [ref=e987] [cursor=pointer]:
+              - /url: /gp/offer-listing/B08BCR4ZRS/ref=dp_olp_pn
+              - text: other sellers
+            - text: that may not offer free Prime shipping.
+          - generic [ref=e992]:
+            - generic [ref=e993]:
+              - generic [ref=e994] [cursor=pointer]: "Style Name: B550M PRO-VDH WIFI"
+              - group [ref=e999]:
+                - radiogroup [ref=e1000]:
+                  - listitem [ref=e1001]:
+                    - generic [ref=e1004] [cursor=pointer]:
+                      - radio [checked] [ref=e1005]
+                      - generic [ref=e1007]:
+                        - generic [ref=e1008]: B550M PRO-VDH WIFI
+                        - separator [aria-hidden] [ref=e1010]
+                        - generic [ref=e1015]:
+                          - generic [ref=e1016]:
+                            - generic [ref=e1017]: £99.95 with 9 percent savings
+                            - generic [ref=e1018]: £99.95
+                          - generic [ref=e1021]:
+                            - generic [ref=e1022]: £109.99
+                            - text: £109.99
+                  - button [ref=e1023] [cursor=pointer]:
+                    - generic [ref=e1024]: See 2 options with no featured offers
+            - generic [ref=e1025]: "Size Name: Micro-ATX"
+          - generic [ref=e1028]:
+            - list [ref=e1031]:
+              - rowgroup [ref=e1032]:
+                - listitem [ref=e1033]: Brand MSI
+                - listitem [ref=e1034]: CPU socket Socket AM4
+                - listitem [ref=e1035]: Compatible devices Desktop, Server, Workstation
+                - listitem [ref=e1036]: RAM memory technology DDR4
+                - listitem [ref=e1037]: Compatible processors https://msi.com/Motherboard/support/B550M-PRO-VDH-WIFI#support-cpu
+                - listitem [ref=e1038]: Chipset type AMD B550
+                - listitem [ref=e1039]: Platform Windows 10
+                - listitem [ref=e1040]: Model name 7C95-001R
+                - listitem [ref=e1041]: CPU model Ryzen 3
+                - listitem [ref=e1042]: Memory storage capacity 128 GB
+            - button [ref=e1045] [cursor=pointer]: See more
+          - generic [ref=e1048]:
+            - separator [aria-hidden] [ref=e1049]
+            - heading [level=1] [ref=e1050]: About this item
+            - list [ref=e1051]:
+              - listitem [ref=e1052]: Powered by 3rd generation AMD Ryzen 9, Ryzen7, Ryzen 5 AM4 to maximize connectivity and speed with lightning M.2, PCIe 4.0, USB 3.2 Gen1 and up to 128 GB of DDR4 (4400 MHz)
+              - listitem [ref=e1053]: Core Boost technology combines optimised power circuit layouts and digital power design which allows for precise and steady current delivery to the CPU
+              - listitem [ref=e1054]: With 3rd Gen Ryzen processors, this motherboard features the latest Gen4 PCI-E and M.2 solution with up to 64 GB/s bandwidth for maximum transfer speed and allow for increasing storage capacity at maximum speed
+              - listitem [ref=e1055]: Addressable LED Ready with Mystic Light Extension provides a JRAINBOW pinheader for complete function to connect to addressable RGB strips and control the RGB light all around the system
+              - listitem [ref=e1056]: AUDIO BOOST which rewards your ears with studio grade sound quality for the most immersive gaming experience
+            - generic [ref=e1057]:
+              - text: ›
+              - link [ref=e1058] [cursor=pointer]:
+                - /url: "#productDetails"
+                - text: See more product details
+          - generic [ref=e1062]:
+            - heading [level=2] [ref=e1063]:
+              - paragraph [ref=e1065]: Top Brand
+              - paragraph [ref=e1066]: MSI
+            - list [ref=e1067]:
+              - listitem [ref=e1068]:
+                - paragraph [ref=e1069]: 93% positive ratings from 5K+ customers
+              - listitem [ref=e1070]:
+                - paragraph [ref=e1071]: 50K+ recent orders from this brand
+          - link [ref=e1077] [cursor=pointer]:
+            - /url: javascript:void(0)
+            - text: Report an issue with this product
+      - generic [ref=e1082]:
+        - separator [aria-hidden] [ref=e1083]
+        - heading [level=2] [ref=e1084]: Frequently bought together
+        - generic [ref=e1085]:
+          - group [ref=e1086]:
+            - generic [ref=e1087]:
+              - generic [ref=e1088]:
+                - checkbox [checked] [ref=e1094]
+                - generic [ref=e1099]:
+                  - generic [ref=e1100]: "This item: MSI B550M PRO-VDH WIFI Motherboard, mATX, AM4 | AMD Ryzen 5000 CPU, DDR4 Boost (4400MHz/OC), PCIe 4.0 x16, 3 x PCIe 3.0 x16, M.2 Gen4, M.2 Gen3, Gigabit LAN, Wi-Fi 6"
+                  - generic [ref=e1108]:
+                    - generic [ref=e1109]: £99.95
+                    - generic [aria-hidden] [ref=e1110]:
+                      - text: £
+                      - generic [ref=e1111]:
+                        - text: "99"
+                        - generic [ref=e1112]: .
+                      - text: "95"
+              - generic [ref=e1113]:
+                - generic [ref=e1114]:
+                  - generic [ref=e1115]: +
+                  - checkbox [checked] [ref=e1119]
+                  - link [ref=e1123] [cursor=pointer]:
+                    - /url: /MSI-A650BN-Power-Supply-Unit/dp/B09GW3QZLJ/ref=pd_bxgy_thbs_d_sccl_1/525-2883671-8385749?pd_rd_w=GiN2C&content-id=amzn1.sym.c74a04bb-1833-45ee-8b22-275d7d928695&pf_rd_p=c74a04bb-1833-45ee-8b22-275d7d928695&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B09GW3QZLJ&psc=1
+                - generic [ref=e1125]:
+                  - link [ref=e1127] [cursor=pointer]:
+                    - /url: /MSI-A650BN-Power-Supply-Unit/dp/B09GW3QZLJ/ref=pd_bxgy_d_sccl_1/525-2883671-8385749?pd_rd_w=GiN2C&content-id=amzn1.sym.c74a04bb-1833-45ee-8b22-275d7d928695&pf_rd_p=c74a04bb-1833-45ee-8b22-275d7d928695&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B09GW3QZLJ&psc=1
+                    - generic [ref=e1128]: "MSI MAG A650BN | Power Supply Unit: 80 plus bronze, 650 Watt, 12V Single-Rail, DC-to-DC Circuit, 120mm Fan, 5-Year Limited Warranty"
+                  - generic [ref=e1135]:
+                    - generic [ref=e1136]: £44.99
+                    - generic [aria-hidden] [ref=e1137]:
+                      - text: £
+                      - generic [ref=e1138]:
+                        - text: "44"
+                        - generic [ref=e1139]: .
+                      - text: "99"
+          - generic [ref=e1141]:
+            - generic [ref=e1143]:
+              - text: "Total price:"
+              - generic [ref=e1144]:
+                - generic [ref=e1145]: £144.94
+                - generic [aria-hidden] [ref=e1146]:
+                  - text: £
+                  - generic [ref=e1147]: "144."
+                  - text: "94"
+            - generic [ref=e1153] [cursor=pointer]:
+              - button [ref=e1154]
+              - generic [aria-hidden] [ref=e1155]: Add both to Cart
+      - generic [ref=e1158]:
+        - separator [aria-hidden] [ref=e1159]
+        - group [ref=e1162]:
+          - heading [level=2] [ref=e1167]: Customers who viewed this item also viewed
+          - group [ref=e1172]:
+            - list [ref=e1173]:
+              - listitem [ref=e1174]:
+                - generic [ref=e1176]:
+                  - link [aria-hidden] [ref=e1178] [cursor=pointer]:
+                    - /url: /MSI-PRO-VDH-Motherboard-Ryzen-Type-C/dp/B08NCK1MBQ/ref=pd_sbs_d_sccl_1_1/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B08NCK1MBQ&psc=1
+                  - generic [ref=e1181]:
+                    - link [ref=e1182] [cursor=pointer]:
+                      - /url: /MSI-PRO-VDH-Motherboard-Ryzen-Type-C/dp/B08NCK1MBQ/ref=pd_sbs_d_sccl_1_1/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B08NCK1MBQ&psc=1
+                      - generic [ref=e1183]: MSI B550M PRO-VDH Motherboard M-ATX - Supports AMD Ryzen 3rd Gen Processors, AM4, DDR4 Boost (4400MHz/OC), 1 x PCIe 4.0/3.0 x16, 1 x M.2 Gen4 x4, 1 x M.2 Gen3 x4, Gigabit LAN
+                    - link [ref=e1187] [cursor=pointer]:
+                      - /url: /product-reviews/B08NCK1MBQ/ref=pd_sbs_d_sccl_1_1_cr/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B08NCK1MBQ
+                      - generic [ref=e1189]: 4.4 out of 5 stars
+                      - text: "602"
+                    - generic [ref=e1192]:
+                      - generic [ref=e1193]:
+                        - link [ref=e1194] [cursor=pointer]:
+                          - /url: /MSI-PRO-VDH-Motherboard-Ryzen-Type-C/dp/B08NCK1MBQ/ref=pd_sbs_d_sccl_1_1/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B08NCK1MBQ&psc=1
+                          - text: "-4%"
+                        - link [ref=e1195] [cursor=pointer]:
+                          - /url: /MSI-PRO-VDH-Motherboard-Ryzen-Type-C/dp/B08NCK1MBQ/ref=pd_sbs_d_sccl_1_1/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B08NCK1MBQ&psc=1
+                          - generic [ref=e1196]:
+                            - generic [ref=e1197]: £91.29
+                            - generic [aria-hidden] [ref=e1198]:
+                              - text: £
+                              - generic [ref=e1199]: "91."
+                              - text: "29"
+                      - link [ref=e1201] [cursor=pointer]:
+                        - /url: /MSI-PRO-VDH-Motherboard-Ryzen-Type-C/dp/B08NCK1MBQ/ref=pd_sbs_d_sccl_1_1/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B08NCK1MBQ&psc=1
+                        - generic [ref=e1202]: "RRP: £94.99"
+                    - generic [ref=e1204]: Only 4 left in stock.
+              - listitem [ref=e1207]:
+                - generic [ref=e1209]:
+                  - link [aria-hidden] [ref=e1211] [cursor=pointer]:
+                    - /url: /ASUS-PRIME-B550M-Micro-Wi-Fi/dp/B09LVQXHBG/ref=pd_sbs_d_sccl_1_2/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B09LVQXHBG&psc=1
+                  - generic [ref=e1214]:
+                    - link [ref=e1215] [cursor=pointer]:
+                      - /url: /ASUS-PRIME-B550M-Micro-Wi-Fi/dp/B09LVQXHBG/ref=pd_sbs_d_sccl_1_2/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B09LVQXHBG&psc=1
+                      - generic [ref=e1216]: ASUS PRIME B550M-A WIFI II, AMD B550, AM4, Micro ATX, 4 DDR4, VGA, DVI, HDMI, Wi-Fi, PCIe4, 2x M.2
+                    - link [ref=e1220] [cursor=pointer]:
+                      - /url: /product-reviews/B09LVQXHBG/ref=pd_sbs_d_sccl_1_2_cr/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B09LVQXHBG
+                      - generic [ref=e1222]: 4.4 out of 5 stars
+                      - text: "705"
+                    - generic [ref=e1223]:
+                      - generic [ref=e1225]:
+                        - generic [ref=e1226]:
+                          - link [ref=e1227] [cursor=pointer]:
+                            - /url: /ASUS-PRIME-B550M-Micro-Wi-Fi/dp/B09LVQXHBG/ref=pd_sbs_d_sccl_1_2/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B09LVQXHBG&psc=1
+                            - text: "-7%"
+                          - link [ref=e1228] [cursor=pointer]:
+                            - /url: /ASUS-PRIME-B550M-Micro-Wi-Fi/dp/B09LVQXHBG/ref=pd_sbs_d_sccl_1_2/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B09LVQXHBG&psc=1
+                            - generic [ref=e1229]:
+                              - generic [ref=e1230]: £83.99
+                              - generic [aria-hidden] [ref=e1231]:
+                                - text: £
+                                - generic [ref=e1232]: "83."
+                                - text: "99"
+                        - link [ref=e1234] [cursor=pointer]:
+                          - /url: /ASUS-PRIME-B550M-Micro-Wi-Fi/dp/B09LVQXHBG/ref=pd_sbs_d_sccl_1_2/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B09LVQXHBG&psc=1
+                          - generic [ref=e1235]: "Was: £89.99"
+                      - generic [ref=e1237]: Get it as soon as Thursday, Oct 29
+                    - text: FREE Delivery by Amazon
+              - listitem [ref=e1239]:
+                - generic [ref=e1241]:
+                  - link [aria-hidden] [ref=e1243] [cursor=pointer]:
+                    - /url: /MSI-7C56-002R-B550-A-PRO/dp/B08BCQF1BD/ref=pd_sbs_d_sccl_1_3/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B08BCQF1BD&psc=1
+                  - generic [ref=e1246]:
+                    - link [ref=e1247] [cursor=pointer]:
+                      - /url: /MSI-7C56-002R-B550-A-PRO/dp/B08BCQF1BD/ref=pd_sbs_d_sccl_1_3/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B08BCQF1BD&psc=1
+                      - generic [ref=e1248]: MSI B550-A PRO Motherboard, ATX, AM4 | AMD Ryzen 3rd Gen CPU, DDR4 Boost (4400MHz/OC), PCIe 4.0/3.0 x16, PCIe 3.0 x16, M.2 Gen4 x4, M.2 Gen3 x4, Gigabit LAN
+                    - link [ref=e1252] [cursor=pointer]:
+                      - /url: /product-reviews/B08BCQF1BD/ref=pd_sbs_d_sccl_1_3_cr/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B08BCQF1BD
+                      - generic [ref=e1254]: 4.4 out of 5 stars
+                      - text: 2,415
+                    - generic [ref=e1255]:
+                      - generic [ref=e1257]:
+                        - generic [ref=e1258]:
+                          - link [ref=e1259] [cursor=pointer]:
+                            - /url: /MSI-7C56-002R-B550-A-PRO/dp/B08BCQF1BD/ref=pd_sbs_d_sccl_1_3/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B08BCQF1BD&psc=1
+                            - text: "-10%"
+                          - link [ref=e1260] [cursor=pointer]:
+                            - /url: /MSI-7C56-002R-B550-A-PRO/dp/B08BCQF1BD/ref=pd_sbs_d_sccl_1_3/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B08BCQF1BD&psc=1
+                            - generic [ref=e1261]:
+                              - generic [ref=e1262]: £94.99
+                              - generic [aria-hidden] [ref=e1263]:
+                                - text: £
+                                - generic [ref=e1264]: "94."
+                                - text: "99"
+                        - link [ref=e1266] [cursor=pointer]:
+                          - /url: /MSI-7C56-002R-B550-A-PRO/dp/B08BCQF1BD/ref=pd_sbs_d_sccl_1_3/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B08BCQF1BD&psc=1
+                          - generic [ref=e1267]: "RRP: £104.99"
+                      - generic [ref=e1269]: Get it as soon as Thursday, Oct 29
+                    - text: FREE Delivery by Amazon
+              - listitem [ref=e1271]:
+                - generic [ref=e1273]:
+                  - link [aria-hidden] [ref=e1275] [cursor=pointer]:
+                    - /url: /GIGABYTE-B550M-GAMING-WIFI6-Motherboard/dp/B0F3P3XTMZ/ref=pd_sbs_d_sccl_1_4/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0F3P3XTMZ&psc=1
+                  - generic [ref=e1278]:
+                    - link [ref=e1279] [cursor=pointer]:
+                      - /url: /GIGABYTE-B550M-GAMING-WIFI6-Motherboard/dp/B0F3P3XTMZ/ref=pd_sbs_d_sccl_1_4/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0F3P3XTMZ&psc=1
+                      - generic [ref=e1280]: Gigabyte B550M GAMING X WIFI6 Motherboard - AMD Ryzen 5000 CPUs, 5+3 Phases VRM, up to 3200MHz DDR4, 1xPCIe 4.0 + 1xPCIe 3.0 M.2, Wi-Fi 6, 1GbE LAN, USB 3.2 Gen 1
+                    - link [ref=e1284] [cursor=pointer]:
+                      - /url: /product-reviews/B0F3P3XTMZ/ref=pd_sbs_d_sccl_1_4_cr/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0F3P3XTMZ
+                      - generic [ref=e1286]: 4.5 out of 5 stars
+                      - text: "200"
+                    - generic [ref=e1287]:
+                      - link [ref=e1291] [cursor=pointer]:
+                        - /url: /GIGABYTE-B550M-GAMING-WIFI6-Motherboard/dp/B0F3P3XTMZ/ref=pd_sbs_d_sccl_1_4/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0F3P3XTMZ&psc=1
+                        - generic [ref=e1292]:
+                          - generic [ref=e1293]: £109.83
+                          - generic [aria-hidden] [ref=e1294]:
+                            - text: £
+                            - generic [ref=e1295]: "109."
+                            - text: "83"
+                      - generic [ref=e1296]: Get it 29 Oct – 2 Nov
+              - listitem [ref=e1298]:
+                - generic [ref=e1300]:
+                  - link [aria-hidden] [ref=e1302] [cursor=pointer]:
+                    - /url: /MSI-A520M-2-7GHz-i5-3350M-15-6/dp/B08HKJ45DR/ref=pd_sbs_d_sccl_1_5/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B08HKJ45DR&psc=1
+                  - generic [ref=e1305]:
+                    - link [ref=e1306] [cursor=pointer]:
+                      - /url: /MSI-A520M-2-7GHz-i5-3350M-15-6/dp/B08HKJ45DR/ref=pd_sbs_d_sccl_1_5/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B08HKJ45DR&psc=1
+                      - generic [ref=e1307]: MSI A520M PRO Motherboard, mATX, AM4 | AMD Ryzen 3000 3rd Gen, DDR4, M.2, USB 3.2 Gen 1 Type A, DisplayPort, LAN, HDMI'
+                    - link [ref=e1311] [cursor=pointer]:
+                      - /url: /product-reviews/B08HKJ45DR/ref=pd_sbs_d_sccl_1_5_cr/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B08HKJ45DR
+                      - generic [ref=e1313]: 4.5 out of 5 stars
+                      - text: "152"
+                    - generic [ref=e1314]:
+                      - link [ref=e1318] [cursor=pointer]:
+                        - /url: /MSI-A520M-2-7GHz-i5-3350M-15-6/dp/B08HKJ45DR/ref=pd_sbs_d_sccl_1_5/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B08HKJ45DR&psc=1
+                        - generic [ref=e1319]:
+                          - generic [ref=e1320]: £49.99
+                          - generic [aria-hidden] [ref=e1321]:
+                            - text: £
+                            - generic [ref=e1322]: "49."
+                            - text: "99"
+                      - generic [ref=e1323]: Get it as soon as Thursday, Oct 29
+                    - text: FREE Delivery by Amazon
+              - listitem [ref=e1325]:
+                - generic [ref=e1327]:
+                  - link [aria-hidden] [ref=e1329] [cursor=pointer]:
+                    - /url: /GIGABYTE-B550M-AORUS-AX-Motherboard/dp/B0BZQ1TNW8/ref=pd_sbs_d_sccl_1_6/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0BZQ1TNW8&psc=1
+                  - generic [ref=e1332]:
+                    - link [ref=e1333] [cursor=pointer]:
+                      - /url: /GIGABYTE-B550M-AORUS-AX-Motherboard/dp/B0BZQ1TNW8/ref=pd_sbs_d_sccl_1_6/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0BZQ1TNW8&psc=1
+                      - generic [ref=e1334]: Gigabyte B550M AORUS Elite AX (AM4/ AMD/ B550/ Micro ATX/Single M.2/ SATA 6Gb/s/USB 3.2 Gen 1/ Realtek GbE LAN/PCIe 4.0/ Motherboard)
+                    - link [ref=e1338] [cursor=pointer]:
+                      - /url: /product-reviews/B0BZQ1TNW8/ref=pd_sbs_d_sccl_1_6_cr/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0BZQ1TNW8
+                      - generic [ref=e1340]: 4.4 out of 5 stars
+                      - text: "577"
+                    - generic [ref=e1341]:
+                      - generic [ref=e1343]:
+                        - generic [ref=e1344]:
+                          - link [ref=e1345] [cursor=pointer]:
+                            - /url: /GIGABYTE-B550M-AORUS-AX-Motherboard/dp/B0BZQ1TNW8/ref=pd_sbs_d_sccl_1_6/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0BZQ1TNW8&psc=1
+                            - text: "-13%"
+                          - link [ref=e1346] [cursor=pointer]:
+                            - /url: /GIGABYTE-B550M-AORUS-AX-Motherboard/dp/B0BZQ1TNW8/ref=pd_sbs_d_sccl_1_6/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0BZQ1TNW8&psc=1
+                            - generic [ref=e1347]:
+                              - generic [ref=e1348]: £86.99
+                              - generic [aria-hidden] [ref=e1349]:
+                                - text: £
+                                - generic [ref=e1350]: "86."
+                                - text: "99"
+                        - link [ref=e1352] [cursor=pointer]:
+                          - /url: /GIGABYTE-B550M-AORUS-AX-Motherboard/dp/B0BZQ1TNW8/ref=pd_sbs_d_sccl_1_6/525-2883671-8385749?pd_rd_w=QvsuQ&content-id=amzn1.sym.b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_p=b830a4e4-1d9a-4b95-9151-26f4eef7c6c8&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0BZQ1TNW8&psc=1
+                          - generic [ref=e1353]: "RRP: £99.99"
+                      - generic [ref=e1355]: Get it as soon as Thursday, Oct 29
+                    - text: FREE Delivery by Amazon
+      - generic [ref=e1361]:
+        - separator [aria-hidden] [ref=e1362]
+        - group [ref=e1365]:
+          - heading [level=2] [ref=e1370]: Explore more items
+          - group [ref=e1375]:
+            - list [ref=e1376]:
+              - listitem [ref=e1377]:
+                - generic [ref=e1379]:
+                  - link [aria-hidden] [ref=e1381] [cursor=pointer]:
+                    - /url: /MSI-A650BN-Power-Supply-Unit/dp/B09GW3QZLJ/ref=bmx_dp_d_sccl_2_1/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B09GW3QZLJ&psc=1
+                  - generic [ref=e1384]:
+                    - link [ref=e1385] [cursor=pointer]:
+                      - /url: /MSI-A650BN-Power-Supply-Unit/dp/B09GW3QZLJ/ref=bmx_dp_d_sccl_2_1/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B09GW3QZLJ&psc=1
+                      - generic [ref=e1386]: "MSI MAG A650BN | Power Supply Unit: 80 plus bronze, 650 Watt, 12V Single-Rail, DC-to-DC Circuit, 120mm Fan, 5-Year Limited Warranty"
+                    - link [ref=e1390] [cursor=pointer]:
+                      - /url: /product-reviews/B09GW3QZLJ/ref=bmx_dp_d_sccl_2_1_cr/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B09GW3QZLJ
+                      - generic [ref=e1392]: 4.6 out of 5 stars
+                      - text: 1,781
+                    - generic [ref=e1393]: "#1 Best Seller"
+                    - generic [ref=e1398]:
+                      - link [ref=e1402] [cursor=pointer]:
+                        - /url: /MSI-A650BN-Power-Supply-Unit/dp/B09GW3QZLJ/ref=bmx_dp_d_sccl_2_1/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B09GW3QZLJ&psc=1
+                        - generic [ref=e1403]:
+                          - generic [ref=e1404]: £44.99
+                          - generic [aria-hidden] [ref=e1405]:
+                            - text: £
+                            - generic [ref=e1406]: "44."
+                            - text: "99"
+                      - generic [ref=e1407]: Get it as soon as Thursday, Oct 29
+                    - text: FREE Delivery by Amazon
+              - listitem [ref=e1409]:
+                - generic [ref=e1411]:
+                  - link [aria-hidden] [ref=e1413] [cursor=pointer]:
+                    - /url: /Stealth-Connector-Aluminum-Heatsink-3-93-Inch/dp/B07MFMFL7R/ref=bmx_dp_d_sccl_2_2/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B07MFMFL7R&psc=1
+                  - generic [ref=e1416]:
+                    - link [ref=e1417] [cursor=pointer]:
+                      - /url: /Stealth-Connector-Aluminum-Heatsink-3-93-Inch/dp/B07MFMFL7R/ref=bmx_dp_d_sccl_2_2/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B07MFMFL7R&psc=1
+                      - generic [ref=e1418]: AMD Wraith Stealth Socket AM4 4-Pin Connector CPU Cooler with Aluminum Heatsink & 3.93-Inch Fan (Slim)
+                    - link [ref=e1422] [cursor=pointer]:
+                      - /url: /product-reviews/B07MFMFL7R/ref=bmx_dp_d_sccl_2_2_cr/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B07MFMFL7R
+                      - generic [ref=e1424]: 4.5 out of 5 stars
+                      - text: 2,037
+                    - generic [ref=e1425]:
+                      - link [ref=e1429] [cursor=pointer]:
+                        - /url: /Stealth-Connector-Aluminum-Heatsink-3-93-Inch/dp/B07MFMFL7R/ref=bmx_dp_d_sccl_2_2/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B07MFMFL7R&psc=1
+                        - generic [ref=e1430]:
+                          - generic [ref=e1431]: £9.99
+                          - generic [aria-hidden] [ref=e1432]:
+                            - text: £
+                            - generic [ref=e1433]: "9."
+                            - text: "99"
+                      - generic [ref=e1434]: Get it as soon as Thursday, Oct 29
+                    - text: FREE Delivery by Amazon
+                    - generic [ref=e1436]: Only 11 left in stock.
+              - listitem [ref=e1439]:
+                - generic [ref=e1441]:
+                  - link [aria-hidden] [ref=e1443] [cursor=pointer]:
+                    - /url: /Netac-288-Pin-Desktop-Computer-Memory-Black-D4III/dp/B0GJSRRGKT/ref=bmx_dp_d_sccl_2_3/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0GJSRRGKT&psc=1
+                  - generic [ref=e1446]:
+                    - link [ref=e1447] [cursor=pointer]:
+                      - /url: /Netac-288-Pin-Desktop-Computer-Memory-Black-D4III/dp/B0GJSRRGKT/ref=bmx_dp_d_sccl_2_3/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0GJSRRGKT&psc=1
+                      - generic [ref=e1448]: Netac DDR4 RAM 16GB Kit (2x8GB) 3200 MHz,DRAM 288-Pin UDIMM Desktop Memory,CL16 1.35V Intel XMP 2.0 Computer Memory-Black
+                    - link [ref=e1452] [cursor=pointer]:
+                      - /url: /product-reviews/B0GJSRRGKT/ref=bmx_dp_d_sccl_2_3_cr/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0GJSRRGKT
+                      - generic [ref=e1454]: 4.8 out of 5 stars
+                      - text: "6"
+                    - generic [ref=e1455]:
+                      - generic [ref=e1457]:
+                        - generic [ref=e1458]:
+                          - link [ref=e1459] [cursor=pointer]:
+                            - /url: /Netac-288-Pin-Desktop-Computer-Memory-Black-D4III/dp/B0GJSRRGKT/ref=bmx_dp_d_sccl_2_3/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0GJSRRGKT&psc=1
+                            - text: "-15%"
+                          - link [ref=e1460] [cursor=pointer]:
+                            - /url: /Netac-288-Pin-Desktop-Computer-Memory-Black-D4III/dp/B0GJSRRGKT/ref=bmx_dp_d_sccl_2_3/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0GJSRRGKT&psc=1
+                            - generic [ref=e1461]:
+                              - generic [ref=e1462]: £94.34
+                              - generic [aria-hidden] [ref=e1463]:
+                                - text: £
+                                - generic [ref=e1464]: "94."
+                                - text: "34"
+                        - generic [ref=e1465]: Limited time deal
+                        - link [ref=e1469] [cursor=pointer]:
+                          - /url: /Netac-288-Pin-Desktop-Computer-Memory-Black-D4III/dp/B0GJSRRGKT/ref=bmx_dp_d_sccl_2_3/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0GJSRRGKT&psc=1
+                          - generic [ref=e1470]: "Was: £110.99"
+                      - generic [ref=e1472]: Get it as soon as Thursday, Oct 29
+                    - text: FREE Delivery by Amazon
+              - listitem [ref=e1474]:
+                - generic [ref=e1476]:
+                  - link [aria-hidden] [ref=e1478] [cursor=pointer]:
+                    - /url: /Thermalright-Assassin-1500RPM-Bearing-Cooling/dp/B0C7C55WG7/ref=bmx_dp_d_sccl_2_4/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0C7C55WG7&psc=1
+                  - generic [ref=e1481]:
+                    - link [ref=e1482] [cursor=pointer]:
+                      - /url: /Thermalright-Assassin-1500RPM-Bearing-Cooling/dp/B0C7C55WG7/ref=bmx_dp_d_sccl_2_4/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0C7C55WG7&psc=1
+                      - generic [ref=e1483]: Thermalright Assassin Spirit 120 V2 PLUS CPU Air Cooler,1500RPM Speed,4 Heat Pipes, 120mm PWM Quiet Fans CPU Cooler With S-FDB Bearing, for AMD AM4 AM5/Intel 1700/1150/1151/1200,17XX PC Cooling
+                    - link [ref=e1487] [cursor=pointer]:
+                      - /url: /product-reviews/B0C7C55WG7/ref=bmx_dp_d_sccl_2_4_cr/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0C7C55WG7
+                      - generic [ref=e1489]: 4.7 out of 5 stars
+                      - text: "31"
+                    - generic [ref=e1490]:
+                      - link [ref=e1494] [cursor=pointer]:
+                        - /url: /Thermalright-Assassin-1500RPM-Bearing-Cooling/dp/B0C7C55WG7/ref=bmx_dp_d_sccl_2_4/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B0C7C55WG7&psc=1
+                        - generic [ref=e1495]:
+                          - generic [ref=e1496]: £20.90
+                          - generic [aria-hidden] [ref=e1497]:
+                            - text: £
+                            - generic [ref=e1498]: "20."
+                            - text: "90"
+                      - generic [ref=e1499]: Get it as soon as Thursday, Oct 29
+                    - text: FREE Delivery by Amazon
+              - listitem [ref=e1501]:
+                - generic [ref=e1503]:
+                  - link [aria-hidden] [ref=e1505] [cursor=pointer]:
+                    - /url: /ASUS-GeForce-DisplayPort-Axial-tech-technology/dp/B09CMF65V5/ref=bmx_dp_d_sccl_2_5/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B09CMF65V5&psc=1
+                  - generic [ref=e1508]:
+                    - link [ref=e1509] [cursor=pointer]:
+                      - /url: /ASUS-GeForce-DisplayPort-Axial-tech-technology/dp/B09CMF65V5/ref=bmx_dp_d_sccl_2_5/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B09CMF65V5&psc=1
+                      - generic [ref=e1510]: ASUS Dual GeForce RTX 5050 8GB GDDR6 OC Edition (PCIe 5.0, 8GB GDDR6, DLSS 4, HDMI 2.1b, DisplayPort 2.1b, 2-slot, Axial-tech fan design, 0dB technology, Dual BIOS)
+                    - link [ref=e1514] [cursor=pointer]:
+                      - /url: /product-reviews/B09CMF65V5/ref=bmx_dp_d_sccl_2_5_cr/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B09CMF65V5
+                      - generic [ref=e1516]: 4.7 out of 5 stars
+                      - text: "98"
+                    - generic [ref=e1517]: "#1 Best Seller"
+                    - generic [ref=e1522]:
+                      - link [ref=e1526] [cursor=pointer]:
+                        - /url: /ASUS-GeForce-DisplayPort-Axial-tech-technology/dp/B09CMF65V5/ref=bmx_dp_d_sccl_2_5/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B09CMF65V5&psc=1
+                        - generic [ref=e1527]:
+                          - generic [ref=e1528]: £329.99
+                          - generic [aria-hidden] [ref=e1529]:
+                            - text: £
+                            - generic [ref=e1530]: "329."
+                            - text: "99"
+                      - generic [ref=e1531]: Get it as soon as Thursday, Nov 26
+              - listitem [ref=e1533]:
+                - generic [ref=e1535]:
+                  - link [aria-hidden] [ref=e1537] [cursor=pointer]:
+                    - /url: /MSI-B550-GAMING-WIFI-Motherboard/dp/B096Y35W2C/ref=bmx_dp_d_sccl_2_6/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B096Y35W2C&psc=1
+                  - generic [ref=e1540]:
+                    - link [ref=e1541] [cursor=pointer]:
+                      - /url: /MSI-B550-GAMING-WIFI-Motherboard/dp/B096Y35W2C/ref=bmx_dp_d_sccl_2_6/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B096Y35W2C&psc=1
+                      - generic [ref=e1542]: MSI B550 GAMING WIFI Motherboard, ATX, AM4 | AMD Ryzen 5000 / 4000 / 3000 CPU, DDR4 Memory Boost 4400+MHz/OC, PCIe 4.0 x16, M.2 Gen4, 1G LAN
+                    - link [ref=e1546] [cursor=pointer]:
+                      - /url: /product-reviews/B096Y35W2C/ref=bmx_dp_d_sccl_2_6_cr/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B096Y35W2C
+                      - generic [ref=e1548]: 4.4 out of 5 stars
+                      - text: "55"
+                    - generic [ref=e1549]:
+                      - generic [ref=e1551]:
+                        - generic [ref=e1552]:
+                          - link [ref=e1553] [cursor=pointer]:
+                            - /url: /MSI-B550-GAMING-WIFI-Motherboard/dp/B096Y35W2C/ref=bmx_dp_d_sccl_2_6/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B096Y35W2C&psc=1
+                            - text: "-13%"
+                          - link [ref=e1554] [cursor=pointer]:
+                            - /url: /MSI-B550-GAMING-WIFI-Motherboard/dp/B096Y35W2C/ref=bmx_dp_d_sccl_2_6/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B096Y35W2C&psc=1
+                            - generic [ref=e1555]:
+                              - generic [ref=e1556]: £104.99
+                              - generic [aria-hidden] [ref=e1557]:
+                                - text: £
+                                - generic [ref=e1558]: "104."
+                                - text: "99"
+                        - link [ref=e1560] [cursor=pointer]:
+                          - /url: /MSI-B550-GAMING-WIFI-Motherboard/dp/B096Y35W2C/ref=bmx_dp_d_sccl_2_6/525-2883671-8385749?pd_rd_w=Xp113&content-id=amzn1.sym.5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_p=5bb3b11c-2b9d-4383-82f9-f2fde1bc43d0&pf_rd_r=JBX39FKW4ERSE08PM3C6&pd_rd_wg=RRqdj&pd_rd_r=60b58551-d3f4-4aa2-8819-d7bf6b2efec9&pd_rd_i=B096Y35W2C&psc=1
+                          - generic [ref=e1561]: "RRP: £119.99"
+                      - generic [ref=e1563]: Get it as soon as Thursday, Oct 29
+                    - text: FREE Delivery by Amazon
+      - generic [ref=e1565]:
+        - generic [ref=e1566]:
+          - separator [aria-hidden] [ref=e1567]
+          - generic [ref=e1569]:
+            - heading [level=1] [ref=e1570]: Product Information
+            - generic [ref=e1574]:
+              - generic [ref=e1575]:
+                - button [ref=e1580] [cursor=pointer]:
+                  - heading [level=5] [ref=e1582]: Features & Specs
+                - generic [ref=e1583]:
+                  - generic [ref=e1585]:
+                    - heading [level=3] [ref=e1586]: Warranty & Support
+                    - generic [ref=e1587]:
+                      - text: "Amazon.com Return Policy:"
+                      - generic [ref=e1588]:
+                        - text: Regardless of your statutory right of withdrawal, you enjoy a 30-day right of return for many products. For exceptions and conditions, see
+                        - link [ref=e1589] [cursor=pointer]:
+                          - /url: /gp/help/customer/display.html/ref=orc_hp_s_retpol?ie=UTF8&nodeId=201819200
+                          - text: Return details
+                        - text: .
+                  - generic [ref=e1591]:
+                    - heading [level=3] [ref=e1592]: Feedback
+                    - generic [ref=e1597]:
+                      - text: Would you like to
+                      - button [ref=e1599] [cursor=pointer]: tell us about a lower price?
+              - generic [ref=e1603]:
+                - button [ref=e1606] [cursor=pointer]:
+                  - heading [level=5] [ref=e1608]: Item details
+                - button [ref=e1611] [cursor=pointer]:
+                  - heading [level=5] [ref=e1613]: Additional details
+        - generic [ref=e1615]:
+          - separator [ref=e1616]
+          - heading [level=2] [ref=e1617]: From the manufacturer
+          - generic [ref=e1620]:
+            - generic [ref=e1622]:
+              - generic [ref=e1626]:
+                - heading [level=5] [ref=e1628]: About MSI
+                - paragraph [ref=e1629]: MSI is a trusted name in gaming and esports. Having dedicated countless hours and committed numerous resources to support the world’s most aspiring and best gamers, MSI use their knowledge and expertise in their products in return. MSI integrated all gamer’s aspirational functions in its gaming rigs and pushing the performance beyond limits.
+              - generic [ref=e1630]:
+                - heading [level=3] [ref=e1631]: B550M Pro-VDH Wifi
+                - heading [level=4] [ref=e1632]: Advancing Ascension
+                - paragraph [ref=e1633]: Experience new generation of the B550M PRO-VDH WIFI motherboard powered by 3rd Gen AMD 3000 series AM4 processors. Outperform your system's capacity with Lightning Gen 4 solution. Exclusive DDR4 Boost and Core Boost, created to keep you one step ahead of the competition. 7W/mK level thermal & choke pad with 2oz thickened copper help your PC remain cool, high performing and reliable.
+                - list [ref=e1637]:
+                  - listitem [ref=e1638]:
+                    - generic [ref=e1639]: Designed for 3rd Gen AMD Ryzen processors with Lightning Gen 4 M.2, PCIe 4.0
+                  - listitem [ref=e1640]:
+                    - generic [ref=e1641]: Addressable LED Ready with a JRAINBOW pinheader addressable RGB strips and control the RGB light all around the system
+                  - listitem [ref=e1642]:
+                    - generic [ref=e1643]: Core Boost technology combines premium layout and a digital power design which allows for faster and undistorted current delivery to the CPU at pin-point precision
+                  - listitem [ref=e1644]:
+                    - generic [ref=e1645]: Front USB Type-C allows gamers to be compatible with the latest PC chassis and perfect for external drives and other mobile devices
+            - generic [ref=e1652]:
+              - generic [ref=e1653]:
+                - paragraph [ref=e1654]
+                - heading [level=4] [ref=e1656]: LIGHTNING GEN 4 SOLUTION
+                - paragraph [ref=e1657]: The latest Gen4 PCI-E and M.2 solution with up to 64GB/s bandwidth for maximum transfer speed. PCIe 4.0 maintains both backward and forward compatibility with older and newer specifications.
+              - generic [ref=e1658]:
+                - paragraph [ref=e1659]
+                - heading [level=4] [ref=e1661]: DDR4 BOOST
+                - paragraph [ref=e1662]: Optimised layout design and a fully isolated memory circuitry ensures perfect stability and performance. you never have to worry about your system crashing during games with MSI DDR4 BOOST.
+              - generic [ref=e1663]:
+                - paragraph [ref=e1664]
+                - heading [level=4] [ref=e1666]: CORE BOOST
+                - paragraph [ref=e1667]: Core Boost technology combines MSI’s premium layout and digital power design which allows for faster and undistorted current delivery to the CPU at pin-point precision. This creates the perfect conditions for multi-core CPU while doing.
+            - generic [ref=e1670]:
+              - generic [ref=e1671]:
+                - paragraph [ref=e1672]
+                - heading [level=4] [ref=e1674]: PCB WITH 2OZ THICKENED COPPER
+                - paragraph [ref=e1675]: An enhanced PCB design with 2oz thickened copper increases conductivity, improving heat dissipation and performance reliability especially during overclocking.
+              - generic [ref=e1676]:
+                - paragraph [ref=e1677]
+                - heading [level=4] [ref=e1679]: AUDIO BOOST
+                - paragraph [ref=e1680]: A dedicated high definition audio processor and high quality audio capacitors create a high fidelity sound experience with exceptional acoustics and realism for studio level headphones.
+              - generic [ref=e1681]:
+                - paragraph [ref=e1682]
+                - heading [level=4] [ref=e1684]: EZ DEBUG LED
+                - paragraph [ref=e1685]: Run into trouble? Onboard LEDs for key components will indicate the source of the problem so you know exactly where to look to get up and running again.
+            - table [ref=e1690]:
+              - rowgroup [ref=e1691]:
+                - row [ref=e1692]:
+                  - cell [ref=e1693]
+                  - columnheader [ref=e1694]:
+                    - link [ref=e1695] [cursor=pointer]:
+                      - /url: /dp/B08B4V583Q?ref=emc_s_m_5_i_atc
+                      - generic [ref=e1697]: MAG B550 TOMAHAWK
+                  - columnheader [ref=e1698]:
+                    - link [ref=e1699] [cursor=pointer]:
+                      - /url: /dp/B08B4SD768?ref=emc_s_m_5_i_atc
+                      - generic [ref=e1701]: MAG B550M MORTAR WIFI
+                  - columnheader [ref=e1702]:
+                    - link [ref=e1703] [cursor=pointer]:
+                      - /url: /dp/B08B8WTLMH?ref=emc_s_m_5_i_atc
+                      - generic [ref=e1705]: MAG B550M MORTAR
+                  - columnheader [ref=e1706]:
+                    - link [ref=e1707] [cursor=pointer]:
+                      - /url: /dp/B08B4TB34N?ref=emc_s_m_5_i_atc
+                      - generic [ref=e1709]: MAG B550M BAZOOKA
+                  - columnheader [ref=e1710]:
+                    - link [ref=e1711] [cursor=pointer]:
+                      - /url: /dp/B08BCQF1BD?ref=emc_s_m_5_i_atc
+                      - generic [ref=e1713]: B550-A PRO
+                  - columnheader [ref=e1714]:
+                    - link [ref=e1715] [cursor=pointer]:
+                      - /url: /dp/B08BCR4ZRS?ref=emc_s_m_5_i_atc
+                      - generic [ref=e1717]: B550M PRO-VDH WIFI
+                - row [ref=e1718]:
+                  - cell [ref=e1719]
+                  - cell [ref=e1720]:
+                    - link [ref=e1724] [cursor=pointer]:
+                      - /url: /dp/B08B4V583Q?ref=emc_s_m_5_i_atc
+                      - text: Buying Options
+                  - cell [ref=e1725]:
+                    - link [ref=e1729] [cursor=pointer]:
+                      - /url: /dp/B08B4SD768?ref=emc_s_m_5_i_atc
+                      - text: Buying Options
+                  - cell [ref=e1730]:
+                    - link [ref=e1734] [cursor=pointer]:
+                      - /url: /dp/B08B8WTLMH?ref=emc_s_m_5_i_atc
+                      - text: Buying Options
+                  - cell [ref=e1735]:
+                    - link [ref=e1739] [cursor=pointer]:
+                      - /url: /dp/B08B4TB34N?ref=emc_s_m_5_i_atc
+                      - text: Buying Options
+                  - cell [ref=e1740]:
+                    - generic [ref=e1744] [cursor=pointer]:
+                      - button [ref=e1745]
+                      - generic [aria-hidden] [ref=e1746]: Add To Basket
+                  - cell [ref=e1747]:
+                    - generic [ref=e1751] [cursor=pointer]:
+                      - button [ref=e1752]
+                      - generic [aria-hidden] [ref=e1753]: Add To Basket
+                - row [ref=e1754]:
+                  - rowheader [ref=e1755]: Customer Reviews
+                  - cell [ref=e1756]:
+                    - generic [ref=e1757]: —
+                  - cell [ref=e1758]:
+                    - generic [ref=e1760]:
+                      - generic [ref=e1761]: 4.6 out of 5 stars
+                      - text: "781"
+                  - cell [ref=e1763]:
+                    - generic [ref=e1765]:
+                      - generic [ref=e1766]: 4.4 out of 5 stars
+                      - text: "528"
+                  - cell [ref=e1768]:
+                    - generic [ref=e1770]:
+                      - generic [ref=e1771]: 4.2 out of 5 stars
+                      - text: "258"
+                  - cell [ref=e1773]:
+                    - generic [ref=e1775]:
+                      - generic [ref=e1776]: 4.4 out of 5 stars
+                      - text: 2,415
+                  - cell [ref=e1778]:
+                    - generic [ref=e1780]:
+                      - generic [ref=e1781]: 4.4 out of 5 stars
+                      - text: 1,429
+                - row [ref=e1783]:
+                  - rowheader [ref=e1784]: Price
+                  - cell [ref=e1785]:
+                    - text: —
+                    - generic [ref=e1786]: no data
+                  - cell [ref=e1787]:
+                    - text: —
+                    - generic [ref=e1788]: no data
+                  - cell [ref=e1789]:
+                    - text: —
+                    - generic [ref=e1790]: no data
+                  - cell [ref=e1791]:
+                    - text: —
+                    - generic [ref=e1792]: no data
+                  - cell [ref=e1793]:
+                    - generic [ref=e1794]:
+                      - generic [ref=e1795]: £94.99
+                      - generic [aria-hidden] [ref=e1796]:
+                        - text: £
+                        - generic [ref=e1797]:
+                          - text: "94"
+                          - generic [ref=e1798]: .
+                        - text: "99"
+                  - cell [ref=e1799]:
+                    - generic [ref=e1800]:
+                      - generic [ref=e1801]: £99.95
+                      - generic [aria-hidden] [ref=e1802]:
+                        - text: £
+                        - generic [ref=e1803]:
+                          - text: "99"
+                          - generic [ref=e1804]: .
+                        - text: "95"
+                - row [ref=e1805]:
+                  - rowheader [ref=e1806]: CPU
+                  - cell [ref=e1807]: Support for 3rd Gen AMD Ryzen processors and future AMD Ryzen processors with BIOS update
+                  - cell [ref=e1808]: Support for 3rd Gen AMD Ryzen processors and future AMD Ryzen processors with BIOS update
+                  - cell [ref=e1809]: Support for 3rd Gen AMD Ryzen processors and future AMD Ryzen processors with BIOS update
+                  - cell [ref=e1810]: Support for 3rd Gen AMD Ryzen processors and future AMD Ryzen processors with BIOS update
+                  - cell [ref=e1811]: Support for 3rd Gen AMD Ryzen processors and future AMD Ryzen processors with BIOS update
+                  - cell [ref=e1812]: Support for 3rd Gen AMD Ryzen processors and future AMD Ryzen processors with BIOS update
+                - row [ref=e1813]:
+                  - rowheader [ref=e1814]: Chipset
+                  - cell [ref=e1815]: AMD B550 Chipset
+                  - cell [ref=e1816]: AMD B550 Chipset
+                  - cell [ref=e1817]: AMD B550 Chipset
+                  - cell [ref=e1818]: AMD B550 Chipset
+                  - cell [ref=e1819]: AMD B550 Chipset
+                  - cell [ref=e1820]: AMD B550 Chipset
+                - row [ref=e1821]:
+                  - rowheader [ref=e1822]: Memory
+                  - cell [ref=e1823]: 4 x DIMM; Max. 128GB DDR4; 4866+ MHz
+                  - cell [ref=e1824]: 4 x DIMM; Max. 128GB DDR4; 4400+ MHz
+                  - cell [ref=e1825]: 4 x DIMM; 4 x DIMM; Max. 128GB DDR4; 4400+ MHzMax. 128GB DDR4; 4400+ MHz
+                  - cell [ref=e1826]
+                  - cell [ref=e1827]: 4 x DIMM; Max. 128GB DDR4; 4400+ MHz
+                  - cell [ref=e1828]: 4 x DIMM; Max. 128GB DDR4; 4400+ MHz
+                - row [ref=e1829]:
+                  - rowheader [ref=e1830]: PCIe x16 Slots
+                  - cell [ref=e1831]: 1x PCIe 4.0 x16 slots (@x16) 1x PCIe 3.0 x16 slots (max.@x4) 2x PCIe 3.0 x1 slots
+                  - cell [ref=e1832]: 1x PCIe 4.0 x16 slots (@x16) 1x PCIe 3.0 x16 slots (max.@x4) 2x PCIe 3.0 x1 slots
+                  - cell [ref=e1833]: 1x PCIe 4.0 x16 slots (@x16) 1x PCIe 3.0 x16 slots (max.@x4) 2x PCIe 3.0 x1 slots
+                  - cell [ref=e1834]: 1x PCIe 4.0 x16 slots (@x16) 2x PCIe 3.0 x1 slots
+                  - cell [ref=e1835]: 1x PCIe 4.0 x16 slot (x16 / x4) 1x PCIe 3.0 x16 slot (max.@x4) 2x PCIe 3.0 x1 slots
+                  - cell [ref=e1836]: 1x PCIe 4.0 x16 slots (@x16) 2x PCIe 3.0 x1 slots
+                - row [ref=e1837]:
+                  - rowheader [ref=e1838]: Graphics
+                  - cell [ref=e1839]: HDMI, DisplayPort
+                  - cell [ref=e1840]: HDMI, DisplayPort
+                  - cell [ref=e1841]: HDMI, DisplayPort
+                  - cell [ref=e1842]: HDMI, DisplayPort
+                  - cell [ref=e1843]: HDMI, DisplayPort
+                  - cell [ref=e1844]: HDMI, DisplayPort, VGA
+                - row [ref=e1845]:
+                  - rowheader [ref=e1846]: Audio
+                  - cell [ref=e1847]: Audio Boost
+                  - cell [ref=e1848]: Audio Boost
+                  - cell [ref=e1849]: Audio Boost
+                  - cell [ref=e1850]: Audio Boost
+                  - cell [ref=e1851]: Audio Boost
+                  - cell [ref=e1852]: Audio Boost
+                - row [ref=e1853]:
+                  - rowheader [ref=e1854]: 32Gb/s M.2
+                  - cell [ref=e1855]: 1x 22110 (PCIe 4.0 x4 and SATA mode) 1x 2280 (PCIe 3.0 x4 mode)
+                  - cell [ref=e1856]: 1x 2280 (PCIe 4.0 x4 and SATA mode) 1x 2280 (PCIe 3.0 x4 mode)
+                  - cell [ref=e1857]: 1x 2280 (PCIe 4.0 x4 and SATA mode) 1x 2280 (PCIe 3.0 x4 mode)
+                  - cell [ref=e1858]: 1x 2280 (PCIe 4.0 x4 and SATA mode) 1x 2280 (PCIe 3.0 x4 mode)
+                  - cell [ref=e1859]: 1x 22110 (PCIe 4.0 x4 and SATA mode) 1x 2280 (PCIe 3.0 x4 mode)
+                  - cell [ref=e1860]: 1x 2280 (PCIe 4.0 x4 and SATA mode) 1x 2280 (PCIe 3.0 x4 mode)
+                - row [ref=e1861]:
+                  - rowheader [ref=e1862]: Wireless
+                  - cell [ref=e1863]: "-"
+                  - cell [ref=e1864]: 2x2 Wi-Fi with MU-MIMO 802.11 a/b/g/n/ac/ax
+                  - cell [ref=e1865]: "-"
+                  - cell [ref=e1866]: "-"
+                  - cell [ref=e1867]: "-"
+                  - cell [ref=e1868]: 1x1 Wi-Fi 802.11 a/b/g/n/ac
+                - row [ref=e1869]:
+                  - rowheader [ref=e1870]: Mystic Light
+                  - cell [ref=e1871]: "Yes"
+                  - cell [ref=e1872]: N/A
+                  - cell [ref=e1873]: N/A
+                  - cell [ref=e1874]: N/A
+                  - cell [ref=e1875]: N/A
+                  - cell [ref=e1876]: N/A
+                - row [ref=e1877]:
+                  - rowheader [ref=e1878]: Form Factor
+                  - cell [ref=e1879]: ATX
+                  - cell [ref=e1880]: Micro ATX
+                  - cell [ref=e1881]: Micro ATX
+                  - cell [ref=e1882]: Micro ATX
+                  - cell [ref=e1883]: ATX
+                  - cell [ref=e1884]: Micro ATX
+        - navigation:
+          - navigation:
+            - navigation:
+              - generic: Top
+            - navigation:
+              - generic: About this item
+            - navigation:
+              - generic: Similar
+            - navigation:
+              - generic: Product information
+            - navigation:
+              - generic: From the Brand
+            - navigation:
+              - generic: Reviews
+          - navigation
+          - navigation:
+            - generic: MSI B550M PRO-VDH WIFI Motherboard, mATX, AM4
+        - generic [ref=e1888]:
+          - heading [level=2] [ref=e1889]: Product guides and documents
+          - link [ref=e1891] [cursor=pointer]:
+            - /url: https://m.media-amazon.com/images/I/C14Mo-+ZUYS.pdf
+            - text: Installation Manual (PDF)
+          - separator [aria-hidden] [ref=e1892]
+          - link [ref=e1894] [cursor=pointer]:
+            - /url: https://m.media-amazon.com/images/I/B1N2kHTfM4L.pdf
+            - text: User Manual (PDF)
+      - generic [ref=e1897]:
+        - separator [aria-hidden] [ref=e1898]
+        - generic [ref=e1899]:
+          - heading [level=2] [ref=e1900]: Safety and product resources
+          - generic [ref=e1903]:
+            - heading [level=3] [ref=e1904]: Safety documents
+            - generic [ref=e1908]:
+              - link [ref=e1909] [cursor=pointer]:
+                - /url: javascript:void(0)
+                - text: Installation Manual (PDF)
+              - generic [ref=e1910]: "|"
+              - link [ref=e1911] [cursor=pointer]:
+                - /url: javascript:void(0)
+                - text: User Manual (PDF)
+      - generic [ref=e1917]:
+        - heading [level=2] [ref=e1919]: Product Videos
+        - generic [ref=e1924]:
+          - region [ref=e1925]:
+            - application [ref=e1926]
+            - generic [ref=e1927]:
+              - button [ref=e1928] [cursor=pointer]
+              - slider [ref=e1931] [cursor=pointer]: .
+              - generic [ref=e1932]: "-0:00"
+              - button [ref=e1933] [cursor=pointer]
+          - generic [ref=e1936]:
+            - link [ref=e1937] [cursor=pointer]:
+              - /url: /shop/kuronekogamer
+            - generic [ref=e1938]:
+              - generic [ref=e1939]:
+                - link [ref=e1940] [cursor=pointer]:
+                  - /url: /shop/kuronekogamer
+                  - text: ✅ Ryan Fung
+                - link [ref=e1942] [cursor=pointer]:
+                  - /url: /shop/info
+                  - text: Earns commissions
+              - generic [ref=e1943]: Good Motherboard for Gamers? | MSI B550M PRO-VDH Motherboard
+          - button [ref=e1944] [cursor=pointer]
+      - generic [ref=e2018]:
+        - separator [aria-hidden] [ref=e2019]
+        - generic [ref=e2021]:
+          - generic [ref=e2022]:
+            - generic [ref=e2027]:
+              - heading [level=2] [ref=e2029]: Customer reviews
+              - generic [ref=e2031]:
+                - generic [ref=e2033]:
+                  - generic [ref=e2034]: 4.4 out of 5 stars
+                  - generic [aria-hidden] [ref=e2039]: 4.4 out of 5
+                - generic [ref=e2040]: 1,429 global ratings
+              - list [ref=e2045]:
+                - listitem [ref=e2046]:
+                  - link [ref=e2049] [cursor=pointer]:
+                    - /url: /portal/customer-reviews/B08BCR4ZRS/ref=acr_dp_hist_5?ie=UTF8&filterByStar=five_star&reviewerType=all_reviews#reviews-filter-bar
+                    - generic [aria-hidden] [ref=e2050]: 5 star
+                    - progressbar [aria-hidden] [ref=e2052]
+                    - generic [aria-hidden] [ref=e2053]: 71%
+                - listitem [ref=e2054]:
+                  - link [ref=e2057] [cursor=pointer]:
+                    - /url: /portal/customer-reviews/B08BCR4ZRS/ref=acr_dp_hist_4?ie=UTF8&filterByStar=four_star&reviewerType=all_reviews#reviews-filter-bar
+                    - generic [aria-hidden] [ref=e2058]: 4 star
+                    - progressbar [aria-hidden] [ref=e2060]
+                    - generic [aria-hidden] [ref=e2061]: 15%
+                - listitem [ref=e2062]:
+                  - link [ref=e2065] [cursor=pointer]:
+                    - /url: /portal/customer-reviews/B08BCR4ZRS/ref=acr_dp_hist_3?ie=UTF8&filterByStar=three_star&reviewerType=all_reviews#reviews-filter-bar
+                    - generic [aria-hidden] [ref=e2066]: 3 star
+                    - progressbar [aria-hidden] [ref=e2068]
+                    - generic [aria-hidden] [ref=e2069]: 6%
+                - listitem [ref=e2070]:
+                  - link [ref=e2073] [cursor=pointer]:
+                    - /url: /portal/customer-reviews/B08BCR4ZRS/ref=acr_dp_hist_2?ie=UTF8&filterByStar=two_star&reviewerType=all_reviews#reviews-filter-bar
+                    - generic [aria-hidden] [ref=e2074]: 2 star
+                    - progressbar [aria-hidden] [ref=e2076]
+                    - generic [aria-hidden] [ref=e2077]: 3%
+                - listitem [ref=e2078]:
+                  - link [ref=e2081] [cursor=pointer]:
+                    - /url: /portal/customer-reviews/B08BCR4ZRS/ref=acr_dp_hist_1?ie=UTF8&filterByStar=one_star&reviewerType=all_reviews#reviews-filter-bar
+                    - generic [aria-hidden] [ref=e2082]: 1 star
+                    - progressbar [aria-hidden] [ref=e2084]
+                    - generic [aria-hidden] [ref=e2085]: 5%
+              - button [ref=e2090] [cursor=pointer]: How customer reviews and ratings work
+            - separator [aria-hidden] [ref=e2092]
+          - generic [ref=e2096]:
+            - generic [ref=e2100]:
+              - heading [level=3] [ref=e2101]: Customers say
+              - generic [ref=e2102]: Customers find the motherboard easy to use and appreciate its value for money, with positive feedback about installation instructions. The WiFi connectivity receives mixed reviews - while some praise the built-in WiFi and Bluetooth support, others report constant connection drops making it unusable. The build quality and reliability also get mixed feedback, with some praising its robustness while others report it failing twice. Customers disagree on the motherboard's compatibility, with one noting it's not compatible with CPUs under 3600.
+              - generic [ref=e2104]:
+                - generic [ref=e2105]:
+                  - generic [ref=e2106]: AI Generated from the text of customer reviews
+                  - generic [aria-hidden] [ref=e2108]: Generated from the text of customer reviews
+                - heading [level=4] [ref=e2109]: Select to learn more
+                - tablist [ref=e2110]:
+                  - generic [ref=e2111]:
+                    - tab [ref=e2115]:
+                      - button [ref=e2116] [cursor=pointer]:
+                        - generic [ref=e2117]: Value for money(27)
+                    - tab [ref=e2125]:
+                      - button [ref=e2126] [cursor=pointer]:
+                        - generic [ref=e2127]: Installation(7)
+                    - tab [ref=e2135]:
+                      - button [ref=e2136] [cursor=pointer]:
+                        - generic [ref=e2137]: Ease of use(6)
+                    - tab [ref=e2145]:
+                      - button [ref=e2146] [cursor=pointer]:
+                        - generic [ref=e2147]: Reliability(35)
+                    - tab [ref=e2155]:
+                      - button [ref=e2156] [cursor=pointer]:
+                        - generic [ref=e2157]: Wifi connectivity(12)
+                    - tab [ref=e2165]:
+                      - button [ref=e2166] [cursor=pointer]:
+                        - generic [ref=e2167]: Build quality(8)
+                    - tab [ref=e2175]:
+                      - button [ref=e2176] [cursor=pointer]:
+                        - generic [ref=e2177]: Compatibility(7)
+                    - tab [ref=e2185]:
+                      - button [ref=e2186] [cursor=pointer]:
+                        - generic [ref=e2187]: Connectivity(7)
+            - generic [ref=e2193]:
+              - group [ref=e2196]:
+                - generic [ref=e2197]:
+                  - heading [level=3] [ref=e2199]: Reviews with images
+                  - link [ref=e2202] [cursor=pointer]:
+                    - /url: javascript:void(0)
+                    - text: See all photos
+                - group [ref=e2206]:
+                  - list [ref=e2207]:
+                    - listitem [ref=e2208]:
+                      - button [ref=e2210] [cursor=pointer]
+                    - listitem [ref=e2213]:
+                      - button [ref=e2215] [cursor=pointer]
+                    - listitem [ref=e2218]:
+                      - button [ref=e2220] [cursor=pointer]
+                    - listitem [ref=e2223]:
+                      - button [ref=e2225] [cursor=pointer]
+                    - listitem [ref=e2228]:
+                      - button [ref=e2230] [cursor=pointer]
+                    - listitem [ref=e2233]:
+                      - button [ref=e2235] [cursor=pointer]
+                    - listitem [ref=e2238]:
+                      - button [ref=e2240] [cursor=pointer]
+                    - listitem [ref=e2243]:
+                      - button [ref=e2245] [cursor=pointer]
+                    - listitem [ref=e2248]:
+                      - button [ref=e2250] [cursor=pointer]
+              - separator [aria-hidden] [ref=e2253]
+            - generic [ref=e2258]:
+              - generic [ref=e2259]:
+                - heading [level=3] [ref=e2260]: Top reviews from the United Kingdom
+                - list [ref=e2261]:
+                  - listitem [ref=e2262]:
+                    - generic [ref=e2265]:
+                      - link [ref=e2267] [cursor=pointer]:
+                        - /url: /gp/profile/amzn1.account.AEGADYDQBKOCASDZ4XL5KH2UMJHQ?ref=cm_cr_dp_d_bdcrb_top
+                        - generic [ref=e2271]: Soulofman5446
+                      - generic [ref=e2273]: 5 out of 5 stars
+                      - link [ref=e2276] [cursor=pointer]:
+                        - /url: /portal/customer-reviews/srp/-/R1816LCFNCC4F/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8
+                        - heading [level=5] [ref=e2277]: Really good motherboard for the price.
+                      - generic [ref=e2278]: Reviewed in the United Kingdom on 30 July 2026
+                      - generic [ref=e2279]:
+                        - link [ref=e2280] [cursor=pointer]:
+                          - /url: /portal/customer-reviews/B08BCR4ZRS/ref=cm_cr_dp_d_rvw_fmt?_encoding=UTF8&formatType=current_format
+                          - generic [ref=e2281]: "Size Name: Micro-ATX"
+                          - text: "Style Name: B550M PRO-VDH WIFI"
+                        - link [ref=e2284] [cursor=pointer]:
+                          - /url: /gp/help/customer/display.html/ref=cm_cr_dp_d_rvw_avp?ie=UTF8&nodeId=G8UYX7LALQC8V9KA
+                          - text: Verified Purchase
+                      - paragraph [ref=e2294]: Really good board by MSI. Bought it to go with 5800x3d 10th anniversary. Allows for high ram speeds and the gen 4 pcie is welcome.
+                      - generic [ref=e2296]:
+                        - generic [ref=e2300] [cursor=pointer]:
+                          - button [ref=e2301]
+                          - generic [ref=e2303]: Helpful
+                        - button [ref=e2306] [cursor=pointer]: Report
+                  - listitem [ref=e2307]:
+                    - generic [ref=e2310]:
+                      - link [ref=e2312] [cursor=pointer]:
+                        - /url: /gp/profile/amzn1.account.AEDLZQPSRCB6N4JFG55LH3FG4XXA?ref=cm_cr_dp_d_bdcrb_top
+                        - generic [ref=e2316]: Piotr
+                      - generic [ref=e2318]: 5 out of 5 stars
+                      - link [ref=e2321] [cursor=pointer]:
+                        - /url: /portal/customer-reviews/srp/-/R11NHNC1XRHDS7/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8
+                        - heading [level=5] [ref=e2322]: A good company means a good product
+                      - generic [ref=e2323]: Reviewed in the United Kingdom on 7 February 2026
+                      - generic [ref=e2324]:
+                        - link [ref=e2325] [cursor=pointer]:
+                          - /url: /portal/customer-reviews/B08BCR4ZRS/ref=cm_cr_dp_d_rvw_fmt?_encoding=UTF8&formatType=current_format
+                          - generic [ref=e2326]: "Size Name: Micro-ATX"
+                          - text: "Style Name: B550M PRO-VDH WIFI"
+                        - link [ref=e2329] [cursor=pointer]:
+                          - /url: /gp/help/customer/display.html/ref=cm_cr_dp_d_rvw_avp?ie=UTF8&nodeId=G8UYX7LALQC8V9KA
+                          - text: Verified Purchase
+                      - paragraph [ref=e2339]: A good company and a good product. But I had a little trouble starting my computer, with a 1TB M2 SSD and an RTX graphics card, because this motherboard requires a BIOS update from the moment I bought it. Without this update, my PC wouldn't boot. I installed a gaming computer with RTX graphics and two monitors on it. I've had it for almost a year now and I'm happy with it. Overall, I recommend it.
+                      - generic [ref=e2340]: One person found this helpful
+                      - generic [ref=e2342]:
+                        - generic [ref=e2346] [cursor=pointer]:
+                          - button [ref=e2347]
+                          - generic [ref=e2349]: Helpful
+                        - button [ref=e2352] [cursor=pointer]: Report
+                  - listitem [ref=e2353]:
+                    - generic [ref=e2356]:
+                      - link [ref=e2358] [cursor=pointer]:
+                        - /url: /gp/profile/amzn1.account.AFA4INNBT6BGIRQNRGHL6FVPSHQA?ref=cm_cr_dp_d_bdcrb_top
+                        - generic [ref=e2362]: Oluwatomiwa
+                      - generic [ref=e2364]: 4 out of 5 stars
+                      - link [ref=e2367] [cursor=pointer]:
+                        - /url: /portal/customer-reviews/srp/-/R268GHY075K29Z/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8
+                        - heading [level=5] [ref=e2368]: Great Am4 motherboard
+                      - generic [ref=e2369]: Reviewed in the United Kingdom on 14 August 2026
+                      - generic [ref=e2370]:
+                        - link [ref=e2371] [cursor=pointer]:
+                          - /url: /portal/customer-reviews/B08BCR4ZRS/ref=cm_cr_dp_d_rvw_fmt?_encoding=UTF8&formatType=current_format
+                          - generic [ref=e2372]: "Size Name: Micro-ATX"
+                          - text: "Style Name: B550M PRO-VDH WIFI"
+                        - link [ref=e2375] [cursor=pointer]:
+                          - /url: /gp/help/customer/display.html/ref=cm_cr_dp_d_rvw_avp?ie=UTF8&nodeId=G8UYX7LALQC8V9KA
+                          - text: Verified Purchase
+                      - paragraph [ref=e2385]: Motherboard lights are very helpful and worked fine with my am4 cpu. It was very easy to change my brakes to use a tower cooler
+                      - generic [ref=e2387]:
+                        - generic [ref=e2391] [cursor=pointer]:
+                          - button [ref=e2392]
+                          - generic [ref=e2394]: Helpful
+                        - button [ref=e2397] [cursor=pointer]: Report
+                  - listitem [ref=e2398]:
+                    - generic [ref=e2401]:
+                      - link [ref=e2403] [cursor=pointer]:
+                        - /url: /gp/profile/amzn1.account.AGIQBWXTFB4F5MJAM2HFY4UYPMVQ?ref=cm_cr_dp_d_bdcrb_top
+                        - generic [ref=e2407]: Colin John Grant
+                      - generic [ref=e2409]: 5 out of 5 stars
+                      - link [ref=e2412] [cursor=pointer]:
+                        - /url: /portal/customer-reviews/srp/-/R1LJZXNOB7GMIQ/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8
+                        - heading [level=5] [ref=e2413]: Really good value
+                      - generic [ref=e2414]: Reviewed in the United Kingdom on 9 April 2025
+                      - generic [ref=e2415]:
+                        - link [ref=e2416] [cursor=pointer]:
+                          - /url: /portal/customer-reviews/B08BCR4ZRS/ref=cm_cr_dp_d_rvw_fmt?_encoding=UTF8&formatType=current_format
+                          - generic [ref=e2417]: "Size Name: Micro-ATX"
+                          - text: "Style Name: B550M PRO-VDH WIFI"
+                        - link [ref=e2420] [cursor=pointer]:
+                          - /url: /gp/help/customer/display.html/ref=cm_cr_dp_d_rvw_avp?ie=UTF8&nodeId=G8UYX7LALQC8V9KA
+                          - text: Verified Purchase
+                      - generic [ref=e2429]:
+                        - paragraph [ref=e2430]: OK so it's not the best 500 series board out there but the 5 star rating is simply because of value for what's included - two M.2 slots for your NVME drives, Wifi, a USB-C header (check your case has a USB-C port - if not just leave it unplugged), two 3 pin RGB headers, and two 4 pin RGB headers,.
+                        - paragraph [ref=e2431]: Oh and it has 5 fan headers, which would be enough for most people I would think.
+                        - paragraph [ref=e2432]: And while I have only installed low power CPU's like 3600 and 5600 on it, according to Hardware Unboxed it also handles more powerful chips surprisingly well considering how light it looks. Superb board!
+                        - paragraph [ref=e2433]: I should also add that I only installed NVME drives in this board, no SATA SSD's so I can't speak for how well placed the SATA headers are if you had a long graphics card installed, but just from looking at it I'm guessing you would be fine, especially as they are side mounted and not front mounted like a different motherboard I recently worked with, which was a pain
+                      - generic [ref=e2434]: 8 people found this helpful
+                      - generic [ref=e2436]:
+                        - generic [ref=e2440] [cursor=pointer]:
+                          - button [ref=e2441]
+                          - generic [ref=e2443]: Helpful
+                        - button [ref=e2446] [cursor=pointer]: Report
+                  - listitem [ref=e2447]:
+                    - generic [ref=e2450]:
+                      - link [ref=e2452] [cursor=pointer]:
+                        - /url: /gp/profile/amzn1.account.AHA25LO6353BWPSJT7GTBTCH7KSA?ref=cm_cr_dp_d_bdcrb_top
+                        - generic [ref=e2456]: CD
+                      - generic [ref=e2458]: 5 out of 5 stars
+                      - link [ref=e2461] [cursor=pointer]:
+                        - /url: /portal/customer-reviews/srp/-/RRM89AOZH9YJP/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8
+                        - heading [level=5] [ref=e2462]: Good value (and great customer service)
+                      - generic [ref=e2463]: Reviewed in the United Kingdom on 24 August 2021
+                      - generic [ref=e2464]:
+                        - link [ref=e2465] [cursor=pointer]:
+                          - /url: /portal/customer-reviews/B08BCR4ZRS/ref=cm_cr_dp_d_rvw_fmt?_encoding=UTF8&formatType=current_format
+                          - generic [ref=e2466]: "Size Name: Micro-ATX"
+                          - text: "Style Name: B550M PRO-VDH WIFI"
+                        - link [ref=e2469] [cursor=pointer]:
+                          - /url: /gp/help/customer/display.html/ref=cm_cr_dp_d_rvw_avp?ie=UTF8&nodeId=G8UYX7LALQC8V9KA
+                          - text: Verified Purchase
+                      - generic [ref=e2478]:
+                        - paragraph [ref=e2479]: An excellent, good quality motherboard (especially for the price). A nice surprise was that the BIOS had already been updated to work with new AMD Ryzen 5000 series CPUs "out of the box", saving the need to flash (i.e. update) the BIOS first. Even if I had to, one of the reasons I bought this board was that it has a physical button (at the back) to easily flash the BIOS (i.e. using only a power connection and a USB stick with the update on it). Another reason was the built-in Wifi and Bluetooth support, which both work fine.
+                        - paragraph [ref=e2480]: Tinkering with the BIOS settings is very easy. There are one-click buttons to overlock the CPU and to enable XMP (XMP enables RAM to run at maximum speed; factory defaults for 3200Mhz RAM is only about 2200Mhz without XMP enabled, for example). Excel-style graphs you can click also make it very easy to use the mouse to configure and set fan speeds. I've also used the "M-Flash" button to flash (update) the BIOS twice with no problems.
+                        - paragraph [ref=e2481]: The MSI website provides all the latest BIOS updates and board drivers needed. MSI were also responsive and helpful when I contacted them about problems getting one of the system fans to work. Turns out one of my cable connections was loose (i.e. nothing wrong with the board or BIOS settings). Very happy with this board.
+                      - generic [ref=e2482]: 9 people found this helpful
+                      - generic [ref=e2484]:
+                        - generic [ref=e2488] [cursor=pointer]:
+                          - button [ref=e2489]
+                          - generic [ref=e2491]: Helpful
+                        - button [ref=e2494] [cursor=pointer]: Report
+                  - listitem [ref=e2495]:
+                    - generic [ref=e2498]:
+                      - link [ref=e2500] [cursor=pointer]:
+                        - /url: /gp/profile/amzn1.account.AGLCPNIZMEBL5ENNFEDHRAPLCB7A?ref=cm_cr_dp_d_bdcrb_top
+                        - generic [ref=e2504]: Mrs. Dolapo Akinseye
+                      - generic [ref=e2506]: 5 out of 5 stars
+                      - link [ref=e2509] [cursor=pointer]:
+                        - /url: /portal/customer-reviews/srp/-/ROOO05IKOJ4KO/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8
+                        - heading [level=5] [ref=e2510]: Nice item.
+                      - generic [ref=e2511]: Reviewed in the United Kingdom on 3 August 2026
+                      - generic [ref=e2512]:
+                        - link [ref=e2513] [cursor=pointer]:
+                          - /url: /portal/customer-reviews/B08BCR4ZRS/ref=cm_cr_dp_d_rvw_fmt?_encoding=UTF8&formatType=current_format
+                          - generic [ref=e2514]: "Size Name: Micro-ATX"
+                          - text: "Style Name: B550M PRO-VDH WIFI"
+                        - link [ref=e2517] [cursor=pointer]:
+                          - /url: /gp/help/customer/display.html/ref=cm_cr_dp_d_rvw_avp?ie=UTF8&nodeId=G8UYX7LALQC8V9KA
+                          - text: Verified Purchase
+                      - paragraph [ref=e2527]: Nice item.
+                      - generic [ref=e2529]:
+                        - generic [ref=e2533] [cursor=pointer]:
+                          - button [ref=e2534]
+                          - generic [ref=e2536]: Helpful
+                        - button [ref=e2539] [cursor=pointer]: Report
+                  - listitem [ref=e2540]:
+                    - generic [ref=e2543]:
+                      - link [ref=e2545] [cursor=pointer]:
+                        - /url: /gp/profile/amzn1.account.AF6MGVMNIHIIWZIVMDU77HRSLPFA?ref=cm_cr_dp_d_bdcrb_top
+                        - generic [ref=e2549]: Steven
+                      - generic [ref=e2551]: 3 out of 5 stars
+                      - link [ref=e2554] [cursor=pointer]:
+                        - /url: /portal/customer-reviews/srp/-/R3G35SL84DP0JA/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8
+                        - heading [level=5] [ref=e2555]: Listing Incorrect
+                      - generic [ref=e2556]: Reviewed in the United Kingdom on 23 August 2026
+                      - generic [ref=e2557]:
+                        - link [ref=e2558] [cursor=pointer]:
+                          - /url: /portal/customer-reviews/B08BCR4ZRS/ref=cm_cr_dp_d_rvw_fmt?_encoding=UTF8&formatType=current_format
+                          - generic [ref=e2559]: "Size Name: Micro-ATX"
+                          - text: "Style Name: B550M PRO-VDH WIFI"
+                        - link [ref=e2562] [cursor=pointer]:
+                          - /url: /gp/help/customer/display.html/ref=cm_cr_dp_d_rvw_avp?ie=UTF8&nodeId=G8UYX7LALQC8V9KA
+                          - text: Verified Purchase
+                      - generic [ref=e2571]:
+                        - paragraph [ref=e2572]: This is not the Wi-Fi 6 version of the board, Amazon seem to be uninterested in correcting the listing.
+                        - paragraph [ref=e2573]: I ended up keeping it as fortunately the board itself is well laid out so I was able to fit a WiFi 6 card from a previous build alongside my GPU but if you're fitting a larger GPU and need Wifi 6 then this isn't the motherboard for you.
+                      - generic [ref=e2575]:
+                        - generic [ref=e2579] [cursor=pointer]:
+                          - button [ref=e2580]
+                          - generic [ref=e2582]: Helpful
+                        - button [ref=e2585] [cursor=pointer]: Report
+                  - listitem [ref=e2586]:
+                    - generic [ref=e2589]:
+                      - link [ref=e2591] [cursor=pointer]:
+                        - /url: /gp/profile/amzn1.account.AF7POO4Z2K7UZAHAPJTAA4NYUTZQ?ref=cm_cr_dp_d_bdcrb_top
+                        - generic [ref=e2595]: Sean H
+                      - generic [ref=e2597]: 5 out of 5 stars
+                      - link [ref=e2600] [cursor=pointer]:
+                        - /url: /portal/customer-reviews/srp/-/R1290MFCJV8A7I/ref=cm_cr_dp_d_rvw_ttl?_encoding=UTF8&ie=UTF8
+                        - heading [level=5] [ref=e2601]: "MSI B550M PRO-VDH WIFI: Compact and Reliable Motherboard"
+                      - generic [ref=e2602]: Reviewed in the United Kingdom on 14 March 2024
+                      - generic [ref=e2603]:
+                        - link [ref=e2604] [cursor=pointer]:
+                          - /url: /portal/customer-reviews/B08BCR4ZRS/ref=cm_cr_dp_d_rvw_fmt?_encoding=UTF8&formatType=current_format
+                          - generic [ref=e2605]: "Size Name: Micro-ATX"
+                          - text: "Style Name: B550M PRO-VDH WIFI"
+                        - link [ref=e2608] [cursor=pointer]:
+                          - /url: /gp/help/customer/display.html/ref=cm_cr_dp_d_rvw_avp?ie=UTF8&nodeId=G8UYX7LALQC8V9KA
+                          - text: Verified Purchase
+                      - paragraph [ref=e2618]: The MSI B550M PRO-VDH WIFI Motherboard is a fantastic choice for compact builds. Its M-ATX form factor provides versatility without sacrificing performance. With built-in WiFi connectivity, it offers convenient networking options. The motherboard's robust build quality and reliable performance make it an excellent option for both gaming and productivity tasks. If you're looking for a dependable motherboard for your next build, the MSI B550M PRO-VDH WIFI is worth considering.
+                      - generic [ref=e2620]:
+                        - generic [ref=e2624] [cursor=pointer]:
+                          - button [ref=e2625]
+                          - generic [ref=e2627]: Helpful
+                        - button [ref=e2630] [cursor=pointer]: Report
+              - link [ref=e2632] [cursor=pointer]:
+                - /url: /portal/customer-reviews/B08BCR4ZRS/ref=cm_cr_dp_d_show_all_top?_encoding=UTF8&ie=UTF8&reviewerType=all_reviews
+                - generic [ref=e2633]: See more reviews
+              - generic [ref=e2634]:
+                - heading [level=3] [ref=e2635]: Top reviews from other countries
+                - list [ref=e2636]:
+                  - generic [ref=e2640] [cursor=pointer]:
+                    - button [ref=e2641]
+                    - generic [aria-hidden] [ref=e2642]: Translate all reviews to English
+                  - listitem [ref=e2643]:
+                    - generic [ref=e2646]:
+                      - generic [ref=e2647]: Enrique
+                      - generic [ref=e2654]: 5 out of 5 stars
+                      - heading [level=5] [ref=e2657]: Excelente opción
+                      - generic [ref=e2658]: Reviewed in Spain on 30 May 2026
+                      - generic [ref=e2659]:
+                        - link [ref=e2660] [cursor=pointer]:
+                          - /url: /portal/customer-reviews/B08BCR4ZRS/ref=cm_cr_dp_d_rvw_fmt?_encoding=UTF8&formatType=current_format
+                          - generic [ref=e2661]: "Size Name: Micro-ATX"
+                          - text: "Style Name: B550M PRO-VDH WIFI"
+                        - link [ref=e2664] [cursor=pointer]:
+                          - /url: /gp/help/customer/display.html/ref=cm_cr_dp_d_rvw_avp?ie=UTF8&nodeId=G8UYX7LALQC8V9KA
+                          - text: Verified Purchase
+                      - paragraph [ref=e2674]: Funciona bien gracias, recomendado sin duda
+                      - button [ref=e2678] [cursor=pointer]: Report
+                      - link [ref=e2681] [cursor=pointer]:
+                        - /url: javascript:void(0)
+                        - text: Translate review to English
+                  - listitem [ref=e2682]:
+                    - generic [ref=e2685]:
+                      - generic [ref=e2686]: Tanmay
+                      - generic [ref=e2693]: 5 out of 5 stars
+                      - heading [level=5] [ref=e2696]: Great AMD board for first time builders with a small issue
+                      - generic [ref=e2697]: Reviewed in India on 22 April 2023
+                      - generic [ref=e2698]:
+                        - link [ref=e2699] [cursor=pointer]:
+                          - /url: /portal/customer-reviews/B08BCR4ZRS/ref=cm_cr_dp_d_rvw_fmt?_encoding=UTF8&formatType=current_format
+                          - generic [ref=e2700]: "Size Name: Micro-ATX"
+                          - text: "Style Name: B550M PRO-VDH WIFI"
+                        - link [ref=e2703] [cursor=pointer]:
+                          - /url: /gp/help/customer/display.html/ref=cm_cr_dp_d_rvw_avp?ie=UTF8&nodeId=G8UYX7LALQC8V9KA
+                          - text: Verified Purchase
+                      - generic [ref=e2712]:
+                        - paragraph [ref=e2713]: Keep in mind, if you install a newer generation AMD processor then before you do anything with this motherboard, plug in the 24 pin power supply and the 8 pin CPU power, don't put anything on the board, just the power. Get yourself a USB stick and download the latest motherboard bios file and put it on the stick, there are many videos out there to help you out, and flash the BIOS (install the bios update), while it is plugged in to ONLY the power supply, don't put your cpu, ram, gpu anything on the board and let it do it's thing and update.
+                        - paragraph [ref=e2714]: Once it is updated, proceed to install your components. I speak from firsthand experience when I say that I installed all my components and the PC would simply not turn on and I spent a day trying to fix it, when it turned out to be a very simple problem to fix. So save yourself the hard work of having to remove the components and do the flashing afterwards, do it beforehand and things will be much simpler.
+                        - paragraph [ref=e2715]: No complaints other than that so far, has plenty of ports, can support only DDR4 RAM, and has only 1 PCIE Gen 4 slot for an SSD, but at this price, it really is the best you can get!
+                      - button [ref=e2719] [cursor=pointer]: Report
+                  - listitem [ref=e2720]:
+                    - generic [ref=e2723]:
+                      - generic [ref=e2724]: Massimo
+                      - generic [ref=e2731]: 5 out of 5 stars
+                      - heading [level=5] [ref=e2734]: "La miglior B550 per qualità-prezzo: completa, solida e con Wi-Fi"
+                      - generic [ref=e2735]: Reviewed in Italy on 26 December 2025
+                      - generic [ref=e2736]:
+                        - link [ref=e2737] [cursor=pointer]:
+                          - /url: /portal/customer-reviews/B08BCR4ZRS/ref=cm_cr_dp_d_rvw_fmt?_encoding=UTF8&formatType=current_format
+                          - generic [ref=e2738]: "Size Name: Micro-ATX"
+                          - text: "Style Name: B550M PRO-VDH WIFI"
+                        - link [ref=e2741] [cursor=pointer]:
+                          - /url: /gp/help/customer/display.html/ref=cm_cr_dp_d_rvw_avp?ie=UTF8&nodeId=G8UYX7LALQC8V9KA
+                          - text: Verified Purchase
+                      - generic [ref=e2744]:
+                        - generic [ref=e2750]:
+                          - paragraph [ref=e2751]: Ho acquistato questa scheda madre MSI per il mio PC desktop e ne sono rimasto molto soddisfatto. Cercavo un prodotto che fosse solido, facile da configurare e che avesse il Wi-Fi integrato, e questa B550M ha rispettato tutte le aspettative.
+                          - paragraph [ref=e2752]: "Caratteristiche e Installazione: La scheda è costruita molto bene. Nonostante il formato Micro-ATX, gli spazi sono gestiti ottimamente: c'è tutto quello che serve, inclusi i dissipatori per i componenti critici. L'installazione è stata fluida e il BIOS di MSI è davvero intuitivo, permettendomi di configurare tutto in pochi minuti. Molto utile la presenza della porta Type-C e del dissipatore per l'SSD M.2."
+                          - paragraph [ref=e2753]: "Connettività e Wi-Fi: Uno dei motivi principali per cui l'ho scelta è il Wi-Fi integrato, che si è rivelato stabile e veloce, ideale se non si ha la possibilità di collegare il cavo LAN. Gestisce perfettamente il mio processore Ryzen e non scalda mai eccessivamente, anche durante sessioni di utilizzo prolungate con i miei monitor 4K."
+                          - paragraph [ref=e2754]: "In sintesi:"
+                          - paragraph [ref=e2755]: "Punti di forza: Wi-Fi eccellente, ottima dotazione di porte, BIOS semplice e supporto PCIe 4.0."
+                          - paragraph [ref=e2756]: "Versatilità: Perfetta sia per lavoro che per intrattenimento."
+                          - paragraph [ref=e2757]: "Verdetto finale: Se cercate una scheda madre per piattaforma AM4 che non costi una fortuna ma che offra tutte le tecnologie moderne e il Wi-Fi, questa è probabilmente la migliore opzione sul mercato. Consigliatissima!"
+                        - button [ref=e2761] [cursor=pointer]:
+                          - generic [ref=e2763]: Read more
+                      - button [ref=e2766] [cursor=pointer]
+                      - button [ref=e2771] [cursor=pointer]: Report
+                      - link [ref=e2774] [cursor=pointer]:
+                        - /url: javascript:void(0)
+                        - text: Translate review to English
+                  - listitem [ref=e2775]:
+                    - generic [ref=e2778]:
+                      - generic [ref=e2779]: MP_76
+                      - generic [ref=e2786]: 5 out of 5 stars
+                      - heading [level=5] [ref=e2789]: Sehr empfehlenswert
+                      - generic [ref=e2790]: Reviewed in Germany on 1 March 2024
+                      - generic [ref=e2791]:
+                        - link [ref=e2792] [cursor=pointer]:
+                          - /url: /portal/customer-reviews/B08BCR4ZRS/ref=cm_cr_dp_d_rvw_fmt?_encoding=UTF8&formatType=current_format
+                          - generic [ref=e2793]: "Size Name: Micro-ATX"
+                          - text: "Style Name: B550M PRO-VDH WIFI"
+                        - link [ref=e2796] [cursor=pointer]:
+                          - /url: /gp/help/customer/display.html/ref=cm_cr_dp_d_rvw_avp?ie=UTF8&nodeId=G8UYX7LALQC8V9KA
+                          - text: Verified Purchase
+                      - paragraph [ref=e2806]: Läuft stabil vom Fleck weg. Unterstützung von XMP-Profilen sowie umfangreichen manuellen Timings. Man kann aber natürlich auch einfach seine Komponenten montieren und das Teil starten - geht auch. Stabil, zuverlässig, so wie man es erwartet. Für den Preis auf jeden Fall Daumen hoch!
+                      - button [ref=e2810] [cursor=pointer]: Report
+                      - link [ref=e2813] [cursor=pointer]:
+                        - /url: javascript:void(0)
+                        - text: Translate review to English
+                  - listitem [ref=e2814]:
+                    - generic [ref=e2817]:
+                      - generic [ref=e2818]: GARY CHAN
+                      - generic [ref=e2825]: 5 out of 5 stars
+                      - heading [level=5] [ref=e2828]: Great motherboard. Hassle free
+                      - generic [ref=e2829]: Reviewed in Australia on 1 February 2022
+                      - generic [ref=e2830]:
+                        - link [ref=e2831] [cursor=pointer]:
+                          - /url: /portal/customer-reviews/B08BCR4ZRS/ref=cm_cr_dp_d_rvw_fmt?_encoding=UTF8&formatType=current_format
+                          - generic [ref=e2832]: "Size Name: Micro-ATX"
+                          - text: "Style Name: B550M PRO-VDH WIFI"
+                        - link [ref=e2835] [cursor=pointer]:
+                          - /url: /gp/help/customer/display.html/ref=cm_cr_dp_d_rvw_avp?ie=UTF8&nodeId=G8UYX7LALQC8V9KA
+                          - text: Verified Purchase
+                      - generic [ref=e2844]:
+                        - paragraph [ref=e2845]: I bought this board because of my 5600x upgrade.
+                        - paragraph [ref=e2846]: Things I find good abt this board
+                        - paragraph [ref=e2847]: "- matx size"
+                        - paragraph [ref=e2848]: "- ryzen 5 ready, it didn't need a bios update"
+                        - paragraph [ref=e2849]: "- good price"
+                        - paragraph [ref=e2850]: "- the board comes with wifi and bluebooth"
+                        - paragraph [ref=e2851]: "- worked with pci4.0/6600xt"
+                        - paragraph [ref=e2852]: What I didn't like. Over simplistic instruction manual. I'm use to having a full blueprint of motherboard with details. This single page instruction manual was pretty garbage.
+                      - button [ref=e2856] [cursor=pointer]: Report
+              - link [ref=e2858] [cursor=pointer]:
+                - /url: /portal/customer-reviews/B08BCR4ZRS/ref=cm_cr_dp_d_show_all_top?_encoding=UTF8&ie=UTF8&reviewerType=all_reviews
+                - generic [ref=e2859]: See more reviews
+    - generic [ref=e2864]:
+      - button [ref=e2865] [cursor=pointer]:
+        - generic [ref=e2866]: Back to top
+      - generic [ref=e2867]:
+        - generic [ref=e2868]:
+          - heading [level=6] [ref=e2869]: Get to Know Us
+          - list [ref=e2870]:
+            - listitem [ref=e2871]:
+              - link [ref=e2872] [cursor=pointer]:
+                - /url: https://www.amazon.jobs/en-gb
+                - text: Careers
+            - listitem [ref=e2873]:
+              - link [ref=e2874] [cursor=pointer]:
+                - /url: https://www.aboutamazon.co.uk/?utm_source=gateway&utm_medium=footer
+                - text: About Us
+            - listitem [ref=e2875]:
+              - link [ref=e2876] [cursor=pointer]:
+                - /url: /gp/help/customer/display.html?nodeId=202151760&ref_=help_search_1
+                - text: UK Modern Slavery Statement
+            - listitem [ref=e2877]:
+              - link [ref=e2878] [cursor=pointer]:
+                - /url: https://sustainability.aboutamazon.co.uk/?utm_source=gateway&utm_medium=footer&ref_=susty_footer
+                - text: Sustainability
+            - listitem [ref=e2879]:
+              - link [ref=e2880] [cursor=pointer]:
+                - /url: https://www.amazon.science
+                - text: Amazon Science
+        - generic [ref=e2882]:
+          - heading [level=6] [ref=e2883]: Make Money with Us
+          - list [ref=e2884]:
+            - listitem [ref=e2885]:
+              - link [ref=e2886] [cursor=pointer]:
+                - /url: " https://services.amazon.co.uk/sell.html?ld=AZUKSOAFooter&ref_=sduk_soa"
+                - text: Sell on Amazon
+            - listitem [ref=e2887]:
+              - link [ref=e2888] [cursor=pointer]:
+                - /url: https://services.amazon.co.uk/services/reach-business-customers/features-and-benefits.htm?ld=AZUKB2BRetailFooter
+                - text: Sell on Amazon Business
+            - listitem [ref=e2889]:
+              - link [ref=e2890] [cursor=pointer]:
+                - /url: https://services.amazon.co.uk/handmade.htm?ld=AZUKHNDFOOTER
+                - text: Sell on Amazon Handmade
+            - listitem [ref=e2891]:
+              - link [ref=e2892] [cursor=pointer]:
+                - /url: https://services.amazon.co.uk/services/launchpad.html?ld=AZUKALPLGN22_Footer
+                - text: Sell on Amazon Launchpad
+            - listitem [ref=e2893]:
+              - link [ref=e2894] [cursor=pointer]:
+                - /url: https://supply.amazon.co.uk?ref_=footer_sta&lang=en-GB
+                - text: Supply to Amazon
+            - listitem [ref=e2895]:
+              - link [ref=e2896] [cursor=pointer]:
+                - /url: https://sell.amazon.co.uk/brand-registry/?ref_=AOUKABRLGNRFOOT&ld=AZUKBrandRegFooter
+                - text: Brand Registry and New Seller Incentives
+            - listitem [ref=e2897]:
+              - link [ref=e2898] [cursor=pointer]:
+                - /url: https://sell.amazon.co.uk/global-selling?ld=AZUKSOA_globalsellingfooter
+                - text: Sell Globally with Amazon
+            - listitem [ref=e2899]:
+              - link [ref=e2900] [cursor=pointer]:
+                - /url: https://affiliate-program.amazon.co.uk
+                - text: Associates Programme
+            - listitem [ref=e2901]:
+              - link [ref=e2902] [cursor=pointer]:
+                - /url: https://services.amazon.co.uk/services/fulfilment-by-amazon/features-benefits/?ld=AZUKFBAFooter
+                - text: Fulfilment by Amazon
+            - listitem [ref=e2903]:
+              - link [ref=e2904] [cursor=pointer]:
+                - /url: https://services.amazon.co.uk/services/seller-fulfilled-prime/features-benefits.html?ld=AZUKSFPFooter
+                - text: Seller Fulfilled Prime
+            - listitem [ref=e2905]:
+              - link [ref=e2906] [cursor=pointer]:
+                - /url: https://advertising.amazon.co.uk/products-self-serve?_ref=ext_amzn_ftr
+                - text: Advertise Your Products
+            - listitem [ref=e2907]:
+              - link [ref=e2908] [cursor=pointer]:
+                - /url: https://kdp.amazon.com/?language=en_US
+                - text: Independently Publish with Us
+            - listitem [ref=e2909]:
+              - link [ref=e2910] [cursor=pointer]:
+                - /url: https://pay.amazon.com/uk?ld=AWREUKAPAFooter
+                - text: Amazon Pay
+            - listitem [ref=e2911]:
+              - link [ref=e2912] [cursor=pointer]:
+                - /url: https://www.amazon.co.uk/b?ie=UTF8&node=16721554031
+                - text: Host an Amazon Hub
+            - listitem [ref=e2913]:
+              - text: ›
+              - link [ref=e2914] [cursor=pointer]:
+                - /url: https://services.amazon.co.uk/services.html?ld=AZUKALLFooter
+                - text: See More Make Money with Us
+        - generic [ref=e2916]:
+          - heading [level=6] [ref=e2917]: Amazon Payment Methods
+          - list [ref=e2918]:
+            - listitem [ref=e2919]:
+              - link [ref=e2920] [cursor=pointer]:
+                - /url: /l/52540014031?pr=ukGIL&plattr=footer&place=camp&ie=UTF-8&ref_=NAV_instalments_footer
+                - text: Monthly Payments
+            - listitem [ref=e2921]:
+              - link [ref=e2922] [cursor=pointer]:
+                - /url: /dp/B0BH98211K?pr=ukccbarc&plattr=BXXCN100&place=camp&ie=UTF-8&ref_=BXXCN100
+                - text: The Amazon Barclaycard
+            - listitem [ref=e2923]:
+              - link [ref=e2924] [cursor=pointer]:
+                - /url: /gp/browse.html?node=1571304031&ref_=footer_giftcards
+                - text: Gift Cards
+            - listitem [ref=e2925]:
+              - link [ref=e2926] [cursor=pointer]:
+                - /url: /gp/help/customer/display.html?nodeId=201895380&ref_=footer_tfx
+                - text: Amazon Currency Converter
+            - listitem [ref=e2927]:
+              - link [ref=e2928] [cursor=pointer]:
+                - /url: /gp/help/customer/display.html?nodeId=201894900&ref_=footer_payment
+                - text: Payment Methods Help
+            - listitem [ref=e2929]:
+              - link [ref=e2930] [cursor=pointer]:
+                - /url: /gp/browse.html?node=21868612031&ref_=footer_AmExSWP
+                - text: Shop with Points
+            - listitem [ref=e2931]:
+              - link [ref=e2932] [cursor=pointer]:
+                - /url: /gp/browse.html?node=13958953031&ref_=footer_topup_uk
+                - text: Top Up Your Account
+            - listitem [ref=e2933]:
+              - link [ref=e2934] [cursor=pointer]:
+                - /url: /gp/browse.html?node=13829821031&ref_=footer_purchase_code
+                - text: Top Up Your Account in Store
+        - generic [ref=e2936]:
+          - heading [level=6] [ref=e2937]: Let Us Help You
+          - list [ref=e2938]:
+            - listitem [ref=e2939]:
+              - link [ref=e2940] [cursor=pointer]:
+                - /url: /gp/css/order-history?ref_=footer_hp_ss_comp_tmp
+                - text: Track Packages or View Orders
+            - listitem [ref=e2941]:
+              - link [ref=e2942] [cursor=pointer]:
+                - /url: /gp/help/customer/display.html?nodeId=201910060&ref_=footer_shiprates
+                - text: Delivery Rates & Policies
+            - listitem [ref=e2943]:
+              - link [ref=e2944] [cursor=pointer]:
+                - /url: /gp/subs/primeclub/signup/main.html?ref_=footer_prime
+                - text: Amazon Prime
+            - listitem [ref=e2945]:
+              - link [ref=e2946] [cursor=pointer]:
+                - /url: /gp/css/returns/homepage.html?ref_=footer_hy_f_4
+                - text: Returns & Replacements
+            - listitem [ref=e2947]:
+              - link [ref=e2948] [cursor=pointer]:
+                - /url: /gp/browse.html?node=22246474031&ref_=footer_disposal
+                - text: Recycling
+            - listitem [ref=e2949]:
+              - link [ref=e2950] [cursor=pointer]:
+                - /url: /hz/mycd/myx?ref_=footer_myk
+                - text: Manage Your Content and Devices
+            - listitem [ref=e2951]:
+              - link [ref=e2952] [cursor=pointer]:
+                - /url: https://www.amazon.co.uk/your-product-safety-alerts?ref_=footer_bsx_ypsa
+                - text: Recalls and Product Safety Alerts
+            - listitem [ref=e2953]:
+              - link [ref=e2954] [cursor=pointer]:
+                - /url: /gp/browse.html?node=4816518031&ref_=footer_mobapp
+                - text: Amazon Mobile App
+            - listitem [ref=e2955]:
+              - link [ref=e2956] [cursor=pointer]:
+                - /url: /gp/help/customer/display.html?nodeId=508510&ref_=footer_gw_m_b_cs
+                - text: Customer Service
+            - listitem [ref=e2957]:
+              - link [ref=e2958] [cursor=pointer]:
+                - /url: https://www.amazon.co.uk/gp/help/customer/display.html?nodeId=GUUVBZ8WGVFP8R8X&ref_=nav_foot_accessibility
+                - text: Accessibility
+            - listitem [ref=e2959]:
+              - link [ref=e2960] [cursor=pointer]:
+                - /url: /registries?ref_=nav_footer_registry_giftlist_desktop
+                - text: Lists and Gifting
+            - listitem [ref=e2961]:
+              - link [ref=e2962] [cursor=pointer]:
+                - /url: /gp/help/customer/display.html?nodeId=TLtMJsPGBmJPpN3hvy&ref_=footer_report_illegal_content
+                - text: Report illegal content
+      - generic [ref=e2964]:
+        - link [ref=e2967] [cursor=pointer]:
+          - /url: /ref=footer_logo
+        - generic [ref=e2970]:
+          - link [ref=e2971] [cursor=pointer]:
+            - /url: /customer-preferences/edit?ie=UTF8&ref_=footer_cop&preferencesReturnUrl=%2Fdp%2FB08BCR4ZRS%2Fref%3Dolp-opf-redir
+            - generic [ref=e2972]: £
+            - generic [ref=e2973]: GBP - Pounds
+          - button [ref=e2974] [cursor=pointer]:
+            - generic [ref=e2976]: United Kingdom
+      - generic [ref=e2978]:
+        - list [ref=e2979]:
+          - listitem [ref=e2980]:
+            - link [ref=e2981] [cursor=pointer]:
+              - /url: https://music.amazon.co.uk?ref=dm_aff_amz_couk
+              - heading [level=5] [ref=e2982]: Amazon Music
+              - generic [ref=e2983]: Stream millions of songs
+          - listitem [aria-hidden] [ref=e2984]
+          - listitem [ref=e2985]:
+            - link [ref=e2986] [cursor=pointer]:
+              - /url: https://www.abebooks.co.uk/
+              - heading [level=5] [ref=e2987]: AbeBooks
+              - generic [ref=e2988]: Books, art & collectables
+          - listitem [aria-hidden] [ref=e2989]
+          - listitem [ref=e2990]:
+            - link [ref=e2991] [cursor=pointer]:
+              - /url: https://www.acx.com/
+              - heading [level=5] [ref=e2992]: ACX
+              - generic [ref=e2993]: Audiobook Publishing Made Easy
+          - listitem [aria-hidden] [ref=e2994]
+          - listitem [ref=e2995]:
+            - link [ref=e2996] [cursor=pointer]:
+              - /url: https://www.veeqo.com/gb?utm_source=amazon&utm_medium=website&utm_campaign=footer
+              - heading [level=5] [ref=e2997]: Veeqo
+              - generic [ref=e2998]: Shipping Software Inventory Management
+        - list [ref=e2999]:
+          - listitem [ref=e3000]:
+            - link [ref=e3001] [cursor=pointer]:
+              - /url: https://aws.amazon.com/what-is-cloud-computing/?sc_channel=EL&sc_campaign=UK_amazonfooter
+              - heading [level=5] [ref=e3002]: Amazon Web Services
+              - generic [ref=e3003]: Scalable Cloud Computing Services
+          - listitem [aria-hidden] [ref=e3004]
+          - listitem [ref=e3005]:
+            - link [ref=e3006] [cursor=pointer]:
+              - /url: https://www.audible.co.uk/
+              - heading [level=5] [ref=e3007]: Audible
+              - generic [ref=e3008]: Download Audiobooks
+          - listitem [aria-hidden] [ref=e3009]
+          - listitem [ref=e3010]:
+            - link [ref=e3011] [cursor=pointer]:
+              - /url: https://www.goodreads.com/
+              - heading [level=5] [ref=e3012]: Goodreads
+              - generic [ref=e3013]: Book reviews & recommendations
+          - listitem [aria-hidden] [ref=e3014]
+          - listitem [ref=e3015]:
+            - link [ref=e3016] [cursor=pointer]:
+              - /url: /services?ref_=footer_services
+              - heading [level=5] [ref=e3017]: Amazon Home Services
+              - generic [ref=e3018]: Experienced pros Happiness Guarantee
+        - list [ref=e3019]:
+          - listitem [ref=e3020]:
+            - link [ref=e3021] [cursor=pointer]:
+              - /url: https://www.imdb.com/
+              - heading [level=5] [ref=e3022]: IMDb
+              - generic [ref=e3023]: Movies, TV & Celebrities
+          - listitem [aria-hidden] [ref=e3024]
+          - listitem [ref=e3025]:
+            - link [ref=e3026] [cursor=pointer]:
+              - /url: https://kdp.amazon.com/
+              - heading [level=5] [ref=e3027]: Kindle Direct Publishing
+              - generic [ref=e3028]: Indie Digital & Print Publishing Made Easy
+          - listitem [aria-hidden] [ref=e3029]
+          - listitem [ref=e3030]:
+            - link [ref=e3031] [cursor=pointer]:
+              - /url: https://www.shopbop.com/uk/welcome
+              - heading [level=5] [ref=e3032]: Shopbop
+              - generic [ref=e3033]: Designer Fashion Brands
+          - listitem [aria-hidden] [ref=e3034]
+          - listitem [ref=e3035]:
+            - link [ref=e3036] [cursor=pointer]:
+              - /url: /gp/browse.html?node=3581866031&ref_=footer_wrhsdls
+              - heading [level=5] [ref=e3037]: Amazon Resale
+              - generic [ref=e3038]: Great Deals on Quality Used Products
+        - list [ref=e3039]:
+          - listitem [aria-hidden] [ref=e3040]
+          - listitem [aria-hidden] [ref=e3041]
+          - listitem [ref=e3042]:
+            - link [ref=e3043] [cursor=pointer]:
+              - /url: /gp/browse.html?node=14332913031&ref_=nav_footer_business
+              - heading [level=5] [ref=e3044]: Amazon Business
+              - generic [ref=e3045]: Service for business customers
+          - listitem [aria-hidden] [ref=e3046]
+          - listitem [aria-hidden] [ref=e3047]
+          - listitem [aria-hidden] [ref=e3048]
+          - listitem [aria-hidden] [ref=e3049]
+      - generic [ref=e3050]:
+        - list [ref=e3051]:
+          - listitem [ref=e3052]:
+            - link [ref=e3053] [cursor=pointer]:
+              - /url: /gp/help/customer/display.html?nodeId=201909000&ref_=footer_cou
+              - text: Conditions of Use & Sale
+          - listitem [ref=e3054]:
+            - link [ref=e3055] [cursor=pointer]:
+              - /url: /gp/help/customer/display.html?nodeId=201909010&ref_=footer_privacy
+              - text: Privacy Notice
+          - listitem [ref=e3056]:
+            - link [ref=e3057] [cursor=pointer]:
+              - /url: /gp/help/customer/display.html?nodeId=201890250&ref_=footer_cookies_notice
+              - text: Cookies Notice
+          - listitem [ref=e3058]:
+            - link [ref=e3059] [cursor=pointer]:
+              - /url: /gp/help/customer/display.html?nodeId=201909150&ref_=footer_Interest_Based_Ads_Notice
+              - text: Interest-Based Ads Notice
+        - generic [ref=e3060]: © 1996-2026, Amazon.com, Inc. or its affiliates

@@ -1,0 +1,269 @@
+{
+  "query": "ASRock B550M Pro4 motherboard",
+  "observed_at": "2026-10-22T19:55:07.018274+00:00",
+  "source": "amazon_search",
+  "commercially_verified": false,
+  "parser": "linked_product_heading",
+  "products": [
+    {
+      "external_id": "https://www.amazon.co.uk/Asrock-B550-PRO4-Motherboard-Supports/dp/B089W2ZTHF/ref=sr_1_1",
+      "title": "B550 Pro4 AMD B550 Emplacement AM4 ATX",
+      "price": 106.14,
+      "url": "https://www.amazon.co.uk/Asrock-B550-PRO4-Motherboard-Supports/dp/B089W2ZTHF/ref=sr_1_1",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61TbQdMMLcL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASRock-B550M-PHANTOM-GAMING-MATX/dp/B08MXSQS49/ref=sr_1_2",
+      "title": "B550M Phantom Gaming 4 (90-MXBE90-A0UAYZ)",
+      "price": 94.25,
+      "url": "https://www.amazon.co.uk/ASRock-B550M-PHANTOM-GAMING-MATX/dp/B08MXSQS49/ref=sr_1_2",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71fXhZSyjPL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASRock-B550M-HDV-Supports-Processors-motherboard/dp/B089W26FCB/ref=sr_1_3",
+      "title": "B550M-HDV Supports 3rd Gen AMD AM4 Ryzen\u2122 / Future AMD Ryzen\u2122 Processors motherboard",
+      "price": 74.08,
+      "url": "https://www.amazon.co.uk/ASRock-B550M-HDV-Supports-Processors-motherboard/dp/B089W26FCB/ref=sr_1_3",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71ScBhEOb3L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 30
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Asrock-B550M-Legend-Motherboard-Supports/dp/B089W2Q2QC/ref=sr_1_4",
+      "title": "B550M Steel Legend Motherboard, Supports 3rd Gen AMD4 Ryzen, PCIe 4.2",
+      "price": 122.41,
+      "url": "https://www.amazon.co.uk/Asrock-B550M-Legend-Motherboard-Supports/dp/B089W2Q2QC/ref=sr_1_4",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/719Tu+rAdSL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 2
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-PRO-VDH-Motherboard-DisplayPort-Generation/dp/B08BCR4ZRS/ref=sr_1_5",
+      "title": "B550M PRO-VDH WIFI Motherboard, mATX, AM4",
+      "price": 99.95,
+      "url": "https://www.amazon.co.uk/MSI-PRO-VDH-Motherboard-DisplayPort-Generation/dp/B08BCR4ZRS/ref=sr_1_5",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81OvzNNZttL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-PRIME-B550M-Micro-Wi-Fi/dp/B09LVQXHBG/ref=sr_1_6",
+      "title": "PRIME B550M-A WIFI II, AMD B550, AM4, Micro ATX, 4 DDR4, VGA, DVI, HDMI, Wi-Fi, PCIe4, 2x M.2",
+      "price": 93.1,
+      "url": "https://www.amazon.co.uk/ASUS-PRIME-B550M-Micro-Wi-Fi/dp/B09LVQXHBG/ref=sr_1_6",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81XfxEDurJL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASRock-B550M-ITX-AC-Processors-motherboard/dp/B089VYCHMG/ref=sr_1_7",
+      "title": "B550M-ITX/AC Supports 3rd Gen AMD AM4 Ryzen\u2122 / Future AMD Ryzen\u2122 Processors motherboard, 700W",
+      "price": 123.72,
+      "url": "https://www.amazon.co.uk/ASRock-B550M-ITX-AC-Processors-motherboard/dp/B089VYCHMG/ref=sr_1_7",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71sRk+7W-xL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/GIGABYTE-B550M-AORUS-ELITE-Motherboard/dp/B08BN8VD23/ref=sr_1_8",
+      "title": "B550M AORUS ELITE Motherboard - Supports AMD Ryzen 5000 Series AM4 CPUs, 5+3 Phases Pure Digital VRM, up to 4733MHz DDR4 (OC), 2xPCIe 3.0 M.2, GbE LAN, USB 3.2 Gen1",
+      "price": 81.99,
+      "url": "https://www.amazon.co.uk/GIGABYTE-B550M-AORUS-ELITE-Motherboard/dp/B08BN8VD23/ref=sr_1_8",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81QyMksmunL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-B550M-P-WIFI6E-Motherboard-mATX/dp/B0H71QVLQK/ref=sr_1_9",
+      "title": "PRO B550M-P WIFI6E Motherboard, mATX, AM4",
+      "price": 89.99,
+      "url": "https://www.amazon.co.uk/MSI-B550M-P-WIFI6E-Motherboard-mATX/dp/B0H71QVLQK/ref=sr_1_9",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81ihwwfg00L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Motherboard-Support-5700X3D-5800X3D-4533MHz/dp/B0FST1MBL5/ref=sr_1_10",
+      "title": "Pc Motherboard Fit For ASRock B550M PRO4 Motherboard Support Ryzen 5 3600 5600 5600G 5700X3D R7 5800X3D CPU DDR4 4533MHz 128GB NVME M.2 PCIe 4.0 MATX",
+      "price": 226.56,
+      "url": "https://www.amazon.co.uk/Motherboard-Support-5700X3D-5800X3D-4533MHz/dp/B0FST1MBL5/ref=sr_1_10",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71iOIzRvn-L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 14
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Gigabyte-B550M-K-GiBy-B550MK/dp/B0BW66YHB5/ref=sr_1_11",
+      "title": "B550M K Motherboard - Supports AMD Ryzen 5000 Series AM4 CPUs, up to 4733MHz DDR4 (OC), 2xPCIe 3.0 M.2, GbE LAN, USB 3.2 Gen1",
+      "price": 66.99,
+      "url": "https://www.amazon.co.uk/Gigabyte-B550M-K-GiBy-B550MK/dp/B0BW66YHB5/ref=sr_1_11",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61RLLHk9cVL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 29
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/mother-ASRock-Motherboard-Socket-support/dp/B0FJY8CQSL/ref=sr_1_12",
+      "title": "mother board Fit For ASRock B550M Pro4 Motherboard Socket AM4 B550 support Ryzen 5 5600 4500 3200G 3600 5700X cpu DDR4 128GB NVMe SSD Micro ATX",
+      "price": 257.19,
+      "url": "https://www.amazon.co.uk/mother-ASRock-Motherboard-Socket-support/dp/B0FJY8CQSL/ref=sr_1_12",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71+7LfscCBL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 13
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/motherboard-Motherboard-Support-5700X3D-5800x3D/dp/B0HLDBQKDS/ref=sr_1_13",
+      "title": "pc motherboard Fit For ASRock B550M PRO4 Motherboard B550 4xDDR4 HDMI Dual SATA 6 M.2 NVME PCIe 4.0 Support Ryzen 5 5600G R7 5700X3D 5800x3D CPU",
+      "price": 266.41,
+      "url": "https://www.amazon.co.uk/motherboard-Motherboard-Support-5700X3D-5800x3D/dp/B0HLDBQKDS/ref=sr_1_13",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71b0AxwYh+L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 9
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASRock-A520M-Pro4-A520-Mainboard/dp/B08G22JFHG/ref=sr_1_14",
+      "title": "A520M Pro4, AMD A520 Mainboard - Sockel AM4, 90-MXBDU0-A0UAYZ",
+      "price": 79.06,
+      "url": "https://www.amazon.co.uk/ASRock-A520M-Pro4-A520-Mainboard/dp/B08G22JFHG/ref=sr_1_14",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61nfB3jiGVL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/motherboard-Motherboard-Support-5700x3D-Mainboard/dp/B0HLD5YRBH/ref=sr_1_15",
+      "title": "pc motherboard Fit For ASRock B550M PRO4 Motherboard Set Kit with Ryzen 5 5600 CPU 4xDDR4 M.2 NVME HDMI B550 Support 5700x3D mATX AM4 Mainboard",
+      "price": 277.49,
+      "url": "https://www.amazon.co.uk/motherboard-Motherboard-Support-5700x3D-Mainboard/dp/B0HLD5YRBH/ref=sr_1_15",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71+Zyax5s4L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 9
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/motherboard-Motherboard-Support-5700X3D-5800x3D/dp/B0HN7GZHRG/ref=sr_1_16",
+      "title": "Game motherboard Fit For ASRock B550M PRO4 Motherboard B550 4xDDR4 HDMI Dual SATA 6 M.2 NVME PCIe 4.0 Support Ryzen 5 5600G R7 5700X3D 5800x3D CPU",
+      "price": 268.72,
+      "url": "https://www.amazon.co.uk/motherboard-Motherboard-Support-5700X3D-5800x3D/dp/B0HN7GZHRG/ref=sr_1_16",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71nrRj5EgjL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 13
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/motherboard-ASRock-Motherboard-Socket-Support/dp/B0HKCCBTPG/ref=sr_1_17",
+      "title": "motherboard Fit For ASRock B550M Pro4",
+      "price": 263.69,
+      "url": "https://www.amazon.co.uk/motherboard-ASRock-Motherboard-Socket-Support/dp/B0HKCCBTPG/ref=sr_1_17",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81zOuKtDZoL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 14
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/dp/B0HNRFMVDB/ref=sr_1_18",
+      "title": "Motherboard Fit For ASRock B550M PRO4",
+      "price": 184.64,
+      "url": "https://www.amazon.co.uk/dp/B0HNRFMVDB/ref=sr_1_18",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71Ko6PE1krL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 16
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/motherboard-Fit-ASRock-B550M-Pro4/dp/B0HN46BS23/ref=sr_1_19",
+      "title": "motherboard Fit For ASRock B550M Pro4",
+      "price": 271.31,
+      "url": "https://www.amazon.co.uk/motherboard-Fit-ASRock-B550M-Pro4/dp/B0HN46BS23/ref=sr_1_19",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81CD1GMSOzL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 14
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/motherboard-Fit-ASRock-B550M-Pro4/dp/B0HFR6QQGP/ref=sr_1_20",
+      "title": "motherboard Fit For ASRock B550M Pro4",
+      "price": 261.26,
+      "url": "https://www.amazon.co.uk/motherboard-Fit-ASRock-B550M-Pro4/dp/B0HFR6QQGP/ref=sr_1_20",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81zOuKtDZoL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "ASRock B550M Pro4 motherboard",
+      "estimated_delivery_days": 14
+    }
+  ]
+}

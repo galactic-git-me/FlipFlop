@@ -1,0 +1,11 @@
+{
+  "query": "5600G desktop pc",
+  "observed_at": "2026-10-22T19:39:48.547662+00:00",
+  "publishable": false,
+  "provider_available": false,
+  "unavailable_reason": "No comparable sold listings found",
+  "public_cards": [],
+  "fixed_price_matching_condition_candidates": [],
+  "query_model_matching": "Exact title anchors only; adjacent matches retained with blockers, never pooled",
+  "recent_exact_title_known_delivery": 0
+}

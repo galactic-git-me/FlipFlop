@@ -1,0 +1,87 @@
+- generic [ref=f4e2]:
+  - complementary [ref=f4e4]:
+    - link [ref=f4e6] [cursor=pointer]:
+      - /url: /
+      - img "SoldComps" [ref=f4e7]
+    - navigation [ref=f4e8]:
+      - link "Overview" [ref=f4e9] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Search" [ref=f4e15] [cursor=pointer]:
+        - /url: /dashboard/search
+      - link "Bulk Search" [ref=f4e21] [cursor=pointer]:
+        - /url: /dashboard/bulk-search
+      - link "API Keys" [ref=f4e26] [cursor=pointer]:
+        - /url: /dashboard/api-keys
+      - link "Subscription" [ref=f4e31] [cursor=pointer]:
+        - /url: /dashboard/subscription
+      - link "Usage" [ref=f4e34] [cursor=pointer]:
+        - /url: /dashboard/usage
+      - link "Account" [ref=f4e36] [cursor=pointer]:
+        - /url: /dashboard/account
+      - link "Contact" [ref=f4e40] [cursor=pointer]:
+        - /url: /dashboard/contact
+      - generic [ref=f4e43]:
+        - link "Documentation" [ref=f4e44] [cursor=pointer]:
+          - /url: /docs
+        - link "Changelog" [ref=f4e47] [cursor=pointer]:
+          - /url: /changelog
+    - generic [ref=f4e52]:
+      - generic [ref=f4e53]: F
+      - generic [ref=f4e54]:
+        - paragraph [ref=f4e55]: flipflop
+        - paragraph [ref=f4e56]: mac@theflipflop.shop
+      - button "Sign out" [ref=f4e57] [cursor=pointer]
+  - generic [ref=f4e61]:
+    - banner [ref=f4e62]:
+      - button "Open menu" [ref=f4e63] [cursor=pointer]
+      - generic [ref=f4e65]: Search
+      - button "What's new" [ref=f4e66] [cursor=pointer]
+    - main [ref=f4e71]:
+      - generic [ref=f4e72]:
+        - generic [ref=f4e73]:
+          - heading "Search" [level=1] [ref=f4e74]
+          - paragraph [ref=f4e75]: Search eBay sold listings using your account quota.
+        - generic [ref=f4e76]: 0 / 100 requests this month
+        - generic [ref=f4e78]:
+          - generic [ref=f4e79]:
+            - textbox "e.g. vintage omega seamaster" [ref=f4e81]
+            - button "Search" [disabled] [ref=f4e82]
+            - button "Filters" [active] [ref=f4e83]
+          - generic [ref=f4e87]:
+            - generic [ref=f4e88]:
+              - generic [ref=f4e89]: Results per page
+              - combobox [ref=f4e90] [cursor=pointer]:
+                - option "60"
+                - option "120"
+                - option "240" [selected]
+            - generic [ref=f4e91]:
+              - generic [ref=f4e92]: eBay site
+              - combobox [ref=f4e93] [cursor=pointer]:
+                - option "ebay.com (US)" [selected]
+                - option "ebay.co.uk (UK)"
+                - option "ebay.de (Germany)"
+                - option "ebay.fr (France)"
+                - option "ebay.it (Italy)"
+                - option "ebay.es (Spain)"
+                - option "ebay.ca (Canada)"
+                - option "ebay.com.au (Australia)"
+            - generic [ref=f4e94]:
+              - generic [ref=f4e95]: Sort order
+              - combobox [ref=f4e96] [cursor=pointer]:
+                - option "Ended recently" [selected]
+                - option "Newly listed"
+                - 'option "Price: lowest first"'
+                - 'option "Price: highest first"'
+            - generic [ref=f4e97]:
+              - generic [ref=f4e98]: Condition
+              - combobox [ref=f4e99] [cursor=pointer]:
+                - option "Any condition" [selected]
+                - option "New"
+                - option "Used"
+            - generic [ref=f4e100]:
+              - generic [ref=f4e101]:
+                - generic [ref=f4e102]: Min price
+                - spinbutton "—" [ref=f4e103]
+              - generic [ref=f4e104]:
+                - generic [ref=f4e105]: Max price
+                - spinbutton "—" [ref=f4e106]

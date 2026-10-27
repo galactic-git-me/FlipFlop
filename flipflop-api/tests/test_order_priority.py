@@ -58,7 +58,7 @@ async def test_active_orders_follow_delivery_buckets_and_spend(db):
     completed = Order(
         order_id="completed", customer_id=customer.id, specs={}, customer_price=800,
         component_costs=400, overhead_amount=100,
-        status=OrderStatus.COMPLETED, created_at=now - timedelta(days=4),
+        status=OrderStatus.SHIPPED, created_at=now - timedelta(days=4),
     )
     db.add_all([normal, fast, fast_early, fast_late, prebuilt, prebuilt_standard, flexible, completed])
     await db.flush()
@@ -80,5 +80,5 @@ async def test_active_orders_follow_delivery_buckets_and_spend(db):
     ]
     assert [order["priority_rank"] for order in result["orders"]] == [1, 2, 3, 3, 3, 4, 5]
     assert result["orders"][2]["components_ready_at"] == now + timedelta(days=3)
-    page = await list_order_priority(status=None, skip=2, limit=2, db=db)
+    page = await list_order_priority(status=None, skip=2, limit=2, db=db, all_rows=False)
     assert [order["order_id"] for order in page["orders"]] == ["fast-early", "fast-late"]

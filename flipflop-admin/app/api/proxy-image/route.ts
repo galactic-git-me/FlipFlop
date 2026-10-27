@@ -1,5 +1,6 @@
 const ALLOWED_IMAGE_HOSTS = new Set([
   "www.overclockers.co.uk",
+  "www.scan.co.uk",
   "m.media-amazon.com",
   "images-eu.ssl-images-amazon.com",
   "images-na.ssl-images-amazon.com",
@@ -28,7 +29,10 @@ export async function GET(request: Request) {
       upstream = await fetch(currentUrl, {
         redirect: "manual",
         signal: AbortSignal.timeout(15_000),
-        headers: { Accept: "image/avif,image/webp,image/png,image/jpeg" },
+        headers: {
+          Accept: "image/avif,image/webp,image/png,image/jpeg",
+          "User-Agent": "Mozilla/5.0",
+        },
       });
 
       if (![301, 302, 303, 307, 308].includes(upstream.status)) break;

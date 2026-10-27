@@ -1,0 +1,670 @@
+{
+  "snapshot_at": "2026-10-26T22:00:32.402304+00:00",
+  "database_target": {
+    "database": "pcflipper",
+    "schema": "public",
+    "registry_installed": false
+  },
+  "measurement": "Same frozen captures, exact manufacturer+MPN only; no detail-page data or new network captures. After is replay until a separate apply receipt exists.",
+  "total_listings": 50739,
+  "mpn_eligible_listings": 1612,
+  "mpn_products": 959,
+  "listings_flagged_individually": 41,
+  "conflicting_mpn_groups_excluded": 9,
+  "before": {
+    "products_with_cross_source_links": 58,
+    "products_with_all_observed_sources_linked": 45,
+    "listings_in_cross_source_groups": 206,
+    "cross_source_listing_pairs": 192,
+    "amazon_products_linked_to_another_source": 11
+  },
+  "after_replay": {
+    "products_with_cross_source_links": 155,
+    "products_with_all_observed_sources_linked": 155,
+    "listings_in_cross_source_groups": 547,
+    "cross_source_listing_pairs": 666,
+    "amazon_products_linked_to_another_source": 48
+  },
+  "direct_retailers_before": {
+    "products_with_cross_source_links": 8,
+    "products_with_all_observed_sources_linked": 7,
+    "listings_in_cross_source_groups": 16,
+    "cross_source_listing_pairs": 8,
+    "amazon_products_linked_to_another_source": 2
+  },
+  "direct_retailers_after_replay": {
+    "products_with_cross_source_links": 48,
+    "products_with_all_observed_sources_linked": 48,
+    "listings_in_cross_source_groups": 107,
+    "cross_source_listing_pairs": 70,
+    "amazon_products_linked_to_another_source": 26
+  },
+  "per_source": {
+    "amazon": 132,
+    "ebay": 938,
+    "newegg_uk": 131,
+    "awd_it": 147,
+    "google_shopping": 160,
+    "overclockers": 46,
+    "bargain_hardware": 53,
+    "scan": 5
+  },
+  "limitations": [
+    "MPN equality and variant consistency are the measurement evidence; this is not a manual precision audit.",
+    "Title-only fallback links are retained but not counted as new confirmed MPN links.",
+    "Existing captured titles often omit MPNs; extension improvements need a new results-page scan to measure their additional capture gain.",
+    "No historical CPK is redirected wholesale: only individual evidenced source listings are planned."
+  ],
+  "conflicts": [
+    {
+      "source": "awd_it",
+      "listing_id": "awd_it:corsair-air-5400-rs-r-argb-tempered-glass-white-mid-tower-gaming-pc-case-cc-9011319-ww.html",
+      "title": "Corsair AIR 5400 RS-R ARGB Tempered Glass White Mid-Tower Gaming PC Case - CC-9011319-WWB Tempered Glass Black Mid-Tower Gaming PC Case - CC-9011318-WW",
+      "status": "conflict",
+      "reason": "multiple_manufacturer_parts"
+    },
+    {
+      "source": "bargain_hardware",
+      "listing_id": "bargain_hardware:ibm-00kj410-1-8tb-sff-2-5in-sas-3-12g-7-2k-hdd-01nn116",
+      "title": "IBM (00KJ410) 1.8TB (SFF 2.5in) SAS-3 12G 7.2K HDD (01NN116)",
+      "status": "conflict",
+      "reason": "multiple_manufacturer_parts"
+    },
+    {
+      "source": "bargain_hardware",
+      "listing_id": "bargain_hardware:ibm-00vn384-3-84tb-read-intensive-sff-2-5in-sas-3-12g-ssd-02xx446",
+      "title": "IBM (00VN384) 3.84TB Read Intensive (SFF 2.5in) SAS-3 12G SSD (02XX446)",
+      "status": "conflict",
+      "reason": "multiple_manufacturer_parts"
+    },
+    {
+      "source": "bargain_hardware",
+      "listing_id": "bargain_hardware:ibm-00vn390-7-6tb-read-intensive-sff-2-5in-6g-sas-2-ssd-528-block-size-02wf142",
+      "title": "IBM (00VN390) 7.6TB Read Intensive (SFF 2.5in) 6G SAS-2 SSD 528 Block Size (02WF142)",
+      "status": "conflict",
+      "reason": "multiple_manufacturer_parts"
+    },
+    {
+      "source": "bargain_hardware",
+      "listing_id": "bargain_hardware:ibm-00vn497-2-4tb-sff-2-5in-sas-3-12g-10k-256mb-hdd-01ym176",
+      "title": "IBM (00VN497) 2.4TB (SFF 2.5in) SAS-3 12G 10K 256MB HDD (01YM176)",
+      "status": "conflict",
+      "reason": "multiple_manufacturer_parts"
+    },
+    {
+      "source": "bargain_hardware",
+      "listing_id": "bargain_hardware:ibm-01ym176-2-4tb-sff-2-5in-sas-3-12g-10k-hdd-01ym150",
+      "title": "IBM (01YM176) 2.4TB (SFF 2.5in) SAS-3 12G 10K HDD (01YM150)",
+      "status": "conflict",
+      "reason": "multiple_manufacturer_parts"
+    },
+    {
+      "source": "bargain_hardware",
+      "listing_id": "bargain_hardware:netapp-108-00530-samsung-mz-ils15t0-15-36tb-read-intensive-sff-2-5in-12g-sas-3-ssd",
+      "title": "NetApp (108-00530) Samsung (MZ-ILS15T0) 15.36TB Read Intensive (SFF 2.5in) 12G SAS-3 SSD",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "128157672879",
+      "title": "Crucial 32GB Kit 2x16GB DDR4 2666MHz Desktop RAM UDIMM CT16G4DFD8266",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb",
+        "modules"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "147578741530",
+      "title": "Lenovo (00FC970) NVIDIA Quadro P4000 - 8GB GDDR5 PCIe-x16 FH GPU (00FC966)",
+      "status": "conflict",
+      "reason": "multiple_manufacturer_parts"
+    },
+    {
+      "source": "ebay",
+      "listing_id": "158362523436",
+      "title": "Crucial 8GB Kit (2x4GB) DDR4-2133 UDIMM PC4-17000 288-Pin CT4G4DFS8213",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb",
+        "modules"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "178462587899",
+      "title": "Corsair Dominator Platinum 32GB 2x16GB DDR4 3200MHz C16 CMD64GX4M4C3200C16",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb",
+        "modules"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "198721761932",
+      "title": "Samsung 2Tb 990 Pro M.2 Solid State Drive Mz-V9p1t0bw Pcie Gen 4.0 X4/Nvme 2.0",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "206611703750",
+      "title": "MZ-WLJ15T0 Samsung PM1733 15.36TB NVME PCIe 4.0 X4 U.2 2.5\" Internal SSD",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "227564217074",
+      "title": "Samsung PM1733 15.36TB Enterprise NVMe SSD U.2 PCIe 4.0 - MZ-WLJ15T0",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "257810253826",
+      "title": "Crucial Micron 8GB (4GB x 2) DDR4-2400 UDIMM kit CL17 Computer RAM CT4G4DFS82FA",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "278159417656",
+      "title": "Crucial DDR4 2400MHz 8GB (2x4GB) CL17 CT4G4DFS824A Desktop UDIMM RAM Memory [r1]",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb",
+        "modules"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "287578324989",
+      "title": "\ud83d\udda5\ufe0f Corsair VENGEANCE LPX 8GB DDR4 2400MHz RAM CL18 UDIMM PN: CMK8GX4M1A2400C16",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "cl"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "298624826797",
+      "title": "Crucial 32GB Kit 2x16GB DDR4 2666MHz Desktop RAM UDIMM CT16G4DFRA266",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb",
+        "modules"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "307011763776",
+      "title": "Crucial 2x4gb Ddr4 2400 Udimm CT4G4DF8824A",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb",
+        "modules"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "317985085769",
+      "title": "Samsung GEN 4  1024GB 2280 NVMe M.2 SSD Solid State Drive MZ-VL71T0A 04JY3N",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "318871596269",
+      "title": "Corsair Vengeance LPX 16GB DDR4 3200Mhz DESKTOP UDIMM CMK32GX4M2B3200C16 1x16GB",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb",
+        "modules"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "327305384916",
+      "title": "Crucial 8GB (2x4GB) DDR4-2400 288-Pin UDIMM DDR4 SDRAM CT4G4DFS824A",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb",
+        "modules"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "336793606586",
+      "title": "Crucial 32GB Kit (16GBx2) DDR4-3200 UDIMM CT16G4DFRA32A",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "336848852442",
+      "title": "Crucial 8GB (2x4GB) DDR4-2400 288-Pin UDIMM DDR4 SDRAM CT4G4DFS824A",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb",
+        "modules"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "366338481646",
+      "title": "Samsung PM9A3 15.36TB MZ-QL215T0 MZQL215THBLA-00AAZ SSD 2.5'' PCIE 4.0 NVME U.2",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "366745495702",
+      "title": "16 GB (8GBx2) DDR4 3200 UDIMM 1.2V CL22 Crucial ct8g4dfra32a.c8fp Used",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "377558979184",
+      "title": "Samsung MZ-VL21T0A 1TB NVMe M.2 SSD",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "398109195245",
+      "title": "Samsung PM9A3 15.36TB SSD 2.5\" U.2 PCIE 4.0 NVME MZ-QL215T0 MZQL215THBLA-00AAZ",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "398351193958",
+      "title": "Samsung PM1735 3.2TB SSD AIC HHHL PCIE4.0 x8 NVME MZ-PLJ3T20 MZ-PLJ3T2HBJR-0007C",
+      "status": "conflict",
+      "reason": "multiple_manufacturer_parts"
+    },
+    {
+      "source": "ebay",
+      "listing_id": "407224812637",
+      "title": "Samsung 2Tb 990 Pro M.2 Solid State Drive Mz-V9p1t0bw Pcie Gen 4.0 X4/Nvme 2.0",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "800788205552",
+      "title": "Crucial 32GB Kit 2x16GB DDR4 2666MHz Desktop RAM UDIMM CT16G4DFRA266",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb",
+        "modules"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "800793604935",
+      "title": "Samsung PM9A3 15.36TB SSD 2.5 PCIE 4.0 NVME U.2 MZ-QL215T0 MZQL215THBLA-00AAZ",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "800793629108",
+      "title": "New Samsung PM9A3 15.36TB SSD 2.5 PCIE4.0 NVME U.2 MZ-QL215T0 MZQL215THBLA-00AAZ",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "800836655442",
+      "title": "Samsung PM9A1 1TB M.2 NVMe PCIe 4.0 Internal SSD 7000/5000MB/s MZ-VL21T00",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "820276703876",
+      "title": "Crucial 32GB (2x 16gb) DDR4-2666 UDIMM Desktop RAM 1.2V CL19 CT16G4DFRA266.C8FE",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb",
+        "modules"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "840027067254",
+      "title": "Crucial 16GB (2x8GB) DDR4-2133 UDIMM 288-Pin Unbuffered RAM CT8G4DFD8213",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb",
+        "modules"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "920032347183",
+      "title": "Corsair Vengeance 64GB (1x64GB) DDR5-6400 PC5-51200 DIMM CMK128GX5M2B6400C42",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb",
+        "modules"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "920058119068",
+      "title": "Crucial 32GB Kit 2x16GB DDR4 2666MHz Desktop RAM UDIMM CT16G4DFRA266",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb",
+        "modules"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "920058154581",
+      "title": "Crucial 32GB (2x16GB) DDR4-2400 PC4-19200T UDIMM Non-ECC Unbuffere CT16G4DFD824A",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb",
+        "modules"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "920064494643",
+      "title": "32GB (4 x Crucial 8GB DIMM - CT8G4DFD824A. C16FHP 8GB DDR4-2400 UDIMM 1.2V CL17)",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    },
+    {
+      "source": "ebay",
+      "listing_id": "google-shopping:https%3A%2F%2Fwww.ebay.co.uk%2Fitm%2F900002272374%3F_ul%3DUK:Corsair%20Vengeance%2032GB%20DDR5-5200%20CL40%20PC5-41600%20Desktop%20RAM%20CMK64GX5M2B5200C40%20-",
+      "title": "Corsair Vengeance 32GB DDR5-5200 CL40 PC5-41600 Desktop RAM CMK64GX5M2B5200C40 -",
+      "status": "conflict",
+      "reason": "part_code_variant_disagrees",
+      "fields": [
+        "capacity_gb"
+      ]
+    }
+  ],
+  "group_conflicts": [
+    {
+      "cpk": "d4856f807bffdef4b73d2ea432489c8d",
+      "mpn": "01KR360",
+      "fields": {
+        "speed": [
+          2666,
+          3200
+        ]
+      },
+      "listings": [
+        "bargain_hardware:lenovo-01kr360-16gb-pc4-21300v-e-2rx8-ddr4-2666mhz-ram",
+        "bargain_hardware:lenovo-01kr360-16gb-pc4-25600aa-e-2rx8-ddr4-3200mhz-ecc-unbuffered-ram"
+      ]
+    },
+    {
+      "cpk": "c378a574b77e4454ca0f380d5ac044da",
+      "mpn": "HMA41GU7AFR8N-TF",
+      "fields": {
+        "capacity_gb": [
+          16,
+          8
+        ]
+      },
+      "listings": [
+        "115804528528",
+        "137859155457",
+        "168169328446",
+        "327418052454"
+      ]
+    },
+    {
+      "cpk": "b982472ef123f893c5643059cde26a2b",
+      "mpn": "MZ-NLN256C",
+      "fields": {
+        "capacity_gb": [
+          250,
+          256
+        ]
+      },
+      "listings": [
+        "117462589832",
+        "google-shopping:Samsung%20Hp%20Pm871b%20256gb%20Ssd%20Sata%20Iii%206gb%2Fs%20M.2%20(mz-nln256c%20936240-002):31.9:eBay"
+      ]
+    },
+    {
+      "cpk": "50d297d52703b07805c97db5a2753d00",
+      "mpn": "M378A5143EB1-CPB",
+      "fields": {
+        "capacity_gb": [
+          16,
+          4
+        ]
+      },
+      "listings": [
+        "128039387669",
+        "198725302794",
+        "327186494418"
+      ]
+    },
+    {
+      "cpk": "533e5b78f838b3d4c131ea2cbf69ade3",
+      "mpn": "M378A4G43AB2-CWE",
+      "fields": {
+        "capacity_gb": [
+          32,
+          64
+        ]
+      },
+      "listings": [
+        "128085083085",
+        "840002951036"
+      ]
+    },
+    {
+      "cpk": "e46199137511425147110ca650240466",
+      "mpn": "HMA451U6AFR8N-TF",
+      "fields": {
+        "capacity_gb": [
+          4,
+          8
+        ]
+      },
+      "listings": [
+        "128127206632",
+        "168688560969",
+        "188924664027",
+        "227497813922",
+        "307171021470",
+        "407093637717",
+        "800748965651"
+      ]
+    },
+    {
+      "cpk": "0497233fa77824fa9c28ba5399c2e71c",
+      "mpn": "CT16G4DFD824A",
+      "fields": {
+        "cl": [
+          17,
+          19
+        ]
+      },
+      "listings": [
+        "147650174577",
+        "206564883216",
+        "227247334554",
+        "318921949315",
+        "900037879743"
+      ]
+    },
+    {
+      "cpk": "7243f7dca10d9ee7e4c2e713eabf624f",
+      "mpn": "M378A1K43CB2-CTD",
+      "fields": {
+        "capacity_gb": [
+          16,
+          8
+        ]
+      },
+      "listings": [
+        "188518764429",
+        "318938993354",
+        "880041754849"
+      ]
+    },
+    {
+      "cpk": "c80a8ba7e54d9f135fc412de75fc0ffa",
+      "mpn": "MTA4ATF51264AZ-2G6E1",
+      "fields": {
+        "capacity_gb": [
+          4,
+          8
+        ]
+      },
+      "listings": [
+        "406727610943",
+        "840055572844",
+        "880047116922"
+      ]
+    }
+  ],
+  "after_verified": {
+    "products_with_cross_source_links": 153,
+    "products_with_all_observed_sources_linked": 151,
+    "listings_in_cross_source_groups": 538,
+    "cross_source_listing_pairs": 646,
+    "amazon_products_linked_to_another_source": 46
+  },
+  "direct_retailers_after_verified": {
+    "products_with_cross_source_links": 46,
+    "products_with_all_observed_sources_linked": 46,
+    "listings_in_cross_source_groups": 103,
+    "cross_source_listing_pairs": 68,
+    "amazon_products_linked_to_another_source": 24
+  },
+  "verified_expected_keys": 1568,
+  "apply_summary": {
+    "at": "2026-10-26T22:12:59.133318+00:00",
+    "selected": 1568,
+    "skipped_concurrent_changes": [
+      "B07RW6Z692",
+      "198675219955",
+      "336685848354",
+      "B0CBYZ6DD1",
+      "206652985367",
+      "376231290036",
+      "287659347001",
+      "316775222285",
+      "287659351591",
+      "316775222321",
+      "316775222293",
+      "316775222303",
+      "316775222305",
+      "316775222318",
+      "316775222336",
+      "316775222347",
+      "316775222350",
+      "316775222362",
+      "316775222367",
+      "316775222403",
+      "316834901661",
+      "316834901667",
+      "316834901689",
+      "316834909174",
+      "335951657862",
+      "335951657882",
+      "335951657983",
+      "335951658002",
+      "335951658038",
+      "335970482871",
+      "335970482878",
+      "335970484220",
+      "335970484221",
+      "376231290035",
+      "376231290043",
+      "376231290055",
+      "376231290058",
+      "376231290062",
+      "376231290063",
+      "376231290099",
+      "376231290104",
+      "376231290136",
+      "376263810446",
+      "376263810453"
+    ],
+    "aggregates_pending": 0,
+    "aggregates_recomputed": 1776,
+    "backup": "C:\\Users\\mclar\\CODING\\FlipFlop\\docs\\playbook\\audits\\2026-10-26\\search-matching-backup-221258.json"
+  }
+}

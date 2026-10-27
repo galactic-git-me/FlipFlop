@@ -22,7 +22,7 @@ class PortalAccessGrant(Base):
     order_id: Mapped[int | None] = mapped_column(ForeignKey("orders.id"), index=True)
     manual_build_id: Mapped[int | None] = mapped_column(ForeignKey("manual_builds.id"), index=True)
     contact_email: Mapped[str | None] = mapped_column(String(320), nullable=True, index=True)
-    token_hash: Mapped[str] = mapped_column(String(64), nullable=False, unique=True, index=True)
+    token_hash: Mapped[str] = mapped_column(String(64), nullable=False, unique=True)
     channel: Mapped[str] = mapped_column(String(60), nullable=False, default="direct_guest")
     expires_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, index=True)
     claimed_at: Mapped[datetime | None] = mapped_column(DateTime)

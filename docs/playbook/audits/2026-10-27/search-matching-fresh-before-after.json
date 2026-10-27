@@ -1,0 +1,36 @@
+{
+  "snapshot_at": "2026-10-27T00:34:59.037643+00:00",
+  "total_listings": 55379,
+  "eligible_candidates": 2462,
+  "additional_identity_changes": 440,
+  "individual_conflicts": 53,
+  "conflicting_groups": 10,
+  "before": {
+    "products_with_cross_source_links": 206,
+    "products_with_all_observed_sources_linked": 203,
+    "listings_in_cross_source_groups": 741,
+    "cross_source_listing_pairs": 935,
+    "amazon_products_linked_to_another_source": 79
+  },
+  "after_planned": {
+    "products_with_cross_source_links": 213,
+    "products_with_all_observed_sources_linked": 213,
+    "listings_in_cross_source_groups": 765,
+    "cross_source_listing_pairs": 983,
+    "amazon_products_linked_to_another_source": 86
+  },
+  "direct_before": {
+    "products_with_cross_source_links": 71,
+    "products_with_all_observed_sources_linked": 70,
+    "listings_in_cross_source_groups": 163,
+    "cross_source_listing_pairs": 112,
+    "amazon_products_linked_to_another_source": 42
+  },
+  "direct_after_planned": {
+    "products_with_cross_source_links": 73,
+    "products_with_all_observed_sources_linked": 73,
+    "listings_in_cross_source_groups": 168,
+    "cross_source_listing_pairs": 116,
+    "amazon_products_linked_to_another_source": 44
+  }
+}

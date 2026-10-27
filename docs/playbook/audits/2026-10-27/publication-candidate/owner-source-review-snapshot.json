@@ -1,0 +1,1241 @@
+[
+  {
+    "proposal_id": 44,
+    "revision_sha256": "38cd9bb8c76942b1f8f386d016a33d67dafcde962effeb951ce7b2d75bd5e3c9",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 14883,
+        "fingerprint": "211c525daf602a5d8e9274e91ab4e34f38463b84e917db7a0a625496c1e5a6b9"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15065,
+        "fingerprint": "bd344366926fab26c51d76a88500f8c58b9bcd3970c279e2782026f563560c6c"
+      },
+      {
+        "role": "ram",
+        "listing_id": 15235,
+        "fingerprint": "3d4f0b67be077cd7aebbe6805b924e7d40dbd4542d2c2cc1cd15dedb58c80927"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 17521,
+        "fingerprint": "96d42dbafb583af3ce063df5ab71e48df9f2cd77c47b71b54747e638c2174ae2"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15324,
+        "fingerprint": "c4e835ee4865eca4cb6a824062db22efe723930e2712a2d9aed3d92a29066aea"
+      },
+      {
+        "role": "psu",
+        "listing_id": 15134,
+        "fingerprint": "7fead3e7e80621d82231361aa01b02ae3b45e529a3a7217b800a8acbfcbc08f1"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 17480,
+        "fingerprint": "a0613bf76494805b6dc6903abea2077088d67767120dc992e2d6acc84360bc53"
+      },
+      {
+        "role": "os",
+        "listing_id": 17448,
+        "fingerprint": "123654682ddd9ccdd2e49c1c69979bca55a82bc7f0eb8d30a43f979bed8757e4"
+      },
+      {
+        "role": "wireless_adapter",
+        "listing_id": 17458,
+        "fingerprint": "15c6ea8894f007bc932d35481cda8cba8a7a25a4e1a2e879a0351c47acd52564"
+      }
+    ]
+  },
+  {
+    "proposal_id": 45,
+    "revision_sha256": "d4a8459b8f7fcdb8152c878ccca634765956679faee3662d81ae9e5d0b6d79d3",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 12047,
+        "fingerprint": "0211f1ac1b446691d02ae356a4850fc32c7872db098fe21f76c92b031ef63f45"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15086,
+        "fingerprint": "b8a7d092ff0152b193e6445006dd39a5c29e753558cd507e93163782fe815c71"
+      },
+      {
+        "role": "ram",
+        "listing_id": 18295,
+        "fingerprint": "e94742bdaabc239cdde80aec375e3d71ec6a128b32963d390c3964394e2697e9"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 17251,
+        "fingerprint": "0f6bbc2670587258f0c3c04ec525cab48c10283e7fe52dfc1b4f7e265f723248"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15325,
+        "fingerprint": "da85cafb35959297473a52beca4a4e4e7208727e258e68d614aa1d2620a8616f"
+      },
+      {
+        "role": "psu",
+        "listing_id": 15135,
+        "fingerprint": "9edf341c9c4a3a3c3a7bb44a28f0f37df69fc008698e96442c6b0bcb66624d2c"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 17480,
+        "fingerprint": "a0613bf76494805b6dc6903abea2077088d67767120dc992e2d6acc84360bc53"
+      },
+      {
+        "role": "os",
+        "listing_id": 17448,
+        "fingerprint": "123654682ddd9ccdd2e49c1c69979bca55a82bc7f0eb8d30a43f979bed8757e4"
+      }
+    ]
+  },
+  {
+    "proposal_id": 46,
+    "revision_sha256": "dedd37c62a2ba1f1c7e5884ad416a3eba2576fb59fcbddfad50f7910b26dc20b",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 17452,
+        "fingerprint": "05cb97d7c11bb896443425fb1efaab7c8b240068ebc9d9ff40c594919f93545e"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15078,
+        "fingerprint": "84c36690d4ba35121fb8cf4889cf8fb1e602b377efcd30340ab8cf264c1c7f8a"
+      },
+      {
+        "role": "ram",
+        "listing_id": 18295,
+        "fingerprint": "e94742bdaabc239cdde80aec375e3d71ec6a128b32963d390c3964394e2697e9"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 15012,
+        "fingerprint": "c5ce3c3134543f2e3982163c35e590bb8d4960a6a87d8f37a4218984d1c09e89"
+      },
+      {
+        "role": "case",
+        "listing_id": 17487,
+        "fingerprint": "671e151bee51b8ba21bb837abbd7e3730b995a11ffbbeb92fafbd9dad79c76d5"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15325,
+        "fingerprint": "da85cafb35959297473a52beca4a4e4e7208727e258e68d614aa1d2620a8616f"
+      },
+      {
+        "role": "psu",
+        "listing_id": 15161,
+        "fingerprint": "433542ed0bdb399941e9c88698a88227bc25b0a10472a825edf1bc23c1b0f625"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14849,
+        "fingerprint": "91409cb8b38743a10b0c03d83c32209e686b2a163374218519f6f6798bcf5b24"
+      },
+      {
+        "role": "os",
+        "listing_id": 17448,
+        "fingerprint": "123654682ddd9ccdd2e49c1c69979bca55a82bc7f0eb8d30a43f979bed8757e4"
+      }
+    ]
+  },
+  {
+    "proposal_id": 47,
+    "revision_sha256": "dae3b5b23fa9cb8fe2c5ce970f0a266752f4a0554dfd2b01354efa740116b4e5",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 14937,
+        "fingerprint": "1b7b4438cd8fdfdf69be22259fd54443ae342822f4f132913905eb400a1fced3"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15084,
+        "fingerprint": "b9bf62e4b7661def922e1cd9530eb4041d19be03f6d3ee38a0a47a887a45081a"
+      },
+      {
+        "role": "ram",
+        "listing_id": 18295,
+        "fingerprint": "e94742bdaabc239cdde80aec375e3d71ec6a128b32963d390c3964394e2697e9"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 16021,
+        "fingerprint": "11a3e73734e336885f506027115113048ed3beba3d840a402d006b8348f34d75"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15324,
+        "fingerprint": "c4e835ee4865eca4cb6a824062db22efe723930e2712a2d9aed3d92a29066aea"
+      },
+      {
+        "role": "psu",
+        "listing_id": 15135,
+        "fingerprint": "9edf341c9c4a3a3c3a7bb44a28f0f37df69fc008698e96442c6b0bcb66624d2c"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14842,
+        "fingerprint": "d8c42872324ebf77d98ea09f3f3b38d6f0a1dd2755dd0696fdeddbd1c5bce090"
+      },
+      {
+        "role": "os",
+        "listing_id": 17448,
+        "fingerprint": "123654682ddd9ccdd2e49c1c69979bca55a82bc7f0eb8d30a43f979bed8757e4"
+      }
+    ]
+  },
+  {
+    "proposal_id": 48,
+    "revision_sha256": "3725dc798d3a117d4ed97d07987635061141a77c027226403d50a0e47a0281a1",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 14898,
+        "fingerprint": "9a3cc67990c020b704e31b41b23bf2b5602871c7f8424e2fadd1080e2f079903"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15078,
+        "fingerprint": "84c36690d4ba35121fb8cf4889cf8fb1e602b377efcd30340ab8cf264c1c7f8a"
+      },
+      {
+        "role": "ram",
+        "listing_id": 18295,
+        "fingerprint": "e94742bdaabc239cdde80aec375e3d71ec6a128b32963d390c3964394e2697e9"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 17410,
+        "fingerprint": "4a0c7c119f4867f402d168d34cdd712bdd2882486b804ba3ccfdd1095cbc9144"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15324,
+        "fingerprint": "c4e835ee4865eca4cb6a824062db22efe723930e2712a2d9aed3d92a29066aea"
+      },
+      {
+        "role": "psu",
+        "listing_id": 15135,
+        "fingerprint": "9edf341c9c4a3a3c3a7bb44a28f0f37df69fc008698e96442c6b0bcb66624d2c"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14849,
+        "fingerprint": "91409cb8b38743a10b0c03d83c32209e686b2a163374218519f6f6798bcf5b24"
+      },
+      {
+        "role": "os",
+        "listing_id": 17448,
+        "fingerprint": "123654682ddd9ccdd2e49c1c69979bca55a82bc7f0eb8d30a43f979bed8757e4"
+      }
+    ]
+  },
+  {
+    "proposal_id": 49,
+    "revision_sha256": "2fb25747a6f6fc25b6ed8351f4b20e725b7a4f2627d655d2adcb4d70b00ad045",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 14934,
+        "fingerprint": "fcc1f71d5163a8044281fd7fa4c91a3bda71bd6228195b3761797242219838f0"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15077,
+        "fingerprint": "f9303ead2568e1fa389e24a3e52066dba7a2290d9424a3b38c089ca0ac02d9e2"
+      },
+      {
+        "role": "ram",
+        "listing_id": 17256,
+        "fingerprint": "92e67f51ec8bad4528da8c00805bd3b0a2585e350aa30ff76c9d836b40560c36"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 17264,
+        "fingerprint": "e70d9b08b8bb72354128e91cd780f3240604584d3ac9f68d5191e8439e78e81e"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15951,
+        "fingerprint": "fd40a77888d754a7232a2dc44836e1d0dd9e1a9436c2002014e44dc3b55c1972"
+      },
+      {
+        "role": "psu",
+        "listing_id": 18164,
+        "fingerprint": "e9f30fffa11bfdf57beed965c504285c4428ad4a59ed87a4c5cf7fd509d97d56"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14860,
+        "fingerprint": "efc95be926ad9ffec0c7404ab38c3ea20615562c96b3c84474c0af315305935e"
+      },
+      {
+        "role": "os",
+        "listing_id": 17449,
+        "fingerprint": "23e14e9761e96c6e9ecab6b9321abe6585f45321baf247610dc1da0be322b23b"
+      }
+    ]
+  },
+  {
+    "proposal_id": 50,
+    "revision_sha256": "8400635be10b92cac2aa71b227aa40d15a86af5153001c6c6452f44ab158c752",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 12047,
+        "fingerprint": "0211f1ac1b446691d02ae356a4850fc32c7872db098fe21f76c92b031ef63f45"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15086,
+        "fingerprint": "b8a7d092ff0152b193e6445006dd39a5c29e753558cd507e93163782fe815c71"
+      },
+      {
+        "role": "ram",
+        "listing_id": 18295,
+        "fingerprint": "e94742bdaabc239cdde80aec375e3d71ec6a128b32963d390c3964394e2697e9"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15324,
+        "fingerprint": "c4e835ee4865eca4cb6a824062db22efe723930e2712a2d9aed3d92a29066aea"
+      },
+      {
+        "role": "psu",
+        "listing_id": 15134,
+        "fingerprint": "7fead3e7e80621d82231361aa01b02ae3b45e529a3a7217b800a8acbfcbc08f1"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14860,
+        "fingerprint": "efc95be926ad9ffec0c7404ab38c3ea20615562c96b3c84474c0af315305935e"
+      },
+      {
+        "role": "os",
+        "listing_id": 17448,
+        "fingerprint": "123654682ddd9ccdd2e49c1c69979bca55a82bc7f0eb8d30a43f979bed8757e4"
+      }
+    ]
+  },
+  {
+    "proposal_id": 51,
+    "revision_sha256": "e5269f8cdde2ee36bdacbab4b7499afbb41093b5d5fb59d038b45ef7c7fe3858",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 12047,
+        "fingerprint": "0211f1ac1b446691d02ae356a4850fc32c7872db098fe21f76c92b031ef63f45"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15086,
+        "fingerprint": "b8a7d092ff0152b193e6445006dd39a5c29e753558cd507e93163782fe815c71"
+      },
+      {
+        "role": "ram",
+        "listing_id": 15242,
+        "fingerprint": "5c9c89d5f4bdf04ef890c7546e01db49e93006543c13d3809efe4c01d0c3f1e1"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 16005,
+        "fingerprint": "0fdef03bc9008af20956fa540ac376fdf12b6e4a815afa733b4ce04ec3cd6d12"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15325,
+        "fingerprint": "da85cafb35959297473a52beca4a4e4e7208727e258e68d614aa1d2620a8616f"
+      },
+      {
+        "role": "psu",
+        "listing_id": 15134,
+        "fingerprint": "7fead3e7e80621d82231361aa01b02ae3b45e529a3a7217b800a8acbfcbc08f1"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 17480,
+        "fingerprint": "a0613bf76494805b6dc6903abea2077088d67767120dc992e2d6acc84360bc53"
+      },
+      {
+        "role": "os",
+        "listing_id": 17448,
+        "fingerprint": "123654682ddd9ccdd2e49c1c69979bca55a82bc7f0eb8d30a43f979bed8757e4"
+      }
+    ]
+  },
+  {
+    "proposal_id": 52,
+    "revision_sha256": "4bec32fd9580463ee524d919c5947f0f4368d87acbf16511f62142ba83fd5a58",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 14938,
+        "fingerprint": "19dd1507e769b85c95f47f545e41463052b5ed1b37e923f217d01121abc1a8f8"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15084,
+        "fingerprint": "b9bf62e4b7661def922e1cd9530eb4041d19be03f6d3ee38a0a47a887a45081a"
+      },
+      {
+        "role": "ram",
+        "listing_id": 17256,
+        "fingerprint": "92e67f51ec8bad4528da8c00805bd3b0a2585e350aa30ff76c9d836b40560c36"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 17258,
+        "fingerprint": "b7300a0dd7dff823a5fc19a46a952e3f39c5747248e14f0421a479048cec5ef8"
+      },
+      {
+        "role": "case",
+        "listing_id": 17487,
+        "fingerprint": "671e151bee51b8ba21bb837abbd7e3730b995a11ffbbeb92fafbd9dad79c76d5"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15325,
+        "fingerprint": "da85cafb35959297473a52beca4a4e4e7208727e258e68d614aa1d2620a8616f"
+      },
+      {
+        "role": "psu",
+        "listing_id": 15161,
+        "fingerprint": "433542ed0bdb399941e9c88698a88227bc25b0a10472a825edf1bc23c1b0f625"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14849,
+        "fingerprint": "91409cb8b38743a10b0c03d83c32209e686b2a163374218519f6f6798bcf5b24"
+      },
+      {
+        "role": "os",
+        "listing_id": 17448,
+        "fingerprint": "123654682ddd9ccdd2e49c1c69979bca55a82bc7f0eb8d30a43f979bed8757e4"
+      }
+    ]
+  },
+  {
+    "proposal_id": 53,
+    "revision_sha256": "d966e0f72594d286239335bd899e2d6068d8ceea5d994004410c785bf20146bf",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 12047,
+        "fingerprint": "0211f1ac1b446691d02ae356a4850fc32c7872db098fe21f76c92b031ef63f45"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15086,
+        "fingerprint": "b8a7d092ff0152b193e6445006dd39a5c29e753558cd507e93163782fe815c71"
+      },
+      {
+        "role": "ram",
+        "listing_id": 18295,
+        "fingerprint": "e94742bdaabc239cdde80aec375e3d71ec6a128b32963d390c3964394e2697e9"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15324,
+        "fingerprint": "c4e835ee4865eca4cb6a824062db22efe723930e2712a2d9aed3d92a29066aea"
+      },
+      {
+        "role": "psu",
+        "listing_id": 17505,
+        "fingerprint": "981385f9ecfff76f879bae3e21a96ba76669844fcb6e6608fdab76697d4f55b0"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14860,
+        "fingerprint": "efc95be926ad9ffec0c7404ab38c3ea20615562c96b3c84474c0af315305935e"
+      },
+      {
+        "role": "os",
+        "listing_id": 17449,
+        "fingerprint": "23e14e9761e96c6e9ecab6b9321abe6585f45321baf247610dc1da0be322b23b"
+      }
+    ]
+  },
+  {
+    "proposal_id": 54,
+    "revision_sha256": "45215a4fc5c48eff63857cfc0c1fca40a703c4ece9d8976d1feac22b43ba78c6",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 14937,
+        "fingerprint": "1b7b4438cd8fdfdf69be22259fd54443ae342822f4f132913905eb400a1fced3"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15084,
+        "fingerprint": "b9bf62e4b7661def922e1cd9530eb4041d19be03f6d3ee38a0a47a887a45081a"
+      },
+      {
+        "role": "ram",
+        "listing_id": 18295,
+        "fingerprint": "e94742bdaabc239cdde80aec375e3d71ec6a128b32963d390c3964394e2697e9"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15325,
+        "fingerprint": "da85cafb35959297473a52beca4a4e4e7208727e258e68d614aa1d2620a8616f"
+      },
+      {
+        "role": "psu",
+        "listing_id": 15134,
+        "fingerprint": "7fead3e7e80621d82231361aa01b02ae3b45e529a3a7217b800a8acbfcbc08f1"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14860,
+        "fingerprint": "efc95be926ad9ffec0c7404ab38c3ea20615562c96b3c84474c0af315305935e"
+      },
+      {
+        "role": "os",
+        "listing_id": 17449,
+        "fingerprint": "23e14e9761e96c6e9ecab6b9321abe6585f45321baf247610dc1da0be322b23b"
+      }
+    ]
+  },
+  {
+    "proposal_id": 55,
+    "revision_sha256": "eeaa4c5579aede867532344854b920f2f2e3a13ff6c91bf0e23b762ef35776b9",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 14919,
+        "fingerprint": "ddc16d5de046ff0f80bf218f99ae2689ed5a5e88bea141f95231732741afe117"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15086,
+        "fingerprint": "b8a7d092ff0152b193e6445006dd39a5c29e753558cd507e93163782fe815c71"
+      },
+      {
+        "role": "ram",
+        "listing_id": 17256,
+        "fingerprint": "92e67f51ec8bad4528da8c00805bd3b0a2585e350aa30ff76c9d836b40560c36"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15325,
+        "fingerprint": "da85cafb35959297473a52beca4a4e4e7208727e258e68d614aa1d2620a8616f"
+      },
+      {
+        "role": "psu",
+        "listing_id": 15134,
+        "fingerprint": "7fead3e7e80621d82231361aa01b02ae3b45e529a3a7217b800a8acbfcbc08f1"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14860,
+        "fingerprint": "efc95be926ad9ffec0c7404ab38c3ea20615562c96b3c84474c0af315305935e"
+      },
+      {
+        "role": "os",
+        "listing_id": 17449,
+        "fingerprint": "23e14e9761e96c6e9ecab6b9321abe6585f45321baf247610dc1da0be322b23b"
+      }
+    ]
+  },
+  {
+    "proposal_id": 56,
+    "revision_sha256": "2896225db598939ff68416589fa474f51e92ab653d67be02121fb67fe04a77b5",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 14937,
+        "fingerprint": "1b7b4438cd8fdfdf69be22259fd54443ae342822f4f132913905eb400a1fced3"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15084,
+        "fingerprint": "b9bf62e4b7661def922e1cd9530eb4041d19be03f6d3ee38a0a47a887a45081a"
+      },
+      {
+        "role": "ram",
+        "listing_id": 18296,
+        "fingerprint": "b956d59b6f500f41bba14c13c4986a1a64dbe51015ba706b950374fef23d4d51"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 16021,
+        "fingerprint": "11a3e73734e336885f506027115113048ed3beba3d840a402d006b8348f34d75"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15325,
+        "fingerprint": "da85cafb35959297473a52beca4a4e4e7208727e258e68d614aa1d2620a8616f"
+      },
+      {
+        "role": "psu",
+        "listing_id": 15135,
+        "fingerprint": "9edf341c9c4a3a3c3a7bb44a28f0f37df69fc008698e96442c6b0bcb66624d2c"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14849,
+        "fingerprint": "91409cb8b38743a10b0c03d83c32209e686b2a163374218519f6f6798bcf5b24"
+      },
+      {
+        "role": "os",
+        "listing_id": 17448,
+        "fingerprint": "123654682ddd9ccdd2e49c1c69979bca55a82bc7f0eb8d30a43f979bed8757e4"
+      }
+    ]
+  },
+  {
+    "proposal_id": 57,
+    "revision_sha256": "a33889510fa5843c21469b11190512b0daf9622b5fd64b17f019809303f24096",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 14938,
+        "fingerprint": "19dd1507e769b85c95f47f545e41463052b5ed1b37e923f217d01121abc1a8f8"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15084,
+        "fingerprint": "b9bf62e4b7661def922e1cd9530eb4041d19be03f6d3ee38a0a47a887a45081a"
+      },
+      {
+        "role": "ram",
+        "listing_id": 18296,
+        "fingerprint": "b956d59b6f500f41bba14c13c4986a1a64dbe51015ba706b950374fef23d4d51"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 17522,
+        "fingerprint": "e909073a18b6f46fe2e3c18ea3fdb584e400f12bbe003c73c1899c9861dc1839"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15951,
+        "fingerprint": "fd40a77888d754a7232a2dc44836e1d0dd9e1a9436c2002014e44dc3b55c1972"
+      },
+      {
+        "role": "psu",
+        "listing_id": 17510,
+        "fingerprint": "3a01b19eec29c8fe772ee8596fece029812220f302f9ef236ff0cffa6ff173cf"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14860,
+        "fingerprint": "efc95be926ad9ffec0c7404ab38c3ea20615562c96b3c84474c0af315305935e"
+      },
+      {
+        "role": "os",
+        "listing_id": 17449,
+        "fingerprint": "23e14e9761e96c6e9ecab6b9321abe6585f45321baf247610dc1da0be322b23b"
+      }
+    ]
+  },
+  {
+    "proposal_id": 58,
+    "revision_sha256": "b22e2b7643ffd1b2befe305554b21505c415fe14d4da7caf5e29b323fef737f5",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 14922,
+        "fingerprint": "780954b886ad163b2069b8eeeea5d5b0b396420e336e6488445b924118e4deff"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15077,
+        "fingerprint": "f9303ead2568e1fa389e24a3e52066dba7a2290d9424a3b38c089ca0ac02d9e2"
+      },
+      {
+        "role": "ram",
+        "listing_id": 18296,
+        "fingerprint": "b956d59b6f500f41bba14c13c4986a1a64dbe51015ba706b950374fef23d4d51"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 17264,
+        "fingerprint": "e70d9b08b8bb72354128e91cd780f3240604584d3ac9f68d5191e8439e78e81e"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15951,
+        "fingerprint": "fd40a77888d754a7232a2dc44836e1d0dd9e1a9436c2002014e44dc3b55c1972"
+      },
+      {
+        "role": "psu",
+        "listing_id": 18164,
+        "fingerprint": "e9f30fffa11bfdf57beed965c504285c4428ad4a59ed87a4c5cf7fd509d97d56"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14860,
+        "fingerprint": "efc95be926ad9ffec0c7404ab38c3ea20615562c96b3c84474c0af315305935e"
+      },
+      {
+        "role": "storage_secondary",
+        "listing_id": 15951,
+        "fingerprint": "fd40a77888d754a7232a2dc44836e1d0dd9e1a9436c2002014e44dc3b55c1972"
+      },
+      {
+        "role": "os",
+        "listing_id": 17449,
+        "fingerprint": "23e14e9761e96c6e9ecab6b9321abe6585f45321baf247610dc1da0be322b23b"
+      }
+    ]
+  },
+  {
+    "proposal_id": 59,
+    "revision_sha256": "25e2c7c48b3ccb461273d6f054520b78771f5e8913787ec5b71200d9193a6b9c",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 12047,
+        "fingerprint": "0211f1ac1b446691d02ae356a4850fc32c7872db098fe21f76c92b031ef63f45"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15086,
+        "fingerprint": "b8a7d092ff0152b193e6445006dd39a5c29e753558cd507e93163782fe815c71"
+      },
+      {
+        "role": "ram",
+        "listing_id": 18296,
+        "fingerprint": "b956d59b6f500f41bba14c13c4986a1a64dbe51015ba706b950374fef23d4d51"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 16021,
+        "fingerprint": "11a3e73734e336885f506027115113048ed3beba3d840a402d006b8348f34d75"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15325,
+        "fingerprint": "da85cafb35959297473a52beca4a4e4e7208727e258e68d614aa1d2620a8616f"
+      },
+      {
+        "role": "psu",
+        "listing_id": 15135,
+        "fingerprint": "9edf341c9c4a3a3c3a7bb44a28f0f37df69fc008698e96442c6b0bcb66624d2c"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14842,
+        "fingerprint": "d8c42872324ebf77d98ea09f3f3b38d6f0a1dd2755dd0696fdeddbd1c5bce090"
+      },
+      {
+        "role": "os",
+        "listing_id": 17449,
+        "fingerprint": "23e14e9761e96c6e9ecab6b9321abe6585f45321baf247610dc1da0be322b23b"
+      }
+    ]
+  },
+  {
+    "proposal_id": 60,
+    "revision_sha256": "b317a32452d528f3604448059eddfd0c10485ab59068634727aae2342427991c",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 14922,
+        "fingerprint": "780954b886ad163b2069b8eeeea5d5b0b396420e336e6488445b924118e4deff"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15077,
+        "fingerprint": "f9303ead2568e1fa389e24a3e52066dba7a2290d9424a3b38c089ca0ac02d9e2"
+      },
+      {
+        "role": "ram",
+        "listing_id": 18296,
+        "fingerprint": "b956d59b6f500f41bba14c13c4986a1a64dbe51015ba706b950374fef23d4d51"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 17260,
+        "fingerprint": "498d9c22040ca9cfd7e5b631c1cca0589c41a1cdb21ca1887d17ee482e269f75"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15951,
+        "fingerprint": "fd40a77888d754a7232a2dc44836e1d0dd9e1a9436c2002014e44dc3b55c1972"
+      },
+      {
+        "role": "psu",
+        "listing_id": 17510,
+        "fingerprint": "3a01b19eec29c8fe772ee8596fece029812220f302f9ef236ff0cffa6ff173cf"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14860,
+        "fingerprint": "efc95be926ad9ffec0c7404ab38c3ea20615562c96b3c84474c0af315305935e"
+      },
+      {
+        "role": "os",
+        "listing_id": 17449,
+        "fingerprint": "23e14e9761e96c6e9ecab6b9321abe6585f45321baf247610dc1da0be322b23b"
+      },
+      {
+        "role": "os_secondary",
+        "listing_id": 15953,
+        "fingerprint": "97a5eceb245a23547fa8f665a8e90a89a5e99eff178b86531f97614e7e3700e9"
+      }
+    ]
+  },
+  {
+    "proposal_id": 61,
+    "revision_sha256": "3e8998f32cc88ad47f8325f8ff55276cfd053e578c574665055e05c34be22261",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 18294,
+        "fingerprint": "8471c111ce15b37e5c01099ae797910c8a353ac3b5e6f3a1666548234f7f26fc"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 18297,
+        "fingerprint": "868bd7f0e21b56c4d47d9a9263df6b7c693857c02bcccda2857cb801ed33d220"
+      },
+      {
+        "role": "ram",
+        "listing_id": 17262,
+        "fingerprint": "d7fc5d651dde823cc309ad61d4833983c03ef99c6fca02ba100c6d0e4f6763d2"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 17412,
+        "fingerprint": "7318a04a6adb70441b20b135589cfa04197debd416dafa1fcad919789c48b98b"
+      },
+      {
+        "role": "case",
+        "listing_id": 18298,
+        "fingerprint": "b19e639504d270225e0c5be1bf9ff956b9dc7f17ba2b87d096d742758df75792"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15951,
+        "fingerprint": "fd40a77888d754a7232a2dc44836e1d0dd9e1a9436c2002014e44dc3b55c1972"
+      },
+      {
+        "role": "psu",
+        "listing_id": 17225,
+        "fingerprint": "b46482881a96a052fb5dc6bfa7abbe829457ad9fc9cf6e3953dcb7408b689d41"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 17232,
+        "fingerprint": "a9cfe87ab4105b310c085a217048d3004c752153e6d3322a8d7ec12289033763"
+      },
+      {
+        "role": "storage_secondary",
+        "listing_id": 17314,
+        "fingerprint": "aacaff98eca438fec963dae2555c1515b9b4ebf111d44a9dbc671c137d5bbd30"
+      },
+      {
+        "role": "os",
+        "listing_id": 17449,
+        "fingerprint": "23e14e9761e96c6e9ecab6b9321abe6585f45321baf247610dc1da0be322b23b"
+      },
+      {
+        "role": "os_secondary",
+        "listing_id": 15953,
+        "fingerprint": "97a5eceb245a23547fa8f665a8e90a89a5e99eff178b86531f97614e7e3700e9"
+      },
+      {
+        "role": "wireless_adapter",
+        "listing_id": 17458,
+        "fingerprint": "15c6ea8894f007bc932d35481cda8cba8a7a25a4e1a2e879a0351c47acd52564"
+      }
+    ]
+  },
+  {
+    "proposal_id": 62,
+    "revision_sha256": "5441e896bfd674191c087180223a698190230fa84a253af7663d8cef3a6be141",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 12047,
+        "fingerprint": "0211f1ac1b446691d02ae356a4850fc32c7872db098fe21f76c92b031ef63f45"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15086,
+        "fingerprint": "b8a7d092ff0152b193e6445006dd39a5c29e753558cd507e93163782fe815c71"
+      },
+      {
+        "role": "ram",
+        "listing_id": 17256,
+        "fingerprint": "92e67f51ec8bad4528da8c00805bd3b0a2585e350aa30ff76c9d836b40560c36"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 16005,
+        "fingerprint": "0fdef03bc9008af20956fa540ac376fdf12b6e4a815afa733b4ce04ec3cd6d12"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15325,
+        "fingerprint": "da85cafb35959297473a52beca4a4e4e7208727e258e68d614aa1d2620a8616f"
+      },
+      {
+        "role": "psu",
+        "listing_id": 15134,
+        "fingerprint": "7fead3e7e80621d82231361aa01b02ae3b45e529a3a7217b800a8acbfcbc08f1"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14842,
+        "fingerprint": "d8c42872324ebf77d98ea09f3f3b38d6f0a1dd2755dd0696fdeddbd1c5bce090"
+      },
+      {
+        "role": "os",
+        "listing_id": 17449,
+        "fingerprint": "23e14e9761e96c6e9ecab6b9321abe6585f45321baf247610dc1da0be322b23b"
+      }
+    ]
+  },
+  {
+    "proposal_id": 63,
+    "revision_sha256": "5ea8438d99cc238a759ecc785b55389fbb3f7a3578b758fbe30ee80bf4f6a28e",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 14938,
+        "fingerprint": "19dd1507e769b85c95f47f545e41463052b5ed1b37e923f217d01121abc1a8f8"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15084,
+        "fingerprint": "b9bf62e4b7661def922e1cd9530eb4041d19be03f6d3ee38a0a47a887a45081a"
+      },
+      {
+        "role": "ram",
+        "listing_id": 18296,
+        "fingerprint": "b956d59b6f500f41bba14c13c4986a1a64dbe51015ba706b950374fef23d4d51"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 16021,
+        "fingerprint": "11a3e73734e336885f506027115113048ed3beba3d840a402d006b8348f34d75"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15951,
+        "fingerprint": "fd40a77888d754a7232a2dc44836e1d0dd9e1a9436c2002014e44dc3b55c1972"
+      },
+      {
+        "role": "psu",
+        "listing_id": 17510,
+        "fingerprint": "3a01b19eec29c8fe772ee8596fece029812220f302f9ef236ff0cffa6ff173cf"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 16936,
+        "fingerprint": "2c4d6c21949145cd5b764b56f142ea4acc9fe20ce9b6f1e198447c06379c83a5"
+      },
+      {
+        "role": "os",
+        "listing_id": 17449,
+        "fingerprint": "23e14e9761e96c6e9ecab6b9321abe6585f45321baf247610dc1da0be322b23b"
+      }
+    ]
+  },
+  {
+    "proposal_id": 64,
+    "revision_sha256": "ddca0bfd0870e64ef7d7e30786aa56cc723e34186ee8bdbdc21b2be80eb489ed",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 14922,
+        "fingerprint": "780954b886ad163b2069b8eeeea5d5b0b396420e336e6488445b924118e4deff"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15077,
+        "fingerprint": "f9303ead2568e1fa389e24a3e52066dba7a2290d9424a3b38c089ca0ac02d9e2"
+      },
+      {
+        "role": "ram",
+        "listing_id": 18296,
+        "fingerprint": "b956d59b6f500f41bba14c13c4986a1a64dbe51015ba706b950374fef23d4d51"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 17522,
+        "fingerprint": "e909073a18b6f46fe2e3c18ea3fdb584e400f12bbe003c73c1899c9861dc1839"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15951,
+        "fingerprint": "fd40a77888d754a7232a2dc44836e1d0dd9e1a9436c2002014e44dc3b55c1972"
+      },
+      {
+        "role": "psu",
+        "listing_id": 17510,
+        "fingerprint": "3a01b19eec29c8fe772ee8596fece029812220f302f9ef236ff0cffa6ff173cf"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14860,
+        "fingerprint": "efc95be926ad9ffec0c7404ab38c3ea20615562c96b3c84474c0af315305935e"
+      },
+      {
+        "role": "storage_secondary",
+        "listing_id": 15951,
+        "fingerprint": "fd40a77888d754a7232a2dc44836e1d0dd9e1a9436c2002014e44dc3b55c1972"
+      },
+      {
+        "role": "os",
+        "listing_id": 17449,
+        "fingerprint": "23e14e9761e96c6e9ecab6b9321abe6585f45321baf247610dc1da0be322b23b"
+      },
+      {
+        "role": "os_secondary",
+        "listing_id": 15953,
+        "fingerprint": "97a5eceb245a23547fa8f665a8e90a89a5e99eff178b86531f97614e7e3700e9"
+      }
+    ]
+  },
+  {
+    "proposal_id": 65,
+    "revision_sha256": "5f68ce402b434916dcf920bb0c67a4baa1034c247cfba67988d945aab6f78a69",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 12047,
+        "fingerprint": "0211f1ac1b446691d02ae356a4850fc32c7872db098fe21f76c92b031ef63f45"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15086,
+        "fingerprint": "b8a7d092ff0152b193e6445006dd39a5c29e753558cd507e93163782fe815c71"
+      },
+      {
+        "role": "ram",
+        "listing_id": 18295,
+        "fingerprint": "e94742bdaabc239cdde80aec375e3d71ec6a128b32963d390c3964394e2697e9"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15324,
+        "fingerprint": "c4e835ee4865eca4cb6a824062db22efe723930e2712a2d9aed3d92a29066aea"
+      },
+      {
+        "role": "psu",
+        "listing_id": 17505,
+        "fingerprint": "981385f9ecfff76f879bae3e21a96ba76669844fcb6e6608fdab76697d4f55b0"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14860,
+        "fingerprint": "efc95be926ad9ffec0c7404ab38c3ea20615562c96b3c84474c0af315305935e"
+      },
+      {
+        "role": "os",
+        "listing_id": 17448,
+        "fingerprint": "123654682ddd9ccdd2e49c1c69979bca55a82bc7f0eb8d30a43f979bed8757e4"
+      }
+    ]
+  },
+  {
+    "proposal_id": 66,
+    "revision_sha256": "47a8c1356487a4ab51d955434e1ddbe7d4b0df925f75ade302de53c16d405ee0",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 12047,
+        "fingerprint": "0211f1ac1b446691d02ae356a4850fc32c7872db098fe21f76c92b031ef63f45"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15086,
+        "fingerprint": "b8a7d092ff0152b193e6445006dd39a5c29e753558cd507e93163782fe815c71"
+      },
+      {
+        "role": "ram",
+        "listing_id": 18295,
+        "fingerprint": "e94742bdaabc239cdde80aec375e3d71ec6a128b32963d390c3964394e2697e9"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 17251,
+        "fingerprint": "0f6bbc2670587258f0c3c04ec525cab48c10283e7fe52dfc1b4f7e265f723248"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15325,
+        "fingerprint": "da85cafb35959297473a52beca4a4e4e7208727e258e68d614aa1d2620a8616f"
+      },
+      {
+        "role": "psu",
+        "listing_id": 15134,
+        "fingerprint": "7fead3e7e80621d82231361aa01b02ae3b45e529a3a7217b800a8acbfcbc08f1"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 17480,
+        "fingerprint": "a0613bf76494805b6dc6903abea2077088d67767120dc992e2d6acc84360bc53"
+      },
+      {
+        "role": "os",
+        "listing_id": 17448,
+        "fingerprint": "123654682ddd9ccdd2e49c1c69979bca55a82bc7f0eb8d30a43f979bed8757e4"
+      }
+    ]
+  },
+  {
+    "proposal_id": 67,
+    "revision_sha256": "3abfda3da2b1ff99307a7b3be5643d031ff8dd738f89a36cd39e85089dd1545b",
+    "source_evidence": [
+      {
+        "role": "cpu",
+        "listing_id": 14919,
+        "fingerprint": "ddc16d5de046ff0f80bf218f99ae2689ed5a5e88bea141f95231732741afe117"
+      },
+      {
+        "role": "motherboard",
+        "listing_id": 15078,
+        "fingerprint": "84c36690d4ba35121fb8cf4889cf8fb1e602b377efcd30340ab8cf264c1c7f8a"
+      },
+      {
+        "role": "ram",
+        "listing_id": 17256,
+        "fingerprint": "92e67f51ec8bad4528da8c00805bd3b0a2585e350aa30ff76c9d836b40560c36"
+      },
+      {
+        "role": "gpu",
+        "listing_id": 15012,
+        "fingerprint": "c5ce3c3134543f2e3982163c35e590bb8d4960a6a87d8f37a4218984d1c09e89"
+      },
+      {
+        "role": "case",
+        "listing_id": 13986,
+        "fingerprint": "07be69c6f40d89f481be388172a11df137322b3c5508abe6b59b447d889f1874"
+      },
+      {
+        "role": "storage",
+        "listing_id": 15951,
+        "fingerprint": "fd40a77888d754a7232a2dc44836e1d0dd9e1a9436c2002014e44dc3b55c1972"
+      },
+      {
+        "role": "psu",
+        "listing_id": 15161,
+        "fingerprint": "433542ed0bdb399941e9c88698a88227bc25b0a10472a825edf1bc23c1b0f625"
+      },
+      {
+        "role": "cooling",
+        "listing_id": 14849,
+        "fingerprint": "91409cb8b38743a10b0c03d83c32209e686b2a163374218519f6f6798bcf5b24"
+      },
+      {
+        "role": "os",
+        "listing_id": 17448,
+        "fingerprint": "123654682ddd9ccdd2e49c1c69979bca55a82bc7f0eb8d30a43f979bed8757e4"
+      }
+    ]
+  }
+]

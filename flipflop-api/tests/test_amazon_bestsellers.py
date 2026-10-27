@@ -5,6 +5,7 @@ from app.services.amazon_bestsellers import (
     match_row_by_bestseller,
     name_similarity,
     bestseller_item_matches_category,
+    bestseller_page_matches_title,
 )
 
 
@@ -100,6 +101,20 @@ def test_bestseller_category_rejects_redirected_browse_lists():
     assert bestseller_item_matches_category("AMD Ryzen 7 7700 Desktop Processor", "cpu")
     assert not bestseller_item_matches_category("RTX 5060 Graphics Card", "motherboard")
     assert not bestseller_item_matches_category("LTO 8 Data Cartridge", "storage")
+
+
+def test_os_bestsellers_accept_only_physical_windows_11_retail_products():
+    assert bestseller_item_matches_category("Microsoft Windows 11 Home FPP Retail USB", "os")
+    assert bestseller_item_matches_category("Microsoft Windows 11 Pro", "os")
+    assert bestseller_item_matches_category("Microsoft Windows 11 Home", "os")
+    assert not bestseller_item_matches_category("Microsoft Windows 11 Pro System Builder DVD", "os")
+    assert not bestseller_item_matches_category("Windows 11 Pro", "os")
+    assert not bestseller_item_matches_category("Windows 11 Home activation key digital download", "os")
+    assert not bestseller_item_matches_category("Windows 11 Home laptop", "os")
+    assert bestseller_page_matches_title("Amazon.co.uk Best Sellers: The most popular items in Operating Systems",
+        "Amazon Operating Systems Best Sellers","os")
+    assert not bestseller_page_matches_title("Amazon.co.uk Best Sellers: The most popular items in Software",
+        "Amazon Operating Systems Best Sellers","os")
 
 
 def test_cpu_cooler_bestsellers_exclude_paste_and_general_fans():

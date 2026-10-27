@@ -1,6 +1,7 @@
 import structlog
 import asyncio
 import os
+import re
 import sys
 import threading
 
@@ -68,9 +69,62 @@ from app.api.public_studio import router as public_studio_router
 from app.api.public_support import router as public_support_router
 
 
+async def _ensure_additive_columns(conn, statements) -> None:
+    """Apply startup-added columns only when the active schema lacks them."""
+    pattern = re.compile(r"^ALTER TABLE ([a-z_][a-z0-9_]*) ADD COLUMN IF NOT EXISTS ([a-z_][a-z0-9_]*)\b", re.I)
+    for statement in statements:
+        match = pattern.match(statement.strip())
+        if match:
+            table, column = match.groups()
+            result = await conn.execute(text("""
+                SELECT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_schema=current_schema()
+                      AND table_name=:table_name AND column_name=:column_name
+                )
+            """), {"table_name": table, "column_name": column})
+            if result.scalar_one():
+                continue
+        await conn.exec_driver_sql(statement)
+
+
+async def _relax_listing_price_constraint(conn) -> None:
+    """Allow an exact source candidate to exist while its offer price is unknown."""
+    if conn.dialect.name != "postgresql":
+        return
+    result = await conn.execute(text("""
+        SELECT is_nullable = 'YES'
+        FROM information_schema.columns
+        WHERE table_schema=current_schema()
+          AND table_name='listings' AND column_name='price'
+    """))
+    if result.scalar_one() is True:
+        return
+    await conn.exec_driver_sql("ALTER TABLE listings ALTER COLUMN price DROP NOT NULL")
+
+
 async def _install_manual_build_delete_guard(conn) -> None:
     """Install the final database-layer guard for irreplaceable build rows."""
     if conn.dialect.name != "postgresql":
+        return
+    installed = await conn.execute(text("""
+        SELECT to_regclass('public.manual_build_deletion_audit') IS NOT NULL
+          AND to_regprocedure('public.protect_manual_build_from_delete()') IS NOT NULL
+          AND to_regprocedure('public.audit_manual_build_archive()') IS NOT NULL
+          AND EXISTS (
+              SELECT 1 FROM pg_trigger
+              WHERE tgrelid=to_regclass('public.manual_builds')
+                AND tgname='trg_protect_manual_build_delete' AND NOT tgisinternal
+                AND tgfoid=to_regprocedure('public.protect_manual_build_from_delete()')
+          )
+          AND EXISTS (
+              SELECT 1 FROM pg_trigger
+              WHERE tgrelid=to_regclass('public.manual_builds')
+                AND tgname='trg_audit_manual_build_archive' AND NOT tgisinternal
+                AND tgfoid=to_regprocedure('public.audit_manual_build_archive()')
+          )
+    """))
+    if installed.scalar_one():
         return
     statements = [
         """
@@ -504,17 +558,20 @@ async def lifespan(app: FastAPI):
         # Small additive lifecycle columns used by Email Events/Dispatch
         # Zone. Keep this separate from the legacy broad migration because
         # that migration is intentionally disabled in production startup.
-        for statement in (
+        await _ensure_additive_columns(conn, (
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS customer_email VARCHAR(320)",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS dispatch_status VARCHAR(30) DEFAULT 'awaiting_dispatch'",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS collection_date TIMESTAMP",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS delivered_at TIMESTAMP",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS warranty_started_at TIMESTAMP",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS customer_id INTEGER",
+            "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS ebay_ship_by_date TIMESTAMP",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS delivery_followup_sent_at TIMESTAMP",
             "ALTER TABLE manual_builds ADD COLUMN IF NOT EXISTS relist_enabled BOOLEAN DEFAULT TRUE",
             "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS relist_interval_days INTEGER DEFAULT 7",
             "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS relist_enabled_default BOOLEAN DEFAULT TRUE",
+            "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS storefront_trust_messages JSON DEFAULT '[]'",
+            "ALTER TABLE app_settings ADD COLUMN IF NOT EXISTS storefront_trust_message_seconds INTEGER DEFAULT 6",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_enabled BOOLEAN DEFAULT FALSE",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS recreate_interval_days INTEGER",
             "ALTER TABLE channel_listings ADD COLUMN IF NOT EXISTS next_recreate_at TIMESTAMP",
@@ -525,8 +582,23 @@ async def lifespan(app: FastAPI):
             "ALTER TABLE products ADD COLUMN IF NOT EXISTS item_specifics JSON",
             "ALTER TABLE products ADD COLUMN IF NOT EXISTS platform_category_id VARCHAR(30)",
             "ALTER TABLE products ADD COLUMN IF NOT EXISTS platform_category_name VARCHAR(150)",
-        ):
-            await conn.exec_driver_sql(statement)
+            "ALTER TABLE gem_radar_scored_listings ADD COLUMN IF NOT EXISTS cpk VARCHAR(64)",
+        ))
+        # Canonical Product Keys can be up to 64 characters. ADD COLUMN IF
+        # NOT EXISTS does not widen an older VARCHAR(16) column, so normalize
+        # existing Gem Radar tables before background scoring updates run.
+        for table in ("gem_radar_scored_listings", "cpk_pricing_index"):
+            width = await conn.execute(text("""
+                SELECT character_maximum_length
+                FROM information_schema.columns
+                WHERE table_schema=current_schema()
+                  AND table_name=:table_name AND column_name='cpk'
+            """), {"table_name": table})
+            current_width = width.scalar_one_or_none()
+            if current_width is not None and current_width < 64:
+                await conn.exec_driver_sql(
+                    f"ALTER TABLE {table} ALTER COLUMN cpk TYPE VARCHAR(64)"
+                )
         await _install_manual_build_delete_guard(conn)
     # DISABLED: migrations deadlock on ALTER TABLE (PostgreSQL constraint acquisition)
     # Safe to skip because all migrations use IF NOT EXISTS and are idempotent
@@ -544,6 +616,13 @@ async def lifespan(app: FastAPI):
     cache = None
 
     if not settings.web_only:
+        # create_all does not migrate existing tables. Refuse to start
+        # sourcing against incompatible scan models instead of exhausting
+        # the entire queue's retries on the same missing column.
+        from app.gem_radar.schema_guard import require_scan_schema
+        from app.database import AsyncSessionLocal
+        async with AsyncSessionLocal() as schema_db:
+            await require_scan_schema(schema_db)
         start_workers()  # Uses DEFAULT_WORKERS (16) for 4x throughput
         start_eval_workers()
         start_part_eval_workers()
@@ -628,10 +707,13 @@ app = FastAPI(
 # uploads live under data/uploads and are served directly by this process.
 _uploads_dir = _app_dir / "data" / "uploads"
 _uploads_dir.mkdir(parents=True, exist_ok=True)
+_three_d_media_dir = _app_dir / "data" / "3d-media"
+_three_d_media_dir.mkdir(parents=True, exist_ok=True)
 # Mounted under /api so Caddy's existing /api/* proxy to this service (see
 # flipflop-shop's next.config.ts) makes these reachable publicly — plain
 # /uploads/* would fall through to the customer Next app instead.
 app.mount("/api/uploads", StaticFiles(directory=str(_uploads_dir)), name="uploads")
+app.mount("/api/3d-media", StaticFiles(directory=str(_three_d_media_dir)), name="3d-media")
 
 app.add_middleware(
     CORSMiddleware,
@@ -688,6 +770,8 @@ app.include_router(config.router, prefix="/api")
 app.include_router(swarms.router, prefix="/api")
 app.include_router(intel.router, prefix="/api")
 app.include_router(settings_router.router, prefix="/api")
+app.include_router(settings_router.public_router, prefix="/api")
+app.include_router(settings_router.storefront_public_router, prefix="/api")
 app.include_router(debug.router, prefix="/api")
 app.include_router(logs_api.router, prefix="/api")
 app.include_router(playbooks.router, prefix="/api")
@@ -912,6 +996,7 @@ async def _migrate_add_columns():
         ("gem_radar_scored_listings", "url", "VARCHAR(1000)"),
         # Manual build → sell lifecycle (purchased components → built → listed)
         ("manual_builds", "status",                "VARCHAR(20) DEFAULT 'in_progress'"),
+        ("manual_builds", "creation_method",       "VARCHAR(20) DEFAULT 'manual'"),
         ("manual_builds", "generated_title",        "VARCHAR(80)"),
         ("manual_builds", "generated_description",  "TEXT"),
         ("manual_builds", "ebay_listing_id",         "VARCHAR(60)"),
@@ -992,6 +1077,12 @@ async def _migrate_add_columns():
                 # Log and continue - the column might already exist or operation might fail
                 # but we don't want to block startup completely
                 log.warning("migration.column_skipped", index=i, table=table, column=col, error=str(exc)[:100])
+
+        try:
+            await _relax_listing_price_constraint(conn)
+            log.debug("migration.constraint_relaxed", table="listings", column="price")
+        except Exception as exc:
+            log.warning("migration.constraint_relax_failed", table="listings", column="price", error=str(exc)[:100])
 
         # playbook_proposals.playbook_id was originally NOT NULL, but a
         # CREATE-action proposal has no playbook yet (see app/api/playbooks.py
@@ -1188,6 +1279,7 @@ async def _seed_default_data():
             ("John Pye",          "https://www.johnpye.co.uk",    False),
             ("Amazon",            "https://www.amazon.co.uk",      True),
             ("eBuyer",            "https://www.ebuyer.com",        True),
+            ("Gamers Outlet",     "https://www.gamers-outlet.net", True),
             ("Temu",              "https://www.temu.com",          True),
             ("AliExpress",        "https://www.aliexpress.com",    True),
             ("Alibaba",           "https://www.alibaba.com",       True),

@@ -1,0 +1,9 @@
+{
+  "query": "7600 9060 XT gaming PC",
+  "observed_at": "2026-10-22T20:22:40.373772+00:00",
+  "publishable": false,
+  "provider_available": false,
+  "unavailable_reason": "eBay sign-in is required for sold prices, but SOLD_COMPS_HEADLESS is enabled. Run it headed so the eBay login window can be completed.",
+  "public_cards": [],
+  "fixed_price_matching_condition_candidates": []
+}

@@ -9,6 +9,7 @@ import { VendorLogo } from "../../components/VendorLogo";
 import { PriceHistorySparkline } from "../../components/listings/PriceHistorySparkline";
 import { api, MarketSnapshot } from "@/lib/api";
 import { normalizeScoredListingsResponse } from "@/lib/scored-listings-response";
+import { loadSourcingRefresh } from "@/lib/sourcing-refresh";
 import { fuzzyMatches } from "@/lib/fuzzy";
 import { VENDOR_ORDER, VENDOR_META, canonicalVendorKey } from "@/lib/vendors";
 import {
@@ -556,6 +557,7 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
   const runFirstSeenAt = useRef(0);
   const observedPendingSweepAt = useRef<string | null>(null);
   const runWasCompleted = useRef(false);
+  const statusRequestInFlight = useRef(false);
   const runMaxima = useRef({
     binPricesCount: 0,
     soldPricesCount: 0,
@@ -590,14 +592,26 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
 
   useEffect(() => {
     const fetchStatus = async () => {
+      if (statusRequestInFlight.current) return;
+      statusRequestInFlight.current = true;
       try {
+        const readStatus = async (path: string) => {
+          try {
+            const response = await fetch(path, { cache: "no-store", signal: AbortSignal.timeout(15_000) });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+          } catch (error) {
+            console.warn(`Pipeline refresh failed: ${path}`, error);
+            return null;
+          }
+        };
         const [res, queueRes, lockRes] = await Promise.all([
-          fetch("/api/gem-radar/pipeline-status", { cache: "no-store" }),
-          fetch("/api/gem-radar/queue-items", { cache: "no-store" }),
-          fetch("/api/gem-radar/scan-lock", { cache: "no-store" }),
+          readStatus("/api/gem-radar/pipeline-status"),
+          readStatus("/api/gem-radar/queue-items"),
+          readStatus("/api/gem-radar/scan-lock"),
         ]);
-        if (res.ok) {
-          const data = await res.json();
+        if (res) {
+          const data = res;
           const activeScans = data.activeScans ?? [];
           const queueIsRunning = Boolean(
             queueStatus && (queueStatus.pending > 0 || queueStatus.processing > 0),
@@ -806,18 +820,19 @@ function PipelineDashboard({ queueStatus, marketSnapshot }: { queueStatus: Queue
             setClientElapsed(0);
           }
         }
-        if (queueRes.ok) {
-          const queueData = await queueRes.json();
-          setQueueItems(queueData.items ?? []);
+        if (queueRes) {
+          setQueueItems(queueRes.items ?? []);
         }
-        if (lockRes.ok) setScanLock((await lockRes.json()) as PipelineStatusResponse["scanLock"]);
+        if (lockRes) setScanLock(lockRes as PipelineStatusResponse["scanLock"]);
       } catch (error) {
-        console.error("Error fetching pipeline status:", error);
+        console.warn("Pipeline refresh failed; retaining the last snapshot:", error);
+      } finally {
+        statusRequestInFlight.current = false;
       }
     };
 
     fetchStatus();
-    const interval = setInterval(fetchStatus, 1000); // Update every second
+    const interval = setInterval(fetchStatus, 5000); // Avoid competing with active ingestion.
     return () => clearInterval(interval);
   }, [displayedScans.length, queueStatus]);
 
@@ -1109,7 +1124,7 @@ function MarketSnapshotPanel({ snapshot }: { snapshot: MarketSnapshot | null }) 
   );
 }
 
- 
+
 // thumbnails; next/image's domain allowlist isn't worth configuring for a
 // scraper whose image hosts vary listing to listing.
 function ListingThumbnail({ src, alt, size = 40 }: { src?: string | null; alt: string; size?: number }) {
@@ -1447,7 +1462,7 @@ function SourceBadge({ source }: { source: string }) {
   return (
     <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs font-semibold whitespace-nowrap ${SOURCE_COLORS[source] || "bg-slate-600 text-slate-200"}`}>
       {domain && (
-         
+
         <img
           src={`https://www.google.com/s2/favicons?domain=${domain}&sz=32`}
           alt=""
@@ -3036,7 +3051,11 @@ function SourcingPageInner() {
   const [scanIntervalMinutes, setScanIntervalMinutes] = useState<number | null>(null);
   const [nowTick, setNowTick] = useState(() => Date.now());
   const [marketSnapshot, setMarketSnapshot] = useState<MarketSnapshot | null>(null);
+  const [refreshError, setRefreshError] = useState("");
   const dataRequestInFlight = useRef(false);
+  const currentTab = useRef(mainTab);
+  currentTab.current = mainTab;
+  const refreshSeconds = mainTab === "listings" ? 15 : 5;
 
   useEffect(() => {
     if (highlightListingId) setMainTab("listings");
@@ -3057,7 +3076,7 @@ function SourcingPageInner() {
       setNextScanAt(status.next_scan_at ? new Date(status.next_scan_at) : null);
       setScanIntervalMinutes(status.scan_interval_minutes);
     } catch (error) {
-      console.error("Error fetching scan schedule:", error);
+      console.warn("Scan schedule refresh failed; retaining the last snapshot:", error);
     }
   };
 
@@ -3065,7 +3084,7 @@ function SourcingPageInner() {
     try {
       setMarketSnapshot(await api.gemRadar.marketSnapshot());
     } catch (error) {
-      console.error("Error fetching market snapshot:", error);
+      console.warn("Market snapshot refresh failed; retaining the last snapshot:", error);
     }
   };
 
@@ -3076,23 +3095,31 @@ function SourcingPageInner() {
       // Do not let one unhealthy Gem Radar endpoint leave the whole page in
       // its initial loading state forever. Each poll gets a bounded lifetime;
       // the next scheduled refresh can recover normally.
-      const signal = AbortSignal.timeout(15_000);
-      const fetchCritical = async (url: string) => {
+      // Allow headroom for active sweeps; the in-flight guard prevents overlap.
+      const fetchCritical = async <T,>(url: string): Promise<T | null> => {
         try {
-          return await fetch(url, { cache: "no-store", signal });
+          const response = await fetch(url, { cache: "no-store", signal: AbortSignal.timeout(url.includes("scored-listings-latest-run") ? 30_000 : 15_000) });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          // The timeout also covers the body. Parse inside this request's
+          // catch so a slow listing body cannot discard a successful queue read.
+          return await response.json();
         } catch (error) {
           console.warn(`Gem Radar request failed: ${url}`, error);
           return null;
         }
       };
-      const [listingsRes, queueRes] = await Promise.all([
-        fetchCritical(`/api/gem-radar/scored-listings-latest-run?environment=${process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV"}&limit=100&offset=${(listingPage - 1) * 100}&paged=true&category=${listingFilters.component.toLowerCase()}&classification=${listingFilters.classification}&stock_lane=${listingFilters.stockLane}&title_query=${encodeURIComponent(listingFilters.title)}&sort_key=${listingFilters.sortKey}&sort_dir=${listingFilters.sortDir}`),
-        fetchCritical(`/api/gem-radar/queue-status`),
-      ]);
-      setBackendConnected(Boolean(listingsRes?.ok || queueRes?.ok));
+      const { listingsData, queueData, failedEndpoints } = await loadSourcingRefresh<unknown, QueueStatus>(
+        mainTab,
+        `/api/gem-radar/scored-listings-latest-run?environment=${process.env.NEXT_PUBLIC_FLIPFLOP_ENV === "live" ? "LIVE" : "DEV"}&limit=100&offset=${(listingPage - 1) * 100}&paged=true&category=${listingFilters.component.toLowerCase()}&classification=${listingFilters.classification}&stock_lane=${listingFilters.stockLane}&title_query=${encodeURIComponent(listingFilters.title)}&sort_key=${listingFilters.sortKey}&sort_dir=${listingFilters.sortDir}`,
+        fetchCritical,
+      );
+      // A slow request from a previous tab must not restore its warning here.
+      if (currentTab.current !== mainTab) return;
+      setBackendConnected(Boolean(listingsData || queueData));
+      setRefreshError(failedEndpoints.length ? `${failedEndpoints.join(" and ")} could not refresh. Showing the last available values; retrying automatically.` : "");
 
-      if (listingsRes?.ok) {
-        const data = normalizeScoredListingsResponse<Listing>(await listingsRes.json());
+      if (listingsData) {
+        const data = normalizeScoredListingsResponse<Listing>(listingsData);
         setListings(data.items);
         setListingHasMore(data.hasMore);
         setListingTotal(data.total);
@@ -3104,18 +3131,16 @@ function SourcingPageInner() {
           const superGems = data.items.filter((l: Listing) => l.classification === "SUPER_GEM").length;
           console.debug(`scored-listings page ${listingPage}: ${data.items.length} rows, ${superGems} SUPER_GEM, ${gems} GEM`);
         }
-      } else if (listingsRes) {
-        console.warn(`scored-listings returned ${listingsRes.status}`);
       }
-      if (queueRes?.ok) {
-        const data = await queueRes.json();
-        setQueueStatus(data);
+      if (queueData) {
+        setQueueStatus(queueData);
       }
 
-      if (listingsRes?.ok || queueRes?.ok) setLastUpdate(new Date());
-      setNextRefreshIn(5);
+      if (listingsData || queueData) setLastUpdate(new Date());
+      setNextRefreshIn(refreshSeconds);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      setRefreshError("Sourcing data could not refresh. Showing the last available values; retrying automatically.");
+      console.warn("Sourcing refresh failed:", error);
     } finally {
       dataRequestInFlight.current = false;
       setLoading(false);
@@ -3124,18 +3149,18 @@ function SourcingPageInner() {
 
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 5000);
+    const interval = setInterval(fetchData, refreshSeconds * 1000);
 
     // Countdown timer for next refresh
     const countdown = setInterval(() => {
-      setNextRefreshIn((prev) => (prev > 0 ? prev - 1 : 5));
+      setNextRefreshIn((prev) => (prev > 0 ? prev - 1 : refreshSeconds));
     }, 1000);
 
     return () => {
       clearInterval(interval);
       clearInterval(countdown);
     };
-  }, [listingPage, listingFilters]);
+  }, [mainTab, listingPage, listingFilters]);
 
   useEffect(() => {
     let active = true;
@@ -3262,6 +3287,8 @@ function SourcingPageInner() {
           </button>
         </div>
       </div>
+
+      {refreshError && <p role="status" className="relative text-sm text-amber-300">{refreshError}</p>}
 
       {/* Main Tabs */}
       <div className="relative flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl px-3 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.35)]">

@@ -1,0 +1,269 @@
+{
+  "query": "MSI B550M PRO VDH WIFI motherboard",
+  "observed_at": "2026-10-22T19:55:12.320837+00:00",
+  "source": "amazon_search",
+  "commercially_verified": false,
+  "parser": "linked_product_heading",
+  "products": [
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-PRO-VDH-Motherboard-DisplayPort-Generation/dp/B08BCR4ZRS/ref=sr_1_1",
+      "title": "B550M PRO-VDH WIFI Motherboard, mATX, AM4",
+      "price": 99.95,
+      "url": "https://www.amazon.co.uk/MSI-PRO-VDH-Motherboard-DisplayPort-Generation/dp/B08BCR4ZRS/ref=sr_1_1",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81OvzNNZttL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-PRO-VDH-Motherboard-Ryzen-Type-C/dp/B08NCK1MBQ/ref=sr_1_2_mod_primary_new",
+      "title": "B550M PRO-VDH Motherboard M-ATX - Supports AMD Ryzen 3rd Gen Processors, AM4, DDR4 Boost (4400MHz/OC), 1 x PCIe 4.0/3.0 x16, 1 x M.2 Gen4 x4, 1 x M.2 Gen3 x4, Gigabit LAN",
+      "price": 89.69,
+      "url": "https://www.amazon.co.uk/MSI-PRO-VDH-Motherboard-Ryzen-Type-C/dp/B08NCK1MBQ/ref=sr_1_2_mod_primary_new",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/91UMFdeYvVL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-B550M-PRO-VDH-ProSeries-Motherboard/dp/B089D1YG11/ref=sr_1_3",
+      "title": "B550M PRO-VDH WiFi ProSeries Motherboard (AMD AM4, DDR4, PCIe 4.0, SATA 6Gb/s, M.2, USB 3.2 Gen 1, Wi-Fi, D-SUB/HDMI/DP, Micro-ATX)",
+      "price": 125.99,
+      "url": "https://www.amazon.co.uk/MSI-B550M-PRO-VDH-ProSeries-Motherboard/dp/B089D1YG11/ref=sr_1_3",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61HOwOmsAiL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 9
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-B550M-P-WIFI6E-Motherboard-mATX/dp/B0H71QVLQK/ref=sr_1_4",
+      "title": "PRO B550M-P WIFI6E Motherboard, mATX, AM4",
+      "price": 89.99,
+      "url": "https://www.amazon.co.uk/MSI-B550M-P-WIFI6E-Motherboard-mATX/dp/B0H71QVLQK/ref=sr_1_4",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81ihwwfg00L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/GIGABYTE-B550M-GAMING-WIFI6-Motherboard/dp/B0F3P3XTMZ/ref=sr_1_5",
+      "title": "B550M GAMING X WIFI6 Motherboard - AMD Ryzen 5000 CPUs, 5+3 Phases VRM, up to 3200MHz DDR4, 1xPCIe 4.0 + 1xPCIe 3.0 M.2, Wi-Fi 6, 1GbE LAN, USB 3.2 Gen 1",
+      "price": 113.15,
+      "url": "https://www.amazon.co.uk/GIGABYTE-B550M-GAMING-WIFI6-Motherboard/dp/B0F3P3XTMZ/ref=sr_1_5",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81YwWAnIrtL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-PRIME-B550M-Micro-Wi-Fi/dp/B09LVQXHBG/ref=sr_1_6",
+      "title": "PRIME B550M-A WIFI II, AMD B550, AM4, Micro ATX, 4 DDR4, VGA, DVI, HDMI, Wi-Fi, PCIe4, 2x M.2",
+      "price": 93.1,
+      "url": "https://www.amazon.co.uk/ASUS-PRIME-B550M-Micro-Wi-Fi/dp/B09LVQXHBG/ref=sr_1_6",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81XfxEDurJL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-B550M-VC-ProSeries-Motherboard-Wi-Fi/dp/B0BDCZRBD6/ref=sr_1_7",
+      "title": "PRO B550M-VC WiFi ProSeries Motherboard (AMD AM4, DDR4, PCIe 4.0, SATA 6Gb/s, M.2, USB 3.2 Gen 2, HDMI/DP, Wi-Fi, mATX)",
+      "price": 136.76,
+      "url": "https://www.amazon.co.uk/MSI-B550M-VC-ProSeries-Motherboard-Wi-Fi/dp/B0BDCZRBD6/ref=sr_1_7",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81ucM03RZCL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 29
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-PRO-B550M-P-Motherboard-mATX/dp/B0H2C1VYZ7/ref=sr_1_8",
+      "title": "PRO B550M-P Motherboard, mATX - Supports AMD Ryzen 5000/5000 G-Series, 4000 G-Series, 3000/3000 G-Series Desktop Processors, AM4 - DDR4 Memory Boost (up to 4400+ MT/s OC), PCIe 4.0 x16, M.2 Gen4",
+      "price": 74.71,
+      "url": "https://www.amazon.co.uk/MSI-PRO-B550M-P-Motherboard-mATX/dp/B0H2C1VYZ7/ref=sr_1_8",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81MPp49fLeL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 1
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-PRO-B550M-P-Motherboard-mATX/dp/B0GXFFZ3GW/ref=sr_1_9",
+      "title": "PRO B550M-P Motherboard, mATX, AM4",
+      "price": 79.99,
+      "url": "https://www.amazon.co.uk/MSI-PRO-B550M-P-Motherboard-mATX/dp/B0GXFFZ3GW/ref=sr_1_9",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81yuyu5r2rL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-B550M-PRO-VDH-Processors-Motherboard/dp/B0CXNK17WT/ref=sr_1_10",
+      "title": "B550M PRO-VDH for AMD Ryzen 5000/4000G/3000 Series Processors Socket AM4 DDR4 PCIe 4.0 Micro-ATX Motherboard MB6468",
+      "price": 231.25,
+      "url": "https://www.amazon.co.uk/MSI-B550M-PRO-VDH-Processors-Motherboard/dp/B0CXNK17WT/ref=sr_1_10",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81vlK82f2+L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-B550-GAMING-WIFI-Motherboard/dp/B096Y35W2C/ref=sr_1_11",
+      "title": "B550 GAMING WIFI Motherboard, ATX, AM4",
+      "price": 104.99,
+      "url": "https://www.amazon.co.uk/MSI-B550-GAMING-WIFI-Motherboard/dp/B096Y35W2C/ref=sr_1_11",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/819invhsDaL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-GAMING-Motherboard-DisplayPort-Generation/dp/B08B4V6H3N/ref=sr_1_12",
+      "title": "MPG B550 GAMING PLUS Motherboard, ATX, AM4",
+      "price": 99.99,
+      "url": "https://www.amazon.co.uk/MSI-GAMING-Motherboard-DisplayPort-Generation/dp/B08B4V6H3N/ref=sr_1_12",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61hPyxPlRjL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/motherboard-PRO-VDH-Motherboard-Micro-ATX-Support/dp/B0HN43M9CZ/ref=sr_1_13",
+      "title": "motherboard Fit For MSI B550M PRO-VDH WIFI",
+      "price": 188.91,
+      "url": "https://www.amazon.co.uk/motherboard-PRO-VDH-Motherboard-Micro-ATX-Support/dp/B0HN43M9CZ/ref=sr_1_13",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71vlKHileFL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 14
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-PRO-B550M-B-Motherboard-mATX/dp/B0GP9GJW53/ref=sr_1_14",
+      "title": "PRO B550M-B Motherboard, mATX, AM4",
+      "price": 74.99,
+      "url": "https://www.amazon.co.uk/MSI-PRO-B550M-B-Motherboard-mATX/dp/B0GP9GJW53/ref=sr_1_14",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81TuXjhFiEL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-PRO-B760-P-WIFI-DDR4/dp/B0BJW1G7VN/ref=sr_1_15_mod_primary_new",
+      "title": "PRO B760-P WIFI DDR4 Motherboard, ATX",
+      "price": 134.99,
+      "url": "https://www.amazon.co.uk/MSI-PRO-B760-P-WIFI-DDR4/dp/B0BJW1G7VN/ref=sr_1_15_mod_primary_new",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81yaPDSDDmL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/motherboard-PRO-VDH-Motherboard-Support-5700X3D/dp/B0HL7XTYK4/ref=sr_1_16",
+      "title": "pc motherboard Fit For MSI B550M PRO-VDH WIFI Motherboard Support Ryzen 5 5600 5600G R7 5700X3D CPU 4xDDR4 DIMM B550 NVME M.2 Shield Frozr PCIe 4.0",
+      "price": 321.49,
+      "url": "https://www.amazon.co.uk/motherboard-PRO-VDH-Motherboard-Support-5700X3D/dp/B0HL7XTYK4/ref=sr_1_16",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71mW-oT1RML._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 9
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/MSI-B850-GAMING-WIFI6E-Motherboard/dp/B096Y1H9VR/ref=sr_1_17",
+      "title": "B850 GAMING PLUS WIFI6E Motherboard, ATX - Supports AMD Ryzen 9000 / 8000 / 7000 Processors, AM5 - DDR5 Memory Boost 8200+ MT/s (OC), PCIe 4.0 x16, M.2 Gen5, Wi-Fi 6E, 2.5G LAN",
+      "price": 124.7,
+      "url": "https://www.amazon.co.uk/MSI-B850-GAMING-WIFI6E-Motherboard/dp/B096Y1H9VR/ref=sr_1_17",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81Ezo61FTmL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/B550M-DS3H-AC-R2-Motherboard/dp/B0F2H4JLJM/ref=sr_1_18",
+      "title": "B550M DS3H AC R2 Motherboard - AMD Ryzen 5000 CPUs, 5+3 Phases VRM, up to 4733MHz DDR4 (O.C.), 1xPCIe 4.0 + 1xPCIe 3.0 M.2, Wi-Fi 5, 1GbE LAN, USB 3.2 Gen 1",
+      "price": 88.96,
+      "url": "https://www.amazon.co.uk/B550M-DS3H-AC-R2-Motherboard/dp/B0F2H4JLJM/ref=sr_1_18",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81sjs+n3mJL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/ASUS-TUF-GAMING-B550-PLUS-WIFI/dp/B09LVQYGXH/ref=sr_1_19",
+      "title": "TUF Gaming B550-PLUS (WI-FI), AMD B550 (Ryzen AM4) ATX motherboard (PCIe 4.0, dual M.2, 10 DrMOS, DDR4 4400, Intel\u00ae WiFi 6, 2.5 Gb Ethernet, HDMI, DisplayPort, USB 3.2 Gen 2 Type-A and Type-C)",
+      "price": 119.99,
+      "url": "https://www.amazon.co.uk/ASUS-TUF-GAMING-B550-PLUS-WIFI/dp/B09LVQYGXH/ref=sr_1_19",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81p3A4HhbdL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/GIGABYTE-B550-EAGLE-WIFI6-Motherboard/dp/B0DXWWWTH8/ref=sr_1_20",
+      "title": "B550 EAGLE WIFI6 Motherboard - AMD Ryzen 5000 G-Series CPUs, 10+3+1 Phases VRM, up to 3200MHz DDR4, 1xPCIe 4.0 + 1xPCIe 3.0 M.2, 1GbE LAN, WIFI 6, USB 3.2 Gen 2",
+      "price": 88.99,
+      "url": "https://www.amazon.co.uk/GIGABYTE-B550-EAGLE-WIFI6-Motherboard/dp/B0DXWWWTH8/ref=sr_1_20",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/81HyYYlfU6L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "MSI B550M PRO VDH WIFI motherboard",
+      "estimated_delivery_days": 27
+    }
+  ]
+}

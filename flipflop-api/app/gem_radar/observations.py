@@ -296,12 +296,14 @@ async def record_observation(
     search_run_id: str | None = None,
     search_query: str | None = None,
 ) -> GemRadarListingObservation:
+    from app.services.commercial_source import commercial_capture
     source = infer_listing_source(listing.url, listing.listing_id)
     observed_delivery_days = estimate_listing_delivery_working_days(listing.delivery_text)
     estimated_delivery_days, delivery_estimate_source = estimate_delivery_working_days(
         source or "", observed_delivery_days, listing.prime_eligible,
     )
     row = GemRadarListingObservation(
+        commercial_source_evidence=commercial_capture(listing),
         listing_id=listing.listing_id,
         seller_name=listing.seller,
         title=listing.title,

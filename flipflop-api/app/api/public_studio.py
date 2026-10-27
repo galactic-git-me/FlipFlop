@@ -42,11 +42,21 @@ async def evaluate_studio(body: StudioSelection, db: AsyncSession = Depends(get_
     playbook = await db.get(Playbook, body.playbook_id)
     playbook_requirements = playbook.requirements if playbook and isinstance(playbook.requirements, dict) else {}
     raw_gpu_required = playbook_requirements.get("gpu_required")
-    # Missing or malformed Playbook data stays conservative. Only an explicit
-    # boolean false makes dedicated graphics optional in Made-by-you. Curated
-    # builds remain fixed, complete pre-approved specifications.
     is_curated = body.build_mode == "curated" or bool(body.curated_build_id)
-    gpu_required = is_curated or raw_gpu_required is not False
+    authored = None
+    if is_curated and body.curated_build_id:
+        from app.services.curated_build_policy import definitions
+        authored = next((item for item in definitions()["builds"]
+                         if item["id"] == body.curated_build_id
+                         and item["segment"] == (playbook.name if playbook else None)), None)
+    # Curated cells declare whether they contain a dedicated GPU. A cell
+    # without one still needs reviewed integrated graphics; an unresolved
+    # authored cell stays conservative. Made-by-you requires an explicit
+    # Playbook exception before dedicated graphics can be optional.
+    if is_curated:
+        gpu_required = authored is None or "gpu" in authored.get("components", {})
+    else:
+        gpu_required = raw_gpu_required is not False
     slots = await (
         public_curated_slots(body.playbook_id, db, body.curated_build_id)
         if is_curated

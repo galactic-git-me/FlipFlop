@@ -8,7 +8,7 @@ from app.database import Base
 class MotherboardSpec(Base):
     """Structured reference row for one motherboard model — the compatibility
     engine's honest alternative to guessing socket/RAM limits from listing
-    title text. Rows start unreviewed when AI-generated; only a human-reviewed
+    title text. Rows start unreviewed when source-captured; only a human-reviewed
     row (reviewed=True) should ever produce a HARD_INCOMPATIBLE verdict —
     unreviewed AI data can still enrich soft NOT_RECOMMENDED signals, per the
     same "unknown/unconfirmed = never a silent hard block" principle used
@@ -33,7 +33,7 @@ class MotherboardSpec(Base):
     wifi: Mapped[Optional[bool]] = mapped_column(Boolean)
 
     source: Mapped[str] = mapped_column(String(20), default="manual")
-    # manual | ai_generated
+    # manual | ai_generated | manufacturer_capture | listing_title
     ai_confidence: Mapped[Optional[float]] = mapped_column(Float)
     ai_reasoning: Mapped[Optional[str]] = mapped_column(String(500))
     reviewed: Mapped[bool] = mapped_column(Boolean, default=False)

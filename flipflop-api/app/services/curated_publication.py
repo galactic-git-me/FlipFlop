@@ -1,5 +1,6 @@
 """One deterministic gate for Playbook publication and baseline pricing."""
 from math import isfinite
+import re
 
 from app.services.curated_build_policy import curated_slots, matches_spec
 
@@ -25,6 +26,19 @@ def publication_snapshot(definition, segment, catalogue_slots, cases, *, require
     slots = curated_slots(catalogue_slots, definition, chosen_ids)
     required = {'cpu', 'motherboard', 'ram', 'storage', 'cooling', 'psu'}
     required.update(set(definition.get('components', {})) - {'case'})
+    storage_items=[item.strip() for item in str(definition.get('components',{}).get('storage') or '').split('+') if item.strip()]
+    if len(storage_items)>1:
+        required.add('storage_secondary')
+    os_spec=str(definition.get('components',{}).get('os') or '')
+    if ('ubuntu' in os_spec.casefold() and 'windows' in os_spec.casefold()
+            and not re.search(r'\b(?:vm|option)\b',os_spec,re.I)):
+        required.add('os_secondary')
+    if chosen_ids.get('wireless_adapter'):
+        required.add('wireless_adapter')
+    # The shared Playbook may contain role aliases for other cells in its
+    # segment. Keep this cell's publication and checkout contract exact.
+    slots=[slot for slot in slots if slot['slot_type'] not in {'storage_secondary','os_secondary','wireless_adapter'}
+        or slot['slot_type'] in required]
     present = {slot['slot_type'] for slot in slots}
     if required - present:
         raise PublicationError('The Playbook is missing required component slots')

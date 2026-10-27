@@ -389,6 +389,23 @@ async def confirm_checkout(
     rare case this call never fires (tab closed mid-flow)."""
     result = await db.execute(select(Product).where(Product.id == product_id))
     product = result.scalar_one_or_none()
+    existing_order = (await db.execute(select(Order).where(
+        Order.stripe_payment_intent_id == body.intent_id,
+        Order.customer_id == customer.id,
+    ))).scalar_one_or_none()
+    if existing_order is not None:
+        if str((existing_order.specs or {}).get("product_id")) != str(product_id):
+            raise HTTPException(403, "This payment does not belong to this build.")
+        return ProductCheckoutConfirmation(
+            order_id=existing_order.id,
+            product_id=product_id,
+            status=existing_order.status.value,
+            amount=float(existing_order.customer_price),
+            currency="gbp",
+            payment_intent_id=body.intent_id,
+            created_at=existing_order.created_at,
+            ebay_listing_withdrawn=None,
+        )
     if not product:
         raise HTTPException(404, "Build not found")
     if product.status == ProductStatus.SOLD:

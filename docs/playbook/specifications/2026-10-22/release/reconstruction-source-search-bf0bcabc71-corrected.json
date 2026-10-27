@@ -1,0 +1,256 @@
+{
+  "query": "AMD Ryzen 5 5600G processor",
+  "observed_at": "2026-10-22T19:55:42.750749+00:00",
+  "source": "amazon_search",
+  "commercially_verified": false,
+  "parser": "linked_product_heading",
+  "products": [
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5600-Processor-12-thread/dp/B09VCHR1VH/ref=sr_1_1",
+      "title": "Ryzensets 5 5600 processor ( 6 Cores/12 Threads, 65W TDP, AM4 Socket, up to 4.4 Ghz max boost, wraith stealth cooler)",
+      "price": 121.98,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5600-Processor-12-thread/dp/B09VCHR1VH/ref=sr_1_1",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51So7GoGvxL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5500-Processor-12-thread/dp/B09VCJ171S/ref=sr_1_3",
+      "title": "AMD Ryzen 5 5500 Processor (6 cores/12 threads, 65W DTP, AM4 socket, 19 MB cache, up to 4.2 GHz max boost, wraith stealth cooler)",
+      "price": 79.99,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5500-Processor-12-thread/dp/B09VCJ171S/ref=sr_1_3",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51So7GoGvxL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-8500G-Retail-Stealth/dp/B0CQ4JV8D5/ref=sr_1_4",
+      "title": "Ryzensets 5 8500G Processor (integrated Radeon graphics, 6 Cores/12 Threads, 65W TDP, AM5 Socket, 22MB Cache , up to 5 GHz max boost frequency, wraith stealth cooler)",
+      "price": 129.0,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-8500G-Retail-Stealth/dp/B0CQ4JV8D5/ref=sr_1_4",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51193NWpmHL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-4500-MPK-units/dp/B09XN6XJ27/ref=sr_1_6",
+      "title": "Ryzen 5 4500 MPK 12 Units",
+      "price": 145.35,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-4500-MPK-units/dp/B09XN6XJ27/ref=sr_1_6",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/11BE1OvJZtL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 26
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-5600X-Processor-Cache/dp/B08166SLDF/ref=sr_1_7",
+      "title": "Ryzensets 5 5600X Processor (6 Cores/12Threads, 65W TDP, AM4 Socket, 35MB Cache, up to 4.6 GHz Max Boost, Wraith Stealth Cooler)",
+      "price": 145.99,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-5600X-Processor-Cache/dp/B08166SLDF/ref=sr_1_7",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51ld6RR8IrL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-7600X-Processeur-Architecture-Fr%C3%A9quence/dp/B0BBJDS62N/ref=sr_1_11",
+      "title": "Ryzensets 5 7600X Processor (integrated radeon graphics, 6 cores/12 threads, 105W TDP, AM5 socket, 38MB cache, up to 5.3 GHz max boost, no cooler)",
+      "price": 135.19,
+      "url": "https://www.amazon.co.uk/AMD-7600X-Processeur-Architecture-Fr%C3%A9quence/dp/B0BBJDS62N/ref=sr_1_11",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51m7L9bQI8L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Processor-3D-V-CacheTM-Technology/dp/B0DVZSG8D5/ref=sr_1_12_mod_primary_new",
+      "title": "Ryzen\u2122 9 9950X3D Processor With 3D V-Cache\u2122 Technology, 16 Cores/32 Threads, 144MB Cache, 170W TDP, AM5 Socket, Up To 5.7 GHz Boost Frequency, DDR5 & PCIe 5.0",
+      "price": 508.98,
+      "url": "https://www.amazon.co.uk/AMD-Processor-3D-V-CacheTM-Technology/dp/B0DVZSG8D5/ref=sr_1_12_mod_primary_new",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71hZfMZNZuL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-TM-Desktop-Processor-16-thread/dp/B0DKFMSMYK/ref=sr_1_14",
+      "title": "RYZEN \u2122 7 9800X 3D Desktop Processor (8-core/16-thread, 104MB cache, up to 5.2 GHz max boost)",
+      "price": 374.99,
+      "url": "https://www.amazon.co.uk/AMD-TM-Desktop-Processor-16-thread/dp/B0DKFMSMYK/ref=sr_1_14",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71NMFO0iUhL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-7-5700G-RyzenTM/dp/B091J3NYVF/ref=sr_1_15",
+      "title": "Ryzen 7 5700G 8-core, 16-Thread Processor with Wraith Stealth Cooler, up to 4.6GHz",
+      "price": 191.98,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-7-5700G-RyzenTM/dp/B091J3NYVF/ref=sr_1_15",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51D3DrDmwkL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Processor-Integrated-RadeonTM-Graphics/dp/B0FQPCWY2C/ref=sr_1_17",
+      "title": "Ryzen 5 3400G Processor (Integrated Radeon\u2122 RX Vega 11 Graphics. 4 cores / 8 threads. 65W TDP. AM4 socket. 6 MB L2+L3 cache. Boost clock up to 4.2 GHz. Wraith Stealth cooler included)",
+      "price": 86.22,
+      "url": "https://www.amazon.co.uk/AMD-Processor-Integrated-RadeonTM-Graphics/dp/B0FQPCWY2C/ref=sr_1_17",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61Th3HXRxsL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Veno-Scorp-Gaming-Processor-Integrated/dp/B0D4MDKKDW/ref=sr_1_18",
+      "title": "Gaming PC - AMD Ryzen 5 5600G Desktop Processor, Radeon Integrated Graphics, 16GB DDR4 RAM, 512GB NVMe SSD, 550W 80+, Wi-Fi, Windows 11, Titan 4 RGB Case.",
+      "price": 459.0,
+      "url": "https://www.amazon.co.uk/Veno-Scorp-Gaming-Processor-Integrated/dp/B0D4MDKKDW/ref=sr_1_18",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71UYLWtVn9L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-3400G-Processor-Graphics/dp/B07SXNDKNM/ref=sr_1_19",
+      "title": "Ryzen 5 3400G Processor (4C/8T, 6 MB cache, 4.2 GHz Max Boost) with Radeon RX Vega 11 Graphics",
+      "price": 74.95,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-3400G-Processor-Graphics/dp/B07SXNDKNM/ref=sr_1_19",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71rKDRYq77L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/3-9GHz-Benang-Prosesor-100-000000252-Memiliki/dp/B0GT1WSC6T/ref=sr_1_20",
+      "title": "R 5 5600G R5 3.9GHz Enam Dua Belas Benang Prosesor CPU 65W L3 = 16M 100-000000252 Soket AM4 Baru Dan Memiliki Kipas",
+      "price": 267.24,
+      "url": "https://www.amazon.co.uk/3-9GHz-Benang-Prosesor-100-000000252-Memiliki/dp/B0GT1WSC6T/ref=sr_1_20",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/51VP0PaQo+L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Six-Core-Twelve-Thread-100-000000252-Support-Desktop/dp/B0GSX868JL/ref=sr_1_21",
+      "title": "R 5 5600G N R5 3.9GHz Six-Core Twelve-Thread 65W L3=16M 100-000000252 Support Desktop CPU Gaming Socket AM4",
+      "price": 254.45,
+      "url": "https://www.amazon.co.uk/Six-Core-Twelve-Thread-100-000000252-Support-Desktop/dp/B0GSX868JL/ref=sr_1_21",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/510cunqCa+L._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/Veno-Scorp-Gaming-PC-Graphics/dp/B0C8VC377Z/ref=sr_1_22",
+      "title": "Gaming PC \u2013 New 24\" 75HZ Gaming Monitor Bundle AMD Ryzen 5 5600G With Radeon Graphics, 16GB RAM 3200MHZ DDR4, 1TB HDD 256GB SSD, 500W 80+ PSU, Wifi, Windows 11, Nova ARGB Gaming Case.",
+      "price": 591.5,
+      "url": "https://www.amazon.co.uk/Veno-Scorp-Gaming-PC-Graphics/dp/B0C8VC377Z/ref=sr_1_22",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71krzLp7ZwL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 27
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/3-9GHz-Six-Core-Twelve-Thread-Processor-100-000000252/dp/B0GSSWWPMD/ref=sr_1_25",
+      "title": "5600G R5 3.9GHz Six-Core Twelve-Thread 65W CPU Processor L3=16M 100-000000252 Socket AM4",
+      "price": 260.64,
+      "url": "https://www.amazon.co.uk/3-9GHz-Six-Core-Twelve-Thread-Processor-100-000000252/dp/B0GSSWWPMD/ref=sr_1_25",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71VmKC-n5hL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-Ryzen-9850X3D-100-100001973WOF-RYZENTM/dp/B0G8JMLXNQ/ref=sr_1_26",
+      "title": "RYZEN\u2122 7 9850X3D",
+      "price": 389.99,
+      "url": "https://www.amazon.co.uk/AMD-Ryzen-9850X3D-100-100001973WOF-RYZENTM/dp/B0G8JMLXNQ/ref=sr_1_26",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/71KDfkysoeL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 25
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/3-9GHz-6-core-12-thread-Processor-100-000000252/dp/B0H4195R6V/ref=sr_1_27",
+      "title": "A N R 5 5600G R5 3.9GHz 6-core 12-thread 65W CPU Processor L3=16M 100-000000252 Socket AM4",
+      "price": 195.16,
+      "url": "https://www.amazon.co.uk/3-9GHz-6-core-12-thread-Processor-100-000000252/dp/B0H4195R6V/ref=sr_1_27",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/61JNjoQkIhL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 24
+    },
+    {
+      "external_id": "https://www.amazon.co.uk/AMD-RYZEN-5-5500F/dp/B0HGMTDZM7/ref=sr_1_28",
+      "title": "RYZEN 5 5500F",
+      "price": 99.99,
+      "url": "https://www.amazon.co.uk/AMD-RYZEN-5-5500F/dp/B0HGMTDZM7/ref=sr_1_28",
+      "condition": "new",
+      "image_urls": [
+        "https://m.media-amazon.com/images/I/518SuEZSsuL._AC_UY218_.jpg"
+      ],
+      "seller_name": "Amazon UK",
+      "found_via_term": "AMD Ryzen 5 5600G processor",
+      "estimated_delivery_days": 25
+    }
+  ]
+}

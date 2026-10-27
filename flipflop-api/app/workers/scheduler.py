@@ -26,6 +26,7 @@ from app.services.benchmark_refresh_job import run_benchmark_refresh
 from app.services.ram_watcher import run_ram_watcher
 from app.services.price_refresh import run_price_refresh
 from app.services.catalogue_service import run_catalogue_pipeline_job, run_catalogue_digest_job
+from app.services.catalogue_marketing_copy import run_marketing_copy_maintenance
 from app.workers.recreate_cycle import run_deferred_publish_job, run_recreate_cycle_job
 from app.workers.manual_build_scheduler import run_deferred_manual_build_publish_job
 from app.workers.markdown_event import run_markdown_event_scan_job, run_manual_build_markdown_event_scan_job
@@ -58,6 +59,8 @@ settings = get_settings()
 _scheduler: AsyncIOScheduler | None = None
 _job_history: dict[str, deque[dict]] = {
     "cases": deque(maxlen=50),
+    "commercial_reconciliation": deque(maxlen=50),
+    "curated_analytics_retention": deque(maxlen=50),
     "case_content_sourcing": deque(maxlen=50),
     "amazon_case_bestsellers": deque(maxlen=50),
     "amazon_component_bestsellers": deque(maxlen=50),
@@ -274,6 +277,39 @@ def start_scheduler():
     scheduler = get_scheduler()
 
     now = datetime.now(timezone.utc)
+    if settings.commercial_reconciliation_enabled:
+        from app.services.playbook_service import (run_scheduled_playbook_refresh,
+            run_pending_scheduled_playbook_rebuild)
+        scheduler.add_job(
+            _run_job_with_history, trigger=IntervalTrigger(hours=1),
+            id='playbook_catalogue_refresh', name='Catalogue-owned Playbook proposals',
+            kwargs={'job_id':'playbook_catalogue_refresh','fn':run_scheduled_playbook_refresh},
+            replace_existing=True, max_instances=1, coalesce=True,
+            next_run_time=now + timedelta(minutes=2),
+        )
+        from app.services.commercial_reconciliation import run_commercial_reconciliation
+        scheduler.add_job(
+            _run_job_with_history, trigger=IntervalTrigger(hours=1),
+            id='commercial_reconciliation', name='Commercial evidence reconciliation',
+            kwargs={'job_id':'commercial_reconciliation','fn':run_commercial_reconciliation},
+            replace_existing=True, max_instances=1, coalesce=True,
+            next_run_time=now + timedelta(minutes=1),
+        )
+        scheduler.add_job(
+            _run_job_with_history, trigger=IntervalTrigger(minutes=1),
+            id='playbook_rebuild_queue', name='Changed-fact Playbook rebuild queue',
+            kwargs={'job_id':'playbook_rebuild_queue','fn':run_pending_scheduled_playbook_rebuild},
+            replace_existing=True, max_instances=1, coalesce=True,
+            next_run_time=now + timedelta(seconds=30),
+        )
+        from app.services.playbook_compatibility_worker import run_pending_playbook_compatibility_reviews
+        scheduler.add_job(
+            _run_job_with_history, trigger=IntervalTrigger(minutes=1),
+            id='playbook_compatibility_reviews', name='Pending Playbook compatibility reviews',
+            kwargs={'job_id':'playbook_compatibility_reviews','fn':run_pending_playbook_compatibility_reviews},
+            replace_existing=True, max_instances=1, coalesce=True,
+            next_run_time=now + timedelta(seconds=45),
+        )
     # DISABLED: Backend scraper swarms replaced by FlipFlopXtension
     # flip_next = _next_run_for("flip_opportunities", settings.flip_scan_interval_minutes, now)
     # upgrade_start = now
@@ -687,6 +723,25 @@ def start_scheduler():
             next_run_time=now + timedelta(minutes=1),
         )
 
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(minutes=2),
+        id="catalogue_marketing_copy",
+        name="Catalogue product guides and upgrade descriptions",
+        kwargs={"job_id": "catalogue_marketing_copy", "fn": run_marketing_copy_maintenance},
+        replace_existing=True, max_instances=1, coalesce=True,
+        next_run_time=now + timedelta(seconds=30),
+    )
+    from app.services.growth_social import run_curated_analytics_retention
+    scheduler.add_job(
+        _run_job_with_history,
+        trigger=IntervalTrigger(hours=24),
+        id="curated_analytics_retention",
+        name="Delete expired consented Playbook journey analytics",
+        kwargs={"job_id": "curated_analytics_retention", "fn": run_curated_analytics_retention},
+        replace_existing=True, max_instances=1, coalesce=True,
+        next_run_time=now + timedelta(hours=24),
+    )
     scheduler.add_job(
         _run_job_with_history,
         trigger=IntervalTrigger(minutes=1),

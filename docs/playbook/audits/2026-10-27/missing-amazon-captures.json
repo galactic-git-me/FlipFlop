@@ -1,0 +1,32 @@
+[
+  {
+    "category": "nvme",
+    "asin": "B09P58BJ2L",
+    "title": "Integral SSD 256GB NVME M.2 2280 PCIe Gen3x4 R-3350MB/s W-1350MB/s M2 Solid State Drive"
+  },
+  {
+    "category": "sata",
+    "asin": "B0CW9SCZWK",
+    "title": "Integral V Series S 1TB Internal Solid State Drive (SSD) - 2.5\" SATA III (6Gb/s), Up to 540MB/s Read and 500MB/s Write Speeds"
+  },
+  {
+    "category": "sata",
+    "asin": "B09M7KC46Q",
+    "title": "Integral V Series 250GB SATA III 2.5 Inch Internal Solid State Drive (SSD) up to 450MB/s Read and 400MB/s Write"
+  },
+  {
+    "category": "sata",
+    "asin": "B01N0TQPQB",
+    "title": "Kingston A400 SSD Internal Solid State Drive 2.5\" SATA Rev 3.0, 480GB - SA400S37/480G"
+  },
+  {
+    "category": "sata",
+    "asin": "B087K9L3R5",
+    "title": "Patriot P210 SATA 3 256GB SSD 2.5 Inch Internal Solid State Drive - P210S256G25"
+  },
+  {
+    "category": "sata",
+    "asin": "B07Y5VDNT9",
+    "title": "PNY CS900 1TB Internal SSD SATA III 2.5\""
+  }
+]
