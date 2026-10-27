@@ -1976,7 +1976,12 @@ async def approve_proposal(db,proposal_id,revision,actor_id):
     for mode,quote in assessment['modes'].items():
         if mode not in policy.enabled_modes:
             continue
-        if not quote['offerable'] or Decimal(quote['price_gbp'])!=Decimal(current['delivery_products'][mode]['recommended_price_gbp']):
+        reviewed=current['delivery_products'][mode]
+        if mode!='standard' and not reviewed.get('available'):
+            if quote['offerable']:
+                raise HTTPException(409,'Delivery eligibility changed; review the new pace quote')
+            continue
+        if not quote['offerable'] or Decimal(quote['price_gbp'])!=Decimal(reviewed['recommended_price_gbp']):
             raise HTTPException(409,'Current source and workshop evidence must support the exact three reviewed prices')
 
     # The exact proposal approval is also the Playbook publication approval.
