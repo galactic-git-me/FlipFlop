@@ -1,0 +1,1207 @@
+{
+  "active_summary": [
+    {
+      "total": 5426,
+      "cpk": 2795,
+      "market": 294,
+      "insufficient": 2480
+    }
+  ],
+  "active_categories": [
+    {
+      "category": null,
+      "n": 2558,
+      "cpk": 0,
+      "market": 0
+    },
+    {
+      "category": "cpu",
+      "n": 868,
+      "cpk": 865,
+      "market": 173
+    },
+    {
+      "category": "ram",
+      "n": 764,
+      "cpk": 740,
+      "market": 64
+    },
+    {
+      "category": "motherboard",
+      "n": 719,
+      "cpk": 678,
+      "market": 29
+    },
+    {
+      "category": "cooler",
+      "n": 243,
+      "cpk": 240,
+      "market": 6
+    },
+    {
+      "category": "case",
+      "n": 120,
+      "cpk": 119,
+      "market": 1
+    },
+    {
+      "category": "gpu",
+      "n": 104,
+      "cpk": 104,
+      "market": 19
+    },
+    {
+      "category": "psu",
+      "n": 36,
+      "cpk": 36,
+      "market": 2
+    },
+    {
+      "category": "ssd",
+      "n": 7,
+      "cpk": 7,
+      "market": 0
+    },
+    {
+      "category": "fan",
+      "n": 7,
+      "cpk": 6,
+      "market": 0
+    }
+  ],
+  "active_classifications": [
+    {
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "NO_COMPARABLES",
+      "n": 2430
+    },
+    {
+      "classification": "IDENTITY_FAILED",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 2423
+    },
+    {
+      "classification": "INELIGIBLE",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 181
+    },
+    {
+      "classification": "POOR_DEAL",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 161
+    },
+    {
+      "classification": "INELIGIBLE",
+      "evidence_status": "NO_COMPARABLES",
+      "n": 62
+    },
+    {
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 32
+    },
+    {
+      "classification": "POOR_DEAL",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "n": 30
+    },
+    {
+      "classification": "IDENTITY_PENDING",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 28
+    },
+    {
+      "classification": "EVIDENCE_LIMITED_DEAL",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 23
+    },
+    {
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "SPARSE_SOLD_EVIDENCE",
+      "n": 18
+    },
+    {
+      "classification": "POOR_DEAL",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 13
+    },
+    {
+      "classification": "GEM",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 9
+    },
+    {
+      "classification": "OK_DEAL",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 8
+    },
+    {
+      "classification": "OK_DEAL",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 4
+    },
+    {
+      "classification": "SUPER_GEM",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 3
+    },
+    {
+      "classification": "SUPER_GEM",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "n": 1
+    }
+  ],
+  "sold_duplicates": [
+    {
+      "n": 119194,
+      "urls": 9441,
+      "missing_url": 0
+    }
+  ],
+  "active_price_health": [
+    {
+      "n": 33586,
+      "fresh": 1170,
+      "latest": "2026-09-12 22:11:12.562178"
+    }
+  ],
+  "identity_examples": [
+    {
+      "title": "Origin 1x8GB Ddr4 3200mhz Desktop Ram, Udimm, Non ECC, Read Details Please",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "GIGABYTE B760 DS3H DDR5 Motherboard",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "INTEL SR0T7 Core i5-3570 Quad Core 3.4GHz Socket 1155 Ivy Bridge Processor CPU",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Gigabyte B760M DS3H WIFI6E GEN5 DDR5 Micro ATX Intel 1700 Motherboard",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Corsair Vengeance LPX 32GB (2x16GB) DDR4-3200 DIMM RAM CMK32GX4M2E3200C16",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Intel Core i5 14400F SRN3R CPU Processor LGA 1700",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Intel Pentium III 866 mhz CPU Processor Socket PGA 370 SL4CB 256kb 133mhz FSB",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Gigabyte GA-Z170-HD3P LGA 1151 ATX Motherboard-Heroes of the Storm Limited Edit",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "AMD Ryzen Threadripper PRO 5955WX",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Intel Core i9-12900KS 3.40GHz (Alder Lake) Socket LGA1700 Processor - Retail",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "16GB RAM Memory HP-Compaq All-in-One",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Patriot Viper Elite 5 Ultra 64GB (2x32GB) DDR5 C28 6000MHz Dual Channel Kit",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Dell OptiPlex 7060 SFF Motherboard",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Intel i7-11700K CPU - Excellent Condition w/ Original Box",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Gigabyte GA-H81M-S2V Desktop Motherboard",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "V-Color RDIMM JEDEC 256GB (4x64GB) DDR5 C60 6400MHz Quad Channel Kit",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "AMD Ryzen 5 5500 processor 3.6 GHz 16 MB L3 Tray",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "CompareQuick viewOffer",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "Gigabyte b860 aorus elite wifi7 ice Motherboard",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    },
+    {
+      "title": "AMD Athlon 64 X2 Dual Core 2.6GHz L2 Cache Socket A",
+      "classification": "IDENTITY_FAILED",
+      "reasoning_summary": "Listing was processed, but no trustworthy canonical product identity is available."
+    }
+  ],
+  "fragmented_models": [],
+  "snapshot": [
+    {
+      "total": 64821,
+      "latest_score": "2026-09-12 22:54:04.236009",
+      "with_cpk": 27635,
+      "with_market": 2640
+    }
+  ],
+  "classification": [
+    {
+      "classification": "IDENTITY_FAILED",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 34630
+    },
+    {
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "NO_COMPARABLES",
+      "n": 23470
+    },
+    {
+      "classification": "POOR_DEAL",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 1766
+    },
+    {
+      "classification": "INELIGIBLE",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 1753
+    },
+    {
+      "classification": "INELIGIBLE",
+      "evidence_status": "NO_COMPARABLES",
+      "n": 1368
+    },
+    {
+      "classification": "IDENTITY_PENDING",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 823
+    },
+    {
+      "classification": "OK_DEAL",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 237
+    },
+    {
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 234
+    },
+    {
+      "classification": "POOR_DEAL",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "n": 194
+    },
+    {
+      "classification": "INSUFFICIENT_DATA",
+      "evidence_status": "SPARSE_SOLD_EVIDENCE",
+      "n": 72
+    },
+    {
+      "classification": "GEM",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 68
+    },
+    {
+      "classification": "SUPER_GEM",
+      "evidence_status": "CLASSIFIABLE",
+      "n": 60
+    },
+    {
+      "classification": "EVIDENCE_LIMITED_DEAL",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 52
+    },
+    {
+      "classification": "POOR_DEAL",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 38
+    },
+    {
+      "classification": "OK_DEAL",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 21
+    },
+    {
+      "classification": "EVIDENCE_LIMITED_DEAL",
+      "evidence_status": "SPARSE_SOLD_EVIDENCE",
+      "n": 10
+    },
+    {
+      "classification": "OK_DEAL",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "n": 7
+    },
+    {
+      "classification": "SUPER_GEM",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "n": 5
+    },
+    {
+      "classification": "INELIGIBLE",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "n": 4
+    },
+    {
+      "classification": "POOR_DEAL",
+      "evidence_status": "SPARSE_SOLD_EVIDENCE",
+      "n": 4
+    },
+    {
+      "classification": "GEM",
+      "evidence_status": "CONDITION_UNCERTAIN",
+      "n": 3
+    },
+    {
+      "classification": "INELIGIBLE",
+      "evidence_status": "ACTIVE_ONLY",
+      "n": 2
+    }
+  ],
+  "categories": [
+    {
+      "category": null,
+      "n": 36048,
+      "cpk": 0,
+      "market": 0,
+      "insufficient": 0
+    },
+    {
+      "category": "motherboard",
+      "n": 6837,
+      "cpk": 6641,
+      "market": 380,
+      "insufficient": 6026
+    },
+    {
+      "category": "cpu",
+      "n": 5662,
+      "cpk": 5633,
+      "market": 1424,
+      "insufficient": 4033
+    },
+    {
+      "category": "ssd",
+      "n": 3382,
+      "cpk": 3205,
+      "market": 144,
+      "insufficient": 2842
+    },
+    {
+      "category": "gpu",
+      "n": 3230,
+      "cpk": 3219,
+      "market": 288,
+      "insufficient": 2822
+    },
+    {
+      "category": "cooler",
+      "n": 3067,
+      "cpk": 2937,
+      "market": 179,
+      "insufficient": 2731
+    },
+    {
+      "category": "ram",
+      "n": 2670,
+      "cpk": 2568,
+      "market": 142,
+      "insufficient": 2073
+    },
+    {
+      "category": "case",
+      "n": 2602,
+      "cpk": 2183,
+      "market": 15,
+      "insufficient": 2072
+    },
+    {
+      "category": "psu",
+      "n": 1132,
+      "cpk": 1098,
+      "market": 66,
+      "insufficient": 1029
+    },
+    {
+      "category": "fan",
+      "n": 191,
+      "cpk": 151,
+      "market": 2,
+      "insufficient": 148
+    }
+  ],
+  "sold": [
+    {
+      "n": 119194,
+      "mapped": 72130,
+      "cpks": 1511,
+      "keys": 2603,
+      "min": "2026-08-08 12:04:56.627668",
+      "max": "2026-09-13 16:30:20.673019",
+      "fresh": 119194
+    }
+  ],
+  "sold_keys": [
+    {
+      "match_key": "CORSAIR750WGOLD",
+      "condition": "used",
+      "n": 4390,
+      "mapped": 4390
+    },
+    {
+      "match_key": "AMDRYZEN77800X3D",
+      "condition": "new",
+      "n": 1121,
+      "mapped": 687
+    },
+    {
+      "match_key": "ARCB580",
+      "condition": "used",
+      "n": 1077,
+      "mapped": 1077
+    },
+    {
+      "match_key": "RX6800XT16GB",
+      "condition": "used",
+      "n": 1008,
+      "mapped": 0
+    },
+    {
+      "match_key": "AMDRYZEN53600",
+      "condition": "used",
+      "n": 906,
+      "mapped": 612
+    },
+    {
+      "match_key": "8GBDDR42666MHZ",
+      "condition": "used",
+      "n": 871,
+      "mapped": 698
+    },
+    {
+      "match_key": "16GBDDR55600MHZ",
+      "condition": "used",
+      "n": 811,
+      "mapped": 599
+    },
+    {
+      "match_key": "EVGA750WGOLD",
+      "condition": "used",
+      "n": 799,
+      "mapped": 799
+    },
+    {
+      "match_key": "AMDRYZEN55600X",
+      "condition": "used",
+      "n": 702,
+      "mapped": 386
+    },
+    {
+      "match_key": "MSI750WGOLD",
+      "condition": "used",
+      "n": 643,
+      "mapped": 643
+    },
+    {
+      "match_key": "CORSAIR750WGOLD",
+      "condition": "new",
+      "n": 636,
+      "mapped": 636
+    },
+    {
+      "match_key": "8GBDDR43200MHZ",
+      "condition": "used",
+      "n": 627,
+      "mapped": 549
+    },
+    {
+      "match_key": "GIGABYTE750WGOLD",
+      "condition": "used",
+      "n": 626,
+      "mapped": 626
+    },
+    {
+      "match_key": "8GBDDR42400MHZ",
+      "condition": "used",
+      "n": 596,
+      "mapped": 294
+    },
+    {
+      "match_key": "8GBDDR42133MHZ",
+      "condition": "used",
+      "n": 595,
+      "mapped": 249
+    },
+    {
+      "match_key": "MSI750WGOLD",
+      "condition": "new",
+      "n": 523,
+      "mapped": 523
+    },
+    {
+      "match_key": "16GBDDR43200MHZ",
+      "condition": "used",
+      "n": 513,
+      "mapped": 360
+    },
+    {
+      "match_key": "16GBDDR4",
+      "condition": "used",
+      "n": 511,
+      "mapped": 0
+    },
+    {
+      "match_key": "16GBDDR42666MHZ",
+      "condition": "used",
+      "n": 478,
+      "mapped": 360
+    },
+    {
+      "match_key": "RX6700XT12GB",
+      "condition": "used",
+      "n": 477,
+      "mapped": 477
+    },
+    {
+      "match_key": "16GB2X8GBDDR43200MHZ",
+      "condition": "used",
+      "n": 477,
+      "mapped": 391
+    },
+    {
+      "match_key": "RX7800XT16GB",
+      "condition": "used",
+      "n": 456,
+      "mapped": 265
+    },
+    {
+      "match_key": "RADEONR9",
+      "condition": "used",
+      "n": 443,
+      "mapped": 0
+    },
+    {
+      "match_key": "RX9060XT",
+      "condition": "used",
+      "n": 437,
+      "mapped": 0
+    },
+    {
+      "match_key": "8GBDDR5",
+      "condition": "used",
+      "n": 434,
+      "mapped": 0
+    },
+    {
+      "match_key": "RX5700XT8GB",
+      "condition": "used",
+      "n": 426,
+      "mapped": 426
+    },
+    {
+      "match_key": "GIGABYTE750WGOLD",
+      "condition": "new",
+      "n": 409,
+      "mapped": 409
+    },
+    {
+      "match_key": "O11DYNAMICEVO",
+      "condition": "used",
+      "n": 399,
+      "mapped": 399
+    },
+    {
+      "match_key": "16GBDDR54800MHZ",
+      "condition": "used",
+      "n": 390,
+      "mapped": 288
+    },
+    {
+      "match_key": "GTX1050TI4GB",
+      "condition": "used",
+      "n": 388,
+      "mapped": 334
+    },
+    {
+      "match_key": "AMDRYZEN73700X",
+      "condition": "used",
+      "n": 381,
+      "mapped": 235
+    },
+    {
+      "match_key": "8GBDDR4",
+      "condition": "used",
+      "n": 378,
+      "mapped": 378
+    },
+    {
+      "match_key": "COOLERMASTER750WGOLD",
+      "condition": "used",
+      "n": 371,
+      "mapped": 0
+    },
+    {
+      "match_key": "AMDRYZEN79800X3D",
+      "condition": "used",
+      "n": 370,
+      "mapped": 150
+    },
+    {
+      "match_key": "32GBDDR43200MHZ",
+      "condition": "used",
+      "n": 360,
+      "mapped": 307
+    }
+  ],
+  "flags": [
+    {
+      "flag": "identity_incomplete",
+      "n": 37186
+    },
+    {
+      "flag": "insufficient_same_condition_sold_comparables",
+      "n": 24995
+    },
+    {
+      "flag": "retro_platform_excluded",
+      "n": 1640
+    },
+    {
+      "flag": "whole_system_misclassified_as_component",
+      "n": 646
+    },
+    {
+      "flag": "multi_variant_listing",
+      "n": 441
+    },
+    {
+      "flag": "accessory_or_parts_listing",
+      "n": 404
+    },
+    {
+      "flag": "bundle_listing",
+      "n": 113
+    },
+    {
+      "flag": "category_identity_conflict",
+      "n": 19
+    },
+    {
+      "flag": "specialised_mining_hardware",
+      "n": 9
+    }
+  ],
+  "policy": {
+    "super_profit": 50.0,
+    "super_roi_pct": 25.0,
+    "super_confidence": 80.0,
+    "super_liquidity": 60.0,
+    "super_score": 85.0,
+    "gem_profit": 30.0,
+    "gem_roi_pct": 18.0,
+    "gem_confidence": 70.0,
+    "gem_liquidity": 45.0,
+    "gem_score": 75.0,
+    "delivery_fallback": 15.0,
+    "ebay_fee_pct": 0.0,
+    "packaging_cost": 6.0,
+    "testing_refurbishment_cost": 10.0,
+    "returns_warranty_pct": 5.0,
+    "minimum_sold_comps": 3,
+    "minimum_source_diversity": 2,
+    "sold_lookback_days": 90,
+    "super_discount_pct": -20.0,
+    "gem_discount_pct": -15.0
+  },
+  "audit_context": {
+    "captured_at_utc": "2026-09-13T16:49:56.797509",
+    "database_host": "127.0.0.1",
+    "database_name": "pcflipper",
+    "active_definition": "observed within 24 hours"
+  },
+  "repair_simulation": {
+    "counts": {
+      "known_active": 2795,
+      "current_market": 293,
+      "refreshed_market": 822,
+      "refreshed_plus_unique_alias_market": 822,
+      "current_market_at_least_3": 233,
+      "refreshed_market_at_least_3": 521
+    },
+    "active_stale_price_rows": 2534,
+    "active_missing_price_rows": 0,
+    "active_changed_price_rows": 991,
+    "unmapped_unique_alias_rows": 75,
+    "unmapped_ambiguous_rows": 27514,
+    "unmapped_no_alias_rows": 19475,
+    "examples": [
+      {
+        "title": "Gigabyte B760M H DDR4 Ultra Durable Intel 1700 Socket Motherboard, Micro-ATX, 2x",
+        "basis": "MIXED_ACTIVE_ESTIMATE",
+        "n": 3
+      },
+      {
+        "title": "Gigabyte B550 EAGLE AM4 ATX Motherboard \u2013 DDR4, Dual M.2, PCIe 4.0 & HDMI",
+        "basis": "MIXED_ACTIVE_ESTIMATE",
+        "n": 6
+      },
+      {
+        "title": "Unlocked AMD EPYC 7443 CPU 24 Core 2.85GHz 128MB Cache 200W - 100-000000340",
+        "basis": "FIXED_RETAIL_CONTEXT",
+        "n": 1
+      },
+      {
+        "title": "Gigabyte B760M D3HP DDR4 LGA1700 Micro-ATX Motherboard \u2013 Dual M.2 & PCIe 4.0",
+        "basis": "MIXED_ACTIVE_ESTIMATE",
+        "n": 6
+      },
+      {
+        "title": "Gigabyte A520M DS3H V2 AM4 Micro-ATX Motherboard \u2013 DDR4, M.2 & HDMI",
+        "basis": "MIXED_ACTIVE_ESTIMATE",
+        "n": 3
+      },
+      {
+        "title": "AMD Ryzen 3 Pro 2200G CPU Desktop Computer Processor 4 Core 3.5 GHz Clock Speed",
+        "basis": "BIN_ESTIMATED",
+        "n": 4
+      },
+      {
+        "title": "AMD EPYC 7402 2.80GHz 24-Core Socket SP3 180W 128MB CPU",
+        "basis": "MIXED_ACTIVE_ESTIMATE",
+        "n": 4
+      },
+      {
+        "title": "Intel Core i5-9500 (SRF4B) 6-Core 3.00GHz 65W 9MB Cache CPU",
+        "basis": "BIN_ESTIMATED",
+        "n": 3
+      },
+      {
+        "title": "Kingston FURY Beast 8GB (1 x 8GB) PC4-25600 (DDR4-3200) UDIMM Memory - Black...",
+        "basis": "FIXED_RETAIL_CONTEXT",
+        "n": 1
+      },
+      {
+        "title": "AMD A8 Series A8-9600 CPU 3.1GHZ AM4 4 Core Processor.",
+        "basis": "BIN_ESTIMATED",
+        "n": 5
+      },
+      {
+        "title": "Noctua NH-D15 chromax.black CPU Cooler, Intel/AMD, Dual NH-A15 Fans, 300-1500RPM",
+        "basis": "FIXED_RETAIL_CONTEXT",
+        "n": 1
+      },
+      {
+        "title": "\ud83d\udd25Gigabyte B850I AORUS PRO AMD AM5 Socket Motherboard, Mini-ITX, 2x DDR5 Slots\ud83d\udd25",
+        "basis": "FIXED_RETAIL_CONTEXT",
+        "n": 1
+      }
+    ]
+  },
+  "ambiguous_alias_examples": [
+    {
+      "match_key": "RX6800XT16GB",
+      "unmapped_rows": 1008,
+      "identities": [
+        {
+          "cpk": "f809b3f67317d4be",
+          "data": {
+            "cpk": "f809b3f67317d4be",
+            "brand": "amd",
+            "model": "rx-6800-xt-16gb",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "3953237f492bf381",
+          "data": {
+            "cpk": "3953237f492bf381",
+            "brand": "xfx",
+            "model": "rx-6800-xt-16gb",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        }
+      ]
+    },
+    {
+      "match_key": "RX9070XT",
+      "unmapped_rows": 576,
+      "identities": [
+        {
+          "cpk": "1490671ec918cc90",
+          "data": {
+            "cpk": "1490671ec918cc90",
+            "brand": "gigabyte",
+            "model": "rx-9070-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "8112167259837be5",
+          "data": {
+            "cpk": "8112167259837be5",
+            "brand": "xfx",
+            "model": "rx-9070-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "86422ad1f25e0399",
+          "data": {
+            "cpk": "86422ad1f25e0399",
+            "brand": "asrock",
+            "model": "rx-9070-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        }
+      ]
+    },
+    {
+      "match_key": "16GBDDR4",
+      "unmapped_rows": 573,
+      "identities": [
+        {
+          "cpk": "cc6ec41ae0046828",
+          "data": {
+            "cpk": "0701f559be200502",
+            "brand": "lexar",
+            "model": "16-gb-ddr4",
+            "specs": {
+              "capacity_gb": 16
+            },
+            "category": "ram",
+            "confidence": 0.9
+          }
+        },
+        {
+          "cpk": "49a61d27f7c088b2",
+          "data": {
+            "cpk": "e0eafba496908480",
+            "brand": "viper-steel",
+            "model": "16gb-ddr4",
+            "specs": {
+              "capacity_gb": 16
+            },
+            "category": "ram",
+            "confidence": 1.0
+          }
+        },
+        {
+          "cpk": "81929462aadfbe73",
+          "data": {
+            "cpk": "f5c6ff05af96a997",
+            "brand": "netac",
+            "model": "16gb-ddr4",
+            "specs": {},
+            "category": "ram",
+            "confidence": 0.8
+          }
+        }
+      ]
+    },
+    {
+      "match_key": "AMDRYZEN77800X3D",
+      "unmapped_rows": 557,
+      "identities": [
+        {
+          "cpk": "f6b1c2b22900496e",
+          "data": {
+            "cpk": "f6b1c2b22900496e",
+            "brand": "amd",
+            "model": "ryzen-7-7800x3d",
+            "specs": {
+              "tdp": null,
+              "cores": 8,
+              "socket": "am5",
+              "threads": 16,
+              "clock_mhz": null
+            },
+            "category": "cpu",
+            "confidence": 0.95
+          }
+        },
+        {
+          "cpk": "f6b1c2b22900496e",
+          "data": {
+            "cpk": "f6b1c2b22900496e",
+            "brand": "amd",
+            "model": "ryzen-7-7800x3d",
+            "specs": {
+              "tdp": null,
+              "cores": 8,
+              "socket": "am5",
+              "clock_mhz": 5000
+            },
+            "category": "cpu",
+            "confidence": 0.95
+          }
+        },
+        {
+          "cpk": "f6b1c2b22900496e",
+          "data": {
+            "cpk": "f6b1c2b22900496e",
+            "brand": "amd",
+            "model": "ryzen-7-7800x3d",
+            "specs": {
+              "tdp": null,
+              "cores": 8,
+              "socket": "am5",
+              "threads": 16,
+              "clock_mhz": 5000
+            },
+            "category": "cpu",
+            "confidence": 0.95
+          }
+        },
+        {
+          "cpk": "f6b1c2b22900496e",
+          "data": {
+            "cpk": "a70fc2c54126b8bb",
+            "brand": "amd",
+            "model": "ryzen-7-7800x3d",
+            "specs": {
+              "tdp": null,
+              "cores": 8,
+              "socket": "am5",
+              "threads": 16,
+              "l3_cache": 96,
+              "clock_mhz": {
+                "base": 4200,
+                "turbo": 5000
+              }
+            },
+            "category": "cpu",
+            "confidence": 1.0
+          }
+        },
+        {
+          "cpk": "f6b1c2b22900496e",
+          "data": {
+            "cpk": "f6b1c2b22900496e",
+            "brand": "amd",
+            "model": "ryzen-7-7800x3d",
+            "specs": {
+              "type": "3d",
+              "cores": 8,
+              "clock_mhz": 5000
+            },
+            "category": "cpu",
+            "confidence": 0.95
+          }
+        },
+        {
+          "cpk": "f6b1c2b22900496e",
+          "data": {
+            "cpk": "f6b1c2b22900496e",
+            "brand": "amd",
+            "model": "ryzen-7-7800x3d",
+            "specs": {
+              "type": "3d",
+              "cores": 8,
+              "socket": "am5",
+              "clock_mhz": 4200
+            },
+            "category": "cpu",
+            "confidence": 0.95
+          }
+        },
+        {
+          "cpk": "f6b1c2b22900496e",
+          "data": {
+            "cpk": "f6b1c2b22900496e",
+            "brand": "amd",
+            "model": "ryzen-7-7800x3d",
+            "specs": {
+              "tdp": null,
+              "socket": "am5",
+              "clock_mhz": null
+            },
+            "category": "cpu",
+            "confidence": 0.9
+          }
+        },
+        {
+          "cpk": "f6b1c2b22900496e",
+          "data": {
+            "cpk": "f6b1c2b22900496e",
+            "brand": "amd",
+            "model": "ryzen-7-7800x3d",
+            "specs": {
+              "tdp": null,
+              "cores": null,
+              "socket": null,
+              "threads": null,
+              "clock_mhz": null
+            },
+            "category": "cpu",
+            "confidence": 0.9
+          }
+        }
+      ]
+    },
+    {
+      "match_key": "RADEONR9",
+      "unmapped_rows": 443,
+      "identities": [
+        {
+          "cpk": "e03b27f90c05ffe1",
+          "data": {
+            "cpk": "e03b27f90c05ffe1",
+            "brand": "asus",
+            "model": "radeon-r9",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "db853405548a30c4",
+          "data": {
+            "cpk": "db853405548a30c4",
+            "brand": "gigabyte",
+            "model": "radeon-r9",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        }
+      ]
+    },
+    {
+      "match_key": "RX9060XT",
+      "unmapped_rows": 437,
+      "identities": [
+        {
+          "cpk": "81b896bae5ef6ee9",
+          "data": {
+            "cpk": "81b896bae5ef6ee9",
+            "brand": "asus",
+            "model": "rx9060-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "8a151b5646e0314a",
+          "data": {
+            "cpk": "8a151b5646e0314a",
+            "brand": "gigabyte",
+            "model": "rx-9060-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "2e29054b5d450a49",
+          "data": {
+            "cpk": "2e29054b5d450a49",
+            "brand": "asus",
+            "model": "rx-9060-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "80b6257202d72f1e",
+          "data": {
+            "cpk": "80b6257202d72f1e",
+            "brand": "xfx",
+            "model": "rx-9060-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "8735b8d045ac4b2d",
+          "data": {
+            "cpk": "8735b8d045ac4b2d",
+            "brand": "sapphire",
+            "model": "rx-9060-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "028b31323f39ea35",
+          "data": {
+            "cpk": "028b31323f39ea35",
+            "brand": "asrock",
+            "model": "rx9060-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        },
+        {
+          "cpk": "7b92cdd0c1aa47cb",
+          "data": {
+            "cpk": "7b92cdd0c1aa47cb",
+            "brand": "asrock",
+            "model": "rx-9060-xt",
+            "specs": {},
+            "category": "gpu",
+            "confidence": 0.85,
+            "extraction_method": "deterministic"
+          }
+        }
+      ]
+    }
+  ]
+}

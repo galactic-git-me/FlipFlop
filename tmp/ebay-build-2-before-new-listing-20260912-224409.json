@@ -1,0 +1,18 @@
+{
+  "id": 2,
+  "name": "PROMETHEUS",
+  "status": "built",
+  "ebay_listing_id": "188817313509",
+  "ebay_listing_url": "https://www.ebay.co.uk/itm/188817313509",
+  "ebay_sku": "FLP-D263528BF3FE",
+  "ebay_offer_id": null,
+  "ebay_draft_id": null,
+  "ebay_draft_url": null,
+  "ebay_listing_status": "unknown",
+  "ebay_listing_status_checked_at": "2026-09-12 21:41:42.486248",
+  "ebay_listing_end_reason": null,
+  "listed_at": null,
+  "next_recreate_at": null,
+  "deferred_publish_at": null,
+  "ebay_order_id": null
+}
