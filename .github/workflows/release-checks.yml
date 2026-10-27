@@ -16,8 +16,23 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: flipflop_release_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d flipflop_release_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
     env:
       OLLAMA_MODEL: disabled-in-ci
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/flipflop_release_test
+      SYNC_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/flipflop_release_test
+      TEST_DATABASE_URL: postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/flipflop_release_test
+      FLIPFLOP_TEST_ADMIN_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/flipflop_release_test
       EBAY_TOKEN_ENCRYPTION_KEY: ci-only-ebay-token-encryption-test-key
     steps:
       - uses: actions/checkout@v5
