@@ -44,7 +44,7 @@ log "Checking Alembic revision graph"
 log "Running API tests"
 (
   cd "$ROOT_DIR/flipflop-api"
-  export FLIPFLOP_TEST_ADMIN_DATABASE_URL="$SYNC_DATABASE_URL"
+  export FLIPFLOP_TEST_ADMIN_DATABASE_URL="${FLIPFLOP_TEST_ADMIN_DATABASE_URL:-${SYNC_DATABASE_URL%/*}/postgres}"
   if [[ "${FLIPFLOP_CI_FULL_API_TESTS:-0}" == "1" ]]; then
     python scripts/run_isolated_tests.py -- tests -q
   else
