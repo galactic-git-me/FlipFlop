@@ -40,6 +40,12 @@ def do_run_migrations(connection: Connection) -> None:
         # transaction; otherwise connection close rolls the entire chain back.
         connection.commit()
 
+    # SQLAlchemy inspection opens an implicit transaction on existing databases
+    # too. Alembic must own the migration transaction so closing this connection
+    # cannot silently roll back successful DDL and the version-table update.
+    if connection.in_transaction():
+        connection.commit()
+
     context.configure(connection=connection, target_metadata=target_metadata)
     reconcile_existing = (
         bootstrap_empty_database
