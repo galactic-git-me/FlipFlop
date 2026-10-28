@@ -2930,20 +2930,50 @@ const ScanRunsOverTimeChart = memo(function ScanRunsOverTimeChart() {
   );
 });
 
-const AnalyticsTab = memo(function AnalyticsTab({ listings }: { listings: Listing[] }) {
+interface SourcingAnalytics {
+  total: number;
+  classification_counts: Record<string, number>;
+  items: AnalyticsListing[];
+}
+
+const AnalyticsTab = memo(function AnalyticsTab() {
+  const [analytics, setAnalytics] = useState<SourcingAnalytics | null>(null);
+  const [analyticsError, setAnalyticsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/gem-radar/sourcing-analytics", {
+      cache: "no-store",
+      signal: AbortSignal.timeout(30_000),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error(`Analytics request failed (${response.status})`);
+        return response.json() as Promise<SourcingAnalytics>;
+      })
+      .then((data) => {
+        if (!cancelled) setAnalytics(data);
+      })
+      .catch((error: unknown) => {
+        if (!cancelled) setAnalyticsError(error instanceof Error ? error.message : "Could not load sourcing analytics");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <div className="space-y-6">
       <ScanRunsOverTimeChart />
-      {analyticsError ? <p role="alert" className="rounded-lg border border-red-700 bg-red-950/30 p-3 text-sm text-red-200">{analyticsError}. Restart the local API if the new analytics endpoint is not active.</p> : !analytics ? <p role="status" className="text-sm text-slate-400">Loading full-population analytics…</p> : <p className="text-sm text-slate-400">Charts use {listings.length.toLocaleString()} stratified points from {analytics.total.toLocaleString()} active listings, independent of Listings filters. Every BSR-linked listing is included.</p>}
+      {analyticsError ? <p role="alert" className="rounded-lg border border-red-700 bg-red-950/30 p-3 text-sm text-red-200">{analyticsError}. Restart the local API if the new analytics endpoint is not active.</p> : !analytics ? <p role="status" className="text-sm text-slate-400">Loading full-population analytics…</p> : <p className="text-sm text-slate-400">Charts use {analytics.items.length.toLocaleString()} stratified points from {analytics.total.toLocaleString()} active listings, independent of Listings filters. Every BSR-linked listing is included.</p>}
       {analytics && <div className="flex flex-wrap gap-2 text-xs text-slate-300">{CLASSIFICATION_ORDER.map(c => <span key={c} className="rounded border border-slate-700 px-2 py-1">{c.replaceAll("_", " ")}: {(analytics.classification_counts[c] ?? 0).toLocaleString()}</span>)}</div>}
       {analytics && <>
       <div className="grid items-stretch gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-        <DealScoreRoiChart listings={listings} />
-        <InsightScatterChart listings={listings} kind="sellThrough" title="Price Variance vs Sell-through" description="Discount opportunity against observed market liquidity; bubble size is sold comparable count." insight="Upper-right points combine a meaningful discount with proven demand. A large discount with weak sell-through is a warning, not automatically a bargain." />
-        <InsightScatterChart listings={listings} kind="profitRoi" title="Expected Profit vs Model ROI" description="Absolute return against percentage return; bubble size is the listing price." insight="Top-right points are strongest on both measures. High ROI with tiny profit is a small-ticket opportunity; high profit with low ROI ties up more capital." />
-        <InsightScatterChart listings={listings} kind="confidenceVariance" title="Market Confidence vs Price Variance" description="How much the market supports the price gap; bubble size is comparable sample size." insight="Look for positive variance with high confidence. Large gaps supported by small samples or low confidence are the most likely false gems." />
-        <InsightScatterChart listings={listings} kind="amazonBestsellerVariance" title="Amazon Best Seller Rank vs Price Variance" description="Amazon category position against the gap to market; lower rank numbers are better. Bubble size is the listing price." insight="Look for a positive price gap with a low Amazon rank. Amazon rank is a product-level signal, not a measure of this marketplace listing's demand." />
-        <InsightScatterChart listings={listings} kind="priceMedian" title="Listing Price vs Market Median" description="Direct price positioning; the dashed diagonal marks parity with the market median." insight="Points above the diagonal have a listing price below market. The farther above, the larger the discount; use classification colour and bubble profit to judge quality." diagonal />
+        <DealScoreRoiChart listings={analytics.items} />
+        <InsightScatterChart listings={analytics.items} kind="sellThrough" title="Price Variance vs Sell-through" description="Discount opportunity against observed market liquidity; bubble size is sold comparable count." insight="Upper-right points combine a meaningful discount with proven demand. A large discount with weak sell-through is a warning, not automatically a bargain." />
+        <InsightScatterChart listings={analytics.items} kind="profitRoi" title="Expected Profit vs Model ROI" description="Absolute return against percentage return; bubble size is the listing price." insight="Top-right points are strongest on both measures. High ROI with tiny profit is a small-ticket opportunity; high profit with low ROI ties up more capital." />
+        <InsightScatterChart listings={analytics.items} kind="confidenceVariance" title="Market Confidence vs Price Variance" description="How much the market supports the price gap; bubble size is comparable sample size." insight="Look for positive variance with high confidence. Large gaps supported by small samples or low confidence are the most likely false gems." />
+        <InsightScatterChart listings={analytics.items} kind="amazonBestsellerVariance" title="Amazon Best Seller Rank vs Price Variance" description="Amazon category position against the gap to market; lower rank numbers are better. Bubble size is the listing price." insight="Look for a positive price gap with a low Amazon rank. Amazon rank is a product-level signal, not a measure of this marketplace listing's demand." />
+        <InsightScatterChart listings={analytics.items} kind="priceMedian" title="Listing Price vs Market Median" description="Direct price positioning; the dashed diagonal marks parity with the market median." insight="Points above the diagonal have a listing price below market. The farther above, the larger the discount; use classification colour and bubble profit to judge quality." diagonal />
       </div>
       <ClassificationLegend classifications={[...CLASSIFICATION_ORDER]} />
       </>}
