@@ -59,6 +59,7 @@ async def test_build_offer_assesses_approved_evidence_without_importing_supplier
                 "condition": "new",
             },
             "catalogue_approved": True,
+            "photo_ready": True,
             "engineering": {"reviewed":True},
         }
         for index, role in enumerate(roles, start=1)

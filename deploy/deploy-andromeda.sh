@@ -53,20 +53,16 @@ if [[ -n "$OLD_IMAGE" ]]; then
   docker image tag "$OLD_IMAGE" flipflop-api:rollback
 fi
 
-log "Building production API"
-if [[ ! -f "$REPO_DIR/../FlipFlop.shop/package.json" && ! -f "$REPO_DIR/FlipFlop.shop/package.json" ]]; then
-  log "Storefront checkout is missing. Expected FlipFlop.shop beside or inside $REPO_DIR."
-  exit 1
-fi
-
-log "Building production API, Gem Radar, storefront, and admin"
-docker compose -f "$COMPOSE_FILE" build api gemradar-worker storefront admin
+log "Building production API, Gem Radar, and admin"
+# The customer site is deployed from its own repository by flipflop-shop.service.
+# Starting the legacy compose storefront would contend for its live port 3020.
+docker compose -f "$COMPOSE_FILE" build api gemradar-worker admin
 
 log "Applying database migrations"
 docker compose -f "$COMPOSE_FILE" run --rm api alembic upgrade head
 
 log "Starting production stack"
-docker compose -f "$COMPOSE_FILE" up -d --remove-orphans
+docker compose -f "$COMPOSE_FILE" up -d api gemradar-worker admin
 
 healthy=0
 for _ in $(seq 1 30); do

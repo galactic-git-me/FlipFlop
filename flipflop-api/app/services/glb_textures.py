@@ -24,7 +24,13 @@ def require_embedded_colour_texture(data: bytes) -> None:
                 texture = material.get("pbrMetallicRoughness",{}).get("baseColorTexture")
                 if not texture or f"TEXCOORD_{texture.get('texCoord',0)}" not in primitive.get("attributes",{}):
                     continue
-                image = images[textures[texture["index"]]["source"]]
+                definition = textures[texture["index"]]
+                image_index = definition.get('source')
+                if image_index is None:
+                    image_index = (definition.get('extensions') or {}).get('EXT_texture_webp',{}).get('source')
+                if image_index is None:
+                    continue
+                image = images[image_index]
                 if image.get("uri", "").startswith("data:image/"):
                     return
                 if "bufferView" in image and views[image["bufferView"]].get("byteLength",0) > 0:
