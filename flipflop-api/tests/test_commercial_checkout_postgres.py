@@ -199,9 +199,12 @@ class CommercialPostgresTests(unittest.IsolatedAsyncioTestCase):
     async def test_checkout_does_not_need_a_weekly_build_count_or_create_a_slot_hold(self):
         await self.db.delete(self.capacity)
         await self.db.flush()
-        quote = await create_checkout_quote(self.db, self.config)
-        self.assertTrue(all(mode["offerable"] for mode in quote["modes"].values()))
-        accepted = await self.accept(quote)
+        # Other full-suite fixtures can leave global workshop evidence. Scope
+        # this no-capacity scenario explicitly instead of depending on order.
+        with patch('app.services.commercial_checkout.current_capacity_ids',AsyncMock(return_value={})):
+            quote = await create_checkout_quote(self.db, self.config)
+            self.assertTrue(all(mode["offerable"] for mode in quote["modes"].values()))
+            accepted = await self.accept(quote)
         reservations = (await self.db.execute(select(WorkshopCapacityReservation).where(
             WorkshopCapacityReservation.quote_snapshot_id == accepted.id
         ))).scalars().all()
