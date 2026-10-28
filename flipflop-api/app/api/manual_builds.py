@@ -1282,18 +1282,17 @@ async def create_ai_ready_to_ship_build(body: AIBuildCreateInput, db: AsyncSessi
 async def create_gem_spotlight_draft(body: GemSpotlightDraftInput, db: AsyncSession = Depends(get_db)):
     """Save the exact eight current component Gems as an unpaid, editable build draft."""
     from app.gem_radar.observations import get_active_buy_it_now_listing_ids
-    from app.api.gem_radar import get_compatible_gem_spotlight
+    from app.api.gem_radar import get_gem_spotlight
 
     required_categories = ("cpu", "motherboard", "ram", "gpu", "ssd", "psu", "cooler", "case")
     if len(set(body.listing_ids)) != len(required_categories):
         raise HTTPException(422, "Choose one distinct Gem for each required component")
 
     active_listing_ids = await get_active_buy_it_now_listing_ids(db)
-    spotlight = await get_compatible_gem_spotlight(db, active_listing_ids)
+    spotlight = await get_gem_spotlight(db, active_listing_ids)
     selected_concept = (spotlight.get("builds", {}).get(body.concept) or {})
-    if (selected_concept.get("compatibility", {}).get("status") != "compatible"
-            or {(selected_concept.get("gems", {}).get(category) or {}).get("id") for category in required_categories} != set(body.listing_ids)):
-        raise HTTPException(409, "The compatible Gem selection has changed or could not be verified. Refresh the Sourcing page before creating the draft.")
+    if {(selected_concept.get("gems", {}).get(category) or {}).get("id") for category in required_categories} != set(body.listing_ids):
+        raise HTTPException(409, "The Gem selection has changed. Refresh the Gem-based pre-builds page before creating the draft.")
     rows = (await db.execute(
         select(GemRadarScoredListing).where(
             GemRadarScoredListing.id.in_(body.listing_ids),
@@ -1335,8 +1334,7 @@ async def create_gem_spotlight_draft(body: GemSpotlightDraftInput, db: AsyncSess
                 "concept": body.concept,
                 "candidate_listing_ids": [by_category[category].listing_id for category in required_categories],
                 "estimated_parts_cost_gbp": estimated_parts_cost,
-                "compatibility_status": "ai_reviewed",
-                "compatibility_review": selected_concept.get("compatibility"),
+                "compatibility_status": "not_checked",
             }
         },
         warranty_reserve_pct=5.0,

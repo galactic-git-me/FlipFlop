@@ -21,19 +21,11 @@ interface GemData {
   expected_profit?: number | null;
 }
 
-interface GemCompatibilityReview {
-  status: "compatible" | "unavailable";
-  summary: string;
-  model?: string | null;
-  checks: { pair: string; status: string; reason: string }[];
-}
-
 type GemBuildConceptKey = "best" | "cheapest" | "highest_end" | "most_profitable" | "most_popular";
 
 interface GemBuildConcept {
   title: string;
   gems: Record<string, GemData | null>;
-  compatibility: GemCompatibilityReview;
   metrics: {
     parts_total?: number;
     component_profit_signal?: number;
@@ -63,8 +55,8 @@ const componentLabels: Record<string, { label: string; icon: typeof Cpu }> = {
 };
 
 const concepts: { key: GemBuildConceptKey; title: string; description: string; signal: string }[] = [
-  { key: "best", title: "The Best Gem Build", description: "Highest-ranked overall compatible set by Gem deal score.", signal: "Overall Gem deal score" },
-  { key: "cheapest", title: "The Cheapest Gem Build", description: "Lowest total asking price while meeting the compatibility checks.", signal: "Lowest parts total" },
+  { key: "best", title: "The Best Gem Build", description: "Highest-ranked overall Gem set by deal score.", signal: "Overall Gem deal score" },
+  { key: "cheapest", title: "The Cheapest Gem Build", description: "Lowest total asking price among available Gem listings.", signal: "Lowest parts total" },
   { key: "highest_end", title: "The Highest-end Gem Build", description: "Highest known CPU/GPU benchmark tier, with component specs considered where benchmark data is unavailable.", signal: "CPU/GPU benchmark percentile" },
   { key: "most_profitable", title: "The Most Profitable Gem Build", description: "Highest combined per-listing expected profit from available Gem market evidence.", signal: "Combined component profit signal" },
   { key: "most_popular", title: "The Most Popular Gem Build", description: "Highest combined desirability, liquidity, watch and bid signals from the selected listings.", signal: "Observed demand signals" },
@@ -134,7 +126,7 @@ export default function GemBasedPrebuilds() {
 
   const createDraft = async (key: GemBuildConceptKey, concept: GemBuildConcept) => {
     const selected = componentOrder.map(category => concept.gems[category] ?? null);
-    if (concept.compatibility.status !== "compatible" || selected.some(gem => !gem) || saving) return;
+    if (selected.some(gem => !gem) || saving) return;
     setSaving(key);
     setDraftError("");
     try {
@@ -156,7 +148,7 @@ export default function GemBasedPrebuilds() {
         <a href="/ready-to-ship" className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white"><ArrowLeft className="h-4 w-4" /> Ready-to-Ship workflows</a>
         <p className="mt-5 text-xs font-semibold uppercase tracking-[.22em] text-cyan-300">Ready-to-Ship</p>
         <h1 className="mt-2 text-3xl font-bold text-white">Gem-based pre-builds</h1>
-        <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-400">Five compatible eight-part build concepts assembled from active Gem listings. Compatibility is an AI estimate from listing information; drafts remain unpaid sourcing candidates.</p>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-400">Five eight-part build concepts assembled from active Gem listings. Drafts remain unpaid sourcing candidates.</p>
       </div>
       <a href="/builds" className="rounded-lg border border-white/10 px-4 py-2 text-sm font-semibold text-slate-200 hover:bg-white/[0.06]">View current builds</a>
     </header>
@@ -174,7 +166,7 @@ export default function GemBasedPrebuilds() {
       const concept = data?.builds?.[key];
       if (!concept) return null;
       const selected = componentOrder.map(category => ({ category, gem: concept.gems[category] ?? null }));
-      const complete = concept.compatibility.status === "compatible" && selected.every(item => item.gem && ["GEM", "SUPER_GEM"].includes(item.gem.classification ?? ""));
+      const complete = selected.every(item => item.gem && ["GEM", "SUPER_GEM"].includes(item.gem.classification ?? ""));
       const partsTotal = concept.metrics.parts_total ?? selected.reduce((sum, item) => sum + (item.gem?.price ?? 0), 0);
       const fixedCosts = partsTotal + partsTotal * 0.10 + 20 + 15 + 6 + 0.20;
       const sellingPrice = concept.metrics.market_reference_total ?? null;
@@ -191,13 +183,7 @@ export default function GemBasedPrebuilds() {
           {key === "most_profitable" && <p className="text-[11px] text-slate-500 sm:col-span-2">Combined Gem market profit signal: {concept.metrics.component_profit_signal == null ? "—" : money(concept.metrics.component_profit_signal)} · listing-level estimate, not guaranteed whole-PC profit.</p>}
           {key === "most_popular" && <p className="text-[11px] text-slate-500 sm:col-span-2">Listing signals: {concept.metrics.listing_watch_count ?? 0} watches · {concept.metrics.listing_bid_count ?? 0} bids. These reflect the selected listings, not total product demand.</p>}
           {key === "highest_end" && <p className="text-[11px] text-slate-500 sm:col-span-2">Average matched CPU/GPU benchmark percentile: {concept.metrics.performance_percentile == null ? "unavailable" : `${concept.metrics.performance_percentile}th`}.</p>}
-          <p className="text-[11px] leading-relaxed text-slate-500 sm:col-span-2">Resale value sums each listing’s available market reference; it is not a confirmed whole-PC selling price. Profit estimate subtracts asking costs, 10% parts overhead, £20 outbound delivery, £15 insurance, £6 packaging, £0 labour, £0.20 fixed payment cost, and payment, warranty and returns reserves. Buying postage is not confirmed. Compatibility is an AI estimate from listing information.</p>
-        </div>
-
-        <div className={`mb-4 rounded-xl border px-4 py-3 ${concept.compatibility.status === "compatible" ? "border-emerald-400/20 bg-emerald-400/[0.04]" : "border-amber-400/20 bg-amber-400/[0.04]"}`}>
-          <p className="text-sm font-semibold text-slate-200">{concept.compatibility.status === "compatible" ? "AI compatibility review passed" : "No confirmed compatible set"}</p>
-          <p className="mt-1 text-xs text-slate-400">{concept.compatibility.summary}</p>
-          {concept.compatibility.checks?.length ? <ul className="mt-2 grid gap-1 text-[11px] text-slate-500 sm:grid-cols-2">{concept.compatibility.checks.map(check => <li key={check.pair}><span className="text-emerald-300">{check.pair}:</span> {check.reason}</li>)}</ul> : null}
+          <p className="text-[11px] leading-relaxed text-slate-500 sm:col-span-2">Resale value sums each listing’s available market reference; it is not a confirmed whole-PC selling price. Profit estimate subtracts asking costs, 10% parts overhead, £20 outbound delivery, £15 insurance, £6 packaging, £0 labour, £0.20 fixed payment cost, and payment, warranty and returns reserves. Buying postage is not confirmed.</p>
         </div>
 
         <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">{selected.map(({ category, gem }) => {
@@ -211,7 +197,7 @@ export default function GemBasedPrebuilds() {
         })}</div>
 
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.07] pt-4">
-          <p className="max-w-2xl text-xs text-slate-500">{complete ? "Creates an unpaid sourcing draft from these eight listings. It does not buy parts or publish an offer." : "A compatible, active Gem is required for each of the eight component types."}</p>
+          <p className="max-w-2xl text-xs text-slate-500">{complete ? "Creates an unpaid sourcing draft from these eight listings. It does not buy parts or publish an offer." : "An active Gem is required for each of the eight component types."}</p>
           <button type="button" onClick={() => void createDraft(key, concept)} disabled={!complete || saving !== null} className="inline-flex items-center gap-2 rounded-lg bg-emerald-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-50">
             {saving === key ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}{saving === key ? "Creating draft…" : `Create ${title} draft`}
           </button>
