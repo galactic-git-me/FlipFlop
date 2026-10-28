@@ -29,6 +29,20 @@ To check for drift without changing files:
 .\scripts\sync-api-package-sources.ps1 -Check
 ```
 
+### GLB publication pipeline
+
+The API image installs the pinned `@gltf-transform/cli` 4.2.1 optimizer. Every
+new Meshy GLB or operator-uploaded GLB is validated and optimized with Meshopt
+geometry compression, WebP textures capped at 2K, and mesh simplification
+disabled. The optimizer checks that primitive modes and index/vertex counts
+remain unchanged and publishes the optimized output only after those checks
+pass. If the output is not smaller, the validated source remains the published
+file. Original bytes are retained outside public media under
+`data/3d-media-originals/` for catalogue assets and `runtime/glb-originals/`
+for finished-build assets. GLB processing runs off the event loop; a missing or
+failed optimizer blocks publication instead of silently serving an unchecked
+new model.
+
 ### Option B — Local Python
 
 ```bash

@@ -53,6 +53,7 @@ from app.schemas.manual_build import (
     BookShipmentResult, ShipmentBookingReconciliationRequest, UpdateEvidenceDataRequest, UpdateListingTitleRequest,
 )
 from app.services import ai_service
+from app.services.glb_optimizer import GlbOptimizationError, persist_optimized_glb, validate_glb
 from app.services.model_selection_service import model_selection_service, ModelSelectionError
 from app.services.getting_started_service import (
     invalidate_ready_to_ship_reviewed_package,
@@ -566,7 +567,11 @@ async def _run_build_3d_generation(
                 async with httpx.AsyncClient(timeout=120, follow_redirects=True) as client:
                     response = await client.get(result.glb_url)
                     response.raise_for_status()
-                local_path.write_bytes(response.content)
+                optimized = await persist_optimized_glb(
+                    response.content,
+                    local_path,
+                    _BUILD_GLB_ORIGINALS_ROOT / str(build_id),
+                )
                 if not local_path.is_file() or local_path.stat().st_size == 0:
                     raise RuntimeError(f"Downloaded GLB was not persisted at {local_path}")
                 _persist_build_model_download(build_id, filename, local_path)
@@ -575,6 +580,8 @@ async def _run_build_3d_generation(
                     progress=result.progress,
                     task_id=result.task_id,
                     glb_url=public_url,
+                    original_file_size_bytes=optimized.original_bytes,
+                    file_size_bytes=optimized.output_bytes,
                     preview_url=result.thumbnail_url,
                     completed_at=datetime.utcnow().isoformat(),
                 )
@@ -887,6 +894,7 @@ _UPLOADS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "upload
 _PUBLIC_MEDIA_ROOT = Path(__file__).resolve().parents[3].parent / "FlipFlop.shop" / "public" / "media"
 _MODELS_ROOT = Path(__file__).resolve().parent.parent.parent / "data" / "uploads" / "models"
 _BUILD_ASSETS_ROOT = Path(__file__).resolve().parents[3] / "builds"
+_BUILD_GLB_ORIGINALS_ROOT = _BUILD_ASSETS_ROOT.parent / "runtime" / "glb-originals" / "build-models"
 _BUILD_3D_SUBDIR = "3D Build"
 _BUILD_ASSET_SUBDIRS = {"Media", "Performance", "Registration", "Specifications"}
 # Served directly by this process (see app.mount("/api/uploads", ...) in
@@ -5395,10 +5403,11 @@ async def upload_build_3d_model(
         raise HTTPException(400, "The GLB file is empty")
     if len(model_bytes) > 100 * 1024 * 1024:
         raise HTTPException(413, "The GLB must be 100 MB or smaller")
-    # Binary glTF begins with the ASCII magic bytes 'glTF'. This rejects a
-    # renamed ZIP/OBJ before it can reach the public storefront.
-    if model_bytes[:4] != b"glTF":
-        raise HTTPException(400, "The uploaded file is not a valid binary GLB")
+    # Reject malformed GLB containers before optimizer or filesystem writes.
+    try:
+        validate_glb(model_bytes)
+    except GlbOptimizationError as exc:
+        raise HTTPException(400, f"The uploaded file is not a valid binary GLB: {exc}") from exc
 
     build = (await db.execute(select(ManualBuild).where(ManualBuild.id == build_id))).scalar_one_or_none()
     if not build:
@@ -5406,7 +5415,14 @@ async def upload_build_3d_model(
 
     filename = f"model-3d-{uuid.uuid4().hex}.glb"
     local_path, public_url = _build_3d_asset_path(build_id, filename)
-    local_path.write_bytes(model_bytes)
+    try:
+        await persist_optimized_glb(
+            model_bytes,
+            local_path,
+            _BUILD_GLB_ORIGINALS_ROOT / str(build_id),
+        )
+    except GlbOptimizationError as exc:
+        raise HTTPException(status_code=422, detail=f"The GLB could not be safely optimized: {exc}") from exc
     _persist_build_model_download(build_id, filename, local_path)
     build.model_3d_url = public_url
     build.updated_at = datetime.utcnow()

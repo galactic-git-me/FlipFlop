@@ -39,6 +39,7 @@ from app.schemas.case_mount import validate_case_mount_manifest
 from app.schemas.fan_layout import FanLayout
 from app.services.component_family_classifier import KNOWN_FAMILY_BUCKETS
 from app.services.media_sync import sync_to_public_media
+from app.services.glb_optimizer import GlbOptimizationError, persist_optimized_glb
 from app.services.meshy_generation import build_prompt, generate_multi_image_asset, poll_multi_image_asset
 from app.services.curated_media_pipeline import MediaPipelineError, select_component_photo
 from app.services.catalogue_photo_inventory import catalogue_generation_queue, catalogue_photo_inventory
@@ -53,6 +54,11 @@ _WORKSPACE_ROOT = Path(__file__).resolve().parents[3]
 _REFERENCE_ROOT = _WORKSPACE_ROOT / "assets" / "3d-reference-images" / "catalogue"
 _APP_ENV = get_settings().app_env.strip().lower()
 _DEV_MEDIA_ROOT = _WORKSPACE_ROOT / "flipflop-api" / "data" / "3d-media"
+_ORIGINAL_MEDIA_ROOT = (
+    _DEV_MEDIA_ROOT.parent / "3d-media-originals"
+    if _APP_ENV == "dev"
+    else _WORKSPACE_ROOT / "data" / "3d-media-originals"
+)
 _PUBLIC_MEDIA_ROOT = (
     _DEV_MEDIA_ROOT
     if _APP_ENV == "dev"
@@ -168,10 +174,14 @@ async def _store_generated_glb(family_key: str, version: int, source_url: str) -
         require_embedded_colour_texture(response.content)
     except ValueError as error:
         raise HTTPException(status_code=502, detail=str(error)) from error
-    public_path.write_bytes(response.content)
+    try:
+        optimized = await persist_optimized_glb(response.content, public_path, _ORIGINAL_MEDIA_ROOT)
+        require_embedded_colour_texture(optimized.content)
+    except (GlbOptimizationError, ValueError) as error:
+        raise HTTPException(status_code=502, detail=f"Generated GLB could not be safely optimized: {error}") from error
     if not await _sync_asset_media(public_path):
         raise HTTPException(status_code=502, detail="Generated GLB could not be published")
-    return f"{_PUBLIC_MEDIA_URL}/{filename}", max(1, len(response.content) // 1024)
+    return f"{_PUBLIC_MEDIA_URL}/{filename}", max(1, optimized.output_bytes // 1024)
 
 
 async def _store_generated_preview(family_key: str, version: int, source_url: str | None) -> str | None:
@@ -1836,14 +1846,18 @@ async def generate_case_asset(
     evidence_stages = dict(evidence.get("stages") or {})
     generation = dict(evidence_stages.get("meshy_generation") or {"attempts": []})
     prior_task_id = generation.get("task_id")
+    retry_source = local_glb if local_glb.is_file() else next(
+        iter(sorted(_ORIGINAL_MEDIA_ROOT.glob(f"{local_glb.stem}-*.original.glb"), reverse=True)),
+        None,
+    )
     retrying_publish = (
         generation.get("task_status") in ("SUCCEEDED", "PUBLISH_FAILED")
         and bool(prior_task_id)
-        and local_glb.is_file()
+        and retry_source is not None
     )
     if retrying_publish:
         try:
-            _validate_uploaded_glb(local_glb.read_bytes())
+            _validate_uploaded_glb(retry_source.read_bytes())
         except (OSError, ValueError):
             retrying_publish = False
     generation.update(
@@ -1874,11 +1888,13 @@ async def generate_case_asset(
         await db.commit()
 
     if retrying_publish:
-        # Meshy already succeeded, but media sync failed. Reuse the local GLB
-        # on retry instead of starting and paying for another generation.
+        # Meshy already succeeded. Reuse its preserved source or local output,
+        # run the optimizer, and retry publication without another paid task.
         result_task_id = str(prior_task_id)
         thumbnail_url = None
         try:
+            source_bytes = retry_source.read_bytes()
+            optimized = await persist_optimized_glb(source_bytes, local_glb, _ORIGINAL_MEDIA_ROOT)
             if not await _sync_asset_media(local_glb):
                 raise HTTPException(status_code=502, detail="media sync failed")
         except Exception as exc:
@@ -1890,7 +1906,7 @@ async def generate_case_asset(
                 ) from exc
             raise
         stable_glb_url = f"{_PUBLIC_MEDIA_URL}/{local_glb.name}"
-        file_size_kb = max(1, local_glb.stat().st_size // 1024)
+        file_size_kb = max(1, optimized.output_bytes // 1024)
     else:
         result = await generate_multi_image_asset(approved_image_urls, progress_callback=record_meshy_progress)
         if result is None:
@@ -2093,7 +2109,10 @@ async def upload_variant_glb(
     filename = f"catalogue-variant-{variant_id}-v{version}-{uuid4().hex[:8]}.glb"
     _PUBLIC_MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
     public_path = _PUBLIC_MEDIA_ROOT / filename
-    public_path.write_bytes(content)
+    try:
+        optimized = await persist_optimized_glb(content, public_path, _ORIGINAL_MEDIA_ROOT)
+    except GlbOptimizationError as exc:
+        raise HTTPException(status_code=422, detail=f"The GLB passed upload validation but could not be safely optimized: {exc}") from exc
     if not await _sync_asset_media(public_path):
         public_path.unlink(missing_ok=True)
         raise HTTPException(status_code=502, detail="The GLB was valid but could not be published to shared media")
@@ -2107,7 +2126,7 @@ async def upload_variant_glb(
         version=version,
         glb_ref=f"{_PUBLIC_MEDIA_URL}/{filename}",
         source_image_refs=model_image_urls,
-        file_size_kb=max(1, len(content) // 1024),
+        file_size_kb=max(1, optimized.output_bytes // 1024),
         notes="Operator-uploaded GLB; validate scale, orientation, geometry and provenance before activation.",
         created_by=getattr(admin, "email", None) or "admin-upload",
         provenance_status="metadata-only",
