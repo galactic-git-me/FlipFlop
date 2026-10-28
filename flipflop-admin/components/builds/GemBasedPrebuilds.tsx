@@ -109,7 +109,7 @@ export default function GemBasedPrebuilds() {
         let failure: Error | null = null;
         for (let attempt = 0; attempt < 2 && !result; attempt += 1) {
           try {
-            const response = await fetch("/api/gem-radar/gem-build-concepts", { cache: "no-store", signal: AbortSignal.timeout(110_000) });
+            const response = await fetch("/api/gem-radar/gem-build-concepts", { cache: "no-store", signal: AbortSignal.timeout(180_000) });
             if (!response.ok) throw new Error(`Gem build selection returned ${response.status}.`);
             result = await response.json() as GemSpotlightData;
           } catch (error) {

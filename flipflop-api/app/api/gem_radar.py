@@ -2536,7 +2536,7 @@ async def get_compatible_gem_spotlight(db: AsyncSession, actionable_ids: set[str
                     "{\"pair\":\"RAM/motherboard\",\"status\":\"compatible\",\"reason\":\"...\"},"
                     "{\"pair\":\"motherboard/case\",\"status\":\"compatible\",\"reason\":\"...\"}],\"summary\":\"...\"}. "
                     "Use only supplied IDs. Never invent specifications or claim compatibility without evidence."
-                ), max_tokens=1800, timeout=30, json_mode=True)
+                ), max_tokens=1800, timeout=120, json_mode=True)
             proposal = json.loads(response.text)
             proposed_builds = proposal.get("builds") or {}
             expected_pairs = {"CPU/motherboard", "GPU/motherboard", "RAM/motherboard", "motherboard/case"}
