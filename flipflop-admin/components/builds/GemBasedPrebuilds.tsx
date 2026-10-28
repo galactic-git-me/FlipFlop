@@ -105,9 +105,19 @@ export default function GemBasedPrebuilds() {
     let active = true;
     const load = async () => {
       try {
-        const response = await fetch("/api/gem-radar/gem-build-concepts", { cache: "no-store", signal: AbortSignal.timeout(110_000) });
-        if (!response.ok) throw new Error(`Gem build selection returned ${response.status}.`);
-        const result = await response.json() as GemSpotlightData;
+        let result: GemSpotlightData | null = null;
+        let failure: Error | null = null;
+        for (let attempt = 0; attempt < 2 && !result; attempt += 1) {
+          try {
+            const response = await fetch("/api/gem-radar/gem-build-concepts", { cache: "no-store", signal: AbortSignal.timeout(110_000) });
+            if (!response.ok) throw new Error(`Gem build selection returned ${response.status}.`);
+            result = await response.json() as GemSpotlightData;
+          } catch (error) {
+            failure = error instanceof Error ? error : new Error("Could not load Gem build concepts.");
+            if (attempt === 0) await new Promise(resolve => setTimeout(resolve, 1500));
+          }
+        }
+        if (!result) throw failure ?? new Error("Could not load Gem build concepts.");
         if (active) { setData(result); setLoadError(""); }
       } catch (error) {
         if (active) setLoadError(error instanceof Error ? error.message : "Could not load Gem build concepts.");
