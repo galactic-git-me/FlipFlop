@@ -132,12 +132,23 @@ def optimize_glb(content: bytes) -> OptimizedGlb:
             "false",
         ]
         try:
-            result = subprocess.run(
+            subprocess.run(
                 command,
                 check=True,
                 capture_output=True,
                 text=True,
+                encoding="utf-8",
+                errors="replace",
                 timeout=_OPTIMIZER_TIMEOUT_SECONDS,
+            )
+            subprocess.run(
+                [*_optimizer_command(), "inspect", str(output)],
+                check=True,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=180,
             )
         except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
             detail = getattr(exc, "stderr", None) or str(exc)

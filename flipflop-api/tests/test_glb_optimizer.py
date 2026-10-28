@@ -26,7 +26,8 @@ def _mock_optimizer(monkeypatch, output: bytes) -> None:
     monkeypatch.setattr(glb_optimizer, "_optimizer_command", lambda: ["gltf-transform"])
 
     def run(command, **_kwargs):
-        Path(command[3]).write_bytes(output)
+        if command[1] == "optimize":
+            Path(command[3]).write_bytes(output)
 
     monkeypatch.setattr(glb_optimizer.subprocess, "run", run)
 
